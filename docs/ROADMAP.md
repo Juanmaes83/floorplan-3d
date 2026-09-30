@@ -128,7 +128,7 @@ Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets
 
 ## Ecosistema — propuestas pendientes de decisión (30-09-2026)
 
-La [auditoría de integración](product/ecosystem-integration-audit.md) compara Rubik Sota, los tres proyectos de Immersphere, Asset Lab, el downloader IKEA y Blender MCP mediante snapshots fijados por SHA. Identifica formatos incompatibles y pruebas mínimas; no implementa conexiones ni acredita servicios publicados. AstraLabs / Blender GPT Astra / Seedance 2.5 sigue sin repositorio identificado.
+La [auditoría de integración](product/ecosystem-integration-audit.md) compara Rubik Sota, los tres proyectos de Immersphere, Asset Lab, el downloader IKEA y Blender MCP mediante snapshots fijados por SHA. Identifica formatos incompatibles y pruebas mínimas; no implementa conexiones ni acredita servicios publicados. El LAB Astra quedó localizado en `lab-astra-sept-2026`, con referencia explícita a la rama LAB de Blender MCP: hay arquitectura documental y código MCP, sin cadena completa ejecutada demostrada. Seedance 2.5 continúa sin evidencia de integración en esas fuentes.
 
 Se propone evaluar primero un catálogo externo muy pequeño con medidas y permisos específicos, soporte técnico acotado y fallback; posteriormente, bajo decisión de alcance, estudiar propuestas comerciales al CRM, exportación determinista a Blender y presentaciones 360 con referencias estables. Son **propuestas pendientes de decisión**, sin cliente prioritario aprobado, nuevos números de fase ni cambio de alcance/cierre de F1, F2 o F3.
 
