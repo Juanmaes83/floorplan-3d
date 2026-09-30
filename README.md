@@ -46,7 +46,7 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 ### Archivos
 
 - Exportar una imagen PNG del plano.
-- Importar una imagen PNG/JPG desde «Plano propio» para calibrarla y trazar encima.
+- Importar una imagen PNG/JPG/WebP estática desde «Archivo» o «Plano propio» para calibrarla y trazar encima.
 - Exportar e importar proyectos en JSON; exportar ZIP cuando se necesite transportar también las imágenes.
 - Restablecer la distribución de ejemplo.
 
@@ -103,7 +103,7 @@ F1a y su ampliación de proyectos locales, español, experiencia móvil y fallba
 
 ## Plano propio (F1b integrada)
 
-«Plano propio» permite importar PNG/JPG local, calibrar con dos puntos y una
+«Plano propio» permite importar PNG/JPG/WebP estático local, calibrar con dos puntos y una
 distancia en milímetros, verificar una segunda cota y trazar muros, huecos y estancias.
 Usa «Navegar» para desplazar/ampliar y «Seleccionar/editar» para corregir geometría.
 Las medidas son orientativas; no hay detección automática ni garantía profesional.
@@ -111,7 +111,10 @@ Las medidas son orientativas; no hay detección automática ni garantía profesi
 Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
 y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
 personales antes de compartirlo. Para cargar una imagen usa «Plano propio» → «Nuevo
-desde imagen». «Archivo» → «Importar plano» importa JSON; se registró como mejora
-renombrarlo a «Importar proyecto JSON» y añadir una entrada directa para imagen.
-PNG/JPG: máximo 15 MiB y 8000 px por lado. Consulta [uso y límites](docs/technical/F1b.md)
+desde imagen». «Archivo» → «Importar proyecto JSON» importa JSON. «Archivo» → «Cargar imagen de plano (PNG/JPG/WebP)» ofrece el acceso directo al flujo de imagen.
+PNG/JPG/WebP estático: máximo 15 MiB y 8000 px por lado. Consulta [uso y límites](docs/technical/F1b.md)
 y la [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md).
+
+Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plano
+(PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
+y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).

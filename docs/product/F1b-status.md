@@ -27,3 +27,17 @@ La imagen de referencia puede ser PNG/JPG de hasta 15 MiB y 8000 px por lado. El
 4. Evaluar formatos adicionales (PDF, WebP y HEIC/HEIF) mediante una entrega acotada posterior. No están admitidos por el importador actual ni quedan aprobados sin pruebas de compatibilidad, privacidad y límites.
 
 F1b queda cerrada por aprobación expresa y merge de Juanma con estas limitaciones visibles; no se afirma que las pruebas pendientes se hayan realizado ni que exista precisión profesional.
+
+## Seguimiento de importación (esta rama, aún sin fusionar)
+
+La mejora de claridad y WebP estático está implementada para revisión: «Archivo →
+Importar proyecto JSON» y «Cargar imagen de plano (PNG/JPG/WebP)», reutilizando el
+flujo existente. WebP conserva bytes, calibración, IndexedDB y ZIP; 15 MiB/8000 px
+no cambian. [Decisión de formatos](../technical/image-formats.md). PDF, HEIC/HEIF,
+WebP animado y con EXIF siguen no admitidos. Los puntos 1 y 4 del listado anterior
+describen lo pendiente en master al inicio; esta entrega resuelve el punto 1 y la
+ampliación WebP del punto 4, sin reclamar que ya estén fusionados.
+
+[Roadmap canónico](../ROADMAP.md): F1a/F1b integradas, F2 asistencia **no iniciada**,
+F3 catálogo condicionado. Siguen pendientes cinco planos autorizados, revisión
+humana de esta corrección y teléfono físico. No se repite la implementación F1b.

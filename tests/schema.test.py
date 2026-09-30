@@ -19,6 +19,65 @@ def reject_duplicate_keys(pairs):
 def load_unique_json(path):
     return json.loads(path.read_text(), object_pairs_hook=reject_duplicate_keys)
 
+def browser_schema(source):
+    # This module embeds the schema as a JSON literal. Parse before JS evaluation
+    # can silently replace a repeated property, including in nested objects.
+    literal = source.split('const schema = ', 1)[1]
+    schema, end = json.JSONDecoder(object_pairs_hook=reject_duplicate_keys).raw_decode(literal)
+    if not literal[end:].lstrip().startswith('; if(typeof module'):
+        raise ValueError('Unexpected schema module suffix')
+    return schema
+
+
+class SchemaSourceTests(unittest.TestCase):
+    def test_published_contract_status_distinguishes_implementation_from_decisions(self):
+        schema = load_unique_json(ROOT / 'docs/contracts/FloorPlanProjectV1.schema.json')
+        description = schema['description']
+        self.assertRegex(description, r'Contrato de datos implementado')
+        self.assertIn('F1a/F1b integrada en master', description)
+        self.assertIn('1.2.0', description)
+        self.assertIn('WebP estático', description)
+        self.assertRegex(description, r'no implica aprobar las decisiones de producto F0 que sigan pendientes')
+        self.assertNotRegex(description, r'(?i)propuesta F0|no (?:está )?implementad')
+        document = (ROOT / 'docs/contracts/FloorPlanProjectV1.md').read_text()
+        self.assertNotRegex(document.split('## 1.', 1)[0], r'(?i)propuesta F0|no (?:está )?implementad')
+
+    def test_duplicate_detector(self):
+        for source in ('{"verification":1,"verification":2}',
+                       '{"scale":{"verification":1,"verification":2}}',
+                       r'{"verification":1,"verifi\u0063ation":2}'):
+            with self.subTest(source=source), self.assertRaisesRegex(ValueError, 'Clave JSON duplicada: verification'):
+                json.loads(source, object_pairs_hook=reject_duplicate_keys)
+        self.assertEqual(json.loads('{"a":{"x":1},"b":{"x":2}}',
+                                    object_pairs_hook=reject_duplicate_keys),
+                         {'a': {'x': 1}, 'b': {'x': 2}})
+
+    def test_schema_sources_and_runtime_match(self):
+        canonical = json.loads((ROOT / 'docs/contracts/FloorPlanProjectV1.schema.json').read_text(),
+                               object_pairs_hook=reject_duplicate_keys)
+        browser = browser_schema((ROOT / 'js/project-schema.js').read_text())
+        runtime = json.loads(subprocess.check_output(
+            ['node', '-e', "console.log(JSON.stringify(require('./js/project-schema.js')))"], cwd=ROOT))
+        self.assertEqual(browser, canonical)
+        self.assertEqual(runtime, canonical)
+        for schema in (canonical, browser):
+            properties = schema['$defs']['scale']['properties']
+            self.assertEqual(list(properties).count('verification'), 1)
+            self.assertEqual(properties['verification'], {'$ref': '#/$defs/verification'})
+            self.assertEqual(schema['$defs']['verification']['type'], 'object')
+
+    def test_reintroduced_duplicate_fails_in_both_sources(self):
+        reference = '"verification": { "$ref": "#/$defs/verification" }'
+        canonical = (ROOT / 'docs/contracts/FloorPlanProjectV1.schema.json').read_text()
+        browser = (ROOT / 'js/project-schema.js').read_text()
+        for source, parse in ((canonical, lambda s: json.loads(s, object_pairs_hook=reject_duplicate_keys)),
+                              (browser, browser_schema)):
+            self.assertEqual(source.count(reference), 1)
+            mutated = source.replace(reference, reference + ',\n' + reference, 1)
+            with self.assertRaisesRegex(ValueError, 'Clave JSON duplicada: verification'):
+                parse(mutated)
+
+
 class ContractTests(unittest.TestCase):
     def setUp(self):
         self.schema = load_unique_json(ROOT / 'docs/contracts/FloorPlanProjectV1.schema.json')

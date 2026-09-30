@@ -13,14 +13,21 @@ Juanma autorizó explícitamente los merges con estos pendientes:
 
 Codex reportó 77 pruebas Node y 7 Python aprobadas en su checkout local. No se repitió la suite completa en esta sesión contra la revisión remota final; los checks remotos visibles eran de Vercel. La implementación 3D se probó con Chromium/SwiftShader, que no acredita rendimiento móvil físico.
 
-La PR #2 contiene el roadmap de producto existente y sigue pendiente de reconciliar con los merges F1a/F1b. No se ha inventado una numeración nueva de fases.
+El [roadmap canónico](../ROADMAP.md) reconcilia la numeración F0 con el texto histórico de PR #2. F2 es asistencia y no está iniciada; F3 es catálogo condicionado.
 
 ## Base histórica de implementación
 
 La implementación se preparó originalmente sobre `966ab8395dcef2875de0e25337cae9058052ea34`, rama `feat/f1-local-projects-mobile`. F1b se publicó apilada sobre esa base para conservar sus dependencias; tras aprobarse, PR #5 y PR #6 se fusionaron en orden. El merge final incorpora ambos conjuntos de cambios en master.
-## Uso
+## Seguimiento de importación en esta entrega (aún sin fusionar)
 
-1. «Plano propio» → «Nuevo desde imagen». Seleccionar PNG/JPG válido. El proyecto
+[Decisión técnica y formatos](image-formats.md): etiquetas explícitas JSON/imagen, acceso
+desde Archivo y WebP estático de extremo a extremo. PDF y HEIC/HEIF diferidos.
+Los pendientes citados en el cierre anterior son históricos: esta entrega resuelve
+la claridad de importación y añade WebP; conserva cinco planos y móvil físico pendientes.
+
+## Uso en esta entrega
+
+1. «Archivo» → «Cargar imagen de plano (PNG/JPG/WebP)» o «Plano propio» → «Nuevo desde imagen». Seleccionar un raster estático válido. «Archivo» → «Importar proyecto JSON» abre solo el selector JSON. El proyecto
    anterior se conserva. «Añadir imagen» mantiene también la geometría existente.
 2. Elegir referencia, origen X/Y, giro, visibilidad y opacidad. La imagen original
    no se recorta ni modifica. La referencia se dibuja sobre el pavimento con su
@@ -49,7 +56,7 @@ La implementación se preparó originalmente sobre `966ab8395dcef2875de0e25337ca
 8. Revisar W1–W4 y confirmar cada elemento cuando proceda; pulsar un aviso abre
    sus propiedades y centra el plano. Añadir/mover/girar/eliminar mobiliario genérico
    con las herramientas existentes. El 3D deriva del mismo proyecto.
-9. «Exportar ZIP» incluye `project.json` y `images/img_<id>.png|jpg`. Importarlo en
+9. «Exportar ZIP» incluye `project.json` y `images/img_<id>.png|jpg|webp`. Importarlo en
    otro contexto reconstruye imágenes y proyecto. El JSON normal de F1a continúa
    disponible, pero no transporta binarios. El ZIP no incluye nombres originales
    de ficheros; conserva bytes originales y por ello puede conservar metadatos EXIF.

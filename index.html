@@ -222,6 +222,9 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
  header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop{position:fixed;top:58px;right:4px}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
 }
 #tracePanel{padding:10px;border-bottom:1px solid var(--line)}#tracePanel .actions{flex-wrap:wrap}#tracePanel label{display:block;margin:8px 0}#tracePanel input,#tracePanel select{max-width:100%;font-size:16px}#tracePanel .btn{border:1px solid var(--line);min-height:44px}#traceWarnings{max-height:160px;overflow:auto}#traceWarnings button{display:block;text-align:left;width:100%;margin:4px 0}#traceStatus{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12px}#traceStatus:empty{display:none}:focus-visible{outline:3px solid var(--teal);outline-offset:2px}#traceDistance label{display:block;margin:10px 0}#traceDistance input{font-size:16px;padding:8px;width:100%}
+.menu-pop{max-width:calc(100vw - 8px);max-height:calc(100dvh - 70px);overflow-y:auto}.menu-pop .btn{white-space:normal;overflow-wrap:anywhere}
+#toast{max-width:calc(100vw - 24px);width:max-content;overflow-wrap:anywhere;box-sizing:border-box}
+.import-help{display:block;max-width:280px;padding:4px 8px;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;}
 </style>
 <script type="importmap">
 {"imports":{
@@ -295,10 +298,13 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
       <div class="menu-pop">
         <button class="btn" id="exportPng" data-en="Export image">导出图片</button>
         <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
-        <button class="btn" id="importJson" data-en="Import plan">导入方案</button>
+        <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
+        <span id="importJsonHelp" class="import-help" data-en="Project data only (.json); images use the action below." data-es="Datos de proyecto (.json); para imágenes usa la acción siguiente.">项目数据 (.json)；图片请使用下方操作。</span>
+        <button class="btn" id="importImage" data-en="Load floor plan image (PNG/JPG/WebP)" data-es="Cargar imagen de plano (PNG/JPG/WebP)" aria-describedby="importImageHelp">加载平面图图片 (PNG/JPG/WebP)</button>
+        <span id="importImageHelp" class="import-help" data-en="Static image, up to 15 MiB and 8000 px on the longest side. Creates a new local project; keeps the current one. PDF/HEIC: export a local raster copy first." data-es="Imagen estática, hasta 15 MiB y 8000 px en el lado mayor. Crea un proyecto local y conserva el actual. PDF/HEIC: exporta primero una copia raster local.">静态图片，最大 15 MiB / 8000 px。创建本地项目并保留当前项目。PDF/HEIC 请先导出本地图片。</span>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
-    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+    <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
   </header>
 
   <aside class="lib">
@@ -350,7 +356,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
   </footer>
 </div>
 <div id="toast" role="status"></div>
-<input type="file" id="traceImageFile" accept="image/png,image/jpeg" hidden>
+<input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
 <input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
@@ -482,7 +488,8 @@ const ES_TEXT = {
   "File ▾": "Archivo ▾",
   "Export image": "Exportar imagen",
   "Export plan JSON": "Exportar plano JSON",
-  "Import plan": "Importar plano",
+  "Import project JSON": "Importar proyecto JSON",
+  "Choose a project JSON file. For PNG/JPG/WebP, use Load floor plan image.": "Selecciona un proyecto JSON. Para PNG/JPG/WebP usa Cargar imagen de plano.",
   "Reset to default": "Restablecer diseño inicial",
   "Rooms · click to fly there": "Estancias · pulsa para ir a ellas",
   "Walk mode": "Modo recorrido",
@@ -661,6 +668,7 @@ function applyStaticLang(){
     el.dataset.zhTitle ??= el.title;
     el.title = LANG === 'zh' ? el.dataset.zhTitle : LANG === 'es' ? (el.dataset.esTitle || ES_TEXT[el.dataset.enTitle] || el.dataset.enTitle) : el.dataset.enTitle;
   });
+  for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
   const langBtn = document.getElementById('langBtn');
   langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
   langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';
@@ -1688,13 +1696,14 @@ matchMedia('(max-width:1100px)').addEventListener('change', () => drawer(null));
 drawer(null);                                  // 恢复上次的面板收起状态
 $('#exportPng').onclick = exportPNG;
 $('#exportJson').onclick = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
-$('#importJson').onclick = () => $('#fileIn').click();
+$('#importJson').onclick = () => { document.querySelector('details.menu').open=false;$('#fileIn').click(); };
 let importSequence=0;
 $('#fileIn').onchange = async e => {
   const file=e.target.files[0];e.target.value='';if(!file)return;
   const sequence=++importSequence;
   try {
     if(file.size>15*1024*1024)throw new Error('Project file exceeds 15 MB');
+    if(!/\.json$/i.test(file.name)||file.type&&!['application/json','text/plain'].includes(file.type))throw new Error(tr('请选择 JSON 项目；图片请使用加载图片操作。','Choose a project JSON file. For PNG/JPG/WebP, use Load floor plan image.'));
     const text=await file.text();if(sequence!==importSequence)return;
     const before=snap();const next=Core.importInto(projectStore,text);window.FloorPlanTraceUI?.cancel();
     ui.sel=null;ui.mA=ui.mCur=null;undoStack.push(before);if(undoStack.length>150)undoStack.shift();redoStack.length=0;

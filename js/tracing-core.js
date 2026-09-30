@@ -3,9 +3,9 @@
  const C=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  const LIMITS={bytes:15*1024*1024,pixels:8000,images:20,packageBytes:320*1024*1024,jsonBytes:15*1024*1024};
  const distance=(a,b)=>Math.hypot(b.x-a.x,b.y-a.y);
- function imageInfo(bytes,type){
+ function imageInfo(bytes,type,name){
   const b=new Uint8Array(bytes),v=new DataView(b.buffer,b.byteOffset,b.byteLength);let mediaType,width,height,orientation=1,orientationOffset;
-  if(!b.length||b.length>LIMITS.bytes)throw Error('La imagen debe ocupar entre 1 byte y 15 MB.');
+  if(!b.length||b.length>LIMITS.bytes)throw Error('La imagen debe ocupar entre 1 byte y 15 MiB.');
   if(b.length>=33&&[137,80,78,71,13,10,26,10].every((n,i)=>b[i]===n)&&v.getUint32(8)===13&&v.getUint32(12)===0x49484452){mediaType='image/png';width=v.getUint32(16);height=v.getUint32(20);for(let at=33;at+8<=b.length;){const size=v.getUint32(at),kind=v.getUint32(at+4);if(kind===0x65584966)throw Error('PNG con metadatos EXIF: exporta una copia con orientación aplicada antes de importarlo.');if(size>b.length-at-12)break;at+=size+12;}}
   else if(b[0]===255&&b[1]===216){
    mediaType='image/jpeg';let at=2;
@@ -21,8 +21,45 @@
     }at+=length;
    }
   }
-  if(!mediaType||!width||!height)throw Error('Solo se admiten imágenes PNG o JPG/JPEG válidas.');
+  else if(b.length>=12&&v.getUint32(0)===0x52494646&&v.getUint32(8)===0x57454250){
+   mediaType='image/webp';
+   if(v.getUint32(4,true)+8!==b.length)throw Error('WebP truncado o con tamaño incoherente.');
+   let at=12,raster=false,canvas;
+   const uint24=n=>b[n]+b[n+1]*256+b[n+2]*65536;
+   while(at<b.length){
+    if(at+8>b.length)throw Error('WebP corrupto.');
+    const kind=v.getUint32(at),size=v.getUint32(at+4,true),data=at+8;
+    if(size>b.length-data||data+size+(size%2)>b.length)throw Error('WebP truncado.');
+    if(kind===0x414e494d||kind===0x414e4d46)throw Error('WebP animado no admitido. Exporta una imagen estática PNG/JPG/WebP.');
+    if(kind===0x45584946)throw Error('WebP con EXIF no admitido: exporta una copia con orientación aplicada antes de importarlo.');
+    if(kind===0x56503858){
+     if(canvas||raster||size!==10||b[data]&0xc1||b[data+1]||b[data+2]||b[data+3])throw Error('Cabecera WebP no válida.');
+     if(b[data]&2)throw Error('WebP animado no admitido. Exporta una imagen estática PNG/JPG/WebP.');
+     if(b[data]&8)throw Error('WebP con EXIF no admitido: exporta una copia con orientación aplicada antes de importarlo.');
+     canvas={width:1+uint24(data+4),height:1+uint24(data+7)};
+     if(Math.max(canvas.width,canvas.height)>LIMITS.pixels)throw Error('La imagen supera 8000 px. Reduce su resolución antes de importarla.');
+    }
+    if(kind===0x56503820||kind===0x5650384c){
+     if(raster)throw Error('WebP con varias imágenes no admitido.');raster=true;
+     if(kind===0x56503820){
+      if(size<10||b[data]&1||b[data+3]!==0x9d||b[data+4]!==1||b[data+5]!==0x2a)throw Error('WebP VP8 corrupto.');
+      width=v.getUint16(data+6,true)&0x3fff;height=v.getUint16(data+8,true)&0x3fff;
+     }else{
+      if(size<5||b[data]!==0x2f||b[data+4]&0xe0)throw Error('WebP VP8L corrupto.');
+      const bits=v.getUint32(data+1,true);width=(bits&0x3fff)+1;height=((bits>>>14)&0x3fff)+1;
+     }
+    }
+    at=data+size+(size%2);
+   }
+   if(!raster||canvas&&(canvas.width!==width||canvas.height!==height))throw Error('Dimensiones WebP incoherentes.');
+  }
+  if(!mediaType||!width||!height){
+   if(type==='application/pdf'||/\.pdf$/i.test(name||''))throw Error('PDF no admitido. Exporta la página localmente a PNG/JPG/WebP y calibra esa imagen.');
+   if(/image\/hei[cf]|image\/heif/.test(type||'')||/\.hei[cf]$/i.test(name||''))throw Error('HEIC/HEIF no admitido. Exporta una copia local PNG/JPG/WebP con la orientación aplicada.');
+   throw Error('Solo se admiten imágenes PNG, JPG/JPEG o WebP estáticas válidas. PDF y HEIC/HEIF requieren exportar una copia local.');
+  }
   if(type&&type!==mediaType)throw Error('El tipo declarado no coincide con el contenido de la imagen.');
+  if(name){const extension=name.split('.').pop().toLowerCase(),expected={'image/png':['png'],'image/jpeg':['jpg','jpeg'],'image/webp':['webp']}[mediaType];if(!expected.includes(extension))throw Error('La extensión no coincide con el contenido de la imagen. Usa PNG, JPG/JPEG o WebP con su extensión correcta.');}
   if(Math.max(width,height)>LIMITS.pixels)throw Error('La imagen supera 8000 px. Reduce su resolución antes de importarla.');
   if(!Number.isInteger(orientation)||orientation<1||orientation>8)throw Error('Orientación EXIF no válida.');
   return {mediaType,widthPx:width,heightPx:height,bytes:b.length,orientation,orientationOffset};
@@ -37,7 +74,7 @@
  function length(value){if(!Number.isInteger(value)||value<1||value>100000)throw Error('Introduce una distancia entre 1 y 100000 mm.');return value;}
  function calibrate(p,imageId,a,b,known){const image=p.sourceImages.find(i=>i.id===imageId);if(!image)throw Error('Selecciona una imagen local.');a=bounded(image,a);b=bounded(image,b);known=length(known);const d=distance(a,b);if(!d)throw Error('Los dos puntos deben ser distintos.');const ratio=known/d;if(ratio>1000)throw Error('Escala fuera del límite del contrato.');
   // Recalibration changes the reference only. Existing mm geometry is retained for explicit review.
-  image.placement??={originMm:{x:0,y:0},rotationDeg:0,mmPerPixel:ratio};image.placement.mmPerPixel=ratio;p.schemaVersion='1.1.0';p.scale={confidence:'estimated',method:'known-dimension',calibration:{sourceImageId:imageId,pointA:a,pointB:b,knownLengthMm:known,mmPerPixel:ratio,calibratedAt:new Date().toISOString(),confirmedByUser:false}};C.validate(p);return p;
+  image.placement??={originMm:{x:0,y:0},rotationDeg:0,mmPerPixel:ratio};image.placement.mmPerPixel=ratio;p.schemaVersion=Number(p.schemaVersion.split('.')[1])>=2?p.schemaVersion:'1.1.0';p.scale={confidence:'estimated',method:'known-dimension',calibration:{sourceImageId:imageId,pointA:a,pointB:b,knownLengthMm:known,mmPerPixel:ratio,calibratedAt:new Date().toISOString(),confirmedByUser:false}};C.validate(p);return p;
  }
  function verify(p,a,b,known){const c=p.scale.calibration;if(!c)throw Error('Calibra la imagen antes de verificar.');const image=p.sourceImages.find(i=>i.id===c.sourceImageId);a=bounded(image,a);b=bounded(image,b);known=length(known);if(!distance(a,b))throw Error('Los dos puntos deben ser distintos.');
   const same=(u,v)=>distance(u,v)<1e-7;if((same(a,c.pointA)&&same(b,c.pointB))||(same(a,c.pointB)&&same(b,c.pointA)))throw Error('Usa una segunda cota independiente, no los puntos de calibración.');
