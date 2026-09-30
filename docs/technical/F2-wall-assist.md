@@ -1,5 +1,7 @@
 # F2 — prototipo experimental de sugerencias locales de muros
 
+> **Estado actualizado tras PR #9 (30-09-2026):** aprobado por Juanma y fusionado en `master` mediante `10f7439b3fc86b0a0bd325d94531709d45cbcad4`. El HEAD revisado fue `3e3e6117770d97cb6e82f73fa06613d31a506019`; la preview Vercel `READY` se verificó contra ese SHA. Este prototipo sigue siendo experimental y **F2 no está validada**. Los apartados de publicación que describen bloqueos son la evidencia histórica previa a abrir la PR; véase el cierre al final.
+
 Estado de esta rama: **prototipo experimental de F2; en revisión; no validado**.
 Base: `master` remoto verificado `dbd29987308e7cca1455fdbf3cf7f3813feda1d6`,
 coincidente con la referencia de Juanma. Rama única `feat/f2-local-wall-assist`.
@@ -150,7 +152,7 @@ real es que Juanma prepare localmente el inventario autorizado y referencias,
 registre las cinco sesiones y congele el conjunto de veinte, sin publicar sus bytes.
 
 
-## Publicación para revisión: bloqueo externo
+## Publicación inicial: bloqueo externo (estado previo a crear PR #9; supersedido)
 
 Código/capturas publicados mediante `git push -u origin HEAD`, sin force push,
 en [feat/f2-local-wall-assist](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-local-wall-assist).
@@ -177,3 +179,14 @@ Pendiente concreto: abrir la PR mediante la integración de GitHub con permisos
 y obtener de Vercel el deployment de su HEAD; verificar READY, SHA y URL/acceso
 antes de revisión humana. No usar la preview histórica #7/#8 como esta entrega.
 Las capturas publicadas permiten revisar los recorridos locales mientras tanto.
+
+
+## Cierre de revisión y merge — PR #9 (30-09-2026)
+
+- Juanma aprobó la PR #9 tras la revisión visual. Se fusionó a `master` con merge commit `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; HEAD aprobado `3e3e6117770d97cb6e82f73fa06613d31a506019`.
+- Vercel confirmó deployment `READY` con `githubCommitSha` igual al HEAD aprobado. [Preview protegida](https://floorplan-3d-git-feat-f2-local-82705b-juanma-espinosas-projects.vercel.app/) · [inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/DCTag9Sc5JH4j3sce8sA6LLZN9Wn). La revisión usó una URL temporal que expira; el token no se conserva en documentación.
+- Verificación final disponible: suite completa 98/98 antes del último ajuste localizado; pruebas dirigidas F2 13/13 después del ajuste; schema 10/10 y recorder 12/12. No se repitió la suite completa tras la corrección acotada.
+- La aprobación visual valida la revisión humana del prototipo, no la precisión del detector. Continúan pendientes las cinco sesiones manuales, el conjunto fijo de veinte planos reales autorizados con referencias independientes y los umbrales decididos por Juanma. Las capturas y fixtures sintéticos no sustituyen esos datos.
+- El 3D se comprobó con SwiftShader. No hubo medición de rendimiento en un teléfono físico. No se hizo despliegue manual a producción.
+
+**Siguiente etapa — evaluación F2:** conservar el prototipo como baseline de código; preparar datos y referencias localmente, medir primero la línea base manual de cinco sesiones y congelar el conjunto de veinte antes de evaluar el detector. No afinar parámetros ni presentar cifras de precisión/tiempo/cobertura hasta separar calibración y evaluación y acordar criterios. El proceso y límites están en [el protocolo F2](../qa/F2-entry-protocol.md) y el [roadmap](../ROADMAP.md).
