@@ -7,6 +7,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#fffdf9">
+<meta name="description" content="Diseña distribuciones de interiores en 2D y recórrelas en 3D con Rubik Sota Floor Plan Designer.">
+<meta property="og:title" content="Rubik Sota Floor Plan Designer">
+<meta property="og:description" content="Diseña y visualiza tu vivienda en 2D y 3D.">
 <title>户型装修设计</title>
 <style>
 :root{
@@ -69,6 +72,7 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 .modehint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:#fff;
   padding:5px 12px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none}
 .modehint.show{opacity:.9}
+ .plan-meta{color:var(--muted);font-size:11px;white-space:nowrap}
 footer{grid-column:1/-1;display:flex;gap:18px;align-items:center;padding:0 14px;background:var(--panel);overflow:hidden;white-space:nowrap;
   border-top:1px solid var(--line);color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
 #tip{overflow:hidden;text-overflow:ellipsis}
@@ -210,7 +214,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   aside.right{justify-self:end;transform:translateX(110%)}
   aside.open{transform:none;box-shadow:0 0 30px rgba(40,30,20,.18)}
   .lib-grid{grid-template-columns:1fr 1fr 1fr}
-  .brand span,footer .only2d{display:none!important}
+  .brand span,footer .only2d,.plan-meta{display:none!important}
 }
 </style>
 <script type="importmap">
@@ -227,7 +231,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
     </div>
-    <div class="brand"><b data-en="3BR 2LR 2BA · Interior Design">三室两厅两卫 · 装修设计</b><span id="subtitle">原始户型 1:60 · 尺寸单位 mm</span></div>
+    <div class="brand"><b>Rubik Sota</b><span id="subtitle">Floor Plan Designer</span></div><span class="plan-meta" data-en="3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan" data-es="3 dormitorios · 2 salones · 2 baños · Plano de referencia">3 dormitorios · 2 salones · 2 baños · Plano de referencia</span>
     <div class="grp seg" id="viewSeg" title="切换 2D / 3D (T)" data-en-title="Switch 2D / 3D (T)">
       <span class="pill"></span>
       <button class="btn" data-view="2d" data-en="2D Plan">2D 平面</button>
@@ -277,7 +281,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
     </div>
     <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
     <div class="spacer"></div>
-    <button class="btn" id="langBtn" title="Switch language / 切换语言" style="border:1px solid var(--line);background:#fff">EN</button>
+    <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff">EN</button>
     <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
     <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
       <div class="menu-pop">
@@ -338,10 +342,142 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
 <div id="toast"></div>
 
 <script>
-/* ======================= 多语言（中文 / English，默认中文） ======================= */
-const LANG_KEY = 'huxing-lang';
-let LANG = (() => { try { return localStorage.getItem(LANG_KEY) === 'en' ? 'en' : 'zh'; } catch(e) { return 'zh'; } })();
-const tr = (zh, en) => LANG === 'en' ? en : zh;
+/* ======================= Multilingual UI: Español / English / 中文 ======================= */
+const LANG_KEY = 'rubik-sota-floorplan-lang';
+let LANG = (() => { try { const saved=localStorage.getItem(LANG_KEY); return ['es','en','zh'].includes(saved) ? saved : 'es'; } catch(e) { return 'es'; } })();
+const ES_TEXT = {
+  "Nothing to undo": "No hay nada que deshacer",
+  "Entry": "Entrada",
+  "Drag to rotate (Shift for free angle)": "Arrastra para girar (Mayús: ángulo libre)",
+  "Drag to resize": "Arrastra para cambiar el tamaño",
+  "Room Areas": "Superficie de las estancias",
+  "Click to view / change flooring": "Pulsa para ver o cambiar el suelo",
+  "Net floor area": "Superficie útil",
+  "* Bay windows are excluded; areas use net inner wall dimensions": "* Los miradores no se incluyen; la superficie se calcula entre caras interiores",
+  "Flooring Estimate": "Estimación de pavimentos",
+  "incl. 5% waste": "incluye un 5 % de merma",
+  "Flooring total": "Total de pavimentos",
+  "Plan Stats": "Resumen del plano",
+  "Furniture": "Muebles",
+  "Walls removed": "Muros retirados",
+  "Clear measures": "Borrar mediciones",
+  "Clear layout": "Vaciar distribución",
+  "Rotate": "Girar",
+  "Duplicate": "Duplicar",
+  "Delete": "Eliminar",
+  "Properties": "Propiedades",
+  "Done": "Listo",
+  "Floor / Properties": "Suelo / Propiedades",
+  "There is no furniture to clear": "No hay muebles que retirar",
+  "Layout cleared — Undo to restore": "Distribución vaciada — Deshaz para restaurarla",
+  "Hide library ( [ )": "Ocultar biblioteca ( [ )",
+  "Show library ( [ )": "Mostrar biblioteca ( [ )",
+  "Hide properties ( ] )": "Ocultar propiedades ( ] )",
+  "Show properties ( ] )": "Mostrar propiedades ( ] )",
+  "Room": "Estancia",
+  "Name": "Nombre",
+  "Floor area": "Superficie",
+  "Perimeter": "Perímetro",
+  "Width": "Ancho",
+  "Depth": "Fondo",
+  "Flooring": "Pavimento",
+  "Estimated cost": "Coste estimado",
+  "Furniture in room": "Muebles de la estancia",
+  "None": "Ninguno",
+  "← Back to overview": "← Volver a la vista general",
+  "Center": "Centro",
+  "Rotation": "Rotación",
+  "Color": "Color",
+  "Footprint": "Superficie ocupada",
+  "Rotate 90°": "Girar 90°",
+  "Bring to front": "Traer al frente",
+  "Send to back": "Enviar al fondo",
+  "← Back": "← Volver",
+  "Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With \"Wall snap\" on, items snap flush to nearby walls.": "Arrastra para mover; usa el punto superior para girar y el tirador inferior derecho para cambiar el tamaño. Con «Ajustar a muros», los muebles se alinean automáticamente.",
+  "Load-bearing walls (black) cannot be removed": "Los muros de carga (negros) no se pueden retirar",
+  "Exterior walls are part of the building envelope and should not be removed": "Los muros exteriores forman parte de la envolvente del edificio y no deben retirarse",
+  "Wall restored": "Muro restaurado",
+  "Hold and drag a line, or tap two points · snaps to walls · tap \"Select\" to exit": "Mantén pulsado y arrastra para trazar una línea, o marca dos puntos · se ajusta a los muros · pulsa «Seleccionar» para salir",
+  "Click two points (or drag) to measure · snaps to walls · Shift locks horizontal/vertical · Esc cancels": "Marca dos puntos (o arrastra) para medir · se ajusta a los muros · Mayús fija horizontal/vertical · Esc cancela",
+  "Click a grey non-bearing wall to remove it, click again to restore · black bearing walls cannot be removed": "Pulsa un muro gris sin carga para retirarlo; vuelve a pulsarlo para restaurarlo · los muros negros de carga no se pueden retirar",
+  "Click to add, or drag onto the plan": "Pulsa para añadir o arrastra al plano",
+  "Drop it on the floor": "Suéltalo sobre el suelo",
+  "floor-plan-design": "rubik-sota-floor-plan",
+  "Tap or drag from the library · 1 finger pans · pinch zooms · bottom bar rotates / duplicates / deletes": "Pulsa o arrastra desde la biblioteca · un dedo desplaza · pellizca para ampliar · la barra inferior permite girar, duplicar y eliminar",
+  "1 finger orbits · 2 fingers zoom / pan · tap furniture or floor to edit · tap doors to open": "Un dedo gira la vista · dos dedos amplían o desplazan · pulsa un mueble o el suelo para editar · pulsa las puertas para abrirlas",
+  "Drag furniture onto the plan · scroll to zoom · drag empty space to pan · T for 3D": "Arrastra muebles al plano · usa la rueda para ampliar · arrastra el espacio vacío para desplazar · T para ver en 3D",
+  "3D stays in sync with the plan · panel edits apply instantly · T for 2D": "La vista 3D se sincroniza con el plano · los cambios del panel se aplican al instante · T para volver a 2D",
+  "3D engine is still loading or failed to load (three.js needs a network connection)": "La vista 3D sigue cargando o no se ha podido iniciar (Three.js necesita conexión a internet)",
+  "Showing at 1:60 (same scale as the original plan)": "Vista a escala 1:60 (igual que el plano original)",
+  "Fullscreen is not supported here — in Safari, use \"Add to Home Screen\" to open it fullscreen": "Este navegador no admite pantalla completa. En Safari, usa «Añadir a pantalla de inicio» para abrirla a pantalla completa",
+  "Could not enter fullscreen": "No se ha podido activar la pantalla completa",
+  "Exit fullscreen": "Salir de pantalla completa",
+  "Fullscreen": "Pantalla completa",
+  "Plan imported": "Plano importado",
+  "Invalid file format": "Formato de archivo no válido",
+  "Reset to the default design? (undoable)": "¿Restablecer el diseño inicial? (se puede deshacer)",
+  "Whole home": "Toda la vivienda",
+  "1 finger orbits · 2 fingers zoom / pan · select furniture to drag it · tap doors to open": "Un dedo gira la vista · dos dedos amplían o desplazan · selecciona un mueble y arrástralo · pulsa las puertas para abrirlas",
+  "Left-drag orbits · right-drag pans · scroll zooms · select furniture to drag it · click doors to open": "Arrastra con el botón izquierdo para girar y con el derecho para desplazar · la rueda amplía · selecciona y arrastra muebles · pulsa las puertas para abrirlas",
+  "Joystick moves · drag to look · tap doors to open": "El joystick permite moverse · arrastra para mirar alrededor · pulsa las puertas para abrirlas",
+  "WASD moves · mouse looks · Shift runs · E opens doors · Esc pauses": "WASD para moverse · ratón para mirar · Mayús para correr · E para abrir puertas · Esc para pausar",
+  "Tap to start at the front door": "Pulsa para empezar desde la puerta principal",
+  "Joystick moves · drag on screen to look": "Usa el joystick para moverte y arrastra la pantalla para mirar",
+  "Tap doors to open · \"Exit walk\" returns to orbit": "Pulsa las puertas para abrirlas · «Salir del recorrido» vuelve a la vista aérea",
+  "Click to start at the front door": "Pulsa para empezar desde la puerta principal",
+  "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move · mouse looks · <kbd>Shift</kbd> runs": "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> moverse · ratón mirar · <kbd>Mayús</kbd> correr",
+  "<kbd>E</kbd> opens the door ahead · <kbd>Esc</kbd> pauses": "<kbd>E</kbd> abre la puerta de delante · <kbd>Esc</kbd> pausa",
+  "◧ Library": "◧ Biblioteca",
+  "Properties ◨": "Propiedades ◨",
+  "3BR 2LR 2BA · Interior Design": "3 dormitorios · 2 salones · 2 baños",
+  "2D Plan": "Plano 2D",
+  "3D Scene": "Escena 3D",
+  "Select": "Seleccionar",
+  "Measure": "Medir",
+  "Demolish": "Modificar muros",
+  "Fit": "Ajustar",
+  "Orbit": "Vista aérea",
+  "Walk": "Recorrer",
+  "Iso": "Isométrica",
+  "Top": "Superior",
+  "Undo": "Deshacer",
+  "Redo": "Rehacer",
+  "Clear": "Vaciar",
+  "Dims": "Cotas",
+  "Rooms": "Estancias",
+  "Grid": "Cuadrícula",
+  "Bearing walls": "Muros de carga",
+  "Wall snap": "Ajustar a muros",
+  "Full walls": "Muros completos",
+  "Cut walls": "Muros seccionados",
+  "Labels": "Nombres",
+  "Night": "Noche",
+  "Sun": "Luz solar",
+  "File ▾": "Archivo ▾",
+  "Export image": "Exportar imagen",
+  "Export plan JSON": "Exportar plano JSON",
+  "Import plan": "Importar plano",
+  "Reset to default": "Restablecer diseño inicial",
+  "Rooms · click to fly there": "Estancias · pulsa para ir a ellas",
+  "Walk mode": "Modo recorrido",
+  "Exit walk": "Salir del recorrido",
+  "Scale": "Escala",
+  "Switch 2D / 3D (T)": "Cambiar entre 2D y 3D (T)",
+  "Select / Move (V)": "Seleccionar / mover (V)",
+  "Measure (M)": "Medir (M)",
+  "Demolish non-bearing walls (X)": "Modificar muros sin carga (X)",
+  "Zoom out": "Alejar",
+  "Zoom in": "Acercar",
+  "Fit to window (F)": "Ajustar a la ventana (F)",
+  "Show at 1:60 (same scale as the original plan)": "Mostrar a escala 1:60 (igual que el plano original)",
+  "Show at 1:100": "Mostrar a escala 1:100",
+  "Undo (Ctrl+Z)": "Deshacer (Ctrl+Z)",
+  "Redo (Ctrl+Shift+Z)": "Rehacer (Ctrl+Mayús+Z)",
+  "Remove all furniture and appliances (undoable)": "Retirar todos los muebles y electrodomésticos (se puede deshacer)",
+  "Snap furniture to walls while dragging": "Ajustar los muebles a los muros al arrastrar",
+  "3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan": "3 dormitorios · 2 salones · 2 baños · Plano de referencia"
+};
+const tr = (zh, en) => LANG === 'en' ? en : LANG === 'es' ? (ES_TEXT[en] ?? en) : zh;
 // 内置的房间 / 材料 / 家具名称存的是中文；英文界面下显示译名，用户自己改过的名称原样显示
 const NAMES_EN = {
   '主卧室':'Master Bedroom', '主卫浴':'Master Bath', '小孩房':"Kids' Room", '客卫浴':'Guest Bath', '洗衣阳台':'Laundry Balcony',
@@ -363,14 +499,116 @@ const NAMES_EN = {
   '蒸烤箱高柜':'Oven Tower', '烘干机':'Dryer', '空气净化器':'Air Purifier', '长书桌':'Long Desk', '办公椅':'Office Chair',
   '大书架':'Large Bookshelf', '立式钢琴':'Upright Piano', '跑步机':'Treadmill', '阅读椅':'Reading Chair', '茶桌':'Tea Table', '休闲椅':'Lounge Chair',
 };
-const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : s;
-// 静态文案：元素上写 data-en / data-en-title，中文原文首次切换时存进 dataset
+const NAMES_ES = {
+  "主卧室": "Dormitorio principal",
+  "主卫浴": "Baño en suite",
+  "小孩房": "Dormitorio infantil",
+  "客卫浴": "Baño de invitados",
+  "洗衣阳台": "Balcón-lavadero",
+  "子女房": "Dormitorio juvenil",
+  "厨房": "Cocina",
+  "餐厅": "Comedor",
+  "过道": "Pasillo",
+  "客厅": "Salón",
+  "休闲阳台": "Balcón de estar",
+  "主卧飘窗": "Mirador del dormitorio principal",
+  "子女房飘窗": "Mirador del dormitorio juvenil",
+  "橡木地板": "Parqué de roble",
+  "胡桃木地板": "Parqué de nogal",
+  "800 地砖": "Baldosa 800",
+  "600 地砖": "Baldosa 600",
+  "大理石": "Mármol",
+  "300 防滑砖": "Baldosa antideslizante 300",
+  "水磨石": "Terrazo",
+  "满铺地毯": "Moqueta",
+  "卧室": "Dormitorio",
+  "餐厨": "Cocina y comedor",
+  "卫浴": "Baño",
+  "家电": "Electrodomésticos",
+  "书房 · 休闲": "Estudio y ocio",
+  "双人床 1.8m": "Cama doble 1,8 m",
+  "双人床 1.5m": "Cama doble 1,5 m",
+  "双人床": "Cama doble",
+  "单人床": "Cama individual",
+  "婴儿床": "Cuna",
+  "床头柜": "Mesilla",
+  "衣柜": "Armario",
+  "小衣柜": "Armario pequeño",
+  "梳妆台": "Tocador",
+  "书桌": "Escritorio",
+  "椅子": "Silla",
+  "书架": "Estantería",
+  "飘窗垫": "Colchoneta para mirador",
+  "三人沙发": "Sofá de 3 plazas",
+  "双人沙发": "Sofá de 2 plazas",
+  "转角沙发": "Sofá rinconero",
+  "单人沙发": "Butaca",
+  "懒人沙发": "Puf",
+  "茶几": "Mesa de centro",
+  "边几": "Mesa auxiliar",
+  "电视柜": "Mueble de TV",
+  "地毯": "Alfombra",
+  "鞋柜": "Zapatero",
+  "玄关柜": "Mueble de entrada",
+  "落地灯": "Lámpara de pie",
+  "绿植": "Planta",
+  "大绿植": "Planta grande",
+  "餐桌": "Mesa de comedor",
+  "六人餐桌": "Mesa de comedor para 6",
+  "圆桌": "Mesa redonda",
+  "餐椅": "Silla de comedor",
+  "岛台": "Isla de cocina",
+  "吧椅": "Taburete de bar",
+  "橱柜台面": "Encimera",
+  "燃气灶": "Placa de gas",
+  "水槽": "Fregadero",
+  "冰箱": "Frigorífico",
+  "餐边柜": "Aparador",
+  "马桶": "Inodoro",
+  "浴室柜": "Mueble de baño",
+  "双盆浴室柜": "Mueble de baño con doble lavabo",
+  "淋浴房": "Ducha",
+  "淋浴区": "Zona de ducha",
+  "浴缸": "Bañera",
+  "洗衣机": "Lavadora",
+  "洗衣池": "Pila de lavar",
+  "电热水器": "Termo eléctrico",
+  "储物柜": "Armario de almacenaje",
+  "65 寸电视": "Televisor de 65 pulgadas",
+  "55 寸电视": "Televisor de 55 pulgadas",
+  "对开门冰箱": "Frigorífico americano",
+  "柜机空调": "Aire acondicionado de suelo",
+  "挂机空调": "Aire acondicionado de pared",
+  "洗碗机": "Lavavajillas",
+  "蒸烤箱高柜": "Columna de horno y vapor",
+  "烘干机": "Secadora",
+  "空气净化器": "Purificador de aire",
+  "长书桌": "Escritorio largo",
+  "办公椅": "Silla de oficina",
+  "大书架": "Estantería grande",
+  "立式钢琴": "Piano vertical",
+  "跑步机": "Cinta de correr",
+  "阅读椅": "Sillón de lectura",
+  "茶桌": "Mesa auxiliar",
+  "休闲椅": "Sillón de descanso"
+};
+const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+// Static labels use their English key; room and furniture names use NAMES_ES / NAMES_EN.
 function applyStaticLang(){
-  document.documentElement.lang = tr('zh-CN', 'en');
-  document.title = tr('户型装修设计', 'Floor Plan Designer');
-  document.querySelectorAll('[data-en]').forEach(el => { el.dataset.zh ??= el.textContent; el.textContent = tr(el.dataset.zh, el.dataset.en); });
-  document.querySelectorAll('[data-en-title]').forEach(el => { el.dataset.zhTitle ??= el.title; el.title = tr(el.dataset.zhTitle, el.dataset.enTitle); });
-  document.getElementById('langBtn').textContent = tr('EN', '中文');
+  document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : LANG;
+  document.title = 'Rubik Sota Floor Plan Designer';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.dataset.zh ??= el.textContent;
+    el.textContent = LANG === 'zh' ? el.dataset.zh : LANG === 'es' ? (el.dataset.es || ES_TEXT[el.dataset.en] || el.dataset.en) : el.dataset.en;
+  });
+  document.querySelectorAll('[data-en-title]').forEach(el => {
+    el.dataset.zhTitle ??= el.title;
+    el.title = LANG === 'zh' ? el.dataset.zhTitle : LANG === 'es' ? (el.dataset.esTitle || ES_TEXT[el.dataset.enTitle] || el.dataset.enTitle) : el.dataset.enTitle;
+  });
+  const langBtn = document.getElementById('langBtn');
+  langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
+  langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';
+  langBtn.setAttribute('aria-label', langBtn.title);
 }
 
 /* ============================================================
@@ -1489,7 +1727,7 @@ function setLang(l){
   $('#tip').textContent = TIPS()[viewMode];
   window.View3D?.relang();
 }
-$('#langBtn').onclick = () => setLang(LANG === 'en' ? 'zh' : 'en');
+$('#langBtn').onclick = () => setLang(({es:'en',en:'zh',zh:'es'})[LANG]);
 
 applyStaticLang(); syncFullscreen();
 buildDefs(); buildLib(); renderOpenings(); renderDims();
