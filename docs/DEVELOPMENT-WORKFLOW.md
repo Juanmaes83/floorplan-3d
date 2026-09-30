@@ -87,15 +87,7 @@ Esta entrega no cambia interfaz: una preview nueva no es requisito de revisión
 UI. La PR debe revisar documentos, cálculos y pruebas offline; no presentar la
 preview histórica #7 como validación de la preparación o de asistencia inexistente.
 
-Publicación de preparación: rama remota `docs/f2-entry-evaluation`, commit de
-protocolo/recorder `dc989ea046a977fc7c2d5619f7f3b802b1db9349`, publicado con
-`git push -u origin HEAD`, sin force push. Crear la PR hacia master quedó bloqueado:
-`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
-No existe una PR creada por Codex para esta preparación. La rama está conservada:
-[abrir revisión hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...docs/f2-entry-evaluation?expand=1).
-No se insistió por GraphQL ni se modificó red/autenticación. Registrar el número
-real al abrirla desde GitHub; no fusionar ni presentar F2 como iniciada. No se
-requiere preview UI nueva, porque esta entrega no cambia la interfaz.
+Publicación inicial: la API REST bloqueó la creación de PR desde el entorno de Codex. Tras la aprobación de Juanma, se abrió la [PR #8](https://github.com/Juanmaes83/floorplan-3d/pull/8), que se fusionó; el cierre y SHA final constan en la sección siguiente. La preview Vercel generada por GitHub no se usó para QA visual porque esta preparación no cambia la interfaz.
 
 
 ## Cierre de preparación de entrada F2 — PR #8 (30-09-2026)
