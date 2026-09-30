@@ -96,3 +96,12 @@ No existe una PR creada por Codex para esta preparación. La rama está conserva
 No se insistió por GraphQL ni se modificó red/autenticación. Registrar el número
 real al abrirla desde GitHub; no fusionar ni presentar F2 como iniciada. No se
 requiere preview UI nueva, porque esta entrega no cambia la interfaz.
+
+
+## Cierre de preparación de entrada F2 — PR #8 (30-09-2026)
+
+Juanma aprobó la entrega. Como Codex no pudo crear la PR por REST, se creó desde la integración de GitHub: [PR #8](https://github.com/Juanmaes83/floorplan-3d/pull/8), rama `docs/f2-entry-evaluation`, HEAD revisado `db5f363e731e56485f7284cdabead7ca88ec9213`. Se fusionó con merge commit `387a9bfd57630bced0d9fc1f858d9a0f3c181229` sobre `master`.
+
+El [roadmap canónico](ROADMAP.md) quedó actualizado después del merge. PR #8 fue solo preparación de entrada: protocolo, plantilla vacía y recorder offline; no modifica interfaz y no implementa asistencia. Codex reportó 12/12 pruebas del recorder; no se repitieron en esta sesión. No requiere preview visual. F2 continúa **no iniciada** y mantiene como pendientes la línea base autorizada de cinco sesiones, conjunto de veinte planos con referencias y aprobación humana de umbrales.
+
+La rama se conservó tras la fusión; su limpieza remota queda pendiente de la acción de GitHub si no se eliminó automáticamente. La PR #8 produjo un deployment Vercel READY, pero al no cambiar la interfaz no se usó como revisión visual ni como evidencia de QA 3D.
