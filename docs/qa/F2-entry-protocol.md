@@ -270,3 +270,8 @@ permisos reales sigue a cargo de Juanma, en privado.
 
 Sin cambios visuales: no corresponde preview UI para verificar el cálculo CLI.
 Una página READY no acredita las métricas ni completa la evaluación pendiente.
+
+
+## Método del comparador geométrico aprobado (30-09-2026)
+
+Juanma aprobó la regla de precisión/exhaustividad por longitud implementada en el evaluador offline. En este comparador de ejes horizontales/verticales, las diagonales no reciben crédito de coincidencia, pero su longitud permanece en los denominadores globales de predicciones y referencias; el informe también muestra por separado la exhaustividad sobre ejes soportados. Esto hace visible la limitación del detector actual en vez de ocultarla. La aprobación es del método de cálculo: no fija tolerancia universal, umbral de calidad ni declara F2 validada. Los datos reales quedan para la validación empírica posterior y no bloquean seguir desarrollando el prototipo.
