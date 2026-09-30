@@ -3,7 +3,8 @@
 Actualizado: 30-09-2026. PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
-`49ea432f7d8eba75042e00762c902a7d3830040d`.
+`49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
+`95fcf0da989a9e3bf85f8747c19fc4a9a13426ab`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -24,7 +25,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | **Entrega inicial en revisión**: catálogo genérico dimensionado, adaptador, GLB local autorizado de prueba y fallback. Sin modelos comerciales ni catálogo IKEA autorizado. No se declara F3 cerrada; [informe](technical/F3-initial.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Entrega inicial integrada** por PR #12 (merge `95fcf0d`): catálogo genérico dimensionado, adaptador, GLB sintético local y fallback. **Catálogo externo pendiente**: Juanma confirma autorización para usar los assets del proyecto; cada modelo candidato debe superar comprobaciones de existencia, hash, dimensiones, compatibilidad técnica y alcance de permisos. F3 sigue abierta. [Informe](technical/F3-initial.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
 
@@ -114,21 +115,12 @@ veinte planos con referencias siguen pendientes para evaluar calidad, tiempos y
 umbrales; no bloquean continuar el desarrollo de F2.
 
 
-## F3 — entrega inicial (rama feat/f3-authorized-assets)
+## F3 — entrega inicial integrada (PR #12, 30-09-2026)
 
-Base remota comprobada: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`.
-PR #11 está fusionada (merge `49ea432`); la exportación cruda F2 ya está integrada.
-F2 sigue experimental,
-no validada. Cinco sesiones y veinte planos permanecen en el backlog de validación
-posterior y no bloquean F3.
+PR #12 ([F3: initial authorized 3D asset catalog](https://github.com/Juanmaes83/floorplan-3d/pull/12)) fue revisada visualmente y aprobada por Juanma antes del merge. HEAD revisado: `b3c72d0c6fae1290c9a7b4e449aa388c3f878531`; base: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`; merge commit: `95fcf0da989a9e3bf85f8747c19fc4a9a13426ab`. Vercel confirmó READY con el SHA de la rama; deployment `dpl_F8NcvTSZF37VdrUBi2c7Kqx9W8uw`, preview [protegida por Vercel Authentication](https://floorplan-3d-git-feat-f3-autho-dce6ec-juanma-espinosas-projects.vercel.app/). No se cambió production manualmente.
 
-F3 añade un banco sintético original con permiso MIT específico, normalización,
-comprobación ±20 mm por eje, carga privada desde recursos estáticos locales y
-fallback conservando el objeto. Auditados los 134 registros actuales de Asset Lab:
-114 GLB comprobados y decodificados, cero permisos suficientes para exponerlos.
-No se copian GLB, previews ni documentos de Asset Lab al repositorio público.
+La entrega integra catálogo genérico con alturas explícitas, asociación de `assetRef`, normalización/validación de GLB local, preservación del objeto y fallback. Incluye un banco sintético original con licencia MIT específica. No incluye modelos de Asset Lab ni catálogo comercial.
 
-Pendientes: revisión humana y PR/preview verificable, presupuesto de producto
-aprobado, rendimiento en móvil físico y catálogo externo con permisos y dimensiones
-verificables. Draco se auditó privadamente pero no se incorpora al cargador público.
-Informe e inventario con evidencia, resultados y publicación: [F3-initial.md](technical/F3-initial.md).
+Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets de Asset Lab. Esta confirmación sustituye el bloqueo previo de autorización para continuar el trabajo. La auditoría referenciada en el informe es una instantánea histórica del commit `5dc7b182c5c227472b84aea66a3ffa1368c95981`; no se toma como inventario actual. Antes de publicar cada modelo se vuelve a comprobar el fichero y hash, sus dimensiones verificables, compatibilidad del formato/extensiones, atribución y el alcance concreto del permiso. Se conserva el Asset Lab en solo lectura; los modelos se incorporarán al catálogo de este repo únicamente después de pasar esas comprobaciones.
+
+**Estado:** F3 inicial integrada; **catálogo externo pendiente**. Pendientes de siguientes entregas: inventario actual y selección de modelos, decisión de normalización/dimensiones por candidato, soporte técnico de formatos (incluido Draco si se necesita), y revisar materiales externos. La medición en móvil físico y cualquier presupuesto de rendimiento siguen como validaciones; SwiftShader no las sustituye. F2 continúa experimental y no validada empíricamente; cinco sesiones y veinte planos siguen pendientes, sin bloquear F3.
