@@ -247,3 +247,41 @@ el manifest estático local en la prueba de privacidad F2; no se amplió la pol�
 de red ni se admitieron datos/uploads. La suite completa repetida dio los 120/120
 de la tabla. La aclaración final del manifest no alteró geometría/código, y se
 repitieron los diez tests F3 sobre sus bytes finales.
+
+El control del índice detectó después finales CRLF del CSV como whitespace en
+135 líneas. Se normalizaron a LF conservando sus 134 registros y se repitió
+`git diff --check origin/master` sobre la entrega completa: código 0.
+
+### Publicación y bloqueos externos de revisión
+
+Commit de implementación/QA: `fd315142141f54abce408fe25cbca3414aed19c1`.
+`git push -u origin HEAD` publicó `feat/f3-authorized-assets` sin force push.
+El cierre documental/formato CSV posterior conserva todo el código probado.
+Base master continúa `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`.
+
+Crear PR por REST falló exactamente:
+
+```text
+Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden
+```
+
+No se intentó GraphQL ni se modificó red. La lista pública posterior mostraba
+#1/#2/#3, sin PR F3. [Preparar PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f3-authorized-assets?expand=1).
+La descripción debe separar implementación, banco propio MIT, todos los assets
+excluidos, límites, pruebas y pendientes; este informe contiene esos datos.
+
+GitHub muestra `Vercel / Vercel Preview Comments: succeeded` en el commit de
+implementación. No es un deployment READY ni CI de pruebas. No hay workflow
+propio de CI en `.github/`; los resultados de suites son ejecuciones locales.
+El enlace de feedback apunta a la
+[preview candidata](https://floorplan-3d-git-feat-f3-autho-dce6ec-juanma-espinosas-projects.vercel.app/).
+La petición sin autenticación desde este entorno falla exactamente con
+`curl: (56) CONNECT tunnel failed, response 403`, HTTP 000. No se obtuvo respuesta
+del deployment; no se deduce de ese túnel si requiere login. No hay capacidad
+Vercel API disponible ni binding VERCEL_TOKEN para consultar SHA/READY. No se
+extraen credenciales ni se amplía red para resolverlo.
+
+**Pendiente:** crear la PR desde el enlace manual y confirmar en Vercel READY,
+SHA final de la rama, URL y acceso para revisión humana. La URL candidata no se
+presenta como preview verificada del HEAD documental final. No hay merge ni
+despliegue manual a producción. Todo el trabajo permanece publicado en GitHub.
