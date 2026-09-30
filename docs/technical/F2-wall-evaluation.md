@@ -250,14 +250,12 @@ Decisión de Juanma (30-09-2026): acepta esta **definición de métrica**, inclu
 
 ### Publicación y estado de revisión (actualizado 30-09-2026)
 
-La rama está publicada en [feat/f2-evaluation-harness](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-evaluation-harness). Commit de la implementación: `759ca53a4afd32c1f89ae1cbffa34a4c64eb29f9`; el HEAD de revisión indicado a continuación añade el registro de publicación, sin cambios en el evaluador.
+La rama está publicada en [feat/f2-evaluation-harness](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-evaluation-harness). La [PR #10](https://github.com/Juanmaes83/floorplan-3d/pull/10) está abierta y lista para revisión, con base `master` @ `fbb6448ee7931d6fa1a5e7ae486d4c368a921663`. La implementación inicial es `759ca53a4afd32c1f89ae1cbffa34a4c64eb29f9`; el HEAD de revisión cambia conforme a los commits de aprobación/documentación registrados en la PR.
 
-La primera creación de PR por REST respondió `Forbidden`. Después se creó la [PR #10](https://github.com/Juanmaes83/floorplan-3d/pull/10), actualmente abierta en estado **Draft**, con base `master` @ `fbb6448ee7931d6fa1a5e7ae486d4c368a921663` y HEAD `3c63fbe5bf19fba5d4e9da1a07a3867ec7bc7190`. No está fusionada.
-
-Vercel publicó un deployment **READY** y su API confirma que corresponde a ese HEAD y a la rama de esta PR:
+Vercel confirmó como **READY** el deployment de la rama para el SHA `43af835776b3067013a04853269fe89189994dba`:
 [preview](https://floorplan-3d-git-feat-f2-evalu-2df055-juanma-espinosas-projects.vercel.app/) ·
-[inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/A97UfKkdfFAoaEKv72GXazdxXrPU).
+[inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/9UypwsaXVTp1xPyqKLwoDzPFEK8e).
+Esa verificación precede al commit documental que actualiza este informe; no se cambió código de interfaz.
 
-No hay cambios de interfaz; por tanto, esta URL no sustituye las pruebas de la CLI ni requiere revisión visual de la app. No se hizo despliegue manual ni merge. Mantener la PR en Draft hasta revisar la definición métrica, el evaluador y las pruebas.
-
+No hay cambios de interfaz; por tanto, la preview no sustituye las pruebas de la CLI ni requiere revisión visual de la app. El deployment es automático desde Git; no se hizo despliegue manual. La PR está lista para revisión.
 La herramienta calcula geometría anónima local; no incluye imágenes ni permisos. Juanma aprobó el método métrico el 30-09-2026, incluida la ausencia de crédito para diagonales en este comparador; estas líneas siguen dentro de los denominadores globales. La aprobación del método o de la implementación no valida F2 ni fija umbrales de calidad del producto. Los datos reales no bloquean continuar el desarrollo del prototipo y solo se necesitan para la validación empírica. Conservar imágenes, referencias y registros completos fuera de GitHub/Vercel.
