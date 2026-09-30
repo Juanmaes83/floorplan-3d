@@ -130,8 +130,10 @@ Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets
 
 La [matriz de oportunidades](product/competitive-opportunity-matrix.md) contrasta
 el estado integrado con documentación primaria accesible de Floorplanner y
-magicplan; Sweet Home 3D y los datos comerciales quedan no verificados por acceso
-bloqueado. Propone para
+magicplan; Sweet Home 3D y los datos comerciales quedan no verificados tras
+intentos fallidos con curl y Playwright en este entorno. La corrección metodológica
+registra tooling y límites por método; no afirma inexistencia de información
+oficial ni comparación completa. Propone para
 revisión un catálogo externo pequeño, medidas trazables, soporte acotado de texturas
 y evaluación de formatos/rendimiento; no aprueba negocio, hosting o integraciones.
 

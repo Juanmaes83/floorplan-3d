@@ -1,6 +1,6 @@
 # Auditoría competitiva y matriz de oportunidades
 
-Consulta: **30-09-2026 (Europe/Madrid)**. Base inspeccionada y comprobada contra el remoto:
+Consulta y corrección metodológica: **30-09-2026 (Europe/Madrid)**. Base inspeccionada y comprobada contra el remoto:
 `master` @ `19d286b5d8d1b288048ee5617ea734cff2964ef6`.
 Rama documental: `docs/competitive-opportunity-matrix`.
 Esta entrega contiene propuestas; no aprueba decisiones de negocio ni implementa funciones.
@@ -14,8 +14,10 @@ experimental integrado y sin validación empírica. F3 inicial (#12) está integ
 alturas explícitas del catálogo genérico, asociación de `assetRef`, un banco GLB
 sintético propio, normalización y fallback. **Catálogo externo pendiente; F3 abierta.**
 
-La comparación es parcial: las páginas de producto, ayuda, precios y licencias
-intentadas están bloqueadas por el entorno. Hay evidencia primaria accesible en
+La comparación sigue parcial: los intentos con curl y Playwright de abrir las
+páginas de producto, ayuda, precios y licencias fallan en este entorno. Estos
+resultados describen límites de los métodos disponibles; no demuestran que la
+información oficial no exista o no pueda verificarse desde otro entorno. Hay evidencia primaria accesible en
 repositorios de los proveedores: un ejemplo reciente de integración app-to-app
 magicplan y ejemplos Floorplanner de 2009/2011. Esto permite comparar mecanismos
 concretos de intercambio, pero **no acreditar paridad de la interfaz, precios,
@@ -48,6 +50,64 @@ sin sincronización/collaboración, sin presentación compartida alojada ni expo
 PDF a escala dedicada. La relevancia de esas brechas para clientes sigue siendo
 hipótesis; la comparación bloqueada no permite atribuirlas a los tres competidores.
 No conviene replicar ahora backend, cuentas, ecommerce, CRM, precios o IA universal.
+
+## Corrección de métodos de investigación (30-09-2026)
+
+Esta revisión continúa en la misma rama desde `6861600`, conservando la matriz
+publicada. Corrige su falta de evidencia sobre descubrimiento de herramientas y
+navegación. No abre PR ni cambia app, schema, assets o decisiones. La comparación
+**no se declara completa**: tareas y condiciones comerciales importantes siguen
+sin poder revisarse mediante las herramientas disponibles en esta ejecución.
+
+### Descubrimiento previo del tooling
+
+Se inspeccionaron `README.md`, `docs/technical/F1a.md`, referencias de F1b/F2/F3,
+`tests/browser.test.cjs` y `tests/assets.browser.test.cjs`, nombres de manifests y
+configuraciones pertinentes de checkout/workspace, resolución de módulos y comandos.
+No se leyeron ni imprimieron valores de `.env`, credenciales o tokens.
+
+| Herramienta | Evidencia de disponibilidad | Uso en esta corrección |
+| --- | --- | --- |
+| Playwright Node **1.62.1** | `require.resolve("playwright")` y versión del package instalado; usado por pruebas existentes | **Sí**: navegación real `page.goto`, contexto nuevo sin autenticar, sin interceptar ni sustituir respuestas. Veinte URLs intentadas; ninguna recuperó una página inspeccionable |
+| Chromium | `/usr/bin/chromium`, documentado en runner existente | **Sí**, headless con opciones existentes; no se instaló navegador ni se ignoraron errores TLS |
+| Playwright Python | `importlib.util.find_spec("playwright")` encuentra módulo | No: se usó el runner Node ya documentado |
+| Firecrawl CLI/Node/Python | Sin comando `firecrawl`; módulos `@mendable/firecrawl-js`, `firecrawl` y Python `firecrawl` no encontrados; sin configuración identificada en checkout | **No disponible entre las herramientas comprobadas**, no usado ni instalado |
+| MCP / búsqueda / crawling conectado | Catálogo de herramientas activas y recursos revisado; no herramienta callable de navegador, Firecrawl o búsqueda web encontrada. Skills disponibles no aportan aquí un navegador conectado; no se abrió conexión ni OAuth | No disponible para esta investigación; no se instaló servidor MCP |
+| Scripts de navegación y validadores | Runners Playwright del repo; sin manifest de dependencias ni linter Markdown configurado localizado en checkout. No script Firecrawl/crawling pertinente encontrado | Se reutiliza la biblioteca instalada en scripts temporales; biblioteca estándar Python para validación documental |
+| curl / Git | Comandos existentes, lectura de repositorios oficiales ya descargados y revisiones fijadas | **Sí**, curl con TLS verificado para apertura de URLs y Git para contenido documental; no equivalen a observar flujos de UI |
+
+### Intentos de navegador y cobertura pendiente
+
+Playwright lanzó Chromium sin desactivar comprobaciones de certificados. Se
+intentaron las doce páginas FP1–FP4, MP1–MP4 y SH1–SH4 de la tabla de fuentes,
+más SH5 SourceForge: **13 fallos `net::ERR_TUNNEL_CONNECTION_FAILED`**. No hubo
+respuesta HTTP del destino, título ni contenido de producto recuperado; no se
+recorrieron flujos, formularios, exportaciones o planes porque ninguna página abrió.
+No se afirma inspección visual de esas páginas.
+
+También se intentaron siete fuentes primarias GitHub FP-G1–FP-G6 y MP-G1:
+**7 fallos `net::ERR_CERT_AUTHORITY_INVALID`**. No se hizo click para continuar,
+no se ignoró TLS ni se modificó red/permisos. Esas fuentes se verifican por lectura
+Git y curl con TLS verificado, que sí permite abrir sus URLs. Esto distingue un
+fallo del navegador de una fuente documental accesible por otro método.
+
+| Apartado solicitado | Qué se intentó / fuente legible | Estado tras la corrección |
+| --- | --- | --- |
+| Floorplanner: tareas, niveles/límites, exportación y precios | Navegador FP1/FP2/FP4; curl; FP-G4–FP-G6 legibles por Git | Actualidad comercial/UI **NV**. Exportadores de 2011 confirmados documentalmente, no extrapolados al producto actual |
+| Floorplanner: compartir/embed/API | Navegador FP3/FP4; curl; FP-G1/FP-G3 legibles por Git | POC/API de 2009 confirmados. API vigente, white-label, entitlements y tarifas **NV** |
+| magicplan: creación/edición móvil y web, importación y calibración | Navegador MP1/MP4; curl; MP-G1 legible por Git | Demo nativo iOS y esquema del paquete confirmados; edición web, calibración y recorrido UI **NV** |
+| magicplan: exportar/colaborar/API/planes/límites/precios | Navegador MP2/MP3/MP4; curl; MP-G1 legible | Paquete compartido y referencia Cloud API confirmados documentalmente. Coedición, acceso API y condiciones comerciales **NV** |
+| Sweet Home 3D: tareas, importación/exportación, móvil/web | Navegador SH1/SH2/SH4/SH5; curl | **NV**; no contenido inspeccionable recuperado |
+| Sweet Home 3D: API/plugins, licencia de app y licencias de modelos/texturas | Navegador SH2/SH3/SH4; curl | **NV** por separado para aplicación, plugin/visor, modelo y textura; no se infiere una licencia común |
+
+**“curl bloqueado en este entorno”** identifica el fallo CONNECT de ese método.
+**“No localizado en fuentes oficiales accesibles”** solo se usa tras leer una
+fuente: por ejemplo, ausencia de LICENSE en los árboles fijados de FML y del demo
+magicplan, o ausencia de condiciones comerciales actuales en sus documentos.
+Ninguna expresión demuestra inexistencia de una función/licencia/oferta en el
+producto. No hay base nueva para convertir precios o funciones de las webs
+bloqueadas en confirmados. Tampoco un extracto de búsqueda sustituye la lectura:
+no se usaron resultados de búsqueda como evidencia ni se encontró un buscador callable.
 
 ## Evidencia y antecedentes
 
@@ -87,6 +147,13 @@ Todas las fuentes de esta sección se consultaron el **30-09-2026**. Los enlaces
 GitHub siguientes devolvieron HTTP 200. Se leyó el contenido de las revisiones
 fijadas, además de comprobar apertura del enlace. Los títulos de documento se
 indican abajo; para los ficheros sin título editorial se usa su nombre real.
+**Método por fuente:** FP-G1–FP-G6 y MP-G1: nueva lectura `git show` de los
+ficheros de las revisiones fijadas, comprobación del árbol para licencias y apertura
+de enlace mediante curl/TLS; sus intentos Playwright fallaron por certificado.
+THREE: apertura curl/TLS y licencia documental de la versión fijada, sin atribuir
+licencia al catálogo. Los diez enlaces GitHub (ocho fuentes y dos antecedentes)
+se reintentan con curl al validar esta corrección.
+
 Floorplanner publica estos repositorios bajo su organización y el README remite
 a su dominio; el ejemplo magicplan lo publica su propia organización. Su antigüedad
 no debe confundirse con una oferta comercial vigente.
@@ -101,9 +168,11 @@ no debe confundirse con una oferta comercial vigente.
 | [MP-G1][mp-demo] | magicplan Integration Field App Example; `d382a5a`, 13-04-2026 | Crear/reabrir proyecto por enlace nativo; recibir paquete ZIP `.magicplan` iOS, esquema 1.0, espacios/media/formularios; cita endpoint Cloud API | T01, T03–T04, T06–T07, T09; O07, O10 |
 | [THREE][three-license] | LICENSE, `r160` | MIT del motor Three.js; no licencia de modelos ni marcas | Licencias; motor existente |
 
-### Fuentes inaccesibles y datos comerciales
+### Fuentes con acceso fallido por curl y navegador; datos comerciales pendientes
 
-Cada URL siguiente se intentó mediante `curl --location --max-time 25`, con TLS
+Cada URL siguiente se reintentó mediante curl y Playwright en esta corrección;
+Playwright falla como se detalla arriba. Para curl se usó
+`curl --location --max-time 25`, con TLS
 verificado. Resultado para todas: salida 56, **HTTP de destino 000**, error exacto
 `curl: (56) CONNECT tunnel failed, response 403`. El 403 es del túnel/proxy del
 entorno, no prueba una negativa del producto ni la existencia del path. No se pudo
@@ -200,7 +269,7 @@ futuras. No se asignan puntuaciones de mercado, aceptación o esfuerzo.
 | O10 Sync/colaboración: compartir entre personas/dispositivos | T08 NV; paquete local [MP-G1][mp-demo] no demuestra coedición | Sin sync ni cloud; archivos manuales | Agentes, reformas | **POSPONER**, fase posterior; demanda hipótesis |
 | O11 Promesa de interpretar cualquier plano automáticamente | T02/T03 NV para competidores; limitación F2 confirmada | H/V experimental, revisión humana y validación pendiente | Reformas, agentes | **DESCARTAR** esa promesa; fuera del alcance F3; continuar evaluación F2 aparte |
 | O12 Ecommerce/precios/CRM dentro de F3 | T10 NV; no evidencia de necesidad ni condiciones comerciales | Sin esos flujos/contratos | Beneficio por validar con segmentos | **DESCARTAR** para F3, fuera del roadmap actual |
-| O13 Reutilizar motor/catalogue de Sweet Home 3D | T04/T09 y SH2–SH4 bloqueados; código/licencias/formatos NV | No conexión ni lector implementado | Interioristas, cliente final | **POSPONER**, fase posterior; no adoptar código/modelos sin fuente legible |
+| O13 Reutilizar motor/catálogo de Sweet Home 3D | T04/T09 y SH2–SH4 bloqueados; código/licencias/formatos NV | No conexión ni lector implementado | Interioristas, cliente final | **POSPONER**, fase posterior; no adoptar código/modelos sin fuente legible |
 
 | ID | Dependencias y límites | Próximo paso verificable |
 | --- | --- | --- |
@@ -255,6 +324,8 @@ repositorio público en esta entrega.
 
 ### Nueva auditoría Asset Lab (solo lectura)
 
+**Reverificado en esta ejecución de corrección**, con lectura de archivos/hash y
+nueva decodificación; no se conserva como actual solo por coincidir el commit.
 Se volvió a consultar el remoto y a inspeccionar ficheros actuales de
 `Juanmaes83/immersphere-asset-lab` el 30-09-2026. HEAD remoto verificado:
 `5dc7b182c5c227472b84aea66a3ffa1368c95981`. Coincide con la instantánea histórica,
@@ -330,14 +401,56 @@ servicio Floorplanner, colaboración y evaluación de Sweet Home 3D si hay fuent
 accesibles y necesidad. Ecommerce/CRM/IA cloud quedan fuera. F2 conserva cinco
 sesiones y veinte planos pendientes, sin bloquear catálogo/materiales F3.
 
-## Verificación de esta entrega
+## Verificación de esta entrega y de la corrección
 
 La tarea es documental: no se ejecutaron de nuevo las suites de producto F1/F2/F3.
 Las pruebas históricas citadas por los informes conservan su carácter histórico.
 La nueva decodificación usa **renderizado por software SwiftShader**: no valida
 rendimiento en GPU/teléfono físico, demanda, medidas físicas ni calidad comercial.
 
-Comandos de investigación ejecutados desde el checkout actual (artefactos temporales
+Comandos de esta **corrección** ejecutados desde el mismo checkout:
+
+```bash
+git status --short --branch
+git rev-parse HEAD
+rg --files -g 'AGENTS.md' -g '*package*.json' -g '*playwright*' -g '*firecrawl*' -g '*requirements*' -g '*mcp*' -g '!node_modules/**'
+rg -n -i 'playwright|firecrawl|crawling|browser|navegaci|mcp' README.md docs tests .github
+command -v chromium
+command -v firecrawl
+node -e 'console.log(require("playwright/package.json").version)'
+node /tmp/competitive-browser-research.cjs
+node /tmp/competitive-browser-primary.cjs
+git ls-remote https://github.com/Juanmaes83/immersphere-asset-lab.git HEAD refs/heads/main
+git -C /tmp/f3-asset-lab-audit rev-parse HEAD
+git -C /tmp/f3-asset-lab-audit status --short
+python3 /tmp/competitive-current-assets.py
+node /tmp/f3-asset-lab-audit/scripts/validate-manifest.js
+node /tmp/f3-private-audit.cjs
+python3 /tmp/validate-competitive-doc.py
+python3 /tmp/validate-competitive-markdown.py
+git diff --check
+git diff --cached --check
+```
+
+Además: resolución de módulos Node y `find_spec` Python, inspección de nombres/
+claves de configuración pertinente sin valores sensibles y metadatos de herramientas
+MCP; `git show SHA:archivo` y `git ls-tree` en repositorios de proveedor para
+reconfirmar documentos/ausencia de archivos de licencia. `command -v firecrawl`
+y resoluciones negativas son evidencia de no disponibilidad, no instalaciones.
+Los scripts temporales Node usan `page.goto` con timeout 18 s y recogen fallos de
+navegación; terminan con salida 0 porque registran los **20 fallos de acceso**, no
+porque las páginas estén verificadas. Sin cambios de red, certificados o permisos.
+
+Auditoría actual Asset Lab: remoto/checkout siguen en `5dc7b18`, limpio; Python
+relee manifest, árbol, todos los archivos y hashes; salida 0. Se reconfirman 134
+entradas, 114 GLB, 134 previews, 133 referencias existentes, una sola dimensión
+W/H/D completa entre GLB existentes, 113 con imágenes, 109 Draco, 93 WebP y las
+banderas restrictivas. Validador actual: 134/134, salida 0. Decodificación repetida:
+114, fallos `[]`, salida 0. Las cajas/candidatos/hashes publicados se contrastan
+contra esos resultados nuevos. F3 público no se modifica ni se evalúa rendimiento
+físico. Autorización general confirmada; hipótesis de demanda permanecen hipótesis.
+
+Comandos de la **publicación inicial** ejecutados desde el checkout actual (artefactos temporales
 fuera del repositorio; ningún modelo o preview se añadió al Git público):
 
 ```bash
@@ -367,6 +480,7 @@ Validación documental final ejecutada:
 
 ```bash
 python3 /tmp/validate-competitive-doc.py
+python3 /tmp/validate-competitive-markdown.py
 git diff --check
 git diff --cached --check
 ```
@@ -377,6 +491,11 @@ inventario/hashes con los resultados actuales; comprueba URLs mediante curl.
 Resultado, salida 0: **24 enlaces internos**, ninguno roto; **42 usos de referencias,
 8 definiciones**, ninguna indefinida; inventario/decodificación/hashes concordantes.
 **23 URLs externas distintas: 10 HTTP 200 y 13 bloqueadas** con el error declarado.
+Comprobación Markdown temporal, salida 0: fences equilibrados y columnas
+consistentes en las 12 tablas de la matriz y las dos del roadmap; registro de
+navegación contrastado (20 intentos, 13 túnel y 7 TLS, cero páginas inspeccionables);
+cajas y triángulos de candidatos reconfirmados contra la decodificación nueva.
+Estos controles básicos no se presentan como un linter Markdown completo.
 Los dos `git diff` terminan con salida 0, sin errores de whitespace. No se encontró
 un linter/validador Markdown configurado en el repositorio. Los destinos bloqueados
 se registran como NV; no se declara que todos los enlaces externos sean accesibles.
