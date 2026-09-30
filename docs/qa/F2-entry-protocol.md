@@ -235,3 +235,38 @@ despliegue manual; no hay preview UI nueva requerida para esta preparación.
 ## Reconciliación tras la revisión y el merge de PR #9 (30-09-2026)
 
 La [PR #9](https://github.com/Juanmaes83/floorplan-3d/pull/9) se aprobó y fusionó con merge commit `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; HEAD revisado `3e3e6117770d97cb6e82f73fa06613d31a506019`. El prototipo se aprobó como implementación experimental. Los recuentos de cinco sesiones reales y veinte planos de evaluación siguen en cero/no disponibles en el inventario previo; confirmar de nuevo cuando Juanma prepare los datos en privado. Los artefactos sintéticos publicados no cuentan como datos reales.
+
+
+## Evaluador geométrico offline en preparación (esta rama, 30-09-2026)
+
+[Formato, reglas propuestas y ejecución](../technical/F2-wall-evaluation.md):
+`scripts/f2-wall-evaluation.py` compara segmentos crudos de muros sugeridos con
+ejes anotados/revisados manualmente, en un marco común alineado con el raster y
+unidad mm. No cambia el detector ni FloorPlanProjectV1. La tolerancia geométrica
+es parámetro explícito obligatorio; no hay valor por defecto ni umbral de
+calidad aprobado. Precisión/exhaustividad por longitud con asignación de capacidad
+sin doble conteo; regla versionada propuesta para revisión de Juanma.
+
+Preparar y guardar los segmentos reales **en local fuera de Git**, sin imágenes,
+rutas, EXIF, nombres, proyectos o permisos. Congelar el SHA del detector, revisión
+`eval_NNN` y correspondencia privada entre IDs opacos de casos y los `plan_NNN`
+del inventario. No omitir casos fallidos ni puntuar geometría corregida por la
+persona como salida cruda. Normalización/escala comunes se preparan en privado,
+sin ajustar el detector a las referencias reservadas.
+
+El evaluador muestra casos, fallos, denominadores y agregado micro; referencia
+ausente queda sin puntuar y análisis fallido con referencia cuenta cero cobertura.
+Las orientaciones oblicuas conservan longitud en la exhaustividad global aunque
+este comparador de ejes no les asigne crédito. Revisar cada caso y alcance antes
+de interpretar agregados. La CLI nunca valida F2. No compara tiempos/correcciones
+ni mezcla cinco sesiones manuales con veinte de evaluación.
+
+Readiness conserva el inventario único, plantilla vacía y todos sus mínimos
+(digital/scan/photo en cinco; esos tipos y con/sin mobiliario en veinte).
+Solo se publican fixtures geométricos sintéticos y sus pruebas. En la inspección
+actual de `/workspace` no se identificaron candidatos reales/autorizaciones; solo
+los seis raster sintéticos y capturas del prototipo. La preparación de datos y
+permisos reales sigue a cargo de Juanma, en privado.
+
+Sin cambios visuales: no corresponde preview UI para verificar el cálculo CLI.
+Una página READY no acredita las métricas ni completa la evaluación pendiente.
