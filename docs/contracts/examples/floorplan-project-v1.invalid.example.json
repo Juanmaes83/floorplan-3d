@@ -1,0 +1,32 @@
+{
+  "schema": "rubik-sota.floorplan-project",
+  "schemaVersion": "1.0.0",
+  "id": "prj_01J9Z0INVALID00001",
+  "name": "Ejemplo INVÁLIDO a propósito (ver FloorPlanProjectV1.md §8)",
+  "createdAt": "2026-09-30T08:00:00Z",
+  "updatedAt": "2026-09-30T08:00:00Z",
+  "units": "cm",
+  "coordinateSystem": { "origin": "plan-top-left", "xAxis": "right", "yAxis": "down", "rotation": "degrees-clockwise" },
+  "scale": { "confidence": "real", "method": "declared-ratio", "declaredRatio": "1:100" },
+  "defaults": { "wallHeightMm": 2600, "wallThicknessMm": 100 },
+  "sourceImages": [
+    { "id": "img_plan", "mediaType": "application/pdf", "widthPx": 3000, "heightPx": 2000, "storage": { "kind": "remote", "ref": "blob:https://example.invalid/5f1c" } }
+  ],
+  "walls": [
+    { "id": "wal_a", "start": { "x": 0, "y": 0 }, "end": { "x": 4000.5, "y": 0 }, "heightMm": 2600, "structure": "exterior", "status": "existing" },
+    { "id": "wal_b", "start": { "x": 0, "y": 0 }, "end": { "x": 0, "y": 0 }, "thicknessMm": 100, "heightMm": 2600, "structure": "partition", "status": "existing" }
+  ],
+  "openings": [
+    { "id": "opn_door", "wallId": "wal_missing", "kind": "door", "offsetMm": 3800, "widthMm": 900, "heightMm": 2100, "sillHeightMm": 0 }
+  ],
+  "rooms": [
+    { "id": "rom_a", "name": "Salón", "polygon": [{ "x": 0, "y": 0 }, { "x": 4000, "y": 0 }], "floorMaterialId": "mat_oak", "countsTowardArea": true }
+  ],
+  "materials": [
+    { "id": "mat_oak", "name": "Roble", "category": "floor", "appearance": { "color": "#d8b88a" }, "price": { "amount": 320, "currency": "CNY" } }
+  ],
+  "objects": [
+    { "id": "obj_sofa", "type": "sofa", "name": "Sofá", "position": { "x": 1000, "y": 1000 }, "rotationDeg": 360, "size": { "widthMm": 2200, "depthMm": 900 } },
+    { "id": "obj_sofa", "type": "sofa", "name": "Sofá duplicado", "position": { "x": 2000, "y": 1000 }, "rotationDeg": 0, "size": { "widthMm": 2200, "depthMm": 900 } }
+  ]
+}
