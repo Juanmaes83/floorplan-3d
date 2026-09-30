@@ -1,7 +1,8 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 Actualizado: 30-09-2026. PR #9 integrada en `master` mediante merge commit
-`10f7439b3fc86b0a0bd325d94531709d45cbcad4`.
+`10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 integrada mediante merge
+commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -87,4 +88,7 @@ contratos, permisos y evaluación propios.
 
 ## Evaluador F2 y decisión métrica (30-09-2026)
 
-La PR #10 incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación.
+La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`. Incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación.
+
+
+Siguiente trabajo de implementación F2: puede continuar con datos sintéticos y casos unitarios, sin esperar los conjuntos reales. Mantener como limitaciones visibles el comparador solo horizontal/vertical y la ausencia de umbrales de producto. Cinco sesiones y veinte planos autorizados son necesarios para la validación empírica, no para seguir desarrollando el prototipo.
