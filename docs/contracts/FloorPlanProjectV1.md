@@ -1,0 +1,217 @@
+# FloorPlanProjectV1 — contrato de proyecto de plano
+
+**Estado:** propuesta F0, **pendiente de aprobación** por Juanma. No está implementada en la app.
+**Fecha:** 30-09-2026 · **Referencia auditada:** `master` @ `a03136c` y PR #1 @ `540b825`.
+**Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
+
+## 1. Para qué sirve y qué no hace
+
+Es el formato durable y portable de **un** plano editable: la geometría (muros, huecos, estancias), la escala y su calibración, los acabados, los muebles y la referencia a la imagen original. No depende de la interfaz: sirve igual para el editor actual, para una importación futura y para un adaptador hacia CRM o Immersphere.
+
+No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos, tenant, precios, presupuestos, licencias, leads, plantas múltiples, techos inclinados ni muros curvos.
+
+### Por qué hace falta: lo que guarda la app hoy (comprobado)
+
+| Aspecto | Hoy (`index.html` @ `a03136c`) | Problema para un proyecto portable |
+|---|---|---|
+| Geometría | Constantes `WALLS`, `WINS`, `DOORS`, `SLIDES`, `ROOMS` en el código (l. 385-448) | El JSON exportado **no contiene muros ni estancias**. Solo existe una vivienda. |
+| Estado guardado | `{furniture, rooms:{id:{name,mat}}, demolished:['w<índice>'], measures:[{a,b}]}` en `localStorage['huxing-design-v1']` (l. 529-562) | Sin versión ni tipo. Un muro se identifica por su **posición en el array**: si se edita la lista, cambian las referencias. |
+| Importación | Acepta cualquier JSON con `furniture` como array (l. 1466-1472) | No valida versión, tipos ni referencias. |
+| IDs de mueble | `'f' + Date.now().toString(36) + contador` (l. 493) | Se regeneran al restaurar el ejemplo. |
+| Materiales | `MATS` con precio en ¥/m² (l. 450-459) | Precio en yuanes sin fuente verificada. |
+
+## 2. Identidad
+
+- Cada entidad lleva un `id` con prefijo de tipo: `prj_`, `wal_`, `opn_`, `rom_`, `mat_`, `obj_`, `img_`, `msr_`, seguido de un sufijo de 3 a 64 caracteres `[A-Za-z0-9_-]` que empieza por letra o dígito.
+- **Creación:** el ID se genera **una sola vez**, al crear la entidad. Recomendación: ULID o `crypto.randomUUID()` sin guiones. Las plantillas pueden usar IDs deterministas legibles (por ejemplo `wal_ref-w12`).
+- **Prohibido regenerar** IDs al editar, mover, guardar, exportar, importar o migrar. Mover un muro no cambia su ID. Borrar una entidad no libera su ID dentro del proyecto.
+- **Duplicar un proyecto** genera un `prj_` nuevo. Los IDs hijos pueden conservarse, porque solo tienen que ser únicos dentro del proyecto.
+- **Unicidad:** los IDs son únicos en todo el documento, no solo dentro de su lista (regla S1).
+
+## 3. Versiones, compatibilidad y migración
+
+- `schema` = `"rubik-sota.floorplan-project"` identifica el tipo de fichero. `schemaVersion` sigue SemVer, y este esquema acepta solo `1.x.y`.
+- **Minor (1.1, 1.2…):** solo añade campos opcionales o valores de enum nuevos que se puedan ignorar sin perder información. **Patch:** aclaraciones sin cambio estructural.
+- **Major (2.0):** cualquier cambio que rompa la compatibilidad. Requiere un migrador explícito `vN → vN+1`.
+- **Lector que recibe una versión:**
+
+| Caso | Comportamiento |
+|---|---|
+| Sin `schema` y con `furniture` como array | Estado heredado `huxing-design-v1`: se migra con el migrador heredado (ver abajo). |
+| `schema` distinto o ausente sin `furniture` | Se rechaza con el mensaje «no es un proyecto». |
+| Major desconocido (≥ 2 para un lector v1) | Se rechaza sin modificar nada. Se ofrece conservar el fichero original. |
+| Misma major y minor superior a la del lector | Se abre avisando de que es más nuevo. Al guardar se **conservan** los campos desconocidos o se ofrece «guardar como copia»; nunca se descartan en silencio. |
+| Misma major y minor igual o inferior | Se carga normalmente. |
+
+- **Migrador heredado (se implementa en F1, no en F0):** la geometría sale de la plantilla de referencia con IDs deterministas (`wal_ref-w<índice>` según el orden actual de `WALLS`). `demolished:['w12']` pasa a `status:"demolished"` en `wal_ref-w12`. Las estancias toman como ID `rom_<id actual>`. Los muebles conservan su ID con prefijo (`f…` → `obj_f…`), y los campos cambian así: `cx,cy` → `position`, `w,d` → `size`, `rot` → `rotationDeg`. `MATS` pasa a `mat_<clave>` **sin precio**, y `measures` a `measurements` con ID nuevo. La escala de la plantilla queda como `confidence:"estimated"`, `method:"template"`, porque las cotas proceden de un plano original que no está en el repo.
+- **Riesgo conocido:** el `index.html` actual está bajo `localStorage['huxing-design-v1']`. El migrador debe ser idempotente y no borrar la clave antigua hasta confirmar que la nueva se ha guardado.
+
+## 4. Geometría y medidas
+
+- **Unidad canónica:** milímetros (`units:"mm"`).
+- **Coordenadas en planta:** enteros (`integer`) en ±1 000 000 mm. Se redondea al mm más cercano con `Math.round`, **solo al escribir**. Los cálculos intermedios (calibración, rotaciones) pueden ser decimales. Los píxeles de imagen (`pixelPoint`) y `mmPerPixel` sí son decimales.
+- **Ejes:** origen `plan-top-left`, **x a la derecha, y hacia abajo**, igual que el SVG actual. En 3D: `mundo.x = (x − cx)/1000`, `mundo.z = (y − cy)/1000`, `mundo.y` = altura. Así lo hace hoy la app (l. 1514-1515, con centro fijo `OX=6000, OY=5300`); en F1 el centro se calculará a partir de la envolvente.
+- **Rotación:** grados enteros `0–359`, **positivo en sentido horario** en planta (con y hacia abajo). En 3D equivale a `rotation.y = −rotationDeg·π/180`, igual que hoy (l. 2259).
+- **Escala** (`scale`):
+  - `confidence`: `real` (calibrada con una dimensión conocida y confirmada), `estimated` (plantilla, escala declarada o cota no confirmada) o `pending` (sin calibrar).
+  - `method`: `known-dimension`, `declared-ratio`, `template` o `none`.
+  - `calibration`: dos puntos en píxeles de la imagen original, la longitud real `knownLengthMm` y `mmPerPixel = knownLengthMm / |AB|`, que se guarda para auditoría y se comprueba con una tolerancia del 0,1 % (S6).
+  - Coherencia, impuesta por el esquema: `real` exige `known-dimension` y `calibration`; `pending` ⇔ `none`.
+  - `declaredRatio` (por ejemplo `1:100`) es solo informativo, porque una imagen escaneada o fotografiada no conserva esa escala.
+- **Estancias:** **polígono simple explícito** por las caras interiores, sin repetir el primer vértice, e independiente de los muros. `countsTowardArea:false` sirve para miradores y huecos, como hoy con `counted:false`.
+- **Muros:** segmento de **eje** `start → end` con `thicknessMm` simétrico y `heightMm` propio (la app hoy usa 2,8 m global). `structure` es una etiqueta declarada, **no un dictamen técnico**. `status`: `existing`, `demolished` o `new`.
+- **Huecos:** siempre vinculados a un `wallId`, con `offsetMm` medido desde `wall.start` por el eje hasta el borde del hueco, más `widthMm`, `heightMm` y `sillHeightMm`. Las puertas llevan `swing` opcional: extremo de la bisagra y lado de apertura mirando de start a end.
+- **Procedencia:** `source.method` puede ser `template`, `manual`, `imported` o `suggested` (este último experimental, para F2). `source.review` puede ser `unreviewed` o `confirmed`. Nada `suggested` o `unreviewed` debe presentarse como medida confirmada.
+
+### Por qué polígono de estancia + muros por eje (y no un grafo topológico) para el MVP
+
+1. **Coincide con lo que existe:** la app ya separa `ROOMS` (polígonos) de `WALLS` (rectángulos). La migración es mecánica: el lado largo del rectángulo da el eje y el corto el grosor.
+2. **Coincide con el flujo manual de F1:** trazar una estancia pulsando esquinas y trazar un muro con dos clics son operaciones independientes y fáciles de corregir.
+3. **Áreas fiables y sencillas:** la superficie se calcula directamente del polígono con la fórmula del área de Gauss, como hoy (l. 572).
+4. **Coste aceptado:** estancias y muros pueden no coincidir. Eso se detecta con un **aviso** (W2), no con un error, y se resuelve con la revisión humana. Un modelo topológico (nodos compartidos, semiaristas) se puede introducir en una v2 si F1–F2 demuestran que hace falta.
+
+## 5. Materiales, objetos e imagen fuente
+
+- **Materiales:** se referencian por `floorMaterialId`, con `appearance.color` y un `preset` procedimental opcional. **Sin binarios, texturas incrustadas ni precio.**
+- **Objetos:** `type` genérico, `name`, `position` (centro de la huella), `rotationDeg`, `size.widthMm` y `size.depthMm` obligatorios, `heightMm` y `elevationMm` opcionales, `roomId` y `color` opcionales.
+- **`assetRef` (experimental, F3):** contiene `catalog`, `assetId` y `catalogRevision`. Solo es un puntero: **no afirma que el fichero exista, que la licencia cubra el uso ni ningún precio**. Esas comprobaciones pertenecen al catálogo (ver auditoría de Asset Lab). Si el asset no está disponible o no está autorizado, la app dibuja el `type` genérico con el mismo `size`.
+- **Imagen original (`sourceImages[]`):** es una **referencia externa**. Lleva `id`, `mediaType` (V1: PNG o JPEG), tamaño en px, `sha256` y `storage.kind`, que puede ser `local-browser`, `sidecar-file` o `remote` (este último experimental, sujeto a D-06 y D-08). `storage.ref` prohíbe `blob:` y `data:`. Tampoco se deben usar URLs firmadas temporales. **La identidad del recurso es `id` + `sha256`, no la URL.**
+- **Separación de datos:** la geometría (muros, estancias) vive en mm y es la fuente de verdad. El origen visual (`placement`: cómo se superpone la imagen en mm) y el recurso (`storage`: dónde están los bytes) son independientes. Se puede quitar la imagen sin perder la geometría.
+- **`originalFileName`** puede contener una dirección o un nombre de persona, así que se trata como dato potencialmente personal (D-08).
+
+## 6. Reglas de validación
+
+Las reglas **E** se comprueban con JSON Schema. Las **S** son semánticas y las debe aplicar el código de la app, porque JSON Schema no puede expresarlas. Las **W** son avisos que no bloquean.
+
+| Regla | Tipo | Qué comprueba |
+|---|---|---|
+| E1 | Esquema | Tipos, obligatorios, `additionalProperties:false`, enums, rangos y patrones de ID. |
+| E2 | Esquema | Coherencia `scale.confidence` ↔ `method` ↔ `calibration`. |
+| E3 | Esquema | Sin precio en materiales; imagen solo PNG/JPEG; `storage.ref` sin `blob:`/`data:`. |
+| S1 | Error | Todos los `id` son únicos en el documento. |
+| S2 | Error | Toda referencia existe: `opening.wallId`, `room.floorMaterialId`, `object.roomId`, `calibration.sourceImageId`. |
+| S3 | Error | Muro de longitud ≥ 1 mm (`start ≠ end`). |
+| S4 | Error | Hueco dentro del muro (`offsetMm + widthMm ≤ longitud`), `sill + height ≤ wall.heightMm`, y `swing` solo en `door`. |
+| S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (la autointersección aún no está en el script ad hoc). |
+| S6 | Error | `mmPerPixel` coincide con `knownLengthMm/|AB|` (±0,1 %). |
+| S7 | Error | `updatedAt ≥ createdAt`. |
+| W1 | Aviso | Geometría con `review:"unreviewed"` o `method:"suggested"`. |
+| W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (propuesto; no implementado). |
+| W3 | Aviso | Objeto fuera de su `roomId` o solapado con un muro (propuesto; no implementado). |
+| W4 | Aviso | `scale.confidence ≠ "real"`: la UI debe mostrar las medidas como aproximadas. |
+
+## 7. Obligatorio, opcional y experimental
+
+| Campo | Estado |
+|---|---|
+| `schema`, `schemaVersion`, `id`, `name`, `createdAt`, `updatedAt`, `units`, `coordinateSystem`, `scale`, `defaults`, `walls`, `openings`, `rooms`, `materials`, `objects` | **Obligatorio** (las listas pueden estar vacías) |
+| `sourceImages`, `measurements`, `app`, `labelAt`, `swing`, `isEntrance`, `size.heightMm`, `elevationMm`, `color`, `roomId`, `source` | Opcional |
+| `assetRef`, `source.method:"suggested"`, `storage.kind:"remote"`, `extensions` (`x-*`) | **Experimental**: puede cambiar en un minor y los lectores deben tolerar su ausencia |
+
+## 8. Ejemplos
+
+**Válido:** [`examples/floorplan-project-v1.example.json`](examples/floorplan-project-v1.example.json). Es un estudio ficticio de 6 × 4 m con 6 muros, 3 huecos, 2 estancias, 2 materiales, 3 objetos, una medida y una imagen calibrada. El `sha256` y el `assetId` son **ilustrativos**: no apuntan a ficheros reales. Resultado: esquema válido, semántica OK y un aviso W1 intencionado (`wal_bath-south` sin revisar).
+
+**Inválido:** [`examples/floorplan-project-v1.invalid.example.json`](examples/floorplan-project-v1.invalid.example.json). Salida observada el 30-09-2026:
+
+```text
+JSON Schema: INVÁLIDO (14 errores)
+  /units const: must be equal to constant ("mm")
+  /scale required: must have required property 'calibration'        ← "real" sin calibración
+  /scale/method const: must be equal to constant ("known-dimension")
+  /scale if: must match "then" schema
+  /sourceImages/0/mediaType enum                                       ← PDF fuera de V1
+  /sourceImages/0/storage/ref pattern "^(?!blob:)(?!data:)"            ← URL temporal
+  /walls/0 required: 'thicknessMm'
+  /walls/0/id pattern                                                  ← sufijo "a" demasiado corto
+  /walls/0/end/x type: must be integer                                 ← 4000.5 mm
+  /walls/1/id pattern
+  /rooms/0/id pattern
+  /rooms/0/polygon minItems: must NOT have fewer than 3 items
+  /materials/0 additionalProperties [price]                            ← precio no permitido
+  /objects/0/rotationDeg maximum: must be <= 359
+Semántica: ERRORES 4
+  S1 id duplicado obj_sofa
+  S3 muro de longitud 0 wal_b
+  S2 hueco opn_door -> muro inexistente wal_missing
+  S5 estancia rom_a área 0
+```
+
+### Cómo se validó (y cómo reproducirlo)
+
+El repo **no tiene** `package.json`, validador ni dependencias (comprobado: solo `index.html`, `README.md` y `.gitignore`). Para no añadir dependencias al producto, la validación se ejecutó con Ajv instalado en un **directorio temporal fuera del repo**:
+
+```bash
+mkdir /tmp/fp-validate && cd /tmp/fp-validate
+npm init -y && npm i ajv@8 ajv-formats@3        # ejecutado: ajv 8.20.0, ajv-formats 3.0.1
+# guardar como validate.mjs el script del Anexo A
+node validate.mjs <repo>/docs/contracts/FloorPlanProjectV1.schema.json \
+  <repo>/docs/contracts/examples/floorplan-project-v1.example.json \
+  <repo>/docs/contracts/examples/floorplan-project-v1.invalid.example.json
+```
+
+Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false})`. Se desactiva `strictRequired` porque los `if/then` de `scale` declaran `required` sin repetir `properties`, algo válido en JSON Schema que el modo estricto de Ajv rechaza por prudencia. Las reglas S se comprobaron con un script ad hoc (Anexo A). **S5 (autointersección) y W2–W4 no están implementadas**. Si se aprueba el contrato, la validación debería entrar en el repo en F1 junto con el migrador.
+
+## 9. Riesgos conocidos y decisiones pendientes
+
+| # | Riesgo o decisión | Propuesta provisional |
+|---|---|---|
+| C-1 | Coordenadas enteras en mm: pierden < 0,5 mm por punto | Aceptable para visualización. Revisar si alguien exige precisión submilimétrica. |
+| C-2 | Estancias y muros pueden no coincidir | W2 más revisión humana. Modelo topológico solo en v2 si hace falta. |
+| C-3 | Muros solo rectos y de altura uniforme | Suficiente para vivienda residencial típica. Curvos e inclinados, fuera de V1. |
+| C-4 | Una sola planta por proyecto | Varias plantas = varios proyectos o un `levels[]` en v1.x (decisión aplazable). |
+| C-5 | `extensions` puede usarse como cajón de sastre | Solo `x-*` y revisión en PR. Lo que se consolide pasa al esquema en un minor. |
+| C-6 | `sourceImages[].storage` sin decisión de hosting ni privacidad | Mantener `local-browser` y `sidecar-file` en F1. `remote` bloqueado hasta D-06 y D-08. |
+| C-7 | Formato del paquete exportado (JSON + imagen) | Propuesta: `.zip` con `project.json` + `images/`. Pendiente de decisión D-09. |
+| C-8 | `structure:"load-bearing"` puede leerse como dato técnico | La UI debe mostrarlo como etiqueta orientativa, nunca como dictamen. |
+
+## Anexo A — script de validación usado (fuera del repo)
+
+```js
+// validate.mjs — Ajv 2020 + reglas semánticas S1–S4, S5 (solo área), S6, S7 y aviso W1
+import fs from 'node:fs';
+import Ajv2020 from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
+const [schemaPath, ...files] = process.argv.slice(2);
+const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false }); addFormats(ajv);
+const validate = ajv.compile(JSON.parse(fs.readFileSync(schemaPath, 'utf8')));
+function semantic(p) {
+  const e = [], w = [], ids = new Map();
+  for (const k of ['walls', 'openings', 'rooms', 'materials', 'objects', 'measurements', 'sourceImages'])
+    for (const x of p[k] || []) { if (ids.has(x.id)) e.push(`S1 id duplicado ${x.id}`); ids.set(x.id, k); }
+  const has = (id, k) => ids.get(id) === k;
+  const walls = new Map((p.walls || []).map(x => [x.id, x]));
+  for (const x of p.walls || []) if (Math.hypot(x.end.x - x.start.x, x.end.y - x.start.y) < 1) e.push(`S3 muro de longitud 0 ${x.id}`);
+  for (const o of p.openings || []) {
+    const wl = walls.get(o.wallId); if (!wl) { e.push(`S2 hueco ${o.id} -> muro inexistente ${o.wallId}`); continue; }
+    const L = Math.hypot(wl.end.x - wl.start.x, wl.end.y - wl.start.y);
+    if (o.offsetMm + o.widthMm > L) e.push(`S4 hueco ${o.id} se sale del muro`);
+    if (o.sillHeightMm + o.heightMm > wl.heightMm) e.push(`S4 hueco ${o.id} más alto que el muro`);
+    if (o.swing && o.kind !== 'door') e.push(`S4 swing solo para door (${o.id})`);
+  }
+  for (const r of p.rooms || []) {
+    if (!has(r.floorMaterialId, 'materials')) e.push(`S2 estancia ${r.id} -> material inexistente`);
+    const A = Math.abs(r.polygon.reduce((a, q, i) => { const n = r.polygon[(i + 1) % r.polygon.length]; return a + q.x * n.y - n.x * q.y; }, 0)) / 2;
+    if (!(A > 0)) e.push(`S5 estancia ${r.id} área 0`);
+  }
+  for (const o of p.objects || []) if (o.roomId && !has(o.roomId, 'rooms')) e.push(`S2 objeto ${o.id} -> estancia inexistente`);
+  const c = p.scale?.calibration;
+  if (c) {
+    if (!has(c.sourceImageId, 'sourceImages')) e.push('S2 calibración -> imagen inexistente');
+    const mpp = c.knownLengthMm / Math.hypot(c.pointB.x - c.pointA.x, c.pointB.y - c.pointA.y);
+    if (Math.abs(mpp - c.mmPerPixel) / mpp > 0.001) e.push(`S6 mmPerPixel ${c.mmPerPixel} != ${mpp.toFixed(6)}`);
+  }
+  if (Date.parse(p.updatedAt) < Date.parse(p.createdAt)) e.push('S7 updatedAt < createdAt');
+  for (const x of p.walls || []) if (x.source?.review === 'unreviewed') w.push(`W1 muro sin revisar ${x.id}`);
+  return { e, w };
+}
+for (const f of files) {
+  const p = JSON.parse(fs.readFileSync(f, 'utf8'));
+  const ok = validate(p);
+  console.log(`\n== ${f}\nJSON Schema: ${ok ? 'VÁLIDO' : 'INVÁLIDO (' + validate.errors.length + ' errores)'}`);
+  if (!ok) for (const x of validate.errors) console.log(`  ${x.instancePath || '/'} ${x.keyword}: ${x.message}`);
+  const s = semantic(p);
+  console.log(`Semántica: ${s.e.length ? 'ERRORES ' + s.e.length : 'OK'}${s.w.length ? ' · avisos ' + s.w.length : ''}`);
+  [...s.e, ...s.w].forEach(x => console.log('  ' + x));
+}
+```
