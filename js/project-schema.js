@@ -108,21 +108,6 @@
         "confidence": { "enum": ["real", "estimated", "pending"] },
         "method": { "enum": ["known-dimension", "declared-ratio", "template", "none"] },
         "declaredRatio": { "type": "string", "pattern": "^1:[1-9][0-9]{0,4}$", "description": "Escala impresa en el plano (p. ej. 1:100). Solo informativa: no calibra una imagen digital." },
-        "verification": {
-      "type": "object", "additionalProperties": false,
-      "required": ["sourceImageId", "pointA", "pointB", "knownLengthMm", "measuredLengthMm", "errorPercent", "thresholdPercent", "status", "verifiedAt"],
-      "properties": {
-        "sourceImageId": {"$ref": "#/$defs/imageId"},
-        "pointA": {"$ref": "#/$defs/pixelPoint"},
-        "pointB": {"$ref": "#/$defs/pixelPoint"},
-        "knownLengthMm": {"$ref": "#/$defs/lengthMm"},
-        "measuredLengthMm": {"type": "integer", "minimum": 1, "maximum": 2000000},
-        "errorPercent": {"type": "number"},
-        "thresholdPercent": {"const": 2, "description": "Umbral provisional de producto, no garantía de precisión."},
-        "status": {"enum": ["consistent", "discrepant"]},
-        "verifiedAt": {"type": "string", "format": "date-time"}
-      }
-    },
     "calibration": { "$ref": "#/$defs/calibration" },
         "note": { "type": "string", "maxLength": 500 },
         "verification": { "$ref": "#/$defs/verification" }
