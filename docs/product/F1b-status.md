@@ -1,25 +1,29 @@
-# Estado de implementación F1b
+# Estado de F1b
 
-Esta entrega apila F1b sobre PR #5 abierta (966ab83; mismo código que a4b5a9d), sin fusionarla.
-El plan rector sigue en [PR #3](https://github.com/Juanmaes83/floorplan-3d/pull/3),
-commit 825ddf6: F1b corresponde al flujo manual de imagen, calibración, trazado y
-revisión; su relación con el roadmap de PR #2 permanece intacta.
+**Estado: integrada en master por la PR #6.**
 
-Implementado para revisión: PNG/JPEG local, preparación no destructiva, dos cotas,
-confirmación, muros/huecos/estancias editables, navegación diferenciada, W1–W4,
-mobiliario/2D/3D existentes, ZIP portable y borrado local. Véase [F1b.md](../technical/F1b.md).
+- PR: [#6](https://github.com/Juanmaes83/floorplan-3d/pull/6), fusionada el 30-09-2026.
+- Merge commit: `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`.
+- HEAD de código revisado: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`.
+- Base F1a extendida de proyectos locales/mobile-first: PR [#5](https://github.com/Juanmaes83/floorplan-3d/pull/5), merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`.
+- Preview revisada: [deployment Vercel ligado al HEAD F1b](https://floorplan-3-6cgnmgojz-juanma-espinosas-projects.vercel.app/). El acceso compartible temporal caduca el 01-10-2026; el deployment directo puede requerir sesión Vercel.
+- Vercel produjo automáticamente un deployment `READY` de producción al actualizarse `master`; no se lanzó manualmente.
 
-Pendiente: cinco planos reales autorizados (incluyendo escaneo y foto), validación
-humana en móvil/escritorio, rendimiento en móvil físico y preview verificable por
-SHA. No se declara F1b cerrada ni se modifican estados de aprobación de F0.
-F2 (interpretación asistida), F3 (catálogos), PDF, backend y producción siguen fuera.
+## Alcance integrado
 
-El encargo autoriza expresamente la entrega apilada como excepción al avance
-secuencial de DEVELOPMENT-WORKFLOW.md. No altera sus reglas de revisión humana,
-merge y cierre documental, ni declara cerrada la base todavía abierta.
+Importación local PNG/JPEG, colocación y opacidad, calibración y verificación con segunda cota, trazado/edición manual de muros, huecos y estancias, avisos W1–W4, mobiliario genérico, vistas 2D/3D, almacenamiento local y ZIP portable. El plano importado se carga desde «Plano propio» → «Nuevo desde imagen». «Archivo» → «Importar plano» espera un proyecto JSON, no una imagen.
 
-Publicación técnica: rama feat/f1b-image-calibration-tracing subida sin force push.
-PR todavía no creada: POST REST a api.github.com rechazado con Forbidden.
-Preview F1b/READY/protección todavía no verificables. Próximo paso externo: abrir
-la PR apilada contra #5 y obtener un deployment asociado al SHA final antes de
-revisión humana. La implementación no se declara formalmente aceptada ni cerrada.
+## Verificación y límites
+
+Codex informó 77 pruebas Node y 7 Python aprobadas en su checkout. No repetimos la suite completa sobre la revisión remota final. Los checks remotos observados fueron despliegues Vercel, no una CI de pruebas. La escena 3D se comprobó con Chromium/SwiftShader; no se midió rendimiento en móvil físico.
+
+La imagen de referencia puede ser PNG/JPG de hasta 15 MiB y 8000 px por lado. El PNG adjuntado para la revisión (1448×1086, ~718 KB) está dentro de los límites. No se comprobó aún su carga satisfactoria por la ruta «Plano propio».
+
+## Pendientes aceptados para continuidad
+
+1. Mejorar la claridad del menú: «Importar plano» → «Importar proyecto JSON» y acceso «Cargar imagen de plano (PNG/JPG)» desde Archivo, reutilizando el flujo existente.
+2. Evaluar cinco planos autorizados —incluyendo escaneo y foto móvil— y registrar error de segunda cota, tiempo, correcciones e incidencias en [F1b-five-plans.md](../qa/F1b-five-plans.md).
+3. Probar rendimiento en un teléfono físico.
+4. Evaluar formatos adicionales (PDF, WebP y HEIC/HEIF) mediante una entrega acotada posterior. No están admitidos por el importador actual ni quedan aprobados sin pruebas de compatibilidad, privacidad y límites.
+
+F1b queda cerrada por aprobación expresa y merge de Juanma con estas limitaciones visibles; no se afirma que las pruebas pendientes se hayan realizado ni que exista precisión profesional.

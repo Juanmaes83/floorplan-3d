@@ -1,52 +1,35 @@
-# Checklist F1b por commit
+# F1b — registro de preview y revisión humana
 
-Base: PR #5, HEAD 966ab8395dcef2875de0e25337cae9058052ea34; destino de PR apilada:
-feat/f1-local-projects-mobile. El SHA exacto publicado figura en el informe de entrega;
-no existe URL de preview comprobada en esta sesión.
+## Versión revisada
 
-- [ ] PR F1b abierta contra la rama de #5, dependencia explícita.
-- [ ] Deployment Vercel ligado al SHA publicado y READY.
-- [ ] Acceso/protección comprobados en sesión sin autenticar, sin afirmar que un
-      enlace protegido sea público.
-- [ ] Revisar 390×844 y 844×390 táctil; escritorio 1440×900.
-- [ ] Importar PNG/JPG autorizado, mover/girar/ocultar referencia y variar opacidad.
-- [ ] Calibrar y repetir; segunda cota independiente, discrepancia visible y revisión.
-- [ ] Trazar/editar/eliminar muros, puerta, ventana y estancia; cancelar borrador,
-      deshacer/rehacer; distinguir navegar/dibujar.
-- [ ] Revisar/localizar W1–W4 y confirmar revisión de elementos.
-- [ ] Amueblar, ver 3D, girar cámara y volver a 2D con mismo proyecto.
-- [ ] Exportar ZIP, importar en sesión limpia, recargar y borrar imagen/proyecto.
-- [ ] Sin WebGL: mensaje y 2D editable; cuota/imagen corrupta sin pérdida de estado.
-- [ ] Validar cinco planos reales según F1b-five-plans.md.
+- PR [#6](https://github.com/Juanmaes83/floorplan-3d/pull/6), fusionada en master.
+- HEAD de código revisado: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`.
+- Merge commit: `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`.
+- Deployment Vercel de preview: [abrir deployment ligado al SHA](https://floorplan-3-6cgnmgojz-juanma-espinosas-projects.vercel.app/), estado READY.
+- Vercel protegía el URL directo. Se generó URL compartible temporal y Juanma abrió la aplicación; el token caduca el 01-10-2026. No dejar ese token como enlace permanente.
+- Tras el merge, Vercel también publicó automáticamente master en producción. Ese deployment no sustituye la revisión de la preview.
 
-Pruebas propias locales automatizadas y capturas están documentadas en F1b.md.
-SwiftShader es renderizado por software; no marca aprobada la revisión humana.
+## Resultado de revisión
 
-Bloqueos observados: api.github.com rechaza la conexión con HTTP 403 del proxy;
-no se usa GraphQL para insistir. No hay .vercel, vercel.json, CLI/token/herramientas
-Vercel disponibles en el entorno. Esto no demuestra que no exista un proyecto remoto:
-impide identificar deployment, confirmar READY o comprobar su protección.
-No se cambió la red, se fusionó nada ni se desplegó a producción.
+Las capturas mostraron la interfaz española con la vivienda de referencia y el menú Archivo desplegado. La persona usuaria intentó abrir el PNG mediante «Archivo > Importar plano»; esa acción filtra JSON y el selector de Windows oculta imágenes. No es evidencia de que el decoder PNG falle: el PNG debe cargarse por «Plano propio > Nuevo desde imagen». La carga del PNG adjunto por esa ruta queda pendiente de verificación humana.
 
-El nuevo DEVELOPMENT-WORKFLOW.md informa una preview de la **base a4b5a9d**:
-https://floorplan-3d-6ii3r2tdm-juanma-espinosas-projects.vercel.app/
-No corresponde a F1b ni se presenta como su preview vigente; no se dispone de un
-deployment de la rama F1b ni se acredita su READY/protección por ese enlace.
+Juanma autorizó el merge de F1b con esta limitación registrada. No se afirma que se hayan completado todos los puntos de abajo.
 
-## Publicación observada
+## Checklist y estado
 
-Código y pruebas publicados en `feat/f1b-image-calibration-tracing`, commit
-`9cd74a59fdb6db14ee132674df974e6c71a3057d`, sobre 966ab83. El commit siguiente
-solo registra esta evidencia documental; el SHA final de rama se consulta con
-`git rev-parse HEAD` o en el informe de entrega. No equivale a un deployment READY.
+- [x] PR de F1b fusionada y deployment READY asociado al SHA revisado.
+- [x] Acceso temporal compartible usado para abrir la aplicación.
+- [x] Escritorio: interfaz y menú Archivo inspeccionados mediante capturas.
+- [ ] Subir el PNG adjunto por «Plano propio > Nuevo desde imagen» y calibrar usando la cota 10,00 m.
+- [ ] Confirmar segunda cota, trazado, edición, 2D/3D, ZIP y recuperación en sesión limpia.
+- [ ] Recorrer la plataforma táctil en móvil vertical y horizontal.
+- [ ] Validar cinco planos reales autorizados según [F1b-five-plans.md](F1b-five-plans.md).
+- [ ] Medir rendimiento en móvil físico.
 
-Crear la PR por REST, sin GraphQL, falló exactamente:
-`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
-No existe PR F1b creada por esta sesión. Abrirla contra feat/f1-local-projects-mobile
-con dependencia de #5 cuando la API o la interfaz autorizada estén disponibles.
-La rama está publicada para conservar todo el trabajo, sin merge ni force push.
+## Mejora inmediata derivada
 
-La sesión no autenticada tampoco pudo llegar a la preview histórica de la base:
-`curl: (56) CONNECT tunnel failed, response 403` (proxy del entorno). Esto no permite
-concluir si Vercel la protege: no se alcanzó el deployment. La página pública del
-commit no mostró enlaces Vercel/checks; no se inventa estado remoto ni enlace F1b.
+En el trabajo de formatos/ingesta, separar claramente los dos flujos:
+- «Importar proyecto JSON» para .json.
+- «Cargar imagen de plano (PNG/JPG)» para el flujo actual de F1b.
+
+La mejora de UX no altera retroactivamente lo observado: el input JSON está haciendo el filtrado esperado y la entrada de imagen existe en otro lugar.

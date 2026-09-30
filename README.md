@@ -46,7 +46,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 ### Archivos
 
 - Exportar una imagen PNG del plano.
-- Exportar e importar distribuciones en JSON.
+- Importar una imagen PNG/JPG desde «Plano propio» para calibrarla y trazar encima.
+- Exportar e importar proyectos en JSON; exportar ZIP cuando se necesite transportar también las imágenes.
 - Restablecer la distribución de ejemplo.
 
 ## Uso local
@@ -98,11 +99,9 @@ El botón «Proyectos» permite crear, abrir, renombrar, duplicar y eliminar pro
 La colección es local a este navegador y origen; no se sincroniza entre dispositivos.
 Exporta cada proyecto como JSON para conservar una copia independiente.
 
-F1a está integrada desde la PR #4. Esta entrega completa proyectos, español/marca,
-uso móvil y el aviso sin WebGL. La implementación F1b para revisión se describe a continuación; su aceptación humana sigue pendiente.
-Véase [documentación de esta entrega](docs/technical/F1-local-projects-mobile.md).
+F1a y su ampliación de proyectos locales, español, experiencia móvil y fallback sin WebGL quedaron integradas por las PR #4 y #5. F1b quedó integrada por la PR #6. La validación con cinco planos reales y la mejora de la claridad de importación siguen pendientes; véanse los registros de fase.
 
-## Plano propio (F1b para revisión)
+## Plano propio (F1b integrada)
 
 «Plano propio» permite importar PNG/JPG local, calibrar con dos puntos y una
 distancia en milímetros, verificar una segunda cota y trazar muros, huecos y estancias.
@@ -111,6 +110,8 @@ Las medidas son orientativas; no hay detección automática ni garantía profesi
 
 Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
 y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
-personales antes de compartirlo. Máximo 15 MiB y 8000 px de lado por imagen.
-Consulta [uso, límites y pruebas](docs/technical/F1b.md) y la
-[evaluación humana pendiente](docs/qa/F1b-five-plans.md).
+personales antes de compartirlo. Para cargar una imagen usa «Plano propio» → «Nuevo
+desde imagen». «Archivo» → «Importar plano» importa JSON; se registró como mejora
+renombrarlo a «Importar proyecto JSON» y añadir una entrada directa para imagen.
+PNG/JPG: máximo 15 MiB y 8000 px por lado. Consulta [uso y límites](docs/technical/F1b.md)
+y la [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md).

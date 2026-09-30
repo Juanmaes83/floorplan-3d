@@ -1,21 +1,23 @@
 # F1b: imagen, calibración y trazado manual local
 
-## Base y dependencia
+## Estado de cierre (30-09-2026)
 
-Base verificada final: `966ab8395dcef2875de0e25337cae9058052ea34`, rama
-`feat/f1-local-projects-mobile`. La PR #5 sigue abierta como borrador hacia master.
-966ab83 añade solo `docs/DEVELOPMENT-WORKFLOW.md` sobre a4b5a9d; las pruebas
-se ejecutaron con el mismo código de base. El encargo actual autoriza explícitamente
-avanzar con F1b apilada, como excepción al avance secuencial del flujo general.
-No aprueba, fusiona ni marca cerrada la fase anterior.
-F1a está en master mediante PR #4 (`de195e3`), pero proyectos múltiples, español,
-uso móvil y fallback WebGL dependen todavía de #5. La PR F1b debe apilarse sobre
-`feat/f1-local-projects-mobile`; no fusiona ni sobrescribe las PR #1/#2/#3/#5.
+F1b está integrada en `master` mediante la [PR #6](https://github.com/Juanmaes83/floorplan-3d/pull/6), merge commit `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`. La PR #5, base de proyectos locales/mobile-first, se integró antes por el merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`.
 
-Autoridad de alcance: [plan F1–F3 de PR #3](https://github.com/Juanmaes83/floorplan-3d/blob/825ddf629d037d57690aedeea188b725ebf561b5/docs/product/F1-F3-plan.md).
-Los documentos product/plan, F0-decisions y la checklist de PR #3 no están fusionados
-en esta base: se consultaron desde su commit publicado, sin resolver la PR abierta.
+HEAD de código de F1b revisado: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`. Vercel informó deployment de preview READY para ese SHA. La sesión de revisión usó URL compartible temporal, que caduca el 01-10-2026; ver [registro de preview](../qa/F1b-preview.md).
 
+Juanma autorizó explícitamente los merges con estos pendientes:
+- La ruta «Archivo > Importar plano» filtra proyectos JSON. Las imágenes PNG/JPG se cargan mediante «Plano propio > Nuevo desde imagen». Se requiere mejorar las etiquetas/accesos y probar la carga del PNG proporcionado.
+- Evaluación de cinco planos reales autorizados y prueba de rendimiento en móvil físico.
+- PDF, WebP y HEIC/HEIF no están implementados.
+
+Codex reportó 77 pruebas Node y 7 Python aprobadas en su checkout local. No se repitió la suite completa en esta sesión contra la revisión remota final; los checks remotos visibles eran de Vercel. La implementación 3D se probó con Chromium/SwiftShader, que no acredita rendimiento móvil físico.
+
+La PR #2 contiene el roadmap de producto existente y sigue pendiente de reconciliar con los merges F1a/F1b. No se ha inventado una numeración nueva de fases.
+
+## Base histórica de implementación
+
+La implementación se preparó originalmente sobre `966ab8395dcef2875de0e25337cae9058052ea34`, rama `feat/f1-local-projects-mobile`. F1b se publicó apilada sobre esa base para conservar sus dependencias; tras aprobarse, PR #5 y PR #6 se fusionaron en orden. El merge final incorpora ambos conjuntos de cambios en master.
 ## Uso
 
 1. «Plano propio» → «Nuevo desde imagen». Seleccionar PNG/JPG válido. El proyecto
@@ -113,34 +115,23 @@ verificado de F1a: **renderizado por software**, sin acreditar rendimiento móvi
 La carga directa del CDN en este Chromium sigue condicionada por su confianza TLS;
 no se cambia la red. Ver el resultado final ejecutado en la sección de cierre.
 
-## Decisiones y evaluación humana
+## Revisión humana, pruebas y cierre
 
-D-02/03/04/06/08/09/10 se usan como supuestos locales de esta fase; D-07 continúa
-pendiente para preview. No se han marcado decisiones F0 como aprobadas ni prometido
-precisión profesional. [Matriz de cinco planos](../qa/F1b-five-plans.md): vacía y
-**pendiente de validación humana**; impide declarar F1b aceptada o cerrada.
+Juanma revisó la interfaz desplegada mediante las capturas de escritorio y autorizó el merge. La revisión detectó que «Archivo > Importar plano» abre el selector JSON; esto explica que Windows oculte el PNG. El flujo de imagen separado es «Plano propio» → «Nuevo desde imagen». La carga del PNG adjunto por esa ruta, el uso en móvil físico y la evaluación de cinco planos reales autorizados permanecen pendientes.
 
-## Cierre de pruebas ejecutado el 30-09-2026
+Codex informó en su checkout:
+- 77/77 pruebas Node aprobadas, sin omisiones.
+- 7/7 pruebas Python aprobadas, sin omisiones.
+- Recorridos de navegador, incluidos recalibración, 2D/3D y ZIP; capturas 390×844, 844×390 y 1440×900.
+- 3D en Chromium/SwiftShader; no acredita rendimiento con GPU física o móvil.
 
-- Suite completa Node: **77/77**, cero fallos y cero omisiones, 203,94 s; incluye
-  F1a, colección F1, lógica F1b y navegador.
-- Esquema independiente Python: **4/4**, incluyendo el nuevo ejemplo compatible.
-- Tras la revisión visual del pie y capas de referencia: navegador **20/20**,
-  cero fallos/omisiones, 211,51 s. Comando: `node --test tests/browser.test.cjs`.
-- Recorrido F1b final con recalibración después de trazar, en las tres vistas:
-  **3/3**, 65,78 s; comando
-  `node --test --test-name-pattern='F1b full workflow' tests/browser.test.cjs`.
-- Recorridos comprueban interacción real de cámara, pixels renderizados y fuente
-  compartida de 2D/3D; ZIP en contexto limpio, recarga y borrado de bytes en IndexedDB.
-- Capturas propias 2D/3D de 390×844, 844×390 y 1440×900 revisadas; los mensajes de
-  estado quedan en el pie y no cubren acciones del mobiliario.
-- Sintaxis de 2 scripts inline y los módulos locales, y diff sin errores.
-- No se acredita rendimiento de GPU/móvil físico ni los cinco planos reales.
-- No hay workflows CI en la base ni se añadió un servicio de CI. Estado remoto de
-  checks y PR/deployment no verificable por el bloqueo de API y falta de acceso Vercel.
+No se repitió la suite completa en esta sesión sobre el HEAD remoto final; los checks remotos visibles eran de Vercel y no constituyen CI de tests. Por ello los resultados anteriores se atribuyen a Codex y no se presentan como nueva ejecución independiente.
 
-Publicación: código en 9cd74a59fdb6db14ee132674df974e6c71a3057d, rama
-feat/f1b-image-calibration-tracing. El cierre documental posterior no cambia código.
-POST REST para abrir PR fue rechazado con Forbidden; no se insiste por GraphQL.
-La conexión sin autenticar a la preview histórica de la base fue bloqueada por
-el proxy con CONNECT 403: no se acredita protección de Vercel ni preview F1b.
+F1b quedó integrada en master con aprobación expresa de Juanma:
+- PR #5 (base local/mobile-first) merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`.
+- PR #6 (F1b) merge commit `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`.
+- SHA de código de F1b revisado: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`.
+- Preview Vercel: READY para ese SHA; el acceso temporal compartible caduca el 01-10-2026.
+- Vercel creó automáticamente el deployment de producción al fusionarse en master; no se hizo despliegue manual.
+
+El merge cierra F1b con limitaciones y evaluación restante explícitas; no demuestra precisión profesional ni termina la evaluación con planos reales.

@@ -1,6 +1,6 @@
 # F1b: evaluación con cinco planos reales
 
-Estado: **pendiente de validación humana**. No se han proporcionado cinco planos
+Estado: **pendiente de validación con cinco planos reales autorizados**. F1b ya fue aprobada y fusionada por Juanma; esta evaluación queda como seguimiento y no se marca como ejecutada ni se presenta como prueba que haya bloqueado el merge. No se han proporcionado cinco planos
 con autorización de uso. Los fixtures sintéticos comprueban comportamiento técnico;
 no representan esta evaluación ni acreditan precisión profesional.
 

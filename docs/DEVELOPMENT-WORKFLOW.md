@@ -36,13 +36,16 @@ Cada PR de fase debe dejar visibles:
 - No fusionar ni desplegar a producción por el mero hecho de que CI o Vercel estén en verde; hace falta revisión humana y aprobación explícita.
 - Si el trabajo queda bloqueado, conservarlo en una PR o rama claramente identificada y registrar el siguiente paso concreto; no crear una segunda rama que duplique el mismo trabajo.
 
-## Aplicación a F1a y F1b
+## Cierre de F1a y F1b (30-09-2026)
 
-La PR #5, feat/f1-local-projects-mobile, es la entrega de base F1a que se está revisando. La preview comunicada para ese SHA es:
+- F1a canónica: PR #4 fusionada en `de195e35f531cccc5711d11f3b7fa82657d100c1`.
+- Base local/mobile-first (proyectos locales, español/marca, fallback WebGL): PR #5 fusionada con merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`.
+- F1b (imagen, calibración, trazado): PR #6 fusionada con merge commit `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`.
+- Cabeza de código F1b revisada: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`.
+- Preview de revisión de F1b: [deployment Vercel](https://floorplan-3d-6cgnmgojz-juanma-espinosas-projects.vercel.app/), ligado al SHA anterior. El enlace compartible temporal se generó para la revisión y caduca el 01-10-2026; no usarlo como enlace permanente.
+- El usuario autorizó el merge de ambas PR. La revisión de interfaz mostró que «Archivo > Importar plano» filtra JSON y oculta PNG; el PNG se carga hoy mediante «Plano propio > Nuevo desde imagen». Se registra como mejora de UX para el siguiente trabajo.
+- La revisión de cinco planos reales (incluyendo escaneo y foto) sigue pendiente y no se presenta como aprobada. Se conserva en `docs/qa/F1b-five-plans.md`.
+- Codex reportó 77 pruebas Node y 7 Python aprobadas en su checkout. No se repitió la suite completa en esta sesión sobre el HEAD remoto final; los checks remotos disponibles fueron Vercel. 3D: Chromium/SwiftShader, sin acreditar rendimiento en GPU/móvil físico.
+- Tras fusionar a `master`, Vercel generó automáticamente un deployment de producción `READY` desde el commit F1b. No se ejecutó un despliegue manual. El flujo de próximos cambios debe seguir la PR y revisión documentadas arriba.
 
-- PR: https://github.com/Juanmaes83/floorplan-3d/pull/5
-- Rama: feat/f1-local-projects-mobile
-- SHA de preview: a4b5a9dbb1af6349170c802dea6b931a45cfbed4
-- Preview: https://floorplan-3d-6ii3r2tdm-juanma-espinosas-projects.vercel.app/
-
-La descripción de la PR debe mantenerse sincronizada con la existencia y accesibilidad de esta preview. F1b depende de F1a integrada: no se inicia sobre una base incompleta ni se declara F1a cerrada hasta la revisión, aprobación, merge y actualización del roadmap.
+La PR #2 contiene el roadmap de producto, pero sigue abierta y su texto de referencia está desactualizado respecto a F1a/F1b fusionadas. No se crea un segundo roadmap aquí; reconciliar el documento existente antes de basar en él el siguiente prompt de fase.

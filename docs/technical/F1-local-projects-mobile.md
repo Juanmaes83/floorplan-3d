@@ -60,41 +60,21 @@ rendimiento ni comportamiento acreditado en un móvil físico. Los módulos ofic
 Three.js se sirven solo durante los tests mediante el transporte curl con TLS
 verificado ya documentado en F1a; no se modifica el CDN ni la política de red.
 
-## Publicación y pendientes
+## Publicación y cierre
 
-La rama se basa en master; no sobrescribe la rama abierta de PR #1 ni incorpora
-cambios de otros repositorios. Esta entrega debe revisarse en una sola PR hacia master,
-sin fusionarla. No hay CI configurada en la base. Consultar estado remoto requiere API
-GitHub, que en este entorno devuelve `Forbidden` en `api.github.com/graphql`.
+La entrega de proyectos locales, español/marca, mobile-first y fallback sin WebGL se integró mediante la PR [#5](https://github.com/Juanmaes83/floorplan-3d/pull/5), merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`. La rama F1b dependiente se fusionó después; véase [F1b](F1b.md).
 
-Preview pública: no disponible/verificada. Tanto `raw.githack.com` como
-`rawcdn.githack.com` rechazan la conexión desde este entorno con HTTP 403 del proxy.
-No se presenta un enlace hipotético como preview ni una respuesta HTTP como QA 3D.
-Crear/publicar Pages mediante API tampoco está disponible aquí. Queda pendiente
-una URL pública vinculada al SHA final, abierta sin autenticar y con 2D/3D comprobados.
+Preview examinada de esta entrega: https://floorplan-3d-6ii3r2tdm-juanma-espinosas-projects.vercel.app/ , ligada al SHA de aplicación `a4b5a9dbb1af6349170c802dea6b931a45cfbed4`. No se generó un deployment nuevo para el HEAD documental `966ab83`; ambos contienen la misma aplicación F1a local/mobile-first.
 
-La comparación cuantitativa de píxeles frente al commit anterior a F1a, con umbral
-acordado, no se rehace ni se acredita en esta entrega. Las pruebas históricas de F1a
-se mantienen con su resultado y límites; esta entrega documenta solo evidencia nueva.
-F1b sigue pendiente: imagen, calibración, trazado y revisión manual. No se incluye
-interpretación automática, Asset Lab, IKEA, backend ni publicación en producción.
+Al fusionarse F1b a master, Vercel produjo automáticamente el deployment de producción READY asociado al commit `7b5b083daaff91f7aac1b1ac4a77ecdb1c5968f9`. No hubo despliegue manual.
 
+La validación técnica local reportada fue 53/53 Node/navegador y 3/3 de esquema. 3D en SwiftShader no acredita rendimiento en móvil físico. Los detalles originales y limitaciones se conservan abajo.
 ## Resultado local (30-09-2026)
 
-- 3/3 pruebas nuevas de colección aprobadas, sin omisiones.
-- 5/5 pruebas de navegador de esta entrega aprobadas, sin omisiones.
+- 3/3 pruebas nuevas de colección y 5/5 pruebas de navegador de esta entrega aprobadas, sin omisiones.
 - Canvas vertical: 390 × 762 px, 90,3 % del alto del viewport.
 - Canvas horizontal: 844 × 308 px, 79,0 % del alto del viewport.
 - Cambio de orientación en ambas sesiones y giro táctil de cámara comprobados.
-- Capturas propias 2D, 3D y tras girar disponibles en `/tmp/f1-mobile-*` durante QA;
-  no se incorporan temporales ni imágenes de prueba al repositorio.
-- La entrada en 3D cierra los cajones móviles para mostrar la escena; siguen
-  disponibles mediante los controles de cabecera.
-- Sintaxis de scripts inline, colección y pruebas comprobada; diff sin errores.
-- Las pruebas históricas completas de F1a se ejecutan por la instrucción final del usuario.
-
-Cierre por instrucción final del usuario: suite completa ejecutada incluyendo F1a.
-`node --test tests/project.test.cjs tests/library.test.cjs tests/browser.test.cjs`:
-53 pruebas aprobadas, cero fallidas y cero omitidas (134,97 s).
-`python3 tests/schema.test.py`: 3 pruebas aprobadas. No se intenta crear la PR
-por GraphQL ni se modifica la red. Se publica la rama mediante push normal y no se fusiona.
+- 3D comprobado en Chromium/SwiftShader; no acredita rendimiento en GPU ni móvil físico.
+- F1-local-projects-mobile se integró por la PR #5, merge commit `67e7498a478b77215cdf9920644f9f85b804b94c`.
+- La fase F1b dependiente se integró después por la PR #6; su estado y pendientes están en [F1b.md](F1b.md).
