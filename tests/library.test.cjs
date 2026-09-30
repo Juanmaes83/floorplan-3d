@@ -1,0 +1,11 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const Core=require('../js/project-core.js'),Library=require('../js/project-library.js');
+function fixture(){const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};return {storage,library:Library.load(storage,Core.initial()),map};}
+test('create/open/rename/duplicate/delete persist independently after reload',()=>{
+ const {storage,library}=fixture(),first=library.activeId();library.save(Core.initial());library.create('Second');const second=library.activeId();
+ const p=library.project();p.objects.pop();library.save(p);library.rename(second,'Renamed');library.duplicate(second,'Copy');const copy=library.activeId();
+ assert.notEqual(library.project().id,p.id);library.open(first);assert.equal(library.project().objects.length,46);
+ const reload=Library.load(storage,Core.initial());reload.open(second);assert.equal(reload.project().objects.length,45);assert.equal(reload.list().find(e=>e.id===second).name,'Renamed');reload.remove(second);assert.equal(reload.list().length,2);reload.open(copy);assert.equal(reload.project().objects.length,45);
+});
+test('failed storage writes and invalid names preserve collection atomically',()=>{const {storage,library,map}=fixture();library.save(Core.initial());const before=JSON.stringify(library.list()),saved=map.get(Library.KEY);storage.setItem=()=>{throw Error('quota');};assert.throws(()=>library.create('Other'),/quota/);assert.equal(JSON.stringify(library.list()),before);assert.equal(map.get(Library.KEY),saved);assert.throws(()=>library.rename(library.activeId(),' '));assert.throws(()=>library.remove(library.activeId()),/al menos/);});
+test('collection rejects corruption without overwriting source',()=>{const {storage,map}=fixture();map.set(Library.KEY,'{"version":1,"entries":[]}');assert.throws(()=>Library.load(storage,Core.initial()));assert.equal(map.get(Library.KEY),'{"version":1,"entries":[]}');});

@@ -1,6 +1,9 @@
 # F1a: proyecto canónico y migración local
 
-Base: `a03136c86842968a3de5da4c33549d3df3313c51`, rama de trabajo `work`.
+Base histórica de F1a: `a03136c86842968a3de5da4c33549d3df3313c51`, rama de trabajo `work`.
+F1a fue fusionada en master por la PR #4, commit `de195e35f531cccc5711d11f3b7fa82657d100c1`.
+Los criterios de proyectos locales, español y móvil que completa la siguiente entrega
+se documentan en [F1-local-projects-mobile.md](F1-local-projects-mobile.md).
 Autoridad: contrato y ejemplos de F0 recuperados del PR #3, commit
 `825ddf629d037d57690aedeea188b725ebf561b5`. Los archivos bajo
 `docs/contracts/` conservan ese contenido y su estado histórico de propuesta;

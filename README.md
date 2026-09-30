@@ -1,79 +1,103 @@
-# 户型装修设计
+# Rubik Sota Floor Plan Designer
 
-纯前端的户型装修设计工具：在 2D 平面图上摆放家具、拆改墙体、测量尺寸，一键切换到 Three.js 3D 场景，可以鸟瞰，也可以第一人称漫游。整个应用就是一个 `index.html`，无需构建，打开即用。
+**Rubik Sota Floor Plan Designer** es un editor de planos de vivienda en el navegador. Permite organizar estancias y muebles en 2D, medir y modificar tabiques, y recorrer la propuesta en 3D.
 
-## 功能
+La aplicación es estática: no necesita servidor de aplicación ni compilación. El plano de ejemplo y las preferencias se guardan en el navegador.
 
-**2D 平面布置**
-- 按原始户型 1:60 / 1:100 比例显示，尺寸单位 mm
-- 从左侧家具库拖入 60 余种家具家电（卧室、客厅、餐厨、卫浴、家电、书房休闲）
-- 拖动移动、旋转（Shift 自由角度）、调整尺寸，贴墙自动吸附
-- 测量工具（靠近墙面自动吸附，Shift 锁定水平 / 垂直）
-- 拆改非承重墙，承重墙单独标示
-- 图层开关：尺寸标注、房间名、家具、网格、承重墙
+## Idiomas
 
-**3D 场景**
-- 鸟瞰、斜视、俯视多种视角，点击房间列表可飞到对应房间
-- 漫游模式：桌面端 WASD + 鼠标，触屏设备用虚拟摇杆，可以点门开关
-- 全高墙 / 剖切墙切换，日照时间滑块，夜景灯光
-- 精细家具模型：柜门分缝与拉手、软包床头、带环境反射的金属与陶瓷材质等
-- 在 3D 中也能选中、拖动家具，与 2D 方案实时同步
+La interfaz está disponible en:
 
-**方案与统计**
-- 房间面积与套内使用面积自动统计
-- 为每个房间更换地面材料（木地板、地砖、大理石、水磨石、地毯等），按面积加 5% 损耗估算造价
-- 撤销 / 重做，方案自动保存在浏览器本地
-- 中文 / English 界面切换（顶栏右侧按钮，默认中文，选择会记住）
-- 导出 PNG 图片，导出 / 导入方案 JSON
+- Español (idioma inicial)
+- English
+- 中文
 
-## 快速开始
+El selector de idioma conserva la elección en el navegador. Los nombres de estancias, muebles y materiales incluidos se traducen; los nombres personalizados por el usuario se mantienen.
 
-```bash
-git clone <仓库地址>
-cd <仓库目录>
-```
+## Funciones
 
-然后直接用浏览器打开 `index.html`。也可以起一个本地静态服务器：
+### Plano 2D
+
+- Plano de referencia con escala 1:60 y cotas en milímetros.
+- Biblioteca de más de 60 muebles y electrodomésticos, organizados por estancia.
+- Añadir elementos con un clic o arrastrándolos al plano.
+- Mover, girar y redimensionar muebles; ajustar a los muros.
+- Medir distancias con ajuste a los muros.
+- Retirar y restaurar tabiques no estructurales; los muros de carga quedan identificados.
+- Capas independientes para cotas, nombres de estancia, muebles, cuadrícula y muros de carga.
+
+### Vista 3D
+
+- Cambiar entre plano 2D y escena 3D con transición.
+- Vista aérea, isométrica y superior.
+- Recorrido en primera persona: WASD y ratón en escritorio; joystick virtual en pantallas táctiles.
+- Abrir puertas durante el recorrido.
+- Muros a altura completa o en sección.
+- Control de luz diurna y modo nocturno.
+- Seleccionar y mover muebles en 3D; los cambios se reflejan en el plano.
+
+### Superficies y estimaciones
+
+- Superficie por estancia y superficie útil total.
+- Seleccionar materiales de suelo por estancia.
+- Superficies por material. En español se ocultan los precios heredados en yuanes, sin sustituir moneda ni inventar importes.
+- Deshacer y rehacer cambios.
+
+### Archivos
+
+- Exportar una imagen PNG del plano.
+- Exportar e importar distribuciones en JSON.
+- Restablecer la distribución de ejemplo.
+
+## Uso local
+
+Se recomienda servir la carpeta con un servidor HTTP sencillo:
 
 ```bash
 python3 -m http.server 8000
-# 访问 http://localhost:8000
 ```
 
-> Three.js 通过 jsDelivr CDN 加载，首次打开 3D 场景需要联网。
+Después abre [http://localhost:8000](http://localhost:8000).
 
-## 快捷键
+Three.js se carga desde jsDelivr; la primera apertura de la escena 3D necesita conexión a internet.
 
-| 按键 | 作用 |
+## Atajos
+
+| Tecla | Acción |
 | --- | --- |
-| `T` | 切换 2D / 3D |
-| `V` / `M` / `X` | 选择 / 测量 / 拆改墙体 |
-| `R` / `Shift+R` | 选中家具顺时针 / 逆时针旋转 90° |
-| `Delete` / `Backspace` | 删除选中家具 |
-| `Ctrl/⌘ + D` | 复制选中家具 |
-| `Ctrl/⌘ + Z`，`Ctrl/⌘ + Shift + Z` | 撤销，重做 |
-| `F` | 适应窗口 |
-| `+` / `-` | 放大 / 缩小 |
-| `[` / `]` | 展开 / 收起左侧家具库、右侧面板 |
-| `Shift + F` | 全屏 |
-| `Esc` | 取消当前操作 |
-| 漫游：`WASD` / 方向键，`Shift`，`E` | 移动，快走，开关门 |
+| `T` | Cambiar entre 2D y 3D |
+| `V` | Seleccionar o mover |
+| `M` | Medir |
+| `X` | Modificar un muro no estructural |
+| `R` | Girar 90° |
+| Flechas | Ajuste fino de 10 mm |
+| `Shift` + flechas | Ajuste fino de 100 mm |
+| `Ctrl/Cmd + D` | Duplicar |
+| `Delete` | Eliminar |
+| `Ctrl/Cmd + Z` | Deshacer |
+| `F` | Ajustar el plano a la ventana |
+| `Shift + F` | Pantalla completa |
+| `Esc` | Cancelar selección o pausar recorrido |
 
-## 技术栈
+## Tecnología
 
-- 原生 HTML / CSS / JavaScript，无框架、无构建步骤
-- 2D 平面图用 SVG 绘制
-- 3D 场景用 [Three.js](https://threejs.org/) r160（OrbitControls、PointerLockControls、RoundedBoxGeometry、RoomEnvironment、CSS2DRenderer）
-- 数据保存在 `localStorage`
+- HTML/CSS en `index.html` y módulos JavaScript locales en `js/`.
+- Three.js 0.160.0 para la escena 3D.
+- Sin dependencias de servidor ni datos enviados a una API propia.
+- Los datos de trabajo y la preferencia de idioma se guardan en el almacenamiento local del navegador.
 
-## 自定义户型
+## Autoría y marca
 
-户型数据写在 `index.html` 里：
+Producto: **Rubik Sota Floor Plan Designer**
+Autoría del proyecto: **Rubik Sota**
 
-- `ROOMS`：房间多边形、名称、默认地面材料
-- `WALLS` / `WINS`：墙体与窗洞
-- `MATS`：地面材料名称与单价
-- `LIB`：家具库（类型、名称、默认尺寸、颜色）
-- `buildFurniture()`：各类家具的 3D 模型
+## Proyectos locales
 
-改这些数据就能换成自己的户型。
+El botón «Proyectos» permite crear, abrir, renombrar, duplicar y eliminar proyectos
+(con confirmación). Cada proyecto conserva su geometría y edición al recargar.
+La colección es local a este navegador y origen; no se sincroniza entre dispositivos.
+Exporta cada proyecto como JSON para conservar una copia independiente.
+
+F1a está integrada desde la PR #4. Esta entrega completa proyectos, español/marca,
+uso móvil y el aviso sin WebGL. Imagen, calibración y trazado siguen pendientes en F1b.
+Véase [documentación de esta entrega](docs/technical/F1-local-projects-mobile.md).
