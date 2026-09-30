@@ -135,22 +135,23 @@ offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el fluj
 en su teléfono; el rendimiento físico sigue sin medir.
 
 
-## F3 — entrega inicial, pendiente de revisión
+## F3 — entrega inicial integrada; catálogo externo pendiente
 
 La biblioteca genérica conserva sus 60 entradas y añade alturas de diseño explícitas
-para muebles nuevos. Los proyectos anteriores se abren sin añadir campos ni cambiar
-medidas. En propiedades de un mueble, «Modelo 3D autorizado» permite asociar el
-banco sintético original de prueba o volver al genérico. Conserva identidad,
-estancia, posición, giro, dimensiones y elevación. El modelo se adapta a las medidas
-del objeto; no representa un producto comercial. Permiso MIT específico junto al
-GLB, sin atribuir una licencia al resto del repositorio.
+para muebles nuevos. En propiedades de un mueble, «Modelo 3D autorizado» permite
+asociar el banco sintético original de prueba o volver al genérico. La asociación
+conserva identidad, estancia, posición, giro, dimensiones y elevación. El modelo se
+adapta a las medidas del objeto; no representa un producto comercial. El permiso MIT
+es específico de ese GLB y su generador.
 
-Si el modelo no carga, falla su integridad/permiso o difieren sus dimensiones,
-se conserva el genérico y se informa en propiedades. Solo recursos locales;
-Three.js/GLTFLoader siguen fijados a 0.160.0 en el mismo CDN existente.
-No incorpora assets, nombres, SKU, imágenes ni precios de IKEA a la experiencia.
-Draco, texturas externas, animaciones y otras extensiones no se admiten en esta
-primera ruta. [Informe, auditoría y límites](docs/technical/F3-initial.md).
+Juanma confirmó que el proyecto tiene autorización para usar los assets de Asset Lab.
+Esta entrega inicial no los integra: cada candidato requiere comprobar que el fichero
+está disponible, verificar sus dimensiones y compatibilidad técnica, y registrar el
+alcance de permisos/atribución antes de incorporarlo. Three.js/GLTFLoader siguen
+fijados a 0.160.0; Draco, texturas externas, animaciones y otras extensiones no se
+admiten en la ruta actual. [Informe y estado F3](docs/technical/F3-initial.md) ·
+[roadmap](docs/ROADMAP.md).
 
-F3 no se declara cerrada: faltan revisión de PR/preview, permisos y dimensiones
-para catálogo externo, aprobación de presupuestos y medición en móvil físico.
+La entrega inicial se fusionó por PR #12; **F3 permanece abierta hasta completar el
+catálogo externo autorizado**. La evaluación en móvil físico y los presupuestos de
+rendimiento siguen pendientes.
