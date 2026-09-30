@@ -99,7 +99,7 @@ El botón «Proyectos» permite crear, abrir, renombrar, duplicar y eliminar pro
 La colección es local a este navegador y origen; no se sincroniza entre dispositivos.
 Exporta cada proyecto como JSON para conservar una copia independiente.
 
-F1a y su ampliación de proyectos locales, español, experiencia móvil y fallback sin WebGL quedaron integradas por las PR #4 y #5. F1b quedó integrada por la PR #6. La validación con cinco planos reales y la mejora de la claridad de importación siguen pendientes; véanse los registros de fase.
+F1a y su ampliación de proyectos locales, español, experiencia móvil y fallback sin WebGL quedaron integradas por las PR #4 y #5. F1b quedó integrada por la PR #6. PR #7 integró la claridad de importación y WebP estático. La línea base con cinco planos reales autorizados sigue pendiente; véanse los registros de fase.
 
 ## Plano propio (F1b integrada)
 
@@ -118,3 +118,11 @@ y la [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md).
 Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plano
 (PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
 y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).
+
+## Preparación de F2
+
+F2 (asistencia local) no está iniciada. Falta medir cinco planos autorizados,
+preparar un conjunto fijo de al menos veinte con referencias y acordar umbrales
+con Juanma. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
+offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el flujo
+en su teléfono; el rendimiento físico sigue sin medir.

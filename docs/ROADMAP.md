@@ -1,7 +1,7 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 Actualizado: 30-09-2026. Base integrada verificada: master
-`c28a1701186d885522b4c80f0ab78ae72bb8768d`.
+`d64466599e4ee5267471e1c136acc044062f0fa0`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -21,7 +21,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; PR #3 conserva auditoría/decisiones históricas pendientes de reconciliar con master. No se declara aprobada toda F0. |
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
-| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** Requiere medir el flujo manual con cinco planos autorizados y fijar umbrales antes de construir asistencia. |
+| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** Preparación de protocolo/recorder offline en esta entrega, sin asistencia. Requiere medir el flujo manual con cinco planos autorizados, preparar al menos veinte planos de evaluación con referencias y fijar umbrales antes de construir asistencia. |
 | F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | Pendiente; sin integración de Asset Lab, IKEA o muebles comerciales en esta entrega. |
 
 ## Correspondencia con el roadmap histórico de PR #2
@@ -39,32 +39,33 @@ proponía otra numeración. Sus números quedan como referencias históricas:
 | F6: Asset Lab/IKEA | F3, condicionada |
 | F7–F9: CRM, Immersphere Pro, analítica/oferta | Horizonte futuro sin fase aprobada ni numeración nueva asignada |
 
-Propuesta para las PR documentales abiertas (no se modifican ni cierran aquí):
-- **#2:** sustituir su roadmap por este documento reconciliado antes de continuar
-  su revisión, o cerrar como sustituida tras integrar esta entrega. No fusionar
+Tratamiento de las PR históricas (comparación de esta preparación, 30-09-2026):
+
+- **#2:** conserva contenido único sobre responsabilidades, VisualProposalV1 y fases futuras. Preservar PR/rama y reconciliar ese contenido en una entrega documental acotada; sustituir su numeración antigua antes de continuar
+  su revisión; no retirarla mientras esos detalles sigan únicamente allí. No fusionar
   el texto antiguo que vuelve a marcar resultados existentes como pendientes.
 - **#3:** conservar auditoría, decisiones y criterios como evidencia fechada;
   actualizar referencias de fase a este roadmap. Revisar su diff contra master y
   retirar copias obsoletas de contratos/código antes de integrar documentación.
   No sobrescribir el schema F1b/WebP con el schema histórico de F0.
-- **#1:** español/marca ya llegó por #5; revisar los cambios residuales contra
-  master antes de resolverla, sin reintroducir su index.html anterior a F1a/F1b.
+- **#1:** español/marca sustituida por #5/#7: diccionarios, nombres, metadatos y persistencia conservados; la etiqueta antigua de importación fue reemplazada deliberadamente. Cierre solicitado por REST, bloqueado con `Forbidden`; PR/rama preservadas hasta poder cerrarla. No reintroducir su index.html histórico. Detalle en DEVELOPMENT-WORKFLOW.md.
 
 ## Puerta antes de F2 y pendientes visibles
 
 1. [Cinco planos reales autorizados](qa/F1b-five-plans.md), incluyendo escaneo y
    foto: registrar error de segunda cota, tiempo, correcciones e incidencias.
-2. Juanma debe fijar los umbrales de precisión, tiempo y rendimiento usando esa
+2. Preparar un conjunto **fijo de al menos veinte planos variados**, autorizados, con geometría/cotas de referencia y separación entre calibración y validación; no confundirlo con las cinco sesiones de base. El inventario local actual es cero en ambos conjuntos. [Protocolo y registros](qa/F2-entry-protocol.md).
+3. Juanma debe fijar los umbrales de precisión, tiempo y rendimiento usando esa
    línea base **antes** de construir asistencia. No se adopta el 30 % provisional
    del plan histórico ni se inventa otro umbral en esta tarea.
-3. Juanma confirmó el 30-09-2026 que el flujo funciona en su teléfono físico.
+4. Juanma confirmó el 30-09-2026 que el flujo funciona en su teléfono físico.
    No consta el modelo ni una medición de rendimiento; medir rendimiento físico
    sigue pendiente. SwiftShader y emulación táctil solo acreditan
    comportamiento/renderizado por software.
-4. PDF y HEIC/HEIF diferidos: [decisión de formatos](technical/image-formats.md).
+5. PDF y HEIC/HEIF diferidos: [decisión de formatos](technical/image-formats.md).
    WebP estático quedó integrado por PR #7 con pruebas del recorrido completo;
    quedan excluidos WebP animado y con EXIF.
-5. La corrección de importación fue revisada y aprobada por Juanma antes de
+6. La corrección de importación fue revisada y aprobada por Juanma antes de
    fusionar PR #7. La preview de referencia correspondió al SHA
    `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`.
 
