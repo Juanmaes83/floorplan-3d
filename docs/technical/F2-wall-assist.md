@@ -127,19 +127,53 @@ Resultados ejecutados el 30-09-2026 (hora local Europe/Madrid):
 | `node --test tests/project.test.cjs tests/library.test.cjs tests/tracing.test.cjs tests/wall_assist.test.cjs tests/browser.test.cjs` | 98/98 aprobadas; 0 fallos/cancelaciones/omisiones; 274,40 s. Incluye regresiones F1a/F1b: importación, calibración, segunda cota, trazado, undo/redo, guardado, ZIP y 2D/3D. Ejecución previa al último ajuste de recuperación y a la octava prueba del detector. |
 | `node --test tests/wall_assist.test.cjs` | 8/8 aprobadas, 0,143 s; incorpora registro técnico sintético sin umbral de rendimiento. |
 | `node --test --test-name-pattern='F2 temporary' tests/browser.test.cjs` antes/después de corregir recuperación | Primero 1 fallo reproducido: análisis deshabilitado cuando falta blob local; después 1/1 aprobada, 3,05 s. |
-| `node --test --test-name-pattern='F2 \|synthetic detector\|clear strokes\|short interruptions\|blank, uniform\|transparent strokes\|sampling maps\|explicit acceptance\|invalid corrected' tests/wall_assist.test.cjs tests/browser.test.cjs` | Repetición final tras la corrección: 13/13 aprobadas, sin fallos/cancelaciones/omisiones; ocho de algoritmo y cinco de navegador. Los cuatro recorridos de red observan 34 peticiones GET estáticas cada uno, cero intentos ajenos y cuatro candidatos en el fixture. |
+| Repetición dirigida F2 (comando siguiente) | Repetición final tras la corrección: 13/13 aprobadas, sin fallos/cancelaciones/omisiones; ocho de algoritmo y cinco de navegador. Los cuatro recorridos de red observan 34 peticiones GET estáticas cada uno, cero intentos ajenos y cuatro candidatos en el fixture. |
 | `python3 tests/schema.test.py` | 10/10 aprobadas; 0,237 s. Incluye igualdad schema canónico/embebido y rechazo de claves duplicadas. |
 | `python3 tests/f2_readiness.test.py` | 12/12 aprobadas; 0,098 s. Las puertas de inventario conservan sus mínimos. |
 | `node --check js/project-core.js`, `js/tracing-core.js`, `js/tracing-ui.js`, `js/wall-assist.js`, `tests/browser.test.cjs` y `tests/wall_assist.test.cjs` | Todos con código 0; sin errores. |
 | `node --check /tmp/f2-inline-10.cjs` y `/tmp/f2-inline-12.mjs` | Ambos con código 0 tras extraer los scripts inline actuales. Importmap validado como JSON. |
 | `git diff --check` | Código 0, sin errores. |
 
+```bash
+node --test --test-name-pattern='F2 |synthetic detector|clear strokes|short interruptions|blank, uniform|transparent strokes|sampling maps|explicit acceptance|invalid corrected' tests/wall_assist.test.cjs tests/browser.test.cjs
+```
+
 Una primera extracción de sintaxis trató el importmap JSON como JavaScript y
 falló con `Unexpected token ':'`; se corrigió el extractor distinguiendo
-importmap de scripts. Fue un error del comando auxiliar, no del producto.
+importmap de scripts. Fue un error del comando auxiliar, no del producto. Un auxiliar de formato
+documental también falló con `IndexError` antes de escribir; se corrigió después.
 Los 98 tests completos no se repitieron tras la última corrección acotada: se
 repitieron sus cinco recorridos F2 y los ocho de algoritmo sobre el código final.
 No se ejecutaron mediciones en teléfono físico ni evaluación real con cinco/veinte
 planos, ni revisión humana de Vercel. No se afirma que esas validaciones pasaran. La siguiente acción de evaluación
 real es que Juanma prepare localmente el inventario autorizado y referencias,
 registre las cinco sesiones y congele el conjunto de veinte, sin publicar sus bytes.
+
+
+## Publicación para revisión: bloqueo externo
+
+Código/capturas publicados mediante `git push -u origin HEAD`, sin force push,
+en [feat/f2-local-wall-assist](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-local-wall-assist).
+Commit funcional: `9e35908e9206738a34c3b9ac1d8bad3d1b3b2b61`. Este informe
+recibe después una corrección documental, sin alterar el código probado.
+
+Crear PR por REST con la descripción preparada dio exactamente:
+`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
+No hay PR nueva creada por Codex; no se inventa un número ni se fusiona.
+[Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f2-local-wall-assist?expand=1).
+Se intentó una consulta inicial con gh pr list (GraphQL) y también devolvió
+Forbidden; no se insistió. La consulta posterior fue por REST y el listado
+público HTML confirmó únicamente #1/#2/#3 abiertas antes de publicar.
+
+Consultar check-runs por REST del commit funcional también dio `Forbidden`.
+La [página pública de checks de ese SHA](https://github.com/Juanmaes83/floorplan-3d/commit/9e35908e9206738a34c3b9ac1d8bad3d1b3b2b61/checks)
+muestra `Vercel / Vercel Preview Comments` succeeded (0 comentarios pendientes).
+**Eso no demuestra un deployment READY** ni sustituye CI de tests. No se pudo
+obtener una URL exacta de preview ni comprobar su SHA, estado o acceso humano.
+Las rutas públicas de deployments y parciales de suites consultadas dieron 404;
+no se cambió red/autenticación ni se hizo despliegue manual para suplirlo.
+
+Pendiente concreto: abrir la PR mediante la integración de GitHub con permisos
+y obtener de Vercel el deployment de su HEAD; verificar READY, SHA y URL/acceso
+antes de revisión humana. No usar la preview histórica #7/#8 como esta entrega.
+Las capturas publicadas permiten revisar los recorridos locales mientras tanto.
