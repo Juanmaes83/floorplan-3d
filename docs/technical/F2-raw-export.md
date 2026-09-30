@@ -214,3 +214,38 @@ Se revisaron las capturas móvil vertical y horizontal. El diálogo horizontal
 permite desplazamiento vertical; la descarga y cancelar son utilizables por toque.
 Las capturas heredadas regeneradas por las regresiones se excluyeron del cambio;
 solo se publican las cuatro nuevas capturas sintéticas de este flujo.
+
+## Publicación y pendientes de revisión
+
+Código y QA publicados en `feat/f2-local-raw-export`, commit
+`298c6fd18d346fc724f274c4c60229d56f6c8c16`, desde la base obligatoria
+`65518be43c1ff6680f53af5b6c3cf4a9f2257635`. El cierre documental posterior
+no altera el código probado. `git push -u origin HEAD` funcionó sin force push.
+
+La creación REST de PR falló exactamente con:
+
+```text
+Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden
+```
+
+La lista pública posterior seguía mostrando únicamente #1, #2 y #3 abiertas;
+no se inventa una PR de esta tarea. Se puede preparar desde
+[comparar master con la rama](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f2-local-raw-export?expand=1).
+No se intentó GraphQL, no se cambió la política de red, no hubo merge ni
+despliegue manual a producción.
+
+Los checks públicos del commit de código muestran
+`Vercel / Vercel Preview Comments: succeeded`. No es evidencia de estado READY
+del deployment ni ejecución remota de la suite. No hay workflow CI propio en
+`.github/`. La consulta REST de check-runs también devuelve `Forbidden`.
+
+El comentario de feedback de ese check apunta a esta
+[URL candidata de preview](https://floorplan-3d-git-feat-f2-local-0acbc2-juanma-espinosas-projects.vercel.app/).
+La petición sin autenticar desde este entorno falló con
+`curl: (56) CONNECT tunnel failed, response 403` (`HTTP 000`, sin respuesta
+del deployment). Por ello no se acredita READY, asociación del deployment al
+HEAD documental final, acceso público ni revisión visual de esa URL. No se
+deduce protección de autenticación del deployment a partir de un bloqueo del
+túnel. Quedan pendientes crear la PR y confirmar el deployment READY del HEAD
+final con URL accesible para revisión humana, desde GitHub/Vercel autorizados.
+El trabajo y sus pruebas permanecen publicados; F2 sigue **no validada**.
