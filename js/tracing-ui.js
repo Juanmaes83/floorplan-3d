@@ -1,11 +1,29 @@
 /* F1b UI integrates the existing editor/history/renderers; persistent data never live here. */
 (function(){
- const T=FloorPlanTracing,P=FloorPlanPackage,I=FloorPlanImages,A=FloorPlanWallAssist;
+ const T=FloorPlanTracing,P=FloorPlanPackage,I=FloorPlanImages,A=FloorPlanWallAssist,R=FloorPlanRawWallExport;
  let mode='navigate',points=[],editing=null,shown=false,lastId=library?.activeId(),lastRoot=project.id,operation=0,distanceMode,selectedImage;
  const urls=new Map(),loading=new Set();
+ let rawSession=null,rawExportReason='Analiza una imagen calibrada antes de exportar.',exportSerial;
+ function invalidateRaw(reason){rawSession=null;rawExportReason=reason;const b=$('#assistRawExport');if(b){b.disabled=true;b.title=reason;}if(rawDialog.open){rawDialog.close();rawForm.reset();}}
+ const rawDialog=document.createElement('dialog');rawDialog.id='rawExportDialog';rawDialog.setAttribute('aria-labelledby','rawExportTitle');
+ const rawTitle=document.createElement('h2');rawTitle.id='rawExportTitle';rawTitle.textContent='Exportar sugerencias para evaluación';rawDialog.append(rawTitle);
+ const rawNote=document.createElement('p');rawNote.textContent='Descarga privada voluntaria. No incluye imagen ni proyecto. Referencias ausentes: no es una evaluación. No compartas archivos reales en GitHub/Vercel.';rawDialog.append(rawNote);
+ const rawDetails=document.createElement('p');rawDetails.id='rawExportDetails';rawDetails.style.overflowWrap='anywhere';rawDialog.append(rawDetails);
+ const rawForm=document.createElement('form');rawForm.autocomplete='off';rawDialog.append(rawForm);const rawFields={};
+ for(const [key,text,options]of [['dataset_id','Revisión del conjunto (eval_NNN)',null],['case_id','ID opaco del caso (case_NNN)',null],['type','Tipo de plano',[['digital','Exportación digital'],['scan','Escaneo'],['photo','Foto']]],['data_kind','Origen de los datos',[['synthetic','Fixture sintética'],['real','Datos reales privados']]]]){
+  const label=document.createElement('label');label.textContent=text;const input=document.createElement(options?'select':'input');input.id='raw-'+key;input.required=true;
+  if(options){const empty=document.createElement('option');empty.value='';empty.textContent='Selecciona explícitamente';input.append(empty);for(const [value,name]of options){const o=document.createElement('option');o.value=value;o.textContent=name;input.append(o);}}else{input.type='text';input.maxLength=8;input.pattern=key==='dataset_id'?'eval_[0-9]{3}':'case_[0-9]{3}';input.autocomplete='off';}
+  label.append(input);rawForm.append(label);rawFields[key]=input;
+ }
+ const rawSave=document.createElement('button');rawSave.id='rawExportSave';rawSave.className='btn primary';rawSave.textContent='Descargar instantánea cruda';rawForm.append(rawSave);
+ const rawCancel=document.createElement('button');rawCancel.id='rawExportCancel';rawCancel.type='button';rawCancel.className='btn';rawCancel.textContent='Cancelar';rawCancel.onclick=()=>{rawDialog.close();rawForm.reset();};rawForm.append(rawCancel);
+ const rawError=document.createElement('p');rawError.id='rawExportError';rawError.setAttribute('role','alert');rawForm.append(rawError);document.body.append(rawDialog);rawDialog.addEventListener('cancel',()=>rawForm.reset());
+ function openRawExport(){checkAssist();if(!rawSession||!candidates.length)throw Error(rawExportReason);exportSerial=assistSerial;rawForm.reset();rawError.textContent='';rawDetails.textContent=`${rawSession.predictions.length} segmentos crudos · image-aligned-mm · ${rawSession.scale_applied.mm_per_pixel} mm/píxel · escala ${rawSession.scale_applied.confidence} · detector ${rawSession.detector_commit}`;rawDialog.showModal();rawFields.dataset_id.focus();}
+ rawForm.onsubmit=e=>{e.preventDefault();try{checkAssist();if(!rawSession||exportSerial!==assistSerial||!candidates.length)throw Error('La sesión cambió. Vuelve a analizar y exporta antes de revisar.');const record=R.build(rawSession,Object.fromEntries(Object.entries(rawFields).map(([k,input])=>[k,input.value])));download('sugerencias-crudas-evaluacion.json',new Blob([JSON.stringify(record,null,2)],{type:'application/json'}));rawDialog.close();rawForm.reset();status('Instantánea privada descargada. Añade referencias solo en una copia local; F2 sigue sin validar.');}catch(err){rawError.textContent=err.message;}};
+
  let candidates=[],assistKey=null,assistSerial=0,analyzing=false,correcting=null;
  function referenceKey(){return JSON.stringify([library?.activeId(),project.id,image(),project.scale]);}
- function clearAssist(){assistSerial++;analyzing=false;candidates=[];assistKey=null;correcting=null;if(assistDialog.open)assistDialog.close();$('#gAssist').replaceChildren();$('#assistCandidates')?.replaceChildren();}
+ function clearAssist(){invalidateRaw('La sesión cambió o se canceló; vuelve a analizar.');$('#assistRawExport')?.remove();assistSerial++;analyzing=false;candidates=[];assistKey=null;correcting=null;if(assistDialog.open)assistDialog.close();$('#gAssist').replaceChildren();$('#assistCandidates')?.replaceChildren();}
  function checkAssist(){if(assistKey!==null&&assistKey!==referenceKey())clearAssist();}
  function drawAssist(){const g=$('#gAssist');g.replaceChildren();candidates.forEach((c,n)=>{const line=document.createElementNS(svg.namespaceURI,'line');for(const [key,value]of Object.entries({x1:c.start.x,y1:c.start.y,x2:c.end.x,y2:c.end.y,stroke:'#7c3aed','stroke-width':3/view.s,'stroke-dasharray':`${8/view.s} ${5/view.s}`}))line.setAttribute(key,value);g.append(line);const label=document.createElementNS(svg.namespaceURI,'text');label.setAttribute('x',(c.start.x+c.end.x)/2);label.setAttribute('y',(c.start.y+c.end.y)/2-8/view.s);label.setAttribute('font-size',14/view.s);label.setAttribute('fill','#7c3aed');label.textContent=`S${n+1}`;g.append(label);});}
  async function analyze(){let bitmap,serial;try{
@@ -21,9 +39,10 @@
   await new Promise(resolve=>requestAnimationFrame(resolve));
   if(serial!==assistSerial||key!==referenceKey()||initial!==snap())return;
   const result=A.detect(ctx.getImageData(0,0,canvas.width,canvas.height));
+  try{rawSession=R.capture(result,im,canvas.width,canvas.height,project.scale);rawExportReason='';}catch(err){invalidateRaw(err.message);}
   candidates=result.map(c=>A.toWorld(c,im,canvas.width,canvas.height));analyzing=false;render();status(candidates.length?`${candidates.length} sugerencias experimentales. Revisa cada segmento; no son muros confirmados.`:'Sin candidatos. Continúa con el trazado manual.');
  }catch(e){if(serial===undefined||serial===assistSerial){clearAssist();render();report(e);}}finally{bitmap?.close();if(serial===assistSerial&&analyzing){analyzing=false;render();}}}
- function acceptCandidate(c,start=c.start,end=c.end){checkAssist();if(!candidates.includes(c))throw Error('La sugerencia ya no está disponible. Vuelve a analizar.');apply(p=>A.accept(p,c,start,end));candidates=candidates.filter(x=>x!==c);render();status('Muro aceptado con revisión humana y procedencia experimental. La escala no ha cambiado.');}
+ function acceptCandidate(c,start=c.start,end=c.end){checkAssist();if(!candidates.includes(c))throw Error('La sugerencia ya no está disponible. Vuelve a analizar.');apply(p=>A.accept(p,c,start,end));invalidateRaw('Ya hay revisión humana. Vuelve a analizar para una nueva instantánea cruda.');candidates=candidates.filter(x=>x!==c);render();status('Muro aceptado con revisión humana y procedencia experimental. La escala no ha cambiado.');}
  const assistDialog=document.createElement('dialog');assistDialog.id='assistCorrection';assistDialog.setAttribute('aria-labelledby','assistCorrectionTitle');
  const heading=document.createElement('h2');heading.id='assistCorrectionTitle';heading.textContent='Corregir sugerencia experimental';assistDialog.append(heading);
  const description=document.createElement('p');description.textContent='Revisa los extremos en mm. Guardar confirma solo este muro; no confirma escala ni exactitud.';assistDialog.append(description);
@@ -37,11 +56,12 @@
   const button=(id,text,fn,container=section)=>{const b=document.createElement('button');b.id=id;b.className='btn';b.textContent=text;b.onclick=()=>{try{fn();}catch(e){report(e);}};container.append(b);return b;};
   button('assistAnalyze',analyzing?'Analizando…':'Sugerir muros localmente',analyze).disabled=analyzing;
   button('assistCancel','Descartar todas / cancelar',()=>{clearAssist();render();status('Sugerencias descartadas. La geometría se conserva.');});
+  if(candidates.length){const b=button('assistRawExport','Exportar sugerencias para evaluación',openRawExport);b.disabled=!rawSession;b.title=rawExportReason;if(!rawSession){const reason=document.createElement('p');reason.id='rawExportUnavailable';reason.textContent=rawExportReason;section.append(reason);}}
   const list=document.createElement('div');list.id='assistCandidates';list.style.cssText='max-height:240px;overflow:auto';section.append(list);
   candidates.forEach((c,n)=>{const row=document.createElement('div');row.style.cssText='margin:8px 0;border-top:1px solid var(--line)';const title=document.createElement('p');title.textContent=`S${n+1} · (${c.start.x}, ${c.start.y}) → (${c.end.x}, ${c.end.y}) mm · sin confirmar`;row.append(title);
    button(`assistAccept-${c.id}`,`Aceptar S${n+1}`,()=>acceptCandidate(c),row);
    button(`assistCorrect-${c.id}`,`Corregir S${n+1}`,()=>{correcting=c;correctionError.textContent='';for(const [key,value]of Object.entries({startX:c.start.x,startY:c.start.y,endX:c.end.x,endY:c.end.y}))correctionInputs[key].value=value;assistDialog.showModal();correctionInputs.startX.focus();},row);
-   button(`assistReject-${c.id}`,`Rechazar S${n+1}`,()=>{candidates=candidates.filter(x=>x!==c);render();status('Sugerencia rechazada. La geometría se conserva.');},row);list.append(row);
+   button(`assistReject-${c.id}`,`Rechazar S${n+1}`,()=>{invalidateRaw('Ya hay revisión humana. Vuelve a analizar para exportar.');candidates=candidates.filter(x=>x!==c);render();status('Sugerencia rechazada. La geometría se conserva.');},row);list.append(row);
   });panel.append(section);
  }
 
@@ -118,6 +138,6 @@
   await I.put(pending);try{if(serial!==operation||current!==project.id||snap()!==initial){await I.remove(pending.map(e=>e[0]));return;}project=library.add(result.project,'Proyecto ZIP importado');editing=null;ui.sel=null;undoStack.length=redoStack.length=0;refreshProject();shown=true;renderAll();fitView();status('ZIP importado localmente. Revisa la escala y los avisos.');}catch(e){await I.remove(pending.map(e=>e[0]));throw e;}
  }
  $('#traceZipFile').onchange=async e=>{const file=e.target.files[0];e.target.value='';if(file)try{await importZip(file);}catch(err){report(err);}};
- addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#traceDistance').open){cancel();editing=null;renderPanel();}});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#traceDistance').open&&!rawDialog.open){cancel();editing=null;renderPanel();}});
  window.FloorPlanTraceUI={render,editPanel,cancel,cleanup,decode,importZip,viewChanged};render();
 })();

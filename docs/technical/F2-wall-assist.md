@@ -196,3 +196,14 @@ Las capturas publicadas permiten revisar los recorridos locales mientras tanto.
 Juanma aprobó por la PR #10 el comparador offline de precisión/exhaustividad por longitud. Las diagonales quedan sin crédito en el comparador de ejes, pero se conservan en los denominadores globales; el informe presenta aparte exhaustividad en ejes soportados. La aprobación no fija tolerancia universal ni umbrales de producto y no valida F2. PR #10 está integrada en `master` mediante `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`.
 
 F2 puede continuar desarrollándose sin esperar cinco sesiones ni veinte planos reales; esos datos se reservan para la validación empírica. Limitación concreta a resolver en una próxima entrega: las sugerencias crudas no aceptadas solo viven en memoria de `tracing-ui.js` y no pueden alimentar el evaluador sin reconstruirlas manualmente. Candidato de siguiente tarea: exportación explícita y local de predicciones crudas antes de revisión humana, sin imagen, red ni envío automático, con prueba de privacidad y formato compatible con el evaluador. La decisión final de formato/flujo debe comprobarse contra el código actual en la siguiente PR.
+
+
+## Exportación cruda local en esta rama (30-09-2026)
+
+[Formato, auditoría del marco y flujo](F2-raw-export.md): captura antes de
+`toWorld`, descarga voluntaria calibrada y conversión local al evaluador. No
+reconstruye predicciones desde geometría revisada ni persiste candidatos. Se
+exporta antes de aceptar/corregir/rechazar; cualquier revisión invalida la
+instantánea. Detector y contrato permanecen intactos. F2 sigue experimental y
+no validada; cinco sesiones/veinte planos son evaluación empírica posterior,
+no bloqueo para implementar este flujo.

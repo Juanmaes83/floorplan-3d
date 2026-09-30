@@ -21,3 +21,13 @@ explícita 5 mm para esta demostración, longitudes M=250, P=350, R=300: precisi
 5/7 y exhaustividad 5/6. Son cálculos sintéticos, no calidad del detector en viviendas.
 El SHA identifica la versión experimental integrada por PR #9; no se ejecuta
 el detector ni se afina en estos tests.
+
+
+`f2-raw-export.synthetic.json` fue construido con el módulo de exportación y
+coordenadas procedurales propias, sin vivienda ni imagen real. Incluye una
+horizontal de 4000 mm y una diagonal de 500 mm, escala de ejemplo 10 mm/px,
+referencias ausentes y tipo/origen sintéticos declarados. Es un formato
+intermedio; convertir con `scripts/f2-raw-export-to-evaluation.py`. Completar
+referencias idénticas solo en el test produce 8/9 global y 1 sobre ejes soportados;
+no acredita calidad en planos reales. El detector actual no genera diagonales: la
+fixture comprueba que exportador/conversor no las filtran si se presentan.
