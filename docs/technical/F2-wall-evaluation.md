@@ -250,3 +250,29 @@ Revisión solicitada: aprobar o ajustar la **definición de métrica** antes de 
 para tomar decisiones; después Juanma prepara/revisa en privado referencias,
 registra las cinco sesiones separadas y congela los veinte casos con sus fallos,
 SHA del detector y tolerancia explícita. No se publican sus datos geométricos.
+
+### Publicación conservada y bloqueo de PR
+
+Rama publicada con `git push -u origin HEAD`, sin force push:
+[feat/f2-evaluation-harness](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-evaluation-harness).
+Commit funcional `759ca53a4afd32c1f89ae1cbffa34a4c64eb29f9`; este registro
+posterior solo añade documentación de publicación, sin cambiar el código probado.
+
+La creación por REST con título/alcance/reglas/pruebas preparados dio exactamente:
+`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
+No se creó ninguna PR desde Codex y no se inventa número.
+[Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f2-evaluation-harness?expand=1).
+No se usó GraphQL ni se cambió red/autenticación para superar el bloqueo.
+No se fusionó, no se borraron ramas ni se desplegó manualmente.
+
+La página pública de checks del commit funcional mostró `Vercel / Vercel Preview
+Comments` succeeded, sin URL exacta de preview/deployment. Ese check solo informa
+comentarios pendientes, **no acredita READY ni CI de tests**. No se verificó un
+SHA de deployment porque no hubo un deployment identificable en la evidencia
+accesible; no se presenta uno histórico como esta entrega. Al no cambiar UI,
+no es necesaria una preview visual y no se intentó generar una manualmente.
+
+Siguiente acción concreta: Juanma abre la PR desde el compare publicado y revisa
+la definición métrica y formato; los datos reales y permisos se preparan después
+privadamente según el protocolo. La aprobación de reglas no valida F2 ni fija
+los umbrales de calidad, tiempo, cobertura, latencia o memoria pendientes.
