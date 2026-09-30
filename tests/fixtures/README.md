@@ -4,3 +4,11 @@ fixtures sintéticos generados para estas pruebas: un rectángulo procedural de
 planos privados o recursos descargados. La variante JPEG EXIF declara orientación 6
 para comprobar que se conserva el original al preparar su representación visual.
 No sustituyen la evaluación humana con cinco planos autorizados.
+
+`manual-plan.webp` (VP8L lossless) y `manual-plan-lossy.webp` (VP8 lossy)
+se generaron localmente desde el mismo PNG sintético con Pillow disponible
+en el entorno; no se añadió una dependencia a la aplicación o tests. Los bytes
+de cada WebP son la referencia original de esos tests y se comparan tras ZIP.
+
+`manual-plan-alpha.webp` añade un píxel transparente y usa VP8X/ALPH/VP8,
+para comprobar el contenedor extendido con decodificación real.

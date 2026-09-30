@@ -15,3 +15,7 @@ no representan esta evaluación ni acreditan precisión profesional.
 Registrar autorización antes de usar cada fichero. No adjuntar direcciones, nombres
 ni datos privados al repositorio o a una preview. Medir error y tiempo como evidencia,
 sin comparar con una promesa de precisión o un tiempo de trazado aún no aprobados.
+
+Esta línea base debe medirse antes de iniciar F2 (asistencia) y antes de fijar
+umbrales con Juanma. El 2 % del aviso de segunda cota no es un umbral de aceptación
+para F2. El seguimiento UX/WebP no completa ninguna fila de esta tabla.

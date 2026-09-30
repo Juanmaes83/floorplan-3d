@@ -1,6 +1,15 @@
 # Cambios compatibles de FloorPlanProjectV1
 
-## 1.1.0 — F1b (implementación para revisión, 30-09-2026)
+## 1.2.0 — seguimiento de formatos (esta entrega, sin fusionar)
+
+- `sourceImages[].mediaType` admite `image/webp` estático además de PNG/JPEG.
+- ZIP preserva y restaura `.webp` con bytes originales, dimensiones y SHA-256.
+- WebP animado/con EXIF, PDF y HEIC/HEIF quedan excluidos del importador.
+- No cambian calibración ni verificación; proyectos sin WebP conservan su versión.
+- V1.0/V1.1 siguen funcionando; lectores con el enum antiguo pueden rechazar WebP.
+- [Decisión y pruebas de formatos](../technical/image-formats.md).
+
+## 1.1.0 — F1b (integrada por PR #6, 30-09-2026)
 
 - `scale.verification` opcional: sourceImageId, puntos A/B en píxeles originales,
   knownLengthMm, measuredLengthMm (mm entero), errorPercent firmado, thresholdPercent
@@ -20,7 +29,7 @@
   estos campos nuevos. Para leerlos/escribirlos con sus garantías, usar esta versión.
 - Extensión opcional autorizada por el encargo, no aprobación de decisiones F0.
 
-El ZIP materializa `storage.kind:sidecar-file` y `ref:images/<imageId>.png|jpg`.
+El ZIP materializa `storage.kind:sidecar-file` y `ref:images/<imageId>.png|jpg|webp`.
 Al importar se restaura `local-browser` con nueva clave local. Las referencias a
 IDs, geometría, calibración, verificación y huellas se conservan; únicamente cambia
 la ubicación de almacenamiento. El proyecto JSON nunca incluye data:/blob: ni binarios.

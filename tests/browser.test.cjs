@@ -282,3 +282,70 @@ test('F1b geometry editor rejects invalid polygons atomically and preserves IDs 
  await page.locator('#traceEditPolygon').fill('0,0\n4000,4000\n0,4000\n4000,0');await page.locator('#traceEditSave').click();assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),saved:localStorage.getItem('rubik-sota-project-library-v1')})),before);assert.match(await page.locator('#toast').textContent(),/zero-area|self-intersection/);
  await page.locator('#traceWarnings button').filter({hasText:sample.walls[0].id}).first().click();page.once('dialog',d=>d.accept());await page.locator('#traceDeleteGeometry').click();assert.ok(await page.evaluate(id=>!FloorPlanApp.project.walls.some(w=>w.id===id)&&!FloorPlanApp.project.openings.some(o=>o.wallId===id),sample.walls[0].id));await page.locator('#undo').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),4);assert.equal(await page.evaluate(()=>FloorPlanApp.project.openings.length),2);assert.deepEqual(errors,[]);
 });
+
+async function imageZip(page){const pending=page.waitForEvent('download');await page.locator('#traceExport').click();const stream=await (await pending).createReadStream(),parts=[];for await(const part of stream)parts.push(part);return Buffer.concat(parts);}
+for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`image import clarity and complete WebP workflow ${viewport.width}x${viewport.height}`,async t=>{
+ const {page,errors}=await pageFor(t,{viewport,hasTouch:true});const unexpected=[];page.on('request',r=>{if(!r.url().startsWith(url)&&!r.url().startsWith('blob:')&&!r.url().startsWith('https://cdn.jsdelivr.net/'))unexpected.push(r.url());});
+ const original=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.locator('details.menu summary').tap();assert.equal(await page.locator('#importJson').textContent(),'Importar proyecto JSON');
+ let pending=page.waitForEvent('filechooser');await page.locator('#importJson').tap();assert.equal(await (await pending).element().getAttribute('id'),'fileIn');
+ await page.locator('details.menu summary').tap();pending=page.waitForEvent('filechooser');await page.locator('#importImage').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'traceImageFile');
+ const fixture=path.join(__dirname,'fixtures/manual-plan.webp'),bytes=await readFile(fixture);await chooser.setFiles({name:'sample.webp',mimeType:'',buffer:bytes});
+ await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
+ await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
+ const project=await page.evaluate(()=>FloorPlanApp.project);assert.equal(await page.evaluate(value=>{const lib=JSON.parse(localStorage.getItem('rubik-sota-project-library-v1'));return JSON.stringify(lib).includes(value);},original),true);
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#gSource image'));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),project);
+ await page.locator('#traceBtn').tap();const zip=await imageZip(page);
+ const {page:fresh}=await pageFor(t,{viewport,hasTouch:true});await fresh.locator('#traceZipFile').setInputFiles({name:'project.zip',mimeType:'application/zip',buffer:zip});await fresh.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await fresh.waitForFunction(()=>document.querySelector('#gSource image'));
+ assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
+ const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
+ await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
+ await fresh.locator('details.menu summary').tap();assert.ok(await fresh.locator('#importImage').isVisible());await fresh.locator('#importImage').scrollIntoViewIfNeeded();
+ assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ const box=await fresh.locator('#importImage').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height);
+ await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
+ await fresh.locator('details.menu summary').tap();const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
+ const message=await fresh.locator('#toast').boundingBox();assert.ok(message.x>=0&&message.x+message.width<=viewport.width&&message.y>=0&&message.y+message.height<=viewport.height);assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeError);await fresh.screenshot({path:`/tmp/image-import-error-${viewport.width}.png`});
+ assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);
+});
+
+test('image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration',async t=>{
+ for(const name of ['manual-plan.png','manual-plan.jpg','manual-plan-lossy.webp','manual-plan-alpha.webp']){
+  const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('details.menu summary').click();await page.locator('#importImage').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures',name));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+  const im=await page.evaluate(()=>FloorPlanApp.project.sourceImages[0]);assert.equal(im.widthPx,480);assert.equal(im.heightPx,320);
+  if(name.endsWith('.webp')){await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();}
+  const expectedScale=await page.evaluate(()=>FloorPlanApp.project.scale);
+  const zip=await imageZip(page),{page:fresh}=await pageFor(t);await fresh.locator('#traceZipFile').setInputFiles({name:'project.zip',mimeType:'application/zip',buffer:zip});await fresh.waitForFunction(()=>document.querySelector('#gSource image'));
+  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),expectedScale);await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));
+  const original=await readFile(path.join(__dirname,'fixtures',name)),restored=await fresh.evaluate(async()=>Array.from(new Uint8Array(await (await FloorPlanImages.get(FloorPlanApp.project.sourceImages[0].storage.ref)).arrayBuffer())));assert.deepEqual(Buffer.from(restored),original);assert.deepEqual(errors,[]);
+ }
+});
+
+test('image import failures preserve current project, collection and image keys atomically',async t=>{
+ const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.webp'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ const snapshot=()=>page.evaluate(async()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1'),keys:await FloorPlanImages.keys()})),before=await snapshot();
+ const png=await readFile(path.join(__dirname,'fixtures/manual-plan.png')),webp=await readFile(path.join(__dirname,'fixtures/manual-plan.webp')),large=Buffer.from(png);large.writeUInt32BE(8001,16);const corrupt=Buffer.from(webp);corrupt.fill(0,25);
+ const cases=[{name:'fake.png',mimeType:'image/png',buffer:webp},{name:'fake.jpg',mimeType:'',buffer:png},{name:'truncated.webp',mimeType:'image/webp',buffer:webp.subarray(0,-1)},{name:'corrupt.webp',mimeType:'image/webp',buffer:corrupt},{name:'large.png',mimeType:'image/png',buffer:Buffer.alloc(15*1024*1024+1)},{name:'huge.png',mimeType:'image/png',buffer:large},{name:'plan.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')},{name:'plan.heic',mimeType:'',buffer:Buffer.alloc(30)}];
+ for(const file of cases){await page.evaluate(()=>document.querySelector('#toast').textContent='');await page.locator('#traceImageFile').setInputFiles(file);await page.waitForFunction(()=>document.querySelector('#toast').textContent.length>0);assert.deepEqual(await snapshot(),before);}
+ for(const failure of ['read','decode','store']){
+  await page.evaluate(kind=>{document.querySelector('#toast').textContent='';if(kind==='read'){window.originalReader=File.prototype.arrayBuffer;File.prototype.arrayBuffer=async()=>{throw Error('read failure');};}if(kind==='decode'){window.originalDecoder=createImageBitmap;window.createImageBitmap=async()=>{throw Error('decode failure');};}if(kind==='store'){window.originalPut=FloorPlanImages.put;FloorPlanImages.put=async()=>{throw Error('No se pudo guardar la imagen.');};}},failure);
+  await page.locator('#traceImageFile').setInputFiles({name:'valid.webp',mimeType:'image/webp',buffer:webp});await page.waitForFunction(()=>document.querySelector('#toast').textContent.length>0);assert.deepEqual(await snapshot(),before);
+  await page.evaluate(kind=>{if(kind==='read')File.prototype.arrayBuffer=originalReader;if(kind==='decode')window.createImageBitmap=originalDecoder;if(kind==='store')FloorPlanImages.put=originalPut;},failure);
+ }
+ await page.locator('#fileIn').setInputFiles({name:'plan.png',mimeType:'image/png',buffer:png});assert.match(await page.locator('#toast').textContent(),/proyecto JSON/);assert.deepEqual(await snapshot(),before);
+ const Package=require('../js/project-package.js'),badProject=JSON.parse(before.project),badZip=await Package.encode(badProject,async()=>new Blob([corrupt]));await page.evaluate(()=>document.querySelector('#toast').textContent='');await page.locator('#traceZipFile').setInputFiles({name:'corrupt-image.zip',mimeType:'application/zip',buffer:Buffer.from(await badZip.arrayBuffer())});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('decodificar'));assert.deepEqual(await snapshot(),before);
+ await page.locator('#traceZipFile').setInputFiles({name:'broken.zip',mimeType:'application/zip',buffer:Buffer.from('bad')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('ZIP'));assert.deepEqual(await snapshot(),before);assert.deepEqual(errors,[]);
+});
+
+test('image import labels and accessible help follow Spanish, English and Chinese',async t=>{
+ const {page,errors}=await pageFor(t);
+ for(const [language,jsonText,imageText,inputLabel]of [['es','Importar proyecto JSON','Cargar imagen de plano (PNG/JPG/WebP)','Imagen de plano PNG, JPG o WebP'],['en','Import project JSON','Load floor plan image (PNG/JPG/WebP)','Floor plan image PNG, JPG or WebP'],['zh','导入项目 JSON','加载平面图图片 (PNG/JPG/WebP)','平面图图片 PNG、JPG 或 WebP']]){
+  assert.equal(await page.locator('html').getAttribute('lang'),language==='zh'?'zh-CN':language);
+  await page.locator('details.menu summary').click();assert.equal(await page.locator('#importJson').textContent(),jsonText);assert.equal(await page.locator('#importImage').textContent(),imageText);assert.equal(await page.locator('#traceImageFile').getAttribute('aria-label'),inputLabel);
+  assert.equal(await page.locator('#importImage').getAttribute('aria-describedby'),'importImageHelp');assert.match(await page.locator('#importImageHelp').textContent(),/15 MiB/);
+  await page.locator('details.menu summary').click();await page.locator('#langBtn').click();
+ }
+ assert.deepEqual(errors,[]);
+});

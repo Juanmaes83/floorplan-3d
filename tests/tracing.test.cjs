@@ -22,3 +22,36 @@ test('JPEG and EXIF rotations retain original bytes/pixels, neutralizing display
 test('ZIP rejects duplicate entries and encrypted flags before touching a collection',async()=>{const raw=P.zip({size:2,*[Symbol.iterator](){yield ['project.json',new TextEncoder().encode('{}')];yield ['project.json',new TextEncoder().encode('{}')];}});await assert.rejects(()=>raw.arrayBuffer().then(b=>P.unzip(b)),/duplicado/);const b=new Uint8Array(await P.zip(new Map([['project.json',new TextEncoder().encode('{}')]])).arrayBuffer()),v=new DataView(b.buffer),at=v.getUint32(b.length-6,true);v.setUint16(at+8,1,true);await assert.rejects(()=>P.unzip(b),/cifrado/);});
 test('ZIP inflation stops before accepting a payload larger than its declared bound',async()=>{const zlib=require('node:zlib'),data=new TextEncoder().encode('{}'),encoded=zlib.deflateRawSync(Buffer.alloc(100000,65)),stored=new Uint8Array(await P.zip(new Map([['project.json',data]])).arrayBuffer()),head=stored.slice(0,42),central=stored.slice(44,102),end=stored.slice(102);new DataView(head.buffer).setUint16(8,8,true);new DataView(head.buffer).setUint32(18,encoded.length,true);new DataView(central.buffer).setUint16(10,8,true);new DataView(central.buffer).setUint32(20,encoded.length,true);new DataView(end.buffer).setUint32(16,42+encoded.length,true);await assert.rejects(()=>new Blob([head,encoded,central,end]).arrayBuffer().then(b=>P.unzip(b)),/límite/);});
 test('W3 catches a furniture footprint crossing a concave room even with all corners inside',()=>{const p=seed(),r=T.room(p,[{x:0,y:0},{x:4000,y:0},{x:4000,y:4000},{x:3000,y:4000},{x:3000,y:1000},{x:1000,y:1000},{x:1000,y:4000},{x:0,y:4000}]);p.objects=[{id:'obj_concave',name:'Caja',type:'box',position:{x:2000,y:2000},size:{widthMm:3000,depthMm:3000},rotationDeg:0,roomId:r.id}];assert.ok(T.warnings(p).some(w=>w.code==='W3'&&w.message.includes('estancia')));});
+
+test('static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes',async()=>{
+ for(const filename of ['manual-plan.webp','manual-plan-lossy.webp','manual-plan-alpha.webp']){
+  const bytes=new Uint8Array(fs.readFileSync(__dirname+'/fixtures/'+filename)),info=T.imageInfo(bytes,'image/webp',filename);
+  assert.equal(info.widthPx,480);assert.equal(info.heightPx,320);assert.equal(info.orientation,1);
+  const p=seed();p.schemaVersion='1.2.0';p.sourceImages[0].mediaType='image/webp';
+  T.calibrate(p,'img_synthetic',{x:50,y:50},{x:450,y:50},4000);T.verify(p,{x:50,y:250},{x:450,y:250},4000);T.confirm(p);
+  assert.equal(p.schemaVersion,'1.2.0');
+  const zip=await P.encode(p,async()=>new Blob([bytes])),entries=await P.unzip(await zip.arrayBuffer());
+  assert.ok(entries.has('images/img_synthetic.webp'));const result=await P.validateEntries(entries);
+  assert.deepEqual(result.images[0].bytes,bytes);assert.deepEqual(result.project.scale,p.scale);
+  assert.equal(result.project.sourceImages[0].mediaType,'image/webp');
+  const forged=new Map(entries),json=JSON.parse(new TextDecoder().decode(entries.get('project.json')));
+  json.sourceImages[0].storage.ref='images/img_synthetic.png';forged.delete('images/img_synthetic.webp');forged.set('images/img_synthetic.png',bytes);forged.set('project.json',new TextEncoder().encode(JSON.stringify(json)));
+  await assert.rejects(()=>P.validateEntries(forged),/extensión/);
+ }
+});
+test('image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants',()=>{
+ const webp=new Uint8Array(fs.readFileSync(__dirname+'/fixtures/manual-plan.webp'));
+ assert.equal(T.imageInfo(webp,'','plan.WEBP').mediaType,'image/webp');
+ assert.throws(()=>T.imageInfo(webp,'image/png','plan.webp'),/tipo declarado/);
+ assert.throws(()=>T.imageInfo(webp,'','plan.png'),/extensión/);
+ assert.throws(()=>T.imageInfo(webp.slice(0,-1)),/truncado/);
+ const extra=new Uint8Array(webp.length+1);extra.set(webp);assert.throws(()=>T.imageInfo(extra),/tamaño/);
+ const oversized=webp.slice(),view=new DataView(oversized.buffer);const bits=view.getUint32(21,true);view.setUint32(21,(bits&~0x3fff)|8000,true);assert.throws(()=>T.imageInfo(oversized),/8000/);
+ function prefix(kind,data){const chunk=Buffer.alloc(8+data.length+(data.length%2));chunk.write(kind);chunk.writeUInt32LE(data.length,4);Buffer.from(data).copy(chunk,8);const result=Buffer.concat([webp.subarray(0,12),chunk,webp.subarray(12)]);result.writeUInt32LE(result.length-8,4);return result;}
+ assert.throws(()=>T.imageInfo(prefix('ANIM',new Uint8Array(6))),/animado/);
+ assert.throws(()=>T.imageInfo(prefix('EXIF',new Uint8Array(6))),/EXIF/);
+ const extended=Buffer.alloc(10);extended.writeUIntLE(479,4,3);extended.writeUIntLE(319,7,3);assert.equal(T.imageInfo(prefix('VP8X',extended)).widthPx,480);
+ extended.writeUIntLE(8000,4,3);assert.throws(()=>T.imageInfo(prefix('VP8X',extended)),/8000/);
+ assert.throws(()=>T.imageInfo(Buffer.from('%PDF-1.7'),'application/pdf','plan.pdf'),/PDF no admitido/);
+ assert.throws(()=>T.imageInfo(Buffer.alloc(30),'','plan.heic'),/HEIC\/HEIF no admitido/);
+});

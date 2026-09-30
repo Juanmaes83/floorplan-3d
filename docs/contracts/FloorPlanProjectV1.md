@@ -75,7 +75,7 @@ No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos
 - **Materiales:** se referencian por `floorMaterialId`, con `appearance.color` y un `preset` procedimental opcional. **Sin binarios, texturas incrustadas ni precio.**
 - **Objetos:** `type` genérico, `name`, `position` (centro de la huella), `rotationDeg`, `size.widthMm` y `size.depthMm` obligatorios, `heightMm` y `elevationMm` opcionales, `roomId` y `color` opcionales.
 - **`assetRef` (experimental, F3):** contiene `catalog`, `assetId` y `catalogRevision`. Solo es un puntero: **no afirma que el fichero exista, que la licencia cubra el uso ni ningún precio**. Esas comprobaciones pertenecen al catálogo (ver auditoría de Asset Lab). Si el asset no está disponible o no está autorizado, la app dibuja el `type` genérico con el mismo `size`.
-- **Imagen original (`sourceImages[]`):** es una **referencia externa**. Lleva `id`, `mediaType` (V1: PNG o JPEG), tamaño en px, `sha256` y `storage.kind`, que puede ser `local-browser`, `sidecar-file` o `remote` (este último experimental, sujeto a D-06 y D-08). `storage.ref` prohíbe `blob:` y `data:`. Tampoco se deben usar URLs firmadas temporales. **La identidad del recurso es `id` + `sha256`, no la URL.**
+- **Imagen original (`sourceImages[]`):** es una **referencia externa**. Lleva `id`, `mediaType` (PNG o JPEG; desde 1.2.0 también WebP estático), tamaño en px, `sha256` y `storage.kind`, que puede ser `local-browser`, `sidecar-file` o `remote` (este último experimental, sujeto a D-06 y D-08). `storage.ref` prohíbe `blob:` y `data:`. Tampoco se deben usar URLs firmadas temporales. **La identidad del recurso es `id` + `sha256`, no la URL.**
 - **Separación de datos:** la geometría (muros, estancias) vive en mm y es la fuente de verdad. El origen visual (`placement`: cómo se superpone la imagen en mm) y el recurso (`storage`: dónde están los bytes) son independientes. Se puede quitar la imagen sin perder la geometría.
 - **`originalFileName`** puede contener una dirección o un nombre de persona, así que se trata como dato potencialmente personal (D-08).
 
@@ -120,7 +120,7 @@ JSON Schema: INVÁLIDO (14 errores)
   /scale required: must have required property 'calibration'        ← "real" sin calibración
   /scale/method const: must be equal to constant ("known-dimension")
   /scale if: must match "then" schema
-  /sourceImages/0/mediaType enum                                       ← PDF fuera de V1
+  /sourceImages/0/mediaType enum                                       ← PDF sigue fuera de V1
   /sourceImages/0/storage/ref pattern "^(?!blob:)(?!data:)"            ← URL temporal
   /walls/0 required: 'thicknessMm'
   /walls/0/id pattern                                                  ← sufijo "a" demasiado corto

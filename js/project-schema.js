@@ -156,7 +156,7 @@
       "properties": {
         "id": { "$ref": "#/$defs/imageId" },
         "role": { "enum": ["floor-plan"], "default": "floor-plan" },
-        "mediaType": { "enum": ["image/png", "image/jpeg"], "description": "PDF u otros formatos quedan fuera de V1 hasta decisión D-02." },
+        "mediaType": { "enum": ["image/png", "image/jpeg", "image/webp"], "description": "Raster PNG, JPEG y WebP estático. PDF y HEIC/HEIF no admitidos." },
         "widthPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
         "heightPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
         "bytes": { "type": "integer", "minimum": 1 },
