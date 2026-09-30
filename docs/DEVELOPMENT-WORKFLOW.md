@@ -130,3 +130,15 @@ La [PR #10](https://github.com/Juanmaes83/floorplan-3d/pull/10) se fusionó en `
 Juanma aprobó el método métrico: este comparador de ejes horizontales/verticales no da crédito a diagonales y conserva su longitud en los denominadores globales; informa aparte exhaustividad en ejes soportados. La suite dirigida del evaluador se ejecutó tras actualizar el estado: **16/16**; la CLI sintética devuelve `rules_status: metric_method_approved_thresholds_pending` y `f2_validated: false`. Readiness 12/12, schema 10/10 y regresiones Node 67/67 fueron reportadas en la rama antes de los cambios de aprobación, que no tocaron esas áreas.
 
 Vercel confirmó `READY` para el SHA de rama `35502fa412e282bb5a83c78aabe5c35d534ff88e`; [preview de revisión](https://floorplan-3d-git-feat-f2-evalu-2df055-juanma-espinosas-projects.vercel.app/) · [deployment inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/3scPzg7rEe9JvRz9mDkJUWjVDhXQ). No hay cambios visuales, así que no hace falta revisión humana de interfaz. La evaluación con cinco sesiones y veinte planos autorizados queda para validar precisión/tiempo más adelante; no bloquea continuar la implementación F2 con pruebas sintéticas. F2 sigue siendo experimental y **no validada**. La rama no se eliminó: no había herramienta de borrado de refs disponible en esta sesión; puede eliminarse con **Delete branch** en la PR una vez confirmado el merge.
+
+
+## Entrega de exportación cruda F2 — en revisión (esta rama)
+
+Base remota master verificada `65518be43c1ff6680f53af5b6c3cf4a9f2257635`.
+Checkout inicial limpio en la rama del evaluador; nueva y única rama
+`feat/f2-local-raw-export`, trabajo anterior conservado. Exportación explícita,
+privada y transitoria; sin modificar detector ni FloorPlanProjectV1. Requiere
+PR hacia master, preview del HEAD final y aprobación de Juanma; no se fusiona
+en esta tarea. [Informe, auditoría de coordenadas, tests y evidencia](technical/F2-raw-export.md).
+Cinco sesiones y veinte planos reales no bloquean el desarrollo autorizado;
+siguen pendientes para validar empíricamente F2 y fijar umbrales.

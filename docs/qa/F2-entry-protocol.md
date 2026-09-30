@@ -275,3 +275,26 @@ Una página READY no acredita las métricas ni completa la evaluación pendiente
 ## Método del comparador geométrico aprobado (30-09-2026)
 
 Juanma aprobó la regla de precisión/exhaustividad por longitud implementada en el evaluador offline. En este comparador de ejes horizontales/verticales, las diagonales no reciben crédito de coincidencia, pero su longitud permanece en los denominadores globales de predicciones y referencias; el informe también muestra por separado la exhaustividad sobre ejes soportados. Esto hace visible la limitación del detector actual en vez de ocultarla. La aprobación es del método de cálculo: no fija tolerancia universal, umbral de calidad ni declara F2 validada. Los datos reales quedan para la validación empírica posterior y no bloquean seguir desarrollando el prototipo.
+
+
+## Capturar sugerencias crudas mediante descarga explícita (esta rama)
+
+[Exportación y conversión local](../technical/F2-raw-export.md): desde «Plano
+propio», calibrar la imagen seleccionada, analizar y usar «Exportar sugerencias
+para evaluación» **antes** de revisar candidatos. Completar IDs opacos, tipo y
+origen explícitos en el diálogo. Una escala desconocida/incoherente bloquea la
+exportación, conservando asistencia y edición manual. El archivo privado tiene
+marco image-aligned-mm obtenido desde píxeles crudos, no desde la capa SVG girada.
+Conserva diagonales, versión real del detector y escala aplicada; no imagen ni
+datos de otros proyectos. No se guarda automáticamente en proyectos/JSON/ZIP/IDB.
+
+Convertir fuera de Git con `scripts/f2-raw-export-to-evaluation.py`. El registro
+resultante conserva referencias ausentes hasta anotarlas/revisarlas en una copia
+local independiente. Sin ellas, no hay métricas del caso. Completar escala/frame
+comunes y conservar correspondencias/consentimientos privadamente; no subir
+exportaciones reales ni referencias a GitHub, Vercel o CI. La regla aprobada
+cuenta diagonales en denominadores globales aunque el comparador no les dé crédito.
+
+Cinco sesiones manuales y veinte planos reales validan empíricamente precisión,
+tiempo y cobertura después; **no bloquean seguir implementando F2**. No se
+aprueban tolerancias de producto ni se declara F2 validada por una descarga.

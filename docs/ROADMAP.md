@@ -90,3 +90,13 @@ contratos, permisos y evaluación propios.
 
 La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`. Incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación. Próxima tarea candidata para avanzar F2: exportar bajo acción expresa del usuario las sugerencias crudas aún no revisadas desde el navegador, en un formato compatible con el evaluador; sin exportar imágenes, red ni persistencia automática. Verificar primero la forma actual del dato y no añadir esta exportación a FloorPlanProjectV1 sin justificarlo.
 
+
+
+## Exportación cruda F2 — estado de esta rama
+
+F2 experimental; exportación local explícita implementada con QA registrada en
+[su informe](technical/F2-raw-export.md); F2 no validada. Snapshot antes de
+placement/revisión, metadatos obligatorios y conversión local al evaluador; sin
+cambiar detector, contrato ni persistir candidatos. Pendiente PR/preview y revisión
+humana antes de merge. Las cinco sesiones y veinte planos siguen siendo
+validación empírica posterior, no una puerta que bloquee esta implementación.
