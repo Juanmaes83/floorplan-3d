@@ -171,3 +171,8 @@ La inspección de traducciones de #1 tuvo un error al intentar interpretar NAMES
 como JSON (su literal usa sintaxis JavaScript); se corrigió comparando directamente
 ese literal, que coincide con master. No fue un fallo de una suite de producto.
 El cierre REST de #1 quedó bloqueado por Forbidden y se registra en el workflow.
+
+Publicación para revisión: rama `docs/f2-entry-evaluation` conservada en GitHub;
+creación de PR por REST bloqueada con `Forbidden`. [Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...docs/f2-entry-evaluation?expand=1).
+Detalle y commit de código en [workflow](../DEVELOPMENT-WORKFLOW.md). Sin merge ni
+despliegue manual; no hay preview UI nueva requerida para esta preparación.
