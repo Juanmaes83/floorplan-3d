@@ -169,3 +169,19 @@ Las cinco sesiones y veinte planos con referencias, junto con los umbrales y
 mediciones reales, son puertas de validación; no bloquean seguir implementando
 F2 bajo pruebas sintéticas con sus limitaciones declaradas. Roadmap actualizado
 en [docs/ROADMAP.md](ROADMAP.md).
+
+
+## Preparación F3 — entrega inicial, sin merge
+
+Rama única `feat/f3-authorized-assets` desde master remoto
+`fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`, checkout inicial limpio; se conserva
+la rama anterior ya integrada por PR #11. Sin PR/rama F3 abierta al inspeccionar.
+Esta entrega **no cierra F3** ni actualiza un registro de merge que no ha ocurrido.
+
+El [informe F3](technical/F3-initial.md) recoge alcance, permiso del fixture propio,
+auditoría en solo lectura de Asset Lab, pruebas, medidas y límites. Tras aprobación
+explícita de Juanma y merge real, se añadirá aquí PR, HEAD revisado, SHA fusionado,
+preview revisada/acceso y pendientes aceptados. Hasta entonces no se hace merge ni
+despliegue manual a producción. Si la API de PR/preview está bloqueada, publicar
+la rama igualmente y declarar el bloqueo exacto, sin confundir check de comentarios
+con READY. Cinco/veinte casos F2 siguen pendientes y no bloquean la implementación.

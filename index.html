@@ -370,6 +370,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
 <script src="js/project-core.js"></script>
+<script src="js/generic-catalog.js"></script>
+<script src="js/asset-catalog.js"></script>
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
@@ -415,6 +417,7 @@ const ES_TEXT = {
   "Floor area": "Superficie",
   "Perimeter": "Perímetro",
   "Width": "Ancho",
+  "Height": "Altura",
   "Depth": "Fondo",
   "Flooring": "Pavimento",
   "Estimated cost": "Coste estimado",
@@ -708,35 +711,7 @@ function defaultState(){ return Core.initial(); }
 const uid = () => Core.id('obj');
 const F = (type,name,cx,cy,w,d,rot=0,color) => Core.object(type,name,cx,cy,w,d,rot,color || typeColor(type));
 // 家具库：[类型, 名称, 宽, 深, 颜色]
-const LIB = [
-  {cat:'卧室', items:[
-    ['bed','双人床 1.8m',1800,2000,'#c9d6df'],['bed','双人床 1.5m',1500,2000,'#d8c7dc'],['bed','单人床',1200,2000,'#e8d5b5'],
-    ['crib','婴儿床',1250,700,'#efe3d0'],['nightstand','床头柜',450,400,'#e8dccb'],['wardrobe','衣柜',2000,600,'#efe6d8'],
-    ['wardrobe','小衣柜',1200,550,'#efe6d8'],['dresser','梳妆台',1000,450,'#efe6d8'],['desk','书桌',1200,600,'#e2cfb4'],
-    ['chair','椅子',450,480,'#cfc6b8'],['bookshelf','书架',800,300,'#e2cfb4'],['baycushion','飘窗垫',520,1800,'#e7dccd']]},
-  {cat:'客厅', items:[
-    ['sofa','三人沙发',2400,900,'#b7c4b0'],['sofa','双人沙发',1700,880,'#c3cbd6'],['cornersofa','转角沙发',2800,1700,'#b7c4b0'],
-    ['armchair','单人沙发',850,850,'#d6b99a'],['beanbag','懒人沙发',800,800,'#e0b98f'],['coffeetable','茶几',1300,650,'#e8dccb'],
-    ['sidetable','边几',500,500,'#d9c3a3'],['tvstand','电视柜',2400,400,'#e2cfb4'],['rug','地毯',2400,1700,'#d9cbb8'],
-    ['shoecab','鞋柜',1000,350,'#efe6d8'],['shoecab','玄关柜',1400,380,'#e6dccc'],['floorlamp','落地灯',450,450,'#3d3a34'],
-    ['plant','绿植',500,500,'#a9c39b'],['plant','大绿植',700,700,'#9dbb8c']]},
-  {cat:'餐厨', items:[
-    ['table','餐桌',1400,800,'#e2cfb4'],['table','六人餐桌',1800,900,'#d8c2a2'],['roundtable','圆桌',1000,1000,'#e2cfb4'],
-    ['chair','餐椅',450,480,'#cfc6b8'],['island','岛台',1800,900,'#e9e5de'],['barstool','吧椅',420,420,'#6b5d4c'],
-    ['counter','橱柜台面',1600,600,'#e9e5de'],['stove','燃气灶',750,450,'#dcdcdc'],['ksink','水槽',800,450,'#e1e6ea'],
-    ['fridge','冰箱',700,700,'#dfe4e8'],['cabinet','餐边柜',1600,400,'#efe6d8']]},
-  {cat:'卫浴', items:[
-    ['toilet','马桶',400,700,'#ffffff'],['vanity','浴室柜',800,500,'#eef1f3'],['vanity','双盆浴室柜',1200,500,'#eef1f3'],
-    ['shower','淋浴房',900,900,'#e4edf2'],['bathtub','浴缸',1600,750,'#eef3f6'],['washer','洗衣机',600,600,'#e6ebee'],
-    ['waterheater','电热水器',800,450,'#f4f4f2'],['cabinet','储物柜',1000,400,'#efe6d8']]},
-  {cat:'家电', items:[
-    ['tv','65 寸电视',1450,80,'#1d1d1f'],['tv','55 寸电视',1230,80,'#1d1d1f'],['fridge','对开门冰箱',910,700,'#c9ced3'],
-    ['aircon','柜机空调',500,380,'#f6f7f8'],['acwall','挂机空调',900,250,'#f6f7f8'],['dishwasher','洗碗机',600,600,'#c9ced3'],
-    ['ovencol','蒸烤箱高柜',600,600,'#efe6d8'],['dryer','烘干机',600,600,'#e6ebee'],['purifier','空气净化器',400,300,'#f4f4f2']]},
-  {cat:'书房 · 休闲', items:[
-    ['desk','长书桌',1600,700,'#d8c2a2'],['officechair','办公椅',620,620,'#4a4f55'],['bookshelf','大书架',1600,350,'#e2cfb4'],
-    ['piano','立式钢琴',1500,600,'#1f1d1b'],['treadmill','跑步机',800,1800,'#3a3a3c'],['armchair','阅读椅',750,800,'#c9a98a']]},
-];
+const LIB = FloorPlanGenericCatalog.groups;
 const typeColor = t => { for (const c of LIB) for (const i of c.items) if (i[0]===t) return i[4]; return '#eee'; };
 
 const PX_MM = 25.4 / 96;                       // 1 CSS px = 0.2646 mm
@@ -1245,6 +1220,9 @@ function furnPanel(f){
       <label class="full">${tr('名称','Name')}<input id="fName" value="${esc(nm(f.name))}"></label>
       <label>${tr('宽','Width')} (mm)<input type="number" id="fW" value="${f.w}" min="50" step="10"></label>
       <label>${tr('深','Depth')} (mm)<input type="number" id="fD" value="${f.d}" min="50" step="10"></label>
+      <label>${tr('高度','Height')} (mm)<input type="number" id="fH" value="${f.size.heightMm??''}" placeholder="${FloorPlanGenericCatalog.heights[f.type]??800}" min="1" max="10000" step="10"></label>
+      <label class="full">Modelo 3D autorizado<select id="fAsset" aria-describedby="fAssetStatus"><option value="">Genérico</option>${(window.FloorPlanAssetUI?.entries||[]).map(e=>`<option value="${esc(e.id)}" ${f.assetRef?.assetId===e.id&&f.assetRef?.catalog===e.catalog?'selected':''}>${esc(e.name)}</option>`).join('')}</select></label>
+      <p class="full muted" id="fAssetStatus" role="status" aria-live="polite"></p>
       <label>${tr('中心','Center')} X (mm)<input type="number" id="fX" value="${Math.round(f.cx)}" step="10"></label>
       <label>${tr('中心','Center')} Y (mm)<input type="number" id="fY" value="${Math.round(f.cy)}" step="10"></label>
       <label>${tr('旋转','Rotation')} (°)<input type="number" id="fR" value="${f.rot}" step="15"></label>
@@ -1264,6 +1242,9 @@ function bindFurnPanel(f){
   $('#fName').onchange = e => upd(g => g.name = e.target.value.trim() || g.name);
   num('#fW', (g,v) => g.w = Math.max(50, Math.round(v)));
   num('#fD', (g,v) => g.d = Math.max(50, Math.round(v)));
+  $('#fH').onchange=e=>{const value=e.target.value;if(value==='')upd(g=>delete g.size.heightMm);else if(Number.isFinite(Number(value))&&Number(value)>=1&&Number(value)<=10000)upd(g=>g.size.heightMm=Math.round(Number(value)));else renderPanel();};
+  $('#fAsset').onchange=e=>{const entry=window.FloorPlanAssetUI?.entries.find(a=>a.id===e.target.value);upd(g=>{if(entry){g.assetRef=FloorPlanAssets.associate(g,entry).assetRef;project.schemaVersion='1.3.0';}else delete g.assetRef;});};
+  window.FloorPlanAssetUI?.update();
   num('#fX', (g,v) => g.cx = v); num('#fY', (g,v) => g.cy = v); num('#fR', (g,v) => g.rot = norm(v));
   $('#fC').onchange = e => upd(g => g.color = e.target.value);
   $('#aRot').onclick = () => rotateSel(90);
@@ -1298,7 +1279,8 @@ function pushOut(f){
   }
 }
 function addItem(it, x, y){
-  const [type,name,w,d,color] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
+  const [type,name,w,d,color,height] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
+  f.size.heightMm=height;
   pushOut(f);
   ui.sel = {kind:'furn', id:f.id};
   mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
@@ -1766,6 +1748,7 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
 window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
+<script src="js/asset-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
@@ -1779,6 +1762,7 @@ import {PointerLockControls} from 'three/addons/controls/PointerLockControls.js'
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import * as AssetLoader from './js/asset-loader.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
 let OX = geometry.center.x, OY = geometry.center.y, H = project.defaults.wallHeightMm/1000; const FOV = 45;       // 户型中心放在世界原点，层高 2.8 m
@@ -2530,7 +2514,7 @@ function buildFurniture(f){
     }
     default: g.add(box(w, .8, d, c));
   }
-  if(f.size.heightMm){const bounds=new THREE.Box3().setFromObject(g), height=bounds.max.y-bounds.min.y;if(height>0)g.scale.y=M(f.size.heightMm)/height;}
+  if(f.size.heightMm){const bounds=new THREE.Box3().setFromObject(g), size=bounds.getSize(new THREE.Vector3());if(size.x>0&&size.y>0&&size.z>0){g.scale.set(M(f.w)/size.x,M(f.size.heightMm)/size.y,M(f.d)/size.z);g.children.forEach(child=>child.position.sub(new THREE.Vector3((bounds.min.x+bounds.max.x)/2,bounds.min.y,(bounds.min.z+bounds.max.z)/2)));}}
   g.position.set(wx(f.cx), M(f.elevationMm||0), wz(f.cy));
   g.rotation.y = -f.rot * Math.PI/180;       // 平面顺时针旋转 → 绕 Y 轴负向
   g.userData.fid = f.id;
@@ -2619,9 +2603,27 @@ function buildArch(){
   applyLight(); applyGrow();
 }
 
+const assetStates=new Map(),assetRequests=new Map();let assetGeneration=0;
+function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Event('floorplan-asset-status'));}
+function loadFurnitureAsset(g,f,generation){
+  if(!f.assetRef){publishAsset(f.id,{state:'generic'});return;}
+  const entry=FloorPlanAssets.resolve(window.FloorPlanAssetUI?.entries||[],f.assetRef);
+  if(!entry){publishAsset(f.id,{state:'error',reason:'Referencia no disponible o no autorizada'});return;}
+  const controller=new AbortController();assetRequests.set(f.id,controller);publishAsset(f.id,{state:'loading'});
+  const bounds=new THREE.Box3().setFromObject(g),height=f.size.heightMm?M(f.size.heightMm):bounds.max.y-bounds.min.y;
+  AssetLoader.load(entry,{signal:controller.signal}).then(result=>{
+    if(generation!==assetGeneration||controller.signal.aborted||g.parent!==furnG){AssetLoader.dispose(result.scene);return;}
+    const position=g.position.clone(),rotation=g.rotation.clone();clearGroup(g);g.scale.set(1,1,1);
+    result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
+    g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
+    publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
+  }).catch(()=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
+}
 function buildFurn(){
+  assetGeneration++;assetRequests.forEach(c=>c.abort());assetRequests.clear();assetStates.clear();
+  furnG.children.forEach(g=>{if(g.userData.authorizedAsset)AssetLoader.dispose(g);});
   clearGroup(furnG);
-  state.furniture.forEach(f => furnG.add(buildFurniture(f)));
+  state.furniture.forEach(f => {const g=buildFurniture(f);furnG.add(g);loadFurnitureAsset(g,f,assetGeneration);});
   furnG.visible = opt.furn; selKey = null; applyGrow();
 }
 
@@ -2939,7 +2941,7 @@ function shot(){ const a = document.createElement('a'); a.download = tr('户型�
 
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 
-window.View3D = {get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>
