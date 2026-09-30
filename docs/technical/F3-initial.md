@@ -285,3 +285,18 @@ extraen credenciales ni se amplía red para resolverlo.
 SHA final de la rama, URL y acceso para revisión humana. La URL candidata no se
 presenta como preview verificada del HEAD documental final. No hay merge ni
 despliegue manual a producción. Todo el trabajo permanece publicado en GitHub.
+
+
+## Cierre de revisión y merge — PR #12 (30-09-2026)
+
+Juanma aprobó la revisión visual de la preview y la PR #12 quedó fusionada en `master`.
+- Rama: `feat/f3-authorized-assets`.
+- Base: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`.
+- HEAD revisado/deployment READY: `b3c72d0c6fae1290c9a7b4e449aa388c3f878531`.
+- Merge commit: `95fcf0da989a9e3bf85f8747c19fc4a9a13426ab`.
+- PR: [#12](https://github.com/Juanmaes83/floorplan-3d/pull/12).
+- [Preview protegida](https://floorplan-3d-git-feat-f3-autho-dce6ec-juanma-espinosas-projects.vercel.app/) · [deployment Vercel](https://vercel.com/juanma-espinosas-projects/floorplan-3d/F8NcvTSZF37VdrUBi2c7Kqx9W8uw).
+
+Estado actualizado: **F3 inicial integrada; catálogo externo pendiente**. Juanma confirma que el proyecto tiene permisos para usar los assets de Asset Lab. La auditoría descrita arriba documenta el estado técnico del commit Asset Lab inspeccionado en ese momento; no se tratará como inventario actual ni como verificación de permisos por modelo. Antes de integrar un candidato, comprobar en Asset Lab la versión actual, presencia/hash del fichero, dimensiones verificables, formato/extensiones y alcance de permiso/atribución. Esta entrega no incorpora modelos de Asset Lab; el único GLB publicado es el banco sintético propio con licencia MIT específica.
+
+La PR tenía Vercel `READY` para el HEAD. El check remoto observado fue Vercel Preview Comments; la batería 120/120 Node/browser, 10/10 F3 y 41/41 Python fue reportada por Codex como ejecución local previa, no CI remota. SwiftShader no acredita rendimiento en teléfono físico. Las pruebas no se repitieron durante el merge/documentación. F3 continúa abierta para avanzar el catálogo, sin bloquearse por la validación empírica pendiente de F2.
