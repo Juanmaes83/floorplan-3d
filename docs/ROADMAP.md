@@ -124,3 +124,19 @@ La entrega integra catálogo genérico con alturas explícitas, asociación de `
 Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets de Asset Lab. Esta confirmación sustituye el bloqueo previo de autorización para continuar el trabajo. La auditoría referenciada en el informe es una instantánea histórica del commit `5dc7b182c5c227472b84aea66a3ffa1368c95981`; no se toma como inventario actual. Antes de publicar cada modelo se vuelve a comprobar el fichero y hash, sus dimensiones verificables, compatibilidad del formato/extensiones, atribución y el alcance concreto del permiso. Se conserva el Asset Lab en solo lectura; los modelos se incorporarán al catálogo de este repo únicamente después de pasar esas comprobaciones.
 
 **Estado:** F3 inicial integrada; **catálogo externo pendiente**. Pendientes de siguientes entregas: inventario actual y selección de modelos, decisión de normalización/dimensiones por candidato, soporte técnico de formatos (incluido Draco si se necesita), y revisar materiales externos. La medición en móvil físico y cualquier presupuesto de rendimiento siguen como validaciones; SwiftShader no las sustituye. F2 continúa experimental y no validada empíricamente; cinco sesiones y veinte planos siguen pendientes, sin bloquear F3.
+
+
+## Auditoría competitiva — propuestas para F3 (30-09-2026)
+
+La [matriz de oportunidades](product/competitive-opportunity-matrix.md) contrasta
+el estado integrado con documentación primaria accesible de Floorplanner y
+magicplan; Sweet Home 3D y los datos comerciales quedan no verificados por acceso
+bloqueado. Propone para
+revisión un catálogo externo pequeño, medidas trazables, soporte acotado de texturas
+y evaluación de formatos/rendimiento; no aprueba negocio, hosting o integraciones.
+
+La autorización general de Juanma para usar Asset Lab sigue confirmada. La nueva
+inspección técnica vuelve a verificar el remoto y los ficheros, sin copiar assets.
+**F3 inicial integrada; catálogo externo pendiente; fase no cerrada.** D-01 y las
+decisiones concretas de alojamiento/rendimiento siguen para revisión. F2 permanece
+experimental: cinco sesiones y veinte planos reales pendientes, sin bloquear F3.
