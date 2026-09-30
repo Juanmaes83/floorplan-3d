@@ -119,7 +119,7 @@ Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plan
 (PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
 y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).
 
-## F2: prototipo experimental en revisión (esta rama)
+## F2: prototipo experimental integrado, no validado
 
 Juanma autorizó el 30-09-2026 un prototipo local limitado a sugerencias de muros,
 antes de completar la evaluación. En «Plano propio», «Sugerir muros localmente»
@@ -128,8 +128,29 @@ No modifica escala ni geometría sin aceptación explícita; el trazado manual s
 disponible. Solo analiza líneas horizontales/verticales, sin interpretar habitaciones
 ni huecos. [Informe y límites](docs/technical/F2-wall-assist.md).
 
-F2 está **en revisión y no validada**, no completada. Falta medir cinco planos autorizados,
+F2 está **integrada por las PR #9/#10/#11 y no validada empíricamente**. Falta medir cinco planos autorizados,
 preparar un conjunto fijo de al menos veinte con referencias y acordar umbrales
-con Juanma. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
+con Juanma. Estos datos son validación posterior y no bloquean F3. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
 offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el flujo
 en su teléfono; el rendimiento físico sigue sin medir.
+
+
+## F3 — entrega inicial, pendiente de revisión
+
+La biblioteca genérica conserva sus 60 entradas y añade alturas de diseño explícitas
+para muebles nuevos. Los proyectos anteriores se abren sin añadir campos ni cambiar
+medidas. En propiedades de un mueble, «Modelo 3D autorizado» permite asociar el
+banco sintético original de prueba o volver al genérico. Conserva identidad,
+estancia, posición, giro, dimensiones y elevación. El modelo se adapta a las medidas
+del objeto; no representa un producto comercial. Permiso MIT específico junto al
+GLB, sin atribuir una licencia al resto del repositorio.
+
+Si el modelo no carga, falla su integridad/permiso o difieren sus dimensiones,
+se conserva el genérico y se informa en propiedades. Solo recursos locales;
+Three.js/GLTFLoader siguen fijados a 0.160.0 en el mismo CDN existente.
+No incorpora assets, nombres, SKU, imágenes ni precios de IKEA a la experiencia.
+Draco, texturas externas, animaciones y otras extensiones no se admiten en esta
+primera ruta. [Informe, auditoría y límites](docs/technical/F3-initial.md).
+
+F3 no se declara cerrada: faltan revisión de PR/preview, permisos y dimensiones
+para catálogo externo, aprobación de presupuestos y medición en móvil físico.

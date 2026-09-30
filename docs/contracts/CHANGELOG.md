@@ -1,5 +1,13 @@
 # Cambios compatibles de FloorPlanProjectV1
 
+## 1.3.0 — F3 inicial (esta rama, pendiente de revisión)
+
+- Añade `rubik-sota-local` al enum de `assetRef.catalog`, ya opcional en V1.0.
+- Revisión local: prefijo de 40 hex del SHA-256 del manifest; Asset Lab conserva commit Git.
+- No hay migración de datos anteriores ni nuevos campos obligatorios.
+- Solo la asociación local eleva la versión a 1.3.0; lectores anteriores pueden rechazar el nuevo enum.
+- Schema canónico y embebido mantienen igualdad estructural.
+
 ## 1.2.0 — seguimiento de formatos (integrada por PR #7, c28a170)
 
 - `sourceImages[].mediaType` admite `image/webp` estático además de PNG/JPEG.

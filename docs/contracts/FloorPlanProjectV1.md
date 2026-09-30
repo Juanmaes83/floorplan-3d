@@ -1,6 +1,6 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
-**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
+**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 está implementada en esta rama, pendiente de revisión; no se declara fusionada. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
 **Fecha:** 30-09-2026 · **Base integrada de esta revisión:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
 
@@ -241,3 +241,30 @@ humana de ese segmento, no exactitud dimensional ni confirmación de escala.
 La edición posterior conserva `method:"suggested"` y vuelve a `unreviewed`
 hasta nueva confirmación. W1 sigue señalando el origen experimental incluso
 después de revisarlo. [Informe](../technical/F2-wall-assist.md).
+
+
+## Ampliación F3 1.3.0 — catálogo local opcional, en revisión
+
+`assetRef` ya existía antes de F3; no hay un nuevo campo ni migración obligatoria.
+El enum `catalog` añade `rubik-sota-local` junto a `immersphere-asset-lab`.
+Al asociar el modelo local se escribe `schemaVersion:1.3.0`. Proyectos anteriores
+mantienen su versión y sus campos ausentes hasta una edición explícita.
+Lectores anteriores pueden rechazar el nuevo enum; exportar una copia genérica
+quitando explícitamente la asociación permite interoperar sin perder geometría.
+
+Para Asset Lab, `catalogRevision` conserva el significado de commit Git del
+manifest. Para el catálogo local son los primeros 40 hex del SHA-256 de los bytes
+UTF-8 del manifest servido; identifica su contenido, no se presenta como commit.
+El nuevo flujo lo guarda. Una referencia sin revisión, tolerada desde V1.0, solo
+se resuelve por ID conocido en el catálogo autorizado actual. Una revisión
+incompatible o ID desconocido produce fallback, sin borrar el puntero original.
+La revisión es una identidad, no evidencia de derechos. El cargador verifica
+los bytes del documento de permiso y del GLB antes de parsear el modelo.
+
+Asignar/quitar `assetRef` conserva todos los demás campos del objeto. Altura ya
+opcional: los muebles nuevos de la biblioteca guardan su altura de diseño; los
+anteriores no se rellenan al abrir. Si no hay altura, el asset usa la altura
+observable de su genérico, sin persistir una estimación. JSON guarda solo el
+puntero; ZIP sigue transportando imágenes de planos, sin empaquetar assets 3D.
+Los materiales existentes siguen siendo procedimentales/color, sin precio ni
+catálogo externo. [Ejemplo local](examples/floorplan-project-v1.f3.example.json).

@@ -24,7 +24,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | Pendiente; sin integración de Asset Lab, IKEA o muebles comerciales en esta entrega. |
+| F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | **Entrega inicial en revisión**: catálogo genérico dimensionado, adaptador, GLB local autorizado de prueba y fallback. Sin modelos comerciales ni catálogo IKEA autorizado. No se declara F3 cerrada; [informe](technical/F3-initial.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
 
@@ -89,7 +89,7 @@ contratos, permisos y evaluación propios.
 
 ## Evaluador F2 y decisión métrica (30-09-2026)
 
-La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`. Incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación. Próxima tarea candidata para avanzar F2: exportar bajo acción expresa del usuario las sugerencias crudas aún no revisadas desde el navegador, en un formato compatible con el evaluador; sin exportar imágenes, red ni persistencia automática. Verificar primero la forma actual del dato y no añadir esta exportación a FloorPlanProjectV1 sin justificarlo.
+La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`. Incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación. La propuesta entonces candidata de exportar sugerencias crudas bajo acción expresa del usuario ya se integró por PR #11, sin imágenes, red ni persistencia automática ni modificación de FloorPlanProjectV1. Véase el cierre siguiente; no se marca esa implementación como pendiente.
 
 
 
@@ -112,3 +112,23 @@ la revisión del reporte no repitió esas suites. 3D usa SwiftShader, sin medici
 de rendimiento en GPU o teléfono físico. Las cinco sesiones autorizadas y los
 veinte planos con referencias siguen pendientes para evaluar calidad, tiempos y
 umbrales; no bloquean continuar el desarrollo de F2.
+
+
+## F3 — entrega inicial (rama feat/f3-authorized-assets)
+
+Base remota comprobada: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`.
+PR #11 está fusionada (merge `49ea432`); la exportación cruda F2 ya está integrada.
+F2 sigue experimental,
+no validada. Cinco sesiones y veinte planos permanecen en el backlog de validación
+posterior y no bloquean F3.
+
+F3 añade un banco sintético original con permiso MIT específico, normalización,
+comprobación ±20 mm por eje, carga privada desde recursos estáticos locales y
+fallback conservando el objeto. Auditados los 134 registros actuales de Asset Lab:
+114 GLB comprobados y decodificados, cero permisos suficientes para exponerlos.
+No se copian GLB, previews ni documentos de Asset Lab al repositorio público.
+
+Pendientes: revisión humana y PR/preview verificable, presupuesto de producto
+aprobado, rendimiento en móvil físico y catálogo externo con permisos y dimensiones
+verificables. Draco se auditó privadamente pero no se incorpora al cargador público.
+Informe e inventario con evidencia, resultados y publicación: [F3-initial.md](technical/F3-initial.md).
