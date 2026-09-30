@@ -21,8 +21,7 @@ No se fusiona ni se despliega manualmente a producción en esta tarea.
 Siguen pendientes [cinco sesiones manuales](../qa/F1b-five-plans.md) aptas, con
 exportación digital/escaneo/foto, y [veinte planos fijos](../qa/F2-entry-protocol.md)
 autorizados con referencias independientes, esos tres tipos y con/sin mobiliario.
-Juanma debe proporcionar/revisar esos datos **en privado y localmente** y acordar
-umbrales antes de validar o ampliar asistencia. Ningún fixture sustituye esos datos.
+Juanma puede proporcionar/revisar esos datos **en privado y localmente** cuando abordemos la validación empírica y fijar umbrales antes de afirmar precisión, mejora temporal o cobertura. No son un bloqueo para seguir implementando F2 con fixtures sintéticos y limitaciones explícitas. Ningún fixture sustituye los datos reales para validar.
 El recorder sigue emitiendo `implementation_authorized:false`; la autorización
 procede del mensaje explícito de Juanma, no de completar sus contadores.
 
@@ -190,3 +189,10 @@ Las capturas publicadas permiten revisar los recorridos locales mientras tanto.
 - El 3D se comprobó con SwiftShader. No hubo medición de rendimiento en un teléfono físico. No se hizo despliegue manual a producción.
 
 **Siguiente etapa — evaluación F2:** conservar el prototipo como baseline de código; preparar datos y referencias localmente, medir primero la línea base manual de cinco sesiones y congelar el conjunto de veinte antes de evaluar el detector. No afinar parámetros ni presentar cifras de precisión/tiempo/cobertura hasta separar calibración y evaluación y acordar criterios. El proceso y límites están en [el protocolo F2](../qa/F2-entry-protocol.md) y el [roadmap](../ROADMAP.md).
+
+
+## Decisión métrica y continuación de F2 (30-09-2026)
+
+Juanma aprobó por la PR #10 el comparador offline de precisión/exhaustividad por longitud. Las diagonales quedan sin crédito en el comparador de ejes, pero se conservan en los denominadores globales; el informe presenta aparte exhaustividad en ejes soportados. La aprobación no fija tolerancia universal ni umbrales de producto y no valida F2. PR #10 está integrada en `master` mediante `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`.
+
+F2 puede continuar desarrollándose sin esperar cinco sesiones ni veinte planos reales; esos datos se reservan para la validación empírica. Limitación concreta a resolver en una próxima entrega: las sugerencias crudas no aceptadas solo viven en memoria de `tracing-ui.js` y no pueden alimentar el evaluador sin reconstruirlas manualmente. Candidato de siguiente tarea: exportación explícita y local de predicciones crudas antes de revisión humana, sin imagen, red ni envío automático, con prueba de privacidad y formato compatible con el evaluador. La decisión final de formato/flujo debe comprobarse contra el código actual en la siguiente PR.
