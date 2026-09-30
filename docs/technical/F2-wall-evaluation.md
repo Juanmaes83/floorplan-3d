@@ -251,28 +251,16 @@ para tomar decisiones; después Juanma prepara/revisa en privado referencias,
 registra las cinco sesiones separadas y congela los veinte casos con sus fallos,
 SHA del detector y tolerancia explícita. No se publican sus datos geométricos.
 
-### Publicación conservada y bloqueo de PR
+### Publicación y estado de revisión (actualizado 30-09-2026)
 
-Rama publicada con `git push -u origin HEAD`, sin force push:
-[feat/f2-evaluation-harness](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-evaluation-harness).
-Commit funcional `759ca53a4afd32c1f89ae1cbffa34a4c64eb29f9`; este registro
-posterior solo añade documentación de publicación, sin cambiar el código probado.
+La rama está publicada en [feat/f2-evaluation-harness](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f2-evaluation-harness). Commit de la implementación: `759ca53a4afd32c1f89ae1cbffa34a4c64eb29f9`; el HEAD de revisión indicado a continuación añade el registro de publicación, sin cambios en el evaluador.
 
-La creación por REST con título/alcance/reglas/pruebas preparados dio exactamente:
-`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
-No se creó ninguna PR desde Codex y no se inventa número.
-[Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f2-evaluation-harness?expand=1).
-No se usó GraphQL ni se cambió red/autenticación para superar el bloqueo.
-No se fusionó, no se borraron ramas ni se desplegó manualmente.
+La primera creación de PR por REST respondió `Forbidden`. Después se creó la [PR #10](https://github.com/Juanmaes83/floorplan-3d/pull/10), actualmente abierta en estado **Draft**, con base `master` @ `fbb6448ee7931d6fa1a5e7ae486d4c368a921663` y HEAD `3c63fbe5bf19fba5d4e9da1a07a3867ec7bc7190`. No está fusionada.
 
-La página pública de checks del commit funcional mostró `Vercel / Vercel Preview
-Comments` succeeded, sin URL exacta de preview/deployment. Ese check solo informa
-comentarios pendientes, **no acredita READY ni CI de tests**. No se verificó un
-SHA de deployment porque no hubo un deployment identificable en la evidencia
-accesible; no se presenta uno histórico como esta entrega. Al no cambiar UI,
-no es necesaria una preview visual y no se intentó generar una manualmente.
+Vercel publicó un deployment **READY** y su API confirma que corresponde a ese HEAD y a la rama de esta PR:
+[preview](https://floorplan-3d-git-feat-f2-evalu-2df055-juanma-espinosas-projects.vercel.app/) ·
+[inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/A97UfKkdfFAoaEKv72GXazdxXrPU).
 
-Siguiente acción concreta: Juanma abre la PR desde el compare publicado y revisa
-la definición métrica y formato; los datos reales y permisos se preparan después
-privadamente según el protocolo. La aprobación de reglas no valida F2 ni fija
-los umbrales de calidad, tiempo, cobertura, latencia o memoria pendientes.
+No hay cambios de interfaz; por tanto, esta URL no sustituye las pruebas de la CLI ni requiere revisión visual de la app. No se hizo despliegue manual ni merge. Mantener la PR en Draft hasta revisar la definición métrica, el evaluador y las pruebas.
+
+La herramienta calcula geometría anónima local; no incluye imágenes ni permisos. Su regla métrica figura como propuesta para revisión humana. Aprobar la implementación o la regla no valida F2 ni fija umbrales de calidad del producto. Antes de usar datos reales, revisar la regla y conservar las imágenes, referencias y registros completos fuera de GitHub/Vercel.
