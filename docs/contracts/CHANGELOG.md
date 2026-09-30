@@ -1,6 +1,6 @@
 # Cambios compatibles de FloorPlanProjectV1
 
-## 1.3.0 — F3 inicial (esta rama, pendiente de revisión)
+## 1.3.0 — catálogo local opcional F3 (integrada por PR #12, 30-09-2026)
 
 - Añade `rubik-sota-local` al enum de `assetRef.catalog`, ya opcional en V1.0.
 - Revisión local: prefijo de 40 hex del SHA-256 del manifest; Asset Lab conserva commit Git.
