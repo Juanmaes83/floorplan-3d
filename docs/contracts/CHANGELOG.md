@@ -1,6 +1,6 @@
 # Cambios compatibles de FloorPlanProjectV1
 
-## 1.2.0 — seguimiento de formatos (esta entrega, sin fusionar)
+## 1.2.0 — seguimiento de formatos (integrada por PR #7, c28a170)
 
 - `sourceImages[].mediaType` admite `image/webp` estático además de PNG/JPEG.
 - ZIP preserva y restaura `.webp` con bytes originales, dimensiones y SHA-256.

@@ -109,7 +109,7 @@ la claridad de importación y añade WebP; conserva cinco planos y la medición 
 - Las imágenes permanecen como referencia 2D; el 3D muestra la geometría trazada,
   no inserta una textura de plano con datos personales.
 - No hay detección, backend, PDF, assets comerciales, cuotas de precios ni despliegue
-  a producción. Falta evaluación en dispositivo físico y cinco viviendas autorizadas.
+  a producción. Juanma confirmó el funcionamiento en teléfono; falta medir rendimiento físico y evaluar cinco planos autorizados.
 
 ## Verificación
 
@@ -149,3 +149,11 @@ F1b quedó integrada en master con aprobación expresa de Juanma:
 - Vercel creó automáticamente el deployment de producción al fusionarse en master; no se hizo despliegue manual.
 
 El merge cierra F1b con limitaciones y evaluación restante explícitas; no demuestra precisión profesional ni termina la evaluación con planos reales.
+
+## Preparación de la entrada a F2
+
+La base manual de cinco planos autorizados y el conjunto fijo de al menos veinte
+para evaluar asistencia siguen sin estar disponibles en el checkout.
+[Protocolo de preparación](../qa/F2-entry-protocol.md): datos y evidencias permanecen
+en local; el script resume registros anónimos y no lee imágenes ni autoriza F2.
+No se implementa asistencia sin línea base y umbrales explícitos acordados.

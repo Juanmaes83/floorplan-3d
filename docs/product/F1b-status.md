@@ -9,11 +9,11 @@
 - Preview revisada: [deployment Vercel ligado al HEAD F1b](https://floorplan-3-6cgnmgojz-juanma-espinosas-projects.vercel.app/). El acceso compartible temporal caduca el 01-10-2026; el deployment directo puede requerir sesión Vercel.
 - Vercel produjo automáticamente un deployment `READY` de producción al actualizarse `master`; no se lanzó manualmente.
 
-## Alcance integrado
+## Alcance histórico al integrar PR #6
 
 Importación local PNG/JPEG, colocación y opacidad, calibración y verificación con segunda cota, trazado/edición manual de muros, huecos y estancias, avisos W1–W4, mobiliario genérico, vistas 2D/3D, almacenamiento local y ZIP portable. El plano importado se carga desde «Plano propio» → «Nuevo desde imagen». «Archivo» → «Importar plano» espera un proyecto JSON, no una imagen.
 
-## Verificación y límites
+## Evidencia histórica de PR #6
 
 Codex informó 77 pruebas Node y 7 Python aprobadas en su checkout. No repetimos la suite completa sobre la revisión remota final. Los checks remotos observados fueron despliegues Vercel, no una CI de pruebas. La escena 3D se comprobó con Chromium/SwiftShader; no se midió rendimiento en móvil físico.
 
@@ -59,3 +59,16 @@ Chromium/SwiftShader y no acreditan rendimiento en un dispositivo.
    constituye una medición de rendimiento.
 3. Fijar umbrales de precisión/tiempo antes de iniciar la asistencia F2.
 4. PDF y HEIC/HEIF permanecen diferidos, según la decisión técnica vinculada.
+
+## Preparación antes de asistencia F2
+
+Estado verificado sobre master d644665: PR #7 fusionada. El chequeo funcional
+de Juanma en teléfono sigue siendo una confirmación manual; no hay medidas de
+rendimiento físico. En el checkout solo hay fixtures sintéticos, sin cinco planos
+reales autorizados ni un conjunto fijo de veinte con referencias. No hay métricas
+de línea base ni prototipo asistido evaluado.
+
+Se prepara el [protocolo y recorder offline](../qa/F2-entry-protocol.md), con
+criterios relativos propuestos para decisión humana, sin números inventados ni
+umbrales aprobados. F2 permanece no iniciada; cinco sesiones y veinte planos
+de evaluación se registran y contabilizan por separado.
