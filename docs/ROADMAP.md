@@ -1,8 +1,9 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 Actualizado: 30-09-2026. PR #9 integrada en `master` mediante merge commit
-`10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 integrada mediante merge
-commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`.
+`10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
+`c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
+`49ea432f7d8eba75042e00762c902a7d3830040d`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -92,11 +93,22 @@ La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd
 
 
 
-## Exportación cruda F2 — estado de esta rama
+## Exportación cruda F2 — cierre de PR #11 (30-09-2026)
 
-F2 experimental; exportación local explícita implementada con QA registrada en
-[su informe](technical/F2-raw-export.md); F2 no validada. Snapshot antes de
-placement/revisión, metadatos obligatorios y conversión local al evaluador; sin
-cambiar detector, contrato ni persistir candidatos. Pendiente PR/preview y revisión
-humana antes de merge. Las cinco sesiones y veinte planos siguen siendo
-validación empírica posterior, no una puerta que bloquee esta implementación.
+La [PR #11](https://github.com/Juanmaes83/floorplan-3d/pull/11) integró en
+`master` la exportación local voluntaria de sugerencias crudas y su conversión
+para el evaluador. Merge commit: `49ea432f7d8eba75042e00762c902a7d3830040d`;
+HEAD de la PR revisado: `86479409567efb5df180c4d161ec9232059fa210`.
+No cambia el detector ni FloorPlanProjectV1, y no persiste sugerencias ni imágenes.
+
+La preview Vercel fue `READY` para el SHA revisado y está protegida por
+autenticación Vercel. Eso acredita el deployment; no acredita acceso público ni
+una revisión humana visual completada. No se hizo despliegue manual a producción.
+[Informe técnico actualizado](technical/F2-raw-export.md).
+
+F2 continúa **experimental y no validada empíricamente**. Codex reportó 110/110
+Node/navegador, 10/10 schema, 12/12 readiness, 16/16 evaluador y 3/3 exportación;
+la revisión del reporte no repitió esas suites. 3D usa SwiftShader, sin medición
+de rendimiento en GPU o teléfono físico. Las cinco sesiones autorizadas y los
+veinte planos con referencias siguen pendientes para evaluar calidad, tiempos y
+umbrales; no bloquean continuar el desarrollo de F2.
