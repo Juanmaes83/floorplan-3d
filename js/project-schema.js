@@ -3,7 +3,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Juanmaes83/floorplan-3d/docs/contracts/FloorPlanProjectV1.schema.json",
   "title": "FloorPlanProjectV1",
-  "description": "PROPUESTA F0 (pendiente de aprobación). Proyecto de plano portable e independiente de la UI de Rubik Sota Floor Plan Designer. Unidad canónica: milímetros enteros. Las reglas semánticas (referencias, geometría imposible) están en FloorPlanProjectV1.md §6 y no se pueden expresar solo con JSON Schema.",
+  "description": "Contrato de datos implementado para Rubik Sota Floor Plan Designer, portable e independiente de la UI. Base F1a/F1b integrada en master; esta revisión incluye la ampliación 1.2.0 con WebP estático. Su implementación no implica aprobar las decisiones de producto F0 que sigan pendientes. Unidad canónica: milímetros enteros. Las reglas semánticas (referencias, geometría imposible) están en FloorPlanProjectV1.md §6 y no se pueden expresar solo con JSON Schema.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],

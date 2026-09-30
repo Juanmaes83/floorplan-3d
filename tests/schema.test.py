@@ -30,6 +30,18 @@ def browser_schema(source):
 
 
 class SchemaSourceTests(unittest.TestCase):
+    def test_published_contract_status_distinguishes_implementation_from_decisions(self):
+        schema = load_unique_json(ROOT / 'docs/contracts/FloorPlanProjectV1.schema.json')
+        description = schema['description']
+        self.assertRegex(description, r'Contrato de datos implementado')
+        self.assertIn('F1a/F1b integrada en master', description)
+        self.assertIn('1.2.0', description)
+        self.assertIn('WebP estático', description)
+        self.assertRegex(description, r'no implica aprobar las decisiones de producto F0 que sigan pendientes')
+        self.assertNotRegex(description, r'(?i)propuesta F0|no (?:está )?implementad')
+        document = (ROOT / 'docs/contracts/FloorPlanProjectV1.md').read_text()
+        self.assertNotRegex(document.split('## 1.', 1)[0], r'(?i)propuesta F0|no (?:está )?implementad')
+
     def test_duplicate_detector(self):
         for source in ('{"verification":1,"verification":2}',
                        '{"scale":{"verification":1,"verification":2}}',

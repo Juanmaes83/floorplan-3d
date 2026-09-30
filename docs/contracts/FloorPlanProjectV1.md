@@ -1,7 +1,7 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
-**Estado:** propuesta F0, **pendiente de aprobación** por Juanma. No está implementada en la app.
-**Fecha:** 30-09-2026 · **Referencia auditada:** `master` @ `a03136c` y PR #1 @ `540b825`.
+**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). Esta rama implementa la ampliación 1.2.0 con WebP estático, en revisión en la PR #7 y aún sin fusionar. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
+**Fecha:** 30-09-2026 · **Base integrada de esta revisión:** `master` @ `0f67a63`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
 
 ## 1. Para qué sirve y qué no hace
@@ -10,9 +10,9 @@ Es el formato durable y portable de **un** plano editable: la geometría (muros,
 
 No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos, tenant, precios, presupuestos, licencias, leads, plantas múltiples, techos inclinados ni muros curvos.
 
-### Por qué hace falta: lo que guarda la app hoy (comprobado)
+### Contexto histórico: lo que guardaba la app antes de F1a (auditoría F0)
 
-| Aspecto | Hoy (`index.html` @ `a03136c`) | Problema para un proyecto portable |
+| Aspecto | Auditoría histórica (`index.html` @ `a03136c`) | Problema para un proyecto portable |
 |---|---|---|
 | Geometría | Constantes `WALLS`, `WINS`, `DOORS`, `SLIDES`, `ROOMS` en el código (l. 385-448) | El JSON exportado **no contiene muros ni estancias**. Solo existe una vivienda. |
 | Estado guardado | `{furniture, rooms:{id:{name,mat}}, demolished:['w<índice>'], measures:[{a,b}]}` en `localStorage['huxing-design-v1']` (l. 529-562) | Sin versión ni tipo. Un muro se identifica por su **posición en el array**: si se edita la lista, cambian las referencias. |
@@ -43,14 +43,14 @@ No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos
 | Misma major y minor superior a la del lector | Se abre avisando de que es más nuevo. Al guardar se **conservan** los campos desconocidos o se ofrece «guardar como copia»; nunca se descartan en silencio. |
 | Misma major y minor igual o inferior | Se carga normalmente. |
 
-- **Migrador heredado (se implementa en F1, no en F0):** la geometría sale de la plantilla de referencia con IDs deterministas (`wal_ref-w<índice>` según el orden actual de `WALLS`). `demolished:['w12']` pasa a `status:"demolished"` en `wal_ref-w12`. Las estancias toman como ID `rom_<id actual>`. Los muebles conservan su ID con prefijo (`f…` → `obj_f…`), y los campos cambian así: `cx,cy` → `position`, `w,d` → `size`, `rot` → `rotationDeg`. `MATS` pasa a `mat_<clave>` **sin precio**, y `measures` a `measurements` con ID nuevo. La escala de la plantilla queda como `confidence:"estimated"`, `method:"template"`, porque las cotas proceden de un plano original que no está en el repo.
-- **Riesgo conocido:** el `index.html` actual está bajo `localStorage['huxing-design-v1']`. El migrador debe ser idempotente y no borrar la clave antigua hasta confirmar que la nueva se ha guardado.
+- **Migrador heredado (implementado en F1a):** la geometría sale de la plantilla de referencia con IDs deterministas (`wal_ref-w<índice>` según el orden actual de `WALLS`). `demolished:['w12']` pasa a `status:"demolished"` en `wal_ref-w12`. Las estancias toman como ID `rom_<id actual>`. Los muebles conservan su ID con prefijo (`f…` → `obj_f…`), y los campos cambian así: `cx,cy` → `position`, `w,d` → `size`, `rot` → `rotationDeg`. `MATS` pasa a `mat_<clave>` **sin precio**, y `measures` a `measurements` con ID nuevo. La escala de la plantilla queda como `confidence:"estimated"`, `method:"template"`, porque las cotas proceden de un plano original que no está en el repo.
+- **Riesgo conocido:** la clave histórica es `localStorage['huxing-design-v1']`. El migrador F1a es idempotente y conserva la clave antigua al guardar el proyecto nuevo.
 
 ## 4. Geometría y medidas
 
 - **Unidad canónica:** milímetros (`units:"mm"`).
 - **Coordenadas en planta:** enteros (`integer`) en ±1 000 000 mm. Se redondea al mm más cercano con `Math.round`, **solo al escribir**. Los cálculos intermedios (calibración, rotaciones) pueden ser decimales. Los píxeles de imagen (`pixelPoint`) y `mmPerPixel` sí son decimales.
-- **Ejes:** origen `plan-top-left`, **x a la derecha, y hacia abajo**, igual que el SVG actual. En 3D: `mundo.x = (x − cx)/1000`, `mundo.z = (y − cy)/1000`, `mundo.y` = altura. Así lo hace hoy la app (l. 1514-1515, con centro fijo `OX=6000, OY=5300`); en F1 el centro se calculará a partir de la envolvente.
+- **Ejes:** origen `plan-top-left`, **x a la derecha, y hacia abajo**, igual que el SVG actual. En 3D: `mundo.x = (x − cx)/1000`, `mundo.z = (y − cy)/1000`, `mundo.y` = altura. La implementación actual calcula el centro a partir de la envolvente en `js/project-core.js`; el centro fijo `OX=6000, OY=5300` corresponde a la auditoría histórica.
 - **Rotación:** grados enteros `0–359`, **positivo en sentido horario** en planta (con y hacia abajo). En 3D equivale a `rotation.y = −rotationDeg·π/180`, igual que hoy (l. 2259).
 - **Escala** (`scale`):
   - `confidence`: `real` (calibrada con una dimensión conocida y confirmada), `estimated` (plantilla, escala declarada o cota no confirmada) o `pending` (sin calibrar).
@@ -87,17 +87,17 @@ Las reglas **E** se comprueban con JSON Schema. Las **S** son semánticas y las 
 |---|---|---|
 | E1 | Esquema | Tipos, obligatorios, `additionalProperties:false`, enums, rangos y patrones de ID. |
 | E2 | Esquema | Coherencia `scale.confidence` ↔ `method` ↔ `calibration`. |
-| E3 | Esquema | Sin precio en materiales; imagen solo PNG/JPEG; `storage.ref` sin `blob:`/`data:`. |
+| E3 | Esquema | Sin precio en materiales; imagen PNG/JPEG y, desde 1.2.0, WebP estático; `storage.ref` sin `blob:`/`data:`. |
 | S1 | Error | Todos los `id` son únicos en el documento. |
 | S2 | Error | Toda referencia existe: `opening.wallId`, `room.floorMaterialId`, `object.roomId`, `calibration.sourceImageId`. |
 | S3 | Error | Muro de longitud ≥ 1 mm (`start ≠ end`). |
 | S4 | Error | Hueco dentro del muro (`offsetMm + widthMm ≤ longitud`), `sill + height ≤ wall.heightMm`, y `swing` solo en `door`. |
-| S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (la autointersección aún no está en el script ad hoc). |
+| S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (validado en la app; el script histórico del Anexo A solo comprobaba el área). |
 | S6 | Error | `mmPerPixel` coincide con `knownLengthMm/|AB|` (±0,1 %). |
 | S7 | Error | `updatedAt ≥ createdAt`. |
 | W1 | Aviso | Geometría con `review:"unreviewed"` o `method:"suggested"`. |
-| W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (propuesto; no implementado). |
-| W3 | Aviso | Objeto fuera de su `roomId` o solapado con un muro (propuesto; no implementado). |
+| W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (implementado en F1b). |
+| W3 | Aviso | Objeto fuera de su `roomId` o solapado con un muro (implementado en F1b). |
 | W4 | Aviso | `scale.confidence ≠ "real"`: la UI debe mostrar las medidas como aproximadas. |
 
 ## 7. Obligatorio, opcional y experimental
@@ -150,7 +150,7 @@ node validate.mjs <repo>/docs/contracts/FloorPlanProjectV1.schema.json \
   <repo>/docs/contracts/examples/floorplan-project-v1.invalid.example.json
 ```
 
-Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false})`. Se desactiva `strictRequired` porque los `if/then` de `scale` declaran `required` sin repetir `properties`, algo válido en JSON Schema que el modo estricto de Ajv rechaza por prudencia. Las reglas S se comprobaron con un script ad hoc (Anexo A). **S5 (autointersección) y W2–W4 no están implementadas**. Si se aprueba el contrato, la validación debería entrar en el repo en F1 junto con el migrador.
+**Ejecución histórica de F0, no instrucciones del validador actual.** Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false})`. Se desactiva `strictRequired` porque los `if/then` de `scale` declaran `required` sin repetir `properties`, algo válido en JSON Schema que el modo estricto de Ajv rechaza por prudencia. Las reglas S se comprobaron con un script ad hoc (Anexo A). En aquella ejecución ad hoc no estaban implementadas S5 (autointersección) ni W2–W4. Actualmente S5 y la migración están en `js/project-core.js`, y W1–W4 en `js/tracing-core.js`, con pruebas del repositorio. Véase [changelog](CHANGELOG.md) para las ampliaciones 1.1.0 y 1.2.0.
 
 ## 9. Riesgos conocidos y decisiones pendientes
 
@@ -162,10 +162,10 @@ Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false}
 | C-4 | Una sola planta por proyecto | Varias plantas = varios proyectos o un `levels[]` en v1.x (decisión aplazable). |
 | C-5 | `extensions` puede usarse como cajón de sastre | Solo `x-*` y revisión en PR. Lo que se consolide pasa al esquema en un minor. |
 | C-6 | `sourceImages[].storage` sin decisión de hosting ni privacidad | Mantener `local-browser` y `sidecar-file` en F1. `remote` bloqueado hasta D-06 y D-08. |
-| C-7 | Formato del paquete exportado (JSON + imagen) | Propuesta: `.zip` con `project.json` + `images/`. Pendiente de decisión D-09. |
+| C-7 | Formato del paquete exportado (JSON + imagen) | ZIP local implementado en F1b con `project.json` + `images/`. No se declara aprobada formalmente D-09 por esta implementación. |
 | C-8 | `structure:"load-bearing"` puede leerse como dato técnico | La UI debe mostrarlo como etiqueta orientativa, nunca como dictamen. |
 
-## Anexo A — script de validación usado (fuera del repo)
+## Anexo A — script histórico de validación F0 (fuera del repo)
 
 ```js
 // validate.mjs — Ajv 2020 + reglas semánticas S1–S4, S5 (solo área), S6, S7 y aviso W1
