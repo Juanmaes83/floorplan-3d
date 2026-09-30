@@ -1,4 +1,6 @@
-# Preparación de la puerta F2 — sin asistencia implementada
+# Protocolo de evaluación F2 — cinco sesiones y conjunto fijo
+
+> **Estado actual (30-09-2026):** el prototipo local de sugerencias de muros se fusionó mediante la PR #9. F2 sigue sin validar. Este protocolo conserva el propósito original de preparar la evaluación; las referencias a que no había asistencia describen el estado previo a la PR #9. Véanse el [roadmap](../ROADMAP.md) y el [informe del prototipo](../technical/F2-wall-assist.md).
 
 ## Autorización posterior: prototipo experimental en revisión (30-09-2026)
 
@@ -15,8 +17,7 @@ otorga autorizaciones; la excepción procede exclusivamente de Juanma.
 
 Base verificada: `master` @ `d64466599e4ee5267471e1c136acc044062f0fa0`.
 Estado inicial de PR #8: **preparación documental e infraestructura offline**.
-En esta rama F2 es un **prototipo experimental en revisión, no validado**, por la
-autorización posterior descrita arriba. El [roadmap canónico](../ROADMAP.md) conserva la autoridad sobre fases.
+Tras la autorización posterior y la fusión de PR #9, F2 dispone de un **prototipo experimental integrado, no validado**. El [roadmap canónico](../ROADMAP.md) conserva la autoridad sobre fases.
 Fuente de requisitos F2: [plan F0 de PR #3 @ 825ddf6](https://github.com/Juanmaes83/floorplan-3d/blob/825ddf629d037d57690aedeea188b725ebf561b5/docs/product/F1-F3-plan.md).
 Esta preparación no aprueba decisiones F0 ni implementa detección/sugerencias.
 
@@ -28,7 +29,7 @@ Esta preparación no aprueba decisiones F0 ni implementa detección/sugerencias.
 | Veinte o más planos variados autorizados | 0 disponibles; no hay un conjunto fijo ni geometría/cotas de referencia documentadas. |
 | Seis raster de tests | Sintéticos propios, formatos PNG/JPEG/WebP. Solo prueban infraestructura; no cuentan para ninguno de los conjuntos. |
 | Funcionamiento en teléfono | Confirmado por Juanma; sin modelo/navegador ni mediciones de rendimiento físico. |
-| Prototipo de asistencia y métricas asistidas | No existe en esta entrega; no se ha evaluado. |
+| Prototipo de asistencia | Sugerencias locales experimentales de muros integradas por PR #9; no se han evaluado con planos reales. |
 | Error, tiempo, correcciones, latencia, memoria observados en planos reales | No disponibles; no se inventan valores o umbrales. |
 
 La ausencia se refiere al checkout y carpetas accesibles inspeccionadas, no a
@@ -157,20 +158,20 @@ aviso existente del 2 % no aprueba D-04 ni una precisión profesional. Los méto
 de memoria varían por navegador: identificar APIs/herramientas disponibles y qué
 parte de la memoria miden; no equiparar heap JS a consumo total del navegador.
 
-## Puerta y condiciones del futuro prototipo
+## Puerta de validación del prototipo integrado
 
-La puerta sigue cerrada: faltan cinco sesiones autorizadas medidas, referencias y
-conjunto fijo de veinte, y umbrales explícitos acordados. La preparación de estos
-materiales no equivale a iniciar F2. Revisar privacidad, operador y criterios con
-Juanma y después seguir PR/revisión/aprobación/merge del flujo del proyecto.
+La puerta de validación sigue cerrada: faltan cinco sesiones autorizadas medidas, referencias y
+conjunto fijo de veinte, y umbrales explícitos acordados. La fusión del prototipo
+no satisface esos requisitos ni permite afirmar precisión o mejora. Mantener
+privacidad de materiales y seguir el ciclo PR/revisión/aprobación/merge para cambios.
 `implementation_authorized:false` es permanente en esta herramienta: un informe
 no modifica el roadmap ni concede permisos de implementar.
 
-Cuando se autorice el prototipo local, toda propuesta será `suggested/unreviewed`,
-aceptable, rechazable y corregible por una persona. Mantendrá edición manual,
-historial e IDs, mostrará incertidumbre, no confirmará escala ni alterará geometría
-silenciosamente. Respetará almacenamiento/límites locales. Quedan fuera backend,
-IA externa, envío de planos, publicación automática, Asset Lab/CRM y precios.
+El prototipo local integrado presenta propuestas `suggested/unreviewed`, aceptables,
+rechazables y corregibles por una persona. Mantiene edición manual, historial e IDs;
+no confirma escala ni altera geometría silenciosamente. Respeta almacenamiento y
+límites locales. Backend, IA externa, envío de planos, publicación automática,
+Asset Lab/CRM y precios siguen fuera de alcance.
 
 ## Reproducción y revisión
 
@@ -229,3 +230,8 @@ Publicación para revisión: rama `docs/f2-entry-evaluation` conservada en GitHu
 creación de PR por REST bloqueada con `Forbidden`. [Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...docs/f2-entry-evaluation?expand=1).
 Detalle y commit de código en [workflow](../DEVELOPMENT-WORKFLOW.md). Sin merge ni
 despliegue manual; no hay preview UI nueva requerida para esta preparación.
+
+
+## Reconciliación tras la revisión y el merge de PR #9 (30-09-2026)
+
+La [PR #9](https://github.com/Juanmaes83/floorplan-3d/pull/9) se aprobó y fusionó con merge commit `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; HEAD revisado `3e3e6117770d97cb6e82f73fa06613d31a506019`. El prototipo se aprobó como implementación experimental. Los recuentos de cinco sesiones reales y veinte planos de evaluación siguen en cero/no disponibles en el inventario previo; confirmar de nuevo cuando Juanma prepare los datos en privado. Los artefactos sintéticos publicados no cuentan como datos reales.
