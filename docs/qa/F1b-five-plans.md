@@ -1,5 +1,18 @@
 # F1b: evaluación con cinco planos reales
 
+## Autorización posterior: prototipo experimental en revisión (30-09-2026)
+
+Juanma autoriza implementar y revisar en `feat/f2-local-wall-assist` un prototipo
+local limitado a sugerencias editables de muros antes de disponer de las cinco
+sesiones, veinte planos y umbrales finales. Esta decisión sustituye, solo para
+ese prototipo, la prohibición de comenzar implementación previa que figura en
+el protocolo inicial. No completa ni elimina ninguna puerta de evaluación.
+F2 no está validada ni terminada; no se afirma precisión, ahorro temporal,
+compatibilidad general ni rendimiento móvil físico. Master solo reflejará el
+nuevo estado después de un merge aprobado. [Informe de la rama](../technical/F2-wall-assist.md).
+El recorder conserva `implementation_authorized:false`: resume registros y no
+otorga autorizaciones; la excepción procede exclusivamente de Juanma.
+
 Estado: **pendiente de validación con cinco planos reales autorizados**. F1b ya fue aprobada y fusionada por Juanma; esta evaluación queda como seguimiento y no se marca como ejecutada ni se presenta como prueba que haya bloqueado el merge. No se han proporcionado cinco planos
 con autorización de uso. Los fixtures sintéticos comprueban comportamiento técnico;
 no representan esta evaluación ni acreditan precisión profesional.

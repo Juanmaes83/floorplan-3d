@@ -21,7 +21,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; PR #3 conserva auditoría/decisiones históricas pendientes de reconciliar con master. No se declara aprobada toda F0. |
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
-| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** La preparación del protocolo y recorder offline se integró mediante PR #8 (merge commit `387a9bf`); no incluye asistencia ni cambios de interfaz. Antes de construirla, faltan la línea base de cinco sesiones autorizadas, el conjunto fijo de veinte planos con referencias y los umbrales aprobados. |
+| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental de F2; en revisión; no validado (estado de esta rama).** Juanma autorizó el 30-09-2026 implementar y revisar sugerencias locales de muros antes de completar la evaluación. PR #8 integró la preparación; cinco sesiones, veinte planos y umbrales siguen pendientes. [Informe](technical/F2-wall-assist.md). Master solo cambiará de estado tras merge aprobado. |
 | F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | Pendiente; sin integración de Asset Lab, IKEA o muebles comerciales en esta entrega. |
 
 ## Correspondencia con el roadmap histórico de PR #2
@@ -34,7 +34,7 @@ proponía otra numeración. Sus números quedan como referencias históricas:
 | F0: auditoría/contrato | F0 |
 | F1: base mobile-first + F2: proyectos múltiples | F1a, ya integrada |
 | F3: subir y trazar | F1b, ya integrada |
-| F4: detección asistida | F2, no iniciada |
+| F4: detección asistida | F2, prototipo experimental en revisión en esta rama |
 | F5: escena 3D desde geometría | Parte de F1a y usada por F1b; no una fase pendiente independiente |
 | F6: Asset Lab/IKEA | F3, condicionada |
 | F7–F9: CRM, Immersphere Pro, analítica/oferta | Horizonte futuro sin fase aprobada ni numeración nueva asignada |
@@ -50,13 +50,14 @@ Tratamiento de las PR históricas (revisado el 30-09-2026 tras integrar PR #8):
   No sobrescribir el schema F1b/WebP con el schema histórico de F0.
 - **#1:** español/marca sustituida por #5/#7: diccionarios, nombres, metadatos y persistencia conservados; la etiqueta antigua de importación fue reemplazada deliberadamente. Cierre solicitado por REST, bloqueado con `Forbidden`; PR/rama preservadas hasta poder cerrarla. No reintroducir su index.html histórico. Detalle en DEVELOPMENT-WORKFLOW.md.
 
-## Puerta antes de F2 y pendientes visibles
+## Puertas de evaluación F2 y pendientes visibles
 
-1. [Cinco planos reales autorizados](qa/F1b-five-plans.md), incluyendo escaneo y
-   foto: registrar error de segunda cota, tiempo, correcciones e incidencias.
+1. [Cinco planos reales autorizados](qa/F1b-five-plans.md), incluyendo exportación
+   digital, escaneo y foto: registrar error de segunda cota, tiempo, correcciones e incidencias.
 2. Preparar un conjunto **fijo de al menos veinte planos variados**, autorizados, con geometría/cotas de referencia y separación entre calibración y validación; no confundirlo con las cinco sesiones de base. En la inspección documentada del checkout para PR #8 no se encontraron candidatos reales autorizados: cero en ambos conjuntos; confirmar de nuevo al preparar datos locales. [Protocolo y registros](qa/F2-entry-protocol.md).
 3. Juanma debe fijar los umbrales de precisión, tiempo y rendimiento usando esa
-   línea base **antes** de construir asistencia. No se adopta el 30 % provisional
+   línea base antes de validar o ampliar la asistencia. La autorización explícita
+   de Juanma permite solo este prototipo experimental previo, sin aprobar umbrales. No se adopta el 30 % provisional
    del plan histórico ni se inventa otro umbral en esta tarea.
 4. Juanma confirmó el 30-09-2026 que el flujo funciona en su teléfono físico.
    No consta el modelo ni una medición de rendimiento; medir rendimiento físico
@@ -69,7 +70,8 @@ Tratamiento de las PR históricas (revisado el 30-09-2026 tras integrar PR #8):
    fusionar PR #7. La preview de referencia correspondió al SHA
    `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`.
 
-La preparación de entrada F2 se fusionó por PR #8 el 30-09-2026 en `387a9bfd57630bced0d9fc1f858d9a0f3c181229`. Añade el protocolo reproducible, plantilla vacía y calculador offline; cobertura mínima alineada entre documentos, código y pruebas. Codex reportó 12/12 pruebas del recorder; no se ejecutaron de nuevo durante este merge. No hubo cambios de interfaz ni se requiere preview visual. F2 permanece **no iniciada**.
+La preparación de entrada F2 se fusionó por PR #8 el 30-09-2026 en `387a9bfd57630bced0d9fc1f858d9a0f3c181229`. Añade el protocolo reproducible, plantilla vacía y calculador offline; cobertura mínima alineada entre documentos, código y pruebas. Codex reportó 12/12 pruebas del recorder; no se ejecutaron de nuevo durante este merge. No hubo cambios de interfaz ni se requiere preview visual. En el cierre de PR #8 F2 permanecía **no iniciada**. La nueva autorización para
+el prototipo de esta rama no modifica ese registro histórico ni completa F2.
 
 CRM, cuentas, backend, IA, Asset Lab, precios y publicación de planos a terceros
 no forman parte de este seguimiento. Integraciones futuras requerirán alcance,

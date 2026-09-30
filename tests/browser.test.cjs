@@ -349,3 +349,63 @@ test('image import labels and accessible help follow Spanish, English and Chines
  }
  assert.deepEqual(errors,[]);
 });
+
+// F2: synthetic image only; strict request observation includes attempted/blocked traffic.
+for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.js$/.test(u.pathname)||['/','/favicon.ico'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
+ await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
+ await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#assistCandidates button').length>=6);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ const count=await page.locator('#gAssist line').count();assert.ok(count>=2);
+ assert.ok(await page.locator('#gAssist line').evaluateAll(lines=>lines.every(line=>line.getAttribute('stroke')==='#7c3aed'&&line.hasAttribute('stroke-dasharray'))));
+ await page.locator('[id^="assistReject-"]').first().tap();assert.equal(await page.locator('#gAssist line').count(),count-1);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ await page.locator('[id^="assistCorrect-"]').first().click();await page.locator('#assist-startX').fill('123');await page.locator('#assistCorrectionCancel').click();assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ assert.ok(await page.locator('[id^="assistAccept-"]').first().evaluate(b=>b.getBoundingClientRect().height>=44));
+ const artifact=path.join(__dirname,`../docs/qa/artifacts/f2/${viewport.width}x${viewport.height}`);await page.screenshot({path:artifact+'-review.png'});
+ // Keyboard activation on desktop, touch on mobile. Every acceptance is explicit.
+ const accept=page.locator('[id^="assistAccept-"]').first();if(viewport.width===1440){await accept.focus();await accept.press('Enter');}else await accept.tap();
+ const first=await page.evaluate(()=>FloorPlanApp.project.walls[0]);assert.deepEqual(first.source,{method:'suggested',review:'confirmed'});
+ await page.locator('[id^="assistCorrect-"]').first().click();await page.locator('#assist-startX').fill('123');await page.locator('#assistCorrectionSave').click();await page.waitForFunction(()=>!document.querySelector('#assistCorrection').open);
+ const second=await page.evaluate(()=>FloorPlanApp.project.walls[1]);assert.equal(second.start.x,123);assert.deepEqual(second.source,first.source);assert.notEqual(second.id,first.id);
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.scale),JSON.parse(before).scale);
+ await page.locator('#assistCancel').click();assert.equal(await page.locator('#gAssist line').count(),0);assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),2);
+ await page.locator('#undo').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),1);await page.locator('#redo').click();assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls[1]),second);
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#gSource image'));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls),[first,second]);assert.equal(await page.locator('#gAssist line').count(),0);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:artifact+'-2d.png'});
+ await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
+ assert.ok(await page.evaluate(()=>View3D.renderedSource===FloorPlanApp.project&&View3D.renderedGeometry.source.walls.length===2));assert.ok(await page.evaluate(()=>document.querySelector('#view3d canvas').getBoundingClientRect().height/innerHeight>=.6));
+ assert.ok(await page.evaluate(()=>{const c=document.createElement('canvas');c.width=c.height=32;const ctx=c.getContext('2d');ctx.drawImage(document.querySelector('#view3d canvas'),0,0,32,32);return new Set(ctx.getImageData(0,0,32,32).data).size>20;}));
+ await page.screenshot({path:artifact+'-3d.png'});await page.locator('[data-view="2d"]').click();await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+ await page.locator('#traceBtn').click();const zip=await imageZip(page),Package=require('../js/project-package.js'),decoded=await Package.validateEntries(await Package.unzip(zip));assert.deepEqual(decoded.project.walls,[first,second]);
+ assert.deepEqual(unexpected,[]);assert.ok(requests.length>0);assert.ok(requests.every(r=>r.method==='GET'&&r.bodyBytes===0));assert.deepEqual(errors,[]);
+ t.diagnostic(JSON.stringify({viewport,requests:requests.length,unexpected:unexpected.length,wallIds:[first.id,second.id],candidateCount:count}));
+});
+
+test('F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits',async t=>{
+ const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('#traceBtn').click();
+ const initial=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#traceStatus').textContent.includes('Importa'));assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),initial);
+ await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ // A missing local blob must leave analysis retryable, without disabling manual work.
+ await page.evaluate(()=>{window.originalGet=FloorPlanImages.get;FloorPlanImages.get=async()=>null;});
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#traceStatus').textContent.includes('Imagen local no disponible'));
+ assert.equal(await page.locator('#assistAnalyze').isEnabled(),true);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);await page.evaluate(()=>FloorPlanImages.get=originalGet);
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);
+ const Package=require('../js/project-package.js'),pendingZip=await Package.validateEntries(await Package.unzip(await imageZip(page)));assert.equal(pendingZip.project.walls.length,0);assert.ok(!JSON.stringify(pendingZip.project).includes('candidate_'));
+ await page.locator('#assistCancel').click();assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal(await page.locator('#gAssist line').count(),0);
+ // Cancel a genuinely in-flight IDB read; a late completion must not resurrect proposals.
+ await page.evaluate(()=>{window.originalGet=FloorPlanImages.get;FloorPlanImages.get=async key=>{await new Promise(resolve=>window.releaseAssistRead=resolve);return originalGet(key);};});
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>!!window.releaseAssistRead);await page.locator('#assistCancel').click();await page.evaluate(()=>{FloorPlanImages.get=originalGet;releaseAssistRead();});await page.waitForTimeout(150);assert.equal(await page.locator('#gAssist line').count(),0);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);await page.locator('#traceImageX').fill('100');await page.locator('#traceImageX').press('Tab');assert.equal(await page.locator('#gAssist line').count(),0);
+ await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);await page.locator('[id^="assistAccept-"]').first().click();const id=await page.evaluate(()=>FloorPlanApp.project.walls[0].id);
+ await page.locator('#traceWarnings button').filter({hasText:id}).click();await page.locator('#traceEdit-start-x').fill('101');await page.locator('#traceEditSave').click();assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls[0].source),{method:'suggested',review:'unreviewed'});
+ await page.locator('#traceReviewed').click();assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls[0].source),{method:'suggested',review:'confirmed'});assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls[0].id),id);assert.match(await page.locator('#traceWarnings').textContent(),/Origen experimental sugerido/);
+ // Manual tool stays accessible while assistance candidates exist.
+ await traceTool(page,'traceWall');await imageTap(page,{x:50,y:120});await imageTap(page,{x:450,y:120});assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),2);assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls[1].source.method),'manual');assert.deepEqual(errors,[]);
+});

@@ -97,3 +97,16 @@ Juanma aprobó la entrega. Como Codex no pudo crear la PR por REST, se creó des
 El [roadmap canónico](ROADMAP.md) quedó actualizado después del merge. PR #8 fue solo preparación de entrada: protocolo, plantilla vacía y recorder offline; no modifica interfaz y no implementa asistencia. Codex reportó 12/12 pruebas del recorder; no se repitieron en esta sesión. No requiere preview visual. F2 continúa **no iniciada** y mantiene como pendientes la línea base autorizada de cinco sesiones, conjunto de veinte planos con referencias y aprobación humana de umbrales.
 
 La rama se conservó tras la fusión; su limpieza remota queda pendiente de la acción de GitHub si no se eliminó automáticamente. La PR #8 produjo un deployment Vercel READY, pero al no cambiar la interfaz no se usó como revisión visual ni como evidencia de QA 3D.
+
+
+## Autorización de prototipo F2 (30-09-2026; estado de esta rama)
+
+Juanma autoriza excepcionalmente implementar y revisar sugerencias locales de
+muros antes de las cinco sesiones, veinte planos y umbrales finales. No autoriza
+validar/completar F2 ni elimina las puertas del roadmap. Una sola rama
+`feat/f2-local-wall-assist`, base remota verificada
+`dbd29987308e7cca1455fdbf3cf7f3813feda1d6`, checkout inicial limpio en
+`docs/f2-entry-evaluation` @ `db5f363`. Se conservan todas las ramas previas.
+PR hacia master y revisión/aprobación humana obligatoria; sin merge en esta tarea.
+El estado en master solo se actualizará tras merge aprobado.
+Resultados, capturas y publicación: [informe experimental](technical/F2-wall-assist.md).

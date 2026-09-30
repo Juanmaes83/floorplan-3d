@@ -218,6 +218,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
 }
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
+#assistCorrection .btn{min-height:44px;white-space:normal}#assistCorrection form{max-width:100%}
 @media(max-width:1100px) and (pointer:coarse){
  header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop{position:fixed;top:58px;right:4px}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
 }
@@ -328,6 +329,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
       <g id="gDims" pointer-events="none"></g>
       <g id="gMeasure" pointer-events="none"></g>
       <g id="gTrace" pointer-events="none"></g>
+      <g id="gAssist" pointer-events="none" aria-label="Sugerencias experimentales sin confirmar"></g>
       <g id="gSel"></g>
     </svg>
     <div id="view3d">
@@ -371,6 +373,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
+<script src="js/wall-assist.js"></script>
 <script src="js/local-images.js"></script>
 <script src="js/project-package.js"></script>
 <script>

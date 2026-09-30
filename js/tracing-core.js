@@ -95,7 +95,7 @@
  function crossing(a,b,c,d){return cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0;}
  function inside(p,poly){let yes=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if(segmentPoint(p,a,b).distance<1e-7)return true;if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)yes=!yes;}return yes;}
  function warnings(p){const out=[],active=p.walls.filter(w=>w.status!=='demolished'),add=(code,id,message)=>out.push({code,id,message});
-  for(const kind of ['walls','openings','rooms'])for(const e of p[kind])if(e.source?.review==='unreviewed'||e.source?.method==='suggested')add('W1',e.id,'Geometría pendiente de revisión humana.');
+  for(const kind of ['walls','openings','rooms'])for(const e of p[kind])if(e.source?.review==='unreviewed'||e.source?.method==='suggested')add('W1',e.id,e.source?.review==='confirmed'?'Origen experimental sugerido; revisión humana registrada, sin garantía de exactitud.':'Geometría pendiente de revisión humana.');
   for(const r of p.rooms){let outside=false;for(let i=0;i<r.polygon.length;i++){
     const a=r.polygon[i],b=r.polygon[(i+1)%r.polygon.length],intervals=[];
     for(const w of active){const tolerance=w.thicknessMm/2+20;

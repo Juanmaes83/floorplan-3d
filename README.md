@@ -106,7 +106,7 @@ F1a y su ampliación de proyectos locales, español, experiencia móvil y fallba
 «Plano propio» permite importar PNG/JPG/WebP estático local, calibrar con dos puntos y una
 distancia en milímetros, verificar una segunda cota y trazar muros, huecos y estancias.
 Usa «Navegar» para desplazar/ampliar y «Seleccionar/editar» para corregir geometría.
-Las medidas son orientativas; no hay detección automática ni garantía profesional.
+Las medidas son orientativas; no hay generación automática de vivienda ni garantía profesional.
 
 Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
 y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
@@ -119,9 +119,16 @@ Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plan
 (PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
 y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).
 
-## Preparación de F2
+## F2: prototipo experimental en revisión (esta rama)
 
-F2 (asistencia local) no está iniciada. Falta medir cinco planos autorizados,
+Juanma autorizó el 30-09-2026 un prototipo local limitado a sugerencias de muros,
+antes de completar la evaluación. En «Plano propio», «Sugerir muros localmente»
+presenta segmentos discontinuos morados: acepta, corrige o rechaza cada uno.
+No modifica escala ni geometría sin aceptación explícita; el trazado manual sigue
+disponible. Solo analiza líneas horizontales/verticales, sin interpretar habitaciones
+ni huecos. [Informe y límites](docs/technical/F2-wall-assist.md).
+
+F2 está **en revisión y no validada**, no completada. Falta medir cinco planos autorizados,
 preparar un conjunto fijo de al menos veinte con referencias y acordar umbrales
 con Juanma. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
 offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el flujo

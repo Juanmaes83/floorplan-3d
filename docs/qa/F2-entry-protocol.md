@@ -1,8 +1,22 @@
 # Preparación de la puerta F2 — sin asistencia implementada
 
+## Autorización posterior: prototipo experimental en revisión (30-09-2026)
+
+Juanma autoriza implementar y revisar en `feat/f2-local-wall-assist` un prototipo
+local limitado a sugerencias editables de muros antes de disponer de las cinco
+sesiones, veinte planos y umbrales finales. Esta decisión sustituye, solo para
+ese prototipo, la prohibición de comenzar implementación previa que figura en
+el protocolo inicial. No completa ni elimina ninguna puerta de evaluación.
+F2 no está validada ni terminada; no se afirma precisión, ahorro temporal,
+compatibilidad general ni rendimiento móvil físico. Master solo reflejará el
+nuevo estado después de un merge aprobado. [Informe de la rama](../technical/F2-wall-assist.md).
+El recorder conserva `implementation_authorized:false`: resume registros y no
+otorga autorizaciones; la excepción procede exclusivamente de Juanma.
+
 Base verificada: `master` @ `d64466599e4ee5267471e1c136acc044062f0fa0`.
-Estado: **preparación documental e infraestructura offline**; F2 no iniciada ni
-validada. El [roadmap canónico](../ROADMAP.md) conserva la autoridad sobre fases.
+Estado inicial de PR #8: **preparación documental e infraestructura offline**.
+En esta rama F2 es un **prototipo experimental en revisión, no validado**, por la
+autorización posterior descrita arriba. El [roadmap canónico](../ROADMAP.md) conserva la autoridad sobre fases.
 Fuente de requisitos F2: [plan F0 de PR #3 @ 825ddf6](https://github.com/Juanmaes83/floorplan-3d/blob/825ddf629d037d57690aedeea188b725ebf561b5/docs/product/F1-F3-plan.md).
 Esta preparación no aprueba decisiones F0 ni implementa detección/sugerencias.
 
