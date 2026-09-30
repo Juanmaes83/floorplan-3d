@@ -1,7 +1,7 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 Actualizado: 30-09-2026. Base integrada verificada: master
-`d64466599e4ee5267471e1c136acc044062f0fa0`.
+`387a9bfd57630bced0d9fc1f858d9a0f3c181229`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -21,7 +21,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; PR #3 conserva auditoría/decisiones históricas pendientes de reconciliar con master. No se declara aprobada toda F0. |
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
-| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** Preparación de protocolo/recorder offline en esta entrega, sin asistencia. Requiere medir el flujo manual con cinco planos autorizados, preparar al menos veinte planos de evaluación con referencias y fijar umbrales antes de construir asistencia. |
+| F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** La preparación del protocolo y recorder offline se integró mediante PR #8 (merge commit `387a9bf`); no incluye asistencia ni cambios de interfaz. Antes de construirla, faltan la línea base de cinco sesiones autorizadas, el conjunto fijo de veinte planos con referencias y los umbrales aprobados. |
 | F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | Pendiente; sin integración de Asset Lab, IKEA o muebles comerciales en esta entrega. |
 
 ## Correspondencia con el roadmap histórico de PR #2
@@ -39,7 +39,7 @@ proponía otra numeración. Sus números quedan como referencias históricas:
 | F6: Asset Lab/IKEA | F3, condicionada |
 | F7–F9: CRM, Immersphere Pro, analítica/oferta | Horizonte futuro sin fase aprobada ni numeración nueva asignada |
 
-Tratamiento de las PR históricas (comparación de esta preparación, 30-09-2026):
+Tratamiento de las PR históricas (revisado el 30-09-2026 tras integrar PR #8):
 
 - **#2:** conserva contenido único sobre responsabilidades, VisualProposalV1 y fases futuras. Preservar PR/rama y reconciliar ese contenido en una entrega documental acotada; sustituir su numeración antigua antes de continuar
   su revisión; no retirarla mientras esos detalles sigan únicamente allí. No fusionar
@@ -54,7 +54,7 @@ Tratamiento de las PR históricas (comparación de esta preparación, 30-09-2026
 
 1. [Cinco planos reales autorizados](qa/F1b-five-plans.md), incluyendo escaneo y
    foto: registrar error de segunda cota, tiempo, correcciones e incidencias.
-2. Preparar un conjunto **fijo de al menos veinte planos variados**, autorizados, con geometría/cotas de referencia y separación entre calibración y validación; no confundirlo con las cinco sesiones de base. El inventario local actual es cero en ambos conjuntos. [Protocolo y registros](qa/F2-entry-protocol.md).
+2. Preparar un conjunto **fijo de al menos veinte planos variados**, autorizados, con geometría/cotas de referencia y separación entre calibración y validación; no confundirlo con las cinco sesiones de base. En la inspección documentada del checkout para PR #8 no se encontraron candidatos reales autorizados: cero en ambos conjuntos; confirmar de nuevo al preparar datos locales. [Protocolo y registros](qa/F2-entry-protocol.md).
 3. Juanma debe fijar los umbrales de precisión, tiempo y rendimiento usando esa
    línea base **antes** de construir asistencia. No se adopta el 30 % provisional
    del plan histórico ni se inventa otro umbral en esta tarea.
@@ -69,6 +69,8 @@ Tratamiento de las PR históricas (comparación de esta preparación, 30-09-2026
    fusionar PR #7. La preview de referencia correspondió al SHA
    `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`.
 
+La preparación de entrada F2 se fusionó por PR #8 el 30-09-2026 en `387a9bfd57630bced0d9fc1f858d9a0f3c181229`. Añade el protocolo reproducible, plantilla vacía y calculador offline; cobertura mínima alineada entre documentos, código y pruebas. Codex reportó 12/12 pruebas del recorder; no se ejecutaron de nuevo durante este merge. No hubo cambios de interfaz ni se requiere preview visual. F2 permanece **no iniciada**.
+
 CRM, cuentas, backend, IA, Asset Lab, precios y publicación de planos a terceros
-no forman parte de este seguimiento F1b. Integraciones futuras requerirán alcance,
-contratos, permisos y evaluación propios; no se inicia esa fase aquí.
+no forman parte de este seguimiento. Integraciones futuras requerirán alcance,
+contratos, permisos y evaluación propios.
