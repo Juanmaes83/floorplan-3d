@@ -22,16 +22,37 @@ archivos que Juanma pueda conservar en otro dispositivo. La herramienta consume
 registros declarados y no comprueba que existan los archivos o los derechos:
 la revisión humana de las evidencias locales sigue siendo obligatoria.
 
+## Cobertura mínima obligatoria de ambos conjuntos
+
+La exportación digital sigue siendo requisito de la [línea base de cinco](F1b-five-plans.md).
+El calculador aplica estos mínimos sobre registros **aptos**, no sobre todas las
+filas declaradas; los criterios de aptitud se detallan más abajo:
+
+| Conjunto | Número mínimo de planos distintos aptos | Tipos obligatorios | Mobiliario dibujado |
+| --- | --- | --- | --- |
+| Línea base manual | 5 sesiones medidas | Al menos uno `digital`, uno `scan` y uno `photo` | Sin mínimo con/sin mobiliario |
+| Evaluación fija | 20 planos con referencias; revisión `eval_NNN` y conjunto congelado | Al menos uno `digital`, uno `scan` y uno `photo` | Al menos uno con (`true`) y uno sin (`false`) |
+
+Para el conjunto de veinte, tipos y ambos estados de mobiliario son **mínimos
+obligatorios**, no recomendaciones. No hay cuotas por encima de uno por categoría
+ni obligación de cubrir las seis combinaciones tipo × mobiliario: un mismo plano
+puede aportar cobertura a su tipo y a su estado de mobiliario. Los restantes
+planos pueden distribuirse libremente entre esas categorías. Registros sintéticos,
+sin autorización revisada, fuera de los límites o incompletos no completan número
+ni cobertura. Cumplir estos mínimos de inventario no acredita representatividad,
+precisión ni autorización para implementar F2.
+
 ## Conjunto fijo de evaluación: al menos veinte planos
 
 Asignar un ID anónimo `plan_NNN` estable a cada plano original; copias, conversiones
 y variantes del mismo plano no cuentan como viviendas distintas. Juanma debe
 verificar esa correspondencia en el registro privado, pues el script no inspecciona
 imágenes ni puede probar identidad o autorización. Registrar revisión `eval_NNN`, responsable y fecha de
-congelación antes de probar asistencia. Incluir tipos variados: exportación digital
-(CAD rasterizado localmente), escaneo y foto, con y sin mobiliario dibujado, distintas
-resoluciones/orientaciones/calidades, con/sin cotas impresas cuando existan medidas
-independientes fiables. No se asignan cuotas por tipo ni se presume cobertura.
+congelación antes de probar asistencia. Exigir la cobertura mínima anterior de
+exportación digital (CAD rasterizado localmente), escaneo, foto y con/sin mobiliario
+dibujado. Procurar distintas resoluciones/orientaciones/calidades y con/sin cotas
+impresas cuando existan medidas independientes fiables; estas variaciones no añaden
+mínimos automáticos. No se presume cobertura más allá de los casos registrados.
 Los casos fuera de los tipos cubiertos deben declararse no evaluados.
 
 Por cada plano, exigir autorización revisada y evidencia privada, raster admitido,
@@ -154,7 +175,7 @@ se distinguen de las pruebas Node existentes y de la confirmación manual de Jua
 Publicar esta preparación como PR hacia master, sin merge ni despliegue manual.
 Los resultados reales de comandos se registran en el informe de entrega.
 
-## Verificación ejecutada de esta preparación (30-09-2026)
+## Verificación inicial de esta preparación (30-09-2026; anterior a la reconciliación)
 
 | Comando real | Resultado |
 | --- | --- |
@@ -171,6 +192,24 @@ La inspección de traducciones de #1 tuvo un error al intentar interpretar NAMES
 como JSON (su literal usa sintaxis JavaScript); se corrigió comparando directamente
 ese literal, que coincide con master. No fue un fallo de una suite de producto.
 El cierre REST de #1 quedó bloqueado por Forbidden y se registra en el workflow.
+
+## Reconciliación de cobertura: verificación ejecutada (30-09-2026)
+
+Se conserva la exportación digital como mínimo obligatorio de la línea base y se
+explicitan los mínimos obligatorios de tipos y mobiliario del conjunto de veinte.
+No cambian la app, los criterios de aptitud ni la puerta de autorización F2.
+
+| Comando real | Resultado de esta corrección |
+| --- | --- |
+| `python3 tests/f2_readiness.test.py` antes de corregir el calculador | 10 tests ejecutados; 2 subcasos fallaron al aceptar una línea base sin digital, también cuando solo un registro sintético aportaba ese tipo. Defecto reproducido. |
+| `python3 tests/f2_readiness.test.py` tras la corrección | 12/12 aprobadas, 0,079 s. Cobertura de cada tipo, ambos estados de mobiliario en veinte, registros no aptos, mínimos de tamaño y ausencia de cuotas o combinaciones adicionales. |
+| `python3 scripts/f2-readiness.py docs/qa/f2-evaluation.template.json` | Código 0; ambos conjuntos vacíos, métricas null, ambas condiciones de completitud false e implementation_authorized false. |
+| `git diff --check` | Código 0, sin errores. |
+
+Las suites de app/schema de la verificación inicial no se repitieron en esta
+corrección: solo cambian protocolo, calculador offline y sus pruebas. Ninguna de
+estas pruebas usa planos reales ni completa la evaluación pendiente. Juanma abrirá
+la PR desde GitHub para revisión; esta corrección no crea ni fusiona una PR.
 
 Publicación para revisión: rama `docs/f2-entry-evaluation` conservada en GitHub;
 creación de PR por REST bloqueada con `Forbidden`. [Abrir PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...docs/f2-entry-evaluation?expand=1).

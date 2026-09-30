@@ -6,7 +6,7 @@ no representan esta evaluación ni acreditan precisión profesional.
 
 | Plano autorizado | Tipo | Resolución | Error segunda cota | Tiempo de trazado | Correcciones | Incidencias / resultado |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 — pendiente | Exportación digital | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| 1 — pendiente | Exportación digital (obligatoria) | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
 | 2 — pendiente | Escaneo (obligatorio) | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
 | 3 — pendiente | Foto móvil (obligatoria) | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
 | 4 — pendiente | A determinar | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
@@ -34,8 +34,11 @@ base ni al conjunto de veinte planos para F2.
 
 ### Material que debe proporcionar Juanma en local
 
-1. Cinco planos reales distintos con IDs `plan_001`…`plan_005`: al menos un
-   escaneo y una foto móvil, además de exportación digital y otros tipos elegidos.
+1. Al menos cinco planos reales distintos con IDs `plan_NNN`: al menos una
+   exportación digital (`digital`), un escaneo (`scan`) y una foto móvil (`photo`).
+   Los otros dos pueden ser de cualquiera de esos tipos; no hay cuotas adicionales
+   ni mínimo con/sin mobiliario para esta línea base. Solo las sesiones aptas y
+   medidas descritas en el protocolo F2 cuentan para el mínimo y su cobertura.
    Usar PNG/JPEG o WebP estático admitido, hasta 15 MiB/8000 px de lado mayor.
    PDF/HEIC/HEIF requieren una copia raster obtenida **localmente**; conservar la
    fuente y la relación de conversión solo en el registro privado.

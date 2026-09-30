@@ -70,6 +70,29 @@ class ReadinessTests(unittest.TestCase):
         self.assertEqual(report['baseline']['load_failures'], 1)
         self.assertFalse(report['gate']['baseline_complete_on_declared_records'])
 
+    def test_baseline_requires_each_type_among_five_eligible_sessions(self):
+        for missing in ('digital', 'scan', 'photo'):
+            data = records(); data['baseline'] = [plan(n) for n in range(5)]
+            replacement = next(kind for kind in ('digital', 'scan', 'photo') if kind != missing)
+            for row in data['baseline']:
+                if row['type'] == missing: row['type'] = replacement
+            with self.subTest(missing=missing):
+                self.assertFalse(readiness.summarize(data)['gate']['baseline_complete_on_declared_records'])
+            excluded = plan(5); excluded['type'] = missing; excluded['data_kind'] = 'synthetic'
+            data['baseline'].append(excluded)
+            with self.subTest(missing=missing, excluded=True):
+                self.assertFalse(readiness.summarize(data)['gate']['baseline_complete_on_declared_records'])
+
+    def test_baseline_minimum_does_not_add_furniture_or_distribution_quotas(self):
+        data = records(); data['baseline'] = [plan(n) for n in range(5)]
+        for row, kind in zip(data['baseline'], ('digital', 'scan', 'photo', 'digital', 'digital')):
+            row['type'] = kind
+        self.assertTrue(readiness.summarize(data)['gate']['baseline_complete_on_declared_records'])
+        data['baseline'].pop()
+        self.assertFalse(readiness.summarize(data)['gate']['baseline_complete_on_declared_records'])
+        data['baseline'].extend([plan(4), plan(5)])
+        self.assertTrue(readiness.summarize(data)['gate']['baseline_complete_on_declared_records'])
+
     def test_duplicates_and_reused_calibration_dimensions_are_rejected(self):
         data = records(); data['baseline'] = [plan(1), plan(1)]
         with self.assertRaisesRegex(ValueError, 'distinct'):
@@ -103,6 +126,36 @@ class ReadinessTests(unittest.TestCase):
                 for row in mutated['evaluation']['plans']: row['type'] = 'digital'
             if change == 'limit': mutated['evaluation']['plans'][0]['width_px'] = 8001
             self.assertFalse(readiness.summarize(mutated)['gate']['evaluation_set_complete_on_declared_records'])
+
+    def test_evaluation_requires_each_type_and_both_furniture_states_among_eligible_plans(self):
+        data = records(); data['evaluation'] = {'revision_id': 'eval_001', 'frozen': True,
+                                             'plans': [plan(n, False) for n in range(20)]}
+        for missing in ('digital', 'scan', 'photo', False, True):
+            mutated = copy.deepcopy(data)
+            for row in mutated['evaluation']['plans']:
+                if isinstance(missing, bool): row['furniture_drawn'] = not missing
+                elif row['type'] == missing:
+                    row['type'] = next(kind for kind in ('digital', 'scan', 'photo') if kind != missing)
+            with self.subTest(missing=missing):
+                self.assertFalse(readiness.summarize(mutated)['gate']['evaluation_set_complete_on_declared_records'])
+            excluded = plan(20, False); excluded['authorization']['status'] = 'pending'
+            if isinstance(missing, bool): excluded['furniture_drawn'] = missing
+            else: excluded['type'] = missing
+            mutated['evaluation']['plans'].append(excluded)
+            with self.subTest(missing=missing, excluded=True):
+                self.assertFalse(readiness.summarize(mutated)['gate']['evaluation_set_complete_on_declared_records'])
+
+    def test_evaluation_minimum_allows_overlapping_categories_without_six_combinations(self):
+        data = records(); data['evaluation'] = {'revision_id': 'eval_001', 'frozen': True,
+                                             'plans': [plan(n, False) for n in range(20)]}
+        for n, row in enumerate(data['evaluation']['plans']):
+            row['type'] = 'scan' if n == 0 else 'photo' if n == 1 else 'digital'
+            row['furniture_drawn'] = n == 0
+        self.assertTrue(readiness.summarize(data)['gate']['evaluation_set_complete_on_declared_records'])
+        data['evaluation']['plans'].pop()
+        self.assertFalse(readiness.summarize(data)['gate']['evaluation_set_complete_on_declared_records'])
+        data['evaluation']['plans'].extend([plan(19, False), plan(20, False)])
+        self.assertTrue(readiness.summarize(data)['gate']['evaluation_set_complete_on_declared_records'])
 
     def test_sets_remain_separate_and_overlap_is_reported(self):
         data = records(); data['baseline'] = [plan(1)]

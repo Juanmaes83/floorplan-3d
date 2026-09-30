@@ -99,7 +99,7 @@ def summarize(data):
     errors = [abs(p['measured_length_mm'] - p['known_length_mm']) / p['known_length_mm'] * 100 for p in measured]
     times = [p['tracing_seconds'] for p in measured]
     corrections = [sum(p['corrections'].values()) for p in measured]
-    baseline_ready = len(measured) >= 5 and {'scan', 'photo'} <= {p['type'] for p in measured}
+    baseline_ready = len(measured) >= 5 and {'digital', 'scan', 'photo'} <= {p['type'] for p in measured}
     evaluation_ready = (len(ready_evaluation) >= 20 and evaluation.get('frozen') is True
                         and bool(re.fullmatch(r'eval_[0-9]{3}', evaluation.get('revision_id') or ''))
                         and {'digital', 'scan', 'photo'} <= {p['type'] for p in ready_evaluation}
