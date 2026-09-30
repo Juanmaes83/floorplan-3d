@@ -221,6 +221,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 @media(max-width:1100px) and (pointer:coarse){
  header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop{position:fixed;top:58px;right:4px}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
 }
+#tracePanel{padding:10px;border-bottom:1px solid var(--line)}#tracePanel .actions{flex-wrap:wrap}#tracePanel label{display:block;margin:8px 0}#tracePanel input,#tracePanel select{max-width:100%;font-size:16px}#tracePanel .btn{border:1px solid var(--line);min-height:44px}#traceWarnings{max-height:160px;overflow:auto}#traceWarnings button{display:block;text-align:left;width:100%;margin:4px 0}#traceStatus{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12px}#traceStatus:empty{display:none}:focus-visible{outline:3px solid var(--teal);outline-offset:2px}#traceDistance label{display:block;margin:10px 0}#traceDistance input{font-size:16px;padding:8px;width:100%}
 </style>
 <script type="importmap">
 {"imports":{
@@ -286,6 +287,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     </div>
     <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
     <div class="spacer"></div>
+    <button class="btn" id="traceBtn">Plano propio</button><span id="scaleConfidence" style="font-size:11px">Medidas orientativas</span>
     <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>
     <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff">EN</button>
     <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
@@ -312,12 +314,14 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
       <defs id="defs"></defs>
       <g id="gGrid"></g>
       <g id="gRooms"></g>
+      <g id="gSource" pointer-events="none"></g>
       <g id="gFurn"></g>
       <g id="gWalls"></g>
       <g id="gOpen"></g>
       <g id="gLabels" pointer-events="none"></g>
       <g id="gDims" pointer-events="none"></g>
       <g id="gMeasure" pointer-events="none"></g>
+      <g id="gTrace" pointer-events="none"></g>
       <g id="gSel"></g>
     </svg>
     <div id="view3d">
@@ -335,17 +339,20 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     <div id="fab"></div>
   </main>
 
-  <aside class="right"><div id="panel"></div></aside>
+  <aside class="right"><section id="tracePanel" hidden></section><div id="panel"></div></aside>
 
   <footer>
     <span class="only2d">X <b id="cx">—</b></span><span class="only2d">Y <b id="cy">—</b></span>
     <span class="only2d"><span data-en="Scale">当前比例</span> <b id="ratio">—</b></span>
     <span id="hover" class="only2d"></span>
     <span class="spacer"></span>
-    <span id="tip"></span>
+    <span id="traceStatus" role="status" aria-live="polite"></span><span id="tip"></span>
   </footer>
 </div>
 <div id="toast" role="status"></div>
+<input type="file" id="traceImageFile" accept="image/png,image/jpeg" hidden>
+<input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
+<dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
@@ -357,6 +364,9 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/project-core.js"></script>
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
+<script src="js/tracing-core.js"></script>
+<script src="js/local-images.js"></script>
+<script src="js/project-package.js"></script>
 <script>
 /* ======================= Multilingual UI: Español / English / 中文 ======================= */
 const LANG_KEY = 'rubik-sota-floorplan-lang';
@@ -1058,6 +1068,7 @@ function renderAll(){
   refreshProject(); buildDefs(); renderOpenings(); renderDims();
   renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
   window.View3D?.sync();
+  window.FloorPlanTraceUI?.render();
 }
 
 function updateHeader(){
@@ -1072,6 +1083,7 @@ function updateHeader(){
 const esc = SafeDOM.value;
 
 function renderPanel(){
+  if(window.FloorPlanTraceUI?.editPanel())return;
   renderFab();
   const p = $('#panel');
   if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
@@ -1290,6 +1302,7 @@ function toggleWall(id){
 }
 
 function setTool(t){
+  window.FloorPlanTraceUI?.cancel();
   ui.tool = t; ui.mA = null; ui.mCur = null;
   svg.setAttribute('class', 'tool-' + t);
   document.querySelectorAll('#tools .btn').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
@@ -1628,7 +1641,7 @@ async function setView(m){
     viewMode='2d';document.body.classList.remove('m3d');$('#stage').classList.remove('is3d','animating');
     toast(LANG==='es'?'La vista 3D no está disponible en este navegador. Puedes seguir trabajando en 2D.':tr('3D 不可用，可继续使用 2D','3D unavailable in this browser. You can continue in 2D.'),6000);
     applyView();
-  }finally{switching=false;document.body.classList.remove('busy');}
+  }finally{switching=false;document.body.classList.remove('busy');window.FloorPlanTraceUI?.viewChanged();}
 }
 document.querySelectorAll('.menu-pop .btn').forEach(b => b.addEventListener('click', () => b.closest('details').open = false));
 document.querySelectorAll('#viewSeg .btn').forEach(b => b.onclick = () => setView(b.dataset.view));
@@ -1683,7 +1696,7 @@ $('#fileIn').onchange = async e => {
   try {
     if(file.size>15*1024*1024)throw new Error('Project file exceeds 15 MB');
     const text=await file.text();if(sequence!==importSequence)return;
-    const before=snap();const next=Core.importInto(projectStore,text);
+    const before=snap();const next=Core.importInto(projectStore,text);window.FloorPlanTraceUI?.cancel();
     ui.sel=null;ui.mA=ui.mCur=null;undoStack.push(before);if(undoStack.length>150)undoStack.shift();redoStack.length=0;
     refreshProject();renderAll();fitView();
     toast(tr('方案已导入','Plan imported') + (next.migrated?' — previous format migrated':'') + (next.project.schemaVersion!=='1.0.0'?' — newer V1 fields retained':''));
@@ -1733,11 +1746,13 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
       ++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;
       refreshProject();renderAll();fitView();listProjects();$('#projectError').textContent='';
       if(action==='open')$('#projectsDialog').close();
+      if(action==='remove')window.FloorPlanTraceUI?.cleanup();
     }catch(e){$('#projectError').textContent=e.message;}
   };
 }
-window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
+window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
+<script src="js/tracing-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：

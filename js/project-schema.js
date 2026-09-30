@@ -1,4 +1,4 @@
-// Exact F0 schema from PR #3, commit 825ddf629d037d57690aedeea188b725ebf561b5.
+/* FloorPlanProjectV1 schema, synchronized with docs/contracts. */
 (function(root){const schema = {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Juanmaes83/floorplan-3d/docs/contracts/FloorPlanProjectV1.schema.json",
@@ -108,8 +108,9 @@
         "confidence": { "enum": ["real", "estimated", "pending"] },
         "method": { "enum": ["known-dimension", "declared-ratio", "template", "none"] },
         "declaredRatio": { "type": "string", "pattern": "^1:[1-9][0-9]{0,4}$", "description": "Escala impresa en el plano (p. ej. 1:100). Solo informativa: no calibra una imagen digital." },
-        "calibration": { "$ref": "#/$defs/calibration" },
-        "note": { "type": "string", "maxLength": 500 }
+    "calibration": { "$ref": "#/$defs/calibration" },
+        "note": { "type": "string", "maxLength": 500 },
+        "verification": { "$ref": "#/$defs/verification" }
       },
       "allOf": [
         { "if": { "properties": { "method": { "const": "known-dimension" } } }, "then": { "required": ["calibration"] } },
@@ -117,6 +118,21 @@
         { "if": { "properties": { "method": { "const": "none" } } }, "then": { "properties": { "confidence": { "const": "pending" } } } },
         { "if": { "properties": { "confidence": { "const": "real" } } }, "then": { "properties": { "method": { "const": "known-dimension" } }, "required": ["calibration"] } }
       ]
+    },
+    "verification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceImageId", "pointA", "pointB", "knownLengthMm", "measuredLengthMm", "errorPercent", "thresholdPercent", "status", "verifiedAt"],
+      "properties": {
+        "sourceImageId": {"$ref": "#/$defs/imageId"},
+        "pointA": {"$ref": "#/$defs/pixelPoint"},
+        "pointB": {"$ref": "#/$defs/pixelPoint"},
+        "knownLengthMm": {"$ref": "#/$defs/lengthMm"},
+        "measuredLengthMm": {"type": "integer", "minimum": 1, "maximum": 2000000},
+        "errorPercent": {"type": "number"},
+        "thresholdPercent": {"const": 2, "description": "Umbral provisional de producto, no garantía de precisión."},
+        "status": {"enum": ["consistent", "discrepant"]},
+        "verifiedAt": {"type": "string", "format": "date-time"}
+      }
     },
     "calibration": {
       "type": "object",
@@ -166,7 +182,8 @@
             "mmPerPixel": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000 }
           }
         },
-        "visible": { "type": "boolean", "default": true }
+        "visible": { "type": "boolean", "default": true },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Opacidad opcional, 1 si falta." }
       }
     },
     "wall": {

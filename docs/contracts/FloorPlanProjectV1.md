@@ -215,3 +215,17 @@ for (const f of files) {
   [...s.e, ...s.w].forEach(x => console.log('  ' + x));
 }
 ```
+
+## Extensión opcional F1b (V1.1)
+
+El [changelog](CHANGELOG.md) documenta `scale.verification` y
+`sourceImages[].opacity`, sus validaciones y la compatibilidad con V1 anteriores.
+El [ejemplo sintético F1b](examples/floorplan-project-v1.f1b.example.json) registra
+la segunda cota sin incrustar binarios. Su imagen procede del fixture propio
+`tests/fixtures/manual-plan.png`; el ZIP sitúa esos bytes en `images/img_synthetic.png`.
+
+La app implementa ahora W1–W4: W2 cubre el contorno completo por la unión de tramos
+a distancia ≤ grosor/2 + 20 mm de muros activos; W3 utiliza la huella orientada del
+objeto, su estancia asignada y sólidos de muros descontando huecos. Ningún aviso
+bloquea por sí solo. La propuesta/script ad hoc históricos anteriores se conservan
+como evidencia de F0, no como descripción del código actual.

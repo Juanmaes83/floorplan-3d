@@ -15,7 +15,9 @@
     function name(value){if(typeof value!=='string'||!value.trim()||value.trim().length>120)throw Error('El nombre debe tener entre 1 y 120 caracteres');return value.trim();}
     function entry(next,id){const e=next.entries.find(e=>e.id===id);if(!e)throw Error('Proyecto no encontrado');return e;}
     return {
+      all:()=>Core.clone(data.entries),
       list:()=>data.entries.map(({id,name})=>({id,name})),activeId:()=>data.activeId,project:()=>Core.clone(current().project),
+      add(project,value){Core.validate(project);const title=name(value);return change(n=>{const id=Core.id('prj');n.entries.push({id,name:title,project:Core.clone(project)});n.activeId=id;});},
       save(project){Core.validate(project);return change(n=>{entry(n,n.activeId).project=Core.clone(project);});},
       open(id){return change(n=>{entry(n,id);n.activeId=id;});},
       rename(id,value){const title=name(value);return change(n=>{entry(n,id).name=title;});},
