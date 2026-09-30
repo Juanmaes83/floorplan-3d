@@ -1,9 +1,10 @@
 # F2 — exportación local de sugerencias crudas
 
-Estado de esta rama: **F2 experimental; exportación implementada, QA local registrada
-más abajo; F2 no validada**. Requiere PR, preview y revisión/aprobación de Juanma;
-no se fusiona en esta tarea. Las cinco sesiones y veinte planos reales son
-validación empírica posterior y **no bloquean esta implementación**.
+Estado actual: **exportación integrada en master; F2 continúa experimental y no validada**.
+La PR #11 fue aprobada por Juanma y fusionada el 30-09-2026. La integración
+incorpora exportación voluntaria de sugerencias crudas, conversión local para el
+evaluador y pruebas sintéticas. Las cinco sesiones y veinte planos reales siguen
+pendientes para validación empírica; no bloquean continuar implementando F2.
 
 Base verificada: `master` @ `65518be43c1ff6680f53af5b6c3cf4a9f2257635`, exactamente
 la indicada. Checkout inicial limpio en la rama del evaluador; creada únicamente
@@ -174,11 +175,11 @@ rechaza el CA del CDN, curl con TLS verificado para módulos oficiales. Es
 | 844×390 | [Captura](../qa/artifacts/f2-raw-export/844x390.png) |
 | 1440×900 | [Captura](../qa/artifacts/f2-raw-export/1440x900.png) |
 
-Capturas de controles, no planos privados ni baseline visual aprobado. Se comprueban
-overflow, tamaños y descarga funcional. Se requiere preview ligada al HEAD final
-para revisión humana; READY no equivale a aprobación. No se reutiliza preview
-histórica #9/#10 para presentar esta interfaz. Publicación/verificación real se
-registra al cerrar esta tarea; no se hace merge ni despliegue manual a producción.
+Capturas de controles sintéticos; no son planos privados ni baseline visual aprobado.
+La preview vinculada al HEAD revisado fue confirmada READY por Vercel. La URL
+requiere autenticación Vercel; no se declara pública ni se afirma que Juanma haya
+hecho una revisión visual humana de esta preview. READY acredita el deployment,
+no la aceptación visual. No hubo despliegue manual a producción.
 
 ## QA ejecutada
 
@@ -215,37 +216,30 @@ permite desplazamiento vertical; la descarga y cancelar son utilizables por toqu
 Las capturas heredadas regeneradas por las regresiones se excluyeron del cambio;
 solo se publican las cuatro nuevas capturas sintéticas de este flujo.
 
-## Publicación y pendientes de revisión
+## Publicación, revisión y estado de integración
 
-Código y QA publicados en `feat/f2-local-raw-export`, commit
-`298c6fd18d346fc724f274c4c60229d56f6c8c16`, desde la base obligatoria
-`65518be43c1ff6680f53af5b6c3cf4a9f2257635`. El cierre documental posterior
-no altera el código probado. `git push -u origin HEAD` funcionó sin force push.
+La implementación se desarrolló desde `master` @
+`65518be43c1ff6680f53af5b6c3cf4a9f2257635` en `feat/f2-local-raw-export`.
+El HEAD aprobado fue `86479409567efb5df180c4d161ec9232059fa210`. La
+[PR #11](https://github.com/Juanmaes83/floorplan-3d/pull/11) se marcó lista para
+revisión y se fusionó con merge commit
+`49ea432f7d8eba75042e00762c902a7d3830040d`. La rama fue publicada sin force
+push. Esta actualización documental posterior no modifica la implementación
+ni cambia los resultados de QA reportados abajo.
 
-La creación REST de PR falló exactamente con:
+Vercel API confirmó `READY` para el HEAD exacto de la PR. Deployment:
+`dpl_FMbzhNP6rz2kJhah3jCL5nemskeF`. [Preview](https://floorplan-3d-git-feat-f2-local-0acbc2-juanma-espinosas-projects.vercel.app/).
+La preview está protegida por Vercel Authentication; la revisión anónima de esta
+sesión llegó al login. Por tanto, no se afirma que sea pública ni que se haya
+completado revisión visual humana. READY no sustituye esa revisión.
 
-```text
-Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden
-```
+La PR reportó Vercel Preview Comments como check satisfactorio; ese check no
+acredita por sí solo la ejecución remota de la suite. Los resultados de pruebas
+arriba corresponden a la ejecución reportada por Codex en la rama. No hay CI
+propia configurada en `.github/`.
 
-La lista pública posterior seguía mostrando únicamente #1, #2 y #3 abiertas;
-no se inventa una PR de esta tarea. Se puede preparar desde
-[comparar master con la rama](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f2-local-raw-export?expand=1).
-No se intentó GraphQL, no se cambió la política de red, no hubo merge ni
-despliegue manual a producción.
-
-Los checks públicos del commit de código muestran
-`Vercel / Vercel Preview Comments: succeeded`. No es evidencia de estado READY
-del deployment ni ejecución remota de la suite. No hay workflow CI propio en
-`.github/`. La consulta REST de check-runs también devuelve `Forbidden`.
-
-El comentario de feedback de ese check apunta a esta
-[URL candidata de preview](https://floorplan-3d-git-feat-f2-local-0acbc2-juanma-espinosas-projects.vercel.app/).
-La petición sin autenticar desde este entorno falló con
-`curl: (56) CONNECT tunnel failed, response 403` (`HTTP 000`, sin respuesta
-del deployment). Por ello no se acredita READY, asociación del deployment al
-HEAD documental final, acceso público ni revisión visual de esa URL. No se
-deduce protección de autenticación del deployment a partir de un bloqueo del
-túnel. Quedan pendientes crear la PR y confirmar el deployment READY del HEAD
-final con URL accesible para revisión humana, desde GitHub/Vercel autorizados.
-El trabajo y sus pruebas permanecen publicados; F2 sigue **no validada**.
+F2 sigue **experimental y no validada empíricamente**. No se usaron planos reales
+autorizados ni se fijaron umbrales de producto. Las cinco sesiones de línea base,
+el conjunto separado de veinte planos con referencias, la revisión humana
+accesible y el rendimiento en teléfono físico permanecen pendientes para la
+validación correspondiente; no bloquean continuar el desarrollo F2.
