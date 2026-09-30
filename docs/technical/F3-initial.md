@@ -72,10 +72,15 @@ no tamaño físico, marca/licencia, texturas de los demás ni GPU real. Se visua
 solo en la auditoría local expresamente solicitada. Sus capturas están fuera del
 checkout público y no se cargan en la experiencia ni en Vercel.
 
-**Puerta de permisos por candidato:** uso comercial, redistribución, streaming,
-modificación, atribución, territorio, duración y marca: **no verificados** en los
-134. La plantilla `pending` no cubre ningún candidato concreto; el PDF no existe.
-No se expone ningún nombre/SKU/imagen/precio de esa marca en la app. El validador
+**Estado de permisos en la instantánea auditada:** el manifest declaraba banderas,
+pero los documentos asociados estaban pendientes o ausentes y no acreditaban por
+sí solos el alcance de uso. Con posterioridad, el 30-09-2026, Juanma confirmó que
+el proyecto tiene autorización para usar los assets de Asset Lab. Esa confirmación
+permite avanzar con su uso en Rubik Sota; no convierte el inventario de este SHA en
+actual ni aporta las dimensiones que faltan. Al seleccionar cada candidato se
+registrará la autorización de Juanma junto a la comprobación actual de fichero,
+hash, dimensiones, atribución, formato y alcance aplicable. No se expone ningún
+nombre/SKU/imagen/precio de esa marca en la app en esta entrega. El validador
 `node /tmp/f3-asset-lab-audit/scripts/validate-manifest.js` dio código 0 y
 «ALL CHECKS PASSED, 134 items»: comprueba estructura/enum/IDs, no existencia de
 ficheros, hash, GLB, dimensiones físicas ni alcance jurídico. Su verde no abre
