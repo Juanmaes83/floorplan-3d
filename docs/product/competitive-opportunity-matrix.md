@@ -1,6 +1,6 @@
 # Auditoría competitiva y matriz de oportunidades
 
-Consulta y corrección metodológica: **30-09-2026 (Europe/Madrid)**. Base inspeccionada y comprobada contra el remoto:
+Consulta, corrección metodológica y ampliación externa: **30-09-2026 (Europe/Madrid)**. Base inspeccionada y comprobada contra el remoto:
 `master` @ `19d286b5d8d1b288048ee5617ea734cff2964ef6`.
 Rama documental: `docs/competitive-opportunity-matrix`.
 Esta entrega contiene propuestas; no aprueba decisiones de negocio ni implementa funciones.
@@ -17,12 +17,20 @@ sintético propio, normalización y fallback. **Catálogo externo pendiente; F3 
 La comparación sigue parcial: los intentos con curl y Playwright de abrir las
 páginas de producto, ayuda, precios y licencias fallan en este entorno. Estos
 resultados describen límites de los métodos disponibles; no demuestran que la
-información oficial no exista o no pueda verificarse desde otro entorno. Hay evidencia primaria accesible en
-repositorios de los proveedores: un ejemplo reciente de integración app-to-app
-magicplan y ejemplos Floorplanner de 2009/2011. Esto permite comparar mecanismos
-concretos de intercambio, pero **no acreditar paridad de la interfaz, precios,
-calidad de render, cobertura funcional o límites comerciales actuales**. Sweet
-Home 3D queda no verificado. Una celda NV no demuestra que falte esa función.
+información oficial no exista o no pueda verificarse desde otro entorno.
+Se añaden nueve referencias oficiales aportadas en la conversación, con consulta
+externa reportada del 30-09-2026: niveles/exportaciones y presentación profesional
+Floorplanner; plan gratuito, creación/edición y planes magicplan; guía, licencia,
+API/plugins y descarga/uso móvil/visor Sweet Home 3D. Su procedencia externa se
+identifica como **E**, sin atribuir acceso a Codex. Las paráfrasis aportadas
+permiten confirmar documentalmente formatos, algunas
+condiciones y licencias; no incluyen importes inequívocos ni todos los límites.
+No se inventan cifras o cláusulas ausentes.
+
+Además se conserva la documentación primaria leída por Codex: un ejemplo reciente
+app-to-app magicplan y ejemplos Floorplanner de 2009/2011. Las fuentes documentales
+no acreditan **paridad funcional, pruebas de uso ni calidad/rendimiento**. Una
+celda NV expresa el detalle pendiente, no ausencia de la función.
 
 Los hallazgos que cambian la siguiente decisión son:
 
@@ -57,7 +65,9 @@ Esta revisión continúa en la misma rama desde `6861600`, conservando la matriz
 publicada. Corrige su falta de evidencia sobre descubrimiento de herramientas y
 navegación. No abre PR ni cambia app, schema, assets o decisiones. La comparación
 **no se declara completa**: tareas y condiciones comerciales importantes siguen
-sin poder revisarse mediante las herramientas disponibles en esta ejecución.
+sin poder revisarse mediante las herramientas disponibles en esa ejecución.
+Este apartado registra la corrección local publicada en `733f8dd`; la ampliación
+posterior con paráfrasis externas actualiza las filas vigentes de comparación.
 
 ### Descubrimiento previo del tooling
 
@@ -91,7 +101,7 @@ no se ignoró TLS ni se modificó red/permisos. Esas fuentes se verifican por le
 Git y curl con TLS verificado, que sí permite abrir sus URLs. Esto distingue un
 fallo del navegador de una fuente documental accesible por otro método.
 
-| Apartado solicitado | Qué se intentó / fuente legible | Estado tras la corrección |
+| Apartado solicitado | Qué se intentó / fuente legible | Estado tras la corrección local anterior (actualización externa E abajo) |
 | --- | --- | --- |
 | Floorplanner: tareas, niveles/límites, exportación y precios | Navegador FP1/FP2/FP4; curl; FP-G4–FP-G6 legibles por Git | Actualidad comercial/UI **NV**. Exportadores de 2011 confirmados documentalmente, no extrapolados al producto actual |
 | Floorplanner: compartir/embed/API | Navegador FP3/FP4; curl; FP-G1/FP-G3 legibles por Git | POC/API de 2009 confirmados. API vigente, white-label, entitlements y tarifas **NV** |
@@ -105,14 +115,20 @@ fallo del navegador de una fuente documental accesible por otro método.
 fuente: por ejemplo, ausencia de LICENSE en los árboles fijados de FML y del demo
 magicplan, o ausencia de condiciones comerciales actuales en sus documentos.
 Ninguna expresión demuestra inexistencia de una función/licencia/oferta en el
-producto. No hay base nueva para convertir precios o funciones de las webs
-bloqueadas en confirmados. Tampoco un extracto de búsqueda sustituye la lectura:
+producto. La corrección local anterior no recuperó contenido nuevo de las webs
+bloqueadas; la posterior aportación externa permite confirmar solo los datos
+parafraseados, identificados como E en la comparación vigente. Tampoco un
+extracto de búsqueda sustituye la lectura:
 no se usaron resultados de búsqueda como evidencia ni se encontró un buscador callable.
 
 ## Evidencia y antecedentes
 
 - **C**: confirmado documentalmente en una fuente primaria; no implica probar el producto.
 - **H**: fuente histórica confirmada; disponibilidad comercial actual NV.
+- **E**: fuente oficial aportada por el usuario, consulta externa reportada del
+  30-09-2026; se usan las paráfrasis aportadas, no se atribuye lectura a Codex.
+  No son citas literales. Detalles no aportados siguen NV; E no equivale a prueba
+  interactiva ni a comprobación independiente del texto original.
 - **R**: implementado y comprobado mediante lectura de código/documentación del repo.
 - **P**: parcial, con límite concreto indicado.
 - **NV**: no verificado; no equivale a ausencia.
@@ -152,7 +168,8 @@ ficheros de las revisiones fijadas, comprobación del árbol para licencias y ap
 de enlace mediante curl/TLS; sus intentos Playwright fallaron por certificado.
 THREE: apertura curl/TLS y licencia documental de la versión fijada, sin atribuir
 licencia al catálogo. Los diez enlaces GitHub (ocho fuentes y dos antecedentes)
-se reintentan con curl al validar esta corrección.
+se reintentaron con curl en la corrección local `733f8dd`; no se atribuye
+a ese método la evidencia E aportada después.
 
 Floorplanner publica estos repositorios bajo su organización y el README remite
 a su dominio; el ejemplo magicplan lo publica su propia organización. Su antigüedad
@@ -168,9 +185,39 @@ no debe confundirse con una oferta comercial vigente.
 | [MP-G1][mp-demo] | magicplan Integration Field App Example; `d382a5a`, 13-04-2026 | Crear/reabrir proyecto por enlace nativo; recibir paquete ZIP `.magicplan` iOS, esquema 1.0, espacios/media/formularios; cita endpoint Cloud API | T01, T03–T04, T06–T07, T09; O07, O10 |
 | [THREE][three-license] | LICENSE, `r160` | MIT del motor Three.js; no licencia de modelos ni marcas | Licencias; motor existente |
 
+### Fuentes documentales aportadas por una vía externa
+
+**Procedencia, método y fecha:** el usuario aporta las URLs, títulos y resúmenes de
+fuentes oficiales consultadas el **30-09-2026 mediante otra vía de investigación**,
+fuera del entorno local de Codex. El método externo concreto no fue especificado.
+Los resúmenes son **paráfrasis, no citas literales**. Codex los incorpora como
+**E: evidencia documental aportada externamente**, sin afirmar haber abierto estas
+nueve URLs con curl/Playwright ni probado los productos. Los títulos siguientes son
+los proporcionados por el usuario. Los detalles no incluidos siguen pendientes.
+
+| ID / URL oficial | Título aportado | Datos respaldados por la paráfrasis externa / límites | Aplicación |
+| --- | --- | --- | --- |
+| [FP-E1][fp-levels-external] | Project levels | Mejoras por proyecto mediante créditos; exportaciones PDF/FML/DXF según nivel/resolución/condiciones. Básico: SD con marca de agua y límites de plantas/diseños. Niveles superiores amplían límites y opciones de compartir. Tours 3D y embed público Spaceplanner tienen condiciones/créditos adicionales. Cantidades exactas y equivalencia monetaria no aportadas | T06/T09/T10, O08/O09 |
+| [FP-E2][fp-professionals-external] | Floorplanner for professionals | Promociona visualización profesional, renders interiores y tours 3D; no acredita calidad comparativa ni flujo probado | T05/T06, O09 |
+| [MP-E1][mp-free-external] | Using magicplan for free | Starter: dos proyectos; excluye Workspaces & Teams y API & Integrations. Se describen planes superiores; importes no confirmados | T08/T09/T10, opciones de integración |
+| [MP-E2][mp-first-plan-external] | Crea tu primer plano | Creación/edición en app móvil/tableta; cloud no edita proyectos. Habitaciones manuales, importar/dibujar sobre plano existente, modificar dimensiones, añadir/editar objetos. LiDAR en iOS compatible; guía indica que Android no ofrece ese escaneo de habitaciones. Formatos y procedimiento de calibración no aportados | T01–T04/T07 |
+| [MP-E3][mp-pricing-external] | Pricing | Dos proyectos gratuitos; documentación/informes/estimaciones, sincronización/almacenamiento y acceso API según plan. Importes/condiciones exactos no confirmados; no atribuir prestaciones a Starter por inferencia | T07–T10, build/buy |
+| [SH-E1][sh-license-external] | Licencia | Código y componentes indicados: GPL v2 o posterior. Programa, documentos generados y derechos sobre modelos/texturas se tratan separadamente; algunos contenidos requieren atribución y externos pueden tener términos propios | Licencias separadas abajo; no extender GPL a todos los assets o exportaciones |
+| [SH-E2][sh-guide-external] | Guía del usuario | Importación de modelos OBJ/DAE/3DS/ZIP con modelo compatible/KMZ; exportación de vista 3D a OBJ y archivos asociados. Bibliotecas de muebles/texturas exigen evaluar licencias específicas | T04/T06, O09/O13; no atribuir esos formatos a FloorPlanProjectV1 |
+| [SH-E3][sh-documentation-external] | Documentation | Guía de desarrollo de plugins y Javadocs de API del ecosistema de escritorio; no demuestra SDK web, iframe o API SaaS compatible con Rubik Sota | T09, O13 |
+| [SH-E4][sh-download-external] | Descarga | Compatibilidad móvil para importar/exportar SH3D/SH3X; visor 3D HTML5/WebGL publicable en sitio propio a partir de un proyecto. No equivale a colaboración multiusuario o integración lista para Rubik Sota | T05–T07/T09, O13 |
+
+La existencia de estas fuentes y sus datos documentales corrige el NV general de
+niveles/exportaciones Floorplanner, edición móvil/plan Starter magicplan y
+licencia/formatos/API de escritorio/visor Sweet Home 3D. No acredita paridad,
+calidad, rendimiento ni disponibilidad de todo ello en cualquier plan/dispositivo.
+Se mantienen pendientes **todos los importes monetarios no confirmados**: créditos
+Floorplanner no se convierten en euros ni se toman como precio de suscripción.
+
 ### Fuentes con acceso fallido por curl y navegador; datos comerciales pendientes
 
-Cada URL siguiente se reintentó mediante curl y Playwright en esta corrección;
+Registro histórico de `733f8dd`: cada URL siguiente se reintentó mediante curl
+y Playwright en aquella corrección local;
 Playwright falla como se detalla arriba. Para curl se usó
 `curl --location --max-time 25`, con TLS
 verificado. Resultado para todas: salida 56, **HTTP de destino 000**, error exacto
@@ -179,7 +226,7 @@ entorno, no prueba una negativa del producto ni la existencia del path. No se pu
 leer título ni contenido; los nombres de esta tabla son destinos de investigación,
 no títulos recuperados. No se eludió la restricción ni se cambió la política de red.
 
-| IDs / URL intentada | Información pendiente / filas afectadas |
+| IDs / URL intentada | Información no obtenida en el intento local (E actualiza la comparación vigente) |
 | --- | --- |
 | [FP1: inicio](https://floorplanner.com/) | T01–T08, funciones actuales |
 | [FP2: precios](https://floorplanner.com/pricing) | T10, planes/precios/monedas/límites |
@@ -195,11 +242,14 @@ no títulos recuperados. No se eludió la restricción ni se cambió la polític
 | [SH4: visor JS](https://www.sweethome3d.com/SweetHome3DJSViewer.jsp) | T09, integración: NV; el nombre del path no prueba una API |
 | [SH5: distribución SourceForge](https://sourceforge.net/projects/sweethome3d/) | Alternativa de distribución oficial intentada; también bloqueada, sin contenido utilizable |
 
-Precios públicos, monedas, periodicidad, límites por plan y presupuestos vigentes:
-**NV para los tres productos**. No se afirma que sean gratis, que exijan cotización
-para todos sus planes o que incluyan una API. Cualquier contratación/integración
-comercial propuesta **requiere presupuesto y confirmación del proveedor**; no se
-contactó a ninguno ni se abrió cuenta, aceptaron términos o contrataron servicios.
+Importes públicos, monedas, periodicidad y presupuestos vigentes:
+**NV para los tres productos**. MP-E1 documenta Starter con dos proyectos y
+exclusiones concretas; FP-E1 documenta créditos por proyecto y condiciones
+generales. Otras cantidades o condiciones no aportadas siguen pendientes. No se
+afirma gratuidad de todo el producto ni API incluida en todos los planes.
+Cualquier contratación/integración comercial propuesta requiere confirmar
+condiciones y presupuesto del proveedor; no se contactó a ninguno ni se abrió
+cuenta, aceptaron términos o contrataron servicios.
 
 ## Estado real de Rubik Sota
 
@@ -236,16 +286,17 @@ habitaciones en un formato de intercambio no acredita la experiencia de edición
 
 | ID / tarea | Floorplanner | magicplan | Sweet Home 3D | Rubik Sota |
 | --- | --- | --- | --- | --- |
-| T01 Crear/iniciar proyecto | **H**: API sobre proyectos en servidores ([FP-G1][fp-api]); UI actual NV (FP1/FP4) | **C documental**: ejemplo crea/reabre por `magicplanstd://`, enlaza referencia externa ([MP-G1][mp-demo]); UI/plan NV | **NV** SH1/SH2 | **R** proyectos locales CRUD |
-| T02 Importar raster/calibrar | **NV** FP1/FP4 | **NV** MP1/MP4; paquete documentado no demuestra importación/calibración raster | **NV** SH2 | **R/P** PNG/JPEG/WebP estático, dos puntos + segunda cota; sin PDF/HEIC |
-| T03 Dibujar/editar muros, habitaciones, huecos | **NV** FP4 | **C documental**: paquete contiene espacios/muros/huecos, medidas en metros ([MP-G1][mp-demo]); edición UI **NV** | **NV** SH2 | **R** trazado y edición manual; F2 **P**, experimental |
-| T04 Colocar/editar mobiliario | **NV** FP1/FP4 | Paquete documenta objetos ([MP-G1][mp-demo]); catálogo/colocación/edición **NV** | **NV** SH2 | **R/P** genéricos y un GLB propio; catálogo externo pendiente |
-| T05 Cambiar 2D/3D | **NV** FP1/FP4 | **NV** MP1/MP4 | **NV** SH1/SH2 | **R** dos vistas; sin WebGL se conserva 2D |
-| T06 Exportar/imprimir/compartir/presentar | **H**: código de exportación COLLADA/texturas y SVG ([FP-G4][fp-fml], [FP-G5][fp-dae], [FP-G6][fp-svg]); iframe POC ([FP-G3][fp-iframe]); UI/formatos actuales **NV** | **C documental**: compartir paquete ZIP `.magicplan` vía iOS, thumbnails/media ([MP-G1][mp-demo]); impresión/PDF/visor alojado **NV** | **NV** SH2/SH4 | **R/P** JSON/ZIP/PNG; sin PDF a escala dedicado ni visor compartido |
-| T07 Móvil/entre dispositivos | **NV** FP1/FP4 | **C documental**: integración nativa iOS; Android, sync y experiencia entre dispositivos **NV** ([MP-G1][mp-demo]) | **NV** SH1/SH2 | **P** táctil/local; transferir archivo manualmente no es sincronización |
-| T08 Colaboración | **NV** FP3/FP4 | **NV** MP3/MP4; enlace/paquete no acredita coedición | **NV** SH1/SH2 | **Propuesto, no implementado**; proyectos locales |
-| T09 API/SDK/iframe/white-label | **H** PHP REST con clave y POC iframe 2009 ([FP-G1][fp-api], [FP-G3][fp-iframe]); SDK/white-label/vigencia **NV** | **C documental** enlaces + formato paquete; cita Cloud API `/projects/{id}/plan` ([MP-G1][mp-demo]); acceso/contrato/SDK web/iframe/white-label **NV** | **NV** SH4; no concluir ausencia de API | **R** formato propio; servicio/API externa no implementado |
-| T10 Planes/límites/precios | **NV** FP2/FP3 | **NV** MP2/MP3 | **NV** SH1/SH3 | Sin plan comercial implementado; no precios inventados. Límites técnicos no son tarifas. |
+| T01 Crear/iniciar proyecto | **H** API sobre proyectos alojados ([FP-G1][fp-api]); **E** niveles por proyecto ([FP-E1][fp-levels-external]); pasos de creación UI **NV** | **E** creación en móvil/tableta, cloud no edita ([MP-E2][mp-first-plan-external]); **C** demo crea/reabre por enlace nativo ([MP-G1][mp-demo]) | **E** proyectos SH3D/SH3X importables/exportables en móvil ([SH-E4][sh-download-external]); pasos de creación **NV** | **R** proyectos locales CRUD |
+| T02 Importar raster/calibrar | **NV** FP1/FP4; exportar FML no acredita importación raster | **E** importar/dibujar sobre plano existente y modificar dimensiones ([MP-E2][mp-first-plan-external]); formatos/calibración y segunda cota **NV** | Importación de modelos documentada, pero raster/calibración **NV** con el resumen aportado de [SH-E2][sh-guide-external] | **R/P** PNG/JPEG/WebP estático, dos puntos + segunda cota; sin PDF/HEIC |
+| T03 Dibujar/editar muros, habitaciones, huecos | **NV** FP4 | **E** crear habitaciones manuales y modificar dimensiones ([MP-E2][mp-first-plan-external]); **C** paquete con espacios/muros/huecos y medidas ([MP-G1][mp-demo]); herramientas exactas de muros/huecos **NV** | Herramientas geométricas exactas **NV**; resumen de [SH-E2][sh-guide-external] centrado en modelos/exportación | **R** trazado y edición manual; F2 **P**, experimental |
+| T04 Colocar/editar mobiliario | Catálogo/edición **NV** FP1/FP4 | **E** añadir/editar objetos ([MP-E2][mp-first-plan-external]); catálogo/dimensiones verificadas **NV** | **E** importar modelos OBJ/DAE/3DS/ZIP compatible/KMZ ([SH-E2][sh-guide-external]); pasos de edición/medidas físicas **NV** | **R/P** genéricos y un GLB propio; catálogo externo pendiente |
+| T05 Cambiar 2D/3D | **E** renders interiores/tours 3D ([FP-E2][fp-professionals-external]); cambio interactivo 2D/3D **NV** | **NV** MP1/MP4; guía no aporta detalle de vista 3D | **E** visor 3D HTML5/WebGL ([SH-E4][sh-download-external]); cambio editor 2D/3D **NV** | **R** dos vistas; sin WebGL se conserva 2D |
+| T06 Exportar/imprimir/compartir/presentar | **E** PDF/FML/DXF con condiciones de nivel, básico SD/marca de agua, compartir y tours ([FP-E1][fp-levels-external]); visualización profesional ([FP-E2][fp-professionals-external]). Resoluciones exactas/cuotas **NV**; COLLADA/SVG son solo **H** ([FP-G5][fp-dae], [FP-G6][fp-svg]) | **C** paquete ZIP vía iOS ([MP-G1][mp-demo]); **E** informes/documentación según plan ([MP-E3][mp-pricing-external]); formatos/impresión/visor **NV** | **E** vista 3D exportable OBJ y archivos asociados ([SH-E2][sh-guide-external]); visor en sitio propio y proyectos SH3D/SH3X en móvil ([SH-E4][sh-download-external]); condiciones específicas y flujo no probado | **R/P** JSON/ZIP/PNG; sin PDF a escala dedicado ni visor compartido |
+| T07 Móvil/entre dispositivos | **NV** FP1/FP4 | **E** edición móvil/tableta; cloud no edita; LiDAR solo iOS compatible, sin ese escaneo Android según guía ([MP-E2][mp-first-plan-external]); sync/almacenamiento según plan ([MP-E3][mp-pricing-external]); experiencia no medida | **E** importar/exportar SH3D/SH3X en móvil ([SH-E4][sh-download-external]); sync/edición móvil exacta **NV** | **P** táctil/local; archivo manual no es sync |
+| T08 Colaboración | Compartir documentado **E** ([FP-E1][fp-levels-external]); coedición **NV** | **E** Workspaces & Teams excluido de Starter ([MP-E1][mp-free-external]); alcance de coedición/planes superiores **NV** | Visor publicable **E** ([SH-E4][sh-download-external]); colaboración multiusuario **NV** | **Propuesto, no implementado**; proyectos locales |
+| T09 API/SDK/iframe/white-label | **E** embed público Spaceplanner con condiciones/créditos ([FP-E1][fp-levels-external]); **H** cliente REST/iframe 2009 ([FP-G1][fp-api], [FP-G3][fp-iframe]); API vigente/white-label/entitlements **NV** | **E** API & Integrations excluido de Starter ([MP-E1][mp-free-external]); acceso API según plan ([MP-E3][mp-pricing-external]); **C** demo nativo/paquete ([MP-G1][mp-demo]); cuotas/SDK web/iframe **NV** | **E** Javadocs/API y guía plugins escritorio ([SH-E3][sh-documentation-external]), visor HTML5/WebGL alojable ([SH-E4][sh-download-external]); no acredita API SaaS/SDK web compatible | **R** formato propio; servicio/API externa no implementado |
+| T10 Planes/límites/precios | **E** niveles y upgrades por proyecto/créditos, SD con marca de agua y límites ampliables ([FP-E1][fp-levels-external]); cantidades/importes exactos **NV** | **E** Starter dos proyectos, sin Teams/API; planes/prestaciones según [MP-E1][mp-free-external]/[MP-E3][mp-pricing-external]; importes/condiciones no aportados **NV** | **E** licencia de código GPL v2+ ([SH-E1][sh-license-external]); eso no fija precio de cada distribución o servicio, importes **NV** | Sin plan comercial implementado; límites técnicos no son tarifas |
+
 
 ## Matriz de oportunidades
 
@@ -257,19 +308,19 @@ futuras. No se asignan puntuaciones de mercado, aceptación o esfuerzo.
 
 | ID / oportunidad y problema | Referencia oficial / evidencia | Estado actual | Usuarios potenciales | Recomendación / encaje |
 | --- | --- | --- | --- | --- |
-| O01 Catálogo externo pequeño y trazable: presentar opciones reales sin inventar medidas | Competidores T04 NV; dato confirmado del Asset Lab autorizado, auditoría actual abajo | Solo un GLB propio | Interioristas, agentes, cliente final | **INTEGRAR**, trabajo restante F3; utilidad hipótesis |
+| O01 Catálogo externo pequeño y trazable: presentar opciones reales sin inventar medidas | T04: edición de objetos magicplan e importación de modelos Sweet Home 3D **E** ([MP-E2][mp-first-plan-external], [SH-E2][sh-guide-external]); dato confirmado del Asset Lab autorizado, auditoría actual abajo | Solo un GLB propio | Interioristas, agentes, cliente final | **INTEGRAR**, trabajo restante F3; utilidad hipótesis |
 | O02 Procedencia de medidas: evitar que el aspecto visual sugiera un ajuste físico falso | T03 [MP-G1][mp-demo] documenta medidas de intercambio; no validación física. Brecha local confirmada | Alturas genéricas; 113 modelos existentes sin medidas completas | Reformas, interioristas, cliente final | **IMPLEMENTAR**, F3; problema hipótesis, brecha confirmada |
 | O03 Texturas embebidas acotadas: conservar aspecto de los modelos autorizados | T06 [FP-G5][fp-dae] indica texturas históricas; 113 modelos actuales las contienen | Loader rechaza todas las imágenes/texturas | Interioristas, agentes | **IMPLEMENTAR**, F3; necesidad técnica confirmada |
-| O04 Draco/WebP según candidatos: abrir catálogo sin aceptar cualquier formato | T04 competidores NV; 109 GLB actuales requieren Draco, 93 también EXT_texture_webp | Sin decodificador Draco ni extensiones permitidas | Interioristas, cliente final | **IMPLEMENTAR**, F3 en entrega separada tras piloto; alcance propuesto |
-| O05 Materiales y selección por dimensiones: decidir combinaciones útiles | T04/T05 competidores NV; referencia de exportación texturada [FP-G5][fp-dae] solo histórica | Presets de suelo y catálogo genérico; externos pendientes | Interioristas, cliente final | **IMPLEMENTAR**, F3; utilidad hipótesis |
-| O06 Presupuesto de carga/fallback: revisar en móvil sin bloquear el plano | T07 NV para prestaciones/rendimiento; evidencia local de loader y auditoría | Fallback y límites existentes; sin rendimiento físico medido | Los cuatro segmentos | **IMPLEMENTAR**, F3; mediciones/hosting pendientes |
+| O04 Draco/WebP según candidatos: abrir catálogo sin aceptar cualquier formato | T04 importación de modelos **E** ([SH-E2][sh-guide-external]); no acredita Draco en competidores. 109 GLB actuales requieren Draco, 93 también EXT_texture_webp | Sin decodificador Draco ni extensiones permitidas | Interioristas, cliente final | **IMPLEMENTAR**, F3 en entrega separada tras piloto; alcance propuesto |
+| O05 Materiales y selección por dimensiones: decidir combinaciones útiles | T04 objetos/importación y T05 presentación 3D **E** ([MP-E2][mp-first-plan-external], [SH-E2][sh-guide-external], [FP-E2][fp-professionals-external]); selección/materiales exactos NV | Presets de suelo y catálogo genérico; externos pendientes | Interioristas, cliente final | **IMPLEMENTAR**, F3; utilidad hipótesis |
+| O06 Presupuesto de carga/fallback: revisar en móvil sin bloquear el plano | T07 uso móvil **E** ([MP-E2][mp-first-plan-external], [SH-E4][sh-download-external]); rendimiento físico NV; evidencia local de loader y auditoría | Fallback y límites existentes; sin rendimiento físico medido | Los cuatro segmentos | **IMPLEMENTAR**, F3; mediciones/hosting pendientes |
 | O07 Intercambio `.magicplan`: reducir recaptura al recibir un trabajo de campo | T01/T06/T07 [MP-G1][mp-demo], mecanismo confirmado, utilidad indicio | JSON/ZIP propios; no lector de ese paquete | Reformas, agentes | **INTEGRAR**, fase posterior; sujeto a necesidad y permiso específico |
-| O08 Servicio Floorplanner alojado: consumir plataforma en vez de ampliar editor | T09 [FP-G1][fp-api]/[FP-G3][fp-iframe], solo 2009; oferta vigente NV | Estático y local, sin gestión de claves/backend | Agentes, interioristas | **POSPONER**, fase posterior; no justificado para F3 |
-| O09 Presentación/impresión e intercambio 3D: entregar algo útil al destinatario | T06 [FP-G4][fp-fml]/[FP-G5][fp-dae]/[FP-G6][fp-svg] histórico; formatos actuales NV | PNG/JSON/ZIP; sin PDF dedicado ni COLLADA | Agentes, reformas, cliente final | **POSPONER**, fase posterior; probar destinatario/formato antes |
-| O10 Sync/colaboración: compartir entre personas/dispositivos | T08 NV; paquete local [MP-G1][mp-demo] no demuestra coedición | Sin sync ni cloud; archivos manuales | Agentes, reformas | **POSPONER**, fase posterior; demanda hipótesis |
+| O08 Servicio Floorplanner alojado: consumir plataforma en vez de ampliar editor | T09 embed Spaceplanner **E** con condiciones ([FP-E1][fp-levels-external]); API REST solo **H** ([FP-G1][fp-api]); API comercial vigente NV | Estático y local, sin gestión de claves/backend | Agentes, interioristas | **POSPONER**, fase posterior; no justificado para F3 |
+| O09 Presentación/impresión e intercambio 3D: entregar algo útil al destinatario | T06 PDF/FML/DXF **E** ([FP-E1][fp-levels-external]) y OBJ **E** ([SH-E2][sh-guide-external]); límites exactos/entitlements pendientes | PNG/JSON/ZIP; sin PDF dedicado ni COLLADA | Agentes, reformas, cliente final | **POSPONER**, fase posterior; probar destinatario/formato antes |
+| O10 Sync/colaboración: compartir entre personas/dispositivos | T08 Starter sin Teams **E** ([MP-E1][mp-free-external]); sync según plan **E** ([MP-E3][mp-pricing-external]); coedición NV | Sin sync ni cloud; archivos manuales | Agentes, reformas | **POSPONER**, fase posterior; demanda hipótesis |
 | O11 Promesa de interpretar cualquier plano automáticamente | T02/T03 NV para competidores; limitación F2 confirmada | H/V experimental, revisión humana y validación pendiente | Reformas, agentes | **DESCARTAR** esa promesa; fuera del alcance F3; continuar evaluación F2 aparte |
-| O12 Ecommerce/precios/CRM dentro de F3 | T10 NV; no evidencia de necesidad ni condiciones comerciales | Sin esos flujos/contratos | Beneficio por validar con segmentos | **DESCARTAR** para F3, fuera del roadmap actual |
-| O13 Reutilizar motor/catálogo de Sweet Home 3D | T04/T09 y SH2–SH4 bloqueados; código/licencias/formatos NV | No conexión ni lector implementado | Interioristas, cliente final | **POSPONER**, fase posterior; no adoptar código/modelos sin fuente legible |
+| O12 Ecommerce/precios/CRM dentro de F3 | T10 planes documentados **E** ([MP-E3][mp-pricing-external]); importes NV y sin evidencia de necesidad en Rubik Sota | Sin esos flujos/contratos | Beneficio por validar con segmentos | **DESCARTAR** para F3, fuera del roadmap actual |
+| O13 Reutilizar motor/catálogo de Sweet Home 3D | T09 API/plugins escritorio y visor **E** ([SH-E3][sh-documentation-external], [SH-E4][sh-download-external]); código GPL v2+ **E** ([SH-E1][sh-license-external]); licencias por asset/compatibilidad NV | No conexión ni lector implementado | Interioristas, cliente final | **POSPONER**, fase posterior; no adoptar código/modelos sin fuente legible |
 
 | ID | Dependencias y límites | Próximo paso verificable |
 | --- | --- | --- |
@@ -280,12 +331,12 @@ futuras. No se asignan puntuaciones de mercado, aceptación o esfuerzo.
 | O05 | Texturas/modelos autorizados por candidato y atribución; contrato actual conserva color/presets; cambios futuros exigirían decisión explícita | Probar una combinación y búsqueda por medidas con usuarios; registrar qué datos no necesitan cambiar el contrato |
 | O06 | Hosting/caché/retención, versión/hash, red, bytes en disco frente a memoria; presupuesto de rendimiento pendiente | Medir cold/warm load y memoria en un teléfono físico; mantener plano 2D/fallback operativo al fallar/hash distinto/timeout |
 | O07 | Contrato paquete, metros→mm, coordenadas/objetos no mapeables; datos sensibles y alcance de licencia del ejemplo; sin API contratada | Mapear un paquete sintético autorizado, lista blanca de geometría, errores/migración, sin copiar media ni transmitir datos; validar necesidad antes de implementar |
-| O08 | API vigente, presupuesto, contrato, backend seguro, borrado/localización de datos y lock-in | Cuando haya demanda, confirmar documentación/versiones/entitlements con proveedor; no usar endpoints HTTP 2009 ni claves en frontend |
+| O08 | API vigente, presupuesto, contrato, backend seguro, borrado/localización de datos y lock-in | Cuando haya demanda, confirmar documentación/versiones/entitlements actuales, condiciones Spaceplanner y presupuesto con proveedor; no usar endpoints HTTP 2009 ni claves en frontend |
 | O09 | Destinatario, escala/unidades, privacidad de imagen/archivo; licencia del toolkit FML no verificada | Probar PNG actual con destinatarios; definir criterio de impresión/intercambio antes de elegir formato o proveedor |
 | O10 | Consentimiento, cuentas, identidad, conflicto/borrado, tratamiento de direcciones/imágenes | Entrevistar usuarios sobre transferencia manual; no inferir cloud a partir de compartir un ZIP |
 | O11 | Corpus autorizado, cinco sesiones, veinte referencias, umbrales; F2 sigue experimental | Ejecutar protocolo F2 y registrar cobertura/tiempos; evitar claims de precisión o reconocimiento universal |
 | O12 | Modelo de negocio y datos/precios verificables ausentes; marcas y acuerdos comerciales específicos | Registrar demanda si aparece fuera de F3, sin inventar tarifas ni convertir monedas |
-| O13 | Fuentes oficiales accesibles de licencia y formatos, procedencia por modelo/textura, compatibilidad | Reabrir investigación desde guía/licencia oficial cuando sea accesible; hasta entonces NV, sin copiar catálogo/código |
+| O13 | Fuentes oficiales accesibles de licencia y formatos, procedencia por modelo/textura, compatibilidad | Mapear formatos OBJ/SH3D al contrato local y verificar GPL/atribución/compatibilidad por componente y asset; sin copiar catálogo/código en esta entrega |
 
 ## Build / buy / partner
 
@@ -297,11 +348,11 @@ precios. Ninguna opción se conectó a un servicio real.
 | --- | --- | --- | --- |
 | Construcción propia incremental (O01–O06) | Límites actuales del loader/contrato; soporte de texturas/Draco pendiente, no presupuesto físico aprobado | Coste de desarrollo/hosting no estimado; control del contrato, dependencia Three.js | Compatible con frontend estático; archivos/medidas locales, red para módulos/assets. No prometer offline ni rendimiento físico |
 | Asset Lab autorizado (O01) | Propietario confirma uso; restricciones por recurso y auditoría técnica más abajo | No precio/acuerdo de compra informado; dependencia de versión y selección | Catálogo estático posible tras fichas/adaptador/loader; distribución/hosting específico se documenta; no publicar catálogo completo ni cargas de usuario |
-| Paquete magicplan (O07), [MP-G1][mp-demo] | Formato ZIP MIME `application/vnd.magicplan.project-package+zip`, esquema 1.0, manifest/media; demo iOS React Native y enlaces nativos | Tarifas/planes NV; requiere confirmación del proveedor y permiso del código si se reutilizara; dependencia del formato | No drop-in web: importar selectivamente geometría sería trabajo propio. Direcciones, geolocalización, formularios, fotos/360/vídeos pueden ser personales; no enviar ni copiar indiscriminadamente |
-| API magicplan/partner, [MP-G1][mp-demo] | README cita Cloud API `/projects/{id}/plan`; autenticación, disponibilidad/SDK web/quotas no verificados | Requiere presupuesto/contrato del proveedor; planes NV; lock-in de IDs/esquema | Posible cambio a backend/credenciales y transferencia de datos: posponer; el demo nativo no habilita un iframe |
-| API/iframe Floorplanner, [FP-G1][fp-api]/[FP-G3][fp-iframe] | API con claves y POC iframe documentados en 2009; vigencia/seguridad/white-label NV | Requiere confirmación y presupuesto del proveedor; MIT del cliente PHP no compra acceso al servicio | Datos del proyecto en servidores externos; secreto nunca en frontend. POC HTTP antiguo no es integración aprobada; UX móvil/embed por comprobar |
-| Intercambio FML/SVG/COLLADA, [FP-G4][fp-fml]/[FP-G5][fp-dae]/[FP-G6][fp-svg] | Toolkit Ruby 0.2.5 de 2011, exportadores documentados por código; contrato actual del proveedor NV | Tarifa NV; licencia de toolkit no localizada; dependencias Ruby y traducción de geometría | No encaja directamente en browser estático; estudiar formato antes de reutilizar software; unidades/media/datos no mapeables por validar |
-| Motor/catálogo/visor Sweet Home 3D (SH2–SH4) | Todo NV por acceso bloqueado; no inferir API/SDK ni licencia a partir del nombre del producto | Precio/licencia/servicio NV; requiere confirmación si se propone contratación | No evaluar compatibilidad web, cloud, móvil o redistribución sin fuentes; posponer |
+| Paquete magicplan (O07), [MP-G1][mp-demo] | Formato ZIP MIME `application/vnd.magicplan.project-package+zip`, esquema 1.0, manifest/media; demo iOS React Native y enlaces nativos | Tarifas NV; Starter excluye API & Integrations ([MP-E1][mp-free-external]); esto no confirma restricciones de paquetes compartidos. Permiso del código si se reutilizara; dependencia del formato | No drop-in web: importar selectivamente geometría sería trabajo propio. Direcciones, geolocalización, formularios, fotos/360/vídeos pueden ser personales; no enviar ni copiar indiscriminadamente |
+| API magicplan/partner, [MP-G1][mp-demo] | README cita Cloud API `/projects/{id}/plan`; [MP-E3][mp-pricing-external] documenta API según plan y [MP-E1][mp-free-external] la excluye de Starter. Autenticación/SDK web/quotas no verificados | Requiere confirmar plan contratado, presupuesto y condiciones; Starter sin API **E** ([MP-E1][mp-free-external]); lock-in de IDs/esquema | Posible cambio a backend/credenciales y transferencia de datos: posponer; el demo nativo no habilita un iframe |
+| API/iframe Floorplanner, [FP-G1][fp-api]/[FP-G3][fp-iframe] | API con claves y POC iframe de 2009; embed público Spaceplanner **E** con condiciones/créditos ([FP-E1][fp-levels-external]); no acredita API/white-label vigente | Requiere confirmación y presupuesto del proveedor; MIT del cliente PHP no compra acceso al servicio | Datos del proyecto en servidores externos; secreto nunca en frontend. POC HTTP antiguo no es integración aprobada; UX móvil/embed por comprobar |
+| Intercambio FML/SVG/COLLADA, [FP-G4][fp-fml]/[FP-G5][fp-dae]/[FP-G6][fp-svg] | Toolkit Ruby 0.2.5 de 2011, exportadores documentados por código; exportación FML actual **E** ([FP-E1][fp-levels-external]); compatibilidad del formato antiguo con el actual NV | Tarifa NV; licencia de toolkit no localizada; dependencias Ruby y traducción de geometría | No encaja directamente en browser estático; estudiar formato antes de reutilizar software; unidades/media/datos no mapeables por validar |
+| Motor/catálogo/visor Sweet Home 3D ([SH-E1][sh-license-external]–[SH-E4][sh-download-external]) | **E** código GPL v2+, API/plugins escritorio, modelos OBJ/DAE/3DS/ZIP/KMZ y visor WebGL propio ([SH-E1][sh-license-external]–[SH-E4][sh-download-external]); detalles por componente pendientes; bloqueo local conservado | Importes/servicio NV; GPL v2+ del código, sin licencia única del catálogo; verificar obligaciones por componente/asset | Visor HTML5/WebGL posible en sitio propio, no plugin de escritorio ejecutable en browser ni servicio SaaS listo. Mapeo de formatos, hosting, redistribución y privacidad por evaluar; posponer |
 
 ## Licencias, permisos y assets
 
@@ -319,13 +370,18 @@ repositorio público en esta entrega.
 | Cliente PHP Floorplanner, [FP-G2][fp-license] | MIT para ese código con aviso | No copiar: antiguo y fuera de F3. No concede servicio/API, usuarios/diseños, catálogo ni marca Floorplanner |
 | Toolkit FML de Floorplanner, [FP-G4][fp-fml] | No se encontró archivo LICENSE/COPY en árbol de la revisión consultada; licencia NV | Referenciar mecanismos, no copiar código ni extrapolar MIT del otro repo |
 | Demo magicplan, [MP-G1][mp-demo] | No se encontró LICENSE/COPY/TERMS en árbol; package private=true no es una licencia | Referencia documental, no copiar código. El paquete puede contener datos/media de clientes sin derecho de redistribución; importación selectiva futura requiere origen autorizado |
-| Código/modelos/texturas Sweet Home 3D, SH3 | NV; fuente bloqueada | No asumir licencia única ni reutilizar catálogo. Verificar términos separados por código/modelo/textura si se retoma |
+| Código de aplicación Sweet Home 3D, [SH-E1][sh-license-external] | **E** GPL versión 2 o posterior para código y componentes indicados ([SH-E1][sh-license-external]); revisar alcance y obligaciones concretas si se reutilizara | No declarar que habilita un servicio o copiar código sin condiciones verificadas |
+| Bibliotecas/modelos Sweet Home 3D, [SH-E1][sh-license-external]/[SH-E4][sh-download-external] | **E** condiciones separadas del programa; algunos contenidos requieren atribución. Licencia/procedencia concreta por biblioteca/modelo **NV** | No extender una licencia del código a los modelos; comprobar modificación, redistribución y hosting |
+| Bibliotecas/texturas Sweet Home 3D, [SH-E1][sh-license-external]/[SH-E4][sh-download-external] | **E** condiciones separadas; ciertos contenidos requieren atribución y externos pueden tener términos propios. Licencia concreta por textura **NV** | No presumir que una textura descargable autoriza su uso o redistribución en Rubik Sota |
+| Plugins/API/visor Sweet Home 3D, [SH-E3][sh-documentation-external]/[SH-E4][sh-download-external] | **E** documentación plugins/API escritorio y visor web; licencia de cada plugin/biblioteca/visor, versión y compatibilidad concretas **NV** | API documentada no equivale a derecho de redistribuir SDK/plugin o contratar API cloud |
+| Ficheros exportados con Sweet Home 3D, [SH-E1][sh-license-external]/[SH-E2][sh-guide-external] | **E** la página separa uso de documentos generados y licencias de modelos/texturas; derechos concretos de assets incluidos siguen por verificar | No transferir automáticamente al resultado la licencia de la aplicación ni asumir libertad de hosting de materiales incluidos |
 | Marcas, medidas y fotografías de terceros | No se deriva permiso del nombre IKEA ni de MIT de herramientas | El permiso general de Asset Lab se mantiene; registrar restricciones específicas de cada recurso y atribución. Fotografías/medidas de otra fuente no quedan autorizadas por defecto |
 
-### Nueva auditoría Asset Lab (solo lectura)
+### Auditoría Asset Lab de la corrección local `733f8dd` (solo lectura)
 
-**Reverificado en esta ejecución de corrección**, con lectura de archivos/hash y
-nueva decodificación; no se conserva como actual solo por coincidir el commit.
+**Reverificado en la corrección local publicada en `733f8dd`**, con lectura de
+archivos/hash y nueva decodificación; no se tomó solo del CSV histórico.
+Esta ampliación documental externa conserva esa evidencia fechada, sin repetirla.
 Se volvió a consultar el remoto y a inspeccionar ficheros actuales de
 `Juanmaes83/immersphere-asset-lab` el 30-09-2026. HEAD remoto verificado:
 `5dc7b182c5c227472b84aea66a3ffa1368c95981`. Coincide con la instantánea histórica,
@@ -350,7 +406,8 @@ Acceso mediante el remoto Git existente; no se publica un enlace a binarios priv
 ### Candidatos técnicos para la siguiente entrega
 
 Selección propuesta por requisitos técnicos observados, no por ventas/demanda.
-Todos los ficheros siguientes existen y su hash se calculó en la revisión actual.
+Los ficheros siguientes existían y sus hashes se calcularon en la inspección
+fechada de `733f8dd`; no se declara una nueva auditoría en esta ampliación.
 Caja XYZ del modelo en mm, **no dimensiones comerciales verificadas**. Conteos de
 triángulos suman mallas recorridas; bytes geométricos no incluyen texturas/memoria GPU.
 
@@ -408,7 +465,7 @@ Las pruebas históricas citadas por los informes conservan su carácter históri
 La nueva decodificación usa **renderizado por software SwiftShader**: no valida
 rendimiento en GPU/teléfono físico, demanda, medidas físicas ni calidad comercial.
 
-Comandos de esta **corrección** ejecutados desde el mismo checkout:
+Comandos de la **corrección local anterior (`733f8dd`)** ejecutados desde el mismo checkout:
 
 ```bash
 git status --short --branch
@@ -441,7 +498,7 @@ Los scripts temporales Node usan `page.goto` con timeout 18 s y recogen fallos d
 navegación; terminan con salida 0 porque registran los **20 fallos de acceso**, no
 porque las páginas estén verificadas. Sin cambios de red, certificados o permisos.
 
-Auditoría actual Asset Lab: remoto/checkout siguen en `5dc7b18`, limpio; Python
+Auditoría de aquella ejecución Asset Lab: remoto/checkout seguían en `5dc7b18`, limpio; Python
 relee manifest, árbol, todos los archivos y hashes; salida 0. Se reconfirman 134
 entradas, 114 GLB, 134 previews, 133 referencias existentes, una sola dimensión
 W/H/D completa entre GLB existentes, 113 con imágenes, 109 Draco, 93 WebP y las
@@ -476,7 +533,7 @@ comerciales/ayuda/licencias y distribución intentadas: 13 bloqueadas (error arr
 Los dos enlaces históricos F0 también devolvieron HTTP 200 en la comprobación final.
 No se instaló herramienta, contactó proveedor ni creó cuenta.
 
-Validación documental final ejecutada:
+Validación documental de la **corrección metodológica previa** ejecutada:
 
 ```bash
 python3 /tmp/validate-competitive-doc.py
@@ -502,6 +559,44 @@ se registran como NV; no se declara que todos los enlaces externos sean accesibl
 La revisión del diff limita la entrega a esta matriz y el enlace/propuestas del
 roadmap; app, schema, README y assets quedan sin cambios.
 
+## Última ampliación con fuentes externas (30-09-2026)
+
+Parte de `733f8dd98cc5615b0ed18b8e3a25d26476566e4e` en la misma rama. Solo cambia
+esta matriz y su resumen en el roadmap. No se abren PR ni se incorporan decisiones,
+funciones, schema o assets. Los resultados curl/Playwright y de Asset Lab de arriba
+son registros de las ejecuciones anteriores, **no reejecutados en esta ampliación**.
+Las nueve fuentes externas se registran con su procedencia y no se suman como
+páginas abiertas por Codex a los 23 enlaces del registro de acceso local.
+
+Validación ejecutada en esta ampliación:
+
+```bash
+python3 /tmp/validate-external-amplification.py
+python3 /tmp/validate-competitive-markdown.py
+git diff --check
+git diff --cached --check
+```
+
+Resultados, salida 0: **24 enlaces internos**, ninguno roto; **109 usos de
+referencias y 17 definiciones**, ninguna indefinida. **32 URLs externas** con
+sintaxis/dominios oficiales válidos: 23 del registro anterior más nueve fuentes
+aportadas, sin abrirlas por red en esta ampliación. Se contrastaron títulos, fecha,
+procedencia y afirmaciones con las nueve paráfrasis proporcionadas, no con una
+lectura independiente de las páginas originales. Markdown: fences equilibrados
+y columnas consistentes en **13 tablas de la matriz y dos del roadmap**. El
+validador existente recontrasta registros guardados de navegación/decodificación;
+no vuelve a navegar ni decodificar Asset Lab. No hay linter Markdown configurado.
+Ambos `git diff` pasan sin errores de whitespace. No se ejecutaron suites de app.
+
+Pendientes concretos: importes/monedas/periodicidad de planes; cantidades de créditos,
+resoluciones y cuotas exactas Floorplanner; condiciones actuales de API/white-label
+Floorplanner y del embed Spaceplanner; plan/cuotas/autenticación y prestaciones
+exactas de integración magicplan; formatos/calibración que no detalla la paráfrasis,
+coedición y experiencia real entre dispositivos; licencia/atribución de cada
+modelo, textura, plugin o componente del visor Sweet Home 3D y condiciones de
+los assets incorporados a exportaciones. Ningún detalle pendiente cambia D-01,
+F3 abierta ni las cinco sesiones y veinte planos F2 pendientes.
+
 ## Enlaces de las fuentes primarias fijadas
 
 [fp-api]: https://github.com/floorplanner/floorplanner-api-php/blob/1080ac8ce6c071b0bc4e09a81fe402141473aa93/README
@@ -512,3 +607,13 @@ roadmap; app, schema, README y assets quedan sin cambios.
 [fp-svg]: https://github.com/floorplanner/fml/blob/476a3741257205ed276d1cac1204707d22d11b64/lib/floorplanner/svg_export.rb
 [mp-demo]: https://github.com/magicplan/app-to-app-integration-example/blob/d382a5ace5c829b8f66ae48d5f3b3000621e83d5/README.md
 [three-license]: https://github.com/mrdoob/three.js/blob/r160/LICENSE
+
+[fp-levels-external]: https://floorplanner.com/es/project-levels
+[fp-professionals-external]: https://floorplanner.com/es/professionals
+[mp-free-external]: https://help.magicplan.app/using-magicplan-for-free
+[mp-first-plan-external]: https://help.magicplan.app/es/crea-tu-primer-plano
+[mp-pricing-external]: https://magicplan.app/es/pricing
+[sh-license-external]: https://www.sweethome3d.com/es/licencia/
+[sh-guide-external]: https://www.sweethome3d.com/es/guia-del-usuario-de-sweet-home-3d/
+[sh-documentation-external]: https://www.sweethome3d.com/documentation/
+[sh-download-external]: https://www.sweethome3d.com/es/descarga/

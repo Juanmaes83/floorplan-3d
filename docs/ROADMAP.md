@@ -129,16 +129,21 @@ Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets
 ## Auditoría competitiva — propuestas para F3 (30-09-2026)
 
 La [matriz de oportunidades](product/competitive-opportunity-matrix.md) contrasta
-el estado integrado con documentación primaria accesible de Floorplanner y
-magicplan; Sweet Home 3D y los datos comerciales quedan no verificados tras
-intentos fallidos con curl y Playwright en este entorno. La corrección metodológica
-registra tooling y límites por método; no afirma inexistencia de información
-oficial ni comparación completa. Propone para
-revisión un catálogo externo pequeño, medidas trazables, soporte acotado de texturas
+el estado integrado con documentación primaria leída por Codex y nueve fuentes
+oficiales aportadas en la conversación, consultadas por una vía externa el
+30-09-2026. Estas últimas añaden referencias de niveles/exportaciones Floorplanner,
+Starter/edición móvil magicplan y licencia GPL v2+/formatos/API de escritorio/visor
+web Sweet Home 3D, según paráfrasis externas; importes y condiciones no aportadas
+siguen pendientes. Los fallos locales de curl/Playwright se conservan sin atribuir
+a Codex el acceso externo; ni las fuentes
+ni sus paráfrasis acreditan pruebas de uso, paridad o investigación completa.
+Propone para revisión un catálogo externo pequeño, medidas trazables, soporte
+acotado de texturas
 y evaluación de formatos/rendimiento; no aprueba negocio, hosting o integraciones.
 
-La autorización general de Juanma para usar Asset Lab sigue confirmada. La nueva
-inspección técnica vuelve a verificar el remoto y los ficheros, sin copiar assets.
+La autorización general de Juanma para usar Asset Lab sigue confirmada. La
+inspección técnica fechada en la corrección `733f8dd` verificó remoto y ficheros
+sin copiar assets; no se repite en esta ampliación de fuentes externas.
 **F3 inicial integrada; catálogo externo pendiente; fase no cerrada.** D-01 y las
 decisiones concretas de alojamiento/rendimiento siguen para revisión. F2 permanece
 experimental: cinco sesiones y veinte planos reales pendientes, sin bloquear F3.
