@@ -1,9 +1,9 @@
 # QA — claridad de importación y formatos locales
 
-Fecha: 30-09-2026. Rama: `fix/local-image-import-formats`.
+Fecha: 30-09-2026. Rama de implementación: `fix/local-image-import-formats`.
+Merge commit: `c28a1701186d885522b4c80f0ab78ae72bb8768d`.
 Base: master `0f67a63e13e9139117f17200a3d6f8bf97590072`, verificado en remoto
-antes de editar y después de las pruebas. Esta es una corrección de F1b integrada,
-no una nueva implementación de F1a/F1b ni inicio de F2.
+antes de editar y después de las pruebas. Esta corrección de F1b ya está integrada por PR #7; no es una nueva fase ni inicio de F2.
 
 ## Preflight y protección de trabajo previo
 
@@ -17,8 +17,8 @@ no una nueva implementación de F1a/F1b ni inicio de F2.
   detector existente. No se volvió a implementar la corrección ya integrada.
 - Nueva rama basada en master, sin rebase/force push. La rama previa y su commit
   local siguen disponibles; no son el remoto final de esta entrega.
-- PR #4/#5/#6 fusionadas; #1/#2/#3 abiertas, comprobadas en páginas públicas GitHub.
-  No se modifican o resuelven las PR documentales aquí; la propuesta está en
+- PR #4/#5/#6/#7 fusionadas; #1/#2/#3 siguen abiertas y requieren limpieza/reconciliación, comprobadas en GitHub.
+  No se modifican o resuelven las PR documentales #1–#3 aquí; el roadmap canónico integrado está en
   [ROADMAP.md](../ROADMAP.md).
 
 ## Comandos y resultados reales
@@ -72,16 +72,17 @@ incluyen capturas ni logs temporales en el commit.
 
 El evento filechooser y `setInputFiles` permiten comprobar el input y su recorrido,
 no la apariencia del diálogo nativo del sistema operativo ni la carpeta Descargas.
-No se afirma revisión manual en teléfono ni evaluación de cinco planos reales.
+Juanma aprobó la PR #7 tras la revisión y confirmó que la aplicación funciona en su teléfono. No se registraron modelo ni rendimiento físico. La evaluación de cinco planos reales autorizados sigue pendiente.
 Los tests 3D no acreditan rendimiento físico.
 
-## Pendientes de revisión
+## Pendientes posteriores al merge
 
-- Cinco planos reales autorizados (matriz aún vacía), teléfono físico y umbrales
-  aprobados antes de F2.
+- Cinco planos reales autorizados (matriz aún vacía), medición de rendimiento en
+  teléfono físico y umbrales aprobados antes de F2.
 - PDF y HEIC/HEIF diferidos; WebP animado/con EXIF excluidos. Véase
   [decisión técnica](../technical/image-formats.md).
-- Revisión humana de la corrección y preview pública ligada a su SHA. Una preview
-  del F1b anterior no valida esta entrega. No se despliega a producción.
+- La revisión humana y aprobación de PR #7 se completaron antes del merge. Preview
+  READY para el SHA `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`. Vercel creó una
+  deployment de producción automáticamente al fusionar; no hubo despliegue manual.
 - No hay workflow de CI de pruebas en el checkout. Las pruebas aquí son locales;
   despliegues Vercel, si existen, no equivalen a una CI de tests.

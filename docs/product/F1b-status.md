@@ -19,25 +19,43 @@ Codex informó 77 pruebas Node y 7 Python aprobadas en su checkout. No repetimos
 
 La imagen de referencia puede ser PNG/JPG de hasta 15 MiB y 8000 px por lado. El PNG adjuntado para la revisión (1448×1086, ~718 KB) está dentro de los límites. No se comprobó aún su carga satisfactoria por la ruta «Plano propio».
 
-## Pendientes aceptados para continuidad
+## Estado del seguimiento de importación
 
-1. Mejorar la claridad del menú: «Importar plano» → «Importar proyecto JSON» y acceso «Cargar imagen de plano (PNG/JPG)» desde Archivo, reutilizando el flujo existente.
-2. Evaluar cinco planos autorizados —incluyendo escaneo y foto móvil— y registrar error de segunda cota, tiempo, correcciones e incidencias en [F1b-five-plans.md](../qa/F1b-five-plans.md).
-3. Probar rendimiento en un teléfono físico.
-4. Evaluar formatos adicionales (PDF, WebP y HEIC/HEIF) mediante una entrega acotada posterior. No están admitidos por el importador actual ni quedan aprobados sin pruebas de compatibilidad, privacidad y límites.
+La mejora de claridad y el soporte de WebP estático quedaron integrados mediante
+la [PR #7](https://github.com/Juanmaes83/floorplan-3d/pull/7), merge commit
+`c28a1701186d885522b4c80f0ab78ae72bb8768d`. El commit de corrección documental
+y schema fue `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`; la funcionalidad se
+implementó en `fa278a920525fce654ea3c5d8539c0986601edc5`.
 
-F1b queda cerrada por aprobación expresa y merge de Juanma con estas limitaciones visibles; no se afirma que las pruebas pendientes se hayan realizado ni que exista precisión profesional.
+La preview Vercel READY ligada al SHA revisado fue
+[esta deployment](https://floorplan-3d-7n9xg3hqg-juanma-espinosas-projects.vercel.app/).
+Juanma aprobó la PR. Vercel creó automáticamente la deployment de producción
+tras el merge; no hubo despliegue manual.
 
-## Seguimiento de importación (esta rama, aún sin fusionar)
+«Archivo» separa ahora «Importar proyecto JSON» de «Cargar imagen de plano».
+PNG/JPEG siguen admitidos y WebP estático completa decodificación, calibración,
+persistencia y ZIP conservando bytes. PDF, HEIC/HEIF, WebP animado y WebP con
+EXIF siguen sin admitirse. Ver [decisión técnica](../technical/image-formats.md).
 
-La mejora de claridad y WebP estático está implementada para revisión: «Archivo →
-Importar proyecto JSON» y «Cargar imagen de plano (PNG/JPG/WebP)», reutilizando el
-flujo existente. WebP conserva bytes, calibración, IndexedDB y ZIP; 15 MiB/8000 px
-no cambian. [Decisión de formatos](../technical/image-formats.md). PDF, HEIC/HEIF,
-WebP animado y con EXIF siguen no admitidos. Los puntos 1 y 4 del listado anterior
-describen lo pendiente en master al inicio; esta entrega resuelve el punto 1 y la
-ampliación WebP del punto 4, sin reclamar que ya estén fusionados.
+## Verificación y límites
 
-[Roadmap canónico](../ROADMAP.md): F1a/F1b integradas, F2 asistencia **no iniciada**,
-F3 catálogo condicionado. Siguen pendientes cinco planos autorizados, revisión
-humana de esta corrección y teléfono físico. No se repite la implementación F1b.
+Codex reportó para el SHA funcional `fa278a9`: 86/86 pruebas Node, 9/9 Python,
+verificaciones sintácticas y `git diff --check` correctos. Para el commit de
+documentación/schema `cbadb7d`: 59/59 pruebas Node de project/library/tracing,
+10/10 pruebas Python de schema, `node --check js/project-schema.js` y
+`git diff --check` correctos. No se repitió la suite de navegador tras ese
+último commit, que cambió descripciones/documentación del schema y su prueba.
+
+Juanma confirmó que la aplicación funciona en su teléfono. No se registró el
+modelo ni se midió rendimiento físico. Las pruebas de 3D automatizadas usan
+Chromium/SwiftShader y no acreditan rendimiento en un dispositivo.
+
+## Pendientes para continuar
+
+1. Evaluar cinco planos reales autorizados —incluidos un escaneo y una foto
+   móvil— y registrar error de segunda cota, tiempo, correcciones e incidencias
+   en [F1b-five-plans.md](../qa/F1b-five-plans.md).
+2. Medir rendimiento en teléfono físico; la comprobación funcional de Juanma no
+   constituye una medición de rendimiento.
+3. Fijar umbrales de precisión/tiempo antes de iniciar la asistencia F2.
+4. PDF y HEIC/HEIF permanecen diferidos, según la decisión técnica vinculada.

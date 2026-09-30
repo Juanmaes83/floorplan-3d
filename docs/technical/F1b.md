@@ -6,24 +6,31 @@ F1b está integrada en `master` mediante la [PR #6](https://github.com/Juanmaes8
 
 HEAD de código de F1b revisado: `d02d48979f5c0fd1be828aeddfa744f9b7721edd`. Vercel informó deployment de preview READY para ese SHA. La sesión de revisión usó URL compartible temporal, que caduca el 01-10-2026; ver [registro de preview](../qa/F1b-preview.md).
 
-Juanma autorizó explícitamente los merges con estos pendientes:
-- La ruta «Archivo > Importar plano» filtra proyectos JSON. Las imágenes PNG/JPG se cargan mediante «Plano propio > Nuevo desde imagen». Se requiere mejorar las etiquetas/accesos y probar la carga del PNG proporcionado.
-- Evaluación de cinco planos reales autorizados y prueba de rendimiento en móvil físico.
-- PDF, WebP y HEIC/HEIF no están implementados.
+F1b fue aprobada y fusionada. Los seguimientos de claridad de importación y
+WebP estático se integraron después mediante la [PR #7](https://github.com/Juanmaes83/floorplan-3d/pull/7),
+merge commit `c28a1701186d885522b4c80f0ab78ae72bb8768d`. El flujo de Archivo
+distingue importación JSON y carga de imagen; PNG/JPEG continúan admitidos y
+WebP estático completa decodificación, calibración, persistencia y ZIP. PDF,
+HEIC/HEIF y WebP animado/con EXIF siguen diferidos/no admitidos.
 
-Codex reportó 77 pruebas Node y 7 Python aprobadas en su checkout local. No se repitió la suite completa en esta sesión contra la revisión remota final; los checks remotos visibles eran de Vercel. La implementación 3D se probó con Chromium/SwiftShader, que no acredita rendimiento móvil físico.
+Juanma confirmó el 30-09-2026 que la aplicación funciona en su teléfono. No se
+registró modelo de dispositivo ni medición de rendimiento. Siguen pendientes la
+medición de rendimiento físico y la evaluación de cinco planos reales autorizados.
+F2 sigue sin iniciar hasta registrar esa línea base y acordar umbrales.
 
-El [roadmap canónico](../ROADMAP.md) reconcilia la numeración F0 con el texto histórico de PR #2. F2 es asistencia y no está iniciada; F3 es catálogo condicionado.
-
+Codex reportó 86 pruebas Node y 9 Python para el commit funcional `fa278a9`.
+Para el commit documental/schema `cbadb7d`, reportó 59 pruebas Node de
+project/library/tracing y 10 Python de schema; no repitió pruebas de navegador
+tras ese commit.
 ## Base histórica de implementación
 
 La implementación se preparó originalmente sobre `966ab8395dcef2875de0e25337cae9058052ea34`, rama `feat/f1-local-projects-mobile`. F1b se publicó apilada sobre esa base para conservar sus dependencias; tras aprobarse, PR #5 y PR #6 se fusionaron en orden. El merge final incorpora ambos conjuntos de cambios en master.
-## Seguimiento de importación en esta entrega (aún sin fusionar)
+## Seguimiento de importación integrado por PR #7
 
 [Decisión técnica y formatos](image-formats.md): etiquetas explícitas JSON/imagen, acceso
 desde Archivo y WebP estático de extremo a extremo. PDF y HEIC/HEIF diferidos.
 Los pendientes citados en el cierre anterior son históricos: esta entrega resuelve
-la claridad de importación y añade WebP; conserva cinco planos y móvil físico pendientes.
+la claridad de importación y añade WebP; conserva cinco planos y la medición de rendimiento móvil como pendientes.
 
 ## Uso en esta entrega
 
@@ -124,7 +131,7 @@ no se cambia la red. Ver el resultado final ejecutado en la sección de cierre.
 
 ## Revisión humana, pruebas y cierre
 
-Juanma revisó la interfaz desplegada mediante las capturas de escritorio y autorizó el merge. La revisión detectó que «Archivo > Importar plano» abre el selector JSON; esto explica que Windows oculte el PNG. El flujo de imagen separado es «Plano propio» → «Nuevo desde imagen». La carga del PNG adjunto por esa ruta, el uso en móvil físico y la evaluación de cinco planos reales autorizados permanecen pendientes.
+Juanma revisó la interfaz desplegada mediante las capturas de escritorio y autorizó el merge. La revisión detectó que «Archivo > Importar plano» abría el selector JSON, lo que explica que Windows ocultara el PNG. PR #7 separó las acciones y añadió WebP. Juanma confirmó el 30-09-2026 que la aplicación funciona en su teléfono; no se registró el modelo ni se midió rendimiento. La evaluación de cinco planos reales autorizados sigue pendiente.
 
 Codex informó en su checkout:
 - 77/77 pruebas Node aprobadas, sin omisiones.

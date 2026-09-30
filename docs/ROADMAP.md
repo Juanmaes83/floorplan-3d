@@ -1,7 +1,7 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 Actualizado: 30-09-2026. Base integrada verificada: master
-`0f67a63e13e9139117f17200a3d6f8bf97590072`.
+`c28a1701186d885522b4c80f0ab78ae72bb8768d`.
 
 Este documento es la fuente canónica de **numeración, estado y alcance de fases**
 a partir de esta entrega. El contrato canónico de datos sigue siendo
@@ -20,7 +20,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | --- | --- | --- |
 | F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; PR #3 conserva auditoría/decisiones históricas pendientes de reconciliar con master. No se declara aprobada toda F0. |
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
-| F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento UX/WebP en esta rama, aún sin fusionar. Cinco planos autorizados y móvil físico pendientes. |
+| F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **No iniciada.** Requiere medir el flujo manual con cinco planos autorizados y fijar umbrales antes de construir asistencia. |
 | F3 | Catálogo condicionado a permisos/licencias por asset y dimensiones verificadas | Pendiente; sin integración de Asset Lab, IKEA o muebles comerciales en esta entrega. |
 
@@ -57,13 +57,16 @@ Propuesta para las PR documentales abiertas (no se modifican ni cierran aquí):
 2. Juanma debe fijar los umbrales de precisión, tiempo y rendimiento usando esa
    línea base **antes** de construir asistencia. No se adopta el 30 % provisional
    del plan histórico ni se inventa otro umbral en esta tarea.
-3. Probar el flujo y rendimiento en teléfono físico. SwiftShader y emulación
-   táctil solo acreditan comportamiento/renderizado por software.
+3. Juanma confirmó el 30-09-2026 que el flujo funciona en su teléfono físico.
+   No consta el modelo ni una medición de rendimiento; medir rendimiento físico
+   sigue pendiente. SwiftShader y emulación táctil solo acreditan
+   comportamiento/renderizado por software.
 4. PDF y HEIC/HEIF diferidos: [decisión de formatos](technical/image-formats.md).
-   WebP estático se implementa en esta entrega con pruebas del recorrido completo;
+   WebP estático quedó integrado por PR #7 con pruebas del recorrido completo;
    quedan excluidos WebP animado y con EXIF.
-5. Revisar humanamente esta corrección, su PR y una preview vinculada a su SHA.
-   No reutilizar como evidencia una preview del commit F1b anterior.
+5. La corrección de importación fue revisada y aprobada por Juanma antes de
+   fusionar PR #7. La preview de referencia correspondió al SHA
+   `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`.
 
 CRM, cuentas, backend, IA, Asset Lab, precios y publicación de planos a terceros
 no forman parte de este seguimiento F1b. Integraciones futuras requerirán alcance,
