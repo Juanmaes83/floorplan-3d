@@ -171,17 +171,12 @@ F2 bajo pruebas sintéticas con sus limitaciones declaradas. Roadmap actualizado
 en [docs/ROADMAP.md](ROADMAP.md).
 
 
-## Preparación F3 — entrega inicial, sin merge
+## Cierre F3 inicial — PR #12 (30-09-2026)
 
-Rama única `feat/f3-authorized-assets` desde master remoto
-`fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`, checkout inicial limpio; se conserva
-la rama anterior ya integrada por PR #11. Sin PR/rama F3 abierta al inspeccionar.
-Esta entrega **no cierra F3** ni actualiza un registro de merge que no ha ocurrido.
+Juanma aprobó la preview y la [PR #12](https://github.com/Juanmaes83/floorplan-3d/pull/12) se fusionó en `master`. Rama: `feat/f3-authorized-assets`; HEAD revisado: `b3c72d0c6fae1290c9a7b4e449aa388c3f878531`; base: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`; merge commit: `95fcf0da989a9e3bf85f8747c19fc4a9a13426ab`.
 
-El [informe F3](technical/F3-initial.md) recoge alcance, permiso del fixture propio,
-auditoría en solo lectura de Asset Lab, pruebas, medidas y límites. Tras aprobación
-explícita de Juanma y merge real, se añadirá aquí PR, HEAD revisado, SHA fusionado,
-preview revisada/acceso y pendientes aceptados. Hasta entonces no se hace merge ni
-despliegue manual a producción. Si la API de PR/preview está bloqueada, publicar
-la rama igualmente y declarar el bloqueo exacto, sin confundir check de comentarios
-con READY. Cinco/veinte casos F2 siguen pendientes y no bloquean la implementación.
+Vercel confirmó `READY` para el SHA revisado. [Preview protegida](https://floorplan-3d-git-feat-f3-autho-dce6ec-juanma-espinosas-projects.vercel.app/) · [deployment](https://vercel.com/juanma-espinosas-projects/floorplan-3d/F8NcvTSZF37VdrUBi2c7Kqx9W8uw). Juanma realizó la revisión visual. No se hizo despliegue manual a producción.
+
+F3 queda como **entrega inicial integrada; catálogo externo pendiente**. Juanma confirma autorización para usar los assets del proyecto Asset Lab. El informe de inventario F3 registra una auditoría de solo lectura de un commit anterior; volver a comprobar disponibilidad, dimensiones, requisitos técnicos y permisos aplicables por candidato antes de su incorporación. El alcance de PR #12 sigue siendo un fixture sintético propio, genéricos dimensionados, asociación/carga local y fallback.
+
+Codex reportó 120/120 pruebas Node/navegador, 10/10 dirigidas F3 y 41/41 Python; la revisión de merge no repitió esas suites. SwiftShader es renderizado por software y no acredita rendimiento físico. Los siguientes pasos de F3 son auditar el Asset Lab actual y seleccionar modelos con dimensiones verificables, sin cargar assets de terceros desde la app ni cambiar Asset Lab. Las cinco sesiones y los veinte planos F2 siguen pendientes para validación empírica y no bloquean F3.
