@@ -1,6 +1,6 @@
 # F2 — herramienta offline de evaluación geométrica
 
-Estado: **infraestructura de evaluación en preparación y revisión**. F2 permanece
+Estado: **infraestructura integrada; método métrico aprobado por Juanma el 30-09-2026; umbrales de producto pendientes**. F2 permanece
 **prototipo experimental integrado, no validado**. No cambia ni afina el detector,
 la app, FloorPlanProjectV1 o los criterios de producto. Sin nuevas dependencias.
 
@@ -101,7 +101,7 @@ para caber: conservar el conjunto original y preparar lotes con revisiones/alcan
 explícitos si fuera necesario. No sumar promedios de lotes como si fueran métricas
 micro; para el conjunto de veinte habitual cabe un único registro.
 
-## Regla métrica propuesta para revisión (no aprobada por Juanma)
+## Regla métrica aprobada para el comparador (30-09-2026)
 
 Versión reproducible de la regla: `axis-length-capacity-v1`. Se elige **longitud
 cubierta**, no conteo de instancias de muro, para no penalizar cortar un mismo eje
@@ -174,7 +174,7 @@ puede dominar el agregado. No hay umbral de aceptación ni estado automático de
 
 `all_cases_have_reviewed_reference`, `all_analyses_succeeded`, conteos de fallos y
 casos incluidos/excluidos se publican junto al agregado. `f2_validated:false` y
-`rules_status:proposed_for_human_review` son permanentes. El registro completo se
+`rules_status:metric_method_approved_thresholds_pending` son permanentes. El registro completo se
 valida antes de calcular; ningún agregado convierte un caso fallido en éxito.
 
 Se lee solo el JSON local; cálculo sin sockets, red, imágenes ni servicios externos.
@@ -242,14 +242,11 @@ de tiempos manual/asistido, validación humana de métricas ni umbrales aprobado
   privacidad y ausencia de red/lectura de imágenes durante el cálculo.
 - `tests/fixtures/f2-wall-evaluation.synthetic.json` y su README: ejemplo
   procedural calculable a mano, marcado como sintético.
-- Este informe y `docs/qa/F2-entry-protocol.md`: reglas propuestas, marco común,
+- Este informe y `docs/qa/F2-entry-protocol.md`: regla aprobada, marco común,
   preparación privada, comandos/resultados y limitaciones.
 - `docs/ROADMAP.md`: solo infraestructura en preparación/revisión; F2 no validada.
 
-Revisión solicitada: aprobar o ajustar la **definición de métrica** antes de usarla
-para tomar decisiones; después Juanma prepara/revisa en privado referencias,
-registra las cinco sesiones separadas y congela los veinte casos con sus fallos,
-SHA del detector y tolerancia explícita. No se publican sus datos geométricos.
+Decisión de Juanma (30-09-2026): acepta esta **definición de métrica**, incluida la regla de que las diagonales no reciben crédito en este comparador de ejes y permanecen en los denominadores globales. Esta aprobación fija el método del comparador; no fija una tolerancia universal ni umbrales de aceptación del producto. Si se ejecuta una evaluación real, Juanma prepara/revisa en privado las referencias, registra las cinco sesiones separadas y congela los veinte casos con sus fallos, SHA del detector y tolerancia explícita. No se publican sus datos geométricos.
 
 ### Publicación y estado de revisión (actualizado 30-09-2026)
 
@@ -263,4 +260,4 @@ Vercel publicó un deployment **READY** y su API confirma que corresponde a ese 
 
 No hay cambios de interfaz; por tanto, esta URL no sustituye las pruebas de la CLI ni requiere revisión visual de la app. No se hizo despliegue manual ni merge. Mantener la PR en Draft hasta revisar la definición métrica, el evaluador y las pruebas.
 
-La herramienta calcula geometría anónima local; no incluye imágenes ni permisos. Su regla métrica figura como propuesta para revisión humana. Aprobar la implementación o la regla no valida F2 ni fija umbrales de calidad del producto. Antes de usar datos reales, revisar la regla y conservar las imágenes, referencias y registros completos fuera de GitHub/Vercel.
+La herramienta calcula geometría anónima local; no incluye imágenes ni permisos. Juanma aprobó el método métrico el 30-09-2026, incluida la ausencia de crédito para diagonales en este comparador; estas líneas siguen dentro de los denominadores globales. La aprobación del método o de la implementación no valida F2 ni fija umbrales de calidad del producto. Los datos reales no bloquean continuar el desarrollo del prototipo y solo se necesitan para la validación empírica. Conservar imágenes, referencias y registros completos fuera de GitHub/Vercel.
