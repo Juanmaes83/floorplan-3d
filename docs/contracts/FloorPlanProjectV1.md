@@ -229,3 +229,15 @@ a distancia ≤ grosor/2 + 20 mm de muros activos; W3 utiliza la huella orientad
 objeto, su estancia asignada y sólidos de muros descontando huecos. Ningún aviso
 bloquea por sí solo. La propuesta/script ad hoc históricos anteriores se conservan
 como evidencia de F0, no como descripción del código actual.
+
+
+## Uso experimental de procedencia en esta rama F2
+
+Sin cambios al schema 1.2.0 ni migración: el prototipo usa los enums existentes.
+Los candidatos viven solo en memoria, fuera del proyecto/JSON/ZIP. Al aceptar o
+corregir explícitamente se crea un muro F1b con ID estable y
+`source:{method:"suggested",review:"confirmed"}`. Confirmar registra revisión
+humana de ese segmento, no exactitud dimensional ni confirmación de escala.
+La edición posterior conserva `method:"suggested"` y vuelve a `unreviewed`
+hasta nueva confirmación. W1 sigue señalando el origen experimental incluso
+después de revisarlo. [Informe](../technical/F2-wall-assist.md).

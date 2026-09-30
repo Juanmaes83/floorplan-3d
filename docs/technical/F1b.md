@@ -16,7 +16,7 @@ HEIC/HEIF y WebP animado/con EXIF siguen diferidos/no admitidos.
 Juanma confirmó el 30-09-2026 que la aplicación funciona en su teléfono. No se
 registró modelo de dispositivo ni medición de rendimiento. Siguen pendientes la
 medición de rendimiento físico y la evaluación de cinco planos reales autorizados.
-F2 sigue sin iniciar hasta registrar esa línea base y acordar umbrales.
+En el cierre F1b, F2 seguía sin iniciar hasta registrar esa línea base y acordar umbrales.
 
 Codex reportó 86 pruebas Node y 9 Python para el commit funcional `fa278a9`.
 Para el commit documental/schema `cbadb7d`, reportó 59 pruebas Node de
@@ -156,4 +156,6 @@ La base manual de cinco planos autorizados y el conjunto fijo de al menos veinte
 para evaluar asistencia siguen sin estar disponibles en el checkout.
 [Protocolo de preparación](../qa/F2-entry-protocol.md): datos y evidencias permanecen
 en local; el script resume registros anónimos y no lee imágenes ni autoriza F2.
-No se implementa asistencia sin línea base y umbrales explícitos acordados.
+Juanma autorizó después, el 30-09-2026, un prototipo experimental limitado de
+sugerencias locales de muros previo a esa evaluación: [informe de esta rama](F2-wall-assist.md).
+Las puertas siguen pendientes; F2 está en revisión y no validada.

@@ -78,7 +78,7 @@
     for (const k of lists) for (const x of project[k] || []) {
       if (ids.has(x.id)) fail(`/${k}/${x.id}`, 'duplicate ID');
       ids.set(x.id, k);
-      if (x.source?.review === 'unreviewed' || x.source?.method === 'suggested') warnings.push(`${x.id}: geometry not confirmed`);
+      if (x.source?.review === 'unreviewed' || x.source?.method === 'suggested') warnings.push(`${x.id}: ${x.source?.review==='confirmed'?'experimental suggested origin; human review recorded':'geometry not confirmed'}`);
     }
     const ref = (value, kind, path) => { if (ids.get(value) !== kind) fail(path, `missing ${kind} reference ${value}`); };
     const walls = new Map(project.walls.map(w => [w.id, w]));
