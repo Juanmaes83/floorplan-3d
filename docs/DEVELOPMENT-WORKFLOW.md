@@ -142,3 +142,30 @@ PR hacia master, preview del HEAD final y aprobación de Juanma; no se fusiona
 en esta tarea. [Informe, auditoría de coordenadas, tests y evidencia](technical/F2-raw-export.md).
 Cinco sesiones y veinte planos reales no bloquean el desarrollo autorizado;
 siguen pendientes para validar empíricamente F2 y fijar umbrales.
+
+
+## Cierre de exportación cruda F2 — PR #11 (30-09-2026)
+
+Juanma aprobó y se fusionó la [PR #11](https://github.com/Juanmaes83/floorplan-3d/pull/11)
+en `master`. HEAD revisado: `86479409567efb5df180c4d161ec9232059fa210`;
+merge commit: `49ea432f7d8eba75042e00762c902a7d3830040d`. La rama publicada fue
+`feat/f2-local-raw-export`. Se integró exportación voluntaria y local de
+sugerencias crudas, con conversor al evaluador; no incorpora datos privados,
+no hace upload y no altera FloorPlanProjectV1 ni el detector.
+
+Vercel API informó deployment `READY` para el HEAD revisado. La
+[preview](https://floorplan-3d-git-feat-f2-local-0acbc2-juanma-espinosas-projects.vercel.app/)
+requiere autenticación Vercel; por ello no se registra como enlace público ni se
+afirma revisión visual humana completada. No hubo despliegue manual a producción.
+
+Codex reportó: Node/navegador 110/110, schema 10/10, readiness 12/12, evaluador
+16/16, exportación 3/3; sintaxis y diff correctos. No se repitieron las suites
+durante este cierre documental. SwiftShader no acredita rendimiento de GPU ni
+teléfono físico. Los resultados y límites quedan en
+[el informe técnico](technical/F2-raw-export.md).
+
+Estado tras el merge: F2 continúa **experimental, no validada empíricamente**.
+Las cinco sesiones y veinte planos con referencias, junto con los umbrales y
+mediciones reales, son puertas de validación; no bloquean seguir implementando
+F2 bajo pruebas sintéticas con sus limitaciones declaradas. Roadmap actualizado
+en [docs/ROADMAP.md](ROADMAP.md).
