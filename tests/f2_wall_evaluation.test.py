@@ -113,6 +113,7 @@ class WallEvaluationTests(unittest.TestCase):
         row = case(predictions=[segment(), segment(1, (0, 0), (30, 40))],
                    references=[segment(), segment(1, (0, 0), (30, 40))])
         report = metrics(row)
+        self.assertEqual(evaluator.evaluate(records([row]), 1)['rules_status'], 'metric_method_approved_thresholds_pending')
         self.assertEqual(report['reference_length_mm'], 150)
         self.assertAlmostEqual(report['precision_length'], 2/3)
         self.assertAlmostEqual(report['recall_length_all_orientations'], 2/3)
