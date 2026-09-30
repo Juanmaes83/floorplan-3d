@@ -30,7 +30,12 @@ class ContractTests(unittest.TestCase):
             ['node', '-e', "console.log(JSON.stringify(require('./js/project-core.js').initial()))"], cwd=ROOT)
         self.validator.validate(json.loads(raw))
 
-    def test_schema_sources_have_unique_keys_and_match(self):
+    def test_json_duplicate_key_guard_rejects_duplicates(self):
+        with self.assertRaisesRegex(ValueError, 'Clave JSON duplicada'):
+            json.loads('{"duplicate": 1, "duplicate": 2}',
+                       object_pairs_hook=reject_duplicate_keys)
+
+    def test_js_schema_matches_canonical_and_scale_has_one_verification_ref(self):
         js_schema = json.loads(subprocess.check_output(
             ['node', '-e', "process.stdout.write(JSON.stringify(require('./js/project-schema.js')))"],
             cwd=ROOT))
@@ -39,8 +44,10 @@ class ContractTests(unittest.TestCase):
         source = (ROOT / 'js/project-schema.js').read_text()
         defs_start = source.index('  "$defs": {')
         scale_start = source.index('    "scale": {', defs_start)
-        scale_end = source.index('\\n    "verification": {', scale_start)
-        scale_source = source[scale_start:scale_end]
+        scale_tail = source[scale_start:]
+        boundary = re.search(r'(?m)^    "verification": \{', scale_tail)
+        self.assertIsNotNone(boundary)
+        scale_source = scale_tail[:boundary.start()]
         verification_keys = re.findall(r'(?m)^        "verification":', scale_source)
         self.assertEqual(len(verification_keys), 1)
         self.assertIn('"verification": { "$ref": "#/$defs/verification" }', scale_source)
