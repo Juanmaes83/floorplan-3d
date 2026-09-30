@@ -477,7 +477,35 @@ const ES_TEXT = {
   "Snap furniture to walls while dragging": "Ajustar los muebles a los muros al arrastrar",
   "3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan": "3 dormitorios · 2 salones · 2 baños · Plano de referencia"
 };
-const tr = (zh, en) => LANG === 'en' ? en : LANG === 'es' ? (ES_TEXT[en] ?? en) : zh;
+const tr = (zh, en) => LANG === 'en' ? en : LANG === 'es' ? translateEs(zh, en) : zh;
+function translateEs(zh, en){
+  if (ES_TEXT[en]) return ES_TEXT[en];
+  let m;
+  if ((m=en.match(/^Net floor area ≈ (.+) m² · Units: mm · Original scale 1:60$/))) return `Superficie útil aprox. ${m[1]} m² · Unidades: mm · Escala original 1:60`;
+  if ((m=en.match(/^Wall area \(2\.8m ceiling, openings not deducted\) ≈ (.+) m²$/))) return `Superficie de muros aprox. ${m[1]} m² (altura: 2,8 m; sin descontar puertas ni ventanas)`;
+  if ((m=en.match(/^(\d+) items$/))) return `${m[1]} elementos`;
+  if ((m=en.match(/^Remove all (\d+) furniture \/ appliance items\?\nWalls, flooring and measurements are kept\. You can Undo this\.$/))) return `¿Retirar los ${m[1]} muebles o electrodomésticos?\nSe conservan los muros, pavimentos y mediciones. Puedes deshacerlo.`;
+  if ((m=en.match(/^Added "(.+)" (\d+)×(\d+)$/))) return `Añadido «${m[1]}» ${m[2]}×${m[3]}`;
+  if ((m=en.match(/^Marked (\d+) mm of wall for removal$/))) return `Muro de ${m[1]} mm marcado para retirar`;
+  if (en.startsWith('Furniture is drawn at real size (mm). ')){
+    const touch=en.includes('Tap to place at the center');
+    return `Los muebles se dibujan a tamaño real (mm). ${touch ? 'Pulsa para colocarlos en el centro o mantén pulsado y arrástralos al plano o al suelo 3D (desliza arriba o abajo para recorrer la biblioteca).' : 'Pulsa para añadir al centro o arrástralos al plano o al suelo 3D.'} Después puedes cambiar sus medidas y color en el panel derecho.`;
+  }
+  if (en.startsWith('<section><h3>Touch Controls</h3>')) return `<section><h3>Controles táctiles</h3><div class="kbd">
+    <kbd>Arrastrar con un dedo</kbd><span>Desplaza el plano en un espacio vacío</span><kbd>Dos dedos</kbd><span>Pellizca para ampliar y arrastra para desplazar</span>
+    <kbd>Biblioteca</kbd><span>Pulsa para colocar en el centro o mantén pulsado y arrastra hasta el lugar deseado</span>
+    <kbd>Pulsar un mueble</kbd><span>Arrastra para mover; usa el punto superior para girar y el tirador inferior derecho para cambiar el tamaño</span>
+    <kbd>Barra de herramientas</kbd><span>La barra inferior permite girar, duplicar o eliminar</span>
+    <kbd>Medir</kbd><span>Mantén pulsado y arrastra una línea, o marca dos puntos</span>
+    <kbd>Recorrido 3D</kbd><span>Muévete con el joystick, arrastra para mirar y pulsa las puertas para abrirlas</span>
+  </div></section>`;
+  if (en.startsWith('<section><h3>Keyboard Shortcuts</h3>')) return `<section><h3>Atajos de teclado</h3><div class="kbd">
+    <kbd>Arrastrar</kbd><span>Arrastra muebles al plano</span><kbd>V</kbd><span>Seleccionar / mover</span><kbd>M</kbd><span>Medir (Mayús: horizontal/vertical)</span>
+    <kbd>X</kbd><span>Modificar muros sin carga (negro = muro de carga)</span><kbd>R</kbd><span>Girar 90° (Mayús invierte el sentido)</span><kbd>Flechas</kbd><span>Ajustar 10 mm (Mayús: 100 mm)</span>
+    <kbd>⌘/Ctrl D</kbd><span>Duplicar</span><kbd>Delete</kbd><span>Eliminar</span><kbd>⌘/Ctrl Z</kbd><span>Deshacer</span><kbd>T</kbd><span>Cambiar entre 2D / 3D</span><kbd>F</kbd><span>Ajustar a la ventana</span><kbd>Esc</kbd><span>Cancelar selección</span>
+  </div></section>`;
+  return en;
+}
 // 内置的房间 / 材料 / 家具名称存的是中文；英文界面下显示译名，用户自己改过的名称原样显示
 const NAMES_EN = {
   '主卧室':'Master Bedroom', '主卫浴':'Master Bath', '小孩房':"Kids' Room", '客卫浴':'Guest Bath', '洗衣阳台':'Laundry Balcony',
