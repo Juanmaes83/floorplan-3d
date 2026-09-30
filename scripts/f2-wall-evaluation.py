@@ -1,4 +1,4 @@
-"""Offline length-based wall evaluation; metric rules proposed for human review."""
+"""Offline length-based wall evaluation; approved metric method, product thresholds pending."""
 import argparse
 import importlib.util
 import json
@@ -198,7 +198,7 @@ def evaluate(data, tolerance):
                     key = case['id'] + ':' + segment['id']
                     target.append({**segment, 'id': key}); target_matched[key] = matched[segment['id']]
         cases.append(report)
-    return {'metric_version': 'axis-length-capacity-v1', 'rules_status': 'proposed_for_human_review',
+    return {'metric_version': 'axis-length-capacity-v1', 'rules_status': 'metric_method_approved_thresholds_pending',
             'record_version': 1, 'dataset_id': data['dataset_id'], 'detector_commit': data['detector_commit'],
             'units': 'mm', 'coordinate_frame': 'image-aligned-mm', 'data_kind': data['data_kind'], 'tolerance_mm': tolerance,
             'f2_validated': False, 'cases': cases,
