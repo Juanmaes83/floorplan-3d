@@ -86,7 +86,7 @@ test('file handler rejects invalid inputs atomically with visible element-specif
   for(const [i,change]of mutations.entries()){
     const value=change(Core.clone(example)),buffer=Buffer.from(typeof value==='string'?value:JSON.stringify(value));
     await page.locator('#fileIn').setInputFiles({name:`invalid-${i}.json`,mimeType:'application/json',buffer});
-    await page.waitForTimeout(100);assert.match(await page.locator('#toast').textContent(),/Import rejected|无法导入/);
+    await page.waitForTimeout(100);assert.match(await page.locator('#toast').textContent(),/Import rejected|无法导入|Importación rechazada/);
     const after=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),saved:localStorage.getItem('rubik-sota-floorplan-project-v1'),html:document.querySelector('#plan').outerHTML}));assert.deepEqual(after,before);
   }assert.deepEqual(errors,[]);
 });
@@ -146,4 +146,66 @@ test('3D renders the same project, follows imported geometry and returns to 2D',
   const east=await page.evaluate(()=>View3D.wallMeshes.find(w=>w.id==='wal_ext-east'));
   assert.ok(Math.abs(east.dimensions.width-Math.hypot(1,4))<1e-8);assert.ok(Math.abs(east.angle+Math.atan2(4,1))<1e-8);
   await page.click('[data-view="2d"]');await page.waitForFunction(()=>!document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));assert.equal(await page.locator('#gRooms polygon.room').count(),2);assert.deepEqual(errors,[]);
+});
+
+// F1 completion tests: run with --test-name-pattern='F1 completion'.
+test('F1 completion: local project UI, reload, isolation, confirmation and full import/export',async t=>{
+ const {page,errors}=await pageFor(t);
+ assert.equal(await page.locator('html').getAttribute('lang'),'es');assert.equal(await page.title(),'Rubik Sota Floor Plan Designer');
+ assert.ok(!(await page.locator('#panel').textContent()).includes('¥'));
+ await page.click('.item[data-key="0:0"]');await page.click('#projectsBtn');await page.fill('#projectName','<img src=x onerror=alert(1)>');await page.click('#projectRename');
+ await page.fill('#projectName','Second');await page.click('#projectCreate');await page.click('#projectClose');assert.equal(await page.locator('#gFurn .furn').count(),46);
+ await page.locator('#fileIn').setInputFiles({name:'example.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(example))});await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);
+ assert.deepEqual(JSON.parse((await readDownload(page,'#exportJson')).toString()),example);
+ const snapshot=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')}));
+ const invalid=Core.clone(example);invalid.openings[0].wallId='wal_missing';
+ await page.locator('#fileIn').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('rechazada'));
+ assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')})),snapshot);
+ await page.reload();assert.equal(await page.locator('#gRooms polygon.room').count(),2);
+ await page.click('#projectsBtn');await page.fill('#projectName','Copy');await page.click('#projectDuplicate');assert.equal(await page.locator('#projectList option').count(),3);
+ const ids=await page.locator('#projectList option').evaluateAll(es=>es.map(e=>e.value));await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);
+ page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),2);await page.click('#projectClose');
+ await page.reload();assert.equal(await page.locator('#gFurn .furn').count(),47);assert.equal(await page.locator('img').count(),0);assert.deepEqual(errors,[]);
+});
+async function softwareModules(page,t){
+ t.diagnostic('3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.');
+ const cache=new Map();await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async r=>{const target=r.request().url();if(!cache.has(target))cache.set(target,(await verifiedFetch('curl',['--fail','--silent','--show-error','--max-time','20',target],{maxBuffer:4*1024*1024})).stdout);await r.fulfill({status:200,contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:cache.get(target)});});
+}
+for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 completion: touch 2D/3D ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
+ const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
+ await page.locator('#tgLib').tap();await page.locator('.item[data-key="0:0"]').tap();assert.equal(await page.locator('#gFurn .furn').count(),47);
+ await page.locator('#aRot').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
+ await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-2d.png`});
+ await page.locator('[data-view="3d"]').tap();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
+ assert.equal(await page.locator('aside.open').count(),0);
+ const result=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),r=canvas.getBoundingClientRect(),small=document.createElement('canvas');small.width=small.height=32;const c=small.getContext('2d');c.drawImage(canvas,0,0,32,32);return {ratio:r.height/innerHeight,width:r.width,overflow:document.documentElement.scrollWidth>innerWidth,colors:new Set(c.getImageData(0,0,32,32).data).size,same:View3D.renderedSource===FloorPlanApp.project};});
+ t.diagnostic(JSON.stringify(result));assert.ok(result.ratio>=.6);assert.ok(result.width>300);assert.ok(result.colors>20);assert.equal(result.overflow,false);assert.equal(result.same,true);
+ await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-3d.png`});
+ const prior=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());
+ const session=await context.newCDPSession(page),box=await page.locator('#view3d canvas').boundingBox(),x=box.x+box.width*.5,y=box.y+box.height*.3;
+ await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+ for(let i=1;i<=8;i++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
+ await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(400);
+ assert.notEqual(await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL()),prior);
+ await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-orbit.png`});
+ const rotated={width:viewport.height,height:viewport.width};await page.setViewportSize(rotated);await page.waitForTimeout(300);
+ assert.ok(await page.evaluate(()=>document.querySelector('#view3d canvas').getBoundingClientRect().height/innerHeight>=.6));
+ await page.setViewportSize(viewport);await page.waitForTimeout(300);
+ await page.locator('#tgPanel').tap();assert.ok(await page.locator('#panel').isVisible());assert.ok(!(await page.locator('#panel').textContent()).includes('¥'));await page.locator('#tgPanel').tap();
+ await page.locator('[data-view="2d"]').tap();await page.waitForFunction(()=>!document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));assert.equal(await page.locator('#gFurn .furn').count(),47);assert.deepEqual(errors,[]);
+});
+test('F1 completion: no WebGL gives readable message and keeps 2D editable', {timeout:90000},async t=>{
+ const context=await browser.newContext();t.after(()=>context.close());await context.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(type==='webgl'||type==='webgl2'||type==='experimental-webgl')return null;return get.call(this,type,...args);};});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);await page.click('[data-view="3d"]');
+ assert.match(await page.locator('#toast').textContent(),/Puedes seguir trabajando en 2D/);assert.equal(await page.evaluate(()=>document.body.classList.contains('busy')||document.body.classList.contains('m3d')),false);
+ await page.click('.item[data-key="0:0"]');assert.equal(await page.locator('#gFurn .furn').count(),47);await page.click('#undo');assert.equal(await page.locator('#gFurn .furn').count(),46);assert.deepEqual(errors,[]);
+});
+
+test('F1 completion: collection adopts F1a migration and preserves both historical keys',async t=>{
+ const legacy={furniture:[{id:'fold-001',type:'bed',name:'old',cx:1000,cy:1000,w:1500,d:2000,rot:0,color:'#c9d6df'}],rooms:{},demolished:['w29'],measures:[]};
+ const {page,errors}=await pageFor(t,{},legacy);const initial=await page.evaluate(()=>({p:FloorPlanApp.project,legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')}));
+ await page.click('#projectsBtn');await page.fill('#projectName','Migrado');await page.click('#projectRename');await page.click('#projectClose');await page.reload();
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),initial.p);
+ assert.deepEqual(await page.evaluate(()=>({legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')})),{legacy:initial.legacy,v1:initial.v1});assert.deepEqual(errors,[]);
 });
