@@ -1,0 +1,295 @@
+{
+  "schema": "rubik-sota.floorplan-project",
+  "schemaVersion": "1.1.0",
+  "id": "prj_f44e0360d2c04d95b89c365d6048c6ec",
+  "name": "Ejemplo sintético F1b",
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-09-30T11:40:11.333Z",
+  "units": "mm",
+  "coordinateSystem": {
+    "origin": "plan-top-left",
+    "xAxis": "right",
+    "yAxis": "down",
+    "rotation": "degrees-clockwise"
+  },
+  "scale": {
+    "confidence": "real",
+    "method": "known-dimension",
+    "calibration": {
+      "sourceImageId": "img_synthetic",
+      "pointA": {
+        "x": 50,
+        "y": 50
+      },
+      "pointB": {
+        "x": 450,
+        "y": 50
+      },
+      "knownLengthMm": 4000,
+      "mmPerPixel": 10,
+      "calibratedAt": "2026-09-30T11:40:11.332Z",
+      "confirmedByUser": true
+    },
+    "verification": {
+      "sourceImageId": "img_synthetic",
+      "pointA": {
+        "x": 50,
+        "y": 250
+      },
+      "pointB": {
+        "x": 450,
+        "y": 250
+      },
+      "knownLengthMm": 4000,
+      "measuredLengthMm": 4000,
+      "errorPercent": 0,
+      "thresholdPercent": 2,
+      "status": "consistent",
+      "verifiedAt": "2026-09-30T11:40:11.333Z"
+    }
+  },
+  "defaults": {
+    "wallHeightMm": 2800,
+    "wallThicknessMm": 240
+  },
+  "walls": [
+    {
+      "id": "wal_54a4e71a552a413895b889c8c7e33565",
+      "start": {
+        "x": 400,
+        "y": 400
+      },
+      "end": {
+        "x": 4400,
+        "y": 400
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_b7edb8aa20a540d2955e58f5ecac6561",
+      "start": {
+        "x": 4400,
+        "y": 400
+      },
+      "end": {
+        "x": 4400,
+        "y": 2800
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_da38a48171f14d04a2fc6f14e7b1818e",
+      "start": {
+        "x": 4400,
+        "y": 2800
+      },
+      "end": {
+        "x": 400,
+        "y": 2800
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "wal_334b66d9f923484e827fd80a43675626",
+      "start": {
+        "x": 400,
+        "y": 2800
+      },
+      "end": {
+        "x": 400,
+        "y": 400
+      },
+      "thicknessMm": 240,
+      "heightMm": 2800,
+      "structure": "unknown",
+      "status": "new",
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "openings": [
+    {
+      "id": "opn_b6f9ddfafe984c1d91b29cedd6af0990",
+      "wallId": "wal_54a4e71a552a413895b889c8c7e33565",
+      "kind": "door",
+      "offsetMm": 1600,
+      "widthMm": 800,
+      "heightMm": 2100,
+      "sillHeightMm": 0,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      },
+      "swing": {
+        "hinge": "start",
+        "side": "left"
+      }
+    },
+    {
+      "id": "opn_52404b60a06d4e81a828c243af143da1",
+      "wallId": "wal_b7edb8aa20a540d2955e58f5ecac6561",
+      "kind": "window",
+      "offsetMm": 800,
+      "widthMm": 800,
+      "heightMm": 1200,
+      "sillHeightMm": 900,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "rom_d4b0b0af17af4b31be9ab098becc690d",
+      "name": "Estancia",
+      "polygon": [
+        {
+          "x": 400,
+          "y": 400
+        },
+        {
+          "x": 4400,
+          "y": 400
+        },
+        {
+          "x": 4400,
+          "y": 2800
+        },
+        {
+          "x": 400,
+          "y": 2800
+        }
+      ],
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat_wood",
+      "name": "橡木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#d8b88a",
+        "preset": "wood"
+      }
+    },
+    {
+      "id": "mat_walnut",
+      "name": "胡桃木地板",
+      "category": "floor",
+      "appearance": {
+        "color": "#9b7250",
+        "preset": "walnut"
+      }
+    },
+    {
+      "id": "mat_tile800",
+      "name": "800 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#ebe6dc",
+        "preset": "tile-800"
+      }
+    },
+    {
+      "id": "mat_tile600",
+      "name": "600 地砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#dfe3e1",
+        "preset": "tile-600"
+      }
+    },
+    {
+      "id": "mat_marble",
+      "name": "大理石",
+      "category": "floor",
+      "appearance": {
+        "color": "#f1eee8",
+        "preset": "marble"
+      }
+    },
+    {
+      "id": "mat_antislip",
+      "name": "300 防滑砖",
+      "category": "floor",
+      "appearance": {
+        "color": "#d3d8d4",
+        "preset": "tile-300"
+      }
+    },
+    {
+      "id": "mat_terrazzo",
+      "name": "水磨石",
+      "category": "floor",
+      "appearance": {
+        "color": "#e6dfd3",
+        "preset": "terrazzo"
+      }
+    },
+    {
+      "id": "mat_carpet",
+      "name": "满铺地毯",
+      "category": "floor",
+      "appearance": {
+        "color": "#c9c3d3",
+        "preset": "carpet"
+      }
+    }
+  ],
+  "objects": [],
+  "measurements": [],
+  "sourceImages": [
+    {
+      "id": "img_synthetic",
+      "mediaType": "image/png",
+      "widthPx": 480,
+      "heightPx": 320,
+      "bytes": 1676,
+      "sha256": "caf740447fee0471b645667d8192faa94989e8ca9022696a8e194d070fd1f728",
+      "storage": {
+        "kind": "sidecar-file",
+        "ref": "images/img_synthetic.png"
+      },
+      "placement": {
+        "originMm": {
+          "x": 0,
+          "y": 0
+        },
+        "rotationDeg": 0,
+        "mmPerPixel": 10
+      },
+      "visible": true,
+      "opacity": 0.55
+    }
+  ]
+}

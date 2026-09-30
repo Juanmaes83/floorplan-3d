@@ -21,6 +21,9 @@ class ContractTests(unittest.TestCase):
     def test_valid_f0_example(self):
         self.validator.validate(json.loads((ROOT / 'docs/contracts/examples/floorplan-project-v1.example.json').read_text()))
 
+    def test_f1b_example(self):
+        self.validator.validate(json.loads((ROOT / 'docs/contracts/examples/floorplan-project-v1.f1b.example.json').read_text()))
+
     def test_invalid_f0_example(self):
         errors = list(self.validator.iter_errors(json.loads((ROOT / 'docs/contracts/examples/floorplan-project-v1.invalid.example.json').read_text())))
         # Ajv reports an additional synthetic `if` error. Assert the actual rejected fields.

@@ -117,6 +117,26 @@
       const d=Math.hypot(c.pointB.x-c.pointA.x,c.pointB.y-c.pointA.y), expected=c.knownLengthMm/d;
       if (!d || !Number.isFinite(expected) || Math.abs(c.mmPerPixel-expected)/expected>0.001) fail('/scale/calibration/mmPerPixel', 'inconsistent calibration');
     }
+    const v=project.scale.verification;
+    if(c){
+      const image=(project.sourceImages||[]).find(i=>i.id===c.sourceImageId);
+      for(const p of [c.pointA,c.pointB])if(p.x>image.widthPx||p.y>image.heightPx)fail('/scale/calibration','point outside source image');
+    }
+    if(v){
+      if(!c||v.sourceImageId!==c.sourceImageId)fail('/scale/verification','verification must use calibrated source image');
+      const image=project.sourceImages.find(i=>i.id===v.sourceImageId);
+      for(const p of [v.pointA,v.pointB])if(p.x>image.widthPx||p.y>image.heightPx)fail('/scale/verification','point outside source image');
+      const same=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<1e-7;
+      if((same(v.pointA,c.pointA)&&same(v.pointB,c.pointB))||(same(v.pointA,c.pointB)&&same(v.pointB,c.pointA)))fail('/scale/verification','requires an independent second distance');
+      if(image.placement&&Math.abs(image.placement.mmPerPixel-c.mmPerPixel)/c.mmPerPixel>.001)fail('/scale/calibration','placement scale differs from calibration');
+      const distance=Math.hypot(v.pointB.x-v.pointA.x,v.pointB.y-v.pointA.y),measured=Math.round(distance*c.mmPerPixel);
+      if(!distance||measured!==v.measuredLengthMm)fail('/scale/verification/measuredLengthMm','inconsistent second distance');
+      const error=(measured-v.knownLengthMm)/v.knownLengthMm*100;
+      if(Math.abs(v.errorPercent-error)>1e-7)fail('/scale/verification/errorPercent','inconsistent error');
+      if(v.status!==(Math.abs(error)<=v.thresholdPercent?'consistent':'discrepant'))fail('/scale/verification/status','inconsistent verification status');
+      if(Date.parse(v.verifiedAt)<Date.parse(c.calibratedAt))fail('/scale/verification/verifiedAt','earlier than calibration');
+      if(project.scale.confidence==='real'&&(v.status!=='consistent'||c.confirmedByUser!==true))fail('/scale/confidence','real requires consistent verification and explicit confirmation');
+    }
     if (Date.parse(project.updatedAt)<Date.parse(project.createdAt)) fail('/updatedAt', 'earlier than createdAt');
     if (project.scale.confidence !== 'real') warnings.push('Dimensions are approximate: scale not confirmed.');
     return {warnings};
@@ -232,7 +252,8 @@
       if(at<length) walls.push(wallRect(w,at,length-at));
     }
     const rooms=p.rooms.map(r=>({id:r.id,name:r.name,poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
-    const points=[...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
+    const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
+    const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const v of points){minX=Math.min(minX,v.x);minY=Math.min(minY,v.y);maxX=Math.max(maxX,v.x);maxY=Math.max(maxY,v.y);}
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};

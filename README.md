@@ -99,5 +99,18 @@ La colección es local a este navegador y origen; no se sincroniza entre disposi
 Exporta cada proyecto como JSON para conservar una copia independiente.
 
 F1a está integrada desde la PR #4. Esta entrega completa proyectos, español/marca,
-uso móvil y el aviso sin WebGL. Imagen, calibración y trazado siguen pendientes en F1b.
+uso móvil y el aviso sin WebGL. La implementación F1b para revisión se describe a continuación; su aceptación humana sigue pendiente.
 Véase [documentación de esta entrega](docs/technical/F1-local-projects-mobile.md).
+
+## Plano propio (F1b para revisión)
+
+«Plano propio» permite importar PNG/JPG local, calibrar con dos puntos y una
+distancia en milímetros, verificar una segunda cota y trazar muros, huecos y estancias.
+Usa «Navegar» para desplazar/ampliar y «Seleccionar/editar» para corregir geometría.
+Las medidas son orientativas; no hay detección automática ni garantía profesional.
+
+Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
+y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
+personales antes de compartirlo. Máximo 15 MiB y 8000 px de lado por imagen.
+Consulta [uso, límites y pruebas](docs/technical/F1b.md) y la
+[evaluación humana pendiente](docs/qa/F1b-five-plans.md).
