@@ -110,3 +110,14 @@ validar/completar F2 ni elimina las puertas del roadmap. Una sola rama
 PR hacia master y revisión/aprobación humana obligatoria; sin merge en esta tarea.
 El estado en master solo se actualizará tras merge aprobado.
 Resultados, capturas y publicación: [informe experimental](technical/F2-wall-assist.md).
+
+
+## Cierre del prototipo experimental F2 — PR #9 (30-09-2026)
+
+Juanma aprobó la revisión y la [PR #9](https://github.com/Juanmaes83/floorplan-3d/pull/9) se fusionó a `master` con merge commit `10f7439b3fc86b0a0bd325d94531709d45cbcad4`. El HEAD revisado fue `3e3e6117770d97cb6e82f73fa06613d31a506019).
+
+La preview de Vercel quedó `READY` y el deployment API confirmó ese mismo SHA y la rama `feat/f2-local-wall-assist`: [preview](https://floorplan-3d-git-feat-f2-local-82705b-juanma-espinosas-projects.vercel.app/) · [inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/DCTag9Sc5JH4j3sce8sA6LLZN9Wn). Vercel Authentication protege la preview. Para la revisión se generó un enlace temporal de acceso; caduca y no debe tratarse como URL pública permanente. Juanma aprobó la PR después de la revisión.
+
+Verificación reportada: la suite completa dio 98/98 antes del último ajuste localizado; la repetición dirigida final F2 fue 13/13, además de 10/10 schema y 12/12 recorder. La suite completa no se repitió tras ese ajuste. 3D se probó con SwiftShader; no acredita rendimiento en GPU/teléfono físico ni precisión con planos reales. No hubo despliegue manual a producción.
+
+El estado de F2 es **prototipo experimental integrado, no validado**. La siguiente etapa es la evaluación, no añadir más automatización: reunir en privado las cinco sesiones manuales autorizadas y un conjunto fijo separado de al menos veinte planos autorizados con geometría/cotas de referencia; congelar la versión y acordar umbrales antes de afirmar precisión, mejora temporal o cobertura. Las imágenes, cotas, permisos y correspondencias privadas no se suben a GitHub ni a Vercel.
