@@ -138,3 +138,9 @@ precisión profesional. [Matriz de cinco planos](../qa/F1b-five-plans.md): vací
 - No se acredita rendimiento de GPU/móvil físico ni los cinco planos reales.
 - No hay workflows CI en la base ni se añadió un servicio de CI. Estado remoto de
   checks y PR/deployment no verificable por el bloqueo de API y falta de acceso Vercel.
+
+Publicación: código en 9cd74a59fdb6db14ee132674df974e6c71a3057d, rama
+feat/f1b-image-calibration-tracing. El cierre documental posterior no cambia código.
+POST REST para abrir PR fue rechazado con Forbidden; no se insiste por GraphQL.
+La conexión sin autenticar a la preview histórica de la base fue bloqueada por
+el proxy con CONNECT 403: no se acredita protección de Vercel ni preview F1b.

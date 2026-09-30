@@ -17,3 +17,9 @@ F2 (interpretación asistida), F3 (catálogos), PDF, backend y producción sigue
 El encargo autoriza expresamente la entrega apilada como excepción al avance
 secuencial de DEVELOPMENT-WORKFLOW.md. No altera sus reglas de revisión humana,
 merge y cierre documental, ni declara cerrada la base todavía abierta.
+
+Publicación técnica: rama feat/f1b-image-calibration-tracing subida sin force push.
+PR todavía no creada: POST REST a api.github.com rechazado con Forbidden.
+Preview F1b/READY/protección todavía no verificables. Próximo paso externo: abrir
+la PR apilada contra #5 y obtener un deployment asociado al SHA final antes de
+revisión humana. La implementación no se declara formalmente aceptada ni cerrada.
