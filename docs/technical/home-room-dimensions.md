@@ -1,6 +1,6 @@
 # Viviendas y dimensiones de estancias — entrega post-F3
 
-Estado: implementación preparada para revisión; no aprobada ni fusionada.
+Estado: aprobada por Juanma y fusionada en master mediante la PR #18.
 Fecha: 01-10-2026. Rama: `feat/home-room-dimensions`.
 Base remota comprobada: `master` @ `19fbd5f90b1766580eb1c0ae45cc2827d69404e7`.
 Checkout inicial limpio en la rama F3 @ `772e24c`; trabajo previo conservado.
@@ -113,33 +113,19 @@ referencia al alias de rama; ese check no acredita las regresiones ni READY.
 La [referencia de preview encontrada en ese check](https://floorplan-3d-git-feat-home-roo-573ef9-juanma-espinosas-projects.vercel.app/)
 es un alias mutable: **no se certifica como deployment inmutable del SHA final**.
 
-### Bloqueos externos de publicación de revisión
+### Publicación, PR y revisión humana
 
-El push Git normal funcionó. La creación autorizada de PR REST falló:
-`Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
-No se insistió con GraphQL ni se cambiaron permisos/red. No se abrió ni fusionó
-una PR en este entorno. Se deja [el enlace de creación hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/home-room-dimensions?expand=1)
-y todo el trabajo publicado en la misma rama.
+La [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18) se creó y fusionó por squash tras la aprobación de Juanma. HEAD aprobado: `c7d1b81e1f6456a9485c88f88723a6fd0fd7fe66`; merge en master: `10e9f96b417f866d45088fede039786180ddce95`.
 
-Comprobar el alias desde una sesión nueva sin autenticar dio:
+Vercel confirmó `READY` para el SHA aprobado, deployment `dpl_4NS1VpLdy1ABhYsksQ3vXFcNfk93`. Alias de la preview protegida: [revisión post-F3](https://floorplan-3d-git-feat-home-roo-573ef9-juanma-espinosas-projects.vercel.app/). La revisión humana se habilitó mediante un enlace temporal que caduca; el alias por sí solo puede requerir acceso Vercel. No se ejecutó despliegue manual a producción.
 
-- `curl -I --max-time 20 <alias>`: `CONNECT tunnel failed, response 403`.
-- Playwright/Chromium, contexto nuevo sin cookies: `net::ERR_TUNNEL_CONNECTION_FAILED`.
-- GET público a GitHub API para estado del commit: HTTP 403.
+La suite Node completa se ejecutó antes del ajuste de una expectativa histórica: 159/160. Tras corregir únicamente esa expectativa, pasó la prueba afectada 1/1 y las pruebas dirigidas finales 25/25; **no se repitió la suite completa después del ajuste**. Python fue 41/41. Esta limitación se conserva en el registro; no se declara una ejecución agregada final que no ocurrió.
 
-No se verifican acceso de la persona invitada, protección de autenticación,
-READY ni URL inmutable del SHA final. No hay enlace temporal autorizado disponible.
-Estos requisitos de revisión quedan **pendientes**, junto con la apertura de PR;
-no se presenta el trabajo como completamente entregado ni visualmente aprobado.
-No se ejecuta merge ni despliegue manual a producción. Las capturas sintéticas están en
-[artifacts/home-room-dimensions](../qa/artifacts/home-room-dimensions/).
-El 3D local usa Chromium/SwiftShader: renderizado por software, sin acreditar
-rendimiento de móvil físico. READY de Vercel no equivale a revisión visual.
-
-F3 permanece cerrado y no se modifica su catálogo/pipeline. F2 conserva su estado
-experimental: cinco sesiones y veinte planos reales siguen pendientes.
+La aprobación humana cierra esta entrega dentro del alcance rectangular y ortogonal especificado. No equivale a validar rendimiento en un dispositivo físico ni a cubrir geometrías no soportadas. Vercel READY identifica un deployment, no sustituye la revisión humana.
 
 ## Revisión de Juanma
+
+Juanma aprobó visualmente la preview de la PR #18 el 01-10-2026. La lista siguiente recoge los flujos de revisión definidos; no representa una medición física de rendimiento.
 
 1. Nuevo proyecto → plano vacío → crear y nombrar una habitación.
 2. Añadir otra a la derecha/debajo; verificar medidas y pared compartida.
@@ -151,3 +137,10 @@ experimental: cinco sesiones y veinte planos reales siguen pendientes.
    comprobar independencia; descargar JSON y ZIP, importarlos y revisar 2D/3D.
 6. Repetir en escritorio y teléfono vertical/horizontal. Revisión física y
    aprobación humana pendientes; no se fusiona en esta tarea.
+
+
+## Cierre y estado integrado
+
+La entrega quedó integrada en master el 01-10-2026 por la PR #18, merge squash `10e9f96b417f866d45088fede039786180ddce95`. El commit funcional aprobado fue `c7d1b81e1f6456a9485c88f88723a6fd0fd7fe66`. La preview READY correspondió a ese SHA. La rama de trabajo ya está fusionada; no hubo despliegue manual a producción.
+
+La siguiente tarea de organización es reconciliar la documentación histórica de F0 en la PR #3 existente, sin restaurar el contrato o schema antiguos. No se asigna una fase nueva a esta entrega hasta reconciliar la propuesta PR #15 con el roadmap canónico. La siguiente candidata de producto es la biblioteca visual de suelos y acabados; requiere alcance aprobado antes de iniciarse. F2 continúa experimental y pendiente de validación con cinco sesiones y veinte planos de referencia, sin bloquear esas mejoras.
