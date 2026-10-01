@@ -127,7 +127,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`furniture search filters insertion persistence and touch/keyboard ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const {page,errors,requests,mobile}=await setup(t,viewport);
- async function library(){if(mobile&&!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();}
+ async function library(){if(mobile){if(!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();await page.waitForFunction(()=>document.querySelector('aside.lib').getBoundingClientRect().left>=-.5);}}
  await library();assert.equal(await page.locator('#searchResults .item').count(),63);
  const input=page.getByRole('searchbox',{name:'Buscar muebles'});await input.fill(' SOFÁ ');const accented=await page.locator('#searchResults .item').count();await input.fill('sofa');assert.equal(await page.locator('#searchResults .item').count(),accented);
  await input.fill('nevera');assert.equal(await page.locator('#searchResults .item').count(),2);
