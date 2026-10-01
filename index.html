@@ -29,7 +29,7 @@ header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 1
   background:var(--panel);border-bottom:1px solid var(--line)}
 .brand{display:flex;flex-direction:column;margin-right:8px;line-height:1.25}
 .brand b{font-size:15px;letter-spacing:.5px}
-.brand span{color:var(--muted);font-size:12px}
+.brand span{color:var(--muted);font-size:12px}\n.brand .brand-owner{display:block!important;color:var(--muted);font-size:10px;line-height:1.2}
 .grp{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .btn{border:0;background:transparent;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
 .btn:hover{background:#f2ece2}
@@ -216,7 +216,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .lib-grid{grid-template-columns:1fr 1fr 1fr}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
-dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}\n.legal-dialog{width:min(620px,94vw);padding:20px}.legal-dialog h2{margin:0 0 12px}.legal-dialog section{padding:10px 0;border-bottom:1px solid var(--line)}.legal-dialog section:last-of-type{border-bottom:0}.legal-dialog p{margin:7px 0;line-height:1.6;overflow-wrap:anywhere}.legal-dialog a{color:var(--teal)}.legal-dialog .actions{justify-content:flex-end}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
@@ -265,7 +265,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
     </div>
-    <div class="brand"><b>Rubik Sota</b><span id="subtitle">Floor Plan Designer</span></div><span class="plan-meta" data-en="3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan" data-es="3 dormitorios · 2 salones · 2 baños · Plano de referencia">3 dormitorios · 2 salones · 2 baños · Plano de referencia</span>
+    <div class="brand"><b>Rubik Sota</b><span id="subtitle">Floor Plan Designer</span><span class="brand-owner" data-en="© Juan Manuel Espinosa Galant" data-es="© Juan Manuel Espinosa Galant">© Juan Manuel Espinosa Galant</span></div><span class="plan-meta" data-en="3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan" data-es="3 dormitorios · 2 salones · 2 baños · Plano de referencia">3 dormitorios · 2 salones · 2 baños · Plano de referencia</span>
     <div class="grp seg" id="viewSeg" title="切换 2D / 3D (T)" data-en-title="Switch 2D / 3D (T)">
       <span class="pill"></span>
       <button class="btn" data-view="2d" data-en="2D Plan">2D 平面</button>
@@ -316,7 +316,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
     <div class="spacer"></div>
     <button class="btn" id="traceBtn">Plano propio</button><span id="scaleConfidence" style="font-size:11px">Medidas orientativas</span>
-    <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>
+    <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>\n    <button class="btn" id="legalBtn" data-en="Legal and use" data-es="Legal y uso">Legal y uso</button>
     <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff">EN</button>
     <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
     <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
@@ -385,7 +385,33 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
 <input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
-<dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
+<dialog id="legalDialog" class="legal-dialog" aria-labelledby="legalTitle">
+  <h2 id="legalTitle" data-en="Legal and use" data-es="Legal y uso">法律与使用</h2>
+  <section aria-labelledby="legalOwnerTitle">
+    <h3 id="legalOwnerTitle" data-en="Authorship and ownership" data-es="Autoría y titularidad">作者与权利人</h3>
+    <p><span data-en="Author and owner:" data-es="Autor y titular:">作者与权利人：</span> <strong>Juan Manuel Espinosa Galant</strong></p>
+    <p><span data-en="Contact:" data-es="Contacto:">联系方式：</span> <a href="tel:629554870">629554870</a></p>
+    <p><span data-en="Platform:" data-es="Plataforma:">平台：</span> Rubik Sota Floor Plan Designer</p>
+  </section>
+  <section aria-labelledby="legalTermsTitle">
+    <h3 id="legalTermsTitle" data-en="Use conditions" data-es="Condiciones de uso">使用条款</h3>
+    <p data-en="Sale, sublicensing, distribution or redistribution of Rubik Sota Floor Plan Designer, in whole or in part, including its code, interface and original materials, is prohibited without the owner's prior express written authorization."
+       data-es="Queda prohibida la venta, sublicencia, distribución o redistribución de Rubik Sota Floor Plan Designer, total o parcialmente, incluidos su código, interfaz y materiales propios, sin autorización previa, expresa y por escrito del titular.">未经权利人事先明确书面授权，禁止出售、再许可、分发或再分发 Rubik Sota Floor Plan Designer 的全部或部分内容，包括其代码、界面和原创材料。</p>
+    <p data-en="Access to this platform does not grant ownership rights or commercial-use permission. Contact the owner to request authorization."
+       data-es="El acceso a esta plataforma no concede derechos de propiedad ni autorización de uso comercial. Para solicitar permiso, contacta con el titular.">访问本平台不授予所有权或商业使用许可。如需授权，请联系权利人。</p>
+  </section>
+  <section aria-labelledby="legalThirdPartyTitle">
+    <h3 id="legalThirdPartyTitle" data-en="Third-party resources" data-es="Recursos de terceros">第三方资源</h3>
+    <p data-en="Third-party software, models, textures and other resources remain subject to their own licenses. This notice does not replace or extend those licenses."
+       data-es="El software, los modelos, las texturas y demás recursos de terceros conservan sus propias licencias. Este aviso no las sustituye ni amplía.">第三方软件、模型、纹理及其他资源仍受各自许可条款约束。本声明不替代或扩大这些许可。</p>
+  </section>
+  <section aria-labelledby="legalScopeTitle">
+    <h3 id="legalScopeTitle" data-en="Platform scope" data-es="Alcance de la plataforma">平台范围</h3>
+    <p data-en="Plans, dimensions and 3D visualizations are design aids. Verify measurements and applicable technical requirements independently before construction or purchase."
+       data-es="Los planos, las dimensiones y las visualizaciones 3D son herramientas de diseño. Verifica las medidas y los requisitos técnicos aplicables antes de construir o comprar.">平面图、尺寸和 3D 可视化仅供设计参考。施工或购买前，请独立核实尺寸及适用技术要求。</p>
+  </section>
+  <div class="actions"><button id="legalClose" class="btn primary" data-en="Close" data-es="Cerrar">关闭</button></div>
+</dialog>\n<dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
 <label>Nombre <input id="projectName" maxlength="120"></label>
@@ -1786,7 +1812,7 @@ function listProjects(){
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
-$('#projectsBtn').onclick=()=>{if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};
+$('#projectsBtn').onclick=()=>{if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};\n$('#legalBtn').onclick=()=>$('#legalDialog').showModal();\n$('#legalClose').onclick=()=>$('#legalDialog').close();
 $('#projectClose').onclick=()=>$('#projectsDialog').close();
 $('#projectList').onchange=()=>$('#projectName').value=library.list().find(e=>e.id===$('#projectList').value).name;
 for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rename'],['Duplicate','duplicate'],['Delete','remove']]){
