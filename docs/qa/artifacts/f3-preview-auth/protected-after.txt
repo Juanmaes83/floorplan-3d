@@ -1,0 +1,11 @@
+✔ protected preview session keeps both authorized catalogs and textured assets 1440x900 (17684.347153ms)
+✔ protected preview session keeps both authorized catalogs and textured assets 390x844 (13786.598402ms)
+✔ protected preview session keeps both authorized catalogs and textured assets 844x390 (13434.635917ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45339.253631

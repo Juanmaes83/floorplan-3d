@@ -25,7 +25,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Entrega inicial integrada** por PR #12 (merge `95fcf0d`): catálogo genérico dimensionado, adaptador, GLB sintético local y fallback. **Catálogo externo pendiente**: Juanma confirma autorización para usar los assets del proyecto; cada modelo candidato debe superar comprobaciones de existencia, hash, dimensiones, compatibilidad técnica y alcance de permisos. F3 sigue abierta. [Informe](technical/F3-initial.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Entrega inicial integrada** por PR #12 (merge `95fcf0d`): catálogo genérico dimensionado, adaptador, GLB sintético local y fallback. **Piloto externo en revisión** (01-10-2026): dos modelos IKEA con JPEG embebido, medidas oficiales aportadas externamente, hashes y autorización específica de Juanma. Pendiente de revisión humana y merge; no catálogo comercial completo. F3 sigue abierta. [Informe](technical/F3-initial.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
 
@@ -133,3 +133,30 @@ La [auditoría de integración](product/ecosystem-integration-audit.md) compara 
 Se propone evaluar primero un catálogo externo muy pequeño con medidas y permisos específicos, soporte técnico acotado y fallback; posteriormente, bajo decisión de alcance, estudiar propuestas comerciales al CRM, exportación determinista a Blender y presentaciones 360 con referencias estables. Son **propuestas pendientes de decisión**, sin cliente prioritario aprobado, nuevos números de fase ni cambio de alcance/cierre de F1, F2 o F3.
 
 F3 inicial permanece integrada y el catálogo externo pendiente. F2 permanece experimental: cinco sesiones y veinte planos siguen pendientes, sin bloquear el avance de F3. La autorización general de Juanma sobre los assets ya está confirmada; se conservan las comprobaciones específicas por recurso antes de incorporarlo o distribuirlo.
+
+## F3 — piloto externo texturizado en revisión (01-10-2026)
+
+Rama `feat/f3-textured-external-catalog`, basada en master `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, posterior a las PR #13/#14. Integra SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con procedencia fijada, autorización de Juanma para Git/preview, medidas oficiales aportadas externamente y soporte acotado de JPEG embebido. El sofá 90591748 se excluye por superar la tolerancia de 20 mm. El schema sigue en 1.3.0; no se modifican Asset Lab ni decisiones comerciales.
+
+[Informe y resultados actuales](technical/F3-initial.md#piloto-externo-texturizado-01-10-2026). La entrega requiere revisión humana y merge: **F3 permanece abierta**. La preview del nuevo SHA debe verificarse por separado de las capturas locales; la preview de PR #12 no acredita este piloto. SwiftShader no valida rendimiento en teléfono físico. F2 mantiene cinco sesiones y veinte planos pendientes.
+
+### F3 — búsqueda local de muebles en revisión (01-10-2026)
+
+Sobre la misma rama `feat/f3-textured-external-catalog`: búsqueda por nombre/tipo,
+familias derivadas del catálogo, sinónimos españoles y filtros de estancia/familia.
+Conserva los 60 genéricos y muestra únicamente los tres modelos del catálogo F3
+aceptado, con etiquetas y atribución separadas. No cambia dimensiones originales,
+contrato 1.3.0, assets ni decisiones comerciales.
+[Informe de UX y QA](technical/F3-furniture-search.md).
+Pendiente de preview verificable del SHA final, revisión humana y merge; **F3 sigue
+abierta**, sin alterar el orden de fases. Cinco sesiones y veinte planos F2 pendientes.
+
+### F3 — corrección de catálogo en preview protegida (01-10-2026)
+
+La revisión humana de PR #17 detectó ausencia de los IKEA y aviso genérico de catálogo.
+Se corrige en la misma rama la omisión de sesión en fetch de manifests/permisos/GLB:
+credenciales solo del mismo origen validado, manteniendo guards F3. Se añade motivo
+concreto de red/HTTP/JSON/adaptación/exclusión y regresión en navegador con protección
+de sesión, desktop y móvil. [Diagnóstico y QA](technical/F3-preview-catalog-fix.md).
+Requiere nueva preview del HEAD y revisión de Juanma; **F3 permanece abierta**.
+No cambia schema, assets, decisiones de producto ni las cinco sesiones/veinte planos F2 pendientes.

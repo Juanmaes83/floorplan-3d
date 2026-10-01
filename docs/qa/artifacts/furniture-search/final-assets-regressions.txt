@@ -1,0 +1,38 @@
+✔ F3 authorized load, dimensions, state and offline fallback 390x844 (10981.272477ms)
+ℹ {"viewport":{"width":390,"height":844},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2314.2999999970198,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 844x390 (10066.711659ms)
+ℹ {"viewport":{"width":844,"height":390},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2304.7000000029802,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 1440x900 (17285.977991ms)
+ℹ {"viewport":{"width":1440,"height":900},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2778.300000011921,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 loader rejects bad headers, extensions, external dependencies, integrity, dimensions and timeout (648.4026ms)
+✔ F3 missing reference, broken URL and stale asynchronous success keep a generic editor (7262.041448ms)
+✔ F3 core embedded JPEG loads without blob URLs; budgets, MIME and external resources fail closed (5308.199954ms)
+✔ F3 cancellation during image decoding closes late resources and shared disposal is unique (605.053616ms)
+✔ F3 external textured catalog end-to-end 1440x900 (21466.06741ms)
+✔ F3 external textured catalog end-to-end 390x844 (18424.601977ms)
+✔ F3 external textured catalog end-to-end 844x390 (17743.454162ms)
+✔ furniture search filters insertion persistence and touch/keyboard 1440x900 (20165.864944ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 390x844 (16928.846618ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 844x390 (16687.253539ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ search keeps generics during catalog pending/exclusion and unavailable model fallback (8656.399304ms)
+✔ generic catalog has explicit validated three dimensions without rewriting old projects (12.990795ms)
+✔ manifest adapts one verified source and hashes real fixture and permission bytes (3.382849ms)
+✔ permission gates deny pending/missing/expired or incomplete usage and dimensions (0.691283ms)
+✔ untrusted transform, extension, paths, sizes and duplicate IDs are excluded (0.723311ms)
+✔ assetRef association/clear keeps room, identity, geometry and compatibility intact (10.173794ms)
+✔ curated external evidence records exact binaries and project authorization without inventing worldwide rights (2.295809ms)
+✔ external references survive JSON, project duplication, reload and ZIP without binary embedding (26.260117ms)
+✔ search derives unique entries and dimensions without duplicating catalog (3.758775ms)
+✔ exact partial accent case redundant spaces synonym and stored type search (0.940713ms)
+✔ combined query room family reset and empty preserve separation (0.435635ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 172939.736522

@@ -135,23 +135,23 @@ offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el fluj
 en su teléfono; el rendimiento físico sigue sin medir.
 
 
-## F3 — entrega inicial integrada; catálogo externo pendiente
+## F3 — entrega inicial integrada; piloto externo en revisión
 
-La biblioteca genérica conserva sus 60 entradas y añade alturas de diseño explícitas
-para muebles nuevos. En propiedades de un mueble, «Modelo 3D autorizado» permite
-asociar el banco sintético original de prueba o volver al genérico. La asociación
-conserva identidad, estancia, posición, giro, dimensiones y elevación. El modelo se
-adapta a las medidas del objeto; no representa un producto comercial. El permiso MIT
-es específico de ese GLB y su generador.
+La biblioteca genérica conserva sus 60 entradas. «Modelo 3D autorizado» permite
+asociar el banco sintético propio o los dos modelos del piloto externo: SONGESAND
+90366839 y STOCKHOLM 2025 puf 80586139. La asociación conserva identidad, estancia,
+posición, giro, dimensiones y elevación; adapta el modelo a las medidas existentes.
+Las medidas oficiales del producto se muestran por separado. El usuario puede
+cambiar expresamente las dimensiones del objeto antes de asociarlo.
 
-Juanma confirmó que el proyecto tiene autorización para usar los assets de Asset Lab.
-Esta entrega inicial no los integra: cada candidato requiere comprobar que el fichero
-está disponible, verificar sus dimensiones y compatibilidad técnica, y registrar el
-alcance de permisos/atribución antes de incorporarlo. Three.js/GLTFLoader siguen
-fijados a 0.160.0; Draco, texturas externas, animaciones y otras extensiones no se
-admiten en la ruta actual. [Informe y estado F3](docs/technical/F3-initial.md) ·
-[roadmap](docs/ROADMAP.md).
+Juanma autoriza la incorporación, publicación en Git y preview de revisión de estos
+assets para este proyecto. El permiso MIT del banco sintético no se aplica a IKEA;
+la procedencia y el alcance se registran en el documento específico del piloto.
+Three.js/GLTFLoader siguen en 0.160.0: se admiten texturas JPEG core embebidas con
+límites de descarga y memoria; no Draco, WebP, URI de imagen externas ni extensiones.
+El schema sigue en 1.3.0. Fallos y cancelación mantienen el objeto genérico operativo.
 
-La entrega inicial se fusionó por PR #12; **F3 permanece abierta hasta completar el
-catálogo externo autorizado**. La evaluación en móvil físico y los presupuestos de
-rendimiento siguen pendientes.
+La entrega inicial se fusionó por PR #12. El nuevo piloto requiere revisión humana
+y merge; **F3 sigue abierta**. SwiftShader valida renderizado por software, sin
+acreditar rendimiento en móvil físico. [Informe y evidencia](docs/technical/F3-initial.md#piloto-externo-texturizado-01-10-2026) ·
+[roadmap](docs/ROADMAP.md). F2 conserva sus cinco sesiones y veinte planos pendientes.
