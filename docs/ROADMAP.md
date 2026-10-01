@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 01-10-2026 sobre master remoto `5e5e0dc42b8669e7afcb121851f2901d2930a260`, que incluye PR #3 y #15 fusionadas y el cierre aprobado de #18 (`10e9f96`). La biblioteca de superficies de esta rama está pendiente de revisión humana. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 01-10-2026 tras integrar por squash la PR #19 (`fa79d07243672076df506aae0f50ec84fca82b5d`), aprobada tras revisión humana. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -25,7 +25,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Piloto externo texturizado acotado completado, aprobado y fusionado** por PR #17 (SHA revisado `772e24c`; merge `24534b5`): SONGESAND y puf STOCKHOLM, búsqueda/filtros y carga con sesión same-origin. No declara completo el catálogo comercial ni una biblioteca general de materiales; ampliaciones y pipeline de conversión quedan como entregas posteriores. [Informe](technical/F3-preview-catalog-fix.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Piloto de catálogo externo y biblioteca visual acotada integrados y aprobados.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 añade 50 mapas de superficie CC0-1.0 (10 en cada una de cinco familias), aplicación persistente a suelos y paredes, búsqueda, comparación, repetición y fallback, con `FloorPlanProjectV1` 1.4.0. Merge #19: `fa79d07243672076df506aae0f50ec84fca82b5d`; SHA revisado `104830bf97cab262df7a26dae725203d661e097d`. No cierra un catálogo comercial general ni valida rendimiento en teléfono físico. La normalización de otros formatos y perfiles PBR siguen como propuestas posteriores. [Informe y QA](technical/surface-material-library.md). |
 | Entrega post-F3, sin numeración nueva | Inicio de proyectos vacíos/desde imagen y edición directa de dimensiones de estancias rectangulares | Aprobada e integrada por PR #18 (`c7d1b81` revisado; merge `10e9f96`). No modifica schema 1.3.0; limita edición numérica a geometría ortogonal inequívoca. [Informe](technical/home-room-dimensions.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
@@ -180,16 +180,12 @@ Codex reportó suite Node agregada inicial **159/160**; tras actualizar una expe
 
 **Estado:** entrega dimensional post-F3 aprobada e integrada. PR #3 y #15 ya fueron reconciliadas y fusionadas. Juanma autorizó específicamente implementar la biblioteca visual de 50 superficies de esta entrega, sin numeración nueva ni aprobación global de Roadmap 2. La implementación y su revisión humana se registran a continuación. F2 sigue experimental y no validada; sus cinco sesiones y veinte planos con referencias continúan pendientes y no bloquean desarrollo.
 
-## Biblioteca visual de superficies — implementación en revisión, sin fase nueva
+## Biblioteca visual de superficies — PR #19 integrada (01-10-2026)
 
-Base remota comprobada: `5e5e0dc42b8669e7afcb121851f2901d2930a260`.
-Rama única `feat/surface-material-library`, checkout inicialmente limpio, creada
-sobre esa base. Las PR #3/#15 están **MERGED**; sus ramas documentales se conservan.
+Juanma aprobó la revisión humana y la [PR #19](https://github.com/Juanmaes83/floorplan-3d/pull/19) se fusionó por squash. Rama revisada: `feat/surface-material-library`; SHA revisado `104830bf97cab262df7a26dae725203d661e097d`; merge a master `fa79d07243672076df506aae0f50ec84fca82b5d`.
 
-Alcance autorizado: 50 acabados, diez por familia, búsqueda/comparación, aplicación
-local a suelo o pared completa, representación 2D/3D, historial y persistencia.
-Contrato opcional 1.4.0, recursos servidos localmente y fallback visible.
-[Inventario, derechos, QA y límites](technical/surface-material-library.md).
-La revisión humana y la integración de esta biblioteca siguen pendientes.
-No incluye puertas, ventanas, muebles nuevos ni conectores. No modifica decisiones
-comerciales abiertas ni completa F2: cinco sesiones y veinte planos siguen pendientes.
+Entrega acotada: 50 mapas CC0-1.0 (diez en cada una de cinco familias), búsqueda y comparación, aplicación persistente a suelos y paredes, repetición configurable, fallback y muestras 2D. `FloorPlanProjectV1` pasa a 1.4.0 con campos opcionales para acabado mural y repetición; la compatibilidad de proyectos existentes se mantiene. [Inventario, procedencia, QA y límites](technical/surface-material-library.md).
+
+Vercel informó READY para el SHA revisado; la preview estuvo disponible en [esta URL](https://floorplan-3d-git-feat-surface-ddcf54-juanma-espinosas-projects.vercel.app/). Codex reportó pruebas locales y renderizado de los mapas en Chromium/SwiftShader; la suite completa tuvo fallos/timeout iniciales y no se repitió completa tras los ajustes. No se declara rendimiento validado en teléfono físico.
+
+F3 incorpora ahora el piloto de mobiliario externo y esta biblioteca acotada de superficies; no se afirma completado un catálogo comercial ilimitado, un pipeline universal de conversión ni perfiles PBR completos. La siguiente propuesta técnica del Roadmap 2 es evaluar un pipeline controlado para modelos, con perfiles y límites por recurso. F2 continúa experimental: cinco sesiones y veinte planos con referencias siguen pendientes, sin bloquear el desarrollo.

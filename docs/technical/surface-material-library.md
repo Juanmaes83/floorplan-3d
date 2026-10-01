@@ -1,4 +1,4 @@
-# Biblioteca visual de superficies — 50 acabados, revisión humana pendiente
+# Biblioteca visual de superficies — 50 acabados, integrada y aprobada
 
 Entrega autorizada y acotada: superficies; no añade puertas, ventanas, muebles ni conectores. No completa F2: cinco sesiones y veinte planos siguen pendientes.
 
@@ -123,8 +123,8 @@ Capturas:
 
 [Rama](https://github.com/Juanmaes83/floorplan-3d/tree/feat/surface-material-library) · [compare hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/surface-material-library?expand=1). Sin force push, merge ni despliegue manual de producción. SHA publicado y estado de API/CI/preview se comunican al terminar. GET REST de PR devolvió `Get "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls?state=open": Forbidden`; HTML público permitió comprobar las PR previas. El commit se vincula a [la huella de aplicación ejecutada](../qa/artifacts/surface-library/application-source-fingerprint.json). No existe workflow de CI de producto en `.github`; Vercel es un deployment/check diferente de ejecutar esta suite.
 
-Resultado de publicación: rama publicada y HEAD remoto comprobado. La creación de PR mediante REST devuelve `Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`; no se creó PR. La consulta de status del commit también devuelve `Forbidden`. HTML público de commit/rama accesible, sin deployment READY/URL inmutable atribuible al SHA. La preview previa documentada devuelve CONNECT 403 y no se presenta como preview nueva. [Comandos de publicación y bloqueos](../qa/artifacts/surface-library/publication-checks.txt). Usar compare para abrir revisión en GitHub; CI remota y preview nueva siguen pendientes.
+Cierre: Juanma revisó y aprobó la biblioteca visual; la PR #19 se fusionó mediante squash el 01-10-2026. SHA de la rama revisada `104830bf97cab262df7a26dae725203d661e097d`; merge en `master` `fa79d07243672076df506aae0f50ec84fca82b5d`. Vercel informó `READY` y vinculó el deployment al SHA revisado; preview: https://floorplan-3d-git-feat-surface-ddcf54-juanma-espinosas-projects.vercel.app/. No hubo despliegue manual a producción. Sin workflow de CI de producto; las verificaciones locales y el check Vercel no equivalen a una suite remota completa.
 
 Revisar español, filtros y las cinco familias; comparar madera/espiga, baldosas, piedra, terrazo y revoco; aplicar, cancelar, deshacer/rehacer, recargar y exportar/importar; comprobar paredes compartidas y escala en dos estancias distintas. Recorrer móvil vertical/horizontal y 3D. Confirmar que el desgaste y el detalle de 256 px son adecuados al producto antes de aprobar.
 
-Pendiente: aprobación visual humana, rendimiento/legibilidad en teléfono físico, medidas oficiales de repetición, cualquier perfil PBR más detallado y evaluar cliente/negocio (sin decisión inferida). F2 conserva sus cinco sesiones y veinte planos. La siguiente acción es revisar esta biblioteca, no ampliar a conectores o arquitectura.
+Pendiente: medir rendimiento y legibilidad en teléfono físico; decidir más adelante si se necesitan medidas oficiales de repetición o perfiles PBR adicionales. No se infiere segmento cliente/negocio ni aprobación de conectores. F2 conserva sus cinco sesiones y veinte planos de validación pendientes.
