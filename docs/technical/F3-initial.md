@@ -459,9 +459,9 @@ Los resultados finales y la publicación se registran a continuación.
 | Python stdlib: comparación de meshes/nodes/accessors y 5 bufferViews no-imagen originales/optimizados | PASS, bytes geométricos idénticos |
 | `git diff --check` y `git diff --cached --check` | PASS |
 
-[Log completo Node](../qa/artifacts/f3-textures/node-regressions.log),
+[Log completo Node](../qa/artifacts/f3-textures/node-regressions.txt),
 [resultados Python/manifests](../qa/artifacts/f3-textures/python-manifests.json),
-[QA posterior al commit](../qa/artifacts/f3-textures/external-commit-qa.log).
+[QA posterior al commit](../qa/artifacts/f3-textures/external-commit-qa.txt).
 La recaptura no repite indiscriminadamente la suite: identifica visualmente el código
 publicado `7646d84e72e8719373cd095f1c757b073a56d791`. El commit documental posterior
 solo añade documentación y evidencia; mantiene el mismo código/assets de aplicación.
