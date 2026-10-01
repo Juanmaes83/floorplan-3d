@@ -1,4 +1,4 @@
-# F3 · normalización e integración de Asset Lab — en revisión
+# F3 · normalización e integración de Asset Lab — integrada (PR #20)
 
 **Base Rubik:** `18c68e21ec03819b9d44dfe51d27179c5bdad5d7` (`master`, comprobado por `git ls-remote` el 01-10-2026). **Asset Lab:** `5dc7b182c5c227472b84aea66a3ffa1368c95981` (`main`, clon temporal de solo lectura). La autorización de Juanma para usar recursos de Asset Lab en Rubik y preparar Git/preview se registra en [la procedencia](../../assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt). El manifest de origen declara `authorized-commercial-demo`, `redistributionAllowed:false`, `qaStatus:pending` y referencias mayoritariamente a una plantilla; se conservan esos hechos, separados del permiso específico confirmado por Juanma. No se afirma licencia IKEA general ni afiliación.
 
@@ -53,3 +53,8 @@ Validación final en este checkout: `node --test --test-concurrency=1 tests/*.te
 | IKEA LAUTERS · lámpara de pie | 719 × 1435 × 553 | 122,144 → 549,712 B | EXT_texture_webp, KHR_draco_mesh_compression | 2 JPEG | `aa556cdf8ec6155942a3dd1dee23411d13fa9ca55b731f1afd45b89f2e7e1de3` / `e406b7d2f41430f102dddcda5ddaf7786542572056d4ef631acb6e92b58349ca` |
 | IKEA VÄSMAN · sillón exterior | 571 × 920 × 637 | 465,188 → 3,565,448 B | EXT_texture_webp, KHR_draco_mesh_compression | 2 JPEG | `5ff3354496f91625dfa3aa9b61a4f40fcb153c8c651a903ce84632611079af35` / `9d19f3c7c1e1be0d845aef3843d471055db4637bf80b5d68fb1f9474866f0ce7` |
 | IKEA NÄMMARÖ · sofá exterior de dos plazas | 1270 × 798 × 743 | 559,996 → 780,996 B | EXT_texture_webp, KHR_draco_mesh_compression | 4 JPEG | `f284e9ba36ec44880d6c7b82bf4370e5228748c1d32f1f0a06414e082c3446fb` / `7114e080f5812e35b3894eca1efb0c0bb42d23113d2fffd15bb27c00d4eaa8e8` |
+
+
+## Registro de integración de PR #20 — 01-10-2026
+
+Juanma autorizó la fusión por squash de la ampliación de Asset Lab. HEAD revisado: `8a19d602dbab624c86f9d040c6d9d26a5fa526c4`; merge en `master`: `29250810a8341b3b296539118b54799f1e31a77b`. Vercel confirmó la deployment de producción `READY` para ese SHA (`dpl_8wu9peThE8KGn4khX5uabs3Hs8ws`). La URL estable pública es https://floorplan-3d-alpha.vercel.app/. Esto registra el merge y el despliegue; no afirma medidas oficiales ni validación de rendimiento en teléfono físico.

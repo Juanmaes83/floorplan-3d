@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 01-10-2026 tras integrar por squash la PR #19 (`fa79d07243672076df506aae0f50ec84fca82b5d`), aprobada tras revisión humana. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 01-10-2026 tras integrar por squash la PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); Vercel confirmó `READY` para producción en ese SHA. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -138,9 +138,9 @@ Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets
 
 La [auditoría de integración](product/ecosystem-integration-audit.md) compara Rubik Sota, los tres proyectos de Immersphere, Asset Lab, el downloader IKEA y Blender MCP mediante snapshots fijados por SHA. Identifica formatos incompatibles y pruebas mínimas; no implementa conexiones ni acredita servicios publicados. El LAB Astra quedó localizado en `lab-astra-sept-2026`, con referencia explícita a la rama LAB de Blender MCP: hay arquitectura documental y código MCP, sin cadena completa ejecutada demostrada. Seedance 2.5 continúa sin evidencia de integración en esas fuentes.
 
-Se propone evaluar primero un catálogo externo muy pequeño con medidas y permisos específicos, soporte técnico acotado y fallback; posteriormente, bajo decisión de alcance, estudiar propuestas comerciales al CRM, exportación determinista a Blender y presentaciones 360 con referencias estables. Son **propuestas pendientes de decisión**, sin cliente prioritario aprobado, nuevos números de fase ni cambio de alcance/cierre de F1, F2 o F3.
+El piloto inicial de catálogo externo ya se amplió con doce modelos normalizados de Asset Lab mediante PR #20. La ampliación mantiene perfiles acotados, fallback y permisos por recurso; no valida escala física ni constituye una integración comercial general. Siguen como propuestas pendientes de decisión las conexiones con CRM, exportación determinista a Blender y presentaciones 360, sin cliente prioritario aprobado ni nuevos números de fase.
 
-F3 inicial permanece integrada y el catálogo externo pendiente. F2 permanece experimental: cinco sesiones y veinte planos siguen pendientes, sin bloquear el avance de F3. La autorización general de Juanma sobre los assets ya está confirmada; se conservan las comprobaciones específicas por recurso antes de incorporarlo o distribuirlo.
+F3 inicial, el piloto texturizado y la primera tanda de doce modelos de Asset Lab están integrados. Siguen pendientes la verificación de escala física y el rendimiento en teléfono físico; los siguientes assets requieren comprobación específica. F2 permanece experimental: cinco sesiones y veinte planos siguen pendientes, sin bloquear el avance.
 
 ## F3 — piloto externo texturizado en revisión (01-10-2026)
 

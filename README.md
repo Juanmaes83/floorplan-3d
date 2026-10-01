@@ -161,13 +161,15 @@ El contrato opcional 1.4.0 conserva los proyectos anteriores.
 La biblioteca fue revisada y fusionada por la PR #19; no completa la evaluación
 F2 ni autoriza conectores o ampliaciones de muebles/puertas/ventanas.
 
-## Ampliación de modelos Asset Lab — en revisión
+## Ampliación de modelos Asset Lab — integrada por PR #20
 
-Una tanda de doce modelos normalizados de Asset Lab se suma a los dos modelos
-IKEA del piloto. Se encuentra en el buscador por nombre y categoría; al colocar
+La tanda de doce modelos normalizados de Asset Lab se suma a los dos modelos
+IKEA del piloto. Está disponible en el buscador por nombre y categoría; al colocar
 un modelo, la vista 3D lo carga desde el catálogo local y conserva el mueble
-genérico si falla. Las medidas de los modelos nuevos describen su **malla**, con
-escala física sin verificar; no son medidas oficiales de IKEA. El
+genérico si falla. Las medidas de los modelos nuevos describen su **malla**; su
+escala física no está verificada y no son medidas oficiales de IKEA. El
 [informe técnico y pipeline](docs/technical/F3-asset-lab-pipeline.md) registra
-inventario, conversiones, procedencia, rechazos y pruebas. Esta ampliación espera
-revisión visual y aprobación de Juanma; no cierra F3 en su conjunto.
+inventario, conversiones, procedencia, rechazos y pruebas. La PR #20 se fusionó
+por squash en `master` (`29250810a8341b3b296539118b54799f1e31a77b`). Vercel confirmó
+producción `READY` para ese SHA. La escala física y el rendimiento en teléfono
+físico siguen pendientes; esta integración no convierte el catálogo en universal.
