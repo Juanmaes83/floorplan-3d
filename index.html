@@ -29,7 +29,8 @@ header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 1
   background:var(--panel);border-bottom:1px solid var(--line)}
 .brand{display:flex;flex-direction:column;margin-right:8px;line-height:1.25}
 .brand b{font-size:15px;letter-spacing:.5px}
-.brand span{color:var(--muted);font-size:12px}\n.brand .brand-owner{display:block!important;color:var(--muted);font-size:10px;line-height:1.2}
+.brand span{color:var(--muted);font-size:12px}
+.brand .brand-owner{display:block!important;color:var(--muted);font-size:10px;line-height:1.2}
 .grp{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .btn{border:0;background:transparent;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
 .btn:hover{background:#f2ece2}
@@ -216,7 +217,8 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .lib-grid{grid-template-columns:1fr 1fr 1fr}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
-dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}\n.legal-dialog{width:min(620px,94vw);padding:20px}.legal-dialog h2{margin:0 0 12px}.legal-dialog section{padding:10px 0;border-bottom:1px solid var(--line)}.legal-dialog section:last-of-type{border-bottom:0}.legal-dialog p{margin:7px 0;line-height:1.6;overflow-wrap:anywhere}.legal-dialog a{color:var(--teal)}.legal-dialog .actions{justify-content:flex-end}
+dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.legal-dialog{width:min(620px,94vw);padding:20px}.legal-dialog h2{margin:0 0 12px}.legal-dialog section{padding:10px 0;border-bottom:1px solid var(--line)}.legal-dialog section:last-of-type{border-bottom:0}.legal-dialog p{margin:7px 0;line-height:1.6;overflow-wrap:anywhere}.legal-dialog a{color:var(--teal)}.legal-dialog .actions{justify-content:flex-end}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
@@ -316,7 +318,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
     <div class="spacer"></div>
     <button class="btn" id="traceBtn">Plano propio</button><span id="scaleConfidence" style="font-size:11px">Medidas orientativas</span>
-    <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>\n    <button class="btn" id="legalBtn" data-en="Legal and use" data-es="Legal y uso">Legal y uso</button>
+    <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>
+    <button class="btn" id="legalBtn" data-en="Legal and use" data-es="Legal y uso">Legal y uso</button>
     <button class="btn" id="langBtn" title="Cambiar idioma" aria-label="Cambiar idioma" style="border:1px solid var(--line);background:#fff">EN</button>
     <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
     <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
@@ -411,7 +414,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
        data-es="Los planos, las dimensiones y las visualizaciones 3D son herramientas de diseño. Verifica las medidas y los requisitos técnicos aplicables antes de construir o comprar.">平面图、尺寸和 3D 可视化仅供设计参考。施工或购买前，请独立核实尺寸及适用技术要求。</p>
   </section>
   <div class="actions"><button id="legalClose" class="btn primary" data-en="Close" data-es="Cerrar">关闭</button></div>
-</dialog>\n<dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
+</dialog>
+<dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
 <label>Nombre <input id="projectName" maxlength="120"></label>
@@ -1812,7 +1816,9 @@ function listProjects(){
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
-$('#projectsBtn').onclick=()=>{if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};\n$('#legalBtn').onclick=()=>$('#legalDialog').showModal();\n$('#legalClose').onclick=()=>$('#legalDialog').close();
+$('#projectsBtn').onclick=()=>{if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);listProjects();$('#projectError').textContent='';$('#projectsDialog').showModal();};
+$('#legalBtn').onclick=()=>$('#legalDialog').showModal();
+$('#legalClose').onclick=()=>$('#legalDialog').close();
 $('#projectClose').onclick=()=>$('#projectsDialog').close();
 $('#projectList').onchange=()=>$('#projectName').value=library.list().find(e=>e.id===$('#projectList').value).name;
 for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rename'],['Duplicate','duplicate'],['Delete','remove']]){
