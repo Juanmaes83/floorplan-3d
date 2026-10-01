@@ -1,6 +1,6 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
-> **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**  
+> **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
 > Reconciliada el 01-10-2026 contra `master` remoto `133f6f47fc5f16764cb290f95e49414932b27a09`, después de PR #17 y #18. La primera versión se preparó sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`; su fotografía anterior queda sustituida aquí. PR #15 sigue abierta, propuesta no aprobada. No modifica el roadmap canónico ni el contrato 1.3.0; F3 está cerrado para su piloto y la entrega dimensional #18 ya está integrada.
 
 ## 1. Propósito y principios
