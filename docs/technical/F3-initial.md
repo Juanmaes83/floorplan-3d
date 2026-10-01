@@ -515,3 +515,16 @@ regresiones locales verdes, listos para revisar, pero faltan PR, preview verific
 revisión humana y merge. Continúan pendientes rendimiento físico y validación de
 fidelidad/materiales del puf optimizado. No se cierra F3 ni se define cliente prioritario.
 F2 conserva cinco sesiones y veinte planos pendientes.
+
+
+## Estado final del piloto externo — PR #17 (01-10-2026)
+
+La entrega descrita como pendiente en las secciones históricas terminó en la [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17), aprobada por Juanma tras revisar la preview corregida y fusionada por squash.
+
+- SHA revisado: `772e24c26d10cec4349f28558ffc87ee18748317`; merge SHA en `master`: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`.
+- Vercel: READY para ese SHA en https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/; requiere Vercel Authentication.
+- Incluye SONGESAND, puf STOCKHOLM, soporte acotado de JPEG embebido, búsqueda/filtros y carga de catálogo con sesión protegida.
+- Codex reportó 138/138 Node/navegador y 41/41 Python en la rama antes del merge; no se repitieron para la actualización documental.
+- Schema 1.3.0 intacto; no hay soporte universal para Draco/KTX2/meshopt ni biblioteca PBR general.
+
+F3 queda cerrada para el piloto inicial autorizado. Las ampliaciones del catálogo, el normalizador de assets y la biblioteca visual de materiales son trabajos posteriores del Roadmap 2, no criterios ocultos para reabrir este piloto. El Roadmap 2 permanece como propuesta en la PR #15 hasta su revisión y aprobación separadas. SwiftShader no acredita rendimiento móvil físico; F2 mantiene las cinco sesiones y veinte planos pendientes.
