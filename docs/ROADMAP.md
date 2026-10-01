@@ -171,3 +171,14 @@ La entrega reúne el piloto de dos modelos externos con texturas JPEG embebidas,
 **Alcance cerrado:** piloto inicial acotado y aprobado; no equivale a completar un catálogo comercial amplio ni una biblioteca visual general de materiales. La conversión/normalización de cualquier asset, Draco/KTX2/meshopt, los acabados PBR y los conectores del ecosistema siguen siendo trabajos posteriores, con perfiles y límites propios.
 
 **Siguiente entrega recomendada, sin número de fase asignado aún:** crear proyecto vacío o desde imagen con claridad y editar dimensiones de habitaciones, siguiendo el orden 1 de Roadmap 2. La propuesta de Roadmap 2 sigue en la [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15), abierta, no aprobada ni integrada. Se preparó sobre master `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` y aún describe F3 como activa; reconciliar ese estado con este cierre antes de aprobar o fusionar la propuesta. La auditoría geométrica ya integrada en [room-dimension-editing-discovery.md](product/room-dimension-editing-discovery.md) recomienda limitar el primer MVP a habitaciones rectangulares ortogonales con correspondencia inequívoca. Antes de implementar, concretar lado fijo, muros compartidos, ubicación de huecos/cotas y conflictos con muebles; preservar edición manual y rechazar cambios ambiguos sin mutar el proyecto. F2 conserva sus cinco sesiones y veinte planos pendientes, que no bloquean esta entrega.
+
+## Entrega post-F3 — viviendas y dimensiones de estancias (en revisión)
+
+Rama `feat/home-room-dimensions`, basada en master remoto `19fbd5f`.
+Implementa inicio de proyecto vacío/imagen, estancias rectangulares dimensionadas,
+unión por un muro inequívoco y cambio de dimensión con lado fijo, preview e
+historial. Bloquea relaciones ambiguas y conflictos con vecinos, huecos, cotas o
+muebles; conserva la edición manual. No modifica FloorPlanProjectV1 1.3.0 ni
+reabre F3. [Alcance, reglas, pruebas y revisión](technical/home-room-dimensions.md).
+Pendiente revisión humana y merge; no aprobada ni cerrada. PR #15 se conserva
+separada. F2 sigue experimental, con cinco sesiones y veinte planos pendientes.
