@@ -84,7 +84,7 @@ export function normalize(scene,entry){
 }
 async function download(url,limit,signal){
  const absolute=new URL(url,location.href);if(absolute.origin!==location.origin||absolute.search||absolute.hash||!absolute.pathname.startsWith(new URL('assets/f3/',location.href).pathname))throw Error('Asset path is not approved');
- const response=await fetch(absolute,{signal,credentials:'omit',redirect:'error',cache:'no-cache'});if(!response.ok)throw Error('Unavailable resource');
+ const response=await fetch(absolute,{signal,credentials:'same-origin',redirect:'error',cache:'no-cache'});if(!response.ok)throw Error(absolute.pathname+': HTTP '+response.status);
  const reader=response.body.getReader(),chunks=[];let length=0;try{while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>limit)throw Error('Resource limit exceeded');chunks.push(value);}}finally{await reader.cancel();}
  const bytes=new Uint8Array(length);let n=0;for(const b of chunks){bytes.set(b,n);n+=b.length;}return bytes.buffer;
 }

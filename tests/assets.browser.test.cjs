@@ -3,8 +3,8 @@ const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=re
 const {execFile}=require('node:child_process'),{promisify}=require('node:util'),run=promisify(execFile);
 const {chromium}=require('playwright'),Core=require('../js/project-core.js');
 const fixture=require('../docs/contracts/examples/floorplan-project-v1.example.json');
-let server,browser,url;const cache=new Map();
-before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{const p=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!p.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',/\.m?js$/.test(p)?'text/javascript':p.endsWith('.json')?'application/json':p.endsWith('.glb')?'model/gltf-binary':p.endsWith('.txt')?'text/plain':'text/html');res.end(await fs.readFile(p));}catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});});
+let server,browser,url,protectedAssets=false;const cache=new Map();
+before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(async(req,res)=>{try{if(protectedAssets&&req.url.startsWith('/assets/f3/')&&!String(req.headers.cookie||'').split(';').some(c=>c.trim()==='qa-preview=authorized')){res.writeHead(401,{'Content-Type':'text/html'});res.end('Preview requires a session');return;}const p=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!p.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',/\.m?js$/.test(p)?'text/javascript':p.endsWith('.json')?'application/json':p.endsWith('.glb')?'model/gltf-binary':p.endsWith('.txt')?'text/plain':'text/html');res.end(await fs.readFile(p));}catch{res.writeHead(404);res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 async function setup(t,viewport={width:1440,height:900}){
  const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());const page=await context.newPage(),errors=[],requests=[],consoleMessages=[];page.on('console',m=>consoleMessages.push({type:m.type(),text:m.text()}));page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({url:r.url(),method:r.method(),body:r.postData()}));page.on('websocket',s=>errors.push('Unexpected WebSocket '+s.url()));
@@ -165,4 +165,45 @@ test('search keeps generics during catalog pending/exclusion and unavailable mod
  await page.route('**/assets/f3/songesand-90366839.glb',r=>r.fulfill({status:404,body:'Missing'}));await page.locator('#furnitureSearch').fill('songesand');await page.locator('#searchResults .item').click();const inserted=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));
  await open3D(page);await page.waitForFunction(id=>View3D.assetStatus(id)?.state==='error',inserted.id);assert.deepEqual(await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id),inserted.id),inserted);assert.match(await page.locator('#fAssetStatus').innerText(),/genérico/);assert.equal(await page.evaluate(()=>View3D.assetObjects.length),0);await page.click('[data-view="2d"]');assert.deepEqual(errors,[]);
  await page.unroute('**/assets/f3/external.manifest.json');await page.route('**/assets/f3/external.manifest.json',r=>r.fulfill({status:404,body:'Missing catalog'}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),61);assert.match(await page.locator('#searchCatalogState').innerText(),/genérico/);
+});
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`protected preview session keeps both authorized catalogs and textured assets ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,context,errors,mobile}=await setup(t,viewport),responses=[];
+ page.on('response',r=>{const p=new URL(r.url()).pathname;if(p.startsWith('/assets/f3/'))responses.push({path:p,status:r.status()});});
+ await context.addCookies([{name:'qa-preview',value:'authorized',url,httpOnly:true,sameSite:'Lax'}]);protectedAssets=true;t.after(()=>{protectedAssets=false;});
+ await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);
+ assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.filter(e=>e.catalog==='immersphere-asset-lab').length),2,JSON.stringify({responses,error:await page.evaluate(()=>FloorPlanAssetUI.error)}));
+ assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.length),3);assert.equal(await page.evaluate(()=>FloorPlanAssetUI.error),null);
+ for(const term of ['cómoda','puf']){
+  if(mobile&&!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();
+  if(mobile)await page.waitForFunction(()=>document.querySelector('aside.lib').getBoundingClientRect().left>=-.5);
+  await page.locator('#furnitureSearch').fill(term);const card=page.locator('#searchResults .item[data-key^="asset:"]');assert.equal(await card.count(),1);assert.match(await card.innerText(),term==='cómoda'?/SONGESAND/:/STOCKHOLM/);assert.match(await card.innerText(),/Modelo 3D autorizado/);assert.ok(await page.locator('#searchResults .item[data-key^="asset:"]').count());
+  await card.click();const object=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));assert.deepEqual(object.size,term==='cómoda'?{widthMm:820,depthMm:500,heightMm:810}:{widthMm:690,depthMm:650,heightMm:400});
+  await open3D(page);await page.waitForFunction(id=>['ready','error'].includes(View3D.assetStatus(id)?.state),object.id);const status=await page.evaluate(id=>View3D.assetStatus(id),object.id);assert.equal(status.state,'ready',JSON.stringify({status,responses}));assert.match(status.attribution,/IKEA/);assert.ok(status.textureStats.images>0);
+  await page.click('[data-view="2d"]');await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+ }
+ for(const p of ['/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/f3/ASSET-LAB-PROVENANCE.txt','/assets/f3/songesand-90366839.glb','/assets/f3/stockholm-pouf-80586139.glb'])assert.ok(responses.some(r=>r.path===p&&r.status===200),p);
+ assert.ok(responses.every(r=>r.status===200));assert.deepEqual(errors,[]);
+ const commit=(await run('git',['rev-parse','HEAD'])).stdout.trim();await fs.mkdir('docs/qa/artifacts/f3-preview-auth',{recursive:true});await fs.writeFile(`docs/qa/artifacts/f3-preview-auth/${viewport.width}x${viewport.height}.json`,JSON.stringify({commitAtRun:commit,viewport,method:'Local browser with session-protected fixture server; SwiftShader software',responses,catalog:await page.evaluate(()=>FloorPlanAssetUI.diagnostics)},null,2)+'\n');
+});
+
+test('catalog failures and exclusions cannot silently leave generic search results',{timeout:90000},async t=>{
+ const {page,errors,consoleMessages}=await setup(t);
+ const manifest=JSON.parse(await fs.readFile('assets/f3/external.manifest.json','utf8'));
+ const excluded=structuredClone(manifest);for(const e of excluded.source)e.qaStatus='pending';
+ const cases=[
+  {label:'HTTP 401',status:401,body:'Session required',contentType:'text/html',expect:/HTTP 401/},
+  {label:'HTTP 404',status:404,body:'Not found',contentType:'text/html',expect:/HTTP 404/},
+  {label:'HTML instead of JSON',status:200,body:'<!doctype html><title>Login</title>',contentType:'text/html',expect:/JSON inválido.*text\/html/},
+  {label:'invalid identity',status:200,body:JSON.stringify({...manifest,catalogRevision:'invalid'}),contentType:'application/json',expect:/Adaptación: Invalid manifest identity/},
+  {label:'excluded entries',status:200,body:JSON.stringify(excluded),contentType:'application/json',expect:/unsupported-or-unverified-resource/}
+ ];
+ for(const scenario of cases){
+  await page.route('**/assets/f3/external.manifest.json',r=>r.fulfill({status:scenario.status,body:scenario.body,contentType:scenario.contentType}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);
+  const diagnostic=await page.evaluate(()=>FloorPlanAssetUI.diagnostics[1]);assert.equal(diagnostic.httpStatus,scenario.status);assert.match(diagnostic.reason,scenario.expect,scenario.label);assert.ok(['error','warning'].includes(diagnostic.state));
+  assert.match(await page.locator('#searchCatalogState').innerText(),/assets\/f3\/external.manifest.json/);assert.match(await page.locator('#searchCatalogState').innerText(),scenario.expect);await page.locator('#furnitureSearch').fill('cómoda');assert.equal(await page.locator('#searchResults .item[data-key^="asset:"]').count(),0);assert.equal(await page.locator('#searchResults .item').count(),1);assert.match(await page.locator('#searchResults .item').innerText(),/Genérico/);
+  await page.unroute('**/assets/f3/external.manifest.json');
+ }
+ await page.route('**/assets/f3/catalog.manifest.json',r=>r.fulfill({status:404,body:'Missing'}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);assert.match(await page.locator('#searchCatalogState').innerText(),/assets\/f3\/catalog.manifest.json.*HTTP 404/);assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.filter(e=>e.catalog==='immersphere-asset-lab').length),2);
+ assert.ok(consoleMessages.some(m=>m.type==='warning'&&m.text.includes('F3 catálogo QA')));assert.deepEqual(errors,[]);
 });

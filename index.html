@@ -232,6 +232,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .lib-controls label{display:block;font-size:12px;margin:6px 0}.search-row{display:flex;gap:4px}
 .lib-controls input,.lib-controls select{font:inherit;font-size:16px;min-height:44px;width:100%;min-width:0;border:1px solid var(--line);border-radius:6px;padding:6px}
 .lib-controls .btn,#searchEmptyReset{min-height:44px;border:1px solid var(--line)}
+#searchCatalogState{overflow-wrap:anywhere}
 #searchCount,#searchCatalogState{font-size:12px;margin:8px 0;line-height:1.4}
 .item{font:inherit;color:var(--ink);min-height:100px;min-width:0;text-align:center;overflow-wrap:anywhere}
 .item b,.item small,.item-kind{max-width:100%;white-space:normal;line-height:1.35}
@@ -2657,7 +2658,7 @@ function loadFurnitureAsset(g,f,generation){
     result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
     g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
     publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
-  }).catch(()=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
+  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
 }
 function buildFurn(){
   assetGeneration++;assetRequests.forEach(c=>c.abort());assetRequests.clear();assetStates.clear();
