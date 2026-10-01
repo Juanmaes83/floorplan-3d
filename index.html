@@ -238,6 +238,13 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .item-kind{font-size:11px;font-weight:600}.item-attribution{font-size:10px!important}
 .lib h4{position:static}.lib-grid{align-items:stretch}
 @media(max-width:1100px){.lib-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:1100px) and (max-height:500px){
+ .lib-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;padding:6px}
+ .lib-controls>label{grid-column:1/-1;margin:0}.search-row{grid-column:1;grid-row:2}
+ .search-summary{grid-column:2;grid-row:2;gap:4px}.search-summary #searchCount{margin:0;max-width:55px}
+ .search-filters{grid-column:1/-1}.search-filters label{margin:0}
+ #searchCatalogState{grid-column:1/-1;margin:0;font-size:11px}
+}
 </style>
 <script type="importmap">
 {"imports":{
