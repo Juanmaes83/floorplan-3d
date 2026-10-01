@@ -135,23 +135,10 @@ offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el fluj
 en su teléfono; el rendimiento físico sigue sin medir.
 
 
-## F3 — entrega inicial integrada; piloto externo en revisión
+## F3 — piloto externo texturizado integrado
 
-La biblioteca genérica conserva sus 60 entradas. «Modelo 3D autorizado» permite
-asociar el banco sintético propio o los dos modelos del piloto externo: SONGESAND
-90366839 y STOCKHOLM 2025 puf 80586139. La asociación conserva identidad, estancia,
-posición, giro, dimensiones y elevación; adapta el modelo a las medidas existentes.
-Las medidas oficiales del producto se muestran por separado. El usuario puede
-cambiar expresamente las dimensiones del objeto antes de asociarlo.
+La [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) completó y cerró el piloto acotado tras revisión visual de Juanma. Se integraron SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con dimensiones, atribución y texturas JPEG embebidas; el buscador permite encontrar los modelos junto con los muebles genéricos. SHA revisado/desplegado: `772e24c26d10cec4349f28558ffc87ee18748317`; merge en `master`: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`. La [preview de ese SHA](https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/) está protegida por Vercel Authentication y figura READY. No hubo despliegue manual a producción.
 
-Juanma autoriza la incorporación, publicación en Git y preview de revisión de estos
-assets para este proyecto. El permiso MIT del banco sintético no se aplica a IKEA;
-la procedencia y el alcance se registran en el documento específico del piloto.
-Three.js/GLTFLoader siguen en 0.160.0: se admiten texturas JPEG core embebidas con
-límites de descarga y memoria; no Draco, WebP, URI de imagen externas ni extensiones.
-El schema sigue en 1.3.0. Fallos y cancelación mantienen el objeto genérico operativo.
+Este cierre cubre el piloto inicial, no un catálogo comercial amplio ni una biblioteca PBR completa. No se admiten de forma general Draco, KTX2, meshopt, WebP ni URI de texturas remotas. El schema permanece en 1.3.0; se conserva el fallback genérico. El informe registra pruebas, diagnósticos y limitaciones: [corrección de catálogo en preview protegida](docs/technical/F3-preview-catalog-fix.md) y [estado F3/roadmap](docs/ROADMAP.md).
 
-La entrega inicial se fusionó por PR #12. El nuevo piloto requiere revisión humana
-y merge; **F3 sigue abierta**. SwiftShader valida renderizado por software, sin
-acreditar rendimiento en móvil físico. [Informe y evidencia](docs/technical/F3-initial.md#piloto-externo-texturizado-01-10-2026) ·
-[roadmap](docs/ROADMAP.md). F2 conserva sus cinco sesiones y veinte planos pendientes.
+La siguiente entrega recomendada es mejorar «Nuevo proyecto» y permitir edición directa de dimensiones para habitaciones ortogonales bien identificadas. La especificación geométrica está en [room-dimension-editing-discovery.md](docs/product/room-dimension-editing-discovery.md); el Roadmap 2 continúa como propuesta no aprobada en la [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15). Las cinco sesiones y veinte planos de validación F2 permanecen pendientes y no bloquean este trabajo.
