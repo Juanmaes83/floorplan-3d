@@ -17,7 +17,7 @@ function build(groups,entries=[],label=s=>s,spanish=label){
  const seen=new Set(),result=[];
  function add(r){if(seen.has(r.id)||!specs[r.type]||!r.name.trim())throw Error('Duplicate or ambiguous search entry');seen.add(r.id);r.family=specs[r.type][0];r.terms=normalize([r.name,r.type,families[r.family],specs[r.type][1],r.extra||''].join(' '));result.push(r);}
  groups.forEach((g,ci)=>g.items.forEach((it,ii)=>add({id:`${ci}:${ii}`,kind:'generic',name:label(it[1]),extra:spanish(it[1]),room:String(ci),roomName:label(g.cat),type:it[0],item:it,dimensions:{width:it[2],height:it[5],depth:it[3]}})));
- for(const entry of entries){const meta=assets[entry.catalog+'/'+entry.id];if(!meta)continue;const d=entry.dimensionsMm;
+ for(const entry of entries){const meta=assets[entry.catalog+'/'+entry.id]||(specs[entry.type]&&Number.isInteger(entry.room)&&entry.room>=0&&entry.room<groups.length?{type:entry.type,room:entry.room,terms:'ikea asset lab modelo 3d'}:null);if(!meta)continue;const d=entry.dimensionsMm;
   add({id:'asset:'+entry.catalog+'/'+entry.id,kind:'asset',name:entry.name,room:String(meta.room),roomName:label(groups[meta.room].cat),type:meta.type,extra:meta.terms,dimensions:d,entry,item:[meta.type,entry.name,d.width,d.depth,'#c9c2b7',d.height,entry]});
  }
  return result;

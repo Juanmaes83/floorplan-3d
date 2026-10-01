@@ -1,0 +1,22 @@
+F3 Asset Lab expansion — provenance and project-specific permission record
+Recorded 2026-10-01 for Juanmaes83/floorplan-3d.
+
+Juanma confirmed authorization to use Asset Lab resources and explicitly requested
+this integration, publication in the Rubik Git repository, and a review preview.
+This is a record of authorization for this project, not a general license or
+an IKEA affiliation. Original Asset Lab metadata is retained in the technical
+inventory and per-model evidence: licenseType authorized-commercial-demo,
+redistributionAllowed false, qaStatus pending, and permission references mostly
+to a pending template. Those fields alone do not authorize public distribution.
+
+Source repository: https://github.com/Juanmaes83/immersphere-asset-lab
+Source revision: 5dc7b182c5c227472b84aea66a3ffa1368c95981
+Source manifest: manifest/ikea-sample.manifest.json
+The integration copies selected, normalized GLBs into floorplan-3d. Asset Lab
+itself is not modified. Every source and output hash, conversion and model-only
+dimension is recorded in docs/technical/F3-pipeline-results.json.
+
+IKEA names identify the product references in Asset Lab. No manufacturer
+dimensions are asserted for these new models; displayed dimensions describe the
+normalized mesh, with uncertain physical scale. Do not reuse the synthetic
+fixture's MIT license for these files. Additional uses require separate review.

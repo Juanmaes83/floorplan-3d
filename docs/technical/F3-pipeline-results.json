@@ -1,0 +1,828 @@
+{
+  "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "tool": "glTF Transform 4.3.0 / sharp 0.34.4",
+  "steps": [
+    "copy: decode Draco",
+    "jpeg: convert WebP then PNG to JPEG quality 82",
+    "resize: maximum 1024 pixels per side"
+  ],
+  "outputs": [
+    {
+      "id": "ikea-solvinden-solar-floor-lamp-outdoor-beige",
+      "sourcePath": "assets/ikea/lighting/solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "sourceSha256": "fd7be7eae99afc3a787482afa17244fa4db27e71e2a8d261d3a7726494160411",
+      "sourceBytes": 25968,
+      "sourceExtensions": [
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [],
+      "outputPath": "assets/f3/ikea-solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "outputSha256": "1012194c96e7e116650a4a7936bc63bfd86a59c8026b3ee3bba32c3229397c14",
+      "outputBytes": 195384,
+      "outputImages": [],
+      "modelDimensionsMm": {
+        "width": 258,
+        "height": 1200,
+        "depth": 250
+      },
+      "bboxMinMeters": [
+        -0.12915146350860596,
+        0,
+        -0.12500007450580597
+      ],
+      "bboxMaxMeters": [
+        0.12916672229766846,
+        1.1999977827072144,
+        0.12498919665813446
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo",
+      "sourcePath": "assets/ikea/bed/brimnes-estructura-de-cama-con-almacenaje-blancoluroy.glb",
+      "sourceSha256": "4aa5610bb99bff386190dc136eb31f50df8c3f0766b7f6534a762a2da8646669",
+      "sourceBytes": 630152,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 326252,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 42472,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 80,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 50336,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo.glb",
+      "outputSha256": "2670c91b7d239e40bb631e51e8f5b82d67b85215c1031f1ab5081468a45ad928",
+      "outputBytes": 3301296,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 162682,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 103603,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 301,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 132054,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1506,
+        "height": 470,
+        "depth": 2054
+      },
+      "bboxMinMeters": [
+        -0.7530853152275085,
+        0,
+        -1.0270256996154785
+      ],
+      "bboxMaxMeters": [
+        0.7530686259269714,
+        0.46966224908828735,
+        1.0270256996154785
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-malm-comoda-6-cajones-blanco-demo",
+      "sourcePath": "assets/ikea/dresser/malm-comoda-6-cajones-blanco.glb",
+      "sourceSha256": "7d99ddb4c4a65f8ebd73be26dd3523ea0876d2d96050d5a2c830eae06ab56491",
+      "sourceBytes": 356720,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 17420,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 309878,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3752,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4886,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-malm-comoda-6-cajones-blanco-demo.glb",
+      "outputSha256": "c4e5f7af6b452cb97adad5dfb409d1f23654370010228ae8b09696cab2d82c31",
+      "outputBytes": 290184,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 43272,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 153673,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 7404,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 9486,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1603,
+        "height": 780,
+        "depth": 483
+      },
+      "bboxMinMeters": [
+        -0.8017137944698334,
+        0,
+        -0.24161740392446518
+      ],
+      "bboxMaxMeters": [
+        0.8017138540744781,
+        0.7801331609953195,
+        0.24157384783029556
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-lisabo-mesa-chapa-fresno-demo",
+      "sourcePath": "assets/ikea/table/lisabo-mesa-chapa-fresno.glb",
+      "sourceSha256": "d5142ade612d60b3930115e28d57ae4dfb8b5164954fb1568a9ae5b714ae21f6",
+      "sourceBytes": 77744,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 40468,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16488,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-lisabo-mesa-chapa-fresno-demo.glb",
+      "outputSha256": "36f27968b7b4e34ccba96fe2424aeef7119c4dd88512a0dab444bf8b5020853f",
+      "outputBytes": 261580,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 77964,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 47208,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1400,
+        "height": 740,
+        "depth": 780
+      },
+      "bboxMinMeters": [
+        -0.7000376582145691,
+        -0.000017616750483284704,
+        -0.3900509774684906
+      ],
+      "bboxMaxMeters": [
+        0.7000289559364319,
+        0.7401384115219116,
+        0.3900996744632721
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-lisabo-silla-negrotallmyra-negro-gris-demo",
+      "sourcePath": "assets/ikea/chair/lisabo-silla-negrotallmyra-negro-gris.glb",
+      "sourceSha256": "564205ff65b5625edede81445ed911594ea7bd871ee19cb1f3abfc0d03135e90",
+      "sourceBytes": 321452,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 84030,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 58552,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-lisabo-silla-negrotallmyra-negro-gris-demo.glb",
+      "outputSha256": "016b277d201ecde0a3b82cef2a28dd3975b0fc50ebb507b5d78720c4f79aad8d",
+      "outputBytes": 2054416,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 130236,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 135915,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 455,
+        "height": 804,
+        "depth": 521
+      },
+      "bboxMinMeters": [
+        -0.22763630747795105,
+        -0.00007322178134927526,
+        -0.26038306951522827
+      ],
+      "bboxMaxMeters": [
+        0.22778356075286865,
+        0.8042760491371155,
+        0.2602861523628235
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-nammaro-garden-table-light-brown",
+      "sourcePath": "assets/ikea/tables/nammaro-garden-table-light-brown.glb",
+      "sourceSha256": "5ab7c7e20f99fe76b13a4cc9f2a4dba6323ca0c1d87d9532eb80d1cecec0070b",
+      "sourceBytes": 184216,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 58232,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43012,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-nammaro-garden-table-light-brown.glb",
+      "outputSha256": "f99c03d0e58f721df58d2d347f633369188dbf519e656eafd569496e200312aa",
+      "outputBytes": 1034908,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 101820,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 119358,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 750,
+        "height": 750,
+        "depth": 630
+      },
+      "bboxMinMeters": [
+        -0.3750004172325134,
+        -0.000001339964342150779,
+        -0.3150005340576172
+      ],
+      "bboxMaxMeters": [
+        0.3750009536743164,
+        0.7500000596046448,
+        0.31483030319213867
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-frotorp-coffee-table-white-chrome-white-glass-demo",
+      "sourcePath": "assets/ikea/coffee-table/frotorp-mesa-de-centro-blanco-cromadoblanco-vidrio.glb",
+      "sourceSha256": "102063ce485aaae9c75d65dc21c6584768f09fabc5b987819cd7e8dc68cce32d",
+      "sourceBytes": 325104,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 194153,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 19488,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 38212,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-frotorp-coffee-table-white-chrome-white-glass-demo.glb",
+      "outputSha256": "6b0cddebac3d3243281bb6dde88b7c5f79ec32cd0a5a7a1e68efcf1d585c6f0b",
+      "outputBytes": 943932,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 253459,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 46532,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 97934,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 883,
+        "height": 349,
+        "depth": 883
+      },
+      "bboxMinMeters": [
+        -0.4415000379085541,
+        -9.568470886733849e-7,
+        -0.4415077567100525
+      ],
+      "bboxMaxMeters": [
+        0.44153788685798645,
+        0.3489992618560791,
+        0.44153016805648804
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-morum-indoor-outdoor-rug-beige",
+      "sourcePath": "assets/ikea/rugs/morum-indoor-outdoor-rug-beige.glb",
+      "sourceSha256": "db17959485c5559bf8f5048e615418e6720daafbbff80e318e86c119276c2afb",
+      "sourceBytes": 275944,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 241354,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16646,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-morum-indoor-outdoor-rug-beige.glb",
+      "outputSha256": "bc72dbf9b10be487e5bbb8a020eab814828f5119e918f9d7d50af942cc1ee558",
+      "outputBytes": 403896,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 250391,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 44409,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1594,
+        "height": 16,
+        "depth": 2319
+      },
+      "bboxMinMeters": [
+        -0.7972671985626221,
+        -0.00046572336577810347,
+        -1.1603424549102783
+      ],
+      "bboxMaxMeters": [
+        0.7970504760742188,
+        0.015391089953482151,
+        1.1591413021087646
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-hemnes-tv-unit-white-light-brown-stain-demo",
+      "sourcePath": "assets/ikea/tv-unit/hemnes-mueble-tv-tinte-blancomarron-claro.glb",
+      "sourceSha256": "23b9bf671b18666df2cb04aba8bce5e7769077d0fe1a283e28150483204ca80d",
+      "sourceBytes": 146392,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 41102,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 38640,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-hemnes-tv-unit-white-light-brown-stain-demo.glb",
+      "outputSha256": "9bcf19d78c2954d215718785bd2d9932b826fa0aa1430722f3f61f58942e94fe",
+      "outputBytes": 873520,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 121992,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 81165,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1477,
+        "height": 570,
+        "depth": 488
+      },
+      "bboxMinMeters": [
+        -0.7385000586509705,
+        0,
+        -0.24409089982509613
+      ],
+      "bboxMaxMeters": [
+        0.7385000586509705,
+        0.5700464844703674,
+        0.24436582624912262
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-lauters-floor-lamp-brown-ash-demo",
+      "sourcePath": "assets/ikea/lighting/lauters-lampara-de-pie-marron-fresno.glb",
+      "sourceSha256": "aa556cdf8ec6155942a3dd1dee23411d13fa9ca55b731f1afd45b89f2e7e1de3",
+      "sourceBytes": 122144,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 41160,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22218,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-lauters-floor-lamp-brown-ash-demo.glb",
+      "outputSha256": "e406b7d2f41430f102dddcda5ddaf7786542572056d4ef631acb6e92b58349ca",
+      "outputBytes": 549712,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 98215,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 53251,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 719,
+        "height": 1435,
+        "depth": 553
+      },
+      "bboxMinMeters": [
+        -0.3595711290836334,
+        0,
+        -0.27635443210601807
+      ],
+      "bboxMaxMeters": [
+        0.359573632478714,
+        1.4348737001419067,
+        0.2763824462890625
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-vasman-armchair-outdoor-brown",
+      "sourcePath": "assets/ikea/chairs/vasman-armchair-outdoor-brown.glb",
+      "sourceSha256": "5ff3354496f91625dfa3aa9b61a4f40fcb153c8c651a903ce84632611079af35",
+      "sourceBytes": 465188,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 8222,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 83396,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-vasman-armchair-outdoor-brown.glb",
+      "outputSha256": "9d19f3c7c1e1be0d845aef3843d471055db4637bf80b5d68fb1f9474866f0ce7",
+      "outputBytes": 3565448,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 18028,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 168593,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 571,
+        "height": 920,
+        "depth": 637
+      },
+      "bboxMinMeters": [
+        -0.2854772210121155,
+        -0.00008413894101977348,
+        -0.318092942237854
+      ],
+      "bboxMaxMeters": [
+        0.28546130657196045,
+        0.9201014041900635,
+        0.3184487819671631
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey",
+      "sourcePath": "assets/ikea/lounge/nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "sourceSha256": "f284e9ba36ec44880d6c7b82bf4370e5228748c1d32f1f0a06414e082c3446fb",
+      "sourceBytes": 559996,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 48146,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 399316,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 34494,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4856,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "outputSha256": "7114e080f5812e35b3894eca1efb0c0bb42d23113d2fffd15bb27c00d4eaa8e8",
+      "outputBytes": 780996,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 91455,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 212702,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 89528,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 12445,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1270,
+        "height": 798,
+        "depth": 743
+      },
+      "bboxMinMeters": [
+        -0.6352039575576782,
+        0,
+        -0.3712819814682007
+      ],
+      "bboxMaxMeters": [
+        0.6352039575576782,
+        0.7977755069732666,
+        0.3712819814682007
+      ],
+      "officialDimensions": null
+    }
+  ],
+  "rejected": [
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "reason": "outside Rubik output profile: ikea-glostad-3-seat-sofa-knisa-dark-grey-demo {\"bytes\":351620,\"sha256\":\"f0dcbc11686e5978fe251c4af4b961435ea4463de2cf90b125e5a34a4e0ef010\",\"extensionsRequired\":[\"KHR_texture_transform\"],\"extensionsUsed\":[\"KHR_texture_transform\"],\"images\":[{\"mime\":\"image/jpeg\",\"bytes\":9596,\"width\":256,\"height\":256,\"hasAlpha\":false}],\"meshes\":2,\"materials\":2,\"externalResources\":false}"
+    },
+    {
+      "id": "ikea-brimnes-tv-unit-white-demo",
+      "reason": "outside Rubik output profile: ikea-brimnes-tv-unit-white-demo {\"bytes\":498004,\"sha256\":\"18fa9d7f0bd3979f6a3ece990081606d34b61a848660051144387ee07a000bb8\",\"extensionsRequired\":[\"EXT_texture_webp\"],\"extensionsUsed\":[\"EXT_texture_webp\"],\"images\":[{\"mime\":\"image/webp\",\"bytes\":2142,\"width\":1024,\"height\":1024,\"hasAlpha\":true},{\"mime\":\"image/jpeg\",\"bytes\":34789,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":13724,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":63421,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":173605,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":115110,\"width\":1024,\"height\":1024,\"hasAlpha\":false}],\"meshes\":1,\"materials\":2,\"externalResources\":false}"
+    },
+    {
+      "id": "ikea-saltsjobaden-armchair-tonerud-red-brown-demo",
+      "reason": "outside Rubik output profile: ikea-saltsjobaden-armchair-tonerud-red-brown-demo {\"bytes\":979360,\"sha256\":\"ff097bbd6380bf4e9ed0040786864a07b4df47f1bf0d3c25dda912c6f771b17e\",\"extensionsRequired\":[],\"extensionsUsed\":[\"KHR_materials_ior\",\"KHR_materials_specular\"],\"images\":[{\"mime\":\"image/jpeg\",\"bytes\":2837,\"width\":250,\"height\":250,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":11871,\"width\":256,\"height\":256,\"hasAlpha\":false}],\"meshes\":2,\"materials\":2,\"externalResources\":false}"
+    },
+    {
+      "id": "ikea-brimnes-mesita-de-noche-blanco-demo",
+      "reason": "outside Rubik output profile: ikea-brimnes-mesita-de-noche-blanco-demo {\"bytes\":561764,\"sha256\":\"41219133c1628ca95937b4433383dac61411c8058aa8a6b4e944800b138d4806\",\"extensionsRequired\":[\"EXT_texture_webp\"],\"extensionsUsed\":[\"EXT_texture_webp\"],\"images\":[{\"mime\":\"image/jpeg\",\"bytes\":64161,\"width\":846,\"height\":846,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":18037,\"width\":846,\"height\":846,\"hasAlpha\":false},{\"mime\":\"image/webp\",\"bytes\":28846,\"width\":846,\"height\":846,\"hasAlpha\":true},{\"mime\":\"image/jpeg\",\"bytes\":105954,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":61862,\"width\":1024,\"height\":1024,\"hasAlpha\":false},{\"mime\":\"image/jpeg\",\"bytes\":31390,\"width\":1024,\"height\":1024,\"hasAlpha\":false}],\"meshes\":2,\"materials\":2,\"externalResources\":false}"
+    }
+  ]
+}

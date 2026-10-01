@@ -1,0 +1,6677 @@
+{
+  "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "manifestEntries": 134,
+  "physicalGlb": 114,
+  "missing": 20,
+  "unlisted": [],
+  "rows": [
+    {
+      "id": "ikea-demo-001",
+      "name": "Demo Sofa Nordic",
+      "category": "sofa",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 220,
+        "height": 85,
+        "depth": 95,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "docs/placeholder-permission-ikea.pdf",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-002",
+      "name": "Demo Armchair Berg",
+      "category": "armchair",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 82,
+        "height": 101,
+        "depth": 85,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-003",
+      "name": "Demo Coffee Table Laxe",
+      "category": "coffee-table",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 90,
+        "height": 45,
+        "depth": 90,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-004",
+      "name": "Demo Dining Table Mora",
+      "category": "dining-table",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 180,
+        "height": 75,
+        "depth": 90,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-005",
+      "name": "Demo Chair Edda",
+      "category": "chair",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 47,
+        "height": 80,
+        "depth": 50,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-006",
+      "name": "Demo Bed Malm",
+      "category": "bed",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 180,
+        "height": 100,
+        "depth": 200,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-007",
+      "name": "Demo Wardrobe Pax",
+      "category": "wardrobe",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 200,
+        "height": 236,
+        "depth": 60,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-008",
+      "name": "Demo Floor Lamp Ranarp",
+      "category": "lamp",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 28,
+        "height": 150,
+        "depth": 28,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-009",
+      "name": "Demo Rug Silkeborg",
+      "category": "rug",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 170,
+        "height": 1,
+        "depth": 240,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-010",
+      "name": "Demo Vase Svalka",
+      "category": "decor",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 15,
+        "height": 30,
+        "depth": 15,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-011",
+      "name": "Demo Shelf Billy",
+      "category": "shelf",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 80,
+        "height": 202,
+        "depth": 28,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-012",
+      "name": "Demo Kitchen Island Vadholma",
+      "category": "kitchen",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 126,
+        "height": 90,
+        "depth": 79,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-013",
+      "name": "Demo Bathroom Cabinet Godmorgon",
+      "category": "bathroom",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 100,
+        "height": 64,
+        "depth": 49,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-014",
+      "name": "Demo Desk Alex/Linnmon",
+      "category": "office",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 150,
+        "height": 74,
+        "depth": 75,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-015",
+      "name": "Demo Cushion GURLI",
+      "category": "textile",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 50,
+        "height": 10,
+        "depth": 50,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-016",
+      "name": "Demo Pendant Lamp HEKTAR",
+      "category": "lamp",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 47,
+        "height": 52,
+        "depth": 47,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-017",
+      "name": "Demo Side Table Gladom",
+      "category": "coffee-table",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 53,
+        "height": 50,
+        "depth": 53,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-018",
+      "name": "Demo Mirror Nissedal",
+      "category": "decor",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 65,
+        "height": 150,
+        "depth": 2,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-019",
+      "name": "Demo Bar Stool Janinge",
+      "category": "chair",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 42,
+        "height": 91,
+        "depth": 48,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-demo-020",
+      "name": "Demo Curtains Majgull",
+      "category": "textile",
+      "modelPath": "assets/_placeholder/demo-model.glb",
+      "exists": false,
+      "manifestDimensions": {
+        "width": 145,
+        "height": 250,
+        "depth": 1,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending"
+    },
+    {
+      "id": "ikea-vittskar-armchair-outdoor-dark-grey-20575167",
+      "name": "VITTSKÄR silla con reposabrazos",
+      "category": "chair",
+      "modelPath": "assets/ikea/chairs/vittskar-armchair-outdoor-dark-grey.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": 64,
+        "height": 95,
+        "depth": 59,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2330000,
+      "sha256": "56f00593a0eddb94a1b15a9be12598a9d5381febff35143e98f5739b286fb5f2",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 9748,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 130072,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26404,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16482,
+          "width": 978,
+          "height": 978,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 120185,
+          "width": 978,
+          "height": 978,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 23290,
+          "width": 978,
+          "height": 978,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10920,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 127819,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26988,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 24582,
+          "width": 891,
+          "height": 891,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 103051,
+          "width": 891,
+          "height": 891,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 25822,
+          "width": 891,
+          "height": 891,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10506,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 143872,
+          "width": 1080,
+          "height": 1080,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22390,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 77390,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 877610,
+          "width": 1889,
+          "height": 1889,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 125828,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 6,
+      "materials": 6,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-vasman-armchair-outdoor-brown",
+      "name": "VÄSMAN silla con reposabrazos exterior",
+      "category": "chair",
+      "modelPath": "assets/ikea/chairs/vasman-armchair-outdoor-brown.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 465188,
+      "sha256": "5ff3354496f91625dfa3aa9b61a4f40fcb153c8c651a903ce84632611079af35",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 8222,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 83396,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-garden-table-light-brown",
+      "name": "NÄMMARÖ mesa jardín",
+      "category": "table",
+      "modelPath": "assets/ikea/tables/nammaro-garden-table-light-brown.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 184216,
+      "sha256": "5ab7c7e20f99fe76b13a4cc9f2a4dba6323ca0c1d87d9532eb80d1cecec0070b",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 58232,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43012,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-hakanskar-outdoor-coffee-table-light-brown",
+      "name": "HÅKANSKÄR mesa de centro exterior",
+      "category": "side-table",
+      "modelPath": "assets/ikea/side-tables/hakanskar-outdoor-coffee-table-light-brown.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 231792,
+      "sha256": "65a3386d975ff4b2a4c6f7a0029feebdffb206398cc4a56d8cb3d095e7e41033",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 85080,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 51788,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey",
+      "name": "NÄMMARÖ sofá de 2 plazas",
+      "category": "lounge",
+      "modelPath": "assets/ikea/lounge/nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 559996,
+      "sha256": "f284e9ba36ec44880d6c7b82bf4370e5228748c1d32f1f0a06414e082c3446fb",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 48146,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 399316,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 34494,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4856,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-solvinden-solar-floor-lamp-outdoor-beige",
+      "name": "SOLVINDEN lámpara de pie solar exterior",
+      "category": "lighting",
+      "modelPath": "assets/ikea/lighting/solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 25968,
+      "sha256": "fd7be7eae99afc3a787482afa17244fa4db27e71e2a8d261d3a7726494160411",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [],
+      "meshes": 3,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-morum-indoor-outdoor-rug-beige",
+      "name": "MORUM alfombra interior/exterior",
+      "category": "rug",
+      "modelPath": "assets/ikea/rugs/morum-indoor-outdoor-rug-beige.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 275944,
+      "sha256": "db17959485c5559bf8f5048e615418e6720daafbbff80e318e86c119276c2afb",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 241354,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16646,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stjarnanis-outdoor-planter-acacia-90612029",
+      "name": "STJÄRNANIS jardinera exterior",
+      "category": "planter",
+      "modelPath": "assets/ikea/planters/stjarnanis-outdoor-planter-acacia-90612029.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 145388,
+      "sha256": "fd9b110f65d0a0849d5ae8cd72141fccfe010c196d9ddf4bb1591517d73a389c",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 61432,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1274,
+          "width": 160,
+          "height": 160,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 554,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 582,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 260,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 34,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3080,
+          "width": 224,
+          "height": 224,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 362,
+          "width": 128,
+          "height": 128,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 5,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-havsten-outdoor-back-seat-cushion-beige-90542499",
+      "name": "HAVSTEN cojín respaldo/asiento exterior",
+      "category": "textile",
+      "modelPath": "assets/ikea/textile/havsten-outdoor-back-seat-cushion-beige-90542499.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 388264,
+      "sha256": "34e4e8f730597a507f48ede4559c19b2a884f09163a8679b86de0f3fd85e0139",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 92980,
+          "width": 1608,
+          "height": 1608,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 208534,
+          "width": 1608,
+          "height": 1608,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 63140,
+          "width": 1608,
+          "height": 1608,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-sjalsligt-decoration-set-of-3",
+      "name": "SJÄLSLIGT adorno, juego de 3",
+      "category": "decor",
+      "modelPath": "assets/ikea/decor/sjalsligt-decoration-set-of-3.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 333472,
+      "sha256": "4423a43ff3db643795c3a2da8866fc724b92f2c5b38fa28286156c65154906f1",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 35224,
+          "width": 688,
+          "height": 688,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7350,
+          "width": 688,
+          "height": 688,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 28344,
+          "width": 612,
+          "height": 612,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3922,
+          "width": 612,
+          "height": 612,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 11536,
+          "width": 633,
+          "height": 633,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4536,
+          "width": 633,
+          "height": 633,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-brimnes-tv-unit-white-demo",
+      "name": "BRIMNES mueble TV - blanco",
+      "category": "tv-unit",
+      "modelPath": "assets/ikea/tv-unit/brimnes-mueble-tv-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 478800,
+      "sha256": "ff59d8491500ac4317a2ec6fde15f1060bf85c8b924bbcdb56d5efc06f764069",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 2148,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 30484,
+          "width": 1229,
+          "height": 1229,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 2176,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 32708,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 342121,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44804,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-hemnes-tv-unit-white-light-brown-stain-demo",
+      "name": "HEMNES mueble TV - tinte blanco/marron claro",
+      "category": "tv-unit",
+      "modelPath": "assets/ikea/tv-unit/hemnes-mueble-tv-tinte-blancomarron-claro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 146392,
+      "sha256": "23b9bf671b18666df2cb04aba8bce5e7769077d0fe1a283e28150483204ca80d",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 41102,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 38640,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-fjallbo-tv-unit-black-90339290",
+      "name": "FJALLBO mueble TV - negro",
+      "category": "tv-unit",
+      "modelPath": "assets/ikea/tv-unit/fjallbo-mueble-tv-negro-90339290.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2655912,
+      "sha256": "9a8d46aeddc8e423ceab912ff640c3895dd807f178e002954db57749779da220",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 152340,
+          "width": 1863,
+          "height": 1863,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 229060,
+          "width": 1863,
+          "height": 1863,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 537996,
+          "width": 1501,
+          "height": 1501,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 1209597,
+          "width": 1501,
+          "height": 1501,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 193610,
+          "width": 1501,
+          "height": 1501,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "name": "GLOSTAD sofa de 3 plazas - Knisa gris oscuro",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/glostad-sofa-de-3-plazas-knisa-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 55708,
+      "sha256": "ee97e34a2da4926d7bea51a0b3f9d0d59031a17730d2d4b731c45d701e172aad",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 8140,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+      "name": "GLOSTAD sofa de 2 plazas - Knisa gris oscuro",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/glostad-sofa-de-2-plazas-knisa-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 892232,
+      "sha256": "eb19b9bebedaabd3313c04e8a62bb3536685eafc861af3ee310126959c7464e4",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 87510,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 460452,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 84186,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-hyltarp-3-seat-sofa-gransel-natural-demo",
+      "name": "HYLTARP sofa de 3 plazas - Gransel natural",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/hyltarp-sofa-de-3-plazas-gransel-natural.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 104372,
+      "sha256": "27f5cbd13a7e0ba428a5d83121fcaf5c9d017f1ae90a12930bca2db123072f69",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 58972,
+          "width": 477,
+          "height": 477,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kivik-3-seat-sofa-chaise-tibbleby-beige-grey-99440590",
+      "name": "KIVIK sofa 3 plazas con chaiselongue - Tibbleby beis/gris",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/kivik-sofa-3-plazas-con-chaiselongue-tibbleby-beisgris-99440590.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1057544,
+      "sha256": "f292ebf24aeef527cfd06e1b3179b2cfa5c32040221a086657bb4e9eb4ce13b8",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 125961,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 840765,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 38902,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 1525,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-eskilstuna-3-seat-sofa-chaise-hillared-anthracite-demo",
+      "name": "ESKILSTUNA sofa 3 plazas con chaiselongue - Hillared antracita",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/eskilstuna-sofa-3-plazas-con-chaiselongue-hillared-antracita.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 136016,
+      "sha256": "949e534cc7569ecaeeb58649d5d893d129d7eef5d94783c2e18da9fcd1780e72",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 64078,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10304,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10244,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-saltsjobaden-armchair-tonerud-red-brown-demo",
+      "name": "SALTSJOBADEN sillon - Tonerud marron rojizo",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/saltsjobaden-sillon-tonerud-marron-rojizo.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 100784,
+      "sha256": "a94ebc5651ee642324683de336517357cdc1c7ce9afdb2b4f0d130cfa0d9798b",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_materials_ior",
+        "KHR_materials_specular"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 1192,
+          "width": 250,
+          "height": 250,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10214,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+      "name": "STRANDMON sillon orejero - Tommaboda beige intenso",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/strandmon-sillon-orejero-tommaboda-beige-intenso.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1196180,
+      "sha256": "c481248979e68c8b2f57be97d102611dfda9286693cf82cb726b966f996ff5d6",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 104172,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 610295,
+          "width": 2048,
+          "height": 2047,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 118808,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-ektorp-armchair-kilanda-light-beige-99552101",
+      "name": "EKTORP sillon - Kilanda beige claro",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/ektorp-sillon-kilanda-beige-claro-99552101.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 400024,
+      "sha256": "bddfeb16bb65a6b8fa70fcc1400a3883dbf88bb8c5394bc8ff0ccad91caed978",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 134298,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 156629,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 13782,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 1746,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-jarnvag-low-pile-rug-demo",
+      "name": "JARNVAG alfombra - pelo corto",
+      "category": "rug",
+      "modelPath": "assets/ikea/rug/jarnvag-alfombra-pelo-corto.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 88008,
+      "sha256": "34ee6000b61987ce2782c960b77a130bdbfe3f792e2eafc3f2e180f6b83f8753",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 82566,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 1356,
+          "width": 128,
+          "height": 128,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 456,
+          "width": 384,
+          "height": 384,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 384,
+          "width": 384,
+          "height": 384,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lauters-floor-lamp-brown-ash-demo",
+      "name": "LAUTERS lampara de pie - marron fresno",
+      "category": "lighting",
+      "modelPath": "assets/ikea/lighting/lauters-lampara-de-pie-marron-fresno.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 122144,
+      "sha256": "aa556cdf8ec6155942a3dd1dee23411d13fa9ca55b731f1afd45b89f2e7e1de3",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 41160,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22218,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-frotorp-coffee-table-white-chrome-white-glass-demo",
+      "name": "FROTORP mesa de centro - blanco/cromado blanco vidrio",
+      "category": "coffee-table",
+      "modelPath": "assets/ikea/coffee-table/frotorp-mesa-de-centro-blanco-cromadoblanco-vidrio.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 325104,
+      "sha256": "102063ce485aaae9c75d65dc21c6584768f09fabc5b987819cd7e8dc68cce32d",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 194153,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 19488,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 38212,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-bankkontor-alfombra-pelo-largo-demo",
+      "name": "BANKKONTOR alfombra - pelo largo",
+      "category": "rug",
+      "modelPath": "assets/ikea/rug/bankkontor-alfombra-pelo-largo.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 216064,
+      "sha256": "3294a2c19f27bca97d5e7c2df96e29d075a3ae9bdf91cb292b0ebef0a8b14bab",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 102948,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 27491,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 15412,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 104,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-brimnes-armario-con-3-puertas-blanco-demo",
+      "name": "BRIMNES Armario con 3 puertas - blanco",
+      "category": "wardrobe",
+      "modelPath": "assets/ikea/wardrobe/brimnes-armario-con-3-puertas-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 310796,
+      "sha256": "2db6efa9c99970f68b23dbb0fd84ab1adff8eb5474a4a403b3943d46efa3f77b",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 27370,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 42708,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 141002,
+          "width": 952,
+          "height": 952,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 50783,
+          "width": 952,
+          "height": 952,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1926,
+          "width": 952,
+          "height": 952,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo",
+      "name": "BRIMNES estructura de cama con almacenaje - blancoLur?y",
+      "category": "bed",
+      "modelPath": "assets/ikea/bed/brimnes-estructura-de-cama-con-almacenaje-blancoluroy.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 630152,
+      "sha256": "4aa5610bb99bff386190dc136eb31f50df8c3f0766b7f6534a762a2da8646669",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 326252,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 42472,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 80,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 50336,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-brimnes-mesita-de-noche-blanco-demo",
+      "name": "BRIMNES Mesita de noche - blanco",
+      "category": "bedside-table",
+      "modelPath": "assets/ikea/bedside-table/brimnes-mesita-de-noche-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 286180,
+      "sha256": "03af83991888397f5037b494959fa0617bc4dd0adba310e37e2380b0d46677fd",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 46017,
+          "width": 846,
+          "height": 846,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4934,
+          "width": 846,
+          "height": 846,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 28962,
+          "width": 846,
+          "height": 846,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 135147,
+          "width": 1614,
+          "height": 1614,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 17912,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 12506,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-hemnes-comoda-de-2-cajones-tinte-blanco-demo",
+      "name": "HEMNES c?moda de 2 cajones - tinte blanco",
+      "category": "dresser",
+      "modelPath": "assets/ikea/dresser/hemnes-comoda-de-2-cajones-tinte-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 349912,
+      "sha256": "0aa7a66669a143f5cf696b4ae227ea7a9b028da0c6d5be8e502b7fa0389c50ea",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 57792,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 60348,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-hemnes-tocador-blanco-demo",
+      "name": "HEMNES Tocador - blanco",
+      "category": "vanity",
+      "modelPath": "assets/ikea/vanity/hemnes-tocador-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 332036,
+      "sha256": "659163f13f027942125e445b528aa96e21f002f80be3e342ca36fa8dd8266273",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 7766,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 267771,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10844,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 667,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 336,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 2988,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-idanas-canape-tapizado-naggen-beige-demo",
+      "name": "IDAN?S canap? tapizado - Naggen beige",
+      "category": "bed",
+      "modelPath": "assets/ikea/bed/idanas-canape-tapizado-naggen-beige.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 590948,
+      "sha256": "f97d35495874ba7e7001c8b761eb50fc66b3d26a5fb2becc46aed4f6aea4d801",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 3386,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 11107,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 17388,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 8112,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 5,
+      "materials": 5,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-idanas-estructura-de-cama-con-almacenaje-marron-oscuroluroy-demo",
+      "name": "IDAN?S estructura de cama con almacenaje - marr?n oscuroLur?y",
+      "category": "bed",
+      "modelPath": "assets/ikea/bed/idanas-estructura-de-cama-con-almacenaje-marron-oscuroluroy.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 219804,
+      "sha256": "3fa698d5d0f14bfc18c60ecd6343a7e7198de66d059448cbe63ca5eb1947a9af",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 94741,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44272,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 47828,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-karmsund-espejo-de-mesa-negro-demo",
+      "name": "KARMSUND Espejo de mesa - negro",
+      "category": "mirror",
+      "modelPath": "assets/ikea/mirror/karmsund-espejo-de-mesa-negro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 96316,
+      "sha256": "4fa67a4a6c5f8deffb51760b8aef996b12373a503b35649cb546e53d0ee7c2c3",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 20900,
+          "width": 946,
+          "height": 946,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 5508,
+          "width": 946,
+          "height": 946,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 5314,
+          "width": 748,
+          "height": 748,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1164,
+          "width": 748,
+          "height": 748,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1484,
+          "width": 748,
+          "height": 748,
+          "hasAlpha": true
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-malm-comoda-6-cajones-blanco-demo",
+      "name": "MALM c?moda 6 cajones - blanco",
+      "category": "dresser",
+      "modelPath": "assets/ikea/dresser/malm-comoda-6-cajones-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 356720,
+      "sha256": "7d99ddb4c4a65f8ebd73be26dd3523ea0876d2d96050d5a2c830eae06ab56491",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 17420,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 309878,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3752,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4886,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-malm-comoda-de-2-cajones-negro-marron-demo",
+      "name": "MALM c?moda de 2 cajones - negro-marr?n",
+      "category": "dresser",
+      "modelPath": "assets/ikea/dresser/malm-comoda-de-2-cajones-negro-marron.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 64072,
+      "sha256": "ce0e6b8be00fadd90b8415f265ebfcedf4c3e2552879916ef8efea546ec18f93",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 18704,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 25110,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+      "name": "NORDLI c?moda de 5 cajones - blanco",
+      "category": "dresser",
+      "modelPath": "assets/ikea/dresser/nordli-comoda-de-5-cajones-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 568708,
+      "sha256": "da733273971a56dd29694eff71cf7cc54d8b9758e6198b9b6019c1f8d86e0e00",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 30836,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 352540,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7866,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44018,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo",
+      "name": "SONGESAND C?moda de 3 cajones - blanco",
+      "category": "dresser",
+      "modelPath": "assets/ikea/dresser/songesand-comoda-de-3-cajones-blanco-90366839.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 784576,
+      "sha256": "0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f",
+      "extensionsRequired": [],
+      "extensionsUsed": [],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 22214,
+          "width": 512,
+          "height": 589,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 30047,
+          "width": 512,
+          "height": 589,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stomso-mesita-de-noche-de-pared-efecto-abedul-blancoazul-demo",
+      "name": "STOMS? mesita de noche de pared - efecto abedul blancoazul",
+      "category": "bedside-table",
+      "modelPath": "assets/ikea/bedside-table/stomso-mesita-de-noche-de-pared-efecto-abedul-blancoazul.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 155716,
+      "sha256": "d4fabbe0deb9688ea4fe710c127122e88eef2113cf4ab9ef87973f0ad80dc092",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 17442,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22088,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 21572,
+          "width": 940,
+          "height": 940,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26318,
+          "width": 940,
+          "height": 940,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-syvde-tocador-blanco-demo",
+      "name": "SYVDE Tocador - blanco",
+      "category": "vanity",
+      "modelPath": "assets/ikea/vanity/syvde-tocador-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 355912,
+      "sha256": "d8aaed8596d596b9c0f5e7817e8715fffe1a2950e3787aa8ddbcf4db2d95d9a9",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 10010,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 10336,
+          "width": 1210,
+          "height": 1210,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 2300,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 21140,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 236167,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 32462,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-tallasen-estructura-cama-tapizada-kulsta-beige-claroluroy-89514746-demo",
+      "name": "T?LL?SEN estructura cama tapizada - Kulsta beige claroLur?y",
+      "category": "bed",
+      "modelPath": "assets/ikea/bed/tallasen-estructura-cama-tapizada-kulsta-beige-claroluroy-89514746.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 308704,
+      "sha256": "b352473537bae354a54d41183bd95ee4f289e4c6be6d2dfd0fa76542ed039c0d",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 144738,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22108,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 99618,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 6932,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lisabo-mesa-chapa-fresno-demo",
+      "name": "LISABO Mesa - chapa fresno",
+      "category": "table",
+      "modelPath": "assets/ikea/table/lisabo-mesa-chapa-fresno.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 77744,
+      "sha256": "d5142ade612d60b3930115e28d57ae4dfb8b5164954fb1568a9ae5b714ae21f6",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 40468,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16488,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lisabo-silla-fresnotallmyra-blanconegro-demo",
+      "name": "LISABO silla - fresnoTallmyra blanconegro",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/lisabo-silla-fresnotallmyra-blanconegro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 578224,
+      "sha256": "9217fe360abda25d4f68f1a622bd56abcb7f08edc4d597c0a06a780c6a1f40ed",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 102226,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 280078,
+          "width": 1367,
+          "height": 1367,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 69832,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lisabo-silla-negrotallmyra-negro-gris-demo",
+      "name": "LISABO silla - negroTallmyra negro-gris",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/lisabo-silla-negrotallmyra-negro-gris.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 321452,
+      "sha256": "564205ff65b5625edede81445ed911594ea7bd871ee19cb1f3abfc0d03135e90",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 84030,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 58552,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-morbylanga-banco-chapa-robletinte-marron-demo",
+      "name": "M?RBYL?NGA banco - chapa robletinte marr?n",
+      "category": "bench",
+      "modelPath": "assets/ikea/bench/morbylanga-banco-chapa-robletinte-marron.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 86344,
+      "sha256": "ae460f05a0b9bae1cdd6dc8865cd21d383146bc993c1af08fd8f8988de20d79b",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 34914,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 26065,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3876,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-morbylanga-mesa-chapa-roble-tinte-marron-demo",
+      "name": "M?RBYL?NGA Mesa - chapa roble tinte marr?n",
+      "category": "table",
+      "modelPath": "assets/ikea/table/morbylanga-mesa-chapa-roble-tinte-marron.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 299960,
+      "sha256": "27a899caa815077fef192b5070a34a22cc30f9df6db60279f6f39d824cf6855d",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 187843,
+          "width": 1865,
+          "height": 1865,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 20886,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 77122,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-sandsberg-silla-blanco-demo",
+      "name": "SANDSBERG silla - blanco",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/sandsberg-silla-blanco.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 273272,
+      "sha256": "b710f2d27b111489bb929f9be23c96dd6e9435e4cad1742f10e5b332aaad1c12",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 17482,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 49172,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-sandsberg-silla-marron-rojizo-demo",
+      "name": "SANDSBERG silla - marr?n rojizo",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/sandsberg-silla-marron-rojizo.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 284248,
+      "sha256": "4521abc4df348bcd870590912362ee12bedec07f8a4ab1de33a5a1ad3b972ab5",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 18014,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 59344,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-skogsta-banco-con-almacenaje-acacianegro-demo",
+      "name": "SKOGSTA banco con almacenaje - acacianegro",
+      "category": "bench",
+      "modelPath": "assets/ikea/bench/skogsta-banco-con-almacenaje-acacianegro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 161596,
+      "sha256": "346295ebf283fa57f243d4234ae58e01dcc19a96fa78cf6aa45ea29a90dbdc68",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 78388,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 35656,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-skogsta-mesa-acacia-demo",
+      "name": "SKOGSTA mesa - acacia",
+      "category": "table",
+      "modelPath": "assets/ikea/table/skogsta-mesa-acacia.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 208876,
+      "sha256": "8d45aa0f78b8880e6526fb9f188bf334a04d6d39c3ffc5c405948a3b61b3e277",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 86128,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43646,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-skogsta-silla-acacia-demo",
+      "name": "SKOGSTA silla - acacia",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/skogsta-silla-acacia.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 253460,
+      "sha256": "d6caa369c4ab0b055bda6f18ade2b092f78d9d26e3b994d1be823609ed21dc91",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 132822,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46448,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-skogsta-silla-negro-demo",
+      "name": "SKOGSTA silla - negro",
+      "category": "chair",
+      "modelPath": "assets/ikea/chair/skogsta-silla-negro.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 85052,
+      "sha256": "42c41f200140012529f819bf9a9b948d058dfdba77f05ee4bd55c47329f64a5d",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 6416,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26528,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-aparador-chapa-roble-demo",
+      "name": "STOCKHOLM 2025 aparador - chapa roble",
+      "category": "sideboard",
+      "modelPath": "assets/ikea/sideboard/stockholm-2025-aparador-chapa-roble.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 147828,
+      "sha256": "83e200ddebaaa8e42c47ea6643f37e872ab6f4d2b3f2f00a62eeb0122cf89a21",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 74902,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 36976,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-mesa-chapa-roblechapa-roble-demo",
+      "name": "STOCKHOLM 2025 mesa - chapa roblechapa roble",
+      "category": "table",
+      "modelPath": "assets/ikea/table/stockholm-2025-mesa-chapa-roblechapa-roble.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 102576,
+      "sha256": "db65f78ac853dfafd36afbbc75c3ec346420bdb1397da91adfba372a456b6bcd",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 70046,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 636,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 566,
+          "width": 96,
+          "height": 96,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 532,
+          "width": 80,
+          "height": 80,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-vitrina-chapa-roble-demo",
+      "name": "STOCKHOLM 2025 vitrina - chapa roble",
+      "category": "display-cabinet",
+      "modelPath": "assets/ikea/display-cabinet/stockholm-2025-vitrina-chapa-roble.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 469184,
+      "sha256": "6da79b346ae200191408e1236e8571a29fdc43e663c53baf6c1b69c258eefc42",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 97036,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 40464,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 72302,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 22188,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 38369,
+          "width": 1097,
+          "height": 1097,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 37012,
+          "width": 1097,
+          "height": 1097,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 4444,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 28122,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 2254,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 4,
+      "materials": 5,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-tonstad-mesa-extensible-chapa-roble-demo",
+      "name": "TONSTAD mesa extensible - chapa roble",
+      "category": "table",
+      "modelPath": "assets/ikea/table/tonstad-mesa-extensible-chapa-roble.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 732624,
+      "sha256": "5acab7432decc247c2c7ce32505146c61bae1fc65e6458888a7e1ab0be238aec",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 48064,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 36564,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 83006,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 45324,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 81790,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44820,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 72682,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 30030,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 4,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-tversted-alfombra-pelo-corto-demo",
+      "name": "TVERSTED alfombra - pelo corto",
+      "category": "rug",
+      "modelPath": "assets/ikea/rug/tversted-alfombra-pelo-corto.glb",
+      "exists": true,
+      "manifestDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 98040,
+      "sha256": "ae69879ba23d9becc48f42d7de49efbbbe7a1dfe2c203a45d3ae01db3f861d43",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 91798,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 803,
+          "width": 128,
+          "height": 128,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 70,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 108,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-ab-cajones-blanco-90326787-demo",
+      "name": "KNOXHULT Ab cajones - blanco",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-ab-cajones-blanco-90326787.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1115984,
+      "sha256": "d119e6aa94274a03350d80c4be3b71574d2245abe5ce4ff3efe67861a253b904",
+      "extensionsRequired": [],
+      "extensionsUsed": [],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 257472,
+          "width": 2077,
+          "height": 2077,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 241808,
+          "width": 2077,
+          "height": 2077,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 35905,
+          "width": 203,
+          "height": 203,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 617,
+          "width": 203,
+          "height": 203,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 9612,
+          "width": 203,
+          "height": 203,
+          "hasAlpha": true
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-blanco-estructura-demo",
+      "name": "KNOXHULT armario alto con puerta - blanco estructura",
+      "category": "kitchen-tall-cabinet",
+      "modelPath": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco-estructura.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 290352,
+      "sha256": "68c781a7c1c7162d8b7417b0acc6ccc1fcb8569a1ee8cdad784a6f552fc26656",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 37362,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44102,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 8020,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 18412,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 42940,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 79918,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-blanco-demo",
+      "name": "KNOXHULT armario alto con puerta - blanco",
+      "category": "kitchen-tall-cabinet",
+      "modelPath": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 125920,
+      "sha256": "3ed5c64cb49195c97414bf1d00414d72a53219a64fd5e6864601002001ebae49",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 3924,
+          "width": 154,
+          "height": 154,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 668,
+          "width": 154,
+          "height": 154,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 30026,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 37372,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-efecto-roble-90604246-demo",
+      "name": "KNOXHULT armario alto con puerta - efecto roble",
+      "category": "kitchen-tall-cabinet",
+      "modelPath": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-efecto-roble-90604246.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1986992,
+      "sha256": "fef5074d98d2f4fbe46cb13dfbe2fa185543b67a6fe2c5bc400549d6eba70eb6",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 200154,
+          "width": 1883,
+          "height": 1883,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 214297,
+          "width": 1883,
+          "height": 1883,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 231429,
+          "width": 1414,
+          "height": 1414,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 182710,
+          "width": 1414,
+          "height": 1414,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 66897,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 202997,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 139252,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-gris-oscuro-demo",
+      "name": "KNOXHULT armario alto con puerta - gris oscuro",
+      "category": "kitchen-tall-cabinet",
+      "modelPath": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 231648,
+      "sha256": "8d2be849aa0d36f97006a841dc95d95e109b5f84b9431cd037bb4853ad7162db",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 47990,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 77418,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 32964,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 32734,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-cocina-esquina-blanco-demo",
+      "name": "KNOXHULT armario bajo cocina esquina - blanco",
+      "category": "kitchen-corner-cabinet",
+      "modelPath": "assets/ikea/kitchen-corner-cabinet/knoxhult-armario-bajo-cocina-esquina-blanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 159560,
+      "sha256": "ec2866611104cd021a79ba9ffad175ff1097b3027a40984df519b19928dc8991",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 37520,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 30174,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-estructura-90603973-demo",
+      "name": "KNOXHULT armario bajo con puertas y cajón - blanco estructura",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco-estructura-90603973.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2211656,
+      "sha256": "fc5c3d3f70cfba0f18d1196158812f5908ce70e954e77d6614159b18104d8e4e",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/png",
+          "bytes": 77912,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 326829,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 175942,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 409667,
+          "width": 2493,
+          "height": 2493,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 471466,
+          "width": 2493,
+          "height": 2493,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+      "name": "KNOXHULT Armario bajo con puertas y cajón - blanco",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 301860,
+      "sha256": "568be813365f6e438a243f9ab9a822207314ae0df906cf862913efbe624792c2",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 31612,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46256,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 63048,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-efecto-roble-demo",
+      "name": "KNOXHULT armario bajo con puertas y cajón - efecto roble",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-efecto-roble.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 418104,
+      "sha256": "0b06cd2a7435e9930687e73427cf2cef61c42bc989afb3942f8afb14341f3e14",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 70911,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 98316,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 55152,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 63964,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-gris-oscuro-demo",
+      "name": "KNOXHULT armario bajo con puertas y cajón - gris oscuro",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 321104,
+      "sha256": "0119e460cf416ce8453adb1717d795092487ea255b7b662e04041be83b0ffe64",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 70911,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 98316,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46490,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 51100,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-puerta-y-hueco-blanco-demo",
+      "name": "KNOXHULT armario bajo+puerta y hueco - blanco",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-blanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 270480,
+      "sha256": "24531b33579081fee038be49962669f33df5b89d1e8bb475d8b7cf8f106643c9",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 40174,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46104,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 48183,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 73808,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-puerta-y-hueco-efecto-roble-demo",
+      "name": "KNOXHULT armario bajo+puerta y hueco - efecto roble",
+      "category": "kitchen-base-cabinet",
+      "modelPath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-efecto-roble.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 188496,
+      "sha256": "39cef0df68f656078e71193e0281194533fb874aa13594f7675db36e3d970a56",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 4310,
+          "width": 154,
+          "height": 154,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 712,
+          "width": 154,
+          "height": 154,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 40728,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44804,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puerta-blanco-demo",
+      "name": "KNOXHULT Armario de pared con puerta - blanco",
+      "category": "kitchen-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puerta-blanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 123112,
+      "sha256": "d744418e1bf0d19fdd8220b5f6b50325b6fb9a727894207347956591cdc17665",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 39388,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 37388,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 3923,
+          "width": 154,
+          "height": 154,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-blanco-90326792-demo",
+      "name": "KNOXHULT Armario de pared con puertas - blanco",
+      "category": "kitchen-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-90326792.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2846336,
+      "sha256": "5f7077a2dc1548b4463192ef84513e521913767023f3a1ecd86386d7ae1058f0",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/png",
+          "bytes": 2117623,
+          "width": 2044,
+          "height": 2044,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 578733,
+          "width": 2044,
+          "height": 2044,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 7876,
+          "width": 184,
+          "height": 184,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 27778,
+          "width": 184,
+          "height": 184,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 548,
+          "width": 184,
+          "height": 184,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-blanco-estructura-80603978-demo",
+      "name": "KNOXHULT armario de pared con puertas - blanco estructura",
+      "category": "kitchen-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-estructura-80603978.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2110760,
+      "sha256": "a79966519419fc245786501c50712cbce3086f8e0df4222aede4a6deb0eb312b",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/png",
+          "bytes": 375805,
+          "width": 1871,
+          "height": 1871,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 359158,
+          "width": 1871,
+          "height": 1871,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 10242,
+          "width": 1250,
+          "height": 1250,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 71126,
+          "width": 1250,
+          "height": 1250,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 13882,
+          "width": 1250,
+          "height": 1250,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 91427,
+          "width": 1250,
+          "height": 1250,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 74588,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 294365,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 163426,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-efecto-roble-demo",
+      "name": "KNOXHULT armario de pared con puertas - efecto roble",
+      "category": "kitchen-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-efecto-roble.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 449572,
+      "sha256": "6c0bed30f272b23b41d59631e194dc84b13600775644df76883d9a18f566f22e",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 36374,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46252,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 61382,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 34872,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 66440,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 41674,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 6094,
+          "width": 183,
+          "height": 183,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 518,
+          "width": 183,
+          "height": 183,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-gris-oscuro-demo",
+      "name": "KNOXHULT armario de pared con puertas - gris oscuro",
+      "category": "kitchen-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 436744,
+      "sha256": "b33346bfd11381798a5312463968cc0e95739a18277ae36e6bb0ddbf6235c1f4",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 42230,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 49398,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 12574,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 23618,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10056,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16004,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 57690,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 93600,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-puertas-correderas-blanco-80604020-demo",
+      "name": "KNOXHULT armario de pared&puertas correderas - blanco",
+      "category": "kitchen-sliding-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-blanco-80604020.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 756896,
+      "sha256": "d349ca9af3a3e46e66814d671bacbf73fb95a191e125cea270ec8fd6c03cfe9c",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 189137,
+          "width": 1652,
+          "height": 1652,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 194057,
+          "width": 1652,
+          "height": 1652,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 6215,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 81238,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 15700,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-puertas-correderas-efecto-roble-90621081-demo",
+      "name": "KNOXHULT armario de pared&puertas correderas - efecto roble",
+      "category": "kitchen-sliding-wall-cabinet",
+      "modelPath": "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-efecto-roble-90621081.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1440096,
+      "sha256": "eb3f2105aa18b043008f36b435d8f4ddfb2be89ee87f8b3408510fdde47d7313",
+      "extensionsRequired": [],
+      "extensionsUsed": [],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 321813,
+          "width": 1652,
+          "height": 1652,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 272536,
+          "width": 1652,
+          "height": 1652,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 6215,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 81238,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 15700,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-modulo-almacenaje-cocina-efecto-roble-demo",
+      "name": "KNOXHULT módulo almacenaje cocina - efecto roble",
+      "category": "kitchen-storage",
+      "modelPath": "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-efecto-roble.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 389504,
+      "sha256": "d43ecea95ae74d43ca724941c4b13555e0a7ad2a51a82b9dd97f008f32a85a04",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 73392,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 89632,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 57786,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 69744,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-knoxhult-modulo-almacenaje-cocina-gris-oscuro-demo",
+      "name": "KNOXHULT módulo almacenaje cocina - gris oscuro",
+      "category": "kitchen-storage",
+      "modelPath": "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 428500,
+      "sha256": "5cdcba9b336ac351dbd359ff29658eac29aa7b627fbf97468ae1f0ec0a20b2a5",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 73392,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 89632,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 55720,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 66914,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-bingsta-sillon-vissle-amarillo-oscurokabusa-amarillo-oscuro-40455649-demo",
+      "name": "BINGSTA sillón - Vissle amarillo oscuroKabusa amarillo oscuro",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/bingsta-sillon-vissle-amarillo-oscurokabusa-amarillo-oscuro-40455649.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2174800,
+      "sha256": "f3365c87ddccabedce96009dc7426b45a691c9734848e35a915a93ed4d3c5b05",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 263240,
+          "width": 1582,
+          "height": 1582,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 249940,
+          "width": 1582,
+          "height": 1582,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 231415,
+          "width": 1582,
+          "height": 1582,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-havberg-reposapies-grannbomstad-marron-dorado-demo",
+      "name": "HAVBERG reposapiés - GrannBomstad marrón dorado",
+      "category": "footstool",
+      "modelPath": "assets/ikea/footstool/havberg-reposapies-grannbomstad-marron-dorado.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 293992,
+      "sha256": "7c9c10a28d589afdf47497953edd46fb76d3fc13ba952ceb7acdf575836b9714",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 5688,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 154724,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 20944,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1016,
+          "width": 128,
+          "height": 128,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-havberg-silla-giratoria-grannbomstad-marron-dorado-demo",
+      "name": "HAVBERG silla giratoria - GrannBomstad marrón dorado",
+      "category": "lounge-chair",
+      "modelPath": "assets/ikea/lounge-chair/havberg-silla-giratoria-grannbomstad-marron-dorado.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 293808,
+      "sha256": "27faf8f4e4883218c25b79cb727fbfebb8bff7dce640b19b9785f751c2b34dee",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 4678,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 78000,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26916,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3646,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-havberg-silla-giratoria-y-reposapies-grannbomstad-marron-dorado-demo",
+      "name": "HAVBERG silla giratoria y reposapiés - GrannBomstad marrón dorado",
+      "category": "lounge-chair",
+      "modelPath": "assets/ikea/lounge-chair/havberg-silla-giratoria-y-reposapies-grannbomstad-marron-dorado.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 309608,
+      "sha256": "1b026b9fe4f89a34afdfb6bdbe7b2cb418dcae5bfd8df521a2b058f9cc0b1597",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 12990,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 207295,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 21402,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1920,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lillehem-sillon-visslebeige-madera-demo",
+      "name": "LILLEHEM sillón - Visslebeige madera",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/lillehem-sillon-visslebeige-madera.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 143012,
+      "sha256": "e1cb8377b62707815c05138d15b2a86b01acd97d871832fc00d3acc5b3ff6f71",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 454,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 130,
+          "width": 125,
+          "height": 65,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 558,
+          "width": 90,
+          "height": 90,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 2928,
+          "width": 270,
+          "height": 270,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1522,
+          "width": 270,
+          "height": 270,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 4,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lillehem-sofa-modular-3-plazas-con-mesa-gunnared-marron-rojizomadera-demo",
+      "name": "LILLEHEM sofá modular 3 plazas con mesa - Gunnared marrón rojizomadera",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/lillehem-sofa-modular-3-plazas-con-mesa-gunnared-marron-rojizomadera.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 382972,
+      "sha256": "1815563da96dce80c39628b58b532d4dca4351b1d25932e10f2dce6f3e6054a0",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_materials_ior",
+        "KHR_materials_specular",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 1438,
+          "width": 501,
+          "height": 261,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3830,
+          "width": 360,
+          "height": 360,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7218,
+          "width": 360,
+          "height": 360,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 96272,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 3886,
+          "width": 360,
+          "height": 360,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7170,
+          "width": 360,
+          "height": 360,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 6,
+      "materials": 6,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-soderhamn-sillon-hillared-beige-99431246-demo",
+      "name": "SÖDERHAMN sillón - Hillared beige",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/soderhamn-sillon-hillared-beige-99431246.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 531524,
+      "sha256": "149e4d9f4bb275a82239233caaf4cb3b1f5aa76c14eb9d2c9bdc3d7641751b24",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 265076,
+          "width": 1024,
+          "height": 861,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 102,
+          "width": 80,
+          "height": 80,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-soderhamn-sillon-tallmyra-verde-oscuro-demo",
+      "name": "SÖDERHAMN sillón - Tallmyra verde oscuro",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/soderhamn-sillon-tallmyra-verde-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 228864,
+      "sha256": "1153d32ccdadbd24c41cee3440c5b47fd143a3b15018106b0d3ccf70794d04a0",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 110,
+          "width": 117,
+          "height": 128,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 190,
+          "width": 160,
+          "height": 160,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-armario-con-puertas-correderas-ratanpino-demo",
+      "name": "STOCKHOLM 2025 armario con puertas correderas - ratánpino",
+      "category": "cabinet",
+      "modelPath": "assets/ikea/cabinet/stockholm-2025-armario-con-puertas-correderas-ratanpino.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 91504,
+      "sha256": "a8e579f32de469ad118565c728a1ff20592f43d0cb8db47c11ff5920af1c9eeb",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression",
+        "KHR_texture_transform"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 838,
+          "width": 124,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 28662,
+          "width": 256,
+          "height": 227,
+          "hasAlpha": true
+        }
+      ],
+      "meshes": 4,
+      "materials": 4,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-mueble-tv-puertas-correderas-chapa-roble-demo",
+      "name": "STOCKHOLM 2025 mueble TV puertas correderas - chapa roble",
+      "category": "tv-unit",
+      "modelPath": "assets/ikea/tv-unit/stockholm-2025-mueble-tv-puertas-correderas-chapa-roble.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 339568,
+      "sha256": "450e3175f0834429a7ee8127ed4caa4d5280fabc06c7a4eb9fa4a230c42c5e1e",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 87480,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43602,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 68466,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 8126,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 76250,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 8000,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 3,
+      "materials": 3,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo",
+      "name": "STOCKHOLM 2025 puf - Alhamn beige",
+      "category": "pouf",
+      "modelPath": "assets/ikea/pouf/stockholm-2025-puf-alhamn-beige-80586139.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 369416,
+      "sha256": "f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0",
+      "extensionsRequired": [],
+      "extensionsUsed": [],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 102482,
+          "width": 1613,
+          "height": 1613,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 130086,
+          "width": 1613,
+          "height": 1613,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 82916,
+          "width": 1613,
+          "height": 1613,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-chapa-abedul-80594785-demo",
+      "name": "STOCKHOLM 2025 sillón - chapa abedul",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/stockholm-2025-sillon-chapa-abedul-80594785.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1566768,
+      "sha256": "3bdf38664d269a48f8b309f334e82be3e7dcf57df18db5816836ec6ee780098b",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 75577,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 80988,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 405781,
+          "width": 1674,
+          "height": 1674,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 241832,
+          "width": 1674,
+          "height": 1674,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-djurmo-grisblanco-demo",
+      "name": "STOCKHOLM 2025 sillón - Djurmo grisblanco",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/stockholm-2025-sillon-djurmo-grisblanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 483748,
+      "sha256": "e3206ef6a0becc174a633d75be5d6a6365e7bb4b238262202fb521099ee85d7e",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 192832,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 225380,
+          "width": 1880,
+          "height": 1880,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 35844,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-ratandjurmo-grisblanco-demo",
+      "name": "STOCKHOLM 2025 sillón - ratánDjurmo grisblanco",
+      "category": "armchair",
+      "modelPath": "assets/ikea/armchair/stockholm-2025-sillon-ratandjurmo-grisblanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 373624,
+      "sha256": "c1383c2d2fa6f9bd2a72de81ec24f0ce149b88b2a9f645db460c489681a1cf67",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 2522,
+          "width": 54,
+          "height": 214,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 5616,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 5194,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 19044,
+          "width": 251,
+          "height": 232,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 5,
+      "materials": 5,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-1-plaza-alhamn-beige-demo",
+      "name": "STOCKHOLM 2025 sofá de 1 plaza - Alhamn beige",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/stockholm-2025-sofa-de-1-plaza-alhamn-beige.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 282460,
+      "sha256": "d1a886043a7584e6953c16bf47e5a6f40d9b895f14e7f67a9c1465160ffe8217",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 21504,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 209287,
+          "width": 1798,
+          "height": 1798,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26790,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-2-plazas-alhamn-marron-oscuro-90591748-demo",
+      "name": "STOCKHOLM 2025 sofá de 2 plazas - Alhamn marrón oscuro",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-marron-oscuro-90591748.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1316376,
+      "sha256": "fd45755a3adfb81ca1390438f70d68b8966c732d603b00b8102a2f808ad8e10c",
+      "extensionsRequired": [],
+      "extensionsUsed": [],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 142139,
+          "width": 2196,
+          "height": 2196,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 330131,
+          "width": 2196,
+          "height": 2196,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 204038,
+          "width": 2196,
+          "height": 2196,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-2-plazas-alhamn-turquesa-oscuro-demo",
+      "name": "STOCKHOLM 2025 sofá de 2 plazas - Alhamn turquesa oscuro",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-turquesa-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 462880,
+      "sha256": "4094548bdc9319044f8804f76229d2aad6abdd803101d716af2e528e0e075797",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 26720,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 316150,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 38202,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-3-plazas-sundhamn-beige-90586092-demo",
+      "name": "STOCKHOLM 2025 sofá de 3 plazas - Sundhamn beige",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/stockholm-2025-sofa-de-3-plazas-sundhamn-beige-90586092.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 2639280,
+      "sha256": "642ed3f4a0b04ea564fb9c652fa5bd284e52b8506edce8d7544d67fe0dfddf9e",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 1137971,
+          "width": 2882,
+          "height": 2882,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 811064,
+          "width": 2882,
+          "height": 2882,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 543035,
+          "width": 2882,
+          "height": 2882,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-stockholm-mesa-de-centro-chapa-nogal-demo",
+      "name": "STOCKHOLM Mesa de centro - chapa nogal",
+      "category": "coffee-table",
+      "modelPath": "assets/ikea/coffee-table/stockholm-mesa-de-centro-chapa-nogal.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 450684,
+      "sha256": "ad3a84a1a8d41257fd62924eca5a2e5dd353afcd0fba2d5bd778888a65f6a231",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 28338,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 70334,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-viskafors-sofa-de-2-plazas-hogalid-marronabedul-demo",
+      "name": "VISKAFORS sofá de 2 plazas - Högalid marrónabedul",
+      "category": "sofa",
+      "modelPath": "assets/ikea/sofa/viskafors-sofa-de-2-plazas-hogalid-marronabedul.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 286652,
+      "sha256": "81def6bbeec6ab0cdd19e6f2f81fbc512b6602de6f9e47981695f0255066a0d7",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 18118,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 167294,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 18414,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 206,
+          "width": 64,
+          "height": 64,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-armario-para-interior-o-exterior-beige-demo",
+      "name": "KOLBJÖRN armario para interior o exterior - beige",
+      "category": "outdoor-cabinet",
+      "modelPath": "assets/ikea/outdoor-cabinet/kolbjorn-armario-para-interior-o-exterior-beige.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 380080,
+      "sha256": "1427cd2d5c1f652b1b7978e832ed3cbd5073dc60c5b87f4fc0c64ade02090c21",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 296,
+          "width": 128,
+          "height": 128,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 250992,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 26000,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 8602,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-con-2-armarios-beige-demo",
+      "name": "KOLBJÖRN estantería con 2 armarios - beige",
+      "category": "storage-shelf",
+      "modelPath": "assets/ikea/storage-shelf/kolbjorn-estanteria-con-2-armarios-beige.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 368180,
+      "sha256": "c915ad228ec24c1553a3819a603f821eb5bf39d9fc0dd25bbc802a5221232a31",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 38170,
+          "width": 640,
+          "height": 640,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 274,
+          "width": 320,
+          "height": 320,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 454,
+          "width": 320,
+          "height": 320,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 140646,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 10086,
+          "width": 640,
+          "height": 640,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 1552,
+          "width": 320,
+          "height": 320,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 18882,
+          "width": 896,
+          "height": 896,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 2,
+      "materials": 2,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-con-armario-beige-demo",
+      "name": "KOLBJÖRN estantería con armario - beige",
+      "category": "storage-shelf",
+      "modelPath": "assets/ikea/storage-shelf/kolbjorn-estanteria-con-armario-beige.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 648488,
+      "sha256": "f342cbbb171651d01fc6cd605c333e4aa588271863b5f0aa3c3cbd93aadfe1aa",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 168431,
+          "width": 1265,
+          "height": 1265,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 73702,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 18266,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43822,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-de-interior-y-exterior-80x35x162-cm-99291646-demo",
+      "name": "KOLBJÖRN estantería de interior y exterior - 80x35x162 cm",
+      "category": "storage-shelf",
+      "modelPath": "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-80x35x162-cm-99291646.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 859180,
+      "sha256": "45035d66ce2f823c0b8e8414369f19771aedb53a12e1876d47d6d0a7ca4996a0",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 4459,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 344668,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 19516,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/png",
+          "bytes": 10642,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-de-interior-y-exterior-beige-demo",
+      "name": "KOLBJÖRN estantería de interior y exterior - beige",
+      "category": "storage-shelf",
+      "modelPath": "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-beige.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 174128,
+      "sha256": "1c8d33923f28887257b3e8b7b1996d97f24209f7adf36d9aa14bb74efd7225e3",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 40786,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7428,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-kolbjorn-mueble-de-almacenaje-beige-exteriorinterior-demo",
+      "name": "KOLBJÖRN mueble de almacenaje - beige exteriorinterior",
+      "category": "outdoor-storage",
+      "modelPath": "assets/ikea/outdoor-storage/kolbjorn-mueble-de-almacenaje-beige-exteriorinterior.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 223520,
+      "sha256": "b0e7018f82989a6e4a67212f275411e38fa1518a3a450200a9a5e09dd9852447",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 8598,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 54762,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lacko-silla-con-reposabrazos-exterior-gris-oscuro-demo",
+      "name": "LÄCKÖ silla con reposabrazos exterior - gris oscuro",
+      "category": "outdoor-chair",
+      "modelPath": "assets/ikea/outdoor-chair/lacko-silla-con-reposabrazos-exterior-gris-oscuro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 1312960,
+      "sha256": "960a9ae3156f8309df013ec70f5235b2e520c0ec587d0a2d5a9b1b85a7c4d332",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 56166,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 529885,
+          "width": 1430,
+          "height": 1430,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 143822,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lacko-sofa-2-plazas-exterior-gris-demo",
+      "name": "LÄCKÖ sofá 2 plazas exterior - gris",
+      "category": "outdoor-sofa",
+      "modelPath": "assets/ikea/outdoor-sofa/lacko-sofa-2-plazas-exterior-gris.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 120544,
+      "sha256": "84726dc9d7626270145bff4c15358b998b36ddc7ec3e876fe00145184192fb24",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 9792,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 36150,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-lagaskar-mesa-de-centro-exterior-beige-90543762-demo",
+      "name": "LÅGASKÄR mesa de centro exterior - beige",
+      "category": "outdoor-table",
+      "modelPath": "assets/ikea/outdoor-table/lagaskar-mesa-de-centro-exterior-beige-90543762.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 600160,
+      "sha256": "d8bd8602537940322a61c7f1f22e06c37eea0118dd878c1e951d07ce6ad536ed",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 73416,
+          "width": 1627,
+          "height": 1627,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 98867,
+          "width": 1627,
+          "height": 1627,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-mabarsskar-mesa-de-centro-exterior-interiorblanco-demo",
+      "name": "MÅBÄRSSKÄR mesa de centro - exterior interiorblanco",
+      "category": "outdoor-table",
+      "modelPath": "assets/ikea/outdoor-table/mabarsskar-mesa-de-centro-exterior-interiorblanco.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 91916,
+      "sha256": "f476413a9a30664a6bc1f282eab4206357ba65dbe9a045817fb9edc5532d8075",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 6474,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 24272,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-banco-con-respaldo-de-exterior-tinte-marron-claro-demo",
+      "name": "NÄMMARÖ banco con respaldo de exterior - tinte marrón claro",
+      "category": "outdoor-bench",
+      "modelPath": "assets/ikea/outdoor-bench/nammaro-banco-con-respaldo-de-exterior-tinte-marron-claro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 168292,
+      "sha256": "1aa3daceb153c5945b7e4d7a7114e5d69861ef99ad48867488232c9380bc3b32",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 59648,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46818,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-banco-jardin-tinte-marron-claro-demo",
+      "name": "NÄMMARÖ Banco jardín - tinte marrón claro",
+      "category": "outdoor-bench",
+      "modelPath": "assets/ikea/outdoor-bench/nammaro-banco-jardin-tinte-marron-claro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 133792,
+      "sha256": "3c5b01d049c5486bf2ffde4a00c78c079d0e3872ad3549ea93ac0181a8140b4f",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 57578,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 39454,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-baul-tinte-marron-claro-interiorexterior-demo",
+      "name": "NÄMMARÖ baúl - tinte marrón claro interiorexterior",
+      "category": "deck-box",
+      "modelPath": "assets/ikea/deck-box/nammaro-baul-tinte-marron-claro-interiorexterior.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 166456,
+      "sha256": "5d0c367eb64181c962186abf0c1cebe5fe0510774046eb75076195f46e0ba91a",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 61440,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 48130,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-caja-y-pantalla-privacidad-exteriortinte-marron-claro-demo",
+      "name": "NÄMMARÖ caja y pantalla privacidad - exteriortinte marrón claro",
+      "category": "privacy-screen",
+      "modelPath": "assets/ikea/privacy-screen/nammaro-caja-y-pantalla-privacidad-exteriortinte-marron-claro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 422968,
+      "sha256": "99af5d4c64fb29f7d3e79dad2d53e9b25f08141038d167c9a39fcd5e3b1ba56b",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 307130,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 16328,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 71842,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 958,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-pantalla-para-privacidad-tinte-marron-claro-interiorexterior-demo",
+      "name": "NÄMMARÖ pantalla para privacidad - tinte marrón claro interiorexterior",
+      "category": "privacy-screen",
+      "modelPath": "assets/ikea/privacy-screen/nammaro-pantalla-para-privacidad-tinte-marron-claro-interiorexterior.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 481544,
+      "sha256": "671ca5758de6a9caeeae216874c50d3e1d7440d5eb8c4c73b66b5b27de56e8a6",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 79604,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 300878,
+          "width": 1619,
+          "height": 1619,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 55448,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-nammaro-taburete-de-exterior-plegabletinte-marron-claro-demo",
+      "name": "NÄMMARÖ taburete de exterior - plegabletinte marrón claro",
+      "category": "outdoor-stool",
+      "modelPath": "assets/ikea/outdoor-stool/nammaro-taburete-de-exterior-plegabletinte-marron-claro.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 124864,
+      "sha256": "d558e1193bb225f488705ac04be3b36c7742dd308b95babb6173d1edabf48ecc",
+      "extensionsRequired": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/webp",
+          "bytes": 56142,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 37056,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    },
+    {
+      "id": "ikea-paronholmen-banco-con-respaldo-de-exterior-rojo-90503799-demo",
+      "name": "PÄRONHOLMEN banco con respaldo de exterior - rojo",
+      "category": "outdoor-bench",
+      "modelPath": "assets/ikea/outdoor-bench/paronholmen-banco-con-respaldo-de-exterior-rojo-90503799.glb",
+      "exists": true,
+      "manifestDimensions": null,
+      "licenseType": "authorized-commercial-demo",
+      "redistributionAllowed": false,
+      "permissionDocumentRef": "permissions/README.md",
+      "qaStatus": "pending",
+      "bytes": 104224,
+      "sha256": "a08aad662ff93d243c305e089c887cad9ad3ae1fd2a84b054e58301f2b750708",
+      "extensionsRequired": [
+        "KHR_draco_mesh_compression"
+      ],
+      "extensionsUsed": [
+        "KHR_draco_mesh_compression"
+      ],
+      "images": [
+        {
+          "mime": "image/png",
+          "bytes": 2788,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 26200,
+          "width": 256,
+          "height": 256,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 10998,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 4787,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        }
+      ],
+      "meshes": 1,
+      "materials": 1,
+      "externalResources": false
+    }
+  ]
+}

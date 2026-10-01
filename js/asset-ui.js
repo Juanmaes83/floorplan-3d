@@ -49,7 +49,8 @@
   }
  })();
  function update(){const el=document.querySelector('#fAssetStatus');if(!el||ui.sel?.kind!=='furn')return;const f=getF(ui.sel.id),status=window.View3D?.assetStatus(f.id);
-  el.textContent=!f.assetRef?'Mueble genérico.':status?.state==='ready'?'Modelo cargado. '+status.attribution+' Medidas de catálogo: '+Object.values(FloorPlanAssets.resolve(api.entries,f.assetRef)?.dimensionsMm||status.normalizedDimensionsMm).map(v=>Math.round(v)).join(' × ')+' mm. Se adapta a las medidas del objeto, sin cambiarlas.':status?.state==='error'?'Modelo no disponible: se muestra el genérico. Motivo: '+status.reason:status?.state==='loading'?'Cargando modelo; el genérico sigue visible.':'Modelo pendiente de abrir 3D; el genérico sigue visible.';
+  const entry=FloorPlanAssets.resolve(api.entries,f.assetRef);
+  el.textContent=!f.assetRef?'Mueble genérico.':status?.state==='ready'?'Modelo cargado. '+status.attribution+' '+(entry?.dimensionsKind==='model-geometry'?'Medidas de la malla (escala física no verificada): ':'Medidas de catálogo: ')+Object.values(entry?.dimensionsMm||status.normalizedDimensionsMm).map(v=>Math.round(v)).join(' × ')+' mm. Se adapta a las medidas del objeto, sin cambiarlas.':status?.state==='error'?'Modelo no disponible: se muestra el genérico. Motivo: '+status.reason:status?.state==='loading'?'Cargando modelo; el genérico sigue visible.':'Modelo pendiente de abrir 3D; el genérico sigue visible.';
  }
  api.update=update;addEventListener('floorplan-asset-status',update);
 })();

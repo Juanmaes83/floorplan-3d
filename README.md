@@ -146,7 +146,7 @@ Este cierre cubre el piloto inicial, no un catálogo comercial amplio ni una bib
 
 La entrega post-F3 de «Nuevo proyecto» y edición directa de dimensiones se aprobó y fusionó mediante la [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), merge `10e9f96`. Permite crear proyectos vacíos o desde imagen y dimensionar habitaciones rectangulares compatibles con previsualización y protección de geometría. No incluye un editor numérico general para formas irregulares. [Alcance, QA, limitaciones y registro de cierre](docs/technical/home-room-dimensions.md) · [roadmap canónico](docs/ROADMAP.md). F2 sigue experimental: cinco sesiones y veinte planos de evaluación permanecen pendientes, sin bloquear esta entrega.
 
-## Biblioteca visual de superficies — revisión pendiente
+## Biblioteca visual de superficies — integrada
 
 Selecciona una estancia y abre **Biblioteca de acabados · suelo** o **Acabado de
 una pared**. Filtra por familia, busca, compara dos muestras, ajusta la repetición
@@ -158,5 +158,16 @@ Se carga el mapa completo solo cuando se utiliza en 3D; el 2D usa una muestra y
 conserva cotas y símbolos. JSON/ZIP conservan IDs, repetición y color de respaldo.
 El contrato opcional 1.4.0 conserva los proyectos anteriores.
 [Inventario, procedencia, licencias y QA](docs/technical/surface-material-library.md).
-Esta biblioteca sigue pendiente de revisión humana; no completa la evaluación F2
-ni autoriza conectores o ampliaciones de muebles/puertas/ventanas.
+La biblioteca fue revisada y fusionada por la PR #19; no completa la evaluación
+F2 ni autoriza conectores o ampliaciones de muebles/puertas/ventanas.
+
+## Ampliación de modelos Asset Lab — en revisión
+
+Una tanda de doce modelos normalizados de Asset Lab se suma a los dos modelos
+IKEA del piloto. Se encuentra en el buscador por nombre y categoría; al colocar
+un modelo, la vista 3D lo carga desde el catálogo local y conserva el mueble
+genérico si falla. Las medidas de los modelos nuevos describen su **malla**, con
+escala física sin verificar; no son medidas oficiales de IKEA. El
+[informe técnico y pipeline](docs/technical/F3-asset-lab-pipeline.md) registra
+inventario, conversiones, procedencia, rechazos y pruebas. Esta ampliación espera
+revisión visual y aprobación de Juanma; no cierra F3 en su conjunto.

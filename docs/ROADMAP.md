@@ -13,6 +13,16 @@ correspondencia usa el [plan F0 de PR #3, revisión 825ddf6](https://github.com/
 No se aprueban retrospectivamente decisiones F0 aún abiertas ni sus umbrales
 provisionales por adoptar esta numeración.
 
+**Nueva entrega F3 en revisión (01-10-2026):** la rama
+`feat/f3-asset-lab-pipeline`, basada en `master` `18c68e2`, incorpora un pipeline
+reproducible y doce modelos GLB normalizados de Asset Lab. Se comprobaron 114
+GLB físicos frente a 134 fichas y se rechazaron cuatro candidatos concretos.
+Las dimensiones nuevas se etiquetan como medidas de malla, sin equivalencia
+oficial verificada. [Informe, inventario y límites](technical/F3-asset-lab-pipeline.md).
+La entrega espera revisión visual y aprobación de Juanma; no declara F3
+completa ni cambia el estado experimental de F2, la biblioteca de 50 superficies
+o las propuestas comerciales abiertas.
+
 ## Resultado y estado
 
 El editor permite preparar una propuesta orientativa desde una imagen, calibrar,

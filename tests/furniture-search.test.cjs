@@ -5,7 +5,7 @@ const own=fs.readFileSync('assets/f3/catalog.manifest.json'),external=JSON.parse
 const accepted=[...A.adapt(JSON.parse(own),{catalog:'rubik-sota-local',revision:crypto.createHash('sha256').update(own).digest('hex').slice(0,40)}).entries,...A.adapt(external.source,{catalog:'immersphere-asset-lab',revision:external.catalogRevision,evidence:external.evidence}).entries];
 const rows=S.build(G.groups,accepted,label);
 test('search derives unique entries and dimensions without duplicating catalog',()=>{
- assert.equal(rows.length,63);assert.equal(new Set(rows.map(r=>r.id)).size,63);
+ assert.equal(rows.length,60+accepted.length);assert.equal(new Set(rows.map(r=>r.id)).size,rows.length);
  for(const r of rows){assert.ok(r.terms.trim());assert.ok(S.families[r.family]);if(r.kind==='generic')assert.equal(r.item,G.groups[Number(r.room)].items[Number(r.id.split(':')[1])]);else assert.equal(r.dimensions,r.entry.dimensionsMm);}
  for(const [type,[family,terms]]of Object.entries(S.specs)){assert.ok(S.families[family]);assert.ok(terms.trim());assert.ok(rows.some(r=>r.type===type));}
  assert.throws(()=>S.build([...G.groups,{cat:'bad',items:[['unknown','unknown',1,1,'#fff',1]]}],[],label),/ambiguous/);
@@ -20,8 +20,8 @@ test('exact partial accent case redundant spaces synonym and stored type search'
  assert.ok(S.filter(rows,{query:'nevera'}).some(r=>r.type==='fridge'));assert.ok(S.filter(rows,{query:'floorlamp'}).every(r=>r.type==='floorlamp'));
 });
 test('combined query room family reset and empty preserve separation',()=>{
- const result=S.filter(rows,{query:'silla',room:'2',family:'asientos'});assert.equal(result.length,1);assert.equal(result[0].id,'2:3');
- assert.equal(S.filter(rows,{query:'zzzz'}).length,0);assert.equal(S.filter(rows,{}).length,63);
+ const result=S.filter(rows,{query:'silla',room:'2',family:'asientos'});assert.ok(result.some(r=>r.id==='2:3'));assert.ok(result.some(r=>r.kind==='asset'));
+ assert.equal(S.filter(rows,{query:'zzzz'}).length,0);assert.equal(S.filter(rows,{}).length,60+accepted.length);
  assert.equal(S.filter(rows,{query:'songesand'})[0].kind,'asset');assert.equal(S.filter(rows,{query:'cama'})[0].kind,'generic');
  assert.equal(S.build(G.groups,[],label).length,60);
 });
