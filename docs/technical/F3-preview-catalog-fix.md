@@ -145,3 +145,18 @@ históricas regeneradas por la suite para no atribuirles una nueva ejecución.
 El primer diff-check de los artefactos detectó espacios finales en líneas vacías del
 log de fallo de Node. Se eliminan solo esos espacios al publicar la transcripción;
 se conservan errores, respuestas y conteos. El diff-check final pasa tras normalizarlo.
+
+
+## Cierre y revisión humana — PR #17 (01-10-2026)
+
+Tras publicar esta corrección, Juanma revisó la preview y aprobó la entrega. [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) quedó fusionada por squash en `master`.
+
+- Rama: `feat/f3-textured-external-catalog`.
+- SHA de cabeza revisado: `772e24c26d10cec4349f28558ffc87ee18748317`.
+- Merge SHA: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`.
+- Preview exacta confirmada por Vercel como READY: https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/ (Vercel Authentication).
+- El estado remoto de Vercel para el SHA revisado fue correcto.
+- Codex reportó 138/138 Node/navegador y 41/41 Python antes de la revisión; no se repitieron para este registro documental.
+- La revisión humana aprobó el piloto. SwiftShader sigue siendo QA por software, no medición de rendimiento en teléfono físico.
+
+La causa del catálogo ausente en la preview quedó corregida para el flujo probado: se mantienen solicitudes con sesión del mismo origen y diagnósticos por recurso. F3 se cierra para el piloto acotado, no para un catálogo comercial exhaustivo ni para admitir extensiones arbitrarias. Las secciones anteriores registran el estado y los límites durante la investigación, no el estado posterior al merge.
