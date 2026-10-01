@@ -139,3 +139,14 @@ F3 inicial permanece integrada y el catálogo externo pendiente. F2 permanece ex
 Rama `feat/f3-textured-external-catalog`, basada en master `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, posterior a las PR #13/#14. Integra SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con procedencia fijada, autorización de Juanma para Git/preview, medidas oficiales aportadas externamente y soporte acotado de JPEG embebido. El sofá 90591748 se excluye por superar la tolerancia de 20 mm. El schema sigue en 1.3.0; no se modifican Asset Lab ni decisiones comerciales.
 
 [Informe y resultados actuales](technical/F3-initial.md#piloto-externo-texturizado-01-10-2026). La entrega requiere revisión humana y merge: **F3 permanece abierta**. La preview del nuevo SHA debe verificarse por separado de las capturas locales; la preview de PR #12 no acredita este piloto. SwiftShader no valida rendimiento en teléfono físico. F2 mantiene cinco sesiones y veinte planos pendientes.
+
+### F3 — búsqueda local de muebles en revisión (01-10-2026)
+
+Sobre la misma rama `feat/f3-textured-external-catalog`: búsqueda por nombre/tipo,
+familias derivadas del catálogo, sinónimos españoles y filtros de estancia/familia.
+Conserva los 60 genéricos y muestra únicamente los tres modelos del catálogo F3
+aceptado, con etiquetas y atribución separadas. No cambia dimensiones originales,
+contrato 1.3.0, assets ni decisiones comerciales.
+[Informe de UX y QA](technical/F3-furniture-search.md).
+Pendiente de preview verificable del SHA final, revisión humana y merge; **F3 sigue
+abierta**, sin alterar el orden de fases. Cinco sesiones y veinte planos F2 pendientes.
