@@ -124,3 +124,45 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  for(const r of requests){const u=new URL(r.url);assert.ok(u.origin===new URL(url).origin||u.host==='cdn.jsdelivr.net');}
  await fs.writeFile(`docs/qa/artifacts/f3-textures/${viewport.width}x${viewport.height}-metrics.json`,JSON.stringify({commitAtRun:commit,appFingerprint:fingerprint.digest('hex'),viewport,rendering:'Chromium SwiftShader software',metrics,consoleMessages,pageErrors:errors,failedRequests:failures},null,2)+'\n');
 });
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`furniture search filters insertion persistence and touch/keyboard ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors,requests,mobile}=await setup(t,viewport);
+ async function library(){if(mobile&&!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();}
+ await library();assert.equal(await page.locator('#searchResults .item').count(),63);
+ const input=page.getByRole('searchbox',{name:'Buscar muebles'});await input.fill(' SOFÁ ');const accented=await page.locator('#searchResults .item').count();await input.fill('sofa');assert.equal(await page.locator('#searchResults .item').count(),accented);
+ await input.fill('nevera');assert.equal(await page.locator('#searchResults .item').count(),2);
+ await input.fill('silla');await page.locator('#searchRoom').selectOption('2');await page.locator('#searchFamily').selectOption('asientos');assert.equal(await page.locator('#searchResults .item').count(),1);assert.equal(await page.locator('#searchResults .item').getAttribute('data-key'),'2:3');
+ await page.locator('#searchClear').click();assert.equal(await page.locator('#searchRoom').inputValue(),'2');assert.equal(await input.inputValue(),'');assert.equal(await input.evaluate(el=>el===document.activeElement),true);
+ await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),63);assert.equal(await page.locator('#searchFamily').inputValue(),'');
+ await input.fill('noexistezz');assert.equal(await page.locator('#searchResults .item').count(),0);assert.match(await page.locator('#searchCount').innerText(),/^0 resultados/);await page.locator('#searchEmptyReset').click();assert.equal(await page.locator('#searchResults .item').count(),63);
+ await input.fill('bed');const card=page.locator('.item[data-key="0:0"]'),count=await page.evaluate(()=>FloorPlanApp.project.objects.length);assert.match(await card.innerText(),/Genérico/);
+ if(mobile)await card.tap();else{await card.focus();await card.press('Enter');}
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),count+1);
+ const generic=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));assert.deepEqual(generic.size,{widthMm:1800,depthMm:2000,heightMm:1100});assert.equal(generic.type,'bed');assert.equal(generic.assetRef,undefined);
+ for(const term of ['SONGESAND','pouf']){
+  await library();await input.fill(term);assert.equal(await page.locator('#searchResults .item').count(),term==='SONGESAND'?1:2);const result=page.locator('#searchResults .item[data-key^="asset:"]');assert.match(await result.innerText(),/Modelo 3D autorizado/);assert.match(await result.innerText(),/IKEA/);
+  const count=await page.evaluate(()=>FloorPlanApp.project.objects.length);if(mobile)await result.tap();else{await result.focus();await result.press('Space');}
+  assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),count+1);
+  const inserted=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));assert.equal(inserted.assetRef.catalog,'immersphere-asset-lab');assert.deepEqual(inserted.size,term==='SONGESAND'?{widthMm:820,heightMm:810,depthMm:500}:{widthMm:690,heightMm:400,depthMm:650});
+  await open3D(page);await page.waitForFunction(id=>View3D.assetStatus(id)?.state==='ready',inserted.id);assert.deepEqual(await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id),inserted.id),inserted);
+  await page.click('[data-view="2d"]');await page.waitForFunction(()=>!document.body.classList.contains('busy'));await page.reload();await page.waitForFunction(()=>window.View3D&&FloorPlanAssetUI.ready);assert.deepEqual(await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id),inserted.id),inserted);
+ }
+ await library();await input.fill('lampara');assert.equal(await page.locator('#searchResults .item').count(),1);assert.equal(await page.locator('#searchResults .item').getAttribute('data-key'),'1:11');
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ const commit=(await run('git',['rev-parse','HEAD'])).stdout.trim();await page.evaluate(text=>{const e=document.createElement('div');e.textContent=text;e.style.cssText='position:fixed;bottom:0;left:0;background:white;font:9px monospace;z-index:99';document.body.append(e);},`Search QA / local SwiftShader / ${commit}`);
+ await fs.mkdir('docs/qa/artifacts/furniture-search',{recursive:true});await page.screenshot({path:`docs/qa/artifacts/furniture-search/${viewport.width}x${viewport.height}.png`});
+ await input.fill('ikea');assert.equal(await page.locator('#searchResults .item').count(),2);await page.screenshot({path:`docs/qa/artifacts/furniture-search/${viewport.width}x${viewport.height}-authorized.png`});
+ await fs.writeFile(`docs/qa/artifacts/furniture-search/${viewport.width}x${viewport.height}-metrics.json`,JSON.stringify({commitAtRun:commit,viewport,rendering:'Chromium SwiftShader software',resultCounts:{all:63,authorizedQuery:2},pageErrors:errors,requests:requests.map(r=>({url:new URL(r.url).pathname,method:r.method,hasBody:!!r.body})),objects:await page.evaluate(()=>FloorPlanApp.project.objects.map(o=>({type:o.type,size:o.size,assetRef:o.assetRef})))},null,2)+'\n');
+ assert.deepEqual(errors,[]);assert.ok(requests.every(r=>r.method==='GET'&&!r.body&&!new URL(r.url).search));t.diagnostic('Search remains local; 3D rendered with SwiftShader software.');
+});
+
+test('search keeps generics during catalog pending/exclusion and unavailable model fallback',{timeout:90000},async t=>{
+ const {page,context,errors}=await setup(t);
+ let release;const pending=new Promise(r=>release=r);
+ await page.route('**/assets/f3/external.manifest.json',async route=>{await pending;const source=JSON.parse(await fs.readFile('assets/f3/external.manifest.json','utf8'));source.source[1].qaStatus='pending';await route.fulfill({contentType:'application/json',body:JSON.stringify(source)});});
+ await page.reload({waitUntil:'domcontentloaded'});await page.waitForSelector('#furnitureSearch');assert.match(await page.locator('#searchCatalogState').innerText(),/Cargando catálogo/);assert.equal(await page.locator('#searchResults .item').count(),60);await page.locator('#furnitureSearch').fill('cama');assert.ok(await page.locator('#searchResults .item').count()>0);
+ release();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),62);await page.locator('#furnitureSearch').fill('stockholm');assert.equal(await page.locator('#searchResults .item').count(),0);
+ await page.route('**/assets/f3/songesand-90366839.glb',r=>r.fulfill({status:404,body:'Missing'}));await page.locator('#furnitureSearch').fill('songesand');await page.locator('#searchResults .item').click();const inserted=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));
+ await open3D(page);await page.waitForFunction(id=>View3D.assetStatus(id)?.state==='error',inserted.id);assert.deepEqual(await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id),inserted.id),inserted);assert.match(await page.locator('#fAssetStatus').innerText(),/genérico/);assert.equal(await page.evaluate(()=>View3D.assetObjects.length),0);await page.click('[data-view="2d"]');assert.deepEqual(errors,[]);
+ await page.unroute('**/assets/f3/external.manifest.json');await page.route('**/assets/f3/external.manifest.json',r=>r.fulfill({status:404,body:'Missing catalog'}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),61);assert.match(await page.locator('#searchCatalogState').innerText(),/genérico/);
+});
