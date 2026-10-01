@@ -180,3 +180,12 @@ Vercel confirmó `READY` para el SHA revisado. [Preview protegida](https://floor
 F3 queda como **entrega inicial integrada; catálogo externo pendiente**. Juanma confirma autorización para usar los assets del proyecto Asset Lab. El informe de inventario F3 registra una auditoría de solo lectura de un commit anterior; volver a comprobar disponibilidad, dimensiones, requisitos técnicos y permisos aplicables por candidato antes de su incorporación. El alcance de PR #12 sigue siendo un fixture sintético propio, genéricos dimensionados, asociación/carga local y fallback.
 
 Codex reportó 120/120 pruebas Node/navegador, 10/10 dirigidas F3 y 41/41 Python; la revisión de merge no repitió esas suites. SwiftShader es renderizado por software y no acredita rendimiento físico. Los siguientes pasos de F3 son auditar el Asset Lab actual y seleccionar modelos con dimensiones verificables, sin cargar assets de terceros desde la app ni cambiar Asset Lab. Las cinco sesiones y los veinte planos F2 siguen pendientes para validación empírica y no bloquean F3.
+
+
+## Cierre de F3 piloto texturizado — PR #17 (01-10-2026)
+
+Juanma aprobó la revisión visual de la corrección de catálogo y autorizó el merge. La PR #17 se fusionó por squash desde `feat/f3-textured-external-catalog`: HEAD revisado `772e24c26d10cec4349f28558ffc87ee18748317`, merge en `master` `24534b5544ffa37840bf4fe77c4ad12afda0c38b`. Vercel confirmó deployment `READY` vinculado al mismo SHA en https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/ (protegido por Vercel Authentication). No hubo despliegue manual a producción.
+
+La revisión detectó y resolvió que los fetch de manifests/permisos/GLB omitían la sesión. El comportamiento se corrigió con credenciales same-origin y diagnósticos concretos, preservando controles y fallback F3. La aprobación humana cierra el piloto de dos modelos y buscador. Las suites reportadas en la PR no se repitieron durante la actualización documental; véase [el informe](technical/F3-preview-catalog-fix.md).
+
+F3 queda cerrada para el alcance de este piloto inicial; no se considera implementado un catálogo comercial amplio, una biblioteca general de materiales ni un pipeline universal de conversión. La siguiente candidata es la edición dimensional/nuevo proyecto del Roadmap 2, sin número de fase asignado hasta aprobar alcance y reglas geométricas. Las cinco sesiones y veinte planos pendientes de F2 no bloquean esa implementación.
