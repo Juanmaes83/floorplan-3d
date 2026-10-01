@@ -1,0 +1,43 @@
+F3 pilot — Asset Lab provenance and recorded authorization
+Recorded 2026-10-01 for Juanmaes83/floorplan-3d.
+
+Juanma confirmed ownership of Asset Lab and authorized using its assets in this
+project, explicitly instructing their incorporation, Git publication and review
+preview in this F3 task. This record covers that project-specific pilot use.
+It is a record of the user's authorization, not an invented asset license or a
+claim of unrestricted worldwide redistribution, resale or an IKEA partnership.
+Do not apply the synthetic fixture's MIT license to these external models.
+
+Source repository: https://github.com/Juanmaes83/immersphere-asset-lab
+Source revision: 5dc7b182c5c227472b84aea66a3ffa1368c95981
+Source manifest: manifest/ikea-sample.manifest.json
+
+SONGESAND 903.668.39:
+assets/ikea/dresser/songesand-comoda-de-3-cajones-blanco-90366839.glb
+SHA256 0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f
+
+STOCKHOLM 2025 pouffe 805.861.39:
+assets/ikea/pouf/stockholm-2025-puf-alhamn-beige-80586139.glb
+SHA256 f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0
+
+IKEA and the product names identify their source; no affiliation is implied.
+The source manifest records manual-authorized-download / commercial demo,
+redistributionAllowed=false and a pending template reference. These original
+facts are retained in the curated evidence, separately from Juanma's later
+explicit project-use authorization. This does not grant rights to other uses
+or remove conditions from the source repository. Keep this provenance with the
+models. Neither assets nor source permissions were altered in Asset Lab.
+
+Product measures supplied by Juanma from official IKEA pages on 2026-10-01;
+Codex local curl was blocked with HTTP 403 and did not inspect those pages:
+SONGESAND: width 82 cm, height 81 cm, depth 50 cm.
+https://www.ikea.com/fr/fr/p/songesand-commode-3-tiroirs-blanc-90366839/
+STOCKHOLM 2025 pouffe: width 69 cm, height 40 cm, length 65 cm (used as depth).
+https://www.ikea.com.cy/en/products/stockholm-2025-pouffe/80586139/
+These are product dimensions, not packaging sizes; geometry bounds and
+normalization are recorded separately in external.manifest.json and F3 report.
+
+Puf original retained as assets/f3/original-stockholm-pouf-80586139.glb.
+Served textures resized to 1024x1024 with Pillow 12.3.0; geometry unchanged.
+Served GLB SHA256 3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727
+This modified GLB is not byte-identical or visually identical to the original.

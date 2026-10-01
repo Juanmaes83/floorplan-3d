@@ -30,3 +30,18 @@ test('assetRef association/clear keeps room, identity, geometry and compatibilit
  assert.equal(A.resolve([entry],associated.assetRef),entry);assert.equal(A.resolve([entry],{...associated.assetRef,catalogRevision:'a'.repeat(40)}),null);assert.equal(A.resolve([entry],{catalog:'immersphere-asset-lab',assetId:entry.id}),null);
  p.schemaVersion='1.3.0';p.objects[0]=associated;Core.validate(p);assert.deepEqual(Core.prepare(p).project,p);assert.deepEqual(A.associate(associated,null),original);
 });
+
+test('curated external evidence records exact binaries and project authorization without inventing worldwide rights',()=>{
+ const external=JSON.parse(fs.readFileSync('assets/f3/external.manifest.json','utf8')),opts={catalog:'immersphere-asset-lab',revision:external.catalogRevision,evidence:external.evidence};
+ const adapted=A.adapt(external.source,opts);assert.equal(adapted.entries.length,2);assert.deepEqual(adapted.excluded,[]);
+ for(const e of adapted.entries){assert.equal(e.bytes,fs.statSync(e.url).size);assert.equal(e.sha256,crypto.createHash('sha256').update(fs.readFileSync(e.url)).digest('hex'));assert.equal(e.permissionSha256,crypto.createHash('sha256').update(fs.readFileSync(e.permissionUrl)).digest('hex'));assert.equal(external.evidence[e.id].source.redistributionAllowed,false);assert.match(external.evidence[e.id].dimensionsSource,/supplied externally by Juanma/);assert.equal(external.evidence[e.id].permission.territory,undefined);}
+ for(const mutate of [e=>e.permission.project='other/repo',e=>e.permission.authorizedBy='unknown',e=>e.source.sha256='0'.repeat(64),e=>e.source.revision='0'.repeat(40),e=>e.source.path='https://remote/model.glb',e=>e.permission.scope='unrestricted',e=>delete e.permission.authorizationKind]){const altered=copy(external);mutate(altered.evidence[external.source[0].id]);const result=A.adapt(altered.source,{...opts,evidence:altered.evidence});assert.equal(result.entries.length,1);assert.equal(result.excluded.length,1);}
+ const local=copy(manifest);local[0].f3Evidence.permission.brand='IKEA';assert.equal(A.adapt(local,options).entries.length,0);
+});
+
+test('external references survive JSON, project duplication, reload and ZIP without binary embedding',async()=>{
+ const Library=require('../js/project-library.js'),Package=require('../js/project-package.js');const external=JSON.parse(fs.readFileSync('assets/f3/external.manifest.json')),entries=A.adapt(external.source,{catalog:'immersphere-asset-lab',revision:external.catalogRevision,evidence:external.evidence}).entries;
+ const p=Core.initial();p.schemaVersion='1.3.0';for(let i=0;i<entries.length;i++){const before=copy(p.objects[i]);p.objects[i]=A.associate(before,entries[i]);const preserved=copy(p.objects[i]);delete preserved.assetRef;assert.deepEqual(preserved,before);}
+ const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)},library=Library.load(storage,p);library.save(p);const duplicated=library.duplicate(library.activeId(),'Synthetic external copy');assert.notEqual(duplicated.id,p.id);assert.deepEqual(duplicated.objects,p.objects);assert.deepEqual(Library.load(storage,p).project(),duplicated);
+ assert.deepEqual(Core.prepare(JSON.parse(JSON.stringify(p))).project,p);const encoded=await Package.encode(p,async()=>{throw Error('No images/binaries expected');}),contents=await Package.unzip(await encoded.arrayBuffer());assert.deepEqual([...contents.keys()],['project.json']);assert.deepEqual((await Package.validateEntries(contents)).project,p);
+});
