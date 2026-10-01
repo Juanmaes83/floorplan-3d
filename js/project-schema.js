@@ -1,0 +1,321 @@
+/* FloorPlanProjectV1 schema, synchronized with docs/contracts. */
+(function(root){const schema = {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Juanmaes83/floorplan-3d/docs/contracts/FloorPlanProjectV1.schema.json",
+  "title": "FloorPlanProjectV1",
+  "description": "Contrato de datos implementado para Rubik Sota Floor Plan Designer, portable e independiente de la UI. Base F1a/F1b integrada en master; esta revisión incluye la ampliación 1.3.0: WebP estático (1.2.0) y catálogo local opcional F3. Su implementación no implica aprobar las decisiones de producto F0 que sigan pendientes. Unidad canónica: milímetros enteros. Las reglas semánticas (referencias, geometría imposible) están en FloorPlanProjectV1.md §6 y no se pueden expresar solo con JSON Schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],
+  "properties": {
+    "schema": { "const": "rubik-sota.floorplan-project", "description": "Discriminador del tipo de documento. Permite detectar ficheros que no son proyectos." },
+    "schemaVersion": { "type": "string", "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$", "description": "SemVer del contrato. Este esquema acepta solo major 1. Ver política de versiones en el .md §3." },
+    "id": { "$ref": "#/$defs/projectId" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "units": { "const": "mm", "description": "Todas las longitudes del documento están en milímetros enteros." },
+    "coordinateSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "xAxis", "yAxis", "rotation"],
+      "description": "Constantes declarativas: hacen explícito el convenio en el propio fichero.",
+      "properties": {
+        "origin": { "const": "plan-top-left", "description": "Origen arbitrario del plano; se recomienda la esquina superior izquierda de la envolvente." },
+        "xAxis": { "const": "right" },
+        "yAxis": { "const": "down", "description": "Igual que SVG y que la app actual. En 3D, y del plano se proyecta al eje Z del mundo." },
+        "rotation": { "const": "degrees-clockwise", "description": "Rotación en planta vista desde arriba con y hacia abajo: positivo = horario en pantalla." }
+      }
+    },
+    "scale": { "$ref": "#/$defs/scale" },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wallHeightMm", "wallThicknessMm"],
+      "properties": {
+        "wallHeightMm": { "$ref": "#/$defs/heightMm" },
+        "wallThicknessMm": { "$ref": "#/$defs/thicknessMm" }
+      }
+    },
+    "sourceImages": {
+      "type": "array",
+      "maxItems": 20,
+      "items": { "$ref": "#/$defs/sourceImage" }
+    },
+    "walls": { "type": "array", "maxItems": 2000, "items": { "$ref": "#/$defs/wall" } },
+    "openings": { "type": "array", "maxItems": 2000, "items": { "$ref": "#/$defs/opening" } },
+    "rooms": { "type": "array", "maxItems": 500, "items": { "$ref": "#/$defs/room" } },
+    "materials": { "type": "array", "maxItems": 500, "items": { "$ref": "#/$defs/material" } },
+    "objects": { "type": "array", "maxItems": 5000, "items": { "$ref": "#/$defs/object" } },
+    "measurements": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/measurement" } },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "description": "Informativo: qué versión de la app escribió el fichero. No se usa para decidir compatibilidad.",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "version": { "type": "string", "maxLength": 50 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" }
+      }
+    },
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "$defs": {
+    "idSuffix": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "projectId": { "type": "string", "pattern": "^prj_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "wallId": { "type": "string", "pattern": "^wal_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "openingId": { "type": "string", "pattern": "^opn_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "roomId": { "type": "string", "pattern": "^rom_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "materialId": { "type": "string", "pattern": "^mat_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "objectId": { "type": "string", "pattern": "^obj_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "imageId": { "type": "string", "pattern": "^img_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "measurementId": { "type": "string", "pattern": "^msr_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
+    "coordMm": { "type": "integer", "minimum": -1000000, "maximum": 1000000, "description": "Milímetros enteros; límite ±1 km para detectar datos corruptos o unidades equivocadas." },
+    "lengthMm": { "type": "integer", "minimum": 1, "maximum": 100000 },
+    "thicknessMm": { "type": "integer", "minimum": 10, "maximum": 1500 },
+    "heightMm": { "type": "integer", "minimum": 100, "maximum": 10000 },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": { "x": { "$ref": "#/$defs/coordMm" }, "y": { "$ref": "#/$defs/coordMm" } }
+    },
+    "pixelPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "description": "Coordenadas en píxeles de la imagen fuente original (origen arriba-izquierda). Pueden ser decimales.",
+      "properties": { "x": { "type": "number", "minimum": 0 }, "y": { "type": "number", "minimum": 0 } }
+    },
+    "colorHex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "geometrySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "review"],
+      "description": "De dónde viene un elemento geométrico y si una persona lo ha revisado. 'suggested' es EXPERIMENTAL (reservado para F2).",
+      "properties": {
+        "method": { "enum": ["template", "manual", "imported", "suggested"] },
+        "review": { "enum": ["unreviewed", "confirmed"] }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confidence", "method"],
+      "description": "Grado de confianza de que las medidas en mm correspondan a la realidad. real = calibrado con una dimensión conocida y confirmado; estimated = derivado de una escala declarada, una plantilla o una cota no verificada; pending = sin calibrar (las medidas no deben mostrarse como reales).",
+      "properties": {
+        "confidence": { "enum": ["real", "estimated", "pending"] },
+        "method": { "enum": ["known-dimension", "declared-ratio", "template", "none"] },
+        "declaredRatio": { "type": "string", "pattern": "^1:[1-9][0-9]{0,4}$", "description": "Escala impresa en el plano (p. ej. 1:100). Solo informativa: no calibra una imagen digital." },
+    "calibration": { "$ref": "#/$defs/calibration" },
+        "note": { "type": "string", "maxLength": 500 },
+        "verification": { "$ref": "#/$defs/verification" }
+      },
+      "allOf": [
+        { "if": { "properties": { "method": { "const": "known-dimension" } } }, "then": { "required": ["calibration"] } },
+        { "if": { "properties": { "confidence": { "const": "pending" } } }, "then": { "properties": { "method": { "const": "none" } } } },
+        { "if": { "properties": { "method": { "const": "none" } } }, "then": { "properties": { "confidence": { "const": "pending" } } } },
+        { "if": { "properties": { "confidence": { "const": "real" } } }, "then": { "properties": { "method": { "const": "known-dimension" } }, "required": ["calibration"] } }
+      ]
+    },
+    "verification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceImageId", "pointA", "pointB", "knownLengthMm", "measuredLengthMm", "errorPercent", "thresholdPercent", "status", "verifiedAt"],
+      "properties": {
+        "sourceImageId": {"$ref": "#/$defs/imageId"},
+        "pointA": {"$ref": "#/$defs/pixelPoint"},
+        "pointB": {"$ref": "#/$defs/pixelPoint"},
+        "knownLengthMm": {"$ref": "#/$defs/lengthMm"},
+        "measuredLengthMm": {"type": "integer", "minimum": 1, "maximum": 2000000},
+        "errorPercent": {"type": "number"},
+        "thresholdPercent": {"const": 2, "description": "Umbral provisional de producto, no garantía de precisión."},
+        "status": {"enum": ["consistent", "discrepant"]},
+        "verifiedAt": {"type": "string", "format": "date-time"}
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceImageId", "pointA", "pointB", "knownLengthMm", "mmPerPixel", "calibratedAt"],
+      "properties": {
+        "sourceImageId": { "$ref": "#/$defs/imageId" },
+        "pointA": { "$ref": "#/$defs/pixelPoint" },
+        "pointB": { "$ref": "#/$defs/pixelPoint" },
+        "knownLengthMm": { "$ref": "#/$defs/lengthMm", "description": "Dimensión real conocida entre A y B introducida por la persona usuaria." },
+        "mmPerPixel": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000, "description": "knownLengthMm / distancia(A,B) en px. Se guarda para auditoría; debe coincidir con el cálculo (tolerancia 0,1 %)." },
+        "calibratedAt": { "type": "string", "format": "date-time" },
+        "confirmedByUser": { "type": "boolean", "default": false }
+      }
+    },
+    "sourceImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mediaType", "widthPx", "heightPx", "storage"],
+      "description": "Referencia a la imagen original del plano. El JSON nunca incrusta la imagen. La identidad es id + sha256, no la URL.",
+      "properties": {
+        "id": { "$ref": "#/$defs/imageId" },
+        "role": { "enum": ["floor-plan"], "default": "floor-plan" },
+        "mediaType": { "enum": ["image/png", "image/jpeg", "image/webp"], "description": "Raster PNG, JPEG y WebP estático. PDF y HEIC/HEIF no admitidos." },
+        "widthPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
+        "heightPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "originalFileName": { "type": "string", "maxLength": 255, "description": "Puede contener datos personales (dirección, nombre); ver decisión D-08." },
+        "storage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["local-browser", "sidecar-file", "remote"], "description": "local-browser: guardada en el navegador (p. ej. IndexedDB) con clave = id. sidecar-file: fichero junto al JSON exportado. remote: servicio aprobado (EXPERIMENTAL, requiere D-06/D-08)." },
+            "ref": { "type": "string", "maxLength": 1000, "pattern": "^(?!blob:)(?!data:)", "description": "Clave o ruta relativa estable. Prohibidas URLs blob: y data: y URLs firmadas temporales." }
+          }
+        },
+        "placement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["originMm", "rotationDeg", "mmPerPixel"],
+          "description": "Cómo se superpone la imagen al plano en mm: el píxel (0,0) cae en originMm; rotación alrededor de ese punto.",
+          "properties": {
+            "originMm": { "$ref": "#/$defs/point" },
+            "rotationDeg": { "type": "number", "minimum": -180, "maximum": 180 },
+            "mmPerPixel": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000 }
+          }
+        },
+        "visible": { "type": "boolean", "default": true },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Opacidad opcional, 1 si falta." }
+      }
+    },
+    "wall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "start", "end", "thicknessMm", "heightMm", "structure", "status"],
+      "description": "Muro como segmento de eje (línea central) con grosor simétrico. Los muros actuales, rectángulos alineados a ejes, se convierten tomando el lado largo como eje y el corto como grosor.",
+      "properties": {
+        "id": { "$ref": "#/$defs/wallId" },
+        "start": { "$ref": "#/$defs/point" },
+        "end": { "$ref": "#/$defs/point" },
+        "thicknessMm": { "$ref": "#/$defs/thicknessMm" },
+        "heightMm": { "$ref": "#/$defs/heightMm" },
+        "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico." },
+        "status": { "enum": ["existing", "demolished", "new"] },
+        "source": { "$ref": "#/$defs/geometrySource" }
+      }
+    },
+    "opening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "wallId", "kind", "offsetMm", "widthMm", "heightMm", "sillHeightMm"],
+      "description": "Hueco vinculado a un muro. offsetMm = distancia a lo largo del eje desde wall.start hasta el borde del hueco más cercano a start.",
+      "properties": {
+        "id": { "$ref": "#/$defs/openingId" },
+        "wallId": { "$ref": "#/$defs/wallId" },
+        "kind": { "enum": ["door", "sliding-door", "window", "opening"] },
+        "offsetMm": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "widthMm": { "$ref": "#/$defs/lengthMm" },
+        "heightMm": { "$ref": "#/$defs/heightMm" },
+        "sillHeightMm": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "swing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hinge", "side"],
+          "description": "Solo para kind=door. hinge: extremo del hueco con bisagra; side: lado del muro hacia el que abre, mirando de start a end.",
+          "properties": { "hinge": { "enum": ["start", "end"] }, "side": { "enum": ["left", "right"] } }
+        },
+        "isEntrance": { "type": "boolean", "default": false },
+        "source": { "$ref": "#/$defs/geometrySource" }
+      }
+    },
+    "room": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "polygon", "floorMaterialId", "countsTowardArea"],
+      "description": "Estancia como polígono simple explícito (caras interiores), independiente de los muros. La coherencia con los muros se comprueba como aviso, no como error.",
+      "properties": {
+        "id": { "$ref": "#/$defs/roomId" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "polygon": { "type": "array", "minItems": 3, "maxItems": 200, "items": { "$ref": "#/$defs/point" }, "description": "Vértices en orden, sin repetir el primero al final." },
+        "floorMaterialId": { "$ref": "#/$defs/materialId" },
+        "countsTowardArea": { "type": "boolean", "description": "false para miradores, huecos técnicos, etc." },
+        "labelAt": { "$ref": "#/$defs/point" },
+        "source": { "$ref": "#/$defs/geometrySource" }
+      }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "category", "appearance"],
+      "description": "Material referenciado por ID. Sin binarios incrustados y SIN precio: los precios no forman parte de V1 (decisión D-05).",
+      "properties": {
+        "id": { "$ref": "#/$defs/materialId" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "category": { "enum": ["floor", "wall"] },
+        "appearance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["color"],
+          "properties": {
+            "color": { "$ref": "#/$defs/colorHex" },
+            "preset": { "type": "string", "pattern": "^[a-z0-9-]{1,40}$", "description": "Patrón procedimental conocido por la app (p. ej. wood, tile-800). Los desconocidos caen a color liso." }
+          }
+        }
+      }
+    },
+    "assetRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "assetId"],
+      "description": "EXPERIMENTAL (F3). Referencia opcional a un asset de catálogo. No afirma disponibilidad, licencia ni precio; esos datos viven y se verifican en el catálogo.",
+      "properties": {
+        "catalog": { "enum": ["immersphere-asset-lab", "rubik-sota-local"] },
+        "assetId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,127}$" },
+        "catalogRevision": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "Revisión inmutable: commit del manifest para Asset Lab; primeros 40 hex del SHA-256 del manifest para rubik-sota-local. Si falta, solo se resuelve un ID conocido del catálogo autorizado actual." }
+      }
+    },
+    "object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "position", "rotationDeg", "size"],
+      "description": "Mueble u objeto. position = centro de su huella en planta; size = anchura (eje x local), fondo (eje y local) y altura opcional.",
+      "properties": {
+        "id": { "$ref": "#/$defs/objectId" },
+        "type": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$", "description": "Tipo genérico (bed, sofa, wardrobe…). Los desconocidos se dibujan como caja." },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "position": { "$ref": "#/$defs/point" },
+        "elevationMm": { "type": "integer", "minimum": 0, "maximum": 10000, "default": 0 },
+        "rotationDeg": { "type": "integer", "minimum": 0, "maximum": 359 },
+        "size": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["widthMm", "depthMm"],
+          "properties": {
+            "widthMm": { "$ref": "#/$defs/lengthMm" },
+            "depthMm": { "$ref": "#/$defs/lengthMm" },
+            "heightMm": { "type": "integer", "minimum": 1, "maximum": 10000, "description": "Opcional: si falta, la app usa la altura por defecto del tipo." }
+          }
+        },
+        "color": { "$ref": "#/$defs/colorHex" },
+        "roomId": { "$ref": "#/$defs/roomId" },
+        "assetRef": { "$ref": "#/$defs/assetRef" }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "a", "b"],
+      "properties": {
+        "id": { "$ref": "#/$defs/measurementId" },
+        "a": { "$ref": "#/$defs/point" },
+        "b": { "$ref": "#/$defs/point" },
+        "label": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "description": "EXPERIMENTAL. Datos con espacio de nombres x-<nombre>. Los lectores deben conservarlos al reescribir y pueden ignorarlos.",
+      "additionalProperties": false,
+      "patternProperties": { "^x-[a-z0-9-]{1,40}$": {} }
+    }
+  }
+}
+; if(typeof module!=="undefined") module.exports=schema; else root.FloorPlanSchema=schema;})(globalThis);

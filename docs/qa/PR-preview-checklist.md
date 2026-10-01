@@ -3,35 +3,66 @@
 **Aplica a:** todo PR de `Juanmaes83/floorplan-3d` que toque `index.html` o cualquier recurso que se vea en pantalla.
 **Principio:** la QA 3D exige ver una **escena Three.js renderizada e interactiva** del **SHA revisado**. Una respuesta HTTP 200, un proxy, HTML visible o la mera presencia de un `<canvas>` **no bastan**. Ejemplo real de F0: `rawcdn.githack.com` devuelve HTTP 200 a un navegador, pero con una página intermedia («External Content Notice»), no con la app.
 
-## 1. Comandos reales del repo (comprobados el 30-09-2026)
+## 1. Infraestructura actual y comandos documentados
 
-El repo **no tiene** `package.json`, dependencias, build, lint, tests ni workflows. Solo `index.html`, `README.md` y `.gitignore`. La app es un fichero estático que carga Three.js r160 desde jsDelivr.
+Revisión documental del 01-10-2026 contra master
+`133f6f47fc5f16764cb290f95e49414932b27a09`; estado según README, informes y
+[workflow](../DEVELOPMENT-WORKFLOW.md). App estática, módulos en `js/`, pruebas
+Node/Python y fixtures en `tests/`. No hay package.json/build ni workflow de
+pruebas GitHub Actions; Vercel y sus comentarios son servicios separados.
+**No se ejecutan estas suites en la reconciliación documental #3/#15.**
 
-| Paso | Comando | Resultado en F0 |
-|---|---|---|
-| Instalar | No aplica | — |
-| Ejecutar | `python -m http.server 8000 --bind 127.0.0.1` en la raíz (lo dice el README) y abrir `http://127.0.0.1:8000/` | HTTP 200 en `a03136c` y `540b825` |
-| Validar sintaxis | Extraer los `<script>` (excepto `importmap`) y `node --check` en cada uno (ver §6) | OK 2/2 en ambos SHA |
-| Pruebas | No hay suite | — |
-| QA 2D/3D automatizada (fuera del repo) | `node qa3d.mjs <url> <etiqueta> <dir>` (Anexo) | OK en los dos viewports; hallazgos en §3.6 de la auditoría |
+| Uso para una futura PR de producto | Comando / regla | Evidencia y límites |
+| --- | --- | --- |
+| Servir localmente | Reutilizar servidor activo; si no existe y hace falta, `python3 -m http.server 8000 --bind 127.0.0.1` en raíz. | La ejecución local no es una preview pública. No crear worktree salvo autorización. |
+| Sintaxis | `node --check` de módulos/scripts realmente modificados; extraer correctamente scripts inline y excluir importmap y tags src (§6). | Es sintaxis, no QA de render. |
+| Regresiones | `node --test --test-concurrency=1 tests/*.test.cjs` y validadores Python pertinentes documentados. | Usar herramientas ya instaladas; registrar conteos, fallos, omitidas y comandos reales. No instalar paquetes como parte de esta checklist. |
+| Contrato | `python3 tests/schema.test.py` en una PR que lo afecte. | Valida schema canónico/embebido y duplicados. No autoriza cambios contractuales. |
+| Solo documentación | Diff contra master, enlaces internos/referencias, Markdown y `git diff --check`. | No repetir producto ni crear preview visual nueva por esta tarea documental. |
 
-## 2. Preview asociada al SHA
+Las pruebas de navegador actuales usan Playwright y Chromium existentes. Los
+informes describen un transporte de módulos Three.js con curl HTTPS verificado
+si Chromium rechaza la CA del entorno: conserva TLS; **no demuestra carga directa
+del CDN en Chromium**. Si CDN o WebGL fallan, registrar petición/HTTP/TLS/error y
+verificar que 2D continúa, sin declarar 3D comprobado por una captura anterior.
+No desactivar verificación, cambiar permisos/red ni sustituir Three.js por un mock
+para afirmar que la escena real se renderizó.
 
-**Estado a 30-09-2026: no existe una preview oficial por PR** (sin Pages en el fork, sin proyecto Vercel, sin deployments). Opciones reales en D-07 del [registro de decisiones](../product/F0-decisions.md).
+## 2. Preview, SHA y acceso
 
-Para cada PR, rellena en la descripción:
+Vercel ya está conectado según cierres #17/#18. No se necesita dar de alta otro
+hosting ni activar Pages. Previews anteriores protegidas y enlaces temporales
+constan en los informes; **no se vuelven a certificar en esta ejecución**.
+Una PR visual sigue el workflow, aprobación explícita y merge posterior.
+
+Para cada PR de producto, registrar por separado:
 
 ```text
-SHA revisado:          <40 hex>
-URL de preview:        <URL exacta, SOLO si se ha abierto y verificado>
-Acceso:                público | autenticado (quién puede) | no disponible
-Cómo se verificó el SHA: <p. ej. los bytes servidos coinciden con `git show <SHA>:index.html | sha256sum`,
-                        o el panel de Vercel muestra ese commit>
+SHA local/remoto revisado: <40 hex>
+SHA del deployment:       <40 hex y método de comprobación>
+URL exacta / alias:       <indicar si inmutable o mutable>
+Estado Vercel:            READY | fallido | pendiente | no verificado
+Acceso invitado:          sin autenticar verificado | autenticado | no verificado
+Prueba en navegador:      pasos ejecutados, resultados y errores
+Revisión humana:          pendiente | aprobación explícita de Juanma + fecha
 ```
 
-- Si la URL no se ha abierto en un navegador, **no se escribe**. Se pone «no disponible» y el motivo.
-- **Provisional mientras se resuelve D-07:** `https://rawcdn.githack.com/Juanmaes83/floorplan-3d/<SHA>/index.html`. Es un servicio de terceros sin garantías, solo vale para repos públicos y exige pulsar «Open the page». Comprobado en F0 con `540b825`: mismos bytes que el blob git y 3D operativo tras la página intermedia.
-- **Alternativa siempre disponible:** servidor local sobre un `git worktree` del SHA más capturas adjuntas. En ese caso se indica «preview local; sin URL pública».
+- Puede registrarse una URL encontrada como **referencia no verificada**, con
+  fuente y error exacto; no presentarla como preview accesible ni del SHA exacto.
+- READY/commit se contrastan con evidencia del proveedor o deployment público
+  ligado al SHA. Un alias de rama mutable, HTTP 200 o Vercel Preview Comments
+  no demuestra el deployment final ni la escena Three.js.
+- Comprobar acceso desde sesión nueva sin autenticar. Si requiere Vercel
+  Authentication, identificarlo y facilitar acceso temporal autorizado cuando
+  exista; guardar caducidad, no publicar token/cookie/enlace sensible en Git.
+- Bloqueo CONNECT/curl o ERR_TUNNEL de Playwright es una limitación del mecanismo
+  y entorno; no prueba inexistencia de información ni del deployment.
+- Preview local/capturas pueden acreditar ejecución local y SHA probado,
+  dejando pendiente el acceso remoto. No reemplazan la revisión requerida.
+- Githack y Pages del upstream del informe F0 son **antecedentes históricos**,
+  no el circuito vigente de revisión ni prueba de las ramas actuales.
+- No hay merge o despliegue manual a producción automático por estar verde.
+  Una PR solo documental como #3/#15 requiere revisión documental, no nueva QA UI.
 
 ## 3. Viewports obligatorios
 
@@ -44,33 +75,38 @@ Cómo se verificó el SHA: <p. ej. los bytes servidos coinciden con `git show <S
 ## 4. Checklist humana (copiar en el PR y marcar)
 
 **Identificación**
+
 - [ ] SHA, URL y estado de acceso rellenados según §2.
 - [ ] El proyecto de referencia cargado es: `plantilla por defecto` | `<fichero FloorPlanProjectV1 adjunto>`, con el `localStorage` limpio (ventana privada).
 
 **2D (en cada viewport)**
+
 - [ ] Se ve el plano completo tras «Ajustar»; cotas, nombres de estancia y muebles legibles.
 - [ ] Seleccionar, mover, rotar y redimensionar un mueble funciona (con ratón o un dedo).
 - [ ] Zoom (rueda o pinza) y desplazamiento funcionan.
 - [ ] Deshacer y rehacer revierten el último cambio.
 
 **3D del mismo proyecto (en cada viewport)**
+
 - [ ] Al pulsar «Escena 3D» se ven muros, suelos con material y muebles del **mismo** proyecto que en 2D (mismo nº y posición aproximada de muebles).
 - [ ] Arrastrar (ratón o un dedo) **gira la cámara** y la imagen cambia.
 - [ ] Zoom (rueda o pinza) funciona; «Isométrica» y «Superior» mueven la cámara.
 - [ ] «Recorrer»: WASD en escritorio o joystick en táctil; una puerta se abre al pulsarla.
 - [ ] Un cambio hecho en 3D (mover un mueble) aparece en 2D al volver.
-- [ ] **Cambio de tamaño / orientación:** el canvas se adapta sin deformarse. Anota el tamaño útil del 3D (px).
+- [ ] **Cambio de tamaño / orientación:** el canvas se adapta sin deformarse. Anota tamaño útil y ratio: canvas ≥60 % del alto disponible del escenario en ambos móviles.
 - [ ] Volver a 2D funciona (botón o `T`).
 
 **Errores y recursos**
-- [ ] Consola sin errores nuevos respecto a la línea base (en F0 solo aparece `favicon.ico` 404).
+
+- [ ] Consola/red sin errores nuevos respecto al SHA base; registrar y explicar errores, sin asumir que solo falla favicon.
 - [ ] Sin peticiones fallidas a `cdn.jsdelivr.net/npm/three@0.160.0`.
 - [ ] (Si el PR toca el 3D) El 3D sigue funcionando después de entrar y salir 5 veces, sin avisos de contexto WebGL perdido.
-- [ ] (Si el PR toca el arranque) Con WebGL desactivado aparece un mensaje y el 2D sigue operativo. En F0 esto **falla**: la UI se bloquea.
+- [ ] (Si el PR toca el arranque) Con WebGL desactivado aparece un mensaje y el 2D sigue operativo. F0 lo detectó; PR #5 lo corrigió. Verificar la regresión, no asumir el fallo histórico.
 
 **Evidencia adjunta**
+
 - [ ] Capturas: 2D, 3D, 3D tras girar y 3D tras cambiar de tamaño, en escritorio y móvil (8 en total).
-- [ ] Informe JSON de `qa3d.mjs`, si se ha ejecutado.
+- [ ] Transcripts/metrics de tests actuales, si se ejecutaron. Anexo qa3d solo como antecedente; no afirmar nueva ejecución.
 - [ ] Nota de la GPU usada. Con **SwiftShader** (headless), el render y la interacción quedan verificados, pero **el rendimiento no**. El rendimiento se prueba en un dispositivo real e indicando el modelo.
 
 ## 5. Qué cuenta como QA 3D válida
@@ -88,22 +124,30 @@ Cómo se verificó el SHA: <p. ej. los bytes servidos coinciden con `git show <S
 ```bash
 node -e '
 const fs=require("fs"),h=fs.readFileSync("index.html","utf8"),re=/<script(\s[^>]*)?>([\s\S]*?)<\/script>/g;let m,i=0;
-while((m=re.exec(h))){const a=m[1]||"";if(/importmap/.test(a))continue;
+while((m=re.exec(h))){const a=m[1]||"";if(/importmap|\bsrc=/.test(a))continue;
 fs.writeFileSync(`/tmp/fp-js-${i}.${/type="module"/.test(a)?"mjs":"cjs"}`,m[2]);i++}'
 for f in /tmp/fp-js-*; do node --check "$f" && echo "OK $f"; done
 ```
 
-## 7. Cómo ejecutar la QA automatizada (fuera del repo, sin añadir dependencias)
+## 7. Cobertura según el cambio de producto
 
-```bash
-mkdir /tmp/fp-qa && cd /tmp/fp-qa && npm init -y && npm i playwright-core@1.47
-# guardar el Anexo como qa3d.mjs; ajustar CHROME a la ruta local de Chrome
-git -C <repo> worktree add /tmp/fp-sha <SHA>
-python -m http.server 8102 --bind 127.0.0.1 --directory /tmp/fp-sha &
-node qa3d.mjs http://127.0.0.1:8102/ <etiqueta> ./out    # capturas + <etiqueta>-report.json
-```
+Usar tests existentes y herramientas instaladas; no crear worktrees/ramas ni
+instalar navegadores/dependencias para esta revisión documental.
+Para futuros cambios visuales, completar §3–§5 y añadir lo que afecte la PR:
 
-Ejecutado en F0 con Chrome 64-bit (Windows 11, headless, `--use-angle=swiftshader`) y `playwright-core` 1.47.
+- Proyectos independientes, vacío/imagen, cancelación, persistencia y JSON/ZIP.
+- Rectángulos compatibles, lado fijo, preview/confirmar, undo/redo, rechazos
+  de vecinos/cotas/muebles; huecos con consentimiento. No prometer formas generales.
+- F1b: calibración, segunda cota, trazado y borrado compartido de imágenes.
+- F3: búsqueda SONGESAND/puf STOCKHOLM, permiso/hash/medidas/formato/tamaño,
+  carga texturizada, atribución, motivo concreto de fallo y fallback.
+- Verificación local en cada viewport y revisión humana del deployment exacto.
+  SwiftShader es software; no registra rendimiento ni calidad en teléfono físico.
+
+El anexo siguiente conserva el script de F0 @ `825ddf6` (Windows,
+playwright-core 1.47, QA del 30-09-2026). Sus esperas/selectores y métricas son
+históricos; no se ejecutó de nuevo ni reemplaza las regresiones actuales. Las
+instrucciones antiguas de instalar paquetes y crear worktree se retiraron.
 
 ## Anexo: `qa3d.mjs` (versión usada en F0)
 
@@ -217,3 +261,10 @@ await browser.close();
 fs.writeFileSync(path.join(outDir, `${label}-report.json`), JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));
 ```
+
+## Validación de esta reconciliación
+
+Base master `133f6f47fc5f16764cb290f95e49414932b27a09`. Revisión de Markdown,
+enlaces internos/referencias y diff de la PR; sin ejecutar suites, navegador,
+preview visual ni anexos de producto. La auditoría reconciliada registra la
+publicación y los enlaces externos no reconsultados o bloqueados.

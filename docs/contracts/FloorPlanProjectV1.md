@@ -1,7 +1,7 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
-**Estado:** propuesta F0, **pendiente de aprobación** por Juanma. No está implementada en la app.
-**Fecha:** 30-09-2026 · **Referencia auditada:** `master` @ `a03136c` y PR #1 @ `540b825`.
+**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
+**Fecha:** 30-09-2026 · **Base integrada de esta revisión:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
 
 ## 1. Para qué sirve y qué no hace
@@ -10,9 +10,9 @@ Es el formato durable y portable de **un** plano editable: la geometría (muros,
 
 No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos, tenant, precios, presupuestos, licencias, leads, plantas múltiples, techos inclinados ni muros curvos.
 
-### Por qué hace falta: lo que guarda la app hoy (comprobado)
+### Contexto histórico: lo que guardaba la app antes de F1a (auditoría F0)
 
-| Aspecto | Hoy (`index.html` @ `a03136c`) | Problema para un proyecto portable |
+| Aspecto | Auditoría histórica (`index.html` @ `a03136c`) | Problema para un proyecto portable |
 |---|---|---|
 | Geometría | Constantes `WALLS`, `WINS`, `DOORS`, `SLIDES`, `ROOMS` en el código (l. 385-448) | El JSON exportado **no contiene muros ni estancias**. Solo existe una vivienda. |
 | Estado guardado | `{furniture, rooms:{id:{name,mat}}, demolished:['w<índice>'], measures:[{a,b}]}` en `localStorage['huxing-design-v1']` (l. 529-562) | Sin versión ni tipo. Un muro se identifica por su **posición en el array**: si se edita la lista, cambian las referencias. |
@@ -43,14 +43,14 @@ No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos
 | Misma major y minor superior a la del lector | Se abre avisando de que es más nuevo. Al guardar se **conservan** los campos desconocidos o se ofrece «guardar como copia»; nunca se descartan en silencio. |
 | Misma major y minor igual o inferior | Se carga normalmente. |
 
-- **Migrador heredado (se implementa en F1, no en F0):** la geometría sale de la plantilla de referencia con IDs deterministas (`wal_ref-w<índice>` según el orden actual de `WALLS`). `demolished:['w12']` pasa a `status:"demolished"` en `wal_ref-w12`. Las estancias toman como ID `rom_<id actual>`. Los muebles conservan su ID con prefijo (`f…` → `obj_f…`), y los campos cambian así: `cx,cy` → `position`, `w,d` → `size`, `rot` → `rotationDeg`. `MATS` pasa a `mat_<clave>` **sin precio**, y `measures` a `measurements` con ID nuevo. La escala de la plantilla queda como `confidence:"estimated"`, `method:"template"`, porque las cotas proceden de un plano original que no está en el repo.
-- **Riesgo conocido:** el `index.html` actual está bajo `localStorage['huxing-design-v1']`. El migrador debe ser idempotente y no borrar la clave antigua hasta confirmar que la nueva se ha guardado.
+- **Migrador heredado (implementado en F1a):** la geometría sale de la plantilla de referencia con IDs deterministas (`wal_ref-w<índice>` según el orden actual de `WALLS`). `demolished:['w12']` pasa a `status:"demolished"` en `wal_ref-w12`. Las estancias toman como ID `rom_<id actual>`. Los muebles conservan su ID con prefijo (`f…` → `obj_f…`), y los campos cambian así: `cx,cy` → `position`, `w,d` → `size`, `rot` → `rotationDeg`. `MATS` pasa a `mat_<clave>` **sin precio**, y `measures` a `measurements` con ID nuevo. La escala de la plantilla queda como `confidence:"estimated"`, `method:"template"`, porque las cotas proceden de un plano original que no está en el repo.
+- **Riesgo conocido:** la clave histórica es `localStorage['huxing-design-v1']`. El migrador F1a es idempotente y conserva la clave antigua al guardar el proyecto nuevo.
 
 ## 4. Geometría y medidas
 
 - **Unidad canónica:** milímetros (`units:"mm"`).
 - **Coordenadas en planta:** enteros (`integer`) en ±1 000 000 mm. Se redondea al mm más cercano con `Math.round`, **solo al escribir**. Los cálculos intermedios (calibración, rotaciones) pueden ser decimales. Los píxeles de imagen (`pixelPoint`) y `mmPerPixel` sí son decimales.
-- **Ejes:** origen `plan-top-left`, **x a la derecha, y hacia abajo**, igual que el SVG actual. En 3D: `mundo.x = (x − cx)/1000`, `mundo.z = (y − cy)/1000`, `mundo.y` = altura. Así lo hace hoy la app (l. 1514-1515, con centro fijo `OX=6000, OY=5300`); en F1 el centro se calculará a partir de la envolvente.
+- **Ejes:** origen `plan-top-left`, **x a la derecha, y hacia abajo**, igual que el SVG actual. En 3D: `mundo.x = (x − cx)/1000`, `mundo.z = (y − cy)/1000`, `mundo.y` = altura. La implementación actual calcula el centro a partir de la envolvente en `js/project-core.js`; el centro fijo `OX=6000, OY=5300` corresponde a la auditoría histórica.
 - **Rotación:** grados enteros `0–359`, **positivo en sentido horario** en planta (con y hacia abajo). En 3D equivale a `rotation.y = −rotationDeg·π/180`, igual que hoy (l. 2259).
 - **Escala** (`scale`):
   - `confidence`: `real` (calibrada con una dimensión conocida y confirmada), `estimated` (plantilla, escala declarada o cota no confirmada) o `pending` (sin calibrar).
@@ -75,7 +75,7 @@ No incluye (a propósito, porque nada de esto está aprobado): cuentas, permisos
 - **Materiales:** se referencian por `floorMaterialId`, con `appearance.color` y un `preset` procedimental opcional. **Sin binarios, texturas incrustadas ni precio.**
 - **Objetos:** `type` genérico, `name`, `position` (centro de la huella), `rotationDeg`, `size.widthMm` y `size.depthMm` obligatorios, `heightMm` y `elevationMm` opcionales, `roomId` y `color` opcionales.
 - **`assetRef` (experimental, F3):** contiene `catalog`, `assetId` y `catalogRevision`. Solo es un puntero: **no afirma que el fichero exista, que la licencia cubra el uso ni ningún precio**. Esas comprobaciones pertenecen al catálogo (ver auditoría de Asset Lab). Si el asset no está disponible o no está autorizado, la app dibuja el `type` genérico con el mismo `size`.
-- **Imagen original (`sourceImages[]`):** es una **referencia externa**. Lleva `id`, `mediaType` (V1: PNG o JPEG), tamaño en px, `sha256` y `storage.kind`, que puede ser `local-browser`, `sidecar-file` o `remote` (este último experimental, sujeto a D-06 y D-08). `storage.ref` prohíbe `blob:` y `data:`. Tampoco se deben usar URLs firmadas temporales. **La identidad del recurso es `id` + `sha256`, no la URL.**
+- **Imagen original (`sourceImages[]`):** es una **referencia externa**. Lleva `id`, `mediaType` (PNG o JPEG; desde 1.2.0 también WebP estático), tamaño en px, `sha256` y `storage.kind`, que puede ser `local-browser`, `sidecar-file` o `remote` (este último experimental, sujeto a D-06 y D-08). `storage.ref` prohíbe `blob:` y `data:`. Tampoco se deben usar URLs firmadas temporales. **La identidad del recurso es `id` + `sha256`, no la URL.**
 - **Separación de datos:** la geometría (muros, estancias) vive en mm y es la fuente de verdad. El origen visual (`placement`: cómo se superpone la imagen en mm) y el recurso (`storage`: dónde están los bytes) son independientes. Se puede quitar la imagen sin perder la geometría.
 - **`originalFileName`** puede contener una dirección o un nombre de persona, así que se trata como dato potencialmente personal (D-08).
 
@@ -87,17 +87,17 @@ Las reglas **E** se comprueban con JSON Schema. Las **S** son semánticas y las 
 |---|---|---|
 | E1 | Esquema | Tipos, obligatorios, `additionalProperties:false`, enums, rangos y patrones de ID. |
 | E2 | Esquema | Coherencia `scale.confidence` ↔ `method` ↔ `calibration`. |
-| E3 | Esquema | Sin precio en materiales; imagen solo PNG/JPEG; `storage.ref` sin `blob:`/`data:`. |
+| E3 | Esquema | Sin precio en materiales; imagen PNG/JPEG y, desde 1.2.0, WebP estático; `storage.ref` sin `blob:`/`data:`. |
 | S1 | Error | Todos los `id` son únicos en el documento. |
 | S2 | Error | Toda referencia existe: `opening.wallId`, `room.floorMaterialId`, `object.roomId`, `calibration.sourceImageId`. |
 | S3 | Error | Muro de longitud ≥ 1 mm (`start ≠ end`). |
 | S4 | Error | Hueco dentro del muro (`offsetMm + widthMm ≤ longitud`), `sill + height ≤ wall.heightMm`, y `swing` solo en `door`. |
-| S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (la autointersección aún no está en el script ad hoc). |
+| S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (validado en la app; el script histórico del Anexo A solo comprobaba el área). |
 | S6 | Error | `mmPerPixel` coincide con `knownLengthMm/|AB|` (±0,1 %). |
 | S7 | Error | `updatedAt ≥ createdAt`. |
 | W1 | Aviso | Geometría con `review:"unreviewed"` o `method:"suggested"`. |
-| W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (propuesto; no implementado). |
-| W3 | Aviso | Objeto fuera de su `roomId` o solapado con un muro (propuesto; no implementado). |
+| W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (implementado en F1b). |
+| W3 | Aviso | Objeto fuera de su `roomId` o solapado con un muro (implementado en F1b). |
 | W4 | Aviso | `scale.confidence ≠ "real"`: la UI debe mostrar las medidas como aproximadas. |
 
 ## 7. Obligatorio, opcional y experimental
@@ -120,7 +120,7 @@ JSON Schema: INVÁLIDO (14 errores)
   /scale required: must have required property 'calibration'        ← "real" sin calibración
   /scale/method const: must be equal to constant ("known-dimension")
   /scale if: must match "then" schema
-  /sourceImages/0/mediaType enum                                       ← PDF fuera de V1
+  /sourceImages/0/mediaType enum                                       ← PDF sigue fuera de V1
   /sourceImages/0/storage/ref pattern "^(?!blob:)(?!data:)"            ← URL temporal
   /walls/0 required: 'thicknessMm'
   /walls/0/id pattern                                                  ← sufijo "a" demasiado corto
@@ -150,7 +150,7 @@ node validate.mjs <repo>/docs/contracts/FloorPlanProjectV1.schema.json \
   <repo>/docs/contracts/examples/floorplan-project-v1.invalid.example.json
 ```
 
-Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false})`. Se desactiva `strictRequired` porque los `if/then` de `scale` declaran `required` sin repetir `properties`, algo válido en JSON Schema que el modo estricto de Ajv rechaza por prudencia. Las reglas S se comprobaron con un script ad hoc (Anexo A). **S5 (autointersección) y W2–W4 no están implementadas**. Si se aprueba el contrato, la validación debería entrar en el repo en F1 junto con el migrador.
+**Ejecución histórica de F0, no instrucciones del validador actual.** Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false})`. Se desactiva `strictRequired` porque los `if/then` de `scale` declaran `required` sin repetir `properties`, algo válido en JSON Schema que el modo estricto de Ajv rechaza por prudencia. Las reglas S se comprobaron con un script ad hoc (Anexo A). En aquella ejecución ad hoc no estaban implementadas S5 (autointersección) ni W2–W4. Actualmente S5 y la migración están en `js/project-core.js`, y W1–W4 en `js/tracing-core.js`, con pruebas del repositorio. Véase [changelog](CHANGELOG.md) para las ampliaciones 1.1.0 y 1.2.0.
 
 ## 9. Riesgos conocidos y decisiones pendientes
 
@@ -162,10 +162,10 @@ Configuración: `new Ajv2020({allErrors:true, strict:true, strictRequired:false}
 | C-4 | Una sola planta por proyecto | Varias plantas = varios proyectos o un `levels[]` en v1.x (decisión aplazable). |
 | C-5 | `extensions` puede usarse como cajón de sastre | Solo `x-*` y revisión en PR. Lo que se consolide pasa al esquema en un minor. |
 | C-6 | `sourceImages[].storage` sin decisión de hosting ni privacidad | Mantener `local-browser` y `sidecar-file` en F1. `remote` bloqueado hasta D-06 y D-08. |
-| C-7 | Formato del paquete exportado (JSON + imagen) | Propuesta: `.zip` con `project.json` + `images/`. Pendiente de decisión D-09. |
+| C-7 | Formato del paquete exportado (JSON + imagen) | ZIP local implementado en F1b con `project.json` + `images/`. No se declara aprobada formalmente D-09 por esta implementación. |
 | C-8 | `structure:"load-bearing"` puede leerse como dato técnico | La UI debe mostrarlo como etiqueta orientativa, nunca como dictamen. |
 
-## Anexo A — script de validación usado (fuera del repo)
+## Anexo A — script histórico de validación F0 (fuera del repo)
 
 ```js
 // validate.mjs — Ajv 2020 + reglas semánticas S1–S4, S5 (solo área), S6, S7 y aviso W1
@@ -215,3 +215,56 @@ for (const f of files) {
   [...s.e, ...s.w].forEach(x => console.log('  ' + x));
 }
 ```
+
+## Extensión opcional F1b (V1.1)
+
+El [changelog](CHANGELOG.md) documenta `scale.verification` y
+`sourceImages[].opacity`, sus validaciones y la compatibilidad con V1 anteriores.
+El [ejemplo sintético F1b](examples/floorplan-project-v1.f1b.example.json) registra
+la segunda cota sin incrustar binarios. Su imagen procede del fixture propio
+`tests/fixtures/manual-plan.png`; el ZIP sitúa esos bytes en `images/img_synthetic.png`.
+
+La app implementa ahora W1–W4: W2 cubre el contorno completo por la unión de tramos
+a distancia ≤ grosor/2 + 20 mm de muros activos; W3 utiliza la huella orientada del
+objeto, su estancia asignada y sólidos de muros descontando huecos. Ningún aviso
+bloquea por sí solo. La propuesta/script ad hoc históricos anteriores se conservan
+como evidencia de F0, no como descripción del código actual.
+
+
+## Uso experimental de procedencia en esta rama F2
+
+Sin cambios al schema 1.2.0 ni migración: el prototipo usa los enums existentes.
+Los candidatos viven solo en memoria, fuera del proyecto/JSON/ZIP. Al aceptar o
+corregir explícitamente se crea un muro F1b con ID estable y
+`source:{method:"suggested",review:"confirmed"}`. Confirmar registra revisión
+humana de ese segmento, no exactitud dimensional ni confirmación de escala.
+La edición posterior conserva `method:"suggested"` y vuelve a `unreviewed`
+hasta nueva confirmación. W1 sigue señalando el origen experimental incluso
+después de revisarlo. [Informe](../technical/F2-wall-assist.md).
+
+
+## Ampliación F3 1.3.0 — catálogo local opcional (integrada por PR #12)
+
+`assetRef` ya existía antes de F3; no hay un nuevo campo ni migración obligatoria.
+El enum `catalog` añade `rubik-sota-local` junto a `immersphere-asset-lab`.
+Al asociar el modelo local se escribe `schemaVersion:1.3.0`. Proyectos anteriores
+mantienen su versión y sus campos ausentes hasta una edición explícita.
+Lectores anteriores pueden rechazar el nuevo enum; exportar una copia genérica
+quitando explícitamente la asociación permite interoperar sin perder geometría.
+
+Para Asset Lab, `catalogRevision` conserva el significado de commit Git del
+manifest. Para el catálogo local son los primeros 40 hex del SHA-256 de los bytes
+UTF-8 del manifest servido; identifica su contenido, no se presenta como commit.
+El nuevo flujo lo guarda. Una referencia sin revisión, tolerada desde V1.0, solo
+se resuelve por ID conocido en el catálogo autorizado actual. Una revisión
+incompatible o ID desconocido produce fallback, sin borrar el puntero original.
+La revisión es una identidad, no evidencia de derechos. El cargador verifica
+los bytes del documento de permiso y del GLB antes de parsear el modelo.
+
+Asignar/quitar `assetRef` conserva todos los demás campos del objeto. Altura ya
+opcional: los muebles nuevos de la biblioteca guardan su altura de diseño; los
+anteriores no se rellenan al abrir. Si no hay altura, el asset usa la altura
+observable de su genérico, sin persistir una estimación. JSON guarda solo el
+puntero; ZIP sigue transportando imágenes de planos, sin empaquetar assets 3D.
+Los materiales existentes siguen siendo procedimentales/color, sin precio ni
+catálogo externo. [Ejemplo local](examples/floorplan-project-v1.f3.example.json).

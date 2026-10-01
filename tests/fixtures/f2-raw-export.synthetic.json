@@ -1,0 +1,51 @@
+{
+  "export_format": "rubik-sota.raw-wall-predictions",
+  "export_version": 1,
+  "scale_applied": {
+    "method": "known-dimension",
+    "mm_per_pixel": 10,
+    "confidence": "estimated"
+  },
+  "detector_source_sha256": "3a5cb242556dc2aa404b1182f8306ac0268de8a36a793d7afd20c85d31db19db",
+  "evaluation_record": {
+    "record_version": 1,
+    "dataset_id": "eval_001",
+    "detector_commit": "9e35908e9206738a34c3b9ac1d8bad3d1b3b2b61",
+    "units": "mm",
+    "coordinate_frame": "image-aligned-mm",
+    "data_kind": "synthetic",
+    "cases": [
+      {
+        "id": "case_001",
+        "type": "digital",
+        "analysis_status": "ok",
+        "reference_status": "missing",
+        "predictions": [
+          {
+            "id": "seg_000",
+            "start": {
+              "x": 400,
+              "y": 400
+            },
+            "end": {
+              "x": 4400,
+              "y": 400
+            }
+          },
+          {
+            "id": "seg_001",
+            "start": {
+              "x": 400,
+              "y": 400
+            },
+            "end": {
+              "x": 700,
+              "y": 800
+            }
+          }
+        ],
+        "references": null
+      }
+    ]
+  }
+}

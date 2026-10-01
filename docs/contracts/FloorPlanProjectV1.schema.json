@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Juanmaes83/floorplan-3d/docs/contracts/FloorPlanProjectV1.schema.json",
   "title": "FloorPlanProjectV1",
-  "description": "PROPUESTA F0 (pendiente de aprobación). Proyecto de plano portable e independiente de la UI de Rubik Sota Floor Plan Designer. Unidad canónica: milímetros enteros. Las reglas semánticas (referencias, geometría imposible) están en FloorPlanProjectV1.md §6 y no se pueden expresar solo con JSON Schema.",
+  "description": "Contrato de datos implementado para Rubik Sota Floor Plan Designer, portable e independiente de la UI. Base F1a/F1b integrada en master; esta revisión incluye la ampliación 1.3.0: WebP estático (1.2.0) y catálogo local opcional F3. Su implementación no implica aprobar las decisiones de producto F0 que sigan pendientes. Unidad canónica: milímetros enteros. Las reglas semánticas (referencias, geometría imposible) están en FloorPlanProjectV1.md §6 y no se pueden expresar solo con JSON Schema.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "coordinateSystem", "scale", "defaults", "walls", "openings", "rooms", "materials", "objects"],
@@ -107,8 +107,9 @@
         "confidence": { "enum": ["real", "estimated", "pending"] },
         "method": { "enum": ["known-dimension", "declared-ratio", "template", "none"] },
         "declaredRatio": { "type": "string", "pattern": "^1:[1-9][0-9]{0,4}$", "description": "Escala impresa en el plano (p. ej. 1:100). Solo informativa: no calibra una imagen digital." },
-        "calibration": { "$ref": "#/$defs/calibration" },
-        "note": { "type": "string", "maxLength": 500 }
+    "calibration": { "$ref": "#/$defs/calibration" },
+        "note": { "type": "string", "maxLength": 500 },
+        "verification": { "$ref": "#/$defs/verification" }
       },
       "allOf": [
         { "if": { "properties": { "method": { "const": "known-dimension" } } }, "then": { "required": ["calibration"] } },
@@ -116,6 +117,21 @@
         { "if": { "properties": { "method": { "const": "none" } } }, "then": { "properties": { "confidence": { "const": "pending" } } } },
         { "if": { "properties": { "confidence": { "const": "real" } } }, "then": { "properties": { "method": { "const": "known-dimension" } }, "required": ["calibration"] } }
       ]
+    },
+    "verification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceImageId", "pointA", "pointB", "knownLengthMm", "measuredLengthMm", "errorPercent", "thresholdPercent", "status", "verifiedAt"],
+      "properties": {
+        "sourceImageId": {"$ref": "#/$defs/imageId"},
+        "pointA": {"$ref": "#/$defs/pixelPoint"},
+        "pointB": {"$ref": "#/$defs/pixelPoint"},
+        "knownLengthMm": {"$ref": "#/$defs/lengthMm"},
+        "measuredLengthMm": {"type": "integer", "minimum": 1, "maximum": 2000000},
+        "errorPercent": {"type": "number"},
+        "thresholdPercent": {"const": 2, "description": "Umbral provisional de producto, no garantía de precisión."},
+        "status": {"enum": ["consistent", "discrepant"]},
+        "verifiedAt": {"type": "string", "format": "date-time"}
+      }
     },
     "calibration": {
       "type": "object",
@@ -139,7 +155,7 @@
       "properties": {
         "id": { "$ref": "#/$defs/imageId" },
         "role": { "enum": ["floor-plan"], "default": "floor-plan" },
-        "mediaType": { "enum": ["image/png", "image/jpeg"], "description": "PDF u otros formatos quedan fuera de V1 hasta decisión D-02." },
+        "mediaType": { "enum": ["image/png", "image/jpeg", "image/webp"], "description": "Raster PNG, JPEG y WebP estático. PDF y HEIC/HEIF no admitidos." },
         "widthPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
         "heightPx": { "type": "integer", "minimum": 1, "maximum": 20000 },
         "bytes": { "type": "integer", "minimum": 1 },
@@ -165,7 +181,8 @@
             "mmPerPixel": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000 }
           }
         },
-        "visible": { "type": "boolean", "default": true }
+        "visible": { "type": "boolean", "default": true },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Opacidad opcional, 1 si falta." }
       }
     },
     "wall": {
@@ -249,9 +266,9 @@
       "required": ["catalog", "assetId"],
       "description": "EXPERIMENTAL (F3). Referencia opcional a un asset de catálogo. No afirma disponibilidad, licencia ni precio; esos datos viven y se verifican en el catálogo.",
       "properties": {
-        "catalog": { "enum": ["immersphere-asset-lab"] },
+        "catalog": { "enum": ["immersphere-asset-lab", "rubik-sota-local"] },
         "assetId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,127}$" },
-        "catalogRevision": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "Commit del manifest usado al enlazar." }
+        "catalogRevision": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "Revisión inmutable: commit del manifest para Asset Lab; primeros 40 hex del SHA-256 del manifest para rubik-sota-local. Si falta, solo se resuelve un ID conocido del catálogo autorizado actual." }
       }
     },
     "object": {

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "synthetic-bench",
+    "brand": "Rubik Sota",
+    "productName": "Banco sintético de prueba",
+    "category": "bench",
+    "modelPath": "assets/f3/synthetic-bench.glb",
+    "format": "glb",
+    "dimensions": {
+      "width": 600,
+      "height": 450,
+      "depth": 400,
+      "unit": "mm"
+    },
+    "qaStatus": "approved",
+    "licenseType": "MIT",
+    "commercialUseAllowed": true,
+    "redistributionAllowed": true,
+    "brandUsageAllowed": true,
+    "attributionRequired": true,
+    "permissionDocumentRef": "assets/f3/LICENSE.txt",
+    "permissionScope": "worldwide",
+    "f3Evidence": {
+      "modelSha256": "bbf24d137a9172528885b715d2e0caa2a38ab2ccc671030c3eb270820d64e3e3",
+      "bytes": 4204,
+      "permissionSha256": "951e71b78b38fde0c1477ca7e9773a7ea058bd77eb0bb16aa5693a162cb165ea",
+      "permission": {
+        "commercial": true,
+        "redistribution": true,
+        "streaming": true,
+        "modification": true,
+        "attribution": "Rubik Sota — MIT; assets/f3/LICENSE.txt",
+        "territory": "worldwide",
+        "expires": null,
+        "brand": "own-no-third-party-mark"
+      },
+      "dimensionsSource": "Original generated rectangular geometry; generator source in scripts/generate-f3-bench.py",
+      "normalization": {
+        "unitToMeter": 0.5,
+        "rotationDeg": [
+          0,
+          -90,
+          0
+        ],
+        "provenance": "GLB metre coordinates: authored node scale 2 and Y rotation +90; normalization factor 0.5 compensates the deliberate scale and inverse yaw restores the original design X/Z."
+      },
+      "extensionsRequired": []
+    }
+  }
+]

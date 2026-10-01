@@ -1,4 +1,91 @@
-# F0: auditoría de producto (Rubik Sota Floor Plan Designer)
+# F0: auditoría histórica y reconciliación documental
+
+**Reconciliación:** 01-10-2026 · **Estado:** PR #3 abierta, pendiente de revisión de Juanma; F0 no se declara aprobada.
+**Fuente vigente:** `master` remoto @ `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 parte de `825ddf629d037d57690aedeea188b725ebf561b5` y se actualiza incorporando ese master mediante merge normal, sin reescritura.
+
+## 0. Lectura vigente y alcance de la comprobación
+
+Prevalecen [ROADMAP](../ROADMAP.md), [workflow](../DEVELOPMENT-WORKFLOW.md) y el
+[contrato implementado](../contracts/FloorPlanProjectV1.md). El contrato/schema
+1.3.0 y sus ejemplos se conservan exactamente como en master: **no son cambios
+de esta PR**. Los únicos documentos propios de #3 son esta auditoría, el
+[registro D-00–D-16](F0-decisions.md), el [plan histórico reconciliado](F1-F3-plan.md)
+y la [checklist vigente](../qa/PR-preview-checklist.md).
+
+Se consultaron README, roadmap, workflow, contrato/schema, informes F1/F2/F3 y
+[la entrega dimensional](../technical/home-room-dimensions.md) de master.
+Las páginas públicas de GitHub de #3/#15/#18 se leyeron por curl el 01-10-2026:
+#3 y #15 abiertas hacia master; #18 fusionada. Esto **no es** una nueva prueba de
+app, Three.js, CI, preview Vercel, Asset Lab ni derechos de terceros.
+Los resultados de QA siguientes se atribuyen a sus informes y SHAs originales;
+no se repiten suites de producto ni se crea una preview visual en esta tarea.
+
+| Tema originalmente auditado | Estado integrado en master y evidencia | Pendiente / límite |
+| --- | --- | --- |
+| Español, marca y varios proyectos | PR #4/#5: [F1a](../technical/F1a.md) y [base móvil/local](../technical/F1-local-projects-mobile.md); selector persistente y proyectos locales. | No es sync ni backend. Cobertura completa de textos nuevos no reaudita aquí. |
+| Sin WebGL y móvil | PR #5 aporta mensaje y modo 2D operativo; QA posterior en los informes. | SwiftShader es render por software, no rendimiento físico; las medidas 844×140 de F0 son históricas. |
+| Imagen, calibración y trazado | PR #6/#7: [F1b](../technical/F1b.md); PNG/JPEG/WebP estático, dos puntos y longitud, segunda cota, muros/huecos/estancias, JSON/ZIP. | 15 MiB y 8000 px por lado; rechazo, no reescalado automático. PDF/HEIC/animación/EXIF WebP no admitidos. Medidas orientativas. |
+| Modelo y vistas | Contrato 1.3.0, IDs y geometría canónica compartida por 2D/3D. | La independencia de polígonos y ejes de muro no constituye un solver topológico general. |
+| F2 | PR #9/#10/#11: [prototipo](../technical/F2-wall-assist.md), [métrica](../technical/F2-wall-evaluation.md) y [exportación cruda](../technical/F2-raw-export.md) integrados. Método métrico revisado, prototipo experimental. | **No validada empíricamente**. Cinco sesiones, veinte planos y umbrales siguen pendientes; no bloquean desarrollo autorizado. No se adopta la mejora provisional del 30 %. |
+| F3 | PR #12 inicial y [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) aprobada/fusionada (`24534b5544ffa37840bf4fe77c4ad12afda0c38b`): [piloto cerrado](../technical/F3-preview-catalog-fix.md) de SONGESAND 90366839 y puf STOCKHOLM 80586139 texturizados, buscador, atribución y fallback. | No catálogo universal ni soporte general de Draco/KTX2/meshopt/WebP/texturas remotas. No se reaudita el inventario de Asset Lab aquí. |
+| Crear vivienda y dimensionar | [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), aprobada e integrada (`10e9f96b417f866d45088fede039786180ddce95`), [informe](../technical/home-room-dimensions.md): vacío/imagen independientes, rectángulos ortogonales, lado fijo, preview y operación reversible. | Rechaza relaciones ambiguas y conflictos; conserva edición manual. No edición numérica general de formas irregulares ni medición profesional. |
+| Hosting y revisión | Workflow vigente y cierres #17/#18 registran Vercel READY del SHA revisado, acceso protegido/temporal y aprobación humana. | No se prueba ahora el acceso/READY. Un alias puede cambiar, un enlace temporal caduca y un 200/check de comentarios no demuestra 3D ni aprobación. |
+| Permisos | Juanma confirmó el 30-09-2026 permisos para publicar F1a ([registro](../technical/F1a.md)); confirmó uso de Asset Lab y el 01-10-2026 incorporación/Git/preview del piloto ([procedencia](../../assets/f3/ASSET-LAB-PROVENANCE.txt)). | Confirmación del propietario con ese alcance, no dictamen, licencia general, permiso IKEA ni redistribución universal. MIT de la muestra sintética no se aplica al código base o assets externos. |
+
+Las hipótesis de cliente/agente de §2 permanecen hipótesis: D-01 corresponde a
+Juanma. La [auditoría de ecosistema](ecosystem-integration-audit.md) posterior
+aporta snapshots documentales; no prueba integraciones ejecutadas con CRM,
+Blender/Unreal, Immersphere o vídeo. No se amplía su alcance en esta corrección.
+
+### 0.1 Antecedentes que no son hechos actuales
+
+A partir del encabezado **Archivo histórico** se conserva la inspección de
+Claude Code del 30-09-2026: app `a03136c86842968a3de5da4c33549d3df3313c51`,
+español `540b8255eddd23e5ebb805a8f51dd5406a86911f` y Asset Lab
+`5dc7b182c5c227472b84aea66a3ffa1368c95981`. Sus etiquetas [C] significan
+comprobado **por aquella ejecución**, no por esta reconciliación. Rutas/líneas,
+comandos, recuentos (incluido «0/134»), limitaciones y bloqueos de sus §1–§6 son
+históricos y quedan sustituidos como estado actual por §0 y D-00–D-16.
+No se aplican hoy las conclusiones absolutas «sin preview», «sin proyectos»,
+«sin licencia para publicar» o «F1/F3 bloqueadas» de aquella fotografía.
+
+### 0.2 Validaciones de esta actualización
+
+Solo revisión documental: diff completo contra master, ausencia de cambios en
+aplicación/contratos/assets, links internos y anchors, tablas/cercas Markdown y
+`git diff --check`/`git diff --cached --check`. Se registra el resultado antes
+del push. No hay linter documental dedicado en el repo; se usa comprobación de
+Markdown/enlaces con Python estándar, sin dependencias ni ficheros nuevos en Git.
+Mergeabilidad: ausencia de conflictos comprobada localmente tras integrar
+master; el estado de GitHub se informa por separado si no está disponible.
+
+### 0.3 Registro de validación y acceso (01-10-2026)
+
+- `python3 /tmp/reconcile-doc-validator.py` sobre los cuatro documentos: tablas/cercas Markdown, links internos y anchors correctos. Helper temporal fuera del repo; no dependencia ni documento nuevo versionado.
+- `git diff --name-only origin/master`: exactamente los cuatro documentos F0.
+- `git diff --exit-code origin/master -- index.html js assets docs/contracts`: sin diferencias. No reaparece contrato/schema antiguo ni ejemplo paralelo.
+- `git diff --check` y `git diff --cached --check`: correctos.
+- Integración local: conflictos add/add de los dos archivos de contrato resueltos con la copia íntegra de master; sin conflictos restantes. La historia se conserva por merge, no rebase/force.
+- La API REST GET de PR #3 devuelve `Forbidden`; mergeabilidad de GitHub **no verificada**. Las páginas HTML públicas y Git remoto permiten verificar estado, head/base y diff. La ausencia de conflictos local no acredita políticas/revisiones/checks de GitHub.
+- El intento autorizado de actualizar título/descripción de #3 por REST PATCH devolvió `Forbidden`; esos metadatos no se actualizan desde Codex. El push a la rama existente actualiza los archivos de la PR, y estos documentos explican su alcance real.
+- No se ejecutan suites, scripts de QA ni previews. Los conteos de producto permanecen reportes históricos. No se modifica app, schema, assets ni roadmap canónico.
+
+**Enlaces externos:** páginas #3/#15/#18 leídas por curl (01-10-2026). Las URL
+siguientes quedan **no reconsultadas** en esta tarea documental; no se renuevan
+sus resultados HTTP, licencia, contenidos o evidencia interactiva. Los links de
+Vercel y APIs de hosting en las fuentes de master se usan como registro histórico,
+no como acceso actual certificado. Los ejemplos con `<SHA>` son plantillas.
+
+- `https://github.com/Juanmaes83/floorplan-3d` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://github.com/Juanmaes83/floorplan-3d/blob/825ddf629d037d57690aedeea188b725ebf561b5/docs/product/F0-decisions.md` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://github.com/Juanmaes83/floorplan-3d/pull/1` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://github.com/Juanmaes83/floorplan-3d/pull/17` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://github.com/Juanmaes83/floorplan-3d/pull/2` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://juanmaes83.github.io/floorplan-3d/` — no reconsultado; conservar atribución/fecha del antecedente.
+- `https://wy51ai.github.io/floorplan-3d/` — no reconsultado; conservar atribución/fecha del antecedente.
+
+## Archivo histórico — auditoría original del 30-09-2026
+
 
 **Fecha de inspección:** 30-09-2026 · **Autor:** Claude Code (a petición de Juanma). Lo revisan Juanma y Codex.
 **Estado del documento:** para revisión. Nada de lo que aquí se recomienda está decidido; las decisiones están en [`F0-decisions.md`](F0-decisions.md).
@@ -267,7 +354,7 @@ Observación [I]: el eje vertical del GLB (Y) no coincide siempre con el orden a
 | Qué | Comando | Resultado |
 |---|---|---|
 | Acceso GitHub | `gh auth status` | [C] `Juanmaes83`, alcances `repo, workflow, read:org, gist` |
-| Estado del repo | `gh repo view`, `gh pr list --state all`, `gh pr view 1|2 --json …`, `gh run list`, `gh api …/deployments|pages|environments|license` | [C] Ver §1 |
+| Estado del repo | `gh repo view`, `gh pr list --state all`, `gh pr view 1\|2 --json …`, `gh run list`, `gh api …/deployments\|pages\|environments\|license` | [C] Ver §1 |
 | Comandos de la app | Ni `package.json` ni workflows. El README indica **abrir `index.html`** o `python3 -m http.server 8000` | [C] No hay install, build, lint ni test que ejecutar |
 | Servidor local | `python -m http.server 8101 --bind 127.0.0.1 --directory <worktree a03136c>` (y 8102 para `540b825`) | [C] HTTP 200 |
 | Sintaxis JS | Extraer los `<script>` no `importmap` y `node --check` (Node 24.14.1) | [C] OK: 2/2 bloques en `a03136c` y 2/2 en `540b825` |

@@ -1,0 +1,117 @@
+{
+  "catalogRevision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "source": [
+    {
+      "id": "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo",
+      "brand": "IKEA",
+      "productName": "IKEA SONGESAND — cómoda blanca",
+      "modelPath": "assets/f3/songesand-90366839.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 820,
+        "height": 810,
+        "depth": 500,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo",
+      "brand": "IKEA",
+      "productName": "IKEA STOCKHOLM 2025 — puf Alhamn beige",
+      "modelPath": "assets/f3/stockholm-pouf-80586139.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 690,
+        "height": 400,
+        "depth": 650,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PROVENANCE.txt"
+    }
+  ],
+  "evidence": {
+    "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo": {
+      "modelSha256": "0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f",
+      "bytes": 784576,
+      "permissionSha256": "51cd80b6d97cd88e0375860d5178a5194c02ad4092053f4d1bd705972d1334a4",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/dresser/songesand-comoda-de-3-cajones-blanco-90366839.glb",
+        "sha256": "0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f",
+        "sourceMethod": "manual-authorized-download",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA SONGESAND — cómoda blanca; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Official IKEA product measures supplied externally by Juanma, 2026-10-01; local page inspection blocked. https://www.ikea.com/fr/fr/p/songesand-commode-3-tiroirs-blanc-90366839/",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates and authored node transforms; no scaling correction. Identity axes: X width, Y height, Z depth."
+      },
+      "extensionsRequired": []
+    },
+    "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo": {
+      "modelSha256": "3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727",
+      "bytes": 327052,
+      "permissionSha256": "51cd80b6d97cd88e0375860d5178a5194c02ad4092053f4d1bd705972d1334a4",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/pouf/stockholm-2025-puf-alhamn-beige-80586139.glb",
+        "sha256": "f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0",
+        "sourceMethod": "manual-authorized-download",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA STOCKHOLM 2025 — puf Alhamn beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Official IKEA product measures supplied externally by Juanma, 2026-10-01; local page inspection blocked. https://www.ikea.com.cy/en/products/stockholm-2025-pouffe/80586139/",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          90,
+          0
+        ],
+        "provenance": "glTF metre coordinates and authored node transforms; no scaling correction. Yaw +90 aligns GLB longer Z extent with official width 690 mm; X extent becomes depth 650 mm. Bbox tolerance remains 20 mm."
+      },
+      "extensionsRequired": [],
+      "optimization": {
+        "tool": "Pillow",
+        "version": "12.3.0",
+        "script": "scripts/prepare-f3-pouf.py",
+        "parameters": "1024x1024 LANCZOS, JPEG RGB quality=85 subsampling=0 optimize=false progressive=false",
+        "inputSha256": "f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0",
+        "outputSha256": "3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727",
+        "originalPath": "assets/f3/original-stockholm-pouf-80586139.glb",
+        "geometryChanged": false
+      }
+    }
+  }
+}

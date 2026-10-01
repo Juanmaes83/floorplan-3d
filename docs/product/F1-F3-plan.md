@@ -1,4 +1,36 @@
-# Plan acotado F1–F3 (propuesta F0)
+# Plan F1–F3: criterios históricos y estado reconciliado
+
+**Revisión:** 01-10-2026 sobre master `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 documental, pendiente de aprobación; no modifica el roadmap canónico ni el contrato 1.3.0.
+
+## Estado vigente frente a la propuesta original
+
+| Entrega / criterio | Estado real y evidencia | Lo que no se da por medido o aprobado |
+| --- | --- | --- |
+| F1a y base móvil/local | PR #4/#5 integradas: contrato, migración conservando claves históricas, proyectos, español, ocultación ¥ en español, fallback WebGL y vistas desde geometría. [F1a](../technical/F1a.md), [móvil/local](../technical/F1-local-projects-mobile.md). | No consta umbral acordado de diferencia de píxeles ni igualdad byte a byte universal. QA física no acreditada por SwiftShader. |
+| F1b e importación raster | PR #6/#7 integradas: PNG/JPEG/WebP estático, calibración/segunda cota, trazado, avisos, JSON/ZIP y limpieza de referencias locales. [Informe](../technical/F1b.md). | Cinco planos/sesiones reales, error y tiempos todavía pendientes. La línea base exige la cobertura del [protocolo](../qa/F2-entry-protocol.md), incluida exportación digital, escaneo y foto; [matriz de cinco](../qa/F1b-five-plans.md). |
+| F2 | Prototipo local y herramientas offline PR #9/#10/#11 integrados; método métrico por longitud revisado. [Informe](../technical/F2-wall-assist.md). | **Experimental, no validada**: cinco sesiones, conjunto separado de veinte con referencias/cobertura y umbrales pendientes. No se adopta 30 % de reducción de tiempo ni precisión/latencia sin medir. |
+| F3 | PR #12 inicial y #17 piloto acotado aprobado/fusionado: SONGESAND y puf STOCKHOLM texturizados, atribución, búsqueda y fallback. [Cierre](../technical/F3-preview-catalog-fix.md). | No DRM/licencia general ni rendimiento físico de gama media medido. No cargador universal de Draco/KTX2/meshopt ni inventario actual de todo Asset Lab. |
+| Post-F3 #18 | Aprobada/fusionada; vacío/imagen y dimensiones rectangulares con lado fijo, impactos explícitos, preview e historial. [Cierre y límites](../technical/home-room-dimensions.md). | Rectángulos ortogonales con cuatro muros inequívocos. No solver universal, deformación de vecinos ni edición numérica general irregular. |
+
+El desarrollo experimental F2 fue autorizado por Juanma antes de la línea base;
+las cinco sesiones/veinte planos/umbrales son puertas de **validación**, no un
+bloqueo a implementaciones posteriores autorizadas. El workflow vigente exige
+revisión y aprobación por entrega, no aprobación retrospectiva de toda F0.
+La confirmación de permisos del propietario está acotada en D-11/D-12.
+El perfil F3 integrado admite JPEG/PNG embebidos bajo límites; la recomendación
+histórica de DRACOLoader no fue implementada ni necesaria para el piloto.
+PR #15 sigue propuesta separada; próxima candidata: suelos/acabados, pendiente
+alcance y aprobación. No se asigna otro número de fase.
+
+## Archivo histórico del plan F0 (30-09-2026)
+
+Se conserva a continuación el alcance original @ `825ddf6` para trazabilidad,
+incluidas condiciones y cifras provisionales. **No son resultados actuales ni
+puertas de arranque vigentes**. En particular, el umbral visual, el 30 % temporal,
+el rendimiento móvil real, el permiso firmado general, la eliminación de claves
+antiguas y la supuesta ausencia de preview no se consideran conseguidos por
+aprobar F1–F3. Prevalecen la tabla anterior y el [ROADMAP](../ROADMAP.md).
+
 
 **Estado:** propuesta para revisión. **No** sustituye ni modifica el roadmap del [PR #2](https://github.com/Juanmaes83/floorplan-3d/pull/2) (`docs/ROADMAP.md`, sin mergear). Cómo encajan ambos: §4 y decisión D-13.
 **Regla:** no se empieza F1 sin decisión explícita de Juanma tras revisar F0. Cada fase se entrega en PRs pequeños con una preview verificada según [`../qa/PR-preview-checklist.md`](../qa/PR-preview-checklist.md).
