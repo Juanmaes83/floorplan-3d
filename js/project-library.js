@@ -20,7 +20,7 @@
       add(project,value){Core.validate(project);const title=name(value);return change(n=>{const id=Core.id('prj');n.entries.push({id,name:title,project:Core.clone(project)});n.activeId=id;});},
       save(project){Core.validate(project);return change(n=>{entry(n,n.activeId).project=Core.clone(project);});},
       open(id){return change(n=>{entry(n,id);n.activeId=id;});},
-      rename(id,value){const title=name(value);return change(n=>{entry(n,id).name=title;});},
+      rename(id,value){const title=name(value);return change(n=>{const e=entry(n,id);e.name=title;e.project.name=title;});},
       create(value){const title=name(value);return change(n=>{const id=Core.id('prj'),project=Core.initial();project.id=Core.id('prj');n.entries.push({id,name:title,project});n.activeId=id;});},
       duplicate(id,value){const title=name(value);return change(n=>{const source=entry(n,id),newId=Core.id('prj'),project=Core.clone(source.project);project.id=Core.id('prj');n.entries.push({id:newId,name:title,project});n.activeId=newId;});},
       remove(id){return change(n=>{entry(n,id);if(n.entries.length===1)throw Error('Conserva al menos un proyecto');n.entries=n.entries.filter(e=>e.id!==id);if(n.activeId===id)n.activeId=n.entries[0].id;});}

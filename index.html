@@ -217,6 +217,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
 @media(max-width:1100px) and (pointer:coarse){
@@ -257,6 +258,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <body>
 <div class="app">
   <header>
+    <button class="btn primary" id="newProjectBtn">Nuevo proyecto</button>
+    <button class="btn" id="newRoomBtn">+ Estancia</button>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
@@ -385,7 +388,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
 <label>Nombre <input id="projectName" maxlength="120"></label>
-<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p></dialog>
+<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear plantilla de referencia</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p></dialog>
 
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
@@ -396,6 +399,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
+<script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
 <script src="js/raw-wall-export.js"></script>
 <script src="js/local-images.js"></script>
@@ -987,13 +991,14 @@ function renderOpenings(){
   SafeDOM.markup($('#gOpen'), s);
 }
 
+function designDimensions(id){const r=project.rooms.find(q=>q.id===id);if(r?.source?.method!=='manual')return '';try{const b=FloorPlanRoomLayout.rectangle(r);return `${b.width} × ${b.depth} mm`;}catch{return '';}}
 function renderLabels(){
   const g = $('#gLabels');
   g.setAttribute('display', ui.layers.labels ? 'inline' : 'none');
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
     const [x,y] = r.at, halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
     return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(nm(state.rooms[r.id].name))}</text>
-      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>`;
+      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${designDimensions(r.id)?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${designDimensions(r.id)}</text>`:''}`;
   }).join(''));
 }
 
@@ -1221,6 +1226,7 @@ function roomPanel(r){
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></section>
+  <section><button class="btn primary" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></section>
   <section><h3>${tr('地面材料','Flooring')}</h3><div class="mats">${mats}</div>
     ${LANG==='es'?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
   <section><h3>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></h3>
@@ -1229,6 +1235,7 @@ function roomPanel(r){
 }
 function bindRoomPanel(){
   const id = ui.sel.id;
+  $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
@@ -1516,7 +1523,7 @@ svg.addEventListener('contextmenu', e => { if (ui.tool==='measure'){ e.preventDe
 
 /* ======================= 键盘 ======================= */
 document.addEventListener('keydown', e => {
-  if (e.target.matches('input,select,textarea') || e.target.closest('#lib')) return;
+  if (document.querySelector('dialog[open]') || e.target.matches('input,select,textarea') || e.target.closest('#lib')) return;
   if (window.View3D?.walking()) return;
   const mod = e.metaKey || e.ctrlKey, k = e.key.toLowerCase();
   if (mod && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
@@ -1789,6 +1796,7 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
 window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
+<script src="js/room-layout-ui.js"></script>
 <script src="js/asset-ui.js"></script>
 <script type="module">
 /* ============================================================
@@ -2672,7 +2680,7 @@ function buildLabels(){
   labelG.children.slice().forEach(o => { o.element.remove(); labelG.remove(o); });
   geometry.rooms.filter(r => r.at).forEach(r => {
     const el = document.createElement('div'); el.className = 'rlabel';
-    SafeDOM.markup(el, `${esc(nm(state.rooms[r.id].name))}<small>${area(r.poly).toFixed(1)}m²</small>`);
+    SafeDOM.markup(el, `${esc(nm(state.rooms[r.id].name))}<small>${area(r.poly).toFixed(1)}m²</small>${designDimensions(r.id)?`<small>${designDimensions(r.id)}</small>`:''}`);
     const o = new CSS2DObject(el); o.position.set(wx(r.at[0]), topHeight() + .15, wz(r.at[1])); o.visible = labelG.visible; labelG.add(o);
   });
   const counted = geometry.rooms.filter(r => r.counted !== false);
