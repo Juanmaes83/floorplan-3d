@@ -1,0 +1,15 @@
+✔ inventory requires ten qualified maps per family and every map is local, unique and hash checked (7.053583ms)
+✔ each library asset has pinned author and distributor CC0 evidence, not the website code license (0.981018ms)
+✔ catalog rejects duplicate graphics, missing rights, unsafe paths and impossible dimensions (7.053814ms)
+✔ five families, accent insensitive search and wall compatibility filters (0.903948ms)
+✔ floor / shared whole-wall assignment changes only materials and target reference, preserving geometry and openings (21.857281ms)
+✔ changing repeat for one room preserves another assignment and survives local library + JSON import/export (19.865101ms)
+✔ broken wall references and wrong assignment category are rejected; unknown preset round-trips as color fallback (23.132148ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 186.014818

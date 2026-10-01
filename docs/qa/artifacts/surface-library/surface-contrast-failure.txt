@@ -1,0 +1,59 @@
+✖ surface library touch / keyboard / persistence / software 3D 1440x900 (2288.422166ms)
+✖ surface library touch / keyboard / persistence / software 3D 390x844 (876.311639ms)
+✖ surface library touch / keyboard / persistence / software 3D 844x390 (897.065045ms)
+✔ every individual asset decodes, renders and disposes; mixed scene records transfer, memory and frame time (127808.7008ms)
+✔ HTTP, hash, decode, unknown preset and catalogue failures remain visible with safe fallback (49017.165442ms)
+✔ cancel, invalid scale and failed persistence preserve the project and history (1190.502469ms)
+✔ comparison is real and new surfaces never acquire a zero price in English or Chinese (1109.008538ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 183636.601171
+
+✖ failing tests:
+
+test at tests/surfaces.browser.test.cjs:13:89
+✖ surface library touch / keyboard / persistence / software 3D 1440x900 (2288.422166ms)
+  AssertionError [ERR_ASSERTION]: Apply label must remain readable
+      at TestContext.<anonymous> (/workspace/floorplan-3d/tests/surfaces.browser.test.cjs:15:813)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/surfaces.browser.test.cjs:13:89
+✖ surface library touch / keyboard / persistence / software 3D 390x844 (876.311639ms)
+  AssertionError [ERR_ASSERTION]: Apply label must remain readable
+      at TestContext.<anonymous> (/workspace/floorplan-3d/tests/surfaces.browser.test.cjs:15:813)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/surfaces.browser.test.cjs:13:89
+✖ surface library touch / keyboard / persistence / software 3D 844x390 (897.065045ms)
+  AssertionError [ERR_ASSERTION]: Apply label must remain readable
+      at TestContext.<anonymous> (/workspace/floorplan-3d/tests/surfaces.browser.test.cjs:15:813)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

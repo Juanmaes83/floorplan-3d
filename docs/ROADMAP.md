@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 01-10-2026 tras el cierre aprobado de la PR #18 (`10e9f96`). La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 01-10-2026 sobre master remoto `5e5e0dc42b8669e7afcb121851f2901d2930a260`, que incluye PR #3 y #15 fusionadas y el cierre aprobado de #18 (`10e9f96`). La biblioteca de superficies de esta rama está pendiente de revisión humana. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -21,7 +21,7 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 
 | Fase canónica | Alcance | Estado y evidencia |
 | --- | --- | --- |
-| F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; PR #3 conserva auditoría/decisiones históricas pendientes de reconciliar con master. No se declara aprobada toda F0. |
+| F0 | Contrato, auditoría, decisiones y criterios | Contrato integrado; auditoría/decisiones reconciliadas y fusionadas mediante PR #3 (`5e5e0dc`). Las decisiones de producto explícitamente abiertas siguen pendientes; no se declara aprobada toda F0. |
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
@@ -48,10 +48,7 @@ Tratamiento de las PR históricas (revisado el 30-09-2026 tras integrar PR #8):
 - **#2:** conserva contenido único sobre responsabilidades, VisualProposalV1 y fases futuras. Preservar PR/rama y reconciliar ese contenido en una entrega documental acotada; sustituir su numeración antigua antes de continuar
   su revisión; no retirarla mientras esos detalles sigan únicamente allí. No fusionar
   el texto antiguo que vuelve a marcar resultados existentes como pendientes.
-- **#3:** conservar auditoría, decisiones y criterios como evidencia fechada;
-  actualizar referencias de fase a este roadmap. Revisar su diff contra master y
-  retirar copias obsoletas de contratos/código antes de integrar documentación.
-  No sobrescribir el schema F1b/WebP con el schema histórico de F0.
+- **#3:** reconciliada y fusionada el 01-10-2026 en `5e5e0dc`. Conserva auditoría, decisiones y criterios fechados, sin reintroducir schema/ejemplos obsoletos ni aprobar globalmente F0.
 - **#1:** español/marca sustituida por #5/#7: diccionarios, nombres, metadatos y persistencia conservados; la etiqueta antigua de importación fue reemplazada deliberadamente. Cierre solicitado por REST, bloqueado con `Forbidden`; PR/rama preservadas hasta poder cerrarla. No reintroducir su index.html histórico. Detalle en DEVELOPMENT-WORKFLOW.md.
 
 ## Puertas de evaluación F2 y pendientes visibles
@@ -171,7 +168,7 @@ La entrega reúne el piloto de dos modelos externos con texturas JPEG embebidas,
 
 **Alcance cerrado:** piloto inicial acotado y aprobado; no equivale a completar un catálogo comercial amplio ni una biblioteca visual general de materiales. La conversión/normalización de cualquier asset, Draco/KTX2/meshopt, los acabados PBR y los conectores del ecosistema siguen siendo trabajos posteriores, con perfiles y límites propios.
 
-**Estado de la recomendación:** ejecutada y aprobada mediante la PR #18, que integra el flujo de proyecto vacío/imagen y edición dimensional con límites rectangulares conservadores. La [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15) sigue siendo una propuesta abierta, no aprobada y redactada sobre una base anterior a F3; su Roadmap 2 debe reconciliarse antes de usarlo como plan canónico. La auditoría geométrica de [descubrimiento](product/room-dimension-editing-discovery.md) y el [informe de implementación](technical/home-room-dimensions.md) registran alcance y decisiones. F2 conserva las cinco sesiones y veinte planos pendientes; no bloquean esta entrega ni la próxima implementación.
+**Estado de la recomendación:** ejecutada y aprobada mediante la PR #18, que integra el flujo de proyecto vacío/imagen y edición dimensional con límites rectangulares conservadores. La [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15) quedó reconciliada y fusionada el 01-10-2026 en `4ab3902`. Su integración documental no autoriza todas las propuestas de Roadmap 2 ni altera la numeración canónica. La auditoría geométrica de [descubrimiento](product/room-dimension-editing-discovery.md) y el [informe de implementación](technical/home-room-dimensions.md) registran alcance y decisiones. F2 conserva las cinco sesiones y veinte planos pendientes; no bloquean esta entrega ni la próxima implementación.
 
 ## Cierre post-F3 — nuevo proyecto y dimensiones de estancias, PR #18 (01-10-2026)
 
@@ -181,4 +178,18 @@ La entrega permite crear proyectos locales vacíos o desde imagen, mantenerlos i
 
 Codex reportó suite Node agregada inicial **159/160**; tras actualizar una expectativa antigua de renombrado, esa prueba pasó 1/1 y la suite dirigida final fue **25/25**. La suite agregada completa no se repitió después del ajuste. Python: **41/41**; sintaxis y diff correctos. Chromium/SwiftShader acredita renderizado y pruebas de interacción por software, no rendimiento de GPU o teléfono físico. No hay workflow de CI del repo que ejecute la suite de producto.
 
-**Estado:** entrega post-F3 aprobada e integrada; no se asigna un número nuevo mientras la propuesta de Roadmap 2 siga pendiente de reconciliación. Próximo trabajo documental: reconciliar la F0 histórica de la PR #3 en esa PR existente, retirando del cambio su schema/ejemplos obsoletos y conservando el contrato actual. Después, actualizar la propuesta PR #15 para reflejar el master actual. La siguiente candidata de producto es la biblioteca visual de suelos y acabados, como propuesta aún no aprobada. F2 sigue experimental y no validada; sus cinco sesiones y veinte planos con referencias continúan pendientes y no bloquean desarrollo.
+**Estado:** entrega dimensional post-F3 aprobada e integrada. PR #3 y #15 ya fueron reconciliadas y fusionadas. Juanma autorizó específicamente implementar la biblioteca visual de 50 superficies de esta entrega, sin numeración nueva ni aprobación global de Roadmap 2. La implementación y su revisión humana se registran a continuación. F2 sigue experimental y no validada; sus cinco sesiones y veinte planos con referencias continúan pendientes y no bloquean desarrollo.
+
+## Biblioteca visual de superficies — implementación en revisión, sin fase nueva
+
+Base remota comprobada: `5e5e0dc42b8669e7afcb121851f2901d2930a260`.
+Rama única `feat/surface-material-library`, checkout inicialmente limpio, creada
+sobre esa base. Las PR #3/#15 están **MERGED**; sus ramas documentales se conservan.
+
+Alcance autorizado: 50 acabados, diez por familia, búsqueda/comparación, aplicación
+local a suelo o pared completa, representación 2D/3D, historial y persistencia.
+Contrato opcional 1.4.0, recursos servidos localmente y fallback visible.
+[Inventario, derechos, QA y límites](technical/surface-material-library.md).
+La revisión humana y la integración de esta biblioteca siguen pendientes.
+No incluye puertas, ventanas, muebles nuevos ni conectores. No modifica decisiones
+comerciales abiertas ni completa F2: cinco sesiones y veinte planos siguen pendientes.

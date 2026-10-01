@@ -48,7 +48,7 @@ Cada PR de fase debe dejar visibles:
 - Codex reportó 77 pruebas Node y 7 Python aprobadas en su checkout. No se repitió la suite completa en esta sesión sobre el HEAD remoto final; los checks remotos disponibles fueron Vercel. 3D: Chromium/SwiftShader, sin acreditar rendimiento en GPU/móvil físico.
 - Tras fusionar a `master`, Vercel generó automáticamente un deployment de producción `READY` desde el commit F1b. No se ejecutó un despliegue manual. El flujo de próximos cambios debe seguir la PR y revisión documentadas arriba.
 
-La fuente canónica de numeración y estados es [docs/ROADMAP.md](ROADMAP.md), reconciliada con el plan F0. La PR #2 mantiene una propuesta histórica de otra numeración; revisar su diff y sustituir el documento antes de fusionarla. La PR #3 conserva decisiones/auditoría históricas y debe reconciliar sus contratos contra master. No se inicia F2 hasta medir cinco planos autorizados y acordar umbrales. Esta corrección UX/WebP es seguimiento de F1b ya integrada, no una nueva fase.
+La fuente canónica de numeración y estados es [docs/ROADMAP.md](ROADMAP.md), reconciliada con el plan F0. La PR #2 mantiene una propuesta histórica de otra numeración; revisar su diff y sustituir el documento antes de fusionarla. La PR #3 conserva decisiones/auditoría históricas; quedó reconciliada y fusionada el 01-10-2026 sin reintroducir contratos obsoletos. No se inicia F2 hasta medir cinco planos autorizados y acordar umbrales. Esta corrección UX/WebP es seguimiento de F1b ya integrada, no una nueva fase.
 
 ## Preparación de entrada F2 e higiene de ramas (30-09-2026)
 
@@ -200,3 +200,15 @@ Vercel verificó `READY` para el SHA revisado en la preview protegida [post-F3](
 Verificación reportada: Node agregado inicial 159/160; corregida la expectativa histórica, la prueba afectada pasó 1/1 y la repetición dirigida final dio 25/25. La suite completa no se repitió después del cambio de test. Python 41/41; sintaxis y diff correctos. Chromium usó SwiftShader; no acredita rendimiento de GPU ni móvil físico. No hay CI de tests del producto configurada. La limitación está explicada en [el informe de entrega](technical/home-room-dimensions.md).
 
 La entrega no tiene número de fase nuevo hasta reconciliar la PR #15 de Roadmap 2 con el master actual. La próxima tarea documental es cerrar/reconciliar la F0 histórica en la PR #3 existente, sin crear una rama duplicada y sin reintroducir su schema antiguo. F2 sigue experimental y no validada; las cinco sesiones y veinte planos siguen pendientes pero no bloquean estas implementaciones.
+
+## Entrega de biblioteca visual — 01-10-2026, revisión pendiente
+
+PR #3 fusionada en `5e5e0dc`; PR #15 en `4ab3902`, comprobadas mediante historia
+remota y páginas públicas de GitHub. Las menciones de PR abiertas en los registros
+anteriores son históricas. No se vuelven a fusionar ni se modifican sus ramas.
+
+La misión autorizada de biblioteca parte de master `5e5e0dc`, checkout limpio,
+rama nueva única `feat/surface-material-library`, sin worktree ni red/permisos
+modificados. [Informe e inventario](technical/surface-material-library.md).
+Mantener pendiente la revisión humana, no fusionar ni desplegar manualmente a
+producción. READY debe corresponder al SHA final y distinguirse del acceso real.

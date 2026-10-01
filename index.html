@@ -254,6 +254,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
   "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 }}
 </script>
+<link rel="stylesheet" href="css/surface-library.css">
 </head>
 <body>
 <div class="app">
@@ -393,6 +394,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
 <script src="js/project-core.js"></script>
+<script src="js/surface-catalog.js"></script>
 <script src="js/generic-catalog.js"></script>
 <script src="js/furniture-search.js"></script>
 <script src="js/asset-catalog.js"></script>
@@ -727,7 +729,7 @@ let MATS;
 function refreshProject() {
   geometry = Core.geometry(project); BOUNDS = geometry.bounds;
   MATS = Object.fromEntries(project.materials.map(m => [m.id, {name:m.name, sw:m.appearance.color, preset:m.appearance.preset,
-    price:DISPLAY_PRICES[m.id.replace(/^mat_/, '')] ?? 0}]));
+    price:m.appearance.preset?.startsWith('surface-')?null:(DISPLAY_PRICES[m.id.replace(/^mat_/, '')] ?? 0)}]));
 }
 refreshProject();
 const state = Core.editing(() => project);
@@ -818,6 +820,8 @@ function buildDefs(){
       pattern.setAttribute('patternUnits','userSpaceOnUse');pattern.setAttribute('width','100');pattern.setAttribute('height','100');
       const rect=document.createElementNS(pattern.namespaceURI,'rect');rect.setAttribute('width','100');rect.setAttribute('height','100');rect.setAttribute('fill',m.appearance.color);pattern.append(rect);
     }
+    const surface=FloorPlanSurfaces.get(m.appearance.preset);
+    if(surface){const size=m.appearance.repeatMm||surface.repeatMm;pattern.replaceChildren();pattern.setAttribute('width',size.x);pattern.setAttribute('height',size.y);const rect=document.createElementNS(pattern.namespaceURI,'rect');for(const [k,v]of Object.entries({width:size.x,height:size.y,fill:m.appearance.color}))rect.setAttribute(k,v);const image=document.createElementNS(pattern.namespaceURI,'image');for(const [k,v]of Object.entries({width:size.x,height:size.y,href:surface.sample.path,preserveAspectRatio:'none'}))image.setAttribute(k,v);image.addEventListener('error',()=>FloorPlanSurfaces.notify(surface.id,'Muestra 2D no disponible: '+surface.sample.path+'; se muestra el color de respaldo.'));pattern.append(rect,image);}
     pattern.setAttribute('id','m-'+m.id);$('#defs').append(pattern);
   }
 
@@ -959,6 +963,7 @@ function renderWalls(){
     const [x0,y0,x1,y1,k] = w, id = w.id, dem = w.status === 'demolished';
     let fill = k==='b' ? (ui.layers.bearing ? '#b8412c' : '#26241f') : k==='low' ? '#e9e3d8' : k==='e' ? '#8f897d' : '#a7a195';
     let ex = k==='low' ? 'stroke="#8f897d" stroke-width="1" vector-effect="non-scaling-stroke"' : '';
+    const surfaceId=project.walls.find(x=>x.id===id)?.surfaceMaterialId;if(surfaceId&&!dem){ex+=' stroke="'+esc(project.materials.find(m=>m.id===surfaceId).appearance.color)+'" stroke-width="3" vector-effect="non-scaling-stroke"';}
     if (dem){ fill = 'rgba(198,91,58,.12)'; ex = 'stroke="#c65b3a" stroke-width="1.2" stroke-dasharray="5 3" vector-effect="non-scaling-stroke"'; }
     return `<polygon class="wall" data-wall="${esc(id)}" points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="${fill}" ${ex}/>`;
   }).join(''));
@@ -1113,9 +1118,10 @@ function overviewPanel(){
   const tot = geometry.rooms.filter(r => r.counted !== false).reduce((a,r) => a + area(r.poly), 0);
   const byMat = {};
   geometry.rooms.forEach(r => { const m = state.rooms[r.id].mat; byMat[m] = (byMat[m]||0) + area(r.poly); });
+  const showPrices=LANG!=='es'&&Object.keys(byMat).every(m=>Number.isFinite(MATS[m].price));
   let cost = 0;
   const matRows = Object.entries(byMat).map(([m,a]) => { const c = a*MATS[m].price*1.05; cost += c;
-    return `<tr><td><span class="sw" style="background:${esc(MATS[m].sw)}"></span>${esc(nm(MATS[m].name))}</td><td class="r">${fmt(a,1)} m²</td>${LANG==='es'?'':`<td class="r">¥${Math.round(c).toLocaleString()}</td>`}</tr>`; }).join('');
+    return `<tr><td><span class="sw" style="background:${esc(MATS[m].sw)}"></span>${esc(nm(MATS[m].name))}</td><td class="r">${fmt(a,1)} m²</td>${!showPrices?'':`<td class="r">¥${Math.round(c).toLocaleString()}</td>`}</tr>`; }).join('');
   const dem = geometry.walls.filter(w => w.status === 'demolished');
   const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
   return `
@@ -1125,7 +1131,7 @@ function overviewPanel(){
     <div class="muted" style="font-size:11px;margin-top:4px">${tr('* 飘窗不计入使用面积；面积按墙体内净尺寸计算','* Bay windows are excluded; areas use net inner wall dimensions')}</div></section>
   <section><h3>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></h3>
     <table>${matRows}</table>
-    ${LANG==='es'?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</section>
+    ${!showPrices?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</section>
   <section><h3>${tr('方案统计','Plan Stats')}</h3>
     <div class="stats"><div><small>${tr('家具数量','Furniture')}</small><span class="big">${state.furniture.length}</span></div>
       <div><small>${tr('拆除墙体','Walls removed')}</small><span class="big">${fmt(demLen,1)}</span> m</div></div>
@@ -1217,7 +1223,7 @@ function closeDrawers(){ if (narrow()) drawer(null); }
 
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
-  const mats = Object.entries(MATS).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
+  const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
   return `<section><h3>${tr('房间','Room')}</h3>
     <div class="form"><label class="full">${tr('名称','Name')}<input id="rName" value="${esc(nm(st.name))}"></label></div>
     <div class="stats" style="margin-top:10px">
@@ -1227,14 +1233,17 @@ function roomPanel(r){
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></section>
   <section><button class="btn primary" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></section>
-  <section><h3>${tr('地面材料','Flooring')}</h3><div class="mats">${mats}</div>
-    ${LANG==='es'?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
+  <section><h3>${tr('地面材料','Flooring')}</h3><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
+    ${LANG==='es'||!Number.isFinite(MATS[st.mat].price)?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
   <section><h3>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></h3>
     <table>${inside.map(f => `<tr class="click" data-fid="${esc(f.id)}"><td>${esc(nm(f.name))}</td><td class="r muted">${f.w}×${f.d}</td></tr>`).join('') || `<tr><td class="muted">${tr('暂无','None')}</td></tr>`}</table>
     <div class="actions"><button class="btn" id="back">${tr('← 返回总览','← Back to overview')}</button></div></section>`;
 }
 function bindRoomPanel(){
   const id = ui.sel.id;
+  $('#surfaceFloor').onclick=()=>FloorPlanSurfaceUI.open({kind:'floor',id});
+  $('#surfaceWall').onclick=()=>FloorPlanSurfaceUI.open({kind:'wall',id});
+  FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
@@ -1797,6 +1806,7 @@ window.FloorPlanApp={get project(){return project;},get geometry(){return geomet
 </script>
 <script src="js/tracing-ui.js"></script>
 <script src="js/room-layout-ui.js"></script>
+<script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
 <script type="module">
 /* ============================================================
@@ -1811,6 +1821,7 @@ import {PointerLockControls} from 'three/addons/controls/PointerLockControls.js'
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import {SurfaceRenderer} from './js/surface-renderer.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
@@ -1945,7 +1956,9 @@ const TEX = {
   terrazzo:{sx:.5, sy:.5, base:'#e6dfd3', rough:.4}, carpet:{sx:.3, sy:.3, base:'#c6bfd2', rough:1},
 };
 const floorMats = {};
+const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
 function floorMat(materialId){
+  const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
   const cacheKey=JSON.stringify([materialId,material.sw,kind]);
   if (floorMats[cacheKey]) return floorMats[cacheKey];
@@ -2573,9 +2586,12 @@ function buildFurniture(f){
 /* ======================= 建筑 ======================= */
 function clearGroup(g){ g.traverse(o => { if (o.geometry) o.geometry.dispose(); }); g.clear(); }
 function wallBox(rect, yb, yt, m){
+  const assignment=project.walls.find(w=>w.id===rect.id)?.surfaceMaterialId;
+  if(assignment){const finish=project.materials.find(m=>m.id===assignment);m=surfaceRenderer.get(finish)||mat(finish.appearance.color,{roughness:.9});}
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
+  if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
   o.position.set(wx(rect.center[0]), (yb+yt)/2, wz(rect.center[1])); o.rotation.y=-rect.angle; o.castShadow = o.receiveShadow = true; archUp.add(o);
   // 漫游辅助：墙体棱线 + 踢脚线，让相邻墙面、墙角一眼可分（仅漫游模式显示）
@@ -2591,6 +2607,7 @@ function shapeOf(poly, flip){ const s = new THREE.Shape(); poly.forEach(([x, y],
 function buildArch(){
   renderedSource=project; renderedGeometry=geometry;
   clearGroup(archFloor); clearGroup(archUp); lampG.clear(); doors.length = 0; colliders = [];
+  surfaceRenderer.begin();
   OX=geometry.center.x; OY=geometry.center.y; H=project.defaults.wallHeightMm/1000;
   const span=Math.hypot(geometry.envelope.w,geometry.envelope.h)/1000;camera.far=Math.max(300,span*10);camera.updateProjectionMatrix();orbit.maxDistance=Math.max(45,span*4);ground.scale.setScalar(Math.max(1,span/100));
   const top = topHeight();
@@ -2649,10 +2666,11 @@ function buildArch(){
       [-1,1].forEach(e=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(.04,ph,.04),frameMat);fr.position.set(x+e*pl/2,ph/2,off);group.add(fr);});
     });
   });
-  applyLight(); applyGrow();
+  applyLight(); applyGrow(); surfaceRenderer.end();
 }
 
 const assetStates=new Map(),assetRequests=new Map();let assetGeneration=0;
+
 function publishAsset(id,value){assetStates.set(id,value);dispatchEvent(new Event('floorplan-asset-status'));}
 function loadFurnitureAsset(g,f,generation){
   if(!f.assetRef){publishAsset(f.id,{state:'generic'});return;}
@@ -2990,7 +3008,7 @@ function shot(){ const a = document.createElement('a'); a.download = tr('户型�
 
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 
-window.View3D = {refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>

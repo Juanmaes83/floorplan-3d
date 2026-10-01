@@ -41,7 +41,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 ### Superficies y estimaciones
 
 - Superficie por estancia y superficie útil total.
-- Seleccionar materiales de suelo por estancia.
+- Biblioteca visual de 50 acabados locales: diez por familia, búsqueda, comparación y muestras.
+- Seleccionar materiales de suelo por estancia y un acabado para una pared completa (ambas caras), con deshacer/rehacer y repetición ajustable.
 - Superficies por material. En español se ocultan los precios heredados en yuanes, sin sustituir moneda ni inventar importes.
 - Deshacer y rehacer cambios.
 
@@ -144,3 +145,18 @@ La [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) completó y cerr
 Este cierre cubre el piloto inicial, no un catálogo comercial amplio ni una biblioteca PBR completa. No se admiten de forma general Draco, KTX2, meshopt, WebP ni URI de texturas remotas. El schema permanece en 1.3.0; se conserva el fallback genérico. El informe registra pruebas, diagnósticos y limitaciones: [corrección de catálogo en preview protegida](docs/technical/F3-preview-catalog-fix.md) y [estado F3/roadmap](docs/ROADMAP.md).
 
 La entrega post-F3 de «Nuevo proyecto» y edición directa de dimensiones se aprobó y fusionó mediante la [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), merge `10e9f96`. Permite crear proyectos vacíos o desde imagen y dimensionar habitaciones rectangulares compatibles con previsualización y protección de geometría. No incluye un editor numérico general para formas irregulares. [Alcance, QA, limitaciones y registro de cierre](docs/technical/home-room-dimensions.md) · [roadmap canónico](docs/ROADMAP.md). F2 sigue experimental: cinco sesiones y veinte planos de evaluación permanecen pendientes, sin bloquear esta entrega.
+
+## Biblioteca visual de superficies — revisión pendiente
+
+Selecciona una estancia y abre **Biblioteca de acabados · suelo** o **Acabado de
+una pared**. Filtra por familia, busca, compara dos muestras, ajusta la repetición
+si hace falta y confirma. Cancelar conserva el proyecto. En pared, el selector
+identifica el muro completo; ambas caras cambian, también la de una estancia vecina.
+
+Los 50 albedos CC0 se sirven desde esta plataforma, sin API de catálogo externa.
+Se carga el mapa completo solo cuando se utiliza en 3D; el 2D usa una muestra y
+conserva cotas y símbolos. JSON/ZIP conservan IDs, repetición y color de respaldo.
+El contrato opcional 1.4.0 conserva los proyectos anteriores.
+[Inventario, procedencia, licencias y QA](docs/technical/surface-material-library.md).
+Esta biblioteca sigue pendiente de revisión humana; no completa la evaluación F2
+ni autoriza conectores o ampliaciones de muebles/puertas/ventanas.

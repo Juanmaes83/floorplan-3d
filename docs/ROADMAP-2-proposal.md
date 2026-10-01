@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Reconciliada el 01-10-2026 contra `master` remoto `133f6f47fc5f16764cb290f95e49414932b27a09`, después de PR #17 y #18. La primera versión se preparó sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`; su fotografía anterior queda sustituida aquí. PR #15 sigue abierta, propuesta no aprobada. No modifica el roadmap canónico ni el contrato 1.3.0; F3 está cerrado para su piloto y la entrega dimensional #18 ya está integrada.
+> Reconciliada el 01-10-2026 contra `master` remoto `133f6f47fc5f16764cb290f95e49414932b27a09`, después de PR #17 y #18. La primera versión se preparó sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`; su fotografía anterior queda sustituida aquí. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); integración documental, sin aprobación global de las propuestas. No modifica el roadmap canónico ni el contrato 1.3.0; F3 está cerrado para su piloto y la entrega dimensional #18 ya está integrada.
 
 ## 1. Propósito y principios
 
@@ -21,7 +21,7 @@ Principios para decidir:
 Fuente: README, [roadmap canónico](ROADMAP.md), workflow e informes vigentes de
 master. La aprobación de #17/#18 y READY son registros de sus cierres, no QA
 repetida en esta tarea documental. GitHub HTML consultado el 01-10-2026 confirma
-#15 abierta y #18 fusionada; no se ejecutan tests, app ni nueva preview visual.
+#15 estaba abierta y #18 fusionada durante aquella comprobación documental; #15 quedó fusionada después. No se ejecutaron tests, app ni nueva preview visual en aquella revisión.
 El segmento comercial sigue abierto y completar software no aprueba todo F0.
 
 | Área | Estado real que condiciona este plan |
@@ -44,7 +44,7 @@ Los órdenes 0/1 son antecedentes completados; 2–8 son propuestas futuras, **n
 |---|---|---|---|---|
 | 0 · antecedente | F3 inicial y piloto acotado completados | Valor visual revisado; mercado no validado | Estimación histórica M | #12/#17 aprobadas e integradas; piloto de dos IKEA cerrado. No reabrir ni declarar una biblioteca general completada. |
 | 1 · antecedente | Crear vivienda y editar dimensiones integrado | Flujo revisado; impacto comercial no medido | Estimación histórica M–L | #18 aprobada/fusionada; rectángulos con cuatro muros inequívocos. Un solver general o ampliación irregular requeriría otra propuesta. |
-| 2 · candidata próxima | Biblioteca visual de materiales de suelo y acabados | Hipótesis de mejora visual | S–M / media | **Pendiente alcance y aprobación de Juanma; no iniciada.** Presets/muestras locales como primer perfil; procedencia, límites y QA móvil; sin precios ni cambio de schema anticipado. |
+| 2 · candidata próxima | Biblioteca visual de materiales de suelo y acabados | Hipótesis de mejora visual | S–M / media | **Alcance específico autorizado por Juanma en esta entrega; implementación en revisión.** Biblioteca de 50 texturas locales, procedencia, fallback y QA móvil; contrato opcional 1.4.0 necesario para pared persistente. Sin precios. [Informe](technical/surface-material-library.md). |
 | 3 | Importador normalizador de modelos GLB de Asset Lab | Alto para ampliar mobiliario real | M / media-alta | Amplía el canal del piloto F3 cerrado mediante otra entrega, no reabre #17. Requiere perfil aprobado, herramientas reproducibles, procedencia y pruebas del resultado convertido. No relajar el loader de producción para todos los formatos. |
 | 4 | Adaptador Room Designer → CRM | Alto solo si el segmento comercial lo justifica | M / alta por contratos/identidad | D-01 y contrato de datos. Resolver `lineItems`→`products`, cantidades, IDs, versiones, reintentos e idempotencia; prototipo con datos sintéticos primero. |
 | 5 | Exportación determinista Rubik → Blender | Alto para contenido y producción avanzada | M–L / media | Definir ejes, unidades, jerarquía e IDs; probar vivienda asimétrica. Salida portable glTF/GLB como primera prueba, no automatizar aún todo Astra/Seedance. |
@@ -57,11 +57,8 @@ Los órdenes 0/1 son antecedentes completados; 2–8 son propuestas futuras, **n
 - **Conservar lo integrado:** #17 y #18 aprobadas; no volver a implementar ni
   reabrir esas entregas. F2 sigue experimental: cinco sesiones, veinte planos y
   umbrales pendientes sin bloquear nuevas implementaciones autorizadas.
-- **Reconciliar organización:** F0 en la PR #3 existente y esta propuesta #15
-  son revisiones documentales pendientes de Juanma, no aprobación global de fases.
-- **Proponer primero suelos/acabados:** definir muestra visual, selección de
-  acabado, licencias/procedencia, fallback y presupuesto físico; obtener alcance
-  aprobado antes de empezar. No asignar fase nueva ni comprometer fechas.
+- **Organización reconciliada:** F0 #3 y propuesta #15 fusionadas en master; no aprobación global de fases o decisiones abiertas.
+- **Suelos/acabados autorizados:** esta entrega implementa únicamente la biblioteca visual solicitada; revisión humana pendiente. No asignar fase nueva ni comprometer fechas del resto de propuestas.
 - **Investigar D-01:** observar tareas de cliente, agente, interiorista/reforma;
   elegir un segmento o mantenerlo explícitamente abierto, sin inferirlo de CRM.
 - **Después, pipeline controlado de modelos/texturas**, con versiones/permisos,
@@ -261,4 +258,6 @@ revalidaron y deben consultarse antes de diseñar cada integración.
 - REST GET de PR #15 devuelve `Forbidden`; estado de mergeabilidad GitHub no verificado. Master integrado permite confirmar ausencia de conflictos localmente, no políticas/checks/aprobaciones remotos.
 - No se ejecutan suites, anexos de QA ni app; no se crea preview visual ni se certifica CI/READY. Conteos y cierres del producto siguen atribuidos a sus informes originales.
 - REST PATCH para actualizar título/descripción de #15 también devolvió `Forbidden`; metadatos no editados desde Codex. El push publica la revisión en los archivos de la PR existente.
-- PR #15 permanece propuesta documental pendiente de revisión y aprobación explícita de Juanma. No se fusiona ni se modifica master en esta tarea.
+- Estado de aquella revisión: PR #15 permanecía pendiente y Codex no la fusionó. Estado actual comprobado el 01-10-2026: #15 fusionada en `4ab39025379cbbb8873dd344183967aafa0a1bdc` y #3 en `5e5e0dc42b8669e7afcb121851f2901d2930a260`. La biblioteca está autorizada de forma acotada; el resto sigue siendo propuesta.
+
+La entrega actual de biblioteca se documenta en [el informe específico](technical/surface-material-library.md); no inicia los conectores ni aprueba el conjunto del Roadmap 2.

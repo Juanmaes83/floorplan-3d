@@ -117,6 +117,17 @@ class ContractTests(unittest.TestCase):
     def test_f1b_example(self):
         self.validator.validate(json.loads((ROOT / 'docs/contracts/examples/floorplan-project-v1.f1b.example.json').read_text()))
 
+    def test_optional_surface_assignments(self):
+        example = load_unique_json(ROOT / 'docs/contracts/examples/floorplan-project-v1.surfaces.example.json')
+        self.validator.validate(example)
+        self.assertEqual(example['schemaVersion'], '1.4.0')
+        self.assertIn('surfaceMaterialId', example['walls'][0])
+        material = next(m for m in example['materials'] if m['id'] == example['rooms'][0]['floorMaterialId'])
+        self.assertEqual(material['appearance']['repeatMm'], {'x': 1000, 'y': 1000})
+        for invalid in ({'x': 0, 'y': 1000}, {'x': 1000}, {'x': 1000, 'y': 1000, 'url': 'https://outside.test'}):
+            material['appearance']['repeatMm'] = invalid
+            self.assertTrue(list(self.validator.iter_errors(example)))
+
     def test_invalid_f0_example(self):
         errors = list(self.validator.iter_errors(json.loads((ROOT / 'docs/contracts/examples/floorplan-project-v1.invalid.example.json').read_text())))
         # Ajv reports an additional synthetic `if` error. Assert the actual rejected fields.

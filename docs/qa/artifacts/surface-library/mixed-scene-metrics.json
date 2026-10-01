@@ -1,0 +1,101 @@
+{
+  "active": [
+    {
+      "id": "surface-wood-floor",
+      "key": "[\"mat_surface-wood-floor-floor\",\"surface-wood-floor\",1000,1000]",
+      "state": "ready",
+      "bytes": 6208,
+      "gpuBytes": 349526,
+      "loadMs": 7899.4000000059605,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      }
+    },
+    {
+      "id": "surface-square-tiles",
+      "key": "[\"mat_surface-square-tiles-floor\",\"surface-square-tiles\",1000,1000]",
+      "state": "ready",
+      "bytes": 10700,
+      "gpuBytes": 349526,
+      "loadMs": 7899.4000000059605,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      }
+    },
+    {
+      "id": "surface-marble-01",
+      "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000]",
+      "state": "ready",
+      "bytes": 3940,
+      "gpuBytes": 349526,
+      "loadMs": 7897.70000000298,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      }
+    },
+    {
+      "id": "surface-brushed-concrete",
+      "key": "[\"mat_surface-brushed-concrete-floor\",\"surface-brushed-concrete\",1000,1000]",
+      "state": "ready",
+      "bytes": 10796,
+      "gpuBytes": 349526,
+      "loadMs": 7899.20000000298,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      }
+    },
+    {
+      "id": "surface-white-plaster-02",
+      "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000]",
+      "state": "ready",
+      "bytes": 7864,
+      "gpuBytes": 349526,
+      "loadMs": 7888,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      }
+    }
+  ],
+  "estimatedGpuBytes": 1747630,
+  "downloadedMapBytes": 39508,
+  "memory": {
+    "geometries": 1299,
+    "textures": 11
+  },
+  "disposals": 50,
+  "frameIntervalMs": {
+    "median": 991.2999999970198,
+    "max": 1169.3999999910593
+  },
+  "environment": "Desktop Chromium headless / SwiftShader; not mobile hardware",
+  "baseline": {
+    "fixture": "same reference home / original procedural floors / no surface assignments",
+    "memory": {
+      "geometries": 1303,
+      "textures": 7
+    },
+    "activeSurfaceCount": 0,
+    "medianFrameIntervalMs": 952.2999999970198,
+    "maxFrameIntervalMs": 1162.5
+  }
+}

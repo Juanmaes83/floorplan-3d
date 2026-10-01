@@ -1,6 +1,6 @@
 # F0: registro de decisiones reconciliado
 
-**Revisión:** 01-10-2026 · base master `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 abierta; **F0 no aprobada globalmente**.
+**Revisión:** 01-10-2026 · base master `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 fusionada el 01-10-2026 (`5e5e0dc`); **F0 no aprobada globalmente**.
 
 Se conservan D-00–D-16 y su trazabilidad: [registro original del 30-09-2026](https://github.com/Juanmaes83/floorplan-3d/blob/825ddf629d037d57690aedeea188b725ebf561b5/docs/product/F0-decisions.md). Las opciones y recomendaciones originales son antecedentes, no decisiones vigentes por inferencia. Evidencias: [auditoría reconciliada](F0-product-audit.md), [plan](F1-F3-plan.md), contrato y roadmap canónicos.
 
