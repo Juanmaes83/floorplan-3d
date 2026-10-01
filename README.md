@@ -18,6 +18,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 
 ### Plano 2D
 
+- Crear proyectos locales vacíos o desde imagen, independientes entre sí.
+- Crear estancias rectangulares e introducir ancho y profundidad interiores en milímetros, con vista previa, lado fijo, confirmación y deshacer/rehacer.
 - Plano de referencia con escala 1:60 y cotas en milímetros.
 - Biblioteca de más de 60 muebles y electrodomésticos, organizados por estancia.
 - Añadir elementos con un clic o arrastrándolos al plano.
@@ -130,7 +132,7 @@ ni huecos. [Informe y límites](docs/technical/F2-wall-assist.md).
 
 F2 está **integrada por las PR #9/#10/#11 y no validada empíricamente**. Falta medir cinco planos autorizados,
 preparar un conjunto fijo de al menos veinte con referencias y acordar umbrales
-con Juanma. Estos datos son validación posterior y no bloquean F3. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
+con Juanma. Estos datos siguen pendientes para validar F2 y no bloquean nuevas entregas de producto. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
 offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el flujo
 en su teléfono; el rendimiento físico sigue sin medir.
 
@@ -141,4 +143,4 @@ La [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) completó y cerr
 
 Este cierre cubre el piloto inicial, no un catálogo comercial amplio ni una biblioteca PBR completa. No se admiten de forma general Draco, KTX2, meshopt, WebP ni URI de texturas remotas. El schema permanece en 1.3.0; se conserva el fallback genérico. El informe registra pruebas, diagnósticos y limitaciones: [corrección de catálogo en preview protegida](docs/technical/F3-preview-catalog-fix.md) y [estado F3/roadmap](docs/ROADMAP.md).
 
-La siguiente entrega recomendada es mejorar «Nuevo proyecto» y permitir edición directa de dimensiones para habitaciones ortogonales bien identificadas. La especificación geométrica está en [room-dimension-editing-discovery.md](docs/product/room-dimension-editing-discovery.md); el Roadmap 2 continúa como propuesta no aprobada en la [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15). Las cinco sesiones y veinte planos de validación F2 permanecen pendientes y no bloquean este trabajo.
+La entrega post-F3 de «Nuevo proyecto» y edición directa de dimensiones se aprobó y fusionó mediante la [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), merge `10e9f96`. Permite crear proyectos vacíos o desde imagen y dimensionar habitaciones rectangulares compatibles con previsualización y protección de geometría. No incluye un editor numérico general para formas irregulares. [Alcance, QA, limitaciones y registro de cierre](docs/technical/home-room-dimensions.md) · [roadmap canónico](docs/ROADMAP.md). F2 sigue experimental: cinco sesiones y veinte planos de evaluación permanecen pendientes, sin bloquear esta entrega.
