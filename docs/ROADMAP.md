@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 01-10-2026. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 01-10-2026 tras el cierre aprobado de la PR #18 (`10e9f96`). La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -25,7 +25,8 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Entrega inicial integrada** por PR #12 (merge `95fcf0d`): catálogo genérico dimensionado, adaptador, GLB sintético local y fallback. **Catálogo externo pendiente**: Juanma confirma autorización para usar los assets del proyecto; cada modelo candidato debe superar comprobaciones de existencia, hash, dimensiones, compatibilidad técnica y alcance de permisos. F3 sigue abierta. [Informe](technical/F3-initial.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Piloto externo texturizado acotado completado, aprobado y fusionado** por PR #17 (SHA revisado `772e24c`; merge `24534b5`): SONGESAND y puf STOCKHOLM, búsqueda/filtros y carga con sesión same-origin. No declara completo el catálogo comercial ni una biblioteca general de materiales; ampliaciones y pipeline de conversión quedan como entregas posteriores. [Informe](technical/F3-preview-catalog-fix.md). |
+| Entrega post-F3, sin numeración nueva | Inicio de proyectos vacíos/desde imagen y edición directa de dimensiones de estancias rectangulares | Aprobada e integrada por PR #18 (`c7d1b81` revisado; merge `10e9f96`). No modifica schema 1.3.0; limita edición numérica a geometría ortogonal inequívoca. [Informe](technical/home-room-dimensions.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
 
@@ -133,3 +134,51 @@ La [auditoría de integración](product/ecosystem-integration-audit.md) compara 
 Se propone evaluar primero un catálogo externo muy pequeño con medidas y permisos específicos, soporte técnico acotado y fallback; posteriormente, bajo decisión de alcance, estudiar propuestas comerciales al CRM, exportación determinista a Blender y presentaciones 360 con referencias estables. Son **propuestas pendientes de decisión**, sin cliente prioritario aprobado, nuevos números de fase ni cambio de alcance/cierre de F1, F2 o F3.
 
 F3 inicial permanece integrada y el catálogo externo pendiente. F2 permanece experimental: cinco sesiones y veinte planos siguen pendientes, sin bloquear el avance de F3. La autorización general de Juanma sobre los assets ya está confirmada; se conservan las comprobaciones específicas por recurso antes de incorporarlo o distribuirlo.
+
+## F3 — piloto externo texturizado en revisión (01-10-2026)
+
+Rama `feat/f3-textured-external-catalog`, basada en master `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, posterior a las PR #13/#14. Integra SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con procedencia fijada, autorización de Juanma para Git/preview, medidas oficiales aportadas externamente y soporte acotado de JPEG embebido. El sofá 90591748 se excluye por superar la tolerancia de 20 mm. El schema sigue en 1.3.0; no se modifican Asset Lab ni decisiones comerciales.
+
+[Informe y resultados actuales](technical/F3-initial.md#piloto-externo-texturizado-01-10-2026). La entrega requiere revisión humana y merge: **F3 permanece abierta**. La preview del nuevo SHA debe verificarse por separado de las capturas locales; la preview de PR #12 no acredita este piloto. SwiftShader no valida rendimiento en teléfono físico. F2 mantiene cinco sesiones y veinte planos pendientes.
+
+### F3 — búsqueda local de muebles en revisión (01-10-2026)
+
+Sobre la misma rama `feat/f3-textured-external-catalog`: búsqueda por nombre/tipo,
+familias derivadas del catálogo, sinónimos españoles y filtros de estancia/familia.
+Conserva los 60 genéricos y muestra únicamente los tres modelos del catálogo F3
+aceptado, con etiquetas y atribución separadas. No cambia dimensiones originales,
+contrato 1.3.0, assets ni decisiones comerciales.
+[Informe de UX y QA](technical/F3-furniture-search.md).
+Pendiente de preview verificable del SHA final, revisión humana y merge; **F3 sigue
+abierta**, sin alterar el orden de fases. Cinco sesiones y veinte planos F2 pendientes.
+
+### F3 — corrección de catálogo en preview protegida (01-10-2026)
+
+La revisión humana de PR #17 detectó ausencia de los IKEA y aviso genérico de catálogo.
+Se corrige en la misma rama la omisión de sesión en fetch de manifests/permisos/GLB:
+credenciales solo del mismo origen validado, manteniendo guards F3. Se añade motivo
+concreto de red/HTTP/JSON/adaptación/exclusión y regresión en navegador con protección
+de sesión, desktop y móvil. [Diagnóstico y QA](technical/F3-preview-catalog-fix.md).
+Requiere nueva preview del HEAD y revisión de Juanma; **F3 permanece abierta**.
+No cambia schema, assets, decisiones de producto ni las cinco sesiones/veinte planos F2 pendientes.
+
+
+## Cierre del piloto F3 de catálogo externo — PR #17 (01-10-2026)
+
+Juanma aprobó la revisión visual de la versión corregida y la [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) se fusionó mediante squash el 01-10-2026. Rama: `feat/f3-textured-external-catalog`; SHA revisado y desplegado: `772e24c26d10cec4349f28558ffc87ee18748317`; commit de merge en `master`: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`. Vercel confirmó `READY` para el SHA exacto en [la preview protegida](https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/). La revisión humana aprobó la búsqueda y el acceso a SONGESAND y STOCKHOLM; no hubo despliegue manual a producción.
+
+La entrega reúne el piloto de dos modelos externos con texturas JPEG embebidas, dimensiones y atribución, buscador y filtros de muebles, y corrección de las solicitudes con sesión de la preview protegida. Conserva validaciones, fallback genérico y FloorPlanProjectV1 1.3.0. Codex reportó 138/138 Node/navegador y 41/41 Python antes del merge; estas suites no se repitieron para este cierre documental. SwiftShader no acredita rendimiento en un teléfono físico.
+
+**Alcance cerrado:** piloto inicial acotado y aprobado; no equivale a completar un catálogo comercial amplio ni una biblioteca visual general de materiales. La conversión/normalización de cualquier asset, Draco/KTX2/meshopt, los acabados PBR y los conectores del ecosistema siguen siendo trabajos posteriores, con perfiles y límites propios.
+
+**Estado de la recomendación:** ejecutada y aprobada mediante la PR #18, que integra el flujo de proyecto vacío/imagen y edición dimensional con límites rectangulares conservadores. La [PR #15](https://github.com/Juanmaes83/floorplan-3d/pull/15) sigue siendo una propuesta abierta, no aprobada y redactada sobre una base anterior a F3; su Roadmap 2 debe reconciliarse antes de usarlo como plan canónico. La auditoría geométrica de [descubrimiento](product/room-dimension-editing-discovery.md) y el [informe de implementación](technical/home-room-dimensions.md) registran alcance y decisiones. F2 conserva las cinco sesiones y veinte planos pendientes; no bloquean esta entrega ni la próxima implementación.
+
+## Cierre post-F3 — nuevo proyecto y dimensiones de estancias, PR #18 (01-10-2026)
+
+Juanma aprobó la revisión humana y la [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18) se fusionó por squash. Rama: `feat/home-room-dimensions`; HEAD revisado: `c7d1b81e1f6456a9485c88f88723a6fd0fd7fe66`; merge en `master`: `10e9f96b417f866d45088fede039786180ddce95`. Vercel confirmó deployment `READY` para el SHA revisado, ID `dpl_4NS1VpLdy1ABhYsksQ3vXFcNfk93`, en [preview protegida](https://floorplan-3d-git-feat-home-roo-573ef9-juanma-espinosas-projects.vercel.app/). La revisión se hizo con un enlace temporal de acceso; no se almacena porque caduca. No se ejecutó despliegue manual a producción.
+
+La entrega permite crear proyectos locales vacíos o desde imagen, mantenerlos independientes, añadir habitaciones rectangulares ortogonales y editar ancho/profundidad interiores con lado fijo, vista previa, confirmación y una entrada de historial. Se protegen IDs, muros compartidos, huecos, cotas, muebles y habitaciones vecinas; relaciones ambiguas se bloquean y permanecen disponibles en edición manual. FloorPlanProjectV1 1.3.0 y F3 no cambian. No es todavía un editor dimensional general para geometrías irregulares ni un solver completo de viviendas. [Informe, QA y limitaciones](technical/home-room-dimensions.md).
+
+Codex reportó suite Node agregada inicial **159/160**; tras actualizar una expectativa antigua de renombrado, esa prueba pasó 1/1 y la suite dirigida final fue **25/25**. La suite agregada completa no se repitió después del ajuste. Python: **41/41**; sintaxis y diff correctos. Chromium/SwiftShader acredita renderizado y pruebas de interacción por software, no rendimiento de GPU o teléfono físico. No hay workflow de CI del repo que ejecute la suite de producto.
+
+**Estado:** entrega post-F3 aprobada e integrada; no se asigna un número nuevo mientras la propuesta de Roadmap 2 siga pendiente de reconciliación. Próximo trabajo documental: reconciliar la F0 histórica de la PR #3 en esa PR existente, retirando del cambio su schema/ejemplos obsoletos y conservando el contrato actual. Después, actualizar la propuesta PR #15 para reflejar el master actual. La siguiente candidata de producto es la biblioteca visual de suelos y acabados, como propuesta aún no aprobada. F2 sigue experimental y no validada; sus cinco sesiones y veinte planos con referencias continúan pendientes y no bloquean desarrollo.

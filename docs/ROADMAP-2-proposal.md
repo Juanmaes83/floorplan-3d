@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**  
-> Preparada el 01-10-2026 sobre `master` en `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`. No sustituye `docs/ROADMAP.md`, no cierra F3 ni cambia el contrato vigente. F3 sigue siendo la fase activa hasta terminar y aprobar su entrega de catálogo externo.
+> Reconciliada el 01-10-2026 contra `master` remoto `133f6f47fc5f16764cb290f95e49414932b27a09`, después de PR #17 y #18. La primera versión se preparó sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`; su fotografía anterior queda sustituida aquí. PR #15 sigue abierta, propuesta no aprobada. No modifica el roadmap canónico ni el contrato 1.3.0; F3 está cerrado para su piloto y la entrega dimensional #18 ya está integrada.
 
 ## 1. Propósito y principios
 
@@ -16,66 +16,100 @@ Principios para decidir:
 5. **No inferir prioridad de mercado:** cliente final, inmobiliarias, interiorismo/decoración y reformas son segmentos distintos. D-01 sigue abierta; CRM, normativa y capacidades B2B deben validarse con el segmento elegido.
 6. **Revisión fase a fase:** cada entrega tiene PR, pruebas, preview del SHA exacto cuando cambie la interfaz, revisión humana, aprobación, merge y actualización documental antes de iniciar una fase dependiente.
 
-## 2. Punto de partida comprobado
+## 2. Punto de partida reconciliado
+
+Fuente: README, [roadmap canónico](ROADMAP.md), workflow e informes vigentes de
+master. La aprobación de #17/#18 y READY son registros de sus cierres, no QA
+repetida en esta tarea documental. GitHub HTML consultado el 01-10-2026 confirma
+#15 abierta y #18 fusionada; no se ejecutan tests, app ni nueva preview visual.
+El segmento comercial sigue abierto y completar software no aprueba todo F0.
 
 | Área | Estado real que condiciona este plan |
 |---|---|
 | Planos e imágenes | F1b ya importa PNG/JPG/WebP estáticos, calibra con dos puntos y una segunda cota, y permite trazar/editar muros, huecos y habitaciones. No hay que volver a construir ese flujo desde cero. El límite actual documentado es 15 MiB y 8000 px por lado. |
-| Proyectos | F1a/F1b permiten varios proyectos locales, persistencia e intercambio JSON/ZIP. No hay sincronización multi-dispositivo ni servidor de proyecto. |
-| Medidas | `FloorPlanProjectV1` usa mm, IDs estables, muros, huecos, polígonos de habitación y objetos con dimensiones. Las habitaciones guardan polígonos explícitos; no son automáticamente una derivación topológica de los muros. Cambiar una dimensión puede afectar varios elementos y requiere una transacción coherente. |
+| Proyectos | F1a/F1b permiten varios proyectos locales, persistencia y JSON/ZIP. [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), aprobada e integrada, añadió inicio independiente vacío/imagen y creación de habitaciones dimensionadas. Sin sync multi-dispositivo ni servidor de proyecto. |
+| Medidas | `FloorPlanProjectV1` 1.3.0 mantiene mm/IDs y polígonos explícitos independientes de los ejes de muro. #18 edita rectángulos ortogonales con muros inequívocos: lado fijo, impactos, preview y operación reversible. No solver universal ni edición numérica general irregular. [Reglas y cierre](technical/home-room-dimensions.md). |
 | F2 | Asistencia local experimental. Cinco sesiones de base, conjunto fijo de veinte planos y umbrales acordados siguen pendientes; no bloquean estas propuestas, pero F2 no debe anunciarse como precisión validada. |
-| F3 | Entrega inicial integrada: catálogo genérico dimensionado, referencia de asset, muestra sintética y fallback. Catálogo externo todavía pendiente. La auditoría histórica encontró muchos GLB con Draco/texturas y extensiones; su inventario debe repetirse desde el estado actual de Asset Lab antes de elegir candidatos. |
-| Render web | Three.js está fijado en el proyecto. El cargador F3 actual impone límites y rechaza texturas/extensiones; esa política es deliberada para estabilidad y seguridad del runtime, no prueba de que los ficheros sean imposibles de convertir. |
+| F3 | PR #12 inicial integrada (`95fcf0d`) y [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) piloto externo aprobado/fusionado (`24534b5544ffa37840bf4fe77c4ad12afda0c38b`): SONGESAND 90366839 y puf STOCKHOLM 80586139 texturizados, buscador/atribución/fallback. [Cierre](technical/F3-preview-catalog-fix.md). No catálogo general: nuevos candidatos necesitan inventario, medidas, permiso y perfil por recurso. |
+| Render web | Three.js 0.160.0 fijado. F3 admite PNG/JPEG embebidos bajo validación; rechaza extensiones/recursos fuera del perfil. No soporte general de Draco, KTX2, meshopt, WebP ni URI remotas. La política del runtime no implica imposibilidad de convertir un asset offline. |
 | Ecosistema | La auditoría documentó Asset Lab, Room Designer, CRM, Immersphere SaaS, Blender MCP y LAB Astra. Son fuentes potenciales; la auditoría no demuestra integración de extremo a extremo. La evidencia de cada repo está fijada por SHA en [la auditoría de ecosistema](product/ecosystem-integration-audit.md). |
 | Presentación | La auditoría describe hotspots de Immersphere como posiciones visuales/porcentuales. No equivalen a coordenadas espaciales enlazadas con geometría Rubik. |
 | Roadmap vigente | F0–F3 y sus cierres siguen en [docs/ROADMAP.md](ROADMAP.md). Este Roadmap 2 es un horizonte propuesto posterior, no una renumeración retroactiva. |
 
 ## 3. Secuencia propuesta
 
-Ordena entregas por combinación de valor visible, esfuerzo y dependencias. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
+Los órdenes 0/1 son antecedentes completados; 2–8 son propuestas futuras, **no números de fase aprobados**. Ordena las candidatas por combinación de valor visible, esfuerzo y dependencias. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
 
 | Orden | Entrega propuesta | Impacto potencial | Esfuerzo / incertidumbre | Dependencia y decisión |
 |---|---|---|---|---|
-| 0 | Cerrar F3 inicial y un piloto acotado de assets | Alto en calidad visual de la propuesta | M / media | Fase activa. Elegir pocos modelos; verificar bytes, hash, dimensiones con fuente, licencia/permiso y móvil. No ampliar el contrato salvo necesidad demostrada. |
-| 1 | Crear plano y editar dimensiones de estancias | Muy alto: mejora el trabajo central para todos los segmentos | M–L / alta en topología | Mantener imagen/calibración/trazado. MVP en habitaciones ortogonales explícitamente soportadas; no deformar silenciosamente habitaciones irregulares. Requiere definir reglas de adyacencia y huecos. |
-| 2 | Biblioteca visual de materiales de suelo y acabados | Alto y visible | S–M / media | Empezar por presets existentes y muestras visuales locales; medir tamaño y carga móvil. No requiere catálogo externo ni cambiar el schema por anticipado. |
-| 3 | Importador normalizador de modelos GLB de Asset Lab | Alto para ampliar mobiliario real | M / media-alta | Completa el canal F3. Requiere perfil aprobado, herramientas reproducibles, procedencia y pruebas del resultado convertido. No relajar el loader de producción para todos los formatos. |
+| 0 · antecedente | F3 inicial y piloto acotado completados | Valor visual revisado; mercado no validado | Estimación histórica M | #12/#17 aprobadas e integradas; piloto de dos IKEA cerrado. No reabrir ni declarar una biblioteca general completada. |
+| 1 · antecedente | Crear vivienda y editar dimensiones integrado | Flujo revisado; impacto comercial no medido | Estimación histórica M–L | #18 aprobada/fusionada; rectángulos con cuatro muros inequívocos. Un solver general o ampliación irregular requeriría otra propuesta. |
+| 2 · candidata próxima | Biblioteca visual de materiales de suelo y acabados | Hipótesis de mejora visual | S–M / media | **Pendiente alcance y aprobación de Juanma; no iniciada.** Presets/muestras locales como primer perfil; procedencia, límites y QA móvil; sin precios ni cambio de schema anticipado. |
+| 3 | Importador normalizador de modelos GLB de Asset Lab | Alto para ampliar mobiliario real | M / media-alta | Amplía el canal del piloto F3 cerrado mediante otra entrega, no reabre #17. Requiere perfil aprobado, herramientas reproducibles, procedencia y pruebas del resultado convertido. No relajar el loader de producción para todos los formatos. |
 | 4 | Adaptador Room Designer → CRM | Alto solo si el segmento comercial lo justifica | M / alta por contratos/identidad | D-01 y contrato de datos. Resolver `lineItems`→`products`, cantidades, IDs, versiones, reintentos e idempotencia; prototipo con datos sintéticos primero. |
 | 5 | Exportación determinista Rubik → Blender | Alto para contenido y producción avanzada | M–L / media | Definir ejes, unidades, jerarquía e IDs; probar vivienda asimétrica. Salida portable glTF/GLB como primera prueba, no automatizar aún todo Astra/Seedance. |
 | 6 | Entrada CAD vectorial: DXF piloto, luego decisión DWG | Alto para profesionales; menor para consumidor | L / alta | Elegir entidades, unidades, capas y supuestos. DXF primero con importación local si una biblioteca adecuada supera revisión de licencia. DWG necesita gate de proveedor/convertidor, privacidad y coste; no se reduce a renderizar una imagen. |
 | 7 | Presentación conectada con panoramas/hotspots Immersphere | Alto para promoción inmobiliaria | L / alta | Depende de proyecto/objeto IDs y exportación espacial. Definir relación panorama-cámara-transformación-objeto; primer intercambio estático y reversible. No llamar “hotspot anclado” a una coordenada de pantalla. |
 | 8 | Perfil orientativo de reglas constructivas por jurisdicción | Potencialmente alto para profesionales, riesgo alto | L / muy alta | Solo tras escoger país/uso y asesoría competente. Empezar con reglas estructuradas, versionadas y citadas; nunca prometer certificación o cumplimiento automático. |
 
-### 3.1 Orden recomendado en la práctica
+### 3.1 Orden recomendado después de #18
 
-- **Terminar primero la F3 ya abierta.** No mezclar este documento con su PR de implementación. Un pipeline de conversión validado puede formar parte del cierre F3 si ya está dentro del alcance aprobado de la PR; de lo contrario, se planifica como entrega separada.
-- **Después, hacer un pequeño descubrimiento de usuario** para D-01: observar tareas de cliente final, agente, interiorista y reforma con el prototipo actual. El resultado debe elegir un usuario/flujo inicial o conservar explícitamente la decisión abierta.
-- **Construir la edición dimensional como primera gran mejora de producto**, tras especificar y probar la geometría. Debe preservar la importación raster y añadir creación/edición clara; no sustituir trazado manual por automatización F2 no validada.
-- **Mejorar materiales y canal de assets en entregas delimitadas**, con preview antes/después y presupuesto móvil medido.
-- **Abrir CRM, Blender/CAD e Immersphere según el segmento elegido**; son conectores diferentes, no una única “integración del ecosistema”.
-- **Dejar normativa al final** y solo con una jurisdicción elegida y contenido/licencias resueltos.
+- **Conservar lo integrado:** #17 y #18 aprobadas; no volver a implementar ni
+  reabrir esas entregas. F2 sigue experimental: cinco sesiones, veinte planos y
+  umbrales pendientes sin bloquear nuevas implementaciones autorizadas.
+- **Reconciliar organización:** F0 en la PR #3 existente y esta propuesta #15
+  son revisiones documentales pendientes de Juanma, no aprobación global de fases.
+- **Proponer primero suelos/acabados:** definir muestra visual, selección de
+  acabado, licencias/procedencia, fallback y presupuesto físico; obtener alcance
+  aprobado antes de empezar. No asignar fase nueva ni comprometer fechas.
+- **Investigar D-01:** observar tareas de cliente, agente, interiorista/reforma;
+  elegir un segmento o mantenerlo explícitamente abierto, sin inferirlo de CRM.
+- **Después, pipeline controlado de modelos/texturas**, con versiones/permisos,
+  dimensiones, perfil probado y comparación antes/después; no loader universal.
+- **CRM, Blender/Unreal, CAD e Immersphere** según segmento y gates propios:
+  contratos, identidad, unidades, ida/vuelta, privacidad y coste. Son conectores
+  diferentes y no se afirman implementados por enlazar repos o formatos.
+- **Normativa** solo tras decidir jurisdicción/uso, fuentes/licencias y asesoría.
 
 ## 4. Especificación de las mejoras principales
 
-### 4.1 Dimensiones de estancias y “nuevo plano”
+### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
 
-**Problema a resolver:** hoy una imagen puede importarse y trazarse, pero la interfaz no ofrece un editor dimensional directo y obvio para crear o modificar cualquier vivienda. El campo de ancho/profundidad de un mueble no resuelve el tamaño de la estancia.
+[PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18) aprobada por Juanma el
+01-10-2026 y fusionada mediante squash `10e9f96b417f866d45088fede039786180ddce95`.
+SHA revisado: `c7d1b81e1f6456a9485c88f88723a6fd0fd7fe66`.
+[Informe, evidencia, fallos iniciales y cierre](technical/home-room-dimensions.md).
+El registro de cierre identifica Vercel READY y preview protegida/temporal;
+no se vuelve a certificar aquí acceso o rendimiento de esa preview.
 
-**Propuesta de alcance inicial:**
+- «Nuevo proyecto»: vacío o imagen PNG/JPEG/WebP estático, proyectos independientes;
+  conserva raster F1b, calibración, trazado, almacenamiento e intercambio JSON/ZIP.
+- Crear/nombre de estancias con dimensiones interiores enteras en **mm**,
+  posición X/Y o unión compatible a derecha/debajo. La unión reutiliza un muro
+  completo y no cambia silenciosamente la estancia vecina.
+- Edición directa limitada a **cuatro vértices rectangulares ortogonales y cuatro
+  muros completos inequívocos**; una dimensión por operación y lado fijo explícito.
+  La propuesta genérica original de editar cualquier polígono ortogonal o usar
+  metros no se presenta como implementación actual.
+- Preview e impactos antes de confirmar; cancelación intacta, guardar atómico,
+  undo/redo, IDs estables y sincronización 2D/3D. No modifica la escala de la imagen.
+- Huecos en muro desplazado: consentimiento explícito, medidas/posición relativa
+  conservadas; en un muro de longitud variable mantiene posición física mediante
+  offset si cabe. Fuera de límites se rechaza, no se encoge ni elimina.
+- Muros compartidos modificados, relaciones ambiguas, cotas afectadas y muebles
+  fuera/colisionando bloquean el cambio con motivo y alternativa manual. Mover
+  un muro exterior puede funcionar manteniendo fijo el lado compartido compatible.
+- Formas irregulares/diagonales/fragmentadas mantienen selección y edición manual
+  de vértices. No solver universal ni deformación automática de toda una vivienda.
 
-- Presentar un flujo “Nuevo proyecto” con dos rutas visibles: empezar vacío/crear estancias y crear desde imagen PNG/JPG/WebP. Cada selección crea un proyecto independiente; nunca reemplaza el proyecto activo sin confirmación.
-- Permitir seleccionar una estancia y editar dimensiones en milímetros o metros, con modo de edición inequívoco y valores calculados/confirmados claramente diferenciados.
-- Primera versión limitada a polígonos ortogonales válidos. Para una estancia irregular, mostrar qué dimensión no se puede aplicar directamente y conservar edición por vértices; no convertirla silenciosamente en un rectángulo.
-- Al confirmar, calcular un plan de cambio sobre los muros que definen el recinto y ejecutar atómicamente: muros compartidos, esquinas, estancias vecinas, huecos asociados, cotas/medidas, muebles y vista 3D. Si no existe una solución sin romper restricciones, no aplicar y explicar el conflicto.
-- IDs estables: conservarlos cuando la entidad siga teniendo identidad; documentar cuáles se crean/eliminan al dividir o fusionar muros. Undo/redo y export/import deben conservar la edición.
-- No recalibrar la imagen ni cambiar su referencia por una edición dimensional manual. Registrar la discrepancia como edición de geometría, no como nueva medición de origen.
-- Preview táctil mobile-first: formularios cortos, controles accesibles, teclado numérico y visualización del plano suficiente mientras se edita.
-
-**Gate de aceptación antes de codificar:** tabla de casos con habitación aislada, pared compartida, pared con puerta/ventana, habitación irregular, recinto con muebles, undo/redo, carga JSON y cancelación. Acordar qué significa “mantener huecos” cuando un muro se mueve: conservar coordenada relativa, distancia a extremo o distancia global; no adivinar.
+Las aspiraciones originales (edición numérica más general, dividir/fusionar muros,
+varias plantas, recalcular adyacencias) quedan **ampliaciones no aprobadas**.
+Necesitarían casos explícitos, política de anclajes/cotas y pruebas antes de abrir
+otra implementación; no justifican cambiar FloorPlanProjectV1 anticipadamente.
 
 ### 4.2 Conectores de modelos y texturas
 
-**Sí se puede crear un conector**, pero el objetivo no debe ser “que ningún asset sea rechazado”. Conviene separar:
+**Propuesta técnica de pipeline/conector, aún no implementada de forma general:** el objetivo es un perfil controlado, no “que ningún asset sea rechazado”. Conviene separar:
 
 1. **Adaptador de entrada**: lee el origen y produce un paquete Rubik aprobado, registrando SHA-256, fuente, versión, permiso, medidas declaradas y medibles, herramientas y transformaciones.
 2. **Normalizador/validador fuera del runtime**: valida GLB/glTF, recursos embebidos, dimensiones, materiales, malla y límites; decodifica o convierte únicamente extensiones elegidas y probadas.
@@ -87,6 +121,10 @@ Three.js documenta soporte para Draco, meshopt, KTX2/BasisU y extensiones materi
 **Prueba de conector:** un asset compatible existente y otro con Draco/textura; comparación visual origen→normalizado; dimensiones contrastadas con dato fiable; errores útiles para recurso externo, extensión desconocida, archivo corrupto y presupuesto excedido; carga en móvil y fallback genérico. Solo añadir extensiones al perfil si una necesidad real no se resuelve con conversión.
 
 ### 4.3 Materiales con presupuesto visual y móvil
+
+**Próxima candidata propuesta, pendiente de aprobación; no iniciada.** Empezar
+por nivel 1 de suelos/acabados y acordar exclusiones. Nivel 2/PBR es posterior,
+no se incorpora automáticamente al mismo alcance.
 
 - **Nivel 1:** biblioteca de materiales de suelo/acabados basada en los presets existentes: nombre, muestra, color/mapa, categoría y licencia/origen. Separar muestras de catálogo de una textura de alta resolución.
 - **Nivel 2:** materiales PBR en muebles/GLB importados: base color, roughness, normal/occlusion cuando corresponda, gestión de color y formatos de textura comprimidos si el dispositivo lo permite.
@@ -128,15 +166,15 @@ Si se justifica, empezar por verificaciones geométricas limitadas y explicables
 Estas decisiones siguen abiertas hasta aprobarlas expresamente:
 
 1. **Usuario/segmento inicial (D-01):** consumidor, inmobiliaria, interiorismo/decoración o reformas.
-2. **Objetivo de edición dimensional:** creación desde cero, editar planos trazados, o ambos en MVP; política para muros compartidos y estancias no ortogonales.
+2. **Próxima candidata y futuras ampliaciones:** aprobar el alcance de suelos/acabados; decidir si más adelante se amplía la geometría más allá de #18. El alcance rectangular integrado ya está aprobado, no vuelve a plantearse como pendiente.
 3. **Presupuesto móvil objetivo:** dispositivos y mediciones (descarga, memoria, latencia); obtener baseline antes de fijar límites.
-4. **Catálogo:** alcance de autorización de publicación/hosting por asset, marca/atribución, y criterio para dimensiones verificables. La autorización general de Juanma para el repo Asset Lab se registra; no inventa dimensiones ni procedencia física faltante.
+4. **Catálogo futuro:** perfil de conversión, nuevos candidatos/usos, marca/atribución y dimensiones verificables. La [confirmación del propietario](../assets/f3/ASSET-LAB-PROVENANCE.txt) cubre el piloto incorporado/Git/preview; no licencia universal ni partnership IKEA. F1a tiene [confirmación acotada de código](technical/F1a.md), no LICENSE inventado.
 5. **CRM:** cuándo se selecciona como prioridad y cuál es el contrato canónico entre Room Designer y CRM.
 6. **CAD:** si el perfil inicial necesita DXF; proveedor/ruta y política de privacidad si se aborda DWG.
 7. **Geografía normativa:** España/CTE, jurisdicciones estadounidenses/IRC-IBC u otra; propósito educativo, diseño preliminar o profesional.
 8. **Cuenta y datos:** si el producto permanece local/offline o incorpora backend, sincronización, almacenamiento o servicios cloud.
 
-No hace falta resolver todas hoy para cerrar F3 o comenzar el diseño técnico de la edición dimensional. Sí son gates antes de comprometer las integraciones respectivas.
+F3 y #18 ya están cerradas dentro de su alcance. Las decisiones restantes no se resuelven por esos merges; son gates para comprometer las candidatas e integraciones respectivas. Juanma decide prioridades y política; equipo técnico aporta perfiles y mediciones; normativa/derechos amplios requieren asesoría competente.
 
 ## 9. Qué queda fuera por ahora
 
@@ -160,9 +198,9 @@ Antes de aprobar cada fase:
 - Actualizar documento técnico y [roadmap canónico](ROADMAP.md) después de la aprobación/merge. No cambiar el estado canónico a propuesta aprobada por esta página.
 - Merge solo después de aprobación explícita de Juanma; limpiar rama/preview al completar y dejar el siguiente paso verificable.
 
-## 11. Fuentes técnicas oficiales consultadas
+## 11. Fuentes técnicas oficiales: registro histórico y enlaces
 
-Consulta: **01-10-2026**. Las fuentes verifican capacidades del formato/plataforma, no interoperabilidad del proyecto.
+Registro de consulta **original**: 01-10-2026, propuesta `eebbfd9`. Las atribuciones siguientes son evidencia documental del antecedente, no una integración ejecutada ni una nueva revisión técnica en esta reconciliación. La comprobación HTTP de enlaces se registra debajo; HTTP 200 por sí solo no renueva contenidos/versiones, precios o permisos.
 
 - [Three.js — GLTFLoader](https://threejs.org/docs/pages/GLTFLoader.html): formatos y extensiones soportadas; decoders requeridos para Draco, KTX2 y meshopt. La documentación viva debe contrastarse con Three.js 0.160.0 fijado en Rubik antes de implementar.
 - [Three.js — DRACOLoader](https://threejs.org/docs/pages/DRACOLoader.html) y [KTX2Loader](https://threejs.org/docs/pages/KTX2Loader.html): decodificación y transcoding explícitos.
@@ -177,7 +215,50 @@ Consulta: **01-10-2026**. Las fuentes verifican capacidades del formato/platafor
 - [ICC — prefacio IBC 2021](https://codes.iccsafe.org/content/IBC2021P2/preface): reconocimiento de copyright y marco de adopción; revisar licencia/permiso de texto antes de reproducir contenido.
 - [CTE — documentos oficiales](https://www.codigotecnico.org/DocumentosCTE/DocumentosCTE) y [BOE — Real Decreto 314/2006, texto consolidado](https://www.boe.es/buscar/act.php?id=BOE-A-2006-5515): referencia española. La normativa concreta aplicable depende de uso, ubicación y versión vigente.
 
+### 11.1 Comprobación de enlaces, 01-10-2026
+
+Método: curl HEAD con redirecciones y TLS verificado, timeout 15 s, herramientas
+existentes. Sin instalación, cambios de red ni elusión. **HTTP 200 acredita acceso
+al enlace, no inspección funcional o renovación del contenido técnico.** Para
+las fuentes oficiales bloqueadas el origen no llegó a responder: el proxy negó
+CONNECT con 403 (curl 56, código de origen 000). No demuestra inexistencia de la
+fuente o de la capacidad; los contenidos/versiones/importes/licencias no se
+revalidaron y deben consultarse antes de diseñar cada integración.
+
+| URL exacta | Resultado del mecanismo en esta ejecución |
+| --- | --- |
+| https://aps.autodesk.com/developer/overview/model-derivative-api | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://aps.autodesk.com/en/docs/model-derivative/v2/developers_guide/supported-translations/ | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://aps.autodesk.com/topics/pricing | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://codes.iccsafe.org/content/IBC2021P2/preface | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://dev.epicgames.com/documentation/en-us/unreal-engine/datasmith-import-options?application_version=4.27 | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://dev.epicgames.com/documentation/unreal-engine/datasmith-supported-software-and-file-types | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://dev.epicgames.com/documentation/unreal-engine/gltf-file-format-support-in-unreal-engine | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://docs.blender.org/manual/en/5.3/addons/scene_gltf2.html | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://github.com/Juanmaes83/floorplan-3d/pull/17 | HTTP 200; contenido técnico no reaudita en esta comprobación |
+| https://github.com/Juanmaes83/floorplan-3d/pull/18 | HTTP 200; contenido técnico no reaudita en esta comprobación |
+| https://threejs.org/docs/pages/DRACOLoader.html | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://threejs.org/docs/pages/GLTFLoader.html | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://threejs.org/docs/pages/KTX2Loader.html | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://www.boe.es/buscar/act.php?id=BOE-A-2006-5515 | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://www.codigotecnico.org/DocumentosCTE/DocumentosCTE | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://www.iccsafe.org/products-and-services/i-codes/2018-i-codes/irc/ | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+| https://www.iccsafe.org/products-and-services/i-codes/ibc/ | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
+
 ## 12. Historial y estado
 
 - 01-10-2026: primera propuesta; contrastada con `README.md`, `docs/ROADMAP.md`, `docs/DEVELOPMENT-WORKFLOW.md`, contrato/schema F1, documentos F1–F3 y auditoría del ecosistema. Sin cambios al producto, schema ni fases canónicas.
+- 01-10-2026: reconciliación en la misma rama `docs/roadmap-2-evolution`, cabeza anterior `eebbfd911cd02021a8ad3093ddc6d0548dd3be96`, integrando master `133f6f47fc5f16764cb290f95e49414932b27a09` por merge sin reescritura. #17/#18 cerradas para sus alcances; suelos/acabados próxima candidata sin iniciar. Documento único de #15; roadmap canónico, código, contrato y assets intactos frente a master.
+- F0 se reconcilió antes en la PR #3, rama publicada @ `cb822eb98d8185e2cb4496420c206168927da99d`; checkout limpio antes de pasar a #15. No se copia esa documentación a esta PR ni se fusiona #3.
 - Estado de esta página: **lista para revisión humana; no aprobada ni fusionada**.
+
+### 12.1 Validaciones y límites de publicación
+
+- `python3 /tmp/reconcile-doc-validator.py docs/ROADMAP-2-proposal.md`: Markdown (tablas/cercas), enlaces internos/anchors y referencias correctos; helper temporal fuera del repo, sin dependencias/documentos nuevos versionados.
+- `git diff --name-status origin/master`: solo `docs/ROADMAP-2-proposal.md`.
+- `git diff --exit-code origin/master -- docs/ROADMAP.md index.html js assets docs/contracts`: sin diferencias; roadmap canónico y producto conservados.
+- `git diff --check` y `git diff --cached --check`: correctos. Integración de master en esta rama sin conflictos documentales ni de producto; sin reescritura ni force push.
+- REST GET de PR #15 devuelve `Forbidden`; estado de mergeabilidad GitHub no verificado. Master integrado permite confirmar ausencia de conflictos localmente, no políticas/checks/aprobaciones remotos.
+- No se ejecutan suites, anexos de QA ni app; no se crea preview visual ni se certifica CI/READY. Conteos y cierres del producto siguen atribuidos a sus informes originales.
+- REST PATCH para actualizar título/descripción de #15 también devolvió `Forbidden`; metadatos no editados desde Codex. El push publica la revisión en los archivos de la PR existente.
+- PR #15 permanece propuesta documental pendiente de revisión y aprobación explícita de Juanma. No se fusiona ni se modifica master en esta tarea.

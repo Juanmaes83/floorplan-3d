@@ -207,7 +207,8 @@ test('F1 completion: collection adopts F1a migration and preserves both historic
  const legacy={furniture:[{id:'fold-001',type:'bed',name:'old',cx:1000,cy:1000,w:1500,d:2000,rot:0,color:'#c9d6df'}],rooms:{},demolished:['w29'],measures:[]};
  const {page,errors}=await pageFor(t,{},legacy);const initial=await page.evaluate(()=>({p:FloorPlanApp.project,legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')}));
  await page.click('#projectsBtn');await page.fill('#projectName','Migrado');await page.click('#projectRename');await page.click('#projectClose');await page.reload();
- assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),initial.p);
+ // Renaming now changes the portable project name; all migrated data remain identical.
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),{...initial.p,name:'Migrado'});
  assert.deepEqual(await page.evaluate(()=>({legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')})),{legacy:initial.legacy,v1:initial.v1});assert.deepEqual(errors,[]);
 });
 
@@ -354,7 +355,7 @@ test('image import labels and accessible help follow Spanish, English and Chines
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));

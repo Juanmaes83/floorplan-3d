@@ -1,0 +1,105 @@
+{
+  "commitAtRun": "7646d84e72e8719373cd095f1c757b073a56d791",
+  "appFingerprint": "adf824ccaeb776dfe3f7fc144c11b92478d3967b01ca486258a0924c0e440444",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "rendering": "Chromium SwiftShader software",
+  "metrics": [
+    {
+      "assetId": "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo",
+      "modelSha256": "0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f",
+      "status": {
+        "state": "ready",
+        "bytes": 784576,
+        "permissionBytes": 2518,
+        "triangles": 10605,
+        "geometryBytes": 728718,
+        "textureStats": {
+          "images": 2,
+          "textures": 2,
+          "maps": 3,
+          "imageBytes": 52261,
+          "decodedBytes": 2412544,
+          "textureBytes": 3216726
+        },
+        "durationMs": 2983.6000000089407,
+        "normalizedDimensionsMm": {
+          "width": 816.0000443458557,
+          "height": 805.9163093566895,
+          "depth": 509.6103549003601
+        },
+        "instanceDimensionsMm": {
+          "width": 820,
+          "height": 810,
+          "depth": 500
+        },
+        "attribution": "IKEA — IKEA SONGESAND — cómoda blanca; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+      },
+      "memory": {
+        "geometries": 34,
+        "textures": 6
+      },
+      "canvas": 735,
+      "stage": 735
+    },
+    {
+      "assetId": "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo",
+      "modelSha256": "3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727",
+      "status": {
+        "state": "ready",
+        "bytes": 327052,
+        "permissionBytes": 2518,
+        "triangles": 1198,
+        "geometryBytes": 50292,
+        "textureStats": {
+          "images": 3,
+          "textures": 3,
+          "maps": 4,
+          "imageBytes": 273131,
+          "decodedBytes": 12582912,
+          "textureBytes": 16777218
+        },
+        "durationMs": 3311.2999999970198,
+        "normalizedDimensionsMm": {
+          "width": 689.4643902778627,
+          "height": 403.56118872296065,
+          "depth": 657.7361822128297
+        },
+        "instanceDimensionsMm": {
+          "width": 690,
+          "height": 400,
+          "depth": 650
+        },
+        "attribution": "IKEA — IKEA STOCKHOLM 2025 — puf Alhamn beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+      },
+      "memory": {
+        "geometries": 34,
+        "textures": 7
+      },
+      "canvas": 735,
+      "stage": 735
+    }
+  ],
+  "consoleMessages": [
+    {
+      "type": "warning",
+      "text": "[.WebGL-0xf9400bb4800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0xf9400bb4800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0xf9400bb4800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0xf9400bb4800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    }
+  ],
+  "pageErrors": [],
+  "failedRequests": []
+}

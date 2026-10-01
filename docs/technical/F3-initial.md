@@ -1,4 +1,6 @@
-# F3 — entrega inicial, no fase cerrada
+# F3 — entrega inicial y piloto externo; fase abierta
+
+Las secciones anteriores al piloto del 01-10-2026 describen la entrega histórica de PR #12. Sus restricciones y resultados no se presentan como los del nuevo piloto.
 
 Base verificada: master `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`.
 Rama única: `feat/f3-authorized-assets`; checkout inicial limpio en la rama F2,
@@ -305,3 +307,224 @@ Juanma aprobó la revisión visual de la preview y la PR #12 quedó fusionada en
 Estado actualizado: **F3 inicial integrada; catálogo externo pendiente**. Juanma confirma que el proyecto tiene permisos para usar los assets de Asset Lab. La auditoría descrita arriba documenta el estado técnico del commit Asset Lab inspeccionado en ese momento; no se tratará como inventario actual ni como verificación de permisos por modelo. Antes de integrar un candidato, comprobar en Asset Lab la versión actual, presencia/hash del fichero, dimensiones verificables, formato/extensiones y alcance de permiso/atribución. Esta entrega no incorpora modelos de Asset Lab; el único GLB publicado es el banco sintético propio con licencia MIT específica.
 
 La PR tenía Vercel `READY` para el HEAD. El check remoto observado fue Vercel Preview Comments; la batería 120/120 Node/browser, 10/10 F3 y 41/41 Python fue reportada por Codex como ejecución local previa, no CI remota. SwiftShader no acredita rendimiento en teléfono físico. Las pruebas no se repitieron durante el merge/documentación. F3 continúa abierta para avanzar el catálogo, sin bloquearse por la validación empírica pendiente de F2.
+
+## Piloto externo texturizado (01-10-2026)
+
+### Base y alcance
+
+Rama `feat/f3-textured-external-catalog`, nueva desde master
+`6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`. Las páginas públicas de PR #13 y #14
+indicaban Merged; master contiene la auditoría y su actualización de roadmap.
+No había PR F3 nueva abierta; la rama histórica `feat/f3-authorized-assets` ya
+corresponde a PR #12 integrada. El checkout previo de documentación estaba limpio
+y se conserva. No se modifica ningún otro repositorio, schema ni decisión comercial.
+
+Se incorporan **dos** productos; un tercero se descarta. `qaStatus: approved`
+significa que el recurso pasa las comprobaciones técnicas del adaptador, no aprobación
+humana de la PR ni cierre de F3. `FloorPlanProjectV1` permanece en **1.3.0**.
+
+### Inventario reconsultado y permiso
+
+Asset Lab se vuelve a consultar en solo lectura: HEAD remoto y checkout
+`5dc7b182c5c227472b84aea66a3ffa1368c95981`.
+Manifest `manifest/ikea-sample.manifest.json`, SHA-256
+`30d8c7dde47a5b06bf3d03f423bcff3782a37987b37f7ce892bbadea51ddd5ab`:
+134 entradas, 114 GLB existentes/tracked, 20 ausentes, 134 previews; 113 GLB tienen
+imágenes, 109 exigen Draco, 93 WebP, cinco no exigen extensiones. El validador de
+origen pasa 134 entradas, lo que acredita estructura y no derechos/dimensiones.
+No se repite ni se presenta como actual una decodificación geométrica de los 114.
+Los dos modelos aceptados sí se cargan y miden de nuevo en esta ejecución.
+
+El origen mantiene `redistributionAllowed: false`, QA pending y referencias a una
+plantilla de permisos. **No se reescriben esos datos.** La autorización expresa de
+Juanma para incorporar, publicar en Git y ofrecer preview en este proyecto se
+registra por separado en [ASSET-LAB-PROVENANCE.txt](../../assets/f3/ASSET-LAB-PROVENANCE.txt).
+No constituye una licencia mundial del catálogo ni afiliación con IKEA. MIT solo
+cubre el banco sintético propio, no los modelos ni texturas de IKEA. El adaptador
+exige autorización por proyecto, origen/revisión/ruta/hashes y atribución.
+
+### Candidatos y dimensiones
+
+Ancho × alto × fondo, **mm**, sin usar medidas de embalaje. Las dimensiones oficiales
+son evidencia aportada externamente por Juanma, consulta **01-10-2026**; no páginas
+abiertas por Codex. Curl devolvió HTTP 403; Playwright devolvió
+`net::ERR_TUNNEL_CONNECTION_FAILED`. No se instalaron herramientas ni se modificó red.
+
+| Producto | Dimensiones oficiales | Caja GLB con normalización | Decisión |
+| --- | --- | --- | --- |
+| SONGESAND 90366839 | 820 × 810 × 500 | 816.000 × 805.916 × 509.610 | Aceptado; mayor diferencia 9.610 mm |
+| STOCKHOLM 2025 puf 80586139 | 690 × 400 × 650 | 689.464 × 403.561 × 657.736 | Aceptado; mayor diferencia 7.736 mm |
+| STOCKHOLM 2025 sofá 90591748 | 1780 × 700 × 990 | 1806.132 × 711.344 × 1009.908 | Excluido; ancho difiere 26.132 mm, >20 mm |
+
+Fuentes oficiales aportadas, título y URL:
+
+- IKEA Francia, «SONGESAND, commode 3 tiroirs, blanc», artículo 903.668.39:
+  <https://www.ikea.com/fr/fr/p/songesand-commode-3-tiroirs-blanc-90366839/>.
+- IKEA Chipre, «STOCKHOLM 2025 pouffe», artículo 80586139:
+  <https://www.ikea.com.cy/en/products/stockholm-2025-pouffe/80586139/>.
+  La fuente publica largo 650 mm, utilizado aquí como fondo.
+- IKEA Chipre, «STOCKHOLM 2025 2-seat sofa», Alhamn marrón oscuro, artículo 90591748:
+  <https://www.ikea.com.cy/en/products/stockholm-2025-2-seat-sofa/90591748/>.
+
+La cómoda conserva ejes X/Y/Z. El puf rota +90° alrededor de Y para alinear la
+anchura publicada con su extensión Z. Coordenadas glTF en metros, transforms de
+nodo aplicados, escala de unidad 1; centrado X/Z y apoyo en Y=0. No se fuerza la
+escala para superar la tolerancia. Los KNOXHULT 90326787/90621081 no se incorporan:
+cinco imágenes/texturas superan el límite del piloto y faltan medidas oficiales
+confirmadas. La preselección geométrica del sofá procede de la auditoría previa;
+no se ha renderizado ni aceptado el sofá en este piloto.
+
+| Recurso servido | Bytes | Triángulos | Geometría bytes | JPEG / mapas | RGBA decodificado / estimación con mipmaps |
+| --- | ---: | ---: | ---: | --- | --- |
+| SONGESAND | 784576 | 10605 | 728718 | 2 JPEG 512×589 / 3 mapas | 2412544 / 3216726 bytes |
+| Puf optimizado | 327052 | 1198 | 50292 | 3 JPEG 1024×1024 / 4 mapas | 12582912 / 16777218 bytes |
+
+Hashes SHA-256:
+
+- SONGESAND, original y servido: `0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f`.
+- Puf original conservado: `f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0` (369416 bytes).
+- Puf servido: `3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727`.
+
+El puf original usa tres JPEG 1613×1613: 31221228 bytes RGBA, por encima del límite.
+El guard lo rechazó correctamente. No se elevó el presupuesto: se retiene el original
+y se genera una copia reproducible con [prepare-f3-pouf.py](../../scripts/prepare-f3-pouf.py),
+Pillow **12.3.0 ya instalado**, LANCZOS a 1024², RGB/JPEG calidad 85, subsampling 0,
+optimize=false, progressive=false. Conserva los datos geométricos; cambia las imágenes
+y sus offsets. Hay pérdida por reducción/recompresión y no identidad visual exacta.
+`--check` exige el hash original y compara byte a byte el resultado.
+
+### Ruta segura y semántica
+
+Se permiten solo JPEG core embebidos en bufferView, sin URI (ni data/blob), sin
+extensiones, Draco, WebP, animaciones, skins ni morphs. `createImageBitmap` decodifica
+bytes comprobados; el plugin de GLTFLoader suministra texturas sin crear object URLs.
+Se valida firma JPEG, dimensiones antes de decodificar y tamaño real del bitmap.
+Mapas permitidos: base color, metallic/roughness, normal y occlusion, UV0.
+
+Límites técnicos del piloto, **no presupuesto aprobado de rendimiento móvil**:
+GLB 8 MiB; cuatro imágenes/texturas, ocho materiales/mapas; JPEG individual 1 MiB,
+total comprimido 4 MiB; lado máximo 2048; RGBA decodificado total 16 MiB y estimación
+de texturas con mipmaps 24 MiB. La estimación no mide RAM/GPU real. Catálogos locales
+64 KiB cada uno, permiso 32 KiB, fetch mismo origen/sin redirects/credenciales,
+hashes obligatorios. Timeout 8 s y cancelación cubren trabajo asíncrono; JavaScript
+síncrono no es interrumpible. Liberación de geometrías/materiales/texturas y cierre
+de bitmaps, incluido resultado tardío tras abortar; no caché persistente de modelos.
+
+La asociación modifica solo `assetRef`: conserva tipo, ID, posición, dimensiones,
+giro y elevación. El modelo se adapta a esas medidas y se distinguen medidas del
+producto y del objeto. Las pruebas establecen expresamente medidas antes de asociar.
+Fallback, cancelación y catálogo parcialmente fallido mantienen el genérico y 2D.
+JSON/ZIP exportan referencias, **no GLB ni texturas**; importación/recarga conservan
+el contrato. Se mantiene intacta la migración F1a/F1b.
+
+### Regresiones y límites de evidencia
+
+Se amplían pruebas de permisos/hashes/refs y conservación de proyectos; navegador
+comprueba JPEG válido sin object URLs, 17 casos inválidos, presupuesto de memoria,
+cancelación durante decode y liberación única de recursos. En los tres viewports
+1440×900, 390×844 y 844×390 se prueba selección de ambos assets, 2D/3D, proporción de
+canvas ≥60%, preservación canónica, recarga e importación/exportación JSON y ZIP.
+Capturas y métricas: [f3-textures](../qa/artifacts/f3-textures/).
+
+Fallos iniciales registrados: el helper de fixture devolvía un número en lugar de
+Buffer (corregido); la comparación de conservación incluía la referencia del asset
+anterior (se excluye únicamente assetRef); el puf original superaba memoria (copia
+optimizada, sin relajar guard). Suite completa paralela: 127 pruebas, 122 pasan,
+cuatro fallos F2 por el GET del nuevo catálogo y una cancelación por timeout de F1
+390×844 (90 s). Se añade exactamente `/assets/f3/external.manifest.json` a la lista
+local de GET permitidos de privacidad, sin permitir otros destinos ni POST. La suite
+completa se ejecuta secuencialmente sin elevar timeouts ni omitir pruebas.
+
+Un intento inicial de node --check incluyó por error JSON de importmap como JavaScript;
+se corrigió el harness: importmap validado como JSON y scripts de index como módulos.
+No se confunde ese fallo del comando con un fallo de sintaxis de la aplicación.
+Los resultados finales y la publicación se registran a continuación.
+
+### Resultados finales ejecutados
+
+| Comando real | Resultado |
+| --- | --- |
+| `node --test --test-concurrency=1 tests/*.test.cjs` | **127/127**, 0 fallos/cancelados/skips; 407063.145329 ms |
+| `python3 tests/schema.test.py` | **10/10** |
+| `python3 tests/f2_readiness.test.py` | **12/12** |
+| `python3 tests/f2_wall_evaluation.test.py` | **16/16** |
+| `python3 tests/f2_raw_export.test.py` | **3/3** |
+| `python3 scripts/generate-f3-bench.py --check` | PASS, fixture original byte-idéntica |
+| `python3 scripts/prepare-f3-pouf.py --check` | PASS, hash servido reproducible |
+| `node /tmp/f3-asset-lab-audit/scripts/validate-manifest.js` | PASS, 134 entradas, estructura solamente |
+| `node --test --test-name-pattern='external textured catalog end-to-end' tests/assets.browser.test.cjs` | **3/3**, 0 skips/fallos; 59714.924534 ms, recaptura identificada con commit de código |
+| `node --check` sobre asset-catalog.js, asset-ui.js, asset-loader.mjs, assets.test.cjs, assets.browser.test.cjs, browser.test.cjs y helpers/textured-glb.cjs | PASS, cada archivo por separado |
+| `node --check /tmp/f3-current-inline-13.mjs` y `/tmp/f3-current-inline-16.mjs` | PASS; scripts extraídos de index, importmap validado como JSON |
+| Python stdlib: AST del script de optimización, enlaces relativos y fences Markdown de README/ROADMAP/informe | PASS; no linter documental instalado añadido |
+| Python stdlib: comparación de meshes/nodes/accessors y 5 bufferViews no-imagen originales/optimizados | PASS, bytes geométricos idénticos |
+| `git diff --check` y `git diff --cached --check` | PASS |
+
+[Log completo Node](../qa/artifacts/f3-textures/node-regressions.txt),
+[resultados Python/manifests](../qa/artifacts/f3-textures/python-manifests.json),
+[QA posterior al commit](../qa/artifacts/f3-textures/external-commit-qa.txt).
+La recaptura no repite indiscriminadamente la suite: identifica visualmente el código
+publicado `7646d84e72e8719373cd095f1c757b073a56d791`. El commit documental posterior
+solo añade documentación y evidencia; mantiene el mismo código/assets de aplicación.
+
+| Viewport | SONGESAND carga | Puf carga | renderer.info geometrías/texturas | Canvas / stage |
+| --- | ---: | ---: | --- | ---: |
+| 1440×900 | 2983.6 ms | 3311.3 ms | 34/6 y 34/7 | 100% |
+| 390×844 | 2474.0 ms | 2856.3 ms | 34/6 y 34/7 | 100% |
+| 844×390 | 2265.9 ms | 2477.8 ms | 34/6 y 34/7 | 100% |
+
+Métricas del código publicado: [desktop](../qa/artifacts/f3-textures/1440x900-metrics.json),
+[vertical](../qa/artifacts/f3-textures/390x844-metrics.json),
+[horizontal](../qa/artifacts/f3-textures/844x390-metrics.json).
+Cero errores de página y peticiones fallidas en esos tres recorridos. Desktop registra
+cuatro warnings del driver SwiftShader `GPU stall due to ReadPixels`; no se ocultan.
+Conteos renderer.info son del conjunto de la escena, no bytes GPU medidos.
+Fingerprint común de módulos/index/manifiesto:
+`adf824ccaeb776dfe3f7fc144c11b92478d3967b01ca486258a0924c0e440444`.
+
+Capturas de ejemplo con viewport/SHA rotulado:
+[SONGESAND desktop 3D](../qa/artifacts/f3-textures/1440x900-ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo-3d.png),
+[puf vertical 3D](../qa/artifacts/f3-textures/390x844-ikea-stockholm-2025-puf-alhamn-beige-80586139-demo-3d.png),
+[puf horizontal 3D](../qa/artifacts/f3-textures/844x390-ikea-stockholm-2025-puf-alhamn-beige-80586139-demo-3d.png).
+Los doce PNG cubren ambos productos en 2D y 3D y los tres viewports. Playwright 1.62.1
+con Chromium instalado; **SwiftShader es renderizado por software**, no prueba de
+rendimiento móvil físico. Three.js 0.160.0 se suministra en los tests por curl con
+verificación TLS del sistema cuando Chromium rechaza la CA de la plataforma.
+No se instala Firecrawl, decoder, navegador ni paquete.
+
+### Publicación y preview pendiente
+
+Push `git push -u origin HEAD` correcto sin force para el commit de código
+`7646d84e72e8719373cd095f1c757b073a56d791`.
+`gh api --method POST repos/Juanmaes83/floorplan-3d/pulls --input /tmp/f3-create-pr.json`
+falló: `Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden`.
+Sin conector GitHub/Vercel alternativo disponible; no se intentó GraphQL.
+[Rama](https://github.com/Juanmaes83/floorplan-3d/tree/feat/f3-textured-external-catalog) ·
+[Crear PR hacia master](https://github.com/Juanmaes83/floorplan-3d/compare/master...feat/f3-textured-external-catalog?expand=1).
+
+Consultas REST a `/commits/7646d84e72e8719373cd095f1c757b073a56d791/status`
+y `/deployments?sha=7646d84e72e8719373cd095f1c757b073a56d791` fallaron con `Forbidden`.
+La página pública del commit fue accesible, sin URL verificable de preview/check;
+`https://github.com/Juanmaes83/floorplan-3d/deployments` devolvió HTTP 404.
+No hay CLI/conector/binding Vercel utilizable. **URL nueva, READY, SHA desplegado,
+autenticación y CI remota no verificados.** La preview histórica de PR #12 no sirve
+como evidencia del nuevo código. Se solicitó la URL real para intentar su revisión;
+no se inventa un dominio ni se despliega manualmente.
+
+**Recomendación: F3 todavía incompleta.** Hay dos modelos texturizados funcionales y
+regresiones locales verdes, listos para revisar, pero faltan PR, preview verificable,
+revisión humana y merge. Continúan pendientes rendimiento físico y validación de
+fidelidad/materiales del puf optimizado. No se cierra F3 ni se define cliente prioritario.
+F2 conserva cinco sesiones y veinte planos pendientes.
+
+
+## Estado final del piloto externo — PR #17 (01-10-2026)
+
+La entrega descrita como pendiente en las secciones históricas terminó en la [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17), aprobada por Juanma tras revisar la preview corregida y fusionada por squash.
+
+- SHA revisado: `772e24c26d10cec4349f28558ffc87ee18748317`; merge SHA en `master`: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`.
+- Vercel: READY para ese SHA en https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/; requiere Vercel Authentication.
+- Incluye SONGESAND, puf STOCKHOLM, soporte acotado de JPEG embebido, búsqueda/filtros y carga de catálogo con sesión protegida.
+- Codex reportó 138/138 Node/navegador y 41/41 Python en la rama antes del merge; no se repitieron para la actualización documental.
+- Schema 1.3.0 intacto; no hay soporte universal para Draco/KTX2/meshopt ni biblioteca PBR general.
+
+F3 queda cerrada para el piloto inicial autorizado. Las ampliaciones del catálogo, el normalizador de assets y la biblioteca visual de materiales son trabajos posteriores del Roadmap 2, no criterios ocultos para reabrir este piloto. El Roadmap 2 permanece como propuesta en la PR #15 hasta su revisión y aprobación separadas. SwiftShader no acredita rendimiento móvil físico; F2 mantiene las cinco sesiones y veinte planos pendientes.

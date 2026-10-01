@@ -1,0 +1,11 @@
+✔ F3 external textured catalog end-to-end 1440x900 (23252.329074ms)
+✔ F3 external textured catalog end-to-end 390x844 (18688.413246ms)
+✔ F3 external textured catalog end-to-end 844x390 (17380.673975ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59714.924534

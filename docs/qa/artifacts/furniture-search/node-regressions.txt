@@ -1,0 +1,166 @@
+✔ F3 authorized load, dimensions, state and offline fallback 390x844 (11127.599344ms)
+ℹ {"viewport":{"width":390,"height":844},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2227.2000000029802,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 844x390 (9546.753476ms)
+ℹ {"viewport":{"width":844,"height":390},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2086.4000000059605,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 1440x900 (16940.600668ms)
+ℹ {"viewport":{"width":1440,"height":900},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":2361.0999999940395,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 loader rejects bad headers, extensions, external dependencies, integrity, dimensions and timeout (649.449639ms)
+✔ F3 missing reference, broken URL and stale asynchronous success keep a generic editor (7675.641525ms)
+✔ F3 core embedded JPEG loads without blob URLs; budgets, MIME and external resources fail closed (6452.414996ms)
+✔ F3 cancellation during image decoding closes late resources and shared disposal is unique (697.190711ms)
+✔ F3 external textured catalog end-to-end 1440x900 (21476.789258ms)
+✔ F3 external textured catalog end-to-end 390x844 (18209.535809ms)
+✔ F3 external textured catalog end-to-end 844x390 (17549.07833ms)
+✔ furniture search filters insertion persistence and touch/keyboard 1440x900 (19589.856181ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 390x844 (16986.240042ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 844x390 (16622.179814ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ search keeps generics during catalog pending/exclusion and unavailable model fallback (8203.379792ms)
+✔ generic catalog has explicit validated three dimensions without rewriting old projects (10.211403ms)
+✔ manifest adapts one verified source and hashes real fixture and permission bytes (1.604966ms)
+✔ permission gates deny pending/missing/expired or incomplete usage and dimensions (0.622491ms)
+✔ untrusted transform, extension, paths, sizes and duplicate IDs are excluded (0.545798ms)
+✔ assetRef association/clear keeps room, identity, geometry and compatibility intact (7.025128ms)
+✔ curated external evidence records exact binaries and project authorization without inventing worldwide rights (2.069523ms)
+✔ external references survive JSON, project duplication, reload and ZIP without binary embedding (22.496906ms)
+✔ 2D reference drawing and actual edit/duplicate/history/persistence remain functional (1830.048169ms)
+✔ actual file import and export preserve full F0 contract including optional data (960.140796ms)
+✔ room finishes, measurements/history and wall demolition update the canonical project (1038.395259ms)
+✔ opening and exporting a project does not add absent optional fields (832.231845ms)
+✔ file handler rejects invalid inputs atomically with visible element-specific errors (1302.437187ms)
+✔ hostile names and material names stay text; ID/color payloads cannot create events (811.870845ms)
+✔ browser legacy migration is repeatable and keeps the original key (618.169928ms)
+✔ mobile touch placement and responsive 2D are usable in emulation (930.671991ms)
+✔ 3D renders the same project, follows imported geometry and returns to 2D (24560.019411ms)
+ℹ Chromium direct CDN TLS rejected the platform CA. Testing rendering with modules fetched by system curl with TLS verification enabled.
+✔ F1 completion: local project UI, reload, isolation, confirmation and full import/export (2079.330964ms)
+✔ F1 completion: touch 2D/3D 390x844 (49732.187905ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"ratio":0.9028436018957346,"width":390,"overflow":false,"colors":180,"same":true}
+✔ F1 completion: touch 2D/3D 844x390 (48352.631971ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"ratio":0.7897435897435897,"width":844,"overflow":false,"colors":181,"same":true}
+✔ F1 completion: no WebGL gives readable message and keeps 2D editable (742.632115ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1 completion: collection adopts F1a migration and preserves both historical keys (852.412863ms)
+✔ F1b full workflow 390x844 (21674.40705ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b full workflow 844x390 (21291.460132ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b full workflow 1440x900 (22734.065077ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b storage/image editing and shared-reference deletion stay local and recoverable (1529.184565ms)
+✔ F1b rejects signature-valid but corrupt image payload without changing projects (610.666128ms)
+✔ F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history (1099.038841ms)
+✔ image import clarity and complete WebP workflow 360x800 (4949.205588ms)
+✔ image import clarity and complete WebP workflow 390x844 (5068.519411ms)
+✔ image import clarity and complete WebP workflow 844x390 (5125.353924ms)
+✔ image import clarity and complete WebP workflow 1440x900 (4062.199996ms)
+✔ image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration (9137.737197ms)
+✔ image import failures preserve current project, collection and image keys atomically (3101.399336ms)
+✔ image import labels and accessible help follow Spanish, English and Chinese (1078.301725ms)
+✔ F2 local wall assistance privacy/review 360x800 (9659.525774ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":360,"height":800},"requests":54,"unexpected":0,"wallIds":["wal_75cbbef0557e4384a2f1b126039051b6","wal_9a8eb4df11e84dc5bf8673523822c71c"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 390x844 (9993.828654ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":390,"height":844},"requests":54,"unexpected":0,"wallIds":["wal_cd6a7682fb564498856e8711fb2e1317","wal_dcea8ef80d764aa691bad46a05644d8b"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 844x390 (9553.679888ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":844,"height":390},"requests":54,"unexpected":0,"wallIds":["wal_1cde94f1b29a495094f891fbcf04e191","wal_cc5d9c826cc8469cb992be4808c2f4f8"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 1440x900 (9218.136362ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":1440,"height":900},"requests":54,"unexpected":0,"wallIds":["wal_5c72150d6c1448c08bfadda3544e1e13","wal_37e5e593e8204300a3325263a5f1561d"],"candidateCount":4}
+✔ F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits (2042.070781ms)
+✔ F2 raw export private snapshot 360x800 (3625.583385ms)
+✔ F2 raw export private snapshot 390x844 (3604.50534ms)
+✔ F2 raw export private snapshot 844x390 (3633.367102ms)
+✔ F2 raw export private snapshot 1440x900 (3130.391522ms)
+✔ F2 raw export invalidates pending download on reference, scale, image, project and review changes (2531.655035ms)
+✔ search derives unique entries and dimensions without duplicating catalog (3.409777ms)
+✔ exact partial accent case redundant spaces synonym and stored type search (0.787866ms)
+✔ combined query room family reset and empty preserve separation (0.427503ms)
+✔ create/open/rename/duplicate/delete persist independently after reload (38.40546ms)
+✔ failed storage writes and invalid names preserve collection atomically (12.39641ms)
+✔ collection rejects corruption without overwriting source (3.220196ms)
+✔ browser schema is an exact copy of the F0 authority (3.091126ms)
+✔ reference home validates and projects rooms, 48 original wall segments and 22 openings (11.123225ms)
+✔ F0 valid example round-trips every field, image reference, asset pointer and extension (4.167759ms)
+✔ newer minor retains unknown data; unknown major is rejected (3.048453ms)
+✔ atomic rejection: malformed JSON (1.975374ms)
+✔ atomic rejection: F0 invalid fixture (2.628941ms)
+✔ atomic rejection: unknown version (1.929587ms)
+✔ atomic rejection: wrong units (2.394785ms)
+✔ atomic rejection: duplicate ID (6.274122ms)
+✔ atomic rejection: broken wall reference (10.528845ms)
+✔ atomic rejection: broken material reference (2.370619ms)
+✔ atomic rejection: broken room reference (2.952511ms)
+✔ atomic rejection: out of range coordinate (2.16124ms)
+✔ atomic rejection: fractional coordinate (4.503736ms)
+✔ atomic rejection: negative dimension (3.54691ms)
+✔ atomic rejection: non-finite number (3.880614ms)
+✔ atomic rejection: wrong numeric type (2.544917ms)
+✔ atomic rejection: zero length wall (2.235008ms)
+✔ atomic rejection: opening outside wall (2.204443ms)
+✔ atomic rejection: opening above wall (1.977257ms)
+✔ atomic rejection: self-intersecting polygon (2.346293ms)
+✔ atomic rejection: repeated closing vertex (2.094229ms)
+✔ atomic rejection: bad calibration (1.788658ms)
+✔ atomic rejection: invalid timestamp (2.088792ms)
+✔ atomic rejection: timestamp order (3.560771ms)
+✔ atomic rejection: event injection in ID (1.678144ms)
+✔ atomic rejection: CSS injection in color (3.519951ms)
+✔ atomic rejection: unknown 1.0 field (2.014461ms)
+✔ atomic rejection: future field cannot shadow numeric adapter (4.349138ms)
+✔ storage failure does not apply an otherwise valid import (2.237392ms)
+✔ legacy migration preserves IDs, rounds mm, maps references and retains original storage (6.375136ms)
+✔ corrupt old/new saved states degrade to reference without overwriting originals (6.358742ms)
+✔ failed migration write keeps original and usable migrated in-memory project (4.491148ms)
+✔ editing adapters mutate canonical entities; history serialization has no aliases (6.317001ms)
+✔ projection follows geometry edits and stable IDs despite wall reorder (1.312853ms)
+✔ diagonal wall projection retains finite geometry without changing array length (0.589653ms)
+✔ raw image axes convert before placement/rotation/rounding, diagonals preserved (2.87813ms)
+✔ snapshot is immutable, stable across exports and excludes private source fields (0.597464ms)
+✔ source version anchor is bound to the actual detector bytes (0.67528ms)
+✔ unknown/missing unit, frame, SHA, source, scale and metadata block export (0.9257ms)
+✔ uncalibrated, wrong-image, mismatched or zero scales are not silently invented (0.203782ms)
+✔ out-of-bounds or collapsed coordinates reject entire export without clipping (0.245494ms)
+✔ image signatures/types/dimensions and strict application limits (8.558409ms)
+✔ image/world transforms retain original pixels with rotation and translation (23.761107ms)
+✔ calibration, independent verification, confirmation and recalibration are coherent (5.758094ms)
+✔ schema and semantic verification reject forged points, measurements/status and confirmation (22.8346ms)
+✔ stable manual walls/openings/rooms, snapping, deletion and invalid polygon rejection (4.64125ms)
+✔ W1-W4 detect actual review, contour, furniture and scale without blocking (6.339104ms)
+✔ W2 exactly covers segmented contours including tolerance around wall ends (3.119217ms)
+✔ W3 ignores the solid removed by a real opening (2.061411ms)
+✔ ZIP round-trip keeps full geometry, original image bytes and private filenames out (12.703354ms)
+✔ ZIP rejects corruption, CRC, duplicate names, escape paths, broken refs and limits (4.874666ms)
+✔ ZIP DEFLATE input is bounded and valid (independent compressed fixture) (13.871763ms)
+✔ old V1 projects remain valid without new optional verification/opacity (2.151916ms)
+✔ new project collection writes are atomic on storage failure (9.558529ms)
+✔ snap accepts DOMPoint-like inherited coordinates from the actual SVG conversion (0.172876ms)
+✔ JPEG and EXIF rotations retain original bytes/pixels, neutralizing display copy only (0.710331ms)
+✔ ZIP rejects duplicate entries and encrypted flags before touching a collection (0.803289ms)
+✔ ZIP inflation stops before accepting a payload larger than its declared bound (2.671835ms)
+✔ W3 catches a furniture footprint crossing a concave room even with all corners inside (2.869527ms)
+✔ static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes (15.77412ms)
+✔ image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants (1.140939ms)
+✔ clear strokes yield centerline proposals and multiple independent candidates (10.418503ms)
+✔ short interruptions join but large gaps stay separate (2.246095ms)
+✔ blank, uniform dark, low contrast and isolated noise abstain (5.174028ms)
+✔ transparent strokes do not fabricate lines and raster limits are enforced (5.590294ms)
+✔ sampling maps through original pixels, rotation and displacement with F1b transform (0.349116ms)
+✔ explicit acceptance and correction reuse canonical IDs, source states and export validation (29.041758ms)
+✔ invalid corrected geometry fails validation on a clone without changing live project (5.236256ms)
+✔ synthetic detector timing is recorded without imposing product budgets (7.196342ms)
+ℹ {"synthetic":true,"method":"30 calls, clear 160x100 RGBA raster, detector only; no decode/UI","node":"v24.19.0","platform":"linux","arch":"x64","candidates":3,"medianMs":0.14545499999999834,"p90NearestRankMs":0.25434700000000987}
+ℹ tests 134
+ℹ suites 0
+ℹ pass 134
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 466565.21831

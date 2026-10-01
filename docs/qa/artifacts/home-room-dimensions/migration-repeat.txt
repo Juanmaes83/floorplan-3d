@@ -1,0 +1,9 @@
+✔ F1 completion: collection adopts F1a migration and preserves both historical keys (1846.751843ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2296.244533

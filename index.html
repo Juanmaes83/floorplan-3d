@@ -91,7 +91,7 @@ tr.click:hover td{background:#faf5ee}
 .muted{color:var(--muted)}
 .form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .form label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
-.form label.full{grid-column:1/-1}
+.form .full{grid-column:1/-1}
 .form input,.form select{border:1px solid var(--line);border-radius:6px;padding:5px 7px;background:#fff;width:100%}
 .form input[type=color]{padding:2px;height:30px}
 .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -217,6 +217,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
 @media(max-width:1100px) and (pointer:coarse){
@@ -226,6 +227,26 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .menu-pop{max-width:calc(100vw - 8px);max-height:calc(100dvh - 70px);overflow-y:auto}.menu-pop .btn{white-space:normal;overflow-wrap:anywhere}
 #toast{max-width:calc(100vw - 24px);width:max-content;overflow-wrap:anywhere;box-sizing:border-box}
 .import-help{display:block;max-width:280px;padding:4px 8px;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;}
+/* Search controls remain above results inside the existing library drawer. */
+.lib-controls{padding:10px;border-bottom:1px solid var(--line);background:var(--panel)}
+.search-filters{display:grid;grid-template-columns:1fr 1fr;gap:6px}.search-summary{display:flex;align-items:center;gap:8px}
+.lib-controls label{display:block;font-size:12px;margin:6px 0}.search-row{display:flex;gap:4px}
+.lib-controls input,.lib-controls select{font:inherit;font-size:16px;min-height:44px;width:100%;min-width:0;border:1px solid var(--line);border-radius:6px;padding:6px}
+.lib-controls .btn,#searchEmptyReset{min-height:44px;border:1px solid var(--line)}
+#searchCatalogState{overflow-wrap:anywhere}
+#searchCount,#searchCatalogState{font-size:12px;margin:8px 0;line-height:1.4}
+.item{font:inherit;color:var(--ink);min-height:100px;min-width:0;text-align:center;overflow-wrap:anywhere}
+.item b,.item small,.item-kind{max-width:100%;white-space:normal;line-height:1.35}
+.item-kind{font-size:11px;font-weight:600}.item-attribution{font-size:10px!important}
+.lib h4{position:static}.lib-grid{align-items:stretch}
+@media(max-width:1100px){.lib-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:1100px) and (max-height:500px){
+ .lib-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;padding:6px}
+ .lib-controls>label{grid-column:1/-1;margin:0}.search-row{grid-column:1;grid-row:2}
+ .search-summary{grid-column:2;grid-row:2;gap:4px}.search-summary #searchCount{margin:0;max-width:55px}
+ .search-filters{grid-column:1/-1}.search-filters label{margin:0}
+ #searchCatalogState{grid-column:1/-1;margin:0;font-size:11px}
+}
 </style>
 <script type="importmap">
 {"imports":{
@@ -237,6 +258,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <body>
 <div class="app">
   <header>
+    <button class="btn primary" id="newProjectBtn">Nuevo proyecto</button>
+    <button class="btn" id="newRoomBtn">+ Estancia</button>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
@@ -365,16 +388,18 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
 <label>Nombre <input id="projectName" maxlength="120"></label>
-<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p></dialog>
+<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear plantilla de referencia</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p></dialog>
 
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/generic-catalog.js"></script>
+<script src="js/furniture-search.js"></script>
 <script src="js/asset-catalog.js"></script>
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
+<script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
 <script src="js/raw-wall-export.js"></script>
 <script src="js/local-images.js"></script>
@@ -966,13 +991,14 @@ function renderOpenings(){
   SafeDOM.markup($('#gOpen'), s);
 }
 
+function designDimensions(id){const r=project.rooms.find(q=>q.id===id);if(r?.source?.method!=='manual')return '';try{const b=FloorPlanRoomLayout.rectangle(r);return `${b.width} × ${b.depth} mm`;}catch{return '';}}
 function renderLabels(){
   const g = $('#gLabels');
   g.setAttribute('display', ui.layers.labels ? 'inline' : 'none');
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
     const [x,y] = r.at, halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
     return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(nm(state.rooms[r.id].name))}</text>
-      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>`;
+      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${designDimensions(r.id)?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${designDimensions(r.id)}</text>`:''}`;
   }).join(''));
 }
 
@@ -1200,6 +1226,7 @@ function roomPanel(r){
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></section>
+  <section><button class="btn primary" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></section>
   <section><h3>${tr('地面材料','Flooring')}</h3><div class="mats">${mats}</div>
     ${LANG==='es'?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
   <section><h3>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></h3>
@@ -1208,6 +1235,7 @@ function roomPanel(r){
 }
 function bindRoomPanel(){
   const id = ui.sel.id;
+  $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
@@ -1281,6 +1309,7 @@ function pushOut(f){
 function addItem(it, x, y){
   const [type,name,w,d,color,height] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
   f.size.heightMm=height;
+  if(it[6])f.assetRef=FloorPlanAssets.associate(f,it[6]).assetRef;
   pushOut(f);
   ui.sel = {kind:'furn', id:f.id};
   mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
@@ -1494,7 +1523,7 @@ svg.addEventListener('contextmenu', e => { if (ui.tool==='measure'){ e.preventDe
 
 /* ======================= 键盘 ======================= */
 document.addEventListener('keydown', e => {
-  if (e.target.matches('input,select,textarea')) return;
+  if (document.querySelector('dialog[open]') || e.target.matches('input,select,textarea') || e.target.closest('#lib')) return;
   if (window.View3D?.walking()) return;
   const mod = e.metaKey || e.ctrlKey, k = e.key.toLowerCase();
   if (mod && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
@@ -1521,20 +1550,39 @@ document.addEventListener('keydown', e => {
 });
 
 /* ======================= 家具库 ======================= */
+const libSearch={query:'',room:'',family:''};
+let libRows=[];
 function buildLib(){
-  SafeDOM.markup($('#lib'), LIB.map((c,ci) => `<h4>${nm(c.cat)}</h4><div class="lib-grid">${c.items.map((it,ii) => {
-    const [t,n,w,d,col] = it, pad = Math.max(w,d)*.08;
-    return `<div class="item" data-key="${ci}:${ii}" title="${tr('点击添加，或拖到平面图中的指定位置', 'Click to add, or drag onto the plan')}">
-      <svg viewBox="${-w/2-pad} ${-d/2-pad} ${w+2*pad} ${d+2*pad}">${furnSVG(t,w,d,col)}</svg><b>${esc(nm(n))}</b><small>${w}×${d}</small></div>`;
-  }).join('')}</div>`).join('') + `<div class="hint">${tr(
-    `家具按真实尺寸（mm）绘制。${COARSE ? '点一下放到画面中央，或按住向右拖到平面图 / 3D 地面上的指定位置（上下滑动为滚动列表）。' : '点击添加到画面中央，或直接拖到平面图 / 3D 地面上。'}添加后可在右侧修改宽深与颜色。`,
-    `Furniture is drawn at real size (mm). ${COARSE ? 'Tap to place at the center, or hold and drag right onto the plan / 3D floor (swipe up/down to scroll).' : 'Click to add at the center, or drag onto the plan / 3D floor.'} Edit size and color in the right panel afterwards.`)}</div>`);
-  document.querySelectorAll('.item').forEach(el => el.addEventListener('pointerdown', e => {
-    if (e.button) return;
-    libDrag = {el, id:e.pointerId, sx:e.clientX, sy:e.clientY, it:itemOf(el), ghost:null};
-  }));
+  libRows=FloorPlanFurnitureSearch.build(LIB,window.FloorPlanAssetUI?.entries||[],nm,s=>NAMES_ES[s]||s);
+  if(!$('#furnitureSearch')){
+    SafeDOM.markup($('#lib'), `<div class="lib-controls"><label for="furnitureSearch">Buscar muebles</label><div class="search-row"><input id="furnitureSearch" type="search" placeholder="Sofá, cama, mesa…" autocomplete="off"><button class="btn" id="searchClear" type="button">Borrar</button></div><div class="search-filters"><label for="searchRoom">Estancia<select id="searchRoom"><option value="">Todas las estancias</option></select></label><label for="searchFamily">Familia / tipo<select id="searchFamily"><option value="">Todas las familias</option></select></label></div><div class="search-summary"><button class="btn" id="searchAll" type="button">Todos</button><p id="searchCount" role="status" aria-live="polite" aria-atomic="true"></p></div><p id="searchCatalogState"></p></div><div id="searchResults"></div>`);
+    $('#furnitureSearch').oninput=e=>{libSearch.query=e.target.value;renderLibResults();};
+    $('#searchRoom').onchange=e=>{libSearch.room=e.target.value;renderLibResults();};
+    $('#searchFamily').onchange=e=>{libSearch.family=e.target.value;renderLibResults();};
+    $('#searchClear').onclick=()=>{libSearch.query='';$('#furnitureSearch').value='';renderLibResults();$('#furnitureSearch').focus();};
+    $('#searchAll').onclick=resetLibSearch;
+  }
+  SafeDOM.markup($('#searchRoom'), `<option value="">Todas las estancias</option>`+LIB.map((g,i)=>`<option value="${i}">${esc(nm(g.cat))}</option>`).join(''));
+  SafeDOM.markup($('#searchFamily'), `<option value="">Todas las familias</option>`+Object.entries(FloorPlanFurnitureSearch.families).filter(([id])=>libRows.some(r=>r.family===id)).map(([id,label])=>`<option value="${id}">${esc(label)}</option>`).join(''));
+  $('#searchRoom').value=libSearch.room;$('#searchFamily').value=libSearch.family;
+  renderLibResults();
 }
-const itemOf = el => { const [ci, ii] = el.dataset.key.split(':').map(Number); return LIB[ci].items[ii]; };
+function resetLibSearch(){libSearch.query=libSearch.room=libSearch.family='';$('#furnitureSearch').value=$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();$('#furnitureSearch').focus();}
+function renderLibResults(){
+  const rows=FloorPlanFurnitureSearch.filter(libRows,libSearch),api=window.FloorPlanAssetUI;
+  $('#searchCount').textContent=rows.length+' resultados';
+  $('#searchCatalogState').textContent=!api?.ready?'Cargando catálogo de modelos; los genéricos están disponibles.':api.error||'Modelos 3D autorizados: '+libRows.filter(r=>r.kind==='asset').length+'. Su carga se verifica al abrir 3D.';
+  const card=r=>{const [type,,w,d,col]=r.item,pad=Math.max(w,d)*.08;
+    return `<button type="button" class="item" data-key="${esc(r.id)}" aria-label="${esc(r.name)} · ${r.kind==='asset'?'Modelo 3D autorizado':'Genérico'} · ${w} × ${r.dimensions.height} × ${d} mm"><svg aria-hidden="true" viewBox="${-w/2-pad} ${-d/2-pad} ${w+2*pad} ${d+2*pad}">${furnSVG(type,w,d,col)}</svg><b>${esc(r.name)}</b><span class="item-kind">${r.kind==='asset'?'Modelo 3D autorizado':'Genérico'}</span><small>${esc(FloorPlanFurnitureSearch.families[r.family])}</small><small>${w} × ${r.dimensions.height} × ${d} mm</small>${r.entry?`<small class="item-attribution">${esc(r.entry.attribution)}</small>`:''}</button>`;};
+  SafeDOM.markup($('#searchResults'),rows.length?LIB.map((g,i)=>{const group=rows.filter(r=>r.room===String(i));return group.length?`<h4>${esc(nm(g.cat))}</h4><div class="lib-grid">${group.map(card).join('')}</div>`:'';}).join(''):'<p class="hint">No hay muebles que coincidan. Prueba otro nombre o elimina los filtros.</p><button class="btn" id="searchEmptyReset" type="button">Limpiar búsqueda y filtros</button>');
+  if($('#searchEmptyReset'))$('#searchEmptyReset').onclick=resetLibSearch;
+  $('#searchResults').querySelectorAll('.item').forEach(el=>{
+    el.addEventListener('pointerdown',e=>{if(e.button)return;libDrag={el,id:e.pointerId,sx:e.clientX,sy:e.clientY,it:itemOf(el),ghost:null};});
+    el.addEventListener('click',e=>{if(e.detail===0){libDrag={el,id:-1,sx:0,sy:0,it:itemOf(el),ghost:null};endLibDrag({pointerId:-1},true);}});
+  });
+}
+const itemOf=el=>libRows.find(r=>r.id===el.dataset.key)?.item;
+addEventListener('floorplan-catalog-ready',buildLib);
 
 // 家具库拖放：用 pointer 事件实现（iPad 上 HTML5 拖放不可靠）。
 // 列表设置了 touch-action:pan-y，竖向滑动交给浏览器滚动（会触发 pointercancel），横向拖动才开始拖放。
@@ -1748,6 +1796,7 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
 window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
+<script src="js/room-layout-ui.js"></script>
 <script src="js/asset-ui.js"></script>
 <script type="module">
 /* ============================================================
@@ -2616,8 +2665,8 @@ function loadFurnitureAsset(g,f,generation){
     const position=g.position.clone(),rotation=g.rotation.clone();clearGroup(g);g.scale.set(1,1,1);
     result.scene.scale.set(f.w/result.dimensionsMm.width,height*1000/result.dimensionsMm.height,f.d/result.dimensionsMm.depth);
     g.add(result.scene);g.position.copy(position);g.rotation.copy(rotation);g.userData.authorizedAsset=true;
-    publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
-  }).catch(()=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
+    publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
+  }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
 }
 function buildFurn(){
   assetGeneration++;assetRequests.forEach(c=>c.abort());assetRequests.clear();assetStates.clear();
@@ -2631,7 +2680,7 @@ function buildLabels(){
   labelG.children.slice().forEach(o => { o.element.remove(); labelG.remove(o); });
   geometry.rooms.filter(r => r.at).forEach(r => {
     const el = document.createElement('div'); el.className = 'rlabel';
-    SafeDOM.markup(el, `${esc(nm(state.rooms[r.id].name))}<small>${area(r.poly).toFixed(1)}m²</small>`);
+    SafeDOM.markup(el, `${esc(nm(state.rooms[r.id].name))}<small>${area(r.poly).toFixed(1)}m²</small>${designDimensions(r.id)?`<small>${designDimensions(r.id)}</small>`:''}`);
     const o = new CSS2DObject(el); o.position.set(wx(r.at[0]), topHeight() + .15, wz(r.at[1])); o.visible = labelG.visible; labelG.add(o);
   });
   const counted = geometry.rooms.filter(r => r.counted !== false);

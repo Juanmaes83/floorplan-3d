@@ -18,6 +18,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 
 ### Plano 2D
 
+- Crear proyectos locales vacíos o desde imagen, independientes entre sí.
+- Crear estancias rectangulares e introducir ancho y profundidad interiores en milímetros, con vista previa, lado fijo, confirmación y deshacer/rehacer.
 - Plano de referencia con escala 1:60 y cotas en milímetros.
 - Biblioteca de más de 60 muebles y electrodomésticos, organizados por estancia.
 - Añadir elementos con un clic o arrastrándolos al plano.
@@ -130,28 +132,15 @@ ni huecos. [Informe y límites](docs/technical/F2-wall-assist.md).
 
 F2 está **integrada por las PR #9/#10/#11 y no validada empíricamente**. Falta medir cinco planos autorizados,
 preparar un conjunto fijo de al menos veinte con referencias y acordar umbrales
-con Juanma. Estos datos son validación posterior y no bloquean F3. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
+con Juanma. Estos datos siguen pendientes para validar F2 y no bloquean nuevas entregas de producto. [Protocolo reproducible](docs/qa/F2-entry-protocol.md). El recorder
 offline no implementa asistencia ni lee/sube imágenes. Juanma confirmó el flujo
 en su teléfono; el rendimiento físico sigue sin medir.
 
 
-## F3 — entrega inicial integrada; catálogo externo pendiente
+## F3 — piloto externo texturizado integrado
 
-La biblioteca genérica conserva sus 60 entradas y añade alturas de diseño explícitas
-para muebles nuevos. En propiedades de un mueble, «Modelo 3D autorizado» permite
-asociar el banco sintético original de prueba o volver al genérico. La asociación
-conserva identidad, estancia, posición, giro, dimensiones y elevación. El modelo se
-adapta a las medidas del objeto; no representa un producto comercial. El permiso MIT
-es específico de ese GLB y su generador.
+La [PR #17](https://github.com/Juanmaes83/floorplan-3d/pull/17) completó y cerró el piloto acotado tras revisión visual de Juanma. Se integraron SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con dimensiones, atribución y texturas JPEG embebidas; el buscador permite encontrar los modelos junto con los muebles genéricos. SHA revisado/desplegado: `772e24c26d10cec4349f28558ffc87ee18748317`; merge en `master`: `24534b5544ffa37840bf4fe77c4ad12afda0c38b`. La [preview de ese SHA](https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/) está protegida por Vercel Authentication y figura READY. No hubo despliegue manual a producción.
 
-Juanma confirmó que el proyecto tiene autorización para usar los assets de Asset Lab.
-Esta entrega inicial no los integra: cada candidato requiere comprobar que el fichero
-está disponible, verificar sus dimensiones y compatibilidad técnica, y registrar el
-alcance de permisos/atribución antes de incorporarlo. Three.js/GLTFLoader siguen
-fijados a 0.160.0; Draco, texturas externas, animaciones y otras extensiones no se
-admiten en la ruta actual. [Informe y estado F3](docs/technical/F3-initial.md) ·
-[roadmap](docs/ROADMAP.md).
+Este cierre cubre el piloto inicial, no un catálogo comercial amplio ni una biblioteca PBR completa. No se admiten de forma general Draco, KTX2, meshopt, WebP ni URI de texturas remotas. El schema permanece en 1.3.0; se conserva el fallback genérico. El informe registra pruebas, diagnósticos y limitaciones: [corrección de catálogo en preview protegida](docs/technical/F3-preview-catalog-fix.md) y [estado F3/roadmap](docs/ROADMAP.md).
 
-La entrega inicial se fusionó por PR #12; **F3 permanece abierta hasta completar el
-catálogo externo autorizado**. La evaluación en móvil físico y los presupuestos de
-rendimiento siguen pendientes.
+La entrega post-F3 de «Nuevo proyecto» y edición directa de dimensiones se aprobó y fusionó mediante la [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), merge `10e9f96`. Permite crear proyectos vacíos o desde imagen y dimensionar habitaciones rectangulares compatibles con previsualización y protección de geometría. No incluye un editor numérico general para formas irregulares. [Alcance, QA, limitaciones y registro de cierre](docs/technical/home-room-dimensions.md) · [roadmap canónico](docs/ROADMAP.md). F2 sigue experimental: cinco sesiones y veinte planos de evaluación permanecen pendientes, sin bloquear esta entrega.

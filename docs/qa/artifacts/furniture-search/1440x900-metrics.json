@@ -1,0 +1,494 @@
+{
+  "commitAtRun": "eb6559c4c922b59aaef9e8298ee828d4140cf711",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "rendering": "Chromium SwiftShader software",
+  "resultCounts": {
+    "all": 63,
+    "authorizedQuery": 2
+  },
+  "pageErrors": [],
+  "requests": [
+    {
+      "url": "/",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-schema.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/reference-project.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/generic-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/furniture-search.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/safe-dom.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-library.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/wall-assist.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/raw-wall-export.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/local-images.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-package.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/catalog.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/external.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/build/three.module.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/PointerLockControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-loader.mjs",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/songesand-90366839.glb",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-schema.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/reference-project.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/generic-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/furniture-search.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/safe-dom.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-library.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/wall-assist.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/raw-wall-export.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/local-images.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-package.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/catalog.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/external.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/build/three.module.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/PointerLockControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-loader.mjs",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/stockholm-pouf-80586139.glb",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/songesand-90366839.glb",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-schema.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/reference-project.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/generic-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/furniture-search.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-catalog.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/safe-dom.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-library.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-core.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/wall-assist.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/raw-wall-export.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/local-images.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/project-package.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/tracing-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-ui.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/catalog.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/assets/f3/external.manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/build/three.module.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/controls/PointerLockControls.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/js/asset-loader.mjs",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "objects": [
+    {
+      "type": "sofa",
+      "size": {
+        "widthMm": 2200,
+        "depthMm": 900,
+        "heightMm": 800
+      }
+    },
+    {
+      "type": "bed",
+      "size": {
+        "widthMm": 1800,
+        "depthMm": 2000,
+        "heightMm": 1100
+      }
+    },
+    {
+      "type": "dresser",
+      "size": {
+        "widthMm": 820,
+        "depthMm": 500,
+        "heightMm": 810
+      },
+      "assetRef": {
+        "catalog": "immersphere-asset-lab",
+        "assetId": "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo",
+        "catalogRevision": "5dc7b182c5c227472b84aea66a3ffa1368c95981"
+      }
+    },
+    {
+      "type": "beanbag",
+      "size": {
+        "widthMm": 690,
+        "depthMm": 650,
+        "heightMm": 400
+      },
+      "assetRef": {
+        "catalog": "immersphere-asset-lab",
+        "assetId": "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo",
+        "catalogRevision": "5dc7b182c5c227472b84aea66a3ffa1368c95981"
+      }
+    }
+  ]
+}
