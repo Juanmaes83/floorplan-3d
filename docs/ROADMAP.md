@@ -13,15 +13,16 @@ correspondencia usa el [plan F0 de PR #3, revisión 825ddf6](https://github.com/
 No se aprueban retrospectivamente decisiones F0 aún abiertas ni sus umbrales
 provisionales por adoptar esta numeración.
 
-**Nueva entrega F3 en revisión (01-10-2026):** la rama
+**Antecedente de revisión de #20 (01-10-2026; ya integrada):** la rama
 `feat/f3-asset-lab-pipeline`, basada en `master` `18c68e2`, incorpora un pipeline
 reproducible y doce modelos GLB normalizados de Asset Lab. Se comprobaron 114
 GLB físicos frente a 134 fichas y se rechazaron cuatro candidatos concretos.
 Las dimensiones nuevas se etiquetan como medidas de malla, sin equivalencia
 oficial verificada. [Informe, inventario y límites](technical/F3-asset-lab-pipeline.md).
-La entrega espera revisión visual y aprobación de Juanma; no declara F3
-completa ni cambia el estado experimental de F2, la biblioteca de 50 superficies
-o las propuestas comerciales abiertas.
+Aquella revisión quedó superada por el merge squash de PR #20 (`2925081`).
+El pipeline está integrado para esta tanda acotada; no sincroniza automáticamente
+Asset Lab ni admite cualquier modelo. No cambia el estado experimental de F2,
+la biblioteca de 50 superficies ni las propuestas comerciales abiertas.
 
 ## Resultado y estado
 
@@ -35,7 +36,8 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo de objetos 3D y materiales con assets autorizados y dimensiones verificadas | **Piloto de catálogo externo y biblioteca visual acotada integrados y aprobados.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 añade 50 mapas de superficie CC0-1.0 (10 en cada una de cinco familias), aplicación persistente a suelos y paredes, búsqueda, comparación, repetición y fallback, con `FloorPlanProjectV1` 1.4.0. Merge #19: `fa79d07243672076df506aae0f50ec84fca82b5d`; SHA revisado `104830bf97cab262df7a26dae725203d661e097d`. No cierra un catálogo comercial general ni valida rendimiento en teléfono físico. La normalización de otros formatos y perfiles PBR siguen como propuestas posteriores. [Informe y QA](technical/surface-material-library.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados; verificación física por recurso | **Entregas acotadas integradas.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 integró 50 mapas locales CC0-1.0 en cinco familias para suelos y paredes, con aplicación persistente, búsqueda, comparación, repetición y fallback (`FloorPlanProjectV1` 1.4.0; merge `fa79d07`). PR #20 integró un pipeline reproducible y acotado y doce GLB normalizados de Asset Lab (merge squash `2925081`); las medidas nuevas son de malla, sin escala física verificada. No hay sincronización automática con Asset Lab, soporte universal de modelos ni catálogo comercial general. Otros perfiles/extensiones y PBR son propuestas futuras; rendimiento en teléfono físico pendiente. [Materiales](technical/surface-material-library.md) · [Pipeline](technical/F3-asset-lab-pipeline.md). |
+| Entrega solicitada en esta tarea | Autoría visible y apartado «Legal y uso» en la plataforma | Solicitada por el titular para esta PR, pendiente de revisión humana de la interfaz. Texto informativo, sin presentarlo como asesoramiento jurídico; conserva licencias y atribuciones de recursos de terceros. |
 | Entrega post-F3, sin numeración nueva | Inicio de proyectos vacíos/desde imagen y edición directa de dimensiones de estancias rectangulares | Aprobada e integrada por PR #18 (`c7d1b81` revisado; merge `10e9f96`). No modifica schema 1.3.0; limita edición numérica a geometría ortogonal inequívoca. [Informe](technical/home-room-dimensions.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
@@ -131,7 +133,7 @@ La entrega integra catálogo genérico con alturas explícitas, asociación de `
 
 Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets de Asset Lab. Esta confirmación sustituye el bloqueo previo de autorización para continuar el trabajo. La auditoría referenciada en el informe es una instantánea histórica del commit `5dc7b182c5c227472b84aea66a3ffa1368c95981`; no se toma como inventario actual. Antes de publicar cada modelo se vuelve a comprobar el fichero y hash, sus dimensiones verificables, compatibilidad del formato/extensiones, atribución y el alcance concreto del permiso. Se conserva el Asset Lab en solo lectura; los modelos se incorporarán al catálogo de este repo únicamente después de pasar esas comprobaciones.
 
-**Estado:** F3 inicial integrada; **catálogo externo pendiente**. Pendientes de siguientes entregas: inventario actual y selección de modelos, decisión de normalización/dimensiones por candidato, soporte técnico de formatos (incluido Draco si se necesita), y revisar materiales externos. La medición en móvil físico y cualquier presupuesto de rendimiento siguen como validaciones; SwiftShader no las sustituye. F2 continúa experimental y no validada empíricamente; cinco sesiones y veinte planos siguen pendientes, sin bloquear F3.
+**Estado en aquel cierre de #12:** F3 inicial integrada; catálogo externo aún pendiente entonces. Después se integraron #17, #19 y #20 dentro de sus alcances. Nuevos candidatos, extensiones y perfiles generales requieren otra entrega. La medición en móvil físico sigue pendiente; SwiftShader no la sustituye. F2 continúa experimental y no validada empíricamente.
 
 
 ## Ecosistema — propuestas pendientes de decisión (30-09-2026)
@@ -142,13 +144,13 @@ El piloto inicial de catálogo externo ya se amplió con doce modelos normalizad
 
 F3 inicial, el piloto texturizado y la primera tanda de doce modelos de Asset Lab están integrados. Siguen pendientes la verificación de escala física y el rendimiento en teléfono físico; los siguientes assets requieren comprobación específica. F2 permanece experimental: cinco sesiones y veinte planos siguen pendientes, sin bloquear el avance.
 
-## F3 — piloto externo texturizado en revisión (01-10-2026)
+## Antecedente F3 — piloto externo texturizado en revisión antes de #17 (01-10-2026)
 
 Rama `feat/f3-textured-external-catalog`, basada en master `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, posterior a las PR #13/#14. Integra SONGESAND 90366839 y STOCKHOLM 2025 puf 80586139 con procedencia fijada, autorización de Juanma para Git/preview, medidas oficiales aportadas externamente y soporte acotado de JPEG embebido. El sofá 90591748 se excluye por superar la tolerancia de 20 mm. El schema sigue en 1.3.0; no se modifican Asset Lab ni decisiones comerciales.
 
-[Informe y resultados actuales](technical/F3-initial.md#piloto-externo-texturizado-01-10-2026). La entrega requiere revisión humana y merge: **F3 permanece abierta**. La preview del nuevo SHA debe verificarse por separado de las capturas locales; la preview de PR #12 no acredita este piloto. SwiftShader no valida rendimiento en teléfono físico. F2 mantiene cinco sesiones y veinte planos pendientes.
+[Informe de aquella revisión](technical/F3-initial.md#piloto-externo-texturizado-01-10-2026). La revisión y el merge se completaron después en #17; véase su cierre abajo. La preview de PR #12 no acreditaba este piloto. SwiftShader no valida rendimiento en teléfono físico. F2 mantiene cinco sesiones y veinte planos pendientes.
 
-### F3 — búsqueda local de muebles en revisión (01-10-2026)
+### Antecedente F3 — búsqueda local de muebles antes del merge #17 (01-10-2026)
 
 Sobre la misma rama `feat/f3-textured-external-catalog`: búsqueda por nombre/tipo,
 familias derivadas del catálogo, sinónimos españoles y filtros de estancia/familia.
@@ -156,17 +158,17 @@ Conserva los 60 genéricos y muestra únicamente los tres modelos del catálogo 
 aceptado, con etiquetas y atribución separadas. No cambia dimensiones originales,
 contrato 1.3.0, assets ni decisiones comerciales.
 [Informe de UX y QA](technical/F3-furniture-search.md).
-Pendiente de preview verificable del SHA final, revisión humana y merge; **F3 sigue
-abierta**, sin alterar el orden de fases. Cinco sesiones y veinte planos F2 pendientes.
+La preview, revisión humana y merge de este alcance se completaron después en #17.
+Cinco sesiones y veinte planos F2 continúan pendientes.
 
-### F3 — corrección de catálogo en preview protegida (01-10-2026)
+### Antecedente F3 — corrección de catálogo en preview protegida antes de #17 (01-10-2026)
 
 La revisión humana de PR #17 detectó ausencia de los IKEA y aviso genérico de catálogo.
 Se corrige en la misma rama la omisión de sesión en fetch de manifests/permisos/GLB:
 credenciales solo del mismo origen validado, manteniendo guards F3. Se añade motivo
 concreto de red/HTTP/JSON/adaptación/exclusión y regresión en navegador con protección
 de sesión, desktop y móvil. [Diagnóstico y QA](technical/F3-preview-catalog-fix.md).
-Requiere nueva preview del HEAD y revisión de Juanma; **F3 permanece abierta**.
+Aquella nueva preview y revisión se completaron antes del merge #17.
 No cambia schema, assets, decisiones de producto ni las cinco sesiones/veinte planos F2 pendientes.
 
 
@@ -198,4 +200,4 @@ Entrega acotada: 50 mapas CC0-1.0 (diez en cada una de cinco familias), búsqued
 
 Vercel informó READY para el SHA revisado; la preview estuvo disponible en [esta URL](https://floorplan-3d-git-feat-surface-ddcf54-juanma-espinosas-projects.vercel.app/). Codex reportó pruebas locales y renderizado de los mapas en Chromium/SwiftShader; la suite completa tuvo fallos/timeout iniciales y no se repitió completa tras los ajustes. No se declara rendimiento validado en teléfono físico.
 
-F3 incorpora ahora el piloto de mobiliario externo y esta biblioteca acotada de superficies; no se afirma completado un catálogo comercial ilimitado, un pipeline universal de conversión ni perfiles PBR completos. La siguiente propuesta técnica del Roadmap 2 es evaluar un pipeline controlado para modelos, con perfiles y límites por recurso. F2 continúa experimental: cinco sesiones y veinte planos con referencias siguen pendientes, sin bloquear el desarrollo.
+**Estado en el cierre de #19:** F3 incorporaba el piloto de mobiliario externo y esta biblioteca acotada. La propuesta siguiente era evaluar un pipeline controlado para modelos; #20 integró después su primera versión limitada para doce GLB. No se afirma completado un catálogo comercial ilimitado, un pipeline universal ni perfiles PBR completos. F2 continúa experimental: cinco sesiones y veinte planos con referencias siguen pendientes, sin bloquear el desarrollo.

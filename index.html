@@ -77,6 +77,10 @@ footer{grid-column:1/-1;display:flex;gap:18px;align-items:center;padding:0 14px;
   border-top:1px solid var(--line);color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
 #tip{overflow:hidden;text-overflow:ellipsis}
 footer b{color:var(--ink);font-weight:500}
+footer .legal-link{color:var(--ink);font:inherit;text-decoration:underline;text-underline-offset:2px;flex-shrink:0}
+#legalDialog{width:min(620px,calc(100vw - 24px));padding:clamp(16px,4vw,28px);line-height:1.55;color:var(--ink)}
+#legalDialog h2{margin:0 0 12px}#legalDialog p{margin:0 0 14px;overflow-wrap:anywhere}
+#legalDialog a{color:inherit}#legalDialog .actions{justify-content:flex-end}
 #panel section{padding:12px 16px;border-bottom:1px solid var(--line)}
 #panel h3{margin:0 0 8px;font-size:13px}
 #panel h3 small{color:var(--muted);font-weight:400;margin-left:6px}
@@ -157,6 +161,7 @@ main.animating #hint3d{opacity:0}
 .menu-pop{position:absolute;right:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:150px;background:#fff;
   border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(40,30,20,.14);z-index:20;animation:fadeIn .2s ease}
 .menu-pop .btn{text-align:left}
+@media (min-width:1101px) and (max-width:1500px){.menu-pop{left:0;right:auto}}
 .range span{font-variant-numeric:tabular-nums;color:var(--ink)}
 /* ---------- 选中后的浮动工具条 ---------- */
 #fab{position:absolute;left:50%;bottom:16px;transform:translate(-50%,12px);display:flex;align-items:center;gap:4px;padding:5px;
@@ -379,9 +384,18 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     <span id="hover" class="only2d"></span>
     <span class="spacer"></span>
     <span id="traceStatus" role="status" aria-live="polite"></span><span id="tip"></span>
+    <a class="legal-link" id="legalLink" href="#legal-y-uso" data-en="Legal & use" data-es="Legal y uso">法律与使用</a>
   </footer>
 </div>
 <div id="toast" role="status"></div>
+<dialog id="legalDialog" aria-labelledby="legalTitle">
+  <h2 id="legalTitle" data-en="Legal & use" data-es="Legal y uso">法律与使用</h2>
+  <p><strong data-en="Platform authorship" data-es="Autoría de la plataforma">平台作者</strong><br>Juan Manuel Espinosa Galant · Rubik Sota</p>
+  <p><strong data-en="Contact" data-es="Contacto">联系方式</strong><br><a href="tel:+34629554870">629 554 870</a></p>
+  <p data-en="Sale, resale or distribution of this platform is not authorized without the owner's express permission." data-es="No se autoriza la venta, reventa ni distribución de la plataforma sin autorización expresa del titular.">未经权利人明确授权，不得销售、转售或分发本平台。</p>
+  <p data-en="The platform's authorship is separate from third-party resources. Models, textures and other third-party assets retain their own licenses, permissions and attributions; see the credits and resource documentation." data-es="La autoría de la plataforma es distinta de los derechos sobre recursos de terceros. Los modelos, texturas y otros activos de terceros conservan sus licencias, permisos y atribuciones; consulta los créditos y la documentación de recursos.">平台作者身份与第三方资源的权利分开。模型、纹理等第三方资源保留各自的许可、授权和署名；请查看资源说明。</p>
+  <div class="actions"><button type="button" class="btn" id="legalClose" data-en="Close" data-es="Cerrar">关闭</button></div>
+</dialog>
 <input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
 <input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
@@ -1773,6 +1787,12 @@ function setLang(l){
   window.View3D?.relang();
 }
 $('#langBtn').onclick = () => setLang(({es:'en',en:'zh',zh:'es'})[LANG]);
+const legalDialog = $('#legalDialog');
+$('#legalLink').onclick = e => { e.preventDefault(); location.hash = 'legal-y-uso'; legalDialog.showModal(); };
+$('#legalClose').onclick = () => legalDialog.close();
+function openLegalHash(){ if(location.hash === '#legal-y-uso' && !legalDialog.open) legalDialog.showModal(); }
+window.addEventListener('hashchange',openLegalHash);
+openLegalHash();
 
 applyStaticLang(); syncFullscreen();
 buildDefs(); buildLib(); renderOpenings(); renderDims();
