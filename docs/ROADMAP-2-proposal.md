@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**  
-> Preparada el 01-10-2026 sobre \`master\` en \`6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f\`. No sustituye \`docs/ROADMAP.md\`, no cierra F3 ni cambia el contrato vigente. F3 sigue siendo la fase activa hasta terminar y aprobar su entrega de catálogo externo.
+> Preparada el 01-10-2026 sobre `master` en `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`. No sustituye `docs/ROADMAP.md`, no cierra F3 ni cambia el contrato vigente. F3 sigue siendo la fase activa hasta terminar y aprobar su entrega de catálogo externo.
 
 ## 1. Propósito y principios
 
@@ -9,7 +9,7 @@ Este documento ordena las mejoras que pueden convertir Rubik Sota en un flujo co
 
 Principios para decidir:
 
-1. **Una fuente de verdad:** \`FloorPlanProjectV1\` mantiene geometría y unidades en milímetros. Imágenes, escenas Blender/Unreal, productos CRM y vistas panorámicas son derivados con referencias estables.
+1. **Una fuente de verdad:** `FloorPlanProjectV1` mantiene geometría y unidades en milímetros. Imágenes, escenas Blender/Unreal, productos CRM y vistas panorámicas son derivados con referencias estables.
 2. **La geometría debe seguir siendo coherente:** un cambio de ancho/profundidad es una operación sobre muros y relaciones, no solo cambiar un número de etiqueta.
 3. **No abrir formatos sin control:** un adaptador convierte y valida activos al perfil que Rubik soporta. No se confía en una extensión, manifest o nombre de fichero.
 4. **Privacidad por defecto:** la app actual funciona principalmente en navegador y guarda proyectos localmente. Un proveedor cloud o backend es una decisión explícita, con coste, retención y borrado definidos.
@@ -22,7 +22,7 @@ Principios para decidir:
 |---|---|
 | Planos e imágenes | F1b ya importa PNG/JPG/WebP estáticos, calibra con dos puntos y una segunda cota, y permite trazar/editar muros, huecos y habitaciones. No hay que volver a construir ese flujo desde cero. El límite actual documentado es 15 MiB y 8000 px por lado. |
 | Proyectos | F1a/F1b permiten varios proyectos locales, persistencia e intercambio JSON/ZIP. No hay sincronización multi-dispositivo ni servidor de proyecto. |
-| Medidas | \`FloorPlanProjectV1\` usa mm, IDs estables, muros, huecos, polígonos de habitación y objetos con dimensiones. Las habitaciones guardan polígonos explícitos; no son automáticamente una derivación topológica de los muros. Cambiar una dimensión puede afectar varios elementos y requiere una transacción coherente. |
+| Medidas | `FloorPlanProjectV1` usa mm, IDs estables, muros, huecos, polígonos de habitación y objetos con dimensiones. Las habitaciones guardan polígonos explícitos; no son automáticamente una derivación topológica de los muros. Cambiar una dimensión puede afectar varios elementos y requiere una transacción coherente. |
 | F2 | Asistencia local experimental. Cinco sesiones de base, conjunto fijo de veinte planos y umbrales acordados siguen pendientes; no bloquean estas propuestas, pero F2 no debe anunciarse como precisión validada. |
 | F3 | Entrega inicial integrada: catálogo genérico dimensionado, referencia de asset, muestra sintética y fallback. Catálogo externo todavía pendiente. La auditoría histórica encontró muchos GLB con Draco/texturas y extensiones; su inventario debe repetirse desde el estado actual de Asset Lab antes de elegir candidatos. |
 | Render web | Three.js está fijado en el proyecto. El cargador F3 actual impone límites y rechaza texturas/extensiones; esa política es deliberada para estabilidad y seguridad del runtime, no prueba de que los ficheros sean imposibles de convertir. |
@@ -40,7 +40,7 @@ Ordena entregas por combinación de valor visible, esfuerzo y dependencias. Las 
 | 1 | Crear plano y editar dimensiones de estancias | Muy alto: mejora el trabajo central para todos los segmentos | M–L / alta en topología | Mantener imagen/calibración/trazado. MVP en habitaciones ortogonales explícitamente soportadas; no deformar silenciosamente habitaciones irregulares. Requiere definir reglas de adyacencia y huecos. |
 | 2 | Biblioteca visual de materiales de suelo y acabados | Alto y visible | S–M / media | Empezar por presets existentes y muestras visuales locales; medir tamaño y carga móvil. No requiere catálogo externo ni cambiar el schema por anticipado. |
 | 3 | Importador normalizador de modelos GLB de Asset Lab | Alto para ampliar mobiliario real | M / media-alta | Completa el canal F3. Requiere perfil aprobado, herramientas reproducibles, procedencia y pruebas del resultado convertido. No relajar el loader de producción para todos los formatos. |
-| 4 | Adaptador Room Designer → CRM | Alto solo si el segmento comercial lo justifica | M / alta por contratos/identidad | D-01 y contrato de datos. Resolver \`lineItems\`→\`products\`, cantidades, IDs, versiones, reintentos e idempotencia; prototipo con datos sintéticos primero. |
+| 4 | Adaptador Room Designer → CRM | Alto solo si el segmento comercial lo justifica | M / alta por contratos/identidad | D-01 y contrato de datos. Resolver `lineItems`→`products`, cantidades, IDs, versiones, reintentos e idempotencia; prototipo con datos sintéticos primero. |
 | 5 | Exportación determinista Rubik → Blender | Alto para contenido y producción avanzada | M–L / media | Definir ejes, unidades, jerarquía e IDs; probar vivienda asimétrica. Salida portable glTF/GLB como primera prueba, no automatizar aún todo Astra/Seedance. |
 | 6 | Entrada CAD vectorial: DXF piloto, luego decisión DWG | Alto para profesionales; menor para consumidor | L / alta | Elegir entidades, unidades, capas y supuestos. DXF primero con importación local si una biblioteca adecuada supera revisión de licencia. DWG necesita gate de proveedor/convertidor, privacidad y coste; no se reduce a renderizar una imagen. |
 | 7 | Presentación conectada con panoramas/hotspots Immersphere | Alto para promoción inmobiliaria | L / alta | Depende de proyecto/objeto IDs y exportación espacial. Definir relación panorama-cámara-transformación-objeto; primer intercambio estático y reversible. No llamar “hotspot anclado” a una coordenada de pantalla. |
@@ -98,8 +98,8 @@ Three.js documenta soporte para Draco, meshopt, KTX2/BasisU y extensiones materi
 
 | Conector | Transformación a validar | Prueba de ida y vuelta / fallo |
 |---|---|---|
-| Asset Lab → Rubik | manifest y GLB → asset normalizado y \`assetRef\` | mismo hash de entrada; dimensiones con fuente; ID estable; texturas/extensiones esperadas; fallback y rechazo explicable. |
-| Room Designer → CRM | \`lineItems\` → \`products\`/adaptador de CRM | cantidades, SKU/identidad, moneda si aplica, reimportación repetida sin duplicados, proyecto asociado y errores parciales recuperables. Datos ficticios; no exportar PII en telemetría. |
+| Asset Lab → Rubik | manifest y GLB → asset normalizado y `assetRef` | mismo hash de entrada; dimensiones con fuente; ID estable; texturas/extensiones esperadas; fallback y rechazo explicable. |
+| Room Designer → CRM | `lineItems` → `products`/adaptador de CRM | cantidades, SKU/identidad, moneda si aplica, reimportación repetida sin duplicados, proyecto asociado y errores parciales recuperables. Datos ficticios; no exportar PII en telemetría. |
 | Rubik → Blender → Unreal | proyecto mm → escena 3D y glTF/GLB | escala, orientación, muros/huecos, objetos, IDs/nombres y materiales; habitación no simétrica que revele rotaciones/ejes. Capturar versión de Blender/Unreal y ajustes de importación. |
 | Rubik/Immersphere | IDs y coordenadas 3D ↔ panorama/cámara/hotspot | navegación de un punto a otro y hotspot que sigue el objeto; al mover objeto/cámara, vínculo correcto o error visible. El % de pantalla no es posición 3D. |
 | DXF/DWG → Rubik | entidades vectoriales → geometría candidata | unidades, origen, capas, arcos/líneas, bloques y cotas contrastados; vista previa antes de importar; elementos no interpretados quedan disponibles, no desaparecen. |
@@ -146,7 +146,7 @@ No hace falta resolver todas hoy para cerrar F3 o comenzar el diseño técnico d
 - Ecommerce, precios de IKEA, compras, disponibilidad de stock, CRM multi-tenant o sincronización cloud sin segmento, fuente y decisión de privacidad.
 - Hotspots espaciales sin calibración cámara/panorama.
 - Certificación de cumplimiento normativo.
-- Cambiar \`FloorPlanProjectV1\` anticipadamente. Cada cambio de contrato requiere necesidad de interoperabilidad reproducida y compatibilidad de migración.
+- Cambiar `FloorPlanProjectV1` anticipadamente. Cada cambio de contrato requiere necesidad de interoperabilidad reproducida y compatibilidad de migración.
 - Fechas o puntuaciones de mercado/esfuerzo sin evidencia.
 
 ## 10. Definición de terminado por entrega
@@ -179,5 +179,5 @@ Consulta: **01-10-2026**. Las fuentes verifican capacidades del formato/platafor
 
 ## 12. Historial y estado
 
-- 01-10-2026: primera propuesta; contrastada con \`README.md\`, \`docs/ROADMAP.md\`, \`docs/DEVELOPMENT-WORKFLOW.md\`, contrato/schema F1, documentos F1–F3 y auditoría del ecosistema. Sin cambios al producto, schema ni fases canónicas.
+- 01-10-2026: primera propuesta; contrastada con `README.md`, `docs/ROADMAP.md`, `docs/DEVELOPMENT-WORKFLOW.md`, contrato/schema F1, documentos F1–F3 y auditoría del ecosistema. Sin cambios al producto, schema ni fases canónicas.
 - Estado de esta página: **lista para revisión humana; no aprobada ni fusionada**.
