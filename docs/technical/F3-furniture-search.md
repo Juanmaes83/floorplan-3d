@@ -224,3 +224,10 @@ Cero errores de página en esos recorridos; peticiones GET sin cuerpo ni consult
 Se preservan las capturas históricas del piloto previo en f3-textures.
 La preview exacta del HEAD publicado sigue siendo una comprobación independiente
 y pendiente; no se declara terminada la entrega ni cerrada F3.
+
+
+## Cierre tras revisión humana — PR #17 (01-10-2026)
+
+La búsqueda de la cómoda SONGESAND y el puf STOCKHOLM se revisó en la preview corregida y Juanma aprobó la entrega. PR #17 se fusionó por squash: SHA revisado `772e24c26d10cec4349f28558ffc87ee18748317`; merge en `master` `24534b5544ffa37840bf4fe77c4ad12afda0c38b`. El deployment del SHA exacto figura READY en https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/; está protegido por Vercel Authentication.
+
+El problema observado en la primera revisión era la sesión omitida al cargar manifests y GLB. La corrección y el diagnóstico están en [F3-preview-catalog-fix.md](F3-preview-catalog-fix.md). El buscador y los dos modelos quedan integrados en el piloto F3. El estado «preview pendiente» de las secciones previas refleja el momento de su ejecución; este cierre registra la resolución posterior.
