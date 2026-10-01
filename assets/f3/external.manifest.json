@@ -30,6 +30,210 @@
       },
       "qaStatus": "approved",
       "permissionDocumentRef": "assets/f3/ASSET-LAB-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-solvinden-solar-floor-lamp-outdoor-beige",
+      "brand": "IKEA",
+      "productName": "IKEA SOLVINDEN · lámpara de pie solar",
+      "category": "floorlamp",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 258,
+        "height": 1200,
+        "depth": 250,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo",
+      "brand": "IKEA",
+      "productName": "IKEA BRIMNES · cama con almacenaje",
+      "category": "bed",
+      "room": 0,
+      "modelPath": "assets/f3/ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1506,
+        "height": 470,
+        "depth": 2054,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-malm-comoda-6-cajones-blanco-demo",
+      "brand": "IKEA",
+      "productName": "IKEA MALM · cómoda de seis cajones",
+      "category": "dresser",
+      "room": 0,
+      "modelPath": "assets/f3/ikea-malm-comoda-6-cajones-blanco-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1603,
+        "height": 780,
+        "depth": 483,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-lisabo-mesa-chapa-fresno-demo",
+      "brand": "IKEA",
+      "productName": "IKEA LISABO · mesa de fresno",
+      "category": "table",
+      "room": 2,
+      "modelPath": "assets/f3/ikea-lisabo-mesa-chapa-fresno-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1400,
+        "height": 740,
+        "depth": 780,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-lisabo-silla-negrotallmyra-negro-gris-demo",
+      "brand": "IKEA",
+      "productName": "IKEA LISABO · silla negro y gris",
+      "category": "chair",
+      "room": 2,
+      "modelPath": "assets/f3/ikea-lisabo-silla-negrotallmyra-negro-gris-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 455,
+        "height": 804,
+        "depth": 521,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-nammaro-garden-table-light-brown",
+      "brand": "IKEA",
+      "productName": "IKEA NÄMMARÖ · mesa de jardín",
+      "category": "table",
+      "room": 5,
+      "modelPath": "assets/f3/ikea-nammaro-garden-table-light-brown.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 750,
+        "height": 750,
+        "depth": 630,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-frotorp-coffee-table-white-chrome-white-glass-demo",
+      "brand": "IKEA",
+      "productName": "IKEA FRÖTORP · mesa de centro",
+      "category": "coffeetable",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-frotorp-coffee-table-white-chrome-white-glass-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 883,
+        "height": 349,
+        "depth": 883,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-morum-indoor-outdoor-rug-beige",
+      "brand": "IKEA",
+      "productName": "IKEA MORUM · alfombra beige",
+      "category": "rug",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-morum-indoor-outdoor-rug-beige.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1594,
+        "height": 16,
+        "depth": 2319,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-hemnes-tv-unit-white-light-brown-stain-demo",
+      "brand": "IKEA",
+      "productName": "IKEA HEMNES · mueble de TV",
+      "category": "tvstand",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-hemnes-tv-unit-white-light-brown-stain-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1477,
+        "height": 570,
+        "depth": 488,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-lauters-floor-lamp-brown-ash-demo",
+      "brand": "IKEA",
+      "productName": "IKEA LAUTERS · lámpara de pie",
+      "category": "floorlamp",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-lauters-floor-lamp-brown-ash-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 719,
+        "height": 1435,
+        "depth": 553,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-vasman-armchair-outdoor-brown",
+      "brand": "IKEA",
+      "productName": "IKEA VÄSMAN · sillón exterior",
+      "category": "armchair",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-vasman-armchair-outdoor-brown.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 571,
+        "height": 920,
+        "depth": 637,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey",
+      "brand": "IKEA",
+      "productName": "IKEA NÄMMARÖ · sofá exterior de dos plazas",
+      "category": "sofa",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1270,
+        "height": 798,
+        "depth": 743,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
     }
   ],
   "evidence": {
@@ -111,6 +315,630 @@
         "outputSha256": "3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727",
         "originalPath": "assets/f3/original-stockholm-pouf-80586139.glb",
         "geometryChanged": false
+      }
+    },
+    "ikea-solvinden-solar-floor-lamp-outdoor-beige": {
+      "modelSha256": "1012194c96e7e116650a4a7936bc63bfd86a59c8026b3ee3bba32c3229397c14",
+      "bytes": 195384,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/lighting/solvinden-solar-floor-lamp-outdoor-beige.glb",
+        "sha256": "fd7be7eae99afc3a787482afa17244fa4db27e71e2a8d261d3a7726494160411",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA SOLVINDEN · lámpara de pie solar; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "fd7be7eae99afc3a787482afa17244fa4db27e71e2a8d261d3a7726494160411",
+        "outputSha256": "1012194c96e7e116650a4a7936bc63bfd86a59c8026b3ee3bba32c3229397c14",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 258,
+          "height": 1200,
+          "depth": 250
+        }
+      }
+    },
+    "ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo": {
+      "modelSha256": "2670c91b7d239e40bb631e51e8f5b82d67b85215c1031f1ab5081468a45ad928",
+      "bytes": 3301296,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/bed/brimnes-estructura-de-cama-con-almacenaje-blancoluroy.glb",
+        "sha256": "4aa5610bb99bff386190dc136eb31f50df8c3f0766b7f6534a762a2da8646669",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA BRIMNES · cama con almacenaje; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "4aa5610bb99bff386190dc136eb31f50df8c3f0766b7f6534a762a2da8646669",
+        "outputSha256": "2670c91b7d239e40bb631e51e8f5b82d67b85215c1031f1ab5081468a45ad928",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1506,
+          "height": 470,
+          "depth": 2054
+        }
+      }
+    },
+    "ikea-malm-comoda-6-cajones-blanco-demo": {
+      "modelSha256": "c4e5f7af6b452cb97adad5dfb409d1f23654370010228ae8b09696cab2d82c31",
+      "bytes": 290184,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/dresser/malm-comoda-6-cajones-blanco.glb",
+        "sha256": "7d99ddb4c4a65f8ebd73be26dd3523ea0876d2d96050d5a2c830eae06ab56491",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA MALM · cómoda de seis cajones; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "7d99ddb4c4a65f8ebd73be26dd3523ea0876d2d96050d5a2c830eae06ab56491",
+        "outputSha256": "c4e5f7af6b452cb97adad5dfb409d1f23654370010228ae8b09696cab2d82c31",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1603,
+          "height": 780,
+          "depth": 483
+        }
+      }
+    },
+    "ikea-lisabo-mesa-chapa-fresno-demo": {
+      "modelSha256": "36f27968b7b4e34ccba96fe2424aeef7119c4dd88512a0dab444bf8b5020853f",
+      "bytes": 261580,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/table/lisabo-mesa-chapa-fresno.glb",
+        "sha256": "d5142ade612d60b3930115e28d57ae4dfb8b5164954fb1568a9ae5b714ae21f6",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA LISABO · mesa de fresno; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "d5142ade612d60b3930115e28d57ae4dfb8b5164954fb1568a9ae5b714ae21f6",
+        "outputSha256": "36f27968b7b4e34ccba96fe2424aeef7119c4dd88512a0dab444bf8b5020853f",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1400,
+          "height": 740,
+          "depth": 780
+        }
+      }
+    },
+    "ikea-lisabo-silla-negrotallmyra-negro-gris-demo": {
+      "modelSha256": "016b277d201ecde0a3b82cef2a28dd3975b0fc50ebb507b5d78720c4f79aad8d",
+      "bytes": 2054416,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/chair/lisabo-silla-negrotallmyra-negro-gris.glb",
+        "sha256": "564205ff65b5625edede81445ed911594ea7bd871ee19cb1f3abfc0d03135e90",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA LISABO · silla negro y gris; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "564205ff65b5625edede81445ed911594ea7bd871ee19cb1f3abfc0d03135e90",
+        "outputSha256": "016b277d201ecde0a3b82cef2a28dd3975b0fc50ebb507b5d78720c4f79aad8d",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 455,
+          "height": 804,
+          "depth": 521
+        }
+      }
+    },
+    "ikea-nammaro-garden-table-light-brown": {
+      "modelSha256": "f99c03d0e58f721df58d2d347f633369188dbf519e656eafd569496e200312aa",
+      "bytes": 1034908,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/tables/nammaro-garden-table-light-brown.glb",
+        "sha256": "5ab7c7e20f99fe76b13a4cc9f2a4dba6323ca0c1d87d9532eb80d1cecec0070b",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA NÄMMARÖ · mesa de jardín; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "5ab7c7e20f99fe76b13a4cc9f2a4dba6323ca0c1d87d9532eb80d1cecec0070b",
+        "outputSha256": "f99c03d0e58f721df58d2d347f633369188dbf519e656eafd569496e200312aa",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 750,
+          "height": 750,
+          "depth": 630
+        }
+      }
+    },
+    "ikea-frotorp-coffee-table-white-chrome-white-glass-demo": {
+      "modelSha256": "6b0cddebac3d3243281bb6dde88b7c5f79ec32cd0a5a7a1e68efcf1d585c6f0b",
+      "bytes": 943932,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/coffee-table/frotorp-mesa-de-centro-blanco-cromadoblanco-vidrio.glb",
+        "sha256": "102063ce485aaae9c75d65dc21c6584768f09fabc5b987819cd7e8dc68cce32d",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA FRÖTORP · mesa de centro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "102063ce485aaae9c75d65dc21c6584768f09fabc5b987819cd7e8dc68cce32d",
+        "outputSha256": "6b0cddebac3d3243281bb6dde88b7c5f79ec32cd0a5a7a1e68efcf1d585c6f0b",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 883,
+          "height": 349,
+          "depth": 883
+        }
+      }
+    },
+    "ikea-morum-indoor-outdoor-rug-beige": {
+      "modelSha256": "bc72dbf9b10be487e5bbb8a020eab814828f5119e918f9d7d50af942cc1ee558",
+      "bytes": 403896,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/rugs/morum-indoor-outdoor-rug-beige.glb",
+        "sha256": "db17959485c5559bf8f5048e615418e6720daafbbff80e318e86c119276c2afb",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA MORUM · alfombra beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "db17959485c5559bf8f5048e615418e6720daafbbff80e318e86c119276c2afb",
+        "outputSha256": "bc72dbf9b10be487e5bbb8a020eab814828f5119e918f9d7d50af942cc1ee558",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1594,
+          "height": 16,
+          "depth": 2319
+        }
+      }
+    },
+    "ikea-hemnes-tv-unit-white-light-brown-stain-demo": {
+      "modelSha256": "9bcf19d78c2954d215718785bd2d9932b826fa0aa1430722f3f61f58942e94fe",
+      "bytes": 873520,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/tv-unit/hemnes-mueble-tv-tinte-blancomarron-claro.glb",
+        "sha256": "23b9bf671b18666df2cb04aba8bce5e7769077d0fe1a283e28150483204ca80d",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA HEMNES · mueble de TV; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "23b9bf671b18666df2cb04aba8bce5e7769077d0fe1a283e28150483204ca80d",
+        "outputSha256": "9bcf19d78c2954d215718785bd2d9932b826fa0aa1430722f3f61f58942e94fe",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1477,
+          "height": 570,
+          "depth": 488
+        }
+      }
+    },
+    "ikea-lauters-floor-lamp-brown-ash-demo": {
+      "modelSha256": "e406b7d2f41430f102dddcda5ddaf7786542572056d4ef631acb6e92b58349ca",
+      "bytes": 549712,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/lighting/lauters-lampara-de-pie-marron-fresno.glb",
+        "sha256": "aa556cdf8ec6155942a3dd1dee23411d13fa9ca55b731f1afd45b89f2e7e1de3",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA LAUTERS · lámpara de pie; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "aa556cdf8ec6155942a3dd1dee23411d13fa9ca55b731f1afd45b89f2e7e1de3",
+        "outputSha256": "e406b7d2f41430f102dddcda5ddaf7786542572056d4ef631acb6e92b58349ca",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 719,
+          "height": 1435,
+          "depth": 553
+        }
+      }
+    },
+    "ikea-vasman-armchair-outdoor-brown": {
+      "modelSha256": "9d19f3c7c1e1be0d845aef3843d471055db4637bf80b5d68fb1f9474866f0ce7",
+      "bytes": 3565448,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/chairs/vasman-armchair-outdoor-brown.glb",
+        "sha256": "5ff3354496f91625dfa3aa9b61a4f40fcb153c8c651a903ce84632611079af35",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA VÄSMAN · sillón exterior; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "5ff3354496f91625dfa3aa9b61a4f40fcb153c8c651a903ce84632611079af35",
+        "outputSha256": "9d19f3c7c1e1be0d845aef3843d471055db4637bf80b5d68fb1f9474866f0ce7",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 571,
+          "height": 920,
+          "depth": 637
+        }
+      }
+    },
+    "ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey": {
+      "modelSha256": "7114e080f5812e35b3894eca1efb0c0bb42d23113d2fffd15bb27c00d4eaa8e8",
+      "bytes": 780996,
+      "permissionSha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/lounge/nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+        "sha256": "f284e9ba36ec44880d6c7b82bf4370e5228748c1d32f1f0a06414e082c3446fb",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA NÄMMARÖ · sofá exterior de dos plazas; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "f284e9ba36ec44880d6c7b82bf4370e5228748c1d32f1f0a06414e082c3446fb",
+        "outputSha256": "7114e080f5812e35b3894eca1efb0c0bb42d23113d2fffd15bb27c00d4eaa8e8",
+        "steps": [
+          "copy: decode Draco",
+          "jpeg: convert WebP then PNG to JPEG quality 82",
+          "resize: maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1270,
+          "height": 798,
+          "depth": 743
+        }
       }
     }
   }

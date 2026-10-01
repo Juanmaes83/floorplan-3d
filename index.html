@@ -1280,7 +1280,7 @@ function bindFurnPanel(f){
   num('#fW', (g,v) => g.w = Math.max(50, Math.round(v)));
   num('#fD', (g,v) => g.d = Math.max(50, Math.round(v)));
   $('#fH').onchange=e=>{const value=e.target.value;if(value==='')upd(g=>delete g.size.heightMm);else if(Number.isFinite(Number(value))&&Number(value)>=1&&Number(value)<=10000)upd(g=>g.size.heightMm=Math.round(Number(value)));else renderPanel();};
-  $('#fAsset').onchange=e=>{const entry=window.FloorPlanAssetUI?.entries.find(a=>a.id===e.target.value);upd(g=>{if(entry){g.assetRef=FloorPlanAssets.associate(g,entry).assetRef;project.schemaVersion='1.3.0';}else delete g.assetRef;});};
+  $('#fAsset').onchange=e=>{const entry=window.FloorPlanAssetUI?.entries.find(a=>a.id===e.target.value);upd(g=>{if(entry)g.assetRef=FloorPlanAssets.associate(g,entry).assetRef;else delete g.assetRef;});};
   window.FloorPlanAssetUI?.update();
   num('#fX', (g,v) => g.cx = v); num('#fY', (g,v) => g.cy = v); num('#fR', (g,v) => g.rot = norm(v));
   $('#fC').onchange = e => upd(g => g.color = e.target.value);
