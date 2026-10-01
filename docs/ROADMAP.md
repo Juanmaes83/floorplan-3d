@@ -150,3 +150,13 @@ contrato 1.3.0, assets ni decisiones comerciales.
 [Informe de UX y QA](technical/F3-furniture-search.md).
 Pendiente de preview verificable del SHA final, revisión humana y merge; **F3 sigue
 abierta**, sin alterar el orden de fases. Cinco sesiones y veinte planos F2 pendientes.
+
+### F3 — corrección de catálogo en preview protegida (01-10-2026)
+
+La revisión humana de PR #17 detectó ausencia de los IKEA y aviso genérico de catálogo.
+Se corrige en la misma rama la omisión de sesión en fetch de manifests/permisos/GLB:
+credenciales solo del mismo origen validado, manteniendo guards F3. Se añade motivo
+concreto de red/HTTP/JSON/adaptación/exclusión y regresión en navegador con protección
+de sesión, desktop y móvil. [Diagnóstico y QA](technical/F3-preview-catalog-fix.md).
+Requiere nueva preview del HEAD y revisión de Juanma; **F3 permanece abierta**.
+No cambia schema, assets, decisiones de producto ni las cinco sesiones/veinte planos F2 pendientes.
