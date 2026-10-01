@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Reconciliada el 01-10-2026 contra `master` remoto `29250810a8341b3b296539118b54799f1e31a77b`, tras PR #20. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
+> Reconciliada de nuevo el 02-10-2026 contra `origin/master` `15004221da8a6f2e5c22fe45392680a934b6d277`, tras PR #20. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
 
 ## 1. Propósito y principios
 
@@ -38,7 +38,7 @@ El segmento comercial sigue abierto y completar software no aprueba todo F0.
 
 ## 3. Secuencia propuesta
 
-Los órdenes 0/1 son antecedentes completados; 2–8 son propuestas futuras, **no números de fase aprobados**. Ordena las candidatas por combinación de valor visible, esfuerzo y dependencias. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
+Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no números de fase aprobados**. El orden posterior a #20 es orientativo y depende de decisiones aún abiertas. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
 
 | Orden | Entrega propuesta | Impacto potencial | Esfuerzo / incertidumbre | Dependencia y decisión |
 |---|---|---|---|---|
@@ -52,17 +52,19 @@ Los órdenes 0/1 son antecedentes completados; 2–8 son propuestas futuras, **n
 | 7 | Presentación conectada con panoramas/hotspots Immersphere | Alto para promoción inmobiliaria | L / alta | Depende de proyecto/objeto IDs y exportación espacial. Definir relación panorama-cámara-transformación-objeto; primer intercambio estático y reversible. No llamar “hotspot anclado” a una coordenada de pantalla. |
 | 8 | Perfil orientativo de reglas constructivas por jurisdicción | Potencialmente alto para profesionales, riesgo alto | L / muy alta | Solo tras escoger país/uso y asesoría competente. Empezar con reglas estructuradas, versionadas y citadas; nunca prometer certificación o cumplimiento automático. |
 
-### 3.1 Orden recomendado después de #18
+### 3.1 Secuencia propuesta después de #20
 
 - **Conservar lo integrado:** #17 y #18 aprobadas; no volver a implementar ni
   reabrir esas entregas. F2 sigue experimental: cinco sesiones, veinte planos y
   umbrales pendientes sin bloquear nuevas implementaciones autorizadas.
 - **Organización reconciliada:** F0 #3 y propuesta #15 fusionadas en master; no aprobación global de fases o decisiones abiertas.
-- **Suelos/acabados:** biblioteca visual acotada de 50 mapas implementada, revisada y fusionada por PR #19; no equivale a aprobar una biblioteca general, calendario ni las siguientes propuestas. Impacto comercial y rendimiento en móvil físico no medidos.
+- **Suelos/acabados:** biblioteca visual acotada de 50 mapas implementada, revisada y fusionada por PR #19; no equivale a aprobar PBR general, calendario ni las siguientes propuestas.
+- **Modelos:** #20 integró un pipeline reproducible y acotado para doce GLB normalizados; no hay sincronización automática con Asset Lab ni admisión universal. La generalización de perfiles, extensiones y materiales PBR necesita propuesta y pruebas propias.
+- **Pendientes de validación separados:** contrastar escala física de los modelos que lo necesiten; medir rendimiento en teléfono físico; completar las cinco sesiones, veinte planos y umbrales de evaluación empírica F2. Ninguno bloquea esta entrega legal/documental.
 - **Investigar D-01:** observar tareas de cliente, agente, interiorista/reforma;
   elegir un segmento o mantenerlo explícitamente abierto, sin inferirlo de CRM.
-- **Después, pipeline controlado de modelos/texturas**, con versiones/permisos,
-  dimensiones, perfil probado y comparación antes/después; no loader universal.
+- **Después, estudiar la ampliación del pipeline ya integrado**, con nuevos perfiles, versiones/permisos,
+  dimensiones contrastadas y comparación antes/después por recurso; no loader universal.
 - **CRM, Blender/Unreal, CAD e Immersphere** según segmento y gates propios:
   contratos, identidad, unidades, ida/vuelta, privacidad y coste. Son conectores
   diferentes y no se afirman implementados por enlazar repos o formatos.
@@ -106,7 +108,7 @@ otra implementación; no justifican cambiar FloorPlanProjectV1 anticipadamente.
 
 ### 4.2 Conectores de modelos y texturas
 
-**Propuesta técnica de pipeline/conector, aún no implementada de forma general:** el objetivo es un perfil controlado, no “que ningún asset sea rechazado”. Conviene separar:
+**Generalización propuesta del pipeline/conector:** #20 ya implementó un perfil controlado y reproducible para doce modelos. Los pasos siguientes describen ampliaciones por aprobar y probar; el objetivo no es “que ningún asset sea rechazado”. Conviene separar:
 
 1. **Adaptador de entrada**: lee el origen y produce un paquete Rubik aprobado, registrando SHA-256, fuente, versión, permiso, medidas declaradas y medibles, herramientas y transformaciones.
 2. **Normalizador/validador fuera del runtime**: valida GLB/glTF, recursos embebidos, dimensiones, materiales, malla y límites; decodifica o convierte únicamente extensiones elegidas y probadas.
@@ -119,11 +121,9 @@ Three.js documenta soporte para Draco, meshopt, KTX2/BasisU y extensiones materi
 
 ### 4.3 Materiales con presupuesto visual y móvil
 
-**Próxima candidata propuesta, pendiente de aprobación; no iniciada.** Empezar
-por nivel 1 de suelos/acabados y acordar exclusiones. Nivel 2/PBR es posterior,
-no se incorpora automáticamente al mismo alcance.
+**Nivel 1 acotado integrado por #19; ampliaciones pendientes de decisión.** La biblioteca de 50 albedos locales para suelos y paredes ya funciona. Nivel 2/PBR es posterior y no se incorpora automáticamente al mismo alcance.
 
-- **Nivel 1:** biblioteca de materiales de suelo/acabados basada en los presets existentes: nombre, muestra, color/mapa, categoría y licencia/origen. Separar muestras de catálogo de una textura de alta resolución.
+- **Nivel 1 integrado:** biblioteca local CC0-1.0 de 50 mapas en cinco familias, con nombre, muestra, mapa, categoría y procedencia; miniatura separada del mapa de uso 3D. Nuevos materiales requieren revisión por recurso.
 - **Nivel 2:** materiales PBR en muebles/GLB importados: base color, roughness, normal/occlusion cuando corresponda, gestión de color y formatos de textura comprimidos si el dispositivo lo permite.
 - Cada asset declara presupuesto de descarga, dimensiones de textura, memoria estimada y alternativa de menor calidad. Cargar bajo demanda, liberar texturas al cambiar de escena y mantener fallback.
 - La métrica de aceptación debe medir bytes descargados, tiempo de disponibilidad, memoria aproximada y estabilidad en el dispositivo objetivo; no fijar números de producto sin baseline.
@@ -163,7 +163,7 @@ Si se justifica, empezar por verificaciones geométricas limitadas y explicables
 Estas decisiones siguen abiertas hasta aprobarlas expresamente:
 
 1. **Usuario/segmento inicial (D-01):** consumidor, inmobiliaria, interiorismo/decoración o reformas.
-2. **Próxima candidata y futuras ampliaciones:** aprobar el alcance de suelos/acabados; decidir si más adelante se amplía la geometría más allá de #18. El alcance rectangular integrado ya está aprobado, no vuelve a plantearse como pendiente.
+2. **Futuras ampliaciones:** decidir si se amplían superficies/PBR más allá de #19 y geometría más allá de #18. Los alcances acotados integrados no vuelven a plantearse como pendientes.
 3. **Presupuesto móvil objetivo:** dispositivos y mediciones (descarga, memoria, latencia); obtener baseline antes de fijar límites.
 4. **Catálogo futuro:** perfil de conversión, nuevos candidatos/usos, marca/atribución y dimensiones verificables. La [confirmación del propietario](../assets/f3/ASSET-LAB-PROVENANCE.txt) cubre el piloto incorporado/Git/preview; no licencia universal ni partnership IKEA. F1a tiene [confirmación acotada de código](technical/F1a.md), no LICENSE inventado.
 5. **CRM:** cuándo se selecciona como prioridad y cuál es el contrato canónico entre Room Designer y CRM.
@@ -242,12 +242,12 @@ revalidaron y deben consultarse antes de diseñar cada integración.
 | https://www.iccsafe.org/products-and-services/i-codes/2018-i-codes/irc/ | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
 | https://www.iccsafe.org/products-and-services/i-codes/ibc/ | Bloqueado: CONNECT 403; curl 56; origen sin respuesta |
 
-## 12. Historial y estado
+## 12. Historial de la revisión #15 y estado actual
 
 - 01-10-2026: primera propuesta; contrastada con `README.md`, `docs/ROADMAP.md`, `docs/DEVELOPMENT-WORKFLOW.md`, contrato/schema F1, documentos F1–F3 y auditoría del ecosistema. Sin cambios al producto, schema ni fases canónicas.
 - 01-10-2026: reconciliación en la misma rama `docs/roadmap-2-evolution`, cabeza anterior `eebbfd911cd02021a8ad3093ddc6d0548dd3be96`, integrando master `133f6f47fc5f16764cb290f95e49414932b27a09` por merge sin reescritura. #17/#18 cerradas para sus alcances; suelos/acabados próxima candidata sin iniciar. Documento único de #15; roadmap canónico, código, contrato y assets intactos frente a master.
 - F0 se reconcilió antes en la PR #3, rama publicada @ `cb822eb98d8185e2cb4496420c206168927da99d`; checkout limpio antes de pasar a #15. No se copia esa documentación a esta PR ni se fusiona #3.
-- Estado de esta página: **lista para revisión humana; no aprobada ni fusionada**.
+- Estado de aquella revisión de #15: **lista para revisión humana entonces**; #15 se fusionó después. La propuesta de evolución sigue sin aprobación global.
 
 ### 12.1 Validaciones y límites de publicación
 
@@ -260,4 +260,4 @@ revalidaron y deben consultarse antes de diseñar cada integración.
 - REST PATCH para actualizar título/descripción de #15 también devolvió `Forbidden`; metadatos no editados desde Codex. El push publica la revisión en los archivos de la PR existente.
 - Estado de aquella revisión: PR #15 permanecía pendiente y Codex no la fusionó. Estado actual comprobado el 01-10-2026: #15 fusionada en `4ab39025379cbbb8873dd344183967aafa0a1bdc` y #3 en `5e5e0dc42b8669e7afcb121851f2901d2930a260`. La biblioteca está autorizada de forma acotada; el resto sigue siendo propuesta.
 
-La entrega actual de biblioteca se documenta en [el informe específico](technical/surface-material-library.md); no inicia los conectores ni aprueba el conjunto del Roadmap 2.
+La entrega histórica de biblioteca se documenta en [el informe específico](technical/surface-material-library.md); #20 se documenta en [su informe](technical/F3-asset-lab-pipeline.md). Ninguna inicia los conectores ni aprueba el conjunto del Roadmap 2.

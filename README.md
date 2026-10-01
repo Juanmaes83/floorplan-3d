@@ -93,7 +93,7 @@ Three.js se carga desde jsDelivr; la primera apertura de la escena 3D necesita c
 ## Autoría y marca
 
 Producto: **Rubik Sota Floor Plan Designer**
-Autoría del proyecto: **Rubik Sota**
+Autoría de la plataforma: **Juan Manuel Espinosa Galant · Rubik Sota**. La interfaz ofrece «Legal y uso» en el pie y en el enlace permanente `#legal-y-uso`, con contacto y restricción informativa de venta, reventa y distribución sin autorización expresa del titular. Los recursos de terceros mantienen sus propias licencias, permisos y atribuciones; consulta sus inventarios y documentación. Este texto no es asesoramiento jurídico.
 
 ## Proyectos locales
 

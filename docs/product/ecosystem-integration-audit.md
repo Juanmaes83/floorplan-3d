@@ -2,6 +2,8 @@
 
 Fecha de consulta: **30-09-2026**. Auditoría documental y de código; no implementación ni prueba de los servicios publicados. Base de Rubik Sota: `19d286b5d8d1b288048ee5617ea734cff2964ef6` (`master`). Las referencias externas fijan el SHA inspeccionado, no un estado futuro de las ramas.
 
+> **Nota de vigencia (02-10-2026):** los «hoy», «actualmente» y «pendiente» de esta auditoría describen ese snapshot, anterior a las PR #17, #19 y #20. En `master` `1500422`, el piloto de dos modelos, los 50 mapas locales y el pipeline acotado de doce GLB están integrados. Esta auditoría conserva su evidencia de otros repositorios; no prueba conexión automática con Asset Lab ni ida y vuelta con CRM, Blender/Unreal, CAD o Immersphere. Véanse [estado canónico](../ROADMAP.md) y [secuencia posterior a #20](../ROADMAP-2-proposal.md).
+
 ## Conclusión y grado de certeza
 
 Hay piezas reutilizables para conectar **plano → geometría editable → mobiliario → presentación inmobiliaria**, pero la cadena completa todavía no está demostrada. La oportunidad comercial es una hipótesis: reutilizar una propuesta amueblada en anuncios, tours y ofertas. No se ha elegido cliente prioritario; **D-01 sigue pendiente**.
