@@ -173,3 +173,7 @@ inventario, conversiones, procedencia, rechazos y pruebas. La PR #20 se fusionó
 por squash en `master` (`29250810a8341b3b296539118b54799f1e31a77b`). Vercel confirmó
 producción `READY` para ese SHA. La escala física y el rendimiento en teléfono
 físico siguen pendientes; esta integración no convierte el catálogo en universal.
+
+## Estado de esta ampliación F3
+
+Sobre el squash de la PR #22 (`e62d17ee62576466f937700f6c445c33b09ec9c2`), esta rama propone seis modelos Asset Lab adicionales normalizados con el perfil acotado existente. Dos candidatos con extensiones fuera del perfil se excluyeron. Los seis muestran solo medidas derivadas de malla; su escala física y dimensiones oficiales siguen sin verificar. Consulta el [registro de esta tanda](docs/technical/F3-asset-lab-next.md) y el [roadmap canónico](docs/ROADMAP.md). «Legal y uso» quedó integrado y revisado por Juanma en la PR #22.

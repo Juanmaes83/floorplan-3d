@@ -234,6 +234,108 @@
       },
       "qaStatus": "approved",
       "permissionDocumentRef": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+      "brand": "IKEA",
+      "productName": "IKEA GLOSTAD · sofá de dos plazas gris oscuro",
+      "category": "sofa",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1235,
+        "height": 766,
+        "depth": 794,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+      "brand": "IKEA",
+      "productName": "IKEA STRANDMON · sillón orejero beige",
+      "category": "armchair",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 814,
+        "height": 1012,
+        "depth": 978,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-skogsta-mesa-acacia-demo",
+      "brand": "IKEA",
+      "productName": "IKEA SKOGSTA · mesa de acacia",
+      "category": "table",
+      "room": 2,
+      "modelPath": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1600,
+        "height": 743,
+        "depth": 805,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+      "brand": "IKEA",
+      "productName": "IKEA KNOXHULT · armario bajo blanco",
+      "category": "cabinet",
+      "room": 2,
+      "modelPath": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1220,
+        "height": 909,
+        "depth": 610,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-stockholm-2025-aparador-chapa-roble-demo",
+      "brand": "IKEA",
+      "productName": "IKEA STOCKHOLM 2025 · aparador de roble",
+      "category": "cabinet",
+      "room": 1,
+      "modelPath": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1608,
+        "height": 832,
+        "depth": 432,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
+    },
+    {
+      "id": "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+      "brand": "IKEA",
+      "productName": "IKEA NORDLI · cómoda blanca de cinco cajones",
+      "category": "dresser",
+      "room": 0,
+      "modelPath": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+      "format": "glb",
+      "dimensions": {
+        "width": 1202,
+        "height": 1691,
+        "depth": 477,
+        "unit": "mm"
+      },
+      "qaStatus": "approved",
+      "permissionDocumentRef": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt"
     }
   ],
   "evidence": {
@@ -938,6 +1040,312 @@
           "width": 1270,
           "height": 798,
           "depth": 743
+        }
+      }
+    },
+    "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo": {
+      "modelSha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+      "bytes": 1810356,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/sofa/glostad-sofa-de-2-plazas-knisa-gris-oscuro.glb",
+        "sha256": "eb19b9bebedaabd3313c04e8a62bb3536685eafc861af3ee310126959c7464e4",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA GLOSTAD · sofá de dos plazas gris oscuro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "eb19b9bebedaabd3313c04e8a62bb3536685eafc861af3ee310126959c7464e4",
+        "outputSha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1235,
+          "height": 766,
+          "depth": 794
+        }
+      }
+    },
+    "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo": {
+      "modelSha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+      "bytes": 2682460,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/armchair/strandmon-sillon-orejero-tommaboda-beige-intenso.glb",
+        "sha256": "c481248979e68c8b2f57be97d102611dfda9286693cf82cb726b966f996ff5d6",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA STRANDMON · sillón orejero beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "c481248979e68c8b2f57be97d102611dfda9286693cf82cb726b966f996ff5d6",
+        "outputSha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 814,
+          "height": 1012,
+          "depth": 978
+        }
+      }
+    },
+    "ikea-skogsta-mesa-acacia-demo": {
+      "modelSha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+      "bytes": 1057164,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/table/skogsta-mesa-acacia.glb",
+        "sha256": "8d45aa0f78b8880e6526fb9f188bf334a04d6d39c3ffc5c405948a3b61b3e277",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA SKOGSTA · mesa de acacia; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "8d45aa0f78b8880e6526fb9f188bf334a04d6d39c3ffc5c405948a3b61b3e277",
+        "outputSha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1600,
+          "height": 743,
+          "depth": 805
+        }
+      }
+    },
+    "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo": {
+      "modelSha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+      "bytes": 1627956,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco.glb",
+        "sha256": "568be813365f6e438a243f9ab9a822207314ae0df906cf862913efbe624792c2",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA KNOXHULT · armario bajo blanco; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "568be813365f6e438a243f9ab9a822207314ae0df906cf862913efbe624792c2",
+        "outputSha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1220,
+          "height": 909,
+          "depth": 610
+        }
+      }
+    },
+    "ikea-stockholm-2025-aparador-chapa-roble-demo": {
+      "modelSha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+      "bytes": 490828,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/sideboard/stockholm-2025-aparador-chapa-roble.glb",
+        "sha256": "83e200ddebaaa8e42c47ea6643f37e872ab6f4d2b3f2f00a62eeb0122cf89a21",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA STOCKHOLM 2025 · aparador de roble; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "83e200ddebaaa8e42c47ea6643f37e872ab6f4d2b3f2f00a62eeb0122cf89a21",
+        "outputSha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1608,
+          "height": 832,
+          "depth": 432
+        }
+      }
+    },
+    "ikea-nordli-comoda-de-5-cajones-blanco-demo": {
+      "modelSha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+      "bytes": 1171204,
+      "permissionSha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "source": {
+        "repository": "Juanmaes83/immersphere-asset-lab",
+        "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+        "path": "assets/ikea/dresser/nordli-comoda-de-5-cajones-blanco.glb",
+        "sha256": "da733273971a56dd29694eff71cf7cc54d8b9758e6198b9b6019c1f8d86e0e00",
+        "sourceMethod": "Asset Lab manifest and tracked GLB",
+        "redistributionAllowed": false,
+        "permissionDocumentRef": "permissions/README.md",
+        "qaStatus": "pending"
+      },
+      "permission": {
+        "authorizationKind": "owner-confirmed-project-use",
+        "authorizedBy": "Juanma",
+        "project": "Juanmaes83/floorplan-3d",
+        "scope": "local-app-git-and-review-preview",
+        "brand": "third-party-identification-no-affiliation",
+        "attribution": "IKEA — IKEA NORDLI · cómoda blanca de cinco cajones; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación.",
+        "expires": null
+      },
+      "dimensionsSource": "Normalized GLB geometry bounds only; physical product scale not independently verified",
+      "dimensionsKind": "model-geometry",
+      "normalization": {
+        "unitToMeter": 1,
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "provenance": "glTF metre coordinates, original scene node transforms retained; X width, Y height, Z depth; no scaling correction."
+      },
+      "extensionsRequired": [],
+      "pipeline": {
+        "tool": "glTF Transform",
+        "version": "4.3.0",
+        "inputSha256": "da733273971a56dd29694eff71cf7cc54d8b9758e6198b9b6019c1f8d86e0e00",
+        "outputSha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+        "steps": [
+          "copy: decode Draco",
+          "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+        ],
+        "geometryBoundsMm": {
+          "width": 1202,
+          "height": 1691,
+          "depth": 477
         }
       }
     }

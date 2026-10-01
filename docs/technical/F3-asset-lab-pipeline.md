@@ -1,5 +1,7 @@
 # F3 · normalización e integración de Asset Lab — integrada (PR #20)
 
+**Registro histórico de la primera tanda.** Sus doce modelos están integrados; la [siguiente ampliación acotada de seis modelos](F3-asset-lab-next.md) se presenta en una PR posterior y aún requiere revisión visual y merge. Los SHA, comandos y resultados de esta página corresponden a #20.
+
 **Base Rubik:** `18c68e21ec03819b9d44dfe51d27179c5bdad5d7` (`master`, comprobado por `git ls-remote` el 01-10-2026). **Asset Lab:** `5dc7b182c5c227472b84aea66a3ffa1368c95981` (`main`, clon temporal de solo lectura). La autorización de Juanma para usar recursos de Asset Lab en Rubik y preparar Git/preview se registra en [la procedencia](../../assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt). El manifest de origen declara `authorized-commercial-demo`, `redistributionAllowed:false`, `qaStatus:pending` y referencias mayoritariamente a una plantilla; se conservan esos hechos, separados del permiso específico confirmado por Juanma. No se afirma licencia IKEA general ni afiliación.
 
 ## Inventario y selección

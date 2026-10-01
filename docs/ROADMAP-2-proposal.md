@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Reconciliada de nuevo el 02-10-2026 contra `origin/master` `15004221da8a6f2e5c22fe45392680a934b6d277`, tras PR #20. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
+> Reconciliada de nuevo el 02-10-2026 contra `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2`, tras el squash de PR #22. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18, primera tanda Asset Lab #20 y «Legal y uso» #22 están integrados y revisados por Juanma. La nueva tanda de seis modelos es una PR pendiente de revisión, sin alterar la condición de propuesta de este documento.
 
 ## 1. Propósito y principios
 
@@ -60,7 +60,7 @@ Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no n
 - **Organización reconciliada:** F0 #3 y propuesta #15 fusionadas en master; no aprobación global de fases o decisiones abiertas.
 - **Suelos/acabados:** biblioteca visual acotada de 50 mapas implementada, revisada y fusionada por PR #19; no equivale a aprobar PBR general, calendario ni las siguientes propuestas.
 - **Modelos:** #20 integró un pipeline reproducible y acotado para doce GLB normalizados; no hay sincronización automática con Asset Lab ni admisión universal. La generalización de perfiles, extensiones y materiales PBR necesita propuesta y pruebas propias.
-- **Pendientes de validación separados:** contrastar escala física de los modelos que lo necesiten; medir rendimiento en teléfono físico; completar las cinco sesiones, veinte planos y umbrales de evaluación empírica F2. Ninguno bloquea esta entrega legal/documental.
+- **Pendientes de validación separados:** contrastar escala física de los modelos que lo necesiten; medir rendimiento en teléfono físico; completar las cinco sesiones, veinte planos y umbrales de evaluación empírica F2. Ninguno bloquea la entrega F3 acotada ahora propuesta.
 - **Investigar D-01:** observar tareas de cliente, agente, interiorista/reforma;
   elegir un segmento o mantenerlo explícitamente abierto, sin inferirlo de CRM.
 - **Después, estudiar la ampliación del pipeline ya integrado**, con nuevos perfiles, versiones/permisos,

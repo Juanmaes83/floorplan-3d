@@ -1,7 +1,7 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
-**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). Esta rama añade la ampliación opcional compatible 1.4.0 de superficies, pendiente de revisión humana. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
-**Fecha:** 30-09-2026 · **Base integrada de esta revisión:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
+**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). La ampliación opcional compatible 1.4.0 de superficies quedó integrada por PR #19; esta entrega no cambia el contrato ni el schema. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
+**Estado vigente comprobado:** 02-10-2026 · `origin/master` @ `e62d17ee62576466f937700f6c445c33b09ec9c2`. **Base histórica de la redacción original:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
 
 ## 1. Para qué sirve y qué no hace
