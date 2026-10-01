@@ -1,0 +1,15 @@
+✔ surface library touch / keyboard / persistence / software 3D 1440x900 (40656.146206ms)
+✔ surface library touch / keyboard / persistence / software 3D 390x844 (25545.319326ms)
+✔ surface library touch / keyboard / persistence / software 3D 844x390 (26307.765577ms)
+✔ every individual asset decodes, renders and disposes; mixed scene records transfer, memory and frame time (130147.207275ms)
+✔ HTTP, hash, decode, unknown preset and catalogue failures remain visible with safe fallback (49408.589794ms)
+✔ cancel, invalid scale and failed persistence preserve the project and history (1176.498359ms)
+✔ comparison is real and new surfaces never acquire a zero price in English or Chinese (1082.150452ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 274769.909308

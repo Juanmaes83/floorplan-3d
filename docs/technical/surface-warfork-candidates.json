@@ -1,0 +1,690 @@
+{
+  "version": 1,
+  "status": "partial",
+  "targetCount": 50,
+  "sourceCommit": "6f3b22259b7abc144fff5b0218539265e3930e77",
+  "entries": [
+    {
+      "id": "surface-wood-planks",
+      "name": "Tablones claros",
+      "family": "wood",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Tablones claros",
+        "wood"
+      ],
+      "color": "#5f483c",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/wood/woodplank04.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/wood/woodplank04.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "c53b6c4079be1e1551a0d67525086819b7cd075acc71abe501d17bfca99d059b",
+        "sourceBytes": 448794,
+        "sourceDimensions": [
+          554,
+          554
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/wood-planks.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 13492,
+          "sha256": "0b466fbc3bb25fc704366e811e1b7c819baf2e5fa984a3f3738e94b7cfb8a953"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/wood-planks-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 492,
+        "sha256": "c032ec5a5f531c304175bfd0daa495d725dca46fd68a6f1b676f827cd6c9d848"
+      },
+      "totalBytes": 13984,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-wood-refly",
+      "name": "Madera entrelazada",
+      "family": "wood",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Madera entrelazada",
+        "wood"
+      ],
+      "color": "#4e4136",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/refly_wood/wood1.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/refly_wood/wood1.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "5cc97ea01e703d88b56419fcd5d8df6a8fbd16ea35af44fd1c6120c441d89b89",
+        "sourceBytes": 2252,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/wood-refly.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 2824,
+          "sha256": "a8ac7a2d9a0f7fb4fedf79d39351ac9400092d0c294d5862c3c58926283970d5"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/wood-refly-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 298,
+        "sha256": "8c9eb6e90f2fd33e75ec3c6f52bb2a110a312522499b20ec7732230cadfdaa7b"
+      },
+      "totalBytes": 3122,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-tile-grid",
+      "name": "Mosaico cuadriculado",
+      "family": "ceramic",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Mosaico cuadriculado",
+        "ceramic"
+      ],
+      "color": "#666666",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/tiles/floor_tiled.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/tiles/floor_tiled.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "4e0f45209b5f5e289ac046b1459932a37c54cbfd7306ba08c6f61d7c4322345c",
+        "sourceBytes": 66669,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/tile-grid.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 4344,
+          "sha256": "db702aa414f3cce24880b58f9cade886de2de139b78dde5a8e645dfe56409cf7"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/tile-grid-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 612,
+        "sha256": "ab87dff15125506ba20503b4f3e3e7a504825793467ce21b6f0de91b03972bc3"
+      },
+      "totalBytes": 4956,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-tile-large",
+      "name": "Baldosa de gran formato",
+      "family": "ceramic",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Baldosa de gran formato",
+        "ceramic"
+      ],
+      "color": "#282828",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/boqu/bigtiles.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/boqu/bigtiles.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "f229f40ec7f1a605b4d0e4733b1927cf8c0848fef9357684c8254accddd6f99c",
+        "sourceBytes": 71051,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/tile-large.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 1570,
+          "sha256": "b7a675f370517c1b6c867a748cb4a9dfc9769db071d7d9b1e7f4f42cf65584e8"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/tile-large-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 234,
+        "sha256": "2e5870d399f0e1cf0ca1e9fc3f8f1e97edd8048e520abe179c6c1a96e85d432f"
+      },
+      "totalBytes": 1804,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-cement-grain",
+      "name": "Hormigón de grano fino",
+      "family": "mineral",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Hormigón de grano fino",
+        "mineral"
+      ],
+      "color": "#5f6467",
+      "roughness": 0.9,
+      "source": {
+        "assetId": "textures/concrete/concrete2.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/concrete/concrete2.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "d00b6a4724fcb3718c0c7aceb453d19240546aecbc4af2d6aa34f2c8a9f19556",
+        "sourceBytes": 306997,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/cement-grain.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 35090,
+          "sha256": "bb740a4b03ae586313083c124642560d1a96cf699a5de26496875ebc96981326"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/cement-grain-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 254,
+        "sha256": "1416a513a8ee09e912f75b608342afe3dfb6739385d6c61e7dd0e63b1dfb3007"
+      },
+      "totalBytes": 35344,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-cement-noir",
+      "name": "Cemento erosionado",
+      "family": "mineral",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Cemento erosionado",
+        "mineral"
+      ],
+      "color": "#9c9c9c",
+      "roughness": 0.9,
+      "source": {
+        "assetId": "textures/noir/concrete1.png",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/noir/concrete1.png",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "1aedcedc8e82fc6ff2203317c2ddde329ba5ab2c2e54346dad2af5d84ed9f129",
+        "sourceBytes": 111873,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/cement-noir.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 9714,
+          "sha256": "65594b9e4a3439d2601c618cacad5c6396299d58c3d2dc2a7eabf752a169fd20"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/cement-noir-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 260,
+        "sha256": "7f2a052fda87bb8d98fbfbb9f625f1ab20514ab4be0ad4295cc09c9430d6aa68"
+      },
+      "totalBytes": 9974,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-cement-city",
+      "name": "Hormigón rugoso",
+      "family": "mineral",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Hormigón rugoso",
+        "mineral"
+      ],
+      "color": "#73777b",
+      "roughness": 0.9,
+      "source": {
+        "assetId": "textures/wsw_city1/concrete1.png",
+        "title": "Warfork free textures",
+        "author": "Chasseur de Bots / Warsow Development Team",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/wsw_city1/concrete1.png",
+        "license": "CC-BY-SA-4.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "7f3f1cb106b7085ea5b08d491174d37d18e196855a40d24e04019f04bb9c12ab",
+        "sourceBytes": 76338,
+        "sourceDimensions": [
+          256,
+          256
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/cement-city.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 256,
+          "bytes": 1670,
+          "sha256": "96948dce8b3edc9c285df8a198d4ac71980d245eb9fd51b42ee348e0a901e8c0"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/cement-city-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 290,
+        "sha256": "dc58b16824831978a79a1b349ded9c7ac709dd7efd9c999e6c1320024f4c1819"
+      },
+      "totalBytes": 1960,
+      "estimatedGpuBytes": 349525,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-plaster-flat",
+      "name": "Yeso uniforme",
+      "family": "wall",
+      "applications": [
+        "wall"
+      ],
+      "tags": [
+        "Yeso uniforme",
+        "wall"
+      ],
+      "color": "#c1b8ac",
+      "roughness": 0.9,
+      "source": {
+        "assetId": "textures/concrete/plaster2uniform.ktx",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/concrete/plaster2uniform.ktx",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "c207f0d3055eeb1923ac5b8ded028bb198c81ece832994f452ea9881a8910f91",
+        "sourceBytes": 2097252,
+        "sourceDimensions": [
+          512,
+          1024
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 2000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/plaster-flat.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 512,
+          "bytes": 15342,
+          "sha256": "7735bd15b76038ef90e14f5fed40ca057e89b730a18b5657ae32fc009aebfc0e"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/plaster-flat-sample.webp",
+        "format": "image/webp",
+        "width": 56,
+        "height": 112,
+        "bytes": 250,
+        "sha256": "ab12d72b8a4b0a164b4c8768036d002aeefab035ac13c0ad30c8d146783d0d13"
+      },
+      "totalBytes": 15592,
+      "estimatedGpuBytes": 699051,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-plaster-aged",
+      "name": "Yeso con relieve",
+      "family": "wall",
+      "applications": [
+        "wall"
+      ],
+      "tags": [
+        "Yeso con relieve",
+        "wall"
+      ],
+      "color": "#5c554d",
+      "roughness": 0.9,
+      "source": {
+        "assetId": "textures/concrete/oldplasterdetail.ktx",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/concrete/oldplasterdetail.ktx",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "d6826c3a5e43db81427f100b2b44a4be691a0f2b98b651c0bc54838a86f28bcd",
+        "sourceBytes": 2097252,
+        "sourceDimensions": [
+          1024,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 500
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/plaster-aged.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 256,
+          "bytes": 12194,
+          "sha256": "5365ecddb8580288a7cae0e1c30cfd5bf1849457042e32ec2cf17d6e560fc2be"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/plaster-aged-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 56,
+        "bytes": 162,
+        "sha256": "f44029da2aeb860e593a6294add6d25b36782a13cc597f4fa4a61debea6210c4"
+      },
+      "totalBytes": 12356,
+      "estimatedGpuBytes": 699051,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-stone-rocks1",
+      "name": "Piedra de bloques rugosos",
+      "family": "stone",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Piedra de bloques rugosos",
+        "stone"
+      ],
+      "color": "#876152",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/terrain/rocks001_512x512.ktx",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/terrain/rocks001_512x512.ktx",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "c017d19de052bdf332347767ad3325dd00fe0abd54db19e11c94d6c124ca6445",
+        "sourceBytes": 1048676,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/stone-rocks1.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 28706,
+          "sha256": "26277bfa65b9d5ef7accf74d1c92f286ec52815ab7b23b2aef338680fa6e42e7"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/stone-rocks1-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 556,
+        "sha256": "4cf275648f5f83a199f0899d0010344cefec5e53eb58e790b7f04ab6ea0b2b64"
+      },
+      "totalBytes": 29262,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-stone-rocks5",
+      "name": "Piedra mineral irregular",
+      "family": "stone",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Piedra mineral irregular",
+        "stone"
+      ],
+      "color": "#8b8b84",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/terrain/rocks005_512x512.ktx",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/terrain/rocks005_512x512.ktx",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "0720175e78909b2c87646f40149075ef41e9700657ace6539dfff89bb1104a55",
+        "sourceBytes": 1048676,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/stone-rocks5.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 28624,
+          "sha256": "52ceaf657eda63d60a1895dad5a1b57ef0c1c925090622b5765da1548312fbd7"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/stone-rocks5-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 558,
+        "sha256": "2c1bc85850d8da37f03fb9141d5acdfe91083519b780e674d87e4bd69c60520a"
+      },
+      "totalBytes": 29182,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    },
+    {
+      "id": "surface-stone-wall",
+      "name": "Mampostería de piedra",
+      "family": "stone",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "tags": [
+        "Mampostería de piedra",
+        "stone"
+      ],
+      "color": "#67594b",
+      "roughness": 0.65,
+      "source": {
+        "assetId": "textures/terrain/rockwall01.ktx",
+        "title": "Warfork free textures",
+        "author": "Team Forbidden",
+        "url": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/textures/terrain/rockwall01.ktx",
+        "license": "CC0-1.0",
+        "licenseUrl": "https://github.com/TeamForbiddenLLC/warfork-free-textures/blob/6f3b22259b7abc144fff5b0218539265e3930e77/README.md",
+        "consultedAt": "2026-10-01",
+        "sourceSha256": "085503b9ebd9dfea05cd0008e5396c4ad059c32e57e3a446c61091c127447c91",
+        "sourceBytes": 1048676,
+        "sourceDimensions": [
+          512,
+          512
+        ],
+        "changes": "KTX1 decoded when needed; RGB resized to maximum 512 px; WebP re-encoded; separate thumbnail. No recolouring."
+      },
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "Design default, not a physical measurement published by the source. Adjustable before applying.",
+      "maps": {
+        "baseColor": {
+          "path": "assets/materials/stone-wall.webp",
+          "format": "image/webp",
+          "width": 512,
+          "height": 512,
+          "bytes": 25988,
+          "sha256": "65590282272dbaf733b77be6e206bcd7a4c8c875d3e66e9b1102262362daedca"
+        }
+      },
+      "sample": {
+        "path": "assets/materials/stone-wall-sample.webp",
+        "format": "image/webp",
+        "width": 112,
+        "height": 112,
+        "bytes": 1176,
+        "sha256": "f6496dca780e4af0b5b89b7174ad29206ba44d88138f9597a5c65ea5c0e72c99"
+      },
+      "totalBytes": 27164,
+      "estimatedGpuBytes": 1398101,
+      "candidateResult": "Withdrawn: provisional Warfork selection superseded by housing-oriented Poly Haven candidates; no final Rubik test performed."
+    }
+  ]
+}

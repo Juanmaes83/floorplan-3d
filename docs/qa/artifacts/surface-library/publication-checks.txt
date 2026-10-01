@@ -1,0 +1,10 @@
+2026-10-01. Feature commit published: 348b234e2f174dbfed78d349df839b463f2b8736.
+Command: git push -u origin HEAD
+Result: successful new remote branch feat/surface-material-library; ls-remote HEAD matched.
+Command: gh api --method POST repos/Juanmaes83/floorplan-3d/pulls --input /tmp/surface-run/pr.json
+Post "https://api.github.com/repos/Juanmaes83/floorplan-3d/pulls": Forbidden
+Command: gh api repos/Juanmaes83/floorplan-3d/commits/348b234e2f174dbfed78d349df839b463f2b8736/status
+Get "https://api.github.com/repos/Juanmaes83/floorplan-3d/commits/348b234e2f174dbfed78d349df839b463f2b8736/status": Forbidden
+Public GitHub commit and branch HTML: HTTP 200. No authoritative Vercel READY deployment/immutable URL associated with that SHA was exposed. Fresh unauthenticated Playwright context on branch page exposed no check links; it did not validate a Vercel deployment.
+Previously documented preview https://floorplan-3d-rgf0u4thu-juanma-espinosas-projects.vercel.app/ returned urllib URLError: Tunnel connection failed: 403 Forbidden. It has no verified association with this feature SHA and is not offered as the new preview.
+No GraphQL, network changes, manual deployment or merge attempted. PR/CI status/READY preview remain unverified.

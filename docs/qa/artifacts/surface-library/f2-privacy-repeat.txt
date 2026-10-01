@@ -1,0 +1,20 @@
+✔ F2 local wall assistance privacy/review 360x800 (13801.741675ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":360,"height":800},"requests":68,"unexpected":0,"wallIds":["wal_fcf0c9c2e1db4d55967506f61d261fb7","wal_5ac958689ef64c67b1c31cb65597f917"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 390x844 (11213.349637ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":390,"height":844},"requests":68,"unexpected":0,"wallIds":["wal_fa152b35a9af44128a9a10e9a346bc93","wal_5b0d5dbafab54479a3cc53202ccc6bb0"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 844x390 (11226.016816ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":844,"height":390},"requests":68,"unexpected":0,"wallIds":["wal_c27beb006b674db58ae6f29dbe2f1203","wal_c73fa970eceb4192823e309c41d351f9"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 1440x900 (11036.370892ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":1440,"height":900},"requests":68,"unexpected":0,"wallIds":["wal_13c7b48a08b74def80cc7e2a6acb8d78","wal_a424efaa7aa54cf9af90b87b2b729a05"],"candidateCount":4}
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47862.424764

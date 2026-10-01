@@ -1,0 +1,1446 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "input": "touch taps",
+  "rendering": "Chromium SwiftShader software",
+  "metrics": {
+    "maps": [
+      {
+        "id": "surface-herringbone-parquet",
+        "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",2000,3000]",
+        "state": "ready",
+        "bytes": 11452,
+        "gpuBytes": 349526,
+        "loadMs": 5434.399999991059,
+        "map": {
+          "repeat": [
+            0.5,
+            0.3333333333333333
+          ],
+          "colorSpace": "srgb"
+        }
+      },
+      {
+        "id": "surface-white-plaster-02",
+        "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000]",
+        "state": "ready",
+        "bytes": 7864,
+        "gpuBytes": 349526,
+        "loadMs": 5387.5,
+        "map": {
+          "repeat": [
+            1,
+            1
+          ],
+          "colorSpace": "srgb"
+        }
+      }
+    ],
+    "memory": {
+      "geometries": 1298,
+      "textures": 10
+    },
+    "canvas": 762,
+    "stage": 762,
+    "walls": [
+      {
+        "id": "wal_ref-w0",
+        "dimensions": {
+          "width": 0.54,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.075,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w1",
+        "dimensions": {
+          "width": 0.3,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.225,
+          1.4,
+          -5.13
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w2",
+        "dimensions": {
+          "width": 2.46,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -2.575,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w3",
+        "dimensions": {
+          "width": 0.56,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.065,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w4",
+        "dimensions": {
+          "width": 0.29,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -0.02,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w5",
+        "dimensions": {
+          "width": 0.55,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.4,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w6",
+        "dimensions": {
+          "width": 0.3,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          1.4,
+          -5.13
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w7",
+        "dimensions": {
+          "width": 3.36,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          2.355,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w8",
+        "dimensions": {
+          "width": 0.55,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.31,
+          1.4,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w9",
+        "dimensions": {
+          "width": 0.3,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          -5.13
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w10",
+        "dimensions": {
+          "width": 0.5,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          -4.73
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w11",
+        "dimensions": {
+          "width": 0.49,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          -2.435
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w12",
+        "dimensions": {
+          "width": 1.17,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          -1.605
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w13",
+        "dimensions": {
+          "width": 0.63,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          0.775
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w14",
+        "dimensions": {
+          "width": 0.55,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.31,
+          1.4,
+          1.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w15",
+        "dimensions": {
+          "width": 0.79,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          1.725
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w16",
+        "dimensions": {
+          "width": 0.79,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          1.4,
+          4.885
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w17",
+        "dimensions": {
+          "width": 0.55,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.31,
+          1.4,
+          5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w18",
+        "dimensions": {
+          "width": 5.38,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          1.345,
+          1.4,
+          5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w19",
+        "dimensions": {
+          "width": 1.58,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.375,
+          1.4,
+          5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w20",
+        "dimensions": {
+          "width": 0.6,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          6.045,
+          1.4,
+          4.98
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w21",
+        "dimensions": {
+          "width": 1.36,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          1.4,
+          4.6
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w22",
+        "dimensions": {
+          "width": 0.35,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          1.4,
+          2.855
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w23",
+        "dimensions": {
+          "width": 0.96,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.825,
+          1.4,
+          2.8
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w24",
+        "dimensions": {
+          "width": 1.44,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.025,
+          1.4,
+          2.8
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w25",
+        "dimensions": {
+          "width": 0.37,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.625,
+          1.4,
+          2.495
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w26",
+        "dimensions": {
+          "width": 0.24,
+          "height": 2.8,
+          "depth": 0.19,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.625,
+          1.4,
+          2.215
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w27",
+        "dimensions": {
+          "width": 2.42,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.955,
+          1.4,
+          2.8
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w28",
+        "dimensions": {
+          "width": 4.35,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -6.045,
+          1.4,
+          0.505
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w29",
+        "dimensions": {
+          "width": 0.24,
+          "height": 2.8,
+          "depth": 0.2,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -5.825,
+          1.4,
+          -0.21
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w30",
+        "dimensions": {
+          "width": 1.075,
+          "height": 1,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -5.1875,
+          0.5,
+          -0.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w31",
+        "dimensions": {
+          "width": 0.84,
+          "height": 2.8,
+          "depth": 0.455,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.925,
+          1.4,
+          -1.682
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w32",
+        "dimensions": {
+          "width": 1.366,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.625,
+          1.4,
+          -0.167
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w33",
+        "dimensions": {
+          "width": 0.24,
+          "height": 2.8,
+          "depth": 0.09,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.79,
+          1.4,
+          -0.21
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w34",
+        "dimensions": {
+          "width": 2.16,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -2.425,
+          1.4,
+          -0.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w35",
+        "dimensions": {
+          "width": 0.795,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          1.4,
+          -1.6025
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w36",
+        "dimensions": {
+          "width": 0.33,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          1.4,
+          -0.255
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w37",
+        "dimensions": {
+          "width": 2.16,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -2.425,
+          1.4,
+          -1.79
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w38",
+        "dimensions": {
+          "width": 2.4,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          1.4,
+          -4.08
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w39",
+        "dimensions": {
+          "width": 1.54,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -0.335,
+          1.4,
+          -3.08
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w40",
+        "dimensions": {
+          "width": 0.898,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          1.4,
+          -4.531
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w41",
+        "dimensions": {
+          "width": 0.417,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          1.4,
+          -3.0885
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w42",
+        "dimensions": {
+          "width": 0.517,
+          "height": 2.8,
+          "depth": 0.337,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.4165,
+          1.4,
+          -1.742
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w43",
+        "dimensions": {
+          "width": 0.24,
+          "height": 2.8,
+          "depth": 0.09,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          1.4,
+          -1.955
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w44",
+        "dimensions": {
+          "width": 3.36,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          2.355,
+          1.4,
+          -1.79
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w45",
+        "dimensions": {
+          "width": 0.31,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.19,
+          1.4,
+          -1.79
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-w46",
+        "dimensions": {
+          "width": 2.01,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.278,
+          1.4,
+          0.325
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-w47",
+        "dimensions": {
+          "width": 3.637,
+          "height": 2.8,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          2.2165,
+          1.4,
+          1.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-door-0",
+        "dimensions": {
+          "width": 0.88,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          2.45,
+          -2.44
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-door-1",
+        "dimensions": {
+          "width": 0.88,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          2.45,
+          -2.44
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-door-2",
+        "dimensions": {
+          "width": 0.785,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.555,
+          2.45,
+          -3.6895
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-door-3",
+        "dimensions": {
+          "width": 0.785,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          2.45,
+          -0.8125
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-door-4",
+        "dimensions": {
+          "width": 0.893,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          0.278,
+          2.45,
+          -1.1265
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-door-5",
+        "dimensions": {
+          "width": 0.89,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -1.225,
+          2.45,
+          3.475
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-slide-0",
+        "dimensions": {
+          "width": 2.37,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          2.5999999999999996,
+          3.305
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-slide-1",
+        "dimensions": {
+          "width": 0.815,
+          "height": 0.6999999999999997,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.2425,
+          2.45,
+          -0.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-bay-0",
+        "dimensions": {
+          "width": 1.8,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          2.5999999999999996,
+          -3.58
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-bay-1",
+        "dimensions": {
+          "width": 1.48,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.465,
+          2.5999999999999996,
+          -0.28
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-0",
+        "dimensions": {
+          "width": 0.62,
+          "height": 1.4,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -0.475,
+          0.7,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-0",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -0.475,
+          2.5999999999999996,
+          -5.4
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-1",
+        "dimensions": {
+          "width": 3.07,
+          "height": 0.9,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.225,
+          0.45,
+          -3.445
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-1",
+        "dimensions": {
+          "width": 3.07,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -4.225,
+          2.5999999999999996,
+          -3.445
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-2",
+        "dimensions": {
+          "width": 1.82,
+          "height": 0.9,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -5.255,
+          0.45,
+          -1.79
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-2",
+        "dimensions": {
+          "width": 1.82,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -5.255,
+          2.5999999999999996,
+          -1.79
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-3",
+        "dimensions": {
+          "width": 0.605,
+          "height": 0.9,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.625,
+          0.45,
+          -1.1525
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-3",
+        "dimensions": {
+          "width": 0.605,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          -3.625,
+          2.5999999999999996,
+          -1.1525
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-4",
+        "dimensions": {
+          "width": 1.58,
+          "height": 0.9,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.375,
+          0.45,
+          1.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-4",
+        "dimensions": {
+          "width": 1.58,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.375,
+          2.5999999999999996,
+          1.21
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-5",
+        "dimensions": {
+          "width": 3.35,
+          "height": 0.9,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          6.045,
+          0.45,
+          3.005
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-5",
+        "dimensions": {
+          "width": 3.35,
+          "height": 0.3999999999999999,
+          "depth": 0.24,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          6.045,
+          2.5999999999999996,
+          3.005
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-6",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          0.225,
+          -4.57
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-6",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          2.5999999999999996,
+          -4.57
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-7",
+        "dimensions": {
+          "width": 1.89,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.155,
+          0.225,
+          -3.575
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-7",
+        "dimensions": {
+          "width": 1.89,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.155,
+          2.5999999999999996,
+          -3.575
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-8",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          0.225,
+          -2.58
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-8",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          2.5999999999999996,
+          -2.58
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-9",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          0.225,
+          -1.12
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-9",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          2.5999999999999996,
+          -1.12
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-10",
+        "dimensions": {
+          "width": 1.575,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.155,
+          0.225,
+          -0.2825
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-10",
+        "dimensions": {
+          "width": 1.575,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          5.155,
+          2.5999999999999996,
+          -0.2825
+        ],
+        "angle": -1.5707963267948966
+      },
+      {
+        "id": "wal_ref-window-11",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.45,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          0.225,
+          0.555
+        ],
+        "angle": 0
+      },
+      {
+        "id": "wal_ref-window-11",
+        "dimensions": {
+          "width": 0.62,
+          "height": 0.3999999999999999,
+          "depth": 0.1,
+          "widthSegments": 1,
+          "heightSegments": 1,
+          "depthSegments": 1
+        },
+        "position": [
+          4.895,
+          2.5999999999999996,
+          0.555
+        ],
+        "angle": 0
+      }
+    ]
+  },
+  "mapRequests": 80,
+  "pageErrors": []
+}

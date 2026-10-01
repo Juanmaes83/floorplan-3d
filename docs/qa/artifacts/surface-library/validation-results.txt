@@ -1,0 +1,52 @@
+Execution: 2026-10-01. Initial clean checkout; base master 5e5e0dc42b8669e7afcb121851f2901d2930a260.
+
+ACTUAL COMMANDS AND RESULTS
+node --test tests/project.test.cjs tests/library.test.cjs tests/room-layout.test.cjs
+56/56 passed (initial compatibility check).
+node --test tests/surfaces.test.cjs
+7/7 passed after the 50-resource catalogue was prepared.
+node --test --test-name-pattern='1440x900' tests/surfaces.browser.test.cjs
+1/1 passed (desktop flow).
+node --test --test-concurrency=1 tests/*.test.cjs
+173 tests: 168 passed, 4 failed, 1 cancelled by 180000ms timeout. Duration 942147.847342ms.
+Four failures: existing F2 privacy fixture rejected the two new same-origin GET routes /css/surface-library.css and /assets/materials/catalog.json.
+Only those exact routes added; no query, POST/body, image upload or other host allowed.
+One cancelled case: sweep of 50 materials over the full reference home exceeded its time budget under software rendering.
+node --test --test-name-pattern='F2 local wall assistance privacy/review' tests/browser.test.cjs
+4/4 passed after the exact-route fixture correction.
+node --test --test-name-pattern='every individual asset' tests/surfaces.browser.test.cjs
+1/1 passed with a simple room for each individual asset, two render frames per material, and a separate full-home mixed scene.
+Repeated once to add the identical full-home procedural baseline measurement: 1/1 passed, 131125.784029ms.
+The complete 173-case suite was not repeated after those fixture corrections. All failed/cancelled cases were repeated successfully; the three surface UI viewports and two adversarial/storage cases passed in the complete run.
+
+python3 tests/schema.test.py: 11/11 passed.
+python3 tests/f2_readiness.test.py: 12/12 passed.
+python3 tests/f2_wall_evaluation.test.py: 16/16 passed.
+python3 tests/f2_raw_export.test.py: 3/3 passed.
+Total Python: 42/42.
+
+Earlier development checks (not omitted):
+Two first surface-unit expectations failed because Core.prepare returns {project,warnings,migrated}; the assertions were corrected to use .project.
+Three inventory checks failed while the 50-map tests were run against the still-provisional Warfork catalogue; that provisional catalogue and all its graphics were subsequently removed.
+First surface-browser run failed its case-sensitive import-toast wait and was interrupted; fixed to recognize the actual translated status. Desktop repeat passed.
+The source-selection pipeline rejected low-contrast albedos; resources were replaced, not counted or forced through.
+Markdown checks performed before QA outputs existed reported missing generated targets. The final check also found an existing unescaped |AB| in the contract table; escaped it and repeated successfully.
+
+Final additional checks:
+node --test tests/project.test.cjs tests/library.test.cjs tests/room-layout.test.cjs: 56/56 passed again on final application bytes.
+node --test tests/surfaces.test.cjs: 7/7 passed after tightening complete-family and CC0 source validation.
+python3 tests/schema.test.py: 11/11 passed again against the final contract.
+A subsequent seven-case surface-browser run passed four cases and failed three Apply-button contrast checks; the inherited accent was too light. The button now has an explicit dark background. Final repeat: node --test tests/surfaces.browser.test.cjs, 7/7 passed, 274769.909308ms (surface-browser-final.txt). All three viewport flows, the 50-map sweep/mixed baseline, adversarial fallback, atomic persistence, comparison and English/Chinese price checks passed.
+An inline syntax harness initially sent the importmap JSON to node --check; that harness failed. It was corrected to parse importmap with JSON and check actual JavaScript with node; both checks passed. No application syntax defect was hidden.
+New finishes omit legacy estimated prices in all languages; their prices are not inferred from procedural materials.
+
+QUALITY / ENVIRONMENT
+Desktop 1440x900; touch emulation 390x844 and 844x390. Canvas/stage: 735/735, 762/762 and 308/308px.
+No unexpected console/page errors in those flows. Apply-button contrast checked >=4.5.
+Chromium / SwiftShader software rendering. Three.js 0.160.0 modules supplied to Playwright by system curl with TLS verification; direct Chromium CDN TLS rejects the environment CA.
+No physical phone, physical GPU performance, original-site access or CI product test execution claimed.
+No CI product workflow present. No installations, permission/network changes, merge or manual production deployment.
+
+Final syntax, documentation and diff commands/results are recorded in final-static-checks.txt.
+
+Local binary inventory check: 50 distinct WebP baseColor maps and 50 samples, decoded dimensions/format/file bytes/SHA256 verified; 610160 bytes total.

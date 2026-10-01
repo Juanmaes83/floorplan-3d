@@ -1,6 +1,6 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
-**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
+**Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). Esta rama añade la ampliación opcional compatible 1.4.0 de superficies, pendiente de revisión humana. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
 **Fecha:** 30-09-2026 · **Base integrada de esta revisión:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)
 
@@ -93,7 +93,7 @@ Las reglas **E** se comprueban con JSON Schema. Las **S** son semánticas y las 
 | S3 | Error | Muro de longitud ≥ 1 mm (`start ≠ end`). |
 | S4 | Error | Hueco dentro del muro (`offsetMm + widthMm ≤ longitud`), `sill + height ≤ wall.heightMm`, y `swing` solo en `door`. |
 | S5 | Error | Polígono de estancia con área > 0 y **sin autointersecciones** (validado en la app; el script histórico del Anexo A solo comprobaba el área). |
-| S6 | Error | `mmPerPixel` coincide con `knownLengthMm/|AB|` (±0,1 %). |
+| S6 | Error | `mmPerPixel` coincide con `knownLengthMm/\|AB\|` (±0,1 %). |
 | S7 | Error | `updatedAt ≥ createdAt`. |
 | W1 | Aviso | Geometría con `review:"unreviewed"` o `method:"suggested"`. |
 | W2 | Aviso | Estancia cuyo contorno no queda a ≤ grosor/2 + 20 mm de algún muro (implementado en F1b). |
@@ -266,5 +266,30 @@ opcional: los muebles nuevos de la biblioteca guardan su altura de diseño; los
 anteriores no se rellenan al abrir. Si no hay altura, el asset usa la altura
 observable de su genérico, sin persistir una estimación. JSON guarda solo el
 puntero; ZIP sigue transportando imágenes de planos, sin empaquetar assets 3D.
-Los materiales existentes siguen siendo procedimentales/color, sin precio ni
-catálogo externo. [Ejemplo local](examples/floorplan-project-v1.f3.example.json).
+Los materiales originales de aquella entrega eran procedimentales/color, sin precio ni catálogo externo. [Ejemplo local](examples/floorplan-project-v1.f3.example.json).
+
+## Ampliación de superficies 1.4.0 — pendiente de revisión de esta entrega
+
+Se conservan los proyectos 1.0–1.3 sin rellenar campos al abrirlos. Aplicar un
+acabado nuevo eleva a 1.4.0 únicamente las versiones anteriores; conserva futuras
+versiones V1 y los metadatos desconocidos. No cambia geometría ni calibración.
+
+- `walls[].surfaceMaterialId`: referencia **opcional** a un material `category:wall`.
+  Se aplica a toda la pared y ambas caras, incluidos los tramos junto a huecos.
+  En una pared compartida afecta a ambas estancias; la interfaz lo advierte.
+  Ausente mantiene el acabado original. No representa acabados independientes por cara.
+- `materials[].appearance.preset`: admite también el ID estable de la biblioteca
+  local `surface-*`; licencia, origen y archivos se verifican en el catálogo separado.
+- `materials[].appearance.repeatMm:{x,y}`: ampliación opcional, enteros 100–10000 mm,
+  repetición de diseño horizontal/vertical. No son dimensiones físicas publicadas
+  del producto. Si cambia la escala de una asignación compartida se crea otro
+  material para conservar las asignaciones anteriores.
+- Suelo conserva `rooms[].floorMaterialId`. JSON/ZIP transportan referencias y
+  fallback de color, sin mapas ni base64. El receptor necesita la misma biblioteca;
+  IDs desconocidos muestran aviso y color seguro. Los lectores anteriores que
+  conservan campos V1 desconocidos siguen pudiendo presentar su fallback de color.
+
+Regla semántica nueva: `surfaceMaterialId` debe existir en `materials` y ser mural.
+La clasificación histórica de un material de suelo no se restringe retroactivamente.
+[Ejemplo portable](examples/floorplan-project-v1.surfaces.example.json) e
+[inventario y pruebas](../technical/surface-material-library.md).

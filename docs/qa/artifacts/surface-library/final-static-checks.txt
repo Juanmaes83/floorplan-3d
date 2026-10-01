@@ -1,0 +1,5 @@
+Final check: 2026-10-01
+PASS node --check: js/project-core.js js/project-schema.js js/surface-catalog.js js/surface-ui.js js/surface-renderer.mjs tests/surfaces.browser.test.cjs tests/surfaces.test.cjs; inline JS extracted and checked, importmap parsed as JSON.
+PASS python3 scripts/check-documents.py over report, README, roadmap/workflow, F0/F1-F3 and contract documents (tables, fences, relative links and anchors).
+PASS git diff --check and staged git diff --cached --check.
+No secret-pattern matches in task source/documentation; no temporary files included.

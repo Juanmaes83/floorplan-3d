@@ -82,6 +82,7 @@
     }
     const ref = (value, kind, path) => { if (ids.get(value) !== kind) fail(path, `missing ${kind} reference ${value}`); };
     const walls = new Map(project.walls.map(w => [w.id, w]));
+    for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
     for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
     for (const o of project.openings) {
       ref(o.wallId, 'walls', `/openings/${o.id}/wallId`);

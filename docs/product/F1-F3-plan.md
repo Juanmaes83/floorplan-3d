@@ -1,6 +1,6 @@
 # Plan F1–F3: criterios históricos y estado reconciliado
 
-**Revisión:** 01-10-2026 sobre master `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 documental, pendiente de aprobación; no modifica el roadmap canónico ni el contrato 1.3.0.
+**Revisión:** 01-10-2026 sobre master `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 documental reconciliada y fusionada el 01-10-2026 (`5e5e0dc`); no modifica el roadmap canónico ni el contrato 1.3.0.
 
 ## Estado vigente frente a la propuesta original
 

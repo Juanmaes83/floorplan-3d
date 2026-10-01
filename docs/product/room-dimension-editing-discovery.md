@@ -1,6 +1,6 @@
 # Descubrimiento: dimensiones de estancias y entrada de proyectos
 
-**Base auditada:** `origin/master` `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, 01-10-2026. Este texto especifica una **propuesta**, no describe una función de edición dimensional ya disponible. PR #15 (`docs/roadmap-2-evolution`) sigue abierta y no es la base ni una decisión aprobada. F3 inicial está integrada; el catálogo externo continúa pendiente según `docs/ROADMAP.md` y `docs/technical/F3-initial.md`.
+**Base auditada:** `origin/master` `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f`, 01-10-2026. Este texto especifica una **propuesta**, no describe una función de edición dimensional ya disponible. PR #15 (`docs/roadmap-2-evolution`) estaba abierta durante esta auditoría histórica; quedó reconciliada y fusionada el 01-10-2026 (`4ab3902`). No constituye aprobación global de sus propuestas. F3 inicial está integrada; el catálogo externo continúa pendiente según `docs/ROADMAP.md` y `docs/technical/F3-initial.md`.
 
 ## 1. Resumen ejecutivo
 

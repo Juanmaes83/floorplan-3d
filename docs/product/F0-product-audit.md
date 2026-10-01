@@ -1,9 +1,9 @@
 # F0: auditoría histórica y reconciliación documental
 
-**Reconciliación:** 01-10-2026 · **Estado:** PR #3 abierta, pendiente de revisión de Juanma; F0 no se declara aprobada.
-**Fuente vigente:** `master` remoto @ `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 parte de `825ddf629d037d57690aedeea188b725ebf561b5` y se actualiza incorporando ese master mediante merge normal, sin reescritura.
+**Reconciliación:** 01-10-2026 · **Estado actual:** PR #3 reconciliada y fusionada el 01-10-2026 (`5e5e0dc`); decisiones F0 explícitamente abiertas no se declaran aprobadas.
+**Base de la reconciliación anterior:** `master` remoto @ `133f6f47fc5f16764cb290f95e49414932b27a09`. PR #3 parte de `825ddf629d037d57690aedeea188b725ebf561b5` y se actualiza incorporando ese master mediante merge normal, sin reescritura.
 
-## 0. Lectura vigente y alcance de la comprobación
+## 0. Registro de la reconciliación #3 y alcance de aquella comprobación
 
 Prevalecen [ROADMAP](../ROADMAP.md), [workflow](../DEVELOPMENT-WORKFLOW.md) y el
 [contrato implementado](../contracts/FloorPlanProjectV1.md). El contrato/schema
@@ -15,7 +15,7 @@ y la [checklist vigente](../qa/PR-preview-checklist.md).
 Se consultaron README, roadmap, workflow, contrato/schema, informes F1/F2/F3 y
 [la entrega dimensional](../technical/home-room-dimensions.md) de master.
 Las páginas públicas de GitHub de #3/#15/#18 se leyeron por curl el 01-10-2026:
-#3 y #15 abiertas hacia master; #18 fusionada. Esto **no es** una nueva prueba de
+#3 y #15 estaban abiertas en aquella consulta; ambas quedaron fusionadas después (01-10-2026, `5e5e0dc` / `4ab3902`); #18 fusionada. Esto **no es** una nueva prueba de
 app, Three.js, CI, preview Vercel, Asset Lab ni derechos de terceros.
 Los resultados de QA siguientes se atribuyen a sus informes y SHAs originales;
 no se repiten suites de producto ni se crea una preview visual en esta tarea.
