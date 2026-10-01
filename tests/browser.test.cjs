@@ -207,7 +207,8 @@ test('F1 completion: collection adopts F1a migration and preserves both historic
  const legacy={furniture:[{id:'fold-001',type:'bed',name:'old',cx:1000,cy:1000,w:1500,d:2000,rot:0,color:'#c9d6df'}],rooms:{},demolished:['w29'],measures:[]};
  const {page,errors}=await pageFor(t,{},legacy);const initial=await page.evaluate(()=>({p:FloorPlanApp.project,legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')}));
  await page.click('#projectsBtn');await page.fill('#projectName','Migrado');await page.click('#projectRename');await page.click('#projectClose');await page.reload();
- assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),initial.p);
+ // Renaming now changes the portable project name; all migrated data remain identical.
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),{...initial.p,name:'Migrado'});
  assert.deepEqual(await page.evaluate(()=>({legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')})),{legacy:initial.legacy,v1:initial.v1});assert.deepEqual(errors,[]);
 });
 
