@@ -189,3 +189,14 @@ Juanma aprobó la revisión visual de la corrección de catálogo y autorizó el
 La revisión detectó y resolvió que los fetch de manifests/permisos/GLB omitían la sesión. El comportamiento se corrigió con credenciales same-origin y diagnósticos concretos, preservando controles y fallback F3. La aprobación humana cierra el piloto de dos modelos y buscador. Las suites reportadas en la PR no se repitieron durante la actualización documental; véase [el informe](technical/F3-preview-catalog-fix.md).
 
 F3 queda cerrada para el alcance de este piloto inicial; no se considera implementado un catálogo comercial amplio, una biblioteca general de materiales ni un pipeline universal de conversión. La siguiente candidata es la edición dimensional/nuevo proyecto del Roadmap 2, sin número de fase asignado hasta aprobar alcance y reglas geométricas. Las cinco sesiones y veinte planos pendientes de F2 no bloquean esa implementación.
+
+
+## Cierre de entrega post-F3 — PR #18 (01-10-2026)
+
+Juanma aprobó visualmente la entrega de proyectos vacíos/desde imagen y edición directa de dimensiones. La [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), desde `feat/home-room-dimensions`, se fusionó por squash en `master`. HEAD revisado: `c7d1b81e1f6456a9485c88f88723a6fd0fd7fe66`; commit integrado: `10e9f96b417f866d45088fede039786180ddce95`.
+
+Vercel verificó `READY` para el SHA revisado en la preview protegida [post-F3](https://floorplan-3d-git-feat-home-roo-573ef9-juanma-espinosas-projects.vercel.app/), deployment `dpl_4NS1VpLdy1ABhYsksQ3vXFcNfk93`. Juanma abrió y aprobó la revisión temporal; el enlace compartible expiraba y no se registra como URL permanente. No hubo despliegue manual a producción.
+
+Verificación reportada: Node agregado inicial 159/160; corregida la expectativa histórica, la prueba afectada pasó 1/1 y la repetición dirigida final dio 25/25. La suite completa no se repitió después del cambio de test. Python 41/41; sintaxis y diff correctos. Chromium usó SwiftShader; no acredita rendimiento de GPU ni móvil físico. No hay CI de tests del producto configurada. La limitación está explicada en [el informe de entrega](technical/home-room-dimensions.md).
+
+La entrega no tiene número de fase nuevo hasta reconciliar la PR #15 de Roadmap 2 con el master actual. La próxima tarea documental es cerrar/reconciliar la F0 histórica en la PR #3 existente, sin crear una rama duplicada y sin reintroducir su schema antiguo. F2 sigue experimental y no validada; las cinco sesiones y veinte planos siguen pendientes pero no bloquean estas implementaciones.
