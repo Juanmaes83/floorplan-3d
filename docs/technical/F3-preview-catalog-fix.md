@@ -141,3 +141,7 @@ Trazas HTTP y adaptación de cada viewport:
 Identifican código `b17187d8f7a66d2b6c2cd90116a363d645e09594`; el commit documental
 posterior conserva ese código y los mismos assets. Se restauran las capturas
 históricas regeneradas por la suite para no atribuirles una nueva ejecución.
+
+El primer diff-check de los artefactos detectó espacios finales en líneas vacías del
+log de fallo de Node. Se eliminan solo esos espacios al publicar la transcripción;
+se conservan errores, respuestas y conteos. El diff-check final pasa tras normalizarlo.

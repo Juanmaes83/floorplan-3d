@@ -15,9 +15,9 @@
 test at tests/assets.browser.test.cjs:170:95
 ✖ protected preview session keeps both authorized catalogs and textured assets 1440x900 (1733.434313ms)
   AssertionError [ERR_ASSERTION]: {"responses":[{"path":"/assets/f3/catalog.manifest.json","status":401},{"path":"/assets/f3/external.manifest.json","status":401}],"error":"Un catálogo no está disponible: se conserva el mueble genérico."}
-  
+
   0 !== 2
-  
+
       at TestContext.<anonymous> (/workspace/floorplan-3d/tests/assets.browser.test.cjs:175:9)
       at async Test.run (node:internal/test_runner/test:1389:7)
       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
@@ -32,9 +32,9 @@ test at tests/assets.browser.test.cjs:170:95
 test at tests/assets.browser.test.cjs:170:95
 ✖ protected preview session keeps both authorized catalogs and textured assets 390x844 (745.36948ms)
   AssertionError [ERR_ASSERTION]: {"responses":[{"path":"/assets/f3/catalog.manifest.json","status":401},{"path":"/assets/f3/external.manifest.json","status":401}],"error":"Un catálogo no está disponible: se conserva el mueble genérico."}
-  
+
   0 !== 2
-  
+
       at TestContext.<anonymous> (/workspace/floorplan-3d/tests/assets.browser.test.cjs:175:9)
       at async Test.run (node:internal/test_runner/test:1389:7)
       at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
@@ -49,9 +49,9 @@ test at tests/assets.browser.test.cjs:170:95
 test at tests/assets.browser.test.cjs:170:95
 ✖ protected preview session keeps both authorized catalogs and textured assets 844x390 (782.324509ms)
   AssertionError [ERR_ASSERTION]: {"responses":[{"path":"/assets/f3/catalog.manifest.json","status":401},{"path":"/assets/f3/external.manifest.json","status":401}],"error":"Un catálogo no está disponible: se conserva el mueble genérico."}
-  
+
   0 !== 2
-  
+
       at TestContext.<anonymous> (/workspace/floorplan-3d/tests/assets.browser.test.cjs:175:9)
       at async Test.run (node:internal/test_runner/test:1389:7)
       at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
