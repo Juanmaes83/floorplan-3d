@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Base remota comprobada el 02-10-2026: `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2`, merge de PR #22 (Legal y uso, reconciliación documental y ajustes QA). La comprobación anterior sobre `15004221da8a6f2e5c22fe45392680a934b6d277`, tras #20, se conserva como antecedente histórico, no como base actual. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
+> Base remota comprobada el 02-10-2026: `origin/master` `67b7f999c42b3a2960dac6caf94ab77dcc637819`, merge de PR #24 (exportación determinista Rubik→Blender y perfiles controlados). La comprobación anterior sobre `15004221da8a6f2e5c22fe45392680a934b6d277`, tras #20, se conserva como antecedente histórico, no como base actual. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
 
 ## 1. Propósito y principios
 
@@ -70,26 +70,22 @@ Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no n
   diferentes y no se afirman implementados por enlazar repos o formatos.
 - **Normativa** solo tras decidir jurisdicción/uso, fuentes/licencias y asesoría.
 
-### 3.2 Candidata post-F3 autorizada, aún no integrada ni numerada
+### 3.2 Entrega post-F3 integrada por PR #24, sin numeración nueva
 
-Juanma autoriza esta entrega técnica concreta; **no aprueba globalmente Roadmap 2**.
-El [informe de la candidata](technical/post-F3-rubik-blender-candidate.md) separa:
+Juanma aprobó la revisión visual y la PR #24 quedó fusionada el 02-10-2026.
+Merge squash: `67b7f999c42b3a2960dac6caf94ab77dcc637819`; HEAD revisado:
+`86c207530c8bca2ec8a04115c6483319c64582c2`. El [informe técnico](technical/post-F3-rubik-blender-candidate.md)
+conserva la especificación y evidencia. La entrega demuestra, con un fixture
+sintético asimétrico, exportación reproducible, correspondencia semántica y
+apertura/reapertura en Blender 5.2.1; añade perfiles offline controlados y tres
+albedos CC0 candidatos. No incorpora modelos nuevos de Asset Lab ni modifica
+el catálogo web de 50 superficies.
 
-- **Gate A:** exportación offline determinista de un `FloorPlanProjectV1` sintético
-  asimétrico a GLB + manifiesto semántico enlazado por hashes; prueba real por
-  Blender CLI de entidades, IDs, mm→m, ejes, huecos, dimensiones y materiales.
-- **Gate B:** nueva auditoría de Asset Lab desde commit fijado, perfiles acotados
-  de entrada/salida y una tanda pequeña sólo con permiso/procedencia verificados.
-  Tres albedos CC0 PNG candidatos para Blender, sin alterar los cincuenta de la
-  interfaz. PBR PNG probado con un diagnóstico sintético, **no** nuevos materiales
-  PBR comerciales. Los cuatro modelos adicionales examinados quedan rechazados.
-
-La implementación permanece en una PR hacia master y requiere revisión humana;
-no habilita servicios, sincronización, MCP, Unreal, CRM ni hosting adicional.
-No modifica el contrato 1.4.0, no reconstruye muebles genéricos detallados ni
-acredita métricas profesionales. No se asigna F4 ni fecha comercial.
-Cinco sesiones y veinte planos reales siguen reservados para la validación
-empírica final de F2 y **no bloquean esta candidata autorizada**.
+Este resultado técnico **no** integra aún el flujo con LAB Astra/Blender MCP,
+Unreal, CRM o Immersphere; tampoco crea F4, aprueba prioridades globales de
+Roadmap 2 ni mide rendimiento móvil físico. Los albedos candidatos no son un
+catálogo PBR comercial terminado. Cinco sesiones y veinte planos reales siguen
+pendientes para la validación empírica final de F2 y no bloquearon esta entrega.
 
 ## 4. Especificación de las mejoras principales
 

@@ -2,7 +2,8 @@
 
 Fecha: 02-10-2026. Base remota comprobada:
 `e62d17ee62576466f937700f6c445c33b09ec9c2`, `origin/master`.
-Rama: `codex/rubik-blender-candidate`. **Revisión humana pendiente; no merge.**
+Rama revisada: `codex/rubik-blender-candidate`. **Aprobada por Juanma y fusionada mediante squash en PR #24 el 02-10-2026.**
+Merge SHA: `67b7f999c42b3a2960dac6caf94ab77dcc637819`; HEAD revisado: `86c207530c8bca2ec8a04115c6483319c64582c2`.
 Es una entrega técnica autorizada, no F4 ni aprobación global de Roadmap 2.
 
 ## Estado previo y alcance
@@ -254,8 +255,9 @@ Los primeros paquetes/ensayos quedan preservados localmente; sólo los finales
 enlazados aquí son evidencia de la candidata. Las capturas históricas generadas
 por regresiones no se mezclan con la nueva entrega ni sustituyen su evidencia.
 
-Pendientes humanos: revisar semántica/escena y albedos; aceptar límites/fallback;
-permisos específicos de futuros modelos, sets PBR reales y presupuesto móvil.
+Cierre humano: Juanma revisó y aprobó las escenas y albedos el 02-10-2026.
+La revisión acepta el alcance y los límites/fallback de esta entrega. Siguen
+pendientes permisos específicos para futuros modelos, sets PBR reales y presupuesto móvil.
 Cinco sesiones/veinte planos y umbrales F2 siguen pendientes para validación
 empírica final, sin bloquear esta candidata. No conecta automáticamente LAB,
-CRM/Unreal/Immersphere ni autoriza nuevas fases. **HUMAN REVIEW: PENDING.**
+CRM/Unreal/Immersphere ni autoriza nuevas fases. **ESTADO: INTEGRADO POR PR #24; no equivale a F4 ni a validación empírica F2.**

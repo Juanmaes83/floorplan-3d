@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 01-10-2026 tras integrar por squash la PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); Vercel confirmó `READY` para producción en ese SHA. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 02-10-2026 tras fusionar la PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y previamente la PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); Vercel confirmó `READY` para producción en ese SHA. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -42,13 +42,16 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 
 ## Correspondencia con el roadmap histórico de PR #2
 
-**Candidata futura/propuesta post-F3, sin nueva numeración (02-10-2026):**
-Juanma autoriza el ensayo técnico de exportación Rubik→Blender y perfiles
-controlados de activos. [Diseño, prueba CLI real y límites](technical/post-F3-rubik-blender-candidate.md).
-La candidata no está integrada ni aceptada por humanos; no aprueba Roadmap 2,
-no altera F1b/F2 ni abre automáticamente conectores comerciales. Cinco sesiones
-y veinte planos reales quedan para la validación empírica final de F2 y no
-bloquean este trabajo autorizado. Base comprobada: master `e62d17ee62576466f937700f6c445c33b09ec9c2`.
+**Entrega post-F3 integrada, sin nueva numeración (02-10-2026):**
+Juanma aprobó visualmente y fusionó la PR #24. Merge squash:
+`67b7f999c42b3a2960dac6caf94ab77dcc637819`; HEAD revisado:
+`86c207530c8bca2ec8a04115c6483319c64582c2`. Incluye exportación determinista
+de un fixture sintético Rubik→GLB/Blender, perfiles offline acotados y tres
+albedos CC0 candidatos separados del catálogo web. [Informe y límites](technical/post-F3-rubik-blender-candidate.md).
+Es una integración técnica acotada, no F4 ni aprobación global de Roadmap 2.
+No conecta automáticamente LAB Astra, Blender MCP, Unreal, CRM o Immersphere.
+F2 conserva pendientes sus cinco sesiones, veinte planos reales y umbrales; no
+bloquearon esta entrega y siguen pendientes para validación empírica.
 
 La [PR #2, revisión 84ddf72](https://github.com/Juanmaes83/floorplan-3d/blob/84ddf72265b83d46daebdb91fde0d5e568ceb019/docs/ROADMAP.md)
 proponía otra numeración. Sus números quedan como referencias históricas:
