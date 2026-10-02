@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "binary": "byte-for-byte all four package files",
+  "semantic": "all fields after canonical JSON, including entities/transforms/dimensions/materials/references/losses",
+  "files": [
+    {
+      "path": "source-project.json",
+      "bytes": 4201,
+      "sha256": "e651b4dfce4209afbeb30cafbe5c1ad623ecf52a0e4f021b0b1c625826ffe6e4",
+      "binaryEqual": true
+    },
+    {
+      "path": "scene.glb",
+      "bytes": 119196,
+      "sha256": "93349218ae4acdd4e0995c6fad40432bb89cfd7c391963fc4f10675b7811468d",
+      "binaryEqual": true
+    },
+    {
+      "path": "semantic.json",
+      "bytes": 12362,
+      "sha256": "d068bc7d2a8210f3b18a31f9175094314cb0160ade20dd2039a136b07e66565d",
+      "binaryEqual": true
+    },
+    {
+      "path": "package.json",
+      "bytes": 558,
+      "sha256": "2954a9a8c918f09af6dd72968bbb0e8c87ddb752cef2f1ccf2b1425b0ecaa87e",
+      "binaryEqual": true
+    }
+  ],
+  "blendComparison": "Not included: Blender is an inspected downstream scene, not a deterministic serialized package"
+}

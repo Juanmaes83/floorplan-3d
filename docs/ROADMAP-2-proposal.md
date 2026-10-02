@@ -1,7 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Reconciliada de nuevo el 02-10-2026 contra `origin/master` `15004221da8a6f2e5c22fe45392680a934b6d277`, tras PR #20. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
+> Base remota comprobada el 02-10-2026: `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2`, merge de PR #22 (Legal y uso, reconciliación documental y ajustes QA). La comprobación anterior sobre `15004221da8a6f2e5c22fe45392680a934b6d277`, tras #20, se conserva como antecedente histórico, no como base actual. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
 
 ## 1. Propósito y principios
 
@@ -69,6 +69,27 @@ Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no n
   contratos, identidad, unidades, ida/vuelta, privacidad y coste. Son conectores
   diferentes y no se afirman implementados por enlazar repos o formatos.
 - **Normativa** solo tras decidir jurisdicción/uso, fuentes/licencias y asesoría.
+
+### 3.2 Candidata post-F3 autorizada, aún no integrada ni numerada
+
+Juanma autoriza esta entrega técnica concreta; **no aprueba globalmente Roadmap 2**.
+El [informe de la candidata](technical/post-F3-rubik-blender-candidate.md) separa:
+
+- **Gate A:** exportación offline determinista de un `FloorPlanProjectV1` sintético
+  asimétrico a GLB + manifiesto semántico enlazado por hashes; prueba real por
+  Blender CLI de entidades, IDs, mm→m, ejes, huecos, dimensiones y materiales.
+- **Gate B:** nueva auditoría de Asset Lab desde commit fijado, perfiles acotados
+  de entrada/salida y una tanda pequeña sólo con permiso/procedencia verificados.
+  Tres albedos CC0 PNG candidatos para Blender, sin alterar los cincuenta de la
+  interfaz. PBR PNG probado con un diagnóstico sintético, **no** nuevos materiales
+  PBR comerciales. Los cuatro modelos adicionales examinados quedan rechazados.
+
+La implementación permanece en una PR hacia master y requiere revisión humana;
+no habilita servicios, sincronización, MCP, Unreal, CRM ni hosting adicional.
+No modifica el contrato 1.4.0, no reconstruye muebles genéricos detallados ni
+acredita métricas profesionales. No se asigna F4 ni fecha comercial.
+Cinco sesiones y veinte planos reales siguen reservados para la validación
+empírica final de F2 y **no bloquean esta candidata autorizada**.
 
 ## 4. Especificación de las mejoras principales
 

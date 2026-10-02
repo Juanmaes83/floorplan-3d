@@ -37,10 +37,18 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
 | F3 | Catálogo de objetos 3D y materiales con assets autorizados; verificación física por recurso | **Entregas acotadas integradas.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 integró 50 mapas locales CC0-1.0 en cinco familias para suelos y paredes, con aplicación persistente, búsqueda, comparación, repetición y fallback (`FloorPlanProjectV1` 1.4.0; merge `fa79d07`). PR #20 integró un pipeline reproducible y acotado y doce GLB normalizados de Asset Lab (merge squash `2925081`); las medidas nuevas son de malla, sin escala física verificada. No hay sincronización automática con Asset Lab, soporte universal de modelos ni catálogo comercial general. Otros perfiles/extensiones y PBR son propuestas futuras; rendimiento en teléfono físico pendiente. [Materiales](technical/surface-material-library.md) · [Pipeline](technical/F3-asset-lab-pipeline.md). |
-| Entrega solicitada en esta tarea | Autoría visible y apartado «Legal y uso» en la plataforma | Solicitada por el titular para esta PR, pendiente de revisión humana de la interfaz. Texto informativo, sin presentarlo como asesoramiento jurídico; conserva licencias y atribuciones de recursos de terceros. |
+| Entrega legal integrada | Autoría visible y apartado «Legal y uso» en la plataforma | Integrada por PR #22, merge `e62d17ee62576466f937700f6c445c33b09ec9c2`, comprobado el 02-10-2026. Texto informativo, no asesoramiento jurídico; conserva licencias y atribuciones de recursos de terceros. |
 | Entrega post-F3, sin numeración nueva | Inicio de proyectos vacíos/desde imagen y edición directa de dimensiones de estancias rectangulares | Aprobada e integrada por PR #18 (`c7d1b81` revisado; merge `10e9f96`). No modifica schema 1.3.0; limita edición numérica a geometría ortogonal inequívoca. [Informe](technical/home-room-dimensions.md). |
 
 ## Correspondencia con el roadmap histórico de PR #2
+
+**Candidata futura/propuesta post-F3, sin nueva numeración (02-10-2026):**
+Juanma autoriza el ensayo técnico de exportación Rubik→Blender y perfiles
+controlados de activos. [Diseño, prueba CLI real y límites](technical/post-F3-rubik-blender-candidate.md).
+La candidata no está integrada ni aceptada por humanos; no aprueba Roadmap 2,
+no altera F1b/F2 ni abre automáticamente conectores comerciales. Cinco sesiones
+y veinte planos reales quedan para la validación empírica final de F2 y no
+bloquean este trabajo autorizado. Base comprobada: master `e62d17ee62576466f937700f6c445c33b09ec9c2`.
 
 La [PR #2, revisión 84ddf72](https://github.com/Juanmaes83/floorplan-3d/blob/84ddf72265b83d46daebdb91fde0d5e568ceb019/docs/ROADMAP.md)
 proponía otra numeración. Sus números quedan como referencias históricas:

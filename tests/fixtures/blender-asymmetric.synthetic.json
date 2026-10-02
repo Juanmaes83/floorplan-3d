@@ -1,0 +1,43 @@
+{
+  "schema": "rubik-sota.floorplan-project",
+  "schemaVersion": "1.4.0",
+  "id": "prj_blender-asymmetric",
+  "name": "Synthetic interoperability fixture — not a real plan",
+  "createdAt": "2026-10-02T00:00:00Z",
+  "updatedAt": "2026-10-02T00:00:00Z",
+  "units": "mm",
+  "coordinateSystem": {"origin":"plan-top-left","xAxis":"right","yAxis":"down","rotation":"degrees-clockwise"},
+  "scale": {"confidence":"estimated","method":"template","note":"Known authored synthetic dimensions, not F1b calibration or real-world validation"},
+  "defaults": {"wallHeightMm":2970,"wallThicknessMm":200},
+  "walls": [
+    {"id":"wal_north","start":{"x":910,"y":1950},"end":{"x":9450,"y":1950},"thicknessMm":200,"heightMm":2970,"structure":"exterior","status":"existing","surfaceMaterialId":"mat_plaster"},
+    {"id":"wal_east","start":{"x":9450,"y":1950},"end":{"x":9450,"y":4600},"thicknessMm":200,"heightMm":2970,"structure":"exterior","status":"existing"},
+    {"id":"wal_study-south","start":{"x":9450,"y":4600},"end":{"x":7120,"y":4600},"thicknessMm":200,"heightMm":2970,"structure":"partition","status":"existing"},
+    {"id":"wal_partition","start":{"x":7120,"y":1950},"end":{"x":7120,"y":5880},"thicknessMm":200,"heightMm":2970,"structure":"partition","status":"new","surfaceMaterialId":"mat_plaster"},
+    {"id":"wal_south","start":{"x":7120,"y":5880},"end":{"x":910,"y":5880},"thicknessMm":200,"heightMm":2970,"structure":"exterior","status":"existing"},
+    {"id":"wal_west","start":{"x":910,"y":5880},"end":{"x":910,"y":1950},"thicknessMm":200,"heightMm":2970,"structure":"exterior","status":"existing"},
+    {"id":"wal_diagonal","start":{"x":9800,"y":6100},"end":{"x":11330,"y":7290},"thicknessMm":130,"heightMm":1170,"structure":"low","status":"new"},
+    {"id":"wal_removed","start":{"x":1100,"y":4500},"end":{"x":2700,"y":4500},"thicknessMm":100,"heightMm":2400,"structure":"partition","status":"demolished"}
+  ],
+  "openings": [
+    {"id":"opn_north-window","wallId":"wal_north","kind":"window","offsetMm":1070,"widthMm":1730,"heightMm":1230,"sillHeightMm":880},
+    {"id":"opn_partition-door","wallId":"wal_partition","kind":"door","offsetMm":780,"widthMm":830,"heightMm":2140,"sillHeightMm":0,"swing":{"hinge":"end","side":"left"}},
+    {"id":"opn_south-slider","wallId":"wal_south","kind":"sliding-door","offsetMm":1190,"widthMm":2470,"heightMm":2370,"sillHeightMm":0},
+    {"id":"opn_east-void","wallId":"wal_east","kind":"opening","offsetMm":400,"widthMm":910,"heightMm":1930,"sillHeightMm":170}
+  ],
+  "rooms": [
+    {"id":"rom_living","name":"Synthetic living 6010 × 3730","polygon":[{"x":1010,"y":2050},{"x":7020,"y":2050},{"x":7020,"y":5780},{"x":1010,"y":5780}],"floorMaterialId":"mat_wood","countsTowardArea":true},
+    {"id":"rom_study","name":"Synthetic study 2130 × 2450","polygon":[{"x":7220,"y":2050},{"x":9350,"y":2050},{"x":9350,"y":4500},{"x":7220,"y":4500}],"floorMaterialId":"mat_stone","countsTowardArea":true}
+  ],
+  "materials": [
+    {"id":"mat_wood","name":"CC0 local reduced wood albedo","category":"floor","appearance":{"color":"#806042","preset":"surface-wood-floor","repeatMm":{"x":1370,"y":910}}},
+    {"id":"mat_stone","name":"Declared stone color","category":"floor","appearance":{"color":"#887766"}},
+    {"id":"mat_plaster","name":"Declared wall plaster color","category":"wall","appearance":{"color":"#ddd8ca"}}
+  ],
+  "objects": [
+    {"id":"obj_catalog-bench","type":"bench","name":"Actual MIT bench fitted to asymmetric instance","position":{"x":2400,"y":3650},"rotationDeg":37,"size":{"widthMm":870,"depthMm":430,"heightMm":610},"elevationMm":120,"roomId":"rom_living","assetRef":{"catalog":"rubik-sota-local","assetId":"synthetic-bench"}},
+    {"id":"obj_design-table","type":"dining-table","name":"Generic dimensional table, no detailed asset","position":{"x":5100,"y":3800},"rotationDeg":113,"size":{"widthMm":1590,"depthMm":730,"heightMm":760},"roomId":"rom_living","color":"#987654"},
+    {"id":"obj_unknown-ref","type":"cabinet","name":"Deliberately missing catalog asset exercises fallback","position":{"x":8200,"y":3200},"rotationDeg":271,"size":{"widthMm":1170,"depthMm":470,"heightMm":1830},"roomId":"rom_study","assetRef":{"catalog":"rubik-sota-local","assetId":"missing-controlled-candidate"}}
+  ],
+  "measurements": [{"id":"msr_known-living","a":{"x":1010,"y":2050},"b":{"x":7020,"y":2050},"label":"6010 mm synthetic"}]
+}

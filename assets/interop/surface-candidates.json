@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "status": "offline-Blender-candidate-not-approved-browser-library",
+  "profile": "rubik-cc0-albedo-png-v1",
+  "tools": {
+    "Pillow": "12.3.0",
+    "node": "v24.14.1"
+  },
+  "entries": [
+    {
+      "id": "surface-american-walnut-veneer",
+      "name": "american walnut veneer",
+      "family": "wood",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "status": "candidate-human-review-pending",
+      "profile": "rubik-cc0-albedo-png-v1",
+      "color": "#999999",
+      "roughness": 0.8,
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "1000 mm design repeat only, not source physical dimensions",
+      "source": {
+        "assetId": "american_walnut_veneer",
+        "author": "Poly Haven; individual artist not identified in distribution",
+        "license": "CC0-1.0",
+        "url": "https://polyhaven.com/a/american_walnut_veneer",
+        "distribution": "Papyszoo/CC0-Public-Domain-Textures",
+        "revision": "fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2",
+        "path": "packs/polyhaven-textures/textures/american_walnut_veneer/american_walnut_veneer_albedo_preview.png",
+        "sha256": "cede49167b8b10ff18fcc6928d497bcbc9b5fed44f1ac2bf5c658cf1390fd625",
+        "bytes": 84635,
+        "format": "image/png",
+        "dimensions": [
+          256,
+          256
+        ],
+        "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/american_walnut_veneer/american_walnut_veneer_albedo_preview.png",
+        "rights": {
+          "redistribution": true,
+          "modification": true,
+          "commercial": true,
+          "licensePath": "assets/interop/LIBRARY-CC0.txt",
+          "licenseSha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "creatorEvidence": "assets/materials/licenses/POLY-HAVEN-asset-license.json",
+          "creatorLicenseCommit": "b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356"
+        },
+        "changes": "Flat reduced albedo re-encoded RGB lossless PNG; no extracted PBR maps, no recoloring"
+      },
+      "maps": {
+        "baseColor": {
+          "path": "assets/interop/american-walnut-veneer.png",
+          "format": "image/png",
+          "width": 256,
+          "height": 256,
+          "bytes": 73034,
+          "sha256": "5475c46254f922ee7b8d0e7080d990bdb136eba04ededacd6b575088d8d81951"
+        }
+      },
+      "channels": {
+        "baseColor": "sRGB",
+        "roughness": "design scalar, not measured",
+        "normal": null,
+        "metalness": null,
+        "occlusion": null,
+        "height": null
+      }
+    },
+    {
+      "id": "surface-anti-skid-tiles",
+      "name": "anti skid tiles",
+      "family": "tiles",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "status": "candidate-human-review-pending",
+      "profile": "rubik-cc0-albedo-png-v1",
+      "color": "#999999",
+      "roughness": 0.8,
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "1000 mm design repeat only, not source physical dimensions",
+      "source": {
+        "assetId": "anti_skid_tiles",
+        "author": "Poly Haven; individual artist not identified in distribution",
+        "license": "CC0-1.0",
+        "url": "https://polyhaven.com/a/anti_skid_tiles",
+        "distribution": "Papyszoo/CC0-Public-Domain-Textures",
+        "revision": "fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2",
+        "path": "packs/polyhaven-textures/textures/anti_skid_tiles/anti_skid_tiles_albedo_preview.png",
+        "sha256": "c6177bc0308a5c6834bc1e6a9e57b2c7611fe11540cc850ae2bd1bf24a774c11",
+        "bytes": 80254,
+        "format": "image/png",
+        "dimensions": [
+          256,
+          256
+        ],
+        "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/anti_skid_tiles/anti_skid_tiles_albedo_preview.png",
+        "rights": {
+          "redistribution": true,
+          "modification": true,
+          "commercial": true,
+          "licensePath": "assets/interop/LIBRARY-CC0.txt",
+          "licenseSha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "creatorEvidence": "assets/materials/licenses/POLY-HAVEN-asset-license.json",
+          "creatorLicenseCommit": "b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356"
+        },
+        "changes": "Flat reduced albedo re-encoded RGB lossless PNG; no extracted PBR maps, no recoloring"
+      },
+      "maps": {
+        "baseColor": {
+          "path": "assets/interop/anti-skid-tiles.png",
+          "format": "image/png",
+          "width": 256,
+          "height": 256,
+          "bytes": 67298,
+          "sha256": "020ebbc55f4f3734323fb6730b6e4a3ecfe44d990db4a294cdc044d66e89fe9b"
+        }
+      },
+      "channels": {
+        "baseColor": "sRGB",
+        "roughness": "design scalar, not measured",
+        "normal": null,
+        "metalness": null,
+        "occlusion": null,
+        "height": null
+      }
+    },
+    {
+      "id": "surface-brick-floor",
+      "name": "brick floor",
+      "family": "brick",
+      "applications": [
+        "floor",
+        "wall"
+      ],
+      "status": "candidate-human-review-pending",
+      "profile": "rubik-cc0-albedo-png-v1",
+      "color": "#999999",
+      "roughness": 0.8,
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      },
+      "scaleEvidence": "1000 mm design repeat only, not source physical dimensions",
+      "source": {
+        "assetId": "brick_floor",
+        "author": "Poly Haven; individual artist not identified in distribution",
+        "license": "CC0-1.0",
+        "url": "https://polyhaven.com/a/brick_floor",
+        "distribution": "Papyszoo/CC0-Public-Domain-Textures",
+        "revision": "fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2",
+        "path": "packs/polyhaven-textures/textures/brick_floor/brick_floor_albedo_preview.png",
+        "sha256": "c8932e853bc5450645bff09354806cd937431787c08d18b0a2486bde18deca5a",
+        "bytes": 136453,
+        "format": "image/png",
+        "dimensions": [
+          256,
+          256
+        ],
+        "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brick_floor/brick_floor_albedo_preview.png",
+        "rights": {
+          "redistribution": true,
+          "modification": true,
+          "commercial": true,
+          "licensePath": "assets/interop/LIBRARY-CC0.txt",
+          "licenseSha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "creatorEvidence": "assets/materials/licenses/POLY-HAVEN-asset-license.json",
+          "creatorLicenseCommit": "b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356"
+        },
+        "changes": "Flat reduced albedo re-encoded RGB lossless PNG; no extracted PBR maps, no recoloring"
+      },
+      "maps": {
+        "baseColor": {
+          "path": "assets/interop/brick-floor.png",
+          "format": "image/png",
+          "width": 256,
+          "height": 256,
+          "bytes": 116900,
+          "sha256": "52517c1aa1772a91baafc3aa464315e389e42c0d430a3406d0acc89c083dd4e1"
+        }
+      },
+      "channels": {
+        "baseColor": "sRGB",
+        "roughness": "design scalar, not measured",
+        "normal": null,
+        "metalness": null,
+        "occlusion": null,
+        "height": null
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "format": "KTX2 PBR channel sets in pinned source",
+      "reason": "No already installed/pinned KTX2 decoder in this pipeline; not downloaded, transcoded or claimed as PBR delivery"
+    }
+  ]
+}
