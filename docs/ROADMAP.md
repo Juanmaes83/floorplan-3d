@@ -1,6 +1,6 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 02-10-2026 tras fusionar la PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y previamente la PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); Vercel confirmó `READY` para producción en ese SHA. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 02-10-2026 tras fusionar la PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`). Vercel confirmó `READY` para producción en el SHA de la PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); la PR #24 no requirió despliegue de interfaz. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
