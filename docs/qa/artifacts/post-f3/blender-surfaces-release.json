@@ -1,0 +1,386 @@
+{
+  "status": "PASS",
+  "blenderVersion": "5.2.1 LTS",
+  "blenderBuildHash": "9e2066aef7ef",
+  "importOperator": "bpy.ops.import_scene.gltf",
+  "operatorResult": [
+    "FINISHED"
+  ],
+  "options": {
+    "factoryStartup": true,
+    "background": true,
+    "unitSystem": "METRIC",
+    "scaleLength": 1.0
+  },
+  "packageSha256": "18035228be70802acbf749bcece036ab33495a99be79d315fa211c337cd2453f",
+  "verifierSha256": "cdb703fe7d76392f91eb230c18fa7a666d0ae4332b79c37c292ab7a9b34b2f1e",
+  "blend": {
+    "filename": "asymmetric-surfaces-release.blend",
+    "bytes": 388438,
+    "sha256": "797793167e8321944dacf2c9b99347c227c5f32f5ad61900557c93ce5ebd0dd5"
+  },
+  "entities": [
+    {
+      "id": "rom_living",
+      "role": "room",
+      "object": "rom_living",
+      "collection": "Rubik_rooms",
+      "boundsMeters": {
+        "min": [
+          -5.079953193664551,
+          -1.184346079826355,
+          0.0
+        ],
+        "max": [
+          0.9300469160079956,
+          2.545654058456421,
+          0.0
+        ]
+      },
+      "materials": [
+        "mat_wood"
+      ],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "rom_study",
+      "role": "room",
+      "object": "rom_study",
+      "collection": "Rubik_rooms",
+      "boundsMeters": {
+        "min": [
+          1.1300469636917114,
+          0.0956539437174797,
+          0.0
+        ],
+        "max": [
+          3.26004695892334,
+          2.545654058456421,
+          0.0
+        ]
+      },
+      "materials": [
+        "mat_stone"
+      ],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_diagonal",
+      "role": "wall",
+      "object": "wal_diagonal",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          3.6701409816741943,
+          -2.7456541061401367,
+          0.0
+        ],
+        "max": [
+          5.279953479766846,
+          -1.4530383348464966,
+          1.1699999570846558
+        ]
+      },
+      "materials": [
+        "rubik-default-wall"
+      ],
+      "children": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_east",
+      "role": "wall",
+      "object": "wal_east",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          3.2600467205047607,
+          -0.004346145782619715,
+          0.0
+        ],
+        "max": [
+          3.4600470066070557,
+          2.6456539630889893,
+          2.9699997901916504
+        ]
+      },
+      "materials": [
+        "rubik-default-wall"
+      ],
+      "children": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_north",
+      "role": "wall",
+      "object": "wal_north",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          -5.179953098297119,
+          2.545654058456421,
+          0.0
+        ],
+        "max": [
+          3.360046863555908,
+          2.7456538677215576,
+          2.9699997901916504
+        ]
+      },
+      "materials": [
+        "mat_plaster"
+      ],
+      "children": 8,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_partition",
+      "role": "wall",
+      "object": "wal_partition",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          0.930046796798706,
+          -1.284346103668213,
+          0.0
+        ],
+        "max": [
+          1.130047082901001,
+          2.6456539630889893,
+          2.9700000286102295
+        ]
+      },
+      "materials": [
+        "mat_plaster"
+      ],
+      "children": 5,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_removed",
+      "role": "wall",
+      "object": "wal_removed",
+      "collection": "Rubik_walls",
+      "boundsMeters": null,
+      "materials": [],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_south",
+      "role": "wall",
+      "object": "wal_south",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          -5.179953098297119,
+          -1.3843461275100708,
+          0.0
+        ],
+        "max": [
+          1.0300469398498535,
+          -1.184346079826355,
+          2.9699997901916504
+        ]
+      },
+      "materials": [
+        "rubik-default-wall"
+      ],
+      "children": 5,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_study-south",
+      "role": "wall",
+      "object": "wal_study-south",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          1.0300469398498535,
+          -0.10434605181217194,
+          0.0
+        ],
+        "max": [
+          3.360046863555908,
+          0.0956539511680603,
+          2.9700000286102295
+        ]
+      },
+      "materials": [
+        "rubik-default-wall"
+      ],
+      "children": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "wal_west",
+      "role": "wall",
+      "object": "wal_west",
+      "collection": "Rubik_walls",
+      "boundsMeters": {
+        "min": [
+          -5.279953479766846,
+          -1.284346342086792,
+          0.0
+        ],
+        "max": [
+          -5.079952716827393,
+          2.6456542015075684,
+          2.9700000286102295
+        ]
+      },
+      "materials": [
+        "rubik-default-wall"
+      ],
+      "children": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "opn_east-void",
+      "role": "opening",
+      "object": "opn_east-void",
+      "collection": "Rubik_openings",
+      "boundsMeters": null,
+      "materials": [],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "opn_north-window",
+      "role": "opening",
+      "object": "opn_north-window",
+      "collection": "Rubik_openings",
+      "boundsMeters": null,
+      "materials": [],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "opn_partition-door",
+      "role": "opening",
+      "object": "opn_partition-door",
+      "collection": "Rubik_openings",
+      "boundsMeters": null,
+      "materials": [],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "opn_south-slider",
+      "role": "opening",
+      "object": "opn_south-slider",
+      "collection": "Rubik_openings",
+      "boundsMeters": null,
+      "materials": [],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "obj_catalog-bench",
+      "role": "object",
+      "object": "obj_catalog-bench",
+      "collection": "Rubik_objects",
+      "boundsMeters": {
+        "min": [
+          -4.166749954223633,
+          0.5121580362319946,
+          0.12000000476837158
+        ],
+        "max": [
+          -3.213156223297119,
+          1.379150629043579,
+          0.7299999594688416
+        ]
+      },
+      "materials": [
+        "Material_4"
+      ],
+      "children": 3,
+      "status": "PASS"
+    },
+    {
+      "id": "obj_design-table",
+      "role": "object",
+      "object": "obj_design-table",
+      "collection": "Rubik_objects",
+      "boundsMeters": {
+        "min": [
+          -1.6365686655044556,
+          -0.07876434922218323,
+          0.0
+        ],
+        "max": [
+          -0.34333741664886475,
+          1.6700721979141235,
+          0.7599999904632568
+        ]
+      },
+      "materials": [
+        "obj_design-table__color"
+      ],
+      "children": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "obj_unknown-ref",
+      "role": "object",
+      "object": "obj_unknown-ref",
+      "collection": "Rubik_objects",
+      "boundsMeters": {
+        "min": [
+          1.864872932434082,
+          0.8066417574882507,
+          0.0
+        ],
+        "max": [
+          2.3552207946777344,
+          1.984666109085083,
+          1.8300000429153442
+        ]
+      },
+      "materials": [
+        "obj_unknown-ref__color"
+      ],
+      "children": 0,
+      "status": "PASS"
+    }
+  ],
+  "images": [
+    {
+      "name": "surface-american-walnut-veneer",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "name": "surface-anti-skid-tiles",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "name": "surface-brick-floor",
+      "dimensions": [
+        256,
+        256
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "fallback": "generic dimensional box; assetRef retained in semantic manifest",
+      "id": "obj_unknown-ref",
+      "kind": "asset",
+      "reason": "Unknown, unauthorized or revision-mismatched assetRef"
+    },
+    {
+      "id": "msr_known-living",
+      "kind": "measurement",
+      "reason": "Dimension annotation preserved in source-project.json, not modeled"
+    }
+  ]
+}

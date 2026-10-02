@@ -1,0 +1,19 @@
+# Byte-hashed interop sources and permissions must survive Windows checkout.
+scripts/interop/* text eol=lf
+js/project-core.js text eol=lf
+js/project-schema.js text eol=lf
+js/asset-catalog.js text eol=lf
+js/generic-catalog.js text eol=lf
+assets/f3/*.txt text eol=lf
+assets/f3/*.json text eol=lf
+assets/interop/*.txt text eol=lf
+assets/interop/*.json text eol=lf
+assets/materials/catalog.json text eol=lf
+docs/qa/artifacts/post-f3/*.json text eol=lf
+assets/f3/*.glb -text
+assets/interop/*.png -text
+docs/qa/artifacts/post-f3/**/*.glb -text
+docs/qa/artifacts/post-f3/*.blend -text
+scripts/f3-pipeline/reconcile-* text eol=lf
+docs/qa/artifacts/f3-reconciliation*/** -text
+docs/qa/artifacts/f3-reconciliation*/** whitespace=cr-at-eol,-blank-at-eof

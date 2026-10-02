@@ -1,0 +1,121 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "name": "node-full",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--require",
+        "C:\\Users\\temp123\\.codex\\visualizations\\2026\\09\\04\\01a06e52-48d9-7952-88d8-cafb6e617672\\floorplan-3d-post-f3\\scripts\\f3-pipeline\\reconcile-browser-preload.cjs",
+        "--test",
+        "--test-concurrency=1",
+        "tests\\assets.browser.test.cjs",
+        "tests\\assets.test.cjs",
+        "tests\\browser.test.cjs",
+        "tests\\furniture-search.test.cjs",
+        "tests\\interop.test.cjs",
+        "tests\\library.test.cjs",
+        "tests\\project.test.cjs",
+        "tests\\raw_wall_export.test.cjs",
+        "tests\\room-layout.browser.test.cjs",
+        "tests\\room-layout.test.cjs",
+        "tests\\surfaces.browser.test.cjs",
+        "tests\\surfaces.test.cjs",
+        "tests\\tracing.test.cjs",
+        "tests\\wall_assist.test.cjs"
+      ],
+      "exitCode": 0,
+      "seconds": 344.031
+    },
+    {
+      "name": "python-schema",
+      "command": [
+        "C:\\Users\\temp123\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/schema.test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.297
+    },
+    {
+      "name": "python-f2_readiness",
+      "command": [
+        "C:\\Users\\temp123\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_readiness.test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.218
+    },
+    {
+      "name": "python-f2_wall_evaluation",
+      "command": [
+        "C:\\Users\\temp123\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_wall_evaluation.test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.719
+    },
+    {
+      "name": "python-f2_raw_export",
+      "command": [
+        "C:\\Users\\temp123\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_raw_export.test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.422
+    },
+    {
+      "name": "syntax-pipeline.mjs",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--check",
+        "scripts/f3-pipeline/pipeline.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.047
+    },
+    {
+      "name": "syntax-integrate.mjs",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--check",
+        "scripts/f3-pipeline/integrate.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.031
+    },
+    {
+      "name": "markdown",
+      "command": [
+        "C:\\Users\\temp123\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "scripts/check-documents.py",
+        "README.md",
+        "docs/ROADMAP.md",
+        "docs/ROADMAP-2-proposal.md",
+        "docs/contracts/FloorPlanProjectV1.md",
+        "docs/technical/F3-asset-lab-next.md"
+      ],
+      "exitCode": 0,
+      "seconds": 0.047
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "seconds": 0.047
+    }
+  ],
+  "approvedContent": "PASS",
+  "humanApproval": "PRESERVED_ONLY_IF_NO_VISIBLE_CHANGE",
+  "node": "v24.14.1",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "chrome": "C:\\Users\\temp123\\AppData\\Local\\ms-playwright\\chromium-1243\\chrome-win64\\chrome.exe",
+  "nodePath": "C:\\Users\\temp123\\AppData\\Local\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules"
+}

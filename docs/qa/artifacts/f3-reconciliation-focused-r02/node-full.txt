@@ -1,0 +1,11 @@
+✔ image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration (6541.8335ms)
+✔ real MIT catalog geometry, all material IDs, surface conversion and missing-reference fallback explicit (137.5084ms)
+✔ Blender rejects corrupt package before scene import/save (1435.1837ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8705.6936

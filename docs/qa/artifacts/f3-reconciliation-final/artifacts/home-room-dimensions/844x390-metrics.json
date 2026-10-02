@@ -1,0 +1,210 @@
+{
+  "commitAtRun": "5b7267f84380586d5e482373bd70f0392e896009",
+  "viewport": {
+    "width": 844,
+    "height": 390
+  },
+  "input": "touch taps",
+  "rendering": "Chromium SwiftShader software",
+  "canvasHeight": 308,
+  "stageHeight": 308,
+  "wallMeshes": [
+    {
+      "id": "wal_d912b268888a44cfa82f19440621a379",
+      "dimensions": {
+        "width": 4.24,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        -3.14,
+        1.4,
+        0
+      ],
+      "angle": -1.5707963267948966
+    },
+    {
+      "id": "wal_9e8918cde8474b65acd4c1e62376f2a0",
+      "dimensions": {
+        "width": 4.24,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        0.1,
+        1.4,
+        0
+      ],
+      "angle": -1.5707963267948966
+    },
+    {
+      "id": "wal_1addbdbd949842989430b0c68f0aa327",
+      "dimensions": {
+        "width": 3.24,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        -1.52,
+        1.4,
+        -2.12
+      ],
+      "angle": 0
+    },
+    {
+      "id": "wal_b6c0dbd7135a486b96adbe6c7412792e",
+      "dimensions": {
+        "width": 3.24,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        -1.52,
+        1.4,
+        2.12
+      ],
+      "angle": 0
+    },
+    {
+      "id": "wal_f1c2d4f0fc644563b7661dfcbe49a3ac",
+      "dimensions": {
+        "width": 4.24,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        3.14,
+        1.4,
+        0
+      ],
+      "angle": -1.5707963267948966
+    },
+    {
+      "id": "wal_4a67243961ca4c2ab00d3a81fe672c4a",
+      "dimensions": {
+        "width": 3.04,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        1.62,
+        1.4,
+        -2.12
+      ],
+      "angle": 0
+    },
+    {
+      "id": "wal_a5bb1bfdd8844f7bbea748f2a410c231",
+      "dimensions": {
+        "width": 3.04,
+        "height": 2.8,
+        "depth": 0.24,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      "position": [
+        1.62,
+        1.4,
+        2.12
+      ],
+      "angle": 0
+    }
+  ],
+  "rooms": [
+    {
+      "id": "rom_b74024d8900b429798e1a8e96ab87ac4",
+      "name": "Salón",
+      "polygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 3000,
+          "y": 0
+        },
+        {
+          "x": 3000,
+          "y": 4000
+        },
+        {
+          "x": 0,
+          "y": 4000
+        }
+      ],
+      "labelAt": {
+        "x": 1500,
+        "y": 2000
+      },
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    },
+    {
+      "id": "rom_954778acc87542e98a0f92bd83938b56",
+      "name": "Cocina",
+      "polygon": [
+        {
+          "x": 3240,
+          "y": 0
+        },
+        {
+          "x": 6040,
+          "y": 0
+        },
+        {
+          "x": 6040,
+          "y": 4000
+        },
+        {
+          "x": 3240,
+          "y": 4000
+        }
+      ],
+      "labelAt": {
+        "x": 4490,
+        "y": 2000
+      },
+      "floorMaterialId": "mat_wood",
+      "countsTowardArea": true,
+      "source": {
+        "method": "manual",
+        "review": "unreviewed"
+      }
+    }
+  ],
+  "checks": [
+    "independent projects",
+    "shared wall",
+    "numeric preview cancel",
+    "confirm undo redo",
+    "reload",
+    "JSON export",
+    "image calibration preserved",
+    "ZIP round trip",
+    "same canonical 2D and 3D source"
+  ],
+  "pageErrors": []
+}

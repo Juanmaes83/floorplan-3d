@@ -1,0 +1,2152 @@
+[
+  {
+    "id": "surface-wood-floor",
+    "key": "[\"mat_surface-wood-floor-floor\",\"surface-wood-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 6208,
+    "gpuBytes": 349526,
+    "loadMs": 6.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "wood_floor",
+      "title": "Wood Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/wood_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor/wood_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor/wood_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "a0855cfc8ce2c4587d8fb3a53b08e5c3f7cc81e86512e1ae6ed9c9d651e470f6",
+      "sourceBytes": 89085,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-herringbone-parquet",
+    "key": "[\"mat_surface-herringbone-parquet-floor\",\"surface-herringbone-parquet\",1000,1000]",
+    "state": "ready",
+    "bytes": 11452,
+    "gpuBytes": 349526,
+    "loadMs": 6.5,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "herringbone_parquet",
+      "title": "Herringbone Parquet",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/herringbone_parquet",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/herringbone_parquet/herringbone_parquet_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/herringbone_parquet/herringbone_parquet_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "c7963ceae04de6d93f64fb82edbad4a0e41b4c3ca4ab9a75460fdf6aebf5f67f",
+      "sourceBytes": 107525,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-diagonal-parquet",
+    "key": "[\"mat_surface-diagonal-parquet-floor\",\"surface-diagonal-parquet\",1000,1000]",
+    "state": "ready",
+    "bytes": 11544,
+    "gpuBytes": 349526,
+    "loadMs": 7.5,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "diagonal_parquet",
+      "title": "Diagonal Parquet",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/diagonal_parquet",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/diagonal_parquet/diagonal_parquet_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/diagonal_parquet/diagonal_parquet_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "0d9cba9c672a0b6a4ebc633d8d571439abad37be37a9c52647c5557a03590af5",
+      "sourceBytes": 101474,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-rectangular-parquet",
+    "key": "[\"mat_surface-rectangular-parquet-floor\",\"surface-rectangular-parquet\",1000,1000]",
+    "state": "ready",
+    "bytes": 7050,
+    "gpuBytes": 349526,
+    "loadMs": 6.300000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "rectangular_parquet",
+      "title": "Rectangular Parquet",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/rectangular_parquet",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/rectangular_parquet/rectangular_parquet_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/rectangular_parquet/rectangular_parquet_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "039c5988f0a946050aad13faccd426d78e08aa9eab427bdeb3b1caba5791f157",
+      "sourceBytes": 84511,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-oak-wood-planks",
+    "key": "[\"mat_surface-oak-wood-planks-floor\",\"surface-oak-wood-planks\",1000,1000]",
+    "state": "ready",
+    "bytes": 7908,
+    "gpuBytes": 349526,
+    "loadMs": 6.199999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "oak_wood_planks",
+      "title": "Oak Wood Planks",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/oak_wood_planks",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/oak_wood_planks/oak_wood_planks_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/oak_wood_planks/oak_wood_planks_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "f48796d3f7feac069be751153c32520ef4b09d51173b745998e96fd491c642b8",
+      "sourceBytes": 99411,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-old-wood-floor",
+    "key": "[\"mat_surface-old-wood-floor-floor\",\"surface-old-wood-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 10130,
+    "gpuBytes": 349526,
+    "loadMs": 11.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "old_wood_floor",
+      "title": "Old Wood Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/old_wood_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/old_wood_floor/old_wood_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/old_wood_floor/old_wood_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "e405d5654a62e5267a5b292850fd8c6b06980340772c79996e41788acb32bf86",
+      "sourceBytes": 104452,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-wood-floor-worn",
+    "key": "[\"mat_surface-wood-floor-worn-floor\",\"surface-wood-floor-worn\",1000,1000]",
+    "state": "ready",
+    "bytes": 7826,
+    "gpuBytes": 349526,
+    "loadMs": 6.099999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "wood_floor_worn",
+      "title": "Wood Floor Worn",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/wood_floor_worn",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor_worn/wood_floor_worn_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor_worn/wood_floor_worn_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "f2d2baa556f85efb45ca71aa9bb7774633fbcb7121bb90055f62d76e9ce90cb7",
+      "sourceBytes": 97424,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-wood-floor-deck",
+    "key": "[\"mat_surface-wood-floor-deck-floor\",\"surface-wood-floor-deck\",1000,1000]",
+    "state": "ready",
+    "bytes": 15902,
+    "gpuBytes": 349526,
+    "loadMs": 6.099999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "wood_floor_deck",
+      "title": "Wood Floor Deck",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/wood_floor_deck",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor_deck/wood_floor_deck_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_floor_deck/wood_floor_deck_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "6a94ee9e7037137c0f9e7444688592df151253e03367517bcd46156468765762",
+      "sourceBytes": 118709,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-wood-planks",
+    "key": "[\"mat_surface-wood-planks-floor\",\"surface-wood-planks\",1000,1000]",
+    "state": "ready",
+    "bytes": 6708,
+    "gpuBytes": 349526,
+    "loadMs": 5.599999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "wood_planks",
+      "title": "Wood Planks",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/wood_planks",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_planks/wood_planks_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_planks/wood_planks_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "46ef263fff4e963d20fe9a1b7878cf99c4e325e3dc46db4be3cdbed2fc75b36b",
+      "sourceBytes": 96112,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-wood-planks-grey",
+    "key": "[\"mat_surface-wood-planks-grey-floor\",\"surface-wood-planks-grey\",1000,1000]",
+    "state": "ready",
+    "bytes": 10192,
+    "gpuBytes": 349526,
+    "loadMs": 6,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "wood_planks_grey",
+      "title": "Wood Planks Grey",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/wood_planks_grey",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_planks_grey/wood_planks_grey_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/wood_planks_grey/wood_planks_grey_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "7f9b84d6bfc63782d7bb684aa41d07664e0c54aa23464dbbc6bc317bce135027",
+      "sourceBytes": 100698,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-square-tiles",
+    "key": "[\"mat_surface-square-tiles-floor\",\"surface-square-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 10700,
+    "gpuBytes": 349526,
+    "loadMs": 5.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "square_tiles",
+      "title": "Square Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/square_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/square_tiles/square_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/square_tiles/square_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "9f7df2c867781864e49b01f42b9c289b55967e994d609801447dea690a68652e",
+      "sourceBytes": 99531,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-brown-floor-tiles",
+    "key": "[\"mat_surface-brown-floor-tiles-floor\",\"surface-brown-floor-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 8516,
+    "gpuBytes": 349526,
+    "loadMs": 6.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "brown_floor_tiles",
+      "title": "Brown Floor Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/brown_floor_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brown_floor_tiles/brown_floor_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brown_floor_tiles/brown_floor_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "74748d37d07f0119ac0ee337ff47e4487aeffde662feb675c3cc3933848ab8cf",
+      "sourceBytes": 121556,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-floor-tiles-02",
+    "key": "[\"mat_surface-floor-tiles-02-floor\",\"surface-floor-tiles-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 6828,
+    "gpuBytes": 349526,
+    "loadMs": 6.899999618530273,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "floor_tiles_02",
+      "title": "Floor Tiles 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/floor_tiles_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_02/floor_tiles_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_02/floor_tiles_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "d23c562c4e33abccde7c6624e90d8bb62cbffa662d721bfa5723db73de59fd30",
+      "sourceBytes": 98577,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-floor-tiles-04",
+    "key": "[\"mat_surface-floor-tiles-04-floor\",\"surface-floor-tiles-04\",1000,1000]",
+    "state": "ready",
+    "bytes": 3996,
+    "gpuBytes": 349526,
+    "loadMs": 6.099999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "floor_tiles_04",
+      "title": "Floor Tiles 04",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/floor_tiles_04",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_04/floor_tiles_04_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_04/floor_tiles_04_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "1984120c2941ee016c40c5552ad8dbc944b5495caa16372c62d8fa85b03aa3ad",
+      "sourceBytes": 92467,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-floor-tiles-06",
+    "key": "[\"mat_surface-floor-tiles-06-floor\",\"surface-floor-tiles-06\",1000,1000]",
+    "state": "ready",
+    "bytes": 9552,
+    "gpuBytes": 349526,
+    "loadMs": 6.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "floor_tiles_06",
+      "title": "Floor Tiles 06",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/floor_tiles_06",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_06/floor_tiles_06_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_06/floor_tiles_06_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "4e4f39e996ba502c70d42df15a2b4029dd76664e84e417cab549c5cb7466599b",
+      "sourceBytes": 124200,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-floor-tiles-08",
+    "key": "[\"mat_surface-floor-tiles-08-floor\",\"surface-floor-tiles-08\",1000,1000]",
+    "state": "ready",
+    "bytes": 6886,
+    "gpuBytes": 349526,
+    "loadMs": 6.099999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "floor_tiles_08",
+      "title": "Floor Tiles 08",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/floor_tiles_08",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_08/floor_tiles_08_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_08/floor_tiles_08_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "6eef3af00da9fa5cf79e86dfa4f7b1481a45816ad83ef51f3aa12056cd60efe1",
+      "sourceBytes": 98248,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-floor-tiles-09",
+    "key": "[\"mat_surface-floor-tiles-09-floor\",\"surface-floor-tiles-09\",1000,1000]",
+    "state": "ready",
+    "bytes": 15690,
+    "gpuBytes": 349526,
+    "loadMs": 8,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "floor_tiles_09",
+      "title": "Floor Tiles 09",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/floor_tiles_09",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_09/floor_tiles_09_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/floor_tiles_09/floor_tiles_09_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "da78ccc88368f044d42b217b64cbff3eacef05b803a736690255fc1777b6c619",
+      "sourceBytes": 123763,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-interior-tiles",
+    "key": "[\"mat_surface-interior-tiles-floor\",\"surface-interior-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 8218,
+    "gpuBytes": 349526,
+    "loadMs": 7.700000286102295,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "interior_tiles",
+      "title": "Interior Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/interior_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/interior_tiles/interior_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/interior_tiles/interior_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "420bfc2b4fcfcacfa9f9e25c8d55fabf7f46d0bb78f7cbc7c686a1f8fcad2396",
+      "sourceBytes": 100336,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-large-floor-tiles-02",
+    "key": "[\"mat_surface-large-floor-tiles-02-floor\",\"surface-large-floor-tiles-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 15008,
+    "gpuBytes": 349526,
+    "loadMs": 6.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "large_floor_tiles_02",
+      "title": "Large Floor Tiles 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/large_floor_tiles_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/large_floor_tiles_02/large_floor_tiles_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/large_floor_tiles_02/large_floor_tiles_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "0d06a540dee5a762a13c75e421474430a4218008257822a816fd8b1f0e9ca4d6",
+      "sourceBytes": 121728,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-long-white-tiles",
+    "key": "[\"mat_surface-long-white-tiles-floor\",\"surface-long-white-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 10670,
+    "gpuBytes": 349526,
+    "loadMs": 16.699999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "long_white_tiles",
+      "title": "Long White Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/long_white_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/long_white_tiles/long_white_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/long_white_tiles/long_white_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "8c6006dc8c8fd8915d851d73c1e0257cc951427d7f9b557a5f54745c80ec3bb0",
+      "sourceBytes": 87486,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-marble-01",
+    "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000]",
+    "state": "ready",
+    "bytes": 3940,
+    "gpuBytes": 349526,
+    "loadMs": 7.099999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "marble_01",
+      "title": "Marble 01",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/marble_01",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_01/marble_01_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_01/marble_01_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "458ed74a0ca2bb8d76bf3369ac0541bbce18bb6af63f9769b8ac1821d3cc217e",
+      "sourceBytes": 87978,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-marble-tiles",
+    "key": "[\"mat_surface-marble-tiles-floor\",\"surface-marble-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 29516,
+    "gpuBytes": 349526,
+    "loadMs": 7.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "marble_tiles",
+      "title": "Marble Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/marble_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_tiles/marble_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_tiles/marble_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "cad91d75a52212ef1cf1723009ee934e48e9acf79bc411750562dd84edb85c09",
+      "sourceBytes": 130494,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-marble-mosaic-tiles",
+    "key": "[\"mat_surface-marble-mosaic-tiles-floor\",\"surface-marble-mosaic-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 23380,
+    "gpuBytes": 349526,
+    "loadMs": 7.199999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "marble_mosaic_tiles",
+      "title": "Marble Mosaic Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/marble_mosaic_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_mosaic_tiles/marble_mosaic_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/marble_mosaic_tiles/marble_mosaic_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "959bea1e6413eec1eaaddb36d68bbc63fe2c83f88c88b117c361456aede1805b",
+      "sourceBytes": 134667,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-slate-floor",
+    "key": "[\"mat_surface-slate-floor-floor\",\"surface-slate-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 5604,
+    "gpuBytes": 349526,
+    "loadMs": 6.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "slate_floor",
+      "title": "Slate Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/slate_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor/slate_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor/slate_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "928a8dbb57a7d350e93c6737d44d77321eefd59e2e0143a3fcfa47f0c4b7ff15",
+      "sourceBytes": 98196,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-slate-floor-02",
+    "key": "[\"mat_surface-slate-floor-02-floor\",\"surface-slate-floor-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 7208,
+    "gpuBytes": 349526,
+    "loadMs": 6.899999618530273,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "slate_floor_02",
+      "title": "Slate Floor 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/slate_floor_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor_02/slate_floor_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor_02/slate_floor_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "8c399d107c21e2c090432590e2bf3c9dfdde079b645c3a5d508b6c9e6895f2cf",
+      "sourceBytes": 103734,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-slate-floor-03",
+    "key": "[\"mat_surface-slate-floor-03-floor\",\"surface-slate-floor-03\",1000,1000]",
+    "state": "ready",
+    "bytes": 9580,
+    "gpuBytes": 349526,
+    "loadMs": 7.700000286102295,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "slate_floor_03",
+      "title": "Slate Floor 03",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/slate_floor_03",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor_03/slate_floor_03_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/slate_floor_03/slate_floor_03_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "a4913353c1550fa8fa0550da0a764a1061e0aa1a292fb8dc8cd6834ef8ebb114",
+      "sourceBytes": 109615,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-stone-floor",
+    "key": "[\"mat_surface-stone-floor-floor\",\"surface-stone-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 15294,
+    "gpuBytes": 349526,
+    "loadMs": 6.799999713897705,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "stone_floor",
+      "title": "Stone Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/stone_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/stone_floor/stone_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/stone_floor/stone_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "7a2ad81c3de1935ca5d89f17c933838d703484175f413d16eee532b3b92c5e1a",
+      "sourceBytes": 119289,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-monastery-stone-floor",
+    "key": "[\"mat_surface-monastery-stone-floor-floor\",\"surface-monastery-stone-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 12756,
+    "gpuBytes": 349526,
+    "loadMs": 6.800000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "monastery_stone_floor",
+      "title": "Monastery Stone Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/monastery_stone_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/monastery_stone_floor/monastery_stone_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/monastery_stone_floor/monastery_stone_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "c1060576eba608916a1bc3763c67e5b9c79f3c0f6339ac81790b7c0e748e0e0c",
+      "sourceBytes": 110692,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-granite-tile-02",
+    "key": "[\"mat_surface-granite-tile-02-floor\",\"surface-granite-tile-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 4734,
+    "gpuBytes": 349526,
+    "loadMs": 7.5,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "granite_tile_02",
+      "title": "Granite Tile 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/granite_tile_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/granite_tile_02/granite_tile_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/granite_tile_02/granite_tile_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "846d3ca4e1e0b338af2a7ca4a54183598c16ee3a9bb37e570495b84f34769cb7",
+      "sourceBytes": 85375,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-mixed-stone-tiles",
+    "key": "[\"mat_surface-mixed-stone-tiles-floor\",\"surface-mixed-stone-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 24256,
+    "gpuBytes": 349526,
+    "loadMs": 7.300000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "mixed_stone_tiles",
+      "title": "Mixed Stone Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/mixed_stone_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/mixed_stone_tiles/mixed_stone_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/mixed_stone_tiles/mixed_stone_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "1be5b114cce34a7ae6733bf7781d27d6a1b2c50c7df4a2f32515cf08af44ff45",
+      "sourceBytes": 137975,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-brushed-concrete",
+    "key": "[\"mat_surface-brushed-concrete-floor\",\"surface-brushed-concrete\",1000,1000]",
+    "state": "ready",
+    "bytes": 10796,
+    "gpuBytes": 349526,
+    "loadMs": 6.699999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "brushed_concrete",
+      "title": "Brushed Concrete",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/brushed_concrete",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brushed_concrete/brushed_concrete_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brushed_concrete/brushed_concrete_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "a27de0b6b11eb7434134e339830987f868b53dc6d48552e52f9fbea88b8fccf1",
+      "sourceBytes": 97312,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-brushed-concrete-03",
+    "key": "[\"mat_surface-brushed-concrete-03-floor\",\"surface-brushed-concrete-03\",1000,1000]",
+    "state": "ready",
+    "bytes": 12408,
+    "gpuBytes": 349526,
+    "loadMs": 6.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "brushed_concrete_03",
+      "title": "Brushed Concrete 03",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/brushed_concrete_03",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brushed_concrete_03/brushed_concrete_03_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/brushed_concrete_03/brushed_concrete_03_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "bc6e23cd553bc49fa447e198f77d8f9d3daa73af9ea491d8fde2f22114e1706b",
+      "sourceBytes": 102878,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-concrete-floor-01",
+    "key": "[\"mat_surface-concrete-floor-01-floor\",\"surface-concrete-floor-01\",1000,1000]",
+    "state": "ready",
+    "bytes": 24130,
+    "gpuBytes": 349526,
+    "loadMs": 7.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "concrete_floor_01",
+      "title": "Concrete Floor 01",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/concrete_floor_01",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_01/concrete_floor_01_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_01/concrete_floor_01_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "3be6971d387999c44476be781c546be35a26878a8256e296358f6057f03088ea",
+      "sourceBytes": 132841,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-concrete-floor-02",
+    "key": "[\"mat_surface-concrete-floor-02-floor\",\"surface-concrete-floor-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 21970,
+    "gpuBytes": 349526,
+    "loadMs": 6.699999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "concrete_floor_02",
+      "title": "Concrete Floor 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/concrete_floor_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_02/concrete_floor_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_02/concrete_floor_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "622922ef52efe8ed22198e92e261ca9bcf154082b136ec075f23100493660585",
+      "sourceBytes": 121963,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-concrete-floor-03",
+    "key": "[\"mat_surface-concrete-floor-03-floor\",\"surface-concrete-floor-03\",1000,1000]",
+    "state": "ready",
+    "bytes": 19738,
+    "gpuBytes": 349526,
+    "loadMs": 6.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "concrete_floor_03",
+      "title": "Concrete Floor 03",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/concrete_floor_03",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_03/concrete_floor_03_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/concrete_floor_03/concrete_floor_03_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "64ee6e812d0fa795cdadf776d908ecf3a4362baa58959f13dada5ce3d29799a8",
+      "sourceBytes": 132328,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-hangar-concrete-floor",
+    "key": "[\"mat_surface-hangar-concrete-floor-floor\",\"surface-hangar-concrete-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 5170,
+    "gpuBytes": 349526,
+    "loadMs": 7,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "hangar_concrete_floor",
+      "title": "Hangar Concrete Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/hangar_concrete_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/hangar_concrete_floor/hangar_concrete_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/hangar_concrete_floor/hangar_concrete_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "11df82fbcdfe2fb34e1ae1846ebdbf564490bbf886b1d062f4948a4fd3005478",
+      "sourceBytes": 89273,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-smooth-concrete-floor",
+    "key": "[\"mat_surface-smooth-concrete-floor-floor\",\"surface-smooth-concrete-floor\",1000,1000]",
+    "state": "ready",
+    "bytes": 10524,
+    "gpuBytes": 349526,
+    "loadMs": 7.200000286102295,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "smooth_concrete_floor",
+      "title": "Smooth Concrete Floor",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/smooth_concrete_floor",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/smooth_concrete_floor/smooth_concrete_floor_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/smooth_concrete_floor/smooth_concrete_floor_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "9b0d98ca96913089ad419f2509b8430cfc52ca110f950dc8f5ae9c5cea22d49d",
+      "sourceBytes": 107333,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-scuffed-cement",
+    "key": "[\"mat_surface-scuffed-cement-floor\",\"surface-scuffed-cement\",1000,1000]",
+    "state": "ready",
+    "bytes": 5116,
+    "gpuBytes": 349526,
+    "loadMs": 6.599999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "scuffed_cement",
+      "title": "Scuffed Cement",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/scuffed_cement",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/scuffed_cement/scuffed_cement_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/scuffed_cement/scuffed_cement_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "ab18c948595830de22081cbc71b7b43d034e7a8ef9e711d391f651a84c9358a5",
+      "sourceBytes": 89848,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-terrazzo-tiles",
+    "key": "[\"mat_surface-terrazzo-tiles-floor\",\"surface-terrazzo-tiles\",1000,1000]",
+    "state": "ready",
+    "bytes": 18646,
+    "gpuBytes": 349526,
+    "loadMs": 7.300000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "terrazzo_tiles",
+      "title": "Terrazzo Tiles",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/terrazzo_tiles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/terrazzo_tiles/terrazzo_tiles_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/terrazzo_tiles/terrazzo_tiles_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "d5411e8cbacece16b5088acddcdb337bcc4c20040401714bf3e96611ec0caffc",
+      "sourceBytes": 144040,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-granular-concrete",
+    "key": "[\"mat_surface-granular-concrete-floor\",\"surface-granular-concrete\",1000,1000]",
+    "state": "ready",
+    "bytes": 11712,
+    "gpuBytes": 349526,
+    "loadMs": 6.799999713897705,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "granular_concrete",
+      "title": "Granular Concrete",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/granular_concrete",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/granular_concrete/granular_concrete_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/granular_concrete/granular_concrete_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "c9728d593b7ed52ba1e76ffd2af05ae4d9cdc9bf4d761b35ebc4560e46ebe763",
+      "sourceBytes": 109533,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-white-plaster-02",
+    "key": "[\"mat_surface-white-plaster-02-wall\",\"surface-white-plaster-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 7864,
+    "gpuBytes": 349526,
+    "loadMs": 6.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "white_plaster_02",
+      "title": "White Plaster 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/white_plaster_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/white_plaster_02/white_plaster_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/white_plaster_02/white_plaster_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "ac5085cb0288506b1e7c8e937630d4202c9081055cd91f3a461954b8cf87459d",
+      "sourceBytes": 111490,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-grey-plaster-03",
+    "key": "[\"mat_surface-grey-plaster-03-wall\",\"surface-grey-plaster-03\",1000,1000]",
+    "state": "ready",
+    "bytes": 7742,
+    "gpuBytes": 349526,
+    "loadMs": 6.699999809265137,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "grey_plaster_03",
+      "title": "Grey Plaster 03",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/grey_plaster_03",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/grey_plaster_03/grey_plaster_03_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/grey_plaster_03/grey_plaster_03_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "d49fe3cc2d276a284b43809cb678c59c79558cc2acdc6cd579a4a419c8fedb59",
+      "sourceBytes": 117955,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-grey-plaster-02",
+    "key": "[\"mat_surface-grey-plaster-02-wall\",\"surface-grey-plaster-02\",1000,1000]",
+    "state": "ready",
+    "bytes": 16708,
+    "gpuBytes": 349526,
+    "loadMs": 11.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "grey_plaster_02",
+      "title": "Grey Plaster 02",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/grey_plaster_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/grey_plaster_02/grey_plaster_02_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/grey_plaster_02/grey_plaster_02_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "8b2edcf23d20280b5c95d305293a3bce585dc1c25d0f1e7e6791002bfa92eb3d",
+      "sourceBytes": 120325,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-painted-plaster-wall",
+    "key": "[\"mat_surface-painted-plaster-wall-wall\",\"surface-painted-plaster-wall\",1000,1000]",
+    "state": "ready",
+    "bytes": 3104,
+    "gpuBytes": 349526,
+    "loadMs": 5.900000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "painted_plaster_wall",
+      "title": "Painted Plaster Wall",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/painted_plaster_wall",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/painted_plaster_wall/painted_plaster_wall_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/painted_plaster_wall/painted_plaster_wall_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "f20d1bfb9b20d5ec94a51fc0562404cef0e429a748214c135a954cdc9f750597",
+      "sourceBytes": 86002,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-patterned-plaster-wall",
+    "key": "[\"mat_surface-patterned-plaster-wall-wall\",\"surface-patterned-plaster-wall\",1000,1000]",
+    "state": "ready",
+    "bytes": 18282,
+    "gpuBytes": 349526,
+    "loadMs": 6.599999904632568,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "patterned_plaster_wall",
+      "title": "Patterned Plaster Wall",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/patterned_plaster_wall",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/patterned_plaster_wall/patterned_plaster_wall_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/patterned_plaster_wall/patterned_plaster_wall_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "adb78bb27b3506fe62bde0db8f755a2343f5cd6165b90aab257708e05a9a621d",
+      "sourceBytes": 124720,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-plastered-wall-03",
+    "key": "[\"mat_surface-plastered-wall-03-wall\",\"surface-plastered-wall-03\",1000,1000]",
+    "state": "ready",
+    "bytes": 4870,
+    "gpuBytes": 349526,
+    "loadMs": 6.300000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "plastered_wall_03",
+      "title": "Plastered Wall 03",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/plastered_wall_03",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/plastered_wall_03/plastered_wall_03_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/plastered_wall_03/plastered_wall_03_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "ea864a551529903ac9e4e9610288f4ec1561908adcb3cceec0014bbf1069d307",
+      "sourceBytes": 90615,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-plastered-wall-04",
+    "key": "[\"mat_surface-plastered-wall-04-wall\",\"surface-plastered-wall-04\",1000,1000]",
+    "state": "ready",
+    "bytes": 1008,
+    "gpuBytes": 349526,
+    "loadMs": 6,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "plastered_wall_04",
+      "title": "Plastered Wall 04",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/plastered_wall_04",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/plastered_wall_04/plastered_wall_04_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/plastered_wall_04/plastered_wall_04_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "d9abc54720e968f581fcba666719faa5d30348529d99f777c453320566cb1ab1",
+      "sourceBytes": 68840,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-blue-plaster-wall",
+    "key": "[\"mat_surface-blue-plaster-wall-wall\",\"surface-blue-plaster-wall\",1000,1000]",
+    "state": "ready",
+    "bytes": 3240,
+    "gpuBytes": 349526,
+    "loadMs": 6.300000190734863,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "blue_plaster_wall",
+      "title": "Blue Plaster Wall",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/blue_plaster_wall",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/blue_plaster_wall/blue_plaster_wall_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/blue_plaster_wall/blue_plaster_wall_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "1fdb2a8ee646d60d2425127b318dd656715a69f18e050214a7ce37543708283a",
+      "sourceBytes": 83404,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-yellow-plaster",
+    "key": "[\"mat_surface-yellow-plaster-wall\",\"surface-yellow-plaster\",1000,1000]",
+    "state": "ready",
+    "bytes": 7024,
+    "gpuBytes": 349526,
+    "loadMs": 6.400000095367432,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "yellow_plaster",
+      "title": "Yellow Plaster",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/yellow_plaster",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/yellow_plaster/yellow_plaster_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/yellow_plaster/yellow_plaster_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "5160c6831360590b097ba3538d61bf7243f96c6db3e7f2be8ceacd08e7e99375",
+      "sourceBytes": 118156,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  },
+  {
+    "id": "surface-patterned-clay-plaster",
+    "key": "[\"mat_surface-patterned-clay-plaster-wall\",\"surface-patterned-clay-plaster\",1000,1000]",
+    "state": "ready",
+    "bytes": 8058,
+    "gpuBytes": 349526,
+    "loadMs": 6.5,
+    "map": {
+      "repeat": [
+        1,
+        1
+      ],
+      "colorSpace": "srgb"
+    },
+    "source": {
+      "assetId": "patterned_clay_plaster",
+      "title": "Patterned Clay Plaster",
+      "author": "Poly Haven; individual artist not stated in library manifest",
+      "url": "https://polyhaven.com/a/patterned_clay_plaster",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://github.com/Poly-Haven/polyhaven.com/blob/b1a6aa13afc03ae00860f6ac5fe6d5daf8e95356/public/locales/en/license.json",
+      "library": "Modelibr CC0 Public Domain Textures",
+      "distributionUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/patterned_clay_plaster/patterned_clay_plaster_albedo_preview.png",
+      "downloadUrl": "https://raw.githubusercontent.com/Papyszoo/CC0-Public-Domain-Textures/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/packs/polyhaven-textures/textures/patterned_clay_plaster/patterned_clay_plaster_albedo_preview.png",
+      "distributionLicenseUrl": "https://github.com/Papyszoo/CC0-Public-Domain-Textures/blob/fcc4ff97a5a843dc2e242ec9e195389bc46ed7d2/LICENSE",
+      "consultedAt": "2026-10-01",
+      "sourceFormat": "image/png",
+      "sourceSha256": "2f5bddcd246c023b9aefb445c27368cff9c90c8c604337506f2ce2c017e29d62",
+      "sourceBytes": 96150,
+      "sourceDimensions": [
+        256,
+        256
+      ],
+      "changes": "Library-generated flat albedo PNG at 256 px (not a website or sphere capture), re-encoded as WebP; separate 112 px thumbnail. No recolouring.",
+      "rightsEvidence": "CC0 per pinned library pack, corroborated by the official Poly Haven asset-license source. Original website/API unavailable in this environment."
+    },
+    "format": "image/webp",
+    "resolution": [
+      256,
+      256
+    ],
+    "test": "actual local Rubik 3D rendering / SwiftShader"
+  }
+]

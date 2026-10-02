@@ -1,0 +1,110 @@
+{
+  "status": "PASS",
+  "sourceRevision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "commands": [
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "scripts/f3-pipeline/pipeline.mjs",
+        "prepare",
+        "C:\\Users\\temp123\\AppData\\Local\\Temp\\rubik-assetlab-readonly-20261002",
+        "--next",
+        "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+        "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+        "ikea-skogsta-mesa-acacia-demo",
+        "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+        "ikea-stockholm-2025-aparador-chapa-roble-demo",
+        "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+        "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+        "ikea-saltsjobaden-armchair-tonerud-red-brown-demo"
+      ],
+      "exitCode": 0,
+      "seconds": 8.703
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "scripts/f3-pipeline/integrate.mjs",
+        "--next"
+      ],
+      "exitCode": 0,
+      "seconds": 0.062
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+      "before": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+      "after": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+      "before": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+      "after": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+      "before": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+      "after": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+      "before": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+      "after": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+      "before": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+      "after": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+      "before": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+      "after": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/external.manifest.json",
+      "before": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+      "after": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+      "equal": true
+    },
+    {
+      "path": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt",
+      "before": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "after": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "equal": true
+    },
+    {
+      "path": "docs/technical/F3-pipeline-inventory.json",
+      "before": "15017d5b19045e7bc98759cf78fb31287f0e51d4f4c60cfe3208cfa649016cb1",
+      "after": "15017d5b19045e7bc98759cf78fb31287f0e51d4f4c60cfe3208cfa649016cb1",
+      "equal": true
+    },
+    {
+      "path": "docs/technical/F3-pipeline-results.json",
+      "before": "e848272970bbefdea785c9a783f8584a59f7bad2f171100ea1a0d90b97cd6ca6",
+      "after": "e848272970bbefdea785c9a783f8584a59f7bad2f171100ea1a0d90b97cd6ca6",
+      "equal": true
+    }
+  ],
+  "normalizedModels": 6,
+  "excluded": [
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "reason": "unsupported source extension: KHR_texture_transform"
+    },
+    {
+      "id": "ikea-saltsjobaden-armchair-tonerud-red-brown-demo",
+      "reason": "unsupported source extension: KHR_materials_ior, KHR_materials_specular"
+    }
+  ],
+  "resultSemanticallyEqual": true,
+  "resultByteEqual": true,
+  "physicalDimensions": "NOT_VERIFIED"
+}

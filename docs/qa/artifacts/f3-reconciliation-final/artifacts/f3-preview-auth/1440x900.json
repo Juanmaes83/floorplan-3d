@@ -1,0 +1,64 @@
+{
+  "commitAtRun": "5b7267f84380586d5e482373bd70f0392e896009",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "method": "Local browser with session-protected fixture server; SwiftShader software",
+  "responses": [
+    {
+      "path": "/assets/f3/catalog.manifest.json",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/external.manifest.json",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/songesand-90366839.glb",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/stockholm-pouf-80586139.glb",
+      "status": 200
+    },
+    {
+      "path": "/assets/f3/songesand-90366839.glb",
+      "status": 200
+    }
+  ],
+  "catalog": [
+    {
+      "path": "assets/f3/catalog.manifest.json",
+      "state": "ready",
+      "phase": "adapt",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 1630,
+      "accepted": 1,
+      "excluded": []
+    },
+    {
+      "path": "assets/f3/external.manifest.json",
+      "state": "ready",
+      "phase": "adapt",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "bytes": 55197,
+      "accepted": 20,
+      "excluded": []
+    }
+  ]
+}

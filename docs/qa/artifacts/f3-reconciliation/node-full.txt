@@ -1,0 +1,249 @@
+✔ normalized Asset Lab cohort passes the production loader and searchable catalog (1695.6978ms)
+ℹ [{"id":"ikea-solvinden-solar-floor-lamp-outdoor-beige","state":"ready","dimensions":{"width":258.3181858062744,"height":1199.9977827072144,"depth":249.98927116394043},"triangles":10614,"geometryBytes":321684,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":8.099999904632568},{"id":"ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo","state":"ready","dimensions":{"width":1506.15394115448,"height":469.66224908828735,"depth":2054.051399230957},"triangles":51468,"geometryBytes":7467120,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064},"durationMs":37.700000286102295},{"id":"ikea-malm-comoda-6-cajones-blanco-demo","state":"ready","dimensions":{"width":1603.4276485443115,"height":780.1331609953195,"depth":483.19125175476074},"triangles":1484,"geometryBytes":267144,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":213835,"decodedBytes":8912896,"textureBytes":11883864},"durationMs":14},{"id":"ikea-lisabo-mesa-chapa-fresno-demo","state":"ready","dimensions":{"width":1400.066614151001,"height":740.1560282723949,"depth":780.1506519317627},"triangles":2705,"geometryBytes":368166,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":125172,"decodedBytes":8380416,"textureBytes":11173888},"durationMs":13.700000286102295},{"id":"ikea-lisabo-silla-negrotallmyra-negro-gris-demo","state":"ready","dimensions":{"width":455.4198682308197,"height":804.3492709184648,"depth":520.6692218780518},"triangles":40079,"geometryBytes":4874202,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":23.09999990463257},{"id":"ikea-nammaro-garden-table-light-brown","state":"ready","dimensions":{"width":750.0013709068298,"height":750.0013995689869,"depth":629.8308372497559},"triangles":17479,"geometryBytes":2223882,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":221178,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":15.400000095367432},{"id":"ikea-frotorp-coffee-table-white-chrome-white-glass-demo","state":"ready","dimensions":{"width":883.0379247665405,"height":349.0002187031678,"depth":883.0379247665405},"triangles":13363,"geometryBytes":1539666,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":397925,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":25.200000286102295},{"id":"ikea-morum-indoor-outdoor-rug-beige","state":"ready","dimensions":{"width":1594.3176746368408,"height":15.856813319260255,"depth":2319.483757019043},"triangles":2997,"geometryBytes":284670,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":294800,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":14.399999618530273},{"id":"ikea-hemnes-tv-unit-white-light-brown-stain-demo","state":"ready","dimensions":{"width":1477.000117301941,"height":570.0464844703674,"depth":488.45672607421875},"triangles":14030,"geometryBytes":1832916,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":203157,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":15.599999904632568},{"id":"ikea-lauters-floor-lamp-brown-ash-demo","state":"ready","dimensions":{"width":719.1447615623474,"height":1434.8737001419067,"depth":552.7368783950806},"triangles":8880,"geometryBytes":1077888,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":151466,"decodedBytes":8380416,"textureBytes":11173888},"durationMs":12.699999809265137},{"id":"ikea-vasman-armchair-outdoor-brown","state":"ready","dimensions":{"width":570.9385275840759,"height":920.1855431310833,"depth":636.5417242050171},"triangles":87017,"geometryBytes":8040684,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":186621,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":37.19999980926514},{"id":"ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey","state":"ready","dimensions":{"width":1270.4079151153564,"height":797.7755069732666,"depth":742.5639629364014},"triangles":7147,"geometryBytes":1359810,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320},"durationMs":21.200000286102295},{"id":"ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","state":"ready","dimensions":{"width":1234.5600128173828,"height":765.8446405694121,"depth":794.253945350647},"triangles":22464,"geometryBytes":5071872,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":22.700000286102295},{"id":"ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","state":"ready","dimensions":{"width":813.6633634567261,"height":1012.4751202092739,"depth":978.3613085746765},"triangles":32982,"geometryBytes":7988484,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294},"durationMs":33.90000009536743},{"id":"ikea-skogsta-mesa-acacia-demo","state":"ready","dimensions":{"width":1600.0772714614868,"height":743.3429698321561,"depth":805.1661252975464},"triangles":15929,"geometryBytes":2266902,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":15.800000190734863},{"id":"ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","state":"ready","dimensions":{"width":1220.0418710708618,"height":909.427577545948,"depth":610.2815866470337},"triangles":26900,"geometryBytes":3905592,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218},"durationMs":19.700000286102295},{"id":"ikea-stockholm-2025-aparador-chapa-roble-demo","state":"ready","dimensions":{"width":1608.0906391143799,"height":831.9707121925148,"depth":432.0829510688782},"triangles":5219,"geometryBytes":787890,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812},"durationMs":12.099999904632568},{"id":"ikea-nordli-comoda-de-5-cajones-blanco-demo","state":"ready","dimensions":{"width":1201.849102973938,"height":1690.7002112129703,"depth":477.1896302700043},"triangles":8974,"geometryBytes":3416148,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320},"durationMs":18.40000009536743}]
+✔ every normalized model retains identity through edit, reload, JSON import and deletion (3232.9718ms)
+✔ normalized Asset Lab mixed scene 1440x900 (2953.9054ms)
+ℹ {"viewport":{"width":1440,"height":900},"states":[{"state":"ready","bytes":195384,"triangles":10614,"durationMs":282,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0}},{"state":"ready","bytes":3301296,"triangles":51468,"durationMs":424.7999997138977,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064}},{"state":"ready","bytes":2054416,"triangles":40079,"durationMs":372.69999980926514,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":780996,"triangles":7147,"durationMs":418.1000003814697,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320}}]}
+✔ normalized Asset Lab mixed scene 390x844 (2712.2841ms)
+ℹ {"viewport":{"width":390,"height":844},"states":[{"state":"ready","bytes":195384,"triangles":10614,"durationMs":75.40000009536743,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0}},{"state":"ready","bytes":3301296,"triangles":51468,"durationMs":135.80000019073486,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":398640,"decodedBytes":12599296,"textureBytes":16799064}},{"state":"ready","bytes":2054416,"triangles":40079,"durationMs":111.7999997138977,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":266151,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":780996,"triangles":7147,"durationMs":127.90000009536743,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":406130,"decodedBytes":13631488,"textureBytes":18175320}}]}
+✔ next Asset Lab cohort renders and persists 1440x900 (2819.7203ms)
+ℹ {"viewport":{"width":1440,"height":900},"ids":["ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","ikea-skogsta-mesa-acacia-demo","ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","ikea-stockholm-2025-aparador-chapa-roble-demo","ikea-nordli-comoda-de-5-cajones-blanco-demo"],"states":[{"state":"ready","bytes":1810356,"triangles":22464,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":2682460,"triangles":32982,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294}},{"state":"ready","bytes":1057164,"triangles":15929,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1627956,"triangles":26900,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":490828,"triangles":5219,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1171204,"triangles":8974,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320}}]}
+✔ next Asset Lab cohort renders and persists 390x844 (2728.2779ms)
+ℹ {"viewport":{"width":390,"height":844},"ids":["ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","ikea-skogsta-mesa-acacia-demo","ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","ikea-stockholm-2025-aparador-chapa-roble-demo","ikea-nordli-comoda-de-5-cajones-blanco-demo"],"states":[{"state":"ready","bytes":1810356,"triangles":22464,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":2682460,"triangles":32982,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294}},{"state":"ready","bytes":1057164,"triangles":15929,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1627956,"triangles":26900,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":490828,"triangles":5219,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1171204,"triangles":8974,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320}}]}
+✔ next Asset Lab cohort renders and persists 844x390 (2735.9865ms)
+ℹ {"viewport":{"width":844,"height":390},"ids":["ikea-glostad-2-seat-sofa-knisa-dark-grey-demo","ikea-strandmon-wing-chair-tommaboda-deep-beige-demo","ikea-skogsta-mesa-acacia-demo","ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo","ikea-stockholm-2025-aparador-chapa-roble-demo","ikea-nordli-comoda-de-5-cajones-blanco-demo"],"states":[{"state":"ready","bytes":1810356,"triangles":22464,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":438293,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":2682460,"triangles":32982,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":532632,"decodedBytes":12574720,"textureBytes":16766294}},{"state":"ready","bytes":1057164,"triangles":15929,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":234341,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1627956,"triangles":26900,"textureStats":{"images":3,"textures":3,"maps":4,"imageBytes":217853,"decodedBytes":12582912,"textureBytes":16777218}},{"state":"ready","bytes":490828,"triangles":5219,"textureStats":{"images":2,"textures":2,"maps":3,"imageBytes":201686,"decodedBytes":8388608,"textureBytes":11184812}},{"state":"ready","bytes":1171204,"triangles":8974,"textureStats":{"images":4,"textures":4,"maps":4,"imageBytes":274099,"decodedBytes":13631488,"textureBytes":18175320}}]}
+✔ F3 authorized load, dimensions, state and offline fallback 390x844 (5109.1818ms)
+ℹ {"viewport":{"width":390,"height":844},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":54.69999980926514,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 844x390 (5098.4303ms)
+ℹ {"viewport":{"width":844,"height":390},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":53.30000019073486,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 authorized load, dimensions, state and offline fallback 1440x900 (7007.436ms)
+ℹ {"viewport":{"width":1440,"height":900},"renderer":"SwiftShader software","state":"ready","bytes":4204,"permissionBytes":1451,"triangles":60,"geometryBytes":3240,"textureStats":{"images":0,"textures":0,"maps":0,"imageBytes":0,"decodedBytes":0,"textureBytes":0},"durationMs":70.7000002861023,"normalizedDimensionsMm":{"width":600.0000000000006,"height":449.99999999999994,"depth":400.00000000000034},"instanceDimensionsMm":{"width":2200,"height":800,"depth":900},"attribution":"Rubik Sota — MIT; assets/f3/LICENSE.txt","rendererMemory":{"geometries":34,"textures":4}}
+✔ F3 loader rejects bad headers, extensions, external dependencies, integrity, dimensions and timeout (263.1488ms)
+✔ F3 missing reference, broken URL and stale asynchronous success keep a generic editor (2769.9118ms)
+✔ F3 core embedded JPEG loads without blob URLs; budgets, MIME and external resources fail closed (2767.9861ms)
+✔ F3 cancellation during image decoding closes late resources and shared disposal is unique (318.4576ms)
+✔ F3 external textured catalog end-to-end 1440x900 (11432.2898ms)
+✔ F3 external textured catalog end-to-end 390x844 (11857.3412ms)
+✔ F3 external textured catalog end-to-end 844x390 (11876.3886ms)
+✔ furniture search filters insertion persistence and touch/keyboard 1440x900 (8979.0698ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 390x844 (10220.7086ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ furniture search filters insertion persistence and touch/keyboard 844x390 (10233.2374ms)
+ℹ Search remains local; 3D rendered with SwiftShader software.
+✔ search keeps generics during catalog pending/exclusion and unavailable model fallback (2890.4939ms)
+✔ protected preview session keeps both authorized catalogs and textured assets 1440x900 (8610.8252ms)
+✔ protected preview session keeps both authorized catalogs and textured assets 390x844 (9308.6276ms)
+✔ protected preview session keeps both authorized catalogs and textured assets 844x390 (9325.2668ms)
+✔ catalog failures and exclusions cannot silently leave generic search results (875.8931ms)
+✔ generic catalog has explicit validated three dimensions without rewriting old projects (5.6196ms)
+✔ manifest adapts one verified source and hashes real fixture and permission bytes (1.1255ms)
+✔ permission gates deny pending/missing/expired or incomplete usage and dimensions (0.3901ms)
+✔ untrusted transform, extension, paths, sizes and duplicate IDs are excluded (0.1921ms)
+✔ assetRef association/clear keeps room, identity, geometry and compatibility intact (5.735ms)
+✔ curated external evidence records exact binaries and project authorization without inventing worldwide rights (17.7854ms)
+✔ external references survive JSON, project duplication, reload and ZIP without binary embedding (16.6067ms)
+✔ 2D reference drawing and actual edit/duplicate/history/persistence remain functional (904.4057ms)
+✔ actual file import and export preserve full F0 contract including optional data (950.8899ms)
+✔ room finishes, measurements/history and wall demolition update the canonical project (875.3903ms)
+✔ opening and exporting a project does not add absent optional fields (587.2193ms)
+✔ file handler rejects invalid inputs atomically with visible element-specific errors (1010.3393ms)
+✔ hostile names and material names stay text; ID/color payloads cannot create events (620.993ms)
+✔ browser legacy migration is repeatable and keeps the original key (307.9329ms)
+✔ mobile touch placement and responsive 2D are usable in emulation (701.48ms)
+✔ 3D renders the same project, follows imported geometry and returns to 2D (5654.0866ms)
+✔ F1 completion: local project UI, reload, isolation, confirmation and full import/export (1305.7751ms)
+✔ F1 completion: touch 2D/3D 390x844 (7050.4616ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"ratio":0.9028436018957346,"width":390,"overflow":false,"colors":183,"same":true}
+✔ F1 completion: touch 2D/3D 844x390 (7190.2655ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"ratio":0.7897435897435897,"width":844,"overflow":false,"colors":184,"same":true}
+✔ F1 completion: no WebGL gives readable message and keeps 2D editable (429.2912ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1 completion: collection adopts F1a migration and preserves both historical keys (437.9143ms)
+✔ F1b full workflow 390x844 (16785.0023ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b full workflow 844x390 (16801.3089ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b full workflow 1440x900 (12218.2625ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+✔ F1b storage/image editing and shared-reference deletion stay local and recoverable (969.1326ms)
+✔ F1b rejects signature-valid but corrupt image payload without changing projects (334.311ms)
+✔ F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history (621.2401ms)
+✔ image import clarity and complete WebP workflow 360x800 (4341.0079ms)
+✔ image import clarity and complete WebP workflow 390x844 (4352.4109ms)
+✔ image import clarity and complete WebP workflow 844x390 (4353.1693ms)
+✔ image import clarity and complete WebP workflow 1440x900 (3095.2605ms)
+✖ image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration (30456.1456ms)
+✔ image import failures preserve current project, collection and image keys atomically (1491.8625ms)
+✔ image import labels and accessible help follow Spanish, English and Chinese (687.2018ms)
+✔ F2 local wall assistance privacy/review 360x800 (7617.0914ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":360,"height":800},"requests":68,"unexpected":0,"wallIds":["wal_e0a29e534fb8480583994ccaf3c5e97d","wal_83850aa51db04785b22c71d6064a4285"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 390x844 (7552.0265ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":390,"height":844},"requests":68,"unexpected":0,"wallIds":["wal_07dec8fe98b746dd84cf6b64a8bbd443","wal_13dd15bcd67e43efb74bf90ce209ab38"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 844x390 (7210.6991ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":844,"height":390},"requests":68,"unexpected":0,"wallIds":["wal_448a461550124339b0246bd91dc51c81","wal_8c1bba8189cf43d19c9d71a4b0ddbc8c"],"candidateCount":4}
+✔ F2 local wall assistance privacy/review 1440x900 (6203.9635ms)
+ℹ 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+ℹ {"viewport":{"width":1440,"height":900},"requests":68,"unexpected":0,"wallIds":["wal_961ab89d6a444feebb4671ed235b5eb9","wal_70bf399e005246648c0d9744e341ff04"],"candidateCount":4}
+✔ F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits (1639.6607ms)
+✔ F2 raw export private snapshot 360x800 (3525.945ms)
+✔ F2 raw export private snapshot 390x844 (3385.8519ms)
+✔ F2 raw export private snapshot 844x390 (3366.7396ms)
+✔ F2 raw export private snapshot 1440x900 (2620.9481ms)
+✔ F2 raw export invalidates pending download on reference, scale, image, project and review changes (1958.9527ms)
+✔ search derives unique entries and dimensions without duplicating catalog (1.1218ms)
+✔ exact partial accent case redundant spaces synonym and stored type search (0.5255ms)
+✔ combined query room family reset and empty preserve separation (0.2592ms)
+✔ synthetic 1.4 fixture schema + semantics valid; independent real-plan calibration not claimed (1.4983ms)
+✔ repeat export binary and semantic equality; source frozen and never written (23.7436ms)
+✔ mm axes, asymmetric room area, source IDs, diagonal wall and yaw retained (5.3098ms)
+✔ real MIT catalog geometry, all material IDs, surface conversion and missing-reference fallback explicit (5.2676ms)
+✔ merged source buffer references decode correct POSITION and index values (regression) (6.2869ms)
+✔ opening volumes removed, overlapping openings union not double-subtracted (13.7921ms)
+✔ concave and reversed floor polygons triangulate without filling notch (0.1561ms)
+✔ package digests link geometry, source and semantic document (5.4876ms)
+✔ cancel/failure/invalid source preserve input and saved project; no storage calls (1.0554ms)
+✔ no source or evidence overwrite; outside path rejected (5.6141ms)
+✔ profile current MIT fixture measured; malformed/oversized/extension/geometry/URI rejected (0.6832ms)
+✔ project persistence imported/exported 1.4 snapshot unaffected by adapter (12.8833ms)
+✔ new offline surface batch has three actual hash-verified CC0 albedos; old fifty unchanged (2.9782ms)
+✔ new PNG albedos export through separate profile; no project or browser catalog mutation (5.7234ms)
+✔ all fourteen existing curated models pass new core geometry guard; measured bounds not manufacturer precision (147.5771ms)
+✔ offline PNG PBR preserves four channel slots while default browser-compatible profile rejects PNG (1.1799ms)
+✔ surface converter rejects unsupported, oversize and indecodable input without filesystem mutation (0.096ms)
+﹣ Blender rejects corrupt package before scene import/save (0.0433ms) # SKIP
+✔ create/open/rename/duplicate/delete persist independently after reload (19.3906ms)
+✔ failed storage writes and invalid names preserve collection atomically (3.9782ms)
+✔ collection rejects corruption without overwriting source (1.4826ms)
+✔ renaming a project updates its portable name without altering independent projects (9.4841ms)
+✔ browser schema is an exact copy of the F0 authority (1.3842ms)
+✔ reference home validates and projects rooms, 48 original wall segments and 22 openings (4.8891ms)
+✔ F0 valid example round-trips every field, image reference, asset pointer and extension (3.5753ms)
+✔ newer minor retains unknown data; unknown major is rejected (0.9305ms)
+✔ atomic rejection: malformed JSON (1.0463ms)
+✔ atomic rejection: F0 invalid fixture (0.9179ms)
+✔ atomic rejection: unknown version (0.8623ms)
+✔ atomic rejection: wrong units (0.9963ms)
+✔ atomic rejection: duplicate ID (1.0172ms)
+✔ atomic rejection: broken wall reference (1.5349ms)
+✔ atomic rejection: broken material reference (1.0079ms)
+✔ atomic rejection: broken room reference (0.9857ms)
+✔ atomic rejection: out of range coordinate (1.0423ms)
+✔ atomic rejection: fractional coordinate (1.7534ms)
+✔ atomic rejection: negative dimension (1.2623ms)
+✔ atomic rejection: non-finite number (1.7535ms)
+✔ atomic rejection: wrong numeric type (1.6248ms)
+✔ atomic rejection: zero length wall (1.0132ms)
+✔ atomic rejection: opening outside wall (0.9227ms)
+✔ atomic rejection: opening above wall (0.9006ms)
+✔ atomic rejection: self-intersecting polygon (0.9574ms)
+✔ atomic rejection: repeated closing vertex (0.9658ms)
+✔ atomic rejection: bad calibration (1.3124ms)
+✔ atomic rejection: invalid timestamp (1.1552ms)
+✔ atomic rejection: timestamp order (1.944ms)
+✔ atomic rejection: event injection in ID (1.4006ms)
+✔ atomic rejection: CSS injection in color (1.6639ms)
+✔ atomic rejection: unknown 1.0 field (1.4789ms)
+✔ atomic rejection: future field cannot shadow numeric adapter (2.2171ms)
+✔ storage failure does not apply an otherwise valid import (1.0831ms)
+✔ legacy migration preserves IDs, rounds mm, maps references and retains original storage (3.3263ms)
+✔ corrupt old/new saved states degrade to reference without overwriting originals (3.2825ms)
+✔ failed migration write keeps original and usable migrated in-memory project (2.2395ms)
+✔ editing adapters mutate canonical entities; history serialization has no aliases (2.5938ms)
+✔ projection follows geometry edits and stable IDs despite wall reorder (0.5237ms)
+✔ diagonal wall projection retains finite geometry without changing array length (0.4254ms)
+✔ raw image axes convert before placement/rotation/rounding, diagonals preserved (0.9795ms)
+✔ snapshot is immutable, stable across exports and excludes private source fields (0.3404ms)
+✔ source version anchor is bound to the actual detector bytes (0.4488ms)
+✔ unknown/missing unit, frame, SHA, source, scale and metadata block export (0.5271ms)
+✔ uncalibrated, wrong-image, mismatched or zero scales are not silently invented (0.1045ms)
+✔ out-of-bounds or collapsed coordinates reject entire export without clipping (0.1185ms)
+✔ new home / room dimensions / history / software 3D 1440x900 (7551.5618ms)
+ℹ 3D: Chromium SwiftShader software; no physical mobile performance claim.
+✔ new home / room dimensions / history / software 3D 390x844 (7284.8453ms)
+ℹ 3D: Chromium SwiftShader software; no physical mobile performance claim.
+✔ new home / room dimensions / history / software 3D 844x390 (7331.9715ms)
+ℹ 3D: Chromium SwiftShader software; no physical mobile performance claim.
+✔ cancel project dialog, image rejection and persistence failure preserve prior project (1162.0981ms)
+✔ moving door/window consent is explicit, cancellation and one-step history preserve IDs (717.8353ms)
+✔ blank project uses unchanged 1.3 contract and independent empty geometry (5.5745ms)
+✔ multiple rooms share exactly one complete wall without changing the neighbor (5.587ms)
+✔ interior dimensions move three walls, preserve IDs, materials, scale and undo snapshot (1.9943ms)
+✔ right/bottom fixed sides and depth changes preserve the selected interior face (1.5934ms)
+✔ shared wall stays fixed, moving it or changing its length is rejected atomically (3.1889ms)
+✔ door/window on a moving wall require explicit impact; IDs and offsets preserved (1.8881ms)
+✔ opening offset changes keep its physical position when the wall start moves (1.548ms)
+✔ openings beyond shortened wall prevent application (1.5163ms)
+✔ affected manual measurements block, unrelated measurements remain exact (1.7453ms)
+✔ furniture is never silently moved/scaled/reassigned; shrink or wall collision blocks (2.886ms)
+✔ irregular rooms, missing/duplicate walls and junctions refuse safe numeric edit (4.2231ms)
+✔ creation refuses overlapping rooms, invalid dimensions and mismatched shared spans (1.5574ms)
+✔ extension fields survive room design and JSON/ZIP round trip (3.4547ms)
+✔ separate projects persist after reload; failed collection write preserves prior data (9.9683ms)
+✔ prolonged walls and partial/irregular neighbors cannot be silently displaced (3.4574ms)
+✔ measurements anchored at wall axes also refuse dimensional changes (1.4897ms)
+✔ surface library touch / keyboard / persistence / software 3D 1440x900 (7199.0326ms)
+✔ surface library touch / keyboard / persistence / software 3D 390x844 (6299.5015ms)
+✔ surface library touch / keyboard / persistence / software 3D 844x390 (6348.802ms)
+✔ every individual asset decodes, renders and disposes; mixed scene records transfer, memory and frame time (6477.2172ms)
+✔ HTTP, hash, decode, unknown preset and catalogue failures remain visible with safe fallback (4891.2941ms)
+✔ cancel, invalid scale and failed persistence preserve the project and history (631.0745ms)
+✔ comparison is real and new surfaces never acquire a zero price in English or Chinese (533.7353ms)
+✔ inventory requires ten qualified maps per family and every map is local, unique and hash checked (5.4106ms)
+✔ each library asset has pinned author and distributor CC0 evidence, not the website code license (0.5225ms)
+✔ catalog rejects duplicate graphics, missing rights, unsafe paths and impossible dimensions (2.3647ms)
+✔ five families, accent insensitive search and wall compatibility filters (0.4058ms)
+✔ floor / shared whole-wall assignment changes only materials and target reference, preserving geometry and openings (8.8638ms)
+✔ changing repeat for one room preserves another assignment and survives local library + JSON import/export (7.2488ms)
+✔ broken wall references and wrong assignment category are rejected; unknown preset round-trips as color fallback (5.7466ms)
+✔ image signatures/types/dimensions and strict application limits (3.3534ms)
+✔ image/world transforms retain original pixels with rotation and translation (12.3738ms)
+✔ calibration, independent verification, confirmation and recalibration are coherent (5.2688ms)
+✔ schema and semantic verification reject forged points, measurements/status and confirmation (11.2712ms)
+✔ stable manual walls/openings/rooms, snapping, deletion and invalid polygon rejection (3.3032ms)
+✔ W1-W4 detect actual review, contour, furniture and scale without blocking (3.533ms)
+✔ W2 exactly covers segmented contours including tolerance around wall ends (1.808ms)
+✔ W3 ignores the solid removed by a real opening (1.5902ms)
+✔ ZIP round-trip keeps full geometry, original image bytes and private filenames out (5.774ms)
+✔ ZIP rejects corruption, CRC, duplicate names, escape paths, broken refs and limits (2.1675ms)
+✔ ZIP DEFLATE input is bounded and valid (independent compressed fixture) (3.9916ms)
+✔ old V1 projects remain valid without new optional verification/opacity (1.8283ms)
+✔ new project collection writes are atomic on storage failure (3.2818ms)
+✔ snap accepts DOMPoint-like inherited coordinates from the actual SVG conversion (0.0722ms)
+✔ JPEG and EXIF rotations retain original bytes/pixels, neutralizing display copy only (0.4417ms)
+✔ ZIP rejects duplicate entries and encrypted flags before touching a collection (0.3207ms)
+✔ ZIP inflation stops before accepting a payload larger than its declared bound (1.3473ms)
+✔ W3 catches a furniture footprint crossing a concave room even with all corners inside (1.4222ms)
+✔ static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes (9.0445ms)
+✔ image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants (0.5595ms)
+✔ clear strokes yield centerline proposals and multiple independent candidates (2.9702ms)
+✔ short interruptions join but large gaps stay separate (1.1766ms)
+✔ blank, uniform dark, low contrast and isolated noise abstain (3.522ms)
+✔ transparent strokes do not fabricate lines and raster limits are enforced (1.0007ms)
+✔ sampling maps through original pixels, rotation and displacement with F1b transform (0.1573ms)
+✔ explicit acceptance and correction reuse canonical IDs, source states and export validation (3.99ms)
+✔ invalid corrected geometry fails validation on a clone without changing live project (1.6378ms)
+✔ synthetic detector timing is recorded without imposing product budgets (4.4058ms)
+ℹ {"synthetic":true,"method":"30 calls, clear 160x100 RGBA raster, detector only; no decode/UI","node":"v24.14.1","platform":"win32","arch":"x64","candidates":3,"medianMs":0.13179999999999836,"p90NearestRankMs":0.15750000000002728}
+ℹ tests 199
+ℹ suites 0
+ℹ pass 197
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 367988.8131
+
+✖ failing tests:
+
+test at tests\browser.test.cjs:315:1
+✖ image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration (30456.1456ms)
+  page.waitForFunction: Timeout 30000ms exceeded.
+      at TestContext.<anonymous> (C:\Users\temp123\.codex\visualizations\2026\09\04\01a06e52-48d9-7952-88d8-cafb6e617672\floorplan-3d-post-f3\tests\browser.test.cjs:317:251) {
+    name: 'TimeoutError',
+    log: []
+  }

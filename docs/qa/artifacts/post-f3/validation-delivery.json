@@ -1,0 +1,118 @@
+{
+  "status": "PASS",
+  "environment": {
+    "node": "v24.14.1",
+    "platform": "win32",
+    "arch": "x64",
+    "python": "C:\\Users\\temp123\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "chromium": "C:\\Users\\temp123\\AppData\\Local\\ms-playwright\\chromium-1234\\chrome-win64\\chrome.exe",
+    "rendering": "Chromium automated desktop/touch emulation; no physical mobile performance claim"
+  },
+  "cases": [
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--test",
+        "--test-concurrency=1",
+        "tests/project.test.cjs",
+        "tests/library.test.cjs",
+        "tests/tracing.test.cjs",
+        "tests/wall_assist.test.cjs",
+        "tests/raw_wall_export.test.cjs",
+        "tests/assets.test.cjs",
+        "tests/surfaces.test.cjs",
+        "tests/furniture-search.test.cjs",
+        "tests/room-layout.test.cjs",
+        "tests/interop.test.cjs"
+      ],
+      "exitCode": 0,
+      "totals": [
+        "ℹ tests 125",
+        "ℹ pass 125",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ duration_ms 4220.2449"
+      ],
+      "error": null
+    },
+    {
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--test",
+        "--test-concurrency=1",
+        "--test-name-pattern=normalized Asset Lab cohort|F3 loader rejects|F3 missing reference|F3 core embedded JPEG|F3 cancellation|HTTP, hash, decode|cancel, invalid scale|390x844|844x390",
+        "tests/assets.browser.test.cjs",
+        "tests/surfaces.browser.test.cjs"
+      ],
+      "exitCode": 0,
+      "totals": [
+        "ℹ tests 18",
+        "ℹ pass 18",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ duration_ms 105675.7954"
+      ],
+      "error": null
+    },
+    {
+      "command": [
+        "C:\\Users\\temp123\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_readiness.test.py"
+      ],
+      "exitCode": 0,
+      "totals": [
+        "Ran 12 tests in 0.139s",
+        "OK"
+      ],
+      "error": null
+    },
+    {
+      "command": [
+        "C:\\Users\\temp123\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_wall_evaluation.test.py"
+      ],
+      "exitCode": 0,
+      "totals": [
+        "Ran 16 tests in 0.621s",
+        "OK"
+      ],
+      "error": null
+    },
+    {
+      "command": [
+        "C:\\Users\\temp123\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "scripts/interop/run-python-tests.py",
+        "tests/f2_raw_export.test.py"
+      ],
+      "exitCode": 0,
+      "totals": [
+        "Ran 3 tests in 0.348s",
+        "OK"
+      ],
+      "error": null
+    }
+  ],
+  "sourceFingerprints": {
+    "index.html": "541fbc0bc4394012b34d03185214ad9bede859c6d7f80dd20614dddad884b55b",
+    "js/project-core.js": "e70c034746aa6a5be0d200c5dc139e8a4397a29f36ecb89351411b7d09a005b6",
+    "js/project-schema.js": "1f2809f703df9b740b19e06768ddf1627a220894aa100755ce39025efba20fe5",
+    "js/project-library.js": "71b13419db6415af4c797d2aa8c7b5eadc9624b24763e96556a75d6d54918789",
+    "js/asset-loader.mjs": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+    "js/surface-renderer.mjs": "4b7f677f98470cd1b0ff9680e73a1aceb3f79f05eb79e3d6e279692d0c777e02",
+    "scripts/interop/export.cjs": "ac9e63e60564fd3d334d594b37c3a0560eedf474c3fd10449f7074a282cbbb72",
+    "scripts/interop/glb.cjs": "27495c62ab9f20e24e7f70ac822567c51516d089fb9a7c3e1bb7e4d97b044585",
+    "scripts/interop/profiles.json": "f6160fae30e5ad229247e5d93686a26fcfdeef92e83ceb8c3f759db4cdf09a58",
+    "scripts/interop/blender-verify.py": "cdb703fe7d76392f91eb230c18fa7a666d0ae4332b79c37c292ab7a9b34b2f1e"
+  },
+  "independentPythonSchemaOracle": "NOT RUN: jsonschema not installed in available bundled Python; no installation. Fixture validation and schema-copy parity executed by actual Core validator/Node tests. No schema modification.",
+  "finalEvidence": {
+    "determinism": "docs/qa/artifacts/post-f3/determinism-release.json",
+    "blender": "docs/qa/artifacts/post-f3/blender-release.json",
+    "surfaceBlender": "docs/qa/artifacts/post-f3/blender-surfaces-release.json",
+    "pbrBlender": "docs/qa/artifacts/post-f3/pbr-blender-verification.json"
+  }
+}

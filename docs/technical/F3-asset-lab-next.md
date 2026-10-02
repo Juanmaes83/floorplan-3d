@@ -1,6 +1,6 @@
-# F3 · siguiente lote controlado de Asset Lab — propuesta en revisión
+# F3 · tanda controlada #23 — revisión visual aprobada y cierre
 
-**Base de Rubik comprobada:** `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2` (squash PR #22, 02-10-2026). **Asset Lab auditado en clon temporal de solo lectura:** `5dc7b182c5c227472b84aea66a3ffa1368c95981`. El lote todavía requiere revisión visual de Juanma y merge de la PR; no cambia el contrato `FloorPlanProjectV1`.
+**Base original:** `e62d17ee62576466f937700f6c445c33b09ec9c2` (squash PR #22). **Master reconciliado:** `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`, con PR #24 y cierres #25/#26. **HEAD visualmente aprobado:** `5b7267f84380586d5e482373bd70f0392e896009`; Juanma autoriza squash si pruebas, preview exacta y contenido aprobado se conservan. El cierre va en la misma [PR #23](https://github.com/Juanmaes83/floorplan-3d/pull/23), cuya metadata determina estado de fusión/SHA; no se crea rama satélite ni se reescribe historia. **Asset Lab preservado:** `5dc7b182c5c227472b84aea66a3ffa1368c95981`. [QA de reconciliación](../qa/f3-reconciliation-2026-10-02.md). No cambia `FloorPlanProjectV1` ni su schema.
 
 ## Inventario y decisión técnica
 

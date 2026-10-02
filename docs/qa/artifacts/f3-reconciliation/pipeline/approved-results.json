@@ -1,0 +1,456 @@
+{
+  "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "tool": "glTF Transform 4.3.0 / sharp 0.34.4",
+  "steps": [
+    "copy: decode Draco",
+    "NodeIO and sharp: convert opaque WebP/PNG/JPEG to JPEG quality 82, maximum 1024 pixels per side"
+  ],
+  "outputs": [
+    {
+      "id": "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+      "sourcePath": "assets/ikea/sofa/glostad-sofa-de-2-plazas-knisa-gris-oscuro.glb",
+      "sourceSha256": "eb19b9bebedaabd3313c04e8a62bb3536685eafc861af3ee310126959c7464e4",
+      "sourceBytes": 892232,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 87510,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 460452,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 84186,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+      "outputSha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+      "outputBytes": 1810356,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 143924,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 164822,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 129547,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1235,
+        "height": 766,
+        "depth": 794
+      },
+      "bboxMinMeters": [
+        -0.6172752976417542,
+        0.00011497990635689348,
+        -0.3970242738723755
+      ],
+      "bboxMaxMeters": [
+        0.6172847151756287,
+        0.765959620475769,
+        0.3972296714782715
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+      "sourcePath": "assets/ikea/armchair/strandmon-sillon-orejero-tommaboda-beige-intenso.glb",
+      "sourceSha256": "c481248979e68c8b2f57be97d102611dfda9286693cf82cb726b966f996ff5d6",
+      "sourceBytes": 1196180,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 104172,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 610295,
+          "width": 2048,
+          "height": 2047,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 118808,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+      "outputSha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+      "outputBytes": 2682460,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 162039,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 209878,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 160715,
+          "width": 1024,
+          "height": 1023,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 814,
+        "height": 1012,
+        "depth": 978
+      },
+      "bboxMinMeters": [
+        -0.4062685966491699,
+        0.00022555670875590295,
+        -0.4897238612174988
+      ],
+      "bboxMaxMeters": [
+        0.40739476680755615,
+        1.0127006769180298,
+        0.48863744735717773
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-skogsta-mesa-acacia-demo",
+      "sourcePath": "assets/ikea/table/skogsta-mesa-acacia.glb",
+      "sourceSha256": "8d45aa0f78b8880e6526fb9f188bf334a04d6d39c3ffc5c405948a3b61b3e277",
+      "sourceBytes": 208876,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 86128,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 43646,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+      "outputSha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+      "outputBytes": 1057164,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 150655,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 83686,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1600,
+        "height": 743,
+        "depth": 805
+      },
+      "bboxMinMeters": [
+        -0.8000394701957703,
+        -0.000009510931704426184,
+        -0.4025859832763672
+      ],
+      "bboxMaxMeters": [
+        0.8000378012657166,
+        0.7433334589004517,
+        0.4025801420211792
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+      "sourcePath": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco.glb",
+      "sourceSha256": "568be813365f6e438a243f9ab9a822207314ae0df906cf862913efbe624792c2",
+      "sourceBytes": 301860,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 31612,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 46256,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 63048,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+      "outputSha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+      "outputBytes": 1627956,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 68192,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 85529,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 64132,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1220,
+        "height": 909,
+        "depth": 610
+      },
+      "bboxMinMeters": [
+        -0.6100096106529236,
+        -1.1353761664167905e-7,
+        -0.30520492792129517
+      ],
+      "bboxMaxMeters": [
+        0.6100322604179382,
+        0.9094274640083313,
+        0.3050766587257385
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-stockholm-2025-aparador-chapa-roble-demo",
+      "sourcePath": "assets/ikea/sideboard/stockholm-2025-aparador-chapa-roble.glb",
+      "sourceSha256": "83e200ddebaaa8e42c47ea6643f37e872ab6f4d2b3f2f00a62eeb0122cf89a21",
+      "sourceBytes": 147828,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 74902,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 36976,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+      "outputSha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+      "outputBytes": 490828,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 123760,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 77926,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1608,
+        "height": 832,
+        "depth": 432
+      },
+      "bboxMinMeters": [
+        -0.804045557975769,
+        -0.000001689441660346347,
+        -0.21576236188411713
+      ],
+      "bboxMaxMeters": [
+        0.8040450811386108,
+        0.8319690227508545,
+        0.21632058918476105
+      ],
+      "officialDimensions": null
+    },
+    {
+      "id": "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+      "sourcePath": "assets/ikea/dresser/nordli-comoda-de-5-cajones-blanco.glb",
+      "sourceSha256": "da733273971a56dd29694eff71cf7cc54d8b9758e6198b9b6019c1f8d86e0e00",
+      "sourceBytes": 568708,
+      "sourceExtensions": [
+        "EXT_texture_webp",
+        "KHR_draco_mesh_compression"
+      ],
+      "sourceImages": [
+        {
+          "mime": "image/webp",
+          "bytes": 30836,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 352540,
+          "width": 2048,
+          "height": 2048,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 7866,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/webp",
+          "bytes": 44018,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "outputPath": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+      "outputSha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+      "outputBytes": 1171204,
+      "outputImages": [
+        {
+          "mime": "image/jpeg",
+          "bytes": 67638,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 120653,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 17891,
+          "width": 512,
+          "height": 512,
+          "hasAlpha": false
+        },
+        {
+          "mime": "image/jpeg",
+          "bytes": 67917,
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false
+        }
+      ],
+      "modelDimensionsMm": {
+        "width": 1202,
+        "height": 1691,
+        "depth": 477
+      },
+      "bboxMinMeters": [
+        -0.600944310426712,
+        0,
+        -0.238617941737175
+      ],
+      "bboxMaxMeters": [
+        0.600904792547226,
+        1.6907002112129703,
+        0.23857168853282928
+      ],
+      "officialDimensions": null
+    }
+  ],
+  "rejected": [
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "reason": "unsupported source extension: KHR_texture_transform"
+    },
+    {
+      "id": "ikea-saltsjobaden-armchair-tonerud-red-brown-demo",
+      "reason": "unsupported source extension: KHR_materials_ior, KHR_materials_specular"
+    }
+  ]
+}

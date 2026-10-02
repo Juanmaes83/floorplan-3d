@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "status": "technical-candidate-not-mobile-performance-budget",
+  "models": {
+    "id": "rubik-core-glb-v1",
+    "input": "GLB 2.0, self-contained triangle meshes",
+    "output": "GLB 2.0, no extensions",
+    "allowedExtensions": [],
+    "convertedExtensions": [],
+    "rejected": ["Draco", "meshopt", "KTX2", "WebP", "external URI", "animations", "skins", "morphs", "sparse", "non-triangles"],
+    "limits": {"bytes": 8388608, "images": 4, "textures": 4, "materials": 8, "accessorCount": 300000, "triangles": 100000, "vertices": 300000, "geometryBytes": 16777216, "imageBytes": 1048576, "imageSide": 2048, "decodedImageBytes": 16777216},
+    "geometryBudget": "Additional offline admission guard, not a change to the F3 loader or a measured phone budget",
+    "tools": {"inspector": "rubik-interop 1.0.0 / Node 24", "legacyNormalizer": "glTF Transform 4.3.0 / draco3dgltf 1.5.7 / sharp 0.34.4 (unchanged; not invoked by this profile)"}
+  },
+  "blenderPbr": {
+    "id": "rubik-blender-png-pbr-v1",
+    "input": "Core GLB 2.0, embedded JPEG or lossless PNG, triangle meshes",
+    "output": "Core GLB 2.0, same channels and pixel bytes; no universal decoding",
+    "inheritsLimitsFrom": "models",
+    "channels": {"baseColor": "sRGB", "metallicRoughness": "linear G roughness / B metallic", "normal": "linear tangent space +Y; no DirectX Y conversion", "occlusion": "linear R; may share ORM image"},
+    "convertedExtensions": [],
+    "rejected": ["all extensions", "WebP", "KTX2", "animation", "skin", "morph", "sparse", "external URI", "height/displacement", "emissive texture", "UV sets other than 0"],
+    "runtime": "Offline Blender package ONLY; browser F3 JPEG policy unchanged",
+    "tools": {"inspector": "rubik-interop 1.0.0 / Node 24", "decoder": "Blender 5.2.1 glTF importer; PNG signature verified before import"}
+  },
+  "surface": {
+    "id": "rubik-surface-png-v1",
+    "input": "hash-verified existing CC0 WebP baseColor, <=256 px",
+    "output": "lossless RGB PNG, embedded in scene.glb",
+    "channels": {"baseColor": "sRGB", "roughness": "design scalar only", "metalness": "0 design scalar", "normal": "not supplied", "occlusion": "not supplied", "height": "not supplied"},
+    "limits": {"inputBytes": 1048576, "inputSide": 256, "outputBytes": 1048576},
+    "tools": {"Pillow": "12.3.0"},
+    "limitation": "Re-encoding a reduced albedo does not create PBR detail or source masters"
+  },
+  "surfaceCandidate": {"id":"rubik-cc0-albedo-png-v1","input":"Pinned Poly Haven / Modelibr flat PNG albedo <=256 px, <=1 MiB","output":"lossless RGB PNG <=256 px, <=1 MiB","channels":"baseColor sRGB only; no fabricated normal/roughness/AO/height","rejected":["KTX2","unverified license","animated image","alpha","oversize","non-PNG"],"tools":{"Pillow":"12.3.0"},"runtime":"Offline Blender candidate catalog, NOT additions to the fifty approved browser surfaces"},
+  "package": {"bytes": 67108864, "triangles": 500000, "nodes": 20000, "textures": 100, "jsonBytes": 10485760}
+}
