@@ -65,6 +65,16 @@ No QA de teléfono físico ni nuevos umbrales de producto.
 
 Tras publicar normalmente se verifican Vercel READY, SHA final, target preview,
 HTML/aplicación y modelos en URL protegida. No se usa producción como preview.
+Resultado observado: `ba153837a03a2725addbcb325f1f9f94dfa17c5a`, deployment
+`dpl_3EKby7kpAh7sX4YuaGrXH5oXGw2B`, READY/preview. Chromium contra la aplicación
+remota en1440×900,390×844,844×390: seis modelos ready/texturas, seis GLB200 por
+viewport, hashes de HTML/código/manifiesto/seis binarios idénticos a checkout,
+persistencia tras recarga, cero errores de página y requests fallidas.
+[Verificación live](artifacts/f3-reconciliation-live/verification.json).
+El commit siguiente solo incorpora esta evidencia y estado documental; se
+revalida su preview exacta antes del squash y se registra el resultado en PR#23.
+El enlace temporal de revisión de esta preview caduca el03-10-2026 según Vercel;
+su token no se guarda en Git ni se desactiva la protección.
 La URL/ID y el SHA exacto se registran en la propia PR para evitar el bucle de
 cambiar el SHA al documentar el mismo SHA dentro de su commit.
 Si la protección exige enlace temporal, se entrega acceso limitado con caducidad;
