@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "blender": "5.2.1 LTS",
+  "fileSha256": "fbf3151969dcc82d46d82ed29003e5f6e1db8451809d749c1adb044fe137adb2",
+  "images": [
+    "baseColor",
+    "ORM",
+    "normal"
+  ],
+  "links": [
+    {
+      "fromNode": "Principled BSDF",
+      "fromSocket": "BSDF",
+      "toNode": "Material Output",
+      "toSocket": "Surface"
+    },
+    {
+      "fromNode": "Image Texture",
+      "fromSocket": "Color",
+      "toNode": "Principled BSDF",
+      "toSocket": "Base Color"
+    },
+    {
+      "fromNode": "Separate Color",
+      "fromSocket": "Blue",
+      "toNode": "Principled BSDF",
+      "toSocket": "Metallic"
+    },
+    {
+      "fromNode": "Separate Color",
+      "fromSocket": "Green",
+      "toNode": "Principled BSDF",
+      "toSocket": "Roughness"
+    },
+    {
+      "fromNode": "Image Texture.001",
+      "fromSocket": "Color",
+      "toNode": "Separate Color",
+      "toSocket": "Color"
+    },
+    {
+      "fromNode": "Normal Map",
+      "fromSocket": "Normal",
+      "toNode": "Principled BSDF",
+      "toSocket": "Normal"
+    },
+    {
+      "fromNode": "Image Texture.002",
+      "fromSocket": "Color",
+      "toNode": "Normal Map",
+      "toSocket": "Color"
+    },
+    {
+      "fromNode": "Separate Color.001",
+      "fromSocket": "Red",
+      "toNode": "Group",
+      "toSocket": "Occlusion"
+    },
+    {
+      "fromNode": "Image Texture.003",
+      "fromSocket": "Color",
+      "toNode": "Separate Color.001",
+      "toSocket": "Color"
+    }
+  ],
+  "scope": "Original synthetic PNG maps: decoder and node wiring only; no commercial material set nor photoreal validation"
+}

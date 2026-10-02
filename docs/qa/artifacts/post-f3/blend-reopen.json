@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "blender": "5.2.1 LTS",
+  "entities": 17,
+  "images": [
+    {
+      "name": "surface-wood-floor",
+      "dimensions": [
+        256,
+        256
+      ],
+      "packed": true
+    }
+  ],
+  "unitSystem": "METRIC",
+  "scaleLength": 1,
+  "savedPackageSha256": "2954a9a8c918f09af6dd72968bbb0e8c87ddb752cef2f1ccf2b1425b0ecaa87e"
+}

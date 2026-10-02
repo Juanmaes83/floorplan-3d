@@ -1,0 +1,2159 @@
+{
+  "consultedOn": "2026-10-02",
+  "repository": "Juanmaes83/immersphere-asset-lab",
+  "revision": "5dc7b182c5c227472b84aea66a3ffa1368c95981",
+  "method": "Fresh git ls-tree + git show immutable objects; original source remains read-only. Listed counts regenerated, not copied from historical inventory. Only selected candidate bytes fetched/inspected; no claim all GLBs decoded.",
+  "manifestSha256": "30d8c7dde47a5b06bf3d03f423bcff3782a37987b37f7ce892bbadea51ddd5ab",
+  "manifestEntries": 134,
+  "physicalTrackedGlb": 114,
+  "missing": 20,
+  "unlisted": [],
+  "physicalPaths": [
+    "assets/ikea/armchair/bingsta-sillon-vissle-amarillo-oscurokabusa-amarillo-oscuro-40455649.glb",
+    "assets/ikea/armchair/ektorp-sillon-kilanda-beige-claro-99552101.glb",
+    "assets/ikea/armchair/lillehem-sillon-visslebeige-madera.glb",
+    "assets/ikea/armchair/saltsjobaden-sillon-tonerud-marron-rojizo.glb",
+    "assets/ikea/armchair/soderhamn-sillon-hillared-beige-99431246.glb",
+    "assets/ikea/armchair/soderhamn-sillon-tallmyra-verde-oscuro.glb",
+    "assets/ikea/armchair/stockholm-2025-sillon-chapa-abedul-80594785.glb",
+    "assets/ikea/armchair/stockholm-2025-sillon-djurmo-grisblanco.glb",
+    "assets/ikea/armchair/stockholm-2025-sillon-ratandjurmo-grisblanco.glb",
+    "assets/ikea/armchair/strandmon-sillon-orejero-tommaboda-beige-intenso.glb",
+    "assets/ikea/bed/brimnes-estructura-de-cama-con-almacenaje-blancoluroy.glb",
+    "assets/ikea/bed/idanas-canape-tapizado-naggen-beige.glb",
+    "assets/ikea/bed/idanas-estructura-de-cama-con-almacenaje-marron-oscuroluroy.glb",
+    "assets/ikea/bed/tallasen-estructura-cama-tapizada-kulsta-beige-claroluroy-89514746.glb",
+    "assets/ikea/bedside-table/brimnes-mesita-de-noche-blanco.glb",
+    "assets/ikea/bedside-table/stomso-mesita-de-noche-de-pared-efecto-abedul-blancoazul.glb",
+    "assets/ikea/bench/morbylanga-banco-chapa-robletinte-marron.glb",
+    "assets/ikea/bench/skogsta-banco-con-almacenaje-acacianegro.glb",
+    "assets/ikea/cabinet/stockholm-2025-armario-con-puertas-correderas-ratanpino.glb",
+    "assets/ikea/chair/lisabo-silla-fresnotallmyra-blanconegro.glb",
+    "assets/ikea/chair/lisabo-silla-negrotallmyra-negro-gris.glb",
+    "assets/ikea/chair/sandsberg-silla-blanco.glb",
+    "assets/ikea/chair/sandsberg-silla-marron-rojizo.glb",
+    "assets/ikea/chair/skogsta-silla-acacia.glb",
+    "assets/ikea/chair/skogsta-silla-negro.glb",
+    "assets/ikea/chairs/vasman-armchair-outdoor-brown.glb",
+    "assets/ikea/chairs/vittskar-armchair-outdoor-dark-grey.glb",
+    "assets/ikea/coffee-table/frotorp-mesa-de-centro-blanco-cromadoblanco-vidrio.glb",
+    "assets/ikea/coffee-table/stockholm-mesa-de-centro-chapa-nogal.glb",
+    "assets/ikea/deck-box/nammaro-baul-tinte-marron-claro-interiorexterior.glb",
+    "assets/ikea/decor/sjalsligt-decoration-set-of-3.glb",
+    "assets/ikea/display-cabinet/stockholm-2025-vitrina-chapa-roble.glb",
+    "assets/ikea/dresser/hemnes-comoda-de-2-cajones-tinte-blanco.glb",
+    "assets/ikea/dresser/malm-comoda-6-cajones-blanco.glb",
+    "assets/ikea/dresser/malm-comoda-de-2-cajones-negro-marron.glb",
+    "assets/ikea/dresser/nordli-comoda-de-5-cajones-blanco.glb",
+    "assets/ikea/dresser/songesand-comoda-de-3-cajones-blanco-90366839.glb",
+    "assets/ikea/footstool/havberg-reposapies-grannbomstad-marron-dorado.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-ab-cajones-blanco-90326787.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco-estructura-90603973.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-efecto-roble.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-gris-oscuro.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-blanco.glb",
+    "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-efecto-roble.glb",
+    "assets/ikea/kitchen-corner-cabinet/knoxhult-armario-bajo-cocina-esquina-blanco.glb",
+    "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-blanco-80604020.glb",
+    "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-efecto-roble-90621081.glb",
+    "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-efecto-roble.glb",
+    "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-gris-oscuro.glb",
+    "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco-estructura.glb",
+    "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco.glb",
+    "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-efecto-roble-90604246.glb",
+    "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-gris-oscuro.glb",
+    "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puerta-blanco.glb",
+    "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-90326792.glb",
+    "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-estructura-80603978.glb",
+    "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-efecto-roble.glb",
+    "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-gris-oscuro.glb",
+    "assets/ikea/lighting/lauters-lampara-de-pie-marron-fresno.glb",
+    "assets/ikea/lighting/solvinden-solar-floor-lamp-outdoor-beige.glb",
+    "assets/ikea/lounge-chair/havberg-silla-giratoria-grannbomstad-marron-dorado.glb",
+    "assets/ikea/lounge-chair/havberg-silla-giratoria-y-reposapies-grannbomstad-marron-dorado.glb",
+    "assets/ikea/lounge/nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+    "assets/ikea/mirror/karmsund-espejo-de-mesa-negro.glb",
+    "assets/ikea/outdoor-bench/nammaro-banco-con-respaldo-de-exterior-tinte-marron-claro.glb",
+    "assets/ikea/outdoor-bench/nammaro-banco-jardin-tinte-marron-claro.glb",
+    "assets/ikea/outdoor-bench/paronholmen-banco-con-respaldo-de-exterior-rojo-90503799.glb",
+    "assets/ikea/outdoor-cabinet/kolbjorn-armario-para-interior-o-exterior-beige.glb",
+    "assets/ikea/outdoor-chair/lacko-silla-con-reposabrazos-exterior-gris-oscuro.glb",
+    "assets/ikea/outdoor-sofa/lacko-sofa-2-plazas-exterior-gris.glb",
+    "assets/ikea/outdoor-stool/nammaro-taburete-de-exterior-plegabletinte-marron-claro.glb",
+    "assets/ikea/outdoor-storage/kolbjorn-mueble-de-almacenaje-beige-exteriorinterior.glb",
+    "assets/ikea/outdoor-table/lagaskar-mesa-de-centro-exterior-beige-90543762.glb",
+    "assets/ikea/outdoor-table/mabarsskar-mesa-de-centro-exterior-interiorblanco.glb",
+    "assets/ikea/planters/stjarnanis-outdoor-planter-acacia-90612029.glb",
+    "assets/ikea/pouf/stockholm-2025-puf-alhamn-beige-80586139.glb",
+    "assets/ikea/privacy-screen/nammaro-caja-y-pantalla-privacidad-exteriortinte-marron-claro.glb",
+    "assets/ikea/privacy-screen/nammaro-pantalla-para-privacidad-tinte-marron-claro-interiorexterior.glb",
+    "assets/ikea/rug/bankkontor-alfombra-pelo-largo.glb",
+    "assets/ikea/rug/jarnvag-alfombra-pelo-corto.glb",
+    "assets/ikea/rug/tversted-alfombra-pelo-corto.glb",
+    "assets/ikea/rugs/morum-indoor-outdoor-rug-beige.glb",
+    "assets/ikea/side-tables/hakanskar-outdoor-coffee-table-light-brown.glb",
+    "assets/ikea/sideboard/stockholm-2025-aparador-chapa-roble.glb",
+    "assets/ikea/sofa/eskilstuna-sofa-3-plazas-con-chaiselongue-hillared-antracita.glb",
+    "assets/ikea/sofa/glostad-sofa-de-2-plazas-knisa-gris-oscuro.glb",
+    "assets/ikea/sofa/glostad-sofa-de-3-plazas-knisa-gris-oscuro.glb",
+    "assets/ikea/sofa/hyltarp-sofa-de-3-plazas-gransel-natural.glb",
+    "assets/ikea/sofa/kivik-sofa-3-plazas-con-chaiselongue-tibbleby-beisgris-99440590.glb",
+    "assets/ikea/sofa/lillehem-sofa-modular-3-plazas-con-mesa-gunnared-marron-rojizomadera.glb",
+    "assets/ikea/sofa/stockholm-2025-sofa-de-1-plaza-alhamn-beige.glb",
+    "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-marron-oscuro-90591748.glb",
+    "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-turquesa-oscuro.glb",
+    "assets/ikea/sofa/stockholm-2025-sofa-de-3-plazas-sundhamn-beige-90586092.glb",
+    "assets/ikea/sofa/viskafors-sofa-de-2-plazas-hogalid-marronabedul.glb",
+    "assets/ikea/storage-shelf/kolbjorn-estanteria-con-2-armarios-beige.glb",
+    "assets/ikea/storage-shelf/kolbjorn-estanteria-con-armario-beige.glb",
+    "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-80x35x162-cm-99291646.glb",
+    "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-beige.glb",
+    "assets/ikea/table/lisabo-mesa-chapa-fresno.glb",
+    "assets/ikea/table/morbylanga-mesa-chapa-roble-tinte-marron.glb",
+    "assets/ikea/table/skogsta-mesa-acacia.glb",
+    "assets/ikea/table/stockholm-2025-mesa-chapa-roblechapa-roble.glb",
+    "assets/ikea/table/tonstad-mesa-extensible-chapa-roble.glb",
+    "assets/ikea/tables/nammaro-garden-table-light-brown.glb",
+    "assets/ikea/textile/havsten-outdoor-back-seat-cushion-beige-90542499.glb",
+    "assets/ikea/tv-unit/brimnes-mueble-tv-blanco.glb",
+    "assets/ikea/tv-unit/fjallbo-mueble-tv-negro-90339290.glb",
+    "assets/ikea/tv-unit/hemnes-mueble-tv-tinte-blancomarron-claro.glb",
+    "assets/ikea/tv-unit/stockholm-2025-mueble-tv-puertas-correderas-chapa-roble.glb",
+    "assets/ikea/vanity/hemnes-tocador-blanco.glb",
+    "assets/ikea/vanity/syvde-tocador-blanco.glb",
+    "assets/ikea/wardrobe/brimnes-armario-con-3-puertas-blanco.glb"
+  ],
+  "entries": [
+    {
+      "id": "ikea-demo-001",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 220,
+        "height": 85,
+        "depth": 95,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "docs/placeholder-permission-ikea.pdf",
+      "permissionExists": false,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-002",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 82,
+        "height": 101,
+        "depth": 85,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-003",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 90,
+        "height": 45,
+        "depth": 90,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-004",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 180,
+        "height": 75,
+        "depth": 90,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-005",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 47,
+        "height": 80,
+        "depth": 50,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-006",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 180,
+        "height": 100,
+        "depth": 200,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-007",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 200,
+        "height": 236,
+        "depth": 60,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-008",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 28,
+        "height": 150,
+        "depth": 28,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-009",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 170,
+        "height": 1,
+        "depth": 240,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-010",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 15,
+        "height": 30,
+        "depth": 15,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-011",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 80,
+        "height": 202,
+        "depth": 28,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-012",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 126,
+        "height": 90,
+        "depth": 79,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-013",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 100,
+        "height": 64,
+        "depth": 49,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-014",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 150,
+        "height": 74,
+        "depth": 75,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-015",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 50,
+        "height": 10,
+        "depth": 50,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-016",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 47,
+        "height": 52,
+        "depth": 47,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-017",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 53,
+        "height": 50,
+        "depth": 53,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-018",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 65,
+        "height": 150,
+        "depth": 2,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-019",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 42,
+        "height": 91,
+        "depth": 48,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-demo-020",
+      "path": "assets/_placeholder/demo-model.glb",
+      "existsInGitSnapshot": false,
+      "declaredDimensions": {
+        "width": 145,
+        "height": 250,
+        "depth": 1,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-vittskar-armchair-outdoor-dark-grey-20575167",
+      "path": "assets/ikea/chairs/vittskar-armchair-outdoor-dark-grey.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": 64,
+        "height": 95,
+        "depth": 59,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-vasman-armchair-outdoor-brown",
+      "path": "assets/ikea/chairs/vasman-armchair-outdoor-brown.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-garden-table-light-brown",
+      "path": "assets/ikea/tables/nammaro-garden-table-light-brown.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-hakanskar-outdoor-coffee-table-light-brown",
+      "path": "assets/ikea/side-tables/hakanskar-outdoor-coffee-table-light-brown.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey",
+      "path": "assets/ikea/lounge/nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-solvinden-solar-floor-lamp-outdoor-beige",
+      "path": "assets/ikea/lighting/solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-morum-indoor-outdoor-rug-beige",
+      "path": "assets/ikea/rugs/morum-indoor-outdoor-rug-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stjarnanis-outdoor-planter-acacia-90612029",
+      "path": "assets/ikea/planters/stjarnanis-outdoor-planter-acacia-90612029.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-havsten-outdoor-back-seat-cushion-beige-90542499",
+      "path": "assets/ikea/textile/havsten-outdoor-back-seat-cushion-beige-90542499.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-sjalsligt-decoration-set-of-3",
+      "path": "assets/ikea/decor/sjalsligt-decoration-set-of-3.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-brimnes-tv-unit-white-demo",
+      "path": "assets/ikea/tv-unit/brimnes-mueble-tv-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-hemnes-tv-unit-white-light-brown-stain-demo",
+      "path": "assets/ikea/tv-unit/hemnes-mueble-tv-tinte-blancomarron-claro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-fjallbo-tv-unit-black-90339290",
+      "path": "assets/ikea/tv-unit/fjallbo-mueble-tv-negro-90339290.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "path": "assets/ikea/sofa/glostad-sofa-de-3-plazas-knisa-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+      "path": "assets/ikea/sofa/glostad-sofa-de-2-plazas-knisa-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-hyltarp-3-seat-sofa-gransel-natural-demo",
+      "path": "assets/ikea/sofa/hyltarp-sofa-de-3-plazas-gransel-natural.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kivik-3-seat-sofa-chaise-tibbleby-beige-grey-99440590",
+      "path": "assets/ikea/sofa/kivik-sofa-3-plazas-con-chaiselongue-tibbleby-beisgris-99440590.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-eskilstuna-3-seat-sofa-chaise-hillared-anthracite-demo",
+      "path": "assets/ikea/sofa/eskilstuna-sofa-3-plazas-con-chaiselongue-hillared-antracita.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-saltsjobaden-armchair-tonerud-red-brown-demo",
+      "path": "assets/ikea/armchair/saltsjobaden-sillon-tonerud-marron-rojizo.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+      "path": "assets/ikea/armchair/strandmon-sillon-orejero-tommaboda-beige-intenso.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-ektorp-armchair-kilanda-light-beige-99552101",
+      "path": "assets/ikea/armchair/ektorp-sillon-kilanda-beige-claro-99552101.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-jarnvag-low-pile-rug-demo",
+      "path": "assets/ikea/rug/jarnvag-alfombra-pelo-corto.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lauters-floor-lamp-brown-ash-demo",
+      "path": "assets/ikea/lighting/lauters-lampara-de-pie-marron-fresno.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-frotorp-coffee-table-white-chrome-white-glass-demo",
+      "path": "assets/ikea/coffee-table/frotorp-mesa-de-centro-blanco-cromadoblanco-vidrio.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-bankkontor-alfombra-pelo-largo-demo",
+      "path": "assets/ikea/rug/bankkontor-alfombra-pelo-largo.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-brimnes-armario-con-3-puertas-blanco-demo",
+      "path": "assets/ikea/wardrobe/brimnes-armario-con-3-puertas-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo",
+      "path": "assets/ikea/bed/brimnes-estructura-de-cama-con-almacenaje-blancoluroy.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-brimnes-mesita-de-noche-blanco-demo",
+      "path": "assets/ikea/bedside-table/brimnes-mesita-de-noche-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-hemnes-comoda-de-2-cajones-tinte-blanco-demo",
+      "path": "assets/ikea/dresser/hemnes-comoda-de-2-cajones-tinte-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-hemnes-tocador-blanco-demo",
+      "path": "assets/ikea/vanity/hemnes-tocador-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-idanas-canape-tapizado-naggen-beige-demo",
+      "path": "assets/ikea/bed/idanas-canape-tapizado-naggen-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-idanas-estructura-de-cama-con-almacenaje-marron-oscuroluroy-demo",
+      "path": "assets/ikea/bed/idanas-estructura-de-cama-con-almacenaje-marron-oscuroluroy.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-karmsund-espejo-de-mesa-negro-demo",
+      "path": "assets/ikea/mirror/karmsund-espejo-de-mesa-negro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-malm-comoda-6-cajones-blanco-demo",
+      "path": "assets/ikea/dresser/malm-comoda-6-cajones-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-malm-comoda-de-2-cajones-negro-marron-demo",
+      "path": "assets/ikea/dresser/malm-comoda-de-2-cajones-negro-marron.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nordli-comoda-de-5-cajones-blanco-demo",
+      "path": "assets/ikea/dresser/nordli-comoda-de-5-cajones-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-songesand-comoda-de-3-cajones-blanco-90366839-demo",
+      "path": "assets/ikea/dresser/songesand-comoda-de-3-cajones-blanco-90366839.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stomso-mesita-de-noche-de-pared-efecto-abedul-blancoazul-demo",
+      "path": "assets/ikea/bedside-table/stomso-mesita-de-noche-de-pared-efecto-abedul-blancoazul.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-syvde-tocador-blanco-demo",
+      "path": "assets/ikea/vanity/syvde-tocador-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-tallasen-estructura-cama-tapizada-kulsta-beige-claroluroy-89514746-demo",
+      "path": "assets/ikea/bed/tallasen-estructura-cama-tapizada-kulsta-beige-claroluroy-89514746.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lisabo-mesa-chapa-fresno-demo",
+      "path": "assets/ikea/table/lisabo-mesa-chapa-fresno.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lisabo-silla-fresnotallmyra-blanconegro-demo",
+      "path": "assets/ikea/chair/lisabo-silla-fresnotallmyra-blanconegro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lisabo-silla-negrotallmyra-negro-gris-demo",
+      "path": "assets/ikea/chair/lisabo-silla-negrotallmyra-negro-gris.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-morbylanga-banco-chapa-robletinte-marron-demo",
+      "path": "assets/ikea/bench/morbylanga-banco-chapa-robletinte-marron.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-morbylanga-mesa-chapa-roble-tinte-marron-demo",
+      "path": "assets/ikea/table/morbylanga-mesa-chapa-roble-tinte-marron.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-sandsberg-silla-blanco-demo",
+      "path": "assets/ikea/chair/sandsberg-silla-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-sandsberg-silla-marron-rojizo-demo",
+      "path": "assets/ikea/chair/sandsberg-silla-marron-rojizo.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-skogsta-banco-con-almacenaje-acacianegro-demo",
+      "path": "assets/ikea/bench/skogsta-banco-con-almacenaje-acacianegro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-skogsta-mesa-acacia-demo",
+      "path": "assets/ikea/table/skogsta-mesa-acacia.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-skogsta-silla-acacia-demo",
+      "path": "assets/ikea/chair/skogsta-silla-acacia.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-skogsta-silla-negro-demo",
+      "path": "assets/ikea/chair/skogsta-silla-negro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-aparador-chapa-roble-demo",
+      "path": "assets/ikea/sideboard/stockholm-2025-aparador-chapa-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-mesa-chapa-roblechapa-roble-demo",
+      "path": "assets/ikea/table/stockholm-2025-mesa-chapa-roblechapa-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-vitrina-chapa-roble-demo",
+      "path": "assets/ikea/display-cabinet/stockholm-2025-vitrina-chapa-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-tonstad-mesa-extensible-chapa-roble-demo",
+      "path": "assets/ikea/table/tonstad-mesa-extensible-chapa-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-tversted-alfombra-pelo-corto-demo",
+      "path": "assets/ikea/rug/tversted-alfombra-pelo-corto.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-ab-cajones-blanco-90326787-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-ab-cajones-blanco-90326787.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-blanco-estructura-demo",
+      "path": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco-estructura.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-blanco-demo",
+      "path": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-efecto-roble-90604246-demo",
+      "path": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-efecto-roble-90604246.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-alto-con-puerta-gris-oscuro-demo",
+      "path": "assets/ikea/kitchen-tall-cabinet/knoxhult-armario-alto-con-puerta-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-cocina-esquina-blanco-demo",
+      "path": "assets/ikea/kitchen-corner-cabinet/knoxhult-armario-bajo-cocina-esquina-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-estructura-90603973-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco-estructura-90603973.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-efecto-roble-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-efecto-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-gris-oscuro-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-con-puertas-y-cajon-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-puerta-y-hueco-blanco-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-bajo-puerta-y-hueco-efecto-roble-demo",
+      "path": "assets/ikea/kitchen-base-cabinet/knoxhult-armario-bajo-puerta-y-hueco-efecto-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puerta-blanco-demo",
+      "path": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puerta-blanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-blanco-90326792-demo",
+      "path": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-90326792.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-blanco-estructura-80603978-demo",
+      "path": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-blanco-estructura-80603978.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-efecto-roble-demo",
+      "path": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-efecto-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-con-puertas-gris-oscuro-demo",
+      "path": "assets/ikea/kitchen-wall-cabinet/knoxhult-armario-de-pared-con-puertas-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-puertas-correderas-blanco-80604020-demo",
+      "path": "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-blanco-80604020.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-armario-de-pared-puertas-correderas-efecto-roble-90621081-demo",
+      "path": "assets/ikea/kitchen-sliding-wall-cabinet/knoxhult-armario-de-pared-puertas-correderas-efecto-roble-90621081.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-modulo-almacenaje-cocina-efecto-roble-demo",
+      "path": "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-efecto-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-knoxhult-modulo-almacenaje-cocina-gris-oscuro-demo",
+      "path": "assets/ikea/kitchen-storage/knoxhult-modulo-almacenaje-cocina-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-bingsta-sillon-vissle-amarillo-oscurokabusa-amarillo-oscuro-40455649-demo",
+      "path": "assets/ikea/armchair/bingsta-sillon-vissle-amarillo-oscurokabusa-amarillo-oscuro-40455649.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-havberg-reposapies-grannbomstad-marron-dorado-demo",
+      "path": "assets/ikea/footstool/havberg-reposapies-grannbomstad-marron-dorado.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-havberg-silla-giratoria-grannbomstad-marron-dorado-demo",
+      "path": "assets/ikea/lounge-chair/havberg-silla-giratoria-grannbomstad-marron-dorado.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-havberg-silla-giratoria-y-reposapies-grannbomstad-marron-dorado-demo",
+      "path": "assets/ikea/lounge-chair/havberg-silla-giratoria-y-reposapies-grannbomstad-marron-dorado.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lillehem-sillon-visslebeige-madera-demo",
+      "path": "assets/ikea/armchair/lillehem-sillon-visslebeige-madera.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lillehem-sofa-modular-3-plazas-con-mesa-gunnared-marron-rojizomadera-demo",
+      "path": "assets/ikea/sofa/lillehem-sofa-modular-3-plazas-con-mesa-gunnared-marron-rojizomadera.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-soderhamn-sillon-hillared-beige-99431246-demo",
+      "path": "assets/ikea/armchair/soderhamn-sillon-hillared-beige-99431246.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-soderhamn-sillon-tallmyra-verde-oscuro-demo",
+      "path": "assets/ikea/armchair/soderhamn-sillon-tallmyra-verde-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-armario-con-puertas-correderas-ratanpino-demo",
+      "path": "assets/ikea/cabinet/stockholm-2025-armario-con-puertas-correderas-ratanpino.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-mueble-tv-puertas-correderas-chapa-roble-demo",
+      "path": "assets/ikea/tv-unit/stockholm-2025-mueble-tv-puertas-correderas-chapa-roble.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-puf-alhamn-beige-80586139-demo",
+      "path": "assets/ikea/pouf/stockholm-2025-puf-alhamn-beige-80586139.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-chapa-abedul-80594785-demo",
+      "path": "assets/ikea/armchair/stockholm-2025-sillon-chapa-abedul-80594785.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-djurmo-grisblanco-demo",
+      "path": "assets/ikea/armchair/stockholm-2025-sillon-djurmo-grisblanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sillon-ratandjurmo-grisblanco-demo",
+      "path": "assets/ikea/armchair/stockholm-2025-sillon-ratandjurmo-grisblanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-1-plaza-alhamn-beige-demo",
+      "path": "assets/ikea/sofa/stockholm-2025-sofa-de-1-plaza-alhamn-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-2-plazas-alhamn-marron-oscuro-90591748-demo",
+      "path": "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-marron-oscuro-90591748.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-2-plazas-alhamn-turquesa-oscuro-demo",
+      "path": "assets/ikea/sofa/stockholm-2025-sofa-de-2-plazas-alhamn-turquesa-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-2025-sofa-de-3-plazas-sundhamn-beige-90586092-demo",
+      "path": "assets/ikea/sofa/stockholm-2025-sofa-de-3-plazas-sundhamn-beige-90586092.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-stockholm-mesa-de-centro-chapa-nogal-demo",
+      "path": "assets/ikea/coffee-table/stockholm-mesa-de-centro-chapa-nogal.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-viskafors-sofa-de-2-plazas-hogalid-marronabedul-demo",
+      "path": "assets/ikea/sofa/viskafors-sofa-de-2-plazas-hogalid-marronabedul.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-armario-para-interior-o-exterior-beige-demo",
+      "path": "assets/ikea/outdoor-cabinet/kolbjorn-armario-para-interior-o-exterior-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-con-2-armarios-beige-demo",
+      "path": "assets/ikea/storage-shelf/kolbjorn-estanteria-con-2-armarios-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-con-armario-beige-demo",
+      "path": "assets/ikea/storage-shelf/kolbjorn-estanteria-con-armario-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-de-interior-y-exterior-80x35x162-cm-99291646-demo",
+      "path": "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-80x35x162-cm-99291646.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-estanteria-de-interior-y-exterior-beige-demo",
+      "path": "assets/ikea/storage-shelf/kolbjorn-estanteria-de-interior-y-exterior-beige.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-kolbjorn-mueble-de-almacenaje-beige-exteriorinterior-demo",
+      "path": "assets/ikea/outdoor-storage/kolbjorn-mueble-de-almacenaje-beige-exteriorinterior.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lacko-silla-con-reposabrazos-exterior-gris-oscuro-demo",
+      "path": "assets/ikea/outdoor-chair/lacko-silla-con-reposabrazos-exterior-gris-oscuro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lacko-sofa-2-plazas-exterior-gris-demo",
+      "path": "assets/ikea/outdoor-sofa/lacko-sofa-2-plazas-exterior-gris.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-lagaskar-mesa-de-centro-exterior-beige-90543762-demo",
+      "path": "assets/ikea/outdoor-table/lagaskar-mesa-de-centro-exterior-beige-90543762.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-mabarsskar-mesa-de-centro-exterior-interiorblanco-demo",
+      "path": "assets/ikea/outdoor-table/mabarsskar-mesa-de-centro-exterior-interiorblanco.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-banco-con-respaldo-de-exterior-tinte-marron-claro-demo",
+      "path": "assets/ikea/outdoor-bench/nammaro-banco-con-respaldo-de-exterior-tinte-marron-claro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-banco-jardin-tinte-marron-claro-demo",
+      "path": "assets/ikea/outdoor-bench/nammaro-banco-jardin-tinte-marron-claro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-baul-tinte-marron-claro-interiorexterior-demo",
+      "path": "assets/ikea/deck-box/nammaro-baul-tinte-marron-claro-interiorexterior.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-caja-y-pantalla-privacidad-exteriortinte-marron-claro-demo",
+      "path": "assets/ikea/privacy-screen/nammaro-caja-y-pantalla-privacidad-exteriortinte-marron-claro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-pantalla-para-privacidad-tinte-marron-claro-interiorexterior-demo",
+      "path": "assets/ikea/privacy-screen/nammaro-pantalla-para-privacidad-tinte-marron-claro-interiorexterior.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-nammaro-taburete-de-exterior-plegabletinte-marron-claro-demo",
+      "path": "assets/ikea/outdoor-stool/nammaro-taburete-de-exterior-plegabletinte-marron-claro.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    },
+    {
+      "id": "ikea-paronholmen-banco-con-respaldo-de-exterior-rojo-90503799-demo",
+      "path": "assets/ikea/outdoor-bench/paronholmen-banco-con-respaldo-de-exterior-rojo-90503799.glb",
+      "existsInGitSnapshot": true,
+      "declaredDimensions": null,
+      "qaStatus": "pending",
+      "permissionDocumentRef": "permissions/README.md",
+      "permissionExists": true,
+      "redistributionAllowed": false,
+      "licenseType": "authorized-commercial-demo"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "ikea-glostad-3-seat-sofa-knisa-dark-grey-demo",
+      "category": "sofa",
+      "sourcePath": "assets/ikea/sofa/glostad-sofa-de-3-plazas-knisa-gris-oscuro.glb",
+      "sourceBytes": 55708,
+      "sourceSha256": "ee97e34a2da4926d7bea51a0b3f9d0d59031a17730d2d4b731c45d701e172aad",
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "meshDimensionsMm": null,
+      "meshDimensionsReason": "Not admitted/decoded: permission or source profile fails; no fabricated measurements",
+      "technical": {
+        "status": "rejected",
+        "reason": "Profile: extensions rejected",
+        "extensionsUsed": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression",
+          "KHR_texture_transform"
+        ],
+        "extensionsRequired": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression",
+          "KHR_texture_transform"
+        ],
+        "images": 1,
+        "materials": 2
+      },
+      "permission": {
+        "path": "permissions/README.md",
+        "sha256": "4ea9d0a19c8c6da31aea84e82c1af1622d2323b78aed3aa47773f730eaa12aac",
+        "excerpt": "# Permisos y Licencias · Immersphere Asset Lab\n\n## Regla de oro\n\n**Ningún asset se procesa, visualiza ni se usa comercialmente sin permiso legal escrito verificado.**\n\nEste directorio contiene la documentación contractual de los permisos de uso de assets 3D.\n\n---\n\n## Estructura de permisos por marca\n\n```\npermissions/\n├── README.md                    ← Este archivo\n├── .gitkeep                     ← Mantiene directorio en Git\n├── {brand-name}/                ← Un subdirectorio por marca\n│   ├── contract.pdf             ← Contrato firmado\n│   ├── email-confirmation.pdf   ← Email autorizando el uso\n│   ├── addendum-{date}.pdf      ← Añadidos o extensiones\n│   └── README.md                ← Resumen del alcance del permiso\n└── ...\n```\n\n---\n\n## Estado de permisos por marca\n\n| Marca | Estado | Permiso comercial | Redistribución | Reventa | Documento | Vigente hasta |\n|---|---|---|---|---|---|---|\n| IKEA | `pending` | — | — | — | — | — |\n| ... | — | — | — | — | — | — |\n\n**Leyenda:**\n- `pending`: negociación en curso, sin permiso todavía\n- `active`: permiso vigente, se pueden usar assets\n- `expired`: permiso caducado, revisar renovación\n- `suspended`: permiso suspendido temporalmente\n\n---\n\n## Tipos de permisos\n\n### 1. Uso comercial en renders (`commercial-use`)\nPermite usar el modelo 3D en renders y visualizaciones para clientes finales.\n\n### 2. Redistribución en tours (`redistribution`)\nPermite incluir el modelo en tours 3D entregables al cliente.\n\n### 3. Reventa como pack (`resale`)",
+        "redistributionAllowed": false,
+        "qaStatus": "pending"
+      },
+      "decision": "REJECTED_NOT_INCORPORATED",
+      "reason": "No resource-specific authorization for this additional public binary delivery reconciled with redistributionAllowed=false and pending/template permission; existing fourteen models retain their established project-use evidence",
+      "outputBytes": null,
+      "outputSha256": null,
+      "profile": "rubik-core-glb-v1",
+      "attribution": "IKEA / GLOSTAD sofa de 3 plazas - Knisa gris oscuro / source manifest"
+    },
+    {
+      "id": "ikea-vittskar-armchair-outdoor-dark-grey-20575167",
+      "category": "chair",
+      "sourcePath": "assets/ikea/chairs/vittskar-armchair-outdoor-dark-grey.glb",
+      "sourceBytes": 2330000,
+      "sourceSha256": "56f00593a0eddb94a1b15a9be12598a9d5381febff35143e98f5739b286fb5f2",
+      "declaredDimensions": {
+        "width": 64,
+        "height": 95,
+        "depth": 59,
+        "unit": "cm"
+      },
+      "meshDimensionsMm": null,
+      "meshDimensionsReason": "Not admitted/decoded: permission or source profile fails; no fabricated measurements",
+      "technical": {
+        "status": "rejected",
+        "reason": "Profile: extensions rejected",
+        "extensionsUsed": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression"
+        ],
+        "extensionsRequired": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression"
+        ],
+        "images": 18,
+        "materials": 6
+      },
+      "permission": {
+        "path": "permissions/README.md",
+        "sha256": "4ea9d0a19c8c6da31aea84e82c1af1622d2323b78aed3aa47773f730eaa12aac",
+        "excerpt": "# Permisos y Licencias · Immersphere Asset Lab\n\n## Regla de oro\n\n**Ningún asset se procesa, visualiza ni se usa comercialmente sin permiso legal escrito verificado.**\n\nEste directorio contiene la documentación contractual de los permisos de uso de assets 3D.\n\n---\n\n## Estructura de permisos por marca\n\n```\npermissions/\n├── README.md                    ← Este archivo\n├── .gitkeep                     ← Mantiene directorio en Git\n├── {brand-name}/                ← Un subdirectorio por marca\n│   ├── contract.pdf             ← Contrato firmado\n│   ├── email-confirmation.pdf   ← Email autorizando el uso\n│   ├── addendum-{date}.pdf      ← Añadidos o extensiones\n│   └── README.md                ← Resumen del alcance del permiso\n└── ...\n```\n\n---\n\n## Estado de permisos por marca\n\n| Marca | Estado | Permiso comercial | Redistribución | Reventa | Documento | Vigente hasta |\n|---|---|---|---|---|---|---|\n| IKEA | `pending` | — | — | — | — | — |\n| ... | — | — | — | — | — | — |\n\n**Leyenda:**\n- `pending`: negociación en curso, sin permiso todavía\n- `active`: permiso vigente, se pueden usar assets\n- `expired`: permiso caducado, revisar renovación\n- `suspended`: permiso suspendido temporalmente\n\n---\n\n## Tipos de permisos\n\n### 1. Uso comercial en renders (`commercial-use`)\nPermite usar el modelo 3D en renders y visualizaciones para clientes finales.\n\n### 2. Redistribución en tours (`redistribution`)\nPermite incluir el modelo en tours 3D entregables al cliente.\n\n### 3. Reventa como pack (`resale`)",
+        "redistributionAllowed": false,
+        "qaStatus": "pending"
+      },
+      "decision": "REJECTED_NOT_INCORPORATED",
+      "reason": "No resource-specific authorization for this additional public binary delivery reconciled with redistributionAllowed=false and pending/template permission; existing fourteen models retain their established project-use evidence",
+      "outputBytes": null,
+      "outputSha256": null,
+      "profile": "rubik-core-glb-v1",
+      "attribution": "IKEA / VITTSKÄR silla con reposabrazos / https://www.ikea.com/es/es/p/vittskar-silla-con-reposabrazos-ratan-plastico-exterior-gris-oscuro-20575167/"
+    },
+    {
+      "id": "ikea-idanas-canape-tapizado-naggen-beige-demo",
+      "category": "bed",
+      "sourcePath": "assets/ikea/bed/idanas-canape-tapizado-naggen-beige.glb",
+      "sourceBytes": 590948,
+      "sourceSha256": "f97d35495874ba7e7001c8b761eb50fc66b3d26a5fb2becc46aed4f6aea4d801",
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "meshDimensionsMm": null,
+      "meshDimensionsReason": "Not admitted/decoded: permission or source profile fails; no fabricated measurements",
+      "technical": {
+        "status": "rejected",
+        "reason": "Profile: extensions rejected",
+        "extensionsUsed": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression",
+          "KHR_texture_transform"
+        ],
+        "extensionsRequired": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression",
+          "KHR_texture_transform"
+        ],
+        "images": 4,
+        "materials": 5
+      },
+      "permission": {
+        "path": "permissions/README.md",
+        "sha256": "4ea9d0a19c8c6da31aea84e82c1af1622d2323b78aed3aa47773f730eaa12aac",
+        "excerpt": "# Permisos y Licencias · Immersphere Asset Lab\n\n## Regla de oro\n\n**Ningún asset se procesa, visualiza ni se usa comercialmente sin permiso legal escrito verificado.**\n\nEste directorio contiene la documentación contractual de los permisos de uso de assets 3D.\n\n---\n\n## Estructura de permisos por marca\n\n```\npermissions/\n├── README.md                    ← Este archivo\n├── .gitkeep                     ← Mantiene directorio en Git\n├── {brand-name}/                ← Un subdirectorio por marca\n│   ├── contract.pdf             ← Contrato firmado\n│   ├── email-confirmation.pdf   ← Email autorizando el uso\n│   ├── addendum-{date}.pdf      ← Añadidos o extensiones\n│   └── README.md                ← Resumen del alcance del permiso\n└── ...\n```\n\n---\n\n## Estado de permisos por marca\n\n| Marca | Estado | Permiso comercial | Redistribución | Reventa | Documento | Vigente hasta |\n|---|---|---|---|---|---|---|\n| IKEA | `pending` | — | — | — | — | — |\n| ... | — | — | — | — | — | — |\n\n**Leyenda:**\n- `pending`: negociación en curso, sin permiso todavía\n- `active`: permiso vigente, se pueden usar assets\n- `expired`: permiso caducado, revisar renovación\n- `suspended`: permiso suspendido temporalmente\n\n---\n\n## Tipos de permisos\n\n### 1. Uso comercial en renders (`commercial-use`)\nPermite usar el modelo 3D en renders y visualizaciones para clientes finales.\n\n### 2. Redistribución en tours (`redistribution`)\nPermite incluir el modelo en tours 3D entregables al cliente.\n\n### 3. Reventa como pack (`resale`)",
+        "redistributionAllowed": false,
+        "qaStatus": "pending"
+      },
+      "decision": "REJECTED_NOT_INCORPORATED",
+      "reason": "No resource-specific authorization for this additional public binary delivery reconciled with redistributionAllowed=false and pending/template permission; existing fourteen models retain their established project-use evidence",
+      "outputBytes": null,
+      "outputSha256": null,
+      "profile": "rubik-core-glb-v1",
+      "attribution": "IKEA / IDAN?S canap? tapizado - Naggen beige / source manifest"
+    },
+    {
+      "id": "ikea-morbylanga-mesa-chapa-roble-tinte-marron-demo",
+      "category": "table",
+      "sourcePath": "assets/ikea/table/morbylanga-mesa-chapa-roble-tinte-marron.glb",
+      "sourceBytes": 299960,
+      "sourceSha256": "27a899caa815077fef192b5070a34a22cc30f9df6db60279f6f39d824cf6855d",
+      "declaredDimensions": {
+        "width": null,
+        "height": null,
+        "depth": null,
+        "unit": "cm"
+      },
+      "meshDimensionsMm": null,
+      "meshDimensionsReason": "Not admitted/decoded: permission or source profile fails; no fabricated measurements",
+      "technical": {
+        "status": "rejected",
+        "reason": "Profile: extensions rejected",
+        "extensionsUsed": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression"
+        ],
+        "extensionsRequired": [
+          "EXT_texture_webp",
+          "KHR_draco_mesh_compression"
+        ],
+        "images": 3,
+        "materials": 1
+      },
+      "permission": {
+        "path": "permissions/README.md",
+        "sha256": "4ea9d0a19c8c6da31aea84e82c1af1622d2323b78aed3aa47773f730eaa12aac",
+        "excerpt": "# Permisos y Licencias · Immersphere Asset Lab\n\n## Regla de oro\n\n**Ningún asset se procesa, visualiza ni se usa comercialmente sin permiso legal escrito verificado.**\n\nEste directorio contiene la documentación contractual de los permisos de uso de assets 3D.\n\n---\n\n## Estructura de permisos por marca\n\n```\npermissions/\n├── README.md                    ← Este archivo\n├── .gitkeep                     ← Mantiene directorio en Git\n├── {brand-name}/                ← Un subdirectorio por marca\n│   ├── contract.pdf             ← Contrato firmado\n│   ├── email-confirmation.pdf   ← Email autorizando el uso\n│   ├── addendum-{date}.pdf      ← Añadidos o extensiones\n│   └── README.md                ← Resumen del alcance del permiso\n└── ...\n```\n\n---\n\n## Estado de permisos por marca\n\n| Marca | Estado | Permiso comercial | Redistribución | Reventa | Documento | Vigente hasta |\n|---|---|---|---|---|---|---|\n| IKEA | `pending` | — | — | — | — | — |\n| ... | — | — | — | — | — | — |\n\n**Leyenda:**\n- `pending`: negociación en curso, sin permiso todavía\n- `active`: permiso vigente, se pueden usar assets\n- `expired`: permiso caducado, revisar renovación\n- `suspended`: permiso suspendido temporalmente\n\n---\n\n## Tipos de permisos\n\n### 1. Uso comercial en renders (`commercial-use`)\nPermite usar el modelo 3D en renders y visualizaciones para clientes finales.\n\n### 2. Redistribución en tours (`redistribution`)\nPermite incluir el modelo en tours 3D entregables al cliente.\n\n### 3. Reventa como pack (`resale`)",
+        "redistributionAllowed": false,
+        "qaStatus": "pending"
+      },
+      "decision": "REJECTED_NOT_INCORPORATED",
+      "reason": "No resource-specific authorization for this additional public binary delivery reconciled with redistributionAllowed=false and pending/template permission; existing fourteen models retain their established project-use evidence",
+      "outputBytes": null,
+      "outputSha256": null,
+      "profile": "rubik-core-glb-v1",
+      "attribution": "IKEA / M?RBYL?NGA Mesa - chapa roble tinte marr?n / source manifest"
+    }
+  ],
+  "incorporatedModels": 0,
+  "permissionDecision": "General owner permission retained; do not infer per-resource hosting rights from pending templates. No new model binary is published."
+}

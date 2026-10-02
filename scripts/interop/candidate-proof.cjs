@@ -1,0 +1,3 @@
+'use strict';
+const E=require('./export.cjs'),Core=require('../../js/project-core.js'),fixture=require('../../tests/fixtures/blender-asymmetric.synthetic.json'),candidates=require('../../assets/interop/surface-candidates.json');
+const [destination,python]=process.argv.slice(2);if(!destination||!python)throw Error('Usage: node scripts/interop/candidate-proof.cjs NEW-folder python');const p=Core.clone(fixture);p.name='Synthetic asymmetric fixture with three candidate albedos';p.materials.forEach((m,i)=>m.appearance.preset=candidates.entries[i].id);E.writePackage(E.exportProject(p,{python}),destination);console.log('Three actual CC0 candidate albedos exported; source fixture unmodified');
