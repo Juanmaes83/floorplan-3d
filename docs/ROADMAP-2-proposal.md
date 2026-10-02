@@ -1,7 +1,13 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
-> Base remota comprobada el 02-10-2026: `origin/master` `67b7f999c42b3a2960dac6caf94ab77dcc637819`, merge de PR #24 (exportación determinista Rubik→Blender y perfiles controlados). La comprobación anterior sobre `15004221da8a6f2e5c22fe45392680a934b6d277`, tras #20, se conserva como antecedente histórico, no como base actual. PR #15 fusionada el 01-10-2026 (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); esta propuesta continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato de proyecto es 1.4.0 por la extensión opcional de materiales de pared/repetición de #19. El piloto #17, biblioteca #19, entrega dimensional #18 y primera tanda Asset Lab #20 están integrados.
+> Reconciliada el 02-10-2026 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`: PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y cierres #25/#26 conservados. PR #15 fusionada (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); este roadmap continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato es 1.4.0 por #19. El piloto #17, biblioteca #19, entrega dimensional #18, primera tanda Asset Lab #20 y «Legal y uso» #22 están integrados. Los seis modelos de PR #23 están visualmente aprobados por Juanma; su merge autorizado queda condicionado a pruebas, contenido visible idéntico y preview READY del HEAD reconciliado. Esto no aprueba globalmente este documento.
+
+El cierre de la tanda #23 conserva la aprobación visual previa y el exportador
+#24, sin aprobar este roadmap global. [QA y estado por PR](qa/f3-reconciliation-2026-10-02.md).
+La próxima entrega LAB v03 solo empieza después del squash efectivo #23;
+su aprobación visual será independiente. D-01, F2 empírica, escala física,
+teléfono real y conectores comerciales permanecen abiertos.
 
 ## 1. Propósito y principios
 
@@ -30,7 +36,7 @@ El segmento comercial sigue abierto y completar software no aprueba todo F0.
 | Proyectos | F1a/F1b permiten varios proyectos locales, persistencia y JSON/ZIP. [PR #18](https://github.com/Juanmaes83/floorplan-3d/pull/18), aprobada e integrada, añadió inicio independiente vacío/imagen y creación de habitaciones dimensionadas. Sin sync multi-dispositivo ni servidor de proyecto. |
 | Medidas | `FloorPlanProjectV1` 1.4.0 mantiene mm/IDs y polígonos explícitos independientes de los ejes de muro; #19 añadió asignación opcional de acabados a paredes y repetición por material. #18 edita rectángulos ortogonales con muros inequívocos: lado fijo, impactos, preview y operación reversible. No solver universal ni edición numérica general irregular. [Reglas y cierre](technical/home-room-dimensions.md). |
 | F2 | Asistencia local experimental. Cinco sesiones de base, conjunto fijo de veinte planos y umbrales acordados siguen pendientes; no bloquean estas propuestas, pero F2 no debe anunciarse como precisión validada. |
-| F3 | PR #12, #17, #19 y #20 integradas: dos modelos del piloto texturizado, doce modelos Asset Lab normalizados y 50 mapas CC0-1.0 para suelos/paredes, con búsqueda, aplicación, persistencia, comparación y fallback. `FloorPlanProjectV1` 1.4.0 registra acabados murales y repetición. La escala física de los doce modelos nuevos y el rendimiento en teléfono físico no están verificados; nuevas incorporaciones requieren revisión por recurso. |
+| F3 | PR #12/#17/#19/#20 integradas y cierre autorizado #23: dos modelos del piloto, doce normalizados de #20, seis de la tanda aprobada #23 y 50 mapas CC0-1.0, con búsqueda, persistencia y fallback. Contrato1.4.0; escala física de los18 modelos normalizados y rendimiento en teléfono no verificados. La integración efectiva de #23 se confirma en su metadata; nuevas incorporaciones requieren revisión por recurso. |
 | Render web | Three.js 0.160.0 fijado. F3 admite PNG/JPEG embebidos bajo validación; rechaza extensiones/recursos fuera del perfil. No soporte general de Draco, KTX2, meshopt, WebP ni URI remotas. La política del runtime no implica imposibilidad de convertir un asset offline. |
 | Ecosistema | La auditoría documentó Asset Lab, Room Designer, CRM, Immersphere SaaS, Blender MCP y LAB Astra. Son fuentes potenciales; la auditoría no demuestra integración de extremo a extremo. La evidencia de cada repo está fijada por SHA en [la auditoría de ecosistema](product/ecosystem-integration-audit.md). |
 | Presentación | La auditoría describe hotspots de Immersphere como posiciones visuales/porcentuales. No equivalen a coordenadas espaciales enlazadas con geometría Rubik. |
@@ -60,7 +66,7 @@ Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no n
 - **Organización reconciliada:** F0 #3 y propuesta #15 fusionadas en master; no aprobación global de fases o decisiones abiertas.
 - **Suelos/acabados:** biblioteca visual acotada de 50 mapas implementada, revisada y fusionada por PR #19; no equivale a aprobar PBR general, calendario ni las siguientes propuestas.
 - **Modelos:** #20 integró un pipeline reproducible y acotado para doce GLB normalizados; no hay sincronización automática con Asset Lab ni admisión universal. La generalización de perfiles, extensiones y materiales PBR necesita propuesta y pruebas propias.
-- **Pendientes de validación separados:** contrastar escala física de los modelos que lo necesiten; medir rendimiento en teléfono físico; completar las cinco sesiones, veinte planos y umbrales de evaluación empírica F2. Ninguno bloquea esta entrega legal/documental.
+- **Pendientes de validación separados:** contrastar escala física de los modelos que lo necesiten; medir rendimiento en teléfono físico; completar las cinco sesiones, veinte planos y umbrales de evaluación empírica F2. Ninguno bloquea la entrega F3 acotada ahora propuesta.
 - **Investigar D-01:** observar tareas de cliente, agente, interiorista/reforma;
   elegir un segmento o mantenerlo explícitamente abierto, sin inferirlo de CRM.
 - **Después, estudiar la ampliación del pipeline ya integrado**, con nuevos perfiles, versiones/permisos,

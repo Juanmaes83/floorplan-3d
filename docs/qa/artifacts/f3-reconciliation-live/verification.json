@@ -1,0 +1,830 @@
+{
+  "status": "PASS",
+  "sourceCommit": "ba153837a03a2725addbcb325f1f9f94dfa17c5a",
+  "previewOrigin": "https://floorplan-3d-j2dow77oc-juanma-espinosas-projects.vercel.app",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "PASS",
+      "htmlStatus": 200,
+      "models": [
+        "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+        "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+        "ikea-skogsta-mesa-acacia-demo",
+        "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+        "ikea-stockholm-2025-aparador-chapa-roble-demo",
+        "ikea-nordli-comoda-de-5-cajones-blanco-demo"
+      ],
+      "states": [
+        {
+          "state": "ready",
+          "bytes": 1810356,
+          "permissionBytes": 1265,
+          "triangles": 22464,
+          "geometryBytes": 5071872,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 438293,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 869.0999999046326,
+          "normalizedDimensionsMm": {
+            "width": 1234.5600128173828,
+            "height": 765.8446405694121,
+            "depth": 794.253945350647
+          },
+          "instanceDimensionsMm": {
+            "width": 1235,
+            "height": 766,
+            "depth": 794
+          },
+          "attribution": "IKEA — IKEA GLOSTAD · sofá de dos plazas gris oscuro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 2682460,
+          "permissionBytes": 1265,
+          "triangles": 32982,
+          "geometryBytes": 7988484,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 532632,
+            "decodedBytes": 12574720,
+            "textureBytes": 16766294
+          },
+          "durationMs": 1085.5,
+          "normalizedDimensionsMm": {
+            "width": 813.6633634567261,
+            "height": 1012.4751202092739,
+            "depth": 978.3613085746765
+          },
+          "instanceDimensionsMm": {
+            "width": 814,
+            "height": 1012,
+            "depth": 978
+          },
+          "attribution": "IKEA — IKEA STRANDMON · sillón orejero beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1057164,
+          "permissionBytes": 1265,
+          "triangles": 15929,
+          "geometryBytes": 2266902,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 234341,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 959.7000002861023,
+          "normalizedDimensionsMm": {
+            "width": 1600.0772714614868,
+            "height": 743.3429698321561,
+            "depth": 805.1661252975464
+          },
+          "instanceDimensionsMm": {
+            "width": 1600,
+            "height": 743,
+            "depth": 805
+          },
+          "attribution": "IKEA — IKEA SKOGSTA · mesa de acacia; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1627956,
+          "permissionBytes": 1265,
+          "triangles": 26900,
+          "geometryBytes": 3905592,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 217853,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 910.2000002861023,
+          "normalizedDimensionsMm": {
+            "width": 1220.0418710708618,
+            "height": 909.427577545948,
+            "depth": 610.2815866470337
+          },
+          "instanceDimensionsMm": {
+            "width": 1220,
+            "height": 909,
+            "depth": 610
+          },
+          "attribution": "IKEA — IKEA KNOXHULT · armario bajo blanco; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 490828,
+          "permissionBytes": 1265,
+          "triangles": 5219,
+          "geometryBytes": 787890,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 201686,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 683.7999997138977,
+          "normalizedDimensionsMm": {
+            "width": 1608.0906391143799,
+            "height": 831.9707121925148,
+            "depth": 432.0829510688782
+          },
+          "instanceDimensionsMm": {
+            "width": 1608,
+            "height": 832,
+            "depth": 432
+          },
+          "attribution": "IKEA — IKEA STOCKHOLM 2025 · aparador de roble; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1171204,
+          "permissionBytes": 1265,
+          "triangles": 8974,
+          "geometryBytes": 3416148,
+          "textureStats": {
+            "images": 4,
+            "textures": 4,
+            "maps": 4,
+            "imageBytes": 274099,
+            "decodedBytes": 13631488,
+            "textureBytes": 18175320
+          },
+          "durationMs": 789.3000001907349,
+          "normalizedDimensionsMm": {
+            "width": 1201.849102973938,
+            "height": 1690.7002112129703,
+            "depth": 477.1896302700043
+          },
+          "instanceDimensionsMm": {
+            "width": 1202,
+            "height": 1691,
+            "depth": 477
+          },
+          "attribution": "IKEA — IKEA NORDLI · cómoda blanca de cinco cajones; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        }
+      ],
+      "integrity": [
+        {
+          "path": "index.html",
+          "bytes": 221375,
+          "sha256": "541fbc0bc4394012b34d03185214ad9bede859c6d7f80dd20614dddad884b55b",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-loader.mjs",
+          "bytes": 12207,
+          "sha256": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-catalog.js",
+          "bytes": 4521,
+          "sha256": "cbf10cd0e848ce5fca2b3f973c518efa8d07dd5c8ba895a49b7b34a033083a25",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/external.manifest.json",
+          "bytes": 55197,
+          "sha256": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "bytes": 1810356,
+          "sha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "bytes": 2682460,
+          "sha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "bytes": 1057164,
+          "sha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "bytes": 1627956,
+          "sha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "bytes": 490828,
+          "sha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "bytes": 1171204,
+          "sha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+          "matchesLocal": true
+        }
+      ],
+      "responses": [
+        {
+          "path": "/assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "consoleMessages": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "requestFailures": [],
+      "reloadPersistence": "PASS"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "htmlStatus": 200,
+      "models": [
+        "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+        "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+        "ikea-skogsta-mesa-acacia-demo",
+        "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+        "ikea-stockholm-2025-aparador-chapa-roble-demo",
+        "ikea-nordli-comoda-de-5-cajones-blanco-demo"
+      ],
+      "states": [
+        {
+          "state": "ready",
+          "bytes": 1810356,
+          "permissionBytes": 1265,
+          "triangles": 22464,
+          "geometryBytes": 5071872,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 438293,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 391.09999990463257,
+          "normalizedDimensionsMm": {
+            "width": 1234.5600128173828,
+            "height": 765.8446405694121,
+            "depth": 794.253945350647
+          },
+          "instanceDimensionsMm": {
+            "width": 1235,
+            "height": 766,
+            "depth": 794
+          },
+          "attribution": "IKEA — IKEA GLOSTAD · sofá de dos plazas gris oscuro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 2682460,
+          "permissionBytes": 1265,
+          "triangles": 32982,
+          "geometryBytes": 7988484,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 532632,
+            "decodedBytes": 12574720,
+            "textureBytes": 16766294
+          },
+          "durationMs": 389.69999980926514,
+          "normalizedDimensionsMm": {
+            "width": 813.6633634567261,
+            "height": 1012.4751202092739,
+            "depth": 978.3613085746765
+          },
+          "instanceDimensionsMm": {
+            "width": 814,
+            "height": 1012,
+            "depth": 978
+          },
+          "attribution": "IKEA — IKEA STRANDMON · sillón orejero beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1057164,
+          "permissionBytes": 1265,
+          "triangles": 15929,
+          "geometryBytes": 2266902,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 234341,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 381.80000019073486,
+          "normalizedDimensionsMm": {
+            "width": 1600.0772714614868,
+            "height": 743.3429698321561,
+            "depth": 805.1661252975464
+          },
+          "instanceDimensionsMm": {
+            "width": 1600,
+            "height": 743,
+            "depth": 805
+          },
+          "attribution": "IKEA — IKEA SKOGSTA · mesa de acacia; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1627956,
+          "permissionBytes": 1265,
+          "triangles": 26900,
+          "geometryBytes": 3905592,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 217853,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 511.5,
+          "normalizedDimensionsMm": {
+            "width": 1220.0418710708618,
+            "height": 909.427577545948,
+            "depth": 610.2815866470337
+          },
+          "instanceDimensionsMm": {
+            "width": 1220,
+            "height": 909,
+            "depth": 610
+          },
+          "attribution": "IKEA — IKEA KNOXHULT · armario bajo blanco; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 490828,
+          "permissionBytes": 1265,
+          "triangles": 5219,
+          "geometryBytes": 787890,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 201686,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 557.2000002861023,
+          "normalizedDimensionsMm": {
+            "width": 1608.0906391143799,
+            "height": 831.9707121925148,
+            "depth": 432.0829510688782
+          },
+          "instanceDimensionsMm": {
+            "width": 1608,
+            "height": 832,
+            "depth": 432
+          },
+          "attribution": "IKEA — IKEA STOCKHOLM 2025 · aparador de roble; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1171204,
+          "permissionBytes": 1265,
+          "triangles": 8974,
+          "geometryBytes": 3416148,
+          "textureStats": {
+            "images": 4,
+            "textures": 4,
+            "maps": 4,
+            "imageBytes": 274099,
+            "decodedBytes": 13631488,
+            "textureBytes": 18175320
+          },
+          "durationMs": 581.0999999046326,
+          "normalizedDimensionsMm": {
+            "width": 1201.849102973938,
+            "height": 1690.7002112129703,
+            "depth": 477.1896302700043
+          },
+          "instanceDimensionsMm": {
+            "width": 1202,
+            "height": 1691,
+            "depth": 477
+          },
+          "attribution": "IKEA — IKEA NORDLI · cómoda blanca de cinco cajones; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        }
+      ],
+      "integrity": [
+        {
+          "path": "index.html",
+          "bytes": 221375,
+          "sha256": "541fbc0bc4394012b34d03185214ad9bede859c6d7f80dd20614dddad884b55b",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-loader.mjs",
+          "bytes": 12207,
+          "sha256": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-catalog.js",
+          "bytes": 4521,
+          "sha256": "cbf10cd0e848ce5fca2b3f973c518efa8d07dd5c8ba895a49b7b34a033083a25",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/external.manifest.json",
+          "bytes": 55197,
+          "sha256": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "bytes": 1810356,
+          "sha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "bytes": 2682460,
+          "sha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "bytes": 1057164,
+          "sha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "bytes": 1627956,
+          "sha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "bytes": 490828,
+          "sha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "bytes": 1171204,
+          "sha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+          "matchesLocal": true
+        }
+      ],
+      "responses": [
+        {
+          "path": "/assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "consoleMessages": [],
+      "requestFailures": [],
+      "reloadPersistence": "PASS"
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "status": "PASS",
+      "htmlStatus": 200,
+      "models": [
+        "ikea-glostad-2-seat-sofa-knisa-dark-grey-demo",
+        "ikea-strandmon-wing-chair-tommaboda-deep-beige-demo",
+        "ikea-skogsta-mesa-acacia-demo",
+        "ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo",
+        "ikea-stockholm-2025-aparador-chapa-roble-demo",
+        "ikea-nordli-comoda-de-5-cajones-blanco-demo"
+      ],
+      "states": [
+        {
+          "state": "ready",
+          "bytes": 1810356,
+          "permissionBytes": 1265,
+          "triangles": 22464,
+          "geometryBytes": 5071872,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 438293,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 267.69999980926514,
+          "normalizedDimensionsMm": {
+            "width": 1234.5600128173828,
+            "height": 765.8446405694121,
+            "depth": 794.253945350647
+          },
+          "instanceDimensionsMm": {
+            "width": 1235,
+            "height": 766,
+            "depth": 794
+          },
+          "attribution": "IKEA — IKEA GLOSTAD · sofá de dos plazas gris oscuro; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 2682460,
+          "permissionBytes": 1265,
+          "triangles": 32982,
+          "geometryBytes": 7988484,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 532632,
+            "decodedBytes": 12574720,
+            "textureBytes": 16766294
+          },
+          "durationMs": 364.7000002861023,
+          "normalizedDimensionsMm": {
+            "width": 813.6633634567261,
+            "height": 1012.4751202092739,
+            "depth": 978.3613085746765
+          },
+          "instanceDimensionsMm": {
+            "width": 814,
+            "height": 1012,
+            "depth": 978
+          },
+          "attribution": "IKEA — IKEA STRANDMON · sillón orejero beige; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1057164,
+          "permissionBytes": 1265,
+          "triangles": 15929,
+          "geometryBytes": 2266902,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 234341,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 365.69999980926514,
+          "normalizedDimensionsMm": {
+            "width": 1600.0772714614868,
+            "height": 743.3429698321561,
+            "depth": 805.1661252975464
+          },
+          "instanceDimensionsMm": {
+            "width": 1600,
+            "height": 743,
+            "depth": 805
+          },
+          "attribution": "IKEA — IKEA SKOGSTA · mesa de acacia; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1627956,
+          "permissionBytes": 1265,
+          "triangles": 26900,
+          "geometryBytes": 3905592,
+          "textureStats": {
+            "images": 3,
+            "textures": 3,
+            "maps": 4,
+            "imageBytes": 217853,
+            "decodedBytes": 12582912,
+            "textureBytes": 16777218
+          },
+          "durationMs": 420.59999990463257,
+          "normalizedDimensionsMm": {
+            "width": 1220.0418710708618,
+            "height": 909.427577545948,
+            "depth": 610.2815866470337
+          },
+          "instanceDimensionsMm": {
+            "width": 1220,
+            "height": 909,
+            "depth": 610
+          },
+          "attribution": "IKEA — IKEA KNOXHULT · armario bajo blanco; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 490828,
+          "permissionBytes": 1265,
+          "triangles": 5219,
+          "geometryBytes": 787890,
+          "textureStats": {
+            "images": 2,
+            "textures": 2,
+            "maps": 3,
+            "imageBytes": 201686,
+            "decodedBytes": 8388608,
+            "textureBytes": 11184812
+          },
+          "durationMs": 436.7999997138977,
+          "normalizedDimensionsMm": {
+            "width": 1608.0906391143799,
+            "height": 831.9707121925148,
+            "depth": 432.0829510688782
+          },
+          "instanceDimensionsMm": {
+            "width": 1608,
+            "height": 832,
+            "depth": 432
+          },
+          "attribution": "IKEA — IKEA STOCKHOLM 2025 · aparador de roble; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        },
+        {
+          "state": "ready",
+          "bytes": 1171204,
+          "permissionBytes": 1265,
+          "triangles": 8974,
+          "geometryBytes": 3416148,
+          "textureStats": {
+            "images": 4,
+            "textures": 4,
+            "maps": 4,
+            "imageBytes": 274099,
+            "decodedBytes": 13631488,
+            "textureBytes": 18175320
+          },
+          "durationMs": 522.7000002861023,
+          "normalizedDimensionsMm": {
+            "width": 1201.849102973938,
+            "height": 1690.7002112129703,
+            "depth": 477.1896302700043
+          },
+          "instanceDimensionsMm": {
+            "width": 1202,
+            "height": 1691,
+            "depth": 477
+          },
+          "attribution": "IKEA — IKEA NORDLI · cómoda blanca de cinco cajones; Asset Lab. Uso autorizado por Juanma para Rubik Sota; sin afiliación."
+        }
+      ],
+      "integrity": [
+        {
+          "path": "index.html",
+          "bytes": 221375,
+          "sha256": "541fbc0bc4394012b34d03185214ad9bede859c6d7f80dd20614dddad884b55b",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-loader.mjs",
+          "bytes": 12207,
+          "sha256": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+          "matchesLocal": true
+        },
+        {
+          "path": "js/asset-catalog.js",
+          "bytes": 4521,
+          "sha256": "cbf10cd0e848ce5fca2b3f973c518efa8d07dd5c8ba895a49b7b34a033083a25",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/external.manifest.json",
+          "bytes": 55197,
+          "sha256": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "bytes": 1810356,
+          "sha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "bytes": 2682460,
+          "sha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "bytes": 1057164,
+          "sha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "bytes": 1627956,
+          "sha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "bytes": 490828,
+          "sha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+          "matchesLocal": true
+        },
+        {
+          "path": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "bytes": 1171204,
+          "sha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+          "matchesLocal": true
+        }
+      ],
+      "responses": [
+        {
+          "path": "/assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+          "status": 200
+        },
+        {
+          "path": "/assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+          "status": 200
+        }
+      ],
+      "errors": [],
+      "consoleMessages": [],
+      "requestFailures": [],
+      "reloadPersistence": "PASS"
+    }
+  ],
+  "renderer": "Chromium/SwiftShader; not a physical phone",
+  "productionMutation": false
+}

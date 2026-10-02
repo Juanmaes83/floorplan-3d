@@ -1,0 +1,942 @@
+{
+  "approved": "5b7267f84380586d5e482373bd70f0392e896009",
+  "files": [
+    {
+      "path": "assets/f3/ASSET-LAB-NEXT-PROVENANCE.txt",
+      "bytes": 1265,
+      "sha256": "b9852162c2775d1e09f869ea9a9639817d3788161e2b68f342f97620b3922630",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ASSET-LAB-PIPELINE-PROVENANCE.txt",
+      "bytes": 1395,
+      "sha256": "3ac4c1e97c15683db20d9bbf6fa9f4f1a5833d2f213f273dfe1dc0bda1194fe5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ASSET-LAB-PROVENANCE.txt",
+      "bytes": 2518,
+      "sha256": "51cd80b6d97cd88e0375860d5178a5194c02ad4092053f4d1bd705972d1334a4",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/LICENSE.txt",
+      "bytes": 1451,
+      "sha256": "951e71b78b38fde0c1477ca7e9773a7ea058bd77eb0bb16aa5693a162cb165ea",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/catalog.manifest.json",
+      "bytes": 1630,
+      "sha256": "24d0c6932138598c14451af0b03e55bde3c0b3ab9aeebc175a11c491a1b6cec5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/external.manifest.json",
+      "bytes": 55197,
+      "sha256": "ca34e9b9123f22ab5a3655f05a45e0c27ae2b292302b9858255f5a66a38b3bbb",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-brimnes-estructura-de-cama-con-almacenaje-blancoluroy-demo.glb",
+      "bytes": 3301296,
+      "sha256": "2670c91b7d239e40bb631e51e8f5b82d67b85215c1031f1ab5081468a45ad928",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-frotorp-coffee-table-white-chrome-white-glass-demo.glb",
+      "bytes": 943932,
+      "sha256": "6b0cddebac3d3243281bb6dde88b7c5f79ec32cd0a5a7a1e68efcf1d585c6f0b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-glostad-2-seat-sofa-knisa-dark-grey-demo.glb",
+      "bytes": 1810356,
+      "sha256": "f851d4dcbf6fcc46c3eddc8dd2458978e2f2d1ed010274dd5dd2d3bdb2ec1ff5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-hemnes-tv-unit-white-light-brown-stain-demo.glb",
+      "bytes": 873520,
+      "sha256": "9bcf19d78c2954d215718785bd2d9932b826fa0aa1430722f3f61f58942e94fe",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-knoxhult-armario-bajo-con-puertas-y-cajon-blanco-demo.glb",
+      "bytes": 1627956,
+      "sha256": "ae390ea20f370749aefab562d7d8b847e0d421068e59f82fab784027033a9cf0",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-lauters-floor-lamp-brown-ash-demo.glb",
+      "bytes": 549712,
+      "sha256": "e406b7d2f41430f102dddcda5ddaf7786542572056d4ef631acb6e92b58349ca",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-lisabo-mesa-chapa-fresno-demo.glb",
+      "bytes": 261580,
+      "sha256": "36f27968b7b4e34ccba96fe2424aeef7119c4dd88512a0dab444bf8b5020853f",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-lisabo-silla-negrotallmyra-negro-gris-demo.glb",
+      "bytes": 2054416,
+      "sha256": "016b277d201ecde0a3b82cef2a28dd3975b0fc50ebb507b5d78720c4f79aad8d",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-malm-comoda-6-cajones-blanco-demo.glb",
+      "bytes": 290184,
+      "sha256": "c4e5f7af6b452cb97adad5dfb409d1f23654370010228ae8b09696cab2d82c31",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-morum-indoor-outdoor-rug-beige.glb",
+      "bytes": 403896,
+      "sha256": "bc72dbf9b10be487e5bbb8a020eab814828f5119e918f9d7d50af942cc1ee558",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-nammaro-2-seat-outdoor-sofa-light-brown-beige-grey.glb",
+      "bytes": 780996,
+      "sha256": "7114e080f5812e35b3894eca1efb0c0bb42d23113d2fffd15bb27c00d4eaa8e8",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-nammaro-garden-table-light-brown.glb",
+      "bytes": 1034908,
+      "sha256": "f99c03d0e58f721df58d2d347f633369188dbf519e656eafd569496e200312aa",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-nordli-comoda-de-5-cajones-blanco-demo.glb",
+      "bytes": 1171204,
+      "sha256": "892dc56901b334194549b841ccd71a6bb7c454c6295c183174c19d43cfffefe0",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-skogsta-mesa-acacia-demo.glb",
+      "bytes": 1057164,
+      "sha256": "511c1372cea9de56d4d9a8132cc43323ed3d64cd5e9caebddd0be326b7c950ee",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-solvinden-solar-floor-lamp-outdoor-beige.glb",
+      "bytes": 195384,
+      "sha256": "1012194c96e7e116650a4a7936bc63bfd86a59c8026b3ee3bba32c3229397c14",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-stockholm-2025-aparador-chapa-roble-demo.glb",
+      "bytes": 490828,
+      "sha256": "44d77f5745d5f03b96287b80d153a85e97103f3e398e371b22035795b2918d32",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-strandmon-wing-chair-tommaboda-deep-beige-demo.glb",
+      "bytes": 2682460,
+      "sha256": "d2c40079ca97addd9d8152b58b6e34549eb33733e826ccdee81e347f0b1aa376",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/ikea-vasman-armchair-outdoor-brown.glb",
+      "bytes": 3565448,
+      "sha256": "9d19f3c7c1e1be0d845aef3843d471055db4637bf80b5d68fb1f9474866f0ce7",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/original-stockholm-pouf-80586139.glb",
+      "bytes": 369416,
+      "sha256": "f293f011748cb7687beb9e664ca5133eed55beae2c20011453a520c3a1b9f8d0",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/songesand-90366839.glb",
+      "bytes": 784576,
+      "sha256": "0deb36aec6daf871df610e0dbfa1d2cfe321c1b772145b7bb365a8921381cb7f",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/stockholm-pouf-80586139.glb",
+      "bytes": 327052,
+      "sha256": "3da8e51558900bd3e52efbb7446d5bf7db55095ae420750cd96e60ffa6584727",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/f3/synthetic-bench.glb",
+      "bytes": 4204,
+      "sha256": "bbf24d137a9172528885b715d2e0caa2a38ab2ccc671030c3eb270820d64e3e3",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/blue-plaster-wall-sample.webp",
+      "bytes": 148,
+      "sha256": "db10a9798af9c9605d86ad00a13be43e8e79bc11b17ae49d25e73a71a6a6c2b2",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/blue-plaster-wall.webp",
+      "bytes": 3240,
+      "sha256": "615277db2ee6ee4a5cdf10eeda6a5466b1455adc4979ea3c3148a6480206212e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brown-floor-tiles-sample.webp",
+      "bytes": 1322,
+      "sha256": "3bdac4ad856b4f807ccce01b28cf9c6f417eef4050b22e2188ca4e124a756aa0",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brown-floor-tiles.webp",
+      "bytes": 8516,
+      "sha256": "240216cf90542fb2e2064210da21224b1422361cbeb18bd32f555bc26831e6a1",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brushed-concrete-03-sample.webp",
+      "bytes": 520,
+      "sha256": "1f0ee1e5e9ebb244eca468b43b592d3c429cb96b62db689cacce92b3d26c652e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brushed-concrete-03.webp",
+      "bytes": 12408,
+      "sha256": "a70fa99e4e702cef28ccbb99423076ae04d5d7bd81fafc2b2470e4eb7c9fdc6a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brushed-concrete-sample.webp",
+      "bytes": 718,
+      "sha256": "82ce44e1cfe5e26cfc26d8f0f4072e5ff0ab82938db0bf05278d2b9e1b4def6e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/brushed-concrete.webp",
+      "bytes": 10796,
+      "sha256": "b989fff3ce6ed929e717ec37a47752087b12b282e5f2e75add45007de4db3453",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/catalog.json",
+      "bytes": 141210,
+      "sha256": "c8ef8ceb6c71ccd3bac560703dda22dc4f646b2a169c21770c100dda6997b8b5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-01-sample.webp",
+      "bytes": 3212,
+      "sha256": "f06773cc8cfecaa944ec27d7d3270f7575a14779e059e20904de62c5bd023f34",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-01.webp",
+      "bytes": 24130,
+      "sha256": "8344cc6f333267e320e1cc8e47c8c7fb3c9e1aaee006524090770af2fa8b31e8",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-02-sample.webp",
+      "bytes": 2720,
+      "sha256": "5bad90c51fbf01d7f1186fd45e5ecfc6ca1e49ccccb1eaf4b83fdad7adf574e6",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-02.webp",
+      "bytes": 21970,
+      "sha256": "022d811abbec128efe8407f9677b578aa765df13fc7a18d158ed52094415295a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-03-sample.webp",
+      "bytes": 1048,
+      "sha256": "70b3b5f1e2641c2956b213842135c77dabbba40354b2c125032c97b21c9ec548",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/concrete-floor-03.webp",
+      "bytes": 19738,
+      "sha256": "c8b1de193539732e0b717491ae05cfd08533ecc635612f2523a77de7eb33ade2",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/diagonal-parquet-sample.webp",
+      "bytes": 1776,
+      "sha256": "73772cc90c7d86fa51c49488224a85a124954816e1e17ce71e26066a518056d8",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/diagonal-parquet.webp",
+      "bytes": 11544,
+      "sha256": "3a86b6b743acded7956a54866ff867ab3b06c5477fabbc22a3b1d9ee963df8ec",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-02-sample.webp",
+      "bytes": 978,
+      "sha256": "be87b8ceb63317147773fce1fdee86ae43559681e3489bee519d04c9adca9c6b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-02.webp",
+      "bytes": 6828,
+      "sha256": "a116ee28a576964c24126b90ae8d4d871d0ee206677f6245d9edeaa3ad99f05d",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-04-sample.webp",
+      "bytes": 518,
+      "sha256": "dc60d90081f3b8d36eb2450fc2fb75d8b59a35d03e983f29e594cbc4fa015dcd",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-04.webp",
+      "bytes": 3996,
+      "sha256": "3a50b6ac0f119318adf8da55118a8c76346f1880f8cb167b7e3fd7f2467a6e23",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-06-sample.webp",
+      "bytes": 1312,
+      "sha256": "a028a3f63e4de1f7c259354246ab389e42a0d6d4291d3faf1cbecf6b1dca1e97",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-06.webp",
+      "bytes": 9552,
+      "sha256": "dc24b9c7c6f86d37a0e30238effcbdaabddcb234cea7dfc4dfa8738643ffbc5f",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-08-sample.webp",
+      "bytes": 976,
+      "sha256": "43f1418a08ac4dcc30202bcf18e8d9a6fea7604b586de4ebea8b2f9e25e314f7",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-08.webp",
+      "bytes": 6886,
+      "sha256": "5e4a6fffe64fc4abc3ab4022b926773d693490a155c1da12f246d9c0ecb6f5fc",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-09-sample.webp",
+      "bytes": 2066,
+      "sha256": "f4bee47fab4fca780a158c6bdcfa2d8d0fd387731d312f19181f193b65dad979",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/floor-tiles-09.webp",
+      "bytes": 15690,
+      "sha256": "cc3aa57b107506ffef3b007b4400db8ec3ecb62b5ec6d3b10672bdd79fccabe1",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/granite-tile-02-sample.webp",
+      "bytes": 1058,
+      "sha256": "b14c8a83c1830f0e5b8ec889315fac7cb50b2b0844750ec6aff057a87a6001f8",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/granite-tile-02.webp",
+      "bytes": 4734,
+      "sha256": "0eeb10585a1f8a317055fbe9b9e052e10dd34272d6d0a69bc11bf063c4e919dd",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/granular-concrete-sample.webp",
+      "bytes": 268,
+      "sha256": "7c1ad1bbebf2798e851a8a5367b2ffe53bc9ae2818d8babe7fb005b9dd635f3b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/granular-concrete.webp",
+      "bytes": 11712,
+      "sha256": "e9fd662d6f7873fd7766f05032629f4cc8f8b58136030e0f0ae7739a295bce3c",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/grey-plaster-02-sample.webp",
+      "bytes": 1822,
+      "sha256": "75632baa2c7f75ac607769f667dfec90a34328d1d946073eaaf84d5e0271775a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/grey-plaster-02.webp",
+      "bytes": 16708,
+      "sha256": "bba8b47b3410542ecab8337d2d63341b630b6d5a908b8507b80179eb2a1f3160",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/grey-plaster-03-sample.webp",
+      "bytes": 830,
+      "sha256": "cdae24c97dd2e34cd5b6bdcca59cd217ec39af26926d772d52ce5d30a0417716",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/grey-plaster-03.webp",
+      "bytes": 7742,
+      "sha256": "68937d7fa4483fcb23c3cd01dbbaaf4c97432904c368019e190471225858c433",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/hangar-concrete-floor-sample.webp",
+      "bytes": 416,
+      "sha256": "9caed240077aa78a368a3e75a0f50edd208317d7d4c95db4240445f522787808",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/hangar-concrete-floor.webp",
+      "bytes": 5170,
+      "sha256": "4b71c3279753a9966eb381c92ff0a307c998b40e05ae740a03ef50a9855e86bc",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/herringbone-parquet-sample.webp",
+      "bytes": 1544,
+      "sha256": "37491965328604baf6c3dd002fa310525856f799d4d63e7d843c874d3f698a95",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/herringbone-parquet.webp",
+      "bytes": 11452,
+      "sha256": "327344bf3ec2ca9ea5110dfff9ae917833fd8c506ae37dda87456e441bf3b89a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/interior-tiles-sample.webp",
+      "bytes": 1824,
+      "sha256": "5b6a93886ea95e09f729f499b0efe78b1d9ef8b75e0a641b82801503376488cb",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/interior-tiles.webp",
+      "bytes": 8218,
+      "sha256": "bdadf983c3806c5b44bac52ab7d26ffe401b2e80393fdf14112692c5dd433aea",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/large-floor-tiles-02-sample.webp",
+      "bytes": 1374,
+      "sha256": "9cf5131fb4f2fb76613abf72fb35686fa67e176fe78df94962762da9eaf9334d",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/large-floor-tiles-02.webp",
+      "bytes": 15008,
+      "sha256": "e23d9071f776c55c3157702d3b3cf2f42ab76d0a7ee1b185904a65b7d8441b19",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/licenses/LIBRARY-CC0.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/licenses/LIBRARY-README.txt",
+      "bytes": 3737,
+      "sha256": "96cb3fedfcea98394addb877bb425383cfa8ccd5fc176717c2562482c24b3c01",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/licenses/LIBRARY-conversion-script.mjs.txt",
+      "bytes": 7969,
+      "sha256": "e736e4a5075651e57f05ca6d7ffc9135d78acdcc4a2acaf0572d628c7888a276",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/licenses/POLY-HAVEN-asset-license.json",
+      "bytes": 2216,
+      "sha256": "a9d88b758d1751dd41713381115ed309ea659e219c1654157b709dce7757e779",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/licenses/POLY-HAVEN-license-page.tsx.txt",
+      "bytes": 3306,
+      "sha256": "42d2199f721523e5dc44022b0ab6c72d24341273ec187d04ccb339070d6acd5b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/long-white-tiles-sample.webp",
+      "bytes": 1476,
+      "sha256": "45e47a0b5a471b61ff770f772ecd87995c32b371fd81567b6e055dffb7ed2c00",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/long-white-tiles.webp",
+      "bytes": 10670,
+      "sha256": "3e68112cdfb65c452a72197f9e69a2131c86d12a124071c1523c533a4c00fd2b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-01-sample.webp",
+      "bytes": 502,
+      "sha256": "c9b6d7e42fcb72173e8a49fb0bbe9da901584aafa710c17bd9b39f719d056600",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-01.webp",
+      "bytes": 3940,
+      "sha256": "625861c56b8d1a6992389b67bc1a0af3f104eb07af2df5c612b65ba31f4438a5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-mosaic-tiles-sample.webp",
+      "bytes": 4194,
+      "sha256": "135afb2a9ac71ddbae43155803537157376f19b3679ec560443d214f7151d674",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-mosaic-tiles.webp",
+      "bytes": 23380,
+      "sha256": "df373a3aa7c442f5ff5e12411d55f0a8072628b57a0fdc45062e37e39806a568",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-tiles-sample.webp",
+      "bytes": 4390,
+      "sha256": "efb38273ec9c36bc38c2feba9d94c580323788f19bd97e0a0b14d1bc1cf3595b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/marble-tiles.webp",
+      "bytes": 29516,
+      "sha256": "ad19c1775e22a5477fa09e39addb8a4377bc89b5a4d6517e05fcdd84587f6156",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/mixed-stone-tiles-sample.webp",
+      "bytes": 2156,
+      "sha256": "f57a2a976250b3f6d021b1b2c1ea45f38eddb88ca5c83855cb30960b375841b2",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/mixed-stone-tiles.webp",
+      "bytes": 24256,
+      "sha256": "2b0e9e5524b5230559f3cc526c091db9607a41c93b604b0179eb45b997296dc1",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/monastery-stone-floor-sample.webp",
+      "bytes": 1762,
+      "sha256": "3ba95ab0cab6560b4c129a9f7bb4f5042c71a495e376b2d66541578849741419",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/monastery-stone-floor.webp",
+      "bytes": 12756,
+      "sha256": "62cf75aad8b423fab2c9b9cb820a998e55bb32370a07a477e2ff1fba6e2e9772",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/oak-wood-planks-sample.webp",
+      "bytes": 762,
+      "sha256": "e74eae1cce77f970f050be4dfcae98b094ad0bb152b7e2cae1a803dbb478284d",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/oak-wood-planks.webp",
+      "bytes": 7908,
+      "sha256": "352031c3af1204a10d13b7da999bc722c0d107e38eba570d5278fe4876c5c494",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/old-wood-floor-sample.webp",
+      "bytes": 964,
+      "sha256": "7450a68fee9524153082845bbb5134d590447c47c4e967b351083f4886db15b9",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/old-wood-floor.webp",
+      "bytes": 10130,
+      "sha256": "16d1a2d3324a9aed4b1b5570c767bb303b59f2fb69c376a0bf5880486064d978",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/painted-plaster-wall-sample.webp",
+      "bytes": 390,
+      "sha256": "9e0a07d84041aab292e3115f49600e5b38d9a61f716a1c72d4f0914283323a0f",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/painted-plaster-wall.webp",
+      "bytes": 3104,
+      "sha256": "d3b8c04232dd0b303c7d82e6166218c7d884d709ddb98f346fb62f0d2eb1bc8a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/patterned-clay-plaster-sample.webp",
+      "bytes": 632,
+      "sha256": "5c1bcc81a5fd356ae922b6de3c07b8c952f35d51a9a8ae380cbaa690d53cb2dd",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/patterned-clay-plaster.webp",
+      "bytes": 8058,
+      "sha256": "e4ffd3709880bb33226419ff0045fc2564ff9a694fb85007c1ea34e7f98465c8",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/patterned-plaster-wall-sample.webp",
+      "bytes": 3260,
+      "sha256": "10589b0f0d25320a3efa2ed99b85dc7e820d5943c81c7a8521dc8856282e0434",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/patterned-plaster-wall.webp",
+      "bytes": 18282,
+      "sha256": "0befa062697b0eec44d6d4ae26aae03352f25a1ec52415b1bd5c1ea715ca48cd",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/plastered-wall-03-sample.webp",
+      "bytes": 664,
+      "sha256": "b95fce91e53441b0fd6f7574e97adb53366336e1cf389916362260e761bd4bd9",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/plastered-wall-03.webp",
+      "bytes": 4870,
+      "sha256": "2db58e46de7ca52ef2db1fc5f94f8aa42bfb909dbf3ee740ec1be120c45526d7",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/plastered-wall-04-sample.webp",
+      "bytes": 228,
+      "sha256": "0f34f320ecb688857faddbe0db3846f84f9d8871513d52bb3b4bc6033c4d7cb0",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/plastered-wall-04.webp",
+      "bytes": 1008,
+      "sha256": "5f68176df09d55469a206fc05ec9ce7603e1da466891e47c0b094bb8cdfd5ada",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/rectangular-parquet-sample.webp",
+      "bytes": 968,
+      "sha256": "e3477ed20d011731c685e99b0a6ee562f7311106f026199ef3c7157ea9f3786c",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/rectangular-parquet.webp",
+      "bytes": 7050,
+      "sha256": "11b4988bb6046ca8fba9eafa49191a1215bca854fdea1c5a1573520a45fb3a00",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/scuffed-cement-sample.webp",
+      "bytes": 484,
+      "sha256": "2d1fe89bc10ab2344dfa3853c98cbd5c0f950a78afc78f06c31204ec55cc6e1f",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/scuffed-cement.webp",
+      "bytes": 5116,
+      "sha256": "410f3e6a2e286d626d8ba4501a547de2e5904975acfb9a1a6f6979e1f2e0bd4a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor-02-sample.webp",
+      "bytes": 744,
+      "sha256": "92f1f8727a3e0f7019d32a3106fab399d6239a3ce56a2609c590740a3c647677",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor-02.webp",
+      "bytes": 7208,
+      "sha256": "d3ff2ff2ad012df4778605da1eda61ce47ac125f680f867481c13e5065f91cc1",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor-03-sample.webp",
+      "bytes": 1334,
+      "sha256": "619b99a403e364cbaca48bafe32249a9b5e9c7dafe4fc1502886ba55dc64bc17",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor-03.webp",
+      "bytes": 9580,
+      "sha256": "e75111d3d112d852788ab326491712dd197b75d9503b3bc3098e878e463dff40",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor-sample.webp",
+      "bytes": 658,
+      "sha256": "f68b6ad6962e2093a072d19b1673c91cc742e13dd2a61cf5bc93999b10845082",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/slate-floor.webp",
+      "bytes": 5604,
+      "sha256": "1d6f2cb0b64f84abd724aa41dff12a540676b6c5cc6590c967cffce486b6a165",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/smooth-concrete-floor-sample.webp",
+      "bytes": 1022,
+      "sha256": "0c0dc251eb260fa025f72a9ba12a905f2837ef5af2474c425f451f108ced7b2a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/smooth-concrete-floor.webp",
+      "bytes": 10524,
+      "sha256": "bd7d78beabd4e9e6839910e40154a2fd13a99b977fa9df346d1d6782bd0539e5",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/square-tiles-sample.webp",
+      "bytes": 1518,
+      "sha256": "cb042743836af226df51c55dc7e93f1105838d7fcb53c7389dfc4d10afcbe821",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/square-tiles.webp",
+      "bytes": 10700,
+      "sha256": "d14544f60a7b2fc650e5957116c91ef37b5c48d5bab5f3a4485bfb820196f9f9",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/stone-floor-sample.webp",
+      "bytes": 1754,
+      "sha256": "6c40339ba96bf303c859461c8508cd3044c7323b0bfe7c9732fdb3d07480723e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/stone-floor.webp",
+      "bytes": 15294,
+      "sha256": "3340d9f8e596f88b98794c36befe2735b2e293890c055ed135bfc3e5d595a67e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/terrazzo-tiles-sample.webp",
+      "bytes": 948,
+      "sha256": "7160e1c25e70f106135ec18f3b2f1089a08f67628bc67b711eb5e6aa79e26609",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/terrazzo-tiles.webp",
+      "bytes": 18646,
+      "sha256": "493975c8354b9b8b7e2965200f3a299f0b1f0bc116c063e693a6db0dc4fb8d3a",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/white-plaster-02-sample.webp",
+      "bytes": 512,
+      "sha256": "18fa1276af52f3922de63e07219f781cbb364151b4af84641bb432720acb64cb",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/white-plaster-02.webp",
+      "bytes": 7864,
+      "sha256": "722844e62e9d8fd72a14fec01033537848525d1075b68daaa38602f281a18baf",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor-deck-sample.webp",
+      "bytes": 2214,
+      "sha256": "c72b26eada44898ee18e8b377ac3c86c212940ce55b49dfb90d62a1db386f20b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor-deck.webp",
+      "bytes": 15902,
+      "sha256": "7e6f242a9f8cdd38e5bf5d71802b5456cd10e3ab94f13948ba4e52e7d6f8f9ab",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor-sample.webp",
+      "bytes": 618,
+      "sha256": "8f41b6a9bb5a09dc7193f4ca1520ecd0a37e4422f52f22b7093df7325f8f4483",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor-worn-sample.webp",
+      "bytes": 1232,
+      "sha256": "a45dbc6e8ed9e5f3b06da680755f67f11ed63cbf5fede8513a07177d731aa27b",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor-worn.webp",
+      "bytes": 7826,
+      "sha256": "aa15cf489241fd222949d74f8aea99f5387759de6e504c4b6a0ae165097f9280",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-floor.webp",
+      "bytes": 6208,
+      "sha256": "1208a6bcba09c8211136c0df0177ac3f7dc90748789287b1455b405651c743ba",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-planks-grey-sample.webp",
+      "bytes": 1212,
+      "sha256": "387fa36e981404b67948e3141ad1131c58a95ea3799875bc026b42e3bf5ce30e",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-planks-grey.webp",
+      "bytes": 10192,
+      "sha256": "9183ef95c7897ed420dccf082141d6a8f0803b9a5b32b052cae024ecf15642d3",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-planks-sample.webp",
+      "bytes": 952,
+      "sha256": "a8e868ac3fab81f6c1d85d8b77b4f4afae8205d0b8b56623a98b235d17b34897",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/wood-planks.webp",
+      "bytes": 6708,
+      "sha256": "ad2ef88a4a23aa29e59cf58519c7f75ed0fa57e68019d1df2bcdb182b2fb78e7",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/yellow-plaster-sample.webp",
+      "bytes": 798,
+      "sha256": "84278b6d99730b075911c0e946a60522d99f89ae6e167618072d47b4f5a312d2",
+      "equalToApproved": true
+    },
+    {
+      "path": "assets/materials/yellow-plaster.webp",
+      "bytes": 7024,
+      "sha256": "174637bebf17eacd296cc55e98a3f4bc527ad71301789f4eca3007a1cf99b114",
+      "equalToApproved": true
+    },
+    {
+      "path": "index.html",
+      "bytes": 221375,
+      "sha256": "541fbc0bc4394012b34d03185214ad9bede859c6d7f80dd20614dddad884b55b",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/asset-catalog.js",
+      "bytes": 4521,
+      "sha256": "cbf10cd0e848ce5fca2b3f973c518efa8d07dd5c8ba895a49b7b34a033083a25",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/asset-loader.mjs",
+      "bytes": 12207,
+      "sha256": "e506802096a03fcd85aa08b244605d98ecc1d4b82dbcd7f9f4c11783139baef9",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/asset-ui.js",
+      "bytes": 4999,
+      "sha256": "02609338d0867d0e3fa3b606a139ca87ba6a0cbea603798eefc8466c2c416d57",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/furniture-search.js",
+      "bytes": 4432,
+      "sha256": "c7d09df8adca1589311389e8314e45c7708eaa889de9a2725a9a781c9190a49f",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/generic-catalog.js",
+      "bytes": 4318,
+      "sha256": "03df442ceff7e95403f304d00d8dbad62539ee83e2bdde1c5625c8c851d32734",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/local-images.js",
+      "bytes": 1223,
+      "sha256": "9b58364d80647183208c123550a3fb9334fe5ea6bf8afb8707d05ff47c61f525",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/project-core.js",
+      "bytes": 19557,
+      "sha256": "e70c034746aa6a5be0d200c5dc139e8a4397a29f36ecb89351411b7d09a005b6",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/project-library.js",
+      "bytes": 2914,
+      "sha256": "71b13419db6415af4c797d2aa8c7b5eadc9624b24763e96556a75d6d54918789",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/project-package.js",
+      "bytes": 7568,
+      "sha256": "526445698dfd31b466f58704145c00961d666f33ba6efada550515c377d91652",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/project-schema.js",
+      "bytes": 19961,
+      "sha256": "1f2809f703df9b740b19e06768ddf1627a220894aa100755ce39025efba20fe5",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/raw-wall-export.js",
+      "bytes": 5043,
+      "sha256": "033e6583e4d912ba2c0d6878864a2941a02d3eacde4457f3ca9aa56d911fe8f9",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/reference-project.js",
+      "bytes": 55609,
+      "sha256": "63a1d5367241a9ba022510de8a1b60830415274401e94095574ae3dcbd07a5d8",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/room-layout-ui.js",
+      "bytes": 12127,
+      "sha256": "903ca24729c045b22769b3e37ef20b637845f7d8b1941a5ed34270b237b8510d",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/room-layout.js",
+      "bytes": 12299,
+      "sha256": "a935539c3837e615dabe10ec18e8115d0d34e8a313201052de261b7a91004fe1",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/safe-dom.js",
+      "bytes": 1366,
+      "sha256": "6a1585321733e02bf31f18db157bc3fcc767bb42ba870846a04c6432d4f45117",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/surface-catalog.js",
+      "bytes": 4748,
+      "sha256": "7776e51537e7df01fe1682aa6d2da26e4ed4cb7b4f4fb245a96e511e0ef94d43",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/surface-renderer.mjs",
+      "bytes": 3378,
+      "sha256": "4b7f677f98470cd1b0ff9680e73a1aceb3f79f05eb79e3d6e279692d0c777e02",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/surface-ui.js",
+      "bytes": 7333,
+      "sha256": "8d55179d74dbf07aebbb8e05f95003bdc57b8d7129a40a73cd2787f57239d00a",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/tracing-core.js",
+      "bytes": 15384,
+      "sha256": "5b5db5e3c3d5bd2b4721df990bf76bd314eda28bec23980648ff27448c36e509",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/tracing-ui.js",
+      "bytes": 35982,
+      "sha256": "5143fa09a48bd293ff1d200109f9f3a8a77e86cef5382d2b55ba800438dba627",
+      "equalToApproved": true
+    },
+    {
+      "path": "js/wall-assist.js",
+      "bytes": 3172,
+      "sha256": "3a5cb242556dc2aa404b1182f8306ac0268de8a36a793d7afd20c85d31db19db",
+      "equalToApproved": true
+    }
+  ],
+  "status": "PASS"
+}

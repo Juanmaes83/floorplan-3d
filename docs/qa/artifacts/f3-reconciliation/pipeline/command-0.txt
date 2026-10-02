@@ -1,0 +1,1 @@
+{"prepared":6,"rejected":2,"output":"C:\\Users\\temp123\\.codex\\visualizations\\2026\\09\\04\\01a06e52-48d9-7952-88d8-cafb6e617672\\floorplan-3d-post-f3\\docs\\technical\\F3-pipeline-next-results.json"}

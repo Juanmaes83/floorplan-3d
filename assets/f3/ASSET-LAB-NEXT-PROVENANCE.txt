@@ -1,0 +1,21 @@
+F3 Asset Lab controlled next batch — project-specific provenance
+Recorded 2026-10-02 for Juanmaes83/floorplan-3d.
+
+Juanma requested this controlled expansion of Rubik Sota using the existing
+Asset Lab pipeline and publication in a review branch and preview. His prior
+authorization to use Asset Lab resources applies to this project only. It is
+not a general license from IKEA or any other third party, and does not establish
+affiliation or permission for reuse outside this project.
+
+Source repository: https://github.com/Juanmaes83/immersphere-asset-lab
+Source revision: 5dc7b182c5c227472b84aea66a3ffa1368c95981
+Source manifest: manifest/ikea-sample.manifest.json
+The source records licenseType authorized-commercial-demo,
+redistributionAllowed false, qaStatus pending and permissions/README.md.
+These source fields are retained as evidence, not reinterpreted as a general
+distribution license. Normalized GLBs and their source/output hashes are
+recorded in docs/technical/F3-pipeline-next-results.json and the Rubik catalog.
+
+IKEA names identify source product references. Dimensions of this batch come
+from normalized mesh bounds only. Physical scale and manufacturer dimensions
+remain unverified. The synthetic fixture license does not apply to these files.

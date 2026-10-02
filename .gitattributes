@@ -14,3 +14,6 @@ assets/f3/*.glb -text
 assets/interop/*.png -text
 docs/qa/artifacts/post-f3/**/*.glb -text
 docs/qa/artifacts/post-f3/*.blend -text
+scripts/f3-pipeline/reconcile-* text eol=lf
+docs/qa/artifacts/f3-reconciliation*/** -text
+docs/qa/artifacts/f3-reconciliation*/** whitespace=cr-at-eol,-blank-at-eof

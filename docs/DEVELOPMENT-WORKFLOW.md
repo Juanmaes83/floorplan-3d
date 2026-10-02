@@ -1,5 +1,7 @@
 # Flujo de trabajo por fases
 
+**Estado de referencia, 02-10-2026:** `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2` incorpora la PR #22, incluido «Legal y uso» revisado y aprobado por Juanma. Los cierres, ramas y previews fechados más abajo son antecedentes; esta ampliación F3 sigue en revisión hasta aprobación humana.
+
 ## Regla de avance
 
 El proyecto avanza una fase cada vez. No se inicia la fase siguiente hasta que la fase actual haya sido revisada por Juanma, aprobada, fusionada y documentada como cerrada.

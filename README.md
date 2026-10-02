@@ -173,3 +173,7 @@ inventario, conversiones, procedencia, rechazos y pruebas. La PR #20 se fusionó
 por squash en `master` (`29250810a8341b3b296539118b54799f1e31a77b`). Vercel confirmó
 producción `READY` para ese SHA. La escala física y el rendimiento en teléfono
 físico siguen pendientes; esta integración no convierte el catálogo en universal.
+
+## Tanda F3 #23 — revisión aprobada y cierre de integración
+
+La [PR #23](https://github.com/Juanmaes83/floorplan-3d/pull/23) incorpora GLOSTAD, KNOXHULT, NORDLI, SKOGSTA, STOCKHOLM y STRANDMON. Juanma aprobó visualmente la tanda y autorizó su squash; esta entrega reconcilia la misma rama con master `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`, preservando sus modelos/UI y el exportador de PR #24. El cierre documental se integra junto con esta reconciliación, no en una rama documental separada; el estado MERGED y SHA squash se consultan en la PR. Dos candidatos fuera del perfil siguen excluidos. Todas las dimensiones nuevas son medidas de malla, no especificaciones oficiales ni escala física verificada. [Informe de la tanda](docs/technical/F3-asset-lab-next.md) · [reconciliación y QA](docs/qa/f3-reconciliation-2026-10-02.md) · [roadmap](docs/ROADMAP.md). No se hace promoción manual a producción ni se modifica la PR #21.

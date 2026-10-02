@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "C:\Users\temp123\.codex\visualizations\2026\09\04\01a06e52-48d9-7952-88d8-cafb6e617672\floorplan-3d-post-f3\scripts\interop\run-python-tests.py", line 17, in <module>
+    runpy.run_path(target, run_name="__main__")
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "tests/schema.test.py", line 7, in <module>
+    from jsonschema import Draft202012Validator, FormatChecker
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\jsonschema\__init__.py", line 13, in <module>
+    from jsonschema._format import FormatChecker
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\jsonschema\_format.py", line 11, in <module>
+    from jsonschema.exceptions import FormatError
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\jsonschema\exceptions.py", line 15, in <module>
+    from referencing.exceptions import Unresolvable as _Unresolvable
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\referencing\__init__.py", line 5, in <module>
+    from referencing._core import Anchor, Registry, Resource, Specification
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\referencing\_core.py", line 9, in <module>
+    from rpds import HashTrieMap, HashTrieSet, List
+  File "C:\Users\temp123\AppData\Local\Temp\rubik-qa-python\rpds\__init__.py", line 1, in <module>
+    from .rpds import *
+ModuleNotFoundError: No module named 'rpds.rpds'
