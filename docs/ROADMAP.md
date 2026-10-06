@@ -1,6 +1,13 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-**Estado vigente (06-10-2026, `master` `5b93339`):** Fase A de la propuesta Pascal–Rubik integrada por PR #27. LAB v03 verificada como ya entregada y aprobada en el repositorio LAB (PR #4, `37df847`). No hay otra entrega autorizada definida: decisión pendiente de Juanma. Detalle en [la última sección](#estado-posterior-al-06-10-2026--cierre-de-fase-a-pr-27-y-verificación-de-lab-v03). El párrafo siguiente es el registro histórico del 02-10-2026.
+**Estado vigente (06-10-2026, `master` `217ed068b90232907a40b8dff7748a11e6259e7f`):**
+
+- **Fase A** de la propuesta Pascal–Rubik: integrada por PR #27.
+- **Fase B** (captura 3D configurable): integrada por PR #29.
+- **LAB v03:** ya entregada y aprobada en el repositorio LAB (PR #4, `37df847`), sin trabajo de producto pendiente en Rubik.
+- **Fase C** (variantes seguras): autorizada expresamente por Juanma para una PR independiente. No es una fase canónica y no autoriza las fases D–G.
+
+Detalle en [la última sección](#actualización-06-10-2026--fase-b-integrada-pr-29-y-fase-c-autorizada). El párrafo siguiente es el registro histórico del 02-10-2026.
 
 Actualizado: 02-10-2026 al reconciliar la PR #23 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`. Se conserva la exportación de PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y sus cierres documentales #25/#26. La revisión visual de los seis modelos #23 fue aprobada por Juanma; el cierre por squash queda condicionado a pruebas, igualdad del contenido visible y preview READY del HEAD reconciliado. Vercel confirmó `READY` para producción en el SHA histórico de PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); no se promueve producción manualmente. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
@@ -314,6 +321,8 @@ verificación no se cambió código de producto de Rubik.
 
 ### Siguiente paso: decisión pendiente de Juanma
 
+> **Registro histórico, superado.** Después de esta sección Juanma autorizó la Fase B, ya integrada por PR #29, y la Fase C. Véase la [actualización siguiente](#actualización-06-10-2026--fase-b-integrada-pr-29-y-fase-c-autorizada). Las demás opciones siguen pendientes.
+
 Con Fase A integrada y LAB v03 cerrada, este roadmap **no define ahora otra
 entrega autorizada**. No se inventa ninguna. Hechos verificados para decidir:
 
@@ -330,3 +339,82 @@ Opciones, sin preferencia asignada:
 3. Priorizar la validación empírica F2 o la medición en teléfono físico.
 
 Hasta esa decisión no se inicia ninguna entrega nueva de producto.
+
+## Actualización 06-10-2026 — Fase B integrada (PR #29) y Fase C autorizada
+
+Comprobado contra GitHub el 06-10-2026:
+
+- `origin/master` en `217ed068b90232907a40b8dff7748a11e6259e7f`, el merge de PR #29, con padres `5b93339` y `88aa43aa4922dbee4fb414bb0630c68b6654f895`.
+- Las secciones anteriores son registros fechados y se conservan.
+
+### Fase B de la propuesta Pascal–Rubik — integrada por PR #29
+
+[PR #29](https://github.com/Juanmaes83/floorplan-3d/pull/29) se fusionó el
+06-10-2026 a las 22:15:35Z (`merged_by: Juanmaes83`). HEAD revisado:
+`88aa43aa4922dbee4fb414bb0630c68b6654f895`; Vercel informó `success` para ese SHA.
+Detalle en [el informe técnico de la Fase B](technical/capture-3d-phase-b.md).
+
+**Qué integra:**
+
+- Tamaño de captura 3D: «Vista actual» por defecto (el comportamiento anterior) o lado mayor de 1280, 1920 o 2560 px.
+- Proporción: igual que la vista, 16:9, 4:3, 1:1 o 9:16.
+- Las opciones son solo de sesión.
+
+**Cómo funciona:**
+
+- Reutiliza el mismo renderer con una copia de la cámara y encuadre «contain».
+- Restaura el canvas de forma síncrona: no cambian la vista, la cámara, el canvas, el proyecto, el historial ni `localStorage`.
+
+**Límites:**
+
+- 2560 px por lado.
+- Presupuesto de 2560 × 1920 px, además de los límites de la GPU.
+- Si el buffer real no coincide con lo pedido, la captura se aborta con un aviso.
+
+**Pruebas registradas** (secuenciales, en clon aislado):
+
+| Suite | `master` | Fase B |
+| --- | --- | --- |
+| `capture-3d.browser` (nuevo) | — | 3/3 |
+| Fase A | 18/18 | 18/18 |
+| Unitarias | 124 pasan, 1 omitida | 124 pasan, 1 omitida |
+| `browser.test` | 36 pasan, 1 omitida | 36 pasan, 1 omitida |
+| F3 | 21 pasan, 4 fallan | 21 pasan, 4 fallan (los mismos, preexistentes) |
+| Superficies | 7/7 | 7/7 |
+| Dimensiones | 5/5 | 5/5 |
+
+**Límites que se conservan:**
+
+- Memoria y tiempo en teléfono físico sin medir: el presupuesto es un cálculo, no una medición.
+- SwiftShader no acredita GPU real.
+- Las etiquetas CSS2D no aparecen en la imagen.
+- `READY` o `success` no sustituyen la revisión visual humana.
+
+No cambia `FloorPlanProjectV1`.
+
+### Fase C de la propuesta Pascal–Rubik — autorizada, no canónica
+
+Juanma autorizó el 06-10-2026, por instrucción expresa, implementar la **Fase C
+(variantes seguras)** de la [propuesta](proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md):
+
+- duplicar una distribución;
+- editar la copia sin alterar el original;
+- comparar hasta tres distribuciones con métricas y avisos existentes;
+- borrar una variante con confirmación.
+
+La autorización no convierte las fases A–G en fases canónicas ni autoriza las
+fases D–G. La implementación va en una PR independiente de esta, con su propio
+informe técnico.
+
+**Decisión D-C1 resuelta para esta entrega:**
+
+- El vínculo variante → original se guarda como **metadato local de la colección de proyectos** del navegador.
+- Referencia el `id` de la entrada de la biblioteca local.
+- Queda fuera del JSON exportado y de `FloorPlanProjectV1`: sin `extensions['x-variant-of']`, sin campos nuevos ni cambios de versión o schema.
+- Si una variante se exporta e importa en otra instalación, sigue siendo un proyecto válido, pero sin vínculo con su origen.
+
+### Pendientes que no cambian
+
+- **Rubik:** validación empírica F2 (cinco sesiones, veinte planos y umbrales), escala física de los modelos de malla, rendimiento en teléfono físico y D-01.
+- **Propuesta Pascal:** D-A1 sigue abierta; las fases D–G siguen sin aprobar.
+- **Repositorio LAB:** las PR #1 y #5 siguen siendo decisiones separadas en ese repositorio.

@@ -242,3 +242,22 @@ verificó en modo lectura en el repositorio privado `lab-astra-sept-2026`:
 Juanma. Las opciones constan en el [roadmap](ROADMAP.md#siguiente-paso-decisión-pendiente-de-juanma).
 Este cierre es solo documental: no modifica código de producto, `FloorPlanProjectV1`,
 assets ni capturas.
+
+## Cierre de Fase B — PR #29 y autorización de Fase C (06-10-2026)
+
+**Estado de referencia:** `origin/master` en
+`217ed068b90232907a40b8dff7748a11e6259e7f`, el merge de
+[PR #29](https://github.com/Juanmaes83/floorplan-3d/pull/29), fusionada por Juanma
+el 06-10-2026 a las 22:15:35Z.
+
+- **Rama:** `claude/phase-b-3d-capture` (HEAD `88aa43a`), creada desde `5b93339`, independiente de esta PR documental.
+- **Pruebas, límites y capturas:** en el [informe de la Fase B](technical/capture-3d-phase-b.md).
+- **Comparación con `master`:** sin regresiones. Los 4 fallos F3 son preexistentes e idénticos.
+- **Sin verificar:** teléfono físico y revisión visual humana de la preview.
+
+**Fase C.** Autorizada por instrucción expresa de Juanma, como parte de la
+propuesta Pascal y no como fase canónica.
+
+- **Rama:** nueva y aislada desde `master` `217ed06` (`claude/phase-c-safe-variants`), con su propia PR.
+- **D-C1:** vínculo como metadato local de la colección, sin cambios en `FloorPlanProjectV1`. Véase el [roadmap](ROADMAP.md#fase-c-de-la-propuesta-pascalrubik--autorizada-no-canónica).
+- **Esta PR documental** se actualiza con un merge normal de `master`, sin rebase ni force push. Sigue abierta.
