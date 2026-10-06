@@ -359,6 +359,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
       <g id="gMeasure" pointer-events="none"></g>
       <g id="gTrace" pointer-events="none"></g>
       <g id="gAssist" pointer-events="none" aria-label="Sugerencias experimentales sin confirmar"></g>
+      <g id="gReview" pointer-events="none" aria-label="Resaltado de la revisión de distribución (solo lectura)"></g>
       <g id="gSel"></g>
     </svg>
     <div id="view3d">
@@ -1666,6 +1667,7 @@ function exportPNG(){
   clone.setAttribute('viewBox', `${BOUNDS.x} ${BOUNDS.y} ${BOUNDS.w} ${BOUNDS.h}`);
   clone.setAttribute('width', W); clone.setAttribute('height', H);
   SafeDOM.markup(clone.querySelector('#gSel'), '');
+  SafeDOM.markup(clone.querySelector('#gReview'), ''); // read-only review highlight never goes into exported images
   SafeDOM.markup(clone.querySelector('#gGrid'), `<rect x="-20000" y="-20000" width="55000" height="55000" fill="${ui.layers.grid?'url(#grid)':'#f7f4ee'}"/>`);
   const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
   Object.entries({x:-20000,y:-20000,width:55000,height:55000,fill:'#f7f4ee'}).forEach(([k,v]) => bg.setAttribute(k,v));

@@ -28,6 +28,9 @@
    if(Math.abs(den)<EPS){if(num>=-EPS)return 0;continue;}const t=-num/den;if(den<0)t0=Math.max(t0,t);else t1=Math.min(t1,t);if(t0>=t1)return 0;}return (t1-t0)*len(d);}
  function area(P){let s=0;for(let i=0;i<P.length;i++){const a=P[i],b=P[(i+1)%P.length];s+=a.x*b.y-b.x*a.y;}return s/2;}
  function clip(P,origin,n){const out=[];for(let i=0;i<P.length;i++){const a=P[i],b=P[(i+1)%P.length],da=dot(sub(a,origin),n),db=dot(sub(b,origin),n);if(da>=0)out.push(a);if((da>=0)!==(db>=0)){const t=da/(da-db);out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t});}}return out;}
+ // Exact intersection of two convex polygons: clip A by every edge half-plane of B.
+ function intersection(A,B){const ccw=area(B)>0;let Q=A;for(let i=0;i<B.length&&Q.length;i++){const v=B[i],w=B[(i+1)%B.length],e=sub(w,v);Q=clip(Q,v,ccw?{x:-e.y,y:e.x}:{x:e.y,y:-e.x});}return Q;}
+ const copy=P=>P.map(v=>({x:v.x,y:v.y}));
  // Door leaf sweep exactly as Rubik draws it in 2D: hinge h on the wall face, closed along c, open along o (90°), radius = opening width.
  // Returns the largest opening angle (degrees) before the leaf reaches the footprint, or null when they do not interfere.
  function leafContact(door,P){const h={x:door.h[0],y:door.h[1]},c={x:door.c[0],y:door.c[1]},o={x:door.o[0],y:door.o[1]},L=door.len;
@@ -57,11 +60,11 @@
   for(let i=0;i<objects.length;i++)for(let j=i+1;j<objects.length;j++){const A=objects[i],B=objects[j],ids=[A.o.id,B.o.id];
    const depth=penetration(A.poly,B.poly),why=exclusion(A.o,B.o,label);
    if(why){if(depth>EPS||clearanceMm!==null&&separation(A.poly,B.poly).d<clearanceMm)excluded.push({objects:ids,reason:why});continue;}
-   if(depth>EPS){findings.push({code:'solape',objects:ids,measurementMm:round(depth),method:METHOD,limitation:'Huellas en planta; no evalúa altura, por lo que un solape puede ser intencionado (por ejemplo, una silla bajo la mesa).',message:`Las huellas de «${label(A.o)}» y «${label(B.o)}» se solapan ${round(depth)} mm en planta.`});continue;}
+   if(depth>EPS){findings.push({code:'solape',objects:ids,measurementMm:round(depth),evidence:{kind:'overlap',polygon:intersection(A.poly,B.poly),footprints:[copy(A.poly),copy(B.poly)]},method:METHOD,limitation:'Huellas en planta; no evalúa altura, por lo que un solape puede ser intencionado (por ejemplo, una silla bajo la mesa).',message:`Las huellas de «${label(A.o)}» y «${label(B.o)}» se solapan ${round(depth)} mm en planta.`});continue;}
    if(clearanceMm===null)continue;
    const s=separation(A.poly,B.poly);if(!(s.d<clearanceMm))continue;
    if(walls.some(W=>insideLength(s.a,s.b,W)>EPS)){excluded.push({objects:ids,reason:'La separación más corta atraviesa un muro; no es un hueco libre entre muebles.'});continue;}
-   findings.push({code:'holgura',objects:ids,measurementMm:round(s.d),thresholdMm:clearanceMm,method:METHOD+'; distancia mínima exacta entre huellas',limitation:'Distancia en planta entre huellas; no garantiza un paso utilizable ni cumplimiento normativo.',message:s.d<0.05?`«${label(A.o)}» y «${label(B.o)}» están en contacto en planta (0 mm), menos que la holgura indicada (${clearanceMm} mm).`:`«${label(A.o)}» y «${label(B.o)}» quedan a ${round(s.d)} mm en planta, menos que la holgura indicada (${clearanceMm} mm).`});}
+   findings.push({code:'holgura',objects:ids,measurementMm:round(s.d),thresholdMm:clearanceMm,evidence:{kind:'clearance',a:{...s.a},b:{...s.b},footprints:[copy(A.poly),copy(B.poly)]},method:METHOD+'; distancia mínima exacta entre huellas',limitation:'Distancia en planta entre huellas; no garantiza un paso utilizable ni cumplimiento normativo.',message:s.d<0.05?`«${label(A.o)}» y «${label(B.o)}» están en contacto en planta (0 mm), menos que la holgura indicada (${clearanceMm} mm).`:`«${label(A.o)}» y «${label(B.o)}» quedan a ${round(s.d)} mm en planta, menos que la holgura indicada (${clearanceMm} mm).`});}
   const swingDoors=(project.openings||[]).filter(op=>op.kind==='door'&&project.walls.find(w=>w.id===op.wallId)?.status!=='demolished');
   let doorsChecked=0;
   for(const op of swingDoors){
@@ -71,17 +74,25 @@
    for(const {o,poly}of objects){
     if(FLOOR_COVERING.has(o.type)||HIGH_WALL.has(o.type)){const contact=leafContact(door,poly);if(contact!==null)excluded.push({objects:[op.id,o.id],reason:exclusion(o,o,label)||'Tipo excluido.'});continue;}
     const contact=leafContact(door,poly);if(contact===null||contact>=90-EPS)continue;
-    findings.push({code:'puerta',objects:[op.id,o.id],openingId:op.id,measurementDeg:Math.round(contact),method:'Barrido de la hoja como cuarto de círculo de radio igual al ancho del hueco, con la bisagra y el sentido guardados (igual que el plano 2D)',limitation:'Hoja de grosor nulo y apertura completa de 90°; no evalúa altura, tiradores ni el lado opuesto.',message:`La hoja de la puerta ${op.id} (${op.widthMm} mm) alcanza «${label(o)}» al abrir unos ${Math.round(contact)}° de 90°.`});}
+    const h={x:door.h[0],y:door.h[1]},rad=contact*Math.PI/180,tip={x:h.x+door.len*(Math.cos(rad)*door.c[0]+Math.sin(rad)*door.o[0]),y:h.y+door.len*(Math.cos(rad)*door.c[1]+Math.sin(rad)*door.o[1])};
+    findings.push({code:'puerta',objects:[op.id,o.id],openingId:op.id,measurementDeg:Math.round(contact),evidence:{kind:'door',hinge:h,radiusMm:door.len,closed:{x:door.c[0],y:door.c[1]},open:{x:door.o[0],y:door.o[1]},contactDeg:contact,leaf:[{...h},tip],footprint:copy(poly)},method:'Barrido de la hoja como cuarto de círculo de radio igual al ancho del hueco, con la bisagra y el sentido guardados (igual que el plano 2D)',limitation:'Hoja de grosor nulo y apertura completa de 90°; no evalúa altura, tiradores ni el lado opuesto.',message:`La hoja de la puerta ${op.id} (${op.widthMm} mm) alcanza «${label(o)}» al abrir unos ${Math.round(contact)}° de 90°.`});}
   }
+  // Evidence completeness: any object without valid geometry may hide overlaps, clearances or door contacts, so no check that
+  // compares objects can be 'checked'. Valid findings are kept; the state says the list of objects was incomplete.
+  const invalid=skipped.filter(s=>s.check==='objetos').length,missing=invalid?` ${invalid} objeto(s) sin geometría válida no se han podido revisar.`:'';
   const checks={
-   solapes:{status:'checked'},
-   holgura:clearanceMm===null?{status:'insufficient_evidence',reason:'Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado.'}:{status:'checked',thresholdMm:clearanceMm},
-   puertas:!swingDoors.length?{status:'checked',reason:'No hay puertas abatibles activas.'}:doorsChecked===swingDoors.length?{status:'checked'}:doorsChecked?{status:'partial',reason:'Algunas puertas no tienen bisagra y sentido registrados.'}:{status:'insufficient_evidence',reason:'Ninguna puerta tiene bisagra y sentido registrados.'}
+   solapes:invalid?{status:'partial',reason:'Revisión incompleta.'+missing}:{status:'checked'},
+   holgura:clearanceMm===null?{status:'insufficient_evidence',reason:'Indica una holgura mínima en milímetros para revisar separaciones; no hay valor predeterminado.'+(invalid?' Además,'+missing.toLowerCase():'')}:invalid?{status:'partial',thresholdMm:clearanceMm,reason:'Revisión incompleta.'+missing}:{status:'checked',thresholdMm:clearanceMm}
   };
-  if(skipped.some(s=>s.check==='objetos'))checks.solapes={status:'partial',reason:'Algunos objetos no tienen geometría válida.'};
+  if(!swingDoors.length)checks.puertas={status:'checked',reason:'No hay puertas abatibles activas.'};
+  else{const reasons=[];let status=doorsChecked===swingDoors.length?'checked':doorsChecked?'partial':'insufficient_evidence';
+   if(status==='partial')reasons.push('Algunas puertas no tienen bisagra y sentido registrados.');
+   if(status==='insufficient_evidence')reasons.push('Ninguna puerta tiene bisagra y sentido registrados.'+(invalid?' Además,'+missing.toLowerCase():''));
+   else if(invalid){status='partial';reasons.push('Revisión incompleta:'+missing);}
+   checks.puertas=reasons.length?{status,reason:reasons.join(' ')}:{status};}
   const states=Object.values(checks).map(c=>c.status);
   const status=states.every(s=>s==='checked')?'checked':states.every(s=>s==='insufficient_evidence')?'insufficient_evidence':'partial';
   return {status,units:'mm',method:METHOD,scaleConfidence:project.scale?.confidence,checks,findings,excluded,skipped,unsupported:UNSUPPORTED.map(([check,reason])=>({check,reason}))};
  }
- const api={review,leafContact,separation,penetration};if(typeof module==='object')module.exports=api;else root.FloorPlanLayoutReview=api;
+ const api={review,leafContact,separation,penetration,intersection};if(typeof module==='object')module.exports=api;else root.FloorPlanLayoutReview=api;
 })(globalThis);

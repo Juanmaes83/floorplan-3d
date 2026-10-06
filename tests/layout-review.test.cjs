@@ -107,3 +107,56 @@ test('reference plan: intentional stacks excluded, swing interference measured, 
  const withThreshold=R.review(p,{clearanceMm:300});assert.equal(withThreshold.status,'checked');
  const pairs=withThreshold.findings.map(f=>f.code+f.objects.slice().sort().join());assert.equal(new Set(pairs).size,pairs.length,'no duplicate findings');
 });
+
+const bad=()=>({id:'obj_bad',type:'table',name:'roto',position:{x:1,y:1},size:{widthMm:0,depthMm:5},rotationDeg:0});
+const states=r=>({global:r.status,solapes:r.checks.solapes.status,holgura:r.checks.holgura.status,puertas:r.checks.puertas.status});
+
+test('omitted geometry with a threshold and an active door: every object check is partial, valid findings stay',()=>{
+ const p=room();const door=T.opening(p,p.walls[0].id,{x:1400,y:0},'door',800);door.swing={hinge:'start',side:'right'};
+ p.objects=[obj('chair',1500,600,300,300),obj('a',4000,2000,1000,1000),obj('b',4950,2000,1000,1000),bad()];
+ const r=R.review(p,{clearanceMm:300});
+ assert.deepEqual(states(r),{global:'partial',solapes:'partial',holgura:'partial',puertas:'partial'});
+ for(const k of ['solapes','holgura','puertas'])assert.match(r.checks[k].reason,/1 objeto\(s\) sin geometría válida/);
+ assert.deepEqual(codes(r).sort(),['puerta:'+door.id+'+obj_chair','solape:obj_a+obj_b']);
+ assert.equal(r.checks.holgura.thresholdMm,300);
+ // Control: the same plan without the broken object is fully checked.
+ p.objects.pop();assert.deepEqual(states(R.review(p,{clearanceMm:300})),{global:'checked',solapes:'checked',holgura:'checked',puertas:'checked'});
+});
+
+test('omitted geometry with a threshold and no active door: doors stay checked (nothing to check), the rest partial',()=>{
+ const p=room();p.objects=[obj('a',1000,1000,1000,1000),obj('b',2100,1000,1000,1000),bad()];
+ const r=R.review(p,{clearanceMm:300});
+ assert.deepEqual(states(r),{global:'partial',solapes:'partial',holgura:'partial',puertas:'checked'});
+ assert.match(r.checks.puertas.reason,/No hay puertas abatibles activas/);
+ assert.deepEqual(codes(r),['holgura:obj_a+obj_b']);
+ // A door on a demolished wall is not active and does not degrade the door check either.
+ const q=room(),w=T.wall(q,{x:0,y:2000},{x:3000,y:2000});T.opening(q,w.id,{x:1500,y:2000},'door',800);w.status='demolished';q.objects=[bad()];
+ assert.deepEqual(states(R.review(q,{clearanceMm:300})),{global:'partial',solapes:'partial',holgura:'partial',puertas:'checked'});
+});
+
+test('omitted geometry without threshold: clearance stays insufficient and says so; global never checked',()=>{
+ const p=room();p.objects=[obj('a',1000,1000,1000,1000),bad()];
+ const r=R.review(p);
+ assert.deepEqual(states(r),{global:'partial',solapes:'partial',holgura:'insufficient_evidence',puertas:'checked'});
+ assert.match(r.checks.holgura.reason,/no hay valor predeterminado\. Además, 1 objeto\(s\) sin geometría válida/);
+ // Doors without swing plus omitted geometry remain insufficient and mention both causes.
+ const q=room(),d=T.opening(q,q.walls[0].id,{x:1400,y:0},'door',800);delete d.swing;q.objects=[bad()];
+ const rq=R.review(q,{clearanceMm:300});assert.equal(rq.checks.puertas.status,'insufficient_evidence');
+ assert.match(rq.checks.puertas.reason,/Ninguna puerta tiene bisagra.*Además, 1 objeto\(s\)/);assert.equal(rq.status,'partial');
+});
+
+test('evidence geometry is exact: overlap polygon, closest-point segment and leaf at contact',()=>{
+ const p=room();p.objects=[obj('a',1000,1000,1000,1000),obj('b',1950,1200,1000,1000)];
+ const ov=R.review(p).findings[0].evidence;assert.equal(ov.kind,'overlap');
+ const xs=ov.polygon.map(v=>Math.round(v.x)),ys=ov.polygon.map(v=>Math.round(v.y));
+ assert.deepEqual([Math.min(...xs),Math.max(...xs),Math.min(...ys),Math.max(...ys)],[1450,1500,700,1500]);
+ p.objects[1].position={x:2200,y:1000};const cl=R.review(p,{clearanceMm:300}).findings[0].evidence;
+ assert.equal(cl.kind,'clearance');assert.equal(Math.hypot(cl.b.x-cl.a.x,cl.b.y-cl.a.y),200);assert.equal(cl.a.x,1500);assert.equal(cl.b.x,1700);
+ const q=room();const door=T.opening(q,q.walls[0].id,{x:1400,y:0},'door',800);door.swing={hinge:'start',side:'right'};
+ q.objects=[obj('chair',1500,600,300,300)];const f=R.review(q).findings[0],e=f.evidence;
+ assert.equal(e.kind,'door');assert.equal(e.radiusMm,800);assert.deepEqual(e.hinge,{x:1000,y:q.walls[0].thicknessMm/2});
+ assert.ok(Math.abs(Math.hypot(e.leaf[1].x-e.hinge.x,e.leaf[1].y-e.hinge.y)-800)<1e-6,'leaf length = opening width');
+ // The leaf at the contact angle touches the footprint boundary (within 0.5 mm), proving the reported angle.
+ const fp=T.footprint(q.objects[0]);
+ const sepLeaf=R.separation(fp,[e.leaf[0],e.leaf[1],e.leaf[0]]);assert.ok(sepLeaf.d<0.5,`leaf distance ${sepLeaf.d}`);
+});
