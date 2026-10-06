@@ -3,6 +3,7 @@
  const T=FloorPlanTracing,P=FloorPlanPackage,I=FloorPlanImages,A=FloorPlanWallAssist,R=FloorPlanRawWallExport;
  let mode='navigate',points=[],editing=null,shown=false,lastId=library?.activeId(),lastRoot=project.id,operation=0,distanceMode,selectedImage;
  const urls=new Map(),loading=new Set();
+ let layoutClearanceMm=null;
  let rawSession=null,rawExportReason='Analiza una imagen calibrada antes de exportar.',exportSerial;
  function invalidateRaw(reason){rawSession=null;rawExportReason=reason;const b=$('#assistRawExport');if(b){b.disabled=true;b.title=reason;}if(rawDialog.open){rawDialog.close();rawForm.reset();}}
  const rawDialog=document.createElement('dialog');rawDialog.id='rawExportDialog';rawDialog.setAttribute('aria-labelledby','rawExportTitle');
@@ -99,7 +100,28 @@
    const del=document.createElement('button');del.className='btn danger';del.id='traceRemoveImage';del.textContent='Eliminar imagen';del.onclick=async()=>{if(!confirm('¿Eliminar la imagen de referencia? La geometría se conserva; exporta el ZIP antes si necesitas una copia.'))return;try{apply(p=>{p.sourceImages=p.sourceImages.filter(i=>i.id!==im.id);if(p.scale.calibration?.sourceImageId===im.id)p.scale={confidence:'pending',method:'none'};});undoStack.length=redoStack.length=0;await cleanup();}catch(e){report(e);}};panel.append(del);
   }
   const warnings=document.createElement('div');warnings.id='traceWarnings';warnings.setAttribute('aria-label','Avisos de revisión');for(const w of T.warnings(project)){const b=document.createElement('button');b.className='btn';b.textContent=`${w.code} · ${w.id}: ${w.message}`;b.onclick=()=>locate(w.id);warnings.append(b);}if(!warnings.childNodes.length)warnings.textContent='Sin avisos W1–W4. Las medidas siguen siendo orientativas.';panel.append(warnings);
+  layoutPanel(panel);
  }
+ // Phase A layout review: read-only, recomputed on every render; the threshold lives only in memory and never in the project.
+ function layoutPanel(panel){const L=window.FloorPlanLayoutReview;if(!L)return;
+  const box=document.createElement('section');box.id='layoutReview';box.setAttribute('aria-label','Revisión de distribución');panel.append(box);
+  const title=document.createElement('h3');title.textContent='Revisión de distribución · solo lectura';box.append(title);
+  const note=document.createElement('p');note.textContent='Revisa huellas de muebles en planta y el barrido de puertas. No mueve ni guarda nada. No evalúa altura, recorridos completos, normativa ni accesibilidad.';box.append(note);
+  const label=document.createElement('label');label.textContent='Holgura mínima entre muebles (mm, opcional) ';const input=document.createElement('input');input.id='layoutReviewClearance';input.type='number';input.min='1';input.step='1';input.inputMode='numeric';input.value=layoutClearanceMm??'';
+  input.onchange=()=>{const v=input.value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){report(Error('La holgura mínima debe ser un número de milímetros mayor que 0.'));input.value=layoutClearanceMm??'';return;}const next=n===null?null:Math.round(n);if(next===layoutClearanceMm)return;layoutClearanceMm=next;render();};
+  label.append(input);box.append(label);
+  let result;try{result=L.review(project,{clearanceMm:layoutClearanceMm,label:o=>typeof nm==='function'?nm(o.name):o.name});}catch(e){const error=document.createElement('p');error.id='layoutReviewStatus';error.textContent='No se pudo revisar: '+(e.message||e);box.append(error);return;}
+  const state={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
+  const summary=document.createElement('p');summary.id='layoutReviewStatus';summary.dataset.status=result.status;
+  summary.textContent=`Estado: ${state[result.status]} · Solapes: ${state[result.checks.solapes.status]} · Holgura: ${state[result.checks.holgura.status]} · Puertas: ${state[result.checks.puertas.status]}`+[result.checks.holgura.reason,result.checks.puertas.status!=='checked'?result.checks.puertas.reason:null].filter(Boolean).map(r=>' · '+r).join('')+(result.scaleConfidence!=='real'?' · Escala no confirmada: distancias orientativas (W4).':'');box.append(summary);
+  const list=document.createElement('div');list.id='layoutReviewFindings';box.append(list);
+  const kinds={solape:'Solape',holgura:'Holgura',puerta:'Puerta'};
+  for(const f of result.findings){const b=document.createElement('button');b.className='btn';b.dataset.code=f.code;b.textContent=`${kinds[f.code]} · ${f.objects.join(' + ')}: ${f.message}`;b.title=`${f.method}. ${f.limitation}`;b.onclick=()=>locate(f.code==='puerta'?f.objects[1]:f.objects[0]);list.append(b);}
+  if(!result.findings.length)list.textContent='Sin hallazgos con los datos y el método actuales.';
+  const limits=document.createElement('details');limits.id='layoutReviewLimits';const sum=document.createElement('summary');sum.textContent=`Exclusiones, omisiones y límites (${result.excluded.length+result.skipped.length+result.unsupported.length})`;limits.append(sum);
+  const ul=document.createElement('ul');for(const text of [...result.excluded.map(e=>`Excluido ${e.objects.join(' + ')}: ${e.reason}`),...result.skipped.map(e=>`Sin evaluar ${e.id}: ${e.reason}`),...result.unsupported.map(e=>`No comprobado (${e.check}): ${e.reason}`)]){const li=document.createElement('li');li.textContent=text;ul.append(li);}limits.append(ul);box.append(limits);
+ }
+
  function focusPoint(point){view.x0=point.x-svg.clientWidth/2/view.s;view.y0=point.y-svg.clientHeight/2/view.s;applyView();drawPoints();}
  function locate(id){const groups=[['wall',project.walls],['opening',project.openings],['room',project.rooms]];for(const [kind,list]of groups)if(list.some(e=>e.id===id)){editing={kind,id};ui.sel=null;renderPanel();drawer('panel',true);const e=list.find(e=>e.id===id);const w=kind==='opening'?project.walls.find(w=>w.id===e.wallId):e;const point=kind==='room'?{x:e.polygon.reduce((n,p)=>n+p.x,0)/e.polygon.length,y:e.polygon.reduce((n,p)=>n+p.y,0)/e.polygon.length}:kind==='opening'?{x:w.start.x+(w.end.x-w.start.x)*(e.offsetMm+e.widthMm/2)/Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),y:w.start.y+(w.end.y-w.start.y)*(e.offsetMm+e.widthMm/2)/Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y)}:{x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2};focusPoint(point);return;}const obj=project.objects.find(o=>o.id===id);if(obj){select({kind:'furn',id});drawer('panel',true);focusPoint(obj.position);}else toast('Revisa la calibración y la segunda cota.',5000);}
  function editPanel(){if(!editing)return false;const {kind,id}=editing,e=(kind==='wall'?project.walls:kind==='opening'?project.openings:project.rooms).find(e=>e.id===id);if(!e){editing=null;return false;}const panel=$('#panel');panel.replaceChildren();const title=document.createElement('h3');title.textContent=`Editar ${kind==='wall'?'muro':kind==='opening'?'hueco':'estancia'} · ${id}`;panel.append(title);
