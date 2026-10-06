@@ -1,6 +1,6 @@
 # Fase B (propuesta Pascal→Rubik): captura 3D configurable
 
-**Estado: implementación en rama aislada `claude/phase-b-3d-capture`, pendiente de revisión humana.**
+**Estado: integrada en `master` por [PR #29](https://github.com/Juanmaes83/floorplan-3d/pull/29)** (merge `217ed068b90232907a40b8dff7748a11e6259e7f`, 06-10-2026, fusionada por Juanma; HEAD revisado `88aa43aa4922dbee4fb414bb0630c68b6654f895`, Vercel `success`). La redacción de abajo sobre la rama aislada y la PR #28 es el registro de cuando se preparó.
 
 - No es una fase canónica.
 - La autorización de Juanma cubre solo esta Fase B. Las fases C–G y la [propuesta](../proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md) en conjunto siguen sin aprobar.
