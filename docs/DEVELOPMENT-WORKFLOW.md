@@ -214,3 +214,31 @@ rama nueva única `feat/surface-material-library`, sin worktree ni red/permisos
 modificados. [Informe e inventario](technical/surface-material-library.md).
 Mantener pendiente la revisión humana, no fusionar ni desplegar manualmente a
 producción. READY debe corresponder al SHA final y distinguirse del acceso real.
+
+## Cierre de Fase A — PR #27 y verificación de LAB v03 (06-10-2026)
+
+**Estado de referencia:** `origin/master` en
+`5b93339601998d750918e01cb4431073b75cf5a0`, el merge commit de
+[PR #27](https://github.com/Juanmaes83/floorplan-3d/pull/27), fusionada por Juanma
+el 06-10-2026 a las 16:36:44Z.
+
+- **Rama:** la rama de trabajo `claude/intelligent-pasteur-vci64k` (HEAD `d8ff504`) quedó integrada.
+- **Aprobación:** consta como el merge efectuado por Juanma; en GitHub no hay una review formal aparte.
+- **Pruebas, límites y capturas:** en [el informe técnico de la Fase A](technical/layout-review-phase-a.md).
+- **Sin verificar** (así consta en el informe):
+  - la preview del SHA exacto, en escritorio y móvil;
+  - un teléfono físico;
+  - una revisión visual humana registrada.
+- **Reutilización de la rama:** el seguimiento documental posterior parte de `master` `5b93339`. La rama de sesión avanzó por *fast-forward*, sin reset, rebase ni force push.
+
+**LAB v03.** La entrega «LAB v03» que el roadmap citaba como siguiente se
+verificó en modo lectura en el repositorio privado `lab-astra-sept-2026`:
+
+- [PR #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) está MERGED y aprobada por Juanma (squash `37df847`, en `feat/astra-blender-gate-1`).
+- Consumió Rubik `c4f2493` sin requerir cambios en este repositorio.
+- No se repiten importaciones, conversiones ni pruebas de esos recursos.
+
+**Siguiente paso.** No hay una entrega nueva autorizada: la decisión es de
+Juanma. Las opciones constan en el [roadmap](ROADMAP.md#siguiente-paso-decisión-pendiente-de-juanma).
+Este cierre es solo documental: no modifica código de producto, `FloorPlanProjectV1`,
+assets ni capturas.

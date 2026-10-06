@@ -1,5 +1,7 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
+**Estado vigente (06-10-2026, `master` `5b93339`):** Fase A de la propuesta Pascal–Rubik integrada por PR #27. LAB v03 verificada como ya entregada y aprobada en el repositorio LAB (PR #4, `37df847`). No hay otra entrega autorizada definida: decisión pendiente de Juanma. Detalle en [la última sección](#estado-posterior-al-06-10-2026--cierre-de-fase-a-pr-27-y-verificación-de-lab-v03). El párrafo siguiente es el registro histórico del 02-10-2026.
+
 Actualizado: 02-10-2026 al reconciliar la PR #23 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`. Se conserva la exportación de PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y sus cierres documentales #25/#26. La revisión visual de los seis modelos #23 fue aprobada por Juanma; el cierre por squash queda condicionado a pruebas, igualdad del contenido visible y preview READY del HEAD reconciliado. Vercel confirmó `READY` para producción en el SHA histórico de PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); no se promueve producción manualmente. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
@@ -226,3 +228,105 @@ el estado/SHA efectivo se verifica en su metadata antes de iniciar otra entrega.
 No se aprueba globalmente F3/Roadmap 2 ni se promueve producción manualmente.
 Siguiente entrega autorizada, **solo tras MERGED**: LAB v03 desde la v02 integrada,
 con seis modelos nuevos y cinco familias de superficie; revisión humana propia.
+
+## Estado posterior al 06-10-2026 — cierre de Fase A (PR #27) y verificación de LAB v03
+
+Comprobado contra GitHub el 06-10-2026: `origin/master` en
+`5b93339601998d750918e01cb4431073b75cf5a0`. Las secciones anteriores se conservan
+como registro histórico fechado.
+
+### Fase A de la propuesta Pascal–Rubik — integrada por PR #27
+
+[PR #27](https://github.com/Juanmaes83/floorplan-3d/pull/27) se fusionó el
+06-10-2026 a las 16:36:44Z con un merge commit,
+`5b93339601998d750918e01cb4431073b75cf5a0`, cuyos padres son `c4f2493` y el HEAD
+de la rama `d8ff504f166bbc9ecc750aa516efc24832ff3595`.
+
+**Aprobación.** La ejecutó Juanma mediante el merge (`merged_by: Juanmaes83`). En
+GitHub no consta una review formal ni un comentario de aprobación separado. La
+entrega se hizo por instrucción expresa de Juanma, en una rama aislada.
+
+**Qué integra:**
+
+- La auditoría [PASCAL-RUBIK-INTEGRATION-ROADMAP](proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md), que sigue siendo una **propuesta no aprobada**.
+- La revisión local de distribución, de solo lectura:
+  - solapes de huellas orientadas;
+  - holgura frente a un umbral que introduce la persona;
+  - barrido de puertas con bisagra y sentido guardados;
+  - estados `checked`/`partial`/`insufficient_evidence`, también cuando se omite geometría;
+  - resaltado 2D exacto y no persistido.
+
+**Qué no cambia:**
+
+- `FloorPlanProjectV1`, su schema, ejes, unidades, persistencia y formato.
+- No asigna numeración canónica a la Fase A ni aprueba otras fases Pascal: la Fase B y siguientes siguen siendo propuestas.
+
+**Decisión de esta iteración.** No hay umbral de holgura predeterminado; sin él,
+la holgura queda en `insufficient_evidence`. Ofrecer valores orientativos sigue
+pendiente (D-A1 de la propuesta).
+
+**Pruebas registradas** en [el informe técnico](technical/layout-review-phase-a.md).
+Se ejecutaron en secuencia, sobre clones aislados, y con Three.js 0.160.0 servido
+desde el tarball npm por el bloqueo de jsDelivr.
+
+| Suite | `master` | Fase A |
+| --- | --- | --- |
+| Pruebas de la Fase A | — | 18/18 (16 unitarias + 2 de navegador) |
+| Unitarias existentes | 124 pasan, 1 omitida (Blender) | 124 pasan, 1 omitida (Blender) |
+| `browser.test` | 36 pasan, 1 omitida (chequeo de CDN propio) | 36 pasan, 1 omitida (chequeo de CDN propio) |
+| F3 | 21 pasan, 4 fallan (2, 15, 16, 17) | 21 pasan, 4 fallan (los mismos) |
+| Superficies | 7/7 | 7/7 |
+| Dimensiones | 5/5 | 5/5 |
+
+Los 4 fallos de F3 son preexistentes: el mismo error `replaceChildren … blur` y
+el mismo número de ocurrencias en ambas versiones.
+
+**Límites que se conservan:**
+
+- No evalúa altura, holgura frente a muros, recorridos ni entrega de muebles, normativa, accesibilidad ni mallas 3D.
+- A poco zoom en móvil el resaltado es pequeño.
+- No se verificaron la preview del SHA exacto, un teléfono físico ni la revisión visual humana registrada en el informe técnico.
+
+### LAB v03 — ya satisfecha en el repositorio LAB; no requiere cambios en Rubik
+
+La línea anterior «Siguiente entrega autorizada, solo tras MERGED: LAB v03 desde
+la v02 integrada, con seis modelos nuevos y cinco familias de superficie» se
+refería al piloto **Rubik → LAB** del repositorio privado
+[`lab-astra-sept-2026`](https://github.com/Juanmaes83/lab-astra-sept-2026), no a
+una entrega de código de Rubik. Verificación de solo lectura del 06-10-2026:
+
+| Entrega LAB | PR | Estado | Rama base / merge |
+| --- | --- | --- | --- |
+| Piloto sintético Blender | [LAB #2](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/2) | Cerrada el 02-10-2026; el registro LAB la da por fusionada (`4e447ff`) | `feat/astra-blender-gate-1` |
+| v02, transferencia de catálogo | [LAB #3](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/3) | Cerrada el 02-10-2026; squash `101d94a` según el registro LAB | `feat/astra-blender-gate-1` |
+| **v03, catálogo F3 ampliado** | [LAB #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) | **MERGED** el 02-10-2026 a las 20:31:16Z por Juanmaes83; cuerpo: «Aprobada por Juanma» | squash `37df8472e6163263f435424f6989b6c0e10b8ad9` en `feat/astra-blender-gate-1` |
+
+Según [`docs/17-RUBIK-LAB-PILOT-v03.md`](https://github.com/Juanmaes83/lab-astra-sept-2026/blob/37df8472e6163263f435424f6989b6c0e10b8ad9/docs/17-RUBIK-LAB-PILOT-v03.md):
+
+- **Productor:** v03 tomó como productor fijado Rubik `c4f2493`, el squash de PR #23.
+- **Seis modelos nuevos:** son los seis modelos de #23 (GLOSTAD 2 plazas, STRANDMON, SKOGSTA, KNOXHULT, STOCKHOLM aparador y NORDLI), sumados a los cinco de control de v02.
+- **Cinco familias de superficie:** son cinco superficies actuales de la biblioteca #19, una por familia (`herringbone-parquet`, `marble-01`, `terrazzo-tiles`, `blue-plaster-wall` y `square-tiles`).
+- **En Rubik:** todos esos recursos ya estaban integrados; v03 no modificó Rubik ni pide importaciones, conversiones, cambios de contrato, loaders o persistencia.
+- **Lo que no acredita:** compatibilidad de todo el catálogo, escala de fabricante, rendimiento en móvil físico, photoreal ni conexión de producto.
+
+**Conclusión:** LAB v03 está entregada y aprobada en su repositorio. En esta
+verificación no se cambió código de producto de Rubik.
+
+### Siguiente paso: decisión pendiente de Juanma
+
+Con Fase A integrada y LAB v03 cerrada, este roadmap **no define ahora otra
+entrega autorizada**. No se inventa ninguna. Hechos verificados para decidir:
+
+- En el LAB está abierta la [PR #5 «Rubik v03 — Living camera preflight [HUMAN REVIEW]»](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/5), creada el 03-10-2026 desde `codex/rubik-living-walkthrough-v01`. Es trabajo del repositorio LAB, pendiente de revisión humana allí. No se ha auditado su contenido en esta tarea y no figura como entrega de Rubik.
+- [LAB PR #1 «F2-A — Astra + Blender MCP Gate 1»](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/1) sigue abierta, como decisión separada.
+- Siguen pendientes:
+  - en Rubik: la validación empírica F2 (cinco sesiones, veinte planos y umbrales), la escala física de los modelos de malla, el rendimiento en teléfono físico y D-01;
+  - de la propuesta Pascal: la decisión D-A1 y las fases B–G, sin aprobar.
+
+Opciones, sin preferencia asignada:
+
+1. Revisar LAB #5 en su repositorio.
+2. Aprobar expresamente otra propuesta acotada, por ejemplo la Fase B (captura 3D configurable) de la propuesta Pascal.
+3. Priorizar la validación empírica F2 o la medición en teléfono físico.
+
+Hasta esa decisión no se inicia ninguna entrega nueva de producto.
