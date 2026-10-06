@@ -94,6 +94,8 @@
  const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
  function crossing(a,b,c,d){return cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0;}
  function inside(p,poly){let yes=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if(segmentPoint(p,a,b).distance<1e-7)return true;if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)yes=!yes;}return yes;}
+ // Oriented plan footprint of an object: centre position, width along local x, depth along local y, rotationDeg clockwise (y down).
+ function footprint(o){const angle=o.rotationDeg*Math.PI/180;return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>({x:o.position.x+x*o.size.widthMm/2*Math.cos(angle)-y*o.size.depthMm/2*Math.sin(angle),y:o.position.y+x*o.size.widthMm/2*Math.sin(angle)+y*o.size.depthMm/2*Math.cos(angle)}));}
  function warnings(p){const out=[],active=p.walls.filter(w=>w.status!=='demolished'),add=(code,id,message)=>out.push({code,id,message});
   for(const kind of ['walls','openings','rooms'])for(const e of p[kind])if(e.source?.review==='unreviewed'||e.source?.method==='suggested')add('W1',e.id,e.source?.review==='confirmed'?'Origen experimental sugerido; revisión humana registrada, sin garantía de exactitud.':'Geometría pendiente de revisión humana.');
   for(const r of p.rooms){let outside=false;for(let i=0;i<r.polygon.length;i++){
@@ -113,7 +115,7 @@
     }intervals.sort((a,b)=>a[0]-b[0]);let at=0;for(const [lo,hi]of intervals){if(lo>at+1e-9)break;at=Math.max(at,hi);}if(at<1-1e-9){outside=true;break;}
    }if(outside)add('W2',r.id,'Revisa el contorno: algún tramo queda a más de grosor/2 + 20 mm de un muro.');}
   const solids=C.geometry(p).walls.filter(w=>w.status!=='demolished');
-  for(const o of p.objects){const angle=o.rotationDeg*Math.PI/180,poly=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>({x:o.position.x+x*o.size.widthMm/2*Math.cos(angle)-y*o.size.depthMm/2*Math.sin(angle),y:o.position.y+x*o.size.widthMm/2*Math.sin(angle)+y*o.size.depthMm/2*Math.cos(angle)}));
+  for(const o of p.objects){const angle=o.rotationDeg*Math.PI/180,poly=footprint(o);
    const r=p.rooms.find(r=>r.id===o.roomId);if(r&&(poly.some(pt=>!inside(pt,r.polygon))||poly.some((a,i)=>r.polygon.some((c,j)=>crossing(a,poly[(i+1)%poly.length],c,r.polygon[(j+1)%r.polygon.length])))))add('W3',o.id,'El objeto queda fuera de su estancia asignada.');
    // Separating axis theorem between furniture footprint and each oriented wall solid.
    if(solids.some(w=>{const a=w.angle,wp=w.poly.map(([x,y])=>({x,y}));
@@ -121,5 +123,5 @@
   }
   if(p.scale.confidence!=='real')add('W4',p.id,'Medidas orientativas: escala pendiente o no confirmada.');return out;
  }
- const api={LIMITS,imageInfo,renderBytes,orientationAngle,blank,imageToWorld,worldToImage,calibrate,verify,confirm,snap,segmentPoint,wall,opening,room,remove,warnings};if(typeof module==='object')module.exports=api;else root.FloorPlanTracing=api;
+ const api={LIMITS,imageInfo,renderBytes,orientationAngle,blank,imageToWorld,worldToImage,calibrate,verify,confirm,snap,segmentPoint,wall,opening,room,remove,footprint,warnings};if(typeof module==='object')module.exports=api;else root.FloorPlanTracing=api;
 })(globalThis);
