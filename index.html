@@ -222,7 +222,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .lib-grid{grid-template-columns:1fr 1fr 1fr}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
-dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}#projectVariants{border-top:1px solid var(--line);margin-top:10px}#projectVariants h3{margin:10px 0 4px;font-size:15px}#variantsDialog{width:min(980px,96vw)}.variants-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0}.variant-card{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;min-width:0}.variant-card[data-active=true]{border-color:var(--accent,#b5653a);box-shadow:0 0 0 2px #b5653a33}.variant-card h3{margin:0 0 6px;font-size:15px;overflow-wrap:anywhere}.variant-card .role{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:6px;background:#efe8dc;margin-bottom:4px}.variant-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:6px 0;font-size:13px}.variant-card dt{color:var(--muted)}.variant-card dd{margin:0;text-align:right;overflow-wrap:anywhere}.variant-card .actions{display:flex;flex-wrap:wrap;gap:6px}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
@@ -424,7 +424,15 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
 <label>Proyecto <select id="projectList"></select></label>
 <label>Nombre <input id="projectName" maxlength="120"></label>
-<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear plantilla de referencia</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p></dialog>
+<div class="actions"><button id="projectOpen" class="btn">Abrir</button><button id="projectCreate" class="btn">Crear plantilla de referencia</button><button id="projectRename" class="btn">Renombrar</button><button id="projectDuplicate" class="btn">Duplicar</button><button id="projectDelete" class="btn danger">Eliminar</button><button id="projectClose" class="btn">Cerrar</button></div><p id="projectError" role="alert"></p>
+<section id="projectVariants" aria-labelledby="projectVariantsTitle"><h3 id="projectVariantsTitle">Variantes</h3>
+<p>Crea una copia independiente del proyecto abierto, tal como lo ves ahora, para probar otra distribución sin tocar el original (hasta 2 variantes por original). El vínculo entre original y variantes se guarda solo en este navegador: al exportar el JSON se exporta un proyecto normal, sin ese vínculo.</p>
+<div class="actions"><button id="projectVariant" class="btn">Crear variante del proyecto abierto</button><button id="projectCompare" class="btn">Comparar distribuciones</button></div></section></dialog>
+<dialog id="variantsDialog" aria-labelledby="variantsTitle"><h2 id="variantsTitle">Comparar distribuciones</h2>
+<p>Original y variantes guardados en este navegador. Los avisos son geométricos y orientativos (revisión de distribución en planta); no certifican normativa ni accesibilidad.</p>
+<label>Holgura mínima entre muebles (mm, opcional) <input id="variantsClearance" type="number" min="1" step="1" inputmode="numeric"></label>
+<div id="variantsCards" class="variants-cards"></div>
+<div class="actions"><button id="variantsClose" class="btn">Cerrar</button></div><p id="variantsError" role="alert"></p></dialog>
 
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
@@ -437,6 +445,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
 <script src="js/layout-review.js"></script>
+<script src="js/project-variants.js"></script>
 <script src="js/room-layout.js"></script>
 <script src="js/wall-assist.js"></script>
 <script src="js/raw-wall-export.js"></script>
@@ -1834,9 +1843,13 @@ $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
 if(loadedProject.message)toast(loadedProject.message,6000);
+function switchProject(next){project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;refreshProject();renderAll();fitView();}
+function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
+  return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
+function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
 function listProjects(){
-  const list=$('#projectList');list.replaceChildren();
-  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=e.name;list.append(option);}
+  const list=$('#projectList');list.replaceChildren();const names=Object.fromEntries(library.list().map(e=>[e.id,e.name]));
+  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=e.variantOf?`${e.name} — variante de «${names[e.variantOf]}»`:e.name;list.append(option);}
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
@@ -1847,15 +1860,46 @@ for(const [button,action]of [['Open','open'],['Create','create'],['Rename','rena
   $('#project'+button).onclick=()=>{
     try{
       const id=$('#projectList').value,name=$('#projectName').value;
-      if(action==='remove'&&!confirm('¿Eliminar este proyecto local? Esta acción no se puede deshacer.'))return;
-      project=action==='create'?library.create(name):action==='duplicate'?library.duplicate(id,name):action==='rename'?library.rename(id,name):library[action](id);
-      ++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;
-      refreshProject();renderAll();fitView();listProjects();$('#projectError').textContent='';
+      if(action==='remove'&&!confirmRemoveProject(id))return;
+      switchProject(action==='create'?library.create(name):action==='duplicate'?library.duplicate(id,name):action==='rename'?library.rename(id,name):library[action](id));
+      listProjects();$('#projectError').textContent='';
       if(action==='open')$('#projectsDialog').close();
       if(action==='remove')window.FloorPlanTraceUI?.cleanup();
     }catch(e){$('#projectError').textContent=e.message;}
   };
 }
+$('#projectVariant').onclick=()=>{try{switchProject(library.variant(project));listProjects();$('#projectError').textContent='';toast(`Variante creada y abierta: «${library.list().find(e=>e.id===library.activeId()).name}». El original no cambia.`,5000);}catch(e){$('#projectError').textContent=storageMessage(e,'crear la variante');}};
+// Comparison: stored projects for each distribution, except the open one, which uses the state on screen.
+let variantsClearance=null;
+const reviewState={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
+function renderVariants(){
+  const box=$('#variantsCards');box.replaceChildren();$('#variantsError').textContent='';
+  let group;try{group=library.group(library.activeId());}catch(e){$('#variantsError').textContent=e.message;return;}
+  for(const g of group){
+    const data=g.id===library.activeId()?project:g.project;let m;
+    try{m=FloorPlanVariants.metrics(data,{clearanceMm:variantsClearance});}catch(e){$('#variantsError').textContent=e.message;continue;}
+    const card=document.createElement('article');card.className='variant-card';card.dataset.id=g.id;card.dataset.active=String(g.id===library.activeId());
+    const role=document.createElement('span');role.className='role';role.textContent=g.variantOf?'Variante':'Original';const h=document.createElement('h3');h.textContent=g.name+(g.id===library.activeId()?' (abierto)':'');
+    const dl=document.createElement('dl');const c=m.review.checks,row=(k,v,key)=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;if(key)dd.dataset.metric=key;dl.append(dt,dd);};
+    row('Superficie útil',`${fmt(m.netAreaM2)} m²`,'area');row('Muebles',String(m.objects),'objects');
+    row('Revisión de distribución',reviewState[m.review.status],'status');
+    row('Solapes de huellas',`${reviewState[c.solapes.status]} · ${m.review.counts.solape} aviso(s)`,'solape');
+    row('Holgura',c.holgura.status==='insufficient_evidence'&&variantsClearance===null?'evidencia insuficiente · sin umbral indicado':`${reviewState[c.holgura.status]} · ${m.review.counts.holgura} aviso(s)`,'holgura');
+    row('Barrido de puertas',`${reviewState[c.puertas.status]} · ${m.review.counts.puerta} aviso(s)`,'puerta');
+    if(m.review.skipped)row('Elementos sin evaluar',String(m.review.skipped),'skipped');
+    if(m.review.scaleConfidence!=='real')row('Escala','no confirmada: medidas orientativas','scale');
+    const actions=document.createElement('div');actions.className='actions';
+    if(g.id!==library.activeId()){const open=document.createElement('button');open.className='btn';open.dataset.action='open';open.textContent='Abrir';open.onclick=()=>{try{switchProject(library.open(g.id));$('#variantsDialog').close();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(open);}
+    if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
+      const original=group[0].name;if(!confirm(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`))return;
+      try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
+    card.append(role,h,dl,actions);box.append(card);
+  }
+  if(group.length===1){const p=document.createElement('p');p.id='variantsEmpty';p.style.gridColumn='1 / -1';p.textContent='Este proyecto aún no tiene variantes. Usa «Crear variante del proyecto abierto» en «Proyectos».';box.append(p);}
+}
+$('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClearance').value=variantsClearance??'';renderVariants();$('#variantsDialog').showModal();};
+$('#variantsClose').onclick=()=>$('#variantsDialog').close();
+$('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
 window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
