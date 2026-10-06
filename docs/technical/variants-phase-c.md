@@ -68,7 +68,28 @@
 | `tests/variants.test.cjs` (8) | Copia del estado visible; IDs únicos; vínculo local persistente tras recargar; edición de la variante sin mutar el original; renombrado sin romper la relación; nombres sin colisión y ≤120; raíz común y tope de 2; borrar variante (original intacto, se reabre el original); borrar original (variantes conservadas, sin vínculo colgante); cuota llena (mismos bytes, lista y activo); colecciones antiguas y vínculos huérfanos; JSON exportado válido y sin `variantOf`; métricas reutilizadas sin umbral inventado. |
 | `tests/variants.browser.test.cjs` (4) | En 1440×900 y 390×844: edición visible, crear variante desde la UI, editarla, exportar su JSON, comparar (con y sin umbral, área igual a la de la cabecera), recargar, reabrir el original exacto y borrar la variante con confirmación. Además, cuota real llena en Chromium y proyecto con imagen en IndexedDB. |
 
-Los resultados de la batería completa, comparados con `master`, constan en la PR.
+**Batería ejecutada en secuencia** sobre un clon aislado de esta rama. La base es `master` `217ed06`, cuyo árbol es idéntico al de `88aa43a` (`git rev-parse` da `8a6f455` para ambos `^{tree}`). Por eso sirven los resultados de la Fase B, medidos sobre ese mismo árbol.
+
+| Suite | `master` | Fase C |
+| --- | --- | --- |
+| `tests/variants.test.cjs` (nuevo) | — | 8/8 |
+| `tests/variants.browser.test.cjs` (nuevo) | — | 4/4 |
+| `tests/layout-review*.test.cjs` (Fase A) | 18/18 | 18/18 |
+| Unitarias Node existentes | 124 pasan, 1 omitida (Blender) | 124 pasan, 1 omitida (Blender) |
+| `tests/capture-3d.browser.test.cjs` (Fase B) | 3/3 | 3/3 |
+| `tests/browser.test.cjs` | 36 pasan, 1 omitida (chequeo de CDN propio) | 36 pasan, 1 omitida (chequeo de CDN propio) |
+| `tests/assets.browser.test.cjs` (F3) | 21 pasan, 4 fallan (2, 15, 16, 17) | 21 pasan, 4 fallan (los mismos, con el mismo error `replaceChildren … blur` y el mismo número de apariciones) |
+| `tests/surfaces.browser.test.cjs` | 7/7 | 7/7 |
+| `tests/room-layout.browser.test.cjs` | 5/5 | 5/5 |
+| Python (`tests/*.py`) | — | 42/42 (3 + 12 + 16 + 11) |
+
+Otras comprobaciones, todas correctas:
+
+- `node --check` de los archivos JS nuevos y modificados, y de los dos scripts JS en línea de `index.html` (el *importmap* es JSON válido);
+- `git diff --check`;
+- `scripts/check-documents.py`.
+
+**Condición del entorno:** jsDelivr devuelve 403 en este proxy. Three 0.160.0 se sirvió con el mismo *shim* local de `curl` que en la Fase B.
 
 **Capturas** en [`docs/qa/artifacts/variants/`](../qa/artifacts/variants/), con el proyecto de referencia (sin datos personales), en escritorio y móvil:
 
