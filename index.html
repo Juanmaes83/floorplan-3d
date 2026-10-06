@@ -161,6 +161,7 @@ main.animating #hint3d{opacity:0}
 .menu-pop{position:absolute;right:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:150px;background:#fff;
   border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(40,30,20,.14);z-index:20;animation:fadeIn .2s ease}
 .menu-pop .btn{text-align:left}
+.shot3d{display:flex;flex-direction:column;gap:4px;padding:8px 10px;border-top:1px solid var(--line);font-size:12px}.shot3d select{font-size:16px;padding:6px;max-width:100%}.shot3d output{color:var(--muted);min-height:1em}
 @media (min-width:1101px) and (max-width:1500px){.menu-pop{left:0;right:auto}}
 .range span{font-variant-numeric:tabular-nums;color:var(--ink)}
 /* ---------- 选中后的浮动工具条 ---------- */
@@ -327,6 +328,25 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
     <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
       <div class="menu-pop">
         <button class="btn" id="exportPng" data-en="Export image">导出图片</button>
+        <div class="shot3d only3d" id="shot3dOptions" role="group" aria-labelledby="shot3dTitle">
+          <span id="shot3dTitle" data-en="3D capture" data-es="Captura 3D">3D 截图</span>
+          <label for="shot3dSize"><span data-en="Size" data-es="Tamaño">尺寸</span></label>
+          <select id="shot3dSize">
+            <option value="view" data-en="Current view (screen size)" data-es="Vista actual (tamaño de pantalla)">当前视图（屏幕尺寸）</option>
+            <option value="1280" data-en="1280 px long side" data-es="1280 px lado mayor">长边 1280 px</option>
+            <option value="1920" data-en="1920 px long side" data-es="1920 px lado mayor">长边 1920 px</option>
+            <option value="2560" data-en="2560 px long side" data-es="2560 px lado mayor">长边 2560 px</option>
+          </select>
+          <label for="shot3dAspect"><span data-en="Aspect ratio" data-es="Proporción">比例</span></label>
+          <select id="shot3dAspect" disabled>
+            <option value="view" data-en="Same as view" data-es="Igual que la vista">与视图相同</option>
+            <option value="16:9">16:9</option>
+            <option value="4:3">4:3</option>
+            <option value="1:1">1:1</option>
+            <option value="9:16">9:16</option>
+          </select>
+          <output id="shot3dDims" aria-live="polite"></output>
+        </div>
         <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Project data only (.json); images use the action below." data-es="Datos de proyecto (.json); para imágenes usa la acción siguiente.">项目数据 (.json)；图片请使用下方操作。</span>
@@ -427,6 +447,9 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 const LANG_KEY = 'rubik-sota-floorplan-lang';
 let LANG = (() => { try { const saved=localStorage.getItem(LANG_KEY); return ['es','en','zh'].includes(saved) ? saved : 'es'; } catch(e) { return 'es'; } })();
 const ES_TEXT = {
+  "reduced to the limit": "reducida al límite",
+  "Invalid capture option.": "Opción de captura no válida.",
+  "This browser cannot create that capture size; choose a smaller one.": "El navegador no permite ese tamaño de captura; elige uno menor.",
   "Nothing to undo": "No hay nada que deshacer",
   "Entry": "Entrada",
   "Drag to rotate (Shift for free angle)": "Arrastra para girar (Mayús: ángulo libre)",
@@ -1661,8 +1684,14 @@ addEventListener('pointercancel', e => endLibDrag(e, false));
 
 /* ======================= 导入导出 ======================= */
 function download(name, blob){ const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+function shot3dOptions(){ return {size:$('#shot3dSize').value, aspect:$('#shot3dAspect').value}; }
+// Options live only in this page session: never in the project, history or localStorage.
+function updateShot3dDims(){
+  const o = shot3dOptions(); $('#shot3dAspect').disabled = o.size === 'view';
+  try { const s = window.View3D?.shotSize?.(o); $('#shot3dDims').textContent = s ? `${s.width} × ${s.height} px` + (s.reduced ? ' · ' + tr('已按上限缩小', 'reduced to the limit') : '') : ''; } catch { $('#shot3dDims').textContent = ''; }
+}
 function exportPNG(){
-  if (is3D()) return window.View3D.shot();
+  if (is3D()) { try { window.View3D.shot(shot3dOptions()); } catch (e) { toast(e.message || String(e), 6000); } return; }
   const clone = svg.cloneNode(true), W = 3200, H = Math.round(W*BOUNDS.h/BOUNDS.w);
   clone.setAttribute('viewBox', `${BOUNDS.x} ${BOUNDS.y} ${BOUNDS.w} ${BOUNDS.h}`);
   clone.setAttribute('width', W); clone.setAttribute('height', H);
@@ -1755,6 +1784,8 @@ document.addEventListener('pointerdown', e => { const m = $('details.menu'); if 
 matchMedia('(max-width:1100px)').addEventListener('change', () => drawer(null));
 drawer(null);                                  // 恢复上次的面板收起状态
 $('#exportPng').onclick = exportPNG;
+['#shot3dSize','#shot3dAspect'].forEach(id => $(id).onchange = updateShot3dDims);
+$('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
 $('#exportJson').onclick = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
 $('#importJson').onclick = () => { document.querySelector('details.menu').open=false;$('#fileIn').click(); };
 let importSequence=0;
@@ -3027,11 +3058,50 @@ function loop(){
   labelRenderer.render(scene, camera);
 }
 
-function shot(){ const a = document.createElement('a'); a.download = tr('户型装修方案', 'floor-plan-design') + '-3D.png'; a.href = renderer.domElement.toDataURL('image/png'); a.click(); }
+// 3D capture. 'view' keeps the historical behaviour (current canvas, screen size × pixel ratio ≤ 2).
+// Other sizes reuse the same renderer/scene with a CLONED camera: the canvas drawing buffer is resized without
+// touching its CSS, rendered, read synchronously and restored before the browser can paint, so the working view,
+// working camera and layout never change. Tone mapping/output colour space stay identical (default framebuffer).
+const SHOT_EDGES = {'1280':1280, '1920':1920, '2560':2560}, SHOT_ASPECTS = {'16:9':16/9, '4:3':4/3, '1:1':1, '9:16':9/16};
+const SHOT_MAX_PIXELS = 2560*1920; // ≈4.9 MP: ≈19.7 MB RGBA colour buffer before MSAA/depth; see docs/technical/capture-3d-phase-b.md
+function shotLimit(){ const gl = renderer.getContext(), v = gl.getParameter(gl.MAX_VIEWPORT_DIMS); return Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), gl.getParameter(gl.MAX_TEXTURE_SIZE), v[0], v[1]); }
+function shotSize(opts = {}){
+  if (!opts.size || opts.size === 'view') return {width:renderer.domElement.width, height:renderer.domElement.height, mode:'view'};
+  const edge = SHOT_EDGES[opts.size], ratio = opts.aspect && opts.aspect !== 'view' ? SHOT_ASPECTS[opts.aspect] : SW()/SH();
+  if (!edge || !ratio) throw Error(tr('截图选项无效。', 'Invalid capture option.'));
+  let w = ratio >= 1 ? edge : edge*ratio, h = ratio >= 1 ? edge/ratio : edge;
+  const scale = Math.min(1, Math.sqrt(SHOT_MAX_PIXELS/(w*h)), (inited ? shotLimit() : Infinity)/Math.max(w, h));
+  const fit = scale < 1 ? Math.floor : Math.round; // floor when reduced so width × height never exceeds the budget
+  return {width:Math.max(1, fit(w*scale)), height:Math.max(1, fit(h*scale)), mode:'custom', reduced:scale < 1};
+}
+function shot(opts = {}){
+  const name = tr('户型装修方案', 'floor-plan-design') + '-3D.png', size = shotSize(opts);
+  let url;
+  if (size.mode === 'view') url = renderer.domElement.toDataURL('image/png');
+  else {
+    const {width:w, height:h} = size, gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
+    // "Contain" framing: everything visible in the working view stays visible; the other axis gains margin, never stretched.
+    const cam = camera.clone(), work = camera.aspect, aspect = w/h;
+    cam.aspect = aspect;
+    if (aspect < work) cam.fov = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*work/aspect)*180/Math.PI;
+    cam.updateProjectionMatrix();
+    try {
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false);
+      if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
+      renderer.render(scene, cam);
+      url = renderer.domElement.toDataURL('image/png');
+    } finally {
+      renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false);
+      renderer.render(scene, camera);
+    }
+  }
+  const a = document.createElement('a'); a.download = name; a.href = url; a.click();
+  return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced};
+}
 
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 
-window.View3D = {refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize, get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>
