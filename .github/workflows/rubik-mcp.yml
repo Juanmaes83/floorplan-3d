@@ -1,0 +1,40 @@
+name: Rubik local MCP
+
+on:
+  pull_request:
+    paths:
+      - 'tools/rubik-mcp/**'
+      - 'js/project-core.js'
+      - 'js/project-schema.js'
+      - 'js/reference-project.js'
+      - 'js/tracing-core.js'
+      - 'js/layout-review.js'
+      - '.github/workflows/rubik-mcp.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'tools/rubik-mcp/**'
+      - 'js/project-core.js'
+      - 'js/project-schema.js'
+      - 'js/reference-project.js'
+      - 'js/tracing-core.js'
+      - 'js/layout-review.js'
+      - '.github/workflows/rubik-mcp.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/rubik-mcp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm run check
+      - run: npm test
