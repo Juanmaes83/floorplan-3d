@@ -214,3 +214,15 @@ rama nueva única `feat/surface-material-library`, sin worktree ni red/permisos
 modificados. [Informe e inventario](technical/surface-material-library.md).
 Mantener pendiente la revisión humana, no fusionar ni desplegar manualmente a
 producción. READY debe corresponder al SHA final y distinguirse del acceso real.
+
+
+## MCP local de Rubik y roadmap de evolución — 07-10-2026
+
+Base de documentación: `master` `88aef0bfeea8abb67865c3d2a33a484c909511ea`, después de fusionar las PR #30 (variantes) y #31 (MCP local). La [PR #31](https://github.com/Juanmaes83/floorplan-3d/pull/31) entrega un servidor local stdio de solo lectura para JSON exportado: cuatro herramientas, hash por consulta y listas de campos permitidos. No modifica la aplicación, el contrato ni el archivo.
+
+Juanma probó el servidor desde Claude Code en Windows. `npm run check` pasó. `npm test` dio 5/6 porque Windows devolvió `EPERM` al crear el symlink de una fixture de seguridad; el workflow de GitHub Actions de la PR #31 pasó 6/6 en Linux. No se cambió la política de seguridad ni se pidió elevar permisos.
+
+La auditoría del JSON de prueba confirmó consultas paginadas, búsquedas, detalles, revisión sin umbral y prueba explícita a 600 mm; el hash permaneció constante y el proyecto no se modificó. El informe separó datos devueltos por MCP de agrupaciones y explicaciones deducidas por Claude. El filtro de habitación y cuatro pares aparentemente atravesados por muros quedan como hipótesis de diagnóstico a reproducir, no como defectos ya demostrados.
+
+El [roadmap específico](technical/local-mcp-roadmap.md) registra cuatro etapas propuestas: diagnóstico fiable, propuestas explicables, simulación aislada y creación de una variante revisable. Este cambio es documental; no autoriza herramientas de escritura ni altera `FloorPlanProjectV1`. No se ejecutaron suites del producto para una actualización documental. La PR #28, sobre cierres documentales de A/B y autorización C, se mantiene independiente.
+
