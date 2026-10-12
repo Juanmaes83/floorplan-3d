@@ -340,13 +340,13 @@ test('image import failures preserve current project, collection and image keys 
  await page.locator('#traceZipFile').setInputFiles({name:'broken.zip',mimeType:'application/zip',buffer:Buffer.from('bad')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('ZIP'));assert.deepEqual(await snapshot(),before);assert.deepEqual(errors,[]);
 });
 
-test('image import labels and accessible help follow Spanish, English and Chinese',async t=>{
+test('upload control label and accessible help follow Spanish, English and Chinese',async t=>{
  const {page,errors}=await pageFor(t);
- for(const [language,jsonText,imageText,inputLabel]of [['es','Importar proyecto JSON','Cargar imagen de plano (PNG/JPG/WebP)','Imagen de plano PNG, JPG o WebP'],['en','Import project JSON','Load floor plan image (PNG/JPG/WebP)','Floor plan image PNG, JPG or WebP'],['zh','导入项目 JSON','加载平面图图片 (PNG/JPG/WebP)','平面图图片 PNG、JPG 或 WebP']]){
+ for(const [language,uploadText,inputLabel,help]of [['es','Subir plano','Imagen de plano PNG, JPG o WebP',/PDF.*DXF.*arrastrar/],['en','Upload plan','Floor plan image PNG, JPG or WebP',/PDF.*DXF.*drag/],['zh','上传平面图','平面图图片 PNG、JPG 或 WebP',/PDF.*DXF/]]){
   assert.equal(await page.locator('html').getAttribute('lang'),language==='zh'?'zh-CN':language);
-  await page.locator('details.menu summary').click();assert.equal(await page.locator('#importJson').textContent(),jsonText);assert.equal(await page.locator('#importImage').textContent(),imageText);assert.equal(await page.locator('#traceImageFile').getAttribute('aria-label'),inputLabel);
-  assert.equal(await page.locator('#importImage').getAttribute('aria-describedby'),'importImageHelp');assert.match(await page.locator('#importImageHelp').textContent(),/15 MiB/);
-  await page.locator('details.menu summary').click();await page.locator('#langBtn').click();
+  assert.equal(await page.locator('#uploadPlan').textContent(),uploadText);assert.equal(await page.locator('#uploadPlan').getAttribute('aria-describedby'),'uploadPlanHelp');assert.match(await page.locator('#uploadPlanHelp').textContent(),help);
+  assert.equal(await page.locator('#traceImageFile').getAttribute('aria-label'),inputLabel);assert.equal(await page.locator('#importJson').count(),0);assert.equal(await page.locator('#importImage').count(),0);
+  await page.locator('#langBtn').click();
  }
  assert.deepEqual(errors,[]);
 });

@@ -49,8 +49,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 ### Archivos
 
 - Exportar una imagen PNG del plano.
-- Importar una imagen PNG/JPG/WebP estática desde «Archivo» o «Plano propio» para calibrarla y trazar encima.
-- Exportar e importar proyectos en JSON; exportar ZIP cuando se necesite transportar también las imágenes.
+- **Subir plano** (un único botón, o arrastrar y soltar el archivo): PDF, imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, escaneo RoomPlan (JSON) o proyecto JSON/ZIP. El formato se reconoce por el contenido, no por la extensión. Ver [subida multiformato](docs/technical/upload-multiformat.md).
+- Exportar proyectos en JSON; si el plano tiene imagen de fondo se exporta ZIP automáticamente para no perderla.
 - Restablecer la distribución de ejemplo.
 
 ## Uso local
@@ -111,16 +111,26 @@ distancia en milímetros, verificar una segunda cota y trazar muros, huecos y es
 Usa «Navegar» para desplazar/ampliar y «Seleccionar/editar» para corregir geometría.
 Las medidas son orientativas; no hay generación automática de vivienda ni garantía profesional.
 
-Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
-y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
-personales antes de compartirlo. Para cargar una imagen usa «Plano propio» → «Nuevo
-desde imagen». «Archivo» → «Importar proyecto JSON» importa JSON. «Archivo» → «Cargar imagen de plano (PNG/JPG/WebP)» ofrece el acceso directo al flujo de imagen.
-PNG/JPG/WebP estático: máximo 15 MiB y 8000 px por lado. Consulta [uso y límites](docs/technical/F1b.md)
-y la [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md).
+Exporta un ZIP para transportar proyecto e imágenes a otro navegador (se elige
+automáticamente al exportar un plano con imagen de fondo). Los originales y sus
+metadatos permanecen locales hasta esa exportación explícita: revisa datos personales
+antes de compartirlo.
 
-Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plano
-(PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
-y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).
+Para empezar usa **«Subir plano»** (cabecera) o arrastra el archivo a la página:
+
+| Formato | Resultado | Medidas |
+| --- | --- | --- |
+| PNG, JPG, WebP aceptados por F1b | Imagen original sin modificar | Calibrar con dos cotas |
+| PDF (elige página si hay varias), HEIC/HEIF, TIFF, BMP, GIF, AVIF, SVG | Conversión local a PNG/JPG a 300 ppp como máximo | Calibrar con dos cotas |
+| Escaneos grandes, PNG/WebP con EXIF, JPEG con EXIF espejado | Reducción uniforme (≤ 8000 px, ≤ 40 MP) y orientación aplicada | Calibrar con dos cotas |
+| DXF ASCII (mm, cm, m, pulgadas, pies) | Muros con eje y grosor medidos a partir de líneas dobles | Del CAD; revisar |
+| RoomPlan CapturedRoom JSON (experimental) | Muros, puertas y ventanas | Del escaneo LiDAR; revisar |
+| Proyecto JSON / ZIP de Rubik Sota | Proyecto completo | Las del proyecto |
+| DWG, IFC, USDZ | No se importan aún: mensaje con la exportación recomendada | — |
+
+Detalles, límites y licencias: [subida multiformato](docs/technical/upload-multiformat.md),
+[uso y límites F1b](docs/technical/F1b.md), [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md)
+y [roadmap canónico](docs/ROADMAP.md).
 
 ## F2: prototipo experimental integrado, no validado
 
