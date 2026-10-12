@@ -94,7 +94,7 @@
    if(kind==='json'){
     let value;try{value=JSON.parse(decodeText(bytes));}catch{throw Error('El archivo JSON no es válido o está incompleto.');}
     const type=I.classifyJson(value);
-    if(type==='roomplan'){const {project,report}=I.roomPlanToProject(value,{name:stem(file.name)});traceUI().adoptProject(project,stem(file.name));say(`Escaneo RoomPlan importado (experimental): ${report.walls} muros y ${report.openings} huecos${report.skippedOpenings?`; ${report.skippedOpenings} huecos sin muro cercano`:''}. Revisa las medidas.`,9000);return;}
+    if(type==='roomplan'){const {project,report}=I.roomPlanToProject(value,{name:stem(file.name)});traceUI().adoptProject(project,stem(file.name));say(`Escaneo RoomPlan importado: ${report.walls} muros, ${report.openings} puertas, ventanas o huecos y ${report.rooms} ${report.rooms===1?'estancia':'estancias'}${report.skippedOpenings?`; ${report.skippedOpenings} huecos sin muro cercano`:''}. Revisa las medidas.`,9000);return;}
     if(type==='geojson')throw Error(I.GUIDANCE.geojson);
     await app().importProjectFile(file,{fromUpload:true});return;
    }
