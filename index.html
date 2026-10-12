@@ -104,6 +104,7 @@ tr.click:hover td{background:#faf5ee}
 .form input[type=color]{padding:2px;height:30px}
 .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .actions .btn{border:1px solid var(--line);background:#fff}
+.actions .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .mats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .mat{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fff;cursor:pointer;text-align:left}
 .mat.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
@@ -271,7 +272,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
   <header>
     <button class="btn primary" id="newProjectBtn">Nuevo proyecto</button>
     <button class="btn primary upload-plan" id="uploadPlan" aria-describedby="uploadPlanHelp" data-en="Upload plan" data-es="Subir plano">上传平面图</button>
-    <span id="uploadPlanHelp" class="sr-only" data-en="PDF, image (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, RoomPlan scan (JSON) or Rubik Sota project (JSON/ZIP). You can also drag the file onto the page." data-es="PDF, imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, escaneo RoomPlan (JSON) o proyecto Rubik Sota (JSON/ZIP). También puedes arrastrar el archivo a la página.">PDF、图片 (PNG、JPG、WebP、HEIC、TIFF、BMP、GIF、AVIF)、SVG、CAD DXF、RoomPlan 扫描 (JSON) 或 Rubik Sota 项目 (JSON/ZIP)。也可以把文件拖到页面上。</span>
+    <span id="uploadPlanHelp" class="sr-only" data-en="PDF (image or vector drawing), image (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, RoomPlan scan (JSON) or Rubik Sota project (JSON/ZIP). You can also drag the file onto the page." data-es="PDF (imagen o dibujo vectorial), imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, escaneo RoomPlan (JSON) o proyecto Rubik Sota (JSON/ZIP). También puedes arrastrar el archivo a la página.">PDF（图片或矢量图）、图片 (PNG、JPG、WebP、HEIC、TIFF、BMP、GIF、AVIF)、SVG、CAD DXF、BIM IFC、RoomPlan 扫描 (JSON) 或 Rubik Sota 项目 (JSON/ZIP)。也可以把文件拖到页面上。</span>
     <button class="btn" id="newRoomBtn">+ Estancia</button>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
@@ -422,7 +423,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 </dialog>
 <input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
 <input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
-<div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、RoomPlan 或项目)</span></div>
+<div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
+<dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle">PDF con dibujo vectorial</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="raster" formnovalidate id="uploadPdfRaster">Usar como imagen</button> <button class="btn primary" value="vector" id="uploadPdfVector">Importar muros con medidas</button></p></form></dialog>
 <dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
@@ -763,7 +765,7 @@ function applyStaticLang(){
     el.dataset.zhTitle ??= el.title;
     el.title = LANG === 'zh' ? el.dataset.zhTitle : LANG === 'es' ? (el.dataset.esTitle || ES_TEXT[el.dataset.enTitle] || el.dataset.enTitle) : el.dataset.enTitle;
   });
-  for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['uploadIn',{es:'Subir plano: PDF, imagen, DXF, RoomPlan o proyecto',en:'Upload plan: PDF, image, DXF, RoomPlan or project',zh:'上传平面图：PDF、图片、DXF、RoomPlan 或项目'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
+  for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['uploadIn',{es:'Subir plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto',en:'Upload plan: PDF, image, DXF, IFC, RoomPlan or project',zh:'上传平面图：PDF、图片、DXF、IFC、RoomPlan 或项目'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
   const langBtn = document.getElementById('langBtn');
   langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
   langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';

@@ -6,6 +6,7 @@
  const say=(message,ms=6000)=>toast(message,ms);
  const loaded=new Map(),base=document.baseURI;
  const script=src=>{if(!loaded.has(src))loaded.set(src,new Promise((ok,ko)=>{const s=document.createElement('script');s.src=new URL(src,base).href;s.onload=ok;s.onerror=()=>{loaded.delete(src);ko(Error('No se pudo cargar el conversor local ('+src+'). Revisa la conexión y vuelve a intentarlo.'));};document.head.append(s);}));return loaded.get(src);};
+ async function webIfc(){const W=await import(new URL('vendor/web-ifc/web-ifc-api.js',base).href),api=new W.IfcAPI();api.SetWasmPath(new URL('vendor/web-ifc/',base).href,true);await api.Init();return {W,api};}
  async function pdfjs(){const lib=await import(new URL('vendor/pdfjs/pdf.min.mjs',base).href);lib.GlobalWorkerOptions.workerSrc=new URL('vendor/pdfjs/pdf.worker.min.mjs',base).href;return lib;}
  const stem=name=>(name||'plano').replace(/\.[^.]*$/,'')||'plano';
  const decodeText=bytes=>{try{return new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{return new TextDecoder('windows-1252').decode(bytes);}};
@@ -26,12 +27,23 @@
   return new Promise(resolve=>{dialog.addEventListener('close',()=>{const n=Math.round(Number(input.value));resolve(dialog.returnValue==='ok'&&n>=1&&n<=total?n:null);},{once:true});dialog.returnValue='';dialog.showModal();});
  }
 
+ function pickPdfMode(detected,count){
+  const dialog=$('#uploadPdfMode'),input=$('#uploadPdfScale');input.value=detected||100;
+  $('#uploadPdfModeInfo').textContent=`La página contiene ${count} trazos vectoriales. Puedes importar los muros, puertas, ventanas y estancias con medidas (escala ${detected?`1:${detected} detectada en el plano`:'no indicada en el plano: compruébala'}) o usarla como imagen para calibrar a mano.`;
+  return new Promise(resolve=>{dialog.addEventListener('close',()=>{const scale=Math.round(Number(input.value));resolve(dialog.returnValue==='vector'?(scale>=1&&scale<=1000?{mode:'vector',scale}:{mode:'raster'}):dialog.returnValue==='raster'?{mode:'raster'}:null);},{once:true});dialog.returnValue='';dialog.showModal();});
+ }
  const converters={
   async pdf(bytes,name){
    const lib=await pdfjs(),task=lib.getDocument({data:bytes.slice(),isEvalSupported:false});let doc;try{doc=await task.promise;}catch{await task.destroy();throw Error('No se pudo abrir el PDF. Puede estar protegido con contraseña o dañado.');}
    try{
     const number=doc.numPages>1?await pickPdfPage(doc.numPages,name):1;if(!number)return null;
-    const page=await doc.getPage(number),unit=page.getViewport({scale:1}),dpi=300,fit=I.fitRaster(unit.width*dpi/72,unit.height*dpi/72),scale=dpi/72*fit.factor,viewport=page.getViewport({scale});
+    const page=await doc.getPage(number),vec=I.pdfVectorExtract(await page.getOperatorList(),lib.OPS),count=vec.rects.length*4+vec.heavy.length;
+    if(count>=8){
+     const text=await page.getTextContent(),labels=text.items.filter(t=>t.str&&t.str.trim()).map(t=>({text:t.str,point:{x:t.transform[4],y:t.transform[5]}})),choice=await pickPdfMode(I.pdfScaleFromText(labels.map(l=>l.text)),count);
+     if(!choice)return null;
+     if(choice.mode==='vector'){try{return {...I.pdfToProject(vec,{name:stem(name),scale:choice.scale,labels}),page:number,pages:doc.numPages};}catch(e){say(`${e.message} Se importa como imagen.`,8000);}}
+    }
+    const unit=page.getViewport({scale:1}),dpi=300,fit=I.fitRaster(unit.width*dpi/72,unit.height*dpi/72),scale=dpi/72*fit.factor,viewport=page.getViewport({scale});
     const canvas=document.createElement('canvas');canvas.width=Math.floor(viewport.width);canvas.height=Math.floor(viewport.height);const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
     await page.render({canvasContext:ctx,viewport,background:'#ffffff'}).promise;
     const out=await rasterFile(canvas,canvas.width,canvas.height,name);
@@ -89,12 +101,22 @@
    if(kind==='dxf'){
     await script('vendor/dxf-parser/dxf-parser.js');let dxf;try{dxf=new window.DxfParser().parseSync(decodeText(bytes));}catch{throw Error('No se pudo leer el DXF. Guárdalo como DXF ASCII (R2000 o posterior) y súbelo de nuevo.');}
     const {project,report}=I.dxfToProject(dxf,{name:stem(file.name)});traceUI().adoptProject(project,stem(file.name));
-    say(`DXF importado en ${report.units}${report.assumedUnits?' (el archivo no declara unidades)':''}: ${report.walls} muros (${report.paired} con grosor medido)${report.layerFilter?'':'; no hay capa de muros, se usaron todas las líneas'}${report.inserts.doors+report.inserts.windows?`. Bloques detectados: ${report.inserts.doors} ${report.inserts.doors===1?'puerta':'puertas'} y ${report.inserts.windows} ${report.inserts.windows===1?'ventana':'ventanas'}; añade los huecos sobre su muro`:''}. Revisa el resultado.`,10000);return;
+    const o=report.openings,plural=(n,one,many)=>`${n} ${n===1?one:many}`;
+    say(`DXF importado en ${report.units}${report.assumedUnits?' (el archivo no declara unidades)':''}: ${plural(report.walls,'muro','muros')} (${report.paired} con grosor medido), ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(report.rooms,'estancia','estancias')}${report.layerFilter?'':'; no hay capa de muros, se usaron todas las líneas'}${report.unplaced?`; ${report.unplaced} elementos sin muro cercano`:''}. Revisa el resultado.`,10000);return;
+   }
+   if(kind==='ifc'){
+    say('Procesando IFC (BIM)…',60000);const {W,api}=await webIfc();let model;
+    try{model=I.ifcExtract(api,W,bytes);}catch(e){throw Error('No se pudo leer el IFC'+(e?.message?`: ${e.message}`:'')+'. Exporta IFC2x3 o IFC4 desde tu programa BIM.');}
+    const {project,report}=I.ifcToProject(model,{name:stem(file.name)});traceUI().adoptProject(project,stem(file.name));
+    const o=report.openings,plural=(n,one,many)=>`${n} ${n===1?one:many}`;
+    say(`IFC importado: ${plural(report.walls,'muro','muros')}, ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(report.rooms,'estancia','estancias')} (${report.roomsFrom==='IfcSpace'?'de los espacios IfcSpace':'deducidas de los muros'})${report.storeys>1?`. El modelo tiene ${report.storeys} plantas: se ha importado la que tiene más muros`:''}${report.unplaced?`; ${report.unplaced} huecos sin muro cercano`:''}. Revisa el resultado.`,10000);return;
    }
    const convert=kind==='pdf'?converters.pdf:kind==='heic'?converters.heic:kind==='tiff'?converters.tiff:kind==='svg'?converters.svg:['png','jpeg','webp','gif','bmp','avif'].includes(kind)?converters.raster:null;
+   if(kind==='dwg'){const v=I.dwgVersion(bytes);throw Error(`DWG${v?` (AutoCAD ${v})`:''}: este formato cerrado no se puede abrir en el navegador. En AutoCAD usa «Guardar como › DXF» (o el conversor gratuito ODA File Converter) y sube el DXF: se importarán muros, puertas, ventanas y estancias con sus medidas.`);}
    if(!convert)throw Error(I.GUIDANCE[kind]||I.GUIDANCE.unknown);
    say(`Procesando ${I.LABELS[kind]}…`,60000);
    const out=await convert(bytes,file.name,kind);if(!out){say('Subida cancelada.');return;}
+   if(out.project){traceUI().adoptProject(out.project,stem(file.name));const r=out.report,o=r.openings,plural=(n,one,many)=>`${n} ${n===1?one:many}`;say(`PDF vectorial (página ${out.page} de ${out.pages}, escala 1:${r.scale}): ${plural(r.walls,'muro','muros')}, ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(r.rooms,'estancia','estancias')}. Revisa el resultado.`,10000);return;}
    const image=await traceUI().addImage(out.file,true,stem(file.name));
    if(image)say(`${out.detail?out.detail+'. ':''}Plano cargado como nuevo proyecto. Calibra con una cota conocida antes de trazar.`,9000);
   }catch(err){say(err.message||String(err),9000);}

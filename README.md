@@ -121,12 +121,16 @@ Para empezar usa **«Subir plano»** (cabecera) o arrastra el archivo a la pági
 | Formato | Resultado | Medidas |
 | --- | --- | --- |
 | PNG, JPG, WebP aceptados por F1b | Imagen original sin modificar | Calibrar con dos cotas |
-| PDF (elige página si hay varias), HEIC/HEIF, TIFF, BMP, GIF, AVIF, SVG | Conversión local a PNG/JPG a 300 ppp como máximo | Calibrar con dos cotas |
+| PDF escaneado, HEIC/HEIF, TIFF, BMP, GIF, AVIF, SVG | Conversión local a PNG/JPG a 300 ppp como máximo | Calibrar con dos cotas |
 | Escaneos grandes, PNG/WebP con EXIF, JPEG con EXIF espejado | Reducción uniforme (≤ 8000 px, ≤ 40 MP) y orientación aplicada | Calibrar con dos cotas |
-| DXF ASCII (mm, cm, m, pulgadas, pies) | Muros con eje y grosor medidos a partir de líneas dobles | Del CAD; revisar |
-| RoomPlan CapturedRoom JSON (experimental) | Muros, puertas y ventanas | Del escaneo LiDAR; revisar |
+| **PDF vectorial** (planos exportados desde CAD) | Muros, puertas, ventanas y estancias del dibujo; escala detectada en el rótulo o indicada | Del dibujo × escala; revisar |
+| **DXF** ASCII (mm, cm, dm, m, pulgadas, pies) | Muros con eje y grosor, puertas y ventanas (bloques, arcos, huecos) y estancias con su nombre | Del CAD; revisar |
+| **IFC** 2x3/4 (BIM) | Muros, puertas y ventanas (con antepecho) y estancias de `IfcSpace` | Del modelo; revisar |
+| **RoomPlan** CapturedRoom JSON | Muros, puertas y ventanas en su muro (`parentIdentifier`) y estancias con nombre | Del escaneo LiDAR; revisar |
 | Proyecto JSON / ZIP de Rubik Sota | Proyecto completo | Las del proyecto |
-| DWG, IFC, USDZ | No se importan aún: mensaje con la exportación recomendada | — |
+| DWG, USDZ | No se importan: mensaje con la exportación recomendada (DWG → DXF, indicando la versión de AutoCAD) | — |
+
+En una imagen calibrada, «Plano propio» → **«Detectar muros y estancias»** propone muros (bandas oscuras gruesas), huecos y estancias de todo el plano como sugerencia revisable y deshacible.
 
 Detalles, límites y licencias: [subida multiformato](docs/technical/upload-multiformat.md),
 [uso y límites F1b](docs/technical/F1b.md), [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md)
