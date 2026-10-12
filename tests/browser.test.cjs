@@ -288,9 +288,8 @@ async function imageZip(page){const pending=page.waitForEvent('download');await 
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`image import clarity and complete WebP workflow ${viewport.width}x${viewport.height}`,async t=>{
  const {page,errors}=await pageFor(t,{viewport,hasTouch:true});const unexpected=[];page.on('request',r=>{if(!r.url().startsWith(url)&&!r.url().startsWith('blob:')&&!r.url().startsWith('https://cdn.jsdelivr.net/'))unexpected.push(r.url());});
  const original=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- await page.locator('details.menu summary').tap();assert.equal(await page.locator('#importJson').textContent(),'Importar proyecto JSON');
- let pending=page.waitForEvent('filechooser');await page.locator('#importJson').tap();assert.equal(await (await pending).element().getAttribute('id'),'fileIn');
- await page.locator('details.menu summary').tap();pending=page.waitForEvent('filechooser');await page.locator('#importImage').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'traceImageFile');
+ assert.equal((await page.locator('#uploadPlan').textContent()).trim(),'Subir plano');assert.equal(await page.locator('#importJson').count(),0);assert.equal(await page.locator('#importImage').count(),0);
+ const pending=page.waitForEvent('filechooser');await page.locator('#uploadPlan').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'uploadIn');
  const fixture=path.join(__dirname,'fixtures/manual-plan.webp'),bytes=await readFile(fixture);await chooser.setFiles({name:'sample.webp',mimeType:'',buffer:bytes});
  await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await page.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
@@ -303,18 +302,18 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
  const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
  await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
- await fresh.locator('details.menu summary').tap();assert.ok(await fresh.locator('#importImage').isVisible());await fresh.locator('#importImage').scrollIntoViewIfNeeded();
+ assert.ok(await fresh.locator('#uploadPlan').isVisible());await fresh.locator('#uploadPlan').scrollIntoViewIfNeeded();
  assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const box=await fresh.locator('#importImage').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
+  const box=await fresh.locator('#uploadPlan').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
  await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
- await fresh.locator('details.menu summary').tap();const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
+ const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
  const message=await fresh.locator('#toast').boundingBox();assert.ok(message.x>=0&&message.x+message.width<=viewport.width&&message.y>=0&&message.y+message.height<=viewport.height);assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeError);await fresh.screenshot({path:`/tmp/image-import-error-${viewport.width}.png`});
  assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);
 });
 
 test('image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration',async t=>{
  for(const name of ['manual-plan.png','manual-plan.jpg','manual-plan-lossy.webp','manual-plan-alpha.webp']){
-  const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('details.menu summary').click();await page.locator('#importImage').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures',name));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+  const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures',name));await page.waitForFunction(()=>document.querySelector('#gSource image'));
   const im=await page.evaluate(()=>FloorPlanApp.project.sourceImages[0]);assert.equal(im.widthPx,480);assert.equal(im.heightPx,320);
   if(name.endsWith('.webp')){await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();}
   const expectedScale=await page.evaluate(()=>FloorPlanApp.project.scale);
