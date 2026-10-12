@@ -602,7 +602,8 @@ const ES_TEXT = {
   "Project file exceeds 15 MB": "El archivo de proyecto supera 15 MB",
   "The JSON file is invalid or incomplete.": "El archivo JSON no es válido o está incompleto.",
   "This is not a Rubik Sota project JSON.": "No es un proyecto JSON de Rubik Sota.",
-  "The plan has a background image: exported as ZIP (JSON + original image).": "El plano tiene imagen de fondo: se ha exportado como ZIP (JSON + imagen original)."
+  "The plan has a background image: exported as ZIP (JSON + original image).": "El plano tiene imagen de fondo: se ha exportado como ZIP (JSON + imagen original).",
+  "The background image is not stored in this browser: only the JSON was exported.": "La imagen de fondo no está guardada en este navegador: solo se ha exportado el JSON."
 };
 const tr = (zh, en) => LANG === 'en' ? en : LANG === 'es' ? translateEs(zh, en) : zh;
 function translateEs(zh, en){
@@ -1809,7 +1810,13 @@ drawer(null);                                  // 恢复上次的面板收起状
 $('#exportPng').onclick = exportPNG;
 ['#shot3dSize','#shot3dAspect'].forEach(id => $(id).onchange = updateShot3dDims);
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
-$('#exportJson').onclick = () => (project.sourceImages||[]).length ? window.FloorPlanTraceUI.exportZip().then(ok=>ok&&toast(tr('方案含底图：已导出 ZIP（JSON + 原始图片）。','The plan has a background image: exported as ZIP (JSON + original image).'),5000)) : download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
+const exportProjectJson = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
+$('#exportJson').onclick = async () => {
+  if(!(project.sourceImages||[]).length)return exportProjectJson();
+  const result=await window.FloorPlanTraceUI.exportZip();
+  if(result==='zip')toast(tr('方案含底图：已导出 ZIP（JSON + 原始图片）。','The plan has a background image: exported as ZIP (JSON + original image).'),5000);
+  else if(result==='missing'){exportProjectJson();toast(tr('此浏览器中没有底图：仅导出 JSON。','The background image is not stored in this browser: only the JSON was exported.'),6000);}
+};
 let importSequence=0;
 $('#fileIn').onchange = e => {const file=e.target.files[0];e.target.value='';if(file)importProjectFile(file);};
 async function importProjectFile(file,{fromUpload=false}={}){

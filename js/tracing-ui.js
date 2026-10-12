@@ -182,6 +182,7 @@
  addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#traceDistance').open&&!rawDialog.open){cancel();editing=null;renderPanel();}});
  // Adopts a project built by an importer (DXF, RoomPlan) as a new library entry; the current one is kept.
  function adoptProject(next,name){Core.validate(next);project=library.add(next,name);editing=null;ui.sel=null;undoStack.length=redoStack.length=0;refreshProject();shown=true;renderAll();fitView();render();drawer('panel',true);}
- async function exportZip(){try{download('proyecto-plano.zip',await P.encode(project,I.get));return true;}catch(e){report(e);return false;}}
+ // 'missing' when a referenced image is not stored in this browser, so the caller can fall back to JSON.
+ async function exportZip(){try{for(const im of project.sourceImages||[])if(!await I.get(im.storage?.ref||im.id))return 'missing';download('proyecto-plano.zip',await P.encode(project,I.get));return 'zip';}catch(e){report(e);return false;}}
  window.FloorPlanTraceUI={openImage,addImage,adoptProject,exportZip,render,editPanel,cancel,cleanup,decode,importZip,viewChanged};render();
 })();
