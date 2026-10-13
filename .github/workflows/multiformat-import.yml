@@ -1,0 +1,52 @@
+name: Multiformat guided import
+on:
+  pull_request:
+    paths: ['index.html', 'js/**', 'css/**', 'vendor/**', 'tests/**', '.github/workflows/multiformat-import.yml']
+  push:
+    branches: [master]
+    paths: ['index.html', 'js/**', 'css/**', 'vendor/**', 'tests/**', '.github/workflows/multiformat-import.yml']
+permissions:
+  contents: read
+jobs:
+  import-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      INTAKE_ARTIFACTS: qa-results/intake
+      NAVIGATION_ARTIFACTS: qa-results/navigation
+      GUIDE_ARTIFACTS: qa-results/guide
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Verify exact source and syntax
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check js/plan-intake.js
+          node --check js/plan-intake-ui.js
+          node --check js/tracing-ui.js
+          node --check js/guide-ui.js
+          node --check js/guide-core.js
+          node --check js/project-library.js
+      - name: Unit regressions
+        run: node --test --test-concurrency=1 tests/plan-intake.test.cjs tests/guide.test.cjs tests/project.test.cjs tests/library.test.cjs tests/tracing.test.cjs tests/room-layout.test.cjs tests/furniture-search.test.cjs tests/variants.test.cjs tests/layout-review.test.cjs tests/surfaces.test.cjs tests/interop.test.cjs tests/assets.test.cjs tests/wall_assist.test.cjs tests/raw_wall_export.test.cjs
+      - name: Install the browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/intake-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/intake-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/intake-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/intake-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Guided desktop and mobile imports, cancellation and navigation
+        run: node --test --test-concurrency=1 tests/multiformat-guide.browser.test.cjs tests/upload.browser.test.cjs tests/guide-navigation.browser.test.cjs tests/guide.browser.test.cjs
+      - name: Persistence, calibration, 2D/3D and export regressions
+        run: node --test --test-concurrency=1 tests/browser.test.cjs tests/room-layout.browser.test.cjs tests/capture-3d.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: multiformat-${{ env.TESTED_SHA }}
+          path: qa-results/
+          if-no-files-found: error

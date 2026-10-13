@@ -20,7 +20,7 @@
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
  const homeBtn=btn('welcomeBtn','',()=>openWelcome(),header);homeBtn.title=tx('Volver a la bienvenida','Open welcome','打开欢迎页');
  const resume=btn('guideResume','',()=>{state().closed=false;state().fullTools=false;fullEditor=false;store();render();},header);
- const essentials=new Set(['uploadPlanBtn','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume']);
+ const essentials=new Set(['uploadPlanBtn','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume']);
  for(const child of header.children)if(!essentials.has(child.id)&&!child.classList.contains('brand')&&!child.querySelector('#undo'))child.classList.add('advanced-control');
  const bar=el('section',undefined,undefined,'guide-bar');bar.id='guideBar';bar.setAttribute('aria-label','Objetivo y progreso');header.after(bar);
  const top=el('div',undefined,bar,'guide-top'),identity=el('div',undefined,top,'guide-identity');
@@ -46,13 +46,14 @@
  function setRoute(screen,replace=false){
   const url=new URL(location.href);url.hash=screen==='welcome'?'inicio':'editor';
   if(!replace&&url.hash===location.hash)return;
+  window.FloorPlanApp?.cancelFileImport();
   history[replace?'replaceState':'pushState']({...history.state,rubikScreen:screen},'',url);navigationEpoch++;
  }
  function closeDialogs(except){for(const d of document.querySelectorAll('dialog[open]'))if(d!==except){
   if(d.id==='roomDesignDialog')FloorPlanRoomUI.cancel();else d.close();
  }roomReturnToWelcome=false;}
  function closeWelcome(){if(welcome.open)welcome.close();markSeen();setRoute('editor');}
- function restoreRoute(){navigationEpoch++;
+ function restoreRoute(){window.FloorPlanApp?.cancelFileImport();navigationEpoch++;
   if(location.hash==='#inicio')openWelcome(false);
   else if(location.hash==='#editor'){closeDialogs();markSeen();render();searchBtn.focus();}
  }
@@ -79,7 +80,7 @@
   const figure=el('figure',undefined,intro,'welcome-visual');el('span',tx('2D → 3D · A tu ritmo','2D → 3D · At your pace','2D → 3D · 按自己的节奏'),figure,'visual-tag');drawExample(figure);el('figcaption',tx('Proyecto de ejemplo · explora antes de empezar','Example project · explore before starting','示例项目 · 开始前先探索'),figure);
   const entries=el('div',undefined,shell,'welcome-entries');
   for(const [id,icon,title,description,fn]of [
-   ['welcomeUpload','↑',['Subir un plano','Upload a floor plan','上传平面图'],['PNG, JPG o WebP. Calibra y dibuja sobre la imagen; no se genera un 3D automáticamente.','PNG, JPG or WebP. Calibrate and draw over the image; 3D is not generated automatically.','PNG、JPG 或 WebP。校准并描绘图片；不会自动生成 3D。'],()=>beginUpload()],
+   ['welcomeUpload','↑',['Subir un plano','Upload a floor plan','上传平面图'],['PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa el resultado; las imágenes necesitan calibración.','PDF, images, DXF, IFC, RoomPlan or a JSON/ZIP project. Review the result; images need calibration.','PDF、图片、DXF、IFC、RoomPlan 或 JSON/ZIP 项目。检查结果；图片需要校准。'],()=>beginUpload()],
    ['welcomeBlank','+',['Crear desde cero','Create from scratch','从零创建'],['Empieza con un proyecto vacío y crea estancias con las herramientas de dibujo.','Start with an empty project and create rooms using the drawing tools.','从空项目开始，用绘图工具创建房间。'],()=>createOwn('create')],
    ['welcomeExample','◇',['Probar el ejemplo','Try the example','试用示例'],['Explora una vivienda ya preparada. Después podrás crear tu propia copia.','Explore a prepared home. Then you can create your own copy.','浏览准备好的住宅，然后可创建自己的副本。'],()=>example()]
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
@@ -91,7 +92,10 @@
   for(const w of g.walls){const poly=document.createElementNS(ns,'polygon');poly.setAttribute('points',w.poly.map(p=>p.join(',')).join(' '));poly.setAttribute('fill','#534a3e');s.append(poly);}
   for(const o of p.objects){const rect=document.createElementNS(ns,'rect');for(const [k,v]of Object.entries({x:-o.size.widthMm/2,y:-o.size.depthMm/2,width:o.size.widthMm,height:o.size.depthMm,rx:80,fill:'#f9f5ed',stroke:'#aa977e','stroke-width':15,transform:`translate(${o.position.x} ${o.position.y}) rotate(${o.rotationDeg})`}))rect.setAttribute(k,v);s.append(rect);}
  }
- function beginUpload(){pendingEntry={goal:'save3d'};pendingIds=library?.list().map(e=>e.id)||[];entryOrigin='image';const before=library?.activeId(),epoch=navigationEpoch;FloorPlanTraceUI.openImage(true);if(welcome.open){const changed=()=>{if(library?.activeId()!==before&&epoch===navigationEpoch&&welcome.open){closeWelcome();render();}};window.addEventListener('floorplan-image-imported',changed,{once:true});}}
+ function beginUpload(){if(window.FloorPlanUpload)FloorPlanUpload.pick();else FloorPlanTraceUI.openImage(true);}
+ function captureImport(){return {epoch:navigationEpoch,fromWelcome:welcome.open};}
+ function importRouteCurrent(context){return context.epoch===navigationEpoch;}
+ function imported(context,origin){const id=library?.activeId()||project.id;data.entries[id]=G.initial(project,'own',project.sourceImages?.length?'image':origin);pendingEntry=null;entryOrigin=null;pendingIds=[];lastResult=null;lastSnapshot='';store();if(context?.fromWelcome&&importRouteCurrent(context)&&welcome.open)closeWelcome();}
  function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);entryOrigin='example';const p=Core.initial();p.id=Core.id('prj');p.name=tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');}
  function copyExample(goal='save3d'){try{if(!save())return;const p=Core.clone(project);p.id=Core.id('prj');p.name=tx('Mi distribución','My layout','我的布局');pendingEntry={kind:'own',goal,targetType:state().targetType,targetRoomId:state().targetRoomId};pendingIds=library.list().map(e=>e.id);entryOrigin='example-copy';switchProject(library.add(p,p.name));announce(tx('Copia propia creada. El ejemplo se conserva.','Your copy was created. The example is preserved.','已创建自己的副本。示例已保留。'));if(afterCopy){const action=afterCopy;afterCopy=null;safe(()=>execute(action));}}catch(e){toast(e.message,6000);}}
  function announce(text){announcement.textContent=text;toast(text,4000);}
@@ -142,7 +146,7 @@
    if(v?.status==='consistent'&&!c?.confirmedByUser)$('#traceConfirm').click();else await FloorPlanTraceUI.start(c&&!v?'verify':'calibrate');
    render();return;
   }
-  if(task.action==='geometry'){roomReturnToWelcome=false;await setView('2d');if(project.sourceImages?.length){$('#traceBtn').click();await FloorPlanTraceUI.start('wall');}else FloorPlanRoomUI.createRoom();return;}
+  if(task.action==='geometry'){roomReturnToWelcome=false;await setView('2d');if(project.sourceImages?.length||['import','project'].includes(state().origin)){if(!$('#tracePanel')||$('#tracePanel').hidden)$('#traceBtn').click();await FloorPlanTraceUI.start(project.sourceImages?.length?'wall':project.rooms.length?'edit':'room');}else FloorPlanRoomUI.createRoom();return;}
   return execute({id:task.action,...G.actions[task.action==='3d'?'3d':task.action],goal:undefined});
  }
  function primaryLabel(t){if(!t)return '';if(t.blockers.length)return tx('Resolver requisito','Resolve requirement','完成前置任务');if(t.id==='image'&&project.sourceImages?.length&&!facts().imagesReady)return tx('Recuperar imágenes (ZIP)','Restore images (ZIP)','恢复图片 (ZIP)');if(t.id==='start')return state().kind==='example'&&state().goal!=='review'?tx('Crear mi copia','Create my copy','创建副本'):tx('Volver al inicio','Return home','返回首页');if(t.id==='scale'){const c=project.scale.calibration,v=project.scale.verification;return tx(!c?'Empezar a ajustar':v?.status==='consistent'&&!c.confirmedByUser?'Confirmar escala':!v?'Comprobar segunda cota':'Revisar escala',!c?'Start adjusting':v?.status==='consistent'&&!c.confirmedByUser?'Confirm scale':!v?'Check second dimension':'Review scale','检查比例');}
@@ -167,7 +171,7 @@
  function record(kind,rev=G.revision(project)){state().evidence[kind]=rev;store();render();}
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
-  searchBtn.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');resume.hidden=!s.closed;bar.hidden=s.closed;document.body.classList.toggle('guided',!s.closed&&!s.fullTools&&!fullEditor);
+  searchBtn.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
   homeBtn.textContent=tx('← Inicio','← Home','← 首页');homeBtn.title=tx('Volver al inicio sin perder el proyecto','Return home without losing the project','返回首页并保留项目');
   $('#guidePrevious').textContent=tx('← Paso anterior','← Previous step','← 上一步');
   $('#guideGoalChange').textContent=tx('Cambiar objetivo','Change goal','更改目标');$('#guideDetails').textContent=tx('Tareas y ayuda','Tasks & help','任务及帮助');$('#guideClose').textContent='×';$('#guideClose').setAttribute('aria-label',tx('Cerrar guía','Close guide','关闭指南'));
@@ -185,7 +189,7 @@
   const old=lastSnapshot;lastSnapshot=JSON.stringify([id,project,LANG,facts(),s.goal,s.current]);if(old===lastSnapshot)return;
   const p=progress();if(p.current.status==='completed'&&!s.manualTask){s.current=(p.pending[0]||p.current).id;}render();store();
  }
- window.FloorPlanGuideUI={sync,progress,state,record,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
+ window.FloorPlanGuideUI={sync,progress,state,record,captureImport,importRouteCurrent,imported,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
  addEventListener('floorplan-view-ready',()=>record('view3d'));
  addEventListener('floorplan-export-ready',e=>{if(e.detail.projectId===project.id&&e.detail.revision===G.revision(project)){state().exportName=e.detail.filename;record('export',e.detail.revision);}});
  addEventListener('floorplan-images-ready',sync);

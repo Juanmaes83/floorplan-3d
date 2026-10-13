@@ -4,6 +4,7 @@ js/project-core.js text eol=lf
 js/project-schema.js text eol=lf
 js/asset-catalog.js text eol=lf
 js/generic-catalog.js text eol=lf
+js/wall-assist.js text eol=lf
 assets/f3/*.txt text eol=lf
 assets/f3/*.json text eol=lf
 assets/interop/*.txt text eol=lf
@@ -17,3 +18,7 @@ docs/qa/artifacts/post-f3/*.blend -text
 scripts/f3-pipeline/reconcile-* text eol=lf
 docs/qa/artifacts/f3-reconciliation*/** -text
 docs/qa/artifacts/f3-reconciliation*/** whitespace=cr-at-eol,-blank-at-eof
+# Preserve upstream converter bytes and format fixtures (PDF offsets are byte-sensitive).
+vendor/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+tests/fixtures/intake/*.pdf binary
+tests/fixtures/intake/*.dxf -text whitespace=-blank-at-eol

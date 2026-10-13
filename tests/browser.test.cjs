@@ -162,10 +162,12 @@ test('F1 completion: local project UI, reload, isolation, confirmation and full 
  await page.locator('#fileIn').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('rechazada'));
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')})),snapshot);
  await page.reload();assert.equal(await page.locator('#gRooms polygon.room').count(),2);
- await page.click('#projectsBtn');await page.fill('#projectName','Copy');await page.click('#projectDuplicate');assert.equal(await page.locator('#projectList option').count(),3);
+ await page.click('#projectsBtn');await page.fill('#projectName','Copy');await page.click('#projectDuplicate');assert.equal(await page.locator('#projectList option').count(),4);
  const ids=await page.locator('#projectList option').evaluateAll(es=>es.map(e=>e.value));await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
- await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);
- page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),2);await page.click('#projectClose');
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),46);
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),4);
+ page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);await page.click('#projectClose');
  await page.reload();assert.equal(await page.locator('#gFurn .furn').count(),47);assert.equal(await page.locator('img').count(),0);assert.deepEqual(errors,[]);
 });
 const softwareModuleCache=new Map();
@@ -176,17 +178,23 @@ async function softwareModules(page,t){
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 completion: touch 2D/3D ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#tgLib').tap();await page.locator('.item[data-key="0:0"]').tap();assert.equal(await page.locator('#gFurn .furn').count(),47);
- await page.locator('#aRot').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
+ await page.locator('#fab [data-a="rotR"]').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-2d.png`});
  await page.locator('[data-view="3d"]').tap();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
  assert.equal(await page.locator('aside.open').count(),0);
  const result=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),r=canvas.getBoundingClientRect(),small=document.createElement('canvas');small.width=small.height=32;const c=small.getContext('2d');c.drawImage(canvas,0,0,32,32);return {ratio:r.height/innerHeight,width:r.width,overflow:document.documentElement.scrollWidth>innerWidth,colors:new Set(c.getImageData(0,0,32,32).data).size,same:View3D.renderedSource===FloorPlanApp.project};});
  t.diagnostic(JSON.stringify(result));assert.ok(result.ratio>=.6);assert.ok(result.width>300);assert.ok(result.colors>20);assert.equal(result.overflow,false);assert.equal(result.same,true);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-3d.png`});
+ // The selected furniture can capture a drag at this viewport; clear that selection before testing camera orbit.
+ await page.keyboard.press('Escape');
  const prior=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());
  const session=await context.newCDPSession(page),box=await page.locator('#view3d canvas').boundingBox(),x=box.x+box.width*.5,y=box.y+box.height*.3;
+ assert.ok(box.x>=0&&box.x+box.width<=viewport.width,JSON.stringify({box,viewport}));
  await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
- for(let i=1;i<=8;i++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
+ for(let i=1;i<=8;i++){
+  await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
+  await page.evaluate(()=>new Promise(requestAnimationFrame));
+ }
  await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(400);
  assert.notEqual(await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL()),prior);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-orbit.png`});
@@ -288,9 +296,8 @@ async function imageZip(page){const pending=page.waitForEvent('download');await 
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`image import clarity and complete WebP workflow ${viewport.width}x${viewport.height}`,async t=>{
  const {page,errors}=await pageFor(t,{viewport,hasTouch:true});const unexpected=[];page.on('request',r=>{if(!r.url().startsWith(url)&&!r.url().startsWith('blob:')&&!r.url().startsWith('https://cdn.jsdelivr.net/'))unexpected.push(r.url());});
  const original=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- await page.locator('details.menu summary').tap();assert.equal(await page.locator('#importJson').textContent(),'Importar proyecto JSON');
- let pending=page.waitForEvent('filechooser');await page.locator('#importJson').tap();assert.equal(await (await pending).element().getAttribute('id'),'fileIn');
- await page.locator('details.menu summary').tap();pending=page.waitForEvent('filechooser');await page.locator('#importImage').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'traceImageFile');
+ assert.match(await page.locator('#uploadPlanBtn').textContent(),/Subir plano/);assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
+ const pending=page.waitForEvent('filechooser');await page.locator('#uploadPlanBtn').tap();const chooser=await pending;assert.equal(await chooser.element().getAttribute('id'),'uploadIn');
  const fixture=path.join(__dirname,'fixtures/manual-plan.webp'),bytes=await readFile(fixture);await chooser.setFiles({name:'sample.webp',mimeType:'',buffer:bytes});
  await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await page.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.schemaVersion),'1.2.0');
@@ -303,18 +310,18 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
  const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
  await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
- await fresh.locator('details.menu summary').tap();assert.ok(await fresh.locator('#importImage').isVisible());await fresh.locator('#importImage').scrollIntoViewIfNeeded();
+ assert.ok(await fresh.locator('#uploadPlanBtn').isVisible());await fresh.locator('#uploadPlanBtn').scrollIntoViewIfNeeded();
  assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const box=await fresh.locator('#importImage').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
+  const box=await fresh.locator('#uploadPlanBtn').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
  await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
- await fresh.locator('details.menu summary').tap();const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
+ const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
  const message=await fresh.locator('#toast').boundingBox();assert.ok(message.x>=0&&message.x+message.width<=viewport.width&&message.y>=0&&message.y+message.height<=viewport.height);assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeError);await fresh.screenshot({path:`/tmp/image-import-error-${viewport.width}.png`});
  assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);
 });
 
 test('image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration',async t=>{
  for(const name of ['manual-plan.png','manual-plan.jpg','manual-plan-lossy.webp','manual-plan-alpha.webp']){
-  const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('details.menu summary').click();await page.locator('#importImage').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures',name));await page.waitForFunction(()=>document.querySelector('#gSource image'));
+  const {page,errors}=await pageFor(t,{hasTouch:true});await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures',name));await page.waitForFunction(()=>document.querySelector('#gSource image'));
   const im=await page.evaluate(()=>FloorPlanApp.project.sourceImages[0]);assert.equal(im.widthPx,480);assert.equal(im.heightPx,320);
   if(name.endsWith('.webp')){await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();}
   const expectedScale=await page.evaluate(()=>FloorPlanApp.project.scale);
@@ -340,13 +347,13 @@ test('image import failures preserve current project, collection and image keys 
  await page.locator('#traceZipFile').setInputFiles({name:'broken.zip',mimeType:'application/zip',buffer:Buffer.from('bad')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('ZIP'));assert.deepEqual(await snapshot(),before);assert.deepEqual(errors,[]);
 });
 
-test('image import labels and accessible help follow Spanish, English and Chinese',async t=>{
+test('upload control label and accessible help follow Spanish, English and Chinese',async t=>{
  const {page,errors}=await pageFor(t);
- for(const [language,jsonText,imageText,inputLabel]of [['es','Importar proyecto JSON','Cargar imagen de plano (PNG/JPG/WebP)','Imagen de plano PNG, JPG o WebP'],['en','Import project JSON','Load floor plan image (PNG/JPG/WebP)','Floor plan image PNG, JPG or WebP'],['zh','导入项目 JSON','加载平面图图片 (PNG/JPG/WebP)','平面图图片 PNG、JPG 或 WebP']]){
+ for(const [language,uploadText,inputLabel,help]of [['es','Subir plano','Imagen de plano PNG, JPG o WebP',/PDF.*DXF.*arrastrar/],['en','Upload a floor plan','Floor plan image PNG, JPG or WebP',/PDF.*DXF.*drag/],['zh','上传平面图','平面图图片 PNG、JPG 或 WebP',/PDF.*DXF/]]){
   assert.equal(await page.locator('html').getAttribute('lang'),language==='zh'?'zh-CN':language);
-  await page.locator('details.menu summary').click();assert.equal(await page.locator('#importJson').textContent(),jsonText);assert.equal(await page.locator('#importImage').textContent(),imageText);assert.equal(await page.locator('#traceImageFile').getAttribute('aria-label'),inputLabel);
-  assert.equal(await page.locator('#importImage').getAttribute('aria-describedby'),'importImageHelp');assert.match(await page.locator('#importImageHelp').textContent(),/15 MiB/);
-  await page.locator('details.menu summary').click();await page.locator('#langBtn').click();
+  assert.ok((await page.locator('#uploadPlanBtn').textContent()).includes(uploadText));assert.equal(await page.locator('#uploadPlanBtn').getAttribute('aria-describedby'),'uploadPlanHelp');assert.match(await page.locator('#uploadPlanHelp').textContent(),help);
+  assert.equal(await page.locator('#traceImageFile').getAttribute('aria-label'),inputLabel);assert.equal(await page.locator('#importJson').count(),1);assert.equal(await page.locator('#importImage').count(),1);
+  await page.locator('#langBtn').click();
  }
  assert.deepEqual(errors,[]);
 });
@@ -355,7 +362,7 @@ test('image import labels and accessible help follow Spanish, English and Chines
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
