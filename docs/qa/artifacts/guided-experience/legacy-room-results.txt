@@ -1,0 +1,17 @@
+TAP version 13
+# Subtest: new home / room dimensions / history / software 3D 1440x900
+ok 1 - new home / room dimensions / history / software 3D 1440x900
+  ---
+  duration_ms: 22494.792971
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22947.834519

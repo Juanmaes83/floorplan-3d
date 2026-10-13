@@ -26,7 +26,7 @@ async function pageFor(t,options={},legacy){
   const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true,...options});t.after(()=>context.close());
   if(legacy)await context.addInitScript(value=>localStorage.setItem('huxing-design-v1',JSON.stringify(value)),legacy);
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);return {page,errors,context};
+  await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await require('./editor-fixture.cjs')(page);return {page,errors,context};
 }
 async function readDownload(page,selector){
   await page.locator('details.menu summary').click();const pending=page.waitForEvent('download');await page.click(selector);
@@ -114,7 +114,7 @@ test('mobile touch placement and responsive 2D are usable in emulation',async t=
 test('3D renders the same project, follows imported geometry and returns to 2D', {timeout:90000}, async t=>{
   const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());const page=await context.newPage(),errors=[],failures=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>failures.push({url:r.url(),error:r.failure().errorText}));
-  await page.goto(url);try{await page.waitForFunction(()=>!!window.View3D,null,{timeout:5000});}catch{
+  await page.goto(url);await require('./editor-fixture.cjs')(page);try{await page.waitForFunction(()=>!!window.View3D,null,{timeout:5000});}catch{
     const cdn=failures.filter(r=>r.url.startsWith('https://cdn.jsdelivr.net/'));
     if(cdn.length && cdn.every(r=>r.error==='net::ERR_CERT_AUTHORITY_INVALID')){
       // The system curl trusts the platform CA. Keep TLS verification enabled; never use -k.
@@ -174,7 +174,7 @@ async function softwareModules(page,t){
  const cache=softwareModuleCache;await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async r=>{const target=r.request().url();if(!cache.has(target))cache.set(target,(await verifiedFetch('curl',['--fail','--silent','--show-error','--max-time','20',target],{maxBuffer:4*1024*1024})).stdout);await r.fulfill({status:200,contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:cache.get(target)});});
 }
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 completion: touch 2D/3D ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
- const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
+ const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#tgLib').tap();await page.locator('.item[data-key="0:0"]').tap();assert.equal(await page.locator('#gFurn .furn').count(),47);
  await page.locator('#aRot').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-2d.png`});
@@ -198,7 +198,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 c
 });
 test('F1 completion: no WebGL gives readable message and keeps 2D editable', {timeout:90000},async t=>{
  const context=await browser.newContext();t.after(()=>context.close());await context.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(type==='webgl'||type==='webgl2'||type==='experimental-webgl')return null;return get.call(this,type,...args);};});
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);await page.click('[data-view="3d"]');
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);await page.click('[data-view="3d"]');
  assert.match(await page.locator('#toast').textContent(),/Puedes seguir trabajando en 2D/);assert.equal(await page.evaluate(()=>document.body.classList.contains('busy')||document.body.classList.contains('m3d')),false);
  await page.click('.item[data-key="0:0"]');assert.equal(await page.locator('#gFurn .furn').count(),47);await page.click('#undo');assert.equal(await page.locator('#gFurn .furn').count(),46);assert.deepEqual(errors,[]);
 });
@@ -216,7 +216,7 @@ async function traceTool(page,id){await page.locator('#traceBtn').click();await 
 async function imageTap(page,point){const screen=await page.evaluate(p=>{const image=FloorPlanApp.project.sourceImages[0],q=FloorPlanTracing.imageToWorld(image,p),svg=document.querySelector('#plan'),screen=new DOMPoint(q.x,q.y).matrixTransform(svg.getScreenCTM());return {x:screen.x,y:screen.y};},point);await page.touchscreen.tap(screen.x,screen.y);}
 async function knownDistance(page,tool,a,b,value){await traceTool(page,tool);await imageTap(page,a);await imageTap(page,b);await page.locator('#traceKnown').fill(String(value));await page.locator('#traceDistanceSave').click();await page.waitForFunction(()=>!document.querySelector('#traceDistance').open);}
 for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F1b full workflow ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
- const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
+ const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  const existing=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#traceBtn').click();await page.locator('#traceNew').click();
  await page.locator('#traceImageFile').setInputFiles({name:'bad.png',mimeType:'image/png',buffer:Buffer.from('not an image')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PNG'));assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),existing);
  await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1&&FloorPlanApp.project.walls.length===0);await page.waitForFunction(()=>document.querySelector('#gSource image'));
@@ -357,7 +357,7 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
  const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
- await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await page.waitForFunction(()=>!!window.View3D);
+ await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));

@@ -1,0 +1,19 @@
+name: Guided experience
+on:
+  pull_request:
+    paths: ['index.html', 'js/**', 'css/**', 'tests/**', '.github/workflows/guided-experience.yml']
+  push:
+    branches: [master]
+    paths: ['index.html', 'js/**', 'css/**', 'tests/**', '.github/workflows/guided-experience.yml']
+permissions:
+  contents: read
+jobs:
+  goals-and-editor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - run: node --check js/guide-core.js && node --check js/guide-ui.js && node --check js/tracing-ui.js && node --check js/room-layout-ui.js
+      - run: node --test tests/guide.test.cjs tests/project.test.cjs tests/library.test.cjs tests/tracing.test.cjs tests/room-layout.test.cjs tests/furniture-search.test.cjs tests/variants.test.cjs tests/layout-review.test.cjs tests/surfaces.test.cjs tests/interop.test.cjs tests/assets.test.cjs tests/wall_assist.test.cjs tests/raw_wall_export.test.cjs

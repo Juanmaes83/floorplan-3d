@@ -7,7 +7,7 @@ before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(asy
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});});
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 const shots='docs/qa/artifacts/variants';
-async function setup(context){const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await page.waitForFunction(()=>!!window.FloorPlanVariants&&!!window.FloorPlanApp);return {page,errors};}
+async function setup(context){const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.FloorPlanVariants&&!!window.FloorPlanApp);return {page,errors};}
 const lib=page=>page.evaluate(k=>localStorage.getItem(k),Library.KEY);
 const projectJSON=page=>page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
 async function removeFurniture(page,mobile){const id=await page.evaluate(()=>{const o=FloorPlanApp.project.objects.find(o=>o.type!=='rug');select({kind:'furn',id:o.id});return o.id;});const del=page.locator('[data-a="del"]').first();if(mobile)await del.tap();else await del.click();await page.waitForFunction(id=>!FloorPlanApp.project.objects.some(o=>o.id===id),id);return id;}

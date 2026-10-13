@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -261,11 +261,13 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 }}
 </script>
 <link rel="stylesheet" href="css/surface-library.css">
+<link rel="stylesheet" href="css/guided-experience.css">
 </head>
 <body>
 <div class="app">
   <header>
-    <button class="btn primary" id="newProjectBtn">Nuevo proyecto</button>
+    <button class="btn primary upload-plan-cta" id="uploadPlanBtn" data-en="Upload a floor plan" data-es="Subir plano" data-en-title="Upload a floor plan image">↑ Subir plano</button>
+    <button class="btn" id="newProjectBtn">Nuevo proyecto</button>
     <button class="btn" id="newRoomBtn">+ Estancia</button>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
@@ -451,6 +453,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/raw-wall-export.js"></script>
 <script src="js/local-images.js"></script>
 <script src="js/project-package.js"></script>
+<script src="js/guide-core.js"></script>
 <script>
 /* ======================= Multilingual UI: Español / English / 中文 ======================= */
 const LANG_KEY = 'rubik-sota-floorplan-lang';
@@ -1135,6 +1138,7 @@ function renderAll(){
   renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
   window.View3D?.sync();
   window.FloorPlanTraceUI?.render();
+  window.FloorPlanGuideUI?.sync();
 }
 
 function updateHeader(){
@@ -1700,7 +1704,9 @@ function updateShot3dDims(){
   try { const s = window.View3D?.shotSize?.(o); $('#shot3dDims').textContent = s ? `${s.width} × ${s.height} px` + (s.reduced ? ' · ' + tr('已按上限缩小', 'reduced to the limit') : '') : ''; } catch { $('#shot3dDims').textContent = ''; }
 }
 function exportPNG(){
-  if (is3D()) { try { window.View3D.shot(shot3dOptions()); } catch (e) { toast(e.message || String(e), 6000); } return; }
+  const owner=project.id,revision=FloorPlanGuide.revision(project);
+  const ready=(filename=tr('户型装修方案', 'floor-plan-design')+'.png')=>window.dispatchEvent(new CustomEvent('floorplan-export-ready',{detail:{projectId:owner,revision,filename}}));
+  if (is3D()) { try { window.View3D.shot(shot3dOptions()); ready('rubik-sota-floor-plan-3D.png'); } catch (e) { toast(e.message || String(e), 6000); } return; }
   const clone = svg.cloneNode(true), W = 3200, H = Math.round(W*BOUNDS.h/BOUNDS.w);
   clone.setAttribute('viewBox', `${BOUNDS.x} ${BOUNDS.y} ${BOUNDS.w} ${BOUNDS.h}`);
   clone.setAttribute('width', W); clone.setAttribute('height', H);
@@ -1712,10 +1718,13 @@ function exportPNG(){
   clone.insertBefore(bg, clone.querySelector('#gGrid'));
   const img = new Image();
   img.onload = () => {
-    const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-    cv.getContext('2d').drawImage(img, 0, 0, W, H);
-    cv.toBlob(b => download(tr('户型装修方案', 'floor-plan-design') + '.png', b));
+    try {
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const ctx=cv.getContext('2d');if(!ctx)throw Error('No se pudo crear la imagen PNG.');ctx.drawImage(img, 0, 0, W, H);
+      cv.toBlob(b => {if(!b)return toast('No se pudo generar el PNG. Vuelve a intentarlo.',6000);download(tr('户型装修方案', 'floor-plan-design') + '.png', b);ready();});
+    } catch(e){toast(e.message,6000);}
   };
+  img.onerror=()=>toast('No se pudo generar el PNG. Revisa la imagen de referencia.',6000);
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
 }
 
@@ -1743,11 +1752,12 @@ async function setView(m){
       document.body.classList.add('m3d');await window.View3D.enter();
     }else{document.body.classList.remove('m3d');await window.View3D.exit();applyView();}
     viewMode=m;$('#tip').textContent=TIPS()[m];
+    if(m==='3d')window.dispatchEvent(new Event('floorplan-view-ready'));
   }catch(e){
     viewMode='2d';document.body.classList.remove('m3d');$('#stage').classList.remove('is3d','animating');
     toast(LANG==='es'?'La vista 3D no está disponible en este navegador. Puedes seguir trabajando en 2D.':tr('3D 不可用，可继续使用 2D','3D unavailable in this browser. You can continue in 2D.'),6000);
     applyView();
-  }finally{switching=false;document.body.classList.remove('busy');window.FloorPlanTraceUI?.viewChanged();}
+  }finally{switching=false;document.body.classList.remove('busy');window.FloorPlanTraceUI?.viewChanged();window.FloorPlanGuideUI?.sync();}
 }
 document.querySelectorAll('.menu-pop .btn').forEach(b => b.addEventListener('click', () => b.closest('details').open = false));
 document.querySelectorAll('#viewSeg .btn').forEach(b => b.onclick = () => setView(b.dataset.view));
@@ -1906,6 +1916,7 @@ window.FloorPlanApp={get project(){return project;},get geometry(){return geomet
 <script src="js/room-layout-ui.js"></script>
 <script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
+<script src="js/guide-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：

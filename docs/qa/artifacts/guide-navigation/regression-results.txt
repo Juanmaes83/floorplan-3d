@@ -1,0 +1,13 @@
+✔ guided journey, search, goals, 3D and persistence 1440x900 (35045.506457ms)
+✔ guided journey, search, goals, 3D and persistence 390x844 (13275.960867ms)
+✔ guided journey, search, goals, 3D and persistence 844x390 (11031.248709ms)
+✔ image import, calibration, review, project switching and rejected input (4049.784405ms)
+✔ keyboard suggestions, unsupported requests, language, deletion confirmation and failed save (2249.674403ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65952.090858

@@ -21,7 +21,7 @@ function withOverlap(){const p=Core.initial(),sofa=p.objects.find(o=>o.type==='s
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`layout review states and exact 2D highlight stay read-only ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const mobile=viewport.width<1000,name=`${viewport.width}x${viewport.height}`,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,acceptDownloads:true});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await page.waitForFunction(()=>!!window.FloorPlanLayoutReview&&!!window.FloorPlanTraceUI);
+ await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.FloorPlanLayoutReview&&!!window.FloorPlanTraceUI);
  // Baseline after opening the panel: the drawer itself stores the existing UI pane preference.
  await openPanel(page);const initial=await state(page);
  const status=page.locator('#layoutReviewStatus');

@@ -1,0 +1,83 @@
+/* The guide occupies a layout row: it never floats over the floor plan. */
+[hidden]{display:none!important}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{grid-template-rows:auto auto minmax(0,1fr) 30px}
+.app>main,.app>aside{grid-row:3}.app>footer{grid-row:4}
+header .brand{order:-3;margin-right:auto}header .brand b{font-size:19px;letter-spacing:-.5px}
+#actionSearchBtn{order:-2;border:1px solid var(--line);background:#f7f4ee;text-align:left;min-width:225px;color:#645b50}
+#welcomeBtn{order:-4;position:sticky;left:0;z-index:4;flex-shrink:0;background:var(--panel);border:1px solid var(--line);min-height:38px}
+.guide-controls{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:100%}
+.welcome-brand{flex-wrap:wrap;gap:12px}.welcome-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;max-width:100%}.welcome-nav .btn{min-height:44px;white-space:normal}#welcomeReturn{border:1px solid var(--line)}
+body.guided header>.advanced-control{display:none!important}
+body.guided #clearAll,body.guided #redo{display:none}
+body.guided header{flex-wrap:nowrap;min-height:64px;gap:8px}
+body.guided #newRoomBtn{display:none}
+.guide-bar{grid-column:1/-1;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 20px;min-width:0}
+.guide-top,.guide-progress-line,.guide-current{display:flex;align-items:center;gap:12px;min-width:0}
+.guide-top{justify-content:space-between}.guide-identity{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.guide-project{font-size:12px;color:#645b50;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.guide-goal{font-size:14px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.guide-top .btn{border:1px solid var(--line);min-height:34px}
+.guide-progress-line{margin:9px 0 6px;font-size:12px;color:#645b50}.guide-progress-line strong{color:var(--teal)}
+.guide-progress{height:5px;flex:1;max-width:240px;min-width:35px;background:#e8e1d6;border-radius:10px;overflow:hidden}
+.guide-progress>span{display:block;height:100%;background:var(--teal);border-radius:10px;transition:width .2s}
+.guide-steps{display:flex;list-style:none;margin:0 0 8px;padding:0;gap:8px}
+.guide-steps li{flex:1;min-width:0}.guide-steps button{border:0;background:transparent;color:#645b50;text-align:left;padding:4px 0;cursor:pointer;width:100%;white-space:nowrap;font-size:12px}
+.guide-steps button[aria-current=step]{color:var(--teal);font-weight:700}
+.guide-steps .step-number{display:inline-grid;place-items:center;width:22px;height:22px;border:1px solid var(--line);border-radius:50%;margin-right:6px;background:#fff}
+.guide-steps button[aria-current=step] .step-number{background:var(--teal);color:white;border-color:var(--teal)}
+.guide-current{border-radius:10px;background:#f5f0e7;padding:9px 12px;justify-content:space-between}.guide-current h2{font-size:14px;margin:0}.guide-current p{margin:2px 0 0;color:#645b50;font-size:12px;max-width:800px}
+.guide-current .btn{min-height:38px;flex-shrink:0}.guide-current .guide-task-copy{min-width:0}
+.guide-example{color:#755036;font-size:12px;padding-top:7px;display:flex;gap:10px;align-items:center}.guide-example .btn{font-weight:650;text-decoration:underline;padding:0 4px}
+#guideResume{border:1px solid var(--teal);color:var(--teal)}
+#welcomeDialog{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;padding:0;background:#f5f1e9;overflow:auto;color:var(--ink)}
+#welcomeDialog::backdrop{background:var(--bg)}
+.welcome-shell{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,48px)}
+.welcome-brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}.welcome-brand strong{font-size:23px;letter-spacing:-.6px}.welcome-brand small{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#716654}
+.welcome-brand .brand-mark{display:flex;align-items:center;gap:12px}.brand-glyph{display:grid;grid-template-columns:repeat(2,12px);gap:3px;transform:rotate(-8deg)}.brand-glyph i{width:12px;height:12px;background:var(--accent);border-radius:2px}.brand-glyph i:nth-child(2){background:var(--teal)}.brand-glyph i:nth-child(3){background:#d4be98}
+.welcome-intro{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:46px;align-items:center}
+.welcome-eyebrow{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 14px}
+.welcome-intro h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,4.2vw,56px);font-weight:400;line-height:1.1;letter-spacing:-1.6px;margin:0 0 16px}
+.welcome-intro .lead{font-size:16px;color:#665c50;line-height:1.6;margin:0 0 22px;max-width:470px}
+.action-search label{font-weight:600;font-size:13px;color:#51483d;display:block;margin:0 0 7px}
+.action-search input{width:100%;font-size:16px;min-height:52px;border:1px solid #cfc3b0;border-radius:12px;background:#fffdf9;padding:12px 16px;box-shadow:0 4px 18px #45331c05}
+.search-examples{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.search-examples button{border:1px solid var(--line);border-radius:20px;background:transparent;color:#655b4d;font-size:12px;padding:5px 10px;cursor:pointer}
+.action-results{display:grid;gap:6px;margin:10px 0;max-height:330px;overflow:auto;overscroll-behavior:contain}
+.action-result{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;background:#fffdf9;padding:10px 12px;cursor:pointer;white-space:normal}
+.action-result strong,.action-result span{display:block}.action-result strong{font-size:14px}.action-result span{font-size:12px;color:#645b50;margin-top:3px}.action-result .action-requirement{color:#9a4e2b}.action-result[aria-selected=true]{border-color:var(--teal);box-shadow:0 0 0 2px #2f5d6220;background:#f0f5f3}
+.search-feedback{font-size:12px;color:#645b50;min-height:1em;margin:6px 0}
+.welcome-visual{position:relative;background:#e8e2d4;border-radius:28px;padding:28px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;transform:rotate(1deg)}
+.welcome-visual svg{width:100%;height:100%;max-height:340px;filter:drop-shadow(0 10px 8px #6b54351a);transform:rotate(-1deg)}
+.welcome-visual figcaption{position:absolute;bottom:18px;left:24px;font-size:12px;color:#665c50}.welcome-visual .visual-tag{position:absolute;top:20px;right:20px;border:1px solid #cbc3b3;border-radius:20px;padding:5px 12px;background:#f6f2e8;font-size:11px;color:#526355}
+.welcome-entries{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.welcome-entry{display:flex;flex-direction:column;align-items:flex-start;border:1px solid #dbd1c1;border-radius:16px;padding:22px;background:#fffdf9;text-align:left;cursor:pointer;white-space:normal;min-width:0;position:relative}
+.welcome-entry:hover{border-color:var(--accent);box-shadow:0 6px 16px #44321f08}.welcome-entry .entry-icon{font-size:23px;color:var(--accent);margin-bottom:12px}.welcome-entry strong{font-size:17px;margin-bottom:5px}.welcome-entry span:last-child{font-size:13px;line-height:1.5;color:#665c50}
+.welcome-entry:first-child{border-color:#c69b7c;background:#fffaf4}
+.welcome-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:22px;color:#665c50;font-size:12px}.welcome-foot p{margin:0}.welcome-foot .btn{border:1px solid var(--line);white-space:normal}
+.guide-dialog{width:min(680px,94vw);padding:22px;max-height:90dvh}.guide-dialog h2{font-size:24px;letter-spacing:-.6px;margin:0 0 12px}.guide-dialog .dialog-heading{display:flex;align-items:start;justify-content:space-between;gap:12px}.guide-dialog .dialog-heading .btn{min-height:40px}
+.guide-dialog select{border:1px solid var(--line);border-radius:8px;background:white}.guide-dialog p{color:#645b50}.guide-dialog .primary{border:0!important;background:var(--accent)!important;color:#fff!important}
+.guide-task-list{display:grid;gap:8px}.guide-task{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}.guide-task h3{margin:5px 0;font-size:15px}.guide-task p{margin:5px 0;font-size:13px}.guide-task .task-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px}.guide-task .task-meta b{color:var(--teal)}.guide-task[data-state=review]{border-color:#bc8245}.guide-task details{font-size:12px;color:#645b50;margin-top:8px}.guide-task .actions{margin-top:8px}.guide-task .btn{white-space:normal;min-height:38px}
+.guide-outcome{padding:15px;border-radius:12px;background:#edf3f0;border:1px solid #b4ccc1;margin-bottom:14px}.guide-outcome strong{color:var(--teal)}.guide-outcome p{font-size:13px;margin:5px 0}.guide-outcome .btn{border:1px solid #b4ccc1;min-height:40px}
+.plan-empty{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px}.plan-empty>div{max-width:370px;background:#fffdf9e8;border:1px dashed #c7bba7;border-radius:18px;padding:22px;pointer-events:auto}.plan-empty h2{font-size:19px;margin:0 0 8px}.plan-empty p{color:#645b50;font-size:13px}.plan-empty .btn{min-height:44px}
+@media(max-width:1100px){
+ .app{grid-template-rows:auto auto minmax(0,1fr) 24px!important}
+ body.guided header{height:auto!important;min-height:56px;overflow-x:auto;padding:6px 10px;max-width:100vw}
+ body.guided header .brand span{display:none}.guide-bar{padding:8px 12px}.guide-project{max-width:110px}
+ #actionSearchBtn{min-width:180px}.guide-steps{gap:4px}.guide-steps button{font-size:11px}.guide-steps .step-number{margin-right:3px;width:20px;height:20px}
+ .guide-current p{max-width:500px}.guide-top{gap:8px}
+}
+@media(max-width:600px){
+ .welcome-shell{padding:22px 20px}.welcome-brand{margin-bottom:26px}.welcome-brand strong{font-size:20px}.welcome-brand small{font-size:9px}
+ .welcome-intro{display:block}.welcome-intro h1{font-size:39px;letter-spacing:-1px}.welcome-intro .lead{font-size:14px;margin-bottom:18px}.welcome-visual{display:none}
+ .welcome-entries{grid-template-columns:1fr;margin-top:22px;gap:10px}.welcome-entry{padding:16px 16px 16px 55px;min-height:108px}.welcome-entry .entry-icon{position:absolute;left:18px;top:20px}.welcome-entry strong{font-size:16px}.welcome-entry span:last-child{font-size:12px}
+ .welcome-foot{display:block;font-size:11px}.welcome-foot .btn{margin-top:12px}.welcome-brand .btn{font-size:12px}
+ .guide-top{align-items:start;flex-wrap:wrap}.guide-identity{display:block;flex-basis:100%}.guide-controls{display:flex;gap:6px;width:100%;justify-content:flex-end}.guide-goal{font-size:13px}.guide-project{display:block;font-size:11px;max-width:200px;margin-bottom:2px}.guide-top .btn{padding:5px 7px;font-size:11px}
+ .guide-progress-line{gap:8px;font-size:11px}.guide-progress{max-width:60px}.guide-steps{gap:2px;margin-bottom:5px}.guide-steps button{font-size:9px;white-space:normal;line-height:1.2;display:flex;align-items:center;gap:3px}.guide-steps .step-number{flex:none;width:18px;height:18px;margin:0;font-size:10px}
+ .guide-current{padding:8px;gap:8px}.guide-current h2{font-size:12px}.guide-current p{display:none}.guide-current .btn{padding:6px 8px;min-height:38px;font-size:11px;max-width:130px;white-space:normal;line-height:1.2}
+ .guide-example{font-size:10px;gap:5px;padding-top:5px}.guide-dialog{padding:16px}.guide-dialog h2{font-size:21px}.guide-task .actions{gap:4px}
+}
+@media(max-height:500px){
+ .welcome-brand{margin-bottom:16px}.welcome-intro{gap:22px}.welcome-visual{max-height:230px}.welcome-entries{margin-top:18px}.welcome-entry{padding:14px}.welcome-entry .entry-icon{margin-bottom:4px}
+ .guide-bar{padding:5px 12px}.guide-steps{display:none}.guide-current p{display:none}.guide-progress-line{margin:4px 0}.guide-current{padding:5px 9px}.guide-current .btn{min-height:32px}.guide-example{padding-top:3px}.guide-top .btn{min-height:28px}.guide-dialog{max-height:94dvh}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

@@ -226,3 +226,16 @@ el estado/SHA efectivo se verifica en su metadata antes de iniciar otra entrega.
 No se aprueba globalmente F3/Roadmap 2 ni se promueve producción manualmente.
 Siguiente entrega autorizada, **solo tras MERGED**: LAB v03 desde la v02 integrada,
 con seis modelos nuevos y cinco familias de superficie; revisión humana propia.
+
+## Experiencia unificada UI/UX — en revisión (13-10-2026)
+
+Juanma autorizó implementar bienvenida, objetivos, cinco etapas, buscador local de
+acciones, tareas necesarias/opcionales/condicionales y progreso verificable por
+proyecto. Rama `feat/unified-guided-experience`, desde master `88aef0b`. Conserva
+el comportamiento «Subir plano» de la PR #33 abierta; no modifica el schema.
+
+[Implementación y límites](technical/guided-experience.md) ·
+[Plan](technical/guided-experience-plan.md) ·
+[QA y capturas](qa/guided-experience-2026-10-13.md).
+La entrega queda pendiente de revisión visual humana. No cambia el estado
+experimental de F2 ni constituye aprobación de fases adicionales.

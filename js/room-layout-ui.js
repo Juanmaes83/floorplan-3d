@@ -10,20 +10,25 @@
  function input(id,text,value,type='number',parent=form){const label=element('label',text,parent),el=element('input',undefined,label);el.id=id;el.type=type;el.value=value;el.required=true;if(type==='number'){el.step=1;el.inputMode='numeric';}else el.maxLength=120;return el;}
  function selectInput(id,text,options,parent=form){const label=element('label',text,parent),el=element('select',undefined,label);el.id=id;for(const [value,name]of options){const o=element('option',name,el);o.value=value;}return el;}
  function close(){dialog.close();result=null;returnFocus?.focus();}
+ function cancel(){close();window.FloorPlanGuideUI?.returnFromRoom();}
  function start(name){returnFocus=document.activeElement;dialog.close();body.replaceChildren();error.textContent='';title.textContent=name;result=null;baseline=snap();owner=library?.activeId();dialog.showModal();}
- function actions(){const row=element('div');row.className='actions';button('roomDesignCancel','Cancelar',close,row);const manual=button('roomDesignManual','Trazado manual',()=>{close();if(!$('#tracePanel').hidden)return drawer('panel',true);$('#traceBtn').click();},row);manual.title='Seleccionar/editar permite ajustar vértices y muros';}
- dialog.addEventListener('cancel',()=>{result=null;});
+ function actions(){const row=element('div');row.className='actions';button('roomDesignCancel','← Volver',cancel,row);const manual=button('roomDesignManual','Trazado manual',()=>{close();window.FloorPlanGuideUI?.roomCommitted();if(!$('#tracePanel').hidden)return drawer('panel',true);$('#traceBtn').click();},row);manual.title='Seleccionar/editar permite ajustar vértices y muros';}
+ dialog.addEventListener('cancel',e=>{e.preventDefault();cancel();});
  // Store first; publish canonical state and history only after persistence succeeds.
  function apply(next,roomId){if(snap()!==baseline||library?.activeId()!==owner)throw Error('El proyecto cambió. Cancela y vuelve a preparar la operación.');
-  next.updatedAt=new Date(Math.max(Date.now(),Date.parse(next.createdAt))).toISOString();Core.validate(next);storage.setItem(STORE,JSON.stringify(next));window.FloorPlanTraceUI?.cancel();project=next;undoStack.push(baseline);if(undoStack.length>150)undoStack.shift();redoStack.length=0;ui.sel={kind:'room',id:roomId};refreshProject();renderAll();fitView();close();drawer('panel',true);
+  next.updatedAt=new Date(Math.max(Date.now(),Date.parse(next.createdAt))).toISOString();Core.validate(next);storage.setItem(STORE,JSON.stringify(next));window.FloorPlanTraceUI?.cancel();project=next;undoStack.push(baseline);if(undoStack.length>150)undoStack.shift();redoStack.length=0;ui.sel={kind:'room',id:roomId};refreshProject();renderAll();fitView();close();window.FloorPlanGuideUI?.roomCommitted();drawer('panel',true);
  }
  function createProject(){
   if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);start('Nuevo proyecto');
   element('p','Cada proyecto se guarda por separado en este navegador. Puedes abrir los anteriores en Proyectos.');
   const name=input('newProjectName','Nombre del proyecto','Mi vivienda','text',body);
-  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean)throw Error('Escribe un nombre.');const next=library.add(L.blank(clean),clean);window.FloorPlanTraceUI?.cancel();project=next;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;++importSequence;refreshProject();renderAll();fitView();close();createRoom();}catch(e){error.textContent=e.message;}});createBlank.classList.add('primary');
+  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;createBlankProject(name.value.trim());}catch(e){error.textContent=e.message;}});createBlank.classList.add('primary');
   button('newProjectImage','Desde una imagen',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean||clean.length>120)throw Error('Nombre: entre 1 y 120 caracteres.');close();FloorPlanTraceUI.openImage(true,clean);}catch(e){error.textContent=e.message;}});
   element('p','Imagen PNG, JPG/JPEG o WebP estática · hasta 15 MiB y 8000 px por lado. No se crea otro proyecto si cancelas o la imagen no es válida. Calibra y traza con Plano propio.');button('roomDesignCancel','Cancelar',close);name.focus();
+ }
+ function createBlankProject(name='Mi vivienda'){
+  if(!library)throw Error('Colección local no disponible; exporta tu proyecto.');
+  const next=library.add(L.blank(name),name);window.FloorPlanTraceUI?.cancel();project=next;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;++importSequence;refreshProject();renderAll();fitView();close();createRoom();
  }
  function setupPreview(){
   preview=element('section');preview.id='roomDesignPreview';preview.setAttribute('aria-label','Vista previa del plano');
@@ -58,5 +63,5 @@
   }catch(e){error.textContent=e.message;actions();}
  }
  $('#newProjectBtn').onclick=createProject;$('#newRoomBtn').onclick=createRoom;
- window.FloorPlanRoomUI={dimensions,createRoom,createProject};
+ window.FloorPlanRoomUI={dimensions,createRoom,createProject,createBlankProject,cancel:close};
 })();
