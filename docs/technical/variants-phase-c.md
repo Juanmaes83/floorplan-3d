@@ -1,6 +1,8 @@
 # Fase C (propuesta Pascal→Rubik): variantes seguras
 
-**Estado: implementación en rama aislada `claude/phase-c-safe-variants`, pendiente de revisión humana.**
+**Estado: integrada en `master` por [PR #30](https://github.com/Juanmaes83/floorplan-3d/pull/30)**, merge `3599e71432265860ba932147e1d9765f609b68c4` del 07-10-2026; HEAD `cf1984b0aafdcfea40b9ad35616fa8ee625dde57`.
+
+Estado reconciliado el 13-10-2026. La base, pruebas y límites siguientes pertenecen a la entrega original. D-C1 queda resuelta como metadato local de biblioteca, fuera de `FloorPlanProjectV1` y del JSON exportado. [Cierre vigente](../qa/documentation-reconciliation-2026-10-13.md).
 
 - No es una fase canónica.
 - Autorizada expresamente por Juanma solo para esta Fase C. No aprueba las fases D–G ni convierte la [propuesta](../proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md) en roadmap canónico.

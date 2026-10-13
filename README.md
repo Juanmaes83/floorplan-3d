@@ -191,3 +191,15 @@ continúa disponible y la guía puede cerrarse y recuperarse.
 Juanma aprobó la revisión y la [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) se fusionó en `master` (`92a1193fc1386d3f69566beab15923cc62836222`). La corrección de navegación forma parte de la misma entrega. «← Inicio», «← Paso anterior» y Atrás/Adelante permiten volver sin perder el documento; la URL base abre la bienvenida y recargar `#editor` retoma el trabajo. «¿Qué quieres hacer?» también se abre con Ctrl/Cmd+K.
 
 [QA de navegación](docs/qa/guide-navigation-2026-10-13.md) · [Cierre de integración](docs/qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. Los proyectos son locales al navegador y origen: usa JSON/ZIP para transportarlos entre previews o dispositivos.
+
+## Pascal y MCP local — estado reconciliado (13-10-2026)
+
+- [Revisión de distribución](docs/technical/layout-review-phase-a.md) integrada por #27: solapes, holgura explícita y barrido de puertas, con estados de evidencia y resaltado 2D.
+- [Captura 3D configurable](docs/technical/capture-3d-phase-b.md) integrada por #29: proporciones y tamaños acotados, conservando la vista de trabajo.
+- [Variantes locales](docs/technical/variants-phase-c.md) integradas por #30: copia independiente y comparación de hasta tres distribuciones; el vínculo de origen no viaja en el JSON exportado.
+- [MCP local de lectura](tools/rubik-mcp/README.md) integrado por #31: cuatro herramientas sobre un JSON exportado. No conecta con cambios sin exportar ni modifica el proyecto.
+- [Evolución MCP](docs/technical/local-mcp-roadmap.md): diagnóstico, propuestas, simulación y variante revisable son cuatro etapas propuestas, todavía pendientes.
+
+Estas entregas no añaden fases canónicas ni aprueban toda la propuesta Pascal. LAB v03 ya fue entregada en su repositorio. #33 está cerrada porque su CTA se incorporó en #34. #21 está cerrada con [diferencias preservadas](https://github.com/Juanmaes83/floorplan-3d/pull/21#issuecomment-6149918723): su adaptación visual es una entrega independiente pendiente.
+
+[Reconciliación documental de #28/#32, fuentes y límites](docs/qa/documentation-reconciliation-2026-10-13.md). Se conserva la experiencia guiada de #34/#35 y la compatibilidad de proyectos; F2 sigue experimental, con evaluación empírica pendiente.

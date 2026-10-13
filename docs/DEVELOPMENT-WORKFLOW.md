@@ -1,6 +1,8 @@
 # Flujo de trabajo por fases
 
-**Estado de referencia, 02-10-2026:** `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2` incorpora la PR #22, incluido «Legal y uso» revisado y aprobado por Juanma. Los cierres, ramas y previews fechados más abajo son antecedentes; esta ampliación F3 sigue en revisión hasta aprobación humana.
+**Estado vigente reconciliado, 13-10-2026:** base `master` `88b0cb568e9824533764518ec42e235e9c2774a9`. A/B/C y MCP de lectura integrados por #27/#29/#30/#31; guía y navegación por #34/#35. #33 cerrada como incorporada en #34; #21 cerrada con diferencias preservadas y adaptación visual independiente pendiente. [Cierre y fuentes](qa/documentation-reconciliation-2026-10-13.md). Esta tarea integra solo documentación por autorización de Juanma; no implementa la evolución MCP ni autoría visual.
+
+**Antecedente histórico de referencia, 02-10-2026:** `origin/master` `e62d17ee62576466f937700f6c445c33b09ec9c2` incorpora la PR #22, incluido «Legal y uso» revisado y aprobado por Juanma. Los cierres, ramas y previews fechados más abajo son antecedentes; esta ampliación F3 sigue en revisión hasta aprobación humana.
 
 ## Regla de avance
 
@@ -214,3 +216,64 @@ rama nueva única `feat/surface-material-library`, sin worktree ni red/permisos
 modificados. [Informe e inventario](technical/surface-material-library.md).
 Mantener pendiente la revisión humana, no fusionar ni desplegar manualmente a
 producción. READY debe corresponder al SHA final y distinguirse del acceso real.
+
+## Registros históricos recuperados de #28 y #32
+
+Las pruebas y limitaciones siguientes pertenecen a las entregas originales; no se presentan como pruebas nuevas del 13-10-2026. C ya está integrada y LAB v03 ya fue entregada. Los estados posteriores se consultan en el cierre vigente.
+
+## Cierre de Fase A — PR #27 y verificación de LAB v03 (06-10-2026)
+
+**Estado de referencia:** `origin/master` en
+`5b93339601998d750918e01cb4431073b75cf5a0`, el merge commit de
+[PR #27](https://github.com/Juanmaes83/floorplan-3d/pull/27), fusionada por Juanma
+el 06-10-2026 a las 16:36:44Z.
+
+- **Rama:** la rama de trabajo `claude/intelligent-pasteur-vci64k` (HEAD `d8ff504`) quedó integrada.
+- **Aprobación:** consta como el merge efectuado por Juanma; en GitHub no hay una review formal aparte.
+- **Pruebas, límites y capturas:** en [el informe técnico de la Fase A](technical/layout-review-phase-a.md).
+- **Sin verificar** (así consta en el informe):
+  - la preview del SHA exacto, en escritorio y móvil;
+  - un teléfono físico;
+  - una revisión visual humana registrada.
+- **Reutilización de la rama:** el seguimiento documental posterior parte de `master` `5b93339`. La rama de sesión avanzó por *fast-forward*, sin reset, rebase ni force push.
+
+**LAB v03.** La entrega «LAB v03» que el roadmap citaba como siguiente se
+verificó en modo lectura en el repositorio privado `lab-astra-sept-2026`:
+
+- [PR #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) está MERGED y aprobada por Juanma (squash `37df847`, en `feat/astra-blender-gate-1`).
+- Consumió Rubik `c4f2493` sin requerir cambios en este repositorio.
+- No se repiten importaciones, conversiones ni pruebas de esos recursos.
+
+**Siguiente paso en aquel momento (histórico, superado).** No había una entrega nueva autorizada: la decisión era de
+Juanma. Las opciones constan en el [roadmap](ROADMAP.md#siguiente-paso-decisión-pendiente-de-juanma).
+Este cierre es solo documental: no modifica código de producto, `FloorPlanProjectV1`,
+assets ni capturas.
+
+## Cierre de Fase B — PR #29 y autorización de Fase C (06-10-2026)
+
+**Estado de referencia:** `origin/master` en
+`217ed068b90232907a40b8dff7748a11e6259e7f`, el merge de
+[PR #29](https://github.com/Juanmaes83/floorplan-3d/pull/29), fusionada por Juanma
+el 06-10-2026 a las 22:15:35Z.
+
+- **Rama:** `claude/phase-b-3d-capture` (HEAD `88aa43a`), creada desde `5b93339`, independiente de esta PR documental.
+- **Pruebas, límites y capturas:** en el [informe de la Fase B](technical/capture-3d-phase-b.md).
+- **Comparación con `master`:** sin regresiones. Los 4 fallos F3 son preexistentes e idénticos.
+- **Sin verificar:** teléfono físico y revisión visual humana de la preview.
+
+**Fase C (estado histórico del 06-10-2026; integrada después por #30).** Autorizada por instrucción expresa de Juanma, como parte de la
+propuesta Pascal y no como fase canónica.
+
+- **Rama:** nueva y aislada desde `master` `217ed06` (`claude/phase-c-safe-variants`), con su propia PR.
+- **D-C1:** vínculo como metadato local de la colección, sin cambios en `FloorPlanProjectV1`. Véase el [roadmap](ROADMAP.md#fase-c-de-la-propuesta-pascalrubik--autorizada-no-canónica).
+- **Esta PR documental** se actualiza con un merge normal de `master`, sin rebase ni force push. Su estado de apertura era el de aquel momento; el cierre sustitutivo se registra en esta reconciliación.
+
+## MCP local de Rubik y roadmap de evolución — 07-10-2026
+
+Base de documentación: `master` `88aef0bfeea8abb67865c3d2a33a484c909511ea`, después de fusionar las PR #30 (variantes) y #31 (MCP local). La [PR #31](https://github.com/Juanmaes83/floorplan-3d/pull/31) entrega un servidor local stdio de solo lectura para JSON exportado: cuatro herramientas, hash por consulta y listas de campos permitidos. No modifica la aplicación, el contrato ni el archivo.
+
+Juanma probó el servidor desde Claude Code en Windows. `npm run check` pasó. `npm test` dio 5/6 porque Windows devolvió `EPERM` al crear el symlink de una fixture de seguridad; el workflow de GitHub Actions de la PR #31 pasó 6/6 en Linux. No se cambió la política de seguridad ni se pidió elevar permisos.
+
+La auditoría del JSON de prueba confirmó consultas paginadas, búsquedas, detalles, revisión sin umbral y prueba explícita a 600 mm; el hash permaneció constante y el proyecto no se modificó. El informe separó datos devueltos por MCP de agrupaciones y explicaciones deducidas por Claude. El filtro de habitación y cuatro pares aparentemente atravesados por muros quedan como hipótesis de diagnóstico a reproducir, no como defectos ya demostrados.
+
+El [roadmap específico](technical/local-mcp-roadmap.md) registra cuatro etapas propuestas: diagnóstico fiable, propuestas explicables, simulación aislada y creación de una variante revisable. Este cambio es documental; no autoriza herramientas de escritura ni altera `FloorPlanProjectV1`. No se ejecutaron suites del producto para una actualización documental. Los aportes de la PR #28, sobre cierres A/B y autorización C, y los de #32 se recuperan ahora sin mezclar cambios de producto.

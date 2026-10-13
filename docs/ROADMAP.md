@@ -38,9 +38,33 @@ sustituye medición profesional, planos de ejecución ni certificación técnica
 | F1a | Modelo, migración, importación/exportación JSON, varios proyectos locales, español/marca, mobile-first y fallback WebGL | Aprobada e integrada: PR #4 (`de195e3`) y #5 (`67e7498`). El 3D se deriva de la misma geometría. |
 | F1b | Imagen raster local, calibración y segunda cota, trazado/edición, W1–W4, IndexedDB y ZIP | Aprobada e integrada: PR #6 (`7b5b083`). Seguimiento de claridad de importación y WebP estático integrado por PR #7 (`c28a170`). Cinco planos autorizados y medición de rendimiento móvil pendientes. |
 | F2 | Asistencia a interpretación, sugerencias editables y revisión humana | **Prototipo experimental integrado y revisado; F2 no validada.** PR #9 fusionada por Juanma el 30-09-2026 (merge `10f7439`). Añade sugerencias locales de muros con aceptación/corrección/rechazo humanos. Siguen pendientes la línea base de cinco sesiones, el conjunto fijo de veinte planos con referencias y los umbrales. [Informe y limitaciones](technical/F2-wall-assist.md). Herramienta offline de evaluación geométrica integrada por PR #10. Juanma aprobó el 30-09-2026 el método de precisión/exhaustividad por longitud; diagonales sin crédito en el comparador de ejes y conservadas en denominadores globales. Sin umbrales de producto ni validación empírica de F2: [reglas y uso](technical/F2-wall-evaluation.md). |
-| F3 | Catálogo de objetos 3D y materiales con assets autorizados; verificación física por recurso | **Entregas acotadas integradas.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 integró 50 mapas locales CC0-1.0 en cinco familias para suelos y paredes, con aplicación persistente, búsqueda, comparación, repetición y fallback (`FloorPlanProjectV1` 1.4.0; merge `fa79d07`). PR #20 integró un pipeline reproducible y acotado y doce GLB normalizados de Asset Lab (merge squash `2925081`); las medidas nuevas son de malla, sin escala física verificada. PR #23 añade seis GLB, visualmente aprobados por Juanma; merge autorizado sujeto a cierre técnico y conservación de los bytes revisados. No hay sincronización automática con Asset Lab, soporte universal de modelos ni catálogo comercial general. Otros perfiles/extensiones y PBR son propuestas futuras; rendimiento en teléfono físico pendiente. [Materiales](technical/surface-material-library.md) · [Pipeline](technical/F3-asset-lab-pipeline.md) · [Tanda #23](technical/F3-asset-lab-next.md). |
+| F3 | Catálogo de objetos 3D y materiales con assets autorizados; verificación física por recurso | **Entregas acotadas integradas.** PR #17 incorporó SONGESAND y puf STOCKHOLM con búsqueda/filtros; PR #19 integró 50 mapas locales CC0-1.0 en cinco familias para suelos y paredes, con aplicación persistente, búsqueda, comparación, repetición y fallback (`FloorPlanProjectV1` 1.4.0; merge `fa79d07`). PR #20 integró un pipeline reproducible y acotado y doce GLB normalizados de Asset Lab (merge squash `2925081`); las medidas nuevas son de malla, sin escala física verificada. PR #23 añadió seis GLB, visualmente aprobados por Juanma e integrados por squash `c4f2493195c05fe54ca22bc1b9fbaf7ea1681af3`, comprobado en #35; el cierre técnico anterior es histórico. No hay sincronización automática con Asset Lab, soporte universal de modelos ni catálogo comercial general. Otros perfiles/extensiones y PBR son propuestas futuras; rendimiento en teléfono físico pendiente. [Materiales](technical/surface-material-library.md) · [Pipeline](technical/F3-asset-lab-pipeline.md) · [Tanda #23](technical/F3-asset-lab-next.md). |
 | Entrega legal integrada | Autoría visible y apartado «Legal y uso» en la plataforma | Integrada por PR #22, merge `e62d17ee62576466f937700f6c445c33b09ec9c2`, comprobado el 02-10-2026. Texto informativo, no asesoramiento jurídico; conserva licencias y atribuciones de recursos de terceros. |
 | Entrega post-F3, sin numeración nueva | Inicio de proyectos vacíos/desde imagen y edición directa de dimensiones de estancias rectangulares | Aprobada e integrada por PR #18 (`c7d1b81` revisado; merge `10e9f96`). No modifica schema 1.3.0; limita edición numérica a geometría ortogonal inequívoca. [Informe](technical/home-room-dimensions.md). |
+
+## Integraciones Pascal y MCP — estado reconciliado (13-10-2026)
+
+Base auditada: `master` `88b0cb568e9824533764518ec42e235e9c2774a9`; referencia conservada en `baseline/control-2026-10-13-88b0cb5`. La bienvenida, buscador, guía y navegación de #34/#35 permanecen integrados.
+
+| Entrega | Estado actual | Evidencia y alcance |
+| --- | --- | --- |
+| A: revisión local de distribución | Integrada por [#27](https://github.com/Juanmaes83/floorplan-3d/pull/27), merge `5b93339601998d750918e01cb4431073b75cf5a0` | Solapes, holgura explícita y barrido de puertas; lectura y resaltado sin persistencia. [Informe](technical/layout-review-phase-a.md). D-A1 sigue abierta. |
+| B: captura 3D configurable | Integrada por [#29](https://github.com/Juanmaes83/floorplan-3d/pull/29), merge `217ed068b90232907a40b8dff7748a11e6259e7f` | Tamaño/proporción y restauración de cámara/buffer; [informe](technical/capture-3d-phase-b.md). |
+| C: variantes locales seguras | Integrada por [#30](https://github.com/Juanmaes83/floorplan-3d/pull/30), merge `3599e71432265860ba932147e1d9765f609b68c4` | Original y hasta dos variantes, comparación y borrado. D-C1 resuelta como metadato de biblioteca, fuera del JSON exportado. [Informe](technical/variants-phase-c.md). |
+| MCP local v0.1.0 | Integrado por [#31](https://github.com/Juanmaes83/floorplan-3d/pull/31), merge `88aef0bfeea8abb67865c3d2a33a484c909511ea` | Cuatro herramientas sobre un JSON exportado, stdio, solo lectura, hash por consulta. No conecta con la sesión activa ni crea variantes. [Uso](../tools/rubik-mcp/README.md). |
+| Evolución del MCP | Cuatro etapas propuestas; no implementadas por esta documentación | Diagnóstico fiable, propuestas explicables, simulación aislada y variante revisable. [Roadmap MCP](technical/local-mcp-roadmap.md). |
+| LAB v03 | Entregada y aprobada en LAB [#4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4), squash `37df8472e6163263f435424f6989b6c0e10b8ad9` | Base `feat/astra-blender-gate-1`; consumió Rubik `c4f2493`. No es otra implementación pendiente de Floorplan. LAB #1/#5 permanecen abiertas y separadas. |
+| Autoría rescatada de #21 | Rescate documental; adaptación visual pendiente | #21 cerrada sin merge; #22 conserva el panel vigente. Crédito en cabecera y textos adicionales requieren una PR mínima y revisión propia. [Seguimiento](qa/documentation-reconciliation-2026-10-13.md#adaptación-visual-rescatada-de-21--entrega-independiente). |
+
+A/B/C son entregas de la propuesta Pascal, no nuevas fases canónicas. El MCP implementa un subconjunto de lectura relacionado con D1; no equivale a aprobar toda D ni D–G. F2 continúa experimental: cinco sesiones, veinte planos con referencias y umbrales pendientes; escala física de modelos y rendimiento en teléfono siguen sin acreditar.
+
+## MCP local de Rubik — primera entrega y evolución propuesta
+
+La PR #31 ofrece `get_project_summary`, `list_project_elements`, `get_project_element` y `review_layout`; revalida el JSON, limita campos y devuelve SHA-256. La evidencia de uso reportada el 07-10-2026 conserva 47 llamadas con hash estable y sin escrituras. Windows: `npm run check` correcto y 5/6 tests por `EPERM` al crear un symlink de fixture; CI Linux 6/6.
+
+El filtro por habitación y cuatro pares de holgura posiblemente separados por muros son hipótesis a reproducir. Los 600 mm fueron un valor de prueba, no un umbral normativo ni un defecto demostrado. Las cuatro etapas del [roadmap específico](technical/local-mcp-roadmap.md) requieren implementación y revisión propias; esta reconciliación no añade herramientas de escritura ni cambia `FloorPlanProjectV1`.
+
+La [reconciliación de #28/#32](qa/documentation-reconciliation-2026-10-13.md) conserva fuentes, aportes únicos, resultados históricos y límites. Las PR originales se cierran como sustituidas después de comprobar el merge de esta actualización; sus ramas y SHAs se conservan durante este cierre.
 
 ## Correspondencia con el roadmap histórico de PR #2
 
@@ -242,3 +266,190 @@ el comportamiento «Subir plano» de la PR #33 abierta; no modifica el schema.
 Juanma aprobó la versión corregida y autorizó el merge. [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) fusionada en `92a1193fc1386d3f69566beab15923cc62836222`, desde el HEAD revisado `5f0ae7200c206fec2ad22ada8b5be3ae17ebd5f0`. El árbol del merge coincide con el probado. Incluye Inicio visible, Paso anterior, Atrás/Adelante y recuperación sin pérdida de proyecto; URL base → bienvenida, recarga de `#editor` → editor.
 
 [QA de retorno](qa/guide-navigation-2026-10-13.md) · [Cierre, pruebas y deployment](qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. No cambia el estado experimental de F2 ni constituye aprobación de fases adicionales. PR #33 sigue abierta; su comportamiento ya está incluido, no requiere una segunda integración de la misma CTA.
+
+## Registro histórico rescatado de PR #28 — 06-10-2026
+
+> Este registro conserva la evidencia y las decisiones de aquella fecha. El estado vigente está en la sección «Integraciones Pascal y MCP». Fase C ya está integrada por #30; las menciones a autorizaciones, próximos pasos y PR abiertas de este registro no sustituyen ese estado. LAB #1/#5 siguen abiertas según la comprobación del 13-10-2026.
+
+### Estado posterior al 06-10-2026 — cierre de Fase A (PR #27) y verificación de LAB v03
+
+Comprobado contra GitHub el 06-10-2026: `origin/master` en
+`5b93339601998d750918e01cb4431073b75cf5a0`. Las secciones anteriores se conservan
+como registro histórico fechado.
+
+### Fase A de la propuesta Pascal–Rubik — integrada por PR #27
+
+[PR #27](https://github.com/Juanmaes83/floorplan-3d/pull/27) se fusionó el
+06-10-2026 a las 16:36:44Z con un merge commit,
+`5b93339601998d750918e01cb4431073b75cf5a0`, cuyos padres son `c4f2493` y el HEAD
+de la rama `d8ff504f166bbc9ecc750aa516efc24832ff3595`.
+
+**Aprobación.** La ejecutó Juanma mediante el merge (`merged_by: Juanmaes83`). En
+GitHub no consta una review formal ni un comentario de aprobación separado. La
+entrega se hizo por instrucción expresa de Juanma, en una rama aislada.
+
+**Qué integra:**
+
+- La auditoría [PASCAL-RUBIK-INTEGRATION-ROADMAP](proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md), que sigue siendo una **propuesta no aprobada**.
+- La revisión local de distribución, de solo lectura:
+  - solapes de huellas orientadas;
+  - holgura frente a un umbral que introduce la persona;
+  - barrido de puertas con bisagra y sentido guardados;
+  - estados `checked`/`partial`/`insufficient_evidence`, también cuando se omite geometría;
+  - resaltado 2D exacto y no persistido.
+
+**Qué no cambia:**
+
+- `FloorPlanProjectV1`, su schema, ejes, unidades, persistencia y formato.
+- No asigna numeración canónica a la Fase A ni aprueba otras fases Pascal: la Fase B y siguientes siguen siendo propuestas.
+
+**Decisión de esta iteración.** No hay umbral de holgura predeterminado; sin él,
+la holgura queda en `insufficient_evidence`. Ofrecer valores orientativos sigue
+pendiente (D-A1 de la propuesta).
+
+**Pruebas registradas** en [el informe técnico](technical/layout-review-phase-a.md).
+Se ejecutaron en secuencia, sobre clones aislados, y con Three.js 0.160.0 servido
+desde el tarball npm por el bloqueo de jsDelivr.
+
+| Suite | `master` | Fase A |
+| --- | --- | --- |
+| Pruebas de la Fase A | — | 18/18 (16 unitarias + 2 de navegador) |
+| Unitarias existentes | 124 pasan, 1 omitida (Blender) | 124 pasan, 1 omitida (Blender) |
+| `browser.test` | 36 pasan, 1 omitida (chequeo de CDN propio) | 36 pasan, 1 omitida (chequeo de CDN propio) |
+| F3 | 21 pasan, 4 fallan (2, 15, 16, 17) | 21 pasan, 4 fallan (los mismos) |
+| Superficies | 7/7 | 7/7 |
+| Dimensiones | 5/5 | 5/5 |
+
+Los 4 fallos de F3 son preexistentes: el mismo error `replaceChildren … blur` y
+el mismo número de ocurrencias en ambas versiones.
+
+**Límites que se conservan:**
+
+- No evalúa altura, holgura frente a muros, recorridos ni entrega de muebles, normativa, accesibilidad ni mallas 3D.
+- A poco zoom en móvil el resaltado es pequeño.
+- No se verificaron la preview del SHA exacto, un teléfono físico ni la revisión visual humana registrada en el informe técnico.
+
+### LAB v03 — ya satisfecha en el repositorio LAB; no requiere cambios en Rubik
+
+La línea anterior «Siguiente entrega autorizada, solo tras MERGED: LAB v03 desde
+la v02 integrada, con seis modelos nuevos y cinco familias de superficie» se
+refería al piloto **Rubik → LAB** del repositorio privado
+[`lab-astra-sept-2026`](https://github.com/Juanmaes83/lab-astra-sept-2026), no a
+una entrega de código de Rubik. Verificación de solo lectura del 06-10-2026:
+
+| Entrega LAB | PR | Estado | Rama base / merge |
+| --- | --- | --- | --- |
+| Piloto sintético Blender | [LAB #2](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/2) | Cerrada el 02-10-2026; el registro LAB la da por fusionada (`4e447ff`) | `feat/astra-blender-gate-1` |
+| v02, transferencia de catálogo | [LAB #3](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/3) | Cerrada el 02-10-2026; squash `101d94a` según el registro LAB | `feat/astra-blender-gate-1` |
+| **v03, catálogo F3 ampliado** | [LAB #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) | **MERGED** el 02-10-2026 a las 20:31:16Z por Juanmaes83; cuerpo: «Aprobada por Juanma» | squash `37df8472e6163263f435424f6989b6c0e10b8ad9` en `feat/astra-blender-gate-1` |
+
+Según [`docs/17-RUBIK-LAB-PILOT-v03.md`](https://github.com/Juanmaes83/lab-astra-sept-2026/blob/37df8472e6163263f435424f6989b6c0e10b8ad9/docs/17-RUBIK-LAB-PILOT-v03.md):
+
+- **Productor:** v03 tomó como productor fijado Rubik `c4f2493`, el squash de PR #23.
+- **Seis modelos nuevos:** son los seis modelos de #23 (GLOSTAD 2 plazas, STRANDMON, SKOGSTA, KNOXHULT, STOCKHOLM aparador y NORDLI), sumados a los cinco de control de v02.
+- **Cinco familias de superficie:** son cinco superficies actuales de la biblioteca #19, una por familia (`herringbone-parquet`, `marble-01`, `terrazzo-tiles`, `blue-plaster-wall` y `square-tiles`).
+- **En Rubik:** todos esos recursos ya estaban integrados; v03 no modificó Rubik ni pide importaciones, conversiones, cambios de contrato, loaders o persistencia.
+- **Lo que no acredita:** compatibilidad de todo el catálogo, escala de fabricante, rendimiento en móvil físico, photoreal ni conexión de producto.
+
+**Conclusión:** LAB v03 está entregada y aprobada en su repositorio. En esta
+verificación no se cambió código de producto de Rubik.
+
+### Siguiente paso: decisión pendiente de Juanma
+
+> **Registro histórico, superado.** Después de esta sección Juanma autorizó la Fase B, ya integrada por PR #29, y la Fase C. Véase la [actualización siguiente](#actualización-06-10-2026--fase-b-integrada-pr-29-y-fase-c-autorizada). Las demás opciones siguen pendientes.
+
+Con Fase A integrada y LAB v03 cerrada, este roadmap **no define ahora otra
+entrega autorizada**. No se inventa ninguna. Hechos verificados para decidir:
+
+- En el LAB está abierta la [PR #5 «Rubik v03 — Living camera preflight [HUMAN REVIEW]»](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/5), creada el 03-10-2026 desde `codex/rubik-living-walkthrough-v01`. Es trabajo del repositorio LAB, pendiente de revisión humana allí. No se ha auditado su contenido en esta tarea y no figura como entrega de Rubik.
+- [LAB PR #1 «F2-A — Astra + Blender MCP Gate 1»](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/1) sigue abierta, como decisión separada.
+- Siguen pendientes:
+  - en Rubik: la validación empírica F2 (cinco sesiones, veinte planos y umbrales), la escala física de los modelos de malla, el rendimiento en teléfono físico y D-01;
+  - de la propuesta Pascal: la decisión D-A1 y las fases B–G, sin aprobar.
+
+Opciones, sin preferencia asignada:
+
+1. Revisar LAB #5 en su repositorio.
+2. Aprobar expresamente otra propuesta acotada, por ejemplo la Fase B (captura 3D configurable) de la propuesta Pascal.
+3. Priorizar la validación empírica F2 o la medición en teléfono físico.
+
+Hasta esa decisión no se inicia ninguna entrega nueva de producto.
+
+## Actualización 06-10-2026 — Fase B integrada (PR #29) y Fase C autorizada
+
+Comprobado contra GitHub el 06-10-2026:
+
+- `origin/master` en `217ed068b90232907a40b8dff7748a11e6259e7f`, el merge de PR #29, con padres `5b93339` y `88aa43aa4922dbee4fb414bb0630c68b6654f895`.
+- Las secciones anteriores son registros fechados y se conservan.
+
+### Fase B de la propuesta Pascal–Rubik — integrada por PR #29
+
+[PR #29](https://github.com/Juanmaes83/floorplan-3d/pull/29) se fusionó el
+06-10-2026 a las 22:15:35Z (`merged_by: Juanmaes83`). HEAD revisado:
+`88aa43aa4922dbee4fb414bb0630c68b6654f895`; Vercel informó `success` para ese SHA.
+Detalle en [el informe técnico de la Fase B](technical/capture-3d-phase-b.md).
+
+**Qué integra:**
+
+- Tamaño de captura 3D: «Vista actual» por defecto (el comportamiento anterior) o lado mayor de 1280, 1920 o 2560 px.
+- Proporción: igual que la vista, 16:9, 4:3, 1:1 o 9:16.
+- Las opciones son solo de sesión.
+
+**Cómo funciona:**
+
+- Reutiliza el mismo renderer con una copia de la cámara y encuadre «contain».
+- Restaura el canvas de forma síncrona: no cambian la vista, la cámara, el canvas, el proyecto, el historial ni `localStorage`.
+
+**Límites:**
+
+- 2560 px por lado.
+- Presupuesto de 2560 × 1920 px, además de los límites de la GPU.
+- Si el buffer real no coincide con lo pedido, la captura se aborta con un aviso.
+
+**Pruebas registradas** (secuenciales, en clon aislado):
+
+| Suite | `master` | Fase B |
+| --- | --- | --- |
+| `capture-3d.browser` (nuevo) | — | 3/3 |
+| Fase A | 18/18 | 18/18 |
+| Unitarias | 124 pasan, 1 omitida | 124 pasan, 1 omitida |
+| `browser.test` | 36 pasan, 1 omitida | 36 pasan, 1 omitida |
+| F3 | 21 pasan, 4 fallan | 21 pasan, 4 fallan (los mismos, preexistentes) |
+| Superficies | 7/7 | 7/7 |
+| Dimensiones | 5/5 | 5/5 |
+
+**Límites que se conservan:**
+
+- Memoria y tiempo en teléfono físico sin medir: el presupuesto es un cálculo, no una medición.
+- SwiftShader no acredita GPU real.
+- Las etiquetas CSS2D no aparecen en la imagen.
+- `READY` o `success` no sustituyen la revisión visual humana.
+
+No cambia `FloorPlanProjectV1`.
+
+### Fase C de la propuesta Pascal–Rubik — autorizada, no canónica
+
+Juanma autorizó el 06-10-2026, por instrucción expresa, implementar la **Fase C
+(variantes seguras)** de la [propuesta](proposals/PASCAL-RUBIK-INTEGRATION-ROADMAP.md):
+
+- duplicar una distribución;
+- editar la copia sin alterar el original;
+- comparar hasta tres distribuciones con métricas y avisos existentes;
+- borrar una variante con confirmación.
+
+La autorización no convierte las fases A–G en fases canónicas ni autoriza las
+fases D–G. La implementación va en una PR independiente de esta, con su propio
+informe técnico.
+
+**Decisión D-C1 resuelta para esta entrega:**
+
+- El vínculo variante → original se guarda como **metadato local de la colección de proyectos** del navegador.
+- Referencia el `id` de la entrada de la biblioteca local.
+- Queda fuera del JSON exportado y de `FloorPlanProjectV1`: sin `extensions['x-variant-of']`, sin campos nuevos ni cambios de versión o schema.
+- Si una variante se exporta e importa en otra instalación, sigue siendo un proyecto válido, pero sin vínculo con su origen.
+
+### Pendientes que no cambian
+
+- **Rubik:** validación empírica F2 (cinco sesiones, veinte planos y umbrales), escala física de los modelos de malla, rendimiento en teléfono físico y D-01.
+- **Propuesta Pascal:** D-A1 sigue abierta; las fases D–G siguen sin aprobar.
+- **Repositorio LAB:** las PR #1 y #5 siguen siendo decisiones separadas en ese repositorio.
