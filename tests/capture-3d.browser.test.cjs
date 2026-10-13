@@ -9,12 +9,13 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));})
 async function setup(t,viewport){const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  // Official Three.js 0.160.0 modules fetched with the system curl, as in the other software-3D suites.
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();let p=cache.get(target);if(!p){p=run('curl',['--fail','--silent','--show-error','--max-time','20',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout);cache.set(target,p);}await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await p});});
- await page.goto(url);await page.waitForFunction(()=>window.View3D);
+ await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>window.View3D);
  if(mobile)await page.evaluate(()=>document.querySelectorAll('aside.open').forEach(a=>a.classList.remove('open')));
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
  await page.waitForTimeout(1500);return {page,errors,mobile};}
+// Guide output evidence is separate metadata and may change; editable document and other storage stay untouched.
 // Everything the capture must leave untouched: project, history, storage, working camera and working canvas.
-const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))),camera:View3D.cameraState,canvas:View3D.canvasState}));
+const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,redo:redoStack.length,storage:JSON.stringify(Object.fromEntries(Object.keys(localStorage).filter(k=>k!=='rubik-sota-guide-v1').sort().map(k=>[k,localStorage.getItem(k)]))),camera:View3D.cameraState,canvas:View3D.canvasState}));
 async function capture(page,size,aspect){
  await page.evaluate(([size,aspect])=>{document.querySelector('details.menu').open=true;const s=document.querySelector('#shot3dSize'),a=document.querySelector('#shot3dAspect');s.value=size;s.dispatchEvent(new Event('change'));a.value=aspect;a.dispatchEvent(new Event('change'));},[size,aspect]);
  assert.equal(await page.locator('#shot3dAspect').isDisabled(),size==='view','aspect only applies to explicit sizes');

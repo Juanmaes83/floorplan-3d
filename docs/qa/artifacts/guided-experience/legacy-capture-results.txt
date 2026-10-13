@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: 3D capture options download real PNGs without touching the working view 1440x900
+ok 1 - 3D capture options download real PNGs without touching the working view 1440x900
+  ---
+  duration_ms: 59447.396406
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59823.173752

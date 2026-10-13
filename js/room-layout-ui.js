@@ -21,9 +21,13 @@
   if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);start('Nuevo proyecto');
   element('p','Cada proyecto se guarda por separado en este navegador. Puedes abrir los anteriores en Proyectos.');
   const name=input('newProjectName','Nombre del proyecto','Mi vivienda','text',body);
-  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean)throw Error('Escribe un nombre.');const next=library.add(L.blank(clean),clean);window.FloorPlanTraceUI?.cancel();project=next;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;++importSequence;refreshProject();renderAll();fitView();close();createRoom();}catch(e){error.textContent=e.message;}});createBlank.classList.add('primary');
+  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;createBlankProject(name.value.trim());}catch(e){error.textContent=e.message;}});createBlank.classList.add('primary');
   button('newProjectImage','Desde una imagen',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean||clean.length>120)throw Error('Nombre: entre 1 y 120 caracteres.');close();FloorPlanTraceUI.openImage(true,clean);}catch(e){error.textContent=e.message;}});
   element('p','Imagen PNG, JPG/JPEG o WebP estática · hasta 15 MiB y 8000 px por lado. No se crea otro proyecto si cancelas o la imagen no es válida. Calibra y traza con Plano propio.');button('roomDesignCancel','Cancelar',close);name.focus();
+ }
+ function createBlankProject(name='Mi vivienda'){
+  if(!library)throw Error('Colección local no disponible; exporta tu proyecto.');
+  const next=library.add(L.blank(name),name);window.FloorPlanTraceUI?.cancel();project=next;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;++importSequence;refreshProject();renderAll();fitView();close();createRoom();
  }
  function setupPreview(){
   preview=element('section');preview.id='roomDesignPreview';preview.setAttribute('aria-label','Vista previa del plano');
@@ -58,5 +62,5 @@
   }catch(e){error.textContent=e.message;actions();}
  }
  $('#newProjectBtn').onclick=createProject;$('#newRoomBtn').onclick=createRoom;
- window.FloorPlanRoomUI={dimensions,createRoom,createProject};
+ window.FloorPlanRoomUI={dimensions,createRoom,createProject,createBlankProject};
 })();
