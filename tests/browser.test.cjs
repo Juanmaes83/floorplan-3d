@@ -178,17 +178,23 @@ async function softwareModules(page,t){
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 completion: touch 2D/3D ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
  const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#tgLib').tap();await page.locator('.item[data-key="0:0"]').tap();assert.equal(await page.locator('#gFurn .furn').count(),47);
- await page.locator('#aRot').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
+ await page.locator('#fab [data-a="rotR"]').tap();assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).rotationDeg),90);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-2d.png`});
  await page.locator('[data-view="3d"]').tap();await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));
  assert.equal(await page.locator('aside.open').count(),0);
  const result=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),r=canvas.getBoundingClientRect(),small=document.createElement('canvas');small.width=small.height=32;const c=small.getContext('2d');c.drawImage(canvas,0,0,32,32);return {ratio:r.height/innerHeight,width:r.width,overflow:document.documentElement.scrollWidth>innerWidth,colors:new Set(c.getImageData(0,0,32,32).data).size,same:View3D.renderedSource===FloorPlanApp.project};});
  t.diagnostic(JSON.stringify(result));assert.ok(result.ratio>=.6);assert.ok(result.width>300);assert.ok(result.colors>20);assert.equal(result.overflow,false);assert.equal(result.same,true);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-3d.png`});
+ // The selected furniture can capture a drag at this viewport; clear that selection before testing camera orbit.
+ await page.keyboard.press('Escape');
  const prior=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());
  const session=await context.newCDPSession(page),box=await page.locator('#view3d canvas').boundingBox(),x=box.x+box.width*.5,y=box.y+box.height*.3;
+ assert.ok(box.x>=0&&box.x+box.width<=viewport.width,JSON.stringify({box,viewport}));
  await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
- for(let i=1;i<=8;i++)await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
+ for(let i=1;i<=8;i++){
+  await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
+  await page.evaluate(()=>new Promise(requestAnimationFrame));
+ }
  await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(400);
  assert.notEqual(await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL()),prior);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-orbit.png`});

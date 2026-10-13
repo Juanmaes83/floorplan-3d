@@ -75,6 +75,8 @@ Primera comprobación de la corrección, SHA `62ef50a`: los tres recorridos de e
 
 [Informe de revisión, capturas y evidencia](pr38-review-2026-10-13.md). Las correcciones están publicadas, pero la suite completa no pudo ejecutarse sobre el código final por el bloqueo de facturación de GitHub Actions. La PR permanece en borrador; no se declaran nueve regresiones aprobadas ni aprobación de merge.
 
+**Actualización local posterior:** [ejecución completa de los dos workflows](pr38-local-final-2026-10-13.md): 176/0/1 unitarias de multiformato, 165/0/1 de guía y 26/26 más 45/45 pruebas de navegador. Las nueve regresiones quedan confirmadas localmente; GitHub Actions continúa bloqueado antes de ejecutar pruebas. La PR sigue en borrador y sin merge.
+
 ## Límites conservados
 
 RoomPlan solo tiene fixtures de estructura; falta un escaneo real de iPhone. DWG no se importa directamente. DXF/PDF/IFC admiten el subconjunto documentado, con resultados estimados y revisables. La detección raster sigue siendo experimental y ortogonal. F2 no queda validada, no se aprueban umbrales ni se atribuye rendimiento en teléfonos físicos. No cambia FloorPlanProjectV1, sus unidades ni los modelos/materiales ya integrados.

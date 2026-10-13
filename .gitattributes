@@ -4,6 +4,7 @@ js/project-core.js text eol=lf
 js/project-schema.js text eol=lf
 js/asset-catalog.js text eol=lf
 js/generic-catalog.js text eol=lf
+js/wall-assist.js text eol=lf
 assets/f3/*.txt text eol=lf
 assets/f3/*.json text eol=lf
 assets/interop/*.txt text eol=lf
