@@ -68,6 +68,7 @@
   const words=q.split(' '),has=terms=>terms.split(' ').some(w=>words.some((t,i)=>t===w||i===words.length-1&&t.length>=3&&t.length<w.length&&w.startsWith(t)));
   if(has('cambiar modificar change edit')&&has('cocina kitchen')&&!has('pared paredes muro muebles suelo floor wall furniture'))return ['walls','furniture','floor'].map(id=>({id,...actions[id],ambiguous:true}));
   if(has('borrar vaciar eliminar clear delete remove')&&has('muebles furniture'))return [{id:'clear',...actions.clear}];
+  if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house pdf png jpg jpeg webp heic tiff svg dxf ifc roomplan json zip bmp gif avif'))return [{id:'upload',...actions.upload}];
   if(has('exportar export captura capture png descargar download'))return [{id:'export',...actions.export}];
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house'))return [{id:'upload',...actions.upload}];
   const catalogTerms=Object.entries(furnitureSearch.specs).map(([type,[,terms]])=>[type,terms.split(' ')[0],terms.split(' ').filter(t=>t!=='cocina').join(' ')]);
