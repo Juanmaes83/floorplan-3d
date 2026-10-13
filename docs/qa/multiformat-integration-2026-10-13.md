@@ -71,6 +71,10 @@ El workflow guarda la evidencia en `qa-results/`, una carpeta visible para uploa
 
 Primera comprobación de la corrección, SHA `62ef50a`: los tres recorridos de editor completo/recuperación pasaron y el artefacto se publicó. Falló una prueba de calibración guiada (`estimated` en lugar de `real`); el paso de regresiones quedó sin ejecutar. Se estabilizan también los clics de cota después de las transiciones, usando el `getScreenCTM()` real del SVG, y se comprueba que la segunda cota sea consistente antes de confirmar. Se conserva la tolerancia del producto; no se fuerza el estado de escala ni se omite la prueba.
 
+## Revisión final y bloqueo de verificación
+
+[Informe de revisión, capturas y evidencia](pr38-review-2026-10-13.md). Las correcciones están publicadas, pero la suite completa no pudo ejecutarse sobre el código final por el bloqueo de facturación de GitHub Actions. La PR permanece en borrador; no se declaran nueve regresiones aprobadas ni aprobación de merge.
+
 ## Límites conservados
 
 RoomPlan solo tiene fixtures de estructura; falta un escaneo real de iPhone. DWG no se importa directamente. DXF/PDF/IFC admiten el subconjunto documentado, con resultados estimados y revisables. La detección raster sigue siendo experimental y ortogonal. F2 no queda validada, no se aprueban umbrales ni se atribuye rendimiento en teléfonos físicos. No cambia FloorPlanProjectV1, sus unidades ni los modelos/materiales ya integrados.
