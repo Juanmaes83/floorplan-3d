@@ -242,3 +242,29 @@ el comportamiento «Subir plano» de la PR #33 abierta; no modifica el schema.
 Juanma aprobó la versión corregida y autorizó el merge. [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) fusionada en `92a1193fc1386d3f69566beab15923cc62836222`, desde el HEAD revisado `5f0ae7200c206fec2ad22ada8b5be3ae17ebd5f0`. El árbol del merge coincide con el probado. Incluye Inicio visible, Paso anterior, Atrás/Adelante y recuperación sin pérdida de proyecto; URL base → bienvenida, recarga de `#editor` → editor.
 
 [QA de retorno](qa/guide-navigation-2026-10-13.md) · [Cierre, pruebas y deployment](qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. No cambia el estado experimental de F2 ni constituye aprobación de fases adicionales. PR #33 sigue abierta; su comportamiento ya está incluido, no requiere una segunda integración de la misma CTA.
+
+## Casa Serra → Floorplan — preparación de integración (13-10-2026)
+
+Juanma autoriza sumar las mejoras visuales de Casa Serra a Floorplan y confirma
+permiso/licencia para su uso e integración en este proyecto. **Estado actual:
+estudio y preparación documentados; implementación y pruebas de producto pendientes.**
+No se asigna fase F4 ni se considera aprobado globalmente Roadmap 2.
+
+La [especificación de integración](technical/casa-serra-integration.md) fija
+fuentes por SHA, módulos reales, requisitos, restauración de estado y secuencia:
+CS-1 presentación por estancias desde buscador/Revisar y guardar; CS-2 materiales
+PBR selectivos y calidad; CS-3 efectos de dibujo y rutas interiores comprobadas.
+Se reutilizan guía #34, capturas #29, variantes #30 y exportador #24.
+
+Astra se conserva como contexto del flujo plano → render existente. La
+[LAB PR #4](https://github.com/Juanmaes83/lab-astra-sept-2026/pull/4) acredita
+v03 aprobado en la rama operativa `feat/astra-blender-gate-1`, squash
+`37df8472e6163263f435424f6989b6c0e10b8ad9`, con renders y reapertura Blender.
+Las menciones históricas a main documental o LAB v03 como siguiente entrega
+no describen esa rama operativa. Este seguimiento no modifica el LAB ni abre
+otra producción de vídeo; PR #28/#32 conservan sus cierres documentales separados.
+
+Se comprobaron bytes/hash y decodificación de seis mapas fuente; no se
+incorporaron al catálogo ni se midió rendimiento. [Protocolo y casos pendientes](qa/casa-serra-integration-plan.md).
+Primera implementación propuesta: CS-1. La revisión de cada entrega debe
+preceder al siguiente incremento dependiente según el workflow vigente.

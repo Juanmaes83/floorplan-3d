@@ -284,3 +284,33 @@ revalidaron y deben consultarse antes de diseñar cada integración.
 - Estado de aquella revisión: PR #15 permanecía pendiente y Codex no la fusionó. Estado actual comprobado el 01-10-2026: #15 fusionada en `4ab39025379cbbb8873dd344183967aafa0a1bdc` y #3 en `5e5e0dc42b8669e7afcb121851f2901d2930a260`. La biblioteca está autorizada de forma acotada; el resto sigue siendo propuesta.
 
 La entrega histórica de biblioteca se documenta en [el informe específico](technical/surface-material-library.md); #20 se documenta en [su informe](technical/F3-asset-lab-pipeline.md). Ninguna inicia los conectores ni aprueba el conjunto del Roadmap 2.
+
+## 13. Incorporación autorizada de Casa Serra a Floorplan (13-10-2026)
+
+Este alcance concreto responde a la instrucción de Juanma y su confirmación
+de permisos de Casa Serra para Floorplan. El resto del Roadmap 2 mantiene sus
+decisiones/prioridades abiertas. No se reabre ni renumera F0–F3.
+
+[Diseño técnico preparado](technical/casa-serra-integration.md) ·
+[Protocolo de aceptación](qa/casa-serra-integration-plan.md).
+
+| Incremento | Alcance y puntos de integración | Estado |
+| --- | --- | --- |
+| CS-1 | Modo presentación por estancias; acción del buscador y acceso en Revisar y guardar; vistas derivadas del plano; fichas y retorno exacto al editor | Preparado para implementación; código/pruebas pendientes |
+| CS-2 | Piloto PBR de roble/mármol, validación de canales/UV y calidad con presupuesto; preservación de los 50 acabados y fallback | Preparado como incremento dependiente de CS-1; recurso fuente auditado, integración pendiente |
+| CS-3 | Dibujo→material opcional, recorrido interior con verificación de trayectoria y cámaras derivadas reutilizables | Diseño preparado; depende de restauración y presupuesto comprobados |
+
+La primera entrega utiliza la escena/guía actuales, sin sustituir geometría por
+Casa Serra ni duplicar Three. Las cámaras de la casa original son referencias
+de diseño, no trayectorias válidas para proyectos arbitrarios. Las tareas y
+porcentajes de la guía se mantienen separados de la posición del tour.
+
+LAB v03 ya fue aprobado/fusionado en su rama operativa mediante LAB PR #4.
+Las referencias anteriores a v03 pendiente/main documental son antecedentes.
+El paquete offline #24 y el flujo render del LAB se preservan como contexto.
+Esta incorporación se trabaja en Floorplan; no añade un sistema de vídeo,
+nuevo backend, conexión de producto o tareas en Astra.
+
+Esta revisión documental no ejecutó suites de producto ni generó una preview
+con las mejoras. El gate siguiente es implementar/probar CS-1 y revisar su
+deployment del SHA final. CS-2/CS-3 se entregan después de cerrar sus dependencias.
