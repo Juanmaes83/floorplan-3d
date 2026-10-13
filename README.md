@@ -191,3 +191,16 @@ continúa disponible y la guía puede cerrarse y recuperarse.
 Juanma aprobó la revisión y la [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) se fusionó en `master` (`92a1193fc1386d3f69566beab15923cc62836222`). La corrección de navegación forma parte de la misma entrega. «← Inicio», «← Paso anterior» y Atrás/Adelante permiten volver sin perder el documento; la URL base abre la bienvenida y recargar `#editor` retoma el trabajo. «¿Qué quieres hacer?» también se abre con Ctrl/Cmd+K.
 
 [QA de navegación](docs/qa/guide-navigation-2026-10-13.md) · [Cierre de integración](docs/qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. Los proyectos son locales al navegador y origen: usa JSON/ZIP para transportarlos entre previews o dispositivos.
+
+## Casa Serra — preparación de mejoras visuales
+
+Juanma autoriza incorporar las mejoras visuales de Casa Serra en Floorplan.
+La preparación concreta incluye presentación por estancias desde el buscador
+y «Revisar y guardar», materiales PBR selectivos y efectos opcionales posteriores.
+**Es planificación; el modo presentación todavía no está implementado.**
+Se reutilizan guía, capturas y exportador actuales, conservando el flujo de
+render ya trabajado en Astra Labs como contexto, sin abrir una producción nueva
+de vídeo.
+
+[Especificación y orden de integración](docs/technical/casa-serra-integration.md) ·
+[Pruebas de aceptación pendientes](docs/qa/casa-serra-integration-plan.md).
