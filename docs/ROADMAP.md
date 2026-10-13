@@ -1,6 +1,8 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
-Actualizado: 02-10-2026 al reconciliar la PR #23 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`. Se conserva la exportación de PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y sus cierres documentales #25/#26. La revisión visual de los seis modelos #23 fue aprobada por Juanma; el cierre por squash queda condicionado a pruebas, igualdad del contenido visible y preview READY del HEAD reconciliado. Vercel confirmó `READY` para producción en el SHA histórico de PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); no se promueve producción manualmente. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
+Actualizado: 13-10-2026. Experiencia guiada y navegación de vuelta integradas por [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34), merge `92a1193fc1386d3f69566beab15923cc62836222`; [cierre y evidencia](qa/guided-experience-integration-2026-10-13.md). La PR #23 también figura MERGED (`c4f2493195c05fe54ca22bc1b9fbaf7ea1681af3`), verificado en GitHub. F2 sigue experimental y no validada; sus cinco sesiones y veinte planos con referencias siguen pendientes. Esta integración no aprueba otras fases.
+
+**Antecedente del 02-10-2026:** al reconciliar la PR #23 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`. Se conserva la exportación de PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y sus cierres documentales #25/#26. La revisión visual de los seis modelos #23 fue aprobada por Juanma; el cierre por squash queda condicionado a pruebas, igualdad del contenido visible y preview READY del HEAD reconciliado. Vercel confirmó `READY` para producción en el SHA histórico de PR #20 (`29250810a8341b3b296539118b54799f1e31a77b`); no se promueve producción manualmente. La auditoría de integración del ecosistema quedó integrada mediante PR #13; merge squash `a403a52e7be467b96aa580cbceca55f0f653fb79` (rama revisada `docs/ecosystem-integration-audit`, HEAD `be931f827b96369b6b9147e6fb6d6d6ea0b3901b`). PR #9 integrada en `master` mediante merge commit
 `10f7439b3fc86b0a0bd325d94531709d45cbcad4`; PR #10 mediante
 `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`; PR #11 mediante
 `49ea432f7d8eba75042e00762c902a7d3830040d`; PR #12 (F3 inicial) mediante
@@ -213,7 +215,7 @@ Vercel informó READY para el SHA revisado; la preview estuvo disponible en [est
 
 **Estado en el cierre de #19:** F3 incorporaba el piloto de mobiliario externo y esta biblioteca acotada. La propuesta siguiente era evaluar un pipeline controlado para modelos; #20 integró después su primera versión limitada para doce GLB. No se afirma completado un catálogo comercial ilimitado, un pipeline universal ni perfiles PBR completos. F2 continúa experimental: cinco sesiones y veinte planos con referencias siguen pendientes, sin bloquear el desarrollo.
 
-## Cierre de tanda F3 #23 — alcance aprobado
+## Cierre de tanda F3 #23 — integrado
 
 Los seis modelos GLOSTAD/KNOXHULT/NORDLI/SKOGSTA/STOCKHOLM/STRANDMON están
 aprobados visualmente por Juanma en HEAD `5b7267f84380586d5e482373bd70f0392e896009`.
@@ -222,12 +224,12 @@ el exportador #24. El pipeline repite los mismos hashes, seis admitidos y dos
 exclusiones; no cambia loader, schema ni contenido visible aprobado.
 [Reconciliación, pruebas, fallos y procedimiento de cierre](qa/f3-reconciliation-2026-10-02.md).
 Esta sección forma parte del squash autorizado de [PR #23](https://github.com/Juanmaes83/floorplan-3d/pull/23);
-el estado/SHA efectivo se verifica en su metadata antes de iniciar otra entrega.
+su metadata confirma MERGED y squash `c4f2493195c05fe54ca22bc1b9fbaf7ea1681af3` (comprobación 13-10-2026).
 No se aprueba globalmente F3/Roadmap 2 ni se promueve producción manualmente.
 Siguiente entrega autorizada, **solo tras MERGED**: LAB v03 desde la v02 integrada,
 con seis modelos nuevos y cinco familias de superficie; revisión humana propia.
 
-## Experiencia unificada UI/UX — en revisión (13-10-2026)
+## Experiencia unificada UI/UX — integrada (13-10-2026)
 
 Juanma autorizó implementar bienvenida, objetivos, cinco etapas, buscador local de
 acciones, tareas necesarias/opcionales/condicionales y progreso verificable por
@@ -237,5 +239,6 @@ el comportamiento «Subir plano» de la PR #33 abierta; no modifica el schema.
 [Implementación y límites](technical/guided-experience.md) ·
 [Plan](technical/guided-experience-plan.md) ·
 [QA y capturas](qa/guided-experience-2026-10-13.md).
-La entrega queda pendiente de revisión visual humana. No cambia el estado
-experimental de F2 ni constituye aprobación de fases adicionales.
+Juanma aprobó la versión corregida y autorizó el merge. [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) fusionada en `92a1193fc1386d3f69566beab15923cc62836222`, desde el HEAD revisado `5f0ae7200c206fec2ad22ada8b5be3ae17ebd5f0`. El árbol del merge coincide con el probado. Incluye Inicio visible, Paso anterior, Atrás/Adelante y recuperación sin pérdida de proyecto; URL base → bienvenida, recarga de `#editor` → editor.
+
+[QA de retorno](qa/guide-navigation-2026-10-13.md) · [Cierre, pruebas y deployment](qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. No cambia el estado experimental de F2 ni constituye aprobación de fases adicionales. PR #33 sigue abierta; su comportamiento ya está incluido, no requiere una segunda integración de la misma CTA.

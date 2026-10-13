@@ -1,6 +1,6 @@
-# Experiencia guiada Rubik Sota — revisión UI/UX
+# Experiencia guiada Rubik Sota — integrada
 
-Entrega autorizada el 13-10-2026 en `feat/unified-guided-experience`, desde master `88aef0bfeea8abb67865c3d2a33a484c909511ea`. Sin merge ni promoción manual a producción. La preview y el SHA final se verifican en la PR de esta rama.
+Entrega autorizada el 13-10-2026 en `feat/unified-guided-experience`, desde master `88aef0bfeea8abb67865c3d2a33a484c909511ea`. Juanma aprobó la revisión de `5f0ae7200c206fec2ad22ada8b5be3ae17ebd5f0` y la [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) se fusionó en `master` (`92a1193fc1386d3f69566beab15923cc62836222`). [Cierre y comprobaciones](../qa/guided-experience-integration-2026-10-13.md). Producción automática READY; sin promoción manual.
 
 ## Experiencia
 
@@ -10,7 +10,7 @@ Entrega autorizada el 13-10-2026 en `feat/unified-guided-experience`, desde mast
 - Cinco etapas, objetivo visible, tarea actual, acción principal y detalles de todas las tareas. El progreso ocupa una fila del editor; no tapa el plano.
 - Buscador local con sugerencias, tildes, mayúsculas, sinónimos y tipos de mueble del catálogo existente. Navegación con flechas/Enter/Escape y Ctrl/Cmd+K. «Cambiar la cocina» muestra tres posibilidades compatibles con el editor.
 - Guía cerrable y recuperable. Acceso al editor completo, historial existente y confirmaciones de vaciado/eliminación. El modo completo sigue disponible al crear otro proyecto.
-- Español principal y textos nuevos ES/EN/ZH; adaptación a móvil vertical y horizontal; foco visible, combobox/listbox y estados con texto, símbolo y color. La bienvenida no reaparece al retomar un proyecto guardado.
+- Español principal y textos nuevos ES/EN/ZH; adaptación a móvil vertical y horizontal; foco visible, combobox/listbox y estados con texto, símbolo y color. La URL base abre la bienvenida con continuación del proyecto conservado; recargar `#editor` retoma el editor sin reabrirla.
 
 ## Integración de «Subir plano»
 

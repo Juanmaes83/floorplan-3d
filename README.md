@@ -174,11 +174,11 @@ por squash en `master` (`29250810a8341b3b296539118b54799f1e31a77b`). Vercel conf
 producción `READY` para ese SHA. La escala física y el rendimiento en teléfono
 físico siguen pendientes; esta integración no convierte el catálogo en universal.
 
-## Tanda F3 #23 — revisión aprobada y cierre de integración
+## Tanda F3 #23 — integrada
 
-La [PR #23](https://github.com/Juanmaes83/floorplan-3d/pull/23) incorpora GLOSTAD, KNOXHULT, NORDLI, SKOGSTA, STOCKHOLM y STRANDMON. Juanma aprobó visualmente la tanda y autorizó su squash; esta entrega reconcilia la misma rama con master `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`, preservando sus modelos/UI y el exportador de PR #24. El cierre documental se integra junto con esta reconciliación, no en una rama documental separada; el estado MERGED y SHA squash se consultan en la PR. Dos candidatos fuera del perfil siguen excluidos. Todas las dimensiones nuevas son medidas de malla, no especificaciones oficiales ni escala física verificada. [Informe de la tanda](docs/technical/F3-asset-lab-next.md) · [reconciliación y QA](docs/qa/f3-reconciliation-2026-10-02.md) · [roadmap](docs/ROADMAP.md). No se hace promoción manual a producción ni se modifica la PR #21.
+La [PR #23](https://github.com/Juanmaes83/floorplan-3d/pull/23) incorpora GLOSTAD, KNOXHULT, NORDLI, SKOGSTA, STOCKHOLM y STRANDMON. Juanma aprobó visualmente la tanda y autorizó su squash; esta entrega reconcilia la misma rama con master `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`, preservando sus modelos/UI y el exportador de PR #24. La PR #23 figura MERGED, con squash `c4f2493195c05fe54ca22bc1b9fbaf7ea1681af3`, comprobado el 13-10-2026. Su cierre documental se integró junto con esa reconciliación. Dos candidatos fuera del perfil siguen excluidos. Todas las dimensiones nuevas son medidas de malla, no especificaciones oficiales ni escala física verificada. [Informe de la tanda](docs/technical/F3-asset-lab-next.md) · [reconciliación y QA](docs/qa/f3-reconciliation-2026-10-02.md) · [roadmap](docs/ROADMAP.md). No se hace promoción manual a producción ni se modifica la PR #21.
 
-## Experiencia guiada — rama de revisión UI/UX (13-10-2026)
+## Experiencia guiada — integrada (13-10-2026)
 
 La bienvenida y «¿Qué quieres hacer?» conectan necesidades con herramientas reales.
 Cada proyecto conserva objetivo, tareas y progreso comprobable en metadatos separados
@@ -188,4 +188,6 @@ continúa disponible y la guía puede cerrarse y recuperarse.
 
 [Alcance, evidencia y límites](docs/technical/guided-experience.md) ·
 [Validación y capturas](docs/qa/guided-experience-2026-10-13.md).
-Entrega en revisión, sin merge ni promoción manual a producción.
+Juanma aprobó la revisión y la [PR #34](https://github.com/Juanmaes83/floorplan-3d/pull/34) se fusionó en `master` (`92a1193fc1386d3f69566beab15923cc62836222`). La corrección de navegación forma parte de la misma entrega. «← Inicio», «← Paso anterior» y Atrás/Adelante permiten volver sin perder el documento; la URL base abre la bienvenida y recargar `#editor` retoma el trabajo. «¿Qué quieres hacer?» también se abre con Ctrl/Cmd+K.
+
+[QA de navegación](docs/qa/guide-navigation-2026-10-13.md) · [Cierre de integración](docs/qa/guided-experience-integration-2026-10-13.md). Producción automática READY para el merge; sin promoción manual. Los proyectos son locales al navegador y origen: usa JSON/ZIP para transportarlos entre previews o dispositivos.
