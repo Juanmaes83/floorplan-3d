@@ -69,6 +69,8 @@ Comprobación local de esta corrección: **176 unitarias aprobadas, 0 fallos, 1 
 
 El workflow guarda la evidencia en `qa-results/`, una carpeta visible para upload-artifact; la carpeta oculta anterior no produjo ningún artefacto. Ahora la ausencia de evidencia se considera un error. El resultado final, el SHA probado, los logs, el artefacto y la preview exacta se registran en la descripción de #38 después de terminar las comprobaciones.
 
+Primera comprobación de la corrección, SHA `62ef50a`: los tres recorridos de editor completo/recuperación pasaron y el artefacto se publicó. Falló una prueba de calibración guiada (`estimated` en lugar de `real`); el paso de regresiones quedó sin ejecutar. Se estabilizan también los clics de cota después de las transiciones, usando el `getScreenCTM()` real del SVG, y se comprueba que la segunda cota sea consistente antes de confirmar. Se conserva la tolerancia del producto; no se fuerza el estado de escala ni se omite la prueba.
+
 ## Límites conservados
 
 RoomPlan solo tiene fixtures de estructura; falta un escaneo real de iPhone. DWG no se importa directamente. DXF/PDF/IFC admiten el subconjunto documentado, con resultados estimados y revisables. La detección raster sigue siendo experimental y ortogonal. F2 no queda validada, no se aprueban umbrales ni se atribuye rendimiento en teléfonos físicos. No cambia FloorPlanProjectV1, sus unidades ni los modelos/materiales ya integrados.
