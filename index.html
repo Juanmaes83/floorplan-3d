@@ -37,6 +37,10 @@ header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 1
 .btn.chip.on{background:var(--accent-soft);color:var(--accent)}
 .btn.primary{background:var(--accent);color:#fff}
 .btn.primary:hover{background:#9f5530}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#dropOverlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(40,30,20,.55);color:#fff;font-size:22px;font-weight:600;pointer-events:none}
+#dropOverlay.show{display:flex}
+#dropOverlay span{border:3px dashed #fff;border-radius:16px;padding:32px 40px;background:rgba(181,101,58,.85);text-align:center;max-width:80vw}
 .btn.danger{color:#b3372a}
 .spacer{flex:1}
 aside{background:var(--panel);overflow:auto;border-right:1px solid var(--line)}
@@ -100,6 +104,7 @@ tr.click:hover td{background:#faf5ee}
 .form input[type=color]{padding:2px;height:30px}
 .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .actions .btn{border:1px solid var(--line);background:#fff}
+.actions .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .mats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .mat{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fff;cursor:pointer;text-align:left}
 .mat.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
@@ -266,8 +271,10 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <body>
 <div class="app">
   <header>
-    <button class="btn primary upload-plan-cta" id="uploadPlanBtn" data-en="Upload a floor plan" data-es="Subir plano" data-en-title="Upload a floor plan image">↑ Subir plano</button>
+    <button class="btn primary upload-plan-cta" id="uploadPlanBtn" aria-describedby="uploadPlanHelp" data-en="Upload a floor plan" data-es="Subir plano" data-en-title="Upload a floor plan or project">上传平面图</button>
+    <button class="btn" id="uploadCancel" hidden data-en="Cancel import" data-es="Cancelar importación">取消导入</button>
     <button class="btn" id="newProjectBtn">Nuevo proyecto</button>
+    <span id="uploadPlanHelp" class="sr-only" data-en="PDF (image or vector drawing), image (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, RoomPlan scan (JSON) or Rubik Sota project (JSON/ZIP). You can also drag the file onto the page." data-es="PDF (imagen o dibujo vectorial), imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, escaneo RoomPlan (JSON) o proyecto Rubik Sota (JSON/ZIP). También puedes arrastrar el archivo a la página.">PDF（图片或矢量图）、图片 (PNG、JPG、WebP、HEIC、TIFF、BMP、GIF、AVIF)、SVG、CAD DXF、BIM IFC、RoomPlan 扫描 (JSON) 或 Rubik Sota 项目 (JSON/ZIP)。也可以把文件拖到页面上。</span>
     <button class="btn" id="newRoomBtn">+ Estancia</button>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
@@ -351,12 +358,12 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
         </div>
         <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
-        <span id="importJsonHelp" class="import-help" data-en="Project data only (.json); images use the action below." data-es="Datos de proyecto (.json); para imágenes usa la acción siguiente.">项目数据 (.json)；图片请使用下方操作。</span>
-        <button class="btn" id="importImage" data-en="Load floor plan image (PNG/JPG/WebP)" data-es="Cargar imagen de plano (PNG/JPG/WebP)" aria-describedby="importImageHelp">加载平面图图片 (PNG/JPG/WebP)</button>
-        <span id="importImageHelp" class="import-help" data-en="Static image, up to 15 MiB and 8000 px on the longest side. Creates a new local project; keeps the current one. PDF/HEIC: export a local raster copy first." data-es="Imagen estática, hasta 15 MiB y 8000 px en el lado mayor. Crea un proyecto local y conserva el actual. PDF/HEIC: exporta primero una copia raster local.">静态图片，最大 15 MiB / 8000 px。创建本地项目并保留当前项目。PDF/HEIC 请先导出本地图片。</span>
+        <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
+        <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
     <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
+    <input type="file" id="uploadIn" aria-label="Subir plano" hidden>
   </header>
 
   <aside class="lib">
@@ -421,6 +428,9 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 </dialog>
 <input type="file" id="traceImageFile" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" aria-label="Imagen de plano PNG, JPG o WebP" hidden>
 <input type="file" id="traceZipFile" accept=".zip,application/zip" hidden>
+<div id="dropOverlay" aria-hidden="true"><span data-en="Drop the plan to upload it (PDF, image, DXF, IFC, RoomPlan or project)" data-es="Suelta el plano para subirlo (PDF, imagen, DXF, IFC, RoomPlan o proyecto)">松开以上传平面图 (PDF、图片、DXF、IFC、RoomPlan 或项目)</span></div>
+<dialog id="uploadPdfMode" aria-labelledby="uploadPdfModeTitle"><form method="dialog"><h3 id="uploadPdfModeTitle" data-en="PDF vector drawing" data-es="PDF con dibujo vectorial">PDF 矢量绘图</h3><p id="uploadPdfModeInfo"></p><label>Escala del plano 1: <input type="number" id="uploadPdfScale" min="1" max="1000" step="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate id="uploadPdfCancel" data-en="Cancel" data-es="Cancelar">取消</button> <button class="btn" value="raster" formnovalidate id="uploadPdfRaster" data-en="Use as image" data-es="Usar como imagen">用作图片</button> <button class="btn primary" value="vector" id="uploadPdfVector" data-en="Import measured walls" data-es="Importar muros con medidas">导入带尺寸的墙体</button></p></form></dialog>
+<dialog id="uploadPdfPage" aria-labelledby="uploadPdfTitle"><form method="dialog"><h3 id="uploadPdfTitle">Elegir página del PDF</h3><p id="uploadPdfInfo"></p><label>Página <input type="number" id="uploadPdfNumber" min="1" value="1" required></label><p class="actions"><button class="btn" value="cancel" formnovalidate>Cancelar</button> <button class="btn primary" value="ok" id="uploadPdfOk">Usar página</button></p></form></dialog>
 <dialog id="traceDistance" aria-labelledby="traceDistanceTitle"><h2 id="traceDistanceTitle">Distancia conocida</h2><p id="tracePoints"></p><label>Distancia real en milímetros <input id="traceKnown" type="number" min="1" max="100000" step="1" required></label><p>Medidas orientativas. La segunda cota usa un aviso provisional del 2 %.</p><button id="traceDistanceSave" class="btn primary">Guardar cota</button><button id="traceDistanceCancel" class="btn">Cancelar</button><p id="traceDistanceError" role="alert"></p></dialog>
 <dialog id="projectsDialog" aria-labelledby="projectsTitle"><h2 id="projectsTitle">Proyectos locales</h2>
 <p>Se guardan en este navegador. Exporta el JSON para conservar una copia.</p>
@@ -446,6 +456,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 <script src="js/safe-dom.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
+<script src="js/plan-intake.js"></script>
 <script src="js/layout-review.js"></script>
 <script src="js/project-variants.js"></script>
 <script src="js/room-layout.js"></script>
@@ -574,7 +585,7 @@ const ES_TEXT = {
   "Export image": "Exportar imagen",
   "Export plan JSON": "Exportar plano JSON",
   "Import project JSON": "Importar proyecto JSON",
-  "Choose a project JSON file. For PNG/JPG/WebP, use Load floor plan image.": "Selecciona un proyecto JSON. Para PNG/JPG/WebP usa Cargar imagen de plano.",
+  "Choose a project JSON file. For PDF, images or DXF, use Upload plan.": "Selecciona un proyecto JSON. Para PDF, imágenes o DXF usa Subir plano.",
   "Reset to default": "Restablecer diseño inicial",
   "Rooms · click to fly there": "Estancias · pulsa para ir a ellas",
   "Walk mode": "Modo recorrido",
@@ -593,13 +604,20 @@ const ES_TEXT = {
   "Redo (Ctrl+Shift+Z)": "Rehacer (Ctrl+Mayús+Z)",
   "Remove all furniture and appliances (undoable)": "Retirar todos los muebles y electrodomésticos (se puede deshacer)",
   "Snap furniture to walls while dragging": "Ajustar los muebles a los muros al arrastrar",
-  "3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan": "3 dormitorios · 2 salones · 2 baños · Plano de referencia"
+  "3 bedrooms · 2 living rooms · 2 bathrooms · Reference plan": "3 dormitorios · 2 salones · 2 baños · Plano de referencia",
+  " — previous format migrated": " — formato anterior migrado",
+  " — newer V1 fields retained": " — se conservan campos V1 nuevos",
+  "Project file exceeds 15 MB": "El archivo de proyecto supera 15 MB",
+  "The JSON file is invalid or incomplete.": "El archivo JSON no es válido o está incompleto.",
+  "This is not a Rubik Sota project JSON.": "No es un proyecto JSON de Rubik Sota.",
+  "The plan has a background image: exported as ZIP (JSON + original image).": "El plano tiene imagen de fondo: se ha exportado como ZIP (JSON + imagen original).",
+  "The background image is not stored in this browser: only the JSON was exported.": "La imagen de fondo no está guardada en este navegador: solo se ha exportado el JSON."
 };
 const tr = (zh, en) => LANG === 'en' ? en : LANG === 'es' ? translateEs(zh, en) : zh;
 function translateEs(zh, en){
   if (ES_TEXT[en]) return ES_TEXT[en];
   let m;
-  if ((m=en.match(/^Net floor area ≈ (.+) m² · Units: mm · Original scale 1:60$/))) return `Superficie útil aprox. ${m[1]} m² · Unidades: mm · Escala original 1:60`;
+  if ((m=en.match(/^Net floor area ≈ (.+) m² · Units: mm(?: · Original scale (1:\d+))?$/))) return `Superficie útil aprox. ${m[1]} m² · Unidades: mm${m[2]?' · Escala original '+m[2]:''}`;
   if ((m=en.match(/^Wall area \(2\.8m ceiling, openings not deducted\) ≈ (.+) m²$/))) return `Superficie de muros aprox. ${m[1]} m² (altura: 2,8 m; sin descontar puertas ni ventanas)`;
   if ((m=en.match(/^(\d+) items$/))) return `${m[1]} elementos`;
   if ((m=en.match(/^Remove all (\d+) furniture \/ appliance items\?\nWalls, flooring and measurements are kept\. You can Undo this\.$/))) return `¿Retirar los ${m[1]} muebles o electrodomésticos?\nSe conservan los muros, pavimentos y mediciones. Puedes deshacerlo.`;
@@ -753,7 +771,7 @@ function applyStaticLang(){
     el.dataset.zhTitle ??= el.title;
     el.title = LANG === 'zh' ? el.dataset.zhTitle : LANG === 'es' ? (el.dataset.esTitle || ES_TEXT[el.dataset.enTitle] || el.dataset.enTitle) : el.dataset.enTitle;
   });
-  for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
+  for(const [id,labels] of [['fileIn',{es:'Proyecto JSON',en:'Project JSON',zh:'项目 JSON'}],['uploadIn',{es:'Subir plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto',en:'Upload plan: PDF, image, DXF, IFC, RoomPlan or project',zh:'上传平面图：PDF、图片、DXF、IFC、RoomPlan 或项目'}],['traceImageFile',{es:'Imagen de plano PNG, JPG o WebP',en:'Floor plan image PNG, JPG or WebP',zh:'平面图图片 PNG、JPG 或 WebP'}]])document.getElementById(id)?.setAttribute('aria-label',labels[LANG]);
   const langBtn = document.getElementById('langBtn');
   langBtn.textContent = ({es:'EN',en:'中文',zh:'ES'})[LANG];
   langBtn.title = LANG === 'es' ? 'Cambiar idioma' : LANG === 'en' ? 'Change language' : '切换语言';
@@ -1141,9 +1159,11 @@ function renderAll(){
   window.FloorPlanGuideUI?.sync();
 }
 
+const REFERENCE_ID=Core.initial().id;
 function updateHeader(){
   const tot = geometry.rooms.filter(r => r.counted !== false).reduce((a,r) => a + area(r.poly), 0);
   const ratio=project.scale.declaredRatio;
+  const meta=document.querySelector('.plan-meta');if(meta)meta.hidden=project.id!==REFERENCE_ID;
   $('#subtitle').textContent=tr(`套内使用面积约 ${fmt(tot)} m² · 尺寸单位 mm${ratio?' · 原图比例 '+ratio:''}`,`Net floor area ≈ ${fmt(tot)} m² · Units: mm${ratio?' · Original scale '+ratio:''}`);
   $('#undo').disabled = !undoStack.length; $('#redo').disabled = !redoStack.length;
   $('#undo').style.opacity = undoStack.length ? 1 : .4; $('#redo').style.opacity = redoStack.length ? 1 : .4;
@@ -1805,22 +1825,27 @@ drawer(null);                                  // 恢复上次的面板收起状
 $('#exportPng').onclick = exportPNG;
 ['#shot3dSize','#shot3dAspect'].forEach(id => $(id).onchange = updateShot3dDims);
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
-$('#exportJson').onclick = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
-$('#importJson').onclick = () => { document.querySelector('details.menu').open=false;$('#fileIn').click(); };
+const exportProjectJson = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
+$('#exportJson').onclick = exportProjectJson;
+$('#importJson').onclick = () => {document.querySelector('details.menu').open=false;$('#fileIn').click();};
 let importSequence=0;
-$('#fileIn').onchange = async e => {
-  const file=e.target.files[0];e.target.value='';if(!file)return;
-  const sequence=++importSequence;
+function beginFileImport(){return {sequence:++importSequence,entryId:library?.activeId(),snapshot:snap(),route:window.FloorPlanGuideUI?.captureImport()};}
+function fileImportCurrent(operation){return !!operation&&operation.sequence===importSequence&&operation.entryId===library?.activeId()&&operation.snapshot===snap()&&(!operation.route||window.FloorPlanGuideUI?.importRouteCurrent(operation.route));}
+function cancelFileImport(){++importSequence;window.FloorPlanUpload?.cancelDialogs();}
+function fileImportCompleted(operation,origin){window.FloorPlanGuideUI?.imported(operation.route,origin);}
+$('#fileIn').onchange = e => {const file=e.target.files[0];e.target.value='';if(file)importProjectFile(file);};
+async function importProjectFile(file,{fromUpload=false,transaction}={}){
+  const operation=transaction||beginFileImport();
   try {
-    if(file.size>15*1024*1024)throw new Error('Project file exceeds 15 MB');
-    if(!/\.json$/i.test(file.name)||file.type&&!['application/json','text/plain'].includes(file.type))throw new Error(tr('请选择 JSON 项目；图片请使用加载图片操作。','Choose a project JSON file. For PNG/JPG/WebP, use Load floor plan image.'));
-    const text=await file.text();if(sequence!==importSequence)return;
-    const before=snap();const next=Core.importInto(projectStore,text);window.FloorPlanTraceUI?.cancel();
-    ui.sel=null;ui.mA=ui.mCur=null;undoStack.push(before);if(undoStack.length>150)undoStack.shift();redoStack.length=0;
-    refreshProject();renderAll();fitView();
-    toast(tr('方案已导入','Plan imported') + (next.migrated?' — previous format migrated':'') + (next.project.schemaVersion!=='1.0.0'?' — newer V1 fields retained':''));
-  } catch(err){toast(tr('无法导入：','Import rejected: ') + err.message,6000);}
-};
+    if(file.size>15*1024*1024)throw new Error(tr('项目文件超过 15 MB','Project file exceeds 15 MB'));
+    if(!fromUpload&&(!/\.json$/i.test(file.name)||file.type&&!['application/json','text/plain'].includes(file.type)))throw new Error(tr('请选择 JSON 项目；PDF、图片或 DXF 请使用上传平面图。','Choose a project JSON file. For PDF, images or DXF, use Upload plan.'));
+    const text=await file.text();if(!fileImportCurrent(operation))return false;
+    const next=Core.prepare(text);
+    if(!window.FloorPlanTraceUI.adoptProject(next.project,next.project.name||file.name.replace(/\.[^.]*$/,''),{transaction:operation,origin:'project'}))return false;
+    toast(tr('方案已导入','Plan imported') + (next.migrated?tr(' — 已迁移旧格式',' — previous format migrated'):'') + (next.project.schemaVersion!=='1.0.0'?tr(' — 已保留 V1 新字段',' — newer V1 fields retained'):''));
+    return true;
+  } catch(err){toast(tr('无法导入：','Import rejected: ') + (err instanceof SyntaxError?tr('JSON 文件无效或不完整。','The JSON file is invalid or incomplete.'):/schemaVersion: unsupported version/.test(err.message)?tr('不是 Rubik Sota 项目 JSON。','This is not a Rubik Sota project JSON.'):err.message),6000);return false;}
+}
 $('#reset').onclick = () => { if (confirm(tr('恢复为默认设计方案？（可撤销）', 'Reset to the default design? (undoable)'))){ const b = snap(); project = defaultState(); ui.sel = null; commit(b); renderAll(); } };
 // 横竖屏切换、表头换行等都会改变画布尺寸；尺寸从 0 恢复（如首次布局）时重新适应窗口
 // 其余尺寸变化（收起 / 展开面板等）保持画面中心不动
@@ -1910,9 +1935,10 @@ function renderVariants(){
 $('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClearance').value=variantsClearance??'';renderVariants();$('#variantsDialog').showModal();};
 $('#variantsClose').onclick=()=>$('#variantsDialog').close();
 $('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
-window.FloorPlanApp={get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
+window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelFileImport,fileImportCompleted,get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
+<script src="js/plan-intake-ui.js"></script>
 <script src="js/room-layout-ui.js"></script>
 <script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
