@@ -2,6 +2,8 @@
 
 La entrada al editor no creaba historial de pantalla y la reapertura de la URL restauraba el editor automáticamente. «Inicio» quedaba al final de la barra móvil. Además, una tarea completada seleccionada para revisar podía avanzar automáticamente.
 
+La corrección fue aprobada por Juanma y quedó integrada junto con PR #34 en `92a1193fc1386d3f69566beab15923cc62836222`. [Cierre de integración](guided-experience-integration-2026-10-13.md).
+
 ## Cambio
 
 - Pantallas `#inicio` / `#editor` con Atrás y Adelante del navegador. URL base → bienvenida; recarga del editor → editor.

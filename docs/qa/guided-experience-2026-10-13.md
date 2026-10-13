@@ -1,6 +1,6 @@
 # QA de experiencia guiada — 13-10-2026
 
-Repositorio: Juanmaes83/floorplan-3d. Base remota verificada `88aef0b`. Rama: `feat/unified-guided-experience`. Checkout nuevo y sin cambios ajenos; no se encontró AGENTS.md. No hay cambios de schema, merge ni promoción manual. La PR registra la preview READY y el SHA final, comprobados después de publicar.
+Repositorio: Juanmaes83/floorplan-3d. Base remota verificada `88aef0b`. Rama: `feat/unified-guided-experience`. Checkout nuevo y sin cambios ajenos; no se encontró AGENTS.md. La QA inicial no modificó el schema ni realizó merge o promoción manual. Después de la corrección de navegación y la aprobación humana, PR #34 quedó integrada; [cierre y evidencia](guided-experience-integration-2026-10-13.md). La PR registra la preview READY y el SHA final, comprobados después de publicar.
 
 ## Resultados locales
 
