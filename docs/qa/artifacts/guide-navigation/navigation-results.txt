@@ -1,0 +1,12 @@
+✔ native Back, visible home, explicit reopening and task return 1440x900 (2663.316056ms)
+✔ native Back, visible home, explicit reopening and task return 390x844 (2111.483342ms)
+✔ native Back, visible home, explicit reopening and task return 844x390 (1903.023409ms)
+✔ cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project (1395.073435ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8436.70635

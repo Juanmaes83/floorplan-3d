@@ -5,6 +5,9 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .app>main,.app>aside{grid-row:3}.app>footer{grid-row:4}
 header .brand{order:-3;margin-right:auto}header .brand b{font-size:19px;letter-spacing:-.5px}
 #actionSearchBtn{order:-2;border:1px solid var(--line);background:#f7f4ee;text-align:left;min-width:225px;color:#645b50}
+#welcomeBtn{order:-4;position:sticky;left:0;z-index:4;flex-shrink:0;background:var(--panel);border:1px solid var(--line);min-height:38px}
+.guide-controls{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:100%}
+.welcome-brand{flex-wrap:wrap;gap:12px}.welcome-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;max-width:100%}.welcome-nav .btn{min-height:44px;white-space:normal}#welcomeReturn{border:1px solid var(--line)}
 body.guided header>.advanced-control{display:none!important}
 body.guided #clearAll,body.guided #redo{display:none}
 body.guided header{flex-wrap:nowrap;min-height:64px;gap:8px}

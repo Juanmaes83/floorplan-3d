@@ -51,3 +51,9 @@ Los cambios del documento invalidan las evidencias de 3D/PNG, conservando el est
 ## Verificación
 
 Resultados reproducibles y fallos corregidos: [informe QA](../qa/guided-experience-2026-10-13.md). La rama añade un gate de CI para las pruebas de lógica/editor. Los tests antiguos entran explícitamente al editor completo mediante `tests/editor-fixture.cjs`; los nuevos prueban la primera visita y la guía.
+
+## Navegación de vuelta
+
+La URL de entrada abre la bienvenida aunque haya un proyecto recuperado; «Continuar mi proyecto» y «Volver al proyecto» vuelven al documento conservado. `#inicio` y `#editor` representan las pantallas, y el historial del navegador permite Atrás/Adelante. Recargar `#editor` retoma el trabajo. Volver no cambia el documento ni el historial de deshacer. El botón «← Inicio» permanece visible al desplazar la barra horizontal en móvil.
+
+«← Paso anterior» y las etapas permiten revisar tareas completadas. La elección manual se conserva en los metadatos de la guía (`manualTask`), separada del proyecto, evitando que la reconciliación salte de nuevo a una tarea posterior. La evidencia y el porcentaje siguen calculándose a partir del documento. Cancelar o Escape al preparar la primera estancia devuelve a la bienvenida. Atrás cierra ese diálogo sin aplicar la previsualización de estancia. Una importación tardía no cambia la pantalla si la persona ha navegado mientras se procesaba.
