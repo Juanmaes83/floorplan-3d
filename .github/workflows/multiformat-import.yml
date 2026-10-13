@@ -13,9 +13,9 @@ jobs:
     timeout-minutes: 25
     env:
       TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      INTAKE_ARTIFACTS: .qa-results/intake
-      NAVIGATION_ARTIFACTS: .qa-results/navigation
-      GUIDE_ARTIFACTS: .qa-results/guide
+      INTAKE_ARTIFACTS: qa-results/intake
+      NAVIGATION_ARTIFACTS: qa-results/navigation
+      GUIDE_ARTIFACTS: qa-results/guide
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,5 +48,5 @@ jobs:
         if: always()
         with:
           name: multiformat-${{ env.TESTED_SHA }}
-          path: .qa-results/
-          if-no-files-found: ignore
+          path: qa-results/
+          if-no-files-found: error

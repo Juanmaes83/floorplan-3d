@@ -162,10 +162,12 @@ test('F1 completion: local project UI, reload, isolation, confirmation and full 
  await page.locator('#fileIn').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('rechazada'));
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')})),snapshot);
  await page.reload();assert.equal(await page.locator('#gRooms polygon.room').count(),2);
- await page.click('#projectsBtn');await page.fill('#projectName','Copy');await page.click('#projectDuplicate');assert.equal(await page.locator('#projectList option').count(),3);
+ await page.click('#projectsBtn');await page.fill('#projectName','Copy');await page.click('#projectDuplicate');assert.equal(await page.locator('#projectList option').count(),4);
  const ids=await page.locator('#projectList option').evaluateAll(es=>es.map(e=>e.value));await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
- await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);
- page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),2);await page.click('#projectClose');
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),46);
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
+ await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),4);
+ page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);await page.click('#projectClose');
  await page.reload();assert.equal(await page.locator('#gFurn .furn').count(),47);assert.equal(await page.locator('img').count(),0);assert.deepEqual(errors,[]);
 });
 const softwareModuleCache=new Map();
@@ -354,7 +356,7 @@ test('upload control label and accessible help follow Spanish, English and Chine
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));

@@ -47,6 +47,28 @@ Suites de navegador previstas:
 
 La preview debe estar READY para ese mismo HEAD. Una preview de otra rama o un SHA anterior no satisface esta puerta. La revisión visual de la preview final y la aprobación antes del merge se gestionan en la PR.
 
+## Revisión de las nueve regresiones de PR #38
+
+La ejecución [38439027552](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38439027552), sobre `ad89792671c8d06473c5a4d9d2032fd7b4489f8f`, aprobó 176 unitarias (una omitida por Blender externo) y 26 recorridos de importación/guía. La última suite terminó con 36 aprobadas y nueve fallidas. Los fallos se conservan como evidencia del estado anterior, no como resultados de la corrección.
+
+| Prueba fallida | Causa observada | Corrección y comprobación |
+| --- | --- | --- |
+| Rechazo atómico de archivos inválidos | Snapshot del SVG durante la transición de los paneles: cambiaba el `viewBox` por el ResizeObserver, sin cambio del proyecto | La entrada al editor espera los frames de layout y el final de las animaciones reales; se mantiene la comparación completa de proyecto, guardado y SVG |
+| Colección local, recarga y JSON | Expectativa antigua de tres entradas: la importación ahora conserva el proyecto anterior y crea otra entrada | Se esperan cuatro entradas tras duplicar; además se reabre la entrada previa y se comprueban sus 46 muebles, frente a los 47 del original editado |
+| Touch 2D/3D, 390×844 | La guía permanecía visible en modo «Todas las herramientas»; canvas de 56,3 % del alto | El editor completo oculta la guía y ofrece Recuperar guía; se conserva el requisito de canvas ≥60 % |
+| Touch 2D/3D, 844×390 | Mismo problema; canvas de 36,9 % del alto | Mismo ajuste, incluida la rotación del viewport; no se rebaja el requisito de espacio útil |
+| Flujo F1b, 844×390 | El canvas no alcanzaba el 60 % exigido | Recuperación de espacio en el editor completo; se mantienen calibración, 3D, orbitado y ZIP |
+| F2, 360×800 | El observador registró la hoja local `css/guided-experience.css` como tráfico no permitido | Se admite solo esa ruta GET local, manteniendo las restricciones de cuerpo, query, origen, WebSocket y solicitudes inesperadas |
+| F2, 390×844 | Sin esa hoja de estilos, el pie interceptaba el botón Tareas y ayuda | Cargar el CSS real y ejecutar el mismo flujo de aceptación/corrección/rechazo |
+| F2, 844×390 | Sin CSS, el estado del pie interceptaba el botón | Mismo ajuste y pruebas completas de proyecto/exportación |
+| F2, 1440×900 | Sin CSS, la biblioteca interceptaba el botón | Mismo ajuste; se conservan privacidad, geometría, historial y exportación |
+
+La prueba guiada comprueba ahora en los tres tamaños la apertura del editor completo, la guía oculta, su recuperación, la recarga y la igualdad del documento/progreso. Captura el editor completo y la guía recuperada. No se cambia el contrato ni el comportamiento atómico de importación.
+
+Comprobación local de esta corrección: **176 unitarias aprobadas, 0 fallos, 1 omitida**, sintaxis JS y `git diff --check` correctos. El entorno local carece de Chromium; la descarga devolvió una página de sitio no disponible. Por ello los resultados de navegador se obtienen de CI, sobre el SHA final de la PR.
+
+El workflow guarda la evidencia en `qa-results/`, una carpeta visible para upload-artifact; la carpeta oculta anterior no produjo ningún artefacto. Ahora la ausencia de evidencia se considera un error. El resultado final, el SHA probado, los logs, el artefacto y la preview exacta se registran en la descripción de #38 después de terminar las comprobaciones.
+
 ## Límites conservados
 
 RoomPlan solo tiene fixtures de estructura; falta un escaneo real de iPhone. DWG no se importa directamente. DXF/PDF/IFC admiten el subconjunto documentado, con resultados estimados y revisables. La detección raster sigue siendo experimental y ortogonal. F2 no queda validada, no se aprueban umbrales ni se atribuye rendimiento en teléfonos físicos. No cambia FloorPlanProjectV1, sus unidades ni los modelos/materiales ya integrados.

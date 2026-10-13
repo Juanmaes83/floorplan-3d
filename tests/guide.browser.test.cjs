@@ -38,6 +38,14 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await click(page,'#guideGoalChange');await page.selectOption('#guideGoalSelect','export');await click(page,'#guideGoalApply');const png=await download(page,()=>click(page,'#guidePrimary'));assert.equal(png.bytes.subarray(1,4).toString(),'PNG');await page.waitForFunction(()=>FloorPlanGuideUI.progress().finished);
  // Hide / recover guide; reload keeps the goal, current task, geometry and output proof.
  const stored=await project(page);await click(page,'#guideClose');await click(page,'#guideResume');await page.reload();await page.waitForFunction(()=>window.FloorPlanGuideUI);assert.equal(await page.locator('#welcomeDialog').evaluate(d=>d.open),false);assert.deepEqual(await project(page),stored);assert.equal((await progress(page)).goal,'export');assert.equal((await progress(page)).finished,true);
+ // Full editor gives the canvas its space; restoring guidance keeps the same document and evidence.
+ const completed=await progress(page);await click(page,'#guideDetails');await click(page,'#guideAllTools');
+ assert.equal(await page.locator('#guideBar').isVisible(),false);assert.equal(await page.locator('#guideResume').isVisible(),true);
+ if(viewport.width<1000)assert.ok(await page.evaluate(()=>document.querySelector('#stage').getBoundingClientRect().height/innerHeight>=.6));
+ await shot(page,`${suffix}-full-editor`);await page.reload();await page.waitForFunction(()=>window.FloorPlanGuideUI);
+ assert.equal(await page.locator('#guideBar').isVisible(),false);assert.deepEqual(await project(page),stored);assert.deepEqual(await progress(page),completed);
+ await click(page,'#guideResume');assert.equal(await page.locator('#guideBar').isVisible(),true);assert.equal(await page.locator('#guideResume').isVisible(),false);assert.deepEqual(await progress(page),completed);
+ await shot(page,`${suffix}-guide-restored`);
  // Invalidation of previous 3D/PNG evidence is concrete after editing this room.
  await click(page,'#guideDetails');await click(page,'#guideTask-geometry');await page.fill('#roomDesignName','Cocina');await click(page,'#roomDesignReview');await click(page,'#roomDesignConfirm');if(viewport.width<1000)await click(page,'#tgPanel');assert.equal((await project(page)).rooms.length,2);assert.equal((await progress(page)).tasks.find(t=>t.id==='export').status,'review');await search(page,'Deshacer el último cambio');assert.equal((await project(page)).rooms.length,1);assert.equal((await progress(page)).finished,true);
  await click(page,'#guideGoalChange');await page.selectOption('#guideGoalSelect','create');await click(page,'#guideGoalApply');assert.equal((await progress(page)).finished,true);
