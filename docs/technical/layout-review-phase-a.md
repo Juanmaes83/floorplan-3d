@@ -1,6 +1,8 @@
 # Fase A (propuesta Pascal→Rubik) — revisión local de distribución
 
-**Estado: implementación en rama aislada, pendiente de revisión humana.** No es una fase canónica.
+**Estado: integrada en `master` por [PR #27](https://github.com/Juanmaes83/floorplan-3d/pull/27)**, merge `5b93339601998d750918e01cb4431073b75cf5a0` del 06-10-2026; HEAD `d8ff504f166bbc9ecc750aa516efc24832ff3595`. El merge fue efectuado por Juanma; no consta una review formal separada. No es una fase canónica ni aprobación global de Pascal.
+
+Estado reconciliado el 13-10-2026. El historial y la batería siguientes son evidencia de la entrega original, no pruebas nuevas. B/C y MCP de lectura ya integrados; [cierre vigente](../qa/documentation-reconciliation-2026-10-13.md). Las limitaciones declaradas de preview, teléfono y revisión visual del informe histórico se conservan.
 
 Historial en la rama: `02b8165` (revisión inicial) y la corrección posterior de estados de evidencia y resaltado 2D, descrita aquí.
 

@@ -1,9 +1,8 @@
 # Pascal Editor → Rubik Sota: propuesta de evolución post-F3 por «escultura»
 
-> **Estado: BORRADOR DE PROPUESTA. No aprobado.** Este documento no modifica el
-> [roadmap canónico](../ROADMAP.md), ni la numeración de fases, ni el contrato
-> `FloorPlanProjectV1`. No implementa nada. Las fases de la sección 8 son
-> hipótesis para revisión de Juanma, no compromisos de alcance ni de fecha.
+> **Estado vigente reconciliado, 13-10-2026: propuesta global sin aprobación conjunta.** A, B y C fueron autorizadas e integradas de forma acotada por #27/#29/#30; el MCP de lectura #31 cubre un subconjunto relacionado con D1 y no aprueba D–G. Esta auditoría no cambia el [roadmap canónico](../ROADMAP.md), la numeración ni `FloorPlanProjectV1`.
+>
+> El cuerpo siguiente conserva la auditoría histórica del 06-10-2026 sobre Rubik `c4f2493` y Pascal `67f8041`: sus frases «falta», «pendiente» o «PR abierta» describen aquella fecha. LAB v03 ya está entregada y #21 está cerrada con rescate documental; su adaptación visual sigue pendiente. [Estado y cierre vigente](../qa/documentation-reconciliation-2026-10-13.md). Las fases no integradas siguen como hipótesis, sin compromiso de alcance ni fecha.
 >
 > Auditoría realizada el 06-10-2026 sobre los SHA indicados en la sección 2.
 > Las decisiones abiertas de F0 (D-01, D-04, D-06, D-08, D-16 y otras) siguen abiertas.
