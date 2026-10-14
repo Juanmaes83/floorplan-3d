@@ -25,7 +25,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | --- | --- | --- | --- | --- | --- | --- |
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
-| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P01/P02/P03/P04/P06/P09/P10/P11/P12/P13/P14/P15/P16 locales; protocolo completo pendiente |
+| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P01/P02/P03/P04/P05/P06/P09/P10/P11/P12/P13/P14/P15/P16 locales; protocolo completo pendiente |
 | R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida y recorrido que aún no tienen evidencia completa. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2: probar P07 (Escape, cerrar y Atrás durante transición) y P08 (inicio/retorno desde 2D y 3D en modo recorrido y pointer lock). Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R2 — matriz del protocolo P01–P16
 
@@ -71,7 +71,7 @@ Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida
 | P02 | verificado localmente | Entrada guiada y editor con guía cerrada, dos estancias guardadas, cancelar y retorno intacto; corte P01–P03 | — |
 | P03 | verificado localmente | Proyecto vacío por búsqueda y editor, prerrequisito, Cancelar/Ir a Distribuir, foco y documento intactos en cuatro tamaños; corte P01–P03 | — |
 | P04 | verificado localmente | Orden, selección y cancelación; corte `e5dd7c5` | — |
-| P05 | en curso | Vista general y estancia real en cuatro tamaños; ID de parada | Contrastar datos/poses con proyecto propio e importado |
+| P05 | verificado localmente | Proyecto propio y DXF importado: IDs, nombre original/traducido, área, límites y pose repetida; cuatro tamaños y retorno intacto | — |
 | P06 | verificado localmente | Anterior, Siguiente, saltos y límites; corte `4da6273` | La pausa no aplica: no existe reproducción automática |
 | P07 | en curso | Escape durante carga, Escape/Atrás desde 3D y pérdida de contexto | Cerrar/Atrás durante transición desde 2D, foco e impedir reapertura tardía |
 | P08 | en curso | Entrada 2D y 3D con cámara, opciones y puertas restauradas | Recorrido/pointer lock y retorno tras su cancelación |
@@ -103,6 +103,12 @@ Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida
 2. P07: Escape, Volver a editar y Atrás durante carga 3D y transición cancelan la operación. El 2D y su estado vuelven, el foco queda en una acción útil y ninguna promesa o evento tardío reabre la presentación. Probar también cierre tras cargar, cambio de proyecto y errores de consola/pageerror.
 3. P08: iniciar desde 2D y desde 3D conserva vista, cámara, opciones, puertas, selección e historial al volver. Si el modo recorrido está activo, entrar en presentación libera el pointer lock o toque; al volver se restaura el modo de forma utilizable y un nuevo lock solo ocurre por gesto del usuario. Comprobar cancelación antes y después de cargar, y resize/orientación.
 4. Pruebas de navegador y capturas abiertas visualmente en los cuatro tamaños, con exportación/reimportación del proyecto cuando el caso la implique. Registrar bytes, IDs, escala y calibración, calidad/degradación y estado final; no inferir CI de las pruebas locales.
+
+### Corte R2 P05 — verificado localmente
+
+- Un proyecto propio creado desde el ejemplo y un DXF de dos estancias importado por la interfaz generan paradas ligadas al `projectId`, `entryId` y `roomId` activos. El nombre original, la traducción visible, la superficie y los límites de cada estancia coinciden con la geometría. Tras cerrar y reabrir, la selección de dos estancias y posición, orientación y destino de cámara de la misma parada se repiten con tolerancia `1e-5`. El retorno conserva JSON, entrada, objetivo, evidencia, historial, selección y vista 2D.
+- La revisión de capturas detectó que el aviso de copia/importación cruzaba los controles de presentación. Durante el recorrido el aviso se sitúa arriba; el test comprueba geométricamente que no cubre la tarjeta. Se abrieron y revisaron 24 PNG finales de configuración, vista general y estancia en 1440×900, 390×844, 844×390 y 360×800; `artifacts/casa-serra/r2-p05/`.
+- Pruebas locales: P05 navegador **4/4** en los cuatro tamaños, núcleo de presentación **3/3**, sintaxis Node válida, consola/pageerror vacíos. El flujo DXF y la copia propia no alteran sus fuentes; las pruebas de exportación/reimportación de #38 permanecen en el baseline y se volverán a ejecutar en R9. M01/M03/M04 reciben evidencia de identidad, encuadre, retorno y legibilidad; M19 sigue con código propio. R2 queda abierto por P07/P08; CI y revisión humana se registran aparte.
 
 ## R2 — P06/P12, aceptación previa
 

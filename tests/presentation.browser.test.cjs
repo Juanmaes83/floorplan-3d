@@ -334,6 +334,55 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.equal(await page.evaluate(()=>FloorPlanApp.viewMode),'2d');assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P05 own and imported room data and poses follow active IDs ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,consoleErrors=[];
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ async function verify(kind){
+  const before=await state(page),source=await page.evaluate(()=>({id:FloorPlanApp.project.id,entry:FloorPlanApp.entryId,rooms:FloorPlanApp.geometry.rooms.map(r=>({id:r.id,name:r.name,poly:r.poly}))}));
+  assert.ok(source.rooms.length>=2,`${kind} has two real rooms`);
+  await page.locator('#presentationBtn').click();
+  assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
+  const inputs=await page.locator('.presentation-room-row input').evaluateAll(list=>list.map(input=>input.value));
+  assert.deepEqual(inputs.slice(0,2),source.rooms.slice(0,2).map(r=>r.id),`${kind} config uses current room IDs`);
+  await page.locator('.presentation-room-row').nth(1).locator('input').check();
+  await screenshot(page,`${size}-p05-${kind}-config`);
+  await page.getByRole('button',{name:'Iniciar presentación'}).click();
+  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+  const plan=await page.evaluate(()=>structuredClone(FloorPlanPresentation.plan));
+  assert.equal(plan.projectId,source.id);assert.equal(plan.entryId,source.entry);
+  assert.deepEqual(plan.stops.map(s=>s.roomId),[null,...source.rooms.slice(0,2).map(r=>r.id)]);
+  for(const [i,room] of source.rooms.slice(0,2).entries()){
+   const stop=plan.stops[i+1];assert.equal(stop.label,room.name);
+   const expected=await page.evaluate(poly=>({area:FloorPlanPresentationCore.area(poly),bounds:FloorPlanPresentationCore.bounds(poly)}),room.poly);
+   assert.ok(Math.abs(stop.areaM2-expected.area)<1e-8);assert.deepEqual(stop.bounds,expected.bounds);
+  }
+  const toastOverlap=await page.evaluate(()=>{const toast=document.querySelector('#toast'),card=document.querySelector('.presentation-card');if(!toast.classList.contains('show'))return false;const a=toast.getBoundingClientRect(),b=card.getBoundingClientRect();return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;});
+  assert.equal(toastOverlap,false,`${kind} notification does not cover presentation controls`);
+  await screenshot(page,`${size}-p05-${kind}-overview`);
+  await page.locator('.presentation-stops button').nth(1).click();
+  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
+  const firstPose=await page.evaluate(()=>View3D.presentationInspect());
+  assert.ok(firstPose.position.every(Number.isFinite));assert.equal(await page.locator('.presentation-card h2').textContent(),await page.evaluate(name=>nm(name),source.rooms[0].name));
+  await screenshot(page,`${size}-p05-${kind}-room`);
+  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+  assert.deepEqual(await state(page),before,`${kind} return is intact`);
+  await page.locator('#presentationBtn').click();assert.equal(await page.locator('.presentation-room-row input:checked').count(),2);
+  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+  await page.locator('.presentation-stops button').nth(1).click();await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
+  const secondPose=await page.evaluate(()=>View3D.presentationInspect());
+  for(const key of ['position','quaternion','target'])for(let i=0;i<firstPose[key].length;i++)assert.ok(Math.abs(firstPose[key][i]-secondPose[key][i])<1e-5,`${kind} repeat ${key}[${i}]`);
+  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+  assert.deepEqual(await state(page),before);
+ }
+ await page.locator('#guideCopyExample').click();await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
+ await page.locator('#guideClose').click();await verify('own');
+ const ownId=await page.evaluate(()=>FloorPlanApp.project.id);
+ await page.locator('#uploadPlanBtn').click();await page.locator('#uploadIn').setInputFiles(path.join(__dirname,'fixtures/intake/vivienda-dos-estancias.dxf'));
+ await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:30000});
+ await page.locator('#guideClose').click();await verify('imported');
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
 test('R2 room selection and order persist outside project; stale room IDs reconcile on reload',{timeout:120000},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844});
  const original=await state(page),key=await page.evaluate(()=>FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id));
