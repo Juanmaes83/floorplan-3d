@@ -61,7 +61,8 @@
         "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/",
         "exact code SHA ea4431f preview deployment 7068610522 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return, no console errors; Actions 38583409611/38583409601 failed with zero steps",
         "P13 acceptance written before application changes; final local: real PNG bytes/IHDR/dimensions, view-aspect capture, motion/resize gate, camera/buffer restored at four viewports plus 360x800 to 844x390; presentation/core/capture suite 41/41; 11 visually reviewed PNG docs/qa/artifacts/casa-serra/r2-p13/",
-        "exact code SHA 83c2677 preview deployment 7070567791 visually reviewed in authenticated Chrome: overview, bedroom 2/2, PNG control and editor return; remote download event not observable, local bytes verified; Actions 38594968787/38594968953 failed with zero steps"
+        "exact code SHA 83c2677 preview deployment 7070567791 visually reviewed in authenticated Chrome: overview, bedroom 2/2, PNG control and editor return; remote download event not observable, local bytes verified; Actions 38594968787/38594968953 failed with zero steps",
+        "P01/P02/P03: three search terms including Enter, guided and closed-guide entries, saved two-room selection, empty-project prerequisite and focus, unchanged document/goal/view; targeted browser 8/8 and full presentation browser 42/42 at 1440x900, 390x844, 844x390, 360x800; 16 PNG visually reviewed in docs/qa/artifacts/casa-serra/r2-p01-p03/"
       ]
     },
     {
@@ -364,9 +365,9 @@
     }
   ],
   "protocol": [
-    {"id":"P01","status":"en curso","next":"tour search and goal invariance"},
-    {"id":"P02","status":"en curso","next":"closed-guide editor entry and saved configuration"},
-    {"id":"P03","status":"en curso","next":"empty-project four viewport and focus checks"},
+    {"id":"P01","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
+    {"id":"P02","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
+    {"id":"P03","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
     {"id":"P04","status":"verificado localmente","codeSha":"e5dd7c5"},
     {"id":"P05","status":"en curso","next":"own/imported project IDs and derived poses"},
     {"id":"P06","status":"verificado localmente","codeSha":"4da6273","note":"manual tour; no autoplay pause"},

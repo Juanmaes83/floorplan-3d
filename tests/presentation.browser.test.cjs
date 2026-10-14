@@ -13,6 +13,30 @@ async function setup(t,viewport,webgl=true){const browser=await chromium.launch(
  await page.goto(url);await page.waitForFunction(w=>window.FloorPlanPresentation&&(!w||window.View3D),webgl);await page.locator('#welcomeExample').click();return {page,errors};}
 const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,goal:FloorPlanGuideUI.state().goal,guideEvidence:JSON.stringify(FloorPlanGuideUI.state().evidence),undo:undoStack.length,redo:redoStack.length,selection:JSON.stringify(ui.sel),view:FloorPlanApp.viewMode}));
 async function screenshot(page,name){const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,name+'.png')});}
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P01/P02 search and closed-guide entry preserve the project ${viewport.width}x${viewport.height}`,{timeout:150000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,initial=await state(page),consoleErrors=[];
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ for(const query of ['presentar mi vivienda','tour','presentación en 3D']){
+  await page.locator('#actionSearchBtn').click();await page.locator('#editorActionInput').fill(query);
+  const option=page.locator('#editorActionResults [role=option]').first();assert.match(await option.textContent(),/Presentar mi vivienda/);
+  if(query==='tour')await page.locator('#editorActionInput').press('Enter');else await option.click();
+  assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true,`${query} opens presentation config`);
+  assert.equal(await page.evaluate(()=>FloorPlanApp.viewMode),'2d');assert.deepEqual(await state(page),initial,`${query} does not change document or goal`);
+  await screenshot(page,`${size}-p01-${query==='tour'?'tour':query==='presentar mi vivienda'?'presentar':'3d'}-config`);
+  await page.locator('#presentationConfig').getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(await state(page),initial);
+ }
+ await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
+ await page.locator('.presentation-room-row').nth(1).locator('input').check();
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),initial);
+ await page.locator('#guideClose').click();assert.equal(await page.locator('#presentationBtn').isVisible(),true);
+ const closedGuide=await state(page);await page.locator('#presentationBtn').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
+ assert.deepEqual(await page.locator('.presentation-room-row input:checked').count(),2,'same saved room selection after guide close');
+ await screenshot(page,`${size}-p02-closed-guide-config`);
+ await page.locator('#presentationConfig').getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(await state(page),closedGuide);
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
 async function presentationPng(page){
  const expected=await page.evaluate(()=>View3D.shotSize({size:'1280',aspect:'view'}));
  const pending=page.waitForEvent('download');await page.locator('#presentationCapture').click();const download=await pending;
@@ -287,18 +311,27 @@ test('missing 3D runtime returns to the 2D document with an explanation',{timeou
  assert.ok((await page.locator('#toast').textContent()).includes('3D no disponible'));
 });
 
-test('an empty project explains the layout prerequisite without starting 3D',{timeout:45000},async t=>{
- const {page,errors}=await setup(t,{width:390,height:844});
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P03 empty project explains layout in both entry paths ${viewport.width}x${viewport.height}`,{timeout:60000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,consoleErrors=[];
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.locator('#welcomeBtn').click();await page.locator('#welcomeBlank').click();await page.locator('#roomDesignCancel').click();
  if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeReturn').click();
  const beforeState=await state(page);assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms.length),0);
  await page.locator('#actionSearchBtn').click();await page.fill('#editorActionInput','presentar mi vivienda');await page.locator('#editorActionResults [role=option]').first().click();
  assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
  assert.ok((await page.locator('#presentationConfig').textContent()).includes('Primero crea una estancia'));
+ assert.equal(await page.locator('#presentationConfig').getByRole('button',{name:'Iniciar presentación'}).count(),0);
+ await screenshot(page,`${size}-p03-empty-search`);
+ await page.locator('#presentationConfig').getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(await state(page),beforeState);
+ assert.equal(await page.evaluate(()=>document.activeElement?.tagName),'BUTTON','cancel returns focus to an action');
+ await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
+ assert.ok((await page.locator('#presentationConfig').textContent()).includes('Primero crea una estancia'));
+ await screenshot(page,`${size}-p03-empty-editor`);
  await page.getByRole('button',{name:'Ir a Distribuir'}).click();
  assert.equal(await page.locator('#guideDialog').evaluate(d=>d.open),true);
+ assert.equal(await page.evaluate(()=>document.activeElement?.closest('#guideDialog')?.id),'guideDialog','layout guidance receives focus');
  const afterState=await state(page);for(const key of Object.keys(beforeState))assert.ok(afterState[key]===beforeState[key],`${key} unchanged for empty project`);
- assert.deepEqual(errors,[]);
+ assert.equal(await page.evaluate(()=>FloorPlanApp.viewMode),'2d');assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
 test('R2 room selection and order persist outside project; stale room IDs reconcile on reload',{timeout:120000},async t=>{

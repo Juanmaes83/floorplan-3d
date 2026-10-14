@@ -25,7 +25,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | --- | --- | --- | --- | --- | --- | --- |
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
-| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P04/P06/P09/P10/P11/P12/P13/P14/P15/P16 locales; protocolo completo pendiente |
+| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P01/P02/P03/P04/P06/P09/P10/P11/P12/P13/P14/P15/P16 locales; protocolo completo pendiente |
 | R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
@@ -67,9 +67,9 @@ Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida
 
 | Caso | Estado | Evidencia presente | Brecha antes de cerrar R2 |
 | --- | --- | --- | --- |
-| P01 | en curso | Búsqueda «presentación en 3D» y «presentar mi vivienda» en pruebas | «tour», acción correcta desde búsqueda e invariancia del objetivo |
-| P02 | en curso | Entrada guiada de Revisar y guardar probada | Entrada del editor con guía cerrada y equivalencia de configuración |
-| P03 | en curso | Proyecto vacío: explicación e Ir a Distribuir en 390×844 | Repetir otros tamaños, cancelar y comparar documento completo |
+| P01 | verificado localmente | Tres búsquedas, clic y Enter, objetivo/proyecto/vista intactos en cuatro tamaños; corte P01–P03 | — |
+| P02 | verificado localmente | Entrada guiada y editor con guía cerrada, dos estancias guardadas, cancelar y retorno intacto; corte P01–P03 | — |
+| P03 | verificado localmente | Proyecto vacío por búsqueda y editor, prerrequisito, Cancelar/Ir a Distribuir, foco y documento intactos en cuatro tamaños; corte P01–P03 | — |
 | P04 | verificado localmente | Orden, selección y cancelación; corte `e5dd7c5` | — |
 | P05 | en curso | Vista general y estancia real en cuatro tamaños; ID de parada | Contrastar datos/poses con proyecto propio e importado |
 | P06 | verificado localmente | Anterior, Siguiente, saltos y límites; corte `4da6273` | La pausa no aplica: no existe reproducción automática |
@@ -89,6 +89,20 @@ Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida
 1. Las búsquedas «presentar mi vivienda», «tour» y «presentación en 3D» abren la misma configuración de presentación en el proyecto activo, sin cambiar el objetivo ni activar solamente la vista 3D. Las acciones visibles del buscador y teclado se comprueban en 1440×900, 390×844, 844×390 y 360×800.
 2. Desde Revisar y guardar, el control guiado abre la configuración; con la guía cerrada, el botón del editor abre la misma selección y orden guardados. Cancelar ambos caminos conserva JSON, proyecto/variante, escala, calibración, historial, selección y cámara/vista.
 3. En un proyecto vacío, ambas entradas explican que falta una estancia con muros, ofrecen Ir a Distribuir y Cancelar y no inician WebGL. Tras cancelar o ir a Distribuir, el documento permanece intacto y el foco vuelve a un control útil. Revisar visualmente los cuatro tamaños y registrar consola/pageerror.
+
+### Corte R2 P01/P02/P03 — verificado localmente
+
+- Búsqueda «presentar mi vivienda», «tour» y «presentación en 3D»: abre la misma configuración sin cambiar objetivo, proyecto ni vista; «tour» usa Enter. La entrada guiada permite iniciar y cerrar el recorrido, y la entrada con guía cerrada conserva la selección de dos estancias. Cancelar conserva el estado observado.
+- Proyecto vacío: ambas entradas explican el requisito de estancia con muros. No aparece Iniciar presentación. Cancelar devuelve el foco a una acción; Ir a Distribuir enfoca el diálogo de guía. Proyecto, entrada, objetivo, evidencia, historial, selección y vista 2D se conservan; consola y pageerror sin errores.
+- Chromium local con Node 22.13.0 y Playwright 1.62.1: ocho pruebas dirigidas, **8/8** en 1440×900, 390×844, 844×390 y 360×800; regresión completa de presentación **42/42**, incluidos captura PNG, fallback WebGL, restauración de cámara y diez ciclos de memoria estable. Se abrieron las capturas de configuración y proyecto vacío de los cuatro tamaños; 16 PNG representativos en `artifacts/casa-serra/r2-p01-p03/`.
+- M01 y M04 reciben evidencia de entrada y foco; M19 mantiene pruebas y documentación originales. R2 continúa abierto por P05/P07/P08. CI real, preview del SHA de este corte y revisión humana se registran aparte.
+
+### Siguiente corte R2 P05/P07/P08 — aceptación previa
+
+1. P05: en proyecto propio e importado, cada parada usa el `roomId`, nombre, superficie y geometría del proyecto activo. Vista general y estancias mantienen encuadre útil en 1440×900, 390×844, 844×390 y 360×800. La misma revisión del proyecto produce poses repetibles tras reabrir; cambios de proyecto o revisión no reutilizan poses anteriores.
+2. P07: Escape, Volver a editar y Atrás durante carga 3D y transición cancelan la operación. El 2D y su estado vuelven, el foco queda en una acción útil y ninguna promesa o evento tardío reabre la presentación. Probar también cierre tras cargar, cambio de proyecto y errores de consola/pageerror.
+3. P08: iniciar desde 2D y desde 3D conserva vista, cámara, opciones, puertas, selección e historial al volver. Si el modo recorrido está activo, entrar en presentación libera el pointer lock o toque; al volver se restaura el modo de forma utilizable y un nuevo lock solo ocurre por gesto del usuario. Comprobar cancelación antes y después de cargar, y resize/orientación.
+4. Pruebas de navegador y capturas abiertas visualmente en los cuatro tamaños, con exportación/reimportación del proyecto cuando el caso la implique. Registrar bytes, IDs, escala y calibración, calidad/degradación y estado final; no inferir CI de las pruebas locales.
 
 ## R2 — P06/P12, aceptación previa
 
