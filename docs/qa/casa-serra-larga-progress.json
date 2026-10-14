@@ -55,7 +55,8 @@
         "R2 overall P01-P16 remains open",
         "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
         "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
-        "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps"
+        "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
+        "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/"
       ]
     },
     {
@@ -190,7 +191,8 @@
       "testedSha": null,
       "evidence": [
         "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
+        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
+        "R2 P11: missing/corrupt GLB fallback and actual WebGL context loss return to intact 2D; 27/27 presentation/core"
       ]
     },
     {
@@ -203,7 +205,8 @@
       "testedSha": null,
       "evidence": [
         "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
+        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
+        "R2 P11: pending asset requests aborted on context loss; in-flight load cannot reopen presentation"
       ]
     },
     {

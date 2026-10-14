@@ -59,6 +59,68 @@ test('R2 P06/P12 manual jumps and revisits count completed stops without guide e
  assert.deepEqual(await state(page),beforeState);
 });
 
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 missing GLB keeps generic furniture and warns ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
+ await page.waitForFunction(()=>FloorPlanAssetUI?.ready);
+ const target=await page.evaluate(()=>{
+  const entry=FloorPlanAssetUI.entries.find(e=>e.url.includes('songesand'));if(!entry)throw Error('Missing authorized fixture');
+  mutate(()=>{project.objects[0].assetRef={catalog:entry.catalog,assetId:entry.id,catalogRevision:entry.revision};});
+  return {id:project.objects[0].id,url:entry.url};
+ });
+ await page.route('**/assets/f3/*.glb',route=>route.fulfill({status:404,body:'Missing'}));
+ const beforeState=await state(page);
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',target.id,{timeout:30000});
+ await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.match(await page.locator('.presentation-warning').textContent(),/se muestran muebles genéricos/);
+ assert.equal(await page.locator('.presentation-warning').isVisible(),true);
+ assert.equal(await page.evaluate(id=>View3D.assetObjects.some(o=>o.id===id),target.id),false);
+ await screenshot(page,`${size}-asset-fallback`);
+ await page.getByRole('button',{name:'Siguiente →'}).click();await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false');
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
+test('R2 P11 corrupt GLB also keeps the generic and the project',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844});await page.waitForFunction(()=>FloorPlanAssetUI?.ready);
+ const id=await page.evaluate(()=>{const entry=FloorPlanAssetUI.entries.find(e=>e.url.includes('songesand'));mutate(()=>{project.objects[0].assetRef={catalog:entry.catalog,assetId:entry.id,catalogRevision:entry.revision};});return project.objects[0].id;});
+ await page.route('**/assets/f3/*.glb',route=>route.fulfill({status:200,contentType:'model/gltf-binary',body:'invalid GLB bytes'}));
+ const beforeState=await state(page);await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(id=>FloorPlanPresentation.active&&View3D.assetStatus(id)?.state==='error',id,{timeout:30000});
+ assert.equal(await page.locator('.presentation-warning').isVisible(),true);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P11 WebGL context loss returns intact 2D ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
+ const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ const extension=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),gl=canvas.getContext('webgl2')||canvas.getContext('webgl');const ext=gl?.getExtension('WEBGL_lose_context');if(ext)ext.loseContext();else canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true}));return !!ext;});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('m3d')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:30000});
+ assert.ok(await page.locator('#plan .room').count()>0,'2D rooms remain visible');
+ await page.waitForFunction(()=>{const stage=document.querySelector('#stage').getBoundingClientRect(),rooms=[...document.querySelectorAll('#plan .room')].map(el=>el.getBoundingClientRect());return rooms.length>0&&rooms.every(r=>r.left>=stage.left-2&&r.right<=stage.right+2&&r.top>=stage.top-2&&r.bottom<=stage.bottom+2);});
+ assert.equal(await page.evaluate(()=>View3D.contextAvailable),false);
+ assert.match(await page.locator('#toast').textContent(),/El plano sigue disponible en 2D/);
+ await screenshot(page,`${size}-context-loss-2d`);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy'));
+ assert.equal(await page.evaluate(()=>FloorPlanApp.viewMode),'2d');
+ assert.deepEqual(await state(page),beforeState);
+ if(!extension)t.diagnostic('WEBGL_lose_context unavailable; synthetic context-loss event used');
+});
+
+test('R2 P11 context loss while 3D starts cannot reopen the presentation',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>!!document.querySelector('#view3d canvas'),null,{timeout:20000});
+ await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),gl=canvas.getContext('webgl2')||canvas.getContext('webgl');const ext=gl?.getExtension('WEBGL_lose_context');if(ext)ext.loseContext();else canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true}));});
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d'&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy')&&getComputedStyle(document.querySelector('#plan')).opacity==='1',null,{timeout:30000});
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
 test('3D camera, focus and editor state return after Escape and browser Back',{timeout:120000},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));

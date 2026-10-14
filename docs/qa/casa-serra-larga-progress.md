@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2 con P11: fallo de asset/corrupción y pérdida de contexto WebGL, aviso y recuperación del documento 2D. Después abordar P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2 con P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R2 — P06/P12, aceptación previa
 
@@ -76,6 +76,20 @@ Continuar R2 con P11: fallo de asset/corrupción y pérdida de contexto WebGL, a
 - Presentación navegador **14/14**; prueba dirigida con escucha de consola **1/1** y cero errores de consola/pageerror; regresiones de guía y navegación **9/9**. El caso P06/P12 recorre vista general y dos estancias con salto, Anterior, límites, revisita y reinicio, y compara JSON, objetivo, evidencia de guía, selección, historial y vista antes/después. Logs externos `r2-p06-p12-browser-initial.log`, `r2-p06-p12-console-targeted.log` y `r2-p06-p12-guide-regression.log`.
 - Se abrieron capturas nuevas de las vistas en 1440×900, 390×844, 844×390 y 360×800, de la configuración horizontal y del resize 360×800→844×390. Contador y controles legibles dentro de cada viewport; diez PNG seleccionados en `docs/qa/artifacts/casa-serra/r2-p06-p12/`. El editor conserva el recorte móvil preexistente. M19: lógica y UI propias, sin copiar código Casa Larga.
 - Preview exacta del código `4da6273ff1c564e2f3dc9f61163d0ccbfb4f68de`: deployment Vercel `7067617168` en estado `success`, URL `https://floorplan-3d-ii9hkkjp6-juanma-espinosas-projects.vercel.app`. Se abrió en Chrome autenticado: ejemplo, presentación, vista general «1 de 2», avance a dormitorio principal «2 de 2», botón Siguiente deshabilitado y cámara/escena visibles. Es una preview intermedia, no la URL de revisión humana final. Actions del mismo SHA: runs `38577553257` y `38577553272`, ambos `failure` con `steps: 0`; CI no ejecutó las pruebas.
+
+## R2 — P11, aceptación previa
+
+1. Si un GLB autorizado devuelve 404 o bytes corruptos durante la presentación, el mueble mantiene su representación genérica; un aviso accesible explica la degradación sin cambiar `assetRef`, proyecto, selección, sidecar ni evidencia de guía. La escena y el recorrido continúan operativos.
+2. Si el canvas pierde su contexto WebGL durante la carga o reproducción, la presentación y animaciones quedan canceladas, la interfaz vuelve al documento 2D con aviso visible y no reaparece al resolverse trabajo tardío. El JSON, IDs, historial, selección y calibración quedan intactos. Un intento de reabrir 3D mientras el contexto siga perdido informa el bloqueo; no promete que el contexto se recuperó.
+3. Probar 404 y corrupción con respuesta de red real interceptada en Chromium; usar `WEBGL_lose_context` cuando esté disponible y comprobar retorno 2D, ausencia de `pageerror` y errores de consola inesperados. Repetir inicio/cierre y el recorrido en 1440×900, 390×844, 844×390 y 360×800; abrir las capturas y verificar controles/aviso/canvas. Si el driver no expone la extensión, registrar esa limitación y probar además el evento de pérdida sin afirmar pérdida de GPU real.
+
+### Corte R2 P11 — verificado localmente
+
+- Un GLB que responde 404 o bytes inválidos conserva el mueble genérico y muestra un aviso `role=alert` durante la presentación. El recorrido puede avanzar y cerrar sin cambiar el proyecto, asignación del asset, selección, historial ni evidencia de la guía. La respuesta 404 genera el error de red esperado; no hubo `pageerror`. El caso de corrupción también pasó.
+- `WEBGL_lose_context` estuvo disponible en Chromium/SwiftShader y se ejecutó en los cuatro tamaños. Se cancela la animación y el trabajo de assets, se cierra la presentación y se muestra el plano 2D completo, con aviso y proyecto intacto. Un nuevo intento de 3D queda rechazado hasta recargar. También pasó la pérdida durante la carga. Los casos de contexto registraron consola y `pageerror` vacíos.
+- Presentación y núcleo **27/27** sobre el diff final; regresiones dirigidas del editor/asset **4/4** en la repetición final. La primera ejecución concurrente tuvo un timeout de clic interceptado por el SVG en búsqueda; el caso pasó aislado **1/1** y la repetición de los cuatro pasó **4/4**, sin cambios de código. Logs externos `r2-p11-presentation-final.log`, `r2-p11-asset-editor-regressions.log`, `r2-p11-search-repro.log` y `r2-p11-asset-editor-regressions-final.log`.
+- Se abrieron las capturas de aviso de asset y recuperación 2D en 1440×900, 390×844, 844×390 y 360×800. La primera versión del retorno 2D quedó recortada por el orden de `ResizeObserver`; se corrigió el encuadre tras dos frames y se repitió la suite. El plano final está dentro de `#stage` en los cuatro tamaños. Evidencia seleccionada en `docs/qa/artifacts/casa-serra/r2-p11/`. El recorte preexistente de la barra superior del editor móvil sigue documentado en R0.
+- M19: lógica y estilos propios, sin copiar código ni recursos de Casa Larga. R2 completo y P01–P16 siguen abiertos. CI remota y revisión humana no se infieren de estas pruebas locales.
 
 ## R2 — corte P04/P09/P10, aceptación previa
 

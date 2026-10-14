@@ -14,12 +14,18 @@
  const status=el('p',undefined,card,'presentation-status');status.setAttribute('role','status');
  const progress=el('p',undefined,card,'presentation-progress');progress.setAttribute('aria-live','polite');
  const info=el('p',undefined,card,'presentation-info');
+ const warning=el('p',undefined,card,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
  const controls=el('div',undefined,card,'presentation-controls');
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
  const stops=el('div',undefined,card,'presentation-stops');
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
+ function updateAssetWarning(){
+  const count=active?(View3D?.assetMetrics||[]).filter(item=>item.state==='error').length:0;
+  warning.hidden=!count;
+  if(count)warning.textContent=tx(`${count} modelo(s) 3D no disponibles; se muestran muebles genéricos.`,`${count} 3D model(s) unavailable; generic furniture is shown.`,`有 ${count} 个 3D 模型不可用；显示通用家具。`);
+ }
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
@@ -97,7 +103,7 @@
    if(!window.View3D||!await app.enterPresentation3D())throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
-   sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;
+   sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;updateAssetWarning();
    history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
    await go(0,token);closeButton.focus();
   }catch(error){
@@ -120,7 +126,7 @@
   if(sceneState)View3D?.presentationRestore(sceneState);
   if(pendingStart)await pendingStart.catch(()=>{});
   const saved=entry,three=sceneState;
-  active=false;entry=null;sceneState=null;plan=null;visited=new Set();
+  active=false;entry=null;sceneState=null;plan=null;visited=new Set();warning.hidden=true;
   document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
   if(saved)await app.restorePresentationEntry(saved,three);
   overlay.hidden=true;document.body.classList.remove('presentation-exiting');
@@ -133,11 +139,16 @@
  }
  function invalidate(){
   if(!active&&!pendingStart)return;
-  ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;visited=new Set();
+  ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;visited=new Set();warning.hidden=true;
   overlay.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
   if(location.hash==='#presentacion')history.replaceState(history.state,'','#editor');
  }
  function onProjectChange(){if(active&&!sourceCurrent())stop();}
+ function contextLost(){
+  const saved=entry;
+  invalidate();
+  if(saved)app.restorePresentationEntry(saved,null,{force2D:true}).catch(()=>{});
+ }
  function onKey(e){
   if(!active&&!pendingStart)return;
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
@@ -157,7 +168,8 @@
    View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement)overlay.dataset.moving='false';});
   });
  });
+ addEventListener('floorplan-asset-status',updateAssetWarning);
  config.addEventListener('close',()=>{if(!active&&!pendingStart)returnFocus?.focus?.({preventScroll:true});});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,get active(){return active;},get plan(){return plan;}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;}};
 })();

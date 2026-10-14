@@ -282,6 +282,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-card .btn{border:1px solid var(--line);min-height:44px;white-space:normal}
 .presentation-card .btn:disabled{opacity:.45;cursor:default}
 .presentation-status,.presentation-progress,.presentation-info{margin:4px 0;font-size:12px}
+.presentation-warning{margin:6px 0;padding:7px 9px;border-radius:6px;background:#fff1d2;color:#5b3b00;font-size:12px;overflow-wrap:anywhere}
 .presentation-stops{margin-top:8px}
 .presentation-stops .on{background:var(--teal);color:white}
 body.presenting .guide-bar{display:none}
@@ -1811,6 +1812,7 @@ async function setView(m,options={}){
       if(!probe.getContext('webgl2')&&!probe.getContext('webgl'))throw Error('WebGL unavailable');
       if(ui.tool!=='select')setTool('select');ui.mA=null;closeDrawers();
       document.body.classList.add('m3d');await window.View3D.enter();
+      if(!window.View3D.contextAvailable)throw Error('WebGL context lost');
     }else{document.body.classList.remove('m3d');await window.View3D.exit();applyView();}
     viewMode=m;$('#tip').textContent=TIPS()[m];
     if(m==='3d'&&!options.presentation)window.dispatchEvent(new Event('floorplan-view-ready'));
@@ -1820,6 +1822,15 @@ async function setView(m,options={}){
     applyView();
   }finally{switching=false;document.body.classList.remove('busy');window.FloorPlanTraceUI?.viewChanged();window.FloorPlanGuideUI?.sync();}
 }
+addEventListener('floorplan-3d-context-lost',()=>{
+  viewMode='2d';switching=false;
+  document.body.classList.remove('m3d','busy');
+  $('#stage').classList.remove('is3d','animating');
+  $('#tip').textContent=TIPS()['2d'];applyView();
+  window.FloorPlanPresentation?.contextLost();
+  toast('Se perdió la escena 3D. El plano sigue disponible en 2D; recarga la página para intentar abrir 3D de nuevo.',8000);
+  window.FloorPlanGuideUI?.sync();
+});
 document.querySelectorAll('.menu-pop .btn').forEach(b => b.addEventListener('click', () => b.closest('details').open = false));
 document.querySelectorAll('#viewSeg .btn').forEach(b => b.onclick = () => setView(b.dataset.view));
 
@@ -1984,11 +1995,12 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     viewMode,selection:ui.sel?structuredClone(ui.sel):null,tool:ui.tool,view:{...view},
     libOpen:$('aside.lib').classList.contains('open'),panelOpen:$('aside.right').classList.contains('open'),
     hiddenLib:!!panes.hideLib,hiddenPanel:!!panes.hidePanel,headerScroll:$('header').scrollLeft,focus:document.activeElement};},
-  async restorePresentationEntry(entry,threeState){
+  async restorePresentationEntry(entry,threeState,{force2D=false}={}){
     if(!entry||entry.projectId!==project.id||entry.entryId!==(library?.activeId()||project.id))return false;
-    if(viewMode!==entry.viewMode)await setView(entry.viewMode);
-    if(entry.viewMode==='3d'&&threeState)window.View3D?.presentationRestore(threeState);
-    if(entry.viewMode==='2d'){view={...entry.view};applyView();setTool(entry.tool);}
+    const targetMode=force2D?'2d':entry.viewMode;
+    if(viewMode!==targetMode)await setView(targetMode);
+    if(targetMode==='3d'&&threeState)window.View3D?.presentationRestore(threeState);
+    if(targetMode==='2d'){view={...entry.view};applyView();setTool(entry.tool);if(force2D)requestAnimationFrame(()=>requestAnimationFrame(()=>{if(viewMode==='2d')fitView();}));}
     ui.sel=entry.selection;renderSel();renderPanel();
     if(narrow()){drawer(null);if(entry.libOpen)drawer('lib',true);else if(entry.panelOpen)drawer('panel',true);}
     else{drawer('lib',!entry.hiddenLib);drawer('panel',!entry.hiddenPanel);}
@@ -2028,7 +2040,7 @@ const SW = () => stage.clientWidth, SH = () => stage.clientHeight;
 const opt = {cut:2.8, furn:true, labels:true, night:false, hour:10, mode:'orbit'};
 const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm))/1000:opt.cut;
 
-let inited = false, active = false, raf = 0, anim = null, fly = null;
+let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
 let archFloor, archUp, furnG, labelG, lampG, colliders = [], selKey = null, selHelper = null;
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1; let renderedSource, renderedGeometry;
@@ -2038,6 +2050,10 @@ const doors = [], keys = {};
 function init(){
   if (inited) return;
   renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+  renderer.domElement.addEventListener('webglcontextlost',event=>{
+    event.preventDefault();if(contextLost)return;
+    contextLost=true;abort3D();dispatchEvent(new Event('floorplan-3d-context-lost'));
+  });
   inited = true;
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(SW(), SH());
@@ -2986,6 +3002,7 @@ function flyToRoom(id){
 
 /* ======================= 进入 / 退出 3D ======================= */
 async function enter(){
+  if(contextLost)throw Error('WebGL context lost; reload to retry');
   init(); active = true;
   renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH()); camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
   sync(true);
@@ -2996,14 +3013,24 @@ async function enter(){
   startLoop(); renderer.render(scene, camera);
   stage.classList.add('is3d');                       // 交叉淡入：此刻 3D 画面与 2D 平面完全重合
   await wait(420);
+  if(contextLost)throw Error('WebGL context lost');
   await animate(1700, t => {
     camTween(A, B, ease(clamp01(t/.85)));
     grow = ease(clamp01((t - .1)/.55));
     furnGrow = ease(clamp01((t - .45)/.5));
     applyGrow();
   });
+  if(contextLost)throw Error('WebGL context lost');
   orbit.enabled = true; showLabels(opt.labels);
   stage.classList.remove('animating');
+}
+function abort3D(){
+  if(raf)cancelAnimationFrame(raf);raf=0;
+  if(anim?.res)anim.res();anim=null;
+  if(fly?.res)fly.res(false);fly=null;
+  assetGeneration++;assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
+  walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
+  active=false;stage.classList.remove('is3d','animating');
 }
 async function exit(){
   if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
@@ -3295,7 +3322,7 @@ function presentationInspect(){return active?{
   canvas:{width:renderer.domElement.width,height:renderer.domElement.height}
 }:null;}
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,get contextAvailable(){return !contextLost;},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>
