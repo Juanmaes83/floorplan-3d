@@ -53,6 +53,7 @@
         "presentation/core final 14/14 plus variant 1/1; affected browser 50/50; editor regressions 45/45; import workflow equivalent 21/21 plus guide 5/5",
         "visual inspection 14 PNG docs/qa/artifacts/casa-serra/r2-p04-p10/ at 1440x900, 390x844, 844x390, 360x800 and resize",
         "R2 overall P01-P16 remains open",
+        "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps"
       ]
     },

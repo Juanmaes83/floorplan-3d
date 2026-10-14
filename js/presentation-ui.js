@@ -12,11 +12,12 @@
  const top=el('div',undefined,card,'presentation-card-top');
  const title=el('h2',undefined,top),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
  const status=el('p',undefined,card,'presentation-status');status.setAttribute('role','status');
+ const progress=el('p',undefined,card,'presentation-progress');progress.setAttribute('aria-live','polite');
  const info=el('p',undefined,card,'presentation-info');
  const controls=el('div',undefined,card,'presentation-controls');
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
  const stops=el('div',undefined,card,'presentation-stops');
- let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false;
+ let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function draw(){
@@ -26,6 +27,7 @@
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
+  progress.textContent=tx(`Recorrido: ${visited.size} de ${plan.stops.length} vistas visitadas`,`Tour: ${visited.size} of ${plan.stops.length} views visited`,`参观：已访问 ${visited.size} / ${plan.stops.length} 个视图`);
   info.textContent=stop.kind==='room'?tx(`Superficie aproximada ${stop.areaM2.toFixed(2)} m² · medidas orientativas`,`Approximate area ${stop.areaM2.toFixed(2)} m² · indicative dimensions`,`约 ${stop.areaM2.toFixed(2)} 平方米 · 仅供参考`):tx('Vista general del proyecto actual','Overview of the current project','当前项目总览');
   previous.disabled=index===0;next.disabled=index===plan.stops.length-1;
   stops.replaceChildren();
@@ -95,7 +97,7 @@
    if(!window.View3D||!await app.enterPresentation3D())throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
-   sceneState=View3D.presentationCapture();active=true;index=0;controls.hidden=false;stops.hidden=false;
+   sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;
    history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
    await go(0,token);closeButton.focus();
   }catch(error){
@@ -109,7 +111,7 @@
   if(!active||target<0||target>=plan.stops.length)return;
   if(!sourceCurrent()){await stop();return;}
   const move=++movement;index=target;draw();overlay.dataset.moving='true';
-  try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(error){if(token===epoch){status.textContent=error.message;}}
+  try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
   finally{if(move===movement)overlay.dataset.moving='false';}
  }
  async function stop(fromPop=false){
@@ -118,7 +120,7 @@
   if(sceneState)View3D?.presentationRestore(sceneState);
   if(pendingStart)await pendingStart.catch(()=>{});
   const saved=entry,three=sceneState;
-  active=false;entry=null;sceneState=null;plan=null;
+  active=false;entry=null;sceneState=null;plan=null;visited=new Set();
   document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
   if(saved)await app.restorePresentationEntry(saved,three);
   overlay.hidden=true;document.body.classList.remove('presentation-exiting');
@@ -131,7 +133,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart)return;
-  ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;
+  ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;visited=new Set();
   overlay.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
   if(location.hash==='#presentacion')history.replaceState(history.state,'','#editor');
  }

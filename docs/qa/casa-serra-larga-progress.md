@@ -61,7 +61,20 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2 con P06/P12: añadir progreso propio de paradas visitadas y una pausa solo si se ofrece reproducción automática; verificar que ninguna parada añade evidencia al objetivo. Después abordar P11/P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2 con P11: fallo de asset/corrupción y pérdida de contexto WebGL, aviso y recuperación del documento 2D. Después abordar P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+
+## R2 — P06/P12, aceptación previa
+
+1. El recorrido manual conserva Anterior, Siguiente y salto directo. En la primera y última parada se deshabilita el control imposible; título, indicador y parada resaltada coinciden con la cámara solicitada. No se ofrece reproducción automática, así que la pausa de P06 no tiene acción aplicable en este corte.
+2. El recorrido muestra un contador propio de paradas visitadas, incluida la vista general. Solo cuenta una parada cuando su movimiento 3D termina correctamente; revisitas y saltos no duplican el conteo. El contador se reinicia en cada inicio y nunca se guarda en el proyecto ni en el sidecar de selección.
+3. Recorrer todas las paradas, volver atrás y cerrar deja iguales el JSON, objetivo, evidencia de guía, historial, selección y vista. Error, cancelación o cambio de proyecto no atribuyen una parada tardía al recorrido nuevo.
+4. Probar límites, saltos, revisitas, progreso y separación de la guía en Chromium; revisar visualmente indicador y controles en 1440×900, 390×844, 844×390 y 360×800, más resize. Abrir las capturas con la herramienta de imagen. Consola/pageerror vacíos.
+
+### Corte R2 P06/P12 — verificado localmente
+
+- El indicador «Recorrido: n de N vistas visitadas» cuenta solo vistas cuyo movimiento 3D terminó, sin duplicar revisitas. Se reinicia en cada inicio, queda fuera del proyecto y del sidecar, y se invalida al cerrar/cambiar de proyecto. El tour sigue siendo manual; la pausa no aplica porque no hay reproducción automática.
+- Presentación navegador **14/14**; prueba dirigida con escucha de consola **1/1** y cero errores de consola/pageerror; regresiones de guía y navegación **9/9**. El caso P06/P12 recorre vista general y dos estancias con salto, Anterior, límites, revisita y reinicio, y compara JSON, objetivo, evidencia de guía, selección, historial y vista antes/después. Logs externos `r2-p06-p12-browser-initial.log`, `r2-p06-p12-console-targeted.log` y `r2-p06-p12-guide-regression.log`.
+- Se abrieron capturas nuevas de las vistas en 1440×900, 390×844, 844×390 y 360×800, de la configuración horizontal y del resize 360×800→844×390. Contador y controles legibles dentro de cada viewport; diez PNG seleccionados en `docs/qa/artifacts/casa-serra/r2-p06-p12/`. El editor conserva el recorte móvil preexistente. M19: lógica y UI propias, sin copiar código Casa Larga.
 
 ## R2 — corte P04/P09/P10, aceptación previa
 

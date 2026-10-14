@@ -20,12 +20,43 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const startBox=await page.getByRole('button',{name:'Iniciar presentación'}).boundingBox();
  assert.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=viewport.height,`${size}: start button inside viewport`);
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ assert.match(await page.locator('.presentation-progress').textContent(),/1 de 2 vistas visitadas/);
  await screenshot(page,`${size}-overview`);
  await page.getByRole('button',{name:'Siguiente →'}).click();await page.waitForFunction(()=>document.querySelector('.presentation-status')?.textContent?.includes('Vista 2')&&document.querySelector('#presentationOverlay').dataset.moving==='false');await screenshot(page,`${size}-room`);
+ assert.match(await page.locator('.presentation-progress').textContent(),/2 de 2 vistas visitadas/);
  const layout=await page.evaluate(()=>({viewport:innerWidth,card:document.querySelector('.presentation-card').getBoundingClientRect().toJSON(),canvas:document.querySelector('#view3d canvas').getBoundingClientRect().toJSON(),roomId:FloorPlanPresentation.plan.stops[1].roomId}));
  assert.ok(layout.roomId);assert.ok(layout.card.left>=0&&layout.card.right<=layout.viewport);assert.ok(layout.canvas.left>=0&&layout.canvas.right<=layout.viewport);
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
  const afterState=await state(page);for(const key of Object.keys(beforeState))assert.ok(afterState[key]===beforeState[key],`${key} restored`);assert.deepEqual(errors,[]);
+});
+
+test('R2 P06/P12 manual jumps and revisits count completed stops without guide evidence',{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
+ const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guidePresent').click();await page.locator('.presentation-room-row').nth(1).locator('input').check();
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ const progress=()=>page.locator('.presentation-progress').textContent();
+ assert.match(await progress(),/1 de 3 vistas visitadas/);
+ assert.equal(await page.getByRole('button',{name:'← Anterior'}).isDisabled(),true);
+ await page.locator('.presentation-stops button').nth(2).click();
+ await page.waitForFunction(()=>document.querySelector('.presentation-status').textContent.includes('Vista 3')&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.match(await progress(),/2 de 3 vistas visitadas/);
+ assert.equal(await page.getByRole('button',{name:'Siguiente →'}).isDisabled(),true);
+ await page.getByRole('button',{name:'← Anterior'}).click();
+ await page.waitForFunction(()=>document.querySelector('.presentation-status').textContent.includes('Vista 2')&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.match(await progress(),/3 de 3 vistas visitadas/);
+ await page.locator('.presentation-stops button').first().click();
+ await page.waitForFunction(()=>document.querySelector('.presentation-status').textContent.includes('Vista 1')&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.match(await progress(),/3 de 3 vistas visitadas/);
+ assert.equal(await page.getByRole('button',{name:'← Anterior'}).isDisabled(),true);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.match(await progress(),/1 de 3 vistas visitadas/);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);
 });
 
 test('3D camera, focus and editor state return after Escape and browser Back',{timeout:120000},async t=>{
