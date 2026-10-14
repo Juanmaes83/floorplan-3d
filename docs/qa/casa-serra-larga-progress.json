@@ -363,6 +363,24 @@
       "evidence": []
     }
   ],
+  "protocol": [
+    {"id":"P01","status":"en curso","next":"tour search and goal invariance"},
+    {"id":"P02","status":"en curso","next":"closed-guide editor entry and saved configuration"},
+    {"id":"P03","status":"en curso","next":"empty-project four viewport and focus checks"},
+    {"id":"P04","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P05","status":"en curso","next":"own/imported project IDs and derived poses"},
+    {"id":"P06","status":"verificado localmente","codeSha":"4da6273","note":"manual tour; no autoplay pause"},
+    {"id":"P07","status":"en curso","next":"close/back during 2D transition"},
+    {"id":"P08","status":"en curso","next":"walk and pointer lock return"},
+    {"id":"P09","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P10","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P11","status":"verificado localmente","codeSha":"cb13c3b"},
+    {"id":"P12","status":"verificado localmente","codeSha":"4da6273"},
+    {"id":"P13","status":"verificado localmente","codeSha":"83c2677"},
+    {"id":"P14","status":"verificado localmente","codeSha":"ea4431f"},
+    {"id":"P15","status":"verificado localmente","codeSha":"ea4431f"},
+    {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
+  ],
   "preview": {
     "sha": "83c26779238f4728dafbbca01602a064d90035db",
     "url": "https://floorplan-3d-9h5a6i5qh-juanma-espinosas-projects.vercel.app/",

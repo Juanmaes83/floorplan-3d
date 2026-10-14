@@ -63,6 +63,33 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida y recorrido que aún no tienen evidencia completa. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
+## R2 — matriz del protocolo P01–P16
+
+| Caso | Estado | Evidencia presente | Brecha antes de cerrar R2 |
+| --- | --- | --- | --- |
+| P01 | en curso | Búsqueda «presentación en 3D» y «presentar mi vivienda» en pruebas | «tour», acción correcta desde búsqueda e invariancia del objetivo |
+| P02 | en curso | Entrada guiada de Revisar y guardar probada | Entrada del editor con guía cerrada y equivalencia de configuración |
+| P03 | en curso | Proyecto vacío: explicación e Ir a Distribuir en 390×844 | Repetir otros tamaños, cancelar y comparar documento completo |
+| P04 | verificado localmente | Orden, selección y cancelación; corte `e5dd7c5` | — |
+| P05 | en curso | Vista general y estancia real en cuatro tamaños; ID de parada | Contrastar datos/poses con proyecto propio e importado |
+| P06 | verificado localmente | Anterior, Siguiente, saltos y límites; corte `4da6273` | La pausa no aplica: no existe reproducción automática |
+| P07 | en curso | Escape durante carga, Escape/Atrás desde 3D y pérdida de contexto | Cerrar/Atrás durante transición desde 2D, foco e impedir reapertura tardía |
+| P08 | en curso | Entrada 2D y 3D con cámara, opciones y puertas restauradas | Recorrido/pointer lock y retorno tras su cancelación |
+| P09 | verificado localmente | Cambio de proyecto, variante y revisión; corte `e5dd7c5` | — |
+| P10 | verificado localmente | Recarga, ID eliminado y sidecar reconciliado; corte `e5dd7c5` | — |
+| P11 | verificado localmente | GLB 404/corrupto, pérdida de contexto y 2D intacto; corte `cb13c3b` | — |
+| P12 | verificado localmente | Progreso por paradas separado de guía; corte `4da6273` | — |
+| P13 | verificado localmente | PNG real, resize serializado, buffer/cámara recuperados; corte `83c2677` | — |
+| P14 | verificado localmente | Cuatro tamaños, movimiento reducido y cámara 3D; corte `ea4431f` | — |
+| P15 | verificado localmente | Diez ciclos, 1298 geometrías/8 texturas estables; corte `ea4431f` | — |
+| P16 | verificado localmente | HTML como texto y controles visibles; corte `ea4431f`, repetido en P13 | — |
+
+### Siguiente corte P01/P02/P03 — aceptación previa
+
+1. Las búsquedas «presentar mi vivienda», «tour» y «presentación en 3D» abren la misma configuración de presentación en el proyecto activo, sin cambiar el objetivo ni activar solamente la vista 3D. Las acciones visibles del buscador y teclado se comprueban en 1440×900, 390×844, 844×390 y 360×800.
+2. Desde Revisar y guardar, el control guiado abre la configuración; con la guía cerrada, el botón del editor abre la misma selección y orden guardados. Cancelar ambos caminos conserva JSON, proyecto/variante, escala, calibración, historial, selección y cámara/vista.
+3. En un proyecto vacío, ambas entradas explican que falta una estancia con muros, ofrecen Ir a Distribuir y Cancelar y no inician WebGL. Tras cancelar o ir a Distribuir, el documento permanece intacto y el foco vuelve a un control útil. Revisar visualmente los cuatro tamaños y registrar consola/pageerror.
+
 ## R2 — P06/P12, aceptación previa
 
 1. El recorrido manual conserva Anterior, Siguiente y salto directo. En la primera y última parada se deshabilita el control imposible; título, indicador y parada resaltada coinciden con la cámara solicitada. No se ofrece reproducción automática, así que la pausa de P06 no tiene acción aplicable en este corte.
