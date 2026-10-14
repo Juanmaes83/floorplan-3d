@@ -1,376 +1,337 @@
-﻿{
-    "schema":  "CasaSerraProgressV1",
-    "branch":  "feat/casa-serra-larga-improvements",
-    "base":  "a1341eeef82c651914da08ff78328e668091ea78",
-    "current":  "R0",
-    "ci":  "blocked_billing_history_unverified_current",
-    "humanReview":  "pending",
-    "merge":  "pending",
-    "items":  [
-                  {
-                      "id":  "R0",
-                      "type":  "incremento",
-                      "status":  "verificado localmente",
-                      "scope":  "Baseline, fuentes y continuidad",
-                      "dependency":  "#38 probado",
-                      "acceptance":  "Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo",
-                      "testedSha":  "a1341eeef82c651914da08ff78328e668091ea78",
-                      "evidence":  [
-                                       "Node syntax 7 files PASS",
-                                       "unit multiformat 176 pass/0 fail/1 skip",
-                                       "unit guide 165 pass/0 fail/1 skip",
-                                       "browser import 26/26",
-                                       "browser regressions 45/45",
-                                       "visual inspection qa-results/serra-r0 desktop, portrait, landscape, image import; preexisting mobile toolbar clipping"
-                                   ]
-                  },
-                  {
-                      "id":  "R1",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "CS-1 mínimo; M01–M04, mínimos M05/M06/M19",
-                      "dependency":  "R0",
-                      "acceptance":  "Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R2",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "CS-1 completo; M01–M06/M19",
-                      "dependency":  "R1",
-                      "acceptance":  "Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R3",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "M07/M11/M13",
-                      "dependency":  "R2",
-                      "acceptance":  "Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R4",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "CS-2; M08/M09 y control M05/M06",
-                      "dependency":  "R2",
-                      "acceptance":  "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R5",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "CS-3 visual; M10/M15",
-                      "dependency":  "R4",
-                      "acceptance":  "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R6",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "CS-3 recorrido; M18",
-                      "dependency":  "R2",
-                      "acceptance":  "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R7",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "M12/M16",
-                      "dependency":  "R2",
-                      "acceptance":  "Variantes con cámara común; agrupar solo si medición justifica y conserva IDs",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R8",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "M14/M17/M20",
-                      "dependency":  "R2",
-                      "acceptance":  "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "R9",
-                      "type":  "incremento",
-                      "status":  "pendiente",
-                      "scope":  "Cierre de M01–M20",
-                      "dependency":  "R1–R8",
-                      "acceptance":  "Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M01",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Presentación reversible por estancias",
-                      "dependency":  "R0",
-                      "acceptance":  "Ejemplo, importado y propio; cerrar sin mutar proyecto, selección ni historial",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M02",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Fichas y marcadores reales",
-                      "dependency":  "M01",
-                      "acceptance":  "Nombre, área y acabados del roomId; texto seguro y foco usable en móvil",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M03",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Poses y encuadre derivados",
-                      "dependency":  "M01",
-                      "acceptance":  "Mismo proyecto/revisión produce poses repetibles; ejes, diagonal y resize correctos",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M04",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Controles y movimiento reducido",
-                      "dependency":  "M01",
-                      "acceptance":  "Teclado/touch/Escape, sin animación obligatoria ni interferencia con inputs",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M05",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Calidad y fallback por capacidad",
-                      "dependency":  "M01",
-                      "acceptance":  "WebGL/asset/context loss recupera 2D sin alterar documento",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M06",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Carga por etapas cancelable",
-                      "dependency":  "M01",
-                      "acceptance":  "Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M07",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Lámina y anotaciones",
-                      "dependency":  "M03",
-                      "acceptance":  "Exportación real y legible con cotas/escala declaradas y geometría intacta",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M08",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "PBR selectivo",
-                      "dependency":  "M05/M06",
-                      "acceptance":  "Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M09",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Luz/HDRI y presets",
-                      "dependency":  "M08",
-                      "acceptance":  "Comparación con cámara común; ajuste reversible y degradación por capacidad",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M10",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Revelado dibujo/material por IDs",
-                      "dependency":  "M08",
-                      "acceptance":  "Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M11",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Capturas por estancias",
-                      "dependency":  "M03",
-                      "acceptance":  "PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M12",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Comparación de variantes",
-                      "dependency":  "M03",
-                      "acceptance":  "Misma referencia visual; variantes e IDs permanecen aislados",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M13",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Minimapa de orientación",
-                      "dependency":  "M03",
-                      "acceptance":  "RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M14",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Reflejo selectivo",
-                      "dependency":  "M08",
-                      "acceptance":  "Recurso identificado, coste medido y fallback; sin reflejos globales falsos",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M15",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Sombras/efectos acotados",
-                      "dependency":  "M08",
-                      "acceptance":  "Beneficio visual revisado, coste medido y renderer base tras fallo",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M16",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Agrupación de geometría",
-                      "dependency":  "M05",
-                      "acceptance":  "Mejora medida y selección/exportación/asignaciones conservan IDs",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M17",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Detalles procedurales genéricos",
-                      "dependency":  "M05",
-                      "acceptance":  "Piloto identificable, coste medido y geometría/selección intactas",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M18",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Recorrido interior seguro",
-                      "dependency":  "M03",
-                      "acceptance":  "Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M19",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Créditos y procedencia",
-                      "dependency":  "transversal",
-                      "acceptance":  "Cada técnica/recurso incorporado tiene origen y permiso registrado",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  },
-                  {
-                      "id":  "M20",
-                      "type":  "capacidad",
-                      "status":  "pendiente",
-                      "scope":  "Presentación portable",
-                      "dependency":  "M11",
-                      "acceptance":  "Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado",
-                      "testedSha":  null,
-                      "evidence":  [
-
-                                   ]
-                  }
-              ]
+{
+  "schema": "CasaSerraProgressV1",
+  "branch": "feat/casa-serra-larga-improvements",
+  "base": "a1341eeef82c651914da08ff78328e668091ea78",
+  "current": "R2",
+  "ci": "blocked_billing_history_unverified_current",
+  "humanReview": "pending",
+  "merge": "pending",
+  "items": [
+    {
+      "id": "R0",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "Baseline, fuentes y continuidad",
+      "dependency": "#38 probado",
+      "acceptance": "Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo",
+      "testedSha": "a1341eeef82c651914da08ff78328e668091ea78",
+      "evidence": [
+        "Node syntax 7 files PASS",
+        "unit multiformat 176 pass/0 fail/1 skip",
+        "unit guide 165 pass/0 fail/1 skip",
+        "browser import 26/26",
+        "browser regressions 45/45",
+        "visual inspection qa-results/serra-r0 desktop, portrait, landscape, image import; preexisting mobile toolbar clipping"
+      ]
+    },
+    {
+      "id": "R1",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-1 mínimo; M01–M04, mínimos M05/M06/M19",
+      "dependency": "R0",
+      "acceptance": "Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil",
+      "testedSha": "68b2f4ee96f2c1ec049c83ba68d25550a9affcfd",
+      "evidence": [
+        "unit presentation and guide 17/17; broad unit 178 pass/0 fail/1 skip before CSS inline change",
+        "browser final presentation/guide/navigation/capture/import 29/29",
+        "browser editor and F2 regressions 45/45; import prior 26/26; targeted local F2 unexpected 0",
+        "visual inspection and 12 PNG docs/qa/artifacts/casa-serra/r1/ at 1440x900, 390x844, 844x390, 360x800"
+      ]
+    },
+    {
+      "id": "R2",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "CS-1 completo; M01–M06/M19",
+      "dependency": "R1",
+      "acceptance": "Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R3",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "M07/M11/M13",
+      "dependency": "R2",
+      "acceptance": "Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R4",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "CS-2; M08/M09 y control M05/M06",
+      "dependency": "R2",
+      "acceptance": "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R5",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "CS-3 visual; M10/M15",
+      "dependency": "R4",
+      "acceptance": "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R6",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "CS-3 recorrido; M18",
+      "dependency": "R2",
+      "acceptance": "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R7",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "M12/M16",
+      "dependency": "R2",
+      "acceptance": "Variantes con cámara común; agrupar solo si medición justifica y conserva IDs",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R8",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "M14/M17/M20",
+      "dependency": "R2",
+      "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "R9",
+      "type": "incremento",
+      "status": "pendiente",
+      "scope": "Cierre de M01–M20",
+      "dependency": "R1–R8",
+      "acceptance": "Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M01",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Presentación reversible por estancias",
+      "dependency": "R0",
+      "acceptance": "Ejemplo, importado y propio; cerrar sin mutar proyecto, selección ni historial",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M02",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Fichas y marcadores reales",
+      "dependency": "M01",
+      "acceptance": "Nombre, área y acabados del roomId; texto seguro y foco usable en móvil",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M03",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Poses y encuadre derivados",
+      "dependency": "M01",
+      "acceptance": "Mismo proyecto/revisión produce poses repetibles; ejes, diagonal y resize correctos",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M04",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Controles y movimiento reducido",
+      "dependency": "M01",
+      "acceptance": "Teclado/touch/Escape, sin animación obligatoria ni interferencia con inputs",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M05",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Calidad y fallback por capacidad",
+      "dependency": "M01",
+      "acceptance": "WebGL/asset/context loss recupera 2D sin alterar documento",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M06",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Carga por etapas cancelable",
+      "dependency": "M01",
+      "acceptance": "Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M07",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Lámina y anotaciones",
+      "dependency": "M03",
+      "acceptance": "Exportación real y legible con cotas/escala declaradas y geometría intacta",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M08",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "PBR selectivo",
+      "dependency": "M05/M06",
+      "acceptance": "Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M09",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Luz/HDRI y presets",
+      "dependency": "M08",
+      "acceptance": "Comparación con cámara común; ajuste reversible y degradación por capacidad",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M10",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Revelado dibujo/material por IDs",
+      "dependency": "M08",
+      "acceptance": "Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M11",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Capturas por estancias",
+      "dependency": "M03",
+      "acceptance": "PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M12",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Comparación de variantes",
+      "dependency": "M03",
+      "acceptance": "Misma referencia visual; variantes e IDs permanecen aislados",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M13",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Minimapa de orientación",
+      "dependency": "M03",
+      "acceptance": "RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M14",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Reflejo selectivo",
+      "dependency": "M08",
+      "acceptance": "Recurso identificado, coste medido y fallback; sin reflejos globales falsos",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M15",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Sombras/efectos acotados",
+      "dependency": "M08",
+      "acceptance": "Beneficio visual revisado, coste medido y renderer base tras fallo",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M16",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Agrupación de geometría",
+      "dependency": "M05",
+      "acceptance": "Mejora medida y selección/exportación/asignaciones conservan IDs",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M17",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Detalles procedurales genéricos",
+      "dependency": "M05",
+      "acceptance": "Piloto identificable, coste medido y geometría/selección intactas",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M18",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Recorrido interior seguro",
+      "dependency": "M03",
+      "acceptance": "Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea",
+      "testedSha": null,
+      "evidence": []
+    },
+    {
+      "id": "M19",
+      "type": "capacidad",
+      "status": "en curso",
+      "scope": "Créditos y procedencia",
+      "dependency": "transversal",
+      "acceptance": "Cada técnica/recurso incorporado tiene origen y permiso registrado",
+      "testedSha": null,
+      "evidence": [
+        "R1 minimum verified; full acceptance remains in R2"
+      ]
+    },
+    {
+      "id": "M20",
+      "type": "capacidad",
+      "status": "pendiente",
+      "scope": "Presentación portable",
+      "dependency": "M11",
+      "acceptance": "Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado",
+      "testedSha": null,
+      "evidence": []
+    }
+  ]
 }
