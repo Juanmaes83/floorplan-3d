@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "failed_without_steps_on_12500da_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_1dbc9a3_runs_38576295738_38576295869_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -52,7 +52,8 @@
         "P04/P09/P10 slice code e5dd7c5617450e345b6a2fb1c07196849b0c3c87: local sidecar, ordered selection, stale ID/revision reconciliation and invalidation",
         "presentation/core final 14/14 plus variant 1/1; affected browser 50/50; editor regressions 45/45; import workflow equivalent 21/21 plus guide 5/5",
         "visual inspection 14 PNG docs/qa/artifacts/casa-serra/r2-p04-p10/ at 1440x900, 390x844, 844x390, 360x800 and resize",
-        "R2 overall P01-P16 remains open"
+        "R2 overall P01-P16 remains open",
+        "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps"
       ]
     },
     {
@@ -348,9 +349,10 @@
     }
   ],
   "preview": {
-    "sha": "12500daf5c828c033ed78100470eb4fe657753c9",
-    "url": "https://floorplan-3d-3vj7qewda-juanma-espinosas-projects.vercel.app/",
+    "sha": "1dbc9a3ca3dbdd3db681038eba98b8c3646743ab",
+    "url": "https://floorplan-3d-lkn8xiame-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7067406754",
     "status": "deployed_visual_review_authenticated",
-    "anonymousAccess": "302_to_sso"
+    "anonymousAccess": "protected_by_sso"
   }
 }
