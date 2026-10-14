@@ -286,6 +286,14 @@ body.guided .presentation-entry{display:none!important}
 .presentation-stops{margin-top:8px}
 .presentation-stops .btn{min-width:0;max-width:100%;overflow-wrap:anywhere}
 .presentation-stops .on{background:var(--teal);color:white}
+.sheet-dialog{width:min(1240px,calc(100vw - 18px));max-width:none;max-height:calc(100dvh - 18px);padding:10px;background:#fffdf9}
+.sheet-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.sheet-toolbar h2{font-size:18px;margin:0 auto 0 0}
+.sheet-toolbar .btn{min-height:44px}
+.sheet-scroll{max-height:calc(100dvh - 92px);overflow:auto;background:#e8e5df;text-align:center}
+.sheet-scroll img{display:block;width:100%;height:auto;margin:auto}
+.sheet-scroll.zoomed img{width:1600px;max-width:none}
+@media(max-width:680px){.sheet-toolbar h2{flex-basis:100%}.sheet-scroll{max-height:calc(100dvh - 140px)}}
 body.presenting .guide-bar{display:none}
 body.presenting .app{grid-template-rows:0 0 minmax(0,1fr) 0}
 body.presenting header,body.presenting footer{display:none}
@@ -2019,6 +2027,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/asset-ui.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-ui.js"></script>
+<script src="js/sheet-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
