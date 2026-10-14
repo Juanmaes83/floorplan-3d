@@ -17,6 +17,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
  const matches=await page.evaluate(()=>FloorPlanGuide.resolve('presentación en 3D').map(a=>a.id));assert.equal(matches[0],'presentation');
  await page.locator('#guidePresent').click();assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);await screenshot(page,`${size}-config`);
+ const startBox=await page.getByRole('button',{name:'Iniciar presentación'}).boundingBox();
+ assert.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=viewport.height,`${size}: start button inside viewport`);
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
  await screenshot(page,`${size}-overview`);
  await page.getByRole('button',{name:'Siguiente →'}).click();await page.waitForFunction(()=>document.querySelector('.presentation-status')?.textContent?.includes('Vista 2')&&document.querySelector('#presentationOverlay').dataset.moving==='false');await screenshot(page,`${size}-room`);
@@ -72,5 +74,97 @@ test('an empty project explains the layout prerequisite without starting 3D',{ti
  await page.getByRole('button',{name:'Ir a Distribuir'}).click();
  assert.equal(await page.locator('#guideDialog').evaluate(d=>d.open),true);
  const afterState=await state(page);for(const key of Object.keys(beforeState))assert.ok(afterState[key]===beforeState[key],`${key} unchanged for empty project`);
+ assert.deepEqual(errors,[]);
+});
+
+test('R2 room selection and order persist outside project; stale room IDs reconcile on reload',{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844});
+ const original=await state(page),key=await page.evaluate(()=>FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id));
+ await page.locator('#guidePresent').click();
+ assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),null);
+ await page.locator('.presentation-room-row').nth(1).locator('input').check();
+ await page.getByRole('button',{name:'Subir Baño en suite'}).click();
+ await page.getByRole('button',{name:'Cancelar'}).click();
+ assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),null);
+ assert.deepEqual(await state(page),original);
+ await page.locator('#guidePresent').click();
+ await page.locator('.presentation-room-row').nth(1).locator('input').check();
+ await page.getByRole('button',{name:'Subir Baño en suite'}).click();
+ const names=await page.locator('.presentation-room-row label span').allTextContents();assert.equal(names[0],'Baño en suite');
+ await fs.mkdir('qa-results/serra-r2',{recursive:true});await page.screenshot({path:'qa-results/serra-r2/390x844-ordered-config.png'});
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ const plan=await page.evaluate(()=>FloorPlanPresentation.plan),saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+ assert.deepEqual(plan.stops.slice(1).map(s=>s.roomId),saved.roomIds);assert.equal(plan.stops.length,3);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),original);
+ const download=page.waitForEvent('download');await page.evaluate(()=>exportProjectJson());
+ const chunks=[];for await(const chunk of await (await download).createReadStream())chunks.push(chunk);
+ assert.deepEqual(JSON.parse(Buffer.concat(chunks).toString()),JSON.parse(original.project));
+ await page.reload();await page.waitForFunction(()=>window.FloorPlanPresentation);
+ await page.locator('#guidePresent').click();
+ assert.equal(await page.locator('.presentation-room-row').first().locator('span').textContent(),'Baño en suite');
+ assert.equal(await page.locator('.presentation-room-row').nth(0).locator('input').isChecked(),true);
+ assert.equal(await page.locator('.presentation-room-row').nth(1).locator('input').isChecked(),true);
+ await page.locator('.presentation-room-row').first().locator('input').uncheck();
+ await page.getByRole('button',{name:'Cancelar'}).click();
+ assert.deepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).roomIds,key),saved.roomIds);
+ await page.evaluate(k=>{const p=JSON.parse(localStorage.getItem(k));p.revision='old';p.roomIds=['removed-room',...p.roomIds];localStorage.setItem(k,JSON.stringify(p));},key);
+ await page.reload();await page.waitForFunction(()=>window.FloorPlanPresentation);
+ await page.locator('#guidePresent').click();
+ assert.match(await page.locator('.presentation-config-message').textContent(),/1 estancia/);
+ assert.equal(await page.locator('.presentation-room-row').first().locator('span').textContent(),'Baño en suite');
+ await page.getByRole('button',{name:'Cancelar'}).click();
+ assert.deepEqual(errors,[]);
+});
+
+test('R2 changing active project invalidates the live plan and keeps sidecars isolated',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:844,height:390});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ const old=await page.evaluate(()=>({entry:FloorPlanApp.entryId,id:FloorPlanApp.project.id}));
+ await page.evaluate(()=>switchProject(library.create('Proyecto aislado')));
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ const current=await page.evaluate(()=>({entry:FloorPlanApp.entryId,id:FloorPlanApp.project.id}));
+ assert.notDeepEqual(current,old);
+ assert.equal(await page.evaluate(()=>localStorage.getItem(FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id))),null);
+ await page.locator('#actionSearchBtn').click();await page.fill('#editorActionInput','presentar mi vivienda');
+ await page.locator('#editorActionResults [role=option]').first().click();
+ assert.match(await page.locator('#presentationConfig').textContent(),/Selecciona y ordena las estancias/);
+ assert.equal(await page.locator('.presentation-room-row input:checked').count(),1);
+ await page.getByRole('button',{name:'Cancelar'}).click();
+ assert.deepEqual(errors,[]);
+});
+
+test('R2 geometry revision invalidates the tour and resize restores the current aspect',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:360,height:800});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ const oldCamera=await page.evaluate(()=>View3D.presentationInspect().position);
+ await page.setViewportSize({width:844,height:390});
+ await page.waitForFunction(()=>{const c=document.querySelector('#view3d canvas').getBoundingClientRect(),s=View3D.presentationInspect();return c.width>0&&Math.abs(s.aspect-c.width/c.height)<.03;});
+ await page.waitForFunction(old=>{const s=View3D.presentationInspect();return document.querySelector('#presentationOverlay').dataset.moving==='false'&&s.position.some((v,i)=>Math.abs(v-old[i])>.1);},oldCamera);
+ await fs.mkdir('qa-results/serra-r2',{recursive:true});await page.screenshot({path:'qa-results/serra-r2/360x800-resized-to-844x390.png'});
+ await page.evaluate(()=>mutate(()=>{project.rooms[0].name='Dormitorio actualizado';}));
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms[0].name),'Dormitorio actualizado');
+ await page.locator('#guidePresent').click();
+ assert.match(await page.locator('.presentation-config-message').textContent(),/El plano cambió/);
+ await page.getByRole('button',{name:'Cancelar'}).click();
+ assert.deepEqual(errors,[]);
+});
+
+test('R2 project switch during 3D loading cannot reopen a stale presentation',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ const old=await page.evaluate(()=>FloorPlanApp.project.id);
+ await page.evaluate(()=>switchProject(library.create('Cambio durante carga')));
+ await page.waitForFunction(()=>!document.body.classList.contains('busy')&&!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ const current=await page.evaluate(()=>FloorPlanApp.project.id);assert.notEqual(current,old);
+ await page.locator('#actionSearchBtn').click();await page.fill('#editorActionInput','presentar mi vivienda');
+ await page.locator('#editorActionResults [role=option]').first().click();
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.id),current);
+ assert.equal(await page.locator('.presentation-room-row input:checked').count(),1);
+ await page.getByRole('button',{name:'Cancelar'}).click();
  assert.deepEqual(errors,[]);
 });

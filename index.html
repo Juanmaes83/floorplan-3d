@@ -261,9 +261,15 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 
 .presentation-entry{order:-1;border:1px solid var(--teal,#2f5d62);color:var(--teal,#2f5d62);font-weight:650}
 body.guided .presentation-entry{display:none!important}
-.presentation-config{width:min(480px,calc(100vw - 24px));padding:20px}
+.presentation-config{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
 .presentation-config h2{margin:0 0 10px;font-size:20px}
 .presentation-config p{line-height:1.5}
+.presentation-config-message{font-size:13px}
+.presentation-room-list{display:grid;gap:5px;max-height:min(38vh,290px);overflow:auto}
+.presentation-room-row{display:grid;grid-template-columns:minmax(0,1fr) 44px 44px;align-items:center;gap:5px}
+.presentation-room-row label{display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere}
+.presentation-room-row input{width:20px;height:20px;flex:none}
+.presentation-room-row .btn{min-height:44px;border:1px solid var(--line)}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .presentation-config-actions .btn{border:1px solid var(--line);min-height:44px}
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
@@ -287,7 +293,7 @@ body.presenting #hint3d{display:none}
 body.presentation-exiting header,body.presentation-exiting .guide-bar,body.presentation-exiting aside,body.presentation-exiting footer{pointer-events:none;opacity:.45}
 @media(max-width:600px){.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
-@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-info{display:none}.presentation-stops{margin-top:3px}}
+@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-info{display:none}.presentation-stops{margin-top:3px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
 
 </style>
 <script type="importmap">
@@ -857,8 +863,11 @@ let view = {x0:0, y0:0, s:.06};
 const undoStack = [], redoStack = [];
 
 function save(){
-  try { Core.validate(project); storage.setItem(STORE, JSON.stringify(project)); return true; }
-  catch(e){ toast(tr('保存失败：','Save failed: ') + e.message); return false; }
+  let saved=true;
+  try { Core.validate(project); storage.setItem(STORE, JSON.stringify(project)); }
+  catch(e){ toast(tr('保存失败：','Save failed: ') + e.message); saved=false; }
+  window.FloorPlanPresentation?.onProjectChange();
+  return saved;
 }
 const snap = () => JSON.stringify(project);
 function commit(before){
@@ -1910,7 +1919,7 @@ $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
 if(loadedProject.message)toast(loadedProject.message,6000);
-function switchProject(next){project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;refreshProject();renderAll();fitView();}
+function switchProject(next){window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;refreshProject();renderAll();fitView();}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
