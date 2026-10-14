@@ -25,7 +25,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | --- | --- | --- | --- | --- | --- | --- |
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
-| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P01/P02/P03/P04/P05/P06/P07/P09/P10/P11/P12/P13/P14/P15/P16 locales; P08 pendiente |
+| R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
 | R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2: probar P08 (inicio/retorno desde 2D y 3D en modo recorrido y pointer lock), después cerrar R2. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Publicar el cierre R2, revisar la preview del SHA exacto y comenzar R3 por M07/M11/M13. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R2 — matriz del protocolo P01–P16
 
@@ -74,7 +74,7 @@ Continuar R2: probar P08 (inicio/retorno desde 2D y 3D en modo recorrido y point
 | P05 | verificado localmente | Proyecto propio y DXF importado: IDs, nombre original/traducido, área, límites y pose repetida; cuatro tamaños y retorno intacto | — |
 | P06 | verificado localmente | Anterior, Siguiente, saltos y límites; corte `4da6273` | La pausa no aplica: no existe reproducción automática |
 | P07 | verificado localmente | Escape, Cerrar y Atrás durante carga 2D→3D y vuelo; historial `#editor`, foco y documento intactos, sin reapertura tardía; cuatro tamaños | — |
-| P08 | en curso | Entrada 2D y 3D con cámara, opciones y puertas restauradas | Recorrido/pointer lock y retorno tras su cancelación |
+| P08 | verificado localmente | Entrada 2D y 3D, recorrido con pointer lock real o joystick, liberación para presentar, cámara/opciones/puertas/estado restaurados, nuevo gesto para reanudar y resize; 4/4 más regresión 7/7 en cuatro tamaños | — |
 | P09 | verificado localmente | Cambio de proyecto, variante y revisión; corte `e5dd7c5` | — |
 | P10 | verificado localmente | Recarga, ID eliminado y sidecar reconciliado; corte `e5dd7c5` | — |
 | P11 | verificado localmente | GLB 404/corrupto, pérdida de contexto y 2D intacto; corte `cb13c3b` | — |
@@ -115,6 +115,13 @@ Continuar R2: probar P08 (inicio/retorno desde 2D y 3D en modo recorrido y point
 - Reproducción inicial: Atrás durante la carga desde 2D llevaba a `#inicio`. La entrada de historial `#presentacion` ahora se crea al comenzar la carga; Escape, Volver a editar y Atrás consumen esa entrada incluso si el 3D o la cámara siguen pendientes. El error de carga también restaura la entrada, el foco y el historial sin dejar una presentación tardía.
 - Aceptación dirigida **8/8**: cancelación durante carga y durante vuelo hacia estancia en 1440×900, 390×844, 844×390 y 360×800. Los casos verifican proyecto, entrada, objetivo, evidencia, historial de edición, selección, vista 2D, foco, hash `#editor`, consola/pageerror y ausencia de reapertura tras 750 ms. La regresión de presentación y núcleo completa pasó **57/57**, incluidos P05 propio/DXF, captura PNG, fallo de runtime y diez ciclos de memoria estable.
 - Se abrieron y revisaron 16 capturas PNG de carga, movimiento y retorno en los cuatro tamaños; `artifacts/casa-serra/r2-p07/`. Tarjeta y cierre visibles durante operaciones pendientes; el editor recupera el plano y controles. M04/M06 reciben evidencia de salida reversible y cancelación. P08 sigue pendiente; CI y revisión humana permanecen separados.
+
+### Corte R2 P08 y cierre local del protocolo — verificado localmente
+
+- Desde 3D en modo recorrido, la presentación libera un `pointerLockElement` real en escritorio y el joystick táctil en móvil. Al volver, cámara, objetivo, opciones de render, puertas, proyecto, selección e historial coinciden con el estado inicial. El modo recorrido queda listo y solo recupera control tras un gesto nuevo. La entrada 2D y el retorno 3D ordinario ya estaban cubiertos por P02/P07/P14; el test de P08 cubre el estado activo de recorrido.
+- Pruebas Node 22.13.0 / Playwright 1.62.1 / Chromium SwiftShader: P08 **4/4** en 1440×900, 390×844, 844×390 y 360×800; regresiones afectadas P08/P14/cámara/foco **7/7**. El resize 360×800→844×390 verifica proporción de la cámara frente al área 3D real y canvas sincronizado; la proporción de la ventana completa no representa esa área. `console` y `pageerror` vacíos. No se modificó la aplicación en este corte.
+- Se abrieron y revisaron visualmente las 13 capturas de `artifacts/casa-serra/r2-p08/`: recorrido, presentación y retorno en los cuatro tamaños, más resize. La tarjeta de presentación y el control para volver son visibles; en retorno móvil persiste el desplazamiento horizontal preexistente de la barra del editor, registrado en R0.
+- P01–P16 quedan verificados **localmente**. La CI remota bloqueada por facturación, preview del SHA de este corte y revisión humana se registran por separado. M19: pruebas propias y ningún recurso o código literal de Casa Larga incorporado.
 
 ## R2 — P06/P12, aceptación previa
 

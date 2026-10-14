@@ -2,7 +2,7 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R2",
+  "current": "R3",
   "ci": "failed_without_steps_on_83c2677_runs_38594968787_38594968953_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
@@ -43,11 +43,11 @@
     {
       "id": "R2",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "CS-1 completo; M01–M06/M19",
       "dependency": "R1",
       "acceptance": "Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16",
-      "testedSha": null,
+      "testedSha": "f0c1bc01a445cd8765d295615f9dd2015fdbbf2b",
       "evidence": [
         "P04/P09/P10 slice code e5dd7c5617450e345b6a2fb1c07196849b0c3c87: local sidecar, ordered selection, stale ID/revision reconciliation and invalidation",
         "presentation/core final 14/14 plus variant 1/1; affected browser 50/50; editor regressions 45/45; import workflow equivalent 21/21 plus guide 5/5",
@@ -64,7 +64,9 @@
         "exact code SHA 83c2677 preview deployment 7070567791 visually reviewed in authenticated Chrome: overview, bedroom 2/2, PNG control and editor return; remote download event not observable, local bytes verified; Actions 38594968787/38594968953 failed with zero steps",
         "P01/P02/P03: three search terms including Enter, guided and closed-guide entries, saved two-room selection, empty-project prerequisite and focus, unchanged document/goal/view; targeted browser 8/8 and full presentation browser 42/42 at 1440x900, 390x844, 844x390, 360x800; 16 PNG visually reviewed in docs/qa/artifacts/casa-serra/r2-p01-p03/",
         "P05: own copy and imported two-room DXF keep active project/entry/room IDs, raw and localized names, area, bounds, repeatable camera pose and intact 2D return; browser 4/4, core 3/3, 24 PNG visually reviewed at four viewports in docs/qa/artifacts/casa-serra/r2-p05/; moved toast away from presentation controls",
-        "P07: Back during 2D-to-3D load initially escaped to #inicio; moved presentation history entry before load. Back, Escape and Close during load and room flight restore editor/hash/focus/state with no late reopening; targeted browser 8/8, full presentation/core 57/57, 16 PNG visually reviewed at four viewports in docs/qa/artifacts/casa-serra/r2-p07/"
+        "P07: Back during 2D-to-3D load initially escaped to #inicio; moved presentation history entry before load. Back, Escape and Close during load and room flight restore editor/hash/focus/state with no late reopening; targeted browser 8/8, full presentation/core 57/57, 16 PNG visually reviewed at four viewports in docs/qa/artifacts/casa-serra/r2-p07/",
+        "P08: real desktop pointer lock and mobile joystick release for presentation; camera/options/doors/document restored and new gesture required to resume; browser 4/4, affected regressions 7/7, console/pageerror empty, 13 PNG visually reviewed at four viewports plus resize in docs/qa/artifacts/casa-serra/r2-p08/",
+        "P01-P16 verified locally; remote CI and human review remain separate"
       ]
     },
     {
@@ -374,7 +376,7 @@
     {"id":"P05","status":"verificado localmente","note":"own/imported project IDs and repeatable poses; browser 4/4, core 3/3, four viewport visual review"},
     {"id":"P06","status":"verificado localmente","codeSha":"4da6273","note":"manual tour; no autoplay pause"},
     {"id":"P07","status":"verificado localmente","note":"load and room-flight cancellation, browser 8/8, full presentation/core 57/57, four viewport visual review"},
-    {"id":"P08","status":"en curso","next":"walk and pointer lock return"},
+    {"id":"P08","status":"verificado localmente","note":"real pointer lock and touch joystick release/restore by new gesture; 4/4 browser plus 7/7 affected regressions; four viewport and resize visual review"},
     {"id":"P09","status":"verificado localmente","codeSha":"e5dd7c5"},
     {"id":"P10","status":"verificado localmente","codeSha":"e5dd7c5"},
     {"id":"P11","status":"verificado localmente","codeSha":"cb13c3b"},

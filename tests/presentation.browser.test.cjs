@@ -295,6 +295,65 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
  assert.deepEqual(errors,[]);
 });
 
+test('R2 P08 walk pointer lock releases for presentation and needs a new gesture on return',{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900}),consoleErrors=[];
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guideClose').click();
+ await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
+ await page.locator('[data-mode="walk"]').click();assert.equal(await page.evaluate(()=>View3D.walking()),true);
+ await page.locator('#walkOverlay').click();await page.waitForFunction(()=>!!document.pointerLockElement);
+ const before=await state(page),scene=await page.evaluate(()=>View3D.presentationInspect());
+ await screenshot(page,'1440x900-p08-walk-locked');
+ await page.locator('#presentationBtn').focus();await page.locator('#presentationBtn').press('Enter');
+ assert.equal(await page.locator('#presentationConfig').evaluate(d=>d.open),true);
+ await page.getByRole('button',{name:'Iniciar presentación'}).focus();await page.getByRole('button',{name:'Iniciar presentación'}).press('Enter');
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.equal(await page.evaluate(()=>document.pointerLockElement),null,'presentation releases pointer lock');
+ assert.equal(await page.evaluate(()=>View3D.presentationInspect().options.mode),'orbit');
+ await screenshot(page,'1440x900-p08-walk-presentation');
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ const restored=await page.evaluate(()=>View3D.presentationInspect());
+ assert.deepEqual(restored.options,scene.options);assert.deepEqual(restored.doors,scene.doors);
+ for(const key of ['position','quaternion','target'])for(let i=0;i<scene[key].length;i++)assert.ok(Math.abs(restored[key][i]-scene[key][i])<1e-5,`walk ${key}[${i}] restored`);
+ assert.deepEqual(await state(page),before);assert.equal(await page.evaluate(()=>document.pointerLockElement),null,'return does not grab pointer without gesture');
+ assert.equal(await page.locator('#walkOverlay').isVisible(),true,'walk ready for new gesture');
+ await screenshot(page,'1440x900-p08-walk-returned');
+ await page.locator('#walkOverlay').click();await page.waitForFunction(()=>!!document.pointerLockElement);
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
+for(const viewport of [{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P08 touch walk stops and resumes by gesture ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guideClose').click();await page.locator('[data-view="3d"]').click();
+ await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
+ await page.locator('[data-mode="walk"]').click();await page.locator('#walkOverlay').click();
+ assert.equal(await page.locator('#joy').isVisible(),true,'touch joystick active before presentation');
+ const before=await state(page),scene=await page.evaluate(()=>View3D.presentationInspect());
+ await screenshot(page,`${size}-p08-touch-walk`);
+ await page.locator('#presentationBtn').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ assert.equal(await page.locator('#joy').isVisible(),false,'touch joystick released in presentation');
+ assert.equal(await page.evaluate(()=>View3D.presentationInspect().options.mode),'orbit');
+ await screenshot(page,`${size}-p08-touch-presentation`);
+ if(size==='360x800'){
+  await page.setViewportSize({width:844,height:390});
+  await page.waitForFunction(()=>{const c=View3D.cameraState,s=document.querySelector('#stage'),canvas=View3D.canvasState;return s.clientWidth===844&&Math.abs(c.aspect-s.clientWidth/s.clientHeight)<.001&&canvas.width===s.clientWidth&&document.querySelector('#presentationOverlay').dataset.moving==='false';});
+  await screenshot(page,'360-to-844-p08-touch-resized');
+ }
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ const restored=await page.evaluate(()=>View3D.presentationInspect());
+ assert.deepEqual(restored.options,scene.options);assert.deepEqual(restored.doors,scene.doors);
+ for(const key of ['position','quaternion','target'])for(let i=0;i<scene[key].length;i++)assert.ok(Math.abs(restored[key][i]-scene[key][i])<1e-5,`${size} walk ${key}[${i}] restored`);
+ assert.deepEqual(await state(page),before);assert.equal(await page.locator('#joy').isVisible(),false,'touch walk not resumed without gesture');
+ assert.equal(await page.locator('#walkOverlay').isVisible(),true,'walk can resume by touch');
+ const stageAspect=await page.locator('#stage').evaluate(s=>s.clientWidth/s.clientHeight);
+ assert.ok(Math.abs(restored.aspect-stageAspect)<.001,`${size} walk camera matches current 3D viewport`);
+ await screenshot(page,`${size}-p08-touch-returned`);
+ await page.locator('#walkOverlay').click();assert.equal(await page.locator('#joy').isVisible(),true,'new gesture resumes touch walk');
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
 test('Escape during 3D loading cancels without a late presentation',{timeout:120000},async t=>{
  const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
  await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();await page.keyboard.press('Escape');
