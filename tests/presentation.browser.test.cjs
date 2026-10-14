@@ -303,6 +303,53 @@ test('Escape during 3D loading cancels without a late presentation',{timeout:120
  assert.deepEqual(errors,[]);
 });
 
+for(const {viewport,exit} of [
+ {viewport:{width:1440,height:900},exit:'Back'},
+ {viewport:{width:390,height:844},exit:'Close'},
+ {viewport:{width:844,height:390},exit:'Escape'},
+ {viewport:{width:360,height:800},exit:'Back'}
+])test(`R2 P07 ${exit} while 2D presentation is loading restores editor ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),beforeState=await state(page),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.evaluate(()=>{const enter=FloorPlanApp.enterPresentation3D;FloorPlanApp.enterPresentation3D=async()=>{const ok=await enter();await new Promise(resolve=>window.releaseP07Load=resolve);return ok;};});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>typeof window.releaseP07Load==='function');
+ assert.equal(await page.locator('#presentationOverlay').isVisible(),true);
+ await screenshot(page,`${size}-p07-${exit.toLowerCase()}-loading`);
+ if(exit==='Back')await page.goBack();else if(exit==='Close')await page.locator('#presentationClose').click();else await page.keyboard.press('Escape');
+ await page.evaluate(()=>window.releaseP07Load());
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&!document.body.classList.contains('busy'));
+ await page.waitForFunction(()=>location.hash==='#editor');
+ await page.waitForTimeout(750);
+ assert.equal(await page.locator('#presentationOverlay').isVisible(),false,'no late reopening after load cancellation');
+ await screenshot(page,`${size}-p07-${exit.toLowerCase()}-returned`);
+ assert.equal(new URL(page.url()).hash,'#editor',`${exit} consumes presentation entry during load`);
+ assert.deepEqual(await state(page),beforeState);assert.equal(await page.evaluate(()=>document.activeElement?.id),'guidePresent');
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
+for(const {viewport,exit} of [
+ {viewport:{width:1440,height:900},exit:'Close'},
+ {viewport:{width:390,height:844},exit:'Back'},
+ {viewport:{width:844,height:390},exit:'Escape'},
+ {viewport:{width:360,height:800},exit:'Close'}
+])test(`R2 P07 ${exit} during room flight restores editor ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),beforeState=await state(page),consoleErrors=[],size=`${viewport.width}x${viewport.height}`;
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ await page.locator('.presentation-stops button').nth(1).click();
+ assert.equal(await page.locator('#presentationOverlay').getAttribute('data-moving'),'true');
+ await screenshot(page,`${size}-p07-${exit.toLowerCase()}-moving`);
+ if(exit==='Back')await page.goBack();else if(exit==='Close')await page.locator('#presentationClose').click();else await page.keyboard.press('Escape');
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&location.hash==='#editor');
+ await page.waitForTimeout(750);
+ assert.equal(await page.locator('#presentationOverlay').isVisible(),false,'late flight cannot reopen presentation');
+ await screenshot(page,`${size}-p07-${exit.toLowerCase()}-flight-returned`);
+ assert.deepEqual(await state(page),beforeState);assert.equal(await page.evaluate(()=>document.activeElement?.id),'guidePresent');
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
 test('missing 3D runtime returns to the 2D document with an explanation',{timeout:45000},async t=>{
  const {page}=await setup(t,{width:390,height:844},false),beforeState=await state(page);
  await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();

@@ -123,18 +123,19 @@
   title.textContent=tx('Preparando la escena','Preparing the scene','正在准备场景');
   status.textContent=tx('Cargando geometría 3D…','Loading 3D geometry…','正在加载 3D 几何…');
   info.textContent='';controls.hidden=true;stops.hidden=true;
+  history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
   try{
    if(!window.View3D||!await app.enterPresentation3D())throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
    sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;updateAssetWarning();
-   history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
    await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
     toast(error.message,6000);
     document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
-    await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;returnFocus?.focus?.({preventScroll:true});}
+    await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;entry=null;plan=null;sceneState=null;
+    if(location.hash==='#presentacion')history.back();returnFocus?.focus?.({preventScroll:true});}
   }
  }
  async function go(target,token=epoch){
@@ -185,7 +186,7 @@
   if(e.key!=='Tab')e.stopImmediatePropagation();
  }
  addEventListener('keydown',onKey,true);
- addEventListener('popstate',()=>{if(active||pendingStart)stop(true);});
+ addEventListener('popstate',()=>{if(entry&&(active||pendingStart))stop(true);});
  addEventListener('resize',()=>{
   if(!active||!sourceCurrent())return;
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
