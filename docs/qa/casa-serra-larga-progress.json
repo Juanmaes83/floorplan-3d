@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "failed_without_steps_on_1dbc9a3_runs_38576295738_38576295869_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_4da6273_runs_38577553257_38577553272_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -54,6 +54,7 @@
         "visual inspection 14 PNG docs/qa/artifacts/casa-serra/r2-p04-p10/ at 1440x900, 390x844, 844x390, 360x800 and resize",
         "R2 overall P01-P16 remains open",
         "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
+        "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps"
       ]
     },
@@ -350,9 +351,9 @@
     }
   ],
   "preview": {
-    "sha": "1dbc9a3ca3dbdd3db681038eba98b8c3646743ab",
-    "url": "https://floorplan-3d-lkn8xiame-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "7067406754",
+    "sha": "4da6273ff1c564e2f3dc9f61163d0ccbfb4f68de",
+    "url": "https://floorplan-3d-ii9hkkjp6-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7067617168",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
