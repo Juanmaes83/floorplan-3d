@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "failed_without_steps_on_ea4431f_runs_38583409611_38583409601_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_83c2677_runs_38594968787_38594968953_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -60,7 +60,8 @@
         "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps",
         "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/",
         "exact code SHA ea4431f preview deployment 7068610522 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return, no console errors; Actions 38583409611/38583409601 failed with zero steps",
-        "P13 acceptance written before application changes; final local: real PNG bytes/IHDR/dimensions, view-aspect capture, motion/resize gate, camera/buffer restored at four viewports plus 360x800 to 844x390; presentation/core/capture suite 41/41; 11 visually reviewed PNG docs/qa/artifacts/casa-serra/r2-p13/"
+        "P13 acceptance written before application changes; final local: real PNG bytes/IHDR/dimensions, view-aspect capture, motion/resize gate, camera/buffer restored at four viewports plus 360x800 to 844x390; presentation/core/capture suite 41/41; 11 visually reviewed PNG docs/qa/artifacts/casa-serra/r2-p13/",
+        "exact code SHA 83c2677 preview deployment 7070567791 visually reviewed in authenticated Chrome: overview, bedroom 2/2, PNG control and editor return; remote download event not observable, local bytes verified; Actions 38594968787/38594968953 failed with zero steps"
       ]
     },
     {
@@ -363,9 +364,9 @@
     }
   ],
   "preview": {
-    "sha": "ea4431f9fd671492834b356d780e9d0e4962b7d2",
-    "url": "https://floorplan-3d-2a3x4tha0-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "7068610522",
+    "sha": "83c26779238f4728dafbbca01602a064d90035db",
+    "url": "https://floorplan-3d-9h5a6i5qh-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7070567791",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
