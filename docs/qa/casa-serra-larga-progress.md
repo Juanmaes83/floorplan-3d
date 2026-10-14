@@ -25,7 +25,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | --- | --- | --- | --- | --- | --- | --- |
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
-| R2 | pendiente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | — |
+| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P04/P06/P09/P10/P11/P12/P14/P15/P16 locales; protocolo completo pendiente |
 | R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2 con P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2 con P13 (PNG durante presentación) y cerrar P01–P16, incluidos los casos de entrada, salida y recorrido aún sin matriz completa. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R2 — P06/P12, aceptación previa
 
@@ -91,6 +91,21 @@ Continuar R2 con P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comproba
 - Se abrieron las capturas de aviso de asset y recuperación 2D en 1440×900, 390×844, 844×390 y 360×800. La primera versión del retorno 2D quedó recortada por el orden de `ResizeObserver`; se corrigió el encuadre tras dos frames y se repitió la suite. El plano final está dentro de `#stage` en los cuatro tamaños. Evidencia seleccionada en `docs/qa/artifacts/casa-serra/r2-p11/`. El recorte preexistente de la barra superior del editor móvil sigue documentado en R0.
 - M19: lógica y estilos propios, sin copiar código ni recursos de Casa Larga. R2 completo y P01–P16 siguen abiertos. CI remota y revisión humana no se infieren de estas pruebas locales.
 - Preview exacta del código `cb13c3b68d42e13488738028ad23f2b142b363d2`: deployment Vercel `7068095979` en estado `success`. En Chrome autenticado se abrieron el ejemplo, la configuración, la vista general 3D y el Dormitorio principal con progreso 2/2; se cerró la presentación y reapareció el editor. Es una preview intermedia, no la URL de revisión humana final. Actions del mismo SHA: runs `38580370730` y `38580370756`, ambos `failure` con cero pasos ejecutados; CI sigue pendiente.
+
+## R2 — P14/P15/P16, aceptación previa
+
+1. P14: durante una presentación, cambiar entre 1440×900, 390×844, 844×390 y 360×800 actualiza el aspecto del canvas y reencuadra la parada actual sin estirar la escena ni mutar el proyecto. Con `prefers-reduced-motion: reduce`, el salto entre paradas y el resize no obligan a esperar una animación; los controles siguen visibles y el retorno recupera cámara, target, FOV y buffer conforme al viewport final.
+2. P15: diez ciclos de entrada, parada y salida en el mismo documento no aumentan persistentemente los recursos propios (RAF, listeners, geometrías/materiales/texturas o requests pendientes) respecto de un estado estable inicial. El proyecto, biblioteca/variantes, historial, selección y calibración se comparan antes y después; sin errores de consola ni `pageerror`.
+3. P16: nombres de estancia con `<script>`, entidades HTML, caracteres Unicode y una longitud grande se muestran como texto, nunca como HTML ejecutable, tanto en configuración como en ficha/paradas. En los cuatro viewports, títulos, botones y salida siguen dentro del área visible, con foco y lectura accesible; el cierre conserva los nombres originales y el estado del editor.
+4. Ejecutar casos de navegador específicos y regresiones afectadas; abrir las capturas finales de los cuatro tamaños con la herramienta de imagen. Distinguir cualquier límite del renderer bajo SwiftShader de rendimiento en dispositivo físico. Registrar métricas, diferencias visuales y fallo real antes de aceptar el corte.
+
+### Corte R2 P14/P15/P16 — verificado localmente
+
+- P14: con `prefers-reduced-motion: reduce`, el salto de parada termina sin vuelo activo. El resize entre 1440×900, 390×844, 844×390 y 360×800 mantiene la relación de aspecto del canvas y la tarjeta dentro del viewport. Una entrada desde 3D seguida de resize y salida restaura posición, target, quaternion, FOV, opciones y puertas; canvas y aspecto corresponden al área final del editor.
+- P15: la primera prueba detectó crecimiento de **22 geometrías por ciclo** (`1309 → 1331 → 1353`) en las lámparas, porque `lampG.clear()` quitaba los nodos sin liberar sus geometrías. Ahora se liberan geometrías y materiales propios antes de reconstruir el grupo. Tras un ciclo de calentamiento y **diez ciclos completos**, el renderer quedó en **1298 geometrías y 8 texturas en cada medición**; el RAF, animación, vuelo y solicitudes de assets quedaron a cero tras cada salida. Historial, JSON, objetivo, guía, selección y vista retornaron intactos. Los listeners de presentación son registros únicos al cargar el módulo; el listener temporal de `popstate` usa `{once:true}`.
+- P16: se usó un nombre válido dentro del límite de 100 caracteres del contrato con `<script>`, entidad HTML, Unicode y segmento largo sin espacios. Se comprobó que permanece como texto en la configuración, el título y la parada, sin crear script ni ejecutar código. El botón de la parada se cortaba horizontalmente y después verticalmente en 844×390; se añadió salto de línea y se limitó el título a dos líneas en ventanas bajas. El nombre completo sigue en el texto accesible y en el atributo `title`. La captura final muestra la parada y la salida enteras.
+- Presentación y núcleo **34/34** sobre el diff final; regresiones dirigidas de editor 3D, nombres hostiles y fallo de asset **3/3**; sintaxis de los módulos JS correcta. Logs externos `r2-p14-p16-presentation-final.log`, `r2-p14-p16-editor-regression.log`, `r2-p15-initial.log` y `r2-p15-after-lamp-dispose.log`. No hubo `pageerror` ni errores inesperados de consola en los casos nuevos. Se abrieron las capturas finales de los cuatro tamaños para resize, configuración y parada con nombre largo, más la estancia y el plano 2D del décimo ciclo; 14 PNG seleccionados en `docs/qa/artifacts/casa-serra/r2-p14-p16/`.
+- M19: corrección y pruebas propias; ningún código ni recurso Casa Larga copiado. R2 sigue en curso. Actions/CI y revisión humana se registrarán aparte; estas cifras son pruebas locales de Chromium con SwiftShader.
 
 ## R2 — corte P04/P09/P10, aceptación previa
 

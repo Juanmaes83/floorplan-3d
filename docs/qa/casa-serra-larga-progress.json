@@ -57,7 +57,8 @@
         "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
         "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/",
-        "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps"
+        "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps",
+        "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/"
       ]
     },
     {
@@ -166,7 +167,8 @@
       "testedSha": null,
       "evidence": [
         "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
+        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
+        "R2 P14: active room re-frames at four viewport sizes; camera/target/FOV/options restored from 3D after resize"
       ]
     },
     {
@@ -179,7 +181,8 @@
       "testedSha": null,
       "evidence": [
         "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
+        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
+        "R2 P14/P16: reduced-motion navigation resolves without flight; long HTML-like names remain text and controls fit all four viewports"
       ]
     },
     {
@@ -193,7 +196,8 @@
       "evidence": [
         "R1 minimum verified; full acceptance remains in R2",
         "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
-        "R2 P11: missing/corrupt GLB fallback and actual WebGL context loss return to intact 2D; 27/27 presentation/core"
+        "R2 P11: missing/corrupt GLB fallback and actual WebGL context loss return to intact 2D; 27/27 presentation/core",
+        "R2 P15: lamp geometry/material disposal fixed; renderer memory remains 1298 geometries/8 textures over ten cycles"
       ]
     },
     {

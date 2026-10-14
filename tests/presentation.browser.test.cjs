@@ -121,6 +121,99 @@ test('R2 P11 context loss while 3D starts cannot reopen the presentation',{timeo
  assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
 });
 
+test('R2 P14 reduced motion and four resize aspects keep the active stop framed',{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900}),beforeState=await state(page);
+ const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.locator('.presentation-stops button').nth(1).click();
+ assert.equal(await page.locator('#presentationOverlay').getAttribute('data-moving'),'false','reduced-motion jump resolves without tour animation');
+ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}]){
+  await page.setViewportSize(viewport);
+  await page.waitForFunction(()=>{const canvas=document.querySelector('#view3d canvas').getBoundingClientRect(),scene=View3D.presentationInspect();return document.querySelector('#presentationOverlay').dataset.moving==='false'&&Math.abs(scene.aspect-canvas.width/canvas.height)<.03;});
+  const info=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas').getBoundingClientRect(),card=document.querySelector('.presentation-card').getBoundingClientRect(),scene=View3D.presentationInspect();return {canvas:canvas.toJSON(),card:card.toJSON(),aspect:scene.aspect,fly:View3D.lifecycleMetrics.flying};});
+  assert.ok(info.canvas.left>=0&&info.canvas.right<=viewport.width&&info.canvas.width>0&&info.canvas.height>0);
+  assert.ok(info.card.left>=0&&info.card.right<=viewport.width&&info.card.top>=0&&info.card.bottom<=viewport.height);
+  assert.equal(info.fly,false);await screenshot(page,`${viewport.width}x${viewport.height}-reduced-resize-room`);
+ }
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
+test('R2 P14 presentation entered from 3D restores camera and final viewport aspect',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844});
+ await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));
+ const beforeState=await state(page),camera=await page.evaluate(()=>View3D.presentationInspect());
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ await page.setViewportSize({width:844,height:390});
+ await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&Math.abs(View3D.presentationInspect().aspect-document.querySelector('#view3d canvas').getBoundingClientRect().width/document.querySelector('#view3d canvas').getBoundingClientRect().height)<.03);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&FloorPlanApp.viewMode==='3d');
+ await page.waitForFunction(()=>{const c=document.querySelector('#view3d canvas').getBoundingClientRect();return Math.abs(View3D.presentationInspect().aspect-c.width/c.height)<.03;});
+ const after=await page.evaluate(()=>({scene:View3D.presentationInspect(),css:document.querySelector('#view3d canvas').getBoundingClientRect().toJSON(),pixelRatio:View3D.canvasState.pixelRatio}));
+ const restored=after.scene;
+ for(const key of ['position','target','quaternion'])for(let i=0;i<camera[key].length;i++)assert.ok(Math.abs(restored[key][i]-camera[key][i])<.0001,`${key}[${i}] restored`);
+ assert.equal(restored.fov,camera.fov);assert.deepEqual(restored.options,camera.options);assert.deepEqual(restored.doors,camera.doors);
+ assert.ok(Math.abs(restored.aspect-after.css.width/after.css.height)<.03);
+ assert.equal(restored.canvas.width,Math.round(after.css.width*after.pixelRatio));assert.equal(restored.canvas.height,Math.round(after.css.height*after.pixelRatio));
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
+test('R2 P15 ten presentation cycles release their loop and keep renderer memory stable',{timeout:180000},async t=>{
+ const {page,errors}=await setup(t,{width:390,height:844}),beforeState=await state(page);
+ const consoleErrors=[];page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ const metrics=[];
+ for(let cycle=0;cycle<=10;cycle++){
+  await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+  await page.locator('.presentation-stops button').nth(1).click();
+  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
+  if(cycle===10)await screenshot(page,'390x844-ten-cycles-room');
+  await page.locator('#presentationClose').click();
+  await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&FloorPlanApp.viewMode==='2d'&&!document.body.classList.contains('busy'));
+  const measure=await page.evaluate(()=>({memory:View3D.rendererMemory,lifecycle:View3D.lifecycleMetrics,history:history.length}));metrics.push(measure);
+  assert.deepEqual(measure.lifecycle,{loopActive:false,animating:false,flying:false,pendingAssets:0},`cycle ${cycle} releases work`);
+  assert.deepEqual(await state(page),beforeState,`cycle ${cycle} restores document`);
+ }
+ t.diagnostic(`cycle renderer memory=${JSON.stringify(metrics.map(m=>m.memory))}`);
+ const warm=metrics[0];for(let i=1;i<metrics.length;i++){
+  assert.equal(metrics[i].memory.geometries,warm.memory.geometries,`cycle ${i} geometry count stable`);
+  assert.equal(metrics[i].memory.textures,warm.memory.textures,`cycle ${i} texture count stable`);
+  assert.equal(metrics[i].history,warm.history,`cycle ${i} does not grow history`);
+ }
+ t.diagnostic(`renderer memory warm=${JSON.stringify(warm.memory)} final=${JSON.stringify(metrics.at(-1).memory)}`);
+ await screenshot(page,'390x844-ten-cycles-2d');
+ assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P16 long HTML-like room name stays text and controls fit ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
+ const name='<script>window.__presentationInjected=1</script> &amp; Á住宅 '+('SinEspacios'.repeat(3));
+ await page.evaluate(value=>mutate(()=>{project.rooms.find(r=>r.id===FloorPlanApp.geometry.rooms[0].id).name=value;}),name);
+ const beforeState=await state(page),beforeScripts=await page.locator('script').count();
+ await page.locator('#guidePresent').click();
+ assert.equal(await page.locator('.presentation-room-row').first().locator('span').textContent(),name);
+ assert.equal(await page.locator('#presentationConfig script').count(),0);
+ await screenshot(page,`${size}-long-name-config`);
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ await page.locator('.presentation-stops button').nth(1).click();
+ await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
+ assert.equal(await page.locator('.presentation-card h2').textContent(),name);
+ assert.equal(await page.locator('.presentation-stops button').nth(1).textContent(),name);
+ const bounds=await page.evaluate(()=>{const card=document.querySelector('.presentation-card'),button=document.querySelector('.presentation-stops button:last-child'),close=document.querySelector('#presentationClose');return {viewport:{width:innerWidth,height:innerHeight},card:card.getBoundingClientRect().toJSON(),close:close.getBoundingClientRect().toJSON(),stop:button.getBoundingClientRect().toJSON(),stopContentFits:button.scrollWidth<=button.clientWidth+1,overflow:document.documentElement.scrollWidth>innerWidth,executed:window.__presentationInjected};});
+ assert.equal(bounds.executed,undefined);assert.equal(await page.locator('script').count(),beforeScripts);
+ assert.equal(bounds.overflow,false,'no page horizontal overflow');
+ assert.ok(bounds.card.left>=0&&bounds.card.right<=bounds.viewport.width&&bounds.card.top>=0&&bounds.card.bottom<=bounds.viewport.height,'presentation card fits viewport');
+ assert.ok(bounds.close.left>=0&&bounds.close.right<=bounds.viewport.width&&bounds.close.top>=0&&bounds.close.bottom<=bounds.viewport.height,'close button fits viewport');
+ assert.ok(bounds.stop.left>=bounds.card.left&&bounds.stop.right<=bounds.card.right&&bounds.stopContentFits,'stop button text fits card');
+ assert.ok(bounds.stop.top>=bounds.card.top&&bounds.stop.bottom<=bounds.card.bottom,`selected stop remains visible within card ${JSON.stringify(bounds)}`);
+ await screenshot(page,`${size}-long-name-room`);
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),beforeState);assert.deepEqual(errors,[]);
+});
+
 test('3D camera, focus and editor state return after Escape and browser Back',{timeout:120000},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));

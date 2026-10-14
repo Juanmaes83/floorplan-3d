@@ -284,6 +284,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-status,.presentation-progress,.presentation-info{margin:4px 0;font-size:12px}
 .presentation-warning{margin:6px 0;padding:7px 9px;border-radius:6px;background:#fff1d2;color:#5b3b00;font-size:12px;overflow-wrap:anywhere}
 .presentation-stops{margin-top:8px}
+.presentation-stops .btn{min-width:0;max-width:100%;overflow-wrap:anywhere}
 .presentation-stops .on{background:var(--teal);color:white}
 body.presenting .guide-bar{display:none}
 body.presenting .app{grid-template-rows:0 0 minmax(0,1fr) 0}
@@ -294,7 +295,7 @@ body.presenting #hint3d{display:none}
 body.presentation-exiting header,body.presentation-exiting .guide-bar,body.presentation-exiting aside,body.presentation-exiting footer{pointer-events:none;opacity:.45}
 @media(max-width:600px){.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
-@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-info{display:none}.presentation-stops{margin-top:3px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-card h2{max-height:2.6em;overflow:hidden}.presentation-info{display:none}.presentation-stops{margin-top:3px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
 
 </style>
 <script type="importmap">
@@ -2819,7 +2820,9 @@ function shapeOf(poly, flip){ const s = new THREE.Shape(); poly.forEach(([x, y],
 
 function buildArch(){
   renderedSource=project; renderedGeometry=geometry;
-  clearGroup(archFloor); clearGroup(archUp); lampG.clear(); doors.length = 0; colliders = [];
+  clearGroup(archFloor); clearGroup(archUp);
+  lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
+  doors.length = 0; colliders = [];
   surfaceRenderer.begin();
   OX=geometry.center.x; OY=geometry.center.y; H=project.defaults.wallHeightMm/1000;
   const span=Math.hypot(geometry.envelope.w,geometry.envelope.h)/1000;camera.far=Math.max(300,span*10);camera.updateProjectionMatrix();orbit.maxDistance=Math.max(45,span*4);ground.scale.setScalar(Math.max(1,span/100));
@@ -3322,7 +3325,7 @@ function presentationInspect(){return active?{
   canvas:{width:renderer.domElement.width,height:renderer.domElement.height}
 }:null;}
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,get contextAvailable(){return !contextLost;},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,get contextAvailable(){return !contextLost;},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>
