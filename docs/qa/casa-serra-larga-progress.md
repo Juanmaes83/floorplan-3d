@@ -26,7 +26,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
-| R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
+| R3 | en curso | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | `2b8c7f5` parcial | M07 verificado; M11/M13 pendientes |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
@@ -44,7 +44,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M04 | en curso | Controles y movimiento reducido | M01 | Teclado/touch/Escape, sin animación obligatoria ni interferencia con inputs | — | — |
 | M05 | en curso | Calidad y fallback por capacidad | M01 | WebGL/asset/context loss recupera 2D sin alterar documento | — | — |
 | M06 | en curso | Carga por etapas cancelable | M01 | Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio | — | — |
-| M07 | pendiente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | — | — |
+| M07 | verificado localmente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | `2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00` | SVG 1600×1100, 7/7 navegador, 5/5 regresión 3D; capturas `artifacts/casa-serra/r3-m07/` |
 | M08 | pendiente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | — | — |
 | M09 | pendiente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | — | — |
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
@@ -61,7 +61,21 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Publicar el cierre R2, revisar la preview del SHA exacto y comenzar R3 por M07/M11/M13. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+R3 en curso: publicar M07 y continuar M11 (capturas ordenadas por estancia), luego M13 (minimapa ligado a roomId/cámara). Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+
+## R3 — aceptación previa, escrita antes de editar la aplicación
+
+1. M07: una lámina derivada del proyecto activo presenta planta, nombres/superficies de estancias y cotas válidas, cajetín con nombre y revisión, leyenda de acabados y estado de escala. Descarga SVG o PNG con bytes reales y dimensiones declaradas. Texto del proyecto se trata como texto seguro en español, inglés y chino. No imprime escala numérica de papel, norte, autor, dirección ni medición real si no hay datos que los justifiquen. Proyecto irregular/importado y copia propia conservan IDs y geometría; abrir, exportar y cerrar la lámina no mutan proyecto, calibración, selección, historial ni vista. Revisar 1440×900, 390×844, 844×390 y 360×800, incluidas legibilidad y consola/pageerror.
+2. M11: capturar en orden la vista general y cada estancia seleccionada produce PNG reales con cabecera/dimensiones correctas, nombres seguros y manifiesto de poses, aspecto, FOV, revisión y recursos. Bloquear captura durante vuelo/resize, serializar las tomas, cancelar sin descarga parcial engañosa y recuperar cámara, renderer, buffer, modo y documento. Comparar con la captura individual P13 y comprobar bytes descargados en los cuatro tamaños; revisar visualmente al menos vista general, estancia y salida.
+3. M13: minimapa SVG simplificado basado en la geometría del proyecto marca la estancia por `roomId` y la dirección de cámara en el mismo sistema de coordenadas. Funciona con plano girado/irregular y variante, se pliega en móvil, permite elegir parada sin mutar geometría/escala y desaparece cuando la presentación es obsoleta. Verificar click, teclado, resize, retorno intacto y ausencia de errores en los cuatro tamaños.
+
+Estas tres capacidades se publicarán en cortes verificables en ese orden. CI remota, preview exacta y revisión humana se registran por separado. M19 exige código y recursos propios/autorizados.
+
+### Corte R3 M07 — verificado localmente
+
+- El menú Archivo abre una lámina 1600×1100 derivada del proyecto y SVG 2D activos. Incluye muros, puertas, cotas, nombres y superficies, acabados usados, superficie útil, nombre/ID/revisión y estado de escala. El SVG descargado es autónomo: elimina imágenes externas, capas temporales y referencias de usuario; no declara escala física de impresión ni inventa norte, autor o dirección. En móvil ofrece vista ajustada y zoom desplazable. Los nombres se insertan como texto SVG y se mantienen seguros incluso con contenido tipo HTML.
+- Pruebas locales Node 22.13.0/Playwright 1.62.1: navegador M07 **7/7** en 1440×900, 390×844, 844×390 y 360×800; copia propia, DXF importado, estancia cóncava y español/inglés/chino. Se leyeron los bytes de descarga, se parseó SVG, se comprobaron 1600×1100, IDs de estancia/proyecto y estado del editor, calibración, selección e historial antes/después. `console` y `pageerror` vacíos. Regresión de PNG 3D y cámara/retorno **5/5**.
+- Se abrieron visualmente las 14 capturas de la vista normal, zoom, copia propia, DXF, planta irregular y traducciones; cuatro SVG descargados guardados en `artifacts/casa-serra/r3-m07/`. El SVG conserva las cotas del editor y la lámina es legible al ampliar; el plano importado declara medidas orientativas. M19: implementación propia, sin copiar código ni recursos de Casa Larga. CI, preview exacta y revisión humana se registran aparte; R3 continúa por M11/M13.
 
 ## R2 — matriz del protocolo P01–P16
 

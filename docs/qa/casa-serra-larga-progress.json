@@ -72,12 +72,12 @@
     {
       "id": "R3",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "M07/M11/M13",
       "dependency": "R2",
       "acceptance": "Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/; M11/M13 pending"]
     },
     {
       "id": "R4",
@@ -225,12 +225,12 @@
     {
       "id": "M07",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Lámina y anotaciones",
       "dependency": "M03",
       "acceptance": "Exportación real y legible con cotas/escala declaradas y geometría intacta",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00",
+      "evidence": ["Sheet from active project and 2D SVG; SVG download bytes parsed, 1600x1100 and room/project IDs verified", "Browser 7/7 at four viewports, own copy, real DXF, concave room and ES/EN/ZH; editor/project/calibration/history intact; console/pageerror empty", "Affected 3D capture/camera regressions 5/5 and 14 screenshots visually reviewed in docs/qa/artifacts/casa-serra/r3-m07/", "No external source raster in standalone SVG; no invented print scale, north or author; implementation original for M19"]
     },
     {
       "id": "M08",
