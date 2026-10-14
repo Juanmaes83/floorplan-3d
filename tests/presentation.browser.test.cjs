@@ -168,3 +168,21 @@ test('R2 project switch during 3D loading cannot reopen a stale presentation',{t
  await page.getByRole('button',{name:'Cancelar'}).click();
  assert.deepEqual(errors,[]);
 });
+
+test('R2 variant starts with independent presentation metadata',{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900});
+ await page.locator('#guidePresent').click();await page.locator('.presentation-room-row').nth(1).locator('input').check();
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ const source=await page.evaluate(()=>({id:FloorPlanApp.project.id,entry:FloorPlanApp.entryId,key:FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id)}));
+ await page.evaluate(()=>switchProject(library.variant(FloorPlanApp.project)));
+ await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ const variant=await page.evaluate(()=>({id:FloorPlanApp.project.id,entry:FloorPlanApp.entryId,key:FloorPlanPresentationCore.key(FloorPlanApp.entryId,FloorPlanApp.project.id)}));
+ assert.notEqual(variant.id,source.id);assert.notEqual(variant.entry,source.entry);assert.notEqual(variant.key,source.key);
+ assert.equal(await page.evaluate(k=>localStorage.getItem(k),variant.key),null);
+ assert.ok(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).roomIds.length,source.key)>1);
+ await page.locator('#actionSearchBtn').click();await page.fill('#editorActionInput','presentar mi vivienda');
+ await page.locator('#editorActionResults [role=option]').first().click();
+ assert.equal(await page.locator('.presentation-room-row input:checked').count(),1);
+ await page.getByRole('button',{name:'Cancelar'}).click();assert.deepEqual(errors,[]);
+});

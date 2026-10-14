@@ -61,7 +61,22 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Comenzar R2 con el plan configurable y persistido de estancias: definir aceptación de P04/P09/P10 y metadata aislada por entrada y revisión, implementar selección y orden, y probar `roomId` obsoletos. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2 con P06/P12: añadir progreso propio de paradas visitadas y una pausa solo si se ofrece reproducción automática; verificar que ninguna parada añade evidencia al objetivo. Después abordar P11/P14/P15/P16 y cerrar el resto del protocolo P01–P16. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+
+## R2 — corte P04/P09/P10, aceptación previa
+
+1. La configuración presenta todas las estancias válidas del proyecto activo. Cada una se puede incluir o excluir y mover arriba/abajo; la vista general permanece primero y no se permite iniciar sin alguna estancia. Cancelar no escribe metadata ni cambia proyecto, biblioteca, historial, selección o vista.
+2. Confirmar inicio guarda únicamente un sidecar local `PresentationPlanV1` con `entryId`, `projectId`, revisión y `roomId` ordenados. Recargar recupera la selección y orden para esa entrada. Duplicados y variantes tienen otro `entryId`/`projectId` y no heredan el sidecar. JSON/ZIP exportados conservan su contrato anterior.
+3. Al abrir un sidecar con revisión distinta o `roomId` eliminado, la UI explica la reconciliación, omite IDs ausentes y vuelve a derivar datos/poses de la geometría actual. Si no queda ninguna estancia válida, propone una selección nueva. Un sidecar corrupto se ignora con aviso recuperable.
+4. Cambiar de proyecto o editar la geometría durante una presentación la detiene; ninguna operación tardía abre la presentación anterior ni usa una pose de otra entrada. Se conserva el retorno al editor aplicable y se mantienen `pageerror`/consola vacíos.
+5. Pruebas unitarias del plan/sidecar y navegador en 1440×900, 390×844, 844×390; abrir visualmente configuración y paradas. Revisar además 360×800 para resize. La aceptación de P01–P16 completa de R2 se cerrará con los cortes restantes.
+
+### Corte R2 P04/P09/P10 — verificado localmente
+
+- Código probado `e5dd7c5617450e345b6a2fb1c07196849b0c3c87`. El sidecar local guarda `entryId`, `projectId`, revisión y `roomId` ordenados; no entra en `FloorPlanProjectV1` ni en la descarga JSON. Cancelar no escribe. Al recargar se recupera la configuración; una revisión distinta regenera las vistas y un ID ausente se omite con aviso. Cambiar de proyecto durante la presentación o su carga invalida el plan anterior. Cambiar geometría activa el retorno al editor. El resize vuelve a encuadrar la parada sin animación.
+- Pruebas: núcleo del plan **3/3**; presentación y núcleo finales **14/14**; suite afectada de guía, navegación, importación y captura **50/50** antes del último guard de sidecar (las pruebas dirigidas finales cubren ese guard); regresión completa del editor y F2 **45/45**. Importación del workflow: **21/21** en tres suites; las otras **5/5** de guía figuran en la suite afectada, para un total equivalente **26/26**. Descarga JSON real comparada como objeto completo con el proyecto previo; el sidecar permanece aparte. `pageerror` vacío en los casos nuevos. La variante aislada pasó **1/1**. Logs externos `r2-presentation-final.log`, `r2-browser-affected.log`, `r2-browser-editor-regressions.log`, `r2-browser-import-regressions.log`, `r2-order-final-targeted.log`, `r2-switch-during-load.log` y `r2-variant-targeted.log`.
+- Capturas finales abiertas con la herramienta de imagen en 1440×900, 390×844, 844×390 y 360×800, más orden modificado y resize 360×800→844×390. El primer intento horizontal recortaba el botón de inicio; se corrigió la altura y el scroll del diálogo y se repitió la captura. Selección, botones y salida quedan dentro del viewport. Evidencia versionada en `docs/qa/artifacts/casa-serra/r2-p04-p10/`. El recorte preexistente de la barra superior móvil del editor sigue siendo un riesgo aparte.
+- R2 continúa en curso: este corte cierra P04/P09/P10, no acredita aún P01–P16 completo. M19: implementación propia; no se copió código ni recurso Casa Larga. CI remota no sustituye la evidencia local mientras los jobs sigan sin ejecutar pasos.
 
 ## R1 — aceptación escrita antes de implementar
 
