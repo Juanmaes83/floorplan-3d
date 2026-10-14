@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "blocked_billing_history_unverified_current",
+  "ci": "failed_without_steps_on_12500da_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -36,7 +36,8 @@
         "unit presentation and guide 17/17; broad unit 178 pass/0 fail/1 skip before CSS inline change",
         "browser final presentation/guide/navigation/capture/import 29/29",
         "browser editor and F2 regressions 45/45; import prior 26/26; targeted local F2 unexpected 0",
-        "visual inspection and 12 PNG docs/qa/artifacts/casa-serra/r1/ at 1440x900, 390x844, 844x390, 360x800"
+        "visual inspection and 12 PNG docs/qa/artifacts/casa-serra/r1/ at 1440x900, 390x844, 844x390, 360x800",
+        "exact SHA preview visually reviewed in authenticated Chrome; Actions jobs failed with steps empty"
       ]
     },
     {
@@ -333,5 +334,11 @@
       "testedSha": null,
       "evidence": []
     }
-  ]
+  ],
+  "preview": {
+    "sha": "12500daf5c828c033ed78100470eb4fe657753c9",
+    "url": "https://floorplan-3d-3vj7qewda-juanma-espinosas-projects.vercel.app/",
+    "status": "deployed_visual_review_authenticated",
+    "anonymousAccess": "302_to_sso"
+  }
 }
