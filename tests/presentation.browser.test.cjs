@@ -13,6 +13,44 @@ async function setup(t,viewport,webgl=true){const browser=await chromium.launch(
  await page.goto(url);await page.waitForFunction(w=>window.FloorPlanPresentation&&(!w||window.View3D),webgl);await page.locator('#welcomeExample').click();return {page,errors};}
 const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,goal:FloorPlanGuideUI.state().goal,guideEvidence:JSON.stringify(FloorPlanGuideUI.state().evidence),undo:undoStack.length,redo:redoStack.length,selection:JSON.stringify(ui.sel),view:FloorPlanApp.viewMode}));
 async function screenshot(page,name){const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,name+'.png')});}
+async function presentationPng(page){
+ const expected=await page.evaluate(()=>View3D.shotSize({size:'1280',aspect:'view'}));
+ const pending=page.waitForEvent('download');await page.locator('#presentationCapture').click();const download=await pending;
+ assert.match(download.suggestedFilename(),/3D\.png$/);
+ const chunks=[];for await(const chunk of await download.createReadStream())chunks.push(chunk);const png=Buffer.concat(chunks);
+ assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(png.subarray(12,16).toString(),'IHDR');
+ assert.deepEqual([png.readUInt32BE(16),png.readUInt32BE(20)],[expected.width,expected.height]);
+ const colours=await page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(img,0,0,64,64);const d=x.getImageData(0,0,64,64).data,set=new Set();for(let i=0;i<d.length;i+=4)set.add(d[i]>>3<<10|d[i+1]>>3<<5|d[i+2]>>3);return set.size;},png.toString('base64'));
+ assert.ok(colours>40,`rendered PNG has ${colours} colour buckets`);return png;
+}
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P13 presentation PNG is real and restores the view ${viewport.width}x${viewport.height}`,{timeout:150000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,before=await state(page),consoleErrors=[];
+ page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
+ const capture=page.locator('#presentationCapture'),expected=await page.evaluate(()=>View3D.shotSize({size:'1280',aspect:'view'}));
+ assert.equal(await capture.textContent(),`Guardar PNG ${expected.width}×${expected.height}`);
+ const rect=await capture.boundingBox();assert.ok(rect&&rect.x>=0&&rect.y>=0&&rect.x+rect.width<=viewport.width&&rect.y+rect.height<=viewport.height,`${size} capture visible`);
+ const viewState=()=>page.evaluate(()=>({scene:View3D.presentationInspect(),canvas:View3D.canvasState,stop:document.querySelector('.presentation-status').textContent}));
+ const stable=v=>JSON.parse(JSON.stringify(v,(_,x)=>typeof x==='number'?Math.round(x*1e8)/1e8:x));
+ const general=await viewState(),generalPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(general));
+ await screenshot(page,`${size}-p13-overview`);
+ await page.getByRole('button',{name:'Siguiente →'}).click();assert.equal(await capture.isDisabled(),true,'capture serialized with camera motion');
+ await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
+ const room=await viewState(),roomPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(room));
+ assert.notDeepEqual(roomPng,generalPng,'room and overview render different images');
+ await screenshot(page,`${size}-p13-room`);
+ if(size==='390x844'){const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.writeFile(path.join(dir,'390x844-p13-room-download.png'),roomPng);}
+ if(size==='360x800'){
+  await page.setViewportSize({width:844,height:390});await page.waitForFunction(()=>{const canvas=View3D.canvasState,overlay=document.querySelector('#presentationOverlay');return canvas.width===844&&canvas.height>0&&Math.abs(View3D.cameraState.aspect-canvas.width/canvas.height)<.001&&overlay.dataset.moving==='false';});
+  await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled);
+  const resized=await viewState(),resizedPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(resized));
+  const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.writeFile(path.join(dir,'360-to-844-p13-room-download.png'),resizedPng);
+  await screenshot(page,'360-to-844-p13-room');
+ }
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden);
+ assert.deepEqual(await state(page),before);assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
+});
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`presentation starts from a real room and restores 2D ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,beforeState=await state(page);
  const matches=await page.evaluate(()=>FloorPlanGuide.resolve('presentación en 3D').map(a=>a.id));assert.equal(matches[0],'presentation');
@@ -131,7 +169,7 @@ test('R2 P14 reduced motion and four resize aspects keep the active stop framed'
  assert.equal(await page.locator('#presentationOverlay').getAttribute('data-moving'),'false','reduced-motion jump resolves without tour animation');
  for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}]){
   await page.setViewportSize(viewport);
-  await page.waitForFunction(()=>{const canvas=document.querySelector('#view3d canvas').getBoundingClientRect(),scene=View3D.presentationInspect();return document.querySelector('#presentationOverlay').dataset.moving==='false'&&Math.abs(scene.aspect-canvas.width/canvas.height)<.03;});
+  await page.waitForFunction(target=>{const canvas=document.querySelector('#view3d canvas').getBoundingClientRect(),scene=View3D.presentationInspect();return Math.abs(canvas.width-target.width)<1&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&Math.abs(scene.aspect-canvas.width/canvas.height)<.03;},viewport);
   const info=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas').getBoundingClientRect(),card=document.querySelector('.presentation-card').getBoundingClientRect(),scene=View3D.presentationInspect();return {canvas:canvas.toJSON(),card:card.toJSON(),aspect:scene.aspect,fly:View3D.lifecycleMetrics.flying};});
   assert.ok(info.canvas.left>=0&&info.canvas.right<=viewport.width&&info.canvas.width>0&&info.canvas.height>0);
   assert.ok(info.card.left>=0&&info.card.right<=viewport.width&&info.card.top>=0&&info.card.bottom<=viewport.height);

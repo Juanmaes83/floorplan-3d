@@ -25,7 +25,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | --- | --- | --- | --- | --- | --- | --- |
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
-| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P04/P06/P09/P10/P11/P12/P14/P15/P16 locales; protocolo completo pendiente |
+| R2 | en curso | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | — | Cortes P04/P06/P09/P10/P11/P12/P13/P14/P15/P16 locales; protocolo completo pendiente |
 | R3 | pendiente | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | — | — |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
@@ -48,7 +48,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M08 | pendiente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | — | — |
 | M09 | pendiente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | — | — |
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
-| M11 | pendiente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | — | — |
+| M11 | pendiente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | — | P13: captura individual verificada localmente; automatización por estancias sigue en R3 |
 | M12 | pendiente | Comparación de variantes | M03 | Misma referencia visual; variantes e IDs permanecen aislados | — | — |
 | M13 | pendiente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | — | — |
 | M14 | pendiente | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Continuar R2 con P13 (PNG durante presentación) y cerrar P01–P16, incluidos los casos de entrada, salida y recorrido aún sin matriz completa. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+Continuar R2: cerrar la matriz P01–P16, incluidos los casos de entrada, salida y recorrido que aún no tienen evidencia completa. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R2 — P06/P12, aceptación previa
 
@@ -106,6 +106,22 @@ Continuar R2 con P13 (PNG durante presentación) y cerrar P01–P16, incluidos l
 - P16: se usó un nombre válido dentro del límite de 100 caracteres del contrato con `<script>`, entidad HTML, Unicode y segmento largo sin espacios. Se comprobó que permanece como texto en la configuración, el título y la parada, sin crear script ni ejecutar código. El botón de la parada se cortaba horizontalmente y después verticalmente en 844×390; se añadió salto de línea y se limitó el título a dos líneas en ventanas bajas. El nombre completo sigue en el texto accesible y en el atributo `title`. La captura final muestra la parada y la salida enteras.
 - Presentación y núcleo **34/34** sobre el diff final; regresiones dirigidas de editor 3D, nombres hostiles y fallo de asset **3/3**; sintaxis de los módulos JS correcta. Logs externos `r2-p14-p16-presentation-final.log`, `r2-p14-p16-editor-regression.log`, `r2-p15-initial.log` y `r2-p15-after-lamp-dispose.log`. No hubo `pageerror` ni errores inesperados de consola en los casos nuevos. Se abrieron las capturas finales de los cuatro tamaños para resize, configuración y parada con nombre largo, más la estancia y el plano 2D del décimo ciclo; 14 PNG seleccionados en `docs/qa/artifacts/casa-serra/r2-p14-p16/`.
 - M19: corrección y pruebas propias; ningún código ni recurso Casa Larga copiado. R2 sigue en curso. Actions/CI y revisión humana se registrarán aparte; estas cifras son pruebas locales de Chromium con SwiftShader.
+- Preview exacta del código `ea4431f9fd671492834b356d780e9d0e4962b7d2`: deployment Vercel `7068610522` en estado `success`. En Chrome autenticado se abrieron el ejemplo, la configuración, la vista general y el Dormitorio principal 2/2; se inspeccionaron visualmente las dos vistas y el retorno al editor 2D. La consola no registró errores. Es una preview intermedia. Actions del mismo SHA: runs `38583409611` y `38583409601`, ambos `failure` con `steps: []`; CI no ejecutó las pruebas.
+
+## R2 — P13, aceptación previa
+
+1. En una parada estable de la presentación, un control explícito descarga un PNG real de la escena 3D actual. Se validan firma, IHDR, dimensiones y bytes del archivo en 1440×900, 390×844, 844×390 y 360×800, con la vista general y una estancia. La interfaz indica una dimensión conocida antes de descargar.
+2. La captura se serializa con navegación, resize y salida: no se crea un buffer mezclado de dos cámaras ni se deja el renderer a tamaño de exportación. Si la presentación ya se cerró o cambió de proyecto, la captura se rechaza sin descargar ni modificar el documento.
+3. Tras la descarga, cámara, target, FOV, canvas, opciones y parada activa siguen intactos. Escape/Atrás/Volver a editar restauran el editor y permiten otra captura en una nueva entrada. Sin `pageerror` ni errores inesperados de consola.
+4. Ejecutar la suite de captura 3D y presentación afectadas, inspeccionar visualmente las capturas de los cuatro tamaños y abrir al menos un PNG descargado con la herramienta de imagen. Registrar el SHA probado y la evidencia antes de aceptar P13.
+
+### Corte R2 P13 — verificado localmente
+
+- El botón de la presentación exporta con el renderer existente a una dimensión declarada en su etiqueta y conserva la proporción de la vista. La primera captura fija horizontal era válida como PNG, pero ampliaba el encuadre del dormitorio en móvil vertical hasta parecer una vista general. La revisión visual del archivo descargado detectó el problema; la captura final conserva el encuadre de la parada.
+- Se validaron firma PNG, IHDR, dimensiones reales y contenido no uniforme de la vista general y el dormitorio en 1440×900, 390×844, 844×390 y 360×800. También se capturó después de cambiar 360×800 a 844×390. Cámara, target, FOV, canvas, opciones, parada y estado del editor permanecieron iguales salvo tolerancia numérica de órbita inferior a 1e-8. No hubo `pageerror` ni errores de consola en los casos P13.
+- La revisión independiente encontró una carrera en la espera de resize: `data-moving=false` podía preceder el cambio real del canvas. La prueba ahora espera buffer, aspecto y fin del movimiento; el control de captura comprueba tamaño real de canvas y aspecto de cámara frente al stage, además del movimiento, antes de habilitarse. El nuevo botón obligó a compactar el título y la parada larga en 844×390; se volvió a revisar visualmente y P16 pasa.
+- Suite final afectada de presentación, núcleo y captura 3D: **41/41** con Node 22.13.0, Playwright 1.62.1 y Chromium SwiftShader; log externo `r2-p13-affected-rechecked.log`. Sintaxis JS y `git diff --check` pasan. Se abrieron las capturas finales de las cuatro vistas generales, las cuatro estancias, el cambio de orientación y los PNG descargados; 11 archivos seleccionados en `docs/qa/artifacts/casa-serra/r2-p13/`.
+- M11 recibe una captura individual válida; la generación por lote de estancias sigue pendiente de R3. M19: código y estilos propios, sin copia de Casa Larga. R2 y la revisión humana siguen abiertos; la CI remota no se infiere de estos resultados locales.
 
 ## R2 — corte P04/P09/P10, aceptación previa
 

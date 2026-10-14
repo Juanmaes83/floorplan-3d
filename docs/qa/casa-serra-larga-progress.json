@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "failed_without_steps_on_cb13c3b_runs_38580370730_38580370756_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_ea4431f_runs_38583409611_38583409601_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -58,7 +58,9 @@
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
         "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/",
         "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps",
-        "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/"
+        "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/",
+        "exact code SHA ea4431f preview deployment 7068610522 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return, no console errors; Actions 38583409611/38583409601 failed with zero steps",
+        "P13 acceptance written before application changes; final local: real PNG bytes/IHDR/dimensions, view-aspect capture, motion/resize gate, camera/buffer restored at four viewports plus 360x800 to 844x390; presentation/core/capture suite 41/41; 11 visually reviewed PNG docs/qa/artifacts/casa-serra/r2-p13/"
       ]
     },
     {
@@ -262,7 +264,9 @@
       "dependency": "M03",
       "acceptance": "PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados",
       "testedSha": null,
-      "evidence": []
+      "evidence": [
+        "P13 individual presentation PNG at all four viewports plus orientation change; real bytes/dimensions, camera and buffer restored; R3 batch export remains pending"
+      ]
     },
     {
       "id": "M12",
@@ -359,9 +363,9 @@
     }
   ],
   "preview": {
-    "sha": "4da6273ff1c564e2f3dc9f61163d0ccbfb4f68de",
-    "url": "https://floorplan-3d-ii9hkkjp6-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "7067617168",
+    "sha": "ea4431f9fd671492834b356d780e9d0e4962b7d2",
+    "url": "https://floorplan-3d-2a3x4tha0-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7068610522",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
