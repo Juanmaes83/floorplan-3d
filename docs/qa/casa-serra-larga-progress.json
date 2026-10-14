@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R2",
-  "ci": "failed_without_steps_on_4da6273_runs_38577553257_38577553272_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_cb13c3b_runs_38580370730_38580370756_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -56,7 +56,8 @@
         "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
         "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
-        "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/"
+        "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/",
+        "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps"
       ]
     },
     {
