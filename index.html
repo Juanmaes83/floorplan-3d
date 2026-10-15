@@ -2068,7 +2068,8 @@ const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...proj
 
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
-let archFloor, archUp, furnG, labelG, lampG, revealG, colliders = [], selKey = null, selHelper = null;
+let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
+let contactEnabled = false, contactCount = 0;
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
 
@@ -2112,8 +2113,8 @@ function init(){
   glassMat = new THREE.MeshPhysicalMaterial({color:0xcfe6ef, roughness:.05, transparent:true, opacity:.28, depthWrite:false, side:THREE.DoubleSide});
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
-  archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group();
-  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG);
+  archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
+  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -2907,6 +2908,49 @@ function presentationReveal(roomId,reduced=false){
   });
 }
 
+// Presentation-only contact shade. Each room polygon clips its own furniture spots,
+// so an object against a shared wall cannot darken the neighbouring room.
+function contactContains(poly,x,y){
+  let inside=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const a=poly[i],b=poly[j];
+    if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+  }
+  return inside;
+}
+function clearPresentationContactShadows(){
+  if(contactG){contactG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});contactG.clear();}
+  contactCount=0;
+}
+function buildPresentationContactShadows(){
+  clearPresentationContactShadows();
+  if(!contactEnabled||!active||contextLost||!contactG)return;
+  try{
+    for(const room of geometry.rooms){
+      if(room.poly.length<3||room.counted===false)continue;
+      const spots=state.furniture.filter(f=>f.type!=='rug'&&f.type!=='plant'&&contactContains(room.poly,f.cx,f.cy)).slice(0,8);
+      if(!spots.length)continue;
+      const vectors=Array.from({length:8},(_,i)=>{
+        const f=spots[i];return f?new THREE.Vector4(wx(f.cx),wz(f.cy),Math.max(.18,Math.min(1.8,M(f.w)*.72)),Math.max(.18,Math.min(1.8,M(f.d)*.72))):new THREE.Vector4();
+      });
+      const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,
+        uniforms:{spots:{value:vectors},spotCount:{value:spots.length}},
+        vertexShader:'varying vec2 worldFloor; void main(){worldFloor=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+        fragmentShader:'uniform vec4 spots[8];uniform int spotCount;varying vec2 worldFloor;void main(){float shade=0.0;for(int i=0;i<8;i++){if(i>=spotCount)break;vec2 delta=(worldFloor-spots[i].xy)/spots[i].zw;float d=dot(delta,delta);shade=max(shade,0.24*pow(max(0.0,1.0-d),2.0));}if(shade<0.002)discard;gl_FragColor=vec4(0.06,0.055,0.05,shade);}'
+      });
+      const geometry3d=new THREE.ShapeGeometry(shapeOf(room.poly));geometry3d.rotateX(-Math.PI/2);
+      const mesh=new THREE.Mesh(geometry3d,material);mesh.position.y=.004;mesh.renderOrder=3;mesh.userData.contactRoomId=room.id;
+      contactG.add(mesh);contactCount+=spots.length;
+    }
+  }catch(error){clearPresentationContactShadows();contactEnabled=false;throw error;}
+}
+function setPresentationContactShadows(enabled){
+  if(enabled&&(!active||contextLost))throw Error('Vista 3D no disponible');
+  contactEnabled=!!enabled;
+  if(contactEnabled)buildPresentationContactShadows();else clearPresentationContactShadows();
+  return {enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount};
+}
+
 function buildArch(){
   clearPresentationReveal();
   renderedSource=project; renderedGeometry=geometry;
@@ -3021,8 +3065,10 @@ function buildLabels(){
 function sync(force){
   if (!inited || (!active && !force)) return;
   const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.defaults,opt.cut]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
+  const contactChanged=force||a!==sigArch||f!==sigFurn;
   if (force || a !== sigArch){ sigArch = a; buildArch(); }
   if (force || f !== sigFurn){ sigFurn = f; buildFurn(); }
+  if(contactEnabled&&contactChanged)buildPresentationContactShadows();
   if (force || l !== sigLabels){ sigLabels = l; buildLabels(); }
 }
 
@@ -3187,6 +3233,7 @@ async function enter(){
 }
 function abort3D(){
   clearPresentationReveal();
+  setPresentationContactShadows(false);
   stopPresentationLighting();
   if(raf)cancelAnimationFrame(raf);raf=0;
   if(anim?.res)anim.res();anim=null;
@@ -3466,6 +3513,7 @@ function presentationGo(stop,reduced=false){
 }
 function presentationRestore(state){
   clearPresentationReveal();
+  setPresentationContactShadows(false);
   stopPresentationLighting();
   if(!state||!active)return;
   if(fly?.res)fly.res(false);fly=null;
@@ -3504,6 +3552,8 @@ window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
+window.View3D.setPresentationContactShadows=setPresentationContactShadows;
+Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount,transferBytes:0,textureCount:0})});
 </script>
 </body>
 </html>
