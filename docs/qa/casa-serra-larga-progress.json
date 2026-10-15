@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R3",
-  "ci": "failed_without_steps_on_83c2677_runs_38594968787_38594968953_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_05f1073_runs_38637434402_38637434478_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -77,7 +77,7 @@
       "dependency": "R2",
       "acceptance": "Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado",
       "testedSha": null,
-      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/; M11/M13 pending"]
+      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/", "M11 code e6aed05: batch ZIP with ordered PNGs, SHA-256 manifest, cancellation and state restore; browser 8/8, capture 3D 3/3, core/ZIP 23/23, 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/; M13 pending"]
     },
     {
       "id": "R4",
@@ -265,13 +265,15 @@
     {
       "id": "M11",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Capturas por estancias",
       "dependency": "M03",
       "acceptance": "PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados",
-      "testedSha": null,
+      "testedSha": "e6aed05a5e53892450827cd2c1333a0a5aea0b5c",
       "evidence": [
-        "P13 individual presentation PNG at all four viewports plus orientation change; real bytes/dimensions, camera and buffer restored; R3 batch export remains pending"
+        "P13 individual presentation PNG at all four viewports plus orientation change; real bytes/dimensions, camera and buffer restored",
+        "M11 batch ZIP browser 8/8 at four viewports plus cancel, resize, hostile label and Escape; PNG bytes/IHDR/dimensions, CRC/SHA-256, source/project/room IDs, camera/buffer/editor return, console/pageerror empty",
+        "3D capture regression 3/3; presentation and ZIP core 23/23; P13/P14/P16/P07 targeted 18/19 initially with landscape P16 layout, corrected and P16/P13 recheck 2/2; 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/"
       ]
     },
     {
@@ -387,9 +389,9 @@
     {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
   ],
   "preview": {
-    "sha": "83c26779238f4728dafbbca01602a064d90035db",
-    "url": "https://floorplan-3d-9h5a6i5qh-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "7070567791",
+    "sha": "05f10736d37f7dc805c86e48acce984de0b9366a",
+    "url": "https://floorplan-3d-3l3dvqcgs-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": null,
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
