@@ -30,7 +30,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 y M09 previews exactas revisadas; M09 6/6 y regresión amplia 76/76 |
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
 | R6 | verificado localmente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | Planificador 5/5, navegador 8/8, regresión amplia 113/113; cuatro viewports, resize y alternativa aérea |
-| R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
+| R7 | en curso | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | Aceptación previa escrita |
 | R8 | pendiente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | — | — |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
 
@@ -61,7 +61,13 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R6 M18 verificado localmente: código `cd82490`, planificador 5/5, navegador 8/8 y regresión amplia 113/113; evidencia en `artifacts/casa-serra/r6-m18/`. Preview del checkpoint `278c11a` revisada en Chrome. Actualizar PR #39 y comprobar la preview del SHA final de este cierre; después esperar instrucciones del usuario antes de R7.
+R7 M12/M16: comparación visual de variantes en marco y escala comunes, seguida de medición de llamadas de dibujo antes de decidir si agrupar geometría. R6 quedó verificado en `52a42fa`; el usuario autorizó continuar. Conservar todos los `qa-results` locales y la PR en draft.
+
+## R7 — aceptación previa para M12/M16
+
+1. M12: las tarjetas del original y sus variantes muestran la planta en el mismo marco, escala y orientación, derivado de la unión de sus geometrías vigentes. Estancias, muros, puertas y muebles deben poder distinguirse sin abrir cada proyecto. Un cambio de variante debe actualizar sólo la tarjeta correspondiente; nombres/IDs se tratan como texto seguro. La comparación no modifica el proyecto abierto, la biblioteca, selección, historial ni calibración. Probar ejemplo, variante modificada, planta irregular y cuatro viewports, incluido resize.
+2. M16: medir llamadas de dibujo y coste de renderer en escenas representativas antes de agrupar. Sólo aceptar una agrupación si hay una mejora observada y se preservan IDs, selección, asignaciones, exportación, fallback y limpieza de recursos. Si el beneficio no se demuestra o rompe semántica de objetos, documentar el diferimiento con las cifras y conservar el renderer actual.
+3. Gates: pruebas unitarias/navegador y regresiones afectadas, capturas abiertas, consola/pageerror, memoria y frame time de Chromium/SwiftShader; checkpoints de código y evidencia pequeños, PR y preview del SHA exacto. CI sin runner se registra aparte.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 

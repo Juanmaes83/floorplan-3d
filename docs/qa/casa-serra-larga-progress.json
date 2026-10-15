@@ -2,7 +2,7 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R6",
+  "current": "R7",
   "ci": "failed_without_steps_on_278c11a_runs_38781353884_38781354451_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
@@ -112,12 +112,12 @@
     {
       "id": "R7",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "M12/M16",
       "dependency": "R2",
       "acceptance": "Variantes con cámara común; agrupar solo si medición justifica y conserva IDs",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["M12/M16 acceptance written before implementation; user resumed after R6"]
     },
     {
       "id": "R8",
