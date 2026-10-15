@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R3",
-  "ci": "failed_without_steps_on_7376fbb_runs_38665904983_38665905001_billing_history_not_ci_accepted",
+  "current": "R4",
+  "ci": "failed_without_steps_on_ac8f2de_runs_38666739106_38666739115_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -82,12 +82,12 @@
     {
       "id": "R4",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "CS-2; M08/M09 y control M05/M06",
       "dependency": "R2",
       "acceptance": "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["M08 acceptance written before material changes; six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json; runtime pilot still pending"]
     },
     {
       "id": "R5",
@@ -235,12 +235,12 @@
     {
       "id": "M08",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "PBR selectivo",
       "dependency": "M05/M06",
       "acceptance": "Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["Acceptance recorded in progress.md before touching runtime: verify rights, hashes, crop/UV/normal alignment, two-material cap, channel color spaces, fallback, budget and four-viewport visual comparison", "Six Casa Serra JPEGs downloaded outside worktree and verified 6/6 against source-map-audit; official Poly Haven CC0 pages checked, direct wood RGB correlation 0.923/0.930/0.869 and marble 0.919/0.942/0.933 vs approved albedos, visual joins aligned; audit JSON in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json; normal convention, runtime benefit, AO UV and GPU cost pending"]
     },
     {
       "id": "M09",

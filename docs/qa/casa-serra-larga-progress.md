@@ -27,7 +27,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
-| R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
+| R4 | en curso | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | Aceptación M08 escrita abajo; recursos candidatos bajo diagnóstico |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
@@ -45,7 +45,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M05 | en curso | Calidad y fallback por capacidad | M01 | WebGL/asset/context loss recupera 2D sin alterar documento | — | — |
 | M06 | en curso | Carga por etapas cancelable | M01 | Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio | — | — |
 | M07 | verificado localmente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | `2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00` | SVG 1600×1100, 7/7 navegador, 5/5 regresión 3D; capturas `artifacts/casa-serra/r3-m07/` |
-| M08 | pendiente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | — | — |
+| M08 | en curso | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | — | Aceptación y auditoría de candidatos por realizar |
 | M09 | pendiente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | — | — |
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R3 verificado localmente. Publicar cierre M13 y revisar la preview del SHA exacto; después iniciar R4 M08 con aceptación de piloto PBR selectivo y medición de presupuesto. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+R3 verificado localmente y publicado. R4 M08: contrastar físicamente albedos y canales candidatos con la biblioteca aprobada, documentar procedencia y decidir el piloto. Después implementar solo pares alineados, medir memoria y revisar fallback. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
@@ -91,6 +91,22 @@ Estas tres capacidades se publicarán en cortes verificables en ese orden. CI re
 - Código probado `165b71166c05d6f30209282fd91ae1268f74e213`. El minimapa SVG usa los polígonos actuales de `FloorPlanApp.geometry` sin modificar proyecto ni escala. La estancia activa se identifica por `roomId`; las seleccionadas son navegables con click y teclado. La flecha transforma la pose 3D con el centro canónico a los ejes X/Y del plano, incluso con geometría irregular o girada. Se pliega por defecto en móvil y horizontal corto, conserva el estado abierto al cambiar tamaño y desaparece al cerrar o invalidar la presentación.
 - Pruebas locales Node 22.13.0/Playwright 1.62.1: núcleo **4/4** (incluido polígono irregular girado y vector unitario), navegador **5/5** en 1440×900, 390×844, 844×390, 360×800 y resize 360→844. Se verificaron orden y coordenadas de polígonos, `roomId`, dirección, click, Enter, plegado, límites del viewport, cámara/aspecto y retorno 2D con proyecto, guía, selección e historial intactos; `console` y `pageerror` vacíos. Regresiones afectadas P14/P16 **6/6** y lote ZIP M11 **8/8**, con bytes/manifest/CRC y cancelación todavía válidos.
 - Se abrieron visualmente vista general y dormitorio con el mapa en los cuatro tamaños, más el resize y el mapa plegado horizontal; 13 PNG en `artifacts/casa-serra/r3-m13/`. El mapa ocupa la esquina superior izquierda, mantiene la tarjeta de control libre y no recorta la última parada en 844×390. M19: geometría y SVG propios del repositorio, sin recurso ni código de Casa Larga. CI, preview exacta y revisión humana se registran aparte.
+- Preview intermedia exacta `ac8f2de137d3d28cfde9e48ef3283567239e73d0` READY, con metadato GitHub coincidente. En Chrome se revisaron mapa abierto, navegación a dormitorio y retorno al editor, sin errores de consola. Actions `38666739106` y `38666739115` fallaron con `steps: []` por facturación; CI no ejecutó pruebas. Cuerpo y un único comentario de avance de la PR #39 actualizados.
+
+## R4 — aceptación previa de M08, escrita antes de editar materiales
+
+1. Contrastar los seis JPEG auditados de Serra (`oak_wood_planks` y `marble_01`: diff/nor/arm) con `surface-oak-wood-planks` y `surface-marble-01`. Comprobar procedencia/licencia por recurso, bytes/hash/dimensiones, crop/orientación y correspondencia de rasgos entre albedo actual, diff, normal y ARM. Si los albedos no se alinean, crear candidato separado con procedencia verificable o diferir ese par; no conectar canales por similitud de nombre.
+2. El piloto web admite como máximo dos materiales y solo los canales validados. Mantiene los 50 acabados/IDs existentes, no incrusta píxeles en FloorPlanProjectV1 y carga únicamente asignaciones activas. Para cada mapa exige ruta permitida, MIME, ≤512 px/lado, ≤512 KiB, bytes, SHA-256, dimensiones y decodificación. Base color usa sRGB; normal/roughness/AO usan datos lineales. Repetición y orientación siguen la misma UV. No declarar metalness si no se usa su canal.
+3. Comparar base y mejorado con el mismo proyecto, geometría, cámara, hora y exposición en los cuatro viewports. Registrar captura real abierta visualmente, continuidad entre caras, normal +Y, color y coste de carga/memoria estimada y medida del renderer. El presupuesto de admisión parte de los límites del catálogo y del baseline local; no atribuir rendimiento de teléfono físico a SwiftShader.
+4. Simular HTTP, hash, formato/decodificación y context loss; el material vuelve al albedo/color base sin mutar asignación. Cancelar/cambiar proyecto libera mapas propios y no dispone recursos compartidos. Verificar exportación/reimportación y retorno 2D/3D, proyecto/IDs/cámara, consola/pageerror. Ejecutar suites afectadas y revisión visual en 1440×900, 390×844, 844×390 y 360×800, incluido resize.
+
+M09 comienza después de validar M08; sus presets de iluminación y entorno deben preservar la misma cámara/material, degradar sin HDRI y restaurar luz/exposición/fondo al cerrar.
+
+### M08 — auditoría previa de recursos, en curso
+
+- Se descargaron fuera del worktree los seis JPEG del commit fijado de Casa Serra y se repitieron SHA-256 y longitudes de `source-map-audit.json`: **6/6 coinciden**. Se abrieron visualmente diff/nor/arm de roble y mármol y los albedos WebP existentes. Las páginas oficiales de [roble](https://polyhaven.com/a/oak_wood_planks) y [mármol](https://polyhaven.com/a/marble_01) identifican estos recursos como CC0 y ofrecen diffuse, ARM y normal GL; la [licencia oficial](https://polyhaven.com/license) confirma el uso de texturas CC0. La biblioteca actual ya vincula los mismos IDs de origen y su propia evidencia CC0. M19: el código del piloto será propio; la autorización del recurso no se extiende a código de terceros.
+- En `artifacts/casa-serra/r4-m08-source-alignment.json` constan comparaciones directas 1024→256 con los albedos aprobados. Correlación RGB del roble **0.923/0.930/0.869**, error absoluto medio 2.38 niveles de 8 bits; mármol **0.919/0.942/0.933**, error 1.87. Flips y rotaciones dan correlaciones mucho menores. Las vetas y juntas se alinean visualmente sin girar ni recortar; esto admite reutilizar las UV actuales como candidato, pero aún no acredita el resultado PBR en escena. El normal del roble es casi plano; verificar beneficio visible y convención del canal verde antes de aceptar. AO requiere comprobar el UV del renderer; no conectar AO ni metalness por supuesto.
+- Próximo paso ejecutable: derivar mapas web ≤512 px/≤512 KiB desde estos canales con hash/bytes/procedencia, añadirlos solo a los dos acabados candidatos, extender validación y carga para normal/roughness con fallback y métricas, y comparar base/mejorado a cámara y luz fijas. Mantener las pruebas y capturas de R3 intactas.
 
 ## R2 — matriz del protocolo P01–P16
 
