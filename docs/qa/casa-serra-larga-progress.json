@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R4",
-  "ci": "failed_without_steps_on_ac8f2de_runs_38666739106_38666739115_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_c4310e9_runs_38697217578_38697217425_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -87,7 +87,7 @@
       "dependency": "R2",
       "acceptance": "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
       "testedSha": null,
-      "evidence": ["M08 code ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b: six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json", "M08 local pilot tests 13/13, minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69; exact SHA preview pending; measurements and 22 screenshot/metrics artifacts in docs/qa/artifacts/casa-serra/r4-m08/"]
+      "evidence": ["M08 code ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b: six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json", "M08 local pilot tests 13/13, minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69; exact SHA c4310e9 preview inspected; measurements and 22 screenshot/metrics artifacts in docs/qa/artifacts/casa-serra/r4-m08/"]
     },
     {
       "id": "R5",
@@ -240,17 +240,17 @@
       "dependency": "M05/M06",
       "acceptance": "Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido",
       "testedSha": "ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b",
-      "evidence": ["Acceptance recorded in progress.md before touching runtime: rights, hashes, crop/UV/normal alignment, two-material cap, channel color spaces, fallback, budget and four-viewport visual comparison", "Six Casa Serra JPEGs 6/6 verified against source-map-audit; official Poly Haven CC0 pages checked; direct wood RGB correlation 0.923/0.930/0.869 and marble 0.919/0.942/0.933 vs approved albedos", "Local pilot 13/13 PASS, four viewports plus resize; actual PNG download, JSON export/reimport, camera/project/IDs/return intact; HTTP/hash/decode fallback and context-loss disposal", "Minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69 PASS; visual comparison 17 PNG opened, 22 evidence files and measured transfer/GPU/renderer budget in docs/qa/artifacts/casa-serra/r4-m08/; normal GL retained, ARM green only; AO/metalness unwired", "Exact SHA preview pending"]
+      "evidence": ["Acceptance recorded in progress.md before touching runtime: rights, hashes, crop/UV/normal alignment, two-material cap, channel color spaces, fallback, budget and four-viewport visual comparison", "Six Casa Serra JPEGs 6/6 verified against source-map-audit; official Poly Haven CC0 pages checked; direct wood RGB correlation 0.923/0.930/0.869 and marble 0.919/0.942/0.933 vs approved albedos", "Local pilot 13/13 PASS, four viewports plus resize; actual PNG download, JSON export/reimport, camera/project/IDs/return intact; HTTP/hash/decode fallback and context-loss disposal", "Minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69 PASS; visual comparison 17 PNG opened, 22 evidence files and measured transfer/GPU/renderer budget in docs/qa/artifacts/casa-serra/r4-m08/; normal GL retained, ARM green only; AO/metalness unwired", "Exact published SHA c4310e97ce4cba5f8755a61761b0a51fbcd0a4c3 preview READY and visually inspected in Chrome: overview, main bedroom and 2D return; Actions billing blocked, steps empty"]
     },
     {
       "id": "M09",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "Luz/HDRI y presets",
       "dependency": "M08",
-      "acceptance": "Comparación con cámara común; ajuste reversible y degradación por capacidad",
+      "acceptance": "Licensed bounded HDR with official loader; neutral/warm presets compared at common camera/material; reversible light/exposure/background/environment, failure fallback and budget measured across four viewports/resize",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["Acceptance written in progress.md before application changes; source/license and renderer integration under review"]
     },
     {
       "id": "M10",
@@ -390,9 +390,9 @@
     {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
   ],
   "preview": {
-    "sha": "05f10736d37f7dc805c86e48acce984de0b9366a",
-    "url": "https://floorplan-3d-3l3dvqcgs-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": null,
+    "sha": "c4310e97ce4cba5f8755a61761b0a51fbcd0a4c3",
+    "url": "https://floorplan-3d-pmrttdnp8-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "dpl_9N4eoWLGDDhWKMn7DPStF57AExz9",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }

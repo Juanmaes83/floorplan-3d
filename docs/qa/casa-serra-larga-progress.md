@@ -27,7 +27,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
-| R4 | en curso | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | Aceptación M08 escrita abajo; recursos candidatos bajo diagnóstico |
+| R4 | en curso | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f` | M08 publicado en `c4310e9`, preview exacta revisada; M09 pendiente |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R3 verificado localmente y publicado. R4 M08: piloto verificado localmente, código `ad0a23f` y pruebas específicas 13/13, regresiones de minimapa 5/5, superficies 7/7 y presentación/captura 69/69. Publicar evidencia y comprobar preview exacta; después escribir aceptación de M09 antes de implementarlo. Comprobar STOP externo antes de cada fase larga.
+R3 verificado localmente y publicado. R4 M08 verificado y publicado en `c4310e9`: piloto 13/13, regresiones de minimapa 5/5, superficies 7/7 y presentación/captura 69/69, con preview exacta abierta en Chrome. La siguiente capacidad es M09: verificar licencia y presupuesto de un entorno HDR acotado, implementar presets reversibles y comparar con cámara/material comunes. Comprobar STOP externo antes de cada fase larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
@@ -102,17 +102,24 @@ Estas tres capacidades se publicarán en cortes verificables en ese orden. CI re
 
 M09 comienza después de validar M08; sus presets de iluminación y entorno deben preservar la misma cámara/material, degradar sin HDRI y restaurar luz/exposición/fondo al cerrar.
 
+## R4 M09 — aceptación previa, escrita antes de editar la iluminación
+
+1. Seleccionar un entorno HDR pequeño con URL de origen, licencia y SHA-256 comprobables. Usar el cargador oficial compatible con Three.js y PMREM; limitar bytes, dimensiones y carga a la presentación. Si no se acredita recurso o soporte WebGL, mantener el entorno sintético existente y registrar el motivo de degradación. El fondo visible puede permanecer liso e independiente del entorno de reflejos.
+2. Ofrecer al menos luz neutra y cálida como presets reproducibles. Comparar ambas sobre el mismo proyecto, estancia, cámara, geometría, hora y material M08. Registrar exposición, intensidades, color, fondo y entorno activos; evitar llamar «asoleo real» o fotometría a un ajuste visual. La captura PNG y el ZIP deben usar el preset visible y conservar bytes/dimensiones válidos.
+3. Al salir, cancelar, cambiar proyecto, perder WebGL o fallar el HDR, restaurar o degradar de forma explícita y segura: opciones de día/noche/hora, luces, exposición, fondo y entorno, cámara, proyecto/IDs y estado 2D/3D. Ninguna carga tardía puede aplicar luz a otra entrada ni reabrir la presentación; disponer texturas propias sin destruir el entorno compartido.
+4. Medir transferencia y memoria del HDR/PMREM y coste de render en Chromium/SwiftShader; comparar con baseline y no extrapolar a móvil físico. Ejecutar pruebas afectadas en 1440×900, 390×844, 844×390 y 360×800, más resize 360→844, exportación/reimportación, navegación, retorno, degradación y consola/pageerror; abrir visualmente cada captura relevante antes de aceptar.
+
 ### M08 — auditoría previa de recursos, en curso
 
 - Se descargaron fuera del worktree los seis JPEG del commit fijado de Casa Serra y se repitieron SHA-256 y longitudes de `source-map-audit.json`: **6/6 coinciden**. Se abrieron visualmente diff/nor/arm de roble y mármol y los albedos WebP existentes. Las páginas oficiales de [roble](https://polyhaven.com/a/oak_wood_planks) y [mármol](https://polyhaven.com/a/marble_01) identifican estos recursos como CC0 y ofrecen diffuse, ARM y normal GL; la [licencia oficial](https://polyhaven.com/license) confirma el uso de texturas CC0. La biblioteca actual ya vincula los mismos IDs de origen y su propia evidencia CC0. M19: el código del piloto será propio; la autorización del recurso no se extiende a código de terceros.
 - En `artifacts/casa-serra/r4-m08-source-alignment.json` constan comparaciones directas 1024→256 con los albedos aprobados. Correlación RGB del roble **0.923/0.930/0.869**, error absoluto medio 2.38 niveles de 8 bits; mármol **0.919/0.942/0.933**, error 1.87. Flips y rotaciones dan correlaciones mucho menores. Las vetas y juntas se alinean visualmente sin girar ni recortar; esto admite reutilizar las UV actuales como candidato, pero aún no acredita el resultado PBR en escena. El normal del roble es casi plano; verificar beneficio visible y convención del canal verde antes de aceptar. AO requiere comprobar el UV del renderer; no conectar AO ni metalness por supuesto.
 
-### M08 — piloto verificado localmente, preview exacta pendiente
+### M08 — piloto verificado localmente y publicado
 
 - El script propio `scripts/build-material-channels.py` comprueba los seis JPEG fijados antes de derivar WebP lossless 256×256. Sólo dos materiales reciben normal GL y rugosidad extraída del canal verde de ARM. Catálogo y renderer comprueban ruta, MIME, bytes, SHA-256, dimensiones y decode; base sRGB y datos lineales comparten repetición/UV. AO y metalness permanecen sin conectar. El selector básico/detalle vive en la presentación y vuelve al estado original al salir; FloorPlanProjectV1 y los 50 IDs permanecen intactos.
 - Dos asignaciones activas transfieren 11 848 bytes en modo básico y 105 158 con detalle (+93 310). Estimación de memoria GPU de mapas: 699 052 → 2 097 156 bytes (+1 398 104); `renderer.info.memory` midió 10 → 14 texturas, 1 298 geometrías en ambos modos, en Chromium/SwiftShader. No es una medición de teléfono físico. Datos y capturas en `artifacts/casa-serra/r4-m08/material-pilot.json` y sus 22 archivos adjuntos.
 - Suite de M08 **13/13** PASS: cuatro viewports, mismas cámaras y proyecto, PNG descargado con firma y bytes, exportación/reimportación JSON, retorno 2D, resize 360×800→844×390, y fallos HTTP/hash/decode con albedo conservado y liberación al simular pérdida de contexto. Regresión M13 **5/5**, biblioteca de superficies **7/7** y presentación/captura/ZIP **69/69** PASS. Se abrieron visualmente 17 capturas de comparación/resize: geometría, UV, juntas, mapa y controles correctos. La mejora es sutil con esta iluminación; una región de 300×320 del dormitorio cambió 5 148 píxeles >4 niveles RGB. Una captura vacía reveló que la presentación quedaba en una fila de altura cero; se corrigió `main` a la fila visible y se repitieron capturas válidas. La consola normal no produjo errores; el HTTP 503 inyectado emitió el error de recurso esperado.
-- Próximo paso ejecutable: derivar mapas web ≤512 px/≤512 KiB desde estos canales con hash/bytes/procedencia, añadirlos solo a los dos acabados candidatos, extender validación y carga para normal/roughness con fallback y métricas, y comparar base/mejorado a cámara y luz fijas. Mantener las pruebas y capturas de R3 intactas.
+- Preview intermedia exacta `c4310e97ce4cba5f8755a61761b0a51fbcd0a4c3` READY y abierta en Chrome: ejemplo, vista general, dormitorio principal y retorno al editor 2D visibles. Vercel deployment `dpl_9N4eoWLGDDhWKMn7DPStF57AExz9` asociado al status GitHub del SHA. Actions `38697217578` y `38697217425` fallaron con `steps: []` por facturación; CI no ejecutó pruebas. PR #39 actualizada con un solo comentario para este SHA. Próximo paso: M09 según la aceptación anterior.
 
 ## R2 — matriz del protocolo P01–P16
 
