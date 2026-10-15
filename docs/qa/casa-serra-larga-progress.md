@@ -29,7 +29,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
 | R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 y M09 previews exactas revisadas; M09 6/6 y regresión amplia 76/76 |
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
-| R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
+| R6 | en curso | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | Aceptación previa escrita; piloto pendiente |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
 | R8 | pendiente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | — | — |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R5 M15 verificado localmente en código `ae70f26`: piloto 5/5, suite amplia 100/100 y capturas abiertas. Publicar evidencia, actualizar la PR y revisar la preview del SHA exacto; después abrir R6/M18. M10 preview exacta del SHA `3d73e54` revisada en Chrome; Actions [38741590788](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38741590788) y [38741590832](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38741590832) sin pasos. Comprobar STOP externo antes de cada fase larga.
+R6 M18: implementar y probar el recorrido desde la entrada hasta una estancia seleccionada según la aceptación previa de abajo. R5 cerrado localmente: M15 código `ae70f26`, evidencia `81be6e6`, piloto 5/5 y suite amplia 100/100. Preview exacta de `81be6e6` revisada en Chrome; Actions [38777167544](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38777167544) y [38777167781](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38777167781) sin pasos. PR #39 actualizada. Comprobar STOP externo antes de cada fase larga.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 
@@ -80,6 +80,13 @@ R5 M15 verificado localmente en código `ae70f26`: piloto 5/5, suite amplia 100/
 - Código `ae70f26`: botón «Sombras: base/suaves» en la presentación. Un shader propio dibuja hasta ocho manchas suaves por estancia sobre la geometría del polígono real del suelo; éste recorta el efecto en muros compartidos. Se excluyen alfombras y plantas. El modo es opcional y descarta sólo sus geometrías/materiales al apagarlo, salir, cambiar de proyecto o perder WebGL. No escribe en `FloorPlanProjectV1` ni altera la cámara. Escena sin muebles: cero manchas y renderer base.
 - Piloto final **5/5 PASS** en cuatro viewports, resize 360→844, escena vacía, dos muebles solapados, pérdida de contexto, identidad de proyecto/entrada/cámara y memoria restaurada. Regresión amplia de captura, ZIP, M10, HDR, minimapa, presentación, importado/propio y superficies **100/100 PASS**; log externo `r5-m15-broad.log`, piloto `r5-m15-final.log`. Las capturas base/efecto e interfaz se abrieron visualmente; control y salida dentro del viewport. Se publican 19 archivos en `artifacts/casa-serra/r5-m15/`.
 - Presupuesto Chromium/SwiftShader: cero bytes de transferencia y cero texturas nuevas; 40 manchas lógicas en diez estancias del ejemplo, con 6–10 geometrías GPU visibles adicionales según viewport. Las geometrías regresan a 1 298 y las texturas a 9 al desactivar. Medianas de 20 frames: base 16,6–16,7 ms y efecto 16,2–16,7 ms. El cambio visual es deliberadamente leve, visible en los bordes de muebles; no se afirma rendimiento de dispositivo físico. M19: shader y control escritos para esta rama, sin recurso externo.
+
+## R6 — aceptación previa para M18
+
+1. Desde una parada de estancia, ofrecer un recorrido opcional que comienza junto a la puerta de entrada y termina en el `roomId` activo. El plan sale del proyecto y la geometría vigentes, sin coordenadas fijas del ejemplo ni escritura en el documento. Un plan interior usa margen de paso declarado, comprueba muros y ventanas, huecos de puerta, muebles rotados y segmentos diagonales. Se valida también la trayectoria interpolada, no sólo sus extremos.
+2. Cuando no existe ruta interior segura o se supera el presupuesto de búsqueda, usar una ruta aérea por encima de la mayor pared del proyecto y decirlo explícitamente antes de animar. No llamar «interior» a una trayectoria que cruza obstáculos. Una escena sin entrada válida, sin estancia o sin WebGL explica el límite y conserva el editor. Ningún fallo puede dejar la cámara atravesando un muro o reaparecer tras cancelar.
+3. El recorrido se puede cancelar con Volver a editar, Escape, Back, cambio de proyecto, resize o pérdida de contexto. Movimiento reducido salta la animación y conserva una pose segura. Al terminar, la cámara vuelve a la parada de estancia; al salir de la presentación se restaura la cámara/puertas originales, la selección, el historial y el JSON/ZIP del proyecto. La puerta que se abra visualmente durante el recorrido se restaura.
+4. Pruebas de planificador con paso estrecho, muro diagonal, puerta y mueble que obliga a rodear, mueble que bloquea y proyecto irregular; navegador en 1440×900, 390×844, 844×390, 360×800 y resize 360→844. Capturas abiertas, consola/pageerror, presupuesto de frames y regresiones afectadas. Código, evidencia, PR y preview exacta en checkpoints pequeños.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 

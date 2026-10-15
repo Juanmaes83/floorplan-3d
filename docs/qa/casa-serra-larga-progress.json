@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R5",
-  "ci": "failed_without_steps_on_3d73e54_runs_38741590788_38741590832_billing_history_not_ci_accepted",
+  "current": "R6",
+  "ci": "failed_without_steps_on_81be6e6_runs_38777167544_38777167781_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -102,12 +102,12 @@
     {
       "id": "R6",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "CS-3 recorrido; M18",
       "dependency": "R2",
       "acceptance": "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["M18 acceptance written before implementation; R5 M15 evidence SHA 81be6e6 exact preview reviewed in Chrome; Actions 38777167544/38777167781 failed with zero steps"]
     },
     {
       "id": "R7",
