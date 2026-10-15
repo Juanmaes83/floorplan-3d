@@ -102,12 +102,12 @@
     {
       "id": "R6",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "CS-3 recorrido; M18",
       "dependency": "R2",
       "acceptance": "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
-      "testedSha": null,
-      "evidence": ["M18 acceptance written before implementation; R5 M15 evidence SHA 81be6e6 exact preview reviewed in Chrome; Actions 38777167544/38777167781 failed with zero steps"]
+      "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
+      "evidence": ["M18 acceptance written before implementation; route planner 5/5 and browser 8/8 across four viewports, resize and cancellation", "Affected broad regression 113/113; ten visual and metric artifacts in docs/qa/artifacts/casa-serra/r6-m18/", "Reference route five points, two doors, 450 visited cells; GPU memory unchanged at 1298 geometries and 9 textures; Chromium/SwiftShader frame medians 16.5 ms base and 16.6 ms route"]
     },
     {
       "id": "R7",
@@ -339,12 +339,12 @@
     {
       "id": "M18",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Recorrido interior seguro",
       "dependency": "M03",
       "acceptance": "Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
+      "evidence": ["Route planner 5/5, browser 8/8, affected broad regression 113/113; interior and declared aerial fallback, four viewport and resize visual review; ten artifacts in docs/qa/artifacts/casa-serra/r6-m18/"]
     },
     {
       "id": "M19",
@@ -360,7 +360,8 @@
         "M08 four CC0 data maps from pinned Casa Serra JPEG revision with per-channel source SHA; own renderer implementation ad0a23f, no Casa Larga code copied",
         "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied",
         "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied",
-        "M15 own polygon-clipped contact shade shader and presentation control ae70f26; no external asset or Casa Larga source code copied"
+        "M15 own polygon-clipped contact shade shader and presentation control ae70f26; no external asset or Casa Larga source code copied",
+        "M18 own grid route planner, temporary camera animation and minimap line cd82490; no external asset or Casa Larga source code copied"
       ]
     },
     {

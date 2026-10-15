@@ -29,7 +29,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
 | R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 y M09 previews exactas revisadas; M09 6/6 y regresión amplia 76/76 |
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
-| R6 | en curso | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | Aceptación previa escrita; piloto pendiente |
+| R6 | verificado localmente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | Planificador 5/5, navegador 8/8, regresión amplia 113/113; cuatro viewports, resize y alternativa aérea |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
 | R8 | pendiente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | — | — |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
@@ -55,13 +55,13 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M15 | verificado localmente | Sombras/efectos acotados | M08 | Beneficio visual revisado, coste medido y renderer base tras fallo | `ae70f26` | 5/5 piloto, 100/100 regresión amplia; 19 artefactos `artifacts/casa-serra/r5-m15/` |
 | M16 | pendiente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | — | — |
 | M17 | pendiente | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | — | — |
-| M18 | pendiente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | — | — |
+| M18 | verificado localmente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | 5/5 planificador, 8/8 navegador, 113/113 regresión; 10 archivos `artifacts/casa-serra/r6-m18/` |
 | M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08 mapas y M09 HDR Poly Haven CC0 atribuidos; M10 capa temporal de revelado escrita para este proyecto, sin código Casa Larga |
 | M20 | pendiente | Presentación portable | M11 | Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado | — | — |
 
 ## Próxima acción ejecutable
 
-R6 M18: implementar y probar el recorrido desde la entrada hasta una estancia seleccionada según la aceptación previa de abajo. R5 cerrado localmente: M15 código `ae70f26`, evidencia `81be6e6`, piloto 5/5 y suite amplia 100/100. Preview exacta de `81be6e6` revisada en Chrome; Actions [38777167544](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38777167544) y [38777167781](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38777167781) sin pasos. PR #39 actualizada. Comprobar STOP externo antes de cada fase larga.
+R6 M18 verificado localmente: código `cd82490`, planificador 5/5, navegador 8/8 y regresión amplia 113/113; evidencia en `artifacts/casa-serra/r6-m18/`. Publicar evidencia, actualizar PR #39 y revisar la preview del SHA exacto; después esperar instrucciones del usuario antes de R7.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 
@@ -87,6 +87,12 @@ R6 M18: implementar y probar el recorrido desde la entrada hasta una estancia se
 2. Cuando no existe ruta interior segura o se supera el presupuesto de búsqueda, usar una ruta aérea por encima de la mayor pared del proyecto y decirlo explícitamente antes de animar. No llamar «interior» a una trayectoria que cruza obstáculos. Una escena sin entrada válida, sin estancia o sin WebGL explica el límite y conserva el editor. Ningún fallo puede dejar la cámara atravesando un muro o reaparecer tras cancelar.
 3. El recorrido se puede cancelar con Volver a editar, Escape, Back, cambio de proyecto, resize o pérdida de contexto. Movimiento reducido salta la animación y conserva una pose segura. Al terminar, la cámara vuelve a la parada de estancia; al salir de la presentación se restaura la cámara/puertas originales, la selección, el historial y el JSON/ZIP del proyecto. La puerta que se abra visualmente durante el recorrido se restaura.
 4. Pruebas de planificador con paso estrecho, muro diagonal, puerta y mueble que obliga a rodear, mueble que bloquea y proyecto irregular; navegador en 1440×900, 390×844, 844×390, 360×800 y resize 360→844. Capturas abiertas, consola/pageerror, presupuesto de frames y regresiones afectadas. Código, evidencia, PR y preview exacta en checkpoints pequeños.
+
+### M18 — recorrido verificado localmente
+
+- Código `cd82490`: el botón «Recorrer desde entrada» planifica desde la entrada hasta la estancia activa con la geometría vigente. Una cuadrícula de 200 mm, margen de paso de 220 mm y comprobación interpolada a 80 mm evitan muros, ventanas y muebles rotados; las puertas usadas se abren sólo visualmente. Si falta espacio o se supera el presupuesto de 12 000 celdas, el recorrido se declara aéreo antes del movimiento. Si falta entrada válida, se explica y no se mueve la cámara. La ruta y el minimapa son temporales; no escriben en el proyecto ni añaden geometría GPU.
+- Planificador **5/5**: casa de referencia, muro diagonal, hueco de puerta, polígono cóncavo, barrera de muebles, entrada ausente y presupuesto. Navegador **8/8** en cuatro viewports, resize 360→844, movimiento reducido, Escape/Back, pérdida real de contexto y retorno a cámara/puertas 3D originales. Regresión amplia afectada **113/113 PASS**. Consola/pageerror y documento, IDs, historial y selección sin cambios inesperados. Logs externos `r6-m18-directed.log` y `r6-m18-broad.log`.
+- Se abrieron las capturas de ruta interior y minimapa en 1440×900, 390×844, 844×390 y 360×800, además del resize cancelado y la alternativa aérea. Controles dentro del viewport; diez PNG/JSON publicados en `artifacts/casa-serra/r6-m18/`. Caso de referencia: cinco puntos, dos puertas, 450 celdas visitadas; memoria antes/durante 1 298 geometrías y 9 texturas. Mediana de 20 frames 16,5 ms base y 16,6 ms durante la ruta en Chromium/SwiftShader. Estas medidas no representan rendimiento de móvil físico. M19: implementación propia sin recurso externo ni código Casa Larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 

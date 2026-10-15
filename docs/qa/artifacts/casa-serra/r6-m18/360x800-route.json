@@ -1,0 +1,42 @@
+{
+  "kind": "interior",
+  "reason": "Ruta interior libre de obstáculos.",
+  "points": [
+    {
+      "x": 4760,
+      "y": 8760
+    },
+    {
+      "x": 5760,
+      "y": 7960
+    },
+    {
+      "x": 5760,
+      "y": 2960
+    },
+    {
+      "x": 7960,
+      "y": 2360
+    },
+    {
+      "x": 8360,
+      "y": 2360
+    }
+  ],
+  "doorIds": [
+    "opn_door-1",
+    "opn_door-5"
+  ],
+  "visited": 450,
+  "clearanceMm": 220,
+  "baseMemory": {
+    "geometries": 1298,
+    "textures": 9
+  },
+  "routeMemory": {
+    "geometries": 1298,
+    "textures": 9
+  },
+  "baseMedianMs": 16.5,
+  "routeMedianMs": 16.5
+}
