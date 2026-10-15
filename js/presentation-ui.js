@@ -24,6 +24,7 @@
  const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
  const materialButton=button('',controls,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
  const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
+ const revealButton=button('',controls,()=>{revealCurrent();});revealButton.id='presentationReveal';
  const batchButton=button('',controls,()=>{batchPromise=captureBatch().catch(error=>toast(error.message||String(error),6000)).finally(()=>{batchPromise=null;});});batchButton.id='presentationBatch';
  const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
  const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
@@ -61,6 +62,7 @@
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function captureReady(){
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
+  if(View3D.presentationRevealInfo?.status==='running')return false;
   if(View3D.presentationLight.status==='loading')return false;
   if(View3D.surfaceMetrics.some(m=>m.detailState==='loading'||m.detailState==='waiting'))return false;
   const stage=document.querySelector('#stage'),canvas=View3D.canvasState,camera=View3D.cameraState;
@@ -151,6 +153,14 @@
   catch(error){if(active&&token===epoch)toast(error.message||String(error),6000);}
   finally{if(active&&token===epoch)lightButton.disabled=false;}
  }
+ async function revealCurrent(){
+  if(!active||stopping||batchActive||plan.stops[index]?.kind!=='room')return;
+  const token=epoch,roomId=plan.stops[index].roomId;
+  revealButton.disabled=true;
+  try{const pending=View3D.presentationReveal(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches);updateCapture();await pending;}
+  catch(error){if(active&&token===epoch)toast(error.message||String(error),6000);}
+  finally{if(active&&token===epoch){draw();updateCapture();}}
+ }
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
@@ -161,6 +171,9 @@
   lightButton.textContent=window.View3D?.presentationLight?.preset==='warm'?tx('Luz: cálida','Light: warm','灯光：暖色'):tx('Luz: neutra','Light: neutral','灯光：中性');
   lightButton.setAttribute('aria-pressed',String(window.View3D?.presentationLight?.preset==='warm'));
   lightButton.disabled=batchActive||window.View3D?.presentationLight?.status==='loading';
+  revealButton.textContent=tx('Revelar acabados','Reveal finishes','显示饰面');
+  revealButton.hidden=!plan||plan.stops[index]?.kind!=='room';
+  revealButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRevealInfo?.status==='running';
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
@@ -259,9 +272,10 @@
  async function go(target,token=epoch){
   if(!active||batchActive||target<0||target>=plan.stops.length)return;
   if(!sourceCurrent()){await stop();return;}
+  View3D.clearPresentationReveal?.();
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
   try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
-  finally{if(move===movement){overlay.dataset.moving='false';updateCapture();if(active&&sourceCurrent())renderMinimap();}}
+  finally{if(move===movement){overlay.dataset.moving='false';revealButton.disabled=batchActive;updateCapture();if(active&&sourceCurrent())renderMinimap();}}
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;

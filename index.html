@@ -2068,7 +2068,7 @@ const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...proj
 
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
-let archFloor, archUp, furnG, labelG, lampG, colliders = [], selKey = null, selHelper = null;
+let archFloor, archUp, furnG, labelG, lampG, revealG, colliders = [], selKey = null, selHelper = null;
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
 
@@ -2112,8 +2112,8 @@ function init(){
   glassMat = new THREE.MeshPhysicalMaterial({color:0xcfe6ef, roughness:.05, transparent:true, opacity:.28, depthWrite:false, side:THREE.DoubleSide});
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
-  archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group();
-  scene.add(archFloor, archUp, furnG, labelG, lampG);
+  archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group();
+  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -2832,6 +2832,7 @@ function wallBox(rect, yb, yt, m){
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
   if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
+  o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:yt-yb};
   o.position.set(wx(rect.center[0]), (yb+yt)/2, wz(rect.center[1])); o.rotation.y=-rect.angle; o.castShadow = o.receiveShadow = true; archUp.add(o);
   // 漫游辅助：墙体棱线 + 踢脚线，让相邻墙面、墙角一眼可分（仅漫游模式显示）
   const ln = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry), edgeMat); ln.position.copy(o.position); ln.rotation.copy(o.rotation); ln.userData.walkOnly = true; ln.visible = opt.mode === 'walk'; archUp.add(ln);
@@ -2843,7 +2844,71 @@ function wallBox(rect, yb, yt, m){
 const edgeMat = new THREE.LineBasicMaterial({color:0x6f675b}), skirtMat = new THREE.MeshStandardMaterial({color:'#8b7f6e', roughness:.6});
 function shapeOf(poly, flip){ const s = new THREE.Shape(); poly.forEach(([x, y], i) => s[i ? 'lineTo' : 'moveTo'](wx(x), flip ? wz(y) : -wz(y))); return s; }
 
+// A temporary drawing veil uses the actual room polygon and only the inward face of each wall.
+// It never changes the project's materials or the shared mesh materials used by the editor.
+let revealRun=null,revealInfo={status:'off',roomId:null,walls:[],floor:false,floorAreaM2:0,overlayCount:0};
+function pointInRoom(point,poly){
+  let inside=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const a=poly[i],b=poly[j];
+    if((a[1]>point[1])!==(b[1]>point[1])&&point[0]<(b[0]-a[0])*(point[1]-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+  }
+  return inside;
+}
+function wallRoomFace(rect,poly){
+  const [x0,y0,x1,y1]=rect.endpoints,dx=x1-x0,dy=y1-y0,length=Math.hypot(dx,dy);
+  if(length<1)return 0;
+  const nx=-dy/length,ny=dx/length,pad=rect.thicknessMm/2+80;
+  const plus=pointInRoom([rect.center[0]+nx*pad,rect.center[1]+ny*pad],poly);
+  const minus=pointInRoom([rect.center[0]-nx*pad,rect.center[1]-ny*pad],poly);
+  return plus===minus?0:plus?1:-1;
+}
+function clearPresentationReveal(){
+  if(revealRun){cancelAnimationFrame(revealRun.raf);revealRun.resolve(false);revealRun=null;}
+  if(revealG){const geometries=new Set(),materials=new Set();revealG.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));});revealG.clear();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}
+  revealInfo={status:'off',roomId:null,walls:[],floor:false,floorAreaM2:0,overlayCount:0};
+}
+function presentationReveal(roomId,reduced=false){
+  if(!active||contextLost||!revealG)throw Error('Revelado no disponible');
+  const room=geometry.rooms.find(r=>r.id===roomId&&r.poly.length>=3);
+  if(!room)throw Error('Estancia no disponible');
+  clearPresentationReveal();
+  if(reduced){revealInfo={status:'instant',roomId,walls:[],floor:true,floorAreaM2:0,overlayCount:0};return Promise.resolve(true);}
+  const floorMat=new THREE.MeshBasicMaterial({color:0xf8f5ed,transparent:true,opacity:.88,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2});
+  const wallMat=new THREE.MeshBasicMaterial({color:0xf8f5ed,transparent:true,opacity:.78,depthWrite:false,side:THREE.DoubleSide});
+  const lineMat=new THREE.LineBasicMaterial({color:0x6f675b,transparent:true,opacity:.6,depthWrite:false});
+  const floorGeometry=new THREE.ShapeGeometry(shapeOf(room.poly));floorGeometry.rotateX(-Math.PI/2);
+  const positions=floorGeometry.getAttribute('position'),indices=floorGeometry.getIndex();let floorAreaM2=0;
+  for(let i=0;i<(indices?indices.count:positions.count);i+=3){const a=indices?indices.getX(i):i,b=indices?indices.getX(i+1):i+1,c=indices?indices.getX(i+2):i+2;floorAreaM2+=Math.abs((positions.getX(b)-positions.getX(a))*(positions.getZ(c)-positions.getZ(a))-(positions.getZ(b)-positions.getZ(a))*(positions.getX(c)-positions.getX(a)))/2;}
+  const floor=new THREE.Mesh(floorGeometry,floorMat);floor.position.y=.006;floor.userData.roomId=roomId;revealG.add(floor);
+  const outline=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(room.poly.map(([x,y])=>new THREE.Vector3(wx(x),.012,wz(y)))),lineMat);outline.userData.roomId=roomId;revealG.add(outline);
+  const walls=[];
+  archUp.traverse(o=>{
+    const rect=o.userData.revealRect;if(!rect)return;
+    const face=wallRoomFace(rect,room.poly);if(!face)return;
+    const normal=new THREE.Vector3(-Math.sin(rect.angle),0,Math.cos(rect.angle));
+    const veil=new THREE.Mesh(new THREE.PlaneGeometry(M(rect.spanMm),rect.height),wallMat);
+    veil.position.copy(o.position).addScaledVector(normal,face*(M(rect.thicknessMm)/2+.004));
+    veil.rotation.y=o.rotation.y+(face<0?Math.PI:0);
+    veil.userData.wallId=o.userData.wallId;veil.userData.roomId=roomId;veil.userData.face=face;revealG.add(veil);
+    walls.push({wallId:o.userData.wallId,face});
+  });
+  revealInfo={status:'running',roomId,walls,floor:true,floorAreaM2,overlayCount:revealG.children.length};
+  return new Promise(resolve=>{
+    const run={raf:0,resolve};revealRun=run;const began=performance.now();
+    const tick=now=>{
+      if(revealRun!==run)return;
+      const progress=Math.min(1,(now-began)/1100),remaining=1-progress*progress*(3-2*progress);
+      floorMat.opacity=.88*remaining;wallMat.opacity=.78*remaining;lineMat.opacity=.6*remaining;
+      if(progress>=1){const result={...revealInfo,status:'complete'};revealRun=null;clearPresentationReveal();revealInfo=result;resolve(true);return;}
+      run.raf=requestAnimationFrame(tick);
+    };
+    run.raf=requestAnimationFrame(tick);
+  });
+}
+
 function buildArch(){
+  clearPresentationReveal();
   renderedSource=project; renderedGeometry=geometry;
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
@@ -3121,6 +3186,7 @@ async function enter(){
   stage.classList.remove('animating');
 }
 function abort3D(){
+  clearPresentationReveal();
   stopPresentationLighting();
   if(raf)cancelAnimationFrame(raf);raf=0;
   if(anim?.res)anim.res();anim=null;
@@ -3399,6 +3465,7 @@ function presentationGo(stop,reduced=false){
   return flyTo(next,650);
 }
 function presentationRestore(state){
+  clearPresentationReveal();
   stopPresentationLighting();
   if(!state||!active)return;
   if(fly?.res)fly.res(false);fly=null;
@@ -3434,6 +3501,9 @@ function presentationRestorePose(state){
 }
 
 window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D.presentationReveal=presentationReveal;
+window.View3D.clearPresentationReveal=clearPresentationReveal;
+Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 </script>
 </body>
 </html>
