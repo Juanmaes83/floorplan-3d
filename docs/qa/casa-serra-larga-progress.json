@@ -279,12 +279,12 @@
     {
       "id": "M12",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Comparación de variantes",
       "dependency": "M03",
       "acceptance": "Misma referencia visual; variantes e IDs permanecen aislados",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "9e967250a8fef0490ca7619d46b02b29bebefe9b",
+      "evidence": ["Common SVG frame and scale for original/variants, room/wall/door/object IDs, read-only comparison; variants unit/browser 17/17", "Eight visually reviewed screenshots in docs/qa/artifacts/casa-serra/r7-m12/ across four viewports and 360-to-844 resize"]
     },
     {
       "id": "M13",
