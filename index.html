@@ -322,6 +322,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 @media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
 @media(max-height:500px){.presentation-overlay[data-route="true"] .presentation-progress,.presentation-overlay[data-route="true"] .presentation-stops{display:none}.presentation-overlay[data-route="true"] .presentation-card .btn{min-height:36px}}
 
+.variant-card .variant-plan{display:block;width:100%;aspect-ratio:8/5;background:#f5f3ef;border:1px solid var(--line);border-radius:6px;margin:7px 0}.variant-plan .room{fill:#e9dfd0;stroke:#b7aa98;stroke-width:45}.variant-plan .wall{fill:#5c5752}.variant-plan .door{fill:#f5f3ef;stroke:#177d88;stroke-width:55}.variant-plan .object{fill:#b89e81;stroke:#765b43;stroke-width:35}
 </style>
 <script type="importmap">
 {"imports":{
@@ -505,7 +506,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <p>Crea una copia independiente del proyecto abierto, tal como lo ves ahora, para probar otra distribución sin tocar el original (hasta 2 variantes por original). El vínculo entre original y variantes se guarda solo en este navegador: al exportar el JSON se exporta un proyecto normal, sin ese vínculo.</p>
 <div class="actions"><button id="projectVariant" class="btn">Crear variante del proyecto abierto</button><button id="projectCompare" class="btn">Comparar distribuciones</button></div></section></dialog>
 <dialog id="variantsDialog" aria-labelledby="variantsTitle"><h2 id="variantsTitle">Comparar distribuciones</h2>
-<p>Original y variantes guardados en este navegador. Los avisos son geométricos y orientativos (revisión de distribución en planta); no certifican normativa ni accesibilidad.</p>
+<p>Original y variantes guardados en este navegador. Las plantas usan el mismo marco y escala; beige: estancias y muebles, gris: muros, azul: puertas. Los avisos son geométricos y orientativos (revisión de distribución en planta); no certifican normativa ni accesibilidad.</p>
 <label>Holgura mínima entre muebles (mm, opcional) <input id="variantsClearance" type="number" min="1" step="1" inputmode="numeric"></label>
 <div id="variantsCards" class="variants-cards"></div>
 <div class="actions"><button id="variantsClose" class="btn">Cerrar</button></div><p id="variantsError" role="alert"></p></dialog>
@@ -1985,10 +1986,24 @@ $('#projectVariant').onclick=()=>{try{switchProject(library.variant(project));li
 // Comparison: stored projects for each distribution, except the open one, which uses the state on screen.
 let variantsClearance=null;
 const reviewState={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
+function variantPlan(scene,viewBox,name){
+  const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
+  svg.classList.add('variant-plan');svg.setAttribute('viewBox',viewBox.join(' '));svg.dataset.viewBox=viewBox.join(' ');
+  svg.setAttribute('role','img');svg.setAttribute('aria-label',`Planta de ${name}; mismo marco y escala que las demás distribuciones`);
+  for(const [kind,items] of [['room',scene.rooms],['wall',scene.walls],['door',scene.doors],['object',scene.objects]]){
+    const layer=document.createElementNS(ns,'g');layer.setAttribute('class',kind+'-layer');
+    for(const item of items){const path=document.createElementNS(ns,'path');path.setAttribute('class',kind);
+      path.setAttribute('d',item.poly.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' ')+' Z');
+      path.dataset.entityId=item.id||'';if(item.roomId)path.dataset.roomId=item.roomId;layer.append(path);}
+    svg.append(layer);
+  }
+  return svg;
+}
 function renderVariants(){
   const box=$('#variantsCards');box.replaceChildren();$('#variantsError').textContent='';
   let group;try{group=library.group(library.activeId());}catch(e){$('#variantsError').textContent=e.message;return;}
-  for(const g of group){
+  let comparison;try{comparison=FloorPlanVariants.comparisonFrame(group.map(g=>g.id===library.activeId()?project:g.project));}catch(e){$('#variantsError').textContent=e.message;return;}
+  for(const [index,g] of group.entries()){
     const data=g.id===library.activeId()?project:g.project;let m;
     try{m=FloorPlanVariants.metrics(data,{clearanceMm:variantsClearance});}catch(e){$('#variantsError').textContent=e.message;continue;}
     const card=document.createElement('article');card.className='variant-card';card.dataset.id=g.id;card.dataset.active=String(g.id===library.activeId());
@@ -2006,7 +2021,7 @@ function renderVariants(){
     if(g.variantOf){const del=document.createElement('button');del.className='btn danger';del.dataset.action='remove';del.textContent='Eliminar variante';del.onclick=()=>{
       const original=group[0].name;if(!confirm(`¿Eliminar la variante «${g.name}»? Se borra solo esta copia local; el original «${original}» no cambia. No se puede deshacer.`))return;
       try{const wasActive=g.id===library.activeId(),next=library.remove(g.id);if(wasActive)switchProject(next);window.FloorPlanTraceUI?.cleanup();renderVariants();}catch(e){$('#variantsError').textContent=e.message;}};actions.append(del);}
-    card.append(role,h,dl,actions);box.append(card);
+    card.append(role,h,variantPlan(comparison.scenes[index],comparison.viewBox,g.name),dl,actions);box.append(card);
   }
   if(group.length===1){const p=document.createElement('p');p.id='variantsEmpty';p.style.gridColumn='1 / -1';p.textContent='Este proyecto aún no tiene variantes. Usa «Crear variante del proyecto abierto» en «Proyectos».';box.append(p);}
 }
