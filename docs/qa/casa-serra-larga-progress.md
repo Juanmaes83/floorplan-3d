@@ -27,7 +27,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
-| R4 | en curso | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f` | M08 publicado en `c4310e9`, preview exacta revisada; M09 pendiente |
+| R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 preview exacta revisada; M09 6/6 y regresión amplia 76/76, preview M09 pendiente |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
@@ -46,7 +46,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M06 | en curso | Carga por etapas cancelable | M01 | Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio | — | — |
 | M07 | verificado localmente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | `2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00` | SVG 1600×1100, 7/7 navegador, 5/5 regresión 3D; capturas `artifacts/casa-serra/r3-m07/` |
 | M08 | verificado localmente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | `ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b` | 13/13 piloto, 5/5 minimapa, 7/7 superficies, 69/69 presentación/captura; 17 PNG revisados y presupuesto en `artifacts/casa-serra/r4-m08/` |
-| M09 | pendiente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | — | — |
+| M09 | verificado localmente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | `7bd5415` | 6/6 piloto, 76/76 regresión; 24 archivos de evidencia `artifacts/casa-serra/r4-m09/`, cuatro viewports y resize |
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
 | M12 | pendiente | Comparación de variantes | M03 | Misma referencia visual; variantes e IDs permanecen aislados | — | — |
@@ -56,12 +56,12 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M16 | pendiente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | — | — |
 | M17 | pendiente | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | — | — |
 | M18 | pendiente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | — | — |
-| M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08: cuatro mapas derivados de seis JPEG verificados del commit Serra fijado; Poly Haven CC0, origen SHA por canal; código del renderer propio |
+| M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08: cuatro mapas derivados de seis JPEG verificados, Poly Haven CC0 y código propio; M09: HDR Poly Haven CC0 con SHA y atribución en `assets/environments/README.md`, integración propia |
 | M20 | pendiente | Presentación portable | M11 | Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado | — | — |
 
 ## Próxima acción ejecutable
 
-R3 verificado localmente y publicado. R4 M08 verificado y publicado en `c4310e9`: piloto 13/13, regresiones de minimapa 5/5, superficies 7/7 y presentación/captura 69/69, con preview exacta abierta en Chrome. La siguiente capacidad es M09: verificar licencia y presupuesto de un entorno HDR acotado, implementar presets reversibles y comparar con cámara/material comunes. Comprobar STOP externo antes de cada fase larga.
+R4 M08/M09 verificado localmente. M09 código `7bd5415`: piloto 6/6 y regresión afectada 76/76, con capturas revisadas en cuatro tamaños y resize. Publicar evidencia, revisar preview del SHA exacto y comenzar R5 M10/M15. Comprobar STOP externo antes de cada fase larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
@@ -113,6 +113,13 @@ M09 comienza después de validar M08; sus presets de iluminación y entorno debe
 
 - Candidato [Studio Small 09 de Poly Haven](https://polyhaven.com/a/studio_small_09), licencia [CC0](https://polyhaven.com/license), autor Sergej Majboroda según la ficha oficial. La [API de archivos](https://api.polyhaven.com/files/studio_small_09) declara HDR 1K de 1 615 248 bytes y MD5 `d5d7eb9d26d341d6aa4d11c1a54fd97c`. Descarga de auditoría guardada fuera del worktree: bytes y MD5 coinciden; SHA-256 `e7cfda5f4e98e623db12b8bfd0184e048488e4855d9c83e2751fb44a32e80c45`, cabecera Radiance `-Y 512 +X 1024`. El límite propuesto para el piloto es 2 MiB y 1024×512.
 - El import map fija Three.js `0.160.0`; esa versión ofrece [RGBELoader oficial](https://github.com/mrdoob/three.js/blob/r160/examples/jsm/loaders/RGBELoader.js) y PMREM. Ya existe un `RoomEnvironment` sintético compartido, más luz hemisférica, direccional, hora/noche y exposición en `applyLight()`. El HDR debe cargarse sólo para la presentación, no reemplazar permanentemente el entorno compartido ni depender del fondo visible. El parser propio de Serra no se copia. Falta implementar y verificar el presupuesto real de PMREM/renderer.
+
+### M09 — piloto verificado localmente
+
+- Código `7bd5415`: el HDR Studio Small 09 CC0 se carga sólo durante la presentación con `RGBELoader` oficial y PMREM. Archivo 1 615 248 bytes, SHA-256 verificado de nuevo; límite de descarga 2 MiB, 1024×512 y digest comprobados antes de decodificar. Presets neutro y cálido conservan la misma cámara, proyecto, estancia y materiales. HTTP 503, hash corrupto y pérdida de contexto usan el entorno sintético o vuelven al editor sin aplicar recursos tardíos a otra entrada. El fondo sigue siendo liso.
+- Piloto Chromium/SwiftShader **6/6 PASS** tras esperar la recarga asíncrona de los mapas base en el retorno 3D; la primera lectura prematura de memoria dio un fallo de sincronización de la prueba, y el caso dirigido y la suite completa pasan con la condición de recursos listos. Regresión afectada **76/76 PASS** después de corregir la posición del aviso de importación en 844×390; la repetición previa fue 75/76 por ese solapamiento. Logs externos `r4-m09-final-green.log` y `r4-m09-browser-regressions-final-full.log`.
+- Se abrieron las capturas de vista general y dormitorio en 1440×900, 390×844, 844×390 y 360×800, además de fallback y resize 360→844; escena, mapa, botones y aviso son visibles. El PNG descargado tiene firma y bytes válidos, el ZIP contiene vistas y el retorno desde 2D/3D conserva proyecto, IDs, cámara, hora/noche y luces del editor. Consola/pageerror sin errores inesperados en la suite propia. Evidencia seleccionada en `artifacts/casa-serra/r4-m09/`; `qa-results/serra-r4-m09/` queda local.
+- Presupuesto por sesión: 1 615 248 bytes transferidos por el HDR; estimación de fuente GPU 4 194 304 bytes y PMREM 4 194 304 bytes. `renderer.info.memory.textures` midió 15 con HDR/detalle y 10 tras cerrar, en el ejemplo de dos materiales. Medianas de 30 frames entre 16,3 y 17,0 ms para ambos presets en los cuatro viewports de SwiftShader. Estas cifras no acreditan rendimiento en teléfono físico, fotometría ni asoleo real. M19: recurso Poly Haven CC0 atribuido en `assets/environments/README.md`; integración propia sin copiar código de Casa Larga.
 
 ### M08 — auditoría previa de recursos, en curso
 
