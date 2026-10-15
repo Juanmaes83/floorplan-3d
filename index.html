@@ -285,6 +285,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-minimap-room.active{fill:#57a9a2;stroke:#184e52;stroke-width:95}
 .presentation-minimap-room:focus{outline:none;stroke:#103f9d;stroke-width:160}
 .presentation-minimap-heading{fill:none;stroke:#d13932;stroke-width:130;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.presentation-minimap-route{fill:none;stroke:#196e89;stroke-width:125;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .presentation-card{pointer-events:auto;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 30px #2b282433;padding:12px 16px;max-width:min(650px,100%);width:100%;max-height:calc(100% - 20px);overflow:auto}
 .presentation-card-top,.presentation-controls,.presentation-stops{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .presentation-card-top{justify-content:space-between}
@@ -319,6 +320,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 @media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
 @media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+@media(max-height:500px){.presentation-overlay[data-route="true"] .presentation-progress,.presentation-overlay[data-route="true"] .presentation-stops{display:none}.presentation-overlay[data-route="true"] .presentation-card .btn{min-height:36px}}
 
 </style>
 <script type="importmap">
@@ -2040,6 +2042,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
 <script src="js/guide-ui.js"></script>
+<script src="js/presentation-route.js"></script>
 <script src="js/presentation-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
 <script type="module">
@@ -2070,6 +2073,7 @@ let inited = false, active = false, raf = 0, anim = null, fly = null, contextLos
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
 let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
+let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
 
@@ -2953,6 +2957,7 @@ function setPresentationContactShadows(enabled){
 
 function buildArch(){
   clearPresentationReveal();
+  clearPresentationRoute();
   renderedSource=project; renderedGeometry=geometry;
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
@@ -3003,7 +3008,7 @@ function buildArch(){
     const leaf = box(L, dh, .04, mat(d.entry ? '#6b4f3a' : '#efe6d8', {roughness:.5}), L/2);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), metal()); knob.position.set(L - .07, Math.min(1, dh - .05), 0); knob.scale.z = 2.2;
     pivot.add(leaf, knob);
-    const ang = v => Math.atan2(-v[1], v[0]), door = {pivot, a0:ang(d.c), a1:ang(d.o), open:true,len:L};
+    const ang = v => Math.atan2(-v[1], v[0]), door = {id:d.id,pivot, a0:ang(d.c), a1:ang(d.o), open:true,len:L};
     if (door.a1 - door.a0 > Math.PI) door.a1 -= Math.PI*2; if (door.a0 - door.a1 > Math.PI) door.a1 += Math.PI*2;
     door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
     doors.push(door); archUp.add(pivot);
@@ -3233,6 +3238,7 @@ async function enter(){
 }
 function abort3D(){
   clearPresentationReveal();
+  clearPresentationRoute();
   setPresentationContactShadows(false);
   stopPresentationLighting();
   if(raf)cancelAnimationFrame(raf);raf=0;
@@ -3500,6 +3506,7 @@ function presentationCapture(){
 }
 function presentationGo(stop,reduced=false){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
+  clearPresentationRoute();
   const b=stop.bounds,aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const tx=wx(b.x+b.w/2),tz=wz(b.y+b.h/2);
   const span=Math.max(b.h/1000,b.w/1000/aspect);
@@ -3511,8 +3518,41 @@ function presentationGo(stop,reduced=false){
   if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}
   return flyTo(next,650);
 }
+function clearPresentationRoute(){
+  if(!routeRun){routeInfo={status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};return;}
+  const run=routeRun;routeRun=null;cancelAnimationFrame(run.raf);
+  camera.position.copy(run.position);camera.quaternion.copy(run.quaternion);orbit.target.copy(run.target);orbit.enabled=run.orbitEnabled;
+  run.doors.forEach(saved=>{saved.door.open=saved.open;saved.door.cur=saved.cur;saved.door.pivot.rotation.y=saved.cur;});
+  routeInfo={...routeInfo,status:'off'};run.resolve({status:'cancelled'});
+}
+function presentationRoute(roomId,reduced=false){
+  if(!active||contextLost||anim||fly)throw Error('La escena 3D todavía no está lista.');
+  clearPresentationRoute();
+  const plan=window.FloorPlanPresentationRoute.plan(project,geometry,roomId);
+  routeInfo={...plan,points:plan.points||[],doorIds:plan.doorIds||[],clearanceMm:plan.clearanceMm||0,status:plan.kind==='unavailable'?'unavailable':'ready'};
+  if(plan.kind==='unavailable')return Promise.resolve({...routeInfo});
+  if(reduced){routeInfo={...routeInfo,status:'complete'};return Promise.resolve({...routeInfo});}
+  const original={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),orbitEnabled:orbit.enabled,
+    doors:doors.map(door=>({door,open:door.open,cur:door.cur}))};
+  doors.forEach(door=>{if(plan.doorIds.includes(door.id))door.open=true;});
+  orbit.enabled=false;
+  const length=plan.points.reduce((sum,p,i)=>i?sum+Math.hypot(p.x-plan.points[i-1].x,p.y-plan.points[i-1].y):0,0);
+  const height=plan.kind==='aerial'?Math.max(topHeight(),H,...project.objects.map(object=>M(object.size.heightMm||0)))+1.8:1.65,duration=Math.max(1600,Math.min(9000,length/2400*1000));
+  const pointAt=fraction=>{let remaining=length*fraction;for(let i=1;i<plan.points.length;i++){const a=plan.points[i-1],b=plan.points[i],distance=Math.hypot(b.x-a.x,b.y-a.y);if(remaining<=distance||i===plan.points.length-1){const t=distance?Math.min(1,remaining/distance):1;return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t};}remaining-=distance;}return plan.points.at(-1);};
+  const place=t=>{const p=pointAt(t),ahead=pointAt(Math.min(1,t+.025));camera.position.set(wx(p.x),height,wz(p.y));orbit.target.set(wx(ahead.x),plan.kind==='aerial'?0:1.35,wz(ahead.y));camera.lookAt(orbit.target);};
+  routeInfo={...routeInfo,status:'running',progress:0};place(0);
+  return new Promise(resolve=>{const run={...original,raf:0,resolve};routeRun=run;const began=performance.now();
+   const tick=now=>{if(routeRun!==run)return;const t=Math.min(1,(now-began)/duration);routeInfo.progress=t;place(t);
+    if(t<1){run.raf=requestAnimationFrame(tick);return;}
+    routeRun=null;camera.position.copy(run.position);camera.quaternion.copy(run.quaternion);orbit.target.copy(run.target);orbit.enabled=run.orbitEnabled;
+    run.doors.forEach(saved=>{saved.door.open=saved.open;saved.door.cur=saved.cur;saved.door.pivot.rotation.y=saved.cur;});
+    routeInfo={...routeInfo,status:'complete'};resolve({...routeInfo});
+   };run.raf=requestAnimationFrame(tick);
+  });
+}
 function presentationRestore(state){
   clearPresentationReveal();
+  clearPresentationRoute();
   setPresentationContactShadows(false);
   stopPresentationLighting();
   if(!state||!active)return;
@@ -3554,6 +3594,9 @@ window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
 Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount,transferBytes:0,textureCount:0})});
+window.View3D.presentationRoute=presentationRoute;
+window.View3D.clearPresentationRoute=clearPresentationRoute;
+Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 </script>
 </body>
 </html>

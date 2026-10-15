@@ -26,9 +26,11 @@
  const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
  const revealButton=button('',controls,()=>{revealCurrent();});revealButton.id='presentationReveal';
  const contactButton=button('',controls,()=>{changeContactShadows();});contactButton.id='presentationContactShadows';
+ const routeButton=button('',controls,()=>{routeCurrent();});routeButton.id='presentationRoute';
  const batchButton=button('',controls,()=>{batchPromise=captureBatch().catch(error=>toast(error.message||String(error),6000)).finally(()=>{batchPromise=null;});});batchButton.id='presentationBatch';
  const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
  const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
+ const routeStatus=el('p',undefined,card,'presentation-status');routeStatus.id='presentationRouteStatus';routeStatus.setAttribute('role','status');routeStatus.setAttribute('aria-live','polite');routeStatus.hidden=true;
  const captureOptions={size:'1280',aspect:'view'};
  const stops=el('div',undefined,card,'presentation-stops');
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
@@ -55,6 +57,8 @@
     path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(!batchActive)go(chosen.get(room.id));}});
    }
   }
+  const route=View3D.presentationRouteInfo;
+  if(route?.points?.length>1&&['running','complete'].includes(route.status))svgEl('polyline',mapSvg,{points:route.points.map(point=>`${point.x},${point.y}`).join(' '),class:'presentation-minimap-route'});
   if(data.heading){
    const {x,y,dx,dy}=data.heading,length=Math.max(data.viewBox[2],data.viewBox[3])*.10,half=length*.30;
    svgEl('path',mapSvg,{d:`M ${x-dx*length/2} ${y-dy*length/2} L ${x+dx*length/2} ${y+dy*length/2} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half-dy*half} ${y+dy*length/2-dy*half+dx*half} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half+dy*half} ${y+dy*length/2-dy*half-dx*half}`,class:'presentation-minimap-heading','data-heading-x':dx,'data-heading-y':dy});
@@ -64,6 +68,7 @@
  function captureReady(){
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
   if(View3D.presentationRevealInfo?.status==='running')return false;
+  if(View3D.presentationRouteInfo?.status==='running')return false;
   if(View3D.presentationLight.status==='loading')return false;
   if(View3D.surfaceMetrics.some(m=>m.detailState==='loading'||m.detailState==='waiting'))return false;
   const stage=document.querySelector('#stage'),canvas=View3D.canvasState,camera=View3D.cameraState;
@@ -167,22 +172,47 @@
   try{View3D.setPresentationContactShadows(!View3D.presentationContactShadows.enabled);draw();}
   catch(error){toast(error.message||String(error),6000);draw();}
  }
+ function routeMessage(info){
+  switch(info.code){
+   case 'clear':return tx('Ruta interior libre de obstáculos.','Clear indoor route.','室内路线畅通。');
+   case 'budget':return tx('La búsqueda interior supera el presupuesto; recorrido aéreo.','Indoor search exceeded its budget; aerial route.','室内搜索超出预算；使用空中路线。');
+   case 'no_free':return tx('No hay espacio libre junto a la entrada o dentro de la estancia; recorrido aéreo.','No clear space by the entrance or inside the room; aerial route.','入口或房间内没有足够空间；使用空中路线。');
+   case 'obstructed':return tx('Muros, puertas o muebles bloquean la ruta interior; recorrido aéreo.','Walls, doors or furniture block the indoor route; aerial route.','墙、门或家具阻挡室内路线；使用空中路线。');
+   case 'interpolation':return tx('La ruta no conserva el margen de paso; recorrido aéreo.','The path loses its clearance; aerial route.','路径无法保持安全间距；使用空中路线。');
+   case 'no_room':return tx('Estancia sin polígono válido.','Room has no valid polygon.','房间没有有效多边形。');
+   case 'no_entry':return tx('No hay puerta de entrada identificada.','No entrance door is identified.','未找到入口门。');
+   case 'low_entry':return tx('La entrada es demasiado baja para el recorrido.','The entrance is too low for the route.','入口高度不足，无法游览。');
+   default:return info.reason||'';
+  }
+ }
+ async function routeCurrent(){
+  if(!active||stopping||batchActive||View3D.presentationRouteInfo?.status==='running'||plan.stops[index]?.kind!=='room')return;
+  const token=epoch,roomId=plan.stops[index].roomId;
+  try{const pending=View3D.presentationRoute(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches);const info=View3D.presentationRouteInfo;
+   routeStatus.hidden=false;routeStatus.textContent=routeMessage(info);overlay.dataset.route='true';mapOpen=true;draw();renderMinimap();updateCapture();
+   const result=await pending;if(active&&token===epoch){routeStatus.textContent=result.status==='complete'?tx('Recorrido terminado. Cámara restaurada a la estancia.','Route complete. Room camera restored.','游览完成。已恢复房间视角。'):result.status==='cancelled'?tx('Recorrido cancelado.','Route cancelled.','游览已取消。'):routeMessage(result);}
+  }catch(error){if(active&&token===epoch){routeStatus.hidden=false;routeStatus.textContent=error.message||String(error);}}
+  finally{if(active&&token===epoch){draw();updateCapture();}}
+ }
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
   previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
   materialButton.textContent=window.View3D?.surfaceQuality==='enhanced'?tx('Material: detalle','Material: detail','材质：细节'):tx('Material: básico','Material: basic','材质：基础');
   materialButton.setAttribute('aria-pressed',String(window.View3D?.surfaceQuality==='enhanced'));
-  materialButton.disabled=batchActive;
+  materialButton.disabled=batchActive||window.View3D?.presentationRouteInfo?.status==='running';
   lightButton.textContent=window.View3D?.presentationLight?.preset==='warm'?tx('Luz: cálida','Light: warm','灯光：暖色'):tx('Luz: neutra','Light: neutral','灯光：中性');
   lightButton.setAttribute('aria-pressed',String(window.View3D?.presentationLight?.preset==='warm'));
-  lightButton.disabled=batchActive||window.View3D?.presentationLight?.status==='loading';
+  lightButton.disabled=batchActive||window.View3D?.presentationLight?.status==='loading'||window.View3D?.presentationRouteInfo?.status==='running';
   revealButton.textContent=tx('Revelar acabados','Reveal finishes','显示饰面');
   revealButton.hidden=!plan||plan.stops[index]?.kind!=='room';
-  revealButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRevealInfo?.status==='running';
+  revealButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRevealInfo?.status==='running'||window.View3D?.presentationRouteInfo?.status==='running';
   contactButton.textContent=window.View3D?.presentationContactShadows?.enabled?tx('Sombras: suaves','Shadows: soft','阴影：柔和'):tx('Sombras: base','Shadows: base','阴影：基础');
   contactButton.setAttribute('aria-pressed',String(!!window.View3D?.presentationContactShadows?.enabled));
-  contactButton.disabled=batchActive||overlay.dataset.moving==='true';
+  contactButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';
+  routeButton.textContent=tx('Recorrer desde entrada','Tour from entrance','从入口游览');
+  routeButton.hidden=!plan||plan.stops[index]?.kind!=='room';
+  routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
@@ -281,10 +311,10 @@
  async function go(target,token=epoch){
   if(!active||batchActive||target<0||target>=plan.stops.length)return;
   if(!sourceCurrent()){await stop();return;}
-  View3D.clearPresentationReveal?.();
+  View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
   try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
-  finally{if(move===movement){overlay.dataset.moving='false';revealButton.disabled=batchActive;contactButton.disabled=batchActive;updateCapture();if(active&&sourceCurrent())renderMinimap();}}
+  finally{if(move===movement){overlay.dataset.moving='false';revealButton.disabled=batchActive;contactButton.disabled=batchActive;routeButton.disabled=batchActive;updateCapture();if(active&&sourceCurrent())renderMinimap();}}
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
@@ -337,7 +367,7 @@
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
   requestAnimationFrame(()=>{
    if(!active||token!==epoch)return;
-   View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';updateCapture();renderMinimap();requestAnimationFrame(updateCapture);}});
+   View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';draw();updateCapture();renderMinimap();requestAnimationFrame(updateCapture);}});
   });
  });
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
