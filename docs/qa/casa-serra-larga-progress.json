@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R4",
-  "ci": "failed_without_steps_on_c4310e9_runs_38697217578_38697217425_billing_history_not_ci_accepted",
+  "current": "R5",
+  "ci": "failed_without_steps_on_80db2ac_runs_38737194065_38737194401_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -87,12 +87,12 @@
       "dependency": "R2",
       "acceptance": "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
       "testedSha": "7bd5415",
-      "evidence": ["M08 code ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b: six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json", "M08 local pilot tests 13/13, minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69; exact SHA c4310e9 preview inspected; measurements and 22 screenshot/metrics artifacts in docs/qa/artifacts/casa-serra/r4-m08/", "M09 code 7bd5415: local pilot 6/6, affected broad regression 76/76, four viewports and resize visually reviewed; preview exact SHA pending"]
+      "evidence": ["M08 code ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b: six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json", "M08 local pilot tests 13/13, minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69; exact SHA c4310e9 preview inspected; measurements and 22 screenshot/metrics artifacts in docs/qa/artifacts/casa-serra/r4-m08/", "M09 code 7bd5415: local pilot 6/6, affected broad regression 76/76, four viewports and resize visually reviewed; exact SHA 80db2ac preview READY and inspected in Chrome; Actions 38737194065/38737194401 failed with zero steps"]
     },
     {
       "id": "R5",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "CS-3 visual; M10/M15",
       "dependency": "R4",
       "acceptance": "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
@@ -255,7 +255,7 @@
     {
       "id": "M10",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "Revelado dibujo/material por IDs",
       "dependency": "M08",
       "acceptance": "Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar",

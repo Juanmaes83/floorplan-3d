@@ -28,7 +28,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
 | R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
 | R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 preview exacta revisada; M09 6/6 y regresión amplia 76/76, preview M09 pendiente |
-| R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
+| R5 | en curso | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | Aceptación previa registrada; M10 en curso |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
 | R7 | pendiente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | — |
 | R8 | pendiente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | — | — |
@@ -47,7 +47,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M07 | verificado localmente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | `2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00` | SVG 1600×1100, 7/7 navegador, 5/5 regresión 3D; capturas `artifacts/casa-serra/r3-m07/` |
 | M08 | verificado localmente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | `ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b` | 13/13 piloto, 5/5 minimapa, 7/7 superficies, 69/69 presentación/captura; 17 PNG revisados y presupuesto en `artifacts/casa-serra/r4-m08/` |
 | M09 | verificado localmente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | `7bd5415` | 6/6 piloto, 76/76 regresión; 24 archivos de evidencia `artifacts/casa-serra/r4-m09/`, cuatro viewports y resize |
-| M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
+| M10 | en curso | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | Aceptación previa R5 registrada |
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
 | M12 | pendiente | Comparación de variantes | M03 | Misma referencia visual; variantes e IDs permanecen aislados | — | — |
 | M13 | verificado localmente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | `165b71166c05d6f30209282fd91ae1268f74e213` | 5/5 navegador, 4/4 núcleo, 6/6 P14/P16 y 8/8 M11; 13 PNG `artifacts/casa-serra/r3-m13/` |
@@ -61,7 +61,13 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R4 M08/M09 verificado localmente. M09 código `7bd5415`: piloto 6/6 y regresión afectada 76/76, con capturas revisadas en cuatro tamaños y resize. Publicar evidencia, revisar preview del SHA exacto y comenzar R5 M10/M15. Comprobar STOP externo antes de cada fase larga.
+R4 M08/M09 publicado y verificado localmente. Preview intermedia exacta `80db2ac1ee2df858200b6f68275da9762187cd95` READY y revisada en Chrome: vista general neutra, dormitorio cálido y retorno 2D. Actions [38737194065](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38737194065) y [38737194401](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38737194401) fallaron con `steps: []`; CI no ejecutó pruebas. La siguiente tarea es R5 M10, seguida del piloto M15. Comprobar STOP externo antes de cada fase larga.
+
+## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
+
+1. M10: ofrecer un revelado opcional en la presentación para la estancia activa. Usar el polígono real y los `roomId`/`wallId` del proyecto; probar suelo cóncavo, muro diagonal y habitación contigua. Un muro compartido no debe revelar por accidente la cara de la estancia vecina. El efecto debe terminar en el material y color originales, respetar `prefers-reduced-motion`, cancelación, resize, cambios de estancia/proyecto y retorno 2D/3D sin mutar `FloorPlanProjectV1`, selección ni cámara. Si el shader requiere clonación, preservar y restaurar callbacks/cache keys; ningún cambio de uniforms debe recompilar cada frame. Incluir GLB autorizado y fallback ausente como observación de que la ruta de muebles sigue intacta.
+2. M15: pilotar una sombra de contacto moderada o AO en presentación con el mismo proyecto/cámara/luz y opción de volver al renderer base. Comprobar mueble junto a muro, solape y escena sin geometría; no tapar etiquetas, puertas ni límites. Medir transferencia, texturas, geometrías y frame time en Chromium/SwiftShader, y comparar capturas visibles y PNG descargados. Fallo de capacidad o pérdida de contexto debe conservar el editor y descartar sólo recursos propios. Si el beneficio o presupuesto no queda demostrado, registrar diferimiento motivado en vez de activar un efecto global.
+3. Gates de R5: pruebas dirigidas y regresión afectada, consola/pageerror, identidad de proyecto/IDs/cámara y exportación/reimportación; capturas abiertas en 1440×900, 390×844, 844×390, 360×800 y resize 360→844. Publicar un checkpoint por capacidad aceptada con SHA, evidencia, PR y preview exacta cuando exista.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
