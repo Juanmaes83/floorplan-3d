@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R5",
-  "ci": "failed_without_steps_on_80db2ac_runs_38737194065_38737194401_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_3d73e54_runs_38741590788_38741590832_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -92,12 +92,12 @@
     {
       "id": "R5",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "CS-3 visual; M10/M15",
       "dependency": "R4",
       "acceptance": "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
-      "testedSha": "349272a560f6982de7133bf5275dd0ef4704d44f",
-      "evidence": ["M10 room-scoped reveal code 349272a; local pilot 8/8 and affected broad regression 82/82, four viewports/resize/concave floor/shared wall faces/authorized GLB/context loss/reduced motion/JSON round trip", "16 visually reviewed screenshot and metrics artifacts in docs/qa/artifacts/casa-serra/r5-m10/; M15 pending"]
+      "testedSha": "ae70f26",
+      "evidence": ["M10 room-scoped reveal code 349272a; local pilot 8/8 and affected broad regression 82/82, four viewports/resize/concave floor/shared wall faces/authorized GLB/context loss/reduced motion/JSON round trip; exact 3d73e54 preview reviewed in Chrome", "M15 own optional contact shader code ae70f26; local pilot 5/5 and affected broad regression 100/100, four viewports/resize/empty/overlap/context loss; 19 visually reviewed screenshot and metrics artifacts in docs/qa/artifacts/casa-serra/r5-m15/"]
     },
     {
       "id": "R6",
@@ -309,12 +309,12 @@
     {
       "id": "M15",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Sombras/efectos acotados",
       "dependency": "M08",
       "acceptance": "Beneficio visual revisado, coste medido y renderer base tras fallo",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "ae70f26",
+      "evidence": ["M15 local pilot 5/5 and affected broad regression 100/100; 19 artifacts in docs/qa/artifacts/casa-serra/r5-m15/; no transfer or texture increase, six to ten visible GPU geometries, restored after toggling; Chromium/SwiftShader frame medians 16.2-16.7 ms"]
     },
     {
       "id": "M16",
@@ -359,7 +359,8 @@
         "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
         "M08 four CC0 data maps from pinned Casa Serra JPEG revision with per-channel source SHA; own renderer implementation ad0a23f, no Casa Larga code copied",
         "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied",
-        "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied"
+        "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied",
+        "M15 own polygon-clipped contact shade shader and presentation control ae70f26; no external asset or Casa Larga source code copied"
       ]
     },
     {
