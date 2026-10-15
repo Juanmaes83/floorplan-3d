@@ -18,13 +18,17 @@
  const controls=el('div',undefined,card,'presentation-controls');
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
  const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
+ const batchButton=button('',controls,()=>{batchPromise=captureBatch().catch(error=>toast(error.message||String(error),6000)).finally(()=>{batchPromise=null;});});batchButton.id='presentationBatch';
+ const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
+ const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
  const captureOptions={size:'1280',aspect:'view'};
  const stops=el('div',undefined,card,'presentation-stops');
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
+ let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function captureReady(){
-  if(!active||stopping||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
+  if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
   const stage=document.querySelector('#stage'),canvas=View3D.canvasState,camera=View3D.cameraState;
   if(!stage||!canvas||!camera||!stage.clientWidth||!stage.clientHeight)return false;
   const ratio=canvas.pixelRatio||1;
@@ -33,6 +37,10 @@
  }
  function updateCapture(){
   captureButton.disabled=!captureReady();
+  const busy=window.View3D?.lifecycleMetrics;
+  batchButton.disabled=!captureReady()||!!busy?.pendingAssets||!!busy?.animating||!!busy?.flying;
+  batchButton.textContent=tx('Descargar vistas ZIP','Download views ZIP','下载视图 ZIP');
+  cancelBatchButton.textContent=tx('Cancelar lote','Cancel batch','取消批量');
   if(!active)return;
   try{const size=View3D.shotSize(captureOptions);captureButton.textContent=tx(`Guardar PNG ${size.width}×${size.height}` ,`Save PNG ${size.width}×${size.height}`,`保存 PNG ${size.width}×${size.height}`);}
   catch{captureButton.disabled=true;captureButton.textContent=tx('PNG no disponible','PNG unavailable','PNG 不可用');}
@@ -43,6 +51,57 @@
   try{View3D.shot(captureOptions);}
   catch(error){toast(error.message||String(error),6000);}
   finally{updateCapture();}
+ }
+ function cancelBatch(){if(batchActive){batchCancelled=true;batchStatus.textContent=tx('Cancelando capturas…','Cancelling captures…','正在取消截图…');}}
+ const batchCurrent=(serial,sourceEpoch)=>batchActive&&!batchCancelled&&serial===batchSerial&&active&&!stopping&&sourceEpoch===epoch&&sourceCurrent()&&View3D?.contextAvailable;
+ const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+ function assetManifest(){
+  const entries=window.FloorPlanAssetUI?.entries||[];
+  return {
+   sourceImages:(app.project.sourceImages||[]).map(image=>({id:image.id,sha256:image.sha256||null})),
+   models:(app.project.objects||[]).map(object=>{const asset=object.assetRef?FloorPlanAssets.resolve(entries,object.assetRef):null;return {objectId:object.id,assetId:asset?.id||null,catalog:asset?.catalog||null,revision:asset?.revision||null,sha256:asset?.sha256||null,state:View3D.assetStatus(object.id)?.state||'generic'};}),
+   surfaces:(app.project.materials||[]).map(material=>{const surface=material.appearance?.preset?window.FloorPlanSurfaces?.get(material.appearance.preset):null;return {materialId:material.id,preset:surface?.id||null,baseColorSha256:surface?.maps?.baseColor?.sha256||null,sampleSha256:surface?.sample?.sha256||null,color:material.appearance?.color||null};})
+  };
+ }
+ async function captureBatch(){
+  const busy=View3D.lifecycleMetrics;
+  if(!captureReady()||busy.pendingAssets||busy.animating||busy.flying)return;
+  const serial=++batchSerial,sourceEpoch=epoch,sourcePlan=plan,pose=View3D.presentationPose(),entries=new Map(),views=[];
+  batchActive=true;batchCancelled=false;batchResized=false;batchStatus.hidden=false;cancelBatchButton.hidden=false;overlay.dataset.batch='true';
+  const resources=assetManifest();updateCapture();draw();
+  try{
+   for(let i=0;i<sourcePlan.stops.length;i++){
+    if(!batchCurrent(serial,sourceEpoch))return;
+    batchStatus.textContent=tx(`Capturando ${i+1} de ${sourcePlan.stops.length}…`,`Capturing ${i+1} of ${sourcePlan.stops.length}…`,`正在截取 ${i+1} / ${sourcePlan.stops.length}…`);
+    await View3D.presentationGo(sourcePlan.stops[i],true);await nextFrame();
+    if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true'||View3D.lifecycleMetrics.pendingAssets)return;
+    const camera=View3D.presentationPose(),shot=View3D.shot({...captureOptions,download:false});
+    const encoded=shot.dataUrl.split(',')[1],bytes=Uint8Array.from(atob(encoded),char=>char.charCodeAt(0));
+    if(bytes.length<24||bytes[0]!==137||bytes[1]!==80||bytes[2]!==78||bytes[3]!==71)throw Error('PNG incompleto.');
+    const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
+    if(view.getUint32(16)!==shot.width||view.getUint32(20)!==shot.height)throw Error('Dimensiones PNG incoherentes.');
+    const filename=`views/view-${String(i+1).padStart(3,'0')}.png`;
+    entries.set(filename,bytes);
+    views.push({order:i+1,kind:sourcePlan.stops[i].kind,roomId:sourcePlan.stops[i].roomId,label:sourcePlan.stops[i].label,filename,width:shot.width,height:shot.height,bytes:bytes.length,sha256:await FloorPlanPackage.digest(bytes),camera});
+    await nextFrame();
+   }
+   if(!batchCurrent(serial,sourceEpoch))return;
+   const manifest={format:'rubik-sota.presentation-captures',version:1,projectId:sourcePlan.projectId,entryId:sourcePlan.entryId,revision:sourcePlan.revision,center:sourcePlan.center,resources,views};
+   entries.set('presentation.json',new TextEncoder().encode(JSON.stringify(manifest,null,2)));
+   const archive=FloorPlanPackage.zip(entries);
+   View3D.presentationRestorePose(pose);
+   if(!batchCurrent(serial,sourceEpoch))return;
+   const link=document.createElement('a'),url=URL.createObjectURL(archive);link.href=url;link.download='presentacion-estancias.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+   batchStatus.textContent=tx(`${views.length} vistas descargadas.`,`Downloaded ${views.length} views.`,`已下载 ${views.length} 个视图。`);
+   toast(batchStatus.textContent,3000);
+  }catch(error){if(batchCurrent(serial,sourceEpoch)){batchStatus.textContent=error.message;toast(error.message,6000);}}
+  finally{
+   if(active&&sourceEpoch===epoch&&sourceCurrent()&&serial===batchSerial&&!batchResized)View3D.presentationRestorePose(pose);
+   if(batchResized&&active&&sourceEpoch===epoch)batchStatus.textContent=tx('Lote cancelado por cambio de tamaño; no se descargó ningún archivo.','Batch cancelled after resize; no file was downloaded.','调整大小后已取消批量；未下载文件。');
+   if(batchCancelled&&!batchResized&&active&&sourceEpoch===epoch)batchStatus.textContent=tx('Lote cancelado; no se descargó ningún archivo.','Batch cancelled; no file was downloaded.','批量已取消；未下载文件。');
+   if(batchCancelled&&active&&sourceEpoch===epoch)toast(batchStatus.textContent,3000);
+   if(serial===batchSerial){batchActive=false;cancelBatchButton.hidden=true;delete overlay.dataset.batch;updateCapture();draw();}
+  }
  }
  function updateAssetWarning(){
   const count=active?(View3D?.assetMetrics||[]).filter(item=>item.state==='error').length:0;
@@ -59,9 +118,10 @@
   progress.textContent=tx(`Recorrido: ${visited.size} de ${plan.stops.length} vistas visitadas`,`Tour: ${visited.size} of ${plan.stops.length} views visited`,`参观：已访问 ${visited.size} / ${plan.stops.length} 个视图`);
   info.textContent=stop.kind==='room'?tx(`Superficie aproximada ${stop.areaM2.toFixed(2)} m² · medidas orientativas`,`Approximate area ${stop.areaM2.toFixed(2)} m² · indicative dimensions`,`约 ${stop.areaM2.toFixed(2)} 平方米 · 仅供参考`):tx('Vista general del proyecto actual','Overview of the current project','当前项目总览');
   previous.disabled=index===0;next.disabled=index===plan.stops.length-1;
+  previous.disabled ||=batchActive;next.disabled ||=batchActive;
   updateCapture();
   stops.replaceChildren();
-  plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.setAttribute('aria-current',i===index?'step':'false');});
+  plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
  }
  function open(){
   if(active||pendingStart){closeButton.focus();return;}
@@ -113,6 +173,7 @@
  function reorder(i,delta){const j=i+delta;if(j<0||j>=roomOrder.length)return;[roomOrder[i],roomOrder[j]]=[roomOrder[j],roomOrder[i]];renderConfig();roomList.querySelectorAll('.presentation-room-row')[j]?.querySelector(delta<0?'button:first-of-type':'button:last-of-type')?.focus();}
  async function start(){
   const token=++epoch;
+  batchStatus.hidden=true;batchStatus.textContent='';
   entry=app.capturePresentationEntry();entry.focus=returnFocus;
   const selected=roomOrder.filter(id=>selectedRooms.includes(id));
   plan=Core.create(app.project,app.geometry,app.entryId,FloorPlanGuide.revision(app.project),selected);
@@ -139,7 +200,7 @@
   }
  }
  async function go(target,token=epoch){
-  if(!active||target<0||target>=plan.stops.length)return;
+  if(!active||batchActive||target<0||target>=plan.stops.length)return;
   if(!sourceCurrent()){await stop();return;}
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
   try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
@@ -147,6 +208,7 @@
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
+  cancelBatch();
   stopping=true;++epoch;
   captureButton.disabled=true;
   if(sceneState)View3D?.presentationRestore(sceneState);
@@ -165,6 +227,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart)return;
+  cancelBatch();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
   overlay.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
@@ -181,7 +244,7 @@
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
-   e.preventDefault();e.stopImmediatePropagation();go(index+(e.key==='ArrowRight'?1:-1));return;
+   e.preventDefault();e.stopImmediatePropagation();if(!batchActive)go(index+(e.key==='ArrowRight'?1:-1));return;
   }
   if(e.key!=='Tab')e.stopImmediatePropagation();
  }
@@ -189,13 +252,14 @@
  addEventListener('popstate',()=>{if(entry&&(active||pendingStart))stop(true);});
  addEventListener('resize',()=>{
   if(!active||!sourceCurrent())return;
+  if(batchActive){batchResized=true;cancelBatch();}
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
   requestAnimationFrame(()=>{
    if(!active||token!==epoch)return;
    View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';updateCapture();requestAnimationFrame(updateCapture);}});
   });
  });
- addEventListener('floorplan-asset-status',updateAssetWarning);
+ addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)returnFocus?.focus?.({preventScroll:true});});
  draw();
  window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;}};

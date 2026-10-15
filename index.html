@@ -303,8 +303,9 @@ body.presenting #hint3d{display:none}
 body.presenting #toast{top:8px;bottom:auto}
 body.presentation-exiting header,body.presentation-exiting .guide-bar,body.presentation-exiting aside,body.presentation-exiting footer{pointer-events:none;opacity:.45}
 @media(max-width:600px){.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
+@media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
-@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info{display:none}.presentation-stops{margin-top:3px}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
 
 </style>
 <script type="importmap">
@@ -3281,8 +3282,8 @@ function shot(opts = {}){
       renderer.render(scene, camera);
     }
   }
-  const a = document.createElement('a'); a.download = name; a.href = url; a.click();
-  return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced};
+  if(opts.download!==false){const a = document.createElement('a'); a.download = name; a.href = url; a.click();}
+  return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced,...(opts.download===false?{dataUrl:url}:{})};
 }
 
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
@@ -3334,8 +3335,19 @@ function presentationInspect(){return active?{
   fov:camera.fov,aspect:camera.aspect,options:{...opt},doors:doors.map(d=>({open:d.open,cur:d.cur})),
   canvas:{width:renderer.domElement.width,height:renderer.domElement.height}
 }:null;}
+function presentationPose(){
+  if(!active||anim||fly||!camera)throw Error('La cámara de presentación todavía no está lista.');
+  return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,aspect:camera.aspect};
+}
+function presentationRestorePose(state){
+  if(!active||!state)return;
+  if(fly?.res)fly.res(false);fly=null;
+  camera.position.fromArray(state.position);orbit.target.fromArray(state.target);
+  camera.fov=state.fov;camera.aspect=SW()/Math.max(1,SH());camera.updateProjectionMatrix();
+  camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
+}
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,get contextAvailable(){return !contextLost;},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,get contextAvailable(){return !contextLost;},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>

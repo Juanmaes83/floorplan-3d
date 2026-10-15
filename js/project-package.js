@@ -4,7 +4,7 @@
  const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
  const table=Array.from({length:256},(_,n)=>{for(let i=0;i<8;i++)n=(n>>>1)^((n&1)?0xedb88320:0);return n>>>0;});
  function crc(bytes){let n=0xffffffff;for(const b of bytes)n=(n>>>8)^table[(n^b)&255];return (n^0xffffffff)>>>0;}
- function path(name){if(name!=='project.json'&&!/^images\/img_[A-Za-z0-9][A-Za-z0-9_-]{2,63}\.(png|jpg|webp)$/.test(name))throw Error('Ruta ZIP no permitida: '+name);return name;}
+ function path(name){if(name!=='project.json'&&name!=='presentation.json'&&!/^views\/view-[0-9]{3}\.png$/.test(name)&&!/^images\/img_[A-Za-z0-9][A-Za-z0-9_-]{2,63}\.(png|jpg|webp)$/.test(name))throw Error('Ruta ZIP no permitida: '+name);return name;}
  function zip(entries){let offset=0;const locals=[],central=[];
   for(const [name,value]of entries){path(name);const filename=encoder.encode(name),bytes=new Uint8Array(value),checksum=crc(bytes),header=new Uint8Array(30+filename.length),v=new DataView(header.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint16(6,0x800,true);v.setUint32(14,checksum,true);v.setUint32(18,bytes.length,true);v.setUint32(22,bytes.length,true);v.setUint16(26,filename.length,true);header.set(filename,30);locals.push(header,bytes);
    const c=new Uint8Array(46+filename.length),d=new DataView(c.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint16(8,0x800,true);d.setUint32(16,checksum,true);d.setUint32(20,bytes.length,true);d.setUint32(24,bytes.length,true);d.setUint16(28,filename.length,true);d.setUint32(42,offset,true);c.set(filename,46);central.push(c);offset+=header.length+bytes.length;
