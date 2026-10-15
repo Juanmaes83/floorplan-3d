@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R6 M18 verificado localmente: código `cd82490`, planificador 5/5, navegador 8/8 y regresión amplia 113/113; evidencia en `artifacts/casa-serra/r6-m18/`. Publicar evidencia, actualizar PR #39 y revisar la preview del SHA exacto; después esperar instrucciones del usuario antes de R7.
+R6 M18 verificado localmente: código `cd82490`, planificador 5/5, navegador 8/8 y regresión amplia 113/113; evidencia en `artifacts/casa-serra/r6-m18/`. Preview del checkpoint `278c11a` revisada en Chrome. Actualizar PR #39 y comprobar la preview del SHA final de este cierre; después esperar instrucciones del usuario antes de R7.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 
@@ -93,6 +93,7 @@ R6 M18 verificado localmente: código `cd82490`, planificador 5/5, navegador 8/8
 - Código `cd82490`: el botón «Recorrer desde entrada» planifica desde la entrada hasta la estancia activa con la geometría vigente. Una cuadrícula de 200 mm, margen de paso de 220 mm y comprobación interpolada a 80 mm evitan muros, ventanas y muebles rotados; las puertas usadas se abren sólo visualmente. Si falta espacio o se supera el presupuesto de 12 000 celdas, el recorrido se declara aéreo antes del movimiento. Si falta entrada válida, se explica y no se mueve la cámara. La ruta y el minimapa son temporales; no escriben en el proyecto ni añaden geometría GPU.
 - Planificador **5/5**: casa de referencia, muro diagonal, hueco de puerta, polígono cóncavo, barrera de muebles, entrada ausente y presupuesto. Navegador **8/8** en cuatro viewports, resize 360→844, movimiento reducido, Escape/Back, pérdida real de contexto y retorno a cámara/puertas 3D originales. Regresión amplia afectada **113/113 PASS**. Consola/pageerror y documento, IDs, historial y selección sin cambios inesperados. Logs externos `r6-m18-directed.log` y `r6-m18-broad.log`.
 - Se abrieron las capturas de ruta interior y minimapa en 1440×900, 390×844, 844×390 y 360×800, además del resize cancelado y la alternativa aérea. Controles dentro del viewport; diez PNG/JSON publicados en `artifacts/casa-serra/r6-m18/`. Caso de referencia: cinco puntos, dos puertas, 450 celdas visitadas; memoria antes/durante 1 298 geometrías y 9 texturas. Mediana de 20 frames 16,5 ms base y 16,6 ms durante la ruta en Chromium/SwiftShader. Estas medidas no representan rendimiento de móvil físico. M19: implementación propia sin recurso externo ni código Casa Larga.
+- Preview exacta del checkpoint de evidencia `278c11a33462276dd00c4bcf16a6f53ab0bf0bc7`: [deployment Vercel `7100248810`](https://floorplan-3d-4pbksyi9f-juanma-espinosas-projects.vercel.app/) en estado `success`. Se abrió en Chrome autenticado y se verificaron ejemplo, presentación, dormitorio, ruta interior y minimapa, final del movimiento y retorno a `#editor`. La URL está protegida por SSO; no se acredita acceso anónimo. Actions [38781353884](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38781353884) y [38781354451](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38781354451) terminaron `failure` con `steps: 0`. No ejecutaron pruebas; CI no está aprobada.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 

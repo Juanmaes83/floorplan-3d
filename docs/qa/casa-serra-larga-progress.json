@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R6",
-  "ci": "failed_without_steps_on_81be6e6_runs_38777167544_38777167781_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_278c11a_runs_38781353884_38781354451_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -107,7 +107,7 @@
       "dependency": "R2",
       "acceptance": "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
       "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
-      "evidence": ["M18 acceptance written before implementation; route planner 5/5 and browser 8/8 across four viewports, resize and cancellation", "Affected broad regression 113/113; ten visual and metric artifacts in docs/qa/artifacts/casa-serra/r6-m18/", "Reference route five points, two doors, 450 visited cells; GPU memory unchanged at 1298 geometries and 9 textures; Chromium/SwiftShader frame medians 16.5 ms base and 16.6 ms route"]
+      "evidence": ["M18 acceptance written before implementation; route planner 5/5 and browser 8/8 across four viewports, resize and cancellation", "Affected broad regression 113/113; ten visual and metric artifacts in docs/qa/artifacts/casa-serra/r6-m18/", "Reference route five points, two doors, 450 visited cells; GPU memory unchanged at 1298 geometries and 9 textures; Chromium/SwiftShader frame medians 16.5 ms base and 16.6 ms route", "Exact evidence SHA 278c11a preview deployment 7100248810 visually reviewed in authenticated Chrome; Actions 38781353884/38781354451 failed with zero steps"]
     },
     {
       "id": "R7",
@@ -394,9 +394,9 @@
     {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
   ],
   "preview": {
-    "sha": "c4310e97ce4cba5f8755a61761b0a51fbcd0a4c3",
-    "url": "https://floorplan-3d-pmrttdnp8-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "dpl_9N4eoWLGDDhWKMn7DPStF57AExz9",
+    "sha": "278c11a33462276dd00c4bcf16a6f53ab0bf0bc7",
+    "url": "https://floorplan-3d-4pbksyi9f-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7100248810",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
