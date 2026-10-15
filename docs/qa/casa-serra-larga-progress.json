@@ -250,7 +250,7 @@
       "dependency": "M08",
       "acceptance": "Licensed bounded HDR with official loader; neutral/warm presets compared at common camera/material; reversible light/exposure/background/environment, failure fallback and budget measured across four viewports/resize",
       "testedSha": null,
-      "evidence": ["Acceptance written in progress.md before application changes; source/license and renderer integration under review"]
+      "evidence": ["Acceptance written in progress.md before application changes; Poly Haven Studio Small 09 CC0 by Sergej Majboroda; official 1K HDR 1615248 bytes, MD5 matched, SHA-256 e7cfda5f4e98e623db12b8bfd0184e048488e4855d9c83e2751fb44a32e80c45, 1024x512; Three r160 official RGBELoader and PMREM identified; asset external pending implementation"]
     },
     {
       "id": "M10",
