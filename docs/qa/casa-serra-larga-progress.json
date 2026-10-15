@@ -96,8 +96,8 @@
       "scope": "CS-3 visual; M10/M15",
       "dependency": "R4",
       "acceptance": "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "349272a560f6982de7133bf5275dd0ef4704d44f",
+      "evidence": ["M10 room-scoped reveal code 349272a; local pilot 8/8 and affected broad regression 82/82, four viewports/resize/concave floor/shared wall faces/authorized GLB/context loss/reduced motion/JSON round trip", "16 visually reviewed screenshot and metrics artifacts in docs/qa/artifacts/casa-serra/r5-m10/; M15 pending"]
     },
     {
       "id": "R6",
@@ -255,12 +255,12 @@
     {
       "id": "M10",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Revelado dibujo/material por IDs",
       "dependency": "M08",
       "acceptance": "Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "349272a560f6982de7133bf5275dd0ef4704d44f",
+      "evidence": ["Exact room polygon floor and inward wallId face overlay; 9.28 m2 concave floor and 24 shared-wall face mappings checked; no project/material mutation or shader recompilation per frame", "Local browser 8/8, broad regression 82/82; GLB ready, JSON export/reimport, resize, context loss, reduced motion and 2D/3D return verified", "Four viewport drawings/materials plus concave/GLB/resize visually opened; metrics in docs/qa/artifacts/casa-serra/r5-m10/: 1298 geometries and 9 textures before/during/after, 20-frame median 16.4-16.7 ms in SwiftShader"]
     },
     {
       "id": "M11",
@@ -358,7 +358,8 @@
         "R1 minimum verified; full acceptance remains in R2",
         "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
         "M08 four CC0 data maps from pinned Casa Serra JPEG revision with per-channel source SHA; own renderer implementation ad0a23f, no Casa Larga code copied",
-        "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied"
+        "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied",
+        "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied"
       ]
     },
     {
