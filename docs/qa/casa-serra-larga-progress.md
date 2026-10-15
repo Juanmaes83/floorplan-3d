@@ -45,7 +45,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M05 | en curso | Calidad y fallback por capacidad | M01 | WebGL/asset/context loss recupera 2D sin alterar documento | — | — |
 | M06 | en curso | Carga por etapas cancelable | M01 | Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio | — | — |
 | M07 | verificado localmente | Lámina y anotaciones | M03 | Exportación real y legible con cotas/escala declaradas y geometría intacta | `2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00` | SVG 1600×1100, 7/7 navegador, 5/5 regresión 3D; capturas `artifacts/casa-serra/r3-m07/` |
-| M08 | en curso | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | — | Aceptación y auditoría de candidatos por realizar |
+| M08 | verificado localmente | PBR selectivo | M05/M06 | Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido | `ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b` | 13/13 piloto, 5/5 minimapa, 7/7 superficies, 69/69 presentación/captura; 17 PNG revisados y presupuesto en `artifacts/casa-serra/r4-m08/` |
 | M09 | pendiente | Luz/HDRI y presets | M08 | Comparación con cámara común; ajuste reversible y degradación por capacidad | — | — |
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
@@ -56,12 +56,12 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M16 | pendiente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | — | — |
 | M17 | pendiente | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | — | — |
 | M18 | pendiente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | — | — |
-| M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | — |
+| M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08: cuatro mapas derivados de seis JPEG verificados del commit Serra fijado; Poly Haven CC0, origen SHA por canal; código del renderer propio |
 | M20 | pendiente | Presentación portable | M11 | Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado | — | — |
 
 ## Próxima acción ejecutable
 
-R3 verificado localmente y publicado. R4 M08: contrastar físicamente albedos y canales candidatos con la biblioteca aprobada, documentar procedencia y decidir el piloto. Después implementar solo pares alineados, medir memoria y revisar fallback. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+R3 verificado localmente y publicado. R4 M08: piloto verificado localmente, código `ad0a23f` y pruebas específicas 13/13, regresiones de minimapa 5/5, superficies 7/7 y presentación/captura 69/69. Publicar evidencia y comprobar preview exacta; después escribir aceptación de M09 antes de implementarlo. Comprobar STOP externo antes de cada fase larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
@@ -106,6 +106,12 @@ M09 comienza después de validar M08; sus presets de iluminación y entorno debe
 
 - Se descargaron fuera del worktree los seis JPEG del commit fijado de Casa Serra y se repitieron SHA-256 y longitudes de `source-map-audit.json`: **6/6 coinciden**. Se abrieron visualmente diff/nor/arm de roble y mármol y los albedos WebP existentes. Las páginas oficiales de [roble](https://polyhaven.com/a/oak_wood_planks) y [mármol](https://polyhaven.com/a/marble_01) identifican estos recursos como CC0 y ofrecen diffuse, ARM y normal GL; la [licencia oficial](https://polyhaven.com/license) confirma el uso de texturas CC0. La biblioteca actual ya vincula los mismos IDs de origen y su propia evidencia CC0. M19: el código del piloto será propio; la autorización del recurso no se extiende a código de terceros.
 - En `artifacts/casa-serra/r4-m08-source-alignment.json` constan comparaciones directas 1024→256 con los albedos aprobados. Correlación RGB del roble **0.923/0.930/0.869**, error absoluto medio 2.38 niveles de 8 bits; mármol **0.919/0.942/0.933**, error 1.87. Flips y rotaciones dan correlaciones mucho menores. Las vetas y juntas se alinean visualmente sin girar ni recortar; esto admite reutilizar las UV actuales como candidato, pero aún no acredita el resultado PBR en escena. El normal del roble es casi plano; verificar beneficio visible y convención del canal verde antes de aceptar. AO requiere comprobar el UV del renderer; no conectar AO ni metalness por supuesto.
+
+### M08 — piloto verificado localmente, preview exacta pendiente
+
+- El script propio `scripts/build-material-channels.py` comprueba los seis JPEG fijados antes de derivar WebP lossless 256×256. Sólo dos materiales reciben normal GL y rugosidad extraída del canal verde de ARM. Catálogo y renderer comprueban ruta, MIME, bytes, SHA-256, dimensiones y decode; base sRGB y datos lineales comparten repetición/UV. AO y metalness permanecen sin conectar. El selector básico/detalle vive en la presentación y vuelve al estado original al salir; FloorPlanProjectV1 y los 50 IDs permanecen intactos.
+- Dos asignaciones activas transfieren 11 848 bytes en modo básico y 105 158 con detalle (+93 310). Estimación de memoria GPU de mapas: 699 052 → 2 097 156 bytes (+1 398 104); `renderer.info.memory` midió 10 → 14 texturas, 1 298 geometrías en ambos modos, en Chromium/SwiftShader. No es una medición de teléfono físico. Datos y capturas en `artifacts/casa-serra/r4-m08/material-pilot.json` y sus 22 archivos adjuntos.
+- Suite de M08 **13/13** PASS: cuatro viewports, mismas cámaras y proyecto, PNG descargado con firma y bytes, exportación/reimportación JSON, retorno 2D, resize 360×800→844×390, y fallos HTTP/hash/decode con albedo conservado y liberación al simular pérdida de contexto. Regresión M13 **5/5**, biblioteca de superficies **7/7** y presentación/captura/ZIP **69/69** PASS. Se abrieron visualmente 17 capturas de comparación/resize: geometría, UV, juntas, mapa y controles correctos. La mejora es sutil con esta iluminación; una región de 300×320 del dormitorio cambió 5 148 píxeles >4 niveles RGB. Una captura vacía reveló que la presentación quedaba en una fila de altura cero; se corrigió `main` a la fila visible y se repitieron capturas válidas. La consola normal no produjo errores; el HTTP 503 inyectado emitió el error de recurso esperado.
 - Próximo paso ejecutable: derivar mapas web ≤512 px/≤512 KiB desde estos canales con hash/bytes/procedencia, añadirlos solo a los dos acabados candidatos, extender validación y carga para normal/roughness con fallback y métricas, y comparar base/mejorado a cámara y luz fijas. Mantener las pruebas y capturas de R3 intactas.
 
 ## R2 — matriz del protocolo P01–P16
