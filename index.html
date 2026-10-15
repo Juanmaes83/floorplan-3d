@@ -294,7 +294,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-status,.presentation-progress,.presentation-info{margin:4px 0;font-size:12px}
 .presentation-warning{margin:6px 0;padding:7px 9px;border-radius:6px;background:#fff1d2;color:#5b3b00;font-size:12px;overflow-wrap:anywhere}
 .presentation-stops{margin-top:8px}
-.presentation-stops .btn{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.presentation-stops .btn{flex:0 0 auto;min-width:0;max-width:100%;overflow-wrap:anywhere}
 .presentation-stops .on{background:var(--teal);color:white}
 .sheet-dialog{width:min(1240px,calc(100vw - 18px));max-width:none;max-height:calc(100dvh - 18px);padding:10px;background:#fffdf9}
 .sheet-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
@@ -312,12 +312,13 @@ body.presenting aside,body.presenting #fab{pointer-events:none;opacity:.45}
 body.presenting #fab{visibility:hidden}
 body.presenting #hint3d{display:none}
 body.presenting #toast{top:8px;bottom:auto}
+@media(min-width:700px){body.presenting #toast{left:160px;max-width:calc(57% - 176px);transform:translateY(20px)}body.presenting #toast.show{transform:translateY(0)}}
 body.presentation-exiting header,body.presentation-exiting .guide-bar,body.presentation-exiting aside,body.presentation-exiting footer{pointer-events:none;opacity:.45}
 @media(max-width:600px){.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
 @media(max-width:699px),(max-height:500px){.presentation-minimap{top:8px;left:8px;width:150px}.presentation-minimap svg{height:100px}}
 @media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
-@media(max-height:500px){.presentation-card{padding:6px 10px}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+@media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
 
 </style>
 <script type="importmap">
@@ -2053,6 +2054,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {PointerLockControls} from 'three/addons/controls/PointerLockControls.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
 import {SurfaceRenderer} from './js/surface-renderer.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
@@ -2106,7 +2108,7 @@ function init(){
   ground.rotation.x = -Math.PI/2; ground.position.y = -0.015; ground.receiveShadow = true;
   scene.add(hemi, sun, sun.target, ground);
 
-  const pm = new THREE.PMREMGenerator(renderer); envTex = pm.fromScene(new RoomEnvironment(), .04).texture; pm.dispose();
+  const pm = new THREE.PMREMGenerator(renderer); envTex = pm.fromScene(new RoomEnvironment(), .04).texture; baseEnvTex = envTex; pm.dispose();
   glassMat = new THREE.MeshPhysicalMaterial({color:0xcfe6ef, roughness:.05, transparent:true, opacity:.28, depthWrite:false, side:THREE.DoubleSide});
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
@@ -2172,7 +2174,7 @@ function init(){
 
 /* ======================= 材质 ======================= */
 const matCache = new Map();
-let envTex = null, envK = 1;
+let envTex = null, baseEnvTex = null, envK = 1;
 function mat(color, o = {}){
   const key = color + JSON.stringify(o);
   if (!matCache.has(key)){
@@ -2970,6 +2972,7 @@ function applyGrow(){
 
 /* ======================= 日照 / 夜景 ======================= */
 function applyLight(){
+  hemi.color.set(0xfff8ee);hemi.groundColor.set(0xb9a88f);
   const t = (opt.hour - 6) / 12, az = Math.PI * (.15 + t*.7), el = Math.sin(Math.PI*t) * 1.05 + .15, warm = 1 - Math.sin(Math.PI*t);
   sun.position.set(Math.cos(az)*18, Math.sin(el)*20 + 3, -Math.sin(az)*10 + 8); sun.target.position.set(0, 0, 0);
   sun.color.setHSL(.09, .5 + warm*.4, .92 - warm*.12);
@@ -2980,6 +2983,17 @@ function applyLight(){
   lampG.children.forEach(o => { if (o.isPointLight) o.intensity = opt.night ? 6 : 0; else o.material.emissiveIntensity = opt.night ? 2 : .3; });
   renderer.toneMappingExposure = opt.night ? 1.25 : 1.05;
   envK = opt.night ? .15 : 1; matCache.forEach(m => { if (m.envMap) m.envMapIntensity = m.userData.env*envK; });
+  if(lightPreset!=='off'){
+    const warm=lightPreset==='warm';
+    hemi.color.set(warm?0xffe4c9:0xffffff);hemi.groundColor.set(warm?0xb7a38e:0xaeb8c2);
+    hemi.intensity=warm?.9:1.05;
+    sun.color.set(warm?0xffc998:0xfff6e8);sun.intensity=warm?2.05:2.25;
+    renderer.toneMappingExposure=warm?1.12:1.04;
+    scene.background.set(warm?0xf2eee8:0xf4f4f2);
+    scene.environment=envTex;
+    envK=warm?.8:.75;
+    matCache.forEach(m=>{if(m.userData.env){m.envMap=envTex;m.envMapIntensity=m.userData.env*envK;m.needsUpdate=true;}});
+  }
   const h = Math.floor(opt.hour), m = Math.round((opt.hour - h)*60);
   $('#sunT').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
 }
@@ -3017,6 +3031,62 @@ function flyTo(B, dur = 900){
   if(fly?.res)fly.res(false);
   return new Promise(res=>{fly={t0:performance.now(),dur,A:curPose(),B,res};});
 }
+
+// The HDR is a presentation-only resource. The original RoomEnvironment and editor light state survive exit.
+const presentationHdr={path:'assets/environments/studio-small-09-1k.hdr',bytes:1615248,
+  sha256:'e7cfda5f4e98e623db12b8bfd0184e048488e4855d9c83e2751fb44a32e80c45',width:1024,height:512};
+let lightPreset='off',lightStatus='off',lightError='',lightBytes=0,lightEpoch=0,lightController=null,lightTarget=null,lightOriginalEnvironment=null;
+function stopPresentationLighting(){
+  ++lightEpoch;lightController?.abort();lightController=null;
+  lightPreset='off';lightStatus='off';lightError='';lightBytes=0;
+  if(scene){scene.environment=lightOriginalEnvironment;lightOriginalEnvironment=null;}
+  envTex=baseEnvTex;
+  matCache.forEach(m=>{if(m.userData.env){m.envMap=baseEnvTex;m.needsUpdate=true;}});
+  if(inited)applyLight();
+  lightTarget?.dispose();lightTarget=null;
+}
+async function fetchPresentationHdr(epoch){
+  const controller=new AbortController();lightController=controller;
+  let target=null,source=null;
+  try{
+    const response=await fetch(new URL(presentationHdr.path,location.href),{signal:controller.signal});
+    if(!response.ok)throw Error(`HDR HTTP ${response.status}`);
+    const type=(response.headers.get('content-type')||'').split(';')[0].trim().toLowerCase();
+    if(type&&!['application/octet-stream','application/x-hdr','image/vnd.radiance','image/x-hdr'].includes(type))throw Error('HDR MIME inválido');
+    if(Number(response.headers.get('content-length'))>2*1024*1024)throw Error('HDR excede 2 MiB');
+    const reader=response.body.getReader(),chunks=[];let length=0;
+    for(;;){const {value,done}=await reader.read();if(done)break;length+=value.byteLength;if(length>2*1024*1024)throw Error('HDR excede 2 MiB');chunks.push(value);}
+    if(length!==presentationHdr.bytes)throw Error('HDR bytes distintos de la fuente verificada');
+    const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+    const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');
+    if(digest!==presentationHdr.sha256)throw Error('HDR SHA-256 incorrecto');
+    if(epoch!==lightEpoch||!active||contextLost)return false;
+    const parsed=new RGBELoader().parse(bytes.buffer);
+    if(parsed.width!==presentationHdr.width||parsed.height!==presentationHdr.height)throw Error('HDR dimensiones inválidas');
+    source=new THREE.DataTexture(parsed.data,parsed.width,parsed.height,THREE.RGBAFormat,parsed.type);
+    source.colorSpace=THREE.LinearSRGBColorSpace;source.minFilter=THREE.LinearFilter;source.magFilter=THREE.LinearFilter;
+    source.generateMipmaps=false;source.flipY=true;source.needsUpdate=true;
+    const pm=new THREE.PMREMGenerator(renderer);
+    try{target=pm.fromEquirectangular(source);}finally{pm.dispose();}
+    if(epoch!==lightEpoch||!active||contextLost)return false;
+    lightTarget=target;target=null;envTex=lightTarget.texture;lightStatus='hdr';lightBytes=length;applyLight();
+    return true;
+  }catch(error){
+    if(epoch===lightEpoch&&active&&!contextLost){lightStatus='fallback';lightError=String(error.message||error);envTex=baseEnvTex;applyLight();}
+    return false;
+  }finally{source?.dispose();target?.dispose();if(lightController===controller)lightController=null;}
+}
+async function setPresentationLightPreset(preset){
+  if(!['neutral','warm'].includes(preset))throw Error('Preset de luz inválido');
+  if(!active||contextLost)throw Error('Vista 3D no disponible');
+  if(lightPreset==='off')lightOriginalEnvironment=scene.environment;
+  lightPreset=preset;envTex=lightTarget?.texture||baseEnvTex;
+  if(lightStatus==='off')lightStatus='loading';
+  applyLight();
+  if(lightTarget||lightController)return {preset:lightPreset,status:lightStatus,error:lightError};
+  const epoch=++lightEpoch;await fetchPresentationHdr(epoch);
+  return {preset:lightPreset,status:lightStatus,error:lightError};
+}
 function flyToRoom(id){
   const r = geometry.rooms.find(r => r.id === id), xs = r.poly.map(p => p[0]), ys = r.poly.map(p => p[1]);
   const t = new THREE.Vector3(wx((Math.min(...xs)+Math.max(...xs))/2), .6, wz((Math.min(...ys)+Math.max(...ys))/2));
@@ -3051,6 +3121,7 @@ async function enter(){
   stage.classList.remove('animating');
 }
 function abort3D(){
+  stopPresentationLighting();
   if(raf)cancelAnimationFrame(raf);raf=0;
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
@@ -3328,6 +3399,7 @@ function presentationGo(stop,reduced=false){
   return flyTo(next,650);
 }
 function presentationRestore(state){
+  stopPresentationLighting();
   if(!state||!active)return;
   if(fly?.res)fly.res(false);fly=null;
   Object.assign(opt,state.options);
@@ -3361,7 +3433,7 @@ function presentationRestorePose(state){
   camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
 }
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get rendererMemory(){return inited?{...renderer.info.memory}:null;},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 </script>
 </body>
 </html>

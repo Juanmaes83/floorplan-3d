@@ -23,6 +23,7 @@
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
  const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
  const materialButton=button('',controls,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
+ const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
  const batchButton=button('',controls,()=>{batchPromise=captureBatch().catch(error=>toast(error.message||String(error),6000)).finally(()=>{batchPromise=null;});});batchButton.id='presentationBatch';
  const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
  const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
@@ -60,6 +61,7 @@
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function captureReady(){
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
+  if(View3D.presentationLight.status==='loading')return false;
   if(View3D.surfaceMetrics.some(m=>m.detailState==='loading'||m.detailState==='waiting'))return false;
   const stage=document.querySelector('#stage'),canvas=View3D.canvasState,camera=View3D.cameraState;
   if(!stage||!canvas||!camera||!stage.clientWidth||!stage.clientHeight)return false;
@@ -137,8 +139,17 @@
  }
  function updateAssetWarning(){
   const count=active?(View3D?.assetMetrics||[]).filter(item=>item.state==='error').length:0;
-  warning.hidden=!count;
-  if(count)warning.textContent=tx(`${count} modelo(s) 3D no disponibles; se muestran muebles genéricos.`,`${count} 3D model(s) unavailable; generic furniture is shown.`,`有 ${count} 个 3D 模型不可用；显示通用家具。`);
+  const lighting=active?View3D?.presentationLight:null;
+  warning.hidden=!count&&lighting?.status!=='fallback';
+  warning.textContent=[count?tx(`${count} modelo(s) 3D no disponibles; se muestran muebles genéricos.`,`${count} 3D model(s) unavailable; generic furniture is shown.`,`有 ${count} 个 3D 模型不可用；显示通用家具。`):'',lighting?.status==='fallback'?tx('Entorno HDR no disponible; se usa iluminación sintética.','HDR environment unavailable; using synthetic lighting.','HDR 环境不可用；使用合成照明。'):''].filter(Boolean).join(' ');
+ }
+ async function changeLighting(){
+  if(!active||batchActive||stopping)return;
+  const token=epoch,next=View3D.presentationLight.preset==='warm'?'neutral':'warm';
+  lightButton.disabled=true;
+  try{await View3D.setPresentationLightPreset(next);if(active&&token===epoch){draw();updateAssetWarning();}}
+  catch(error){if(active&&token===epoch)toast(error.message||String(error),6000);}
+  finally{if(active&&token===epoch)lightButton.disabled=false;}
  }
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
@@ -147,6 +158,9 @@
   materialButton.textContent=window.View3D?.surfaceQuality==='enhanced'?tx('Material: detalle','Material: detail','材质：细节'):tx('Material: básico','Material: basic','材质：基础');
   materialButton.setAttribute('aria-pressed',String(window.View3D?.surfaceQuality==='enhanced'));
   materialButton.disabled=batchActive;
+  lightButton.textContent=window.View3D?.presentationLight?.preset==='warm'?tx('Luz: cálida','Light: warm','灯光：暖色'):tx('Luz: neutra','Light: neutral','灯光：中性');
+  lightButton.setAttribute('aria-pressed',String(window.View3D?.presentationLight?.preset==='warm'));
+  lightButton.disabled=batchActive||window.View3D?.presentationLight?.status==='loading';
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
@@ -157,6 +171,7 @@
   updateCapture();
   stops.replaceChildren();
   plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
+  if(matchMedia('(max-height: 500px)').matches)stops.children[index]?.scrollIntoView({block:'nearest',inline:'nearest'});
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
  function open(){
@@ -216,7 +231,7 @@
   if(!plan){config.close();return;}
   try{localStorage.setItem(Core.key(plan.entryId,plan.projectId),JSON.stringify(Core.sidecar(plan.projectId,plan.entryId,plan.revision,selected)));}
   catch{toast(tx('No se pudo guardar la configuración local de presentación.','Could not save the local presentation configuration.','无法保存本地展示配置。'),5000);}
-  config.close();overlay.hidden=false;mapOpen=matchMedia('(min-width: 700px) and (min-height: 501px)').matches;map.hidden=true;document.body.classList.add('presenting');
+  config.close();overlay.hidden=false;overlay.dataset.moving='true';mapOpen=matchMedia('(min-width: 700px) and (min-height: 501px)').matches;map.hidden=true;document.body.classList.add('presenting');
   title.textContent=tx('Preparando la escena','Preparing the scene','正在准备场景');
   status.textContent=tx('Cargando geometría 3D…','Loading 3D geometry…','正在加载 3D 几何…');
   info.textContent='';controls.hidden=true;stops.hidden=true;
@@ -229,6 +244,9 @@
    const assigned=new Set([...app.project.rooms.map(r=>r.floorMaterialId),...app.project.walls.map(w=>w.surfaceMaterialId)]);
    materialButton.hidden=!app.project.materials.some(m=>assigned.has(m.id)&&FloorPlanSurfaces.get(m.appearance?.preset)?.maps?.normal);
    if(!materialButton.hidden)View3D.setSurfaceQuality('enhanced');
+   await View3D.setPresentationLightPreset('neutral');
+   if(token!==epoch)return;
+   updateAssetWarning();
    await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
