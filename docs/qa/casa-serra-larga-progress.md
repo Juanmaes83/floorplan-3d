@@ -26,7 +26,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R0 | verificado localmente | Baseline, fuentes y continuidad | #38 probado | Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo | `a1341ee` | Logs externos R0; capturas `docs/qa/artifacts/casa-serra/r0/`; revisión visual arriba |
 | R1 | verificado localmente | CS-1 mínimo; M01–M04, mínimos M05/M06/M19 | R0 | Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil | `68b2f4ee96f2c1ec049c83ba68d25550a9affcfd` | 17/17 unitarias, 29/29 navegador final, 45/45 regresión editor, capturas `artifacts/casa-serra/r1/` |
 | R2 | verificado localmente | CS-1 completo; M01–M06/M19 | R1 | Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16 | `f0c1bc0` + corte P08 | P01–P16 verificados localmente; P08 4/4 y regresión 7/7; capturas `artifacts/casa-serra/r2-p08/` |
-| R3 | en curso | M07/M11/M13 | R2 | Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado | `2b8c7f5`, `e6aed05` parciales | M07/M11 verificados; M13 pendiente |
+| R3 | verificado localmente | M07/M11/M13 | R2 | Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto | `2b8c7f5`, `e6aed05`, `165b711` | M07/M11/M13 verificados; mapa 5/5 navegador y 6/6 P14/P16; `artifacts/casa-serra/r3-m13/` |
 | R4 | pendiente | CS-2; M08/M09 y control M05/M06 | R2 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | — | — |
 | R5 | pendiente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | — | — |
 | R6 | pendiente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | — | — |
@@ -50,7 +50,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M10 | pendiente | Revelado dibujo/material por IDs | M08 | Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar | — | — |
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
 | M12 | pendiente | Comparación de variantes | M03 | Misma referencia visual; variantes e IDs permanecen aislados | — | — |
-| M13 | pendiente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | — | — |
+| M13 | verificado localmente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | `165b71166c05d6f30209282fd91ae1268f74e213` | 5/5 navegador, 4/4 núcleo, 6/6 P14/P16 y 8/8 M11; 13 PNG `artifacts/casa-serra/r3-m13/` |
 | M14 | pendiente | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | — | — |
 | M15 | pendiente | Sombras/efectos acotados | M08 | Beneficio visual revisado, coste medido y renderer base tras fallo | — | — |
 | M16 | pendiente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | — | — |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R3 en curso: implementar M13 (minimapa ligado a roomId/cámara) tras M07 y M11 verificados localmente. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
+R3 verificado localmente. Publicar cierre M13 y revisar la preview del SHA exacto; después iniciar R4 M08 con aceptación de piloto PBR selectivo y medición de presupuesto. Comprobar STOP externo y actualizar checkpoint antes de una tarea larga.
 
 ## R3 — aceptación previa, escrita antes de editar la aplicación
 
@@ -84,6 +84,13 @@ Estas tres capacidades se publicarán en cortes verificables en ese orden. CI re
 - La captura por lote espera cámara, buffer y recursos estables. Durante el lote bloquea navegación y captura individual; cancelar, cambiar tamaño o salir con Escape evita una descarga parcial. Restaura la pose activa y el buffer; al cerrar vuelve a 2D con proyecto, selección, historial y guía intactos. ZIP/PNG/CRC/IHDR/dimensiones/SHA-256, IDs y estado se comprobaron con navegador **8/8** en 1440×900, 390×844, 844×390 y 360×800; `console` y `pageerror` vacíos.
 - Regresiones locales: captura 3D **3/3**, núcleo de presentación y ZIP **23/23**. P13/P14/P16/P07 y retorno de cámara: **18/19** en la primera pasada; el único fallo fue P16 en 844×390 porque el nuevo control ocultaba la última parada. Se compactó la tarjeta y P16/P13 horizontales pasaron **2/2** sobre el código final. La prueba de M11 con nombre HTML largo también pasa con la última parada visible. No se rebajó ninguna aserción.
 - Se abrieron visualmente los PNG descargados de vista general y dormitorio en los cuatro tamaños, las tarjetas antes/después, el resize cancelado, el nombre largo y el retorno con Escape; 20 PNG seleccionados en `artifacts/casa-serra/r3-m11/`. La vista general vertical conserva más margen por su aspecto, mientras la estancia sigue legible al ampliar. M19: reutiliza el escritor ZIP propio del repositorio y hashes de catálogos autorizados; sin código ni recursos Casa Larga copiados. Preview exacta, CI y revisión humana se registran por separado; M13 sigue pendiente.
+- Preview intermedia exacta `7376fbbedd5e5a023b0d9bcb0d8e06e33b5909ee` READY, con metadato GitHub coincidente y revisión en Chrome de vista general, dormitorio y retorno 2D; consola sin errores. Actions `38665904983` y `38665905001` fallaron con `steps: []` por facturación: CI no ejecutó pruebas. El cuerpo y un único comentario de avance de la PR #39 registran este corte.
+
+### Corte R3 M13 — verificado localmente
+
+- Código probado `165b71166c05d6f30209282fd91ae1268f74e213`. El minimapa SVG usa los polígonos actuales de `FloorPlanApp.geometry` sin modificar proyecto ni escala. La estancia activa se identifica por `roomId`; las seleccionadas son navegables con click y teclado. La flecha transforma la pose 3D con el centro canónico a los ejes X/Y del plano, incluso con geometría irregular o girada. Se pliega por defecto en móvil y horizontal corto, conserva el estado abierto al cambiar tamaño y desaparece al cerrar o invalidar la presentación.
+- Pruebas locales Node 22.13.0/Playwright 1.62.1: núcleo **4/4** (incluido polígono irregular girado y vector unitario), navegador **5/5** en 1440×900, 390×844, 844×390, 360×800 y resize 360→844. Se verificaron orden y coordenadas de polígonos, `roomId`, dirección, click, Enter, plegado, límites del viewport, cámara/aspecto y retorno 2D con proyecto, guía, selección e historial intactos; `console` y `pageerror` vacíos. Regresiones afectadas P14/P16 **6/6** y lote ZIP M11 **8/8**, con bytes/manifest/CRC y cancelación todavía válidos.
+- Se abrieron visualmente vista general y dormitorio con el mapa en los cuatro tamaños, más el resize y el mapa plegado horizontal; 13 PNG en `artifacts/casa-serra/r3-m13/`. El mapa ocupa la esquina superior izquierda, mantiene la tarjeta de control libre y no recorta la última parada en 844×390. M19: geometría y SVG propios del repositorio, sin recurso ni código de Casa Larga. CI, preview exacta y revisión humana se registran aparte.
 
 ## R2 — matriz del protocolo P01–P16
 

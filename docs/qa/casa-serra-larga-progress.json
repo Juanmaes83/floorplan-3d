@@ -3,7 +3,7 @@
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
   "current": "R3",
-  "ci": "failed_without_steps_on_05f1073_runs_38637434402_38637434478_billing_history_not_ci_accepted",
+  "ci": "failed_without_steps_on_7376fbb_runs_38665904983_38665905001_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -72,12 +72,12 @@
     {
       "id": "R3",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "M07/M11/M13",
       "dependency": "R2",
-      "acceptance": "Lámina, capturas por estancia y minimapa exportan bytes válidos y restauran el estado",
-      "testedSha": null,
-      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/", "M11 code e6aed05: batch ZIP with ordered PNGs, SHA-256 manifest, cancellation and state restore; browser 8/8, capture 3D 3/3, core/ZIP 23/23, 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/; M13 pending"]
+      "acceptance": "Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto",
+      "testedSha": "165b71166c05d6f30209282fd91ae1268f74e213",
+      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/", "M11 code e6aed05: batch ZIP with ordered PNGs, SHA-256 manifest, cancellation and state restore; browser 8/8, capture 3D 3/3, core/ZIP 23/23, 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/", "M13 code 165b711: roomId/camera-aligned SVG minimap; core 4/4, browser 5/5 at four viewports and resize, P14/P16 6/6, M11 ZIP 8/8; 13 PNG in docs/qa/artifacts/casa-serra/r3-m13/"]
     },
     {
       "id": "R4",
@@ -289,12 +289,12 @@
     {
       "id": "M13",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Minimapa de orientación",
       "dependency": "M03",
       "acceptance": "RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "165b71166c05d6f30209282fd91ae1268f74e213",
+      "evidence": ["Core 4/4 including rotated irregular polygon and camera vector; browser 5/5 across 1440x900, 390x844, 844x390, 360x800 and 360-to-844 resize; P14/P16 6/6, M11 ZIP 8/8; click/Enter/collapse/return/state/console verified; 13 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m13/"]
     },
     {
       "id": "M14",
