@@ -8,6 +8,10 @@
  const headerButton=button('',document.querySelector('header'),()=>open());headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
  const config=el('dialog',undefined,document.body,'presentation-config');config.id='presentationConfig';config.setAttribute('aria-labelledby','presentationConfigTitle');
  const overlay=el('section',undefined,document.querySelector('#stage'),'presentation-overlay');overlay.id='presentationOverlay';overlay.hidden=true;overlay.setAttribute('aria-label','Presentación de la vivienda');
+ const map=el('div',undefined,overlay,'presentation-minimap');map.id='presentationMinimap';map.hidden=true;
+ const mapToggle=button('',map,()=>{mapOpen=!mapOpen;renderMinimap();});mapToggle.id='presentationMinimapToggle';
+ const mapPanel=el('div',undefined,map,'presentation-minimap-panel');mapPanel.id='presentationMinimapPanel';
+ const mapSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');mapSvg.setAttribute('role','group');mapPanel.append(mapSvg);
  const card=el('div',undefined,overlay,'presentation-card');
  const top=el('div',undefined,card,'presentation-card-top');
  const title=el('h2',undefined,top),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
@@ -26,6 +30,32 @@
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
+ let mapOpen=false;
+ const svgEl=(tag,parent,attributes={})=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,String(value));parent.append(node);return node;};
+ function renderMinimap(){
+  map.hidden=!active||!sourceCurrent();if(map.hidden)return;
+  mapToggle.textContent=tx(mapOpen?'Ocultar plano':'Mostrar plano',mapOpen?'Hide map':'Show map',mapOpen?'隐藏平面图':'显示平面图');
+  mapToggle.setAttribute('aria-expanded',String(mapOpen));mapPanel.hidden=!mapOpen;
+  if(!mapOpen)return;
+  const data=Core.minimap(app.geometry,overlay.dataset.moving==='true'?null:View3D.presentationPose(),plan.stops[index].roomId);
+  if(!data){map.hidden=true;return;}
+  mapSvg.replaceChildren();mapSvg.setAttribute('viewBox',data.viewBox.join(' '));
+  mapSvg.setAttribute('aria-label',tx('Plano de orientación','Orientation map','方向平面图'));
+  const chosen=new Map(plan.stops.map((stop,i)=>[stop.roomId,i]).filter(([id])=>id));
+  for(const room of data.rooms){
+   const path=svgEl('polygon',mapSvg,{points:room.poly.map(point=>point.join(',')).join(' '),'data-room-id':room.id,class:`presentation-minimap-room${room.active?' active':''}${chosen.has(room.id)?' selectable':''}`});
+   if(chosen.has(room.id)){
+    path.setAttribute('role','button');path.setAttribute('tabindex','0');path.setAttribute('aria-label',tx(`Ir a ${roomName(room.name)}`,`Go to ${roomName(room.name)}`,`前往 ${roomName(room.name)}`));
+    path.setAttribute('aria-current',room.active?'location':'false');
+    path.addEventListener('click',()=>{if(!batchActive)go(chosen.get(room.id));});
+    path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(!batchActive)go(chosen.get(room.id));}});
+   }
+  }
+  if(data.heading){
+   const {x,y,dx,dy}=data.heading,length=Math.max(data.viewBox[2],data.viewBox[3])*.10,half=length*.30;
+   svgEl('path',mapSvg,{d:`M ${x-dx*length/2} ${y-dy*length/2} L ${x+dx*length/2} ${y+dy*length/2} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half-dy*half} ${y+dy*length/2-dy*half+dx*half} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half+dy*half} ${y+dy*length/2-dy*half-dx*half}`,class:'presentation-minimap-heading','data-heading-x':dx,'data-heading-y':dy});
+  }
+ }
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function captureReady(){
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
@@ -122,6 +152,7 @@
   updateCapture();
   stops.replaceChildren();
   plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
+  if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
  function open(){
   if(active||pendingStart){closeButton.focus();return;}
@@ -180,7 +211,7 @@
   if(!plan){config.close();return;}
   try{localStorage.setItem(Core.key(plan.entryId,plan.projectId),JSON.stringify(Core.sidecar(plan.projectId,plan.entryId,plan.revision,selected)));}
   catch{toast(tx('No se pudo guardar la configuración local de presentación.','Could not save the local presentation configuration.','无法保存本地展示配置。'),5000);}
-  config.close();overlay.hidden=false;document.body.classList.add('presenting');
+  config.close();overlay.hidden=false;mapOpen=matchMedia('(min-width: 700px) and (min-height: 501px)').matches;map.hidden=true;document.body.classList.add('presenting');
   title.textContent=tx('Preparando la escena','Preparing the scene','正在准备场景');
   status.textContent=tx('Cargando geometría 3D…','Loading 3D geometry…','正在加载 3D 几何…');
   info.textContent='';controls.hidden=true;stops.hidden=true;
@@ -204,7 +235,7 @@
   if(!sourceCurrent()){await stop();return;}
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
   try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
-  finally{if(move===movement){overlay.dataset.moving='false';updateCapture();}}
+  finally{if(move===movement){overlay.dataset.moving='false';updateCapture();if(active&&sourceCurrent())renderMinimap();}}
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
@@ -217,7 +248,7 @@
   active=false;entry=null;sceneState=null;plan=null;visited=new Set();warning.hidden=true;
   document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
   if(saved)await app.restorePresentationEntry(saved,three);
-  overlay.hidden=true;document.body.classList.remove('presentation-exiting');
+  overlay.hidden=true;map.hidden=true;document.body.classList.remove('presentation-exiting');
   if(!fromPop&&location.hash==='#presentacion'){
    const focus=saved?.focus;
    addEventListener('popstate',()=>{if(focus?.isConnected)focus.focus({preventScroll:true});},{once:true});
@@ -230,7 +261,7 @@
   cancelBatch();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
-  overlay.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
+  overlay.hidden=true;map.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
   if(location.hash==='#presentacion')history.replaceState(history.state,'','#editor');
  }
  function onProjectChange(){if(active&&!sourceCurrent())stop();}
@@ -243,6 +274,7 @@
   if(!active&&!pendingStart)return;
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
+  if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
    e.preventDefault();e.stopImmediatePropagation();if(!batchActive)go(index+(e.key==='ArrowRight'?1:-1));return;
   }
@@ -256,7 +288,7 @@
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
   requestAnimationFrame(()=>{
    if(!active||token!==epoch)return;
-   View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';updateCapture();requestAnimationFrame(updateCapture);}});
+   View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';updateCapture();renderMinimap();requestAnimationFrame(updateCapture);}});
   });
  });
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});

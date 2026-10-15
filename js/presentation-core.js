@@ -35,6 +35,19 @@
   return {version:1,projectId:project.id,entryId,revision,center,stops:[stop('overview'),...chosen.map(r=>stop('room',r))]};
  }
  const current=(plan,projectId,entryId,revision)=>!!plan&&plan.projectId===projectId&&plan.entryId===entryId&&plan.revision===revision;
- const api={create,current,area,bounds,reconcile,sidecar,key};
+ function minimap(geometry,pose,roomId){
+  const rooms=geometry.rooms.filter(r=>r.poly.length>=3&&area(r.poly)>0);
+  if(!rooms.length)return null;
+  const points=rooms.flatMap(r=>r.poly),box=bounds(points),padding=Math.max(300,Math.max(box.w,box.h)*.06);
+  const viewBox=[box.x-padding,box.y-padding,Math.max(1,box.w+padding*2),Math.max(1,box.h+padding*2)];
+  const camera=pose?.position,target=pose?.target;
+  let heading=null;
+  if(Array.isArray(camera)&&Array.isArray(target)){
+   const dx=target[0]-camera[0],dy=target[2]-camera[2],length=Math.hypot(dx,dy);
+   if(length>1e-8)heading={x:target[0]*1000+geometry.center.x,y:target[2]*1000+geometry.center.y,dx:dx/length,dy:dy/length};
+  }
+  return {viewBox,rooms:rooms.map(r=>({id:r.id,name:r.name,poly:r.poly,active:r.id===roomId})),heading};
+ }
+ const api={create,current,area,bounds,reconcile,sidecar,key,minimap};
  if(typeof module==='object')module.exports=api;else root.FloorPlanPresentationCore=api;
 })(globalThis);

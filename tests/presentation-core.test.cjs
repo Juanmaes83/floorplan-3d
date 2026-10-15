@@ -38,3 +38,19 @@ test('ordered room selection and sidecar reconciliation keep project geometry au
  assert.equal(Presentation.reconcile({...saved,roomIds:[ids[0],ids[0]]},project,geometry,'entry-a','rev-a').invalid,true);
  assert.equal(JSON.stringify(project),before);
 });
+
+test('minimap preserves irregular rotated coordinates and maps camera direction to plan axes',()=>{
+ const geometry={center:{x:5000,y:3000},rooms:[
+  {id:'angled',name:'Angled',poly:[[1000,2000],[3100,1100],[4800,2600],[3000,3900],[1800,3300]]},
+  {id:'next',name:'Next',poly:[[5000,2600],[6500,3400],[5600,4700]]}
+ ]};
+ const before=JSON.stringify(geometry),pose={position:[1,8,2],target:[-1,0,-2]};
+ const map=Presentation.minimap(geometry,pose,'angled');
+ assert.deepEqual(map.rooms[0].poly,geometry.rooms[0].poly);
+ assert.equal(map.rooms[0].active,true);assert.equal(map.rooms[1].active,false);
+ assert.ok(map.viewBox[0]<1000&&map.viewBox[1]<1100);
+ assert.deepEqual([map.heading.x,map.heading.y],[4000,1000]);
+ assert.ok(map.heading.dx<0&&map.heading.dy<0);
+ assert.ok(Math.abs(Math.hypot(map.heading.dx,map.heading.dy)-1)<1e-12);
+ assert.equal(JSON.stringify(geometry),before);
+});
