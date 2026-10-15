@@ -2089,7 +2089,7 @@ let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, g
 let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
-let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1; let renderedSource, renderedGeometry;
+let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
 
 /* ======================= 初始化 ======================= */
@@ -2843,7 +2843,7 @@ function buildFurniture(f){
 }
 
 /* ======================= 建筑 ======================= */
-function clearGroup(g){ g.traverse(o => { if (o.geometry) o.geometry.dispose(); }); g.clear(); }
+function clearGroup(g){ g.traverse(o => { if(o.userData.primitiveBatch){o.dispose();primitiveBatchDisposals++;}if(o.geometry)o.geometry.dispose(); }); g.clear(); }
 function wallBox(rect, yb, yt, m){
   const assignment=project.walls.find(w=>w.id===rect.id)?.surfaceMaterialId;
   if(assignment){const finish=project.materials.find(m=>m.id===assignment);m=surfaceRenderer.get(finish)||mat(finish.appearance.color,{roughness:.9});}
@@ -3056,11 +3056,31 @@ function loadFurnitureAsset(g,f,generation){
     publishAsset(f.id,{state:'ready',bytes:result.bytes,permissionBytes:result.permissionBytes,triangles:result.triangles,geometryBytes:result.geometryBytes,textureStats:result.textureStats,durationMs:result.durationMs,normalizedDimensionsMm:result.dimensionsMm,instanceDimensionsMm:{width:f.w,height:height*1000,depth:f.d},attribution:result.attribution});
   }).catch(error=>{if(generation===assetGeneration)publishAsset(f.id,{state:'error',reason:error.message||'Carga, formato, permiso o dimensiones no válidos'});}).finally(()=>{if(assetRequests.get(f.id)===controller)assetRequests.delete(f.id);});
 }
+function batchFurniturePrimitives(group){
+  const families=new Map();
+  for(const child of group.children){
+    if(!child.isMesh||Array.isArray(child.material)||Object.keys(child.userData).length||!['BoxGeometry','CylinderGeometry','SphereGeometry'].includes(child.geometry?.type))continue;
+    const key=JSON.stringify([child.geometry.type,child.geometry.parameters,child.material.uuid,child.castShadow,child.receiveShadow,child.renderOrder]);
+    if(!families.has(key))families.set(key,[]);families.get(key).push(child);
+  }
+  for(const meshes of families.values()){
+    if(meshes.length<2)continue;
+    const first=meshes[0];let instanced;
+    try{
+      instanced=new THREE.InstancedMesh(first.geometry,first.material,meshes.length);
+      instanced.castShadow=first.castShadow;instanced.receiveShadow=first.receiveShadow;instanced.renderOrder=first.renderOrder;instanced.userData.primitiveBatch=true;
+      meshes.forEach((mesh,i)=>{mesh.updateMatrix();instanced.setMatrixAt(i,mesh.matrix);});
+      instanced.instanceMatrix.needsUpdate=true;
+    }catch(error){instanced?.dispose();primitiveBatchFallbacks++;continue;}
+    meshes.forEach((mesh,i)=>{group.remove(mesh);if(i)mesh.geometry.dispose();});group.add(instanced);
+  }
+}
 function buildFurn(){
   assetGeneration++;assetRequests.forEach(c=>c.abort());assetRequests.clear();assetStates.clear();
   furnG.children.forEach(g=>{if(g.userData.authorizedAsset)AssetLoader.dispose(g);});
   clearGroup(furnG);
-  state.furniture.forEach(f => {const g=buildFurniture(f);furnG.add(g);loadFurnitureAsset(g,f,assetGeneration);});
+  const canInstance=renderer.capabilities.isWebGL2||!!renderer.extensions.get('ANGLE_instanced_arrays');
+  state.furniture.forEach(f => {const g=buildFurniture(f);if(primitiveBatching&&canInstance&&!f.assetRef)batchFurniturePrimitives(g);furnG.add(g);loadFurnitureAsset(g,f,assetGeneration);});
   furnG.visible = opt.furn; selKey = null; applyGrow();
 }
 
@@ -3612,6 +3632,20 @@ Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enab
 window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
+window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
+Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});
+window.View3D.pickFurnitureAt=(x,y)=>active?pick({clientX:x,clientY:y})?.fid||null:null;
+Object.defineProperty(window.View3D,'primitiveBatchSummary',{get:()=>{let batches=0,instances=0,unmapped=0;
+  furnG?.traverse(o=>{if(!o.isInstancedMesh)return;batches++;instances+=o.count;
+    let parent=o.parent;while(parent&&!parent.userData.fid&&parent!==furnG)parent=parent.parent;
+    if(!parent?.userData.fid)unmapped+=o.count;});return {batches,instances,unmapped,disposed:primitiveBatchDisposals,fallbacks:primitiveBatchFallbacks};
+}});
+Object.defineProperty(window.View3D,'renderBudget',{get:()=>{
+  const count=group=>{let n=0;if(group?.visible)group.traverse(o=>{if(o.isMesh&&o.visible)n++;});return n;};
+  return {calls:renderer?.info.render.calls||0,triangles:renderer?.info.render.triangles||0,
+    geometries:renderer?.info.memory.geometries||0,textures:renderer?.info.memory.textures||0,
+    meshes:{architecture:count(archFloor)+count(archUp),furniture:count(furnG),lamps:count(lampG),contact:count(contactG)}};
+}});
 </script>
 </body>
 </html>
