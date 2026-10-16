@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R8",
-  "ci": "failed_without_steps_on_fcabf94_runs_38861523704_38861523740_billing_history_not_ci_accepted",
+  "current": "R9",
+  "ci": "failed_without_steps_on_cb6e003_runs_38880204137_38880204158_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -47,12 +47,11 @@
       "scope": "CS-1 completo; M01–M06/M19",
       "dependency": "R1",
       "acceptance": "Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16",
-      "testedSha": "f0c1bc01a445cd8765d295615f9dd2015fdbbf2b",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
       "evidence": [
         "P04/P09/P10 slice code e5dd7c5617450e345b6a2fb1c07196849b0c3c87: local sidecar, ordered selection, stale ID/revision reconciliation and invalidation",
         "presentation/core final 14/14 plus variant 1/1; affected browser 50/50; editor regressions 45/45; import workflow equivalent 21/21 plus guide 5/5",
         "visual inspection 14 PNG docs/qa/artifacts/casa-serra/r2-p04-p10/ at 1440x900, 390x844, 844x390, 360x800 and resize",
-        "R2 overall P01-P16 remains open",
         "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
         "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
         "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
@@ -126,101 +125,78 @@
       "scope": "M14/M17/M20",
       "dependency": "R2",
       "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
-      "testedSha": "f93aed7",
-      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred", "M14 code f93aed7: 256x256 planar reflection pilot adds 368 calls, cold 936 ms and warm 2.4-3.4 ms; eight textures stable, visually flat wall; deferred; combined render pilots 3/3"]
+      "testedSha": "feae6fdfd27f21f4cc68f886ef06ca41cfcd9876",
+      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred", "M14 code f93aed7: 256x256 planar reflection pilot adds 368 calls, cold 936 ms and warm 2.4-3.4 ms; eight textures stable, visually flat wall; deferred; combined render pilots 3/3", "Exact R8 closure SHA feae6fd preview deployment 7115022782 reviewed in authenticated Chrome; Actions 38877014930/38877014941 failed with zero steps"]
     },
     {
       "id": "R9",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Cierre de M01–M20",
       "dependency": "R1–R8",
       "acceptance": "Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "cb6e00324290c27c96fea1268daf8441bd0beaad",
+      "evidence": ["All 40 test files serial: 415 tests, 414 pass, 0 fail, 1 optional Blender skip; log r9-all-tests-final.log in external supervisor", "Three initial test-only failures fixed in cb6e003; focused rerun 7/7", "Playwright/Chromium screenshots visually reviewed for portable package desktop/portrait/landscape, clean reimport, mobile variants and interior route", "Final matrix: 18 capabilities verified locally, M14/M17 measured and deferred, P01-P16 16/16 locally verified", "Exact cb6e003 preview deployment 7115530249 reviewed in authenticated Chrome: example, overview, bedroom, ZIP control and editor return; Actions 38880204137/38880204158 failed with zero steps"]
     },
     {
       "id": "M01",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Presentación reversible por estancias",
       "dependency": "R0",
       "acceptance": "Ejemplo, importado y propio; cerrar sin mutar proyecto, selección ni historial",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P01-P16 local closure: real example, own and imported room stops, saved selection/order and return to the original 2D/3D document, camera, selection and history; P05 browser 4/4 and P08 browser 4/4 plus affected regression 7/7"]
     },
     {
       "id": "M02",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Fichas y marcadores reales",
       "dependency": "M01",
       "acceptance": "Nombre, área y acabados del roomId; texto seguro y foco usable en móvil",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P05 real project/import room IDs, area, bounds and stable pose at four viewports; P16 HTML-like long names rendered as text with full accessible label; P01-P03 focus and entry controls 8/8"]
     },
     {
       "id": "M03",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Poses y encuadre derivados",
       "dependency": "M01",
       "acceptance": "Mismo proyecto/revisión produce poses repetibles; ejes, diagonal y resize correctos",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
-        "R2 P14: active room re-frames at four viewport sizes; camera/target/FOV/options restored from 3D after resize"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P05 repeatable room poses for own and imported projects with real room IDs and geometry; P14 four viewport sizes, orientation/resize and restored camera, target, FOV and options"]
     },
     {
       "id": "M04",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Controles y movimiento reducido",
       "dependency": "M01",
       "acceptance": "Teclado/touch/Escape, sin animación obligatoria ni interferencia con inputs",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
-        "R2 P14/P16: reduced-motion navigation resolves without flight; long HTML-like names remain text and controls fit all four viewports"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P01-P03 keyboard/search and focus, P07 Back/Escape/Close during load/flight 8/8, P08 pointer lock and touch handoff 4/4 plus regression 7/7, P14 reduced-motion navigation and four viewport sizes"]
     },
     {
       "id": "M05",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Calidad y fallback por capacidad",
       "dependency": "M01",
       "acceptance": "WebGL/asset/context loss recupera 2D sin alterar documento",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
-        "R2 P11: missing/corrupt GLB fallback and actual WebGL context loss return to intact 2D; 27/27 presentation/core",
-        "R2 P15: lamp geometry/material disposal fixed; renderer memory remains 1298 geometries/8 textures over ten cycles"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P11 missing/corrupt GLB fallback and real WebGL context loss return to intact 2D, presentation/core 27/27; P15 geometry/material disposal stable at 1298 geometries and eight textures for ten cycles"]
     },
     {
       "id": "M06",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Carga por etapas cancelable",
       "dependency": "M01",
       "acceptance": "Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio",
-      "testedSha": null,
-      "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
-        "R2 P11: pending asset requests aborted on context loss; in-flight load cannot reopen presentation"
-      ]
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P07 cancellation during initial WebGL load and room flight 8/8 without late reopen; P11 pending asset requests abort on context loss, basic 2D editor restored; P15 ten-cycle lifecycle and resource stability"]
     },
     {
       "id": "M07",
@@ -349,19 +325,19 @@
     {
       "id": "M19",
       "type": "capacidad",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "Créditos y procedencia",
       "dependency": "transversal",
       "acceptance": "Cada técnica/recurso incorporado tiene origen y permiso registrado",
-      "testedSha": null,
+      "testedSha": "feae6fd",
       "evidence": [
-        "R1 minimum verified; full acceptance remains in R2",
-        "R2 P04/P09/P10 partial slice e5dd7c5 accepted; full capability pending",
+        "R1-R2 presentation, guide, controls and original rendering code implemented on this branch; R2 P01-P16 verified locally",
         "M08 four CC0 data maps from pinned Casa Serra JPEG revision with per-channel source SHA; own renderer implementation ad0a23f, no Casa Larga code copied",
         "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied",
         "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied",
         "M15 own polygon-clipped contact shade shader and presentation control ae70f26; no external asset or Casa Larga source code copied",
-        "M18 own grid route planner, temporary camera animation and minimap line cd82490; no external asset or Casa Larga source code copied"
+        "M18 own grid route planner, temporary camera animation and minimap line cd82490; no external asset or Casa Larga source code copied",
+        "R3 M07/M11/M13, R7 M12/M16 and R8 M14/M17/M20 use own code and existing authorized project resources; M20 archives local user image bytes without publishing; no new external asset or Casa Larga source copied"
       ]
     },
     {
@@ -394,9 +370,9 @@
     {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
   ],
   "preview": {
-    "sha": "fcabf94c14c335d3bd950d61af71b24fa5e25d36",
-    "url": "https://floorplan-3d-k4zxp6vk4-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "8keftnBieE1mxTLBjxESRxJq7wTu",
+    "sha": "cb6e00324290c27c96fea1268daf8441bd0beaad",
+    "url": "https://floorplan-3d-cm5eqck9a-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7115530249",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }
