@@ -50,5 +50,15 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
   const object = project.objects[0];
   const element = await client.callTool({ name: 'get_project_element', arguments: { id: object.id } });
   assert.equal(element.structuredContent.item.id, object.id);
+  assert.ok(Array.isArray(element.structuredContent.item.relation.roomIds));
+
+  const roomId = project.rooms[0].id;
+  for (const kind of ['rooms', 'walls', 'openings', 'objects']) {
+    const page = await client.callTool({ name: 'list_project_elements', arguments: { kind, roomId, limit: 2 } });
+    assert.equal(page.isError, undefined, kind);
+    assert.ok(page.structuredContent.total > 0, kind);
+    assert.ok(page.structuredContent.items.every(item => item.relation.roomIds.includes(roomId)), kind);
+    assert.equal(page.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
+  }
   assert.equal(await readFile(file, 'utf8'), original);
 });
