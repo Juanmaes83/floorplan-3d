@@ -81,7 +81,10 @@
   const s=[0];for(let i=1;i<src.length;i++)s.push(s[i-1]+Math.hypot(src[i].x-src[i-1].x,src[i].y-src[i-1].y));
   const total=s.at(-1);
   const walls=[...geometry.walls.filter(w=>w.status!=='demolished'),...geometry.windows],tall=(project.objects||[]).filter(o=>o.type!=='rug'&&(o.size?.heightMm||0)>eye*1000);
-  const blocked=(x,y)=>walls.some(w=>inRect(w,x,y,0))||tall.some(o=>furnitureBlocks(o,x,y,0));
+  // Door leaves the route opens swing into rooms: they block sight like a thin wall (hinge h, open direction o).
+  const leaves=(geometry.doors||[]).filter(d=>(route.doorIds||[]).includes(d.id)&&d.h&&d.o&&d.len).map(d=>({a:d.h,b:[d.h[0]+d.o[0]*d.len,d.h[1]+d.o[1]*d.len]}));
+  const nearLeaf=(x,y)=>leaves.some(({a,b})=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)<50;});
+  const blocked=(x,y)=>walls.some(w=>inRect(w,x,y,0))||tall.some(o=>furnitureBlocks(o,x,y,0))||nearLeaf(x,y);
   const sight=(a,b)=>{const n=Math.max(1,Math.ceil(Math.hypot(b.x-a.x,b.y-a.y)/60));for(let k=1;k<n;k++){const t=k/n;if(blocked(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t))return false;}return true;};
   const xs=room.poly.map(p=>p[0]),ys=room.poly.map(p=>p[1]),centroid=center(room);
   // Arrival: the path sample, from just before the room entry to a short way inside, whose view toward the
@@ -99,12 +102,17 @@
   const content=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inside(room.poly,o.position.x,o.position.y)).map(o=>({x:o.position.x,y:o.position.y}));
   const contentCenter=content.length?{x:content.reduce((n,q)=>n+q.x,0)/content.length,y:content.reduce((n,q)=>n+q.y,0)/content.length}:null;
   const seenShare=(p,yaw,pts,minD)=>{let n=0;for(const q of pts){const d=Math.hypot(q.x-p.x,q.y-p.y);if(d<minD)continue;let da=Math.atan2(q.y-p.y,q.x-p.x)-yaw;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;if(Math.abs(da)<=halfFov&&sight(p,q))n++;}return pts.length?n/pts.length:0;};
+  // Openness: share of a horizontal ray fan across the visible field that runs at least 0.4 m inside the room
+  // before meeting a wall; a doorway view framed mostly by jambs scores low.
+  const openness=(p,yaw)=>{let open=0;const n=21;for(let k=0;k<n;k++){const a=yaw-halfFov+2*halfFov*k/(n-1),dx=Math.cos(a),dy=Math.sin(a);let inRoom=0;
+    for(let d=60;d<=6000;d+=60){const x=p.x+dx*d,y=p.y+dy*d;if(blocked(x,y))break;if(inside(room.poly,x,y))inRoom+=60;}if(inRoom>=400)open++;}return open/n;};
   const viewFrom=p=>{const far=[...room.poly.map(q=>({x:q[0],y:q[1]})),{x:centroid[0],y:centroid[1]}].reduce((a,b)=>Math.hypot(b.x-p.x,b.y-p.y)>Math.hypot(a.x-p.x,a.y-p.y)?b:a);
    let best=null;for(const aim of [far,{x:centroid[0],y:centroid[1]},contentCenter].filter(Boolean)){if(Math.hypot(aim.x-p.x,aim.y-p.y)<300)continue;const yaw=Math.atan2(aim.y-p.y,aim.x-p.x),floor=seenShare(p,yaw,floorPts,600),things=seenShare(p,yaw,content,500);
-    const score=content.length?.4*floor+.6*things:floor;if(!best||score>best.score)best={yaw,score,floor,things};}
-   return best||{yaw:0,score:0,floor:0,things:0};};
+    const open=openness(p,yaw),score=content.length?.3*floor+.4*things+.3*open:.6*floor+.4*open;if(!best||score>best.score)best={yaw,score,floor,things,open};}
+   return best||{yaw:0,score:0,floor:0,things:0,open:0};};
   let end=src.length-1,best=null;
-  if(!aerial){let last=src.length-1;for(let i=enter;i<src.length;i++)if(s[i]-s[enter]>=depth){last=i;break;}end=last;
+  const reach=Math.max(depth,.6*Math.hypot(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)));
+  if(!aerial){let last=src.length-1;for(let i=enter;i<src.length;i++)if(s[i]-s[enter]>=reach){last=i;break;}end=last;
    for(let i=0;i<=last;i++){if(s[i]<s[enter]-600)continue;const v=viewFrom(src[i]);if(!best||v.score>best.score+.02){best={...v,i};}}
    if(best)end=Math.max(best.i,Math.min(src.length-1,2));}
   const arrival=src[end],toCenter=Math.hypot(centroid[0]-arrival.x,centroid[1]-arrival.y);
@@ -137,7 +145,7 @@
   const duration=samples.at(-1).t,closeShare=duration?close/duration:0;
   // `yaw`/`pitchDeg` stay the intended view; `cameraYaw`/`cameraPitchDeg` place it in the visible region.
   for(const p of samples){p.cameraYaw=p.yaw+yawOffset;p.cameraPitchDeg=p.pitchDeg+pitchOffset*180/Math.PI;}
-  return{samples,duration,lengthMm:length,viewOffset:{yawDeg:yawOffset*180/Math.PI,pitchDeg:pitchOffset*180/Math.PI,region},arrival:{x:arrival.x,y:arrival.y,yaw:finalYaw,cameraYaw:finalYaw+yawOffset,cameraPitchDeg:(aerial?45:arrivePitchDeg)+pitchOffset*180/Math.PI,pitchDeg:aerial?45:arrivePitchDeg,viewScore:best?+best.score.toFixed(3):null,floorSeen:best?+best.floor.toFixed(3):null,contentSeen:best?+best.things.toFixed(3):null,insideRoom:inside(room.poly,arrival.x,arrival.y)},enterIndex:enter,readable:aerial||closeShare<=(options.maxCloseShare??.12),closeShare,eyeHeight:eye,vmax};
+  return{samples,duration,lengthMm:length,viewOffset:{yawDeg:yawOffset*180/Math.PI,pitchDeg:pitchOffset*180/Math.PI,region},arrival:{x:arrival.x,y:arrival.y,yaw:finalYaw,cameraYaw:finalYaw+yawOffset,cameraPitchDeg:(aerial?45:arrivePitchDeg)+pitchOffset*180/Math.PI,pitchDeg:aerial?45:arrivePitchDeg,viewScore:best?+best.score.toFixed(3):null,floorSeen:best?+best.floor.toFixed(3):null,contentSeen:best?+best.things.toFixed(3):null,openness:best?+best.open.toFixed(3):null,insideRoom:inside(room.poly,arrival.x,arrival.y)},enterIndex:enter,readable:aerial||closeShare<=(options.maxCloseShare??.12),closeShare,eyeHeight:eye,vmax};
  }
  const api={plan,choreography};if(typeof module!=='undefined')module.exports=api;else root.FloorPlanPresentationRoute=api;
 })(globalThis);
