@@ -31,7 +31,7 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
 
   const listed = await client.listTools();
   assert.deepEqual(listed.tools.map(tool => tool.name).sort(), [
-    'get_project_element', 'get_project_summary', 'list_project_elements', 'review_layout',
+    'diagnose_project', 'get_project_element', 'get_project_summary', 'list_project_elements', 'measure_elements', 'review_layout',
   ]);
   for (const tool of listed.tools) {
     assert.equal(tool.annotations?.readOnlyHint, true, tool.name);
@@ -42,6 +42,16 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
   assert.equal(summary.isError, undefined);
   assert.equal(summary.structuredContent.snapshot.projectId, project.id);
   assert.equal(summary.structuredContent.counts.objects, project.objects.length);
+  const diagnosis = await client.callTool({ name: 'diagnose_project', arguments: {} });
+  assert.equal(diagnosis.isError, undefined);
+  assert.equal(diagnosis.structuredContent.valid, true);
+  assert.equal(diagnosis.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
+  const measured = await client.callTool({ name: 'measure_elements', arguments: {
+    idA: project.objects[0].id, idB: project.objects[1].id, mode: 'reference_points',
+  } });
+  assert.equal(measured.isError, undefined);
+  assert.equal(measured.structuredContent.units, 'mm');
+  assert.equal(measured.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
 
   const review = await client.callTool({ name: 'review_layout', arguments: {} });
   assert.equal(review.isError, undefined);
@@ -60,5 +70,31 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
     assert.ok(page.structuredContent.items.every(item => item.relation.roomIds.includes(roomId)), kind);
     assert.equal(page.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
   }
+  assert.equal(await readFile(file, 'utf8'), original);
+});
+
+test('MCP stdio starts on invalid contract data, diagnoses it and returns tool errors without exiting', async t => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'rubik-mcp-invalid-protocol-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const file = path.join(dir, 'invalid.json');
+  const project = Core.initial();
+  project.openings[0].wallId = 'wal_missing';
+  const original = JSON.stringify(project);
+  await writeFile(file, original);
+  const client = new Client({ name: 'rubik-mcp-invalid-test', version: '1.0.0' });
+  const transport = new StdioClientTransport({ command: process.execPath, args: [serverPath, '--project', file] });
+  t.after(async () => { try { await client.close(); } catch { /* closed */ } });
+  await client.connect(transport);
+  const diagnostic = await client.callTool({ name: 'diagnose_project', arguments: {} });
+  assert.equal(diagnostic.isError, undefined);
+  assert.equal(diagnostic.structuredContent.findings[0].category, 'reference');
+  const ordinary = await client.callTool({ name: 'get_project_summary', arguments: {} });
+  assert.equal(ordinary.isError, true);
+  const measure = await client.callTool({ name: 'measure_elements', arguments: {
+    idA: project.objects[0].id, idB: project.objects[1].id, mode: 'regions',
+  } });
+  assert.equal(measure.isError, true);
+  const repeated = await client.callTool({ name: 'diagnose_project', arguments: {} });
+  assert.equal(repeated.structuredContent.snapshot.sha256, diagnostic.structuredContent.snapshot.sha256);
   assert.equal(await readFile(file, 'utf8'), original);
 });
