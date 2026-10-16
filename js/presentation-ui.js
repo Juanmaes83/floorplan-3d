@@ -81,7 +81,8 @@
   captureButton.disabled=!captureReady();
   const busy=window.View3D?.lifecycleMetrics;
   batchButton.disabled=!captureReady()||!!busy?.pendingAssets||!!busy?.animating||!!busy?.flying;
-  batchButton.textContent=tx('Descargar vistas ZIP','Download views ZIP','下载视图 ZIP');
+  batchButton.textContent=tx('Vistas + proyecto ZIP','Views + project ZIP','视图 + 项目 ZIP');
+  batchButton.title=tx('PNG estáticos de las vistas y proyecto editable para reimportar; no es una escena 3D interactiva.','Static PNG views and an editable project to reimport; this is not an interactive 3D scene.','静态 PNG 视图及可重新导入的可编辑项目；不是交互式 3D 场景。');
   cancelBatchButton.textContent=tx('Cancelar lote','Cancel batch','取消批量');
   if(!active)return;
   try{const size=View3D.shotSize(captureOptions);captureButton.textContent=tx(`Guardar PNG ${size.width}×${size.height}` ,`Save PNG ${size.width}×${size.height}`,`保存 PNG ${size.width}×${size.height}`);}
@@ -128,13 +129,26 @@
     await nextFrame();
    }
    if(!batchCurrent(serial,sourceEpoch))return;
-   const manifest={format:'rubik-sota.presentation-captures',version:1,projectId:sourcePlan.projectId,entryId:sourcePlan.entryId,revision:sourcePlan.revision,center:sourcePlan.center,resources,views};
+   batchStatus.textContent=tx('Preparando proyecto editable…','Preparing editable project…','正在准备可编辑项目…');
+   const {archive:projectArchive,project:editableProject}=await FloorPlanPackage.encode(app.project,FloorPlanImages.get,{withProject:true});
+   if(!batchCurrent(serial,sourceEpoch))return;
+   const projectBytes=new Uint8Array(await projectArchive.arrayBuffer());
+   const projectFile='editable-project.zip';
+   entries.set(projectFile,projectBytes);
+   const stableProject=structuredClone(editableProject);
+   for(const image of stableProject.sourceImages||[])image.storage={kind:'sha256',ref:image.sha256};
+   const portableProject={filename:projectFile,format:'rubik-sota.editable-project',projectId:editableProject.id,sourceRevisionSha256:await FloorPlanPackage.digest(new TextEncoder().encode(sourcePlan.revision)),editableRevisionSha256:await FloorPlanPackage.digest(new TextEncoder().encode(FloorPlanGuide.revision(editableProject))),reimportRevisionSha256:await FloorPlanPackage.digest(new TextEncoder().encode(FloorPlanGuide.revision(stableProject))),bytes:projectBytes.length,sha256:await FloorPlanPackage.digest(projectBytes)};
+   if(portableProject.projectId!==sourcePlan.projectId)throw Error('El proyecto editable no coincide con la presentación.');
+   const total=[...entries.values()].reduce((sum,bytes)=>sum+bytes.length,0);
+   if(total>319*1024*1024)throw Error('La presentación portable supera el límite de 320 MB; reduce las imágenes o vistas.');
+   if(!batchCurrent(serial,sourceEpoch))return;
+   const manifest={format:'rubik-sota.presentation-captures',version:1,viewRepresentation:'static-png',projectId:sourcePlan.projectId,entryId:sourcePlan.entryId,revision:sourcePlan.revision,center:sourcePlan.center,resources,views,portableProject};
    entries.set('presentation.json',new TextEncoder().encode(JSON.stringify(manifest,null,2)));
    const archive=FloorPlanPackage.zip(entries);
    View3D.presentationRestorePose(pose);
    if(!batchCurrent(serial,sourceEpoch))return;
    const link=document.createElement('a'),url=URL.createObjectURL(archive);link.href=url;link.download='presentacion-estancias.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
-   batchStatus.textContent=tx(`${views.length} vistas descargadas.`,`Downloaded ${views.length} views.`,`已下载 ${views.length} 个视图。`);
+   batchStatus.textContent=tx(`${views.length} vistas PNG y proyecto editable descargados.`,`Downloaded ${views.length} PNG views and editable project.`,`已下载 ${views.length} 个 PNG 视图及可编辑项目。`);
    toast(batchStatus.textContent,3000);
   }catch(error){if(batchCurrent(serial,sourceEpoch)){batchStatus.textContent=error.message;toast(error.message,6000);}}
   finally{
