@@ -2655,7 +2655,8 @@ function buildFurniture(f){
         g.add(cyl(.02, .022, .02, cm, x, .81, bz + .06, 16), tube([[x, .83, bz + .06], [x, 1.03, bz + .06], [x, 1.07, bz + .11], [x, 1.03, bz + .15]], .01, cm), rot(box(.01, .01, .06, cm, x, 1.05, bz + .04), .4));
       }
       const mw = Math.min(w*.9, nb*.7);
-      g.add(rbox(mw + .02, .82, .02, glowMat('#fff7e6', '#ffe9c4', .9), 0, 1.14, bz + .01, .01), box(mw, .8, .01, mirror(), 0, 1.15, bz + .025));
+      const mirrorFace=box(mw, .8, .01, mirror(), 0, 1.15, bz + .025);mirrorFace.userData.pilotMirror=true;
+      g.add(rbox(mw + .02, .82, .02, glowMat('#fff7e6', '#ffe9c4', .9), 0, 1.14, bz + .01, .01), mirrorFace);
       g.add(cyl(.028, .028, .12, mat('#c8b8a6', {roughness:.3}), w/2 - .08, .81, bz + .1, 16), rbox(.18, .03, .12, fabric('#e9e2d6'), -w/2 + .12, .81, .05, .012));
       break;
     }
@@ -3653,6 +3654,41 @@ Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatchi
 window.View3D.setProceduralDetails=enabled=>{proceduralDetails=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return proceduralDetails;};
 Object.defineProperty(window.View3D,'proceduralDetails',{get:()=>proceduralDetails});
 Object.defineProperty(window.View3D,'proceduralDetailMetrics',{get:()=>{const objects=[];furnG?.children.forEach(g=>{const detail=g.children.filter(o=>o.userData.proceduralDetail);if(detail.length)objects.push({id:g.userData.fid,count:detail.length,positions:detail.map(o=>o.position.toArray())});});return {enabled:proceduralDetails,objects};}});
+window.View3D.mirrorPilotView=id=>{
+  if(!active||contextLost)throw Error('Vista 3D no disponible');
+  const group=furnG.children.find(g=>g.userData.fid===id),face=group?.children.find(o=>o.userData.pilotMirror);
+  if(!face)throw Error('Espejo genérico no disponible');
+  group.updateWorldMatrix(true,true);const point=face.getWorldPosition(new THREE.Vector3()),normal=new THREE.Vector3(0,0,1).transformDirection(face.matrixWorld);
+  camera.position.copy(point).addScaledVector(normal,1.3);camera.position.y=point.y+.08;orbit.target.copy(point);camera.lookAt(point);orbit.update();renderer.render(scene,camera);
+};
+window.View3D.measureMirrorPilot=id=>{
+  if(!active||contextLost||!renderer||!camera||!scene)throw Error('Vista 3D no disponible');
+  const group=furnG.children.find(g=>g.userData.fid===id),face=group?.children.find(o=>o.userData.pilotMirror);
+  if(!face)throw Error('Espejo genérico no disponible');
+  group.updateWorldMatrix(true,true);camera.updateMatrixWorld();
+  const point=face.getWorldPosition(new THREE.Vector3()),normal=new THREE.Vector3(0,0,1).transformDirection(face.matrixWorld);
+  const facing=camera.position.clone().sub(point).dot(normal)>0;
+  const frustum=new THREE.Frustum().setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));
+  const visible=frustum.intersectsObject(face);
+  const ray=new THREE.Raycaster(camera.position,point.clone().sub(camera.position).normalize(),.01,camera.position.distanceTo(point)+.05);
+  const first=ray.intersectObjects([archUp,furnG],true).find(hit=>hit.object.isMesh&&hit.object.visible&&!hit.object.material?.transparent),unoccluded=first?.object===face;
+  if(!facing||!visible||!unoccluded)return {status:'not-visible',facing,visible,unoccluded,first:first&&{type:first.object.geometry?.type,id:first.object.parent?.userData?.fid,wall:first.object.userData?.wallId,distance:first.distance},textures:renderer.info.memory.textures};
+  const reflect=v=>v.clone().addScaledVector(normal,-2*v.clone().sub(point).dot(normal));
+  const virtual=camera.clone(),look=camera.position.clone().add(camera.getWorldDirection(new THREE.Vector3()));
+  virtual.position.copy(reflect(camera.position));virtual.up.copy(camera.up.clone().reflect(normal));virtual.lookAt(reflect(look));virtual.aspect=1;virtual.updateProjectionMatrix();
+  const texturesBefore=renderer.info.memory.textures,target=new THREE.WebGLRenderTarget(256,256,{depthBuffer:true}),previousTarget=renderer.getRenderTarget(),previousMaterial=face.material,previousVisible=face.visible;
+  let material,preview,reflection,calls=0,triangles=0,renderMs=0;
+  try{
+    face.visible=false;renderer.setRenderTarget(target);renderer.clear();const start=performance.now();renderer.render(scene,virtual);renderMs=performance.now()-start;calls=renderer.info.render.calls;triangles=renderer.info.render.triangles;
+    const pixels=new Uint8Array(256*256*4);renderer.readRenderTargetPixels(target,0,0,256,256,pixels);
+    const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const context=canvas.getContext('2d'),data=context.createImageData(256,256);
+    for(let y=0;y<256;y++)data.data.set(pixels.subarray((255-y)*1024,(256-y)*1024),y*1024);
+    context.putImageData(data,0,0);reflection=canvas.toDataURL('image/png');
+    face.visible=previousVisible;material=new THREE.MeshBasicMaterial({map:target.texture,side:THREE.DoubleSide,toneMapped:false});face.material=material;
+    renderer.setRenderTarget(previousTarget);renderer.render(scene,camera);preview=renderer.domElement.toDataURL('image/png');
+  }finally{face.visible=previousVisible;face.material=previousMaterial;renderer.setRenderTarget(previousTarget);material?.dispose();target.dispose();renderer.render(scene,camera);}
+  return {status:'measured',id,renderMs,calls,triangles,textureBytes:256*256*4,texturesBefore,texturesAfter:renderer.info.memory.textures,preview,reflection};
+};
 window.View3D.pickFurnitureAt=(x,y)=>active?pick({clientX:x,clientY:y})?.fid||null:null;
 Object.defineProperty(window.View3D,'primitiveBatchSummary',{get:()=>{let batches=0,instances=0,unmapped=0;
   furnG?.traverse(o=>{if(!o.isInstancedMesh)return;batches++;instances+=o.count;
