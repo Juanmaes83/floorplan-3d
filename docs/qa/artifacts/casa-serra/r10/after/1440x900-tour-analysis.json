@@ -1,0 +1,133 @@
+{
+ "size": "1440x900",
+ "room": "rom_mbath",
+ "kind": "interior",
+ "code": "clear",
+ "viewOffset": {
+  "yawDeg": 14.57,
+  "pitchDeg": 0
+ },
+ "routeSeconds": 18.97,
+ "lengthMm": 8689,
+ "walkFov": 72,
+ "closeShare": 0,
+ "maxFrameJumpM": 3.606,
+ "maxJumpFrame": 39,
+ "stopMetric": {
+  "target": 0.304,
+  "topOther": [
+   "rom_kid",
+   0.252
+  ],
+  "floorVisible": 0.87
+ },
+ "projectUnchanged": true,
+ "errors": [],
+ "phases": {
+  "descend": {
+   "frames": 97,
+   "seconds": 3.23,
+   "eyeH": [
+    1.5,
+    4.36
+   ],
+   "pitchP50": 57.7,
+   "pitchP95": 65.8,
+   "pitchMax": 66,
+   "viewPitchP50": 57.7,
+   "viewPitchP95": 65.8,
+   "viewPitchMax": 66,
+   "framesViewPitchOver20": 88,
+   "framesPitchOver20": 88,
+   "framesWallClose30": 0,
+   "targetP50": 0,
+   "targetMax": 0.72,
+   "speedMax": 5.91,
+   "speedP50": 3.18
+  },
+  "walk": {
+   "frames": 383,
+   "seconds": 12.77,
+   "eyeH": [
+    1.5,
+    1.5
+   ],
+   "pitchP50": 8,
+   "pitchP95": 16.5,
+   "pitchMax": 20,
+   "viewPitchP50": 8,
+   "viewPitchP95": 16.5,
+   "viewPitchMax": 20,
+   "framesViewPitchOver20": 0,
+   "framesPitchOver20": 0,
+   "framesWallClose30": 65,
+   "targetP50": 0,
+   "targetMax": 1,
+   "speedMax": 0.88,
+   "speedP50": 0.81
+  },
+  "arrive": {
+   "frames": 39,
+   "seconds": 1.3,
+   "eyeH": [
+    1.5,
+    1.5
+   ],
+   "pitchP50": 20,
+   "pitchP95": 20,
+   "pitchMax": 20,
+   "viewPitchP50": 20,
+   "viewPitchP95": 20,
+   "viewPitchMax": 20,
+   "framesViewPitchOver20": 0,
+   "framesPitchOver20": 0,
+   "framesWallClose30": 0,
+   "targetP50": 1,
+   "targetMax": 1,
+   "speedMax": 0,
+   "speedP50": 0
+  },
+  "rise": {
+   "frames": 24,
+   "seconds": 0.8,
+   "eyeH": [
+    1.52,
+    3.6
+   ],
+   "pitchP50": 38.3,
+   "pitchP95": 54.5,
+   "pitchMax": 55,
+   "viewPitchP50": 38.3,
+   "viewPitchP95": 54.5,
+   "viewPitchMax": 55,
+   "framesViewPitchOver20": 24,
+   "framesPitchOver20": 24,
+   "framesWallClose30": 6,
+   "targetP50": 0.69,
+   "targetMax": 1,
+   "speedMax": 0.04,
+   "speedP50": 0
+  },
+  "return": {
+   "frames": 26,
+   "seconds": 0.87,
+   "eyeH": [
+    3.6,
+    4.36
+   ],
+   "pitchP50": 60.4,
+   "pitchP95": 65.7,
+   "pitchMax": 66,
+   "viewPitchP50": 60.4,
+   "viewPitchP95": 65.7,
+   "viewPitchMax": 66,
+   "framesViewPitchOver20": 26,
+   "framesPitchOver20": 26,
+   "framesWallClose30": 0,
+   "targetP50": 0.36,
+   "targetMax": 0.45,
+   "speedMax": 4.83,
+   "speedP50": 3.77
+  }
+ }
+}
