@@ -11,7 +11,7 @@ Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. Es
 Desde esta carpeta:
 
 ```sh
-npm install
+npm ci
 npm start -- --project /ruta/absoluta/al/proyecto.json
 ```
 
@@ -73,3 +73,5 @@ npm run check
 ```
 
 Las pruebas comprueban validación, consultas y paginación, relaciones espaciales sintéticas, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente. En Windows sin privilegio de creación de symlinks se omite únicamente ese caso de seguridad; sigue ejecutándose en Linux CI. El rechazo de JSON inválido se comprueba por separado.
+
+El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. `npm audit` queda sin vulnerabilidades reportadas para el lock actual.
