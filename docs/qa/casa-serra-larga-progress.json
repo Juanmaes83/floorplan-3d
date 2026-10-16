@@ -127,7 +127,7 @@
       "dependency": "R2",
       "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
       "testedSha": null,
-      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68; M14/M17 pending"]
+      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred; M14 pending"]
     },
     {
       "id": "R9",
@@ -329,12 +329,12 @@
     {
       "id": "M17",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "diferido con motivo",
       "scope": "Detalles procedurales genéricos",
       "dependency": "M05",
       "acceptance": "Piloto identificable, coste medido y geometría/selección intactas",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "ab2f89a",
+      "evidence": ["Optional deterministic vanity and coffee table detail, disabled by default: 1729 to 1745 calls, 199934 to 200126 triangles, 1298 to 1314 geometries, 8 textures unchanged; 0/11 visible changed pixels in bathroom/living room", "Selection, document and reimport IDs retained; M17 and M16 regression 2/2; four visually reviewed PNG and metrics in docs/qa/artifacts/casa-serra/r8-m17/"]
     },
     {
       "id": "M18",

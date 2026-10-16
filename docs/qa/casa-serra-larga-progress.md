@@ -31,7 +31,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
 | R6 | verificado localmente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | Planificador 5/5, navegador 8/8, regresión amplia 113/113; cuatro viewports, resize y alternativa aérea |
 | R7 | verificado localmente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | M12 `9e96725`, M16 `e66d85e` | M12 17/17; M16 109 llamadas menos, capturas revisadas; regresión amplia 203/203 |
-| R8 | en curso | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | M20 `d267e4c` | M20 68/68, ZIP editable reimportado y 3 capturas revisadas; M14/M17 pendientes |
+| R8 | en curso | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | M20 `d267e4c`, M17 `ab2f89a` | M20 68/68 y reimportación; M17 diferido tras medir +16 llamadas para 0/11 píxeles visibles; M14 pendiente |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
 
 ## Capacidades de la auditoría
@@ -54,14 +54,14 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M14 | pendiente | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | — | — |
 | M15 | verificado localmente | Sombras/efectos acotados | M08 | Beneficio visual revisado, coste medido y renderer base tras fallo | `ae70f26` | 5/5 piloto, 100/100 regresión amplia; 19 artefactos `artifacts/casa-serra/r5-m15/` |
 | M16 | verificado localmente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | `e66d85e` | Piloto en `artifacts/casa-serra/r7-m16/`: 1729→1620 llamadas, 1298→1189 geometrías, selección/IDs y JSON conservados; suite amplia 203/203 |
-| M17 | pendiente | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | — | — |
+| M17 | diferido con motivo | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | `ab2f89a` | Vanity y mesa de centro, 4 objetos; +16 llamadas/+192 triángulos/+16 geometrías para 0/11 píxeles cambiados en baño/salón; desactivado por defecto, 2/2 |
 | M18 | verificado localmente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | 5/5 planificador, 8/8 navegador, 113/113 regresión; 10 archivos `artifacts/casa-serra/r6-m18/` |
 | M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08 mapas y M09 HDR Poly Haven CC0 atribuidos; M10 capa temporal de revelado escrita para este proyecto, sin código Casa Larga |
 | M20 | verificado localmente | Presentación portable | M11 | Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado | `d267e4c` | ZIP con tres PNG y proyecto editable; SHA de archivo, vistas y revisión; reimportación limpia con 13 estancias, 46 objetos e imagen original; 68/68; 3 PNG revisados |
 
 ## Próxima acción ejecutable
 
-Completar los pilotos independientes R8 M14/M17 y después cerrar la matriz R9. Conservar todos los `qa-results` locales y la PR en draft.
+Completar el piloto R8 M14 y después cerrar la matriz R9. Conservar todos los `qa-results` locales y la PR en draft.
 
 ## R7 — aceptación previa para M12/M16
 
@@ -92,6 +92,12 @@ Completar los pilotos independientes R8 M14/M17 y después cerrar la matriz R9. 
 - Código `d267e4c`: el ZIP de presentación conserva sus vistas PNG estáticas y añade `editable-project.zip`, un paquete reimportable con las imágenes originales como archivos internos. El manifiesto relaciona proyecto, revisión exacta de origen, SHA-256 y tamaño del proyecto editable, hashes de las vistas y una huella de revisión estable al cambiar las referencias de almacenamiento locales durante la importación. La interfaz dice expresamente que las vistas son PNG estáticos.
 - Piloto Chromium: ZIP exterior de 1.103.207 bytes, proyecto editable de 56.280 bytes y tres PNG de 1280×800. Se verificaron los hashes de los cuatro archivos, la imagen de origen y ambas revisiones del proyecto. Reimportación en contexto limpio: mismo ID, 13 estancias, 46 objetos, mismos IDs y bytes de imagen; la huella estable coincide. Límite de 320 MB anunciado antes de generar el ZIP exterior. Sin red ni publicación del proyecto.
 - Suite afectada `project`, `tracing`, `presentation-batch` y `capture-3d`: **68/68 PASS, 0 fail, 0 skip**; log externo `r8-m20-final.log`. Capturas antes, después y reimportación limpia abiertas visualmente y publicadas con métricas en `artifacts/casa-serra/r8-m20/`. Los artefactos históricos regenerados por las pruebas permanecen en el árbol local sin incluirse en este checkpoint.
+
+### R8 M17 — detalle procedimental, piloto diferido
+
+- Código `ab2f89a`: cuatro marcas de superficie deterministas por ID en cada tocador genérico y mesa de centro. Opción experimental reversible `View3D.setProceduralDetails`, desactivada por defecto; no añade campos al proyecto ni artículos ficticios.
+- Cuatro objetos del ejemplo, misma cámara y escena, agrupación desactivada para aislar el coste: **1729 → 1745 llamadas**, **199934 → 200126 triángulos**, **1298 → 1314 geometrías**, ocho texturas constantes. La desactivación recupera las cifras base; nueva activación y reimportación conservan posiciones, IDs y selección. Pruebas dirigidas M17 y regresión M16 **2/2 PASS**.
+- Se abrieron cuatro PNG de baño/salón con/sin detalles. Diferencia RGB >20: **0 píxeles en baño y 11 en salón** de 1.296.000. Valor visual insuficiente para añadir 16 llamadas en este proyecto: M17 se difiere con el piloto apagado. Métricas y capturas en `artifacts/casa-serra/r8-m17/`.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 
