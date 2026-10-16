@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R7",
-  "ci": "failed_without_steps_on_278c11a_runs_38781353884_38781354451_billing_history_not_ci_accepted",
+  "current": "R8",
+  "ci": "failed_without_steps_on_fcabf94_runs_38861523704_38861523740_billing_history_not_ci_accepted",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -112,12 +112,12 @@
     {
       "id": "R7",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "M12/M16",
       "dependency": "R2",
       "acceptance": "Variantes con cámara común; agrupar solo si medición justifica y conserva IDs",
-      "testedSha": null,
-      "evidence": ["M12/M16 acceptance written before implementation; user resumed after R6"]
+      "testedSha": "e66d85e9aba07d1d05a1d67bf6e80854ccec4103",
+      "evidence": ["M12/M16 acceptance written before implementation; user resumed after R6", "M12 variants 17/17 and eight visually reviewed screenshots", "M16 109 fewer draw calls, 109 fewer geometries, 17 extra changed pixels vs restored baseline; affected broad regression 203/203 pass, zero fail/skip", "Exact SHA fcabf94 preview deployment 8keftnBieE1mxTLBjxESRxJq7wTu reviewed in authenticated Chrome; Actions 38861523704/38861523740 failed with zero steps"]
     },
     {
       "id": "R8",
@@ -319,12 +319,12 @@
     {
       "id": "M16",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Agrupación de geometría",
       "dependency": "M05",
       "acceptance": "Mejora medida y selección/exportación/asignaciones conservan IDs",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "e66d85e9aba07d1d05a1d67bf6e80854ccec4103",
+      "evidence": ["M16 Chromium pilot 1729 to 1620 draw calls, 1298 to 1189 geometries, 199934 triangles unchanged, 63 batches/172 instances, IDs/selection/JSON/camera preserved; four PNG visually reviewed in docs/qa/artifacts/casa-serra/r7-m16/", "Affected broad regression 203/203 pass, zero fail/skip; exact SHA fcabf94 preview deployment 8keftnBieE1mxTLBjxESRxJq7wTu reviewed in authenticated Chrome; Actions 38861523704/38861523740 failed with zero steps"]
     },
     {
       "id": "M17",
@@ -394,9 +394,9 @@
     {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
   ],
   "preview": {
-    "sha": "278c11a33462276dd00c4bcf16a6f53ab0bf0bc7",
-    "url": "https://floorplan-3d-4pbksyi9f-juanma-espinosas-projects.vercel.app/",
-    "deploymentId": "7100248810",
+    "sha": "fcabf94c14c335d3bd950d61af71b24fa5e25d36",
+    "url": "https://floorplan-3d-k4zxp6vk4-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "8keftnBieE1mxTLBjxESRxJq7wTu",
     "status": "deployed_visual_review_authenticated",
     "anonymousAccess": "protected_by_sso"
   }

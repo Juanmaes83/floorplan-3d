@@ -30,7 +30,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R4 | verificado localmente | CS-2; M08/M09 y control M05/M06 | R3 | Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido | M08 `ad0a23f`, M09 `7bd5415` | M08 y M09 previews exactas revisadas; M09 6/6 y regresión amplia 76/76 |
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
 | R6 | verificado localmente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | Planificador 5/5, navegador 8/8, regresión amplia 113/113; cuatro viewports, resize y alternativa aérea |
-| R7 | en curso | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | — | Aceptación previa escrita |
+| R7 | verificado localmente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | M12 `9e96725`, M16 `e66d85e` | M12 17/17; M16 109 llamadas menos, capturas revisadas; regresión amplia 203/203 |
 | R8 | pendiente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | — | — |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
 
@@ -53,7 +53,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M13 | verificado localmente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | `165b71166c05d6f30209282fd91ae1268f74e213` | 5/5 navegador, 4/4 núcleo, 6/6 P14/P16 y 8/8 M11; 13 PNG `artifacts/casa-serra/r3-m13/` |
 | M14 | pendiente | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | — | — |
 | M15 | verificado localmente | Sombras/efectos acotados | M08 | Beneficio visual revisado, coste medido y renderer base tras fallo | `ae70f26` | 5/5 piloto, 100/100 regresión amplia; 19 artefactos `artifacts/casa-serra/r5-m15/` |
-| M16 | pendiente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | — | — |
+| M16 | verificado localmente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | `e66d85e` | Piloto en `artifacts/casa-serra/r7-m16/`: 1729→1620 llamadas, 1298→1189 geometrías, selección/IDs y JSON conservados; suite amplia 203/203 |
 | M17 | pendiente | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | — | — |
 | M18 | verificado localmente | Recorrido interior seguro | M03 | Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | 5/5 planificador, 8/8 navegador, 113/113 regresión; 10 archivos `artifacts/casa-serra/r6-m18/` |
 | M19 | en curso | Créditos y procedencia | transversal | Cada técnica/recurso incorporado tiene origen y permiso registrado | — | M08 mapas y M09 HDR Poly Haven CC0 atribuidos; M10 capa temporal de revelado escrita para este proyecto, sin código Casa Larga |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R7 M12/M16: comparación visual de variantes en marco y escala comunes, seguida de medición de llamadas de dibujo antes de decidir si agrupar geometría. R6 quedó verificado en `52a42fa`; el usuario autorizó continuar. Conservar todos los `qa-results` locales y la PR en draft.
+Iniciar los pilotos independientes R8 M14/M17/M20, con aceptación o diferimiento por separado, y después cerrar la matriz R9. Conservar todos los `qa-results` locales y la PR en draft.
 
 ## R7 — aceptación previa para M12/M16
 
@@ -73,6 +73,12 @@ R7 M12/M16: comparación visual de variantes en marco y escala comunes, seguida 
 
 - Código `9e96725`: cada tarjeta de original/variante dibuja estancias, muros, puertas y huellas de muebles con sus IDs en un SVG de planta. El `viewBox` sale de la unión de las geometrías y huellas de la familia; todas las tarjetas comparten marco, escala y orientación. Las etiquetas se asignan como texto/atributos DOM, sin interpretar HTML. La comparación sólo lee los proyectos; crear, abrir y eliminar variantes conserva el comportamiento anterior.
 - Suite de variantes **17/17 PASS** (9 unitarias, 8 navegador): copia aislada, edición, persistencia, exportación JSON, cuota local, imagen compartida, métricas, marco común y diferencia de muebles. Cuatro viewports 1440×900, 390×844, 844×390 y 360×800, más resize 360→844; `pageerror` y consola inesperada vacíos en los nuevos casos. Ocho capturas se abrieron y publicaron en `artifacts/casa-serra/r7-m12/`; las tarjetas se desplazan dentro del diálogo en vertical/horizontal corto. El editor móvil conserva el recorte previo del baseline.
+
+### M16 — piloto visual y presupuesto de render
+
+- Código `e66d85e`, evidencia `fcabf94`: sólo agrupa primitivas opacas pequeñas dentro del grupo del mueble que conserva su `fid`. El ejemplo pasa de 1729 a 1620 llamadas de dibujo y de 1298 a 1189 geometrías, sin variar los 199934 triángulos ni las ocho texturas. Son 109 llamadas menos (6,3 % del total), 172 instancias en 63 lotes. Tres ciclos liberan 189 lotes, con selección por clic, IDs, JSON y cámara intactos; hay fallback al renderer original. Los cuatro PNG de `artifacts/casa-serra/r7-m16/` se abrieron y compararon; el agrupado añade 17 píxeles con diferencia RGB >20 respecto a la variación de referencia de la misma escena. Medianas de 16,5–16,8 ms con vsync en SwiftShader, sin inferencia de FPS en hardware físico.
+- Preview Vercel del SHA exacto `fcabf94c14c335d3bd950d61af71b24fa5e25d36`: `https://floorplan-3d-k4zxp6vk4-juanma-espinosas-projects.vercel.app/`, deployment `8keftnBieE1mxTLBjxESRxJq7wTu`, Ready. Abierta en Chrome autenticado: ejemplo 3D, vista general, dormitorio principal y retorno al editor revisados visualmente. Protegida por SSO; acceso anónimo sin acreditar. Actions de este SHA [38861523704](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38861523704) y [38861523740](https://github.com/Juanmaes83/floorplan-3d/actions/runs/38861523740) fallaron sin ejecutar pasos (`steps: []`); no se cuentan como CI aprobada.
+- Suite amplia final de 18 archivos sobre el código M16 definitivo: **203/203 PASS, 0 fail, 0 skip**, duración 22 min 5 s. Incluye M12, M16, presentación, captura y ZIP M11, superficies/activos, pérdidas de contexto, editor y F2. Log `r7-m16-broad-final-pass.log` en el supervisor externo. Las pruebas de regresión sólo regeneraron artefactos locales existentes; no se descarta ni se publica su contenido de forma indiscriminada.
 
 ## R8 — aceptación previa para pilotos independientes
 
