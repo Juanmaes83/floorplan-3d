@@ -122,12 +122,12 @@
     {
       "id": "R8",
       "type": "incremento",
-      "status": "pendiente",
+      "status": "en curso",
       "scope": "M14/M17/M20",
       "dependency": "R2",
       "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
       "testedSha": null,
-      "evidence": []
+      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68; M14/M17 pending"]
     },
     {
       "id": "R9",
@@ -367,12 +367,12 @@
     {
       "id": "M20",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "verificado localmente",
       "scope": "Presentación portable",
       "dependency": "M11",
       "acceptance": "Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "d267e4c",
+      "evidence": ["Three 1280x800 static PNG views plus nested editable-project.zip, project ID, exact source and portable revision hashes, view and image SHA-256; clean Chromium reimport preserved 13 rooms, 46 objects, IDs and image bytes", "Affected suite 68/68 pass; three PNG visually reviewed and metrics in docs/qa/artifacts/casa-serra/r8-m20/"]
     }
   ],
   "protocol": [
