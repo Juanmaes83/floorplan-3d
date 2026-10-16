@@ -1,4 +1,4 @@
-# Rubik Floorplan MCP — primera entrega local
+# Rubik Floorplan MCP — consulta local de solo lectura
 
 Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. Esta primera entrega es deliberadamente de **solo lectura** y trabaja sobre un archivo explícito, no sobre la sesión abierta del editor.
 
@@ -28,11 +28,33 @@ El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el pro
 ## Herramientas
 
 - `get_project_summary`: esquema, hash, escala, recuentos y superficie útil aproximada.
-- `list_project_elements`: páginas de estancias, muros, huecos y muebles; permite filtrar por nombre/ID y estancia.
-- `get_project_element`: consulta un elemento por ID.
+- `list_project_elements`: páginas de estancias, muros, huecos y muebles; permite filtrar por nombre/ID y estancia a partir de geometría.
+- `get_project_element`: consulta un elemento por ID con la misma relación espacial.
 - `review_layout`: reutiliza la geometría de la revisión de distribución de Rubik. La holgura es opcional y nunca se inventa un valor por defecto.
 
 Cada herramienta declara anotaciones MCP de solo lectura. No hay herramientas para mover, crear, borrar, guardar o exportar. La superficie se calcula desde polígonos guardados y no es una medición certificada.
+
+### Relación por estancia (v0.1.1, primer corte de Etapa 1)
+
+Cada elemento de `list_project_elements` y `get_project_element` añade `relation`:
+
+```json
+{
+  "roomIds": ["rom_rect", "rom_next"],
+  "status": "shared",
+  "method": "wall_strip_polygon_contact",
+  "evidence": [
+    { "roomId": "rom_rect", "overlapAreaMm2": 0, "contactLengthMm": 4000 },
+    { "roomId": "rom_next", "overlapAreaMm2": 0, "contactLengthMm": 4000 }
+  ]
+}
+```
+
+El ejemplo procede del muro compartido del fixture sintético `fixtures/spatial-project.cjs`. `roomIds` se deriva de los polígonos de estancias y de la huella girada del mueble, la banda del muro o el subtramo del hueco. En un mueble que traiga `roomId` guardado se conserva ese campo anterior y `relation.storedRoomId` lo identifica expresamente; una discrepancia no cambia el JSON ni fuerza la atribución. Los estados son `unique` (una estancia sustentada), `shared` (muro/hueco con varias), `ambiguous` (mueble que cruza, toca solo un límite, queda parcialmente fuera o contradice su campo guardado) y `unattributed` (ninguna). `reason` explica la incertidumbre cuando procede. Áreas en mm², longitudes y coordenadas en mm.
+
+El filtro `roomId` de `list_project_elements` devuelve una estancia solo cuando coincide con **su propio ID**. Para muebles, muros y huecos, incluye los que tengan ese ID en `relation.roomIds`; un elemento compartido o ambiguo aparece en todas las estancias implicadas con el mismo ID original. Un ID inexistente devuelve `total:0`. Búsqueda y estancia se combinan antes de `offset`/`limit`; el máximo sigue en 100 elementos por página y la respuesta en 750 KiB. No se usa solo el centro del mueble ni se atribuye un hueco por todo el muro si su subtramo no llega a esa estancia.
+
+Las reglas, tolerancias numéricas y límites están en [relaciones espaciales](../../docs/technical/local-mcp-spatial-relations.md). Esta entrega no incluye aún el informe de validación, medidas entre elementos ni mejora de holguras con obstáculos previstos para el resto de Etapa 1.
 
 ## Límites y privacidad
 
@@ -50,4 +72,4 @@ npm test
 npm run check
 ```
 
-Las pruebas comprueban validación, consultas y paginación, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente.
+Las pruebas comprueban validación, consultas y paginación, relaciones espaciales sintéticas, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente. En Windows sin privilegio de creación de symlinks se omite únicamente ese caso de seguridad; sigue ejecutándose en Linux CI. El rechazo de JSON inválido se comprueba por separado.

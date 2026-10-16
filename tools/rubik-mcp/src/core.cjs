@@ -6,6 +6,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const C = require('../../../js/project-core.js');
 const Review = require('../../../js/layout-review.js');
+const Spatial = require('./spatial.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -104,25 +105,27 @@ function projectElements(project, kind) {
   return project[key];
 }
 
-function publicElement(kind, item) {
+function publicElement(kind, item, relation) {
   if (kind === 'rooms') return {
     id: item.id, name: item.name, polygon: item.polygon,
     labelAt: item.labelAt, countsTowardArea: item.countsTowardArea,
-    areaM2: areaM2(item.polygon),
+    areaM2: areaM2(item.polygon), relation,
   };
   if (kind === 'walls') return {
     id: item.id, start: item.start, end: item.end, thicknessMm: item.thicknessMm,
-    heightMm: item.heightMm, structure: item.structure, status: item.status,
+    heightMm: item.heightMm, structure: item.structure, status: item.status, relation,
   };
   if (kind === 'openings') return {
     id: item.id, wallId: item.wallId, kind: item.kind, offsetMm: item.offsetMm,
     widthMm: item.widthMm, heightMm: item.heightMm, sillHeightMm: item.sillHeightMm,
     ...(item.swing ? { swing: item.swing } : {}),
+    relation,
   };
   return {
     id: item.id, type: item.type, name: item.name, position: item.position,
     size: item.size, rotationDeg: item.rotationDeg,
     ...(item.roomId ? { roomId: item.roomId } : {}),
+    relation,
   };
 }
 
@@ -130,17 +133,17 @@ async function listElements(reader, args = {}) {
   const { project, snapshot } = await reader.load();
   const kind = args.kind;
   const all = projectElements(project, kind);
+  const spatial = Spatial.createSpatialIndex(project);
   const query = typeof args.query === 'string' ? args.query.trim().toLocaleLowerCase() : '';
   const filtered = all.filter(item => {
-    if (args.roomId && item.roomId !== args.roomId) return false;
     if (!query) return true;
     return [item.id, item.name, item.type, item.kind].some(v => typeof v === 'string' && v.toLocaleLowerCase().includes(query));
-  });
+  }).filter(item => !args.roomId || spatial.relation(kind, item).roomIds.includes(args.roomId));
   const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number.isSafeInteger(args.limit) ? args.limit : 50));
   const offset = Math.max(0, Number.isSafeInteger(args.offset) ? args.offset : 0);
   return safeJson({
     snapshot, kind, total: filtered.length, offset, limit,
-    items: filtered.slice(offset, offset + limit).map(item => publicElement(kind, item)),
+    items: filtered.slice(offset, offset + limit).map(item => publicElement(kind, item, spatial.relation(kind, item))),
   });
 }
 
@@ -149,7 +152,10 @@ async function getElement(reader, args = {}) {
   const collections = ['rooms', 'walls', 'openings', 'objects'];
   for (const kind of collections) {
     const item = project[kind].find(candidate => candidate.id === args.id);
-    if (item) return safeJson({ snapshot, kind, item: publicElement(kind, item) });
+    if (item) {
+      const spatial = Spatial.createSpatialIndex(project);
+      return safeJson({ snapshot, kind, item: publicElement(kind, item, spatial.relation(kind, item)) });
+    }
   }
   fail('No existe un elemento con ese ID en el JSON seleccionado.');
 }
