@@ -3059,7 +3059,8 @@ function loadFurnitureAsset(g,f,generation){
 function batchFurniturePrimitives(group){
   const families=new Map();
   for(const child of group.children){
-    if(!child.isMesh||Array.isArray(child.material)||Object.keys(child.userData).length||!['BoxGeometry','CylinderGeometry','SphereGeometry'].includes(child.geometry?.type))continue;
+    const type=child.geometry?.type,smallBox=type==='BoxGeometry'&&child.geometry.parameters.width*child.geometry.parameters.height*child.geometry.parameters.depth<=.001;
+    if(!child.isMesh||Array.isArray(child.material)||child.material.transparent||child.scale.x*child.scale.y*child.scale.z<=0||Object.keys(child.userData).length||!(smallBox||type==='CylinderGeometry'||type==='SphereGeometry'))continue;
     const key=JSON.stringify([child.geometry.type,child.geometry.parameters,child.material.uuid,child.castShadow,child.receiveShadow,child.renderOrder]);
     if(!families.has(key))families.set(key,[]);families.get(key).push(child);
   }
