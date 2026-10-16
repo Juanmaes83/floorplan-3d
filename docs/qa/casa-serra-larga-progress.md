@@ -31,7 +31,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | R5 | verificado localmente | CS-3 visual; M10/M15 | R4 | Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback | M10 `349272a`, M15 `ae70f26` | M10 8/8, M15 5/5 y regresión amplia M15 100/100; cuatro viewports y resize |
 | R6 | verificado localmente | CS-3 recorrido; M18 | R2 | Ruta interior completa libre de obstáculos o alternativa aérea declarada | `cd82490ad5551ed4c2f3066eb158b5698828ca3a` | Planificador 5/5, navegador 8/8, regresión amplia 113/113; cuatro viewports, resize y alternativa aérea |
 | R7 | verificado localmente | M12/M16 | R2 | Variantes con cámara común; agrupar solo si medición justifica y conserva IDs | M12 `9e96725`, M16 `e66d85e` | M12 17/17; M16 109 llamadas menos, capturas revisadas; regresión amplia 203/203 |
-| R8 | en curso | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | M20 `d267e4c`, M17 `ab2f89a` | M20 68/68 y reimportación; M17 diferido tras medir +16 llamadas para 0/11 píxeles visibles; M14 pendiente |
+| R8 | verificado localmente | M14/M17/M20 | R2 | Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor | M20 `d267e4c`, M17 `ab2f89a`, M14 `f93aed7` | M20 68/68 y reimportación; M17/M14 diferidos con coste y capturas; tres pilotos de render 3/3 |
 | R9 | pendiente | Cierre de M01–M20 | R1–R8 | Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft | — | — |
 
 ## Capacidades de la auditoría
@@ -51,7 +51,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 | M11 | verificado localmente | Capturas por estancias | M03 | PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados | `e6aed05a5e53892450827cd2c1333a0a5aea0b5c` | ZIP/PNG/manifiesto 8/8 navegador, 3/3 captura 3D, 23/23 núcleo/ZIP; 20 PNG `artifacts/casa-serra/r3-m11/` |
 | M12 | verificado localmente | Comparación de variantes | M03 | Misma referencia visual; variantes e IDs permanecen aislados | `9e967250a8fef0490ca7619d46b02b29bebefe9b` | 17/17 variantes, ocho capturas revisadas en cuatro viewports y resize |
 | M13 | verificado localmente | Minimapa de orientación | M03 | RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil | `165b71166c05d6f30209282fd91ae1268f74e213` | 5/5 navegador, 4/4 núcleo, 6/6 P14/P16 y 8/8 M11; 13 PNG `artifacts/casa-serra/r3-m13/` |
-| M14 | pendiente | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | — | — |
+| M14 | diferido con motivo | Reflejo selectivo | M08 | Recurso identificado, coste medido y fallback; sin reflejos globales falsos | `f93aed7` | 256×256, +368 llamadas y 29.050 triángulos, primer pase 936 ms/2,4–3,4 ms caliente; pared lisa, ocho texturas estables, material base conserva la vista |
 | M15 | verificado localmente | Sombras/efectos acotados | M08 | Beneficio visual revisado, coste medido y renderer base tras fallo | `ae70f26` | 5/5 piloto, 100/100 regresión amplia; 19 artefactos `artifacts/casa-serra/r5-m15/` |
 | M16 | verificado localmente | Agrupación de geometría | M05 | Mejora medida y selección/exportación/asignaciones conservan IDs | `e66d85e` | Piloto en `artifacts/casa-serra/r7-m16/`: 1729→1620 llamadas, 1298→1189 geometrías, selección/IDs y JSON conservados; suite amplia 203/203 |
 | M17 | diferido con motivo | Detalles procedurales genéricos | M05 | Piloto identificable, coste medido y geometría/selección intactas | `ab2f89a` | Vanity y mesa de centro, 4 objetos; +16 llamadas/+192 triángulos/+16 geometrías para 0/11 píxeles cambiados en baño/salón; desactivado por defecto, 2/2 |
@@ -61,7 +61,7 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-Completar el piloto R8 M14 y después cerrar la matriz R9. Conservar todos los `qa-results` locales y la PR en draft.
+Cerrar R9 con la suite amplia final, matriz M01–M20, preview del SHA exacto y PR #39 actualizada. Conservar todos los `qa-results` locales y la PR en draft.
 
 ## R7 — aceptación previa para M12/M16
 
@@ -98,6 +98,12 @@ Completar el piloto R8 M14 y después cerrar la matriz R9. Conservar todos los `
 - Código `ab2f89a`: cuatro marcas de superficie deterministas por ID en cada tocador genérico y mesa de centro. Opción experimental reversible `View3D.setProceduralDetails`, desactivada por defecto; no añade campos al proyecto ni artículos ficticios.
 - Cuatro objetos del ejemplo, misma cámara y escena, agrupación desactivada para aislar el coste: **1729 → 1745 llamadas**, **199934 → 200126 triángulos**, **1298 → 1314 geometrías**, ocho texturas constantes. La desactivación recupera las cifras base; nueva activación y reimportación conservan posiciones, IDs y selección. Pruebas dirigidas M17 y regresión M16 **2/2 PASS**.
 - Se abrieron cuatro PNG de baño/salón con/sin detalles. Diferencia RGB >20: **0 píxeles en baño y 11 en salón** de 1.296.000. Valor visual insuficiente para añadir 16 llamadas en este proyecto: M17 se difiere con el piloto apagado. Métricas y capturas en `artifacts/casa-serra/r8-m17/`.
+
+### R8 M14 — reflejo selectivo, piloto diferido y cierre R8
+
+- Código `f93aed7`: espejo genérico del baño en suite, comparación del material base y una pasada reflejada de 256×256 desde la misma cámara. El piloto comprueba orientación, frustum y oclusión antes de renderizar; la cámara exterior no produce textura. El target y el material temporal se liberan en `finally`, dejando ocho texturas antes y después de cada pasada. El flujo normal conserva el material base.
+- Vista cercana en Chromium/SwiftShader: escena base **293 llamadas/25.214 triángulos**, pasada adicional **368 llamadas/29.050 triángulos**, target RGBA de 262.144 bytes. Primera pasada 936 ms, tres siguientes 3,4/2,9/2,4 ms. La imagen reflejada muestra prácticamente una pared lisa: el beneficio no justifica la pasada, de modo que M14 se difiere. Cámara y JSON intactos, cuatro imágenes revisadas y métricas en `artifacts/casa-serra/r8-m14/`.
+- Suite dirigida sobre el código conjunto M14/M17/M16: **3/3 PASS**. M20 tuvo 68/68 y reimportación limpia en su checkpoint. Los tres pilotos independientes cumplen su decisión local; R8 se cierra sin activar los dos efectos cuya relación coste/beneficio fue desfavorable. R9 repetirá la suite amplia.
 
 ## R5 — aceptación previa, escrita antes de editar el revelado y los efectos
 

@@ -122,12 +122,12 @@
     {
       "id": "R8",
       "type": "incremento",
-      "status": "en curso",
+      "status": "verificado localmente",
       "scope": "M14/M17/M20",
       "dependency": "R2",
       "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
-      "testedSha": null,
-      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred; M14 pending"]
+      "testedSha": "f93aed7",
+      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred", "M14 code f93aed7: 256x256 planar reflection pilot adds 368 calls, cold 936 ms and warm 2.4-3.4 ms; eight textures stable, visually flat wall; deferred; combined render pilots 3/3"]
     },
     {
       "id": "R9",
@@ -299,12 +299,12 @@
     {
       "id": "M14",
       "type": "capacidad",
-      "status": "pendiente",
+      "status": "diferido con motivo",
       "scope": "Reflejo selectivo",
       "dependency": "M08",
       "acceptance": "Recurso identificado, coste medido y fallback; sin reflejos globales falsos",
-      "testedSha": null,
-      "evidence": []
+      "testedSha": "f93aed7",
+      "evidence": ["256x256 planar mirror pilot in suite bathroom: base 293 draw calls/25214 triangles, extra pass 368 calls/29050 triangles, cold 936 ms and three warm passes 3.4/2.9/2.4 ms in Chromium SwiftShader; target 262144 RGBA bytes disposed, eight textures before/after", "Exterior camera skipped by facing/visibility/occlusion guard; reflection shows nearly flat wall, so base material remains; four visually reviewed PNG and metrics in docs/qa/artifacts/casa-serra/r8-m14/; M14/M17/M16 directed tests 3/3"]
     },
     {
       "id": "M15",
