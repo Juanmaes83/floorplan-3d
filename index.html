@@ -293,6 +293,8 @@ body.guided .presentation-entry{display:none!important}
 .presentation-card .btn{border:1px solid var(--line);min-height:44px;white-space:normal}
 .presentation-card .btn:disabled{opacity:.45;cursor:default}
 .presentation-status,.presentation-progress,.presentation-info{margin:4px 0;font-size:12px}
+.presentation-section{margin:4px 0;padding:5px 8px;border-radius:6px;background:#e6f0ef;color:#184e52;font-size:12px;overflow-wrap:anywhere}
+.presentation-section[hidden]{display:none}
 .presentation-warning{margin:6px 0;padding:7px 9px;border-radius:6px;background:#fff1d2;color:#5b3b00;font-size:12px;overflow-wrap:anywhere}
 .presentation-stops{margin-top:8px}
 .presentation-stops .btn{flex:0 0 auto;min-width:0;max-width:100%;overflow-wrap:anywhere}
@@ -315,8 +317,9 @@ body.presenting #hint3d{display:none}
 body.presenting #toast{top:8px;bottom:auto}
 @media(min-width:700px){body.presenting #toast{left:160px;max-width:calc(57% - 176px);transform:translateY(20px)}body.presenting #toast.show{transform:translateY(0)}}
 body.presentation-exiting header,body.presentation-exiting .guide-bar,body.presentation-exiting aside,body.presentation-exiting footer{pointer-events:none;opacity:.45}
-@media(max-width:600px){.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
+@media(max-width:600px){.presentation-stops{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
 @media(max-width:699px),(max-height:500px){.presentation-minimap{top:8px;left:8px;width:150px}.presentation-minimap svg{height:100px}}
+@media(max-width:600px) and (min-height:501px){.presentation-progress{display:none}.presentation-card .btn{font-size:13px;padding:6px 9px}.presentation-controls{gap:6px}.presentation-section{font-size:11px;padding:3px 6px;margin:2px 0}.presentation-status,.presentation-info{margin:2px 0}}
 @media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
 @media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
@@ -3487,6 +3490,9 @@ function bindUI(){
 /* ======================= 主循环 ======================= */
 const clock = new THREE.Clock();
 function startLoop(){ if (!raf){ clock.getDelta(); raf = requestAnimationFrame(loop); } }
+// Ceiling fixtures belong to the ceiling, which is culled from above: in presentation they hide with it.
+let presentationLamps=false;
+function syncCeilingFixtures(cam){if(!presentationLamps||!lampG)return;const show=topHeight()>=H&&cam.position.y<H-.02;lampG.children.forEach(o=>{if(o.isMesh)o.visible=show;});}
 function loop(){
   raf = requestAnimationFrame(loop);
   const dt = Math.min(clock.getDelta(), .05), now = performance.now();
@@ -3496,6 +3502,7 @@ function loop(){
   else stepWalk(dt);
   doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, dt*6); d.pivot.rotation.y = d.cur; });
   updateSel();
+  syncCeilingFixtures(camera);
   renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 }
@@ -3528,7 +3535,7 @@ function shot(opts = {}){
     if (aspect < work) cam.fov = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*work/aspect)*180/Math.PI;
     cam.updateProjectionMatrix();
     try {
-      renderer.setPixelRatio(1); renderer.setSize(w, h, false);
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
       if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
       renderer.render(scene, cam);
       url = renderer.domElement.toDataURL('image/png');
@@ -3553,13 +3560,50 @@ function presentationCapture(){
     walkCtl.unlock();stopTouchWalk();$('#walkOverlay').style.display='none';$('#cross').style.display='none';
     opt.mode='orbit';syncModeBtns();syncHint3d();orbit.enabled=true;
   }
-  showLabels(false);
+  showLabels(false);presentationBaseCut=opt.cut;frameInfo=null;presentationLamps=true;
   return state;
 }
-function presentationGo(stop,reduced=false){
+// Room stops are framed from the room polygon, its furniture and the visible screen region (outside the card).
+// A wall section is a declared, presentation-only state; the editor's cut returns with presentationRestore.
+let presentationBaseCut=null,frameInfo=null;const frameCache=new WeakMap();
+// Presentation-only floor outline of the framed room: a 70 mm inner band per polygon edge.
+let roomOutline=null;
+function clearRoomOutline(){if(roomOutline){scene.remove(roomOutline);roomOutline.geometry.dispose();roomOutline.material.dispose();roomOutline=null;}}
+function showRoomOutline(roomId){
+  clearRoomOutline();const room=geometry.rooms.find(r=>r.id===roomId);if(!room||room.poly.length<3)return;
+  const poly=room.poly,signed=poly.reduce((n,p,i)=>{const q=poly[(i+1)%poly.length];return n+p[0]*q[1]-q[0]*p[1];},0)>0?1:-1,width=70,pos=[];
+  poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length],L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<1)return;const nx=-(b[1]-a[1])/L*signed,ny=(b[0]-a[0])/L*signed;
+    const c=[a,b,[b[0]+nx*width,b[1]+ny*width],[a[0]+nx*width,a[1]+ny*width]].map(p=>[wx(p[0]),.014,wz(p[1])]);pos.push(...c[0],...c[1],...c[2],...c[0],...c[2],...c[3]);});
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  roomOutline=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0x1f7a72,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
+  roomOutline.userData.presentationOutline=roomId;roomOutline.renderOrder=2;scene.add(roomOutline);
+}
+// sync() compares the built signature, so a cut restored without a rebuild (route cancel) is rebuilt here.
+function setPresentationCut(cut){if(cut!=null)opt.cut=cut;sync();}
+function presentationFrame(roomId,aspect,region){
+  const fullTop=presentationBaseCut===2.8?Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm))/1000:presentationBaseCut;
+  const key=[roomId,aspect.toFixed(3),(region||[0,0,1,1]).map(v=>v.toFixed(3)).join(','),fullTop].join('|');
+  let cache=frameCache.get(geometry);if(!cache){cache=new Map();frameCache.set(geometry,cache);}
+  if(!cache.has(key))cache.set(key,window.FloorPlanPresentationCore.roomFrame(geometry,project.objects,roomId,{aspect,fovDeg:camera.fov,region,wallTop:fullTop,sectionTops:presentationBaseCut===2.8?[1.2]:[]}));
+  return cache.get(key);
+}
+function presentationGo(stop,reduced=false,view={}){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
   clearPresentationRoute();
-  const b=stop.bounds,aspect=Math.max(.2,SW()/Math.max(1,SH()));
+  if(presentationBaseCut==null)presentationBaseCut=opt.cut;
+  const aspect=Math.max(.2,SW()/Math.max(1,SH()));
+  const framed=stop.kind==='room'&&stop.roomId?presentationFrame(stop.roomId,aspect,view.region):null;
+  frameInfo=framed?{...framed,region:view.region||null}:null;
+  if(framed)showRoomOutline(stop.roomId);else clearRoomOutline();
+  if(framed){
+    setPresentationCut(framed.section?framed.wallTop:presentationBaseCut);
+    const next=pose(new THREE.Vector3(wx(framed.look[0]),framed.look[1],wz(framed.look[2])),new THREE.Vector3(wx(framed.eye[0]),framed.eye[1],wz(framed.eye[2])));
+    if(fly?.res)fly.res(false);fly=null;
+    if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}
+    return flyTo(next,650);
+  }
+  setPresentationCut(presentationBaseCut);
+  const b=stop.bounds;
   const tx=wx(b.x+b.w/2),tz=wz(b.y+b.h/2);
   const span=Math.max(b.h/1000,b.w/1000/aspect);
   const frame=aspect<.7?1.65:aspect>2 ? 1.45 : 1.25;
@@ -3570,41 +3614,103 @@ function presentationGo(stop,reduced=false){
   if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}
   return flyTo(next,650);
 }
+// Doors are matched by id: a wall-height rebuild during the route recreates their objects.
+const restoreRouteDoors=saved=>saved.forEach(s=>{const door=doors.find(d=>d.id===s.id);if(door){door.open=s.open;door.cur=s.cur;door.pivot.rotation.y=s.cur;}});
+// Walk-mode aids (wall edges and skirting) separate white planes at eye level during the walk only.
+const setWalkAids=on=>archUp?.traverse(o=>{if(o.userData.walkOnly)o.visible=on||opt.mode==='walk';});
+function routeRebuild(run,cut){const info=routeInfo;routeRun=null;setPresentationCut(cut);routeRun=run;routeInfo=info;}
 function clearPresentationRoute(){
   if(!routeRun){routeInfo={status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};return;}
   const run=routeRun;routeRun=null;cancelAnimationFrame(run.raf);
   camera.position.copy(run.position);camera.quaternion.copy(run.quaternion);orbit.target.copy(run.target);orbit.enabled=run.orbitEnabled;
-  run.doors.forEach(saved=>{saved.door.open=saved.open;saved.door.cur=saved.cur;saved.door.pivot.rotation.y=saved.cur;});
-  routeInfo={...routeInfo,status:'off'};run.resolve({status:'cancelled'});
+  camera.fov=run.fov;camera.updateProjectionMatrix();opt.cut=run.cut;
+  restoreRouteDoors(run.doors);setWalkAids(false);if(roomOutline)roomOutline.visible=true;
+  routeInfo={...routeInfo,status:'off',phase:null};run.resolve({status:'cancelled'});
 }
+// Walkthrough timeline: descend from the stop to eye height at the entrance, walk the choreographed path,
+// hold the arrival view, rise above the walls and return to the stop. Orientation is yaw/pitch without roll.
 function presentationRoute(roomId,reduced=false){
   if(!active||contextLost||anim||fly)throw Error('La escena 3D todavía no está lista.');
   clearPresentationRoute();
-  const plan=window.FloorPlanPresentationRoute.plan(project,geometry,roomId);
-  routeInfo={...plan,points:plan.points||[],doorIds:plan.doorIds||[],clearanceMm:plan.clearanceMm||0,status:plan.kind==='unavailable'?'unavailable':'ready'};
+  const Route=window.FloorPlanPresentationRoute;
+  const routeAspect=SW()/Math.max(1,SH()),routeVfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/routeAspect)*180/Math.PI));
+  const hfovDeg=2*Math.atan(Math.tan(routeVfov*Math.PI/360)*routeAspect)*180/Math.PI;
+  let plan=Route.plan(project,geometry,roomId),moves=plan.kind==='unavailable'?null:Route.choreography(project,geometry,roomId,plan,{hfovDeg});
+  if(plan.kind==='interior'&&moves&&!moves.readable){
+    const door=geometry.doors.find(d=>d.entry),room=geometry.rooms.find(r=>r.id===roomId),xs=room.poly.map(p=>p[0]),ys=room.poly.map(p=>p[1]);
+    const goal=room.at||[(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2];
+    plan={kind:'aerial',code:'illegible',reason:'La ruta interior segura no ofrece una vista legible; recorrido aéreo.',points:[{x:door.rect.center[0],y:door.rect.center[1]},{x:goal[0],y:goal[1]}],clearanceMm:plan.clearanceMm,visited:plan.visited,doorIds:[],interiorCloseShare:moves.closeShare};
+    moves=Route.choreography(project,geometry,roomId,plan,{hfovDeg});
+  }
+  const info={...plan,path:undefined,points:plan.points||[],doorIds:plan.doorIds||[],clearanceMm:plan.clearanceMm||0,status:plan.kind==='unavailable'?'unavailable':'ready'};
+  routeInfo=info;
   if(plan.kind==='unavailable')return Promise.resolve({...routeInfo});
   if(reduced){routeInfo={...routeInfo,status:'complete'};return Promise.resolve({...routeInfo});}
-  const original={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),orbitEnabled:orbit.enabled,
-    doors:doors.map(door=>({door,open:door.open,cur:door.cur}))};
+  const original={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),orbitEnabled:orbit.enabled,fov:camera.fov,cut:opt.cut,
+    doors:doors.map(door=>({id:door.id,open:door.open,cur:door.cur}))};
+  const interior=plan.kind==='interior';
+  // A full-height rebuild runs clearPresentationRoute, which resets routeInfo: publish the plan again after it.
+  if(interior&&opt.cut!==2.8){setPresentationCut(2.8);restoreRouteDoors(original.doors);routeInfo=info;}
   doors.forEach(door=>{if(plan.doorIds.includes(door.id))door.open=true;});
-  orbit.enabled=false;
-  const length=plan.points.reduce((sum,p,i)=>i?sum+Math.hypot(p.x-plan.points[i-1].x,p.y-plan.points[i-1].y):0,0);
-  const height=plan.kind==='aerial'?Math.max(topHeight(),H,...project.objects.map(object=>M(object.size.heightMm||0)))+1.8:1.65,duration=Math.max(1600,Math.min(9000,length/2400*1000));
-  const pointAt=fraction=>{let remaining=length*fraction;for(let i=1;i<plan.points.length;i++){const a=plan.points[i-1],b=plan.points[i],distance=Math.hypot(b.x-a.x,b.y-a.y);if(remaining<=distance||i===plan.points.length-1){const t=distance?Math.min(1,remaining/distance):1;return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t};}remaining-=distance;}return plan.points.at(-1);};
-  const place=t=>{const p=pointAt(t),ahead=pointAt(Math.min(1,t+.025));camera.position.set(wx(p.x),height,wz(p.y));orbit.target.set(wx(ahead.x),plan.kind==='aerial'?0:1.35,wz(ahead.y));camera.lookAt(orbit.target);};
-  routeInfo={...routeInfo,status:'running',progress:0};place(0);
+  orbit.enabled=false;if(roomOutline)roomOutline.visible=false;
+  if(interior)setWalkAids(true);
+  const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size.heightMm||0)));
+  const above=Math.max(topHeight(),fullTop,tallest)+(interior?.8:1.8),aspect=SW()/Math.max(1,SH());
+  const walkFov=interior?routeVfov:camera.fov;
+  const forward=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion);
+  const stopKey={x:camera.position.x*1000+OX,y:camera.position.z*1000+OY,h:camera.position.y,yaw:Math.atan2(forward.z,forward.x),pitch:Math.asin(Math.max(-1,Math.min(1,-forward.y)))*180/Math.PI,fov:camera.fov};
+  const S=moves.samples,first=S[0],last=S.at(-1),height=interior?moves.eyeHeight:above;
+  const key=(p,h,pitch,fov,yaw=p.yaw)=>({x:p.x,y:p.y,h,yaw,pitch,fov});
+  const walkStart=key(first,height,first.pitchDeg,walkFov),walkEnd=key(last,height,last.pitchDeg,walkFov);
+  // Any turn left after walking (arrival view behind a door jamb) happens in place at no more than 35°/s.
+  const arriveKey=key(last,height,interior?moves.arrival.pitchDeg:last.pitchDeg,walkFov,interior?moves.arrival.yaw:last.yaw);
+  let turn=arriveKey.yaw-walkEnd.yaw;while(turn>Math.PI)turn-=2*Math.PI;while(turn<-Math.PI)turn+=2*Math.PI;
+  const turnMs=Math.abs(turn)>.02?Math.max(700,Math.abs(turn)*180/Math.PI/35*1000*1.5):0;
+  // Aerial legs last long enough to average at most 3.5 m/s (smoothstep peaks at 1.5x), within 0.9–2.4 s.
+  const legMs=(a,b)=>Math.min(2400,Math.max(900,Math.hypot(a.x-b.x,a.y-b.y,(a.h-b.h)*1000)/3.5));
+  const phases=interior?[
+    {name:'descend',dur:legMs(stopKey,{...first,h:above}),from:stopKey,to:key(first,above,55,camera.fov)},
+    {name:'descend',dur:800,from:key(first,above,55,camera.fov),to:walkStart},
+    {name:'walk',dur:moves.duration*1000},
+    ...(turnMs?[{name:'turn',dur:turnMs,from:walkEnd,to:arriveKey}]:[]),
+    {name:'arrive',dur:1300,from:arriveKey,to:arriveKey},
+    {name:'rise',dur:800,from:arriveKey,to:key(last,above,55,camera.fov,arriveKey.yaw)},
+    {name:'return',dur:legMs(stopKey,{...last,h:above}),from:key(last,above,55,camera.fov,arriveKey.yaw),to:stopKey,restoreCut:true}
+  ]:[
+    {name:'descend',dur:legMs(stopKey,walkStart),from:stopKey,to:walkStart},
+    {name:'walk',dur:moves.duration*1000},
+    {name:'arrive',dur:900,from:walkEnd,to:walkEnd},
+    {name:'return',dur:legMs(walkEnd,stopKey),from:walkEnd,to:stopKey}
+  ];
+  const total=phases.reduce((n,p)=>n+p.dur,0),smooth=t=>t*t*(3-2*t);
+  const angle=(a,b,t)=>{let d=b-a;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return a+d*t;};
+  const walkAt=seconds=>{let lo=0,hi=S.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(S[mid].t<=seconds)lo=mid;else hi=mid;}
+    const a=S[lo],b=S[hi],t=b.t>a.t?Math.min(1,Math.max(0,(seconds-a.t)/(b.t-a.t))):0;
+    return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,h:height,yaw:angle(a.yaw,b.yaw,t),pitch:a.pitchDeg+(b.pitchDeg-a.pitchDeg)*t,fov:walkFov};};
+  const apply=k=>{const pitch=k.pitch*Math.PI/180;camera.position.set(wx(k.x),k.h,wz(k.y));
+    const dir=new THREE.Vector3(Math.cos(k.yaw)*Math.cos(pitch),-Math.sin(pitch),Math.sin(k.yaw)*Math.cos(pitch));
+    orbit.target.copy(camera.position).addScaledVector(dir,2.5);camera.lookAt(orbit.target);
+    if(Math.abs(camera.fov-k.fov)>1e-6){camera.fov=k.fov;camera.updateProjectionMatrix();}};
+  const at=ms=>{let start=0;for(let i=0;i<phases.length;i++){const p=phases[i];if(ms<start+p.dur||i===phases.length-1){const t=Math.min(1,Math.max(0,(ms-start)/p.dur));
+    if(p.name==='walk')return{phase:p,key:walkAt(Math.min(moves.duration,(ms-start)/1000)),t};
+    const e=smooth(t),A=p.from,B=p.to;return{phase:p,t,key:{x:A.x+(B.x-A.x)*e,y:A.y+(B.y-A.y)*e,h:A.h+(B.h-A.h)*e,yaw:angle(A.yaw,B.yaw,e),pitch:A.pitch+(B.pitch-A.pitch)*e,fov:A.fov+(B.fov-A.fov)*e}};}start+=p.dur;}};
+  routeInfo={...routeInfo,status:'running',progress:0,phase:'descend',phases:phases.map(p=>({name:p.name,ms:Math.round(p.dur)})),durationMs:total,walkMs:Math.round(moves.duration*1000),eyeHeight:interior?moves.eyeHeight:null,walkFov,closeShare:+moves.closeShare.toFixed(3),lengthMm:Math.round(moves.lengthMm)};
   return new Promise(resolve=>{const run={...original,raf:0,resolve};routeRun=run;const began=performance.now();
-   const tick=now=>{if(routeRun!==run)return;const t=Math.min(1,(now-began)/duration);routeInfo.progress=t;place(t);
-    if(t<1){run.raf=requestAnimationFrame(tick);return;}
+   const tick=now=>{if(routeRun!==run)return;const ms=Math.min(total,now-began),state=at(ms);routeInfo.progress=ms/total;routeInfo.phase=state.phase.name;
+    if(state.phase.restoreCut&&opt.cut!==run.cut)routeRebuild(run,run.cut);
+    apply(state.key);
+    if(ms<total){run.raf=requestAnimationFrame(tick);return;}
     routeRun=null;camera.position.copy(run.position);camera.quaternion.copy(run.quaternion);orbit.target.copy(run.target);orbit.enabled=run.orbitEnabled;
-    run.doors.forEach(saved=>{saved.door.open=saved.open;saved.door.cur=saved.cur;saved.door.pivot.rotation.y=saved.cur;});
-    routeInfo={...routeInfo,status:'complete'};resolve({...routeInfo});
-   };run.raf=requestAnimationFrame(tick);
+    camera.fov=run.fov;camera.updateProjectionMatrix();if(opt.cut!==run.cut)setPresentationCut(run.cut);
+    restoreRouteDoors(run.doors);setWalkAids(false);if(roomOutline)roomOutline.visible=true;
+    routeInfo={...routeInfo,status:'complete',phase:null};resolve({...routeInfo});
+   };apply(at(0).key);run.raf=requestAnimationFrame(tick);
   });
 }
 function presentationRestore(state){
   clearPresentationReveal();
   clearPresentationRoute();
+  presentationBaseCut=null;frameInfo=null;presentationLamps=false;clearRoomOutline();
   setPresentationContactShadows(false);
   stopPresentationLighting();
   if(!state||!active)return;
@@ -3632,6 +3738,14 @@ function presentationPose(){
   if(!active||anim||fly||!camera)throw Error('La cámara de presentación todavía no está lista.');
   return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,aspect:camera.aspect};
 }
+// Full presentation view (pose, wall cut, framed stop and outline) for flows that visit other stops, e.g. the ZIP batch.
+function presentationViewState(){return {pose:presentationPose(),cut:opt.cut,frame:frameInfo&&{...frameInfo}};}
+function presentationRestoreView(view){
+  if(!active||!view)return;
+  setPresentationCut(view.cut);frameInfo=view.frame?{...view.frame}:null;
+  if(frameInfo)showRoomOutline(frameInfo.roomId);else clearRoomOutline();
+  presentationRestorePose(view.pose);
+}
 function presentationRestorePose(state){
   if(!active||!state)return;
   if(fly?.res)fly.res(false);fly=null;
@@ -3640,7 +3754,7 @@ function presentationRestorePose(state){
   camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
 }
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
@@ -3648,6 +3762,8 @@ window.View3D.setPresentationContactShadows=setPresentationContactShadows;
 Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount,transferBytes:0,textureCount:0})});
 window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
+Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
+Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
 Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});

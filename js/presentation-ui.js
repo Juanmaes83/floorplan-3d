@@ -18,6 +18,7 @@
  const status=el('p',undefined,card,'presentation-status');status.setAttribute('role','status');
  const progress=el('p',undefined,card,'presentation-progress');progress.setAttribute('aria-live','polite');
  const info=el('p',undefined,card,'presentation-info');
+ const sectionNote=el('p',undefined,card,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;
  const warning=el('p',undefined,card,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
  const controls=el('div',undefined,card,'presentation-controls');
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
@@ -64,6 +65,13 @@
    svgEl('path',mapSvg,{d:`M ${x-dx*length/2} ${y-dy*length/2} L ${x+dx*length/2} ${y+dy*length/2} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half-dy*half} ${y+dy*length/2-dy*half+dx*half} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half+dy*half} ${y+dy*length/2-dy*half-dx*half}`,class:'presentation-minimap-heading','data-heading-x':dx,'data-heading-y':dy});
   }
  }
+ // Screen area not covered by the card, as stage fractions; room stops are framed inside it.
+ function viewRegion(){
+  const stage=document.querySelector('#stage')?.getBoundingClientRect(),box=card.getBoundingClientRect();
+  if(!stage?.width||!stage.height||!box.width||!box.height)return null;
+  const l=(box.left-stage.left)/stage.width,r=(box.right-stage.left)/stage.width,t=(box.top-stage.top)/stage.height,b=(box.bottom-stage.top)/stage.height;
+  return [[0,0,l,1],[r,0,1,1],[0,0,1,t],[0,b,1,1]].map(x=>x.map(v=>Math.min(1,Math.max(0,v)))).sort((x,y)=>(y[2]-y[0])*(y[3]-y[1])-(x[2]-x[0])*(x[3]-x[1]))[0];
+ }
  function sourceCurrent(){return !!plan&&Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));}
  function captureReady(){
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
@@ -109,7 +117,7 @@
  async function captureBatch(){
   const busy=View3D.lifecycleMetrics;
   if(!captureReady()||busy.pendingAssets||busy.animating||busy.flying)return;
-  const serial=++batchSerial,sourceEpoch=epoch,sourcePlan=plan,pose=View3D.presentationPose(),entries=new Map(),views=[];
+  const serial=++batchSerial,sourceEpoch=epoch,sourcePlan=plan,pose=View3D.presentationViewState(),entries=new Map(),views=[];
   batchActive=true;batchCancelled=false;batchResized=false;batchStatus.hidden=false;cancelBatchButton.hidden=false;overlay.dataset.batch='true';
   const resources=assetManifest();updateCapture();draw();
   try{
@@ -145,14 +153,14 @@
    const manifest={format:'rubik-sota.presentation-captures',version:1,viewRepresentation:'static-png',projectId:sourcePlan.projectId,entryId:sourcePlan.entryId,revision:sourcePlan.revision,center:sourcePlan.center,resources,views,portableProject};
    entries.set('presentation.json',new TextEncoder().encode(JSON.stringify(manifest,null,2)));
    const archive=FloorPlanPackage.zip(entries);
-   View3D.presentationRestorePose(pose);
+   View3D.presentationRestoreView(pose);
    if(!batchCurrent(serial,sourceEpoch))return;
    const link=document.createElement('a'),url=URL.createObjectURL(archive);link.href=url;link.download='presentacion-estancias.zip';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
    batchStatus.textContent=tx(`${views.length} vistas PNG y proyecto editable descargados.`,`Downloaded ${views.length} PNG views and editable project.`,`已下载 ${views.length} 个 PNG 视图及可编辑项目。`);
    toast(batchStatus.textContent,3000);
   }catch(error){if(batchCurrent(serial,sourceEpoch)){batchStatus.textContent=error.message;toast(error.message,6000);}}
   finally{
-   if(active&&sourceEpoch===epoch&&sourceCurrent()&&serial===batchSerial&&!batchResized)View3D.presentationRestorePose(pose);
+   if(active&&sourceEpoch===epoch&&sourceCurrent()&&serial===batchSerial&&!batchResized)View3D.presentationRestoreView(pose);
    if(batchResized&&active&&sourceEpoch===epoch)batchStatus.textContent=tx('Lote cancelado por cambio de tamaño; no se descargó ningún archivo.','Batch cancelled after resize; no file was downloaded.','调整大小后已取消批量；未下载文件。');
    if(batchCancelled&&!batchResized&&active&&sourceEpoch===epoch)batchStatus.textContent=tx('Lote cancelado; no se descargó ningún archivo.','Batch cancelled; no file was downloaded.','批量已取消；未下载文件。');
    if(batchCancelled&&active&&sourceEpoch===epoch)toast(batchStatus.textContent,3000);
@@ -193,6 +201,7 @@
    case 'no_free':return tx('No hay espacio libre junto a la entrada o dentro de la estancia; recorrido aéreo.','No clear space by the entrance or inside the room; aerial route.','入口或房间内没有足够空间；使用空中路线。');
    case 'obstructed':return tx('Muros, puertas o muebles bloquean la ruta interior; recorrido aéreo.','Walls, doors or furniture block the indoor route; aerial route.','墙、门或家具阻挡室内路线；使用空中路线。');
    case 'interpolation':return tx('La ruta no conserva el margen de paso; recorrido aéreo.','The path loses its clearance; aerial route.','路径无法保持安全间距；使用空中路线。');
+   case 'illegible':return tx('La ruta interior segura no ofrece una vista legible; recorrido aéreo.','The safe indoor route has no readable view; aerial route.','安全的室内路线视野不佳；使用空中路线。');
    case 'no_room':return tx('Estancia sin polígono válido.','Room has no valid polygon.','房间没有有效多边形。');
    case 'no_entry':return tx('No hay puerta de entrada identificada.','No entrance door is identified.','未找到入口门。');
    case 'low_entry':return tx('La entrada es demasiado baja para el recorrido.','The entrance is too low for the route.','入口高度不足，无法游览。');
@@ -231,13 +240,15 @@
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
   progress.textContent=tx(`Recorrido: ${visited.size} de ${plan.stops.length} vistas visitadas`,`Tour: ${visited.size} of ${plan.stops.length} views visited`,`参观：已访问 ${visited.size} / ${plan.stops.length} 个视图`);
+  const framed=stop.kind==='room'?window.View3D?.presentationFrameInfo:null,section=framed?.roomId===stop.roomId&&framed.section;
   info.textContent=stop.kind==='room'?tx(`Superficie aproximada ${stop.areaM2.toFixed(2)} m² · medidas orientativas`,`Approximate area ${stop.areaM2.toFixed(2)} m² · indicative dimensions`,`约 ${stop.areaM2.toFixed(2)} 平方米 · 仅供参考`):tx('Vista general del proyecto actual','Overview of the current project','当前项目总览');
+  sectionNote.hidden=!section;sectionNote.textContent=section?tx(`Vista seccionada: muros a ${framed.wallTop.toFixed(1).replace('.',',')} m para ver la estancia; el proyecto no cambia.`,`Section view: walls cut at ${framed.wallTop.toFixed(1)} m to show the room; the project is unchanged.`,`剖切视图：墙体在 ${framed.wallTop.toFixed(1)} 米处剖切以显示整个房间。项目不变。`):'';
   previous.disabled=index===0;next.disabled=index===plan.stops.length-1;
   previous.disabled ||=batchActive;next.disabled ||=batchActive;
   updateCapture();
   stops.replaceChildren();
   plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
-  if(matchMedia('(max-height: 500px)').matches)stops.children[index]?.scrollIntoView({block:'nearest',inline:'nearest'});
+  if(matchMedia('(max-height: 500px), (max-width: 600px)').matches)stops.children[index]?.scrollIntoView({block:'nearest',inline:'nearest'});
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
  function open(){
@@ -327,7 +338,7 @@
   if(!sourceCurrent()){await stop();return;}
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
-  try{await View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches);if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
+  try{const pending=View3D.presentationGo(plan.stops[index],matchMedia('(prefers-reduced-motion: reduce)').matches,{region:viewRegion()});draw();await pending;if(active&&token===epoch&&move===movement&&sourceCurrent()){visited.add(target);draw();}}catch(error){if(token===epoch){status.textContent=error.message;}}
   finally{if(move===movement){overlay.dataset.moving='false';revealButton.disabled=batchActive;contactButton.disabled=batchActive;routeButton.disabled=batchActive;updateCapture();if(active&&sourceCurrent())renderMinimap();}}
  }
  async function stop(fromPop=false){
@@ -381,7 +392,7 @@
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
   requestAnimationFrame(()=>{
    if(!active||token!==epoch)return;
-   View3D.presentationGo(plan.stops[index],true).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';draw();updateCapture();renderMinimap();requestAnimationFrame(updateCapture);}});
+   View3D.presentationGo(plan.stops[index],true,{region:viewRegion()}).catch(()=>{}).finally(()=>{if(move===movement){overlay.dataset.moving='false';draw();updateCapture();renderMinimap();requestAnimationFrame(updateCapture);}});
   });
  });
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
