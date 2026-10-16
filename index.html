@@ -2089,7 +2089,7 @@ let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, g
 let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
-let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0; let renderedSource, renderedGeometry;
+let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0, proceduralDetails = false; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
 
 /* ======================= 初始化 ======================= */
@@ -2356,6 +2356,7 @@ const plate = (g, r, x, y, z) => g.add(lathe([[0, 0], [r*.6, 0], [r*.72, .008], 
 /* ======================= 家具模型（局部坐标：背面朝 -z） ======================= */
 function buildFurniture(f){
   const g = new THREE.Group(), w = M(f.w), d = M(f.d), c = f.color || '#ddd', bz = -d/2, R = rng(Math.round(f.w*7 + f.d*13 + f.cx + f.cy));
+  const detailSeed = [...String(f.id)].reduce((seed,ch)=>Math.imul(seed^ch.charCodeAt(0),16777619)>>>0,2166136261), D = rng(detailSeed);
   switch (f.type){
     case 'bed': {
       const fr = woodM('#8d7258'), fab = fabric(c), fh = .3, mt = .22, top = fh + mt, n = Math.max(3, Math.round(w/.28)), sw = (w - .04)/n;
@@ -2515,6 +2516,13 @@ function buildFurniture(f){
       const tm = mat(c, {roughness:.35}), lw = woodM('#3a3027');
       [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a, b]) => g.add(rod([a*(w/2 - .05), 0, b*(d/2 - .05)], [a*(w/2 - .07), .365, b*(d/2 - .07)], .012, lw, .02)));
       g.add(rbox(w, .035, d, tm, 0, .365, 0, .015), rbox(w - .12, .02, d - .12, woodM(darker(c, .85)), 0, .12, 0, .006));
+      if(proceduralDetails){
+        const grain=woodM(darker(c,.87));
+        for(let i=0;i<4;i++){
+          const x=(D()-.5)*w*.55, z=(-.34+i*.23)*d;
+          const line=box(.09+D()*.08,.0015,.002,grain,x,.4005,z);line.userData.proceduralDetail=true;g.add(line);
+        }
+      }
       g.add(box(.3, .03, .22, '#2f5d62', w*.2, .14, 0), box(.26, .025, .19, '#d9b36c', w*.2, .17, .01));
       g.add(rbox(.38, .015, .24, woodM('#6b543f'), -w*.2, .4, 0, .006), box(.22, .025, .16, '#e6dccd', -w*.22, .415, 0));
       g.add(lathe([[0, 0], [.025, 0], [.035, .07], [.034, .08]], ceramic({side:THREE.DoubleSide}), -w*.12, .415, .06, 20));
@@ -2632,6 +2640,13 @@ function buildFurniture(f){
       const vm = mat(c, {roughness:.5}), stone = mat('#fafafa', {roughness:.18}), nb = w >= 1.1 ? 2 : 1, cd = d - .04, cm = chrome();
       g.add(rbox(w, .45, cd, vm, 0, .33, bz + cd/2, .008));
       fronts(g, -w/2 + .005, .335, w - .01, .44, d/2 - .04, nb, 2, vm, 'edge');
+      if(proceduralDetails){
+        const accent=mat(darker(c,.78),{roughness:.7});
+        for(let i=0;i<4;i++){
+          const x=(-.36+(i+.5)*.18)*w+(D()-.5)*.018;
+          const line=box(.0018,.035+D()*.025,.0015,accent,x,.42+(i%2)*.22,d/2-.018);line.userData.proceduralDetail=true;g.add(line);
+        }
+      }
       g.add(rbox(w, .03, d, stone, 0, .78, 0, .006));
       const rb = Math.min(.19, w/nb*.36);
       for (let i = 0; i < nb; i++){
@@ -3635,6 +3650,9 @@ window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
 Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});
+window.View3D.setProceduralDetails=enabled=>{proceduralDetails=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return proceduralDetails;};
+Object.defineProperty(window.View3D,'proceduralDetails',{get:()=>proceduralDetails});
+Object.defineProperty(window.View3D,'proceduralDetailMetrics',{get:()=>{const objects=[];furnG?.children.forEach(g=>{const detail=g.children.filter(o=>o.userData.proceduralDetail);if(detail.length)objects.push({id:g.userData.fid,count:detail.length,positions:detail.map(o=>o.position.toArray())});});return {enabled:proceduralDetails,objects};}});
 window.View3D.pickFurnitureAt=(x,y)=>active?pick({clientX:x,clientY:y})?.fid||null:null;
 Object.defineProperty(window.View3D,'primitiveBatchSummary',{get:()=>{let batches=0,instances=0,unmapped=0;
   furnG?.traverse(o=>{if(!o.isInstancedMesh)return;batches++;instances+=o.count;
