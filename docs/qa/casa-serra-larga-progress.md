@@ -148,7 +148,21 @@ Planta girada 30° con dormitorio cóncavo (fixture sintética `tests/helpers/ir
 
 El criterio 4 de ≤ 10 % de fotogramas con muro cercano **no se cumple en escritorio**: 17,0 %. Corresponde al tramo entre el muro del baño y la cama (0,9 m libres) y al paso de puertas. Las hojas de contacto muestran cama, mesilla, marco de puerta e inodoro reconocibles, pero se deja como punto abierto para la revisión de Juanma. El resto del criterio 4 y el criterio 5 se cumplen en las dos grabaciones. El vuelo de 650 ms entre paradas es anterior a R10 y no se ha modificado.
 
-**Pruebas:** unitarias de Node 17 archivos, **194 pass, 0 fail, 1 skip** (omitida la integración opcional de Blender). Navegador dirigido R10 y M18 durante el ciclo: framing 6/6 (cuatro viewports con resize, repetibilidad con movimiento reducido y corte del editor, plano girado) y M18 8/8 tras las correcciones. **Regresión de navegador completa sobre `1dd86e5`: en curso**; la primera mitad muestra fallos que se están clasificando contra `28e0428` en aislamiento. No se declara aprobada hasta registrar su resultado aquí.
+**Pruebas:** unitarias de Node 17 archivos, **194 pass, 0 fail, 1 skip** (omitida la integración opcional de Blender). Navegador dirigido R10 y M18 durante el ciclo: framing 6/6 (cuatro viewports con resize, repetibilidad con movimiento reducido y corte del editor, plano girado) y M18 8/8 tras las correcciones. **Regresión de navegador completa sobre `1dd86e5`** (28 archivos, en serie, Chromium 1194/SwiftShader de este contenedor): **196 casos, 159 pass, 30 fail** (parte 1: 80/72/6; parte 2: 116/87/24). Cada archivo con fallos se repitió **solo**, con los mismos archivos de prueba, en `1dd86e5` y en `28e0428` (aplicación intacta; sólo el helper de `three` local de las pruebas):
+
+| Archivo | `28e0428` | `1dd86e5` | Causa observada |
+| --- | --- | --- | --- |
+| presentation-batch (ZIP M11/M20) | 7 pass, 2 fail | 7 pass, 2 fail | `download` no llega en 30 s en 1440×900 con SwiftShader |
+| assets (F3) | 21 pass, 4 fail | 21 pass, 4 fail | errores `replaceChildren` en un manejador `blur` del editor |
+| material-detail (M08) | 4/4 | 4/4 | el fallo de la serie fue por tiempo con carga concurrente mía |
+| presentation-light (M09) | 5/5 | 5/5 | ídem |
+| sheet (M07) | 0 pass, 7 fail | 7 fail | `ERR_TUNNEL_CONNECTION_FAILED`: el proxy bloquea recursos externos |
+| presentation-reveal (M10) | 2 pass, 6 fail | 6 fail | mismos casos |
+| presentation (P07/P08/P11/P13/P15/P16) | 46 pass, 10 fail | mismos casos | mismos casos |
+| presentation-minimap, procedural-details, render-budget | fallan por tiempo | fallan por tiempo | límite de tiempo de la prueba en SwiftShader |
+| presentation-route (M18) | — | **1 fallo propio de R10** | ver abajo |
+
+Todos los fallos salvo uno se reproducen igual en `28e0428`: son del entorno de este contenedor, no de R10, y **no se cuentan como aprobados**. El único propio fue M18 1440×900, `geometries 1295>1190`, en una aserción que yo había escrito en R10 (`≤` línea base). Medición directa: la marcha muestra las aristas y zócalos del modo paseo (unos 100, uno por tramo de muro), que se suben a la GPU la primera vez que se dibujan; con seis recorridos seguidos las geometrías quedan en 1297 desde el segundo y las texturas en 9. No hay fuga; la aserción era incorrecta. Se sustituyó por la comprobación que sí la descarta: tras el primer recorrido, dos recorridos más no aumentan geometrías ni texturas. M18 **8/8** después del cambio (sólo prueba, sin cambio de aplicación).
 
 **Preview:** Vercel `dpl_FPoRt3ehyMB3Veb5Q4xYgSjZyhcT`, estado READY para `1b386e3`. Se comprobó por la API de Vercel que sirve los ficheros de ese commit. Desde este contenedor no se pudo abrir en Chromium: el proxy rechaza `*.vercel.app`. La revisión visual en la preview queda para Juanma en Chrome autenticado.
 

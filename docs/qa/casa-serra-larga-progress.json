@@ -157,7 +157,7 @@
         "After 1dd86e5, independent visible-region metric over 33 reference stops: protagonist 33/33, neighbour <25 % 33/33, floor >=75 % 33/33, presence >=40 % 30/33 (Pasillo 390x844 33.2 %, Balcón de estar 390x844 31.2 %, Baño de invitados 844x390 36.8 % not met)",
         "Rotated concave synthetic plan: presence >=40 % 19/22, floor >=75 % 21/22, neighbour <25 % 22/22",
         "Virtual-time 30 fps recordings 1440x900 and 390x844: eye 1.50 m, effective pitch max 20°, 0 walking frames >20°, max 0.88 m/s with ramps, arrival 1.3 s; near-wall frames 17.0 % desktop (not met) and 1.9 % portrait",
-        "Node unit 194 pass/0 fail/1 skip; full browser regression on 1dd86e5 in progress, failures being classified against 28e0428 (not accepted yet)",
+        "Node unit 194 pass/0 fail/1 skip; browser regression 196 cases: 159 pass, 30 fail; every failure but one reproduces identically on 28e0428 run alone (container environment: SwiftShader time limits, proxy-blocked resources, editor blur handler) and is not counted as passed; the one R10-specific failure was a wrong memory assertion in the M18 test (one-off GPU upload of walk aids, plateau 1297 over six routes), replaced by a repeat-growth check, M18 8/8",
         "Vercel preview READY for 1b386e3 serving these files, not opened from the container (proxy rejects *.vercel.app); Actions 38944841362/38944841375 failed with runner_id 0 and no steps: CI not executed"
       ],
       "humanReview": "pending: Juanma must review the exact-SHA preview and the comparison videos"
