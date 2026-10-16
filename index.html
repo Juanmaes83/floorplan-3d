@@ -3629,18 +3629,19 @@ function clearPresentationRoute(){
 }
 // Walkthrough timeline: descend from the stop to eye height at the entrance, walk the choreographed path,
 // hold the arrival view, rise above the walls and return to the stop. Orientation is yaw/pitch without roll.
-function presentationRoute(roomId,reduced=false){
+function presentationRoute(roomId,reduced=false,view={}){
   if(!active||contextLost||anim||fly)throw Error('La escena 3D todavía no está lista.');
   clearPresentationRoute();
   const Route=window.FloorPlanPresentationRoute;
   const routeAspect=SW()/Math.max(1,SH()),routeVfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/routeAspect)*180/Math.PI));
   const hfovDeg=2*Math.atan(Math.tan(routeVfov*Math.PI/360)*routeAspect)*180/Math.PI;
-  let plan=Route.plan(project,geometry,roomId),moves=plan.kind==='unavailable'?null:Route.choreography(project,geometry,roomId,plan,{hfovDeg});
+  const lookOptions={hfovDeg,vfovDeg:routeVfov,region:view.region};
+  let plan=Route.plan(project,geometry,roomId),moves=plan.kind==='unavailable'?null:Route.choreography(project,geometry,roomId,plan,lookOptions);
   if(plan.kind==='interior'&&moves&&!moves.readable){
     const door=geometry.doors.find(d=>d.entry),room=geometry.rooms.find(r=>r.id===roomId),xs=room.poly.map(p=>p[0]),ys=room.poly.map(p=>p[1]);
     const goal=room.at||[(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2];
     plan={kind:'aerial',code:'illegible',reason:'La ruta interior segura no ofrece una vista legible; recorrido aéreo.',points:[{x:door.rect.center[0],y:door.rect.center[1]},{x:goal[0],y:goal[1]}],clearanceMm:plan.clearanceMm,visited:plan.visited,doorIds:[],interiorCloseShare:moves.closeShare};
-    moves=Route.choreography(project,geometry,roomId,plan,{hfovDeg});
+    moves=Route.choreography(project,geometry,roomId,plan,lookOptions);
   }
   const info={...plan,path:undefined,points:plan.points||[],doorIds:plan.doorIds||[],clearanceMm:plan.clearanceMm||0,status:plan.kind==='unavailable'?'unavailable':'ready'};
   routeInfo=info;
@@ -3660,10 +3661,11 @@ function presentationRoute(roomId,reduced=false){
   const forward=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion);
   const stopKey={x:camera.position.x*1000+OX,y:camera.position.z*1000+OY,h:camera.position.y,yaw:Math.atan2(forward.z,forward.x),pitch:Math.asin(Math.max(-1,Math.min(1,-forward.y)))*180/Math.PI,fov:camera.fov};
   const S=moves.samples,first=S[0],last=S.at(-1),height=interior?moves.eyeHeight:above;
-  const key=(p,h,pitch,fov,yaw=p.yaw)=>({x:p.x,y:p.y,h,yaw,pitch,fov});
-  const walkStart=key(first,height,first.pitchDeg,walkFov),walkEnd=key(last,height,last.pitchDeg,walkFov);
+  // Keys use camera angles: the choreography already offsets them so the intended view sits in the visible region.
+  const key=(p,h,pitch,fov,yaw=p.cameraYaw??p.yaw)=>({x:p.x,y:p.y,h,yaw,pitch,fov});
+  const walkStart=key(first,height,first.cameraPitchDeg,walkFov),walkEnd=key(last,height,last.cameraPitchDeg,walkFov);
   // Any turn left after walking (arrival view behind a door jamb) happens in place at no more than 35°/s.
-  const arriveKey=key(last,height,interior?moves.arrival.pitchDeg:last.pitchDeg,walkFov,interior?moves.arrival.yaw:last.yaw);
+  const arriveKey=key(last,height,interior?moves.arrival.cameraPitchDeg:last.cameraPitchDeg,walkFov,interior?moves.arrival.cameraYaw:last.cameraYaw);
   let turn=arriveKey.yaw-walkEnd.yaw;while(turn>Math.PI)turn-=2*Math.PI;while(turn<-Math.PI)turn+=2*Math.PI;
   const turnMs=Math.abs(turn)>.02?Math.max(700,Math.abs(turn)*180/Math.PI/35*1000*1.5):0;
   // Aerial legs last long enough to average at most 3.5 m/s (smoothstep peaks at 1.5x), within 0.9–2.4 s.
@@ -3686,7 +3688,7 @@ function presentationRoute(roomId,reduced=false){
   const angle=(a,b,t)=>{let d=b-a;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return a+d*t;};
   const walkAt=seconds=>{let lo=0,hi=S.length-1;while(hi-lo>1){const mid=(lo+hi)>>1;if(S[mid].t<=seconds)lo=mid;else hi=mid;}
     const a=S[lo],b=S[hi],t=b.t>a.t?Math.min(1,Math.max(0,(seconds-a.t)/(b.t-a.t))):0;
-    return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,h:height,yaw:angle(a.yaw,b.yaw,t),pitch:a.pitchDeg+(b.pitchDeg-a.pitchDeg)*t,fov:walkFov};};
+    return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,h:height,yaw:angle(a.cameraYaw,b.cameraYaw,t),pitch:a.cameraPitchDeg+(b.cameraPitchDeg-a.cameraPitchDeg)*t,fov:walkFov};};
   const apply=k=>{const pitch=k.pitch*Math.PI/180;camera.position.set(wx(k.x),k.h,wz(k.y));
     const dir=new THREE.Vector3(Math.cos(k.yaw)*Math.cos(pitch),-Math.sin(pitch),Math.sin(k.yaw)*Math.cos(pitch));
     orbit.target.copy(camera.position).addScaledVector(dir,2.5);camera.lookAt(orbit.target);
@@ -3694,7 +3696,7 @@ function presentationRoute(roomId,reduced=false){
   const at=ms=>{let start=0;for(let i=0;i<phases.length;i++){const p=phases[i];if(ms<start+p.dur||i===phases.length-1){const t=Math.min(1,Math.max(0,(ms-start)/p.dur));
     if(p.name==='walk')return{phase:p,key:walkAt(Math.min(moves.duration,(ms-start)/1000)),t};
     const e=smooth(t),A=p.from,B=p.to;return{phase:p,t,key:{x:A.x+(B.x-A.x)*e,y:A.y+(B.y-A.y)*e,h:A.h+(B.h-A.h)*e,yaw:angle(A.yaw,B.yaw,e),pitch:A.pitch+(B.pitch-A.pitch)*e,fov:A.fov+(B.fov-A.fov)*e}};}start+=p.dur;}};
-  routeInfo={...routeInfo,status:'running',progress:0,phase:'descend',phases:phases.map(p=>({name:p.name,ms:Math.round(p.dur)})),durationMs:total,walkMs:Math.round(moves.duration*1000),eyeHeight:interior?moves.eyeHeight:null,walkFov,closeShare:+moves.closeShare.toFixed(3),lengthMm:Math.round(moves.lengthMm)};
+  routeInfo={...routeInfo,status:'running',progress:0,phase:'descend',phases:phases.map(p=>({name:p.name,ms:Math.round(p.dur)})),viewOffset:{yawDeg:+moves.viewOffset.yawDeg.toFixed(2),pitchDeg:+moves.viewOffset.pitchDeg.toFixed(2)},durationMs:total,walkMs:Math.round(moves.duration*1000),eyeHeight:interior?moves.eyeHeight:null,walkFov,closeShare:+moves.closeShare.toFixed(3),lengthMm:Math.round(moves.lengthMm)};
   return new Promise(resolve=>{const run={...original,raf:0,resolve};routeRun=run;const began=performance.now();
    const tick=now=>{if(routeRun!==run)return;const ms=Math.min(total,now-began),state=at(ms);routeInfo.progress=ms/total;routeInfo.phase=state.phase.name;
     if(state.phase.restoreCut&&opt.cut!==run.cut)routeRebuild(run,run.cut);

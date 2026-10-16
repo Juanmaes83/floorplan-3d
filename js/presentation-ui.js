@@ -211,7 +211,7 @@
  async function routeCurrent(){
   if(!active||stopping||batchActive||View3D.presentationRouteInfo?.status==='running'||plan.stops[index]?.kind!=='room')return;
   const token=epoch,roomId=plan.stops[index].roomId;
-  try{const pending=View3D.presentationRoute(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches);const info=View3D.presentationRouteInfo;
+  try{const pending=View3D.presentationRoute(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches,{region:viewRegion()});const info=View3D.presentationRouteInfo;
    routeStatus.hidden=false;routeStatus.textContent=routeMessage(info);overlay.dataset.route='true';mapOpen=true;draw();renderMinimap();updateCapture();
    const result=await pending;if(active&&token===epoch){routeStatus.textContent=result.status==='complete'?tx('Recorrido terminado. Cámara restaurada a la estancia.','Route complete. Room camera restored.','游览完成。已恢复房间视角。'):result.status==='cancelled'?tx('Recorrido cancelado.','Route cancelled.','游览已取消。'):routeMessage(result);}
   }catch(error){if(active&&token===epoch){routeStatus.hidden=false;routeStatus.textContent=error.message||String(error);}}

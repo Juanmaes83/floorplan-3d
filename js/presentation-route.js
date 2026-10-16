@@ -88,7 +88,12 @@
   // farthest room point shows the most floor with a clear line of sight (a doorway view for small rooms).
   let enter=src.findIndex(p=>inside(room.poly,p.x,p.y));if(enter<0)enter=src.length-1;
   const depth=Math.min(1600,Math.max(500,.3*Math.sqrt((Math.max(...xs)-Math.min(...xs))*(Math.max(...ys)-Math.min(...ys)))));
-  const halfFov=(options.hfovDeg||70)*Math.PI/360,floorPts=[];
+  // Part of the screen may be covered by the presentation card: aim at the centre of the visible region and score
+  // arrivals with its real angular extent. Offsets: yaw (+ right) and pitch (+ down) to add to the intended view.
+  const tH=Math.tan((options.hfovDeg||70)*Math.PI/360),tV=Math.tan((options.vfovDeg||60)*Math.PI/360);
+  const region=options.region&&options.region[2]-options.region[0]>.25&&options.region[3]-options.region[1]>.25?options.region:[0,0,1,1];
+  const yawOffset=-Math.atan(((region[0]+region[2])-1)*tH),pitchOffset=Math.atan((1-(region[1]+region[3]))*tV);
+  const halfFov=(Math.atan((2*region[2]-1)*tH)-Math.atan((2*region[0]-1)*tH))/2,floorPts=[];
   {const st=Math.max(120,Math.sqrt((Math.max(...xs)-Math.min(...xs))*(Math.max(...ys)-Math.min(...ys))/120));for(let x=Math.min(...xs)+st/2;x<Math.max(...xs);x+=st)for(let y=Math.min(...ys)+st/2;y<Math.max(...ys);y+=st)if(inside(room.poly,x,y))floorPts.push({x,y});}
   // Room content (its furniture) weighs more than bare floor: an arrival should show what the room contains.
   const content=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inside(room.poly,o.position.x,o.position.y)).map(o=>({x:o.position.x,y:o.position.y}));
@@ -130,7 +135,9 @@
   // Readability: share of walking time whose forward view meets a wall within 0.9 m at eye height.
   let close=0;for(let i=1;i<samples.length;i++){const p=samples[i],dx=Math.cos(p.yaw),dy=Math.sin(p.yaw);let hit=false;for(let d=60;d<=900;d+=60)if(walls.some(w=>inRect(w,p.x+dx*d,p.y+dy*d,0))){hit=true;break;}if(hit)close+=samples[i].t-samples[i-1].t;}
   const duration=samples.at(-1).t,closeShare=duration?close/duration:0;
-  return{samples,duration,lengthMm:length,arrival:{x:arrival.x,y:arrival.y,yaw:finalYaw,pitchDeg:aerial?45:arrivePitchDeg,viewScore:best?+best.score.toFixed(3):null,floorSeen:best?+best.floor.toFixed(3):null,contentSeen:best?+best.things.toFixed(3):null,insideRoom:inside(room.poly,arrival.x,arrival.y)},enterIndex:enter,readable:aerial||closeShare<=(options.maxCloseShare??.12),closeShare,eyeHeight:eye,vmax};
+  // `yaw`/`pitchDeg` stay the intended view; `cameraYaw`/`cameraPitchDeg` place it in the visible region.
+  for(const p of samples){p.cameraYaw=p.yaw+yawOffset;p.cameraPitchDeg=p.pitchDeg+pitchOffset*180/Math.PI;}
+  return{samples,duration,lengthMm:length,viewOffset:{yawDeg:yawOffset*180/Math.PI,pitchDeg:pitchOffset*180/Math.PI,region},arrival:{x:arrival.x,y:arrival.y,yaw:finalYaw,cameraYaw:finalYaw+yawOffset,cameraPitchDeg:(aerial?45:arrivePitchDeg)+pitchOffset*180/Math.PI,pitchDeg:aerial?45:arrivePitchDeg,viewScore:best?+best.score.toFixed(3):null,floorSeen:best?+best.floor.toFixed(3):null,contentSeen:best?+best.things.toFixed(3):null,insideRoom:inside(room.poly,arrival.x,arrival.y)},enterIndex:enter,readable:aerial||closeShare<=(options.maxCloseShare??.12),closeShare,eyeHeight:eye,vmax};
  }
  const api={plan,choreography};if(typeof module!=='undefined')module.exports=api;else root.FloorPlanPresentationRoute=api;
 })(globalThis);
