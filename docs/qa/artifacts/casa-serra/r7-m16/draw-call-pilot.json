@@ -1,0 +1,83 @@
+{
+  "full": {
+    "calls": 1729,
+    "triangles": 199934,
+    "frameMs": 16.59999942779541,
+    "geometries": 1298,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 1068,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "hiddenFurniture": {
+    "calls": 657,
+    "triangles": 4954,
+    "frameMs": 16.600000381469727,
+    "geometries": 1298,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 0,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "restored": {
+    "calls": 1729,
+    "triangles": 199934,
+    "frameMs": 16.5,
+    "geometries": 1298,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 1068,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "batched": {
+    "calls": 1620,
+    "triangles": 199934,
+    "frameMs": 16.300000190734863,
+    "geometries": 1189,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 959,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "summary": {
+    "batches": 63,
+    "instances": 172,
+    "unmapped": 0,
+    "disposed": 63,
+    "fallbacks": 0
+  },
+  "visual": {
+    "restoredChangedPixels": 2040,
+    "batchedChangedPixels": 2057
+  },
+  "unbatchedAgain": {
+    "calls": 1730,
+    "triangles": 199934,
+    "frameMs": 16.5,
+    "geometries": 1299,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 1068,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "cycles": {
+    "count": 3,
+    "stableGeometries": 1190,
+    "disposed": 189
+  }
+}
