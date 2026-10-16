@@ -13,7 +13,7 @@ class Recorder{
  async init(){await fs.rm(this.dir,{recursive:true,force:true});await fs.mkdir(this.dir,{recursive:true});await install(this.page);}
  // advance one frame, flush microtasks, capture
  async frame(sample){await step(this.page,1000/this.fps);await this.page.evaluate(()=>new Promise(r=>setTimeout(r,0)));
-  await this.page.screenshot({path:path.join(this.dir,`f${String(this.n).padStart(5,'0')}.jpg`),type:'jpeg',quality:82});
+  await this.page.screenshot({path:path.join(this.dir,`f${String(this.n).padStart(5,'0')}.jpg`),type:'jpeg',quality:82,timeout:180000});
   if(sample)this.log.push({frame:this.n,t:this.n/this.fps,...await this.page.evaluate(sample)});this.n++;}
  async hold(seconds,sample){for(let i=0;i<Math.round(seconds*this.fps);i++)await this.frame(sample);}
  async until(fn,sample,maxSeconds=60){for(let i=0;i<maxSeconds*this.fps;i++){await this.frame(sample);if(await this.page.evaluate(fn))return true;}return false;}

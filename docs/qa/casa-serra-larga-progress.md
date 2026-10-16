@@ -61,7 +61,104 @@ La autorización de Juanma permite desarrollar y pasar al siguiente incremento t
 
 ## Próxima acción ejecutable
 
-R0–R9 cerrados localmente. Revisión humana y merge de la PR #39 quedan pendientes; CI debe ejecutar pasos para contar como verificación remota. Conservar todos los `qa-results` locales y la PR en draft.
+*Histórico, 15-10-2026:* R0–R9 cerrados localmente. Revisión humana y merge de la PR #39 quedan pendientes; CI debe ejecutar pasos para contar como verificación remota. Conservar todos los `qa-results` locales y la PR en draft.
+
+*Vigente, 16-10-2026:* Juanma revisó la preview exacta `28e042847e2887b00a45da08dd14ad9bd5abd30d` y **no acepta** todavía el encuadre de estancias pequeñas ni el recorrido. R10 reabre M03/M18 sin alterar los resultados históricos de R0–R9; véase la sección R10.
+
+## R10 — revisión humana de `28e0428`: reproducción y aceptación previa
+
+Entorno de esta sesión: contenedor Linux en la nube, no el worktree Windows `C:\Users\temp123\work\floorplan-3d-casa-serra`. El checkpoint/STOP del supervisor externo no existe en este contenedor, por lo que no pudo comprobarse; se trabaja con un solo escritor en la rama de #39. Chromium 1194 (Playwright 1.56.1) con SwiftShader en 4 vCPU Xeon 2,1 GHz. `cdn.jsdelivr.net` está denegado por el proxy: los scripts de QA sirven `three@0.160.0` desde el paquete npm oficial con `page.route`, sin cambiar la aplicación. Referencia Astra LAB leída en solo lectura en `feat/astra-blender-gate-1` @ `b5cc40a` (squash de LAB #5, ya fusionada en esa rama operativa); no se modificó LAB.
+
+**Reproducción en `28e0428`** (proyecto de ejemplo `prj_reference-home`, luz neutra de presentación, muros completos, editor completo, 1440×900, 390×844 y 844×390). Métrica independiente 2,5D: rejilla de rayos desde la pose real de la cámara contra muros, dinteles, antepechos y suelo; cada impacto se asigna a la estancia que contiene el punto. No se cuentan muebles como oclusores.
+
+| Parada | Viewport | Estancia objetivo en imagen | Vecina dominante | Suelo objetivo visible |
+| --- | --- | --- | --- | --- |
+| Baño en suite 3,20 m² | 1440×900 | 12,7 % | Dormitorio principal 44,4 % | 17,6 % |
+| Baño en suite | 390×844 | 7,6 % | Dormitorio principal 26,1 % | 17,1 % |
+| Baño en suite | 844×390 | 3,9 % | Dormitorio principal 24,1 % | 17,4 % |
+| Pasillo 5,71 m² | 1440×900 | 5,1 % | Dormitorio juvenil 22,4 % | 16,8 % |
+| Baño de invitados 2,89 m² | 1440×900 | 10,3 % | Comedor 31,7 % | 10,7 % |
+| Balcón-lavadero 2,92 m² | 1440×900 | 9,3 % | Comedor 26,1 % | 4,3 % |
+
+Causa en `presentationGo`: todas las estancias usan la misma dirección fija (elevación 57°), un radio mínimo de 6 m multiplicado por 1,2 y el centro de la caja envolvente; no se considera la oclusión de los muros de 2,8 m ni la tarjeta, que en escritorio cubre el lado derecho y en móvil vertical la mitad inferior. El recorrido (`presentationRoute`) mira a un punto situado sólo un 2,5 % de la longitud por delante y 0,30 m más bajo: en 9,5 m de ruta la cámara queda **51,6° hacia abajo** (53,2° hacia el Dormitorio principal), gira de golpe en cada vértice, avanza a velocidad constante de 2,4 m/s sin rampas y salta a la pose de la parada al terminar. Estas medidas describen composición y movimiento; no demuestran cruce de muros.
+
+Límite de observación: aquí cada fotograma del recorrido tarda ~1,2 s en SwiftShader (vista general ~1,5 s), por lo que una grabación en tiempo real no muestra el movimiento. La evidencia de vídeo se graba con reloj virtual: `performance.now` y `requestAnimationFrame` avanzan exactamente 1/30 s por fotograma capturado y el MP4 de 30 fps reproduce el movimiento a 1×. No mide fps reales; el rendimiento en GPU/móvil físico queda sin acreditar.
+
+**Criterios de aceptación R10, fijados antes de validar el cambio** (el primer borrador del encuadre se escribió en el árbol local en paralelo, sin commit):
+
+1. Paradas de estancia, en las once estancias contadas del ejemplo y en una planta irregular/girada, en 1440×900, 390×844, 844×390 y resize 360×800→844×390: dentro de la zona no cubierta por la tarjeta, la estancia objetivo ocupa al menos el 40 % de la imagen y es la estancia con mayor presencia; ninguna vecina supera el 25 %; al menos el 75 % de las muestras de suelo y muebles de la estancia queda visible.
+2. Si los muros completos impiden cumplir 1, se usa una vista seccionada declarada en la ficha, sólo de presentación, que se restaura al cambiar de parada, salir o cancelar. El estado de corte del editor vuelve exacto.
+3. Mismo proyecto, revisión y viewport producen la misma pose; resize recalcula sin animación; movimiento reducido salta la animación. JSON, IDs, historial y selección sin cambios; consola y `pageerror` vacíos.
+4. Recorrido interior: altura de ojos entre 1,40 y 1,60 m; mirada entre 0° y 20° hacia abajo en ≥ 95 % de los fotogramas en marcha y nunca > 30°; ≤ 10 % de fotogramas con más del 30 % de la imagen ocupada por un muro a menos de 1 m; giro suavizado ≤ 60°/s; velocidad ≤ 1,1 m/s con rampas de arranque y frenado de al menos 0,6 s; margen de 220 mm comprobado sobre la curva suavizada completa.
+5. Llegada: al menos 1 s mostrando el interior de la estancia objetivo antes de volver a la parada, que se recupera con transición suave, nunca con salto instantáneo.
+6. Si la ruta segura no ofrece una vista legible según 4, se declara la alternativa (corte o aérea) antes de animar. Cancelación por Volver a editar, Escape, Atrás, resize, cambio de proyecto y pérdida de contexto se conserva.
+7. Evidencia: capturas antes/después en condiciones equivalentes abiertas visualmente; vídeo a 30 fps de reloj virtual del Baño en suite y del recorrido completo, revisado por hojas de contacto densas; métricas y costes; preview del SHA exacto. CI sin pasos se registra como no ejecutada.
+
+### R10 — implementación (código `7d66d06`)
+
+- **Encuadre de paradas** (`js/presentation-core.js`, `roomFrame`): para cada dirección candidata (cuatro elevaciones, azimut cada 30° alineado con la arista más larga del polígono) se resuelve en forma cerrada la cámara más próxima que mete el suelo, el arranque de muros y los muebles de la estancia en la zona libre de la tarjeta, con un margen del 7 %. Un modelo 2,5D de muros, dinteles, antepechos y muebles de otras estancias mide el suelo visible y, sobre toda la zona libre, la presencia de la estancia y de la vecina mayor. Se elige por visibilidad, presencia, penalización de vecinas por encima del 12 % y preferencia por unos 60° de elevación. Si el proyecto está con muros completos, primero se prueba la sección de 1,2 m que ya existe en el editor. La ficha la declara («Vista seccionada…; el proyecto no cambia») y la sección se deshace al cambiar de parada, salir o cancelar. La cámara queda siempre por encima de los muros completos. Resultado cacheado por geometría, estancia, proporción y zona.
+- **Apoyos visuales de la parada:** contorno del suelo de la estancia (banda de 70 mm, sólo presentación) y lámparas de techo ocultas cuando la cámara está por encima del techo, igual que el techo ya se ocultaba. Tarjeta compacta en móvil vertical: progreso oculto (sigue «Vista X de Y»), botones de 13 px con objetivo táctil de 44 px y paradas en una sola fila desplazable.
+- **Planificador** (`js/presentation-route.js`): Dijkstra en rejilla de 8 vecinos alineada con el ángulo de muro dominante. Coste mayor junto a obstáculos (niveles de confort 330/450 mm) para caminar por el centro. Atajos con margen de 450 mm donde hay sitio y de 220 mm sólo en pasos estrechos. Suavizado por recorte de esquinas, con la curva final validada con el mismo muestreo de 40 mm que el trazado denso; si una pieza falla se usa la polilínea validada. El muestreo de 40 mm limita la intrusión no detectada a 20 mm, es decir, margen real ≥ 200 mm. En el ejemplo, el trazado con ángulo 0 coincide punto por punto con la rejilla anterior.
+- **Coreografía** (`choreography`): ojos a 1,5 m, mirada de 8° al caminar; la orientación sigue el punto visible del recorrido a ≤ 1,2 m, suavizado gaussiano (σ 0,45 m). Velocidad máxima 0,85 m/s, limitada por giro (35°/s) y aceleración (0,8 m/s²), por lo que arranca y frena con rampa. Llegada en la muestra que más suelo y muebles de la estancia ve con línea de visión: en baños, vista desde la puerta. Mirada final ≤ 20°. El giro hacia la vista de llegada sólo empieza cuando esa dirección está despejada 1 m; si queda giro, se hace parado a ≤ 35°/s. Si más del 12 % del tiempo de marcha mira a un muro a menos de 0,9 m, se declara un recorrido aéreo («ruta interior segura sin vista legible»).
+- **Línea temporal** (`index.html`): bajada desde la parada hasta encima de la entrada y descenso vertical (tramos aéreos ≤ 3,5 m/s de media), marcha, giro opcional, 1,3 s de llegada, subida sobre los muros y vuelta suave a la parada. Muros completos durante la marcha, con aristas y zócalos del modo paseo, y FOV de marcha adaptado a la proporción (48–72° vertical). Al terminar o cancelar se restauran cámara, FOV, sección, puertas por ID, ayudas y contorno. La exportación ZIP guarda y restaura la vista completa (pose, sección, parada y contorno). No se toca `FloorPlanProjectV1`.
+
+### R10 — fallos encontrados y corregidos durante el ciclo
+
+- La primera métrica propia del encuadre medía la presencia dentro del recuadro ya reducido por el margen y la sobrestimaba (baño 0,70 frente a 0,399 de la métrica independiente). Corregido: se mide sobre toda la zona libre y el margen baja del 12 % al 7 %.
+- Cambiar la altura de muros al empezar o terminar el recorrido reconstruye la escena y `buildArch` llama a `clearPresentationRoute`, que borraba la información de la ruta (`kind: null`). Corregido en ambos puntos.
+- Tras cancelar una ruta desde una parada seccionada, `opt.cut` volvía a 1,2 sin reconstruir. `setPresentationCut` delega ahora siempre en `sync`, que compara la firma construida.
+- La validación de 80 mm del planificador dejaba pasar intrusiones de pocos milímetros entre muestras; el remuestreo a 40 mm las detectó. Se valida todo a 40 mm.
+- El primer giro hacia la llegada miraba a la jamba de la puerta del baño de invitados mientras se caminaba por el pasillo. Corregido con el criterio de dirección despejada y el giro en parada.
+- La fixture girada redondeaba muros a milímetros enteros y un hueco excedía su muro; sólo se recortan los huecos que desbordan por ese redondeo.
+
+### R10 — resultados medidos sobre el código `1dd86e5`
+
+Código entregado: `4326605` (pruebas con `THREE_LOCAL_DIR` opcional), `7d66d06` (encuadre, planificador y coreografía), `1b386e3` (recorrido apuntado a la zona libre de la tarjeta) y `1dd86e5` (hojas de puerta abiertas como obstáculo visual). Las pruebas y grabaciones finales se hicieron en un worktree separado fijado en `1dd86e5`.
+
+**Paradas** (métrica independiente 2,5D dentro de la zona libre de la tarjeta; once estancias contadas, mismas once seleccionadas antes y después):
+
+| Estancia | Viewport | Antes `28e0428` (imagen completa) | Después `1dd86e5` (zona libre) | Vecina mayor después |
+| --- | --- | --- | --- | --- |
+| Baño en suite | 1440×900 | 12,7 % · dormitorio 44,4 % | 47,2 % | Dormitorio principal 5,7 % |
+| Baño en suite | 390×844 | 7,6 % · dormitorio 26,1 % | 62,9 % | Dormitorio principal 2,5 % |
+| Baño en suite | 844×390 | 3,9 % · dormitorio 24,1 % | 44,7 % | Dormitorio infantil 16,4 % |
+| Pasillo | 1440×900 | 5,1 % | 44,0 % | Salón 6,3 % |
+| Baño de invitados | 1440×900 | 10,3 % | 60,6 % | Pasillo 6,0 % |
+| Balcón-lavadero | 1440×900 | 9,3 % | 60,3 % | Baño de invitados 1,9 % |
+
+Matriz completa de 33 paradas: la estancia objetivo es la de mayor presencia en **33/33**, ninguna vecina supera el 25 % (**33/33**, máximo 20,6 %) y el suelo visible es ≥ 75 % en **33/33**. El umbral del 40 % se cumple en **30/33**. No se cumple en el Pasillo 390×844 (33,2 %), el Balcón de estar 390×844 (31,2 %, estancia 2,9:1, la excepción ya declarada) ni el Baño de invitados 844×390 (36,8 %). En esos tres casos la estancia sigue siendo la protagonista, pero el criterio de presencia queda **no cumplido** y no se rebaja.
+
+La misma métrica sobre `28e0428` y la zona libre de su tarjeta da: en 1440×900, Baño en suite 17,7 % frente al 26,1 % del dormitorio. En 390×844, la tarjeta con doce paradas dejaba sin zona libre útil, con 0 % de cualquier estancia visible fuera de la tarjeta. En 844×390, Baño en suite 6,1 % frente al 15,9 % del dormitorio.
+
+Planta girada 30° con dormitorio cóncavo (fixture sintética `tests/helpers/irregular-home.cjs`, no un plano real evaluado), 1440×900 y 390×844: presencia ≥ 40 % en **19/22** paradas. Fallan el Salón 1440×900 (39,6 %), el Pasillo 390×844 (33,2 %) y el Balcón de estar 390×844 (31,9 %). Estancia protagonista y vecina ≤ 20,4 % en 22/22. Suelo visible ≥ 75 % en 21/22; no se cumple en el Balcón-lavadero 390×844 (71,4 %).
+
+**Recorrido al Baño en suite** (grabación de reloj virtual a 30 fps, motion 1×; «mirada efectiva» = la que ve el usuario en la zona libre de la tarjeta):
+
+| Medida | Antes `28e0428` 1440×900 | Después `1dd86e5` 1440×900 | Después `1dd86e5` 390×844 |
+| --- | --- | --- | --- |
+| Altura de ojos al caminar | 1,65 m | 1,50 m | 1,50 m |
+| Mirada hacia abajo p50 / p95 / máx. | 51,6° / 56,6° / 79,2° | 8° / 16,5° / 20° | 8° / 17,5° / 20° |
+| Fotogramas de marcha con mirada > 20° | 118/118 | 0/383 | 0/373 |
+| Velocidad máxima al caminar | 2,41 m/s, constante | 0,88 m/s con rampas | 0,88 m/s con rampas |
+| Fotogramas de marcha con > 30 % de muro a < 1 m | 0/118 (miraba al suelo) | 65/383 (17,0 %) | 7/373 (1,9 %) |
+| Llegada | ninguna; salto a la parada | 1,3 s con el baño llenando la imagen | 1,3 s con el baño en el 82 % |
+| Salto máximo de cámara en un fotograma | 7,9 m (inicio y final) | 3,6 m (vuelo previo de 650 ms a la parada, no del recorrido) | 8,8 m (mismo vuelo previo) |
+| Duración del recorrido | 3,9 s | 19,0 s | 18,9 s |
+| Proyecto/JSON intacto, errores de consola | sí, 0 | sí, 0 | sí, 0 |
+
+El criterio 4 de ≤ 10 % de fotogramas con muro cercano **no se cumple en escritorio**: 17,0 %. Corresponde al tramo entre el muro del baño y la cama (0,9 m libres) y al paso de puertas. Las hojas de contacto muestran cama, mesilla, marco de puerta e inodoro reconocibles, pero se deja como punto abierto para la revisión de Juanma. El resto del criterio 4 y el criterio 5 se cumplen en las dos grabaciones. El vuelo de 650 ms entre paradas es anterior a R10 y no se ha modificado.
+
+**Pruebas:** unitarias de Node 17 archivos, **194 pass, 0 fail, 1 skip** (omitida la integración opcional de Blender). Navegador dirigido R10 y M18 durante el ciclo: framing 6/6 (cuatro viewports con resize, repetibilidad con movimiento reducido y corte del editor, plano girado) y M18 8/8 tras las correcciones. **Regresión de navegador completa sobre `1dd86e5`: en curso**; la primera mitad muestra fallos que se están clasificando contra `28e0428` en aislamiento. No se declara aprobada hasta registrar su resultado aquí.
+
+**Preview:** Vercel `dpl_FPoRt3ehyMB3Veb5Q4xYgSjZyhcT`, estado READY para `1b386e3`. Se comprobó por la API de Vercel que sirve los ficheros de ese commit. Desde este contenedor no se pudo abrir en Chromium: el proxy rechaza `*.vercel.app`. La revisión visual en la preview queda para Juanma en Chrome autenticado.
+
+**CI:** Actions de `1b386e3`, runs 38944841362 y 38944841375, terminaron `failure` con `runner_id: 0` y sin pasos. **CI no ejecutada.** Los resultados indicados son locales.
+
+### R10 — límites del entorno de esta sesión
+
+- SwiftShader en 4 vCPU tarda 0,5–1,5 s por fotograma a 1440×900 tanto en `28e0428` como en el código nuevo; la medida inicial de 60 ms en una parada antigua fue un artefacto y no se repitió. No hay regresión de render medida. Los tiempos no representan GPU ni móvil físico.
+- Por ese coste, el recorrido se graba con reloj virtual. Los vídeos muestran el movimiento exacto a 1× pero no acreditan fluidez en tiempo real.
+- No puedo ver vídeo continuo: el movimiento se revisó con hojas de contacto de 2–5 fotogramas por segundo y con métricas por fotograma. La percepción de fluidez queda para la revisión de Juanma.
 
 ## R7 — aceptación previa para M12/M16
 

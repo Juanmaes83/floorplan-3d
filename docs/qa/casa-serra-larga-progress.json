@@ -2,8 +2,8 @@
   "schema": "CasaSerraProgressV1",
   "branch": "feat/casa-serra-larga-improvements",
   "base": "a1341eeef82c651914da08ff78328e668091ea78",
-  "current": "R9",
-  "ci": "failed_without_steps_on_cb6e003_runs_38880204137_38880204158_billing_history_not_ci_accepted",
+  "current": "R10",
+  "ci": "not_executed_on_1b386e3_runs_38944841362_38944841375_runner_id_0_no_steps",
   "humanReview": "pending",
   "merge": "pending",
   "items": [
@@ -139,6 +139,30 @@
       "evidence": ["All 40 test files serial: 415 tests, 414 pass, 0 fail, 1 optional Blender skip; log r9-all-tests-final.log in external supervisor", "Three initial test-only failures fixed in cb6e003; focused rerun 7/7", "Playwright/Chromium screenshots visually reviewed for portable package desktop/portrait/landscape, clean reimport, mobile variants and interior route", "Final matrix: 18 capabilities verified locally, M14/M17 measured and deferred, P01-P16 16/16 locally verified", "Exact cb6e003 preview deployment 7115530249 reviewed in authenticated Chrome: example, overview, bedroom, ZIP control and editor return; Actions 38880204137/38880204158 failed with zero steps"]
     },
     {
+      "id": "R10",
+      "type": "incremento",
+      "status": "verificado localmente con criterios parcialmente no cumplidos",
+      "scope": "Revisión de Juanma sobre 28e0428: encuadre de estancias pequeñas (M03) y recorrido (M18)",
+      "dependency": "R9",
+      "acceptance": "Siete criterios R10 en casa-serra-larga-progress.md: presencia >=40 %, vecina <25 %, suelo >=75 %, mirada de marcha 0-20°, <=10 % de muro cercano, llegada >=1 s sin saltos, alternativa declarada",
+      "testedSha": "1dd86e5",
+      "codeCommits": [
+        "4326605",
+        "7d66d06",
+        "1b386e3",
+        "1dd86e5"
+      ],
+      "evidence": [
+        "Before 28e0428 Baño en suite stop 1440x900: 12.7 % vs bedroom 44.4 % (full frame); walk pitch 51.6° median, 118/118 frames >20°, 2.41 m/s, 7.9 m single-frame jump",
+        "After 1dd86e5, independent visible-region metric over 33 reference stops: protagonist 33/33, neighbour <25 % 33/33, floor >=75 % 33/33, presence >=40 % 30/33 (Pasillo 390x844 33.2 %, Balcón de estar 390x844 31.2 %, Baño de invitados 844x390 36.8 % not met)",
+        "Rotated concave synthetic plan: presence >=40 % 19/22, floor >=75 % 21/22, neighbour <25 % 22/22",
+        "Virtual-time 30 fps recordings 1440x900 and 390x844: eye 1.50 m, effective pitch max 20°, 0 walking frames >20°, max 0.88 m/s with ramps, arrival 1.3 s; near-wall frames 17.0 % desktop (not met) and 1.9 % portrait",
+        "Node unit 194 pass/0 fail/1 skip; full browser regression on 1dd86e5 in progress, failures being classified against 28e0428 (not accepted yet)",
+        "Vercel preview READY for 1b386e3 serving these files, not opened from the container (proxy rejects *.vercel.app); Actions 38944841362/38944841375 failed with runner_id 0 and no steps: CI not executed"
+      ],
+      "humanReview": "pending: Juanma must review the exact-SHA preview and the comparison videos"
+    },
+    {
       "id": "M01",
       "type": "capacidad",
       "status": "verificado localmente",
@@ -166,7 +190,8 @@
       "dependency": "M01",
       "acceptance": "Mismo proyecto/revisión produce poses repetibles; ejes, diagonal y resize correctos",
       "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
-      "evidence": ["R2 P05 repeatable room poses for own and imported projects with real room IDs and geometry; P14 four viewport sizes, orientation/resize and restored camera, target, FOV and options"]
+      "evidence": ["R2 P05 repeatable room poses for own and imported projects with real room IDs and geometry; P14 four viewport sizes, orientation/resize and restored camera, target, FOV and options"],
+      "humanReviewHistory": [{"date": "2026-10-16", "sha": "28e042847e2887b00a45da08dd14ad9bd5abd30d", "result": "no aceptado por Juanma", "followUp": "R10"}]
     },
     {
       "id": "M04",
@@ -320,7 +345,8 @@
       "dependency": "M03",
       "acceptance": "Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea",
       "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
-      "evidence": ["Route planner 5/5, browser 8/8, affected broad regression 113/113; interior and declared aerial fallback, four viewport and resize visual review; ten artifacts in docs/qa/artifacts/casa-serra/r6-m18/"]
+      "evidence": ["Route planner 5/5, browser 8/8, affected broad regression 113/113; interior and declared aerial fallback, four viewport and resize visual review; ten artifacts in docs/qa/artifacts/casa-serra/r6-m18/"],
+      "humanReviewHistory": [{"date": "2026-10-16", "sha": "28e042847e2887b00a45da08dd14ad9bd5abd30d", "result": "no aceptado por Juanma", "followUp": "R10"}]
     },
     {
       "id": "M19",

@@ -4,15 +4,15 @@ const H=require('./harness.cjs'),measure=require('./metric.cjs'),fs=require('nod
 const OUT=process.argv[2],MODE=process.argv[3]||'all';
 const ROOMS=['rom_mbath','rom_master','rom_gbath','rom_hall','rom_laundry','rom_kitchen','rom_dining','rom_kid','rom_child','rom_living','rom_balcony'];
 async function present(page,ids){
- await page.locator('#presentationBtn').click();
+ await page.locator('#presentationBtn').click({timeout:120000});
  await page.evaluate(ids=>{document.querySelectorAll('#presentationConfig input[type=checkbox]').forEach(i=>{const want=ids.includes(i.value);if(i.checked!==want){i.checked=want;i.dispatchEvent(new Event('change'));}});},ids);
- await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.getByRole('button',{name:'Iniciar presentación'}).click({timeout:120000});
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:60000});
 }
 const settle=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
 async function goRoom(page,roomId){
  const i=await page.evaluate(id=>FloorPlanPresentation.plan.stops.findIndex(s=>s.roomId===id),roomId);
- await page.locator('.presentation-stops button').nth(i).click();
+ await page.evaluate(i=>document.querySelectorAll('.presentation-stops button')[i].click(),i);
  await page.waitForFunction(i=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelectorAll('.presentation-stops button')[i].classList.contains('on'),i,{timeout:60000});
  await settle(page);
 }
@@ -26,7 +26,7 @@ const metric=(page,roomId)=>page.evaluate(([f,roomId,rf])=>{const region=eval(rf
    if(process.env.IRREGULAR)await page.evaluate(f=>{const p=eval(f)(FloorPlanReference);FloorPlanApp.importProject(p);},`(${require(path.join(__dirname,'..','..','..','tests','helpers','irregular-home.cjs')).toString()})`);
    await present(page,ROOMS);
    for(const id of ROOMS){await goRoom(page,id);const m=await metric(page,id);m.title=await page.locator('.presentation-card h2').textContent();report.stops[`${size}/${id}`]=m;
-    await page.screenshot({path:path.join(OUT,`${size}-${id}.png`)});
+    await page.screenshot({path:path.join(OUT,`${size}-${id}.png`),timeout:180000});
     console.log(size,id,m.title,'visibleRegion target',m.target,'full',m.full.target,'other',JSON.stringify(m.topOther),'floorVis',m.floorVisible,'inFrame',m.floorInFrame,'pitch',m.pitchDownDeg,'h',m.height,'section',!!m.section);}
    report.stops[`${size}/errors`]=errors;await context.close();}
   if(MODE!=='stops')for(const id of ['rom_mbath','rom_master']){
