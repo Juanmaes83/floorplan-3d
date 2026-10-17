@@ -10,12 +10,12 @@ const URL0 = process.env.LORA_URL || 'https://fun.loralab.top/tool/c9ae6fe7-55ca
 const VIEWPORT = {width: 1440, height: 900};
 const RESULTS = {'1': 'ejecutado y funciona', '2': 'ejecutado y falla', '3': 'solo control visible', '4': 'no comprobado'};
 const STEPS = [
- {id: 'A', title: 'Exportar el JSON de «Villa moderna»', ask: 'Abre la plantilla Villa moderna y usa su exportación JSON. La descarga se guarda sola como villa-original.json.', wantsDownload: true},
+ {id: 'A', title: 'Exportar el JSON de «Villa moderna»', ask: 'Abre la plantilla Villa moderna y usa su exportación JSON. La primera descarga JSON válida se guarda como villa-original.json; las imágenes y otros archivos conservan su tipo.', wantsDownload: true},
  {id: 'B', title: 'Proyecto de prueba con una segunda planta', ask: 'Crea un proyecto nuevo, sin datos reales, y añade una segunda planta. Captura antes y después (tecla s). Anota cómo se fijan altura, escala y alineación.'},
  {id: 'C', title: 'Escalera entre ambas plantas', ask: 'Coloca una escalera entre las dos plantas. Captura la planta baja, la alta y el 3D (tecla s en cada una). Anota si aparece hueco en la planta superior.'},
  {id: 'D', title: 'Subir la escalera en el recorrido libre', ask: 'Entra en el recorrido libre e intenta subir esa escalera caminando. Anota el nivel de inicio y el de final, aunque falle.'},
  {id: 'E1', title: 'Guardar y recargar', ask: 'Haz un cambio, guarda si existe esa opción y recarga con F5. Anota si el cambio persiste.'},
- {id: 'E2', title: 'Importar el JSON exportado', ask: 'Importa villa-original.json desde la carpeta de salida. Anota si se recupera igual.'},
+ {id: 'E2', title: 'Importar el JSON exportado', ask: 'Importa el JSON válido indicado en report.md desde la carpeta de salida. Anota si se recupera igual.'},
  {id: 'E3', title: 'Editar exterior', ask: 'Cambia el material de fachada o de cubierta, o añade un elemento exterior.'},
  {id: 'E4', title: 'Día y noche, norte y latitud', ask: 'Cambia la hora a noche y, si existen, el norte y la latitud. Anota si la sombra cambia de dirección.'},
  {id: 'E5', title: 'Altura de ojos 1,70 y 1,05 m', ask: 'En el recorrido, cambia la altura de ojos.'},
@@ -38,13 +38,32 @@ const ask = q => { process.stdout.write(q); return lines.length ? Promise.resolv
  await context.tracing.start({screenshots: true, snapshots: true});
  const page = await context.newPage(), t0 = Date.now(), at = () => +((Date.now() - t0) / 1000).toFixed(1);
  const log = {consoleErrors: [], pageErrors: [], navigation: null}, shots = [], results = [], downloads = [];
+ let downloadIndex = 0, firstJson = null, pendingDownloads = Promise.resolve();
  page.on('console', m => { if (m.type() === 'error') log.consoleErrors.push({atSec: at(), text: m.text().slice(0, 500)}); });
  page.on('pageerror', e => log.pageErrors.push({atSec: at(), text: String(e.message).slice(0, 500)}));
- page.on('download', async d => {
-  const name = downloads.length ? `download-${downloads.length + 1}-${d.suggestedFilename().replace(/[^\w.-]/g, '_')}` : 'villa-original.json';
-  const file = path.join(out, name); await d.saveAs(file); const bytes = fs.readFileSync(file);
-  downloads.push({file: name, suggestedFilename: d.suggestedFilename(), bytes: bytes.length, sha256: sha(bytes), atSec: at()});
-  console.log(`\n  Descarga guardada: ${name} (${bytes.length} bytes, sha256 ${sha(bytes)})`);
+ page.on('download', d => {
+  const index = ++downloadIndex;
+  pendingDownloads = pendingDownloads.then(async () => {
+   const original = d.suggestedFilename().replace(/[^\w.-]/g, '_');
+   const provisional = `download-${index}-${original}`;
+   const provisionalPath = path.join(out, provisional);
+   await d.saveAs(provisionalPath);
+   const bytes = fs.readFileSync(provisionalPath);
+   let type = 'otro';
+   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) type = 'png';
+   else if (bytes.subarray(0, 4).equals(Buffer.from([80, 75, 3, 4]))) type = 'zip';
+   else {
+    try {
+     const value = JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
+     if (value !== null && typeof value === 'object') type = 'json';
+    } catch {}
+   }
+   const name = type === 'json' && !firstJson ? 'villa-original.json' : provisional;
+   if (name !== provisional) fs.renameSync(provisionalPath, path.join(out, name));
+   if (type === 'json' && !firstJson) firstJson = name;
+   downloads.push({file: name, suggestedFilename: d.suggestedFilename(), type, bytes: bytes.length, sha256: sha(bytes), atSec: at()});
+   console.log(`\n  Descarga guardada: ${name} [${type}] (${bytes.length} bytes, sha256 ${sha(bytes)})`);
+  });
  });
  let n = 0;
  const shot = async label => { const file = `${String(++n).padStart(2, '0')}-${label}.png`; await page.screenshot({path: path.join(out, file)}); shots.push({file, atSec: at(), url: page.url()}); console.log(`  Captura ${file}`); return file; };
@@ -62,7 +81,8 @@ const ask = q => { process.stdout.write(q); return lines.length ? Promise.resolv
    const key = raw.trim().toLowerCase();
    if (key === 's') { stepShots.push(await shot(`${step.id}-extra`)); continue; }
    if (key === 'x') { results.push({id: step.id, title: step.title, result: RESULTS['4'], startSec, endSec: at(), shots: stepShots, note: 'paso saltado'}); break; }
-   if (step.wantsDownload && !downloads.length && String(await ask('  Aún no hay descarga. ¿Seguir sin ella? (s/n) ')).trim().toLowerCase() !== 's') continue;
+   if (step.wantsDownload) await pendingDownloads;
+   if (step.wantsDownload && !firstJson && String(await ask('  Aún no hay descarga JSON válida. ¿Seguir sin ella? (s/n) ')).trim().toLowerCase() !== 's') continue;
    stepShots.push(await shot(`${step.id}-resultado`));
    let r; do { r = await ask('  Resultado 1 funciona · 2 falla · 3 solo control visible · 4 no comprobado: '); r = r === null ? '4' : r.trim(); } while (!RESULTS[r]);
    const note = String(await ask('  Nota breve (altura, escala, nivel inicial y final...): ') ?? '').trim();
@@ -70,6 +90,7 @@ const ask = q => { process.stdout.write(q); return lines.length ? Promise.resolv
    break;
   }
  }
+ await pendingDownloads;
  const browserVersion = browser.version(), finalUrl = page.url(), video = page.video();
  await context.tracing.stop({path: path.join(out, 'trace.zip')});
  await context.close();
@@ -96,7 +117,8 @@ const ask = q => { process.stdout.write(q); return lines.length ? Promise.resolv
   `Navegador ${browserVersion}, ${VIEWPORT.width}×${VIEWPORT.height}, ${manifest.os}. URL final: ${finalUrl}.`,
   log.navigation.error ? `**No se pudo abrir la herramienta:** \`${log.navigation.error}\`. Ninguna prueba se ejecutó.` : `Navegación: HTTP ${log.navigation.status ?? "sin respuesta"}.`,
   `Vídeo \`session.webm\` (${manifest.video.bytes} bytes, reproducible: ${playable.ok ? 'sí' : 'no'}). Errores de consola: ${log.consoleErrors.length}; pageerror: ${log.pageErrors.length}.`,
-  downloads.length ? `JSON: \`${downloads[0].file}\`, ${downloads[0].bytes} bytes, SHA-256 \`${downloads[0].sha256}\`.` : 'JSON: no se descargó.', '',
+  firstJson ? `JSON válido: ${firstJson}, ${downloads.find(d => d.file === firstJson).bytes} bytes, SHA-256 ${downloads.find(d => d.file === firstJson).sha256}.` : 'JSON válido: no se descargó.',
+  `Descargas: ${downloads.map(d => `${d.file} (${d.type}, ${d.bytes} bytes)`).join('; ') || 'ninguna'}.`, '',
   '| Prueba | Resultado | Vídeo | Capturas | Nota |', '| --- | --- | --- | --- | --- |',
   ...results.map(r => `| ${r.id} ${r.title} | ${r.result} | ${mmss(r.startSec)}–${mmss(r.endSec)} | ${r.shots.join(', ') || '—'} | ${r.note.replace(/\|/g, '/') || '—'} |`),
   '', `Capturas en blanco o casi uniformes: ${manifest.screenshots.filter(s => s.blank).map(s => s.file).join(', ') || 'ninguna'}.`, '',
