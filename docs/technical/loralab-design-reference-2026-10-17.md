@@ -2,6 +2,8 @@
 
 **Enlace conservado:** [herramienta «室内设计» / diseño interior de LoRA LAB](https://fun.loralab.top/tool/c9ae6fe7-55ca-4fde-bae4-f8484c49bfc6?lang=zh-CN). El catálogo de LoRA LAB la presenta como herramienta de diseño doméstico. Esta nota es una **revisión exploratoria de interfaz** sobre la plantilla «Villa moderna», no una auditoría del código, licencia, privacidad, precisión constructiva o rendimiento. No consta que sea la ampliación CAD/Blender de [Summerz3002](summerz-cad-blender-reference-2026-10-17.md).
 
+**Evidencia ampliada:** [auditoría de la grabación de Juanma (3:24), capturas, comparación con Floorplan y orden de entregas](loralab-video-gap-audit-2026-10-17.md). Confirma el cambio visual 1F/2F/3F, la apertura de la puerta al iniciar una visita libre y el cambio día/noche; documenta por separado las acciones ofrecidas en pantalla que aún requieren prueba directa.
+
 ## Lo observado en la demo
 
 | Área | Evidencia visible el 17-10-2026 | Límite de la observación |

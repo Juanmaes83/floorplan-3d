@@ -102,6 +102,8 @@ pendientes para la validación empírica final de F2 y no bloquearon esta entreg
 
 La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-reference-2026-10-17.md) quedan registradas como **referencia separada**. Su demo muestra tres niveles, exterior/cubierta, controles de sol y presentación y recorrido en primera persona. La nota enumera candidatos para Rubik y un gate de revisión profunda en escritorio y móvil. La investigación comparativa es el siguiente estudio propuesto, no una nueva fase ni una orden de implementar todas las funciones. Tras la evaluación se escogería, si procede, una única entrega con contrato y pruebas propios. No hay evidencia de que esta demo implemente el CAD/Blender de Summerz3002.
 
+La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, la mayor brecha es el **proyecto de varias plantas conectadas**; propone como primer corte nuevo dos niveles y una escalera con contrato versionado y 2D/3D coherentes, seguido de envolvente/exterior y visita entre plantas si se aprueban. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
