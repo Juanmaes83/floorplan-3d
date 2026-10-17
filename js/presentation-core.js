@@ -115,10 +115,10 @@
    }
   }
   ranked.sort((a,b)=>b.pre-a.pre||b.visible-a.visible||a.azimuth-b.azimuth);
-  const cols=20,rows=12,rooms=geometry.rooms.filter(r=>r.poly.length>=3),best=[],samples=[...floor,...content],minY=Math.max(full,tallest)+.35;
+  const rooms=geometry.rooms.filter(r=>r.poly.length>=3),best=[],samples=[...floor,...content],minY=Math.max(full,tallest)+.35;
   const dot=(p,q)=>p[0]*q[0]+p[1]*q[1]+p[2]*q[2];
   // Presence of each room over the whole visible region, by rays from the candidate camera.
-  function shareOf(c,boxes){
+  function shareOf(c,boxes,cols=20,rows=12){
    const counts=new Map();let total=0;
    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
     const sx=visibleRegion[0]+(visibleRegion[2]-visibleRegion[0])*(i+.5)/cols,sy=visibleRegion[1]+(visibleRegion[3]-visibleRegion[1])*(j+.5)/rows,px=(sx*2-1)*tH,py=(1-sy*2)*tV;
@@ -146,19 +146,21 @@
     const s=shareOf(c,boxes);
     best.push({...c,...s,ok:accept(c.visible,s),score:scoreOf(c,c.visible,s)});
    }
-   const pick=best.filter(x=>x.top===top&&x.ok).sort((a,b)=>b.score-a.score)[0];
-   if(pick)return result(pick);
+   // The chosen view is confirmed on a 40x24 grid before it is accepted; a view that only passes on the coarse
+   // grid gives way to the next one.
+   const blockers=boxes.filter(b=>b.kind!=='content');
+   const confirmed=c=>{const v=Math.min(c.visible,framedVisible(c.C,c,blockers)),s=shareOf(c,boxes,40,24);return accept(v,s)?{...c,...s,visible:v}:null;};
+   for(const c of best.filter(x=>x.top===top&&x.ok).sort((a,b)=>b.score-a.score)){const v=confirmed(c);if(v)return result(v);}
    // No view of the whole room meets the criterion (typically a long, narrow room in a near-square free region):
    // move the best views closer, accepting only those that still keep >= 75 % of floor and content in the free
    // region and unoccluded, and the camera above full-height walls.
-   const blockers=boxes.filter(b=>b.kind!=='content'),closer=[];
+   const closer=[];
    for(const c of best.filter(x=>x.top===top).sort((a,b)=>b.share-a.share).slice(0,8)){
     const depth=(cx-c.C[0])*c.f[0]+(Math.min(top,1)/2-c.C[1])*c.f[1]+(cz-c.C[2])*c.f[2];
     for(const k of [.1,.2,.3,.4]){const C=c.C.map((v,i)=>v+c.f[i]*depth*k);if(C[1]<minY)continue;
      const z={...c,C},v=framedVisible(C,c,blockers),s=shareOf(z,boxes);if(accept(v,s))closer.push({...z,...s,visible:v,ok:true,closer:k,score:scoreOf(c,v,s)});}
    }
-   const near=closer.sort((a,b)=>b.score-a.score)[0];
-   if(near)return result(near);
+   for(const c of closer.sort((a,b)=>b.score-a.score)){const v=confirmed(c);if(v)return result(v);}
   }
   return result(best.sort((a,b)=>b.score-a.score)[0]);
   function result(c){
