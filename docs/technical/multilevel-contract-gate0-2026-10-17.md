@@ -28,7 +28,7 @@ Ese validador trata **cualquier `1.x` distinto de `1.0.0`** como versión futura
 | `2.0.0` | Rechazado: `/schemaVersion: unsupported version` |
 | Documento con otro `schema` (contenedor de edificio) | Rechazado: `/: missing id` |
 
-**Consecuencia:** cualquier variante dentro de `FloorPlanProjectV1` 1.x sería leída por Rubik actual, por el MCP y por el exportador Blender como **una sola planta, con los muros de todas las plantas superpuestos**. Las superficies, la revisión de distribución, la presentación y el GLB serían falsos sin ningún error. Además, la §3 del contrato exige que un minor «se pueda ignorar sin perder información», y no es el caso. Por eso las opciones dentro de 1.x quedan descartadas.
+**Consecuencia:** la sonda demuestra que el validador actual **no rechaza** datos de nivel añadidos a 1.x. Si un consumidor usa su geometría sin interpretar esos campos, puede tratar muros de plantas distintas como una sola planta y producir resultados engañosos. La sonda no prueba por sí sola la salida visual de todos los consumidores; esa regresión se comprobará por consumidor en el primer corte. La §3 del contrato exige que un minor se pueda ignorar sin perder información, y aquí no se cumple. Por eso se descartan las opciones multipiso dentro de 1.x.
 
 ## 2. Opciones
 
@@ -39,6 +39,15 @@ Ese validador trata **cualquier `1.x` distinto de `1.0.0`** como versión futura
 | C | Varios proyectos 1.x enlazados por referencia | Archivos sueltos que se apuntan entre sí | Sin schema nuevo | Integridad frágil: archivo ausente, revisión desfasada, sin guardado atómico. La escalera queda entre archivos. Ningún lector actual rechaza un archivo suelto de planta alta, que se presentaría como vivienda completa. |
 | D | **Contenedor de edificio** `rubik-sota.floorplan-building` 1.0.0 que **incrusta** un `FloorPlanProjectV1` 1.x completo por planta, más los datos del edificio (niveles, desplazamientos, escaleras) | Cada planta es un proyecto 1.x válido. El contenedor fija elevación y desplazamiento de cada una y las escaleras entre ellas. | **No cambia `FloorPlanProjectV1` ni su validador.** Escala, calibración e imagen por planta salen gratis. Exportar una planta es entregar su proyecto tal cual. Los lectores actuales rechazan el contenedor de forma explícita (§1). Los consumidores siguen funcionando por planta sin cambios. | Dos schemas que mantener. Las referencias entre plantas necesitan cualificarse (`levelId` + ID interno). Los materiales se duplican por planta. Hay riesgo de desalinear plantas si el desplazamiento está mal: mitigable con la vista de referencia y un aviso. |
 | E | `extensions` en 1.x | Datos de nivel en `x-*` | — | **Descartada:** igual que B (§1). |
+
+### Condiciones que debe resolver D antes de aprobar el contrato
+
+1. **Perfil de los proyectos incrustados.** No basta con que `FloorPlanCore.validate` acepte un 1.x futuro: por compatibilidad puede conservar campos desconocidos. El contrato de edificio debe fijar las versiones 1.x admitidas y rechazar o aislar cualquier campo/extensión que intente expresar otros niveles dentro de un proyecto de planta. Probar un proyecto incrustado que trae `levels[]` o `levelId` para impedir doble interpretación.
+2. **Imágenes y ZIP.** Deduplicar por SHA no define cómo resolver `sourceImages[].storage.ref` de cada planta. Especificar un manifiesto que relacione `levelId`, `sourceImageId`, hash y entrada ZIP, sin cambiar silenciosamente los proyectos incrustados; verificar colisiones de ID/nombre, ausencia de imagen, límites de tamaño y exportación de una planta con sus bytes de imagen.
+3. **Identidad y ciclo de vida.** La biblioteca y las variantes deben guardar, duplicar, importar y borrar el edificio como unidad sin perder la pertenencia de proyectos e imágenes. Exportar un 1.x suelto debe advertir que omite la escalera, la elevación y las otras plantas; no presentarlo como edificio completo.
+4. **Alineación.** `offsetMm` y escala por planta requieren una comprobación visual de puntos homólogos y un aviso de incertidumbre. La diferencia de `scale.confidence` no hace imposible comparar milímetros nominales, pero impide tratarlos como medidas físicas igualmente confirmadas.
+
+Estas condiciones son parte del gate 0; la elección D aún no constituye un schema aprobado.
 
 ### Recomendación: **opción D**, con desacuerdo explícito respecto a #48
 
@@ -103,7 +112,7 @@ Si Juanma prefiere A, las §3–§7 se reescriben con la escala por nivel. Las r
 
 - **BW1:** la huella de la escalera no cae dentro de una estancia del nivel `from` o del nivel `to`.
 - **BW2:** un muro del nivel n supera la altura libre bajo el forjado del nivel n+1.
-- **BW3:** las plantas tienen distinta `scale.confidence`, lo que hace que las medidas entre plantas no sean comparables.
+- **BW3:** las plantas tienen distinta `scale.confidence`; las distancias nominales en mm pueden calcularse, pero su confianza física difiere y se debe mostrar.
 - **BW4:** un muro del nivel superior no tiene muro del nivel inferior a ≤ grosor/2 + 20 mm bajo él. Es **un aviso de coherencia visual, nunca un dictamen estructural**.
 
 ### 3.5 Migración reversible
@@ -115,7 +124,7 @@ Si Juanma prefiere A, las §3–§7 se reescriben con la escala por nivel. Las r
 ### 3.6 JSON y ZIP
 
 - **JSON del edificio:** un único archivo canónico con los proyectos incrustados.
-- **ZIP del edificio:** `building.json` más `images/`, con las imágenes de todas las plantas deduplicadas por `sha256`. El ZIP de proyecto 1.x actual no cambia.
+- **ZIP del edificio:** `building.json` más `images/`, con imágenes deduplicadas por `sha256` y un manifiesto por planta que vincule cada referencia e ID con sus bytes. Validar integridad, límites y colisiones antes de abrir. El ZIP de proyecto 1.x actual no cambia; la exportación de una planta incluye sus imágenes en el formato 1.x existente.
 - Importar un JSON o ZIP detecta el `schema` y abre un proyecto o un edificio. Una versión de contenedor desconocida se rechaza sin modificar nada.
 
 ## 4. Impacto por consumidor
