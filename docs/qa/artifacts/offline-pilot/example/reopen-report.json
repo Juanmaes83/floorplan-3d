@@ -1,0 +1,125 @@
+{
+ "status": "PASS",
+ "blender": "5.2.1 LTS",
+ "process": "fresh",
+ "checks": [
+  {
+   "check": "pilot.blend sha256 unchanged since render",
+   "actual": "82645b0c996430ec4aa9204d0eb35d242d0acad193bcfc759c7f21c9c8fc8915",
+   "expected": "82645b0c996430ec4aa9204d0eb35d242d0acad193bcfc759c7f21c9c8fc8915",
+   "pass": true
+  },
+  {
+   "check": "entity counts by role",
+   "actual": {
+    "room": 13,
+    "wall": 70,
+    "opening": 22,
+    "object": 46
+   },
+   "expected": {
+    "room": 13,
+    "wall": 70,
+    "opening": 22,
+    "object": 46
+   },
+   "pass": true
+  },
+  {
+   "check": "entity IDs sha256",
+   "actual": "e0c96fcf2e67fd6ad2a92a41bdc14074d62e0e429ef4ae18ee5800cd2234365a",
+   "expected": "e0c96fcf2e67fd6ad2a92a41bdc14074d62e0e429ef4ae18ee5800cd2234365a",
+   "pass": true
+  },
+  {
+   "check": "package sha256 in scene",
+   "actual": "a305b71b12581a40386ac53b7e1b028f6a985fa6f87a7add78c91ee0e2d15525",
+   "expected": "a305b71b12581a40386ac53b7e1b028f6a985fa6f87a7add78c91ee0e2d15525",
+   "pass": true
+  },
+  {
+   "check": "shots sha256 in scene",
+   "actual": "6f7ab072152308f4e332be60b6de079aa1dd23854cc3389d79274d0b0e34917b",
+   "expected": "6f7ab072152308f4e332be60b6de079aa1dd23854cc3389d79274d0b0e34917b",
+   "pass": true
+  },
+  {
+   "check": "unit system",
+   "actual": [
+    "METRIC",
+    1.0
+   ],
+   "expected": [
+    "METRIC",
+    1.0
+   ],
+   "pass": true
+  },
+  {
+   "check": "frame range",
+   "actual": [
+    1,
+    648
+   ],
+   "expected": [
+    1,
+    648
+   ],
+   "pass": true
+  },
+  {
+   "check": "camera",
+   "actual": "PilotCamera",
+   "expected": "PilotCamera",
+   "pass": true
+  },
+  {
+   "check": "camera keys use constant interpolation (hard cuts)",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "camera keyed on every frame",
+   "actual": 648,
+   "expected": 648,
+   "pass": true
+  },
+  {
+   "check": "rom_living first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "rom_kitchen first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "rom_dining first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "rom_master first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "rom_mbath first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  },
+  {
+   "check": "rom_gbath first-frame camera inside scene bounds",
+   "actual": true,
+   "expected": true,
+   "pass": true
+  }
+ ]
+}
