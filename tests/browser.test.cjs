@@ -97,7 +97,7 @@ test('hostile names and material names stay text; ID/color payloads cannot creat
   await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);
   await page.locator('#gFurn [data-fid="obj_bed-01"]').dispatchEvent('pointerdown',{button:0,pointerId:1,clientX:400,clientY:400});
   assert.equal(await page.locator('#fName').inputValue(),payload);
-  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
+  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
   assert.deepEqual(JSON.parse((await readDownload(page,'#exportJson')).toString()),p);assert.deepEqual(errors,[]);
 });
 test('browser legacy migration is repeatable and keeps the original key',async t=>{
@@ -168,7 +168,7 @@ test('F1 completion: local project UI, reload, isolation, confirmation and full 
  await page.click('#projectsBtn');await page.selectOption('#projectList',ids[0]);await page.click('#projectOpen');assert.equal(await page.locator('#gFurn .furn').count(),47);
  await page.click('#projectsBtn');await page.selectOption('#projectList',ids[1]);page.once('dialog',d=>d.dismiss());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),4);
  page.once('dialog',d=>d.accept());await page.click('#projectDelete');assert.equal(await page.locator('#projectList option').count(),3);await page.click('#projectClose');
- await page.reload();assert.equal(await page.locator('#gFurn .furn').count(),47);assert.equal(await page.locator('img').count(),0);assert.deepEqual(errors,[]);
+ await page.reload();assert.equal(await page.locator('#gFurn .furn').count(),47);assert.equal(await page.locator('img:not(#sheetPreview)').count(),0);assert.deepEqual(errors,[]);
 });
 const softwareModuleCache=new Map();
 async function softwareModules(page,t){
@@ -443,7 +443,7 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),stored:JSON.stringify({...localStorage})})),before);await page.waitForTimeout(1100);assert.deepEqual(await page.evaluate(()=>({storage:rawStorageWrites,images:rawImageWrites,urls:rawUrls.every(u=>rawRevoked.includes(u))})),{storage:0,images:0,urls:true});
  // Actual browser download -> local converter -> existing evaluator, no reference fabrication.
  const {mkdtemp,writeFile,rm}=require('node:fs/promises'),os=require('node:os'),directory=await mkdtemp(path.join(os.tmpdir(),'raw-export-'));t.after(()=>rm(directory,{recursive:true,force:true}));const file=path.join(directory,'private.json');await writeFile(file,serialized);
- const converted=(await verifiedFetch('python3',[path.join(__dirname,'../scripts/f2-raw-export-to-evaluation.py'),file])).stdout;await writeFile(file,converted);const report=JSON.parse((await verifiedFetch('python3',[path.join(__dirname,'../scripts/f2-wall-evaluation.py'),file,'--tolerance-mm','5'])).stdout);assert.equal(report.cases[0].metrics,null);assert.deepEqual(report.cases[0].failures,['reference_missing']);assert.equal(report.f2_validated,false);
+ const python=process.env.PYTHON||(process.platform==='win32'?'python':'python3');const converted=(await verifiedFetch(python,[path.join(__dirname,'../scripts/f2-raw-export-to-evaluation.py'),file])).stdout;await writeFile(file,converted);const report=JSON.parse((await verifiedFetch(python,[path.join(__dirname,'../scripts/f2-wall-evaluation.py'),file,'--tolerance-mm','5'])).stdout);assert.equal(report.cases[0].metrics,null);assert.deepEqual(report.cases[0].failures,['reference_missing']);assert.equal(report.f2_validated,false);
  await page.locator('[id^="assistReject-"]').first().click();assert.equal(await page.locator('#assistRawExport').isEnabled(),false);assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),stored:JSON.stringify({...localStorage})})),before);
  await page.locator('[id^="assistCorrect-"]').first().click();await page.fill('#assist-startX','123');await page.locator('#assistCorrectionSave').click();assert.equal(await page.locator('#assistRawExport').isEnabled(),false);assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls[0].start.x),123);
  assert.deepEqual(raw.evaluation_record.cases[0].predictions,expected);assert.deepEqual(unexpected,[]);assert.deepEqual(errors,[]);

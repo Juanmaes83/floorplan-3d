@@ -302,6 +302,38 @@
           "height": 256,
           "bytes": 7908,
           "sha256": "352031c3af1204a10d13b7da999bc722c0d107e38eba570d5278fe4876c5c494"
+        },
+        "normal": {
+          "path": "assets/materials/oak-wood-planks-normal.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 256,
+          "bytes": 5362,
+          "sha256": "8d9c1a2fa880feeb8e2120f59e4069dd7d4a020cc3d9db44cb1a3855fdec49fd",
+          "origin": {
+            "repository": "Juanmaes83/casa-serra",
+            "revision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+            "path": "assets/tex-1k/oak_wood_planks/nor.jpg",
+            "sha256": "0d9ad8bc2fc3b50006da9bc90f561429564d767c434b95a2cc19d459ffe66ca6",
+            "license": "CC0-1.0",
+            "derivation": "256px Lanczos; lossless WebP; GL normal RGB"
+          }
+        },
+        "roughness": {
+          "path": "assets/materials/oak-wood-planks-roughness.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 256,
+          "bytes": 38272,
+          "sha256": "d220b508786e166050f1d9c5f26fa4cd3d1d4052e5802886f2db55c4d3931794",
+          "origin": {
+            "repository": "Juanmaes83/casa-serra",
+            "revision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+            "path": "assets/tex-1k/oak_wood_planks/arm.jpg",
+            "sha256": "78ae57bdfd94be276ec4ebe73211ae54a3bd6c268a396becea8ec2dd9935335a",
+            "license": "CC0-1.0",
+            "derivation": "256px Lanczos; lossless WebP; ARM green only"
+          }
         }
       },
       "sample": {
@@ -312,8 +344,8 @@
         "bytes": 762,
         "sha256": "e74eae1cce77f970f050be4dfcae98b094ad0bb152b7e2cae1a803dbb478284d"
       },
-      "totalBytes": 8670,
-      "estimatedGpuBytes": 349526
+      "totalBytes": 52304,
+      "estimatedGpuBytes": 1048578
     },
     {
       "id": "surface-old-wood-floor",
@@ -1294,6 +1326,38 @@
           "height": 256,
           "bytes": 3940,
           "sha256": "625861c56b8d1a6992389b67bc1a0af3f104eb07af2df5c612b65ba31f4438a5"
+        },
+        "normal": {
+          "path": "assets/materials/marble-01-normal.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 256,
+          "bytes": 29558,
+          "sha256": "281c59055a8e51a6260aeb7d9ee6c3aaaca5d961bded7bf4cc9111bd5c83fb7d",
+          "origin": {
+            "repository": "Juanmaes83/casa-serra",
+            "revision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+            "path": "assets/tex-1k/marble_01/nor.jpg",
+            "sha256": "8cc887e0ac036f1727b51c256699466ec763d4e59a8176e1de52714f1412b1b8",
+            "license": "CC0-1.0",
+            "derivation": "256px Lanczos; lossless WebP; GL normal RGB"
+          }
+        },
+        "roughness": {
+          "path": "assets/materials/marble-01-roughness.webp",
+          "format": "image/webp",
+          "width": 256,
+          "height": 256,
+          "bytes": 20118,
+          "sha256": "0720380e7bba20cd9af8157f7166ae9b1e2cbc7de90ce0ddc89c52875d569d39",
+          "origin": {
+            "repository": "Juanmaes83/casa-serra",
+            "revision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+            "path": "assets/tex-1k/marble_01/arm.jpg",
+            "sha256": "3396e4298865d27923e3d392bd0193e6537b61cee56430739b8378bbcf842d9c",
+            "license": "CC0-1.0",
+            "derivation": "256px Lanczos; lossless WebP; ARM green only"
+          }
         }
       },
       "sample": {
@@ -1304,8 +1368,8 @@
         "bytes": 502,
         "sha256": "c9b6d7e42fcb72173e8a49fb0bbe9da901584aafa710c17bd9b39f719d056600"
       },
-      "totalBytes": 4442,
-      "estimatedGpuBytes": 349526
+      "totalBytes": 54118,
+      "estimatedGpuBytes": 1048578
     },
     {
       "id": "surface-marble-tiles",

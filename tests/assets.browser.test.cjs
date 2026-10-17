@@ -9,7 +9,7 @@ after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));})
 async function setup(t,viewport={width:1440,height:900}){
  const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());const page=await context.newPage(),errors=[],requests=[],consoleMessages=[];page.on('console',m=>consoleMessages.push({type:m.type(),text:m.text()}));page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({url:r.url(),method:r.method(),body:r.postData()}));page.on('websocket',s=>errors.push('Unexpected WebSocket '+s.url()));
  // Verified HTTPS transport for the platform CA; no TLS bypass or product/network changes.
- await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();let pending=cache.get(target);if(!pending){pending=run('curl',['--fail','--silent','--show-error','--max-time','20',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout);cache.set(target,pending);}try{await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await pending});}catch(e){errors.push('Verified CDN unavailable: '+e.message);await route.abort();}});
+ await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();let pending=cache.get(target);if(!pending){pending=require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--silent','--show-error','--max-time','20',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout));cache.set(target,pending);}try{await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await pending});}catch(e){errors.push('Verified CDN unavailable: '+e.message);await route.abort();}});
  await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>window.View3D&&window.FloorPlanAssetUI?.ready,null,{timeout:40000});
  const project=Core.clone(fixture);project.objects=[project.objects[1]];delete project.objects[0].assetRef;project.objects[0].rotationDeg=90;project.objects[0].elevationMm=100;project.objects[0].roomId=project.rooms[0].id;delete project.sourceImages;delete project.scale.calibration;project.scale={confidence:'estimated',method:'template'};
  await page.evaluate(p=>FloorPlanApp.importProject(p),project);
@@ -18,6 +18,11 @@ async function setup(t,viewport={width:1440,height:900}){
  return {page,context,errors,requests,consoleMessages,project,mobile};
 }
 async function open3D(page){await page.click('[data-view="3d"]');await page.waitForFunction(()=>document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'),null,{timeout:20000});}
+async function openLibrary(page){
+ const mobile=await page.evaluate(()=>matchMedia('(max-width:1100px)').matches);
+ if(mobile){if(!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();await page.waitForFunction(()=>document.querySelector('aside.lib').getBoundingClientRect().left>=-.5);}
+ else if(await page.locator('.app').evaluate(el=>el.classList.contains('hide-lib'))){await page.locator('#tgLib').click();await require('./layout-fixture.cjs')(page);}
+}
 test('normalized Asset Lab cohort passes the production loader and searchable catalog',{timeout:300000},async t=>{
  const {page,errors}=await setup(t),entries=await page.evaluate(()=>FloorPlanAssetUI.entries.filter(e=>e.dimensionsKind==='model-geometry'));
  assert.equal(entries.length,18);const metrics=[];
@@ -207,10 +212,10 @@ test('search keeps generics during catalog pending/exclusion and unavailable mod
  let release;const pending=new Promise(r=>release=r);
  await page.route('**/assets/f3/external.manifest.json',async route=>{await pending;const source=JSON.parse(await fs.readFile('assets/f3/external.manifest.json','utf8'));source.source[1].qaStatus='pending';await route.fulfill({contentType:'application/json',body:JSON.stringify(source)});});
  await page.reload({waitUntil:'domcontentloaded'});await page.waitForSelector('#furnitureSearch');assert.match(await page.locator('#searchCatalogState').innerText(),/Cargando catálogo/);assert.equal(await page.locator('#searchResults .item').count(),60);await page.locator('#furnitureSearch').fill('cama');assert.ok(await page.locator('#searchResults .item').count()>0);
- release();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),80);await page.locator('#furnitureSearch').fill('alhamn');assert.equal(await page.locator('#searchResults .item').count(),0);
+ release();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await openLibrary(page);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),80);await page.locator('#furnitureSearch').fill('alhamn');assert.equal(await page.locator('#searchResults .item').count(),0);
  await page.route('**/assets/f3/songesand-90366839.glb',r=>r.fulfill({status:404,body:'Missing'}));await page.locator('#furnitureSearch').fill('songesand');await page.locator('#searchResults .item').click();const inserted=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));
  await open3D(page);await page.waitForFunction(id=>View3D.assetStatus(id)?.state==='error',inserted.id);assert.deepEqual(await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id),inserted.id),inserted);assert.match(await page.locator('#fAssetStatus').innerText(),/genérico/);assert.equal(await page.evaluate(()=>View3D.assetObjects.length),0);await page.click('[data-view="2d"]');assert.deepEqual(errors,[]);
- await page.unroute('**/assets/f3/external.manifest.json');await page.route('**/assets/f3/external.manifest.json',r=>r.fulfill({status:404,body:'Missing catalog'}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),61);assert.match(await page.locator('#searchCatalogState').innerText(),/genérico/);
+ await page.unroute('**/assets/f3/external.manifest.json');await page.route('**/assets/f3/external.manifest.json',r=>r.fulfill({status:404,body:'Missing catalog'}));await page.reload();await page.waitForFunction(()=>FloorPlanAssetUI.ready);await openLibrary(page);await page.locator('#searchAll').click();assert.equal(await page.locator('#searchResults .item').count(),61);assert.match(await page.locator('#searchCatalogState').innerText(),/genérico/);
 });
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`protected preview session keeps both authorized catalogs and textured assets ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
@@ -221,8 +226,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.filter(e=>e.catalog==='immersphere-asset-lab').length),20,JSON.stringify({responses,error:await page.evaluate(()=>FloorPlanAssetUI.error)}));
  assert.equal(await page.evaluate(()=>FloorPlanAssetUI.entries.length),21);assert.equal(await page.evaluate(()=>FloorPlanAssetUI.error),null);
  for(const term of ['cómoda','puf']){
-  if(mobile&&!await page.locator('aside.lib').evaluate(el=>el.classList.contains('open')))await page.locator('#tgLib').tap();
-  if(mobile)await page.waitForFunction(()=>document.querySelector('aside.lib').getBoundingClientRect().left>=-.5);
+  await openLibrary(page);
   await page.locator('#furnitureSearch').fill(term);const card=page.locator('#searchResults .item[data-key^="asset:"]').filter({hasText:term==='cómoda'?'SONGESAND':'STOCKHOLM'});assert.equal(await card.count(),1);assert.match(await card.innerText(),/Modelo 3D autorizado/);
   await card.click();const object=await page.evaluate(()=>structuredClone(FloorPlanApp.project.objects.at(-1)));assert.deepEqual(object.size,term==='cómoda'?{widthMm:820,depthMm:500,heightMm:810}:{widthMm:690,depthMm:650,heightMm:400});
   await open3D(page);await page.waitForFunction(id=>['ready','error'].includes(View3D.assetStatus(id)?.state),object.id);const status=await page.evaluate(id=>View3D.assetStatus(id),object.id);assert.equal(status.state,'ready',JSON.stringify({status,responses}));assert.match(status.attribution,/IKEA/);assert.ok(status.textureStats.images>0);

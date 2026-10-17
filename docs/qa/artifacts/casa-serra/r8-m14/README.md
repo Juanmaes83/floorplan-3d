@@ -1,0 +1,7 @@
+# R8 M14 — piloto de reflejo acotado, diferido
+
+SHA de código: `f93aed7`. El piloto manual usa el espejo genérico del baño en suite. El material base se comparó desde la misma cámara con una pasada reflejada de 256×256 píxeles, 262.144 bytes RGBA. `base-material.png` muestra la interfaz, `base-scene.png` el canvas de referencia, `reflection-in-scene.png` el canvas con el mapa temporal y `room-reflection.png` el contenido de la pasada. Las cuatro imágenes se abrieron y revisaron visualmente.
+
+Desde la vista cercana, la escena base necesitó **293 llamadas de dibujo** y 25.214 triángulos. La pasada de reflejo requirió **368 llamadas** y 29.050 triángulos adicionales. Primera pasada **936 ms** en Chromium/SwiftShader; tres pasadas calientes **3,4 / 2,9 / 2,4 ms**. El target se libera en `finally`: ocho texturas antes y después de cada una de las cuatro medidas. La cámara y el JSON del proyecto no cambian. Desde la cámara exterior, el espejo no pasa la puerta/visibilidad y la función evita la pasada.
+
+La imagen reflejada enseña esencialmente una pared lisa y no mejora el espejo en este caso. Se difiere M14: el producto mantiene el material base y no ejecuta el piloto de forma automática. La prueba es reproducible a demanda con `View3D.mirrorPilotView(id)` y `View3D.measureMirrorPilot(id)`; no hay carga ni textura persistente. `reflection-pilot.json` contiene las medidas y el resultado del guardia de visibilidad.

@@ -1,0 +1,26 @@
+{
+    "size":  "1440x900",
+    "base":  {
+                 "geometries":  1298,
+                 "textures":  9
+             },
+    "soft":  {
+                 "geometries":  1304,
+                 "textures":  9
+             },
+    "restored":  {
+                     "geometries":  1298,
+                     "textures":  9
+                 },
+    "contact":  {
+                    "enabled":  true,
+                    "rooms":  10,
+                    "spots":  40,
+                    "transferBytes":  0,
+                    "textureCount":  0
+                },
+    "baseMedianMs":  16.59999942779541,
+    "softMedianMs":  16.799999237060547,
+    "projectUnchanged":  true,
+    "entryUnchanged":  true
+}
