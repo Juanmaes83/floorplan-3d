@@ -136,7 +136,9 @@
     const L=Math.hypot(...d),nd=d.map(v=>v/L);if(!blockers.some(b=>{const h=hitBox(b,C,nd);return h&&h.t<L-.03;}))n++;}
    return n/samples.length;
   }
-  const accept=(v,s)=>v>=.75&&s.share>=.4&&s.other<.25&&s.other<s.share*.6;
+  // Accepted with a margin over the criterion (40 % presence, 75 % floor): this 20x12 ray grid is coarser than
+  // an independent measurement and must not accept views that sit on the threshold.
+  const accept=(v,s)=>v>=.78&&s.share>=.42&&s.other<.23&&s.other<s.share*.6;
   const scoreOf=(c,v,s)=>Math.min(v,.92)+.9*s.share-2*Math.max(0,s.other-.12)-(c.top===full?0:.08)-ew*Math.abs(c.elevation-pe);
   for(const top of tops){
    const boxes=occ.get(top);
