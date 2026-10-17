@@ -81,3 +81,19 @@ test('comparison metrics reuse geometry and the Phase A review states without in
  const t=V.metrics(p,{clearanceMm:300});assert.equal(t.review.checks.holgura.status,'checked');assert.ok(t.review.counts.holgura>0);
  const q=Core.clone(p);q.objects=[];assert.deepEqual(V.metrics(q).review.counts,{solape:0,holgura:0,puerta:0});assert.equal(V.metrics(q).objects,0);
 });
+
+test('M12 comparison frame shares scale, includes shifted geometry and rotates object footprints',()=>{
+ const p=Core.initial(),q=Core.clone(p);p.objects[0].rotationDeg=35;q.objects[0].rotationDeg=35;
+ for(const room of q.rooms)for(const point of room.polygon)point.x+=1800;
+ for(const wall of q.walls){wall.start.x+=1800;wall.end.x+=1800;}
+ for(const object of q.objects)object.position.x+=1800;
+ const before=JSON.stringify([p,q]);
+ const comparison=V.comparisonFrame([p,q]),[x,y,w,h]=comparison.viewBox;
+ assert.equal(comparison.scenes.length,2);assert.ok(Math.abs(w/h-1.6)<1e-9);
+ for(const scene of comparison.scenes){assert.ok(scene.envelope.x>=x&&scene.envelope.x+scene.envelope.w<=x+w);assert.ok(scene.envelope.y>=y&&scene.envelope.y+scene.envelope.h<=y+h);}
+ assert.equal(comparison.scenes[0].rooms[0].id,comparison.scenes[1].rooms[0].id);
+ assert.equal(comparison.scenes[0].objects[0].id,comparison.scenes[1].objects[0].id);
+ assert.ok(Math.abs(comparison.scenes[1].objects[0].poly[0][0]-comparison.scenes[0].objects[0].poly[0][0]-1800)<1e-6);
+ assert.notEqual(comparison.scenes[0].objects[0].poly[0][1],comparison.scenes[0].objects[0].poly[1][1]);
+ assert.equal(JSON.stringify([p,q]),before,'comparison must not edit either project');
+});

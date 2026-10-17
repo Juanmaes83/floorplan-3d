@@ -1,0 +1,2382 @@
+{
+ "stops": {
+  "1440x900/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_master": 0.057,
+    "outside": 0.182,
+    "rom_hall": 0.044,
+    "rom_kid": 0.002,
+    "wallTop": 0.242,
+    "rom_mbath": 0.472
+   },
+   "target": 0.472,
+   "topOther": [
+    "rom_master",
+    0.057
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.87,
+   "pitchDownDeg": 66,
+   "height": 4.362,
+   "medianHitM": 4.52,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.304,
+    "topOther": [
+     "rom_kid",
+     0.252
+    ],
+    "floorVisible": 0.87
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_mbath",
+    "eye": [
+     5094.635179413411,
+     4.362249049249768,
+     -666.4172678873427
+    ],
+    "look": [
+     5094.635179413411,
+     0.5048924191402984,
+     1050.988553302462
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 270,
+    "floorVisible": 0.868,
+    "share": 0.442,
+    "otherShare": 0.058,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño en suite"
+  },
+  "1440x900/rom_master": {
+   "roomId": "rom_master",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_hall": 0.028,
+    "rom_gbath": 0,
+    "outside": 0.132,
+    "rom_kid": 0.001,
+    "wallTop": 0.132,
+    "rom_mbath": 0.035,
+    "rom_master": 0.613,
+    "rom_bay1": 0.059
+   },
+   "target": 0.613,
+   "topOther": [
+    "rom_bay1",
+    0.059
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 1,
+   "floorVisible": 0.967,
+   "pitchDownDeg": 74,
+   "height": 8.468,
+   "medianHitM": 8.59,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.394,
+    "topOther": [
+     "rom_bay1",
+     0.037
+    ],
+    "floorVisible": 0.967
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_master",
+    "eye": [
+     10763.817386811737,
+     8.467880969054107,
+     600.9873731319428
+    ],
+    "look": [
+     8475.716458687253,
+     0.4883247433469906,
+     600.9873731319428
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 74,
+    "azimuthDeg": 0,
+    "floorVisible": 1,
+    "share": 0.604,
+    "otherShare": 0.087,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Dormitorio principal"
+  },
+  "1440x900/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_kitchen": 0.003,
+    "wallTop": 0.242,
+    "rom_laundry": 0.027,
+    "outside": 0.052,
+    "rom_dining": 0.011,
+    "rom_gbath": 0.606,
+    "rom_hall": 0.06
+   },
+   "target": 0.606,
+   "topOther": [
+    "rom_hall",
+    0.06
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 1,
+   "floorVisible": 0.965,
+   "pitchDownDeg": 66,
+   "height": 3.978,
+   "medianHitM": 4.09,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.389,
+    "topOther": [
+     "rom_kid",
+     0.274
+    ],
+    "floorVisible": 0.965
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_gbath",
+    "eye": [
+     5041.761959502299,
+     3.978178225052786,
+     3848.9682729960837
+    ],
+    "look": [
+     3494.3059621444845,
+     0.5025351489885086,
+     3848.9682729960837
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.953,
+    "share": 0.613,
+    "otherShare": 0.083,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño de invitados"
+  },
+  "1440x900/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_child": 0.048,
+    "wallTop": 0.278,
+    "rom_hall": 0.44,
+    "rom_living": 0.063,
+    "rom_dining": 0.003,
+    "rom_gbath": 0.026,
+    "outside": 0.043,
+    "rom_kid": 0.023,
+    "rom_master": 0.027,
+    "rom_mbath": 0.049
+   },
+   "target": 0.44,
+   "topOther": [
+    "rom_living",
+    0.063
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 1,
+   "floorVisible": 0.896,
+   "pitchDownDeg": 66,
+   "height": 5.987,
+   "medianHitM": 5.67,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.284,
+    "topOther": [
+     "rom_kid",
+     0.2
+    ],
+    "floorVisible": 0.896
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_hall",
+    "eye": [
+     4887.165232285762,
+     5.986649648682545,
+     1860.0988910631388
+    ],
+    "look": [
+     4887.165232285763,
+     0.43977283119711164,
+     4329.727564080576
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 66,
+    "azimuthDeg": 270,
+    "floorVisible": 0.875,
+    "share": 0.433,
+    "otherShare": 0.067,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Pasillo"
+  },
+  "1440x900/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_kid": 0.003,
+    "wallTop": 0.322,
+    "outside": 0.05,
+    "rom_gbath": 0.019,
+    "rom_laundry": 0.603,
+    "rom_kitchen": 0.003
+   },
+   "target": 0.603,
+   "topOther": [
+    "rom_gbath",
+    0.019
+   ],
+   "floorSamples": 416,
+   "floorInFrame": 1,
+   "floorVisible": 0.966,
+   "pitchDownDeg": 74,
+   "height": 4.055,
+   "medianHitM": 3.99,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.388,
+    "topOther": [
+     "rom_kitchen",
+     0.243
+    ],
+    "floorVisible": 0.966
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_laundry",
+    "eye": [
+     102.61082913546593,
+     4.055151462796537,
+     4711.031727003917
+    ],
+    "look": [
+     1119.6002850105344,
+     0.508487745143916,
+     4711.031727003917
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 74,
+    "azimuthDeg": 180,
+    "floorVisible": 0.952,
+    "share": 0.629,
+    "otherShare": 0.025,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Balcón-lavadero"
+  },
+  "1440x900/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.145,
+    "wallTop": 0.153,
+    "rom_dining": 0.094,
+    "rom_kitchen": 0.452,
+    "rom_laundry": 0.155
+   },
+   "target": 0.452,
+   "topOther": [
+    "rom_laundry",
+    0.155
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 1,
+   "floorVisible": 0.942,
+   "pitchDownDeg": 66,
+   "height": 5.739,
+   "medianHitM": 6.16,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.291,
+    "topOther": [
+     "rom_laundry",
+     0.101
+    ],
+    "floorVisible": 0.942
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_kitchen",
+    "eye": [
+     388.76927994885295,
+     5.739154718360607,
+     4200.827488524247
+    ],
+    "look": [
+     388.7692799488534,
+     0.4845609640811128,
+     6540.323357572552
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 270,
+    "floorVisible": 1,
+    "share": 0.438,
+    "otherShare": 0.158,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Cocina"
+  },
+  "1440x900/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "wallTop": 0.11,
+    "rom_dining": 0.502,
+    "rom_kitchen": 0.157,
+    "rom_hall": 0.043,
+    "rom_living": 0.106,
+    "outside": 0.001,
+    "rom_child": 0.082
+   },
+   "target": 0.502,
+   "topOther": [
+    "rom_kitchen",
+    0.157
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 1,
+   "floorVisible": 0.997,
+   "pitchDownDeg": 58,
+   "height": 6.5,
+   "medianHitM": 7.14,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.324,
+    "topOther": [
+     "rom_hall",
+     0.126
+    ],
+    "floorVisible": 0.997
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_dining",
+    "eye": [
+     7364.668220991385,
+     6.499585275827214,
+     5683.986653879965
+    ],
+    "look": [
+     3583.2178674045185,
+     0.4479997051276623,
+     5683.986653879965
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 1,
+    "share": 0.542,
+    "otherShare": 0.15,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Comedor"
+  },
+  "1440x900/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kid": 0.703,
+    "wallTop": 0.103,
+    "outside": 0.18,
+    "rom_hall": 0.015
+   },
+   "target": 0.703,
+   "topOther": [
+    "rom_hall",
+    0.015
+   ],
+   "floorSamples": 396,
+   "floorInFrame": 1,
+   "floorVisible": 0.955,
+   "pitchDownDeg": 74,
+   "height": 7.159,
+   "medianHitM": 7.24,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.45,
+    "topOther": [
+     "rom_laundry",
+     0.036
+    ],
+    "floorVisible": 0.955
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_kid",
+    "eye": [
+     2312.2033085590983,
+     7.159460962378757,
+     -253.31216348600293
+    ],
+    "look": [
+     2312.203308559099,
+     0.4923844081383191,
+     1658.4412749431754
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 74,
+    "azimuthDeg": 270,
+    "floorVisible": 0.975,
+    "share": 0.667,
+    "otherShare": 0.017,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Dormitorio infantil"
+  },
+  "1440x900/rom_child": {
+   "roomId": "rom_child",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_dining": 0.069,
+    "rom_hall": 0.057,
+    "outside": 0.139,
+    "rom_gbath": 0.019,
+    "rom_kid": 0.006,
+    "rom_living": 0.05,
+    "wallTop": 0.15,
+    "rom_child": 0.442,
+    "rom_master": 0.006,
+    "rom_bay2": 0.061
+   },
+   "target": 0.442,
+   "topOther": [
+    "rom_dining",
+    0.069
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.944,
+   "pitchDownDeg": 58,
+   "height": 6.709,
+   "medianHitM": 7.8,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.284,
+    "topOther": [
+     "rom_master",
+     0.186
+    ],
+    "floorVisible": 0.944
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_child",
+    "eye": [
+     12437.794472070804,
+     6.709487652879483,
+     4102.203308559099
+    ],
+    "look": [
+     8484.33397300374,
+     0.382628307022598,
+     4102.203308559099
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 0.949,
+    "share": 0.475,
+    "otherShare": 0.087,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio juvenil"
+  },
+  "1440x900/rom_living": {
+   "roomId": "rom_living",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.2,
+    "wallTop": 0.116,
+    "rom_kitchen": 0.023,
+    "rom_dining": 0.06,
+    "rom_living": 0.414,
+    "rom_hall": 0.003,
+    "rom_child": 0.015,
+    "rom_balcony": 0.171
+   },
+   "target": 0.414,
+   "topOther": [
+    "rom_balcony",
+    0.171
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.972,
+   "pitchDownDeg": 58,
+   "height": 9.162,
+   "medianHitM": 10.83,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.267,
+    "topOther": [
+     "rom_child",
+     0.151
+    ],
+    "floorVisible": 0.972
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_living",
+    "eye": [
+     13386.378827427783,
+     9.162489265813647,
+     7314.421401742188
+    ],
+    "look": [
+     7853.138492296495,
+     0.307453700020373,
+     7314.421401742188
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 0.952,
+    "share": 0.421,
+    "otherShare": 0.192,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Salón"
+  },
+  "1440x900/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.28,
+    "wallTop": 0.216,
+    "rom_balcony": 0.412,
+    "rom_living": 0.086,
+    "rom_child": 0.005
+   },
+   "target": 0.412,
+   "topOther": [
+    "rom_living",
+    0.086
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.941,
+   "pitchDownDeg": 58,
+   "height": 5.001,
+   "medianHitM": 5.88,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.264,
+    "topOther": [
+     "rom_living",
+     0.342
+    ],
+    "floorVisible": 0.941
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_balcony",
+    "eye": [
+     10590.920177216409,
+     5.000616205888733,
+     5511.19303163191
+    ],
+    "look": [
+     10590.920177216409,
+     0.38247825790682555,
+     8396.925898215235
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 270,
+    "floorVisible": 0.912,
+    "share": 0.412,
+    "otherShare": 0.087,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6438053097345132,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Balcón de estar"
+  },
+  "1440x900/errors": [],
+  "390x844/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_master": 0.025,
+    "wallTop": 0.278,
+    "rom_kid": 0.009,
+    "rom_mbath": 0.629,
+    "outside": 0.059
+   },
+   "target": 0.629,
+   "topOther": [
+    "rom_master",
+    0.025
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0.957,
+   "floorVisible": 0.826,
+   "pitchDownDeg": 74,
+   "height": 5.858,
+   "medianHitM": 6.25,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.306,
+    "topOther": [
+     "rom_master",
+     0.012
+    ],
+    "floorVisible": 0.826
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_mbath",
+    "eye": [
+     5590,
+     5.858080390050705,
+     -1566.355124991668
+    ],
+    "look": [
+     5590,
+     0.21650636302454807,
+     51.34019567481896
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 74,
+    "azimuthDeg": 270,
+    "floorVisible": 0.868,
+    "share": 0.617,
+    "otherShare": 0.025,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño en suite"
+  },
+  "390x844/rom_master": {
+   "roomId": "rom_master",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.128,
+    "rom_hall": 0.059,
+    "wallTop": 0.131,
+    "rom_mbath": 0.073,
+    "rom_child": 0.015,
+    "rom_master": 0.561,
+    "rom_bay1": 0.032
+   },
+   "target": 0.561,
+   "topOther": [
+    "rom_mbath",
+    0.073
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 1,
+   "floorVisible": 0.92,
+   "pitchDownDeg": 66,
+   "height": 9.837,
+   "medianHitM": 11.91,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.285,
+    "topOther": [
+     "rom_mbath",
+     0.035
+    ],
+    "floorVisible": 0.92
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_master",
+    "eye": [
+     14874.522936331443,
+     9.836633471742815,
+     1684.9999999999998
+    ],
+    "look": [
+     10339.966985737985,
+     -0.3481459466162864,
+     1684.9999999999998
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.95,
+    "share": 0.529,
+    "otherShare": 0.067,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio principal"
+  },
+  "390x844/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "wallTop": 0.263,
+    "rom_laundry": 0.01,
+    "outside": 0.007,
+    "rom_kid": 0.052,
+    "rom_dining": 0.056,
+    "rom_gbath": 0.556,
+    "rom_hall": 0.056
+   },
+   "target": 0.556,
+   "topOther": [
+    "rom_dining",
+    0.056
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 1,
+   "floorVisible": 0.905,
+   "pitchDownDeg": 66,
+   "height": 5.514,
+   "medianHitM": 6.35,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.285,
+    "topOther": [
+     "rom_hall",
+     0.302
+    ],
+    "floorVisible": 0.905
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_gbath",
+    "eye": [
+     6917.317299737399,
+     5.5144633767393,
+     4279.999999999999
+    ],
+    "look": [
+     4488.738192830793,
+     0.05978539429160801,
+     4279.999999999999
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.837,
+    "share": 0.525,
+    "otherShare": 0.087,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño de invitados"
+  },
+  "390x844/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_kid": 0.058,
+    "wallTop": 0.116,
+    "rom_master": 0.044,
+    "outside": 0.043,
+    "rom_hall": 0.332,
+    "rom_gbath": 0.064,
+    "rom_child": 0.136,
+    "rom_dining": 0.158,
+    "rom_living": 0.05
+   },
+   "target": 0.332,
+   "topOther": [
+    "rom_dining",
+    0.158
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 1,
+   "floorVisible": 0.954,
+   "pitchDownDeg": 58,
+   "height": 7.776,
+   "medianHitM": 10.3,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.172,
+    "topOther": [
+     "rom_living",
+     0.375
+    ],
+    "floorVisible": 0.954
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_hall",
+    "eye": [
+     5451.5,
+     7.776221368610006,
+     11276.84194146804
+    ],
+    "look": [
+     5451.5,
+     -0.5179535591805919,
+     6094.066229716935
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 90,
+    "floorVisible": 0.938,
+    "share": 0.317,
+    "otherShare": 0.167,
+    "accepted": false,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Pasillo"
+  },
+  "390x844/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_kid": 0.02,
+    "wallTop": 0.301,
+    "outside": 0.123,
+    "rom_gbath": 0.005,
+    "rom_laundry": 0.464,
+    "rom_kitchen": 0.087
+   },
+   "target": 0.464,
+   "topOther": [
+    "rom_kitchen",
+    0.087
+   ],
+   "floorSamples": 416,
+   "floorInFrame": 0.962,
+   "floorVisible": 0.757,
+   "pitchDownDeg": 74,
+   "height": 6.065,
+   "medianHitM": 6.51,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.227,
+    "topOther": [
+     "rom_kitchen",
+     0.043
+    ],
+    "floorVisible": 0.757
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_laundry",
+    "eye": [
+     -1621.6921134620286,
+     6.065037625884698,
+     4280
+    ],
+    "look": [
+     58.84159824651181,
+     0.20432008631076037,
+     4280
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 74,
+    "azimuthDeg": 180,
+    "floorVisible": 0.786,
+    "share": 0.442,
+    "otherShare": 0.083,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Balcón-lavadero"
+  },
+  "390x844/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "wallTop": 0.19,
+    "outside": 0.016,
+    "rom_dining": 0.079,
+    "rom_kitchen": 0.677,
+    "rom_laundry": 0.038
+   },
+   "target": 0.677,
+   "topOther": [
+    "rom_dining",
+    0.079
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 1,
+   "floorVisible": 0.891,
+   "pitchDownDeg": 66,
+   "height": 6.749,
+   "medianHitM": 8.03,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.349,
+    "topOther": [
+     "rom_laundry",
+     0.206
+    ],
+    "floorVisible": 0.891
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_kitchen",
+    "eye": [
+     1089.9999999999993,
+     6.749309022142721,
+     2285.5926800802827
+    ],
+    "look": [
+     1090,
+     -0.05997288366535791,
+     5317.280310898416
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 270,
+    "floorVisible": 0.923,
+    "share": 0.646,
+    "otherShare": 0.096,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Cocina"
+  },
+  "390x844/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.032,
+    "wallTop": 0.1,
+    "rom_kitchen": 0.204,
+    "rom_laundry": 0.015,
+    "rom_dining": 0.485,
+    "rom_gbath": 0.011,
+    "rom_living": 0.075,
+    "rom_hall": 0.078
+   },
+   "target": 0.485,
+   "topOther": [
+    "rom_kitchen",
+    0.204
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 1,
+   "floorVisible": 1,
+   "pitchDownDeg": 58,
+   "height": 7.46,
+   "medianHitM": 9.93,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.254,
+    "topOther": [
+     "rom_living",
+     0.274
+    ],
+    "floorVisible": 1
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_dining",
+    "eye": [
+     9907.991949170575,
+     7.460197771989156,
+     6574.999999999999
+    ],
+    "look": [
+     4980.643205007538,
+     -0.4252085599220097,
+     6574.999999999999
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 1,
+    "share": 0.483,
+    "otherShare": 0.183,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Comedor"
+  },
+  "390x844/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_hall": 0.021,
+    "wallTop": 0.201,
+    "rom_gbath": 0.022,
+    "outside": 0.147,
+    "rom_laundry": 0.005,
+    "rom_kid": 0.599,
+    "rom_mbath": 0.005
+   },
+   "target": 0.599,
+   "topOther": [
+    "rom_gbath",
+    0.022
+   ],
+   "floorSamples": 396,
+   "floorInFrame": 1,
+   "floorVisible": 0.818,
+   "pitchDownDeg": 66,
+   "height": 8.279,
+   "medianHitM": 10.02,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.298,
+    "topOther": [
+     "rom_gbath",
+     0.011
+    ],
+    "floorVisible": 0.818
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_kid",
+    "eye": [
+     3199.999999999999,
+     8.278937048494443,
+     -3677.14998506908
+    ],
+    "look": [
+     3200,
+     -0.20552091521490112,
+     100.37407966877154
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 270,
+    "floorVisible": 0.85,
+    "share": 0.521,
+    "otherShare": 0.017,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio infantil"
+  },
+  "390x844/rom_child": {
+   "roomId": "rom_child",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_living": 0.041,
+    "wallTop": 0.174,
+    "rom_hall": 0.059,
+    "rom_child": 0.659,
+    "outside": 0.042,
+    "rom_master": 0.02,
+    "rom_bay2": 0.004,
+    "rom_balcony": 0
+   },
+   "target": 0.659,
+   "topOther": [
+    "rom_hall",
+    0.059
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0.958,
+   "floorVisible": 0.902,
+   "pitchDownDeg": 66,
+   "height": 8.637,
+   "medianHitM": 10.4,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.346,
+    "topOther": [
+     "rom_bay2",
+     0.039
+    ],
+    "floorVisible": 0.924
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_child",
+    "eye": [
+     13930.675581990596,
+     8.63667993784112,
+     4990
+    ],
+    "look": [
+     9975.221656563941,
+     -0.2474150361509313,
+     4990
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.949,
+    "share": 0.621,
+    "otherShare": 0.05,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio juvenil"
+  },
+  "390x844/rom_living": {
+   "roomId": "rom_living",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.097,
+    "wallTop": 0.108,
+    "rom_dining": 0.077,
+    "rom_living": 0.668,
+    "rom_hall": 0.009,
+    "rom_child": 0.026,
+    "rom_balcony": 0.014
+   },
+   "target": 0.668,
+   "topOther": [
+    "rom_dining",
+    0.077
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.969,
+   "pitchDownDeg": 66,
+   "height": 11.548,
+   "medianHitM": 14.06,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.34,
+    "topOther": [
+     "rom_balcony",
+     0.11
+    ],
+    "floorVisible": 0.969
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_living",
+    "eye": [
+     15238.547489660756,
+     11.548234525681968,
+     8585
+    ],
+    "look": [
+     9860.54863402344,
+     -0.5309486740942333,
+     8585
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.929,
+    "share": 0.613,
+    "otherShare": 0.108,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Salón"
+  },
+  "390x844/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.349,
+    "wallTop": 0.141,
+    "rom_balcony": 0.312,
+    "rom_living": 0.184,
+    "rom_child": 0.014
+   },
+   "target": 0.312,
+   "topOther": [
+    "rom_living",
+    0.184
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.772,
+   "pitchDownDeg": 58,
+   "height": 7.704,
+   "medianHitM": 10.41,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.161,
+    "topOther": [
+     "rom_child",
+     0.377
+    ],
+    "floorVisible": 0.772
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.5109756097560976
+   ],
+   "frame": {
+    "roomId": "rom_balcony",
+    "eye": [
+     7920.698617824264,
+     7.704445178104658,
+     2692.755491230959
+    ],
+    "look": [
+     10484.816060099829,
+     -0.5024461806753528,
+     7133.937177825789
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 240,
+    "floorVisible": 0.824,
+    "share": 0.287,
+    "otherShare": 0.175,
+    "accepted": false,
+    "region": [
+     0,
+     0,
+     1,
+     0.5609756097560976
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Balcón de estar"
+  },
+  "390x844/errors": [],
+  "844x390/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "wallTop": 0.222,
+    "rom_kid": 0.164,
+    "rom_mbath": 0.447,
+    "rom_master": 0.142,
+    "outside": 0.025
+   },
+   "target": 0.447,
+   "topOther": [
+    "rom_kid",
+    0.164
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.957,
+   "pitchDownDeg": 66,
+   "height": 3.463,
+   "medianHitM": 3.67,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.279,
+    "topOther": [
+     "rom_master",
+     0.463
+    ],
+    "floorVisible": 0.957
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_mbath",
+    "eye": [
+     6449.380268379906,
+     3.462961265286102,
+     2346.028550119173
+    ],
+    "look": [
+     6449.380268379906,
+     0.5048924191402984,
+     1029.0114466975383
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 90,
+    "floorVisible": 1,
+    "share": 0.483,
+    "otherShare": 0.171,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño en suite"
+  },
+  "844x390/rom_master": {
+   "roomId": "rom_master",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.188,
+    "wallTop": 0.157,
+    "rom_bay1": 0.041,
+    "rom_master": 0.511,
+    "rom_child": 0.065,
+    "rom_bay2": 0.003,
+    "rom_mbath": 0.03,
+    "rom_hall": 0.006
+   },
+   "target": 0.511,
+   "topOther": [
+    "rom_child",
+    0.065
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 1,
+   "floorVisible": 0.955,
+   "pitchDownDeg": 58,
+   "height": 4.732,
+   "medianHitM": 5.81,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.317,
+    "topOther": [
+     "rom_child",
+     0.292
+    ],
+    "floorVisible": 0.955
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_master",
+    "eye": [
+     5560.223253920722,
+     4.731972581746953,
+     3039.1349485975384
+    ],
+    "look": [
+     8269.337917777426,
+     0.39648284204563033,
+     3039.134948597538
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 180,
+    "floorVisible": 0.95,
+    "share": 0.504,
+    "otherShare": 0.067,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio principal"
+  },
+  "844x390/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_kitchen": 0.049,
+    "wallTop": 0.201,
+    "outside": 0.041,
+    "rom_laundry": 0.005,
+    "rom_kid": 0.171,
+    "rom_dining": 0.165,
+    "rom_gbath": 0.368
+   },
+   "target": 0.368,
+   "topOther": [
+    "rom_kid",
+    0.171
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 1,
+   "floorVisible": 0.915,
+   "pitchDownDeg": 66,
+   "height": 3.554,
+   "medianHitM": 3.85,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.228,
+    "topOther": [
+     "rom_kid",
+     0.447
+    ],
+    "floorVisible": 0.915
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_gbath",
+    "eye": [
+     4853.046561298093,
+     3.5543165008841635,
+     3389.166267464046
+    ],
+    "look": [
+     3494.305962144484,
+     0.5025351489885086,
+     3389.166267464046
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 0,
+    "floorVisible": 0.93,
+    "share": 0.4,
+    "otherShare": 0.183,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Baño de invitados"
+  },
+  "844x390/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_hall": 0.423,
+    "wallTop": 0.143,
+    "rom_child": 0.106,
+    "outside": 0.028,
+    "rom_living": 0.085,
+    "rom_gbath": 0.075,
+    "rom_dining": 0.139
+   },
+   "target": 0.423,
+   "topOther": [
+    "rom_dining",
+    0.139
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 1,
+   "floorVisible": 0.977,
+   "pitchDownDeg": 74,
+   "height": 5.465,
+   "medianHitM": 5.53,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.263,
+    "topOther": [
+     "rom_living",
+     0.385
+    ],
+    "floorVisible": 0.977
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_hall",
+    "eye": [
+     5178.792684153385,
+     5.46467426833761,
+     6668.54891711084
+    ],
+    "look": [
+     6413.920610670886,
+     0.4909137387901925,
+     5955.447476252337
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 74,
+    "azimuthDeg": 150,
+    "floorVisible": 0.938,
+    "share": 0.417,
+    "otherShare": 0.142,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Pasillo"
+  },
+  "844x390/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.115,
+    "wallTop": 0.283,
+    "rom_laundry": 0.56,
+    "rom_gbath": 0.001,
+    "rom_kitchen": 0.04
+   },
+   "target": 0.56,
+   "topOther": [
+    "rom_kitchen",
+    0.04
+   ],
+   "floorSamples": 416,
+   "floorInFrame": 1,
+   "floorVisible": 0.933,
+   "pitchDownDeg": 74,
+   "height": 3.222,
+   "medianHitM": 3.23,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.346,
+    "topOther": [
+     "rom_gbath",
+     0.248
+    ],
+    "floorVisible": 0.933
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_laundry",
+    "eye": [
+     1871.831952240934,
+     3.221709299497994,
+     4985.502369666051
+    ],
+    "look": [
+     1871.831952240934,
+     0.519854806559632,
+     4210.758060824272
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 74,
+    "azimuthDeg": 90,
+    "floorVisible": 0.929,
+    "share": 0.583,
+    "otherShare": 0.025,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Balcón-lavadero"
+  },
+  "844x390/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.104,
+    "wallTop": 0.146,
+    "rom_kitchen": 0.578,
+    "rom_laundry": 0.027,
+    "rom_dining": 0.144
+   },
+   "target": 0.578,
+   "topOther": [
+    "rom_dining",
+    0.144
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 1,
+   "floorVisible": 0.92,
+   "pitchDownDeg": 58,
+   "height": 3.632,
+   "medianHitM": 4.21,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.356,
+    "topOther": [
+     "rom_laundry",
+     0.148
+    ],
+    "floorVisible": 0.92
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_kitchen",
+    "eye": [
+     3111.783316869772,
+     3.6322843733502883,
+     5581.571326739731
+    ],
+    "look": [
+     1136.3981209809215,
+     0.471007236212841,
+     5581.571326739731
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 0.949,
+    "share": 0.583,
+    "otherShare": 0.129,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Cocina"
+  },
+  "844x390/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.092,
+    "wallTop": 0.112,
+    "rom_kitchen": 0.09,
+    "rom_laundry": 0.001,
+    "rom_dining": 0.586,
+    "rom_gbath": 0.018,
+    "rom_living": 0.055,
+    "rom_hall": 0.045
+   },
+   "target": 0.586,
+   "topOther": [
+    "rom_kitchen",
+    0.09
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 1,
+   "floorVisible": 0.995,
+   "pitchDownDeg": 58,
+   "height": 3.744,
+   "medianHitM": 4.45,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.362,
+    "topOther": [
+     "rom_gbath",
+     0.15
+    ],
+    "floorVisible": 0.995
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_dining",
+    "eye": [
+     5642.629856945434,
+     3.743747821511115,
+     5568.20309588028
+    ],
+    "look": [
+     3583.217867404519,
+     0.4479997051276623,
+     5568.20309588028
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 1,
+    "share": 0.592,
+    "otherShare": 0.071,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Comedor"
+  },
+  "844x390/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "outside": 0.127,
+    "wallTop": 0.206,
+    "rom_hall": 0.031,
+    "rom_kid": 0.618,
+    "rom_gbath": 0.018,
+    "rom_laundry": 0.001
+   },
+   "target": 0.618,
+   "topOther": [
+    "rom_hall",
+    0.031
+   ],
+   "floorSamples": 396,
+   "floorInFrame": 1,
+   "floorVisible": 0.944,
+   "pitchDownDeg": 66,
+   "height": 4.445,
+   "medianHitM": 4.98,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.382,
+    "topOther": [
+     "rom_gbath",
+     0.093
+    ],
+    "floorVisible": 0.944
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_kid",
+    "eye": [
+     1402.9330281269054,
+     4.444735572307405,
+     2893.611779381627
+    ],
+    "look": [
+     3165.9851720034194,
+     0.4848556228500871,
+     2893.611779381627
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 66,
+    "azimuthDeg": 180,
+    "floorVisible": 1,
+    "share": 0.633,
+    "otherShare": 0.029,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio infantil"
+  },
+  "844x390/rom_child": {
+   "roomId": "rom_child",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_living": 0.206,
+    "outside": 0.059,
+    "rom_dining": 0.002,
+    "wallTop": 0.141,
+    "rom_gbath": 0.002,
+    "rom_hall": 0.04,
+    "rom_kid": 0.002,
+    "rom_child": 0.412,
+    "rom_master": 0.1,
+    "rom_bay2": 0.026,
+    "rom_balcony": 0.008,
+    "rom_bay1": 0.001
+   },
+   "target": 0.412,
+   "topOther": [
+    "rom_living",
+    0.206
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.961,
+   "pitchDownDeg": 58,
+   "height": 4.998,
+   "medianHitM": 6.2,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.25,
+    "topOther": [
+     "rom_master",
+     0.288
+    ],
+    "floorVisible": 0.961
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_child",
+    "eye": [
+     11368.174501700707,
+     4.997737881344355,
+     3542.454722936098
+    ],
+    "look": [
+     8484.333973003739,
+     0.38262830702259976,
+     3542.454722936098
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 0,
+    "floorVisible": 1,
+    "share": 0.408,
+    "otherShare": 0.196,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Dormitorio juvenil"
+  },
+  "844x390/rom_living": {
+   "roomId": "rom_living",
+   "cut": 1.2,
+   "top": 1.2,
+   "share": {
+    "rom_laundry": 0.001,
+    "wallTop": 0.084,
+    "rom_dining": 0.094,
+    "rom_hall": 0.019,
+    "rom_gbath": 0.001,
+    "outside": 0.279,
+    "rom_child": 0.041,
+    "rom_bay2": 0.006,
+    "rom_kitchen": 0.015,
+    "rom_living": 0.423,
+    "rom_balcony": 0.037
+   },
+   "target": 0.423,
+   "topOther": [
+    "rom_dining",
+    0.094
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.882,
+   "pitchDownDeg": 58,
+   "height": 6.178,
+   "medianHitM": 7.86,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.263,
+    "topOther": [
+     "rom_balcony",
+     0.069
+    ],
+    "floorVisible": 0.882
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_living",
+    "eye": [
+     9499.579880602334,
+     6.178199368890904,
+     12394.642596252592
+    ],
+    "look": [
+     9499.579880602334,
+     0.38247825790682644,
+     8773.074101784765
+    ],
+    "wallTop": 1.2,
+    "section": true,
+    "elevationDeg": 58,
+    "azimuthDeg": 90,
+    "floorVisible": 0.976,
+    "share": 0.446,
+    "otherShare": 0.1,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": "Vista seccionada: muros a 1,2 m para ver la estancia; el proyecto no cambia.",
+   "title": "Salón"
+  },
+  "844x390/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_balcony": 0.432,
+    "outside": 0.202,
+    "rom_living": 0.105,
+    "wallTop": 0.26,
+    "rom_bay2": 0.001
+   },
+   "target": 0.432,
+   "topOther": [
+    "rom_living",
+    0.105
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.971,
+   "pitchDownDeg": 74,
+   "height": 5.024,
+   "medianHitM": 5.22,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.268,
+    "topOther": [
+     "rom_child",
+     0.218
+    ],
+    "floorVisible": 0.971
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": {
+    "roomId": "rom_balcony",
+    "eye": [
+     11518.654479188399,
+     5.024191303638991,
+     6543.455650607608
+    ],
+    "look": [
+     10394.064473311746,
+     0.49555806406537073,
+     7192.737993228457
+    ],
+    "wallTop": 2.8,
+    "section": false,
+    "elevationDeg": 74,
+    "azimuthDeg": 330,
+    "floorVisible": 1,
+    "share": 0.438,
+    "otherShare": 0.113,
+    "accepted": true,
+    "region": [
+     0,
+     0,
+     0.6184834123222749,
+     1
+    ]
+   },
+   "section": null,
+   "title": "Balcón de estar"
+  },
+  "844x390/errors": []
+ },
+ "routes": {}
+}

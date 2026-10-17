@@ -1,0 +1,60 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "rendering": "Chromium headless / SwiftShader",
+  "checks": [
+    "first visit",
+    "example identity",
+    "independent own copy",
+    "ambiguous query choices",
+    "blank creation",
+    "furniture search/placement",
+    "missing tasks",
+    "3D loaded",
+    "confirmed local storage",
+    "JSON download",
+    "PNG generated",
+    "reload",
+    "invalidation",
+    "optional tasks",
+    "guide hide/resume",
+    "no layout overflow"
+  ],
+  "layout": {
+    "width": 390,
+    "overflow": false,
+    "stage": {
+      "x": 0,
+      "y": 304.875,
+      "width": 390,
+      "height": 515.125,
+      "top": 304.875,
+      "right": 390,
+      "bottom": 820,
+      "left": 0
+    },
+    "bar": {
+      "x": 0,
+      "y": 61,
+      "width": 390,
+      "height": 243.875,
+      "top": 61,
+      "right": 390,
+      "bottom": 304.875,
+      "left": 0
+    },
+    "primary": {
+      "x": 240,
+      "y": 249.5,
+      "width": 130,
+      "height": 38.375,
+      "top": 249.5,
+      "right": 370,
+      "bottom": 287.875,
+      "left": 240
+    }
+  },
+  "errors": []
+}

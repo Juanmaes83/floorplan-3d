@@ -1,0 +1,41 @@
+{
+  "schema": "CasaSerraM08SourceAlignmentV1",
+  "status": "candidate_audit_before_runtime_change",
+  "sourceRevision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+  "sourceAudit": "docs/qa/artifacts/casa-serra/source-map-audit.json",
+  "method": "Downloaded six pinned JPEGs outside the worktree, verified length and SHA-256 against the prior source audit, opened all six visually; compared 1024-to-256 Lanczos downsampling against the existing WebP albedos with per-channel Pearson correlation and mean absolute error, testing direct/flip/rotation variants. The comparison is evidence of crop/orientation, not a physical UV calibration or runtime PBR result.",
+  "licenseEvidence": {
+    "assetPages": ["https://polyhaven.com/a/oak_wood_planks", "https://polyhaven.com/a/marble_01"],
+    "license": "https://polyhaven.com/license",
+    "finding": "Both official asset pages identify their textures as CC0 and expose diffuse, ARM and GL normal maps; the existing Floor Plan catalog records the same Poly Haven asset IDs and pinned CC0 evidence. Exact six JPEG hashes belong to the authorized Casa Serra revision. No Casa Larga code or resource was copied."
+  },
+  "candidates": [
+    {
+      "id": "surface-oak-wood-planks",
+      "sourceAsset": "oak_wood_planks",
+      "baseColor": "assets/materials/oak-wood-planks.webp",
+      "sourceHashes": {"diff": "25c4362be85e32a85736313bf9a0955fbc02c447d6e27acfcc4aaf5df1588646", "nor": "0d9ad8bc2fc3b50006da9bc90f561429564d767c434b95a2cc19d459ffe66ca6", "arm": "78ae57bdfd94be276ec4ebe73211ae54a3bd6c268a396becea8ec2dd9935335a"},
+      "directRgbCorrelation": [0.9232, 0.9303, 0.8688],
+      "directMeanAbsoluteError8bit": 2.38,
+      "nextBestTransform": "flip_x",
+      "nextBestRgbCorrelation": [0.1853, 0.2069, 0.2121],
+      "normalMeanRgb": [128.0, 127.0, 254.26],
+      "armMeanRgb": [240.48, 112.8, 2.53],
+      "visualFinding": "The wood grain and plank joins line up in the current albedo and Serra diffuse without rotation or crop. Normal is almost flat; roughness has visible grain."
+    },
+    {
+      "id": "surface-marble-01",
+      "sourceAsset": "marble_01",
+      "baseColor": "assets/materials/marble-01.webp",
+      "sourceHashes": {"diff": "76c50612b6db3ab5e059f0d666585311236bd73744f04669eb1b2cc0264f9f3c", "nor": "8cc887e0ac036f1727b51c256699466ec763d4e59a8176e1de52714f1412b1b8", "arm": "3396e4298865d27923e3d392bd0193e6537b61cee56430739b8378bbcf842d9c"},
+      "directRgbCorrelation": [0.9192, 0.9419, 0.9328],
+      "directMeanAbsoluteError8bit": 1.87,
+      "nextBestTransform": "flip_x",
+      "nextBestRgbCorrelation": [0.3602, 0.3402, 0.3185],
+      "normalMeanRgb": [125.06, 124.45, 253.32],
+      "armMeanRgb": [244.8, 129.11, 0.5],
+      "visualFinding": "Tile seams and veining align in the current albedo and Serra diffuse without rotation or crop. Normal and ARM seams visually align."
+    }
+  ],
+  "openQuestions": ["Confirm tangent normal green-channel convention in a live same-camera comparison", "Determine whether AO can use the current geometry UV set; do not silently wire AO or metalness", "Measure renderer texture memory and fallback after packaging channels at <=512 px and <=512 KiB"]
+}

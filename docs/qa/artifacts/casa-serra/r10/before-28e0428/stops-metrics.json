@@ -1,0 +1,1541 @@
+{
+ "stops": {
+  "1440x900/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.081,
+    "wallTop": 0.207,
+    "rom_kid": 0.081,
+    "rom_mbath": 0.177,
+    "rom_hall": 0.15,
+    "rom_master": 0.261,
+    "rom_child": 0.043
+   },
+   "target": 0.177,
+   "topOther": [
+    "rom_master",
+    0.261
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0.946,
+   "floorVisible": 0.176,
+   "pitchDownDeg": 57.2,
+   "height": 6.213,
+   "medianHitM": 6.35,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.127,
+    "topOther": [
+     "rom_master",
+     0.444
+    ],
+    "floorVisible": 0.176
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño en suite"
+  },
+  "1440x900/rom_master": {
+   "roomId": "rom_master",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.159,
+    "wallTop": 0.13,
+    "rom_kid": 0.011,
+    "rom_mbath": 0.049,
+    "rom_master": 0.246,
+    "rom_hall": 0.07,
+    "rom_child": 0.298,
+    "rom_gbath": 0.002,
+    "rom_bay1": 0.009,
+    "rom_bay2": 0.027
+   },
+   "target": 0.246,
+   "topOther": [
+    "rom_child",
+    0.298
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 0.867,
+   "floorVisible": 0.514,
+   "pitchDownDeg": 57.2,
+   "height": 8.609,
+   "medianHitM": 9.67,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.221,
+    "topOther": [
+     "rom_child",
+     0.193
+    ],
+    "floorVisible": 0.629
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio principal"
+  },
+  "1440x900/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.087,
+    "outside": 0.025,
+    "rom_laundry": 0.022,
+    "wallTop": 0.108,
+    "rom_gbath": 0.133,
+    "rom_dining": 0.493,
+    "rom_hall": 0.118,
+    "rom_living": 0.012,
+    "rom_child": 0.002
+   },
+   "target": 0.133,
+   "topOther": [
+    "rom_dining",
+    0.493
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 0.965,
+   "floorVisible": 0.095,
+   "pitchDownDeg": 57.2,
+   "height": 6.32,
+   "medianHitM": 6.71,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.103,
+    "topOther": [
+     "rom_dining",
+     0.317
+    ],
+    "floorVisible": 0.107
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño de invitados"
+  },
+  "1440x900/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.085,
+    "outside": 0.058,
+    "rom_laundry": 0.021,
+    "wallTop": 0.094,
+    "rom_kid": 0.033,
+    "rom_gbath": 0.044,
+    "rom_dining": 0.16,
+    "rom_hall": 0.061,
+    "rom_child": 0.105,
+    "rom_living": 0.339
+   },
+   "target": 0.061,
+   "topOther": [
+    "rom_living",
+    0.339
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 0.902,
+   "floorVisible": 0.168,
+   "pitchDownDeg": 57.2,
+   "height": 9.578,
+   "medianHitM": 10.74,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.051,
+    "topOther": [
+     "rom_child",
+     0.224
+    ],
+    "floorVisible": 0.168
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Pasillo"
+  },
+  "1440x900/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.104,
+    "wallTop": 0.108,
+    "rom_laundry": 0.121,
+    "rom_kitchen": 0.401,
+    "rom_gbath": 0.004,
+    "rom_dining": 0.262
+   },
+   "target": 0.121,
+   "topOther": [
+    "rom_kitchen",
+    0.401
+   ],
+   "floorSamples": 416,
+   "floorInFrame": 0.959,
+   "floorVisible": 0.043,
+   "pitchDownDeg": 57.2,
+   "height": 6.351,
+   "medianHitM": 6.63,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.093,
+    "topOther": [
+     "rom_dining",
+     0.261
+    ],
+    "floorVisible": 0.043
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón-lavadero"
+  },
+  "1440x900/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.637,
+    "wallTop": 0.098,
+    "rom_kitchen": 0.228,
+    "rom_laundry": 0.014,
+    "rom_dining": 0.023
+   },
+   "target": 0.228,
+   "topOther": [
+    "rom_dining",
+    0.023
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 0.913,
+   "floorVisible": 0.428,
+   "pitchDownDeg": 57.2,
+   "height": 7.264,
+   "medianHitM": 7.96,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.166,
+    "topOther": [
+     "rom_dining",
+     0.206
+    ],
+    "floorVisible": 0.49
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Cocina"
+  },
+  "1440x900/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.155,
+    "outside": 0.228,
+    "rom_laundry": 0.009,
+    "wallTop": 0.099,
+    "rom_dining": 0.218,
+    "rom_gbath": 0.001,
+    "rom_living": 0.289,
+    "rom_hall": 0.001
+   },
+   "target": 0.218,
+   "topOther": [
+    "rom_living",
+    0.289
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 0.88,
+   "floorVisible": 0.651,
+   "pitchDownDeg": 57.2,
+   "height": 7.264,
+   "medianHitM": 7.94,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.215,
+    "topOther": [
+     "rom_living",
+     0.309
+    ],
+    "floorVisible": 0.771
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Comedor"
+  },
+  "1440x900/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.203,
+    "wallTop": 0.186,
+    "rom_kid": 0.179,
+    "rom_laundry": 0.032,
+    "rom_gbath": 0.13,
+    "rom_mbath": 0,
+    "rom_hall": 0.173,
+    "rom_dining": 0.076,
+    "rom_child": 0.021
+   },
+   "target": 0.179,
+   "topOther": [
+    "rom_hall",
+    0.173
+   ],
+   "floorSamples": 396,
+   "floorInFrame": 0.889,
+   "floorVisible": 0.442,
+   "pitchDownDeg": 57.2,
+   "height": 8.177,
+   "medianHitM": 8.81,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.147,
+    "topOther": [
+     "rom_hall",
+     0.135
+    ],
+    "floorVisible": 0.442
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio infantil"
+  },
+  "1440x900/rom_child": {
+   "roomId": "rom_child",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.018,
+    "rom_dining": 0.094,
+    "wallTop": 0.143,
+    "rom_laundry": 0.001,
+    "outside": 0.043,
+    "rom_gbath": 0.004,
+    "rom_hall": 0.049,
+    "rom_kid": 0.005,
+    "rom_master": 0.013,
+    "rom_child": 0.2,
+    "rom_mbath": 0.001,
+    "rom_living": 0.328,
+    "rom_balcony": 0.102,
+    "rom_bay2": 0.001
+   },
+   "target": 0.2,
+   "topOther": [
+    "rom_living",
+    0.328
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0.892,
+   "floorVisible": 0.463,
+   "pitchDownDeg": 57.2,
+   "height": 9.029,
+   "medianHitM": 10.22,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.173,
+    "topOther": [
+     "rom_living",
+     0.211
+    ],
+    "floorVisible": 0.539
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio juvenil"
+  },
+  "1440x900/rom_living": {
+   "roomId": "rom_living",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.622,
+    "wallTop": 0.063,
+    "rom_kitchen": 0.021,
+    "rom_dining": 0.075,
+    "rom_gbath": 0.004,
+    "rom_hall": 0.011,
+    "rom_child": 0.003,
+    "rom_living": 0.192,
+    "rom_balcony": 0.009
+   },
+   "target": 0.192,
+   "topOther": [
+    "rom_dining",
+    0.075
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0.877,
+   "floorVisible": 0.596,
+   "pitchDownDeg": 57.2,
+   "height": 11.308,
+   "medianHitM": 13.22,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.172,
+    "topOther": [
+     "rom_child",
+     0.074
+    ],
+    "floorVisible": 0.683
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Salón"
+  },
+  "1440x900/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_living": 0.217,
+    "outside": 0.592,
+    "rom_dining": 0.018,
+    "wallTop": 0.084,
+    "rom_child": 0.007,
+    "rom_hall": 0.003,
+    "rom_balcony": 0.081
+   },
+   "target": 0.081,
+   "topOther": [
+    "rom_living",
+    0.217
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0.922,
+   "floorVisible": 0.324,
+   "pitchDownDeg": 57.2,
+   "height": 9.061,
+   "medianHitM": 10.09,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 1.004,
+   "full": {
+    "target": 0.06,
+    "topOther": [
+     "rom_living",
+     0.14
+    ],
+    "floorVisible": 0.348
+   },
+   "region": [
+    0,
+    0,
+    0.6438053097345132,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón de estar"
+  },
+  "1440x900/errors": [],
+  "390x844/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.738,
+    "wallTop": 0.073,
+    "rom_kid": 0.189
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.189
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 10.529,
+   "medianHitM": 16.47,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.076,
+    "topOther": [
+     "rom_master",
+     0.261
+    ],
+    "floorVisible": 0.171
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño en suite"
+  },
+  "390x844/rom_master": {
+   "roomId": "rom_master",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.965,
+    "wallTop": 0.016,
+    "rom_kid": 0.019
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.019
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 19.531,
+   "medianHitM": 31.24,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.072,
+    "topOther": [
+     "rom_child",
+     0.068
+    ],
+    "floorVisible": 0.551
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio principal"
+  },
+  "390x844/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.83,
+    "wallTop": 0.068,
+    "rom_kid": 0.082,
+    "rom_laundry": 0.021
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.082
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 13.149,
+   "medianHitM": 21.03,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.039,
+    "topOther": [
+     "rom_living",
+     0.244
+    ],
+    "floorVisible": 0.147
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño de invitados"
+  },
+  "390x844/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.428,
+    "wallTop": 0.176,
+    "rom_kid": 0.281,
+    "rom_laundry": 0.054,
+    "rom_mbath": 0.031,
+    "rom_gbath": 0.029
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.281
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 12.643,
+   "medianHitM": 17.82,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.058,
+    "topOther": [
+     "rom_living",
+     0.26
+    ],
+    "floorVisible": 0.179
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Pasillo"
+  },
+  "390x844/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 1
+   },
+   "target": 0,
+   "topOther": null,
+   "floorSamples": 416,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 13.233,
+   "medianHitM": 21.17,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.036,
+    "topOther": [
+     "rom_dining",
+     0.154
+    ],
+    "floorVisible": 0.058
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón-lavadero"
+  },
+  "390x844/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.986,
+    "wallTop": 0.013,
+    "rom_laundry": 0.002
+   },
+   "target": 0,
+   "topOther": [
+    "rom_laundry",
+    0.002
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 13.233,
+   "medianHitM": 21.17,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.087,
+    "topOther": [
+     "rom_living",
+     0.139
+    ],
+    "floorVisible": 0.5
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Cocina"
+  },
+  "390x844/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.875,
+    "wallTop": 0.057,
+    "rom_kid": 0.025,
+    "rom_laundry": 0.04,
+    "rom_kitchen": 0.003
+   },
+   "target": 0,
+   "topOther": [
+    "rom_laundry",
+    0.04
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 15.178,
+   "medianHitM": 24.27,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.084,
+    "topOther": [
+     "rom_living",
+     0.258
+    ],
+    "floorVisible": 0.76
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Comedor"
+  },
+  "390x844/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 1
+   },
+   "target": 0,
+   "topOther": null,
+   "floorSamples": 396,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 15.685,
+   "medianHitM": 25.09,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.071,
+    "topOther": [
+     "rom_child",
+     0.176
+    ],
+    "floorVisible": 0.404
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio infantil"
+  },
+  "390x844/rom_child": {
+   "roomId": "rom_child",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.861,
+    "wallTop": 0.046,
+    "rom_kid": 0.065,
+    "rom_laundry": 0.028,
+    "rom_mbath": 0.001
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.065
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 20.701,
+   "medianHitM": 33.11,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.056,
+    "topOther": [
+     "rom_living",
+     0.086
+    ],
+    "floorVisible": 0.485
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio juvenil"
+  },
+  "390x844/rom_living": {
+   "roomId": "rom_living",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.961,
+    "wallTop": 0.016,
+    "rom_kid": 0.019,
+    "rom_laundry": 0.005
+   },
+   "target": 0,
+   "topOther": [
+    "rom_kid",
+    0.019
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 27.054,
+   "medianHitM": 43.27,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.053,
+    "topOther": [
+     "rom_child",
+     0.028
+    ],
+    "floorVisible": 0.675
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Salón"
+  },
+  "390x844/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.004,
+    "rom_dining": 0.163,
+    "wallTop": 0.083,
+    "rom_child": 0.413,
+    "rom_kid": 0.01,
+    "outside": 0.024,
+    "rom_master": 0.011,
+    "rom_living": 0.246,
+    "rom_hall": 0.044,
+    "rom_bay2": 0.002
+   },
+   "target": 0,
+   "topOther": [
+    "rom_child",
+    0.413
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0,
+   "floorVisible": 0,
+   "pitchDownDeg": 57.2,
+   "height": 11.96,
+   "medianHitM": 17.14,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 0.476,
+   "full": {
+    "target": 0.066,
+    "topOther": [
+     "rom_living",
+     0.154
+    ],
+    "floorVisible": 0.287
+   },
+   "region": [
+    0,
+    0,
+    1,
+    0.20243902439024392
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón de estar"
+  },
+  "390x844/errors": [],
+  "844x390/rom_mbath": {
+   "roomId": "rom_mbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "rom_kitchen": 0.054,
+    "wallTop": 0.173,
+    "outside": 0.082,
+    "rom_laundry": 0.035,
+    "rom_kid": 0.057,
+    "rom_mbath": 0.061,
+    "rom_gbath": 0.06,
+    "rom_dining": 0.093,
+    "rom_hall": 0.102,
+    "rom_master": 0.159,
+    "rom_child": 0.122
+   },
+   "target": 0.061,
+   "topOther": [
+    "rom_master",
+    0.159
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 1,
+   "floorVisible": 0.174,
+   "pitchDownDeg": 57.2,
+   "height": 7.207,
+   "medianHitM": 7.76,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.039,
+    "topOther": [
+     "rom_master",
+     0.241
+    ],
+    "floorVisible": 0.174
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño en suite"
+  },
+  "844x390/rom_master": {
+   "roomId": "rom_master",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.167,
+    "wallTop": 0.114,
+    "rom_kitchen": 0.07,
+    "rom_laundry": 0.008,
+    "rom_gbath": 0.018,
+    "rom_kid": 0.007,
+    "rom_mbath": 0.023,
+    "rom_dining": 0.071,
+    "rom_hall": 0.037,
+    "rom_master": 0.121,
+    "rom_child": 0.168,
+    "rom_bay1": 0.013,
+    "rom_living": 0.169,
+    "rom_bay2": 0.013,
+    "rom_balcony": 0.001
+   },
+   "target": 0.121,
+   "topOther": [
+    "rom_living",
+    0.169
+   ],
+   "floorSamples": 399,
+   "floorInFrame": 1,
+   "floorVisible": 0.619,
+   "pitchDownDeg": 57.2,
+   "height": 9.486,
+   "medianHitM": 11.39,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.075,
+    "topOther": [
+     "rom_living",
+     0.105
+    ],
+    "floorVisible": 0.619
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio principal"
+  },
+  "844x390/rom_gbath": {
+   "roomId": "rom_gbath",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "wallTop": 0.126,
+    "rom_kitchen": 0.227,
+    "outside": 0.061,
+    "rom_laundry": 0.009,
+    "rom_gbath": 0.077,
+    "rom_kid": 0.004,
+    "rom_dining": 0.393,
+    "rom_hall": 0.095,
+    "rom_child": 0.004,
+    "rom_living": 0.003
+   },
+   "target": 0.077,
+   "topOther": [
+    "rom_dining",
+    0.393
+   ],
+   "floorSamples": 400,
+   "floorInFrame": 1,
+   "floorVisible": 0.105,
+   "pitchDownDeg": 57.2,
+   "height": 6.055,
+   "medianHitM": 6.51,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.048,
+    "topOther": [
+     "rom_dining",
+     0.243
+    ],
+    "floorVisible": 0.105
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Baño de invitados"
+  },
+  "844x390/rom_hall": {
+   "roomId": "rom_hall",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.441,
+    "wallTop": 0.084,
+    "rom_laundry": 0.013,
+    "rom_kid": 0.027,
+    "rom_kitchen": 0.047,
+    "rom_gbath": 0.016,
+    "rom_mbath": 0.01,
+    "rom_dining": 0.056,
+    "rom_hall": 0.024,
+    "rom_master": 0.004,
+    "rom_child": 0.08,
+    "rom_living": 0.197,
+    "rom_bay2": 0,
+    "rom_balcony": 0.002
+   },
+   "target": 0.024,
+   "topOther": [
+    "rom_living",
+    0.197
+   ],
+   "floorSamples": 346,
+   "floorInFrame": 1,
+   "floorVisible": 0.176,
+   "pitchDownDeg": 57.2,
+   "height": 11.111,
+   "medianHitM": 13.92,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.015,
+    "topOther": [
+     "rom_living",
+     0.122
+    ],
+    "floorVisible": 0.176
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Pasillo"
+  },
+  "844x390/rom_laundry": {
+   "roomId": "rom_laundry",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.217,
+    "wallTop": 0.152,
+    "rom_laundry": 0.07,
+    "rom_kitchen": 0.388,
+    "rom_gbath": 0.011,
+    "rom_dining": 0.164
+   },
+   "target": 0.07,
+   "topOther": [
+    "rom_kitchen",
+    0.388
+   ],
+   "floorSamples": 416,
+   "floorInFrame": 1,
+   "floorVisible": 0.043,
+   "pitchDownDeg": 57.2,
+   "height": 6.055,
+   "medianHitM": 6.21,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.044,
+    "topOther": [
+     "rom_kitchen",
+     0.24
+    ],
+    "floorVisible": 0.043
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón-lavadero"
+  },
+  "844x390/rom_kitchen": {
+   "roomId": "rom_kitchen",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.791,
+    "wallTop": 0.051,
+    "rom_laundry": 0.024,
+    "rom_kitchen": 0.082,
+    "rom_dining": 0.047,
+    "rom_living": 0.006
+   },
+   "target": 0.082,
+   "topOther": [
+    "rom_dining",
+    0.047
+   ],
+   "floorSamples": 414,
+   "floorInFrame": 1,
+   "floorVisible": 0.483,
+   "pitchDownDeg": 57.2,
+   "height": 8.426,
+   "medianHitM": 10.64,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.05,
+    "topOther": [
+     "rom_hall",
+     0.091
+    ],
+    "floorVisible": 0.483
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Cocina"
+  },
+  "844x390/rom_dining": {
+   "roomId": "rom_dining",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.579,
+    "wallTop": 0.056,
+    "rom_kitchen": 0.068,
+    "rom_laundry": 0.006,
+    "rom_gbath": 0.014,
+    "rom_dining": 0.105,
+    "rom_hall": 0.015,
+    "rom_living": 0.158
+   },
+   "target": 0.105,
+   "topOther": [
+    "rom_living",
+    0.158
+   ],
+   "floorSamples": 384,
+   "floorInFrame": 1,
+   "floorVisible": 0.768,
+   "pitchDownDeg": 57.2,
+   "height": 8.426,
+   "medianHitM": 10.5,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.065,
+    "topOther": [
+     "rom_living",
+     0.154
+    ],
+    "floorVisible": 0.768
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Comedor"
+  },
+  "844x390/rom_kid": {
+   "roomId": "rom_kid",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.358,
+    "wallTop": 0.131,
+    "rom_kid": 0.073,
+    "rom_laundry": 0.029,
+    "rom_kitchen": 0.116,
+    "rom_gbath": 0.039,
+    "rom_mbath": 0.016,
+    "rom_dining": 0.13,
+    "rom_hall": 0.066,
+    "rom_master": 0.009,
+    "rom_child": 0.033
+   },
+   "target": 0.073,
+   "topOther": [
+    "rom_dining",
+    0.13
+   ],
+   "floorSamples": 396,
+   "floorInFrame": 1,
+   "floorVisible": 0.419,
+   "pitchDownDeg": 57.2,
+   "height": 9.486,
+   "medianHitM": 11,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.043,
+    "topOther": [
+     "rom_master",
+     0.12
+    ],
+    "floorVisible": 0.419
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio infantil"
+  },
+  "844x390/rom_child": {
+   "roomId": "rom_child",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.183,
+    "wallTop": 0.12,
+    "rom_dining": 0.06,
+    "rom_kitchen": 0.025,
+    "rom_hall": 0.018,
+    "rom_kid": 0.002,
+    "rom_master": 0.015,
+    "rom_mbath": 0.003,
+    "rom_gbath": 0.002,
+    "rom_child": 0.139,
+    "rom_living": 0.375,
+    "rom_bay2": 0.008,
+    "rom_balcony": 0.049
+   },
+   "target": 0.139,
+   "topOther": [
+    "rom_living",
+    0.375
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 0.998,
+   "floorVisible": 0.537,
+   "pitchDownDeg": 57.2,
+   "height": 8.408,
+   "medianHitM": 9.93,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.09,
+    "topOther": [
+     "rom_living",
+     0.231
+    ],
+    "floorVisible": 0.537
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Dormitorio juvenil"
+  },
+  "844x390/rom_living": {
+   "roomId": "rom_living",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.742,
+    "wallTop": 0.041,
+    "rom_dining": 0.035,
+    "rom_kitchen": 0.007,
+    "rom_hall": 0.011,
+    "rom_kid": 0.001,
+    "rom_gbath": 0.001,
+    "rom_child": 0.01,
+    "rom_living": 0.134,
+    "rom_balcony": 0.018
+   },
+   "target": 0.134,
+   "topOther": [
+    "rom_dining",
+    0.035
+   ],
+   "floorSamples": 391,
+   "floorInFrame": 0.992,
+   "floorVisible": 0.688,
+   "pitchDownDeg": 57.2,
+   "height": 10.51,
+   "medianHitM": 13.49,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.089,
+    "topOther": [
+     "rom_child",
+     0.039
+    ],
+    "floorVisible": 0.691
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Salón"
+  },
+  "844x390/rom_balcony": {
+   "roomId": "rom_balcony",
+   "cut": 2.8,
+   "top": 2.8,
+   "share": {
+    "outside": 0.795,
+    "wallTop": 0.041,
+    "rom_living": 0.094,
+    "rom_kitchen": 0,
+    "rom_dining": 0.012,
+    "rom_child": 0.023,
+    "rom_hall": 0.003,
+    "rom_bay2": 0.002,
+    "rom_balcony": 0.03
+   },
+   "target": 0.03,
+   "topOther": [
+    "rom_living",
+    0.094
+   ],
+   "floorSamples": 408,
+   "floorInFrame": 1,
+   "floorVisible": 0.289,
+   "pitchDownDeg": 57.2,
+   "height": 10.51,
+   "medianHitM": 13.51,
+   "nearWall": 0,
+   "nearFloor": 0,
+   "fov": 45,
+   "aspect": 2.306,
+   "full": {
+    "target": 0.018,
+    "topOther": [
+     "rom_living",
+     0.056
+    ],
+    "floorVisible": 0.289
+   },
+   "region": [
+    0,
+    0,
+    0.6184834123222749,
+    1
+   ],
+   "frame": null,
+   "section": null,
+   "title": "Balcón de estar"
+  },
+  "844x390/errors": []
+ },
+ "routes": {}
+}

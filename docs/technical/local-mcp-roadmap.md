@@ -1,5 +1,8 @@
 # Roadmap del MCP local de Rubik
 
+
+> **Nota de estado, 17-10-2026:** la descripción de «cuatro etapas propuestas sin implementación» que sigue corresponde al cierre de 13-10-2026. La Etapa 1 tiene tres cortes **publicados en PR apiladas y aún no integrados**: [#40](https://github.com/Juanmaes83/floorplan-3d/pull/40), relaciones por estancia; [#41](https://github.com/Juanmaes83/floorplan-3d/pull/41), diagnóstico controlado y medidas 2D; [#43](https://github.com/Juanmaes83/floorplan-3d/pull/43), distancia entre dos muebles, obstáculos en el segmento y cadena de puertas documentadas. La cadena de puertas y una recta libre no certifican un trayecto transitable ni su anchura: quedan desvíos, giros, extremos de muro, hojas y empotramientos. Revisar y reconciliar estas PR contra el `master` actual en orden antes de integrar; conservar el SHA y la evidencia local de cada corte. CI de estas PR no está acreditada. Las Etapas 2–4 siguen propuestas. No declarar completa la Etapa 1 por fusionar los tres cortes.
+
 Actualizado: 13-10-2026. Recuperado de PR #32, HEAD `918c134b85eee3f50f95cd20689a2592464c0bde`, y reconciliado sobre `master` `88b0cb568e9824533764518ec42e235e9c2774a9`. La base y evidencia originales del 07-10-2026 pertenecen al merge #31 `88aef0bfeea8abb67865c3d2a33a484c909511ea`. [Cierre y aportes preservados](../qa/documentation-reconciliation-2026-10-13.md).
 
 **Estado en `master`:** MCP v0.1.0 de lectura integrado. Esta rama propone v0.1.1 con el primer corte de relaciones por estancia de Etapa 1; no declara completa la etapa ni modifica las entregas #38/#39. Se conserva la evidencia de uso reportada, no se repite aquí la auditoría de producto.

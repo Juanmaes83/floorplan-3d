@@ -1,0 +1,117 @@
+{
+  "viewport": {
+    "width": 360,
+    "height": 800
+  },
+  "baseline": [
+    {
+      "id": "surface-oak-wood-planks",
+      "key": "[\"mat_surface-oak-wood-planks-floor\",\"surface-oak-wood-planks\",1000,1000,false]",
+      "state": "ready",
+      "detailState": "off",
+      "bytes": 7908,
+      "gpuBytes": 349526,
+      "loadMs": 19.700000762939453,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": null,
+      "roughnessMap": null
+    },
+    {
+      "id": "surface-marble-01",
+      "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000,false]",
+      "state": "ready",
+      "detailState": "off",
+      "bytes": 3940,
+      "gpuBytes": 349526,
+      "loadMs": 18.899999618530273,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": null,
+      "roughnessMap": null
+    }
+  ],
+  "enhanced": [
+    {
+      "id": "surface-oak-wood-planks",
+      "key": "[\"mat_surface-oak-wood-planks-floor\",\"surface-oak-wood-planks\",1000,1000,true]",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 51542,
+      "gpuBytes": 1048578,
+      "loadMs": 40.5,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "roughnessMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      }
+    },
+    {
+      "id": "surface-marble-01",
+      "key": "[\"mat_surface-marble-01-floor\",\"surface-marble-01\",1000,1000,true]",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 53616,
+      "gpuBytes": 1048578,
+      "loadMs": 40.60000038146973,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "roughnessMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      }
+    }
+  ],
+  "memory": {
+    "base": {
+      "geometries": 1298,
+      "textures": 10
+    },
+    "enhanced": {
+      "geometries": 1298,
+      "textures": 14
+    }
+  },
+  "errors": []
+}

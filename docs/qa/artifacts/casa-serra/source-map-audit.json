@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "date": "2026-10-13",
+  "sourceRepository": "Juanmaes83/casa-serra",
+  "sourceRevision": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+  "method": "Authenticated GitHub file reader, base64 decode, JPEG header inspection, SHA-256 and Pillow full raster decode; no source modification",
+  "scope": "Six source JPEG maps only; not an integrated PBR or runtime performance test",
+  "maps": [
+    {
+      "path": "assets/tex-1k/oak_wood_planks/diff.jpg",
+      "bytes": 210229,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "25c4362be85e32a85736313bf9a0955fbc02c447d6e27acfcc4aaf5df1588646",
+      "gitBlobSha": "02dcecf10223114d711adda1225126c66ebca96f",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    },
+    {
+      "path": "assets/tex-1k/oak_wood_planks/nor.jpg",
+      "bytes": 15602,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "0d9ad8bc2fc3b50006da9bc90f561429564d767c434b95a2cc19d459ffe66ca6",
+      "gitBlobSha": "e339a1d347ff26aea77ea2c8a4174f7529f65480",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    },
+    {
+      "path": "assets/tex-1k/oak_wood_planks/arm.jpg",
+      "bytes": 348836,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "78ae57bdfd94be276ec4ebe73211ae54a3bd6c268a396becea8ec2dd9935335a",
+      "gitBlobSha": "91021dd9c800652f0f37e280bf5eafd85c624eab",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    },
+    {
+      "path": "assets/tex-1k/marble_01/diff.jpg",
+      "bytes": 138861,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "76c50612b6db3ab5e059f0d666585311236bd73744f04669eb1b2cc0264f9f3c",
+      "gitBlobSha": "e254658c2fa49e45fd7d6399b2b5b2ed69bcefdb",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    },
+    {
+      "path": "assets/tex-1k/marble_01/nor.jpg",
+      "bytes": 34312,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "8cc887e0ac036f1727b51c256699466ec763d4e59a8176e1de52714f1412b1b8",
+      "gitBlobSha": "7d83fce0950ff398031739418901ef68bb089f85",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    },
+    {
+      "path": "assets/tex-1k/marble_01/arm.jpg",
+      "bytes": 46590,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sha256": "3396e4298865d27923e3d392bd0193e6537b61cee56430739b8378bbcf842d9c",
+      "gitBlobSha": "4f866b6b02b6a95c815fe889ab813aa07a5f5b5a",
+      "decodedMode": "RGB",
+      "decode": "PASS"
+    }
+  ],
+  "runtime": {
+    "python": "3.12.14",
+    "pillow": "12.3.0"
+  },
+  "summary": {
+    "decodePassed": 6,
+    "downloadBytes": 794430,
+    "nominalRgbaBytesBeforeMipmaps": 25165824,
+    "gpuMeasured": false,
+    "integratedPbrTested": false
+  }
+}

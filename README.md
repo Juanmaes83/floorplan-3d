@@ -49,8 +49,8 @@ El selector de idioma conserva la elección en el navegador. Los nombres de esta
 ### Archivos
 
 - Exportar una imagen PNG del plano.
-- Importar una imagen PNG/JPG/WebP estática desde «Archivo» o «Plano propio» para calibrarla y trazar encima.
-- Exportar e importar proyectos en JSON; exportar ZIP cuando se necesite transportar también las imágenes.
+- **Subir plano** (un único botón principal, desde Archivo / la bienvenida / el buscador, o arrastrar y soltar el archivo): PDF, imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, escaneo RoomPlan (JSON) o proyecto JSON/ZIP. El formato se reconoce por el contenido, no por la extensión. Ver [subida multiformato](docs/technical/upload-multiformat.md).
+- Exportar proyectos en JSON desde Archivo, o ZIP con imagen desde Plano propio / la guía. Se conservan las dos opciones explícitas.
 - Restablecer la distribución de ejemplo.
 
 ## Uso local
@@ -111,16 +111,29 @@ distancia en milímetros, verificar una segunda cota y trazar muros, huecos y es
 Usa «Navegar» para desplazar/ampliar y «Seleccionar/editar» para corregir geometría.
 Las medidas son orientativas; no hay generación automática de vivienda ni garantía profesional.
 
-Exporta un ZIP para transportar proyecto e imágenes a otro navegador. Los originales
-y sus metadatos permanecen locales hasta esa exportación explícita: revisa datos
-personales antes de compartirlo. Para cargar una imagen usa «Plano propio» → «Nuevo
-desde imagen». «Archivo» → «Importar proyecto JSON» importa JSON. «Archivo» → «Cargar imagen de plano (PNG/JPG/WebP)» ofrece el acceso directo al flujo de imagen.
-PNG/JPG/WebP estático: máximo 15 MiB y 8000 px por lado. Consulta [uso y límites](docs/technical/F1b.md)
-y la [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md).
+Exporta un ZIP desde Plano propio o la guía para transportar proyecto e imágenes a otro navegador. Archivo conserva la exportación JSON explícita. Los originales y sus
+metadatos permanecen locales hasta esa exportación explícita: revisa datos personales
+antes de compartirlo.
 
-Seguimiento de importación en esta entrega: «Archivo → Cargar imagen de plano
-(PNG/JPG/WebP)» abre el mismo flujo de «Nuevo desde imagen». [Formatos admitidos
-y diferidos](docs/technical/image-formats.md); [roadmap canónico](docs/ROADMAP.md).
+Para empezar usa **«Subir plano»** (cabecera) o arrastra el archivo a la página:
+
+| Formato | Resultado | Medidas |
+| --- | --- | --- |
+| PNG, JPG, WebP aceptados por F1b | Imagen original sin modificar | Calibrar con dos cotas |
+| PDF escaneado, HEIC/HEIF, TIFF, BMP, GIF, AVIF, SVG | Conversión local a PNG/JPG a 300 ppp como máximo | Calibrar con dos cotas |
+| Escaneos grandes, PNG/WebP con EXIF, JPEG con EXIF espejado | Reducción uniforme (≤ 8000 px, ≤ 40 MP) y orientación aplicada | Calibrar con dos cotas |
+| **PDF vectorial** (planos exportados desde CAD) | Muros, puertas, ventanas y estancias del dibujo; escala detectada en el rótulo o indicada | Del dibujo × escala; revisar |
+| **DXF** ASCII (mm, cm, dm, m, pulgadas, pies) | Muros con eje y grosor, puertas y ventanas (bloques, arcos, huecos) y estancias con su nombre | Del CAD; revisar |
+| **IFC** 2x3/4 (BIM) | Muros, puertas y ventanas (con antepecho) y estancias de `IfcSpace` | Del modelo; revisar |
+| **RoomPlan** CapturedRoom JSON | Muros, puertas y ventanas en su muro (`parentIdentifier`) y estancias con nombre | Del escaneo LiDAR; revisar |
+| Proyecto JSON / ZIP de Rubik Sota | Proyecto completo | Las del proyecto |
+| DWG, USDZ | No se importan: mensaje con la exportación recomendada (DWG → DXF, indicando la versión de AutoCAD) | — |
+
+En una imagen calibrada, «Plano propio» → **«Detectar muros y estancias»** propone muros (bandas oscuras gruesas), huecos y estancias de todo el plano como sugerencia revisable y deshacible.
+
+Detalles, límites y licencias: [subida multiformato](docs/technical/upload-multiformat.md),
+[uso y límites F1b](docs/technical/F1b.md), [evaluación pendiente con cinco planos](docs/qa/F1b-five-plans.md)
+y [roadmap canónico](docs/ROADMAP.md).
 
 ## F2: prototipo experimental integrado, no validado
 

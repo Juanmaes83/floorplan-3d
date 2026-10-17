@@ -1,0 +1,31 @@
+# Referencia externa: diseño de vivienda de LoRA LAB (17-10-2026)
+
+**Enlace conservado:** [herramienta «室内设计» / diseño interior de LoRA LAB](https://fun.loralab.top/tool/c9ae6fe7-55ca-4fde-bae4-f8484c49bfc6?lang=zh-CN). El catálogo de LoRA LAB la presenta como herramienta de diseño doméstico. Esta nota es una **revisión exploratoria de interfaz** sobre la plantilla «Villa moderna», no una auditoría del código, licencia, privacidad, precisión constructiva o rendimiento. No consta que sea la ampliación CAD/Blender de [Summerz3002](summerz-cad-blender-reference-2026-10-17.md).
+
+**Evidencia ampliada:** [auditoría de la grabación de Juanma (3:24), capturas, comparación con Floorplan y orden de entregas](loralab-video-gap-audit-2026-10-17.md). Confirma el cambio visual 1F/2F/3F, la apertura de la puerta al iniciar una visita libre y el cambio día/noche; documenta por separado las acciones ofrecidas en pantalla que aún requieren prueba directa.
+
+## Lo observado en la demo
+
+| Área | Evidencia visible el 17-10-2026 | Límite de la observación |
+| --- | --- | --- |
+| Vivienda y edición | Plantillas «Villa moderna», «Piso clásico» y «Solar vacío»; selector 1F/2F/3F, estancias, muros, puertas, ventanas y seis tipos de escaleras en el catálogo. La villa muestra superficies por planta y altura en mm. | No se probó la edición de geometría, la conexión efectiva entre plantas, guardado/reapertura ni el límite anunciado de 2000 m². |
+| Exterior | Plano con terreno, terraza y piscina; 3D orbital de la vivienda completa con tres niveles, balcones y cubierta. Controles de fachada, cubierta, terreno, marcos y vistas con muros cortados. | Una captura del ejemplo no prueba que cualquier proyecto genere esos elementos correctamente. |
+| Luz y presentación | Controles de norte, hora, mes, latitud, luces, cortinas, captura 3D y calidades Baja/Media/Alta/Ultra; imagen 3D observada en «Alta». | No se midieron exactitud solar, FPS, memoria, consumo de red ni calidad móvil. No se verificó la tecnología de render. |
+| Recorrido | Modo en primera persona desde la puerta principal; ofrece ojos de adulto (1,70 m) o niño (1,05 m), WASD, ratón, interacción con puerta/ventana/cortina y luces; se mostró la entrada con puerta interactiva. | No se recorrieron todas las plantas, no se midieron colisiones ni fluidez y no se probó el control táctil. |
+| Proyecto e intercambio | Interfaz en español entre nueve idiomas; menú con importar/exportar diseño `.json`, imagen del plano, captura 3D y copiar enlace. | No se inspeccionó el JSON ni se creó un enlace compartido. El menú observado no ofrece CAD, DWG/DXF ni exportación Blender. La titularidad, licencia y condiciones de reutilización de código/assets no están establecidas. |
+
+## Candidatos de mejora para Rubik, sujetos a decisión
+
+Son **oportunidades**, no requisitos aprobados ni tareas para añadir en bloque. Reutilizar comportamientos como referencia de experiencia no implica copiar código, modelos o texturas.
+
+1. **Proyecto con varias plantas.** Representar niveles, cotas y alturas, estancias por nivel, huecos y escaleras enlazadas, áreas por planta y vista de la inferior. Diseñar una versión/migración del contrato antes de tocar `FloorPlanProjectV1`, con IDs estables, JSON reversible y 2D/3D coherentes. Empezar con un fixture de dos plantas y una escalera; techo/forjado y geometría de hueco requieren semántica explícita. Es una ampliación mayor, no una extensión automática del editor actual.
+2. **Exterior y envolvente.** Fachadas, cubierta (tipos y acabados), carpinterías, balcones, terraza, terreno y jardín como entidades o derivados bien delimitados; evaluar piscina y objetos de exterior sólo si el segmento lo pide. Probar casos de cubierta, ventanas, alturas y pendientes antes de prometer una casa completa. Presupuestar mallas/texturas para móvil y mantener fallback.
+3. **Luz y cámara para presentación.** Controles de orientación, fecha/hora, latitud aproximada e iluminación interior; preajustes orbital, superior, muros cortados y captura. Separar simulación visual orientativa de cálculo solar o energético. Comparar con los controles 3D y la captura ya integrados en Rubik para identificar aportes nuevos, con medidas de coste en dispositivos físicos.
+4. **Recorrido voluntario y controlable.** Evaluar entrada desde puerta, altura de ojos configurable, apertura de puertas y encendido de luces, transición entre plantas y controles táctiles. Comparar con la experiencia guiada de #39 una vez cerrada, sin reabrir sus microajustes. Medir colisiones, orientación, encuadre de baños/pasillos, mareo, FPS y facilidad de salida; conservar la opción de recorrido guiado y vista orbital.
+5. **Inicio, localización e intercambio.** Plantillas de ejemplo claramente identificadas, proyecto vacío, idioma, estadísticas por nivel y exportación/captura. Rubik ya tiene proyectos locales, español y JSON/ZIP; comparar antes de duplicar. Si se evalúa compartir por enlace, decidir qué bytes se transmiten, vigencia, control de acceso, privacidad y recuperación. Si se muestran presupuestos, definir moneda, fuente de precios y carácter estimativo; no heredar cifras del ejemplo.
+
+## Siguiente paso propuesto: revisión profunda antes de implementación
+
+La **primera entrega** derivada de esta referencia es un informe comparativo de sólo lectura, no código de producto. Congelar fecha, URL y capturas; recorrer las tres plantillas en escritorio y móvil físico; probar editar/guardar/reabrir, 1F↔2F↔3F, escaleras, apertura de puertas, exterior, sol, recorrido y capturas. Registrar errores, FPS, memoria/red, tiempos y accesibilidad de teclado/táctil. Comparar cada flujo con el mismo caso en Rubik y con #39/#42 ya revisadas. No subir planos reales ni datos personales a LoRA LAB para esta evaluación.
+
+**Gate de decisión:** identificar público objetivo (vivienda particular, profesional o presentación), beneficio medido, coste/privacidad, dependencia del contrato y alcance mínimo independiente. Priorizar una sola entrega si supera ese gate; decidir si varias plantas, exterior o recorrido es primero. Sin análisis de código/licencia no se reutiliza ningún asset ni implementación ajena. Las capacidades no comprobadas permanecen hipótesis, y esta referencia no altera el roadmap canónico ni constituye una fase aprobada.

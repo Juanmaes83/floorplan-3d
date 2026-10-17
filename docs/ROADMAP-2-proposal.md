@@ -1,5 +1,8 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
+
+> **Estado de integración a 17-10-2026:** #38, #39 y #42 ya están fusionadas en `master` (último merge `05d5514`). El piloto Blender #42 amplía la salida offline del paquete #24; no convierte la propuesta de orden 5 en una integración completa de LAB Astra ni aprueba Roadmap 2. La visita guiada web y el vídeo offline coexisten con Candidate 04. Las alusiones a PR abiertas más abajo son antecedentes fechados. La evaluación profunda de LoRA LAB de §3.4 puede comenzar ahora como estudio transversal. Debe comparar creación/importación/guardado, niveles, exterior, recorrido libre e interacción, y probar escritorio y móvil; de sus resultados se escogerá una sola entrega mínima y se fijará su contrato antes de implementarla. La cadena MCP #40→#41→#43 sigue en revisión separada.
+
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
 > Reconciliada el 02-10-2026 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`: PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y cierres #25/#26 conservados. PR #15 fusionada (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); este roadmap continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato es 1.4.0 por #19. El piloto #17, biblioteca #19, entrega dimensional #18, primera tanda Asset Lab #20 y «Legal y uso» #22 están integrados. Los seis modelos de PR #23 están visualmente aprobados por Juanma; su merge autorizado queda condicionado a pruebas, contenido visible idéntico y preview READY del HEAD reconciliado. Esto no aprueba globalmente este documento.
 
@@ -44,7 +47,7 @@ El segmento comercial sigue abierto y completar software no aprueba todo F0.
 
 ## 3. Secuencia propuesta
 
-Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no números de fase aprobados**. El orden posterior a #20 es orientativo y depende de decisiones aún abiertas. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
+Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no números de fase aprobados**. La evaluación transversal de LoRA LAB se propone como siguiente estudio, sin desplazar ese orden ni aprobar una fase. El orden posterior a #20 es orientativo y depende de decisiones aún abiertas. Las tallas son **estimaciones técnicas preliminares** (S/M/L), no compromisos. El impacto es una hipótesis de producto que requiere pruebas con usuarios.
 
 | Orden | Entrega propuesta | Impacto potencial | Esfuerzo / incertidumbre | Dependencia y decisión |
 |---|---|---|---|---|
@@ -57,6 +60,7 @@ Los órdenes 0–3 son entregas integradas; 4–8 son propuestas futuras, **no n
 | 6 | Entrada CAD vectorial: DXF piloto, luego decisión DWG | Alto para profesionales; menor para consumidor | L / alta | Elegir entidades, unidades, capas y supuestos. DXF primero con importación local si una biblioteca adecuada supera revisión de licencia. DWG necesita gate de proveedor/convertidor, privacidad y coste; no se reduce a renderizar una imagen. |
 | 7 | Presentación conectada con panoramas/hotspots Immersphere | Alto para promoción inmobiliaria | L / alta | Depende de proyecto/objeto IDs y exportación espacial. Definir relación panorama-cámara-transformación-objeto; primer intercambio estático y reversible. No llamar “hotspot anclado” a una coordenada de pantalla. |
 | 8 | Perfil orientativo de reglas constructivas por jurisdicción | Potencialmente alto para profesionales, riesgo alto | L / muy alta | Solo tras escoger país/uso y asesoría competente. Empezar con reglas estructuradas, versionadas y citadas; nunca prometer certificación o cumplimiento automático. |
+| Siguiente estudio transversal | Revisión profunda de [LoRA LAB](technical/loralab-design-reference-2026-10-17.md) y elección de una mejora | Potencial para vivienda completa y presentación, no medido | S–M para evaluar; implementación por estimar | Comparar plantillas, varias plantas, exterior, luz, recorrido y móvil con Rubik tras cerrar la revisión de #39/#42. Elegir segmento y una entrega mínima; no aprobar todavía contrato multipiso, nuevo render ni copia de assets. |
 
 ### 3.1 Secuencia propuesta después de #20
 
@@ -92,6 +96,16 @@ Unreal, CRM o Immersphere; tampoco crea F4, aprueba prioridades globales de
 Roadmap 2 ni mide rendimiento móvil físico. Los albedos candidatos no son un
 catálogo PBR comercial terminado. Cinco sesiones y veinte planos reales siguen
 pendientes para la validación empírica final de F2 y no bloquearon esta entrega.
+
+### 3.3 Referencia externa CAD→Blender (17-10-2026)
+
+[Summerz3002 mostró y describió una ampliación de floorplan-3d](technical/summerz-cad-blender-reference-2026-10-17.md) con importación CAD y renderizado Blender. Los enlaces publicados llevan al repositorio/demo originales de `wy51ai`; no se dispone del código de esa ampliación para verificarlo. La demostración hace relevante evaluar juntos los órdenes 5 y 6 como flujo profesional, **sin cambiar su estado, prioridad ni convertirlos en una fase aprobada**. El piloto Blender #42 y el paquete integrado #24 son nuestras bases técnicas; se probarían primero DXF→geometría candidata validada y Rubik→Blender con mediciones de fidelidad, calidad y coste. Ninguna captura externa acredita escala, recorrido o rendimiento en móvil.
+
+### 3.4 LoRA LAB: siguiente evaluación de vivienda completa
+
+La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-reference-2026-10-17.md) quedan registradas como **referencia separada**. Su demo muestra tres niveles, exterior/cubierta, controles de sol y presentación y recorrido en primera persona. La nota enumera candidatos para Rubik y un gate de revisión profunda en escritorio y móvil. La investigación comparativa es el siguiente estudio propuesto, no una nueva fase ni una orden de implementar todas las funciones. Tras la evaluación se escogería, si procede, una única entrega con contrato y pruebas propios. No hay evidencia de que esta demo implemente el CAD/Blender de Summerz3002.
+
+La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, identifica como brecha estructural el **proyecto de varias plantas conectadas**, además de exterior y visita. Son candidatos para una decisión futura, **no el siguiente corte aprobado ni una alteración del orden orientativo 4–8**. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
 
 ## 4. Especificación de las mejoras principales
 
