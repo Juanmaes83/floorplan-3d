@@ -1,6 +1,10 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 
+## Decisión D-01 — público inicial confirmado el 17-10-2026
+
+Juanma confirmó como público inicial a **profesionales de reformas e interiorismo que preparan y presentan propuestas de vivienda**, incluidos chalets y dúplex. El problema prioritario es mantener plano editable, mobiliario y presentación de toda la vivienda en un proyecto. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La confirmación orienta el estudio LoRA LAB y la evaluación de multipiso, pero no aprueba D-16, un contrato 2.0 ni una fase de implementación. Se probará primero LoRA LAB con el guion de la PR #48 y sus límites de evidencia.
+
 ## Estado vigente tras la integración del 17-10-2026
 
 Las PR [#38](https://github.com/Juanmaes83/floorplan-3d/pull/38) (importación guiada multiformato), [#39](https://github.com/Juanmaes83/floorplan-3d/pull/39) (presentación por estancias y recorrido) y [#42](https://github.com/Juanmaes83/floorplan-3d/pull/42) (piloto Blender offline) están **fusionadas en master**, en ese orden. Merge commits: `34aff2c2b521b004aa007bfa8a7ed2356013dfb4`, `85aaf771ec3b1622313cbfd8bd44962ca2019b0a` y `05d5514fd46130bf81c9a1e6e6d2f0929518fad7`. Las referencias a PR abiertas en secciones fechadas anteriores describen el momento de aquellas auditorías. La presentación web, el piloto Blender y la referencia visual Candidate 04 de LAB Astra conviven; no se sustituye una por otra ni se declara el piloto de calidad Candidate 04.
