@@ -51,6 +51,10 @@ async function main() {
     'Mide dos IDs del JSON en mm. mode=reference_points compara centros de muebles o puntos medios de ejes de muros/huecos; mode=regions compara regiones 2D y devuelve puntos próximos. No calcula holgura de paso, altura ni 3D.',
     { idA: z.string().min(1).max(160), idB: z.string().min(1).max(160), mode: z.enum(['reference_points', 'regions']) },
     args => core.measureElements(reader, args));
+  registerReadTool(server, 'inspect_pair_clearance', 'Inspeccionar separación entre muebles',
+    'Compara dos muebles con umbral explícito en mm. Informa distancia mínima, obstáculos sobre ese segmento y una cadena de puertas documentada entre estancias. No acredita un paso utilizable ni calcula una ruta alternativa.',
+    { idA: z.string().min(1).max(160), idB: z.string().min(1).max(160), clearanceMm: z.number().positive() },
+    args => core.inspectPairClearance(reader, args));
   registerReadTool(server, 'get_project_summary', 'Resumen del proyecto',
     'Lee el resumen del JSON Rubik seleccionado al iniciar. Devuelve versión, hash, escala, recuentos y superficie aproximada. Nunca incluye imágenes ni rutas locales.',
     {}, () => core.getSummary(reader));

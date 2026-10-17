@@ -33,6 +33,7 @@ El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el pro
 - `review_layout`: reutiliza la geometría de la revisión de distribución de Rubik. La holgura es opcional y nunca se inventa un valor por defecto.
 - `diagnose_project`: primer error del validador canónico o, si el JSON es válido, hallazgos agrupados de escala, procedencia, puertas incompletas y relaciones espaciales inciertas.
 - `measure_elements`: distancia 2D determinista entre dos IDs, con modo explícito `reference_points` o `regions`, puntos justificativos, unidades y hash.
+- `inspect_pair_clearance`: inspecciona dos muebles con umbral explícito; distingue la distancia mínima recta, los obstáculos en ese segmento y una cadena de puertas documentada entre estancias. No certifica un paso.
 
 Cada herramienta declara anotaciones MCP de solo lectura. No hay herramientas para mover, crear, borrar, guardar o exportar. La superficie se calcula desde polígonos guardados y no es una medición certificada.
 
@@ -70,7 +71,15 @@ El diagnóstico permite arrancar con JSON mal formado o contrato inválido para 
 
 `reference_points` usa el centro guardado de cada mueble o el punto medio del eje de cada muro/hueco. No ofrece centro de estancia. `regions` mide la mínima distancia euclídea entre huellas giradas, bandas de muros, subtramos de huecos y polígonos de estancias; contacto o solape da 0 mm. Ambas salidas incluyen `pointA`, `pointB`, `units:mm`, `plane:2d`, `scaleConfidence`, estado de relación por estancia y SHA-256 del archivo. Si la relación espacial es ambigua, la medida geométrica sigue visible con `status:spatial_relation_uncertain`. IDs ausentes, geometría degenerada y combinaciones no soportadas dan error explícito. Ningún modo calcula holgura transitable, altura ni 3D.
 
-La [semántica completa, ejemplos y límites](../../docs/technical/local-mcp-diagnostics-measures.md) dejan definido el tercer corte de Etapa 1: holguras con muros, huecos, empotramientos y conectividad.
+La [semántica completa, ejemplos y límites](../../docs/technical/local-mcp-diagnostics-measures.md) distingue esas medidas de una holgura utilizable.
+
+### Obstáculos y puertas documentadas (tercer corte parcial de Etapa 1)
+
+```text
+inspect_pair_clearance({"idA":"obj_rect","idB":"obj_next","clearanceMm":600})
+```
+
+La consulta usa la huella de dos muebles, identifica bandas sólidas, subtramos de hueco y otros muebles que cruzan el segmento mínimo, y registra una cadena de puertas entre las estancias derivadas. Una cadena documentada o un segmento sin obstáculos **no acredita una ruta ni su anchura**. [Reglas y pendientes](../../docs/technical/local-mcp-clearance-connectivity.md).
 
 ## Límites y privacidad
 

@@ -9,6 +9,7 @@ const Review = require('../../../js/layout-review.js');
 const Spatial = require('./spatial.cjs');
 const Diagnostics = require('./diagnostics.cjs');
 const Measure = require('./measure.cjs');
+const Clearance = require('./clearance.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -201,8 +202,13 @@ async function measureElements(reader, args = {}) {
   return safeJson(Measure.measure(project, snapshot, args));
 }
 
+async function inspectPairClearance(reader, args = {}) {
+  const { project, snapshot } = await reader.load();
+  return safeJson(Clearance.analyze(project, snapshot, args));
+}
+
 module.exports = {
   MAX_PROJECT_BYTES, MAX_LAYOUT_OBJECTS, MAX_RESPONSE_BYTES,
   createProjectReader, getSummary, listElements, getElement, reviewLayout,
-  diagnoseProject, measureElements,
+  diagnoseProject, measureElements, inspectPairClearance,
 };

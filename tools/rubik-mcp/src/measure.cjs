@@ -96,4 +96,5 @@ function measure(project, snapshot, args) {
   };
 }
 
-module.exports = { measure };
+// Shared only with the bounded obstacle analysis. Keep geometric definitions identical.
+module.exports = { measure, shape, regionDistance, inside, intersection, distance, point };
