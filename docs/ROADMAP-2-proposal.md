@@ -1,5 +1,8 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
+
+> **Estado de integración a 17-10-2026:** #38, #39 y #42 ya están fusionadas en `master` (último merge `05d5514`). El piloto Blender #42 amplía la salida offline del paquete #24; no convierte la propuesta de orden 5 en una integración completa de LAB Astra ni aprueba Roadmap 2. La visita guiada web y el vídeo offline coexisten con Candidate 04. Las alusiones a PR abiertas más abajo son antecedentes fechados. La evaluación profunda de LoRA LAB de §3.4 puede comenzar ahora como estudio transversal. Debe comparar creación/importación/guardado, niveles, exterior, recorrido libre e interacción, y probar escritorio y móvil; de sus resultados se escogerá una sola entrega mínima y se fijará su contrato antes de implementarla. La cadena MCP #40→#41→#43 sigue en revisión separada.
+
 > **Estado: propuesta para revisión; no aprobada como alcance, prioridad comercial ni compromiso de fechas.**
 > Reconciliada el 02-10-2026 con `origin/master` `7d49a5ed3c07da73c80e259465d62c22c6a69c0d`: PR #24 (`67b7f999c42b3a2960dac6caf94ab77dcc637819`) y cierres #25/#26 conservados. PR #15 fusionada (`4ab39025379cbbb8873dd344183967aafa0a1bdc`); este roadmap continúa sin aprobación global, prioridades comerciales ni fechas. La fotografía inicial sobre `6e8b512d61e8f500c2d6a7f1cfdfdeb7e7c5930f` queda sustituida. El contrato es 1.4.0 por #19. El piloto #17, biblioteca #19, entrega dimensional #18, primera tanda Asset Lab #20 y «Legal y uso» #22 están integrados. Los seis modelos de PR #23 están visualmente aprobados por Juanma; su merge autorizado queda condicionado a pruebas, contenido visible idéntico y preview READY del HEAD reconciliado. Esto no aprueba globalmente este documento.
 
