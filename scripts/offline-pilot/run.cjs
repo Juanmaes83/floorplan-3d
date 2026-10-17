@@ -13,8 +13,8 @@ function step(log,name,cmd,args){return new Promise((resolve,reject)=>{const t=D
 async function main(){
  const {pos:[src,out],opt}=parse(process.argv.slice(2)),py=opt.python||process.env.BPY_PYTHON;
  if(!src||!out||!py)throw Error('Usage: node run.cjs project.json NEW-OUT --python PY [--visual] [--rooms a,b]');
- if(fs.existsSync(out))throw Error('Refusing overwrite: '+out);fs.mkdirSync(out,{recursive:true});
- const before=sha(fs.readFileSync(src)),log=[],started=Date.now(),O=p=>path.join(out,p),run={format:'floorplan-offline-pilot-run',version:'0.1.0',status:'running',project:{path:path.basename(src),sha256Before:before},options:opt,steps:log};
+ if(fs.existsSync(out))throw Error('Refusing overwrite: '+out);
+ const before=sha(fs.readFileSync(src));fs.mkdirSync(out,{recursive:true});const log=[],started=Date.now(),O=p=>path.join(out,p),run={format:'floorplan-offline-pilot-run',version:'0.1.0',status:'running',project:{path:path.basename(src),sha256Before:before},options:opt,steps:log};
  const stop=()=>{cancelled=true;if(child)child.kill('SIGTERM');};process.on('SIGINT',stop);process.on('SIGTERM',stop);
  const save=()=>fs.writeFileSync(O('run.json'),JSON.stringify(run,null,1)+'\n');
  try{

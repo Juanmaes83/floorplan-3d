@@ -36,15 +36,15 @@ function hitBox(b,o,d,tmax){
 // Hits on walls are credited to the room on the camera side of the surface; rays that escape count as void.
 function measure(sc,eye,yaw,pitch,hfov,aspect,{cols=40,rows=0,nearMm=1200}={}){
  rows=rows||Math.max(9,Math.round(cols/aspect));const tx=Math.tan(hfov/2),ty=tx/aspect,f=[Math.cos(yaw)*Math.cos(pitch),Math.sin(yaw)*Math.cos(pitch),-Math.sin(pitch)],r=[-Math.sin(yaw),Math.cos(yaw),0],u=[f[1]*r[2]-f[2]*r[1],f[2]*r[0]-f[0]*r[2],f[0]*r[1]-f[1]*r[0]];
- const counts={},floor={},seen=new Set(),reach=30000;let n=0,near=0;
+ const counts={},floor={},objects={},seen=new Set(),reach=30000;let n=0,near=0;
  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const sx=((i+.5)/cols*2-1)*tx,sy=(1-(j+.5)/rows*2)*ty,d=[0,1,2].map(k=>f[k]+r[k]*sx+u[k]*sy),l=Math.hypot(...d);for(let k=0;k<3;k++)d[k]/=l;
   let best=d[2]<0?(0-eye[2])/d[2]:reach,hit=null;if(best>reach)best=reach;
   const ex=eye[0]+d[0]*best,ey=eye[1]+d[1]*best,minX=Math.min(eye[0],ex),maxX=Math.max(eye[0],ex),minY=Math.min(eye[1],ey),maxY=Math.max(eye[1],ey);
   for(const b of sc.boxes){if(b.maxX<minX||b.minX>maxX||b.maxY<minY||b.minY>maxY)continue;const t=hitBox(b,eye,d,best);if(t!=null&&t<best){best=t;hit=b;}}
-  let key;if(hit?.kind==='object'){key=hit.room;seen.add(hit.id);}else{const back=Math.max(0,best-60),x=eye[0]+d[0]*back,y=eye[1]+d[1]*back;key=best>=reach-1?'void':sc.roomAt(x,y)||'outside';}
+  let key;if(hit?.kind==='object'){key=hit.room;seen.add(hit.id);objects[key]=(objects[key]||0)+1;}else{const back=Math.max(0,best-60),x=eye[0]+d[0]*back,y=eye[1]+d[1]*back;key=best>=reach-1?'void':sc.roomAt(x,y)||'outside';}
   if(!hit&&key!=='void')floor[key]=(floor[key]||0)+1;if(best<nearMm)near++;
   counts[key]=(counts[key]||0)+1;n++;}
- const share={},floorShare={};for(const k in counts)share[k]=counts[k]/n;for(const k in floor)floorShare[k]=floor[k]/n;return {share,floor:floorShare,near:near/n,seen:[...seen]};
+ const share={},floorShare={},objectShare={};for(const k in counts)share[k]=counts[k]/n;for(const k in floor)floorShare[k]=floor[k]/n;for(const k in objects)objectShare[k]=objects[k]/n;return {share,floor:floorShare,objects:objectShare,near:near/n,seen:[...seen]};
 }
 
 // Standing positions: inside the room, clear of its boundary and of furniture footprints taller than a rug.
@@ -81,8 +81,9 @@ function composeRoom(sc,roomId,o={}){
  const evaluate=(x,y,yaw,lens,cols)=>{const hfov=2*Math.atan(sensor/2/lens),pitch=pitchAt(x,y)*DEG,m=measure(sc,[x,y,eyeH],yaw,pitch,hfov,aspect,{cols,nearMm});
   const t=m.share[roomId]||0,other=Math.max(0,...Object.entries(m.share).filter(([k])=>k!==roomId&&k!=='void'&&k!=='outside').map(([,v])=>v)),content=contents.length?m.seen.filter(id=>contents.some(c=>c.id===id)).length/contents.length:1;
   // Legibility: reward the target's visible floor, penalise surfaces closer than 1.2 m filling the frame.
-  const fl=m.floor[roomId]||0;
-  return {score:t+.35*content+Math.min(fl,.3)-2*Math.max(0,m.near-.1)-1.5*Math.max(0,other-.15)-.6*(m.share.void||0)-(24-lens)*.004,x,y,yaw,pitch,lens,hfov,share:t,other,content,floor:fl,near:m.near};};
+  // Furniture of the room filling the frame is what makes a small room recognisable; bare walls do not.
+  const fl=m.floor[roomId]||0,ob=m.objects[roomId]||0;
+  return {score:t+.35*content+Math.min(fl,.3)+1.2*Math.min(ob,.4)-2*Math.max(0,m.near-.1)-1.5*Math.max(0,other-.15)-.6*(m.share.void||0)-(24-lens)*.004,x,y,yaw,pitch,lens,hfov,share:t,other,content,floor:fl,objects:ob,near:m.near};};
  // Coarse pass (20 mm, 20 columns, 10° yaw steps toward the room), then lenses and ±5° on the ten best.
  const coarse=[];for(const [x,y] of pos){const toC=Math.atan2(cy-y,cx-x);for(let k=-6;k<=6;k++)coarse.push(evaluate(x,y,toC+k*10*DEG,20,20));}
  coarse.sort((a,b)=>b.score-a.score);let best=null;
@@ -109,20 +110,20 @@ function composeRoom(sc,roomId,o={}){
  const panPose=s=>({x:best.x,y:best.y,yaw:best.yaw+(1-s)*pan*DEG,pitch:best.pitch});
  const at=s=>chosen.kind==='pan'?panPose(s):pose(chosen,s);
  const samples=[];for(let i=0;i<frames;i++){const t=i/fps,s=ease(t);samples.push({frame:i,...at(s)});}
- const anchors=[0,Math.floor(frames/2),frames-1].map(i=>{const p=samples[i],m=measure(sc,[p.x,p.y,eyeH],p.yaw,p.pitch,best.hfov,aspect,{cols:64,nearMm});return {frame:i,share:m.share,floor:m.floor,nearSurface:+m.near.toFixed(3),objectsSeen:m.seen.filter(id=>contents.some(c=>c.id===id))};});
+ const anchors=[0,Math.floor(frames/2),frames-1].map(i=>{const p=samples[i],m=measure(sc,[p.x,p.y,eyeH],p.yaw,p.pitch,best.hfov,aspect,{cols:64,nearMm});return {frame:i,share:m.share,floor:m.floor,objects:m.objects,nearSurface:+m.near.toFixed(3),objectsSeen:m.seen.filter(id=>contents.some(c=>c.id===id))};});
  // Speeds in m/s between frames, to report the ramps.
  const speeds=samples.slice(1).map((p,i)=>Math.hypot(p.x-samples[i].x,p.y-samples[i].y)/1000*fps);
  return {roomId,roomName:room.name,status:'ok',lensMm:best.lens,sensorWidthMm:sensor,hfovDeg:+(best.hfov/DEG).toFixed(2),eyeHeightMm:eyeH,move:{kind:chosen.kind,distanceMm:chosen.dist,...(chosen.kind==='pan'?{panDeg:chosen.panDeg}:{}),minWallClearanceMm:chosen.minWallClearanceMm,checkedSubsamples:checked},
-  seconds,frames,fps,maxSpeedMs:+Math.max(0,...speeds).toFixed(3),contents:contents.map(c=>c.id),vantage:hostId===roomId?'inside':hostId==='threshold'?'door threshold':'doorway from '+hostId,predicted:{targetFloor:+best.floor.toFixed(3),nearSurface:+best.near.toFixed(3),targetShare:+best.share.toFixed(3),maxNeighbourShare:+best.other.toFixed(3),contentSeen:+best.content.toFixed(3)},anchors,samples};
+  seconds,frames,fps,maxSpeedMs:+Math.max(0,...speeds).toFixed(3),contents:contents.map(c=>c.id),vantage:hostId===roomId?'inside':hostId==='threshold'?'door threshold':'doorway from '+hostId,predicted:{targetObjects:+best.objects.toFixed(3),targetFloor:+best.floor.toFixed(3),nearSurface:+best.near.toFixed(3),targetShare:+best.share.toFixed(3),maxNeighbourShare:+best.other.toFixed(3),contentSeen:+best.content.toFixed(3)},anchors,samples};
 }
 
 // Plan (mm, y down) to Blender (m, z up), the same mapping as scripts/interop/export.cjs + glTF import.
 function toBlender(sc,p,eyeH){const c=sc.center;return {location:[(p.x-c.x)/1000,-(p.y-c.y)/1000,eyeH/1000],direction:[Math.cos(p.yaw)*Math.cos(p.pitch),-Math.sin(p.yaw)*Math.cos(p.pitch),-Math.sin(p.pitch)]};}
 
 function compose(project,{rooms,fps=30,...o}={}){
- const sc=scene(project),ids=rooms||sc.rooms.filter(r=>r.area>=1.5).map(r=>r.id),shots=[];let frame=0;
+ const sc=scene(project),ids=rooms||sc.rooms.filter(r=>r.area>=1.5&&sc.objects.some(o=>o.room===r.id&&o.z1-o.z0>60)).map(r=>r.id),shots=[];let frame=0;
  for(const id of ids){const s=composeRoom(sc,id,{fps,...o});if(s.status==='ok'){s.startFrame=frame;frame+=s.frames;s.blender=s.samples.map(p=>toBlender(sc,p,s.eyeHeightMm));}shots.push(s);}
- return {format:'floorplan-offline-pilot-shots',version:VERSION,projectId:project.id,projectRevision:project.updatedAt,fps,totalFrames:frame,coordinateMapping:{plan:'mm, x right, y down',blender:'m, x right, y up (=-plan y), z up; origin at Core.geometry center',centerMm:sc.center},transitions:'hard cut between rooms; the camera never moves between rooms',shots};
+ return {format:'floorplan-offline-pilot-shots',version:VERSION,projectId:project.id,projectRevision:project.updatedAt,fps,totalFrames:frame,coordinateMapping:{plan:'mm, x right, y down',blender:'m, x right, y up (=-plan y), z up; origin at Core.geometry center',centerMm:sc.center},transitions:'hard cut between rooms; the camera never moves between rooms',selection:rooms?'explicit list':'rooms of at least 1.5 m2 with furniture; empty rooms (e.g. corridors) get no shot',shots};
 }
 module.exports={compose,composeRoom,scene,measure,freeTest,profile,hitBox,insidePoly,edgeDist,VERSION};
 if(require.main===module){const fs=require('node:fs'),[src,out,list]=process.argv.slice(2);if(!src||!out){console.error('Usage: node shots.cjs project.json NEW-shots.json [room,ids]');process.exit(1);}

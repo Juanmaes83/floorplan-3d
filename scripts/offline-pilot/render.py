@@ -147,11 +147,18 @@ def main():
         for b in s["blender"]:
             cam.location = b["location"]
             cam.rotation_mode = "QUATERNION"
-            cam.rotation_quaternion = Vector(b["direction"]).to_track_quat("-Z", "Y")
+            d = Vector(b["direction"])
+            pitch = math.asin(max(-1, min(1, -d.z)))
+            # Architectural framing: level camera (vertical lines stay vertical) and the downward look done with
+            # lens shift, which moves the same image centre down without tilting the camera.
+            level = Vector((d.x, d.y, 0)).normalized()
+            cam.rotation_quaternion = level.to_track_quat("-Z", "Y")
             cam.keyframe_insert("location", frame=frame)
             cam.keyframe_insert("rotation_quaternion", frame=frame)
             cam_data.lens = s["lensMm"]
+            cam_data.shift_y = -s["lensMm"]*math.tan(pitch)/cam_data.sensor_width
             cam_data.keyframe_insert("lens", frame=frame)
+            cam_data.keyframe_insert("shift_y", frame=frame)
             frame += 1
         timeline.append({"roomId": s["roomId"], "first": first, "last": frame-1,
                          "anchors": [first+a["frame"] for a in s["anchors"]]})
@@ -265,7 +272,7 @@ def main():
                         "entityIdsSha256": digest("\n".join(sorted(entities)).encode()),
                         "materials": len(bpy.data.materials), "images": len([i for i in bpy.data.images if i.size[0] > 0]),
                         "cameraKeyframes": scene.frame_end},
-              "presentationAdditions": ["PilotWorld sky 0.9", "PilotSun 2.2 W/m2, 8 deg", "PilotCamera keyed per frame, constant interpolation (hard cuts)"],
+              "presentationAdditions": ["PilotWorld sky 0.9", "PilotSun 2.2 W/m2, 8 deg", "PilotCamera keyed per frame, constant interpolation (hard cuts); level camera with lens shift for the planned downward look (vertical lines stay vertical)"],
               "visualSidecar": visual, "timeline": timeline, "presence": measured}
     (out/"render-report.json").write_text(json.dumps(report, indent=1, ensure_ascii=False)+"\n", encoding="utf8")
     print(json.dumps({k: report[k] for k in ("status", "framesRendered", "secondsPerFrame", "wallSeconds", "peakRssMiB")}))

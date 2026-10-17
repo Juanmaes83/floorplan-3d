@@ -13,16 +13,16 @@ async function capture(project,dest,{chrome=process.env.CHROME,threeDir=process.
  const server=http.createServer((req,res)=>{try{const p=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://l').pathname.replace(/^\/$/,'/index.html')));if(!p.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',types[path.extname(p)]||'application/octet-stream');res.end(fs.readFileSync(p));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const browser=await chromium.launch({...(chrome?{executablePath:chrome}:{}),args:['--no-sandbox','--enable-unsafe-swiftshader']});
- try{const page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ try{const page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   if(threeDir)await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async r=>{const rel=new URL(r.request().url()).pathname.replace('/npm/three@0.160.0/','');await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:fs.readFileSync(path.join(threeDir,rel))});});
   await page.addInitScript(()=>{window.__THREE_DEVTOOLS__=new EventTarget();window.__pilotScenes=[];__THREE_DEVTOOLS__.addEventListener('observe',e=>{if(e.detail?.isScene)window.__pilotScenes.push(e.detail);});});
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
-  await page.waitForFunction(()=>window.FloorPlanApp&&window.View3D&&window.__pilotScenes.length,null,{timeout:90000});
-  await page.evaluate(p=>{document.querySelector('#welcomeDialog')?.close?.();FloorPlanApp.importProject(p);},project);
+  await page.waitForFunction(()=>window.FloorPlanApp&&window.View3D,null,{timeout:90000});
+  await page.evaluate(async p=>{document.querySelector('#welcomeDialog')?.close?.();FloorPlanApp.importProject(p);await setView('3d');},project);
   // Wait until every object has a furniture group at full growth.
   const ids=project.objects.map(o=>o.id).sort();
-  await page.waitForFunction(ids=>{const s=window.__pilotScenes.at(-1),g=[];s.traverse(o=>{if(o.userData?.fid)g.push(o);});const got=[...new Set(g.map(o=>o.userData.fid))].sort();return JSON.stringify(got)===JSON.stringify(ids)&&g.every(o=>o.parent.scale.y===1);},ids,{timeout:90000});
-  const result=await page.evaluate(async()=>{const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js'),THREE=await import('three'),s=window.__pilotScenes.at(-1),groups=[];s.traverse(o=>{if(o.userData?.fid&&!o.userData.authorizedAsset)groups.push(o);});
+  await page.waitForFunction(ids=>{const g=[];for(const s of window.__pilotScenes)s.traverse(o=>{if(o.userData?.fid)g.push(o);});const got=[...new Set(g.map(o=>o.userData.fid))].sort();return JSON.stringify(got)===JSON.stringify(ids)&&g.every(o=>o.parent.scale.y===1);},ids,{timeout:90000});
+  const result=await page.evaluate(async()=>{const {GLTFExporter}=await import('three/addons/exporters/GLTFExporter.js'),THREE=await import('three'),groups=[];for(const s of window.__pilotScenes)s.traverse(o=>{if(o.userData?.fid&&!o.userData.authorizedAsset)groups.push(o);});
    const roots=groups.map(g=>{const c=g.clone(true);c.name=g.userData.fid;c.traverse(o=>{if(o.isLine||o.isLineSegments)o.visible=false;});c.updateMatrixWorld(true);return c;}),rows=roots.map(c=>{const b=new THREE.Box3().setFromObject(c);let tris=0;c.traverse(o=>{if(o.isMesh&&o.visible){const gm=o.geometry;tris+=(gm.index?gm.index.count:gm.attributes.position.count)/3;}});return {id:c.name,position:c.position.toArray(),rotationY:c.rotation.y,boundsMin:b.min.toArray(),boundsMax:b.max.toArray(),triangles:tris};});
    const glb=await new GLTFExporter().parseAsync(roots,{binary:true,onlyVisible:true});return {glb:Array.from(new Uint8Array(glb)),rows};});
   if(errors.length)throw Error('Page errors: '+errors.join(' | '));
