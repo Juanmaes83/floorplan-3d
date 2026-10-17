@@ -235,6 +235,20 @@ Recorrido en vertical 390×844 (`9e3ba33`): 6/378 fotogramas con muro cercano (1
 
 **CI:** GitHub Actions sigue terminando en segundos sin pasos (`runner_id: 0`). **CI no ejecutada.**
 
+### R10 — diagnóstico de los tres síntomas nuevos, 17-10-2026
+
+Repeticiones alternadas, 4 por caso y versión, en las mismas condiciones (`docs/qa/r10-gpu-regression.md`):
+
+| Caso | `28e0428` | `9e3ba33` | Conclusión |
+| --- | --- | --- | --- |
+| M11 cancelación | 3/4 (~42 s) | 0/4 (~50 s) | Reproducible como fallo de la prueba, pero la cancelación funciona igual en ambas versiones según una sonda funcional (sin descarga, estado «Lote cancelado», cámara restaurada). El clic de Playwright a ~1 fps llega cuando el lote ya terminó. Sin defecto funcional demostrado. |
+| P05 1440×900 | 0/4 | 3/4 | Límite de 180 s en ambas versiones; no es una regresión. |
+| Cámara 3D tras Escape/Atrás | 0/4 | 2/4 | Límite de 120 s en ambas versiones; no es una regresión. |
+
+`roomFrame`, mediana caliente para las 13 estancias en Node: `bc1cee7` 532 ms, `1dd86e5` 624 ms y `9e3ba33` 1578 ms. El aumento es real, pero no es la causa de estos síntomas. Queda como riesgo de rendimiento en móvil.
+
+Una corrección tentativa de la nota de sección durante el lote (`e440304`) no cambió el resultado (0/4) y se revirtió (`5e3c1f8`). El código del producto vuelve a ser idéntico a `9e3ba33`. Validación pendiente en un PC con GPU: `docs/qa/r10-gpu-regression.md`.
+
 ### R10 — límites del entorno de esta sesión
 
 - SwiftShader en 4 vCPU tarda 0,5–1,5 s por fotograma a 1440×900 tanto en `28e0428` como en el código nuevo; la medida inicial de 60 ms en una parada antigua fue un artefacto y no se repitió. No hay regresión de render medida. Los tiempos no representan GPU ni móvil físico.
