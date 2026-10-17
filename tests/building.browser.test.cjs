@@ -179,6 +179,22 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  await page.waitForFunction(()=>/PDF página 1 de 1.*Plano cargado como nueva planta del edificio/.test(document.querySelector('#toast').textContent),null,{timeout:30000});
  data=await lib(page);assert.equal(data.entries.find(e=>e.id===data.activeId).building.levels[1].project.sourceImages[0].mediaType,'image/png');
  assert.equal(digest(JSON.stringify(data.entries.find(e=>e.id===singleId))),digest(singleBefore));await shot('12-level-from-pdf');
+ // 12. Duplicate and delete a building as one unit; image cleanup keeps bytes still referenced by another entry.
+ const pdfEntry=data.activeId,ref=data.entries.find(e=>e.id===pdfEntry).building.levels[1].project.sourceImages[0].storage.ref;
+ const hasImage=k=>page.evaluate(async k=>!!(await FloorPlanImages.get(k)),k);assert.equal(await hasImage(ref),true);
+ page.on('dialog',d=>d.accept());
+ await press(page,'#projectsBtn',mobile);await page.fill('#projectName','Copia del edificio');await press(page,'#projectDuplicate',mobile);
+ await page.waitForFunction(()=>FloorPlanBuildingUI.context&&JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.name==='Copia del edificio'));
+ data=await lib(page);const copy=data.entries.find(e=>e.name==='Copia del edificio'),orig=data.entries.find(e=>e.id===pdfEntry);
+ assert.equal(copy.kind,'building');assert.notEqual(copy.building.id,orig.building.id);assert.notDeepEqual(copy.building.levels.map(l=>l.id),orig.building.levels.map(l=>l.id));
+ assert.equal(digest(copy.building.levels[1].project.rooms),digest(orig.building.levels[1].project.rooms));
+ await page.selectOption('#projectList',copy.id);await press(page,'#projectDelete',mobile);
+ await page.waitForFunction(id=>!JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),copy.id);await page.waitForTimeout(500);
+ assert.equal(await hasImage(ref),true,'image still referenced by the original building is kept');
+ await page.selectOption('#projectList',pdfEntry);await press(page,'#projectDelete',mobile);
+ await page.waitForFunction(id=>!JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.some(e=>e.id===id),pdfEntry);
+ let removed=false;for(let i=0;i<30&&!removed;i++){removed=!(await hasImage(ref));if(!removed)await page.waitForTimeout(500);}
+ assert.equal(removed,true,'image removed once no entry references it');await press(page,'#projectClose',mobile);
  await fs.rm(tmp,{recursive:true});
  assert.deepEqual(errors,[]);
 });
