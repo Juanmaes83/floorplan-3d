@@ -1,0 +1,230 @@
+{
+  "sourceBytes": 1615248,
+  "sourceSha256": "e7cfda5f4e98e623db12b8bfd0184e048488e4855d9c83e2751fb44a32e80c45",
+  "sourceDimensions": [
+    1024,
+    512
+  ],
+  "views": [
+    {
+      "viewport": "1440x900",
+      "neutralLight": {
+        "preset": "neutral",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 16053490,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "warmLight": {
+        "preset": "warm",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16770249,
+        "hemiGround": 12034958,
+        "hemiIntensity": 0.9,
+        "sunColor": 16763288,
+        "sunIntensity": 2.05,
+        "background": 15920872,
+        "exposure": 1.12,
+        "envK": 0.8
+      },
+      "neutralMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "warmMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "restoredMemory": {
+        "geometries": 1298,
+        "textures": 10
+      },
+      "neutralFrameMedianMs": 16.59999942779541,
+      "warmFrameMedianMs": 16.5,
+      "downloadPngBytes": 478168,
+      "downloadPngSha256": "7ecd86ab5f14a8bd55406b44cb78ffe6094e70d3a5f9cb49bfe276c58267eb25"
+    },
+    {
+      "viewport": "390x844",
+      "neutralLight": {
+        "preset": "neutral",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 16053490,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "warmLight": {
+        "preset": "warm",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16770249,
+        "hemiGround": 12034958,
+        "hemiIntensity": 0.9,
+        "sunColor": 16763288,
+        "sunIntensity": 2.05,
+        "background": 15920872,
+        "exposure": 1.12,
+        "envK": 0.8
+      },
+      "neutralMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "warmMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "restoredMemory": {
+        "geometries": 1298,
+        "textures": 10
+      },
+      "neutralFrameMedianMs": 16.799999237060547,
+      "warmFrameMedianMs": 16.600000381469727,
+      "downloadPngBytes": 114834,
+      "downloadPngSha256": "83dbbc889f003a0ea2fe6bb027d9bbe143360b23b3c7ce12ea8d9fedfe44bc4a"
+    },
+    {
+      "viewport": "844x390",
+      "neutralLight": {
+        "preset": "neutral",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 16053490,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "warmLight": {
+        "preset": "warm",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16770249,
+        "hemiGround": 12034958,
+        "hemiIntensity": 0.9,
+        "sunColor": 16763288,
+        "sunIntensity": 2.05,
+        "background": 15920872,
+        "exposure": 1.12,
+        "envK": 0.8
+      },
+      "neutralMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "warmMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "restoredMemory": {
+        "geometries": 1298,
+        "textures": 10
+      },
+      "neutralFrameMedianMs": 17,
+      "warmFrameMedianMs": 16.299999237060547,
+      "downloadPngBytes": 156654,
+      "downloadPngSha256": "7b454d7fdd0f272b214a6587af15c5598259ed7074debb444f28a9f3a1ae9e7e"
+    },
+    {
+      "viewport": "360x800",
+      "neutralLight": {
+        "preset": "neutral",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 16053490,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "warmLight": {
+        "preset": "warm",
+        "status": "hdr",
+        "error": "",
+        "bytes": 1615248,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 4194304,
+        "environment": "hdr",
+        "hemiColor": 16770249,
+        "hemiGround": 12034958,
+        "hemiIntensity": 0.9,
+        "sunColor": 16763288,
+        "sunIntensity": 2.05,
+        "background": 15920872,
+        "exposure": 1.12,
+        "envK": 0.8
+      },
+      "neutralMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "warmMemory": {
+        "geometries": 1298,
+        "textures": 15
+      },
+      "restoredMemory": {
+        "geometries": 1298,
+        "textures": 10
+      },
+      "neutralFrameMedianMs": 16.299999237060547,
+      "warmFrameMedianMs": 16.40000057220459,
+      "downloadPngBytes": 108955,
+      "downloadPngSha256": "3e0d0c133c19058989c9427ebc0f920294260cee233f2a0738d74752c0b2d89c"
+    }
+  ]
+}

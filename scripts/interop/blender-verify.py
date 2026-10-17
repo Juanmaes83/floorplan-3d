@@ -167,8 +167,12 @@ def main():
     textures = [i for i in bpy.data.images if i.type == "IMAGE" and i.size[0] > 0]
     if len(textures) != semantic["metrics"]["images"]:
         raise AssertionError("Texture count mismatch")
+    # The glTF importer only creates materials some mesh uses; project materials no room or wall references
+    # are reported, not required.
+    used = {r["floorMaterialId"] for r in project["rooms"]} | {w.get("surfaceMaterialId") for w in project["walls"] if w.get("surfaceMaterialId")}
+    unused_materials = sorted(m["id"] for m in project["materials"] if m["id"] not in used)
     for m in project["materials"]:
-        if not bpy.data.materials.get(m["id"]):
+        if m["id"] in used and not bpy.data.materials.get(m["id"]):
             raise AssertionError("Material missing: " + m["id"])
     bpy.context.scene["rubik_package_sha256"] = digest((root/"package.json").read_bytes())
     bpy.context.scene["rubik_semantic_sha256"] = manifest["semanticSha256"]
@@ -182,7 +186,7 @@ def main():
               "verifierSha256":digest(Path(__file__).read_bytes()),
               "blend":{"filename":blend_path.name,"bytes":blend_path.stat().st_size,"sha256":digest(blend_path.read_bytes())},
               "entities":rows,"images":[{"name":i.name,"dimensions":list(i.size)} for i in textures],
-              "limitations":semantic["omittedOrSubstituted"]}
+              "limitations":semantic["omittedOrSubstituted"],"unusedProjectMaterials":unused_materials}
     report_path.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     print(json.dumps({"status":"PASS","entities":len(rows),"blender":bpy.app.version_string}))
 

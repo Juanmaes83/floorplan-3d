@@ -25,6 +25,8 @@
       all:()=>Core.clone(data.entries),
       list:()=>data.entries.map(e=>{const root=rootOf(data,e);return root?{id:e.id,name:e.name,variantOf:root}:{id:e.id,name:e.name};}),activeId:()=>data.activeId,project:()=>Core.clone(current().project),
       add(project,value){Core.validate(project);const title=name(value);return change(n=>{const id=Core.id('prj');n.entries.push({id,name:title,project:Core.clone(project)});n.activeId=id;});},
+      // File imports preserve the visible original and create a separate entry in one atomic write.
+      importProject(visible,project,value){Core.validate(visible);Core.validate(project);const title=name(value);return change(n=>{entry(n,n.activeId).project=Core.clone(visible);const id=Core.id('prj');n.entries.push({id,name:title,project:Core.clone(project)});n.activeId=id;});},
       save(project){Core.validate(project);return change(n=>{entry(n,n.activeId).project=Core.clone(project);});},
       open(id){return change(n=>{entry(n,id);n.activeId=id;});},
       rename(id,value){const title=name(value);return change(n=>{const e=entry(n,id);e.name=title;e.project.name=title;});},

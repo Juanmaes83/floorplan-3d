@@ -1,0 +1,44 @@
+{
+ "size": "390x844",
+ "room": "rom_mbath",
+ "kind": "interior",
+ "code": "clear",
+ "viewOffset": null,
+ "routeSeconds": 3.93,
+ "lengthMm": 9497.177353546213,
+ "maxFrameJumpM": 11.262,
+ "maxJumpFrame": 95,
+ "stopMetric": {
+  "target": 0.076,
+  "topOther": [
+   "rom_master",
+   0.261
+  ],
+  "floorVisible": 0.171
+ },
+ "projectUnchanged": true,
+ "errors": [],
+ "phases": {
+  "walk": {
+   "frames": 118,
+   "seconds": 3.93,
+   "eyeH": [
+    1.65,
+    1.65
+   ],
+   "pitchP50": 51.6,
+   "pitchP95": 56.6,
+   "pitchMax": 79.2,
+   "viewPitchP50": 51.6,
+   "viewPitchP95": 56.6,
+   "viewPitchMax": 79.2,
+   "framesViewPitchOver20": 118,
+   "framesPitchOver20": 118,
+   "framesWallClose30": 0,
+   "targetP50": 0,
+   "targetMax": 1,
+   "speedMax": 2.41,
+   "speedP50": 2.4
+  }
+ }
+}
