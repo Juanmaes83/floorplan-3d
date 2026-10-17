@@ -41,7 +41,7 @@ Las referencias de Rubik son al código de `master` `b294739`.
 | Visita libre: controles | **Visible:** WASD, ratón, Mayús correr, Espacio saltar, Esc pausa. | WASD y Mayús, ratón con `PointerLockControls`, colisión con muros, joystick y arrastre táctil, Esc. Visita guiada por estancias (#39) y vídeo Blender (#42). | Sin salto, que no aporta a una vivienda. La medida en móvil de LoRA LAB no está comprobada. |
 | CAD, DXF y Blender | **No comprobado** y no visible: el menú no ofrece CAD ni Blender. No se atribuye a LoRA LAB, y tampoco el CAD/Blender de Summerz3002. | DXF en #38; GLB y verificación Blender (#24); piloto offline de vídeo (#42). | Ninguna. |
 
-**Conclusión de la matriz:** casi todo lo que LoRA LAB demuestra en una planta ya existe en Rubik: entrada por la puerta, apertura de puertas, noche con luces, corte de muros, importación y exportación. Las brechas reales y comprobadas son tres, y las tres dependen del contrato: **plantas conectadas con escaleras**, **exterior y envolvente** y, en menor medida, **interacciones de visita** (altura de ojos, ventanas, cortinas, luces). Las demás son mejoras menores o no están demostradas por LoRA LAB.
+**Conclusión de la matriz:** Rubik ya cubre buena parte de lo ejecutado en la grabación sobre una planta: entrada por la puerta, apertura de puertas y noche con luces. El cambio visual 1F/2F/3F demuestra una **brecha estructural de varias plantas** frente a Rubik; crear una escalera y atravesarla sigue sin comprobarse. Exterior y cortinas aparecen en la interfaz, pero su edición o interacción tampoco se verificó. La altura de ojos es una preferencia de vista que no exige cambiar el contrato; entidades de cortina o luminaria y un edificio de varios niveles sí requerirían modelado adicional. Importación/exportación LoRA LAB sólo son controles visibles, mientras las capacidades correspondientes de Rubik se verificaron en su código.
 
 ## 3. Brechas: beneficio y contrato
 
@@ -154,7 +154,7 @@ Reglas semánticas nuevas propuestas:
 
 ### 4.5 Criterios de aceptación
 
-1. Los proyectos de una planta abren y guardan con `schemaVersion` y bytes canónicos sin cambios, y toda la regresión existente sigue pasando.
+1. Los proyectos 1.x de una planta siguen siendo válidos y exportan datos semánticamente equivalentes tras abrir y guardar; no se modifica el archivo original sin una acción del usuario. La regresión existente sigue pasando. Cualquier exigencia de identidad byte a byte de la exportación debe definirse y probarse por separado.
 2. Fixture asimétrico de dos plantas: planta baja 9 × 7 m, planta alta 6 × 7 m desplazada, y escalera recta de 14 peldaños para 2800 mm. Sus IDs se mantienen tras 20 ediciones y su ida y vuelta JSON y ZIP es semánticamente idéntica.
 3. Elevación 3D de cada nivel igual a `elevationMm` (±1 mm). Hueco del forjado igual a la huella de la escalera (±1 mm).
 4. La superficie por planta es igual a la suma de Gauss de sus estancias, y la total es igual a la suma de plantas.
@@ -177,9 +177,9 @@ Reglas semánticas nuevas propuestas:
 
 **Reglas:**
 
-- **Usar sólo los datos de plantilla:** ningún plano real ni dato personal.
-- No iniciar sesión ni aceptar pagos.
-- No descargar ni ejecutar nada distinto del JSON exportado.
+- Usar datos de plantilla, sin subir planos reales ni información personal para esta comparación.
+- Registrar si el sitio exige cuenta o pago para una prueba, sin inferir que la función está disponible gratuitamente.
+- Conservar únicamente la evidencia necesaria para reproducir cada resultado.
 
 **Preparación:**
 
