@@ -119,6 +119,12 @@
   const look=options.lookAheadMm||1200,raw=[];
   for(let i=0;i<=end;i++){let j=i;while(j<end&&s[j]-s[i]<look)j++;while(j>i+1&&!aerial&&!sight(src[i],src[j]))j--;
    const a=src[i],b=j>i?src[j]:(i>0?{x:2*a.x-src[i-1].x,y:2*a.y-src[i-1].y}:src[Math.min(end,i+1)]);raw.push(Math.atan2(b.y-a.y,b.x-a.x));}
+  // While walking, look within ±25° of the walking direction toward where the visible field has most free depth
+  // (wall distance capped at 2.5 m, over the camera's real horizontal field): in corridors and before doors the
+  // view runs along the space instead of filling the frame with the wall beside the path.
+  if(!aerial&&options.avoidNearWalls!==false){const camHalf=Math.atan(tH),depthAt=(p,a)=>{const dx=Math.cos(a),dy=Math.sin(a);for(let d=60;d<=2500;d+=60)if(blocked(p.x+dx*d,p.y+dy*d))return d;return 2500;};
+   for(let i=0;i<raw.length;i++){let bestYaw=raw[i],bestScore=-Infinity;for(let dd=-25;dd<=25;dd+=5){const y=raw[i]+dd*Math.PI/180,c=y+yawOffset;let sum=0;
+     for(let k=0;k<9;k++)sum+=Math.min(1,depthAt(src[i],c-camHalf+2*camHalf*k/8)/1000);const score=sum/9-.003*Math.abs(dd);if(score>bestScore){bestScore=score;bestYaw=y;}}raw[i]=bestYaw;}}
   for(let i=1;i<raw.length;i++){while(raw[i]-raw[i-1]>Math.PI)raw[i]-=2*Math.PI;while(raw[i]-raw[i-1]<-Math.PI)raw[i]+=2*Math.PI;}
   const sigma=Math.round(450/step),yaw=raw.map((_,i)=>{let sum=0,w=0;for(let k=-3*sigma;k<=3*sigma;k++){const j=Math.min(raw.length-1,Math.max(0,i+k)),g=Math.exp(-k*k/(2*sigma*sigma));sum+=raw[j]*g;w+=g;}return sum/w;});
   let finalYaw=best&&best.i===end?best.yaw:toCenter>700?Math.atan2(centroid[1]-arrival.y,centroid[0]-arrival.x):yaw[end];
