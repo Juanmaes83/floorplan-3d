@@ -246,8 +246,7 @@
   progress.textContent=tx(`Recorrido: ${visited.size} de ${plan.stops.length} vistas visitadas`,`Tour: ${visited.size} of ${plan.stops.length} views visited`,`参观：已访问 ${visited.size} / ${plan.stops.length} 个视图`);
   const framed=stop.kind==='room'?window.View3D?.presentationFrameInfo:null,section=framed?.roomId===stop.roomId&&framed.section;
   info.textContent=stop.kind==='room'?tx(`Superficie aproximada ${stop.areaM2.toFixed(2)} m² · medidas orientativas`,`Approximate area ${stop.areaM2.toFixed(2)} m² · indicative dimensions`,`约 ${stop.areaM2.toFixed(2)} 平方米 · 仅供参考`):tx('Vista general del proyecto actual','Overview of the current project','当前项目总览');
-  // The note describes the user's stop; a batch frames other rooms internally and must not resize the card.
-  if(!batchActive){sectionNote.hidden=!section;sectionNote.textContent=section?tx(`Vista seccionada: muros a ${framed.wallTop.toFixed(1).replace('.',',')} m para ver la estancia; el proyecto no cambia.`,`Section view: walls cut at ${framed.wallTop.toFixed(1)} m to show the room; the project is unchanged.`,`剖切视图：墙体在 ${framed.wallTop.toFixed(1)} 米处剖切以显示整个房间。项目不变。`):'';}
+  sectionNote.hidden=!section;sectionNote.textContent=section?tx(`Vista seccionada: muros a ${framed.wallTop.toFixed(1).replace('.',',')} m para ver la estancia; el proyecto no cambia.`,`Section view: walls cut at ${framed.wallTop.toFixed(1)} m to show the room; the project is unchanged.`,`剖切视图：墙体在 ${framed.wallTop.toFixed(1)} 米处剖切以显示整个房间。项目不变。`):'';
   previous.disabled=index===0;next.disabled=index===plan.stops.length-1;
   previous.disabled ||=batchActive;next.disabled ||=batchActive;
   updateCapture();
