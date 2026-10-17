@@ -1,0 +1,192 @@
+# Primer corte multipiso — QA (18-10-2026)
+
+**Estado: implementado y probado en el contenedor; pendiente de aceptación.** Faltan dos gates que sólo puede ejecutar Juanma: GPU representativa y móvil físico (§6). No hay merge ni despliegue.
+
+- **Decisión:** opción D de [#50](../technical/multilevel-contract-gate0-2026-10-17.md), aprobada por Juanma.
+- **Contrato:** [FloorPlanBuildingV1](../contracts/FloorPlanBuildingV1.md).
+
+| | SHA |
+| --- | --- |
+| Base de la PR: #50, rama `docs/multilevel-contract-gate0` | `dc84066`; código igual a `master` `5c822cf` |
+| Código probado | `1a9cb8e` |
+| Commits posteriores | Sólo `docs/` y `scripts/qa/`; se comprueba con `git diff --stat 1a9cb8e HEAD -- js index.html css tests` |
+
+## 1. Qué hay
+
+### Implementado y validado en el contenedor
+
+- **Contrato `FloorPlanBuildingV1` 1.0.0:**
+  - un `FloorPlanProjectV1` 1.x completo por planta, validado en modo estricto;
+  - 1–2 plantas con orden, elevación, forjado visual y desplazamiento en mm;
+  - escaleras rectas entre plantas contiguas;
+  - reglas de error con ruta y avisos BW1–BW4 orientativos;
+  - versión desconocida rechazada.
+- **Lectores 1.x:** `FloorPlanCore.validate` rechaza un edificio con un mensaje explícito, y por tanto también lo rechazan la app, el MCP y el exportador Blender. `FloorPlanCore.validate(project, {strict: true})` se añade como opción; por defecto su comportamiento no cambia.
+- **Intercambio:**
+  - JSON del edificio;
+  - ZIP con `building.json`, `manifest.json` y rutas de imagen por planta, verificado (rutas, manifiesto, tamaños, SHA-256, dimensiones) antes de aplicar nada;
+  - «Exportar esta planta» en JSON o ZIP 1.x, con aviso de lo que omite.
+- **Biblioteca local:** el edificio es una unidad al guardar, reabrir, duplicar, crear variantes y borrar. La limpieza de imágenes recorre todas las plantas de todos los edificios.
+- **Crear el edificio** desde un proyecto de una planta, como entrada nueva; el 1.x no se toca. La segunda planta puede ser vacía o venir de imagen o PDF por el flujo de subida existente.
+- **Editor 2D:**
+  - selector de planta accesible, con `aria-pressed`, teclado y tacto;
+  - sólo se edita la planta activa, con un deshacer/rehacer por planta;
+  - la planta inferior aparece atenuada para alinear;
+  - la escalera se ve en ambas plantas: peldaños y «Sube» abajo, «Hueco de escalera» arriba.
+- **3D:**
+  - plantas apiladas por elevación y desplazamiento, con «Ver todas» o hasta la activa;
+  - forjado visual con hueco y huecos del suelo superior y del techo inferior iguales a la huella;
+  - escalera de N peldaños;
+  - encuadre del edificio visible;
+  - materiales y objetos de cada planta. Las plantas no activas usan mobiliario genérico, porque los GLB autorizados sólo se cargan en la activa.
+- **Superficies** por planta y total.
+- **Consumidores de una planta** (presentación, lámina, variantes) nombran la planta activa. Una planta exportada funciona en Blender (#24/#42) y en el MCP. La revisión de distribución opera por planta.
+
+### Implementado, pendiente de gate externo
+
+- Rendimiento con GPU representativa en el PC de Juanma (§6.1).
+- Rendimiento y uso táctil en móvil físico (§6.2).
+- **CI:** GitHub Actions; se registra en la PR. Mientras termine sin pasos, **CI no ejecutada**.
+
+### No implementado: cortes futuros
+
+- Recorrido libre o guiado que sube la escalera.
+- Exterior, fachada, cubierta y terreno.
+- Más de dos plantas.
+- Escaleras en L, U o de caracol.
+- Rotación entre plantas.
+- IFC multiplanta completo; hoy se sigue importando la planta con más muros.
+- GLB o vídeo del edificio completo.
+- Herramientas MCP de edificio.
+- Variantes por planta.
+- GLB autorizados en plantas no activas.
+
+## 2. Entorno de las pruebas locales
+
+| Elemento | Valor |
+| --- | --- |
+| Contenedor | 4 vCPU, sin GPU |
+| Navegador | Chromium 141.0.7390.37 (`CHROME=/opt/pw-browsers/chromium`) con SwiftShader (ANGLE Vulkan, software) |
+| Node y herramientas | Node v22.22.0, Playwright 1.56.1, Python 3.13.16 |
+| three@0.160.0 | Copia del paquete npm oficial vía `THREE_LOCAL_DIR`, porque el proxy deniega `cdn.jsdelivr.net` |
+| MCP | `@modelcontextprotocol/sdk@1.30.0` y `zod@4.5.4` instalados con `npm install --no-save` en `tools/rubik-mcp`; sin ellos `protocol.test.mjs` no puede ejecutarse |
+
+## 3. Resultados
+
+| Suite | Comando | Resultado en `1a9cb8e` |
+| --- | --- | --- |
+| Unitarias Node | `ls tests/*.test.cjs \| grep -v browser \| xargs node --test` | REGRESSION_NODE |
+| Contrato del edificio | `node --test tests/building.test.cjs` | 11 pass, 0 fail (incluidas en la fila anterior) |
+| Schema (Python) | `python3 tests/building_schema.test.py` y los demás `tests/*.test.py` | 5 archivos OK |
+| MCP | `cd tools/rubik-mcp && node --test` | 6 pass, 0 fail |
+| Navegador, flujo multipiso | `node --test --test-concurrency=1 tests/building.browser.test.cjs` | REGRESSION_BUILDING |
+| Navegador, suite completa | 26 archivos, en serie y archivo a archivo | REGRESSION_FULL |
+
+REGRESSION_TABLE
+
+## 4. Qué cubre el flujo de navegador (`tests/building.browser.test.cjs`)
+
+En cada viewport (1440×900, 390×844 con tacto y 844×390 con tacto) y desde la UI:
+
+1. Crear un proyecto vacío y dos estancias con «+ Estancia».
+2. «Plantas…» → crear el edificio con planta vacía. El proyecto 1.x original queda idéntico byte a byte.
+3. En la planta alta:
+   - crear el dormitorio;
+   - desplazamiento X 2600 mm, con la alineación «2 de 4 muros» comprobada;
+   - escalera recta de 14 peldaños, con sus valores derivados y la etiqueta sin verificación normativa;
+   - superficies «16,80 + 10,56 = 27,36 m²»;
+   - avisos BW3 y BW4.
+4. Cambiar de planta con Enter y Espacia. Comprobar:
+   - `aria-pressed` correcto;
+   - historiales independientes: deshacer y rehacer en una planta nunca cambian el hash canónico de la otra;
+   - peldaños abajo y hueco arriba;
+   - planta inferior atenuada.
+5. En 3D:
+   - 14 peldaños desde −3,1 m hasta 0;
+   - hueco en el suelo superior y en el techo inferior;
+   - suelo del entorno a −3,115 m;
+   - «hasta la activa» oculta la planta alta y «Ver todas» la muestra a +3,1 m.
+6. F5: el edificio vuelve idéntico, con su planta activa.
+7. Exportar el edificio en JSON (menú) y en ZIP, y exportar la planta alta como 1.x válido estricto, con el aviso de lo que omite.
+8. Reimportar el JSON como entrada nueva. Un ZIP manipulado (escalera a una planta inexistente) se rechaza y la colección queda byte a byte igual. El ZIP auténtico se importa.
+9. Comprobar:
+   - la nota de presentación de una planta;
+   - el título de la lámina con la planta;
+   - una variante del edificio que copia el edificio entero;
+   - la comparación de variantes que nombra la planta.
+10. El proyecto de una planta: sin barra de plantas y sin geometría de edificio en 3D.
+11. Crear una planta desde PNG y otra desde PDF de una página con el flujo de subida: el mensaje dice «nueva planta del edificio».
+12. Duplicar y borrar un edificio. La imagen compartida se conserva hasta que ninguna entrada la referencia, y entonces se borra.
+13. Sin `pageerror` ni errores de consola.
+
+Capturas en `docs/qa/artifacts/multilevel/<viewport>-NN-*.png`, generadas por esta prueba sobre el SHA probado.
+
+## 5. Revisión visual
+
+Se abrieron y revisaron las capturas de los tres viewports.
+
+**Defectos de este corte, corregidos durante el ciclo:**
+
+| Defecto | Corrección |
+| --- | --- |
+| El 3D no recibía el contexto de plantas si el módulo 3D cargaba después del primer render. | Reenvío al entrar en 3D. |
+| El encuadre isométrico ignoraba las otras plantas y la altura, y con dos plantas casi cenital no se leía el apilado. | Encuadre del edificio visible, con un ángulo más oblicuo y algo más de distancia en vertical. |
+| Casilla de la planta atenuada desalineada en el diálogo. | Ajuste de estilo. |
+| El aviso de escala decía «difiere» con ambas plantas pendientes. | Texto según el caso. |
+| La subida de una planta desde imagen anunciaba «nuevo proyecto». | Ahora dice «nueva planta del edificio». |
+| Guardar al recargar cambiaba `updatedAt` del edificio sin cambios reales. | Guardar una planta sin cambios no escribe nada nuevo. |
+
+**Límites visuales conocidos que se aceptan en este corte:**
+
+- En «Ver todas», la planta alta tapa el interior de la baja, como en cualquier apilado. Para ver la baja se usa «hasta la activa» o los muros seccionados.
+- En 2D, la etiqueta de una estancia puede solaparse con el contorno de la escalera.
+- En móvil, el panel de propiedades se abre al crear una estancia, como antes de este corte. La prueba lo cierra antes de capturar.
+
+## 6. Gates que debe ejecutar Juanma
+
+### 6.1 PC con GPU (Windows, PowerShell)
+
+```powershell
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra fetch origin feat/multilevel-first-cut
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-multilevel FINAL_SHA
+cd C:\Users\temp123\work\fp-multilevel
+npm init -y > $null; npm install --no-save playwright@1.62.1
+$env:CHROME = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+node scripts/qa/presentation/gpu-check.cjs                 # debe decir representative: true (sin SwiftShader)
+node scripts/qa/multilevel/perf.cjs 1440x900               # criterio: ratio ≤ 1.5 y representative: true
+node scripts/qa/multilevel/perf.cjs 390x844
+node --test --test-concurrency=1 tests/building.browser.test.cjs
+New-Item -ItemType Directory -Force gpu-regression > $null
+Get-ChildItem tests/*browser.test.cjs | % { $n=$_.BaseName; node --test --test-concurrency=1 $_.FullName *> "gpu-regression/$n.log"; "$n exit=$LASTEXITCODE " + ((Select-String -Path "gpu-regression/$n.log" -Pattern '^# (tests|pass|fail|cancelled|skipped) ').Line -join ' ') | Add-Content gpu-regression/summary.txt }
+Get-Content gpu-regression/summary.txt
+```
+
+**A comunicar:** la salida de `gpu-check.cjs` y de los dos `perf.cjs`, y `gpu-regression/summary.txt`. `cancelled` significa sin resultado, no aprobado.
+
+### 6.2 Móvil físico (al menos un Android de gama media y un iPhone)
+
+1. En el PC, generar el ZIP del fixture: `node scripts/qa/multilevel/fixture-zip.cjs edificio-fixture.zip`. Pasarlo al teléfono.
+2. Abrir en el teléfono la preview de Vercel de la PR, con la sesión iniciada, y comprobar que es la del SHA final. «Subir plano» → `edificio-fixture.zip`.
+3. **Comprobar:**
+   - el selector de planta funciona con el dedo;
+   - «Plantas…» se puede leer y desplazar;
+   - en 3D, «Ver todas» muestra las dos plantas y la escalera;
+   - salir y volver restaura el estado;
+   - no se pierde el contexto WebGL.
+4. **Medir los FPS** con el teléfono en reposo 10 s, en órbita, primero con el proyecto de ejemplo de una planta y después con el edificio y «Ver todas»:
+   - Android: `chrome://inspect` en el PC, luego Rendering → Frame rendering stats;
+   - iPhone: Safari → Desarrollo → Línea de tiempo.
+5. **Criterio:** la mediana de fotograma con el edificio no supera 1,5 veces la de una planta, y no hay pérdida de contexto WebGL. Como no hay presupuesto móvil aprobado (decisión 3 de Roadmap 2), este primer registro es la línea base.
+
+## 7. Rendimiento medido aquí (no representativo)
+
+PERF_TABLE
+
+Son SwiftShader en 4 vCPU: no sirven para GPU ni para móviles. El criterio sólo se dará por cumplido con §6.
+
+## 8. Riesgos
+
+- **Fidelidad:** un desplazamiento mal puesto o escalas distintas entre plantas. Mitigación: la planta inferior atenuada, la alineación medida, BW3 y BW4, y el texto «medidas orientativas».
+- **Rendimiento:** dos plantas duplican la geometría. Las plantas no activas usan mobiliario genérico, sin GLB.
+- **Compatibilidad hacia atrás:** si se vuelve a una versión anterior de la app después de crear un edificio, esa versión no podrá abrir la colección local. Fallará con un error explícito y conservando los datos, sin aplanar el edificio. Conviene exportar antes de un retroceso de versión.
+- **Producto:** que alguien lea «edificio» como modelo constructivo. Los textos dicen siempre propuesta orientativa y sin verificación normativa ni estructural.
