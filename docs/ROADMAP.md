@@ -3,7 +3,7 @@
 
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
 
-Juanma confirmó como público inicial a **profesionales de reformas e interiorismo que preparan y presentan propuestas de vivienda**, incluidos chalets y dúplex. El problema prioritario es mantener plano editable, mobiliario y presentación de toda la vivienda en un proyecto. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La confirmación orienta el estudio LoRA LAB y la evaluación de multipiso, pero no aprueba D-16, un contrato 2.0 ni una fase de implementación. Se probará primero LoRA LAB con el guion de la PR #48 y sus límites de evidencia.
+Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La confirmación orienta el estudio LoRA LAB y la evaluación de multipiso, pero no aprueba D-16, un contrato 2.0 ni una fase de implementación. Se probará primero LoRA LAB con el guion de la PR #48 y sus límites de evidencia.
 
 ## Estado vigente tras la integración del 17-10-2026
 
