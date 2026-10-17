@@ -100,6 +100,8 @@ Las referencias de Rubik son al código de `master` `b294739`; `5c822cf` (#49) s
 
 ### 4.3 Antes de escribir código: decisión de contrato (gate 0)
 
+> **Actualización, 17-10-2026:** el gate 0 se ha desarrollado aparte, en la PR documental #50 (`docs/technical/multilevel-contract-gate0-2026-10-17.md`). Una sonda sobre el validador actual muestra que **acepta** un `1.5.0` con `levels[]` y un `x-levels` en `extensions`, superponiendo plantas, y rechaza tanto `2.0.0` como un contenedor con otro `schema`. Con esa evidencia, #50 **recomienda un contenedor de edificio que incrusta un proyecto 1.x por planta** (su opción D) en lugar de la opción A de la tabla siguiente, sobre todo por la escala por planta. La tabla se conserva como recomendación provisional original; la decisión es de Juanma en #50.
+
 Ningún código de producto hasta que Juanma apruebe un documento de contrato con:
 
 - schema;
