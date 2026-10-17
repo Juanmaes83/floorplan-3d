@@ -81,9 +81,10 @@ function composeRoom(sc,roomId,o={}){
  const evaluate=(x,y,yaw,lens,cols)=>{const hfov=2*Math.atan(sensor/2/lens),pitch=pitchAt(x,y)*DEG,m=measure(sc,[x,y,eyeH],yaw,pitch,hfov,aspect,{cols,nearMm});
   const t=m.share[roomId]||0,other=Math.max(0,...Object.entries(m.share).filter(([k])=>k!==roomId&&k!=='void'&&k!=='outside').map(([,v])=>v)),content=contents.length?m.seen.filter(id=>contents.some(c=>c.id===id)).length/contents.length:1;
   // Legibility: reward the target's visible floor, penalise surfaces closer than 1.2 m filling the frame.
+  // Wide lenses are only penalised in rooms of 6 m2 or more (small baths are photographed at 16-18 mm).
   // Furniture of the room filling the frame is what makes a small room recognisable; bare walls do not.
   const fl=m.floor[roomId]||0,ob=m.objects[roomId]||0;
-  return {score:t+.35*content+Math.min(fl,.3)+1.2*Math.min(ob,.4)-2*Math.max(0,m.near-.1)-1.5*Math.max(0,other-.15)-.6*(m.share.void||0)-(24-lens)*.004,x,y,yaw,pitch,lens,hfov,share:t,other,content,floor:fl,objects:ob,near:m.near};};
+  return {score:t+.35*content+Math.min(fl,.3)+1.2*Math.min(ob,.4)-2*Math.max(0,m.near-.1)-1.5*Math.max(0,other-.15)-.6*(m.share.void||0)-(room.area<6?0:(24-lens)*.004),x,y,yaw,pitch,lens,hfov,share:t,other,content,floor:fl,objects:ob,near:m.near};};
  // Coarse pass (20 mm, 20 columns, 10° yaw steps toward the room), then lenses and ±5° on the ten best.
  const coarse=[];for(const [x,y] of pos){const toC=Math.atan2(cy-y,cx-x);for(let k=-6;k<=6;k++)coarse.push(evaluate(x,y,toC+k*10*DEG,20,20));}
  coarse.sort((a,b)=>b.score-a.score);let best=null;
