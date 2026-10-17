@@ -254,8 +254,12 @@
   plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
   // Single-row stops scroll sideways to the active one; scrollIntoView would also scroll the card vertically
   // and push its close button out of the viewport.
-  const active=stops.children[index];
-  if(active&&matchMedia('(max-height: 500px), (max-width: 600px)').matches&&stops.scrollWidth>stops.clientWidth){const left=active.getBoundingClientRect().left-stops.getBoundingClientRect().left+stops.scrollLeft,right=left+active.offsetWidth;if(left<stops.scrollLeft)stops.scrollLeft=left;else if(right>stops.scrollLeft+stops.clientWidth)stops.scrollLeft=right-stops.clientWidth;}
+  const current=stops.children[index];
+  if(current&&matchMedia('(max-height: 500px), (max-width: 600px)').matches){
+   if(stops.scrollWidth>stops.clientWidth){const left=current.getBoundingClientRect().left-stops.getBoundingClientRect().left+stops.scrollLeft,right=left+current.offsetWidth;if(left<stops.scrollLeft)stops.scrollLeft=left;else if(right>stops.scrollLeft+stops.clientWidth)stops.scrollLeft=right-stops.clientWidth;}
+   // A short card scrolls by itself (its header with the close button is sticky): bring the stops row into it.
+   if(card.scrollHeight>card.clientHeight){const c=card.getBoundingClientRect(),r=stops.getBoundingClientRect();if(r.bottom>c.bottom)card.scrollTop+=r.bottom-c.bottom+4;}
+  }
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
  function open(){
