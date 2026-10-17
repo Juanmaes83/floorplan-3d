@@ -1,0 +1,229 @@
+/* FloorPlanBuildingV1 (option D of PR #50): a versioned building document that embeds one complete, independent
+   FloorPlanProjectV1 1.x project per level, plus the building-level data no 1.x reader knows about (level order,
+   elevation, offset and straight stairs). Pure data module: validation, editing helpers, derived geometry and the
+   building ZIP layout. No DOM, storage or network. Geometry checks are orientative coherence warnings for a
+   proposal tool; they are never structural or regulatory judgements. */
+(function(root){
+ 'use strict';
+ const Core=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
+ const SCHEMA='rubik-sota.floorplan-building',VERSION='1.0.0';
+ // Embedded projects must use a 1.x version this reader knows, validated strictly (no unknown fields).
+ const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0'];
+ const LIMITS={levels:2,stairs:4,coordMm:1000000,elevationMm:100000,slabMm:1000,nameMax:200,levelNameMax:80};
+ const ID={building:/^bld_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,level:/^lvl_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,stair:/^str_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/};
+ const MULTI_LEVEL_HINT=/level|floor|storey|story|stair|planta|nivel|piso|escalera|building|edificio/i;
+ const clone=Core.clone;
+ const fail=(path,message)=>{throw new Error(`${path}: ${message}`);};
+ const isInt=(v,min,max)=>Number.isSafeInteger(v)&&v>=min&&v<=max;
+ function dateValid(v){return typeof v==='string'&&/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z$/.test(v)&&Number.isFinite(Date.parse(v));}
+ function exactKeys(value,path,required,optional=[]){
+  if(!value||typeof value!=='object'||Array.isArray(value))fail(path,'expected object');
+  for(const k of required)if(!Object.hasOwn(value,k))fail(path,`missing ${k}`);
+  for(const k of Object.keys(value))if(!required.includes(k)&&!optional.includes(k))fail(`${path}/${k}`,'unknown field');
+ }
+ function point(value,path){exactKeys(value,path,['x','y']);for(const k of ['x','y'])if(!isInt(value[k],-LIMITS.coordMm,LIMITS.coordMm))fail(`${path}/${k}`,`integer mm within ±${LIMITS.coordMm}`);}
+ function text(value,path,max){if(typeof value!=='string'||!value.trim()||[...value].length>max)fail(path,`text of 1–${max} characters`);}
+ // A key anywhere inside extensions that names levels or stairs would be multi-level meaning a 1.x reader ignores.
+ function scanExtensions(value,path){
+  if(value&&typeof value==='object')for(const [k,v]of Object.entries(value)){if(MULTI_LEVEL_HINT.test(k))fail(`${path}/${k}`,'multi-level data is not allowed inside a level project; use the building document');scanExtensions(v,`${path}/${k}`);}
+ }
+ function embedded(project,path){
+  if(!project||typeof project!=='object')fail(path,'expected an embedded FloorPlanProjectV1 project');
+  if(project.schema===SCHEMA)fail(path,'a building cannot be nested inside a level');
+  if(!PROJECT_VERSIONS.includes(project.schemaVersion))fail(`${path}/schemaVersion`,`unsupported level project version ${project.schemaVersion}; supported ${PROJECT_VERSIONS.join(', ')}`);
+  try{Core.validate(project,{strict:true});}catch(e){fail(path,e.message.replace(/^\/+/,'/'));}
+  scanExtensions(project.extensions,`${path}/extensions`);
+  for(const k of ['walls','openings','rooms','materials','objects','measurements','sourceImages'])for(const x of project[k]||[])scanExtensions(x.extensions,`${path}/${k}/${x.id}/extensions`);
+ }
+ // Straight stair footprint in the building frame. startMm is the middle of the first step's front edge;
+ // rotationDeg is the climbing direction, clockwise in plan (x right, y down), like the 1.x contract.
+ function stairFootprint(s){
+  const a=s.rotationDeg*Math.PI/180,d={x:Math.cos(a),y:Math.sin(a)},n={x:-d.y,y:d.x},w=s.widthMm/2,L=s.runLengthMm,p=s.startMm;
+  return [{x:p.x-n.x*w,y:p.y-n.y*w},{x:p.x+n.x*w,y:p.y+n.y*w},{x:p.x+n.x*w+d.x*L,y:p.y+n.y*w+d.y*L},{x:p.x-n.x*w+d.x*L,y:p.y-n.y*w+d.y*L}];
+ }
+ const toLocal=(poly,level)=>poly.map(p=>({x:p.x-level.offsetMm.x,y:p.y-level.offsetMm.y}));
+ const toBuilding=(poly,level)=>poly.map(p=>({x:p.x+level.offsetMm.x,y:p.y+level.offsetMm.y}));
+ function inPoly(p,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
+ const areaMm2=poly=>Math.abs(poly.reduce((s,p,i)=>{const q=poly[(i+1)%poly.length];return s+p.x*q.y-q.x*p.y;},0))/2;
+ function stairInfo(building,s){
+  const from=building.levels.find(l=>l.id===s.fromLevelId),to=building.levels.find(l=>l.id===s.toLevelId),riseMm=to.elevationMm-from.elevationMm;
+  return {riseMm,riserMm:riseMm/s.risers,treadMm:s.runLengthMm/s.risers,footprint:stairFootprint(s)};
+ }
+ function validate(building){
+  exactKeys(building,'/',['schema','schemaVersion','id','name','createdAt','updatedAt','units','levels','stairs']);
+  if(building.schema!==SCHEMA)fail('/schema',`expected ${SCHEMA}`);
+  if(building.schemaVersion!==VERSION)fail('/schemaVersion',`unsupported building version ${building.schemaVersion}; this reader supports ${VERSION}`);
+  if(!ID.building.test(building.id))fail('/id','invalid building ID');
+  text(building.name,'/name',LIMITS.nameMax);
+  if(!dateValid(building.createdAt))fail('/createdAt','invalid UTC date-time');
+  if(!dateValid(building.updatedAt))fail('/updatedAt','invalid UTC date-time');
+  if(Date.parse(building.updatedAt)<Date.parse(building.createdAt))fail('/updatedAt','earlier than createdAt');
+  if(building.units!=='mm')fail('/units','expected mm');
+  if(!Array.isArray(building.levels)||building.levels.length<1||building.levels.length>LIMITS.levels)fail('/levels',`between 1 and ${LIMITS.levels} levels in this version`);
+  if(!Array.isArray(building.stairs)||building.stairs.length>LIMITS.stairs)fail('/stairs',`at most ${LIMITS.stairs} stairs`);
+  const ids=new Set([building.id]),unique=(id,path)=>{if(ids.has(id))fail(path,`duplicate ID ${id}`);ids.add(id);};
+  const projectIds=new Set(),imageIds=new Set();
+  building.levels.forEach((l,i)=>{
+   const path=`/levels/${i}`;exactKeys(l,path,['id','name','order','elevationMm','slabThicknessMm','offsetMm','project']);
+   if(!ID.level.test(l.id))fail(`${path}/id`,'invalid level ID');unique(l.id,`${path}/id`);
+   text(l.name,`${path}/name`,LIMITS.levelNameMax);
+   if(l.order!==i)fail(`${path}/order`,'levels must be listed in contiguous order starting at 0');
+   if(!isInt(l.elevationMm,0,LIMITS.elevationMm))fail(`${path}/elevationMm`,`integer mm 0–${LIMITS.elevationMm}`);
+   if(!isInt(l.slabThicknessMm,0,LIMITS.slabMm))fail(`${path}/slabThicknessMm`,`integer mm 0–${LIMITS.slabMm}`);
+   point(l.offsetMm,`${path}/offsetMm`);
+   if(i===0&&(l.elevationMm!==0||l.slabThicknessMm!==0||l.offsetMm.x!==0||l.offsetMm.y!==0))fail(path,'level 0 defines the building frame: elevation, slab and offset must be 0');
+   if(i>0){const below=building.levels[i-1];if(l.elevationMm<=below.elevationMm)fail(`${path}/elevationMm`,'must be higher than the level below');if(l.elevationMm-l.slabThicknessMm<=below.elevationMm)fail(`${path}/slabThicknessMm`,'slab reaches the floor of the level below');}
+   embedded(l.project,`${path}/project`);
+   if(projectIds.has(l.project.id))fail(`${path}/project/id`,`duplicate project ID ${l.project.id} across levels`);projectIds.add(l.project.id);
+   for(const im of l.project.sourceImages||[]){if(imageIds.has(im.id))fail(`${path}/project/sourceImages/${im.id}`,'duplicate image ID across levels');imageIds.add(im.id);}
+  });
+  building.stairs.forEach((s,i)=>{
+   const path=`/stairs/${i}`;exactKeys(s,path,['id','kind','fromLevelId','toLevelId','startMm','rotationDeg','widthMm','runLengthMm','risers']);
+   if(!ID.stair.test(s.id))fail(`${path}/id`,'invalid stair ID');unique(s.id,`${path}/id`);
+   if(s.kind!=='straight')fail(`${path}/kind`,'only straight stairs in this version');
+   const from=building.levels.find(l=>l.id===s.fromLevelId),to=building.levels.find(l=>l.id===s.toLevelId);
+   if(!from)fail(`${path}/fromLevelId`,`missing level reference ${s.fromLevelId}`);if(!to)fail(`${path}/toLevelId`,`missing level reference ${s.toLevelId}`);
+   if(to.order!==from.order+1)fail(path,'a stair joins a level with the one directly above');
+   point(s.startMm,`${path}/startMm`);
+   if(!isInt(s.rotationDeg,0,359))fail(`${path}/rotationDeg`,'integer 0–359');
+   if(!isInt(s.widthMm,300,5000))fail(`${path}/widthMm`,'integer mm 300–5000');
+   if(!isInt(s.runLengthMm,500,20000))fail(`${path}/runLengthMm`,'integer mm 500–20000');
+   if(!isInt(s.risers,2,40))fail(`${path}/risers`,'integer 2–40');
+  });
+  return {warnings:warnings(building)};
+ }
+ // Orientative coherence warnings (never blocking, never a regulatory or structural verdict).
+ function warnings(building){
+  const out=[],level=id=>building.levels.find(l=>l.id===id);
+  for(const s of building.stairs){
+   for(const [key,l] of [['from',level(s.fromLevelId)],['to',level(s.toLevelId)]]){
+    const rooms=(l.project.rooms||[]).map(r=>r.polygon),corners=toLocal(stairFootprint(s),l);
+    if(!corners.every(c=>rooms.some(poly=>inPoly(c,poly))))out.push({code:'BW1',path:`/stairs/${s.id}`,level:l.id,message:`La huella de la escalera no queda dentro de las estancias de «${l.name}» (${key==='from'?'salida':'llegada'}).`});
+   }
+  }
+  building.levels.forEach((l,i)=>{
+   const above=building.levels[i+1];
+   if(above){const clear=above.elevationMm-above.slabThicknessMm-l.elevationMm,tall=(l.project.walls||[]).filter(w=>w.status!=='demolished'&&w.heightMm>clear);
+    if(tall.length)out.push({code:'BW2',path:`/levels/${l.id}`,level:l.id,message:`${tall.length} muro(s) de «${l.name}» superan la altura libre bajo el forjado de «${above.name}» (${clear} mm).`});}
+  });
+  const conf=building.levels.map(l=>l.project.scale.confidence);
+  if(new Set(conf).size>1||conf.some(c=>c!=='real'))out.push({code:'BW3',path:'/levels',message:`Escala por planta: ${building.levels.map(l=>`«${l.name}» ${l.project.scale.confidence==='real'?'confirmada':l.project.scale.confidence==='estimated'?'estimada':'pendiente'}`).join(', ')}. Las distancias en mm son nominales; su confianza física difiere.`});
+  for(let i=1;i<building.levels.length;i++){const a=alignment(building,building.levels[i].id);if(a.unsupported.length)out.push({code:'BW4',path:`/levels/${building.levels[i].id}`,level:building.levels[i].id,message:`${a.unsupported.length} de ${a.checked} muro(s) de «${building.levels[i].name}» no tienen un muro de la planta inferior debajo. Aviso de coherencia visual, no un dictamen estructural.`});}
+  return out;
+ }
+ // Point-to-segment distance in mm.
+ function segDist(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,L=dx*dx+dy*dy,t=L?Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/L)):0;return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy);}
+ // Alignment check of a level against the one below: a wall counts as supported when both its endpoints and its
+ // midpoint lie within (thickness/2 + 20 mm) of some active wall axis of the level below, both in the building frame.
+ function alignment(building,levelId){
+  const i=building.levels.findIndex(l=>l.id===levelId),l=building.levels[i],below=building.levels[i-1];
+  if(i<1)return {checked:0,supported:0,unsupported:[]};
+  const lower=(below.project.walls||[]).filter(w=>w.status!=='demolished').map(w=>({w,a:{x:w.start.x+below.offsetMm.x,y:w.start.y+below.offsetMm.y},b:{x:w.end.x+below.offsetMm.x,y:w.end.y+below.offsetMm.y}}));
+  const upper=(l.project.walls||[]).filter(w=>w.status!=='demolished'),unsupported=[];
+  for(const w of upper){const a={x:w.start.x+l.offsetMm.x,y:w.start.y+l.offsetMm.y},b={x:w.end.x+l.offsetMm.x,y:w.end.y+l.offsetMm.y},m={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+   const ok=[a,m,b].every(p=>lower.some(q=>segDist(p,q.a,q.b)<=q.w.thicknessMm/2+20));if(!ok)unsupported.push(w.id);}
+  return {checked:upper.length,supported:upper.length-unsupported.length,unsupported};
+ }
+ // Openings of the slab under `levelId` (in that level's own frame): the footprint of every stair arriving at it.
+ function slabVoids(building,levelId){const l=building.levels.find(x=>x.id===levelId);return building.stairs.filter(s=>s.toLevelId===levelId).map(s=>({stairId:s.id,polygon:toLocal(stairFootprint(s),l)}));}
+ function areas(building){
+  const levels=building.levels.map(l=>{const m2=(l.project.rooms||[]).filter(r=>r.countsTowardArea!==false).reduce((a,r)=>a+areaMm2(r.polygon),0)/1e6;return {levelId:l.id,name:l.name,m2};});
+  return {levels,totalM2:levels.reduce((a,l)=>a+l.m2,0)};
+ }
+ // Canonical text: object keys sorted recursively, so hashes do not depend on key order.
+ function canonical(value){return JSON.stringify(value,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(x=>[x,v[x]])):v);}
+ async function sha256(text){const bytes=new TextEncoder().encode(text);if(globalThis.crypto?.subtle)return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');return require('node:crypto').createHash('sha256').update(bytes).digest('hex');}
+ const now=building=>new Date(Math.max(Date.now(),Date.parse(building?.createdAt||0))).toISOString();
+ // Wraps an existing 1.x project as level 0 of a new building. The project is copied unchanged (same IDs).
+ function create(project,{name=project.name,levelName='Planta baja'}={}){
+  const t=new Date().toISOString(),b={schema:SCHEMA,schemaVersion:VERSION,id:Core.id('bld'),name:String(name).slice(0,LIMITS.nameMax),createdAt:t,updatedAt:t,units:'mm',
+   levels:[{id:Core.id('lvl'),name:levelName,order:0,elevationMm:0,slabThicknessMm:0,offsetMm:{x:0,y:0},project:clone(project)}],stairs:[]};
+  validate(b);return b;
+ }
+ // Default elevation of a new level: the tallest active wall below plus the default visual slab thickness.
+ const DEFAULT_SLAB_MM=300;
+ function nextElevation(building){const top=building.levels.at(-1),walls=(top.project.walls||[]).filter(w=>w.status!=='demolished');return top.elevationMm+Math.max(top.project.defaults.wallHeightMm,...walls.map(w=>w.heightMm))+DEFAULT_SLAB_MM;}
+ function addLevel(building,project,{name,elevationMm,slabThicknessMm=DEFAULT_SLAB_MM,offsetMm={x:0,y:0}}={}){
+  if(building.levels.length>=LIMITS.levels)throw Error(`Este corte admite ${LIMITS.levels} plantas como máximo.`);
+  const b=clone(building),order=b.levels.length;
+  const p=clone(project);if(b.levels.some(l=>l.project.id===p.id))p.id=Core.id('prj');
+  b.levels.push({id:Core.id('lvl'),name:name||(order===1?'Planta primera':`Planta ${order}`),order,elevationMm:elevationMm??nextElevation(building),slabThicknessMm,offsetMm:{x:Math.round(offsetMm.x),y:Math.round(offsetMm.y)},project:p});
+  b.updatedAt=now(b);validate(b);return b;
+ }
+ // Removing a level also removes the stairs that reference it.
+ function removeLevel(building,levelId){
+  const b=clone(building),i=b.levels.findIndex(l=>l.id===levelId);if(i<0)throw Error('Planta no encontrada.');if(i===0)throw Error('La planta baja define el marco del edificio y no se puede eliminar.');
+  b.levels.splice(i,1);b.levels.forEach((l,k)=>l.order=k);b.stairs=b.stairs.filter(s=>s.fromLevelId!==levelId&&s.toLevelId!==levelId);b.updatedAt=now(b);validate(b);return b;
+ }
+ function updateLevel(building,levelId,patch){
+  const b=clone(building),l=b.levels.find(x=>x.id===levelId);if(!l)throw Error('Planta no encontrada.');
+  for(const k of ['name','elevationMm','slabThicknessMm','offsetMm'])if(patch[k]!==undefined)l[k]=clone(patch[k]);
+  b.updatedAt=now(b);validate(b);return b;
+ }
+ function setProject(building,levelId,project){const b=clone(building),l=b.levels.find(x=>x.id===levelId);if(!l)throw Error('Planta no encontrada.');l.project=clone(project);b.updatedAt=now(b);validate(b);return b;}
+ function setStair(building,stair){
+  const b=clone(building),s={id:stair.id||Core.id('str'),kind:'straight',fromLevelId:stair.fromLevelId,toLevelId:stair.toLevelId,startMm:{x:Math.round(stair.startMm.x),y:Math.round(stair.startMm.y)},rotationDeg:((Math.round(stair.rotationDeg)%360)+360)%360,widthMm:Math.round(stair.widthMm),runLengthMm:Math.round(stair.runLengthMm),risers:Math.round(stair.risers)};
+  const i=b.stairs.findIndex(x=>x.id===s.id);if(i<0)b.stairs.push(s);else b.stairs[i]=s;b.updatedAt=now(b);validate(b);return b;
+ }
+ function removeStair(building,stairId){const b=clone(building);b.stairs=b.stairs.filter(s=>s.id!==stairId);b.updatedAt=now(b);validate(b);return b;}
+ // Copy with new building, level and project IDs; embedded entity IDs are kept (they are unique per project).
+ function duplicate(building,name){const b=clone(building),map=new Map();b.id=Core.id('bld');if(name)b.name=name;const t=new Date().toISOString();b.createdAt=b.updatedAt=t;
+  for(const l of b.levels){const id=Core.id('lvl');map.set(l.id,id);l.id=id;l.project.id=Core.id('prj');}
+  for(const s of b.stairs){s.id=Core.id('str');s.fromLevelId=map.get(s.fromLevelId);s.toLevelId=map.get(s.toLevelId);}validate(b);return b;}
+ // «Exportar esta planta»: the level's own 1.x project, unchanged and strictly valid, plus what it leaves out.
+ function exportLevel(building,levelId){
+  const l=building.levels.find(x=>x.id===levelId);if(!l)throw Error('Planta no encontrada.');
+  const project=clone(l.project);Core.validate(project,{strict:true});
+  const omitted=[`la relación con ${building.levels.length-1} planta(s) más del edificio «${building.name}»`,`la elevación (${l.elevationMm} mm) y el desplazamiento (${l.offsetMm.x}, ${l.offsetMm.y} mm)`];
+  const stairs=building.stairs.filter(s=>s.fromLevelId===l.id||s.toLevelId===l.id).length;if(stairs)omitted.push(`${stairs} escalera(s) y su hueco`);
+  return {project,warning:`Se exporta sólo «${l.name}» como proyecto de una planta. Omite ${omitted.join('; ')}.`};
+ }
+ function isBuilding(value){return !!value&&typeof value==='object'&&value.schema===SCHEMA;}
+ function prepare(text){let value;try{value=typeof text==='string'?JSON.parse(text):text;}catch{throw Error('El archivo no es JSON válido o está incompleto.');}if(!isBuilding(value))throw Error('No es un documento de edificio Rubik.');validate(value);return clone(value);}
+
+ /* Building ZIP: building.json, manifest.json and levels/<levelId>/images/<imageId>.<ext>. Each level keeps the 1.x
+    sidecar reference images/<imageId>.<ext>; the entry path is that reference prefixed by the level, so two levels
+    can never collide and resolution is exact. No deduplication across levels. */
+ const EXT={'image/png':'png','image/jpeg':'jpg','image/webp':'webp'};
+ const MAX_ENTRIES=2+LIMITS.levels*20;
+ function packagePath(name){if(name==='building.json'||name==='manifest.json'||/^levels\/lvl_[A-Za-z0-9][A-Za-z0-9_-]{2,63}\/images\/img_[A-Za-z0-9][A-Za-z0-9_-]{2,63}\.(png|jpg|webp)$/.test(name))return name;throw Error('Ruta ZIP no permitida en un edificio: '+name);}
+ const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
+ const hex=async bytes=>globalThis.crypto?.subtle?[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join(''):require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+ // getBytes(image) resolves the stored bytes of a level image; imageInfo(bytes,mediaType) returns {widthPx,heightPx}.
+ async function packageEntries(building,getBytes,imageInfo){
+  validate(building);const b=clone(building),entries=new Map(),images=[];
+  for(const l of b.levels)for(const im of l.project.sourceImages||[]){
+   const bytes=await getBytes(im,l);if(!bytes)throw Error(`Imagen local no disponible en «${l.name}»: ${im.id}`);
+   const info=imageInfo(bytes,im.mediaType);im.widthPx=info.widthPx;im.heightPx=info.heightPx;im.bytes=bytes.length;im.sha256=await hex(bytes);delete im.originalFileName;
+   im.storage={kind:'sidecar-file',ref:`images/${im.id}.${EXT[im.mediaType]}`};const entry=`levels/${l.id}/${im.storage.ref}`;entries.set(entry,bytes);
+   images.push({levelId:l.id,sourceImageId:im.id,entry,sha256:im.sha256,bytes:bytes.length,mediaType:im.mediaType});
+  }
+  validate(b);entries.set('building.json',encoder.encode(JSON.stringify(b,null,2)));
+  entries.set('manifest.json',encoder.encode(JSON.stringify({format:'rubik-sota.floorplan-building-package',version:1,buildingId:b.id,images},null,2)));
+  return {entries,building:b};
+ }
+ // Validates every entry before anything is applied. Returns the building and the image bytes per level.
+ async function readEntries(entries,imageInfo){
+  if(!(entries instanceof Map)||!entries.has('building.json')||!entries.has('manifest.json'))throw Error('ZIP de edificio sin building.json o manifest.json.');
+  if(entries.size>MAX_ENTRIES)throw Error('ZIP de edificio con demasiadas entradas.');
+  for(const name of entries.keys())packagePath(name);
+  let building,manifest;try{building=JSON.parse(decoder.decode(entries.get('building.json')));manifest=JSON.parse(decoder.decode(entries.get('manifest.json')));}catch{throw Error('building.json o manifest.json no son JSON válidos.');}
+  validate(building);
+  if(manifest?.format!=='rubik-sota.floorplan-building-package'||manifest.version!==1||manifest.buildingId!==building.id||!Array.isArray(manifest.images))throw Error('Manifiesto de edificio no válido o de otro edificio.');
+  const expected=[],used=new Set(['building.json','manifest.json']),images=[];
+  for(const l of building.levels)for(const im of l.project.sourceImages||[]){
+   if(im.storage.kind!=='sidecar-file'||im.storage.ref!==`images/${im.id}.${EXT[im.mediaType]}`)throw Error(`La imagen ${im.id} de «${l.name}» no tiene la referencia sidecar esperada.`);
+   const entry=`levels/${l.id}/${im.storage.ref}`,m=manifest.images.find(x=>x.entry===entry);
+   if(!m||m.levelId!==l.id||m.sourceImageId!==im.id||m.sha256!==im.sha256||m.bytes!==im.bytes||m.mediaType!==im.mediaType)throw Error(`El manifiesto no coincide con la imagen ${im.id} de «${l.name}».`);
+   const bytes=entries.get(entry);if(!bytes)throw Error(`Falta la imagen ${entry}.`);if(used.has(entry))throw Error('Imagen referenciada dos veces.');used.add(entry);
+   if(bytes.length!==im.bytes||await hex(bytes)!==im.sha256)throw Error(`La imagen ${entry} no coincide con su tamaño o huella SHA-256.`);
+   const info=imageInfo(bytes,im.mediaType);if(info.widthPx!==im.widthPx||info.heightPx!==im.heightPx)throw Error(`La imagen ${entry} no coincide con sus dimensiones.`);
+   expected.push(entry);images.push({levelId:l.id,image:im,bytes});
+  }
+  if(manifest.images.length!==expected.length)throw Error('El manifiesto lista imágenes que el edificio no usa.');
+  if(used.size!==entries.size)throw Error('El ZIP de edificio contiene entradas ajenas.');
+  return {building,images};
+ }
+ const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
+ if(typeof module==='object')module.exports=api;else root.FloorPlanBuilding=api;
+})(typeof globalThis==='object'?globalThis:this);
