@@ -142,7 +142,9 @@
   const scoreOf=(c,v,s)=>Math.min(v,.92)+.9*s.share-2*Math.max(0,s.other-.12)-(c.top===full?0:.08)-ew*Math.abs(c.elevation-pe);
   for(const top of tops){
    const boxes=occ.get(top);
-   for(const c of ranked.filter(x=>x.top===top).slice(0,o.shareCandidates||Infinity)){
+   // Presence decides: a 10x6 pass over every candidate, the 20x12 grid for the 24 best, 40x24 to confirm.
+   const coarse=ranked.filter(x=>x.top===top).map(c=>{const s=shareOf(c,boxes,10,6);return {c,score:scoreOf(c,c.visible,s)};}).sort((a,b)=>b.score-a.score);
+   for(const {c} of coarse.slice(0,o.shareCandidates||24)){
     const s=shareOf(c,boxes);
     best.push({...c,...s,ok:accept(c.visible,s),score:scoreOf(c,c.visible,s)});
    }

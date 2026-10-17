@@ -37,7 +37,7 @@
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
- let mapOpen=false;
+ let mapOpen=false,scrolledIndex=-1;
  const svgEl=(tag,parent,attributes={})=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,String(value));parent.append(node);return node;};
  function renderMinimap(){
   map.hidden=!active||!sourceCurrent();if(map.hidden)return;
@@ -258,11 +258,13 @@
   if(current&&matchMedia('(max-height: 500px), (max-width: 600px)').matches){
    if(stops.scrollWidth>stops.clientWidth){const left=current.getBoundingClientRect().left-stops.getBoundingClientRect().left+stops.scrollLeft,right=left+current.offsetWidth;if(left<stops.scrollLeft)stops.scrollLeft=left;else if(right>stops.scrollLeft+stops.clientWidth)stops.scrollLeft=right-stops.clientWidth;}
    // A short card scrolls by itself (its header with the close button is sticky): bring the stops row into it.
-   if(card.scrollHeight>card.clientHeight){const c=card.getBoundingClientRect(),r=stops.getBoundingClientRect();if(r.bottom>c.bottom)card.scrollTop+=r.bottom-c.bottom+4;}
+   // Only when the selected stop changes, so redraws (e.g. during a batch) never move the card under the pointer.
+   if(scrolledIndex!==index&&matchMedia('(max-height: 500px)').matches&&card.scrollHeight>card.clientHeight){const c=card.getBoundingClientRect(),r=stops.getBoundingClientRect();if(r.bottom>c.bottom)card.scrollTop+=r.bottom-c.bottom+4;}
+   scrolledIndex=index;
   }
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
- function open(){
+ function open(){scrolledIndex=-1;
   if(active||pendingStart){closeButton.focus();return;}
   returnFocus=document.activeElement;
   config.replaceChildren();
