@@ -106,8 +106,8 @@
    if(above){const clear=above.elevationMm-above.slabThicknessMm-l.elevationMm,tall=(l.project.walls||[]).filter(w=>w.status!=='demolished'&&w.heightMm>clear);
     if(tall.length)out.push({code:'BW2',path:`/levels/${l.id}`,level:l.id,message:`${tall.length} muro(s) de «${l.name}» superan la altura libre bajo el forjado de «${above.name}» (${clear} mm).`});}
   });
-  const conf=building.levels.map(l=>l.project.scale.confidence);
-  if(new Set(conf).size>1||conf.some(c=>c!=='real'))out.push({code:'BW3',path:'/levels',message:`Escala por planta: ${building.levels.map(l=>`«${l.name}» ${l.project.scale.confidence==='real'?'confirmada':l.project.scale.confidence==='estimated'?'estimada':'pendiente'}`).join(', ')}. Las distancias en mm son nominales; su confianza física difiere.`});
+  const conf=building.levels.map(l=>l.project.scale.confidence),label=c=>c==='real'?'confirmada':c==='estimated'?'estimada':'pendiente';
+  if(new Set(conf).size>1||conf.some(c=>c!=='real'))out.push({code:'BW3',path:'/levels',message:`Escala por planta: ${building.levels.map(l=>`«${l.name}» ${label(l.project.scale.confidence)}`).join(', ')}. ${new Set(conf).size>1?'Las distancias en mm son nominales y su confianza física difiere entre plantas.':'Ninguna escala está confirmada: las medidas de todas las plantas son orientativas.'}`});
   for(let i=1;i<building.levels.length;i++){const a=alignment(building,building.levels[i].id);if(a.unsupported.length)out.push({code:'BW4',path:`/levels/${building.levels[i].id}`,level:building.levels[i].id,message:`${a.unsupported.length} de ${a.checked} muro(s) de «${building.levels[i].name}» no tienen un muro de la planta inferior debajo. Aviso de coherencia visual, no un dictamen estructural.`});}
   return out;
  }
@@ -160,7 +160,8 @@
   for(const k of ['name','elevationMm','slabThicknessMm','offsetMm'])if(patch[k]!==undefined)l[k]=clone(patch[k]);
   b.updatedAt=now(b);validate(b);return b;
  }
- function setProject(building,levelId,project){const b=clone(building),l=b.levels.find(x=>x.id===levelId);if(!l)throw Error('Planta no encontrada.');l.project=clone(project);b.updatedAt=now(b);validate(b);return b;}
+ // Storing an unchanged level is a no-op (no updatedAt bump), so saving on load or on a level switch writes nothing new.
+ function setProject(building,levelId,project){const b=clone(building),l=b.levels.find(x=>x.id===levelId);if(!l)throw Error('Planta no encontrada.');if(canonical(l.project)===canonical(project))return b;l.project=clone(project);b.updatedAt=now(b);validate(b);return b;}
  function setStair(building,stair){
   const b=clone(building),s={id:stair.id||Core.id('str'),kind:'straight',fromLevelId:stair.fromLevelId,toLevelId:stair.toLevelId,startMm:{x:Math.round(stair.startMm.x),y:Math.round(stair.startMm.y)},rotationDeg:((Math.round(stair.rotationDeg)%360)+360)%360,widthMm:Math.round(stair.widthMm),runLengthMm:Math.round(stair.runLengthMm),risers:Math.round(stair.risers)};
   const i=b.stairs.findIndex(x=>x.id===s.id);if(i<0)b.stairs.push(s);else b.stairs[i]=s;b.updatedAt=now(b);validate(b);return b;
