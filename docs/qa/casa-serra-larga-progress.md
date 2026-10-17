@@ -219,7 +219,7 @@ Matriz completa del ejemplo: **33/33** en presencia, vecina, suelo y protagonist
 | **M11 cancelación** | 1 FAIL | pasa (1 de 2 repeticiones solas) | **No atribuible al entorno.** 0 de 2 en el código actual. |
 | **P05 1440×900**, **cámara 3D tras Escape/Atrás** | 2 sin resultado | pasan | **No atribuibles al entorno.** P05 agota su tiempo en `a3939a5` y `9e3ba33`. |
 
-Los tres últimos recorren muchas paradas. La causa probable es el mayor coste de `roomFrame` en esta ronda (en Node, unas 1,7 veces el de `bc1cee7` para las 13 estancias). Quedan como **bloqueo de aceptación propio de esta ronda**, no como fallo del entorno.
+Los tres últimos recorren muchas paradas. La hipótesis inicial, el mayor coste de `roomFrame`, **quedó descartada** por el diagnóstico con repeticiones de la sección siguiente: P05 y Escape/Atrás agotan su tiempo también en `28e0428`, y M11 era una carrera del clic de la prueba.
 
 Repetición anterior, ya superada: en `da3ed25`, 167/19/10.
 
@@ -242,8 +242,8 @@ Repeticiones alternadas, 4 por caso y versión, en las mismas condiciones (`docs
 | Caso | `28e0428` | `9e3ba33` | Conclusión |
 | --- | --- | --- | --- |
 | M11 cancelación | 3/4 (~42 s) | 0/4 (~50 s) | Reproducible como fallo de la prueba, pero la cancelación funciona igual en ambas versiones según una sonda funcional (sin descarga, estado «Lote cancelado», cámara restaurada). El clic de Playwright a ~1 fps llega cuando el lote ya terminó. Sin defecto funcional demostrado. |
-| P05 1440×900 | 0/4 | 3/4 | Límite de 180 s en ambas versiones; no es una regresión. |
-| Cámara 3D tras Escape/Atrás | 0/4 | 2/4 | Límite de 120 s en ambas versiones; no es una regresión. |
+| P05 1440×900 | 0/4, las 4 agotan los 180 s | 3/4 en 177–179 s; la otra agota los 180 s | Junto al límite en ambas versiones; no es una regresión. Sin reproducción que lo atribuya a `roomFrame`. |
+| Cámara 3D tras Escape/Atrás | 0/4, las 4 agotan los 120 s | 2/4 en ~118 s; las otras agotan los 120 s | Junto al límite en ambas versiones; no es una regresión. Sin reproducción que lo atribuya a `roomFrame`. |
 
 `roomFrame`, mediana caliente para las 13 estancias en Node: `bc1cee7` 532 ms, `1dd86e5` 624 ms y `9e3ba33` 1578 ms. El aumento es real, pero no es la causa de estos síntomas. Queda como riesgo de rendimiento en móvil.
 
