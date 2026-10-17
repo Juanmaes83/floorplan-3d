@@ -2,7 +2,7 @@
 // REPO=<checkout> measures another revision (e.g. a worktree of 28e0428); VIEWPORTS=1440x900,390x844,...
 const H=require('./harness.cjs'),measure=require('./metric.cjs'),fs=require('node:fs/promises'),path=require('node:path');
 const OUT=process.argv[2],MODE=process.argv[3]||'all';
-const ROOMS=['rom_mbath','rom_master','rom_gbath','rom_hall','rom_laundry','rom_kitchen','rom_dining','rom_kid','rom_child','rom_living','rom_balcony'];
+const ROOMS=process.env.ROOMS?process.env.ROOMS.split(','):['rom_mbath','rom_master','rom_gbath','rom_hall','rom_laundry','rom_kitchen','rom_dining','rom_kid','rom_child','rom_living','rom_balcony'];
 async function present(page,ids){
  await page.locator('#presentationBtn').click({timeout:120000});
  await page.evaluate(ids=>{document.querySelectorAll('#presentationConfig input[type=checkbox]').forEach(i=>{const want=ids.includes(i.value);if(i.checked!==want){i.checked=want;i.dispatchEvent(new Event('change'));}});},ids);
@@ -23,9 +23,9 @@ const metric=(page,roomId)=>page.evaluate(([f,roomId,rf])=>{const region=eval(rf
  try{
   if(MODE!=='route')for(const vp of (process.env.VIEWPORTS||'1440x900,390x844,844x390').split(',').map(v=>{const [width,height]=v.split('x').map(Number);return {width,height};})){
    const size=`${vp.width}x${vp.height}`,{page,context,errors}=await H.page(env,vp);
-   if(process.env.IRREGULAR)await page.evaluate(f=>{const p=eval(f)(FloorPlanReference);FloorPlanApp.importProject(p);},`(${require(path.join(__dirname,'..','..','..','tests','helpers','irregular-home.cjs')).toString()})`);
+   if(process.env.IRREGULAR)await page.evaluate(f=>{const p=eval(f)(FloorPlanReference);FloorPlanApp.importProject(p);},`(${require(path.join(process.env.REPO||path.join(__dirname,'..','..','..'),'tests','helpers','irregular-home.cjs')).toString()})`);
    await present(page,ROOMS);
-   for(const id of ROOMS){await goRoom(page,id);const m=await metric(page,id);m.title=await page.locator('.presentation-card h2').textContent();report.stops[`${size}/${id}`]=m;
+   for(const id of ROOMS){if(process.env.MEASURE&&!process.env.MEASURE.split(',').includes(`${size}/${id}`))continue;await goRoom(page,id);const m=await metric(page,id);m.title=await page.locator('.presentation-card h2').textContent();report.stops[`${size}/${id}`]=m;
     await page.screenshot({path:path.join(OUT,`${size}-${id}.png`),timeout:180000});
     console.log(size,id,m.title,'visibleRegion target',m.target,'full',m.full.target,'other',JSON.stringify(m.topOther),'floorVis',m.floorVisible,'inFrame',m.floorInFrame,'pitch',m.pitchDownDeg,'h',m.height,'section',!!m.section);}
    report.stops[`${size}/errors`]=errors;await context.close();}

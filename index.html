@@ -323,6 +323,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 @media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
 @media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+.presentation-overlay[data-route="true"] :is(.presentation-progress,.presentation-info,.presentation-section,.presentation-controls,.presentation-stops){display:none}
 @media(max-height:500px){.presentation-overlay[data-route="true"] .presentation-progress,.presentation-overlay[data-route="true"] .presentation-stops{display:none}.presentation-overlay[data-route="true"] .presentation-card .btn{min-height:36px}}
 
 .variant-card .variant-plan{display:block;width:100%;aspect-ratio:8/5;background:#f5f3ef;border:1px solid var(--line);border-radius:6px;margin:7px 0}.variant-plan .room{fill:#e9dfd0;stroke:#b7aa98;stroke-width:45}.variant-plan .wall{fill:#5c5752}.variant-plan .door{fill:#f5f3ef;stroke:#177d88;stroke-width:55}.variant-plan .object{fill:#b89e81;stroke:#765b43;stroke-width:35}
@@ -3277,7 +3278,7 @@ async function enter(){
   const A = planPose(), B = isoFrom(A);
   grow = 0; furnGrow = 0; applyGrow(); setPose(A);
   stage.classList.add('animating');
-  startLoop(); renderer.render(scene, camera);
+  startLoop(); if(glLost())throw Error('WebGL context lost; reload to retry'); renderer.render(scene, camera);
   stage.classList.add('is3d');                       // 交叉淡入：此刻 3D 画面与 2D 平面完全重合
   await wait(420);
   if(contextLost)throw Error('WebGL context lost');
@@ -3490,11 +3491,15 @@ function bindUI(){
 /* ======================= 主循环 ======================= */
 const clock = new THREE.Clock();
 function startLoop(){ if (!raf){ clock.getDelta(); raf = requestAnimationFrame(loop); } }
+// loseContext() marks the context lost at once but its event arrives in a later task; never render in between
+// (three.js would compile a program against the dead context and throw on its null info log).
+function glLost(){ return contextLost || !!renderer?.getContext()?.isContextLost?.(); }
 // Ceiling fixtures belong to the ceiling, which is culled from above: in presentation they hide with it.
 let presentationLamps=false;
 function syncCeilingFixtures(cam){if(!presentationLamps||!lampG)return;const show=topHeight()>=H&&cam.position.y<H-.02;lampG.children.forEach(o=>{if(o.isMesh)o.visible=show;});}
 function loop(){
   raf = requestAnimationFrame(loop);
+  if (glLost()) return;
   const dt = Math.min(clock.getDelta(), .05), now = performance.now();
   if (anim){ const t = clamp01((now - anim.t0)/anim.dur); anim.fn(t); if (t >= 1){ const r = anim.res; anim = null; r(); } }
   else if (fly){ const t = clamp01((now - fly.t0)/fly.dur); camTween(fly.A, fly.B, ease(t)); if (t >= 1){const done=fly.res;fly=null;done?.(true);} }

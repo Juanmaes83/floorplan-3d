@@ -80,7 +80,7 @@
   // The margin only shapes the fit; presence is measured over the whole visible region.
   const visibleRegion=region,m=o.margin??.07,rw=region[2]-region[0],rh=region[3]-region[1];region=[region[0]+rw*m,region[1]+rh*m,region[2]-rw*m,region[3]-rh*m];
   const ax=2*region[0]-1,bx=2*region[2]-1,ay=1-2*region[3],by=1-2*region[1];
-  const pe=o.preferElevationDeg??60,ew=o.elevationWeight??.012,full=o.wallTop||2.8,sections=(o.sectionTops||[]).filter(t=>t<full),tops=o.sectionFirst===false?[full,...sections]:[...sections,full];
+  const pe=o.preferElevationDeg??54,ew=o.elevationWeight??.012,full=o.wallTop||2.8,sections=(o.sectionTops||[]).filter(t=>t<full),tops=o.sectionFirst===false?[full,...sections]:[...sections,full];
   const own=(objects||[]).filter(x=>x.type!=='rug'&&x.position&&x.size&&insidePoly(room.poly,x.position.x,x.position.y));
   const tallest=Math.max(0,...(objects||[]).map(x=>(x.size?.heightMm||0)/1000));
   const box=bounds(room.poly),cx=(box.x+box.w/2)/1000,cz=(box.y+box.h/2)/1000;
@@ -98,7 +98,7 @@
     for(const [u,v] of [[-w,-d],[w,-d],[w,d],[-w,d]])fit.push([(x.position.x+u*c-v*s)/1000,h,(x.position.y+u*s+v*c)/1000]);}
    const boxes=occluders(geometry,objects,top,room),blockers=boxes.filter(b=>b.kind!=='content');occ.set(top,boxes);
    const minY=Math.max(full,tallest)+.35;// above full-height walls too, so a walkthrough can start from a sectioned stop
-   for(const elevation of o.elevations||[50,58,66,74])for(let azimuth=base;azimuth<360;azimuth+=30){
+   for(const elevation of o.elevations||[40,47,54,61,68,74])for(let azimuth=base;azimuth<360;azimuth+=30){
     const el=elevation*Math.PI/180,az=azimuth*Math.PI/180,f=[-Math.cos(el)*Math.cos(az),-Math.sin(el),-Math.cos(el)*Math.sin(az)];
     const rl=Math.hypot(f[2],f[0]),r=[-f[2]/rl,0,f[0]/rl],u=[r[1]*f[2]-r[2]*f[1],r[2]*f[0]-r[0]*f[2],r[0]*f[1]-r[1]*f[0]];
     const dot=(p,q)=>p[0]*q[0]+p[1]*q[1]+p[2]*q[2],X=fit.map(p=>dot(p,r)),Y=fit.map(p=>dot(p,u)),Z=fit.map(p=>dot(p,f));
@@ -115,24 +115,48 @@
    }
   }
   ranked.sort((a,b)=>b.pre-a.pre||b.visible-a.visible||a.azimuth-b.azimuth);
-  const cols=20,rows=12,rooms=geometry.rooms.filter(r=>r.poly.length>=3),best=[];
+  const cols=20,rows=12,rooms=geometry.rooms.filter(r=>r.poly.length>=3),best=[],samples=[...floor,...content],minY=Math.max(full,tallest)+.35;
+  const dot=(p,q)=>p[0]*q[0]+p[1]*q[1]+p[2]*q[2];
+  // Presence of each room over the whole visible region, by rays from the candidate camera.
+  function shareOf(c,boxes){
+   const counts=new Map();let total=0;
+   for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+    const sx=visibleRegion[0]+(visibleRegion[2]-visibleRegion[0])*(i+.5)/cols,sy=visibleRegion[1]+(visibleRegion[3]-visibleRegion[1])*(j+.5)/rows,px=(sx*2-1)*tH,py=(1-sy*2)*tV;
+    const d0=[0,1,2].map(k=>c.f[k]+px*c.r[k]+py*c.u[k]),L=Math.hypot(...d0),d=d0.map(v=>v/L);
+    let hit=d[1]<0?{t:-c.C[1]/d[1],top:false}:null;for(const b of boxes){const h=hitBox(b,c.C,d);if(h&&(!hit||h.t<hit.t))hit=h;}
+    total++;if(!hit)continue;if(hit.top){counts.set('top',(counts.get('top')||0)+1);continue;}
+    const t=Math.max(0,hit.t-.03),x=(c.C[0]+d[0]*t)*1000,y=(c.C[2]+d[2]*t)*1000,owner=rooms.find(q=>q.counted!==false&&insidePoly(q.poly,x,y))||rooms.find(q=>insidePoly(q.poly,x,y));
+    if(owner)counts.set(owner.id,(counts.get(owner.id)||0)+1);}
+   return {share:(counts.get(room.id)||0)/total,other:Math.max(0,...[...counts].filter(([k])=>k!==room.id&&k!=='top').map(([,v])=>v/total))};
+  }
+  // Floor and content samples that are inside the visible region AND unoccluded (what the criterion counts).
+  function framedVisible(C,c,blockers){
+   let n=0;for(const p of samples){const d=[p[0]-C[0],p[1]-C[1],p[2]-C[2]],z=dot(d,c.f);if(z<=0)continue;
+    const sx=(dot(d,c.r)/z/tH+1)/2,sy=(1-dot(d,c.u)/z/tV)/2;if(sx<visibleRegion[0]||sx>visibleRegion[2]||sy<visibleRegion[1]||sy>visibleRegion[3])continue;
+    const L=Math.hypot(...d),nd=d.map(v=>v/L);if(!blockers.some(b=>{const h=hitBox(b,C,nd);return h&&h.t<L-.03;}))n++;}
+   return n/samples.length;
+  }
+  const accept=(v,s)=>v>=.75&&s.share>=.4&&s.other<.25&&s.other<s.share*.6;
+  const scoreOf=(c,v,s)=>Math.min(v,.92)+.9*s.share-2*Math.max(0,s.other-.12)-(c.top===full?0:.08)-ew*Math.abs(c.elevation-pe);
   for(const top of tops){
    const boxes=occ.get(top);
-   for(const c of ranked.filter(x=>x.top===top).slice(0,o.shareCandidates||6)){
-    const counts=new Map();let total=0;
-    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
-     const sx=visibleRegion[0]+(visibleRegion[2]-visibleRegion[0])*(i+.5)/cols,sy=visibleRegion[1]+(visibleRegion[3]-visibleRegion[1])*(j+.5)/rows,px=(sx*2-1)*tH,py=(1-sy*2)*tV;
-     const d0=[0,1,2].map(k=>c.f[k]+px*c.r[k]+py*c.u[k]),L=Math.hypot(...d0),d=d0.map(v=>v/L);
-     let hit=d[1]<0?{t:-c.C[1]/d[1],top:false}:null;for(const b of boxes){const h=hitBox(b,c.C,d);if(h&&(!hit||h.t<hit.t))hit=h;}
-     total++;if(!hit)continue;if(hit.top){counts.set('top',(counts.get('top')||0)+1);continue;}
-     const t=Math.max(0,hit.t-.03),x=(c.C[0]+d[0]*t)*1000,y=(c.C[2]+d[2]*t)*1000,owner=rooms.find(q=>q.counted!==false&&insidePoly(q.poly,x,y))||rooms.find(q=>insidePoly(q.poly,x,y));
-     if(owner)counts.set(owner.id,(counts.get(owner.id)||0)+1);}
-    const share=(counts.get(room.id)||0)/total,other=Math.max(0,...[...counts].filter(([k])=>k!==room.id&&k!=='top').map(([,v])=>v/total));
-    const ok=c.visible>=.75&&share>=.4&&other<.25&&other<share*.6;
-    best.push({...c,share,other,ok,score:Math.min(c.visible,.92)+.9*share-2*Math.max(0,other-.12)-(top===full?0:.08)-ew*Math.abs(c.elevation-pe)});
+   for(const c of ranked.filter(x=>x.top===top).slice(0,o.shareCandidates||Infinity)){
+    const s=shareOf(c,boxes);
+    best.push({...c,...s,ok:accept(c.visible,s),score:scoreOf(c,c.visible,s)});
    }
    const pick=best.filter(x=>x.top===top&&x.ok).sort((a,b)=>b.score-a.score)[0];
    if(pick)return result(pick);
+   // No view of the whole room meets the criterion (typically a long, narrow room in a near-square free region):
+   // move the best views closer, accepting only those that still keep >= 75 % of floor and content in the free
+   // region and unoccluded, and the camera above full-height walls.
+   const blockers=boxes.filter(b=>b.kind!=='content'),closer=[];
+   for(const c of best.filter(x=>x.top===top).sort((a,b)=>b.share-a.share).slice(0,8)){
+    const depth=(cx-c.C[0])*c.f[0]+(Math.min(top,1)/2-c.C[1])*c.f[1]+(cz-c.C[2])*c.f[2];
+    for(const k of [.1,.2,.3,.4]){const C=c.C.map((v,i)=>v+c.f[i]*depth*k);if(C[1]<minY)continue;
+     const z={...c,C},v=framedVisible(C,c,blockers),s=shareOf(z,boxes);if(accept(v,s))closer.push({...z,...s,visible:v,ok:true,closer:k,score:scoreOf(c,v,s)});}
+   }
+   const near=closer.sort((a,b)=>b.score-a.score)[0];
+   if(near)return result(near);
   }
   return result(best.sort((a,b)=>b.score-a.score)[0]);
   function result(c){

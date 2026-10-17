@@ -211,11 +211,15 @@
  async function routeCurrent(){
   if(!active||stopping||batchActive||View3D.presentationRouteInfo?.status==='running'||plan.stops[index]?.kind!=='room')return;
   const token=epoch,roomId=plan.stops[index].roomId;
-  try{const pending=View3D.presentationRoute(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches,{region:viewRegion()});const info=View3D.presentationRouteInfo;
-   routeStatus.hidden=false;routeStatus.textContent=routeMessage(info);overlay.dataset.route='true';mapOpen=true;draw();renderMinimap();updateCapture();
+  // The card collapses to title, exit and route status while walking, so the walk is framed for (almost) the
+  // whole stage instead of turning toward the strip beside a full card. It expands again when the route ends.
+  overlay.dataset.route='true';routeStatus.hidden=false;routeStatus.textContent='';
+  const stageBox=document.querySelector('#stage')?.getBoundingClientRect(),cardBox=card.getBoundingClientRect(),corner=stageBox?.width&&cardBox.width*cardBox.height<.2*stageBox.width*stageBox.height;
+  try{const pending=View3D.presentationRoute(roomId,matchMedia('(prefers-reduced-motion: reduce)').matches,{region:corner?null:viewRegion()});const info=View3D.presentationRouteInfo;
+   routeStatus.textContent=routeMessage(info);mapOpen=true;draw();renderMinimap();updateCapture();
    const result=await pending;if(active&&token===epoch){routeStatus.textContent=result.status==='complete'?tx('Recorrido terminado. Cámara restaurada a la estancia.','Route complete. Room camera restored.','游览完成。已恢复房间视角。'):result.status==='cancelled'?tx('Recorrido cancelado.','Route cancelled.','游览已取消。'):routeMessage(result);}
   }catch(error){if(active&&token===epoch){routeStatus.hidden=false;routeStatus.textContent=error.message||String(error);}}
-  finally{if(active&&token===epoch){draw();updateCapture();}}
+  finally{if(active&&token===epoch){delete overlay.dataset.route;draw();updateCapture();}}
  }
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
@@ -248,7 +252,10 @@
   updateCapture();
   stops.replaceChildren();
   plan.stops.forEach((item,i)=>{const b=button(item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览'),stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');});
-  if(matchMedia('(max-height: 500px), (max-width: 600px)').matches)stops.children[index]?.scrollIntoView({block:'nearest',inline:'nearest'});
+  // Single-row stops scroll sideways to the active one; scrollIntoView would also scroll the card vertically
+  // and push its close button out of the viewport.
+  const active=stops.children[index];
+  if(active&&matchMedia('(max-height: 500px), (max-width: 600px)').matches&&stops.scrollWidth>stops.clientWidth){const left=active.getBoundingClientRect().left-stops.getBoundingClientRect().left+stops.scrollLeft,right=left+active.offsetWidth;if(left<stops.scrollLeft)stops.scrollLeft=left;else if(right>stops.scrollLeft+stops.clientWidth)stops.scrollLeft=right-stops.clientWidth;}
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
  function open(){
