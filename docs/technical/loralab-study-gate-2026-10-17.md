@@ -208,7 +208,7 @@ node scripts/qa/loralab/annex-a-session.cjs C:\Users\temp123\loralab-evidence
 node scripts/qa/loralab/analyze-export.cjs C:\Users\temp123\loralab-evidence\villa-original.json | Out-File -Encoding utf8 C:\Users\temp123\loralab-evidence\villa-structure.md
 ```
 
-**Qué compartir para el repositorio:** `report.md`, `manifest.json`, `villa-structure.md` y las capturas revisadas. `villa-structure.md` contiene el árbol de claves del JSON, con los textos redactados a su longitud y un recuento de posibles datos sensibles (email, URL, JWT, data URI), sin valores. **No se suben** al repositorio el JSON original de un tercero, el vídeo, la traza ni datos de sesión; se conservan en la carpeta local y se citan por su SHA-256.
+**Qué compartir para el repositorio, tras revisión manual:** `report.md`, `manifest.json`, `villa-structure.md` y sólo las capturas necesarias. `manifest.json` puede contener URL final, errores de consola y notas introducidas por el operador; elimina tokens, datos personales o rutas sensibles antes de publicarlo. La traza y el vídeo pueden registrar la sesión completa. `villa-structure.md` contiene el árbol de claves del JSON, con los textos redactados a su longitud y un recuento de posibles datos sensibles (email, URL, JWT, data URI), sin valores. **No se suben** al repositorio el JSON original de un tercero, el vídeo, la traza ni datos de sesión; se conservan en la carpeta local y se citan por su SHA-256.
 
 Validación del script en este entorno, sin LoRA LAB:
 
@@ -244,7 +244,7 @@ Esto valida la herramienta, **no la plataforma**.
 | --- | --- | --- |
 | 1 | Nuevo desde plantilla: «Piso clásico» y «Solar vacío» | Si cargan; plantas y superficies que muestran. |
 | 2 | Proyecto desde cero: dibujar una estancia de 4 × 3 m con una puerta y una ventana | Si permite introducir medidas exactas y en qué unidad. |
-| 3 | Exportar JSON de la villa | Guardar el archivo y ejecutar `Get-FileHash .\archivo.json -Algorithm SHA256` en PowerShell. **Compartir el JSON:** muestra cómo modela plantas y escaleras. |
+| 3 | Exportar JSON de la villa | Guardar el archivo y ejecutar `Get-FileHash .\archivo.json -Algorithm SHA256` en PowerShell. Conservar el JSON original localmente y compartir de forma privada con quien haga la auditoría si hace falta inspeccionarlo; publicar en el repositorio sólo su hash y un resumen revisado de la estructura. |
 | 4 | Recargar (`F5`) y cerrar y reabrir la pestaña tras un cambio | Si el cambio persiste y dónde. |
 | 5 | Importar el JSON de la prueba 3 en una plantilla vacía | Si se recupera idéntico. |
 | 6 | Amueblar: añadir, mover y girar un mueble en 2F | Si queda en esa planta al cambiar a 1F. |
