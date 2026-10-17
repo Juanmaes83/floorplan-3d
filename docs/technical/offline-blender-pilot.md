@@ -49,4 +49,49 @@ El movimiento termina siempre en la composición elegida: travelling lateral, ac
 
 ## Resultados
 
-Pendiente: se completa con las ejecuciones reales de este piloto.
+Todo se ejecutó en este contenedor (4 vCPU, sin GPU) con `bpy` 5.2.1 LTS. La evidencia está en `docs/qa/artifacts/offline-pilot/`. Los `.blend` y el GLB de muebles (15,6 MB) no se suben; se identifican por hash en los informes.
+
+**Cadena completa (ejemplo, seis estancias con muebles):** `run.cjs` → export 0,1 s → verificación PR #24 **PASS** (151 entidades) → sidecar visual 143 s (46/46 objetos sustituidos por ID, origen ≤ 2 cm de su caja) → tomas 10,5 s → render 4904 s → reapertura en proceso nuevo **PASS** (13 comprobaciones) → MP4 y hojas de contacto. Hash del proyecto igual antes y después. `review-30fps.mp4`: 648 fotogramas, 21,6 s a 30 fps, 640×360, Cycles CPU con 16 muestras y OIDN.
+
+**Coste medido:** 7,4 s por fotograma de media (5,4–10,6 s), pico de 0,9–1,1 GB de RSS y 82 min de render para 21,6 s de vídeo. Un render mayor (1080p, 128 muestras) no está justificado sin decisión de Juanma: con esta CPU serían varias horas por toma.
+
+**Presencia por ID sobre la escena renderizada** (rayos de `scene.ray_cast` desde la cámara real, 96×54, en las anclas inicial/central/final):
+
+| Toma | Estancia objetivo | Vecina mayor | Muebles de la estancia vistos |
+| --- | --- | --- | --- |
+| Salón | 99–100 % | — | 4/7 |
+| Cocina | 100 % | — | 4/4 |
+| Comedor | 84–87 % | Cocina 13–16 % | 6/7 |
+| Dormitorio principal | 93–94 % | Baño en suite / Pasillo ≤ 2,5 % | 3/4 |
+| **Baño en suite** | **100 %** | — (el dormitorio no aparece) | 2/3 al inicio, **3/3** en el centro y el final |
+| Baño de invitados | 100 % | — | 2/3 → 3/3 |
+
+**Segundo caso, sintético girado 30°** (anclas de 10 estancias, sin vídeo completo): verificación y reapertura PASS; 46/46 muebles; Baño en suite 100 % con 3/3 aparatos en las tres anclas; mismas tomas legibles que en el ejemplo. Coste de 8,1 s por fotograma.
+
+**Pruebas:** `tests/offline-pilot.test.cjs`, **7/7** con `BPY_PYTHON` (holgura de muros ≥ 200 mm sobre la curva densa e independiente de `Core.geometry`; altura, mirada de 5–18°, rampas, giro ≤ 12°/s, cortes, determinismo, marco Blender, baño en suite, caso girado y cadena completa en Blender con rechazo de sobrescritura). `tests/interop.test.cjs` 17/17 más 1 omitida (necesita binario de Blender). El fixture de PR #24 sigue pasando el verificador corregido (17 entidades).
+
+### Iteraciones y hallazgos
+
+1. **Cajas dimensionales dentro del baño:** la primera toma daba «100 % baño» en la métrica y era ilegible, a 0,3 m de una ducha exportada como caja opaca de 2,1 m (`probes/01-…`). Se añadieron legibilidad (superficies cercanas, suelo visible), puntos de vista desde el umbral y la estancia vecina, y el sidecar de muebles.
+2. **Muros contados como estancia:** con muebles reales, el baño en suite seguía mostrando sobre todo muro (`probes/02-…`). La puntuación premia ahora los muebles de la estancia, y las estancias sin muebles (el pasillo) no reciben toma, de forma declarada.
+3. **Verticales convergentes:** mirar 18° hacia abajo con 24 mm inclinaba los muros. La cámara se mantiene nivelada y la mirada se baja con desplazamiento de lente (`shift_y`), práctica habitual en fotografía de interiores. En estancias de menos de 6 m² se permiten 16–18 mm (`probes/03-…`).
+4. **Corrección de PR #24:** el importador glTF de Blender no crea materiales sin uso y el verificador exigía todos los del proyecto. El ejemplo tiene dos (`mat_terrazzo`, `mat_carpet`) y fallaba. Ahora exige los que usan suelos y muros y lista los demás en `unusedProjectMaterials`.
+5. **Reinicio del contenedor** durante un render (520/648 fotogramas): se descartó y se repitió en una carpeta nueva, sin mezclar ejecuciones ni sobrescribir.
+
+### Límites declarados
+
+- **No es calidad Candidate 04.** La iluminación es un cielo y un sol, sin techo (el paquete no lo infiere) y sin luces de estancia; los materiales usan el color declarado (8 superficies procedurales sin hornear); 640×360 con 16 muestras.
+- **Las primeras fracciones de la toma del baño en suite muestran sobre todo muro e inodoro**; la estancia sólo se reconoce del todo en su segundo y último tercio.
+- **Artefacto visual:** los lavabos y los platos del comedor muestran elipses negras (material o normales del mueble exportado desde el navegador). Pendiente de diagnóstico.
+- El sidecar visual es una representación del navegador en esta revisión (`appRevision`, hash de `index.html`), no geometría canónica.
+- Sin Pillow en este entorno, las texturas CC0 del exportador usan su fallback declarado. El ejemplo no tiene ninguna, así que no le afecta.
+- Las métricas no sustituyen la revisión humana. Las hojas de contacto de 3 fps las revisé yo; el vídeo a 1× queda para Juanma.
+
+### Reproducir
+
+```
+node scripts/offline-pilot/run.cjs PROJECT.json NEW-OUT --python PY-CON-BPY [--visual] [--rooms a,b] [--frames all|anchors] [--samples 16] [--resolution 640x360]
+# --visual requiere CHROME y THREE_DIR (copia local de three@0.160.0)
+node scripts/offline-pilot/irregular-fixture.cjs NEW.json 30    # segundo caso sintético
+BPY_PYTHON=PY-CON-BPY node --test tests/offline-pilot.test.cjs
+```

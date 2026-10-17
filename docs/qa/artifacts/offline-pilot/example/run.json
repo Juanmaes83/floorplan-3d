@@ -1,0 +1,100 @@
+{
+ "format": "floorplan-offline-pilot-run",
+ "version": "0.1.0",
+ "status": "complete",
+ "project": {
+  "path": "reference.json",
+  "sha256Before": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+  "sha256After": "89c46e592a0b06bce2e446de2103ff667a32167fadc47463563a190003ce103f",
+  "unchanged": true
+ },
+ "options": {
+  "python": "/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/bpy-venv/bin/python",
+  "visual": true,
+  "frames": "all",
+  "samples": "16",
+  "rooms": "rom_living,rom_kitchen,rom_dining,rom_master,rom_mbath,rom_gbath"
+ },
+ "steps": [
+  {
+   "step": "export",
+   "command": "node export.cjs reference.json package python",
+   "exit": 0,
+   "seconds": 0.1,
+   "stdoutTail": [
+    "{\"output\":\"/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/ref-video-3/package\",\"entities\":151,\"nodes\":233,\"triangles\":1576,\"images\":0,\"materials\":55,\"substitutions\":[{\"id\":\"mat_antislip\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_carpet\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_marble\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_terrazzo\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_tile600\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_tile800\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_walnut\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_wood\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"}]}"
+   ]
+  },
+  {
+   "step": "verify",
+   "command": "python -I blender-verify.py -- package verify-report.json verified.blend",
+   "exit": 0,
+   "seconds": 1.1,
+   "stdoutTail": [
+    "01:28:46 | INFO: glTF import finished in 0.26s",
+    "Info: Saved as \"verified.blend\"",
+    "{\"status\": \"PASS\", \"entities\": 151, \"blender\": \"5.2.1 LTS\"}"
+   ]
+  },
+  {
+   "step": "visual",
+   "command": "node capture-visual.cjs reference.json visual",
+   "exit": 0,
+   "seconds": 143,
+   "stdoutTail": [
+    "{\"objects\":46,\"glb\":{\"bytes\":15580716,\"sha256\":\"51596f60c8e95ffc398bf04f260b81743a4834cb1251f6ecb16da765af6e40e5\"},\"appRevision\":\"4fb0622ce430a14c3cd87415fcba029b4cd17596\"}"
+   ]
+  },
+  {
+   "step": "shots",
+   "command": "node shots.cjs reference.json shots.json rom_living,rom_kitchen,rom_dining,rom_master,rom_mbath,rom_gbath",
+   "exit": 0,
+   "seconds": 10.5,
+   "stdoutTail": [
+    "rom_mbath ok door threshold 18 pull-back 350 {\"targetObjects\":0.47,\"targetFloor\":0.031,\"nearSurface\":0.047,\"targetShare\":1,\"maxNeighbourShare\":0,\"contentSeen\":1} 1.00/1.00/1.00",
+    "rom_gbath ok doorway from rom_hall 20 pull-back 500 {\"targetObjects\":0.536,\"targetFloor\":0.012,\"nearSurface\":0.102,\"targetShare\":1,\"maxNeighbourShare\":0,\"contentSeen\":1} 1.00/1.00/1.00",
+    "ms 10410"
+   ]
+  },
+  {
+   "step": "render",
+   "command": "python -I render.py -- verified.blend package shots.json render --rooms rom_living,rom_kitchen,rom_dining,rom_master,rom_mbath,rom_gbath --samples 16 --frames all --visual visual-furniture.glb",
+   "exit": 0,
+   "seconds": 4904.4,
+   "stdoutTail": [
+    "01:21:43.838  render           | Saved: '/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/ref-video-3/render/frames/00648.png'",
+    "Info: Saved copy as \"pilot.blend\"",
+    "{\"status\": \"rendered\", \"framesRendered\": 648, \"secondsPerFrame\": {\"mean\": 7.399, \"max\": 10.55, \"min\": 5.439}, \"wallSeconds\": 4903.4, \"peakRssMiB\": 914.6}"
+   ]
+  },
+  {
+   "step": "reopen",
+   "command": "python -I reopen.py -- render reopen-report.json",
+   "exit": 0,
+   "seconds": 1.1,
+   "stdoutTail": [
+    "00:00.419  blend            | Read blend: \"/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/ref-video-3/render/pilot.blend\"",
+    "{\"status\": \"PASS\", \"checks\": 16, \"failed\": []}"
+   ]
+  },
+  {
+   "step": "encode",
+   "command": "ffmpeg -loglevel error -n -framerate 30 -i %05d.png -c:v libx264 -pix_fmt yuv420p -crf 20 review-30fps.mp4",
+   "exit": 0,
+   "seconds": 3.4,
+   "stdoutTail": [
+    ""
+   ]
+  },
+  {
+   "step": "contact-sheet",
+   "command": "ffmpeg -loglevel error -n -i review-30fps.mp4 -vf fps=3,scale=320:-2,tile=6x8 -q:v 4 contact-sheet-3fps-%02d.jpg",
+   "exit": 0,
+   "seconds": 0.4,
+   "stdoutTail": [
+    ""
+   ]
+  }
+ ],
+ "wallSeconds": 5064
+}
