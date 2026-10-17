@@ -107,6 +107,8 @@ La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-refere
 
 La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, identifica como brecha estructural el **proyecto de varias plantas conectadas**, además de exterior y visita. Son candidatos para una decisión futura, **no el siguiente corte aprobado ni una alteración del orden orientativo 4–8**. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
 
+**Estudio del gate, 17-10-2026:** el [estudio comparativo frente a `master`](technical/loralab-study-gate-2026-10-17.md) recomienda, de forma provisional y condicionada a D-01, un único corte: dos plantas y una escalera recta, precedido de una decisión de contrato. No aprueba la fase ni cambia el orden 4–8. Como LoRA LAB no fue accesible desde el contenedor, incluye el procedimiento para que Juanma aporte la prueba desde Chrome en Windows.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
