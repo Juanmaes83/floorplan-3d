@@ -81,11 +81,11 @@ Todo se ejecutó en este contenedor (4 vCPU, sin GPU) con `bpy` 5.2.1 LTS. La ev
 ### Límites declarados
 
 - **No es calidad Candidate 04.** La iluminación es un cielo y un sol, sin techo (el paquete no lo infiere) y sin luces de estancia; los materiales usan el color declarado (8 superficies procedurales sin hornear); 640×360 con 16 muestras.
-- **Las primeras fracciones de la toma del baño en suite muestran sobre todo muro e inodoro**; la estancia sólo se reconoce del todo en su segundo y último tercio.
+- **Baño en suite:** a lo largo de **toda** la toma predominan el muro y la mampara; el inodoro se ve desde el inicio y el lavabo sólo desde ~60 %. Es reconocible como baño pero no es una buena presentación. Baño de invitados: dominan mampara y muro, el lavabo y el inodoro entran en el último tercio. Comedor: una franja de muro cercano ocupa ~1/3 derecho de la imagen durante toda la toma. Pasillo sin toma (sin muebles).
 - **Artefacto visual:** los lavabos y los platos del comedor muestran elipses negras (material o normales del mueble exportado desde el navegador). Pendiente de diagnóstico.
 - El sidecar visual es una representación del navegador en esta revisión (`appRevision`, hash de `index.html`), no geometría canónica.
 - Sin Pillow en este entorno, las texturas CC0 del exportador usan su fallback declarado. El ejemplo no tiene ninguna, así que no le afecta.
-- Las métricas no sustituyen la revisión humana. Las hojas de contacto de 3 fps las revisé yo; el vídeo a 1× queda para Juanma.
+- **Revisión del MP4 publicado** (`review-30fps.mp4`, sha256 `2e385788…`, idéntico al render): h264 640×360, 30/1 fps, 648 fotogramas decodificados, 21,6 s. Detección de cambio de escena fotograma a fotograma: exactamente 5 cortes, en 108/216/324/432/540 (límites de toma); cambio máximo dentro de una toma 0,0027 (mediana 0,0003), sin saltos, parpadeos ni fotogramas perdidos. Inspeccioné los **648 fotogramas** (todas las muestras a 30 fps, en hojas por toma). No puedo reproducir vídeo en tiempo real: la percepción del movimiento a 1× queda para Juanma.
 
 ### Reproducir
 
