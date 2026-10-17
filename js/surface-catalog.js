@@ -4,6 +4,8 @@
  const families={wood:'Madera',ceramic:'Cerámica y porcelánico',stone:'Piedra y mármol',mineral:'Cemento, microcemento y terrazo',wall:'Yeso y acabados murales'};
  const normalize=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const path=/^assets\/materials\/[a-z0-9-]+(?:-sample)?\.webp$/;
+ const pbrCandidates=new Set(['surface-oak-wood-planks','surface-marble-01']);
+ const pbrRevision='b47b775fae642439e8d42d6201ab5d1677d67f99';
  function validate(c){
   if(c.version!==1||!['complete','partial'].includes(c.status)||c.targetCount!==50||!Array.isArray(c.entries)||c.entries.length>50)throw Error('Catálogo de superficies inválido');
   const ids=new Set(),hashes=new Set();
@@ -13,8 +15,21 @@
    if(!Array.isArray(e.applications)||!e.applications.length||e.applications.some(x=>!['floor','wall'].includes(x)))throw Error('Aplicación de superficie inválida');
    if(!/^#[a-f0-9]{6}$/i.test(e.color)||!Number.isFinite(e.roughness)||e.roughness<0||e.roughness>1)throw Error('Fallback de superficie inválido');
    if(e.source?.license!=='CC0-1.0'||!/^https:\/\/polyhaven\.com\/a\/[a-z0-9_]+$/.test(e.source?.url||'')||!e.source.author||!/^https:\/\/github\.com\/Poly-Haven\/polyhaven\.com\/blob\/[a-f0-9]{40}\/public\/locales\/en\/license\.json$/.test(e.source.licenseUrl||'')||!e.source.distributionUrl||!e.source.distributionLicenseUrl||!e.source.rightsEvidence||!e.scaleEvidence)throw Error('Procedencia/licencia de superficie ausente');
-   for(const f of [e.maps?.baseColor,e.sample])if(!f||!path.test(f.path)||f.format!=='image/webp'||!Number.isInteger(f.bytes)||f.bytes<1||f.bytes>512*1024||!Number.isInteger(f.width)||!Number.isInteger(f.height)||Math.min(f.width,f.height)<1||Math.max(f.width,f.height)>512||!/^([a-f0-9]{64})$/.test(f.sha256))throw Error('Mapa de superficie inválido');
-   if(hashes.has(e.maps.baseColor.sha256))throw Error('Textura repetida');hashes.add(e.maps.baseColor.sha256);
+   const channels=Object.keys(e.maps||{});
+   if(channels.some(channel=>!['baseColor','normal','roughness'].includes(channel))||
+      (channels.length>1&&(!pbrCandidates.has(e.id)||!e.maps.normal||!e.maps.roughness))||
+      (pbrCandidates.has(e.id)&&(!e.maps?.normal||!e.maps?.roughness)))throw Error('Canales de superficie inválidos');
+   for(const f of [...Object.values(e.maps),e.sample]){
+    if(!f||!path.test(f.path)||f.format!=='image/webp'||!Number.isInteger(f.bytes)||f.bytes<1||f.bytes>512*1024||!Number.isInteger(f.width)||!Number.isInteger(f.height)||Math.min(f.width,f.height)<1||Math.max(f.width,f.height)>512||!/^([a-f0-9]{64})$/.test(f.sha256))throw Error('Mapa de superficie inválido');
+    if(hashes.has(f.sha256))throw Error('Textura repetida');hashes.add(f.sha256);
+   }
+   if(e.maps.normal&&Object.values(e.maps).some(m=>m.width!==e.maps.baseColor.width||m.height!==e.maps.baseColor.height))throw Error('Canales desalineados');
+   for(const channel of ['normal','roughness'])if(e.maps[channel]){
+    const origin=e.maps[channel].origin,sourceChannel=channel==='normal'?'nor':'arm';
+    if(origin?.repository!=='Juanmaes83/casa-serra'||origin.revision!==pbrRevision||origin.license!=='CC0-1.0'||
+       origin.path!==`assets/tex-1k/${e.source.assetId}/${sourceChannel}.jpg`||!/^([a-f0-9]{64})$/.test(origin.sha256))throw Error('Procedencia PBR inválida');
+   }
+   if(e.totalBytes!==e.sample.bytes+Object.values(e.maps).reduce((n,m)=>n+m.bytes,0))throw Error('Presupuesto de superficie inválido');
    repeat(e.repeatMm);
   }
   if(c.status==='complete'&&(c.entries.length!==50||Object.keys(families).some(f=>c.entries.filter(e=>e.family===f).length!==10)))throw Error('Biblioteca incompleta: se requieren diez acabados por familia');

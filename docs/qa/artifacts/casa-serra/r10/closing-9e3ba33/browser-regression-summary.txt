@@ -1,0 +1,25 @@
+assets exit=0 # tests 25 # pass 25 # fail 0 # cancelled 0 # skipped 0 
+capture-3d exit=0 # tests 3 # pass 3 # fail 0 # cancelled 0 # skipped 0 
+guide-navigation exit=0 # tests 4 # pass 4 # fail 0 # cancelled 0 # skipped 0 
+guide exit=0 # tests 5 # pass 5 # fail 0 # cancelled 0 # skipped 0 
+layout-review exit=0 # tests 2 # pass 2 # fail 0 # cancelled 0 # skipped 0 
+material-detail exit=1 # tests 5 # pass 4 # fail 0 # cancelled 1 # skipped 0 
+mirror-pilot exit=0 # tests 1 # pass 1 # fail 0 # cancelled 0 # skipped 0 
+multiformat-guide exit=0 # tests 9 # pass 9 # fail 0 # cancelled 0 # skipped 0 
+presentation-batch exit=1 # tests 9 # pass 6 # fail 3 # cancelled 0 # skipped 0 
+presentation-contact exit=0 # tests 5 # pass 5 # fail 0 # cancelled 0 # skipped 0 
+presentation-framing exit=0 # tests 6 # pass 6 # fail 0 # cancelled 0 # skipped 0 
+presentation-light exit=1 # tests 6 # pass 5 # fail 0 # cancelled 1 # skipped 0 
+presentation-minimap exit=1 # tests 5 # pass 4 # fail 0 # cancelled 1 # skipped 0 
+presentation-reveal exit=1 # tests 8 # pass 2 # fail 6 # cancelled 0 # skipped 0 
+presentation-route exit=0 # tests 8 # pass 8 # fail 0 # cancelled 0 # skipped 0 
+presentation exit=1 # tests 58 # pass 46 # fail 8 # cancelled 4 # skipped 0 
+procedural-details exit=1 # tests 1 # pass 0 # fail 0 # cancelled 1 # skipped 0 
+render-budget exit=1 # tests 1 # pass 0 # fail 0 # cancelled 1 # skipped 0 
+room-layout exit=0 # tests 5 # pass 5 # fail 0 # cancelled 0 # skipped 0 
+sheet exit=0 # tests 7 # pass 7 # fail 0 # cancelled 0 # skipped 0 
+surfaces exit=0 # tests 7 # pass 7 # fail 0 # cancelled 0 # skipped 0 
+upload exit=0 # tests 8 # pass 8 # fail 0 # cancelled 0 # skipped 0 
+variants-visual exit=0 # tests 4 # pass 4 # fail 0 # cancelled 0 # skipped 0 
+variants exit=0 # tests 4 # pass 4 # fail 0 # cancelled 0 # skipped 0 
+sha 9e3ba33a867d995075889641f839c8fa38608acc

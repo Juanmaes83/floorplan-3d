@@ -1,0 +1,62 @@
+{
+  "room": "Baño en suite",
+  "id": "obj_template-008",
+  "base": {
+    "calls": 293,
+    "triangles": 25214,
+    "geometries": 1189,
+    "textures": 8,
+    "meshes": {
+      "architecture": 217,
+      "furniture": 959,
+      "lamps": 11,
+      "contact": 0
+    }
+  },
+  "target": {
+    "width": 256,
+    "height": 256,
+    "textureBytes": 262144
+  },
+  "first": {
+    "renderMs": 1121,
+    "calls": 368,
+    "triangles": 29050,
+    "texturesBefore": 8,
+    "texturesAfter": 8
+  },
+  "repeats": [
+    {
+      "renderMs": 6.700000762939453,
+      "calls": 368,
+      "triangles": 29050,
+      "texturesBefore": 8,
+      "texturesAfter": 8
+    },
+    {
+      "renderMs": 4.399999618530273,
+      "calls": 368,
+      "triangles": 29050,
+      "texturesBefore": 8,
+      "texturesAfter": 8
+    },
+    {
+      "renderMs": 4.100000381469727,
+      "calls": 368,
+      "triangles": 29050,
+      "texturesBefore": 8,
+      "texturesAfter": 8
+    }
+  ],
+  "occluded": {
+    "status": "not-visible",
+    "facing": true,
+    "visible": true,
+    "unoccluded": false,
+    "first": {
+      "type": "BoxGeometry",
+      "distance": 4.486109359639825
+    },
+    "textures": 8
+  }
+}

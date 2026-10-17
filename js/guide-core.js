@@ -49,6 +49,7 @@
   example:{title:['Probar el ejemplo','Try the example','试用示例'],description:['Explora el Proyecto de ejemplo. Puedes crear una copia propia.','Explore the Example project. You can create your own copy.','浏览示例项目。可创建自己的副本。'],next:['Explorar en 2D o 3D','Explore in 2D or 3D','浏览 2D 或 3D'],terms:'ejemplo demo probar example try'},
   scale:{title:definitions.scale.title,description:definitions.scale.instruction,next:['Calibrar → segunda cota → confirmar','Calibrate → second dimension → confirm','校准 → 第二尺寸 → 确认'],terms:'escala calibrar calibracion medida medidas dimension ajustar scale calibrate dimensions',prerequisite:'image'},
   furniture:{title:['Buscar muebles','Find furniture','搜索家具'],description:definitions.furniture.instruction,next:['Seleccionar una estancia y colocar el mueble','Select a room and place the item','选择房间并放置家具'],terms:'mueble muebles amueblar catalogo biblioteca furniture furnish catalog',prerequisite:'geometry',goal:'furnish'},
+  presentation:{title:['Presentar mi vivienda','Present my home','展示我的住宅'],description:['Vista general y recorrido por estancias del proyecto actual.','Overview and room tour of the current project.','当前项目的总览和房间导览。'],next:['Elegir estancias e iniciar','Choose rooms and start','选择房间并开始'],terms:'presentar presentacion presentation tour enseñar ensenar vivienda recorrido guiado'},
   '3d':{title:definitions.view3d.title,description:definitions.view3d.instruction,next:['Cargar la escena y revisarla','Load and review the scene','加载并检查场景'],terms:'3d tridimensional recorrer visualizar ver revisar scene walk',prerequisite:'geometry',goal:'review'},
   missing:{title:['Ver qué me falta','See what is left','查看剩余任务'],description:['Consulta las tareas necesarias pendientes de tu objetivo.','See the remaining required tasks for your goal.','查看目标尚未完成的必要任务。'],next:['Resolver la primera tarea pendiente','Resolve the first remaining task','完成第一个剩余任务'],terms:'falta faltan pendiente progreso ayuda siguiente missing progress help next'},
   save:{title:definitions.save.title,description:definitions.save.instruction,next:['Exportar una copia JSON o ZIP','Export a JSON or ZIP copy','导出 JSON 或 ZIP 副本'],terms:'guardar conservar salvar save keep',goal:'save'},
@@ -62,12 +63,13 @@
  const furnitureTerms=[['bed','cama','cama camas lecho bed beds'],['crib','cuna','cuna bebe crib'],['sofa','sofa','sofa sofas couch'],['armchair','butaca','butaca sillon armchair'],['table','mesa','mesa mesas table'],['wardrobe','armario','armario ropero wardrobe'],['fridge','nevera','nevera frigorifico fridge'],['counter','encimera','encimera counter'],['chair','silla','silla sillas chair']];
  function resolve(query){
   let q=normalize(query);
-  const chinese={'上传':'upload plan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export'};
+  const chinese={'上传':'upload plan','家具':'furniture','床':'bed','比例':'scale','保存':'save','还有什么':'missing','剩余':'missing','地板':'floor','墙':'walls','撤销':'undo','示例':'example','从零':'scratch','导出':'export','展示':'presentation'};
   for(const [term,alias]of Object.entries(chinese))if(q.includes(term))q+=' '+alias;
-  if(!q)return ['upload','blank','furniture','3d','missing','save'].map(id=>({id,...actions[id]}));
+  if(!q)return ['upload','blank','furniture','presentation','3d','missing','save'].map(id=>({id,...actions[id]}));
   const words=q.split(' '),has=terms=>terms.split(' ').some(w=>words.some((t,i)=>t===w||i===words.length-1&&t.length>=3&&t.length<w.length&&w.startsWith(t)));
   if(has('cambiar modificar change edit')&&has('cocina kitchen')&&!has('pared paredes muro muebles suelo floor wall furniture'))return ['walls','furniture','floor'].map(id=>({id,...actions[id],ambiguous:true}));
   if(has('borrar vaciar eliminar clear delete remove')&&has('muebles furniture'))return [{id:'clear',...actions.clear}];
+  if(has('presentar presentacion presentation tour enseñar ensenar'))return [{id:'presentation',...actions.presentation}];
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house pdf png jpg jpeg webp heic tiff svg dxf ifc roomplan json zip bmp gif avif'))return [{id:'upload',...actions.upload}];
   if(has('exportar export captura capture png descargar download'))return [{id:'export',...actions.export}];
   if(has('subir cargar importar upload import')&&has('plano imagen foto casa image photo plan house'))return [{id:'upload',...actions.upload}];

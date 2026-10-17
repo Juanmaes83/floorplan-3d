@@ -1,0 +1,281 @@
+{
+  "source": {
+    "id": "prj_reveal-concave",
+    "poly": [
+      [
+        6600,
+        0
+      ],
+      [
+        10270,
+        0
+      ],
+      [
+        10270,
+        3370
+      ],
+      [
+        8700,
+        3370
+      ],
+      [
+        8700,
+        1900
+      ],
+      [
+        6600,
+        1900
+      ]
+    ]
+  },
+  "shared": [
+    [
+      {
+        "roomId": "rom_master",
+        "face": -1
+      },
+      {
+        "roomId": "rom_mbath",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_master",
+        "face": -1
+      },
+      {
+        "roomId": "rom_mbath",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_master",
+        "face": -1
+      },
+      {
+        "roomId": "rom_child",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_master",
+        "face": -1
+      },
+      {
+        "roomId": "rom_mbath",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_master",
+        "face": 1
+      },
+      {
+        "roomId": "rom_bay1",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_mbath",
+        "face": -1
+      },
+      {
+        "roomId": "rom_kid",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_mbath",
+        "face": -1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_kid",
+        "face": -1
+      },
+      {
+        "roomId": "rom_laundry",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_kid",
+        "face": -1
+      },
+      {
+        "roomId": "rom_gbath",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_kid",
+        "face": 1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_gbath",
+        "face": -1
+      },
+      {
+        "roomId": "rom_dining",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_gbath",
+        "face": 1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_gbath",
+        "face": 1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_gbath",
+        "face": -1
+      },
+      {
+        "roomId": "rom_gbath",
+        "face": -1
+      },
+      {
+        "roomId": "rom_laundry",
+        "face": 1
+      },
+      {
+        "roomId": "rom_laundry",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_laundry",
+        "face": -1
+      },
+      {
+        "roomId": "rom_kitchen",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_laundry",
+        "face": -1
+      },
+      {
+        "roomId": "rom_kitchen",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_child",
+        "face": -1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_child",
+        "face": -1
+      },
+      {
+        "roomId": "rom_living",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_child",
+        "face": -1
+      },
+      {
+        "roomId": "rom_hall",
+        "face": 1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_child",
+        "face": 1
+      },
+      {
+        "roomId": "rom_bay2",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_kitchen",
+        "face": 1
+      },
+      {
+        "roomId": "rom_dining",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_living",
+        "face": 1
+      },
+      {
+        "roomId": "rom_balcony",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_living",
+        "face": 1
+      },
+      {
+        "roomId": "rom_balcony",
+        "face": -1
+      }
+    ],
+    [
+      {
+        "roomId": "rom_living",
+        "face": 1
+      },
+      {
+        "roomId": "rom_balcony",
+        "face": -1
+      }
+    ]
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "roomId": "rom_master",
+  "during": {
+    "status": "running",
+    "roomId": "rom_master",
+    "walls": [
+      {
+        "wallId": "wal_ref-w6",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-w7",
+        "face": 1
+      },
+      {
+        "wallId": "wal_ref-w8",
+        "face": 1
+      },
+      {
+        "wallId": "wal_ref-w9",
+        "face": 1
+      },
+      {
+        "wallId": "wal_ref-w10",
+        "face": 1
+      },
+      {
+        "wallId": "wal_ref-w11",
+        "face": 1
+      },
+      {
+        "wallId": "wal_ref-w40",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-w41",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-w44",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-w45",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-door-1",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-door-2",
+        "face": -1
+      },
+      {
+        "wallId": "wal_ref-bay-0",
+        "face": 1
+      }
+    ],
+    "floor": true,
+    "floorAreaM2": 12.367900145268386,
+    "overlayCount": 15
+  },
+  "memory": {
+    "before": {
+      "geometries": 1298,
+      "textures": 9
+    },
+    "during": {
+      "geometries": 1298,
+      "textures": 9
+    },
+    "after": {
+      "geometries": 1298,
+      "textures": 9
+    }
+  },
+  "drawingFrames": {
+    "medianMs": 16.699999809265137,
+    "maxMs": 17.800000190734863
+  },
+  "materialFrames": {
+    "medianMs": 16.5,
+    "maxMs": 18.300000190734863
+  }
+}

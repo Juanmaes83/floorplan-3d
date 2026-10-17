@@ -31,6 +31,7 @@
  for(let i=0;i<5;i++){const li=el('li',undefined,steps),b=btn('guideStage'+i,'',()=>{const p=progress(),tasks=p.tasks.filter(t=>t.stage===i);if(tasks.length){state().current=(tasks.find(t=>t.status!=='completed'&&!t.skipped)||tasks[0]).id;state().manualTask=true;store();render();}else{toast(tx('Esta etapa no requiere tareas para tu objetivo.','This stage has no tasks for your goal.','此阶段没有目标任务。'));}},li);el('span',String(i+1),b,'step-number');el('span',undefined,b,'step-label');}
  const current=el('div',undefined,bar,'guide-current'),copy=el('div',undefined,current,'guide-task-copy'),currentTitle=el('h2',undefined,copy),currentInstruction=el('p',undefined,copy);
  const currentAction=btn('guidePrimary','',()=>runTask(progress().current),current,true);
+ const presentAction=btn('guidePresent','',()=>window.FloorPlanPresentation?.open(),current);
  const exampleLine=el('div',undefined,bar,'guide-example'),exampleNote=el('span',undefined,exampleLine);btn('guideCopyExample','',()=>copyExample(),exampleLine);
  const empty=el('div',undefined,$('#stage'),'plan-empty');empty.id='guideEmpty';const emptyBox=el('div',undefined,empty),emptyTitle=el('h2',undefined,emptyBox),emptyText=el('p',undefined,emptyBox);btn('guideEmptyAction','',()=>runTask(progress().tasks.find(t=>t.id==='geometry')),emptyBox,true);
  const announcement=el('p',undefined,undefined);announcement.id='guideAnnouncement';announcement.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';announcement.setAttribute('role','status');announcement.setAttribute('aria-live','polite');document.body.append(announcement);
@@ -121,6 +122,7 @@
  async function execute(a,fromWelcome=false){
   if(a.id==='upload')return beginUpload();if(a.id==='blank')return createOwn('create');if(a.id==='example')return example();
   if(fromWelcome)closeWelcome();
+  if(a.id==='presentation')return window.FloorPlanPresentation?.open();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
   if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&project.rooms.find(r=>G.normalize(nm(r.name)).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina'));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}
   const block=requirement(a);if(block){if(block==='start')afterCopy=a;state().current=block;state().closed=false;store();render();return openDetails(block);}
@@ -179,6 +181,7 @@
   for(const [i,b]of [...steps.querySelectorAll('button')].entries()){b.querySelector('.step-label').textContent=label(G.stages[i]);if(i===p.stage)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.title=label(G.stages[i]);}
   currentTitle.textContent=showOutcome?tx('✓ Objetivo completado','✓ Goal complete','✓ 目标已完成'):label(p.current.title);currentInstruction.textContent=showOutcome?saved()?tx('Guardado en este navegador. Exporta una copia para conservarlo fuera.','Saved in this browser. Export a copy to keep it elsewhere.','保存在此浏览器。请导出副本以在其他位置保存。'):tx('Resultado listo. Confirma el guardado local.','Result ready. Confirm local saving.','结果已准备。请确认本地保存。'):p.current.blockers.length?tx('Antes: ','First: ','先完成：')+p.current.blockers.map(id=>label(G.definitions[id].title)).join(' · '):label(p.current.instruction);
   currentAction.textContent=showOutcome?tx('Ver resultado y exportar','View result & export','查看结果并导出'):primaryLabel(p.current);currentAction.onclick=()=>safe(()=>showOutcome?openDetails():runTask(p.current));
+  presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');presentAction.hidden=p.stage!==4;
   exampleLine.hidden=s.kind!=='example';exampleNote.textContent=tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');$('#guideCopyExample').textContent=tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
   empty.hidden=G.geometryReady(project)||is3D()||!!project.sourceImages?.length;emptyTitle.textContent=tx('Aquí empieza tu distribución','Your layout starts here','从这里开始布局');emptyText.textContent=tx('Crea tu primera estancia con dimensiones interiores o utiliza el trazado manual.','Create your first room with interior dimensions or use manual drawing.','输入内部尺寸创建房间，或手动绘图。');$('#guideEmptyAction').textContent=tx('Crear primera estancia','Create first room','创建第一个房间');
   const completed=p.tasks.filter(t=>t.status==='completed').map(t=>t.id);s.completed=[...new Set([...s.completed,...completed])];

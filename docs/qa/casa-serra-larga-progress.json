@@ -1,0 +1,406 @@
+{
+  "schema": "CasaSerraProgressV1",
+  "branch": "feat/casa-serra-larga-improvements",
+  "base": "a1341eeef82c651914da08ff78328e668091ea78",
+  "current": "R10-closing",
+  "ci": "not_executed_on_1b386e3_runs_38944841362_38944841375_runner_id_0_no_steps",
+  "humanReview": "pending",
+  "merge": "pending",
+  "items": [
+    {
+      "id": "R0",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "Baseline, fuentes y continuidad",
+      "dependency": "#38 probado",
+      "acceptance": "Fuentes y rama verificadas; suites de #38 repetidas con runtime fijado; checkpoint listo",
+      "testedSha": "a1341eeef82c651914da08ff78328e668091ea78",
+      "evidence": [
+        "Node syntax 7 files PASS",
+        "unit multiformat 176 pass/0 fail/1 skip",
+        "unit guide 165 pass/0 fail/1 skip",
+        "browser import 26/26",
+        "browser regressions 45/45",
+        "visual inspection qa-results/serra-r0 desktop, portrait, landscape, image import; preexisting mobile toolbar clipping"
+      ]
+    },
+    {
+      "id": "R1",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-1 mínimo; M01–M04, mínimos M05/M06/M19",
+      "dependency": "R0",
+      "acceptance": "Vista general y una estancia real; controles, ficha, cancelación y retorno intacto en escritorio/móvil",
+      "testedSha": "68b2f4ee96f2c1ec049c83ba68d25550a9affcfd",
+      "evidence": [
+        "unit presentation and guide 17/17; broad unit 178 pass/0 fail/1 skip before CSS inline change",
+        "browser final presentation/guide/navigation/capture/import 29/29",
+        "browser editor and F2 regressions 45/45; import prior 26/26; targeted local F2 unexpected 0",
+        "visual inspection and 12 PNG docs/qa/artifacts/casa-serra/r1/ at 1440x900, 390x844, 844x390, 360x800",
+        "exact SHA preview visually reviewed in authenticated Chrome; Actions jobs failed with steps empty"
+      ]
+    },
+    {
+      "id": "R2",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-1 completo; M01–M06/M19",
+      "dependency": "R1",
+      "acceptance": "Configuración de orden, poses derivadas, accesibilidad, carga cancelable y P01–P16",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": [
+        "P04/P09/P10 slice code e5dd7c5617450e345b6a2fb1c07196849b0c3c87: local sidecar, ordered selection, stale ID/revision reconciliation and invalidation",
+        "presentation/core final 14/14 plus variant 1/1; affected browser 50/50; editor regressions 45/45; import workflow equivalent 21/21 plus guide 5/5",
+        "visual inspection 14 PNG docs/qa/artifacts/casa-serra/r2-p04-p10/ at 1440x900, 390x844, 844x390, 360x800 and resize",
+        "P06/P12 slice: session-only completed-stop progress; presentation browser 14/14, targeted console 1/1, guide/navigation 9/9; four viewport visual review and resize in docs/qa/artifacts/casa-serra/r2-p06-p12/",
+        "exact SHA 4da6273 preview visually reviewed in authenticated Chrome: overview 1/2, bedroom 2/2 and disabled next; Actions runs 38577553257/38577553272 failed with zero steps",
+        "exact SHA 1dbc9a3 preview visually reviewed in authenticated Chrome: ordered rooms, overview, bathroom stop and editor return; Actions runs 38576295738/38576295869 failed with zero steps",
+        "P11 local: missing/corrupt GLB fallback, accessible warning, real WEBGL_lose_context 2D recovery at four viewports; presentation/core 27/27; screenshots docs/qa/artifacts/casa-serra/r2-p11/",
+        "exact code SHA cb13c3b preview deployment 7068095979 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return; Actions 38580370730/38580370756 failed with zero steps",
+        "P14/P15/P16 local: reduced-motion four-aspect resize and 3D camera restore, ten-cycle stable renderer memory 1298 geometries/8 textures after fixing lamp disposal, HTML-like long names rendered as text; presentation/core 34/34, editor regressions 3/3, 14 reviewed PNG docs/qa/artifacts/casa-serra/r2-p14-p16/",
+        "exact code SHA ea4431f preview deployment 7068610522 visually reviewed in authenticated Chrome: overview, bedroom 2/2 and editor return, no console errors; Actions 38583409611/38583409601 failed with zero steps",
+        "P13 acceptance written before application changes; final local: real PNG bytes/IHDR/dimensions, view-aspect capture, motion/resize gate, camera/buffer restored at four viewports plus 360x800 to 844x390; presentation/core/capture suite 41/41; 11 visually reviewed PNG docs/qa/artifacts/casa-serra/r2-p13/",
+        "exact code SHA 83c2677 preview deployment 7070567791 visually reviewed in authenticated Chrome: overview, bedroom 2/2, PNG control and editor return; remote download event not observable, local bytes verified; Actions 38594968787/38594968953 failed with zero steps",
+        "P01/P02/P03: three search terms including Enter, guided and closed-guide entries, saved two-room selection, empty-project prerequisite and focus, unchanged document/goal/view; targeted browser 8/8 and full presentation browser 42/42 at 1440x900, 390x844, 844x390, 360x800; 16 PNG visually reviewed in docs/qa/artifacts/casa-serra/r2-p01-p03/",
+        "P05: own copy and imported two-room DXF keep active project/entry/room IDs, raw and localized names, area, bounds, repeatable camera pose and intact 2D return; browser 4/4, core 3/3, 24 PNG visually reviewed at four viewports in docs/qa/artifacts/casa-serra/r2-p05/; moved toast away from presentation controls",
+        "P07: Back during 2D-to-3D load initially escaped to #inicio; moved presentation history entry before load. Back, Escape and Close during load and room flight restore editor/hash/focus/state with no late reopening; targeted browser 8/8, full presentation/core 57/57, 16 PNG visually reviewed at four viewports in docs/qa/artifacts/casa-serra/r2-p07/",
+        "P08: real desktop pointer lock and mobile joystick release for presentation; camera/options/doors/document restored and new gesture required to resume; browser 4/4, affected regressions 7/7, console/pageerror empty, 13 PNG visually reviewed at four viewports plus resize in docs/qa/artifacts/casa-serra/r2-p08/",
+        "P01-P16 verified locally; remote CI and human review remain separate"
+      ]
+    },
+    {
+      "id": "R3",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "M07/M11/M13",
+      "dependency": "R2",
+      "acceptance": "Lámina y capturas exportan bytes válidos; minimapa orienta por roomId/cámara; retorno intacto",
+      "testedSha": "165b71166c05d6f30209282fd91ae1268f74e213",
+      "evidence": ["M07 code 2b8c7f5: standalone 1600x1100 SVG architectural sheet, own/real DXF/concave room and three languages; browser 7/7, affected 3D regression 5/5, 14 PNG visually reviewed and four downloaded SVG in docs/qa/artifacts/casa-serra/r3-m07/", "M11 code e6aed05: batch ZIP with ordered PNGs, SHA-256 manifest, cancellation and state restore; browser 8/8, capture 3D 3/3, core/ZIP 23/23, 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/", "M13 code 165b711: roomId/camera-aligned SVG minimap; core 4/4, browser 5/5 at four viewports and resize, P14/P16 6/6, M11 ZIP 8/8; 13 PNG in docs/qa/artifacts/casa-serra/r3-m13/"]
+    },
+    {
+      "id": "R4",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-2; M08/M09 y control M05/M06",
+      "dependency": "R2",
+      "acceptance": "Piloto PBR/UV/color y luz reversibles; comparación visual y presupuesto medido",
+      "testedSha": "7bd5415",
+      "evidence": ["M08 code ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b: six pinned source JPEGs 6/6 SHA-256 and length verified, visual and RGB alignment audit in docs/qa/artifacts/casa-serra/r4-m08-source-alignment.json", "M08 local pilot tests 13/13, minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69; exact SHA c4310e9 preview inspected; measurements and 22 screenshot/metrics artifacts in docs/qa/artifacts/casa-serra/r4-m08/", "M09 code 7bd5415: local pilot 6/6, affected broad regression 76/76, four viewports and resize visually reviewed; exact SHA 80db2ac preview READY and inspected in Chrome; Actions 38737194065/38737194401 failed with zero steps"]
+    },
+    {
+      "id": "R5",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-3 visual; M10/M15",
+      "dependency": "R4",
+      "acceptance": "Revelado por IDs y efectos acotados reversibles con geometría irregular y fallback",
+      "testedSha": "ae70f26",
+      "evidence": ["M10 room-scoped reveal code 349272a; local pilot 8/8 and affected broad regression 82/82, four viewports/resize/concave floor/shared wall faces/authorized GLB/context loss/reduced motion/JSON round trip; exact 3d73e54 preview reviewed in Chrome", "M15 own optional contact shader code ae70f26; local pilot 5/5 and affected broad regression 100/100, four viewports/resize/empty/overlap/context loss; 19 visually reviewed screenshot and metrics artifacts in docs/qa/artifacts/casa-serra/r5-m15/"]
+    },
+    {
+      "id": "R6",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "CS-3 recorrido; M18",
+      "dependency": "R2",
+      "acceptance": "Ruta interior completa libre de obstáculos o alternativa aérea declarada",
+      "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
+      "evidence": ["M18 acceptance written before implementation; route planner 5/5 and browser 8/8 across four viewports, resize and cancellation", "Affected broad regression 113/113; ten visual and metric artifacts in docs/qa/artifacts/casa-serra/r6-m18/", "Reference route five points, two doors, 450 visited cells; GPU memory unchanged at 1298 geometries and 9 textures; Chromium/SwiftShader frame medians 16.5 ms base and 16.6 ms route", "Exact evidence SHA 278c11a preview deployment 7100248810 visually reviewed in authenticated Chrome; Actions 38781353884/38781354451 failed with zero steps"]
+    },
+    {
+      "id": "R7",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "M12/M16",
+      "dependency": "R2",
+      "acceptance": "Variantes con cámara común; agrupar solo si medición justifica y conserva IDs",
+      "testedSha": "e66d85e9aba07d1d05a1d67bf6e80854ccec4103",
+      "evidence": ["M12/M16 acceptance written before implementation; user resumed after R6", "M12 variants 17/17 and eight visually reviewed screenshots", "M16 109 fewer draw calls, 109 fewer geometries, 17 extra changed pixels vs restored baseline; affected broad regression 203/203 pass, zero fail/skip", "Exact SHA fcabf94 preview deployment 8keftnBieE1mxTLBjxESRxJq7wTu reviewed in authenticated Chrome; Actions 38861523704/38861523740 failed with zero steps"]
+    },
+    {
+      "id": "R8",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "M14/M17/M20",
+      "dependency": "R2",
+      "acceptance": "Pilotos independientes con caso de uso, presupuesto y reversibilidad; diferir con motivo si no justifican valor",
+      "testedSha": "feae6fdfd27f21f4cc68f886ef06ca41cfcd9876",
+      "evidence": ["M20 code d267e4c: editable nested project with three hashed static PNG views, clean reimport and affected tests 68/68", "M17 code ab2f89a: optional pilot disabled by default, four generic objects add 16 calls/192 triangles for 0/11 visibly changed pixels in two room views; deferred", "M14 code f93aed7: 256x256 planar reflection pilot adds 368 calls, cold 936 ms and warm 2.4-3.4 ms; eight textures stable, visually flat wall; deferred; combined render pilots 3/3", "Exact R8 closure SHA feae6fd preview deployment 7115022782 reviewed in authenticated Chrome; Actions 38877014930/38877014941 failed with zero steps"]
+    },
+    {
+      "id": "R9",
+      "type": "incremento",
+      "status": "verificado localmente",
+      "scope": "Cierre de M01–M20",
+      "dependency": "R1–R8",
+      "acceptance": "Regresiones, capturas inspeccionadas, preview SHA exacto, matriz final y PR draft",
+      "testedSha": "cb6e00324290c27c96fea1268daf8441bd0beaad",
+      "evidence": ["All 40 test files serial: 415 tests, 414 pass, 0 fail, 1 optional Blender skip; log r9-all-tests-final.log in external supervisor", "Three initial test-only failures fixed in cb6e003; focused rerun 7/7", "Playwright/Chromium screenshots visually reviewed for portable package desktop/portrait/landscape, clean reimport, mobile variants and interior route", "Final matrix: 18 capabilities verified locally, M14/M17 measured and deferred, P01-P16 16/16 locally verified", "Exact cb6e003 preview deployment 7115530249 reviewed in authenticated Chrome: example, overview, bedroom, ZIP control and editor return; Actions 38880204137/38880204158 failed with zero steps"]
+    },
+    {
+      "id": "R10",
+      "type": "incremento",
+      "status": "verificado localmente con criterios parcialmente no cumplidos",
+      "scope": "Revisión de Juanma sobre 28e0428: encuadre de estancias pequeñas (M03) y recorrido (M18)",
+      "dependency": "R9",
+      "acceptance": "Siete criterios R10 en casa-serra-larga-progress.md: presencia >=40 %, vecina <25 %, suelo >=75 %, mirada de marcha 0-20°, <=10 % de muro cercano, llegada >=1 s sin saltos, alternativa declarada",
+      "testedSha": "1dd86e5",
+      "codeCommits": [
+        "4326605",
+        "7d66d06",
+        "1b386e3",
+        "1dd86e5"
+      ],
+      "evidence": [
+        "Before 28e0428 Baño en suite stop 1440x900: 12.7 % vs bedroom 44.4 % (full frame); walk pitch 51.6° median, 118/118 frames >20°, 2.41 m/s, 7.9 m single-frame jump",
+        "After 1dd86e5, independent visible-region metric over 33 reference stops: protagonist 33/33, neighbour <25 % 33/33, floor >=75 % 33/33, presence >=40 % 30/33 (Pasillo 390x844 33.2 %, Balcón de estar 390x844 31.2 %, Baño de invitados 844x390 36.8 % not met)",
+        "Rotated concave synthetic plan: presence >=40 % 19/22, floor >=75 % 21/22, neighbour <25 % 22/22",
+        "Virtual-time 30 fps recordings 1440x900 and 390x844: eye 1.50 m, effective pitch max 20°, 0 walking frames >20°, max 0.88 m/s with ramps, arrival 1.3 s; near-wall frames 17.0 % desktop (not met) and 1.9 % portrait",
+        "Node unit 194 pass/0 fail/1 skip; browser regression 196 cases: 159 pass, 30 fail, 7 without result (test timeouts reported as cancelled), i.e. 189 with result (count corrected 2026-10-17 from the original logs); every failure but one reproduces identically on 28e0428 run alone (container environment: SwiftShader time limits, proxy-blocked resources, editor blur handler) and is not counted as passed; the one R10-specific failure was a wrong memory assertion in the M18 test (one-off GPU upload of walk aids, plateau 1297 over six routes), replaced by a repeat-growth check, M18 8/8",
+        "Vercel preview READY for 1b386e3 serving these files, not opened from the container (proxy rejects *.vercel.app); Actions 38944841362/38944841375 failed with runner_id 0 and no steps: CI not executed"
+      ],
+      "humanReview": "pending: Juanma must review the exact-SHA preview and the comparison videos",
+      "closingRound": {"date": "2026-10-17", "testedSha": "9e3ba33a867d995075889641f839c8fa38608acc", "status": "bloqueado: regresion de navegador no limpia", "stops": "example 33/33 all criteria; rotated synthetic 22/22 presence and neighbour, floor 21/22 (Balcon-lavadero 390x844 73.4 %, exception pending decision)", "walkNearWall1440": "13/396 (3.3 %), was 65/383 (17.0 %)", "browserRegression": "24 files, 196 cases: 170 pass, 17 fail, 9 without result (timeouts); 23 of 26 non-passing fail identically on 28e0428; M11 cancellation, P05 1440x900 and 3D camera after Escape/Back pass on 28e0428 and are an acceptance blocker of this round (likely roomFrame cost)", "ci": "not executed (no steps)"}
+    },
+    {
+      "id": "M01",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Presentación reversible por estancias",
+      "dependency": "R0",
+      "acceptance": "Ejemplo, importado y propio; cerrar sin mutar proyecto, selección ni historial",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P01-P16 local closure: real example, own and imported room stops, saved selection/order and return to the original 2D/3D document, camera, selection and history; P05 browser 4/4 and P08 browser 4/4 plus affected regression 7/7"]
+    },
+    {
+      "id": "M02",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Fichas y marcadores reales",
+      "dependency": "M01",
+      "acceptance": "Nombre, área y acabados del roomId; texto seguro y foco usable en móvil",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P05 real project/import room IDs, area, bounds and stable pose at four viewports; P16 HTML-like long names rendered as text with full accessible label; P01-P03 focus and entry controls 8/8"]
+    },
+    {
+      "id": "M03",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Poses y encuadre derivados",
+      "dependency": "M01",
+      "acceptance": "Mismo proyecto/revisión produce poses repetibles; ejes, diagonal y resize correctos",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P05 repeatable room poses for own and imported projects with real room IDs and geometry; P14 four viewport sizes, orientation/resize and restored camera, target, FOV and options"],
+      "humanReviewHistory": [{"date": "2026-10-16", "sha": "28e042847e2887b00a45da08dd14ad9bd5abd30d", "result": "no aceptado por Juanma", "followUp": "R10"}]
+    },
+    {
+      "id": "M04",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Controles y movimiento reducido",
+      "dependency": "M01",
+      "acceptance": "Teclado/touch/Escape, sin animación obligatoria ni interferencia con inputs",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P01-P03 keyboard/search and focus, P07 Back/Escape/Close during load/flight 8/8, P08 pointer lock and touch handoff 4/4 plus regression 7/7, P14 reduced-motion navigation and four viewport sizes"]
+    },
+    {
+      "id": "M05",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Calidad y fallback por capacidad",
+      "dependency": "M01",
+      "acceptance": "WebGL/asset/context loss recupera 2D sin alterar documento",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P11 missing/corrupt GLB fallback and real WebGL context loss return to intact 2D, presentation/core 27/27; P15 geometry/material disposal stable at 1298 geometries and eight textures for ten cycles"]
+    },
+    {
+      "id": "M06",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Carga por etapas cancelable",
+      "dependency": "M01",
+      "acceptance": "Publica escena básica; recursos tardíos no cruzan proyectos; cancelar libera lo propio",
+      "testedSha": "f7cf560aad6757b5b4c19f224e3a0ff7c6c1d559",
+      "evidence": ["R2 P07 cancellation during initial WebGL load and room flight 8/8 without late reopen; P11 pending asset requests abort on context loss, basic 2D editor restored; P15 ten-cycle lifecycle and resource stability"]
+    },
+    {
+      "id": "M07",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Lámina y anotaciones",
+      "dependency": "M03",
+      "acceptance": "Exportación real y legible con cotas/escala declaradas y geometría intacta",
+      "testedSha": "2b8c7f5c33e37cd5728c3ccab908ca5b40ffcd00",
+      "evidence": ["Sheet from active project and 2D SVG; SVG download bytes parsed, 1600x1100 and room/project IDs verified", "Browser 7/7 at four viewports, own copy, real DXF, concave room and ES/EN/ZH; editor/project/calibration/history intact; console/pageerror empty", "Affected 3D capture/camera regressions 5/5 and 14 screenshots visually reviewed in docs/qa/artifacts/casa-serra/r3-m07/", "No external source raster in standalone SVG; no invented print scale, north or author; implementation original for M19"]
+    },
+    {
+      "id": "M08",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "PBR selectivo",
+      "dependency": "M05/M06",
+      "acceptance": "Mapas/color/normal/UV/escala alineados; fallback y presupuesto medido",
+      "testedSha": "ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b",
+      "evidence": ["Acceptance recorded in progress.md before touching runtime: rights, hashes, crop/UV/normal alignment, two-material cap, channel color spaces, fallback, budget and four-viewport visual comparison", "Six Casa Serra JPEGs 6/6 verified against source-map-audit; official Poly Haven CC0 pages checked; direct wood RGB correlation 0.923/0.930/0.869 and marble 0.919/0.942/0.933 vs approved albedos", "Local pilot 13/13 PASS, four viewports plus resize; actual PNG download, JSON export/reimport, camera/project/IDs/return intact; HTTP/hash/decode fallback and context-loss disposal", "Minimap regression 5/5, surface library regression 7/7 and presentation/capture/ZIP regression 69/69 PASS; visual comparison 17 PNG opened, 22 evidence files and measured transfer/GPU/renderer budget in docs/qa/artifacts/casa-serra/r4-m08/; normal GL retained, ARM green only; AO/metalness unwired", "Exact published SHA c4310e97ce4cba5f8755a61761b0a51fbcd0a4c3 preview READY and visually inspected in Chrome: overview, main bedroom and 2D return; Actions billing blocked, steps empty"]
+    },
+    {
+      "id": "M09",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Luz/HDRI y presets",
+      "dependency": "M08",
+      "acceptance": "Licensed bounded HDR with official loader; neutral/warm presets compared at common camera/material; reversible light/exposure/background/environment, failure fallback and budget measured across four viewports/resize",
+      "testedSha": "7bd5415",
+      "evidence": ["Poly Haven Studio Small 09 CC0 by Sergej Majboroda; official 1K HDR 1615248 bytes, SHA-256 e7cfda5f4e98e623db12b8bfd0184e048488e4855d9c83e2751fb44a32e80c45, 1024x512; Three r160 RGBELoader and PMREM", "Local pilot 6/6 and affected broad regression 76/76; neutral/warm same scene, PNG and ZIP bytes, HTTP/hash/context-loss fallback, prior 3D light/camera restored", "Visual review of four viewports and 360-to-844 resize in docs/qa/artifacts/casa-serra/r4-m09/; HDR transfer 1615248 bytes, GPU estimate 8388608 bytes source plus PMREM, renderer textures 15 during and 10 after; SwiftShader median 16.3-17.0 ms"]
+    },
+    {
+      "id": "M10",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Revelado dibujo/material por IDs",
+      "dependency": "M08",
+      "acceptance": "Entidades correctas en suelos cóncavos/muros compartidos; restauración sin mutar",
+      "testedSha": "349272a560f6982de7133bf5275dd0ef4704d44f",
+      "evidence": ["Exact room polygon floor and inward wallId face overlay; 9.28 m2 concave floor and 24 shared-wall face mappings checked; no project/material mutation or shader recompilation per frame", "Local browser 8/8, broad regression 82/82; GLB ready, JSON export/reimport, resize, context loss, reduced motion and 2D/3D return verified", "Four viewport drawings/materials plus concave/GLB/resize visually opened; metrics in docs/qa/artifacts/casa-serra/r5-m10/: 1298 geometries and 9 textures before/during/after, 20-frame median 16.4-16.7 ms in SwiftShader"]
+    },
+    {
+      "id": "M11",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Capturas por estancias",
+      "dependency": "M03",
+      "acceptance": "PNG por vista con bytes/dimensiones válidos; cámara y buffer restaurados",
+      "testedSha": "e6aed05a5e53892450827cd2c1333a0a5aea0b5c",
+      "evidence": [
+        "P13 individual presentation PNG at all four viewports plus orientation change; real bytes/dimensions, camera and buffer restored",
+        "M11 batch ZIP browser 8/8 at four viewports plus cancel, resize, hostile label and Escape; PNG bytes/IHDR/dimensions, CRC/SHA-256, source/project/room IDs, camera/buffer/editor return, console/pageerror empty",
+        "3D capture regression 3/3; presentation and ZIP core 23/23; P13/P14/P16/P07 targeted 18/19 initially with landscape P16 layout, corrected and P16/P13 recheck 2/2; 20 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m11/"
+      ]
+    },
+    {
+      "id": "M12",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Comparación de variantes",
+      "dependency": "M03",
+      "acceptance": "Misma referencia visual; variantes e IDs permanecen aislados",
+      "testedSha": "9e967250a8fef0490ca7619d46b02b29bebefe9b",
+      "evidence": ["Common SVG frame and scale for original/variants, room/wall/door/object IDs, read-only comparison; variants unit/browser 17/17", "Eight visually reviewed screenshots in docs/qa/artifacts/casa-serra/r7-m12/ across four viewports and 360-to-844 resize"]
+    },
+    {
+      "id": "M13",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Minimapa de orientación",
+      "dependency": "M03",
+      "acceptance": "RoomId y dirección correctos incluso en plano girado/irregular; plegable en móvil",
+      "testedSha": "165b71166c05d6f30209282fd91ae1268f74e213",
+      "evidence": ["Core 4/4 including rotated irregular polygon and camera vector; browser 5/5 across 1440x900, 390x844, 844x390, 360x800 and 360-to-844 resize; P14/P16 6/6, M11 ZIP 8/8; click/Enter/collapse/return/state/console verified; 13 PNG visually reviewed in docs/qa/artifacts/casa-serra/r3-m13/"]
+    },
+    {
+      "id": "M14",
+      "type": "capacidad",
+      "status": "diferido con motivo",
+      "scope": "Reflejo selectivo",
+      "dependency": "M08",
+      "acceptance": "Recurso identificado, coste medido y fallback; sin reflejos globales falsos",
+      "testedSha": "f93aed7",
+      "evidence": ["256x256 planar mirror pilot in suite bathroom: base 293 draw calls/25214 triangles, extra pass 368 calls/29050 triangles, cold 936 ms and three warm passes 3.4/2.9/2.4 ms in Chromium SwiftShader; target 262144 RGBA bytes disposed, eight textures before/after", "Exterior camera skipped by facing/visibility/occlusion guard; reflection shows nearly flat wall, so base material remains; four visually reviewed PNG and metrics in docs/qa/artifacts/casa-serra/r8-m14/; M14/M17/M16 directed tests 3/3"]
+    },
+    {
+      "id": "M15",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Sombras/efectos acotados",
+      "dependency": "M08",
+      "acceptance": "Beneficio visual revisado, coste medido y renderer base tras fallo",
+      "testedSha": "ae70f26",
+      "evidence": ["M15 local pilot 5/5 and affected broad regression 100/100; 19 artifacts in docs/qa/artifacts/casa-serra/r5-m15/; no transfer or texture increase, six to ten visible GPU geometries, restored after toggling; Chromium/SwiftShader frame medians 16.2-16.7 ms"]
+    },
+    {
+      "id": "M16",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Agrupación de geometría",
+      "dependency": "M05",
+      "acceptance": "Mejora medida y selección/exportación/asignaciones conservan IDs",
+      "testedSha": "e66d85e9aba07d1d05a1d67bf6e80854ccec4103",
+      "evidence": ["M16 Chromium pilot 1729 to 1620 draw calls, 1298 to 1189 geometries, 199934 triangles unchanged, 63 batches/172 instances, IDs/selection/JSON/camera preserved; four PNG visually reviewed in docs/qa/artifacts/casa-serra/r7-m16/", "Affected broad regression 203/203 pass, zero fail/skip; exact SHA fcabf94 preview deployment 8keftnBieE1mxTLBjxESRxJq7wTu reviewed in authenticated Chrome; Actions 38861523704/38861523740 failed with zero steps"]
+    },
+    {
+      "id": "M17",
+      "type": "capacidad",
+      "status": "diferido con motivo",
+      "scope": "Detalles procedurales genéricos",
+      "dependency": "M05",
+      "acceptance": "Piloto identificable, coste medido y geometría/selección intactas",
+      "testedSha": "ab2f89a",
+      "evidence": ["Optional deterministic vanity and coffee table detail, disabled by default: 1729 to 1745 calls, 199934 to 200126 triangles, 1298 to 1314 geometries, 8 textures unchanged; 0/11 visible changed pixels in bathroom/living room", "Selection, document and reimport IDs retained; M17 and M16 regression 2/2; four visually reviewed PNG and metrics in docs/qa/artifacts/casa-serra/r8-m17/"]
+    },
+    {
+      "id": "M18",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Recorrido interior seguro",
+      "dependency": "M03",
+      "acceptance": "Trayectoria interpolada evita muros/puertas/muebles o usa alternativa aérea",
+      "testedSha": "cd82490ad5551ed4c2f3066eb158b5698828ca3a",
+      "evidence": ["Route planner 5/5, browser 8/8, affected broad regression 113/113; interior and declared aerial fallback, four viewport and resize visual review; ten artifacts in docs/qa/artifacts/casa-serra/r6-m18/"],
+      "humanReviewHistory": [{"date": "2026-10-16", "sha": "28e042847e2887b00a45da08dd14ad9bd5abd30d", "result": "no aceptado por Juanma", "followUp": "R10"}]
+    },
+    {
+      "id": "M19",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Créditos y procedencia",
+      "dependency": "transversal",
+      "acceptance": "Cada técnica/recurso incorporado tiene origen y permiso registrado",
+      "testedSha": "feae6fd",
+      "evidence": [
+        "R1-R2 presentation, guide, controls and original rendering code implemented on this branch; R2 P01-P16 verified locally",
+        "M08 four CC0 data maps from pinned Casa Serra JPEG revision with per-channel source SHA; own renderer implementation ad0a23f, no Casa Larga code copied",
+        "M09 Poly Haven Studio Small 09 HDR under CC0, official source and SHA recorded in assets/environments/README.md; own integration 7bd5415, no Casa Larga code copied",
+        "M10 own temporary room-polygon and inward-wall-face reveal implementation 349272a; no Casa Larga source code copied",
+        "M15 own polygon-clipped contact shade shader and presentation control ae70f26; no external asset or Casa Larga source code copied",
+        "M18 own grid route planner, temporary camera animation and minimap line cd82490; no external asset or Casa Larga source code copied",
+        "R3 M07/M11/M13, R7 M12/M16 and R8 M14/M17/M20 use own code and existing authorized project resources; M20 archives local user image bytes without publishing; no new external asset or Casa Larga source copied"
+      ]
+    },
+    {
+      "id": "M20",
+      "type": "capacidad",
+      "status": "verificado localmente",
+      "scope": "Presentación portable",
+      "dependency": "M11",
+      "acceptance": "Piloto con uso concreto, identidad/revisión y archivo reimportable o diferimiento motivado",
+      "testedSha": "d267e4c",
+      "evidence": ["Three 1280x800 static PNG views plus nested editable-project.zip, project ID, exact source and portable revision hashes, view and image SHA-256; clean Chromium reimport preserved 13 rooms, 46 objects, IDs and image bytes", "Affected suite 68/68 pass; three PNG visually reviewed and metrics in docs/qa/artifacts/casa-serra/r8-m20/"]
+    }
+  ],
+  "protocol": [
+    {"id":"P01","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
+    {"id":"P02","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
+    {"id":"P03","status":"verificado localmente","note":"targeted browser 8/8, full presentation browser 42/42, four viewport visual review"},
+    {"id":"P04","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P05","status":"verificado localmente","note":"own/imported project IDs and repeatable poses; browser 4/4, core 3/3, four viewport visual review"},
+    {"id":"P06","status":"verificado localmente","codeSha":"4da6273","note":"manual tour; no autoplay pause"},
+    {"id":"P07","status":"verificado localmente","note":"load and room-flight cancellation, browser 8/8, full presentation/core 57/57, four viewport visual review"},
+    {"id":"P08","status":"verificado localmente","note":"real pointer lock and touch joystick release/restore by new gesture; 4/4 browser plus 7/7 affected regressions; four viewport and resize visual review"},
+    {"id":"P09","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P10","status":"verificado localmente","codeSha":"e5dd7c5"},
+    {"id":"P11","status":"verificado localmente","codeSha":"cb13c3b"},
+    {"id":"P12","status":"verificado localmente","codeSha":"4da6273"},
+    {"id":"P13","status":"verificado localmente","codeSha":"83c2677"},
+    {"id":"P14","status":"verificado localmente","codeSha":"ea4431f"},
+    {"id":"P15","status":"verificado localmente","codeSha":"ea4431f"},
+    {"id":"P16","status":"verificado localmente","codeSha":"ea4431f"}
+  ],
+  "preview": {
+    "sha": "cb6e00324290c27c96fea1268daf8441bd0beaad",
+    "url": "https://floorplan-3d-cm5eqck9a-juanma-espinosas-projects.vercel.app/",
+    "deploymentId": "7115530249",
+    "status": "deployed_visual_review_authenticated",
+    "anonymousAccess": "protected_by_sso"
+  }
+}
