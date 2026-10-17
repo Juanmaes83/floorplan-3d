@@ -58,13 +58,13 @@ Las referencias de Rubik son al código de `master` `b294739`.
 
 ### 4.1 Corte: «Dos plantas y una escalera recta en un mismo proyecto»
 
-**D-01 confirmada por Juanma el 17-10-2026 para priorización:** público inicial de profesionales de reformas e interiorismo que preparan y presentan propuestas de vivienda, incluidos chalets y dúplex; problema prioritario de mantener plano editable, mobiliario y presentación de toda la vivienda en un proyecto. La decisión se ha documentado en la PR #49, pendiente de merge. Este público hace pertinente evaluar el corte multipiso; la recomendación sigue provisional hasta probar LoRA LAB y decidir el contrato. Si una evaluación posterior muestra que el trabajo inicial se concentra en pisos de una planta, se revisará la prioridad frente a su coste L.
+**D-01 confirmada por Juanma el 17-10-2026 para priorización:** público prioritario de inmobiliarias, promotoras y estudios de arquitectura, y segundo público de reformas e interiorismo; problema prioritario de preparar y presentar viviendas completas mediante plano editable, mobiliario y vistas coherentes. La decisión se ha documentado en la PR #49, pendiente de merge. Este público hace pertinente evaluar el corte multipiso; la recomendación sigue provisional hasta probar LoRA LAB y decidir el contrato. Si una evaluación posterior muestra que el trabajo inicial se concentra en pisos de una planta, se revisará la prioridad frente a su coste L.
 
 **Por qué este y no otro.** Es la única brecha estructural comprobada en la grabación (1F/2F/3F ejecutado). Además, es requisito de la segunda (cubierta y exterior sobre una casa de dos alturas) y de la visita entre plantas. Las demás brechas son menores o ya existen en `master`.
 
 **Problema que resuelve.** Una vivienda de dos plantas no cabe hoy en un proyecto Rubik. Los niveles importados de IFC se descartan. Superficies, 3D, presentación y exportación muestran sólo una planta.
 
-**Público objetivo:** vivienda unifamiliar de dos plantas. El particular que reforma y el agente o promotor que la presenta, en escritorio y en móvil.
+**Público objetivo de este corte:** equipos inmobiliarios y promotores que presentan viviendas de dos plantas, junto con estudios de arquitectura que comunican propuestas de ese tipo. Reformas e interiorismo son un segundo público. Este corte no acredita mediciones profesionales, documentación técnica ni un flujo BIM completo.
 
 ### 4.2 Alcance
 
@@ -165,7 +165,7 @@ Reglas semánticas nuevas propuestas:
 
 ### 4.6 Dependencias y decisiones de Juanma
 
-1. **D-01:** público inicial confirmado por Juanma el 17-10-2026 (profesionales de reformas e interiorismo, incluidos chalets y dúplex); la decisión documental está en #49. Medir ahora si este corte resuelve una tarea frecuente de ese público.
+1. **D-01:** público prioritario confirmado por Juanma el 17-10-2026 (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público); la decisión documental está en #49. Medir ahora si el corte resuelve tareas frecuentes de presentación de viviendas de varias plantas, sin prometer precisión técnica.
 2. **Contrato:** opción A, B o C, aprobada en el gate 0 antes de cualquier código.
 3. **Cadena MCP #40 → #41 → #43:** cerrarla o fijar su comportamiento ante 2.0 antes del gate 0, porque el MCP lee el contrato.
 4. **Prueba de LoRA LAB del anexo A:** sobre todo el JSON exportado de la villa, para ver cómo modela niveles y escaleras sin copiar código.
