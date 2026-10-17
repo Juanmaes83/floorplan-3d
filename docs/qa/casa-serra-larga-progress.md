@@ -225,6 +225,14 @@ Repetición anterior, ya superada: en `da3ed25`, 167/19/10.
 
 Dirigidas tras las correcciones: P16 4/4, M18 8/8, assets 25/25, lámina 7/7 y P11 en la suite. Unitarias de Node: 194 pass, 0 fail, 1 skip.
 
+Recorrido en vertical 390×844 (`9e3ba33`): 6/378 fotogramas con muro cercano (1,6 %; 7/373 en `bc1cee7`). Mirada p50 8°, máx. 20°; 0,88 m/s; sin errores; proyecto intacto. Giro máximo de la coreografía 42,7°/s (40,6°/s en `bc1cee7`; límite 60°/s).
+
+**Revisión visual del recorrido final:** al llegar, el Baño en suite sigue presentándose como una vista desde la puerta que muestra casi sólo el inodoro, no el baño completo; el pasillo sigue siendo blanco uniforme. Quedan como límites residuales para la revisión humana.
+
+**Evidencia:** `docs/qa/artifacts/casa-serra/r10/closing-9e3ba33/`: vídeos de reloj virtual a 30 fps en 1440×900 y 390×844 con análisis y hojas de contacto, paradas medidas, matrices de ambas plantas, captura de la excepción girada y resumen de la regresión. Los vídeos de `28e0428` y `bc1cee7` para comparar están en `r10/before-28e0428/` y `r10/after/`.
+
+**Preview del SHA probado `9e3ba33`:** https://floorplan-3d-b3wx3jmc1-juanma-espinosas-projects.vercel.app/ (`dpl_3jtnGtNjqCjTCRZykxkp6S9povyx`), READY. Se comprobó por la API de Vercel que sirve el código de esta ronda. Está protegida por SSO; no he podido abrirla en un navegador desde este contenedor.
+
 **CI:** GitHub Actions sigue terminando en segundos sin pasos (`runner_id: 0`). **CI no ejecutada.**
 
 ### R10 — límites del entorno de esta sesión
