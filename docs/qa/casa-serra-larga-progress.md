@@ -148,7 +148,7 @@ Planta girada 30° con dormitorio cóncavo (fixture sintética `tests/helpers/ir
 
 El criterio 4 de ≤ 10 % de fotogramas con muro cercano **no se cumple en escritorio**: 17,0 %. Corresponde al tramo entre el muro del baño y la cama (0,9 m libres) y al paso de puertas. Las hojas de contacto muestran cama, mesilla, marco de puerta e inodoro reconocibles, pero se deja como punto abierto para la revisión de Juanma. El resto del criterio 4 y el criterio 5 se cumplen en las dos grabaciones. El vuelo de 650 ms entre paradas es anterior a R10 y no se ha modificado.
 
-**Pruebas:** unitarias de Node 17 archivos, **194 pass, 0 fail, 1 skip** (omitida la integración opcional de Blender). Navegador dirigido R10 y M18 durante el ciclo: framing 6/6 (cuatro viewports con resize, repetibilidad con movimiento reducido y corte del editor, plano girado) y M18 8/8 tras las correcciones. **Regresión de navegador completa sobre `1dd86e5`** (28 archivos, en serie, Chromium 1194/SwiftShader de este contenedor): **196 casos, 159 pass, 30 fail** (parte 1: 80/72/6; parte 2: 116/87/24). Cada archivo con fallos se repitió **solo**, con los mismos archivos de prueba, en `1dd86e5` y en `28e0428` (aplicación intacta; sólo el helper de `three` local de las pruebas):
+**Pruebas:** unitarias de Node 17 archivos, **194 pass, 0 fail, 1 skip** (omitida la integración opcional de Blender). Navegador dirigido R10 y M18 durante el ciclo: framing 6/6 (cuatro viewports con resize, repetibilidad con movimiento reducido y corte del editor, plano girado) y M18 8/8 tras las correcciones. **Regresión de navegador completa sobre `1dd86e5`** (28 archivos, en serie, Chromium 1194/SwiftShader de este contenedor): **196 casos: 159 pass, 30 fail y 7 sin resultado** (cancelados por límite de tiempo de la prueba; parte 1: 80 = 72/6/2; parte 2: 116 = 87/24/5). Son 189 casos con resultado y 7 sin resultado; los 7 no se cuentan como aprobados. *Corregido el 17-10-2026 a partir de los logs originales: la versión anterior de este párrafo omitía los 7 sin resultado.* Cada archivo con fallos se repitió **solo**, con los mismos archivos de prueba, en `1dd86e5` y en `28e0428` (aplicación intacta; sólo el helper de `three` local de las pruebas):
 
 | Archivo | `28e0428` | `1dd86e5` | Causa observada |
 | --- | --- | --- | --- |
@@ -167,6 +167,65 @@ Todos los fallos salvo uno se reproducen igual en `28e0428`: son del entorno de 
 **Preview:** Vercel `dpl_FPoRt3ehyMB3Veb5Q4xYgSjZyhcT`, estado READY para `1b386e3`. Se comprobó por la API de Vercel que sirve los ficheros de ese commit. Desde este contenedor no se pudo abrir en Chromium: el proxy rechaza `*.vercel.app`. La revisión visual en la preview queda para Juanma en Chrome autenticado.
 
 **CI:** Actions de `1b386e3`, runs 38944841362 y 38944841375, terminaron `failure` con `runner_id: 0` y sin pasos. **CI no ejecutada.** Los resultados indicados son locales.
+
+### R10 — ronda de cierre, 17-10-2026 (código `9e3ba33`)
+
+Revisión de Juanma y Codex sobre la preview de `bc1cee7`: el baño se distingue mejor, pero el encuadre es muy cenital, hay tramos del recorrido con el muro llenando la imagen y la llegada desde la puerta no presenta bien el baño. Esta ronda cierra los criterios pendientes sin cambiar umbrales, denominador ni métrica.
+
+**Cambios (`155a0d2`…`9e3ba33`):**
+
+- `roomFrame`: elevaciones 40–74° con preferencia de 54° (antes 50–74° y 60°). Primero, una pasada de 10×6 rayos sobre todos los candidatos; después, 20×12 rayos sobre los 24 mejores. Acepta con margen sobre el criterio (presencia ≥ 42 %, suelo ≥ 78 %) y confirma la vista elegida con 40×24 rayos, con el suelo contado dentro de la zona libre y sin ocultar. Sólo si ninguna vista de la estancia completa cumple, acerca la cámara entre un 10 y un 40 % manteniendo esos mismos requisitos.
+- Recorrido: durante la marcha la mirada se desvía hasta ±25° respecto a la dirección de avance hacia donde el campo horizontal visible tiene más profundidad libre (distancia a muro limitada a 2,5 m). Mientras se camina, la tarjeta se reduce a título, salida y estado de la ruta.
+- Errores reales corregidos:
+  - `SafeDOM.markup` confirma la edición del campo enfocado antes de reemplazar y descarta la representación obsoleta: es el error `replaceChildren` en `blur` que hacía fallar 4 casos de assets.
+  - El bucle 3D no dibuja tras `loseContext()` antes de su evento: three.js lanzaba `trim` sobre `null` (P11).
+  - En tarjetas bajas, la cabecera con el botón de cierre queda fija y sólo la tarjeta se desplaza hasta la parada activa (P16).
+  - La prueba de la lámina usa el `three` local opcional como el resto de suites (M07, bloqueada por el proxy).
+- Regresiones propias detectadas y corregidas dentro de la ronda:
+  - Una variable que ocultaba el indicador de presentación activa en `draw()`.
+  - Un desplazamiento de la tarjeta en cada redibujado que movía «Cancelar lote» bajo el puntero.
+
+**Encuadres** (métrica independiente 2,5D en la zona libre de la tarjeta, `9e3ba33`):
+
+| Parada | Antes `bc1cee7` | Después `9e3ba33` | Vecina mayor | Suelo visible |
+| --- | --- | --- | --- | --- |
+| Pasillo 390×844 | 33,2 % | **66,4 %** | Comedor 16,5 % | 80,9 % |
+| Balcón de estar 390×844 | 31,2 % | **46,8 %** | Salón 6,9 % | 79,4 % |
+| Baño de invitados 844×390 | 36,8 % | **58,0 %** | Balcón-lavadero 2,5 % | 100 % |
+| Baño en suite 1440×900 / 390×844 / 844×390 | 47,2 / 62,9 / 44,7 % | 57,8 / 62,9 / 73,5 % | ≤ 5,9 % | 100 / 82,6 / 100 % |
+
+Matriz completa del ejemplo: **33/33** en presencia, vecina, suelo y protagonista. Planta sintética girada: **22/22** en presencia, vecina y protagonista; suelo **21/22**. No cumple el Balcón-lavadero 390×844, con 73,4 % (71,4 % en `bc1cee7`): **excepción pendiente de decisión**, no cumplida. Varias paradas quedan a 68–74° de elevación (baños): cumplen el criterio, pero siguen siendo vistas cenitales, como señaló la revisión.
+
+**Muro cercano en la marcha** (1440×900, reloj virtual a 30 fps, mismas dos estancias que la medida original):
+
+| Versión | Fotogramas de marcha con > 30 % de muro a < 1 m | Mirada p50 / máx. | Velocidad máx. |
+| --- | --- | --- | --- |
+| `bc1cee7` | 65/383 (17,0 %) | 8° / 20° | 0,88 m/s |
+| Ciclo 1 (sin giro hacia la zona libre) | 103/387 (26,6 %), descartado | 8° / 20° | 0,88 m/s |
+| **Ciclo 2, `9e3ba33`** | **13/396 (3,3 %)** | 8° / 20° | 0,88 m/s |
+
+**Regresión de navegador final del SHA `9e3ba33`:**
+
+- Comando: `node --test --test-concurrency=1 tests/<archivo>.browser.test.cjs`, archivo a archivo y en serie, en un worktree limpio fijado en el SHA y sin ninguna otra carga.
+- Entorno: Chromium 1194 (`CHROME=/opt/pw-browsers/chromium`), SwiftShader, 4 vCPU, sin GPU, unos 970 ms por fotograma a 1440×900, y `THREE_LOCAL_DIR` = copia del paquete npm oficial `three@0.160.0`, porque el proxy deniega `cdn.jsdelivr.net`.
+- Resultado: **24 archivos, 196 casos: 170 pass, 17 fail y 9 sin resultado** (tiempo de prueba agotado), es decir, 187 con resultado.
+- No es una regresión limpia.
+
+| Grupo | Casos | En `28e0428` (solo, mismas pruebas) | Atribución |
+| --- | --- | --- | --- |
+| P07 ×4, P13 ×4, M10 ×6 | 14 FAIL | fallan igual | La prueba comprueba un estado *durante* un vuelo o revelado de 650 ms; a ~1 fotograma por segundo termina en el primer fotograma. |
+| M11 ZIP 1440×900, M20 ZIP | 2 FAIL | fallan igual | La descarga no llega en 30 s con 12 PNG renderizados por SwiftShader. |
+| M08, M09, M13, M16, M17, P08, P15 | 7 sin resultado | fallan igual | Límite de tiempo de la prueba. |
+| **M11 cancelación** | 1 FAIL | pasa (1 de 2 repeticiones solas) | **No atribuible al entorno.** 0 de 2 en el código actual. |
+| **P05 1440×900**, **cámara 3D tras Escape/Atrás** | 2 sin resultado | pasan | **No atribuibles al entorno.** P05 agota su tiempo en `a3939a5` y `9e3ba33`. |
+
+Los tres últimos recorren muchas paradas. La causa probable es el mayor coste de `roomFrame` en esta ronda (en Node, unas 1,7 veces el de `bc1cee7` para las 13 estancias). Quedan como **bloqueo de aceptación propio de esta ronda**, no como fallo del entorno.
+
+Repetición anterior, ya superada: en `da3ed25`, 167/19/10.
+
+Dirigidas tras las correcciones: P16 4/4, M18 8/8, assets 25/25, lámina 7/7 y P11 en la suite. Unitarias de Node: 194 pass, 0 fail, 1 skip.
+
+**CI:** GitHub Actions sigue terminando en segundos sin pasos (`runner_id: 0`). **CI no ejecutada.**
 
 ### R10 — límites del entorno de esta sesión
 
