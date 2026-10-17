@@ -9,6 +9,7 @@
 | Fecha y vía | Resultado |
 | --- | --- |
 | 17-10-2026, `curl` a `https://fun.loralab.top/tool/c9ae6fe7-…` y a `loralab.top` desde el contenedor de esta sesión | **Denegado** por la política de red del entorno (`CONNECT tunnel failed, response 403`). En la revisión anterior el nombre ni siquiera resolvía (`ENOTFOUND`). |
+| 17-10-2026 21:37 UTC, segundo y último intento, sin cambio de configuración | Igual: `CONNECT tunnel failed, response 403`. No se repetirá hasta que el entorno permita `fun.loralab.top` en sus dominios autorizados. |
 
 **No he navegado LoRA LAB.** Toda la columna LoRA LAB procede de la [grabación de 3:24 de Juanma](loralab-video-gap-audit-2026-10-17.md) (SHA-256 `b9ab170d…`) y de sus seis capturas, tal como las registra esa auditoría; no he visto el vídeo. Para cerrar las pruebas que pide este gate, el [anexo A](#anexo-a-prueba-de-juanma-en-chrome-para-windows) da un procedimiento de Chrome en Windows. Hasta recibir esa evidencia, la recomendación de la §4 es **provisional**.
 
@@ -20,7 +21,7 @@ Leyenda de la evidencia LoRA LAB:
 
 ## 2. Flujos pedidos: LoRA LAB frente a Rubik en `master`
 
-Las referencias de Rubik son al código de `master` `b294739`.
+Las referencias de Rubik son al código de `master` `b294739`; `5c822cf` (#49) sólo cambia documentación, así que siguen siendo válidas.
 
 | Flujo | LoRA LAB | Rubik en `master` | Brecha real |
 | --- | --- | --- | --- |
@@ -58,7 +59,7 @@ Las referencias de Rubik son al código de `master` `b294739`.
 
 ### 4.1 Corte: «Dos plantas y una escalera recta en un mismo proyecto»
 
-**D-01 confirmada por Juanma el 17-10-2026 para priorización:** público prioritario de inmobiliarias, promotoras y estudios de arquitectura, y segundo público de reformas e interiorismo; problema prioritario de preparar y presentar viviendas completas mediante plano editable, mobiliario y vistas coherentes. La decisión se ha documentado en la PR #49, pendiente de merge. Este público hace pertinente evaluar el corte multipiso; la recomendación sigue provisional hasta probar LoRA LAB y decidir el contrato. Si una evaluación posterior muestra que el trabajo inicial se concentra en pisos de una planta, se revisará la prioridad frente a su coste L.
+**D-01 confirmada por Juanma el 17-10-2026 para priorización:** público prioritario de inmobiliarias, promotoras y estudios de arquitectura, y segundo público de reformas e interiorismo; problema prioritario de preparar y presentar viviendas completas mediante plano editable, mobiliario y vistas coherentes. La decisión está integrada en `master` por la PR #49 (merge `5c822cf`); D-16, varias plantas, sigue «en estudio; implementación no aprobada». Este público hace pertinente evaluar el corte multipiso; la recomendación sigue provisional hasta probar LoRA LAB y decidir el contrato. Si una evaluación posterior muestra que el trabajo inicial se concentra en pisos de una planta, se revisará la prioridad frente a su coste L.
 
 **Por qué este y no otro.** Es la única brecha estructural comprobada en la grabación (1F/2F/3F ejecutado). Además, es requisito de la segunda (cubierta y exterior sobre una casa de dos alturas) y de la visita entre plantas. Las demás brechas son menores o ya existen en `master`.
 
@@ -165,7 +166,7 @@ Reglas semánticas nuevas propuestas:
 
 ### 4.6 Dependencias y decisiones de Juanma
 
-1. **D-01:** público prioritario confirmado por Juanma el 17-10-2026 (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público); la decisión documental está en #49. Medir ahora si el corte resuelve tareas frecuentes de presentación de viviendas de varias plantas, sin prometer precisión técnica.
+1. **D-01:** público prioritario confirmado por Juanma el 17-10-2026 (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público); integrada por #49 (`5c822cf`). Medir ahora si el corte resuelve tareas frecuentes de presentación de viviendas de varias plantas, sin prometer precisión técnica.
 2. **Contrato:** opción A, B o C, aprobada en el gate 0 antes de cualquier código.
 3. **Cadena MCP #40 → #41 → #43:** cerrarla o fijar su comportamiento ante 2.0 antes del gate 0, porque el MCP lee el contrato.
 4. **Prueba de LoRA LAB del anexo A:** sobre todo el JSON exportado de la villa, para ver cómo modela niveles y escaleras sin copiar código.
