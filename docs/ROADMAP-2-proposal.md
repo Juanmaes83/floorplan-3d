@@ -93,6 +93,10 @@ Roadmap 2 ni mide rendimiento móvil físico. Los albedos candidatos no son un
 catálogo PBR comercial terminado. Cinco sesiones y veinte planos reales siguen
 pendientes para la validación empírica final de F2 y no bloquearon esta entrega.
 
+### 3.3 Referencia externa CAD→Blender (17-10-2026)
+
+[Summerz3002 mostró y describió una ampliación de floorplan-3d](technical/summerz-cad-blender-reference-2026-10-17.md) con importación CAD y renderizado Blender. Los enlaces publicados llevan al repositorio/demo originales de `wy51ai`; no se dispone del código de esa ampliación para verificarlo. La demostración hace relevante evaluar juntos los órdenes 5 y 6 como flujo profesional, **sin cambiar su estado, prioridad ni convertirlos en una fase aprobada**. El piloto Blender #42 y el paquete integrado #24 son nuestras bases técnicas; se probarían primero DXF→geometría candidata validada y Rubik→Blender con mediciones de fidelidad, calidad y coste. Ninguna captura externa acredita escala, recorrido o rendimiento en móvil.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
