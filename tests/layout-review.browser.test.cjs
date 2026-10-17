@@ -8,6 +8,7 @@ before(async()=>{const root=path.resolve(__dirname,'..');server=createServer(asy
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 // Project, persisted storage and edit history: none of them may change because of the review, its threshold or its highlight.
 const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),saved:JSON.stringify(Object.fromEntries(Object.keys(localStorage).sort().map(k=>[k,localStorage.getItem(k)]))),undo:undoStack.length,redo:redoStack.length}));
+function withoutExpectedExportEvidence(saved){const values=JSON.parse(saved),key='rubik-sota-guide-v1';if(values[key]){const guide=JSON.parse(values[key]);for(const entry of Object.values(guide.entries||{})){delete entry.exportName;if(entry.evidence)delete entry.evidence.export;}values[key]=guide;}return values;}
 // Screen-space check: the drawn element must cover exactly the evidence points mapped through the plan's own transform.
 const aligned=(page,selector,which)=>page.evaluate(([selector,which])=>{const svg=document.querySelector('#gReview').ownerSVGElement,m=svg.getScreenCTM(),key=document.querySelector('#gReview').dataset.finding;
  const f=FloorPlanLayoutReview.review(FloorPlanApp.project,{clearanceMm:Number(document.querySelector('#layoutReviewClearance').value)||null}).findings.find(f=>f.code+':'+f.objects.join('+')===key),e=f.evidence;
@@ -61,7 +62,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`lay
  const download=page.waitForEvent('download');await page.evaluate(()=>{document.querySelector('details.menu').open=true;document.querySelector('#exportPng').click();});await download;
  const exported=await page.evaluate(()=>window.__exported.join('\n'));assert.match(exported,/id="gReview"/);assert.doesNotMatch(exported,/review-(door|gap|overlap|footprint)/);
  assert.ok(await page.locator('#gReview > *').count()>0,'export leaves the on-screen highlight untouched');
- assert.deepEqual(await state(page),initial);
+ const afterExport=await state(page);assert.equal(afterExport.project,initial.project);assert.equal(afterExport.undo,initial.undo);assert.equal(afterExport.redo,initial.redo);
+ assert.deepEqual(withoutExpectedExportEvidence(afterExport.saved),withoutExpectedExportEvidence(initial.saved),'only the guide export receipt may change');
  // Changing project clears the highlight immediately; then an overlap shows the exact intersection.
  await page.evaluate(p=>FloorPlanApp.importProject(p),withOverlap());await page.waitForFunction(()=>FloorPlanApp.project.id==='prj_review-overlap');
  assert.equal(await page.locator('#gReview > *').count(),0,'project change clears the highlight');

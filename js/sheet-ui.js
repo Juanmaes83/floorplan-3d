@@ -1,0 +1,83 @@
+/* Architectural sheet derived from the active project and the existing 2D drawing. */
+(function(){
+ 'use strict';
+ const NS='http://www.w3.org/2000/svg',app=window.FloorPlanApp;
+ const tr=(es,en,zh)=>({es,en,zh})[LANG]||es;
+ const localized=value=>typeof nm==='function'?nm(value):value;
+ const svgNode=(tag,attributes={},parent)=>{const node=document.createElementNS(NS,tag);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,String(value));parent?.append(node);return node;};
+ const text=(parent,value,x,y,size=20,weight=400,fill='#302c28')=>{const node=svgNode('text',{x,y,'font-size':size,'font-weight':weight,fill,'font-family':'Arial, sans-serif'},parent);node.textContent=String(value);return node;};
+ const area=poly=>Math.abs(poly.reduce((sum,p,i)=>{const q=poly[(i+1)%poly.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2/1e6;
+ const inside=(poly,x,y)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
+ function labelPoint(room){
+  if(room.at&&inside(room.poly,...room.at))return room.at;
+  const xs=room.poly.map(p=>p[0]),ys=room.poly.map(p=>p[1]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+  let best=room.poly[0],score=-1;
+  for(let row=0;row<=20;row++)for(let col=0;col<=20;col++){
+   const x=minX+(maxX-minX)*(col+.5)/21,y=minY+(maxY-minY)*(row+.5)/21;if(!inside(room.poly,x,y))continue;
+   let clearance=Infinity;
+   for(let i=0;i<room.poly.length;i++){const a=room.poly[i],b=room.poly[(i+1)%room.poly.length],vx=b[0]-a[0],vy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*vx+(y-a[1])*vy)/(vx*vx+vy*vy||1)));clearance=Math.min(clearance,Math.hypot(x-a[0]-t*vx,y-a[1]-t*vy));}
+   if(clearance>score){score=clearance;best=[x,y];}
+  }
+  return best;
+ }
+ function revisionCode(value){let hash=2166136261;for(let i=0;i<value.length;i++)hash=Math.imul(hash^value.charCodeAt(i),16777619);return (hash>>>0).toString(16).padStart(8,'0');}
+ function build(){
+  const project=app.project,geometry=app.geometry,source=document.querySelector('#plan');
+  if(!project||!geometry||app.source2D!==project||!source)throw Error(tr('La planta 2D aún no está lista. Vuelve a abrir el editor.','The 2D plan is not ready yet. Return to the editor.','二维平面图尚未就绪，请返回编辑器。'));
+  const revision=FloorPlanGuide.revision(project),sheet=svgNode('svg',{xmlns:NS,viewBox:'0 0 1600 1100',width:1600,height:1100,'data-project-id':project.id,'data-revision':revisionCode(revision)});
+  svgNode('rect',{width:1600,height:1100,fill:'#fcfaf6'},sheet);
+  svgNode('rect',{x:22,y:22,width:1556,height:1056,fill:'none',stroke:'#81796e','stroke-width':2},sheet);
+  const title=localized(project.name||tr('Proyecto sin nombre','Untitled project','未命名项目'));
+  text(sheet,tr('LÁMINA DE DISTRIBUCIÓN','FLOOR PLAN SHEET','平面设计图'),50,66,20,700,'#315e62');
+  text(sheet,title.length>62?title.slice(0,59)+'…':title,50,112,Math.max(23,Math.min(38,1250/(title.length*.65||1))),700);
+  svgNode('line',{x1:50,y1:132,x2:1550,y2:132,stroke:'#b9b1a5'},sheet);
+  svgNode('rect',{x:45,y:154,width:1095,height:792,fill:'#f7f4ee',stroke:'#c8c0b5'},sheet);
+  const drawing=source.cloneNode(true),bounds=geometry.bounds;
+  for(const selector of ['#gSource','#gTrace','#gAssist','#gReview','#gSel','#gGrid','#gMeasure'])drawing.querySelector(selector)?.remove();
+  drawing.querySelectorAll('image').forEach(node=>node.remove());
+  drawing.querySelectorAll('foreignObject').forEach(node=>node.remove());
+  drawing.querySelectorAll('#gFurn text').forEach(node=>node.remove());
+  drawing.querySelector('#gLabels')?.replaceChildren();
+  for(const id of ['gFurn','gDims','gLabels'])drawing.querySelector('#'+id)?.removeAttribute('display');
+  drawing.removeAttribute('id');drawing.setAttribute('x','55');drawing.setAttribute('y','164');drawing.setAttribute('width','1075');drawing.setAttribute('height','772');
+  drawing.setAttribute('viewBox',`${bounds.x} ${bounds.y} ${bounds.w} ${bounds.h}`);drawing.setAttribute('preserveAspectRatio','xMidYMid meet');
+  drawing.setAttribute('style','overflow:hidden');sheet.append(drawing);
+  const labels=drawing.querySelector('#gLabels');
+  for(const room of geometry.rooms){
+   if(room.poly.length<3||area(room.poly)<=0)continue;
+   const [x,y]=labelPoint(room),name=localized(room.name),xs=room.poly.map(p=>p[0]),width=Math.max(...xs)-Math.min(...xs),maxChars=Math.max(16,Math.min(26,Math.floor(width/125))),visible=name.length>maxChars?name.slice(0,maxChars-1)+'…':name;
+   const size=Math.max(90,Math.min(220,width/(Math.max(5,visible.length)*.8)));
+   const label=text(labels,visible,x,y,size,700);label.setAttribute('text-anchor','middle');label.setAttribute('paint-order','stroke');label.setAttribute('stroke','#fcfaf6');label.setAttribute('stroke-width','36');svgNode('title',{},label).textContent=name;
+   const value=text(labels,`${area(room.poly).toFixed(2)} m²`,x,y+size*.95,Math.max(95,size*.72),400,'#625b53');value.setAttribute('text-anchor','middle');value.setAttribute('paint-order','stroke');value.setAttribute('stroke','#fcfaf6');value.setAttribute('stroke-width','28');
+  }
+  text(sheet,tr('ACABADOS DEL SUELO','FLOOR FINISHES','地面材料'),1170,188,20,700,'#315e62');
+  const materialIds=[...new Set(project.rooms.map(room=>room.floorMaterialId))].filter(id=>project.materials.some(item=>item.id===id));
+  if(!materialIds.length)text(sheet,tr('Sin acabados asignados','No finishes assigned','未指定材料'),1172,227,17,400,'#625b53');
+  materialIds.slice(0,12).forEach((id,i)=>{const material=project.materials.find(item=>item.id===id),y=226+i*38;if(!material)return;svgNode('rect',{x:1172,y:y-18,width:22,height:22,rx:3,fill:material.appearance.color||'#ddd',stroke:'#8b8379'},sheet);const label=localized(material.name);text(sheet,label.length>27?label.slice(0,26)+'…':label,1207,y,18);});
+  if(materialIds.length>12)text(sheet,tr(`+${materialIds.length-12} acabados más`,`+${materialIds.length-12} more finishes`,`另有 ${materialIds.length-12} 种材料`),1172,226+12*38,16);
+  svgNode('line',{x1:1168,y1:750,x2:1544,y2:750,stroke:'#b9b1a5'},sheet);
+  const used=geometry.rooms.filter(room=>room.counted!==false).reduce((sum,room)=>sum+area(room.poly),0);
+  text(sheet,tr('SUPERFICIE ÚTIL APROX.','APPROX. NET AREA','约使用面积'),1170,792,16,700,'#625b53');text(sheet,`${used.toFixed(2)} m²`,1170,834,32,700);
+  const scale=project.scale?.confidence==='real'?tr('Escala confirmada por la persona','Scale confirmed by user','比例已由用户确认'):tr('Medidas orientativas','Indicative dimensions','尺寸仅供参考');
+  text(sheet,scale,1170,879,16,500,'#625b53');
+  svgNode('line',{x1:50,y1:971,x2:1550,y2:971,stroke:'#b9b1a5'},sheet);
+  text(sheet,tr('Proyecto','Project','项目')+`: ${project.id.length>48?project.id.slice(0,45)+'…':project.id}`,50,1007,16);
+  text(sheet,tr('Revisión','Revision','修订')+`: ${revisionCode(revision)}`,50,1035,16);
+  text(sheet,tr('Unidades del modelo: mm · Sin escala de impresión declarada','Model units: mm · No print scale declared','模型单位：毫米 · 未声明打印比例'),780,1007,15);
+  text(sheet,tr('Cotas y superficies orientativas; verifica medidas in situ.','Dimensions and areas are indicative; verify on site.','尺寸和面积仅供参考，请实地核验。'),780,1035,15,'400','#625b53');
+  return {sheet,projectId:project.id,revision};
+ }
+ const entry=document.createElement('button');entry.type='button';entry.id='openSheet';entry.className='btn';document.querySelector('#exportPng').after(entry);
+ const dialog=document.createElement('dialog');dialog.id='sheetDialog';dialog.className='sheet-dialog';dialog.setAttribute('aria-labelledby','sheetTitle');
+ const top=document.createElement('div');top.className='sheet-toolbar';dialog.append(top);
+ const heading=document.createElement('h2');heading.id='sheetTitle';top.append(heading);
+ const save=document.createElement('button'),zoom=document.createElement('button'),close=document.createElement('button');for(const button of [save,zoom,close]){button.type='button';button.className='btn';top.append(button);}save.id='sheetDownload';zoom.id='sheetZoom';close.id='sheetClose';
+ const scroll=document.createElement('div');scroll.className='sheet-scroll';const preview=document.createElement('img');preview.id='sheetPreview';preview.alt='';scroll.append(preview);dialog.append(scroll);document.body.append(dialog);
+ let current=null,previewUrl=null,focus=null;
+ function relang(){entry.textContent=tr('Abrir lámina','Open sheet','打开图纸');heading.textContent=tr('Lámina del proyecto','Project sheet','项目图纸');save.textContent=tr('Descargar SVG','Download SVG','下载 SVG');zoom.textContent=scroll.classList.contains('zoomed')?tr('Ajustar','Fit','适合窗口'):tr('Ampliar','Zoom','放大');close.textContent=tr('Cerrar','Close','关闭');preview.alt=tr('Lámina arquitectónica del proyecto activo','Architectural sheet of the active project','当前项目平面图');}
+ function clear(){if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=null;preview.removeAttribute('src');scroll.classList.remove('zoomed');current=null;focus?.focus?.({preventScroll:true});}
+ function open(){try{focus=document.activeElement;current=build();const bytes=new XMLSerializer().serializeToString(current.sheet);previewUrl=URL.createObjectURL(new Blob([bytes],{type:'image/svg+xml;charset=utf-8'}));preview.src=previewUrl;dialog.showModal();}catch(error){current=null;toast(error.message||String(error),6000);}}
+ function download(){if(!current||current.projectId!==app.project.id||current.revision!==FloorPlanGuide.revision(app.project)){dialog.close();toast(tr('El proyecto cambió. Abre de nuevo la lámina.','The project changed. Open the sheet again.','项目已更改，请重新打开图纸。'),6000);return;}const name='rubik-sota-sheet-'+current.projectId.replace(/[^a-zA-Z0-9_-]/g,'_')+'.svg',link=document.createElement('a');link.href=previewUrl;link.download=name;link.click();}
+ entry.onclick=()=>{entry.closest('details')?.removeAttribute('open');open();};save.onclick=download;zoom.onclick=()=>{scroll.classList.toggle('zoomed');relang();};close.onclick=()=>dialog.close();dialog.addEventListener('close',clear);document.querySelector('#langBtn')?.addEventListener('click',()=>queueMicrotask(relang));relang();
+ window.FloorPlanSheet={open,get active(){return dialog.open;}};
+})();

@@ -1,0 +1,46 @@
+{
+  "schema": "CasaSerraM08PilotV1",
+  "status": "local_browser_accepted_pending_exact_sha_preview",
+  "codeSha": "ad0a23fefa6978ed48579f8ace40ed4d9c9d1a2b",
+  "candidates": ["surface-oak-wood-planks", "surface-marble-01"],
+  "sourceAudit": "../r4-m08-source-alignment.json",
+  "sourceCommit": "b47b775fae642439e8d42d6201ab5d1677d67f99",
+  "generation": "scripts/build-material-channels.py verifies all six pinned JPEG bytes and SHA-256 before deriving 256x256 lossless WebP. ARM green becomes grayscale roughness. GL normal RGB is resized without channel inversion. Diffuse remains the existing approved albedo. AO and metalness are not wired because AO UV2 and physical metalness were not justified.",
+  "assetBudgets": {
+    "perMapMaxPixels": [512, 512],
+    "perMapMaxBytes": 524288,
+    "derivedMapBytes": {
+      "oakNormal": 5362,
+      "oakRoughness": 38272,
+      "marbleNormal": 29558,
+      "marbleRoughness": 20118
+    },
+    "twoAssignedBaseTransferBytes": 11848,
+    "twoAssignedEnhancedTransferBytes": 105158,
+    "twoAssignedTransferIncreaseBytes": 93310,
+    "twoAssignedBaseEstimatedGpuBytes": 699052,
+    "twoAssignedEnhancedEstimatedGpuBytes": 2097156,
+    "twoAssignedEstimatedGpuIncreaseBytes": 1398104,
+    "desktopMeasuredRendererTexturesBase": 10,
+    "desktopMeasuredRendererTexturesEnhanced": 14,
+    "desktopMeasuredRendererGeometriesBoth": 1298,
+    "desktopLoadMsBase": [21, 20.4],
+    "desktopLoadMsEnhanced": [84.3, 83.8],
+    "measurementEnvironment": "Chromium 1234 / SwiftShader software on Windows; not a physical phone benchmark"
+  },
+  "visualReview": {
+    "viewports": ["1440x900", "390x844", "844x390", "360x800"],
+    "files": "overview and room base/enhanced PNGs in this directory; 360x800-to-844x390-room-base.png opened after resize",
+    "finding": "All 17 comparison/resize PNGs opened. Stage, minimap, room/card controls and floor joins remain visible; no inverted normals or displaced UV seams. The enhancement is subtle at the default lighting and overview scale. In a 300x320 desktop room crop, 5,148 of 96,000 pixels differed by more than 4 RGB levels; mean absolute RGB difference 0.13/0.29/0.47. No claim of a dramatic aesthetic gain.",
+    "layoutFix": "The presentation grid originally allocated zero height to the stage after hiding its header; setting main and asides explicitly in row 2 restored a real 3D viewport. The earlier blank capture was rejected and replaced."
+  },
+  "verification": {
+    "unitAndTargetedBrowser": "13/13 local PASS, including two material pairs at four viewports, PNG download bytes, 2D return, JSON export/reimport, resize, HTTP/hash/decode fallback, synthetic context loss and intact project/IDs/camera",
+    "minimapRegression": "5/5 local PASS at four viewports and resize",
+    "surfaceLibraryRegression": "7/7 local PASS, including every asset and safe fallback",
+    "otherAffectedRegressions": "69/69 local PASS: presentation navigation, batch ZIP, P13 capture, context loss, resize, P05 imported/own projects, state restoration",
+    "console": "No unexpected console/pageerrors in normal flows; injected HTTP 503 produced exactly the expected resource error",
+    "preview": "pending exact published SHA",
+    "ci": "pending new SHA; prior Actions blocked before steps by billing"
+  }
+}
