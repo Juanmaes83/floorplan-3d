@@ -64,7 +64,7 @@ Ampliar el diagnóstico solo después de resolver las limitaciones observadas.
 - Base comprobada: PR #40 `bf5fa9f4ea9f85d33e371c2220e6381dc61d2129`. `diagnose_project` permite informar un JSON inválido manteniendo el lector seguro y el rechazo de todas las consultas ordinarias. El validador canónico solo informa el primer error: la respuesta lo clasifica como formato, contrato, referencia o geometría, y marca expresamente las comprobaciones no realizadas. Sobre JSON válido agrupa escala no confirmada, procedencia, puertas sin `swing` y relaciones ambiguas/sin atribución. Máximo 100 hallazgos visibles, con total/truncamiento. No se declara una lista exhaustiva de errores.
 - `measure_elements` compara dos IDs en `reference_points` (centros de muebles o puntos medios de ejes de muros/huecos) o `regions` (distancia mínima entre huellas, bandas, subtramos y polígonos 2D). Devuelve mm, puntos justificativos, hash, confianza de escala y estado de relación. Las estancias carecen de centro de referencia único; un proyecto inválido o geometría no medible se rechaza. La distancia 2D entre regiones no es holgura libre ni dictamen normativo. [Reglas, ejemplos y tercer corte](local-mcp-diagnostics-measures.md).
 - Fixture sintético: separación centro/huella 4000/3450 mm, objeto en concavidad exterior a 750 mm de la estancia, mueble girado frente a muro a 561,091 mm, contacto y solape a 0 mm, muro/hueco, escala estimada, ID ausente, referencia rota, geometría inválida, protocolo stdio y bytes/hash inmutados. Los comandos, versiones, SHA final y resultados locales/CI se consignan en la PR apilada tras la publicación.
-- **Pendiente en Etapa 1, tercer corte:** holguras con umbral explícito, muros activos y huecos verdaderos, extremos, empotramientos y conectividad entre estancias. Se deberá distinguir un segmento mínimo que atraviesa un muro de un paso utilizable por otro recorrido y mantener estados de evidencia parcial. No se modifica aquí `review_layout`.
+- **Pendiente tras #41:** holguras con umbral explícito, muros activos y huecos verdaderos, extremos, empotramientos y conectividad entre estancias. El corte parcial apilado descrito más abajo aborda el segmento mínimo y las conexiones documentadas; la ruta utilizable sigue pendiente. No se modifica `review_layout`.
 
 ### Etapa 2 — Propuestas de distribución explicables
 
@@ -111,6 +111,8 @@ Según la auditoría original del 07-10-2026, la guía de Pascal entonces consul
 | Niveles, escaleras, cubiertas, sistemas BIM y GLB | Fuera del alcance actual: Rubik aún no tiene el modelo de producto/contrato que permita implementarlos responsablemente. |
 
 ## Orden de ejecución y puertas de revisión
+
+**Seguimiento de PR apiladas, aún sin merge:** #40 deriva relaciones espaciales; #41 añade diagnóstico y medidas. El tercer corte parcial en `feat/rubik-mcp-clearance-connectivity` inspecciona un segmento mínimo y una cadena de puertas documentada, sin afirmar transitabilidad. Su contrato y límites están en [obstáculos y conectividad](local-mcp-clearance-connectivity.md). La Etapa 1 sigue pendiente de corredores con anchura, desvíos, extremos y empotramientos comprobados; el estado integrado de este roadmap no cambia hasta revisar y fusionar las PR en orden.
 
 1. Completar Etapa 1 y comprobarla con el JSON de prueba y fixtures sintéticos controlados.
 2. Prototipar propuestas de Etapa 2, sin escritura.

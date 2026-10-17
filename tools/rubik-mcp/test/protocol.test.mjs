@@ -31,7 +31,7 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
 
   const listed = await client.listTools();
   assert.deepEqual(listed.tools.map(tool => tool.name).sort(), [
-    'diagnose_project', 'get_project_element', 'get_project_summary', 'list_project_elements', 'measure_elements', 'review_layout',
+    'diagnose_project', 'get_project_element', 'get_project_summary', 'inspect_pair_clearance', 'list_project_elements', 'measure_elements', 'review_layout',
   ]);
   for (const tool of listed.tools) {
     assert.equal(tool.annotations?.readOnlyHint, true, tool.name);
@@ -52,6 +52,12 @@ test('MCP stdio exposes read-only project tools and never changes the export', a
   assert.equal(measured.isError, undefined);
   assert.equal(measured.structuredContent.units, 'mm');
   assert.equal(measured.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
+  const clearance = await client.callTool({ name: 'inspect_pair_clearance', arguments: {
+    idA: project.objects[0].id, idB: project.objects[1].id, clearanceMm: 600,
+  } });
+  assert.equal(clearance.isError, undefined);
+  assert.equal(clearance.structuredContent.units, 'mm');
+  assert.equal(clearance.structuredContent.snapshot.sha256, summary.structuredContent.snapshot.sha256);
 
   const review = await client.callTool({ name: 'review_layout', arguments: {} });
   assert.equal(review.isError, undefined);
@@ -94,6 +100,10 @@ test('MCP stdio starts on invalid contract data, diagnoses it and returns tool e
     idA: project.objects[0].id, idB: project.objects[1].id, mode: 'regions',
   } });
   assert.equal(measure.isError, true);
+  const clearance = await client.callTool({ name: 'inspect_pair_clearance', arguments: {
+    idA: project.objects[0].id, idB: project.objects[1].id, clearanceMm: 600,
+  } });
+  assert.equal(clearance.isError, true);
   const repeated = await client.callTool({ name: 'diagnose_project', arguments: {} });
   assert.equal(repeated.structuredContent.snapshot.sha256, diagnostic.structuredContent.snapshot.sha256);
   assert.equal(await readFile(file, 'utf8'), original);
