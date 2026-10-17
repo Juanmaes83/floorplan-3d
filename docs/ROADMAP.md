@@ -79,6 +79,8 @@ No conecta automáticamente LAB Astra, Blender MCP, Unreal, CRM o Immersphere.
 F2 conserva pendientes sus cinco sesiones, veinte planos reales y umbrales; no
 bloquearon esta entrega y siguen pendientes para validación empírica.
 
+**Referencia externa registrada el 17-10-2026:** la [demostración de Summerz3002 sobre CAD y Blender](technical/summerz-cad-blender-reference-2026-10-17.md) se evalúa en el [Roadmap 2 propuesto](ROADMAP-2-proposal.md#33-referencia-externa-cadblender-17-10-2026). El código de esa ampliación no está identificado en los enlaces publicados; no altera el estado de fases canónicas ni acredita una integración en Rubik.
+
 La [PR #2, revisión 84ddf72](https://github.com/Juanmaes83/floorplan-3d/blob/84ddf72265b83d46daebdb91fde0d5e568ceb019/docs/ROADMAP.md)
 proponía otra numeración. Sus números quedan como referencias históricas:
 
