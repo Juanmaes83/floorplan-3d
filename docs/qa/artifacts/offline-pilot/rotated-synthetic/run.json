@@ -1,0 +1,81 @@
+{
+ "format": "floorplan-offline-pilot-run",
+ "version": "0.1.0",
+ "status": "complete",
+ "project": {
+  "path": "rot30.json",
+  "sha256Before": "61e4809491e2a2d2cd7c383c3c396c56407acc03afa2d96316c915ce8b418dbe",
+  "sha256After": "61e4809491e2a2d2cd7c383c3c396c56407acc03afa2d96316c915ce8b418dbe",
+  "unchanged": true
+ },
+ "options": {
+  "python": "/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/bpy-venv/bin/python",
+  "visual": true,
+  "frames": "anchors",
+  "samples": "16"
+ },
+ "steps": [
+  {
+   "step": "export",
+   "command": "node export.cjs rot30.json package python",
+   "exit": 0,
+   "seconds": 0.1,
+   "stdoutTail": [
+    "{\"output\":\"/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/rot-anchors-1/package\",\"entities\":151,\"nodes\":289,\"triangles\":2248,\"images\":0,\"materials\":55,\"substitutions\":[{\"id\":\"mat_antislip\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_carpet\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_marble\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_terrazzo\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_tile600\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_tile800\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_walnut\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"},{\"id\":\"mat_wood\",\"kind\":\"surface\",\"reason\":\"Procedural or unknown preset not baked\",\"fallback\":\"declared color\"}]}"
+   ]
+  },
+  {
+   "step": "verify",
+   "command": "python -I blender-verify.py -- package verify-report.json verified.blend",
+   "exit": 0,
+   "seconds": 1.3,
+   "stdoutTail": [
+    "02:54:09 | INFO: glTF import finished in 0.33s",
+    "Info: Saved as \"verified.blend\"",
+    "{\"status\": \"PASS\", \"entities\": 151, \"blender\": \"5.2.1 LTS\"}"
+   ]
+  },
+  {
+   "step": "visual",
+   "command": "node capture-visual.cjs rot30.json visual",
+   "exit": 0,
+   "seconds": 134.6,
+   "stdoutTail": [
+    "{\"objects\":46,\"glb\":{\"bytes\":15576936,\"sha256\":\"28657df0bdcc52eb05a219dc3dded73c2f8228941e5edafc33ba8c1c8b615714\"},\"appRevision\":\"4fb0622ce430a14c3cd87415fcba029b4cd17596\"}"
+   ]
+  },
+  {
+   "step": "shots",
+   "command": "node shots.cjs rot30.json shots.json",
+   "exit": 0,
+   "seconds": 14.9,
+   "stdoutTail": [
+    "rom_living ok inside 18 truck 700 {\"targetObjects\":0.497,\"targetFloor\":0.118,\"nearSurface\":0,\"targetShare\":1,\"maxNeighbourShare\":0,\"contentSeen\":0.714} 0.99/1.00/1.00",
+    "rom_balcony ok doorway from rom_living 24 push-in 350 {\"targetObjects\":0.429,\"targetFloor\":0.057,\"nearSurface\":0.085,\"targetShare\":0.738,\"maxNeighbourShare\":0,\"contentSeen\":1} 0.66/0.71/0.74",
+    "ms 14878"
+   ]
+  },
+  {
+   "step": "render",
+   "command": "python -I render.py -- verified.blend package shots.json render --samples 16 --frames anchors --visual visual-furniture.glb",
+   "exit": 0,
+   "seconds": 430.6,
+   "stdoutTail": [
+    "07:10.004  render           | Saved: '/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/rot-anchors-1/render/frames/01080.png'",
+    "Info: Saved copy as \"pilot.blend\"",
+    "{\"status\": \"rendered\", \"framesRendered\": 30, \"secondsPerFrame\": {\"mean\": 8.054, \"max\": 11.261, \"min\": 5.819}, \"wallSeconds\": 429.6, \"peakRssMiB\": 926.5}"
+   ]
+  },
+  {
+   "step": "reopen",
+   "command": "python -I reopen.py -- render reopen-report.json",
+   "exit": 0,
+   "seconds": 1.2,
+   "stdoutTail": [
+    "00:00.415  blend            | Read blend: \"/tmp/claude-0/-home-user-floorplan-3d/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/b2/runs/rot-anchors-1/render/pilot.blend\"",
+    "{\"status\": \"PASS\", \"checks\": 20, \"failed\": []}"
+   ]
+  }
+ ],
+ "wallSeconds": 582.7
+}

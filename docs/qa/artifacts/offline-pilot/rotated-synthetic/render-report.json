@@ -1,0 +1,1151 @@
+{
+ "status": "rendered",
+ "blender": "5.2.1 LTS",
+ "engine": "CYCLES",
+ "device": "CPU",
+ "samples": 16,
+ "denoiser": "OPENIMAGEDENOISE",
+ "resolution": [
+  640,
+  360
+ ],
+ "fps": 30,
+ "framesRendered": 30,
+ "framesInTimeline": 1080,
+ "secondsPerFrame": {
+  "mean": 8.054,
+  "max": 11.261,
+  "min": 5.819
+ },
+ "wallSeconds": 429.6,
+ "peakRssMiB": 926.5,
+ "inputs": {
+  "packageSha256": "722dbc15ba2b6973892150daf2c6459ade99c2d41e707520bd7d4c983afd83ef",
+  "shotsSha256": "7dd940fa1ca9d6f337813e1e214bc84bead3589efaf7e973b659a76cb9d77e7f",
+  "verifiedBlendSha256": "076caeb36f935abaf20db0527e5dff88f803e087fb713323989491f94e08a058",
+  "visualSidecarSha256": "28657df0bdcc52eb05a219dc3dded73c2f8228941e5edafc33ba8c1c8b615714",
+  "rendererSha256": "48677b33c68421e97bcaa7121a221b6c3c8de52043ab42db361741fa620adba7"
+ },
+ "pilotBlend": {
+  "bytes": 2754612,
+  "sha256": "09a0cc572866df9c06a2cbc3836f596a5d05880d5fab60eccf1fc9c919b46ddd"
+ },
+ "scene": {
+  "entities": {
+   "room": 13,
+   "wall": 70,
+   "opening": 22,
+   "object": 46
+  },
+  "entityIdsSha256": "e0c96fcf2e67fd6ad2a92a41bdc14074d62e0e429ef4ae18ee5800cd2234365a",
+  "materials": 201,
+  "images": 1,
+  "cameraKeyframes": 1080
+ },
+ "presentationAdditions": [
+  "PilotWorld sky 0.9",
+  "PilotSun 2.2 W/m2, 8 deg",
+  "PilotCamera keyed per frame, constant interpolation (hard cuts); level camera with lens shift for the planned downward look (vertical lines stay vertical)"
+ ],
+ "visualSidecar": [
+  {
+   "id": "obj_template-001",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 17
+  },
+  {
+   "id": "obj_template-002",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-003",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-004",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 24
+  },
+  {
+   "id": "obj_template-005",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 6
+  },
+  {
+   "id": "obj_template-006",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-007",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 8
+  },
+  {
+   "id": "obj_template-008",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-009",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 13
+  },
+  {
+   "id": "obj_template-010",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 26
+  },
+  {
+   "id": "obj_template-011",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-012",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-013",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 99
+  },
+  {
+   "id": "obj_template-014",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 19
+  },
+  {
+   "id": "obj_template-015",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 8
+  },
+  {
+   "id": "obj_template-016",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-017",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 10
+  },
+  {
+   "id": "obj_template-018",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-019",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 78
+  },
+  {
+   "id": "obj_template-020",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 54
+  },
+  {
+   "id": "obj_template-021",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 23
+  },
+  {
+   "id": "obj_template-022",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 10
+  },
+  {
+   "id": "obj_template-023",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-024",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 30
+  },
+  {
+   "id": "obj_template-025",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-026",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-027",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-028",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-029",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 49
+  },
+  {
+   "id": "obj_template-030",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 3
+  },
+  {
+   "id": "obj_template-031",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 31
+  },
+  {
+   "id": "obj_template-032",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-033",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 22
+  },
+  {
+   "id": "obj_template-034",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-035",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 20
+  },
+  {
+   "id": "obj_template-036",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  },
+  {
+   "id": "obj_template-037",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  },
+  {
+   "id": "obj_template-038",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 16
+  },
+  {
+   "id": "obj_template-039",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 20
+  },
+  {
+   "id": "obj_template-040",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 26
+  },
+  {
+   "id": "obj_template-041",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 12
+  },
+  {
+   "id": "obj_template-042",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 6
+  },
+  {
+   "id": "obj_template-043",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 17
+  },
+  {
+   "id": "obj_template-044",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-045",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 11
+  },
+  {
+   "id": "obj_template-046",
+   "status": "replaces-box-in-render",
+   "originDeltaM": 0.0,
+   "meshes": 61
+  }
+ ],
+ "timeline": [
+  {
+   "roomId": "rom_master",
+   "first": 1,
+   "last": 108,
+   "anchors": [
+    1,
+    55,
+    108
+   ]
+  },
+  {
+   "roomId": "rom_mbath",
+   "first": 109,
+   "last": 216,
+   "anchors": [
+    109,
+    163,
+    216
+   ]
+  },
+  {
+   "roomId": "rom_kid",
+   "first": 217,
+   "last": 324,
+   "anchors": [
+    217,
+    271,
+    324
+   ]
+  },
+  {
+   "roomId": "rom_gbath",
+   "first": 325,
+   "last": 432,
+   "anchors": [
+    325,
+    379,
+    432
+   ]
+  },
+  {
+   "roomId": "rom_laundry",
+   "first": 433,
+   "last": 540,
+   "anchors": [
+    433,
+    487,
+    540
+   ]
+  },
+  {
+   "roomId": "rom_child",
+   "first": 541,
+   "last": 648,
+   "anchors": [
+    541,
+    595,
+    648
+   ]
+  },
+  {
+   "roomId": "rom_kitchen",
+   "first": 649,
+   "last": 756,
+   "anchors": [
+    649,
+    703,
+    756
+   ]
+  },
+  {
+   "roomId": "rom_dining",
+   "first": 757,
+   "last": 864,
+   "anchors": [
+    757,
+    811,
+    864
+   ]
+  },
+  {
+   "roomId": "rom_living",
+   "first": 865,
+   "last": 972,
+   "anchors": [
+    865,
+    919,
+    972
+   ]
+  },
+  {
+   "roomId": "rom_balcony",
+   "first": 973,
+   "last": 1080,
+   "anchors": [
+    973,
+    1027,
+    1080
+   ]
+  }
+ ],
+ "presence": [
+  {
+   "roomId": "rom_master",
+   "frame": 1,
+   "targetShare": 0.9323,
+   "largestOther": "rom_mbath",
+   "largestOtherShare": 0.0197,
+   "void": 0.0141,
+   "contentSeen": [
+    "obj_template-001",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "contents": [
+    "obj_template-001",
+    "obj_template-002",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "share": {
+    "rom_master": 0.9323,
+    "rom_mbath": 0.0197,
+    "rom_kid": 0.0181,
+    "void": 0.0141,
+    "rom_hall": 0.0133,
+    "outside": 0.0025
+   }
+  },
+  {
+   "roomId": "rom_master",
+   "frame": 55,
+   "targetShare": 0.9279,
+   "largestOther": "rom_hall",
+   "largestOtherShare": 0.0218,
+   "void": 0.0112,
+   "contentSeen": [
+    "obj_template-001",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "contents": [
+    "obj_template-001",
+    "obj_template-002",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "share": {
+    "rom_master": 0.9279,
+    "rom_hall": 0.0218,
+    "rom_mbath": 0.0197,
+    "rom_kid": 0.0154,
+    "void": 0.0112,
+    "outside": 0.0041
+   }
+  },
+  {
+   "roomId": "rom_master",
+   "frame": 108,
+   "targetShare": 0.9286,
+   "largestOther": "rom_hall",
+   "largestOtherShare": 0.0249,
+   "void": 0.011,
+   "contentSeen": [
+    "obj_template-001",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "contents": [
+    "obj_template-001",
+    "obj_template-002",
+    "obj_template-003",
+    "obj_template-004"
+   ],
+   "share": {
+    "rom_master": 0.9286,
+    "rom_hall": 0.0249,
+    "rom_mbath": 0.0195,
+    "rom_kid": 0.0141,
+    "void": 0.011,
+    "outside": 0.0019
+   }
+  },
+  {
+   "roomId": "rom_mbath",
+   "frame": 109,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_mbath",
+   "frame": 163,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_mbath",
+   "frame": 216,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "contents": [
+    "obj_template-006",
+    "obj_template-007",
+    "obj_template-008"
+   ],
+   "share": {
+    "rom_mbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_kid",
+   "frame": 217,
+   "targetShare": 0.9896,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-009",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "contents": [
+    "obj_template-009",
+    "obj_template-010",
+    "obj_template-011",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "share": {
+    "rom_kid": 0.9896,
+    "outside": 0.0104
+   }
+  },
+  {
+   "roomId": "rom_kid",
+   "frame": 271,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-009",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "contents": [
+    "obj_template-009",
+    "obj_template-010",
+    "obj_template-011",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "share": {
+    "rom_kid": 1.0
+   }
+  },
+  {
+   "roomId": "rom_kid",
+   "frame": 324,
+   "targetShare": 0.9902,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-009",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "contents": [
+    "obj_template-009",
+    "obj_template-010",
+    "obj_template-011",
+    "obj_template-012",
+    "obj_template-013"
+   ],
+   "share": {
+    "rom_kid": 0.9902,
+    "outside": 0.0098
+   }
+  },
+  {
+   "roomId": "rom_gbath",
+   "frame": 325,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "contents": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "share": {
+    "rom_gbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_gbath",
+   "frame": 379,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "contents": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "share": {
+    "rom_gbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_gbath",
+   "frame": 432,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "contents": [
+    "obj_template-014",
+    "obj_template-015",
+    "obj_template-016"
+   ],
+   "share": {
+    "rom_gbath": 1.0
+   }
+  },
+  {
+   "roomId": "rom_laundry",
+   "frame": 433,
+   "targetShare": 0.7535,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1377,
+   "void": 0.0372,
+   "contentSeen": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "contents": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "share": {
+    "rom_laundry": 0.7535,
+    "rom_kitchen": 0.1377,
+    "outside": 0.0716,
+    "void": 0.0372
+   }
+  },
+  {
+   "roomId": "rom_laundry",
+   "frame": 487,
+   "targetShare": 0.7731,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1281,
+   "void": 0.038,
+   "contentSeen": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "contents": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "share": {
+    "rom_laundry": 0.7731,
+    "rom_kitchen": 0.1281,
+    "outside": 0.0608,
+    "void": 0.038
+   }
+  },
+  {
+   "roomId": "rom_laundry",
+   "frame": 540,
+   "targetShare": 0.7855,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1233,
+   "void": 0.0386,
+   "contentSeen": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "contents": [
+    "obj_template-017",
+    "obj_template-018"
+   ],
+   "share": {
+    "rom_laundry": 0.7855,
+    "rom_kitchen": 0.1233,
+    "outside": 0.0527,
+    "void": 0.0386
+   }
+  },
+  {
+   "roomId": "rom_child",
+   "frame": 541,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-038",
+    "obj_template-040"
+   ],
+   "contents": [
+    "obj_template-038",
+    "obj_template-039",
+    "obj_template-040",
+    "obj_template-041"
+   ],
+   "share": {
+    "rom_child": 1.0
+   }
+  },
+  {
+   "roomId": "rom_child",
+   "frame": 595,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-038",
+    "obj_template-040",
+    "obj_template-041"
+   ],
+   "contents": [
+    "obj_template-038",
+    "obj_template-039",
+    "obj_template-040",
+    "obj_template-041"
+   ],
+   "share": {
+    "rom_child": 1.0
+   }
+  },
+  {
+   "roomId": "rom_child",
+   "frame": 648,
+   "targetShare": 0.961,
+   "largestOther": "rom_gbath",
+   "largestOtherShare": 0.0231,
+   "void": 0.0025,
+   "contentSeen": [
+    "obj_template-038",
+    "obj_template-040",
+    "obj_template-041"
+   ],
+   "contents": [
+    "obj_template-038",
+    "obj_template-039",
+    "obj_template-040",
+    "obj_template-041"
+   ],
+   "share": {
+    "rom_child": 0.961,
+    "rom_gbath": 0.0231,
+    "outside": 0.0081,
+    "rom_hall": 0.0052,
+    "void": 0.0025
+   }
+  },
+  {
+   "roomId": "rom_kitchen",
+   "frame": 649,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "contents": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "share": {
+    "rom_kitchen": 1.0
+   }
+  },
+  {
+   "roomId": "rom_kitchen",
+   "frame": 703,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "contents": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "share": {
+    "rom_kitchen": 1.0
+   }
+  },
+  {
+   "roomId": "rom_kitchen",
+   "frame": 756,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "contents": [
+    "obj_template-019",
+    "obj_template-020",
+    "obj_template-021",
+    "obj_template-022"
+   ],
+   "share": {
+    "rom_kitchen": 1.0
+   }
+  },
+  {
+   "roomId": "rom_dining",
+   "frame": 757,
+   "targetShare": 0.8358,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1642,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-029"
+   ],
+   "contents": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-028",
+    "obj_template-029"
+   ],
+   "share": {
+    "rom_dining": 0.8358,
+    "rom_kitchen": 0.1642
+   }
+  },
+  {
+   "roomId": "rom_dining",
+   "frame": 811,
+   "targetShare": 0.8513,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1487,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-029"
+   ],
+   "contents": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-028",
+    "obj_template-029"
+   ],
+   "share": {
+    "rom_dining": 0.8513,
+    "rom_kitchen": 0.1487
+   }
+  },
+  {
+   "roomId": "rom_dining",
+   "frame": 864,
+   "targetShare": 0.8688,
+   "largestOther": "rom_kitchen",
+   "largestOtherShare": 0.1312,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-029"
+   ],
+   "contents": [
+    "obj_template-023",
+    "obj_template-024",
+    "obj_template-025",
+    "obj_template-026",
+    "obj_template-027",
+    "obj_template-028",
+    "obj_template-029"
+   ],
+   "share": {
+    "rom_dining": 0.8688,
+    "rom_kitchen": 0.1312
+   }
+  },
+  {
+   "roomId": "rom_living",
+   "frame": 865,
+   "targetShare": 0.9931,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-035"
+   ],
+   "contents": [
+    "obj_template-031",
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-034",
+    "obj_template-035",
+    "obj_template-036",
+    "obj_template-037"
+   ],
+   "share": {
+    "rom_living": 0.9931,
+    "outside": 0.0069
+   }
+  },
+  {
+   "roomId": "rom_living",
+   "frame": 919,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-035"
+   ],
+   "contents": [
+    "obj_template-031",
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-034",
+    "obj_template-035",
+    "obj_template-036",
+    "obj_template-037"
+   ],
+   "share": {
+    "rom_living": 1.0
+   }
+  },
+  {
+   "roomId": "rom_living",
+   "frame": 972,
+   "targetShare": 1.0,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0,
+   "contentSeen": [
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-035",
+    "obj_template-036"
+   ],
+   "contents": [
+    "obj_template-031",
+    "obj_template-032",
+    "obj_template-033",
+    "obj_template-034",
+    "obj_template-035",
+    "obj_template-036",
+    "obj_template-037"
+   ],
+   "share": {
+    "rom_living": 1.0
+   }
+  },
+  {
+   "roomId": "rom_balcony",
+   "frame": 973,
+   "targetShare": 0.6892,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0.2404,
+   "contentSeen": [
+    "obj_template-043",
+    "obj_template-044",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "contents": [
+    "obj_template-043",
+    "obj_template-044",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "share": {
+    "rom_balcony": 0.6892,
+    "void": 0.2404,
+    "outside": 0.0704
+   }
+  },
+  {
+   "roomId": "rom_balcony",
+   "frame": 1027,
+   "targetShare": 0.7411,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0.2261,
+   "contentSeen": [
+    "obj_template-043",
+    "obj_template-044",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "contents": [
+    "obj_template-043",
+    "obj_template-044",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "share": {
+    "rom_balcony": 0.7411,
+    "void": 0.2261,
+    "outside": 0.0328
+   }
+  },
+  {
+   "roomId": "rom_balcony",
+   "frame": 1080,
+   "targetShare": 0.7571,
+   "largestOther": null,
+   "largestOtherShare": 0,
+   "void": 0.2199,
+   "contentSeen": [
+    "obj_template-043",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "contents": [
+    "obj_template-043",
+    "obj_template-044",
+    "obj_template-045",
+    "obj_template-046"
+   ],
+   "share": {
+    "rom_balcony": 0.7571,
+    "void": 0.2199,
+    "outside": 0.023
+   }
+  }
+ ]
+}
