@@ -2,6 +2,10 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const G=require('../js/guide-core.js'),C=require('../js/project-core.js'),L=require('../js/room-layout.js'),T=require('../js/tracing-core.js');
 function own(){return L.create(L.blank('Mi casa'),{name:'Dormitorio',width:3000,depth:4000}).project;}
 const find=(r,id)=>r.tasks.find(t=>t.id===id);
+test('import verbs with a file format select upload before the PNG export shortcut',()=>{
+ for(const q of ['Subir PNG','Importar JPG','Cargar PDF','importar IFC','upload DXF','import RoomPlan','importar JSON','subir ZIP'])assert.equal(G.resolve(q)[0].id,'upload',q);
+ assert.equal(G.resolve('Exportar PNG')[0].id,'export');
+});
 test('optional furniture, 3D, saving and PNG do not block a create goal',()=>{const p=own(),s=G.initial(p);s.goal='create';const r=G.evaluate(p,s);assert.equal(r.percent,100);assert.equal(r.required,2);assert.equal(r.optionalDone,0);assert.equal(r.finished,true);});
 test('blank dimensions do not require image calibration or pretend to verify measurements',()=>{const p=own(),r=G.evaluate(p,G.initial(p));assert.equal(find(r,'scale'),undefined);assert.equal(p.scale.confidence,'pending');});
 test('furnishing requires a matching item placed inside the target room',()=>{const p=own(),s=G.initial(p);s.goal='furnish';s.targetType='bed';s.targetRoomId=p.rooms[0].id;const o=C.object('bed','Cama',9000,9000,1000,2000,0,'#ddd');p.objects.push(o);assert.equal(find(G.evaluate(p,s),'furniture').status,'pending');o.position={x:1500,y:2000};assert.equal(G.evaluate(p,s).finished,true);o.type='chair';assert.equal(G.evaluate(p,s).finished,false);});

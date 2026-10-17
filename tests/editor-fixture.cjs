@@ -3,4 +3,6 @@ module.exports=async function enterFullEditor(page){
  if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');
  await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();
  if(await page.evaluate(()=>matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right').classList.contains('open')))await page.locator('#tgPanel').click();
+ // Wait for the real pane transition and ResizeObserver before taking snapshots.
+ await require('./layout-fixture.cjs')(page);
 };
