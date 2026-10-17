@@ -10,6 +10,7 @@
 | --- | --- |
 | 17-10-2026, `curl` a `https://fun.loralab.top/tool/c9ae6fe7-…` y a `loralab.top` desde el contenedor de esta sesión | **Denegado** por la política de red del entorno (`CONNECT tunnel failed, response 403`). En la revisión anterior el nombre ni siquiera resolvía (`ENOTFOUND`). |
 | 17-10-2026 21:37 UTC, segundo y último intento, sin cambio de configuración | Igual: `CONNECT tunnel failed, response 403`. No se repetirá hasta que el entorno permita `fun.loralab.top` en sus dominios autorizados. |
+| 17-10-2026 21:47 UTC, Playwright con Chromium 141.0.7390.37 de este entorno | `net::ERR_TUNNEL_CONNECTION_FAILED`. Esta sesión no tiene conexión con el PC de Juanma, así que la prueba directa **no se ha realizado**. No se ha usado ninguna vía de red alternativa. |
 
 **No he navegado LoRA LAB.** Toda la columna LoRA LAB procede de la [grabación de 3:24 de Juanma](loralab-video-gap-audit-2026-10-17.md) (SHA-256 `b9ab170d…`) y de sus seis capturas, tal como las registra esa auditoría; no he visto el vídeo. Para cerrar las pruebas que pide este gate, el [anexo A](#anexo-a-prueba-de-juanma-en-chrome-para-windows) da un procedimiento de Chrome en Windows. Hasta recibir esa evidencia, la recomendación de la §4 es **provisional**.
 
@@ -183,6 +184,52 @@ Reglas semánticas nuevas propuestas:
 - Usar datos de plantilla, sin subir planos reales ni información personal para esta comparación.
 - Registrar si el sitio exige cuenta o pago para una prueba, sin inferir que la función está disponible gratuitamente.
 - Conservar únicamente la evidencia necesaria para reproducir cada resultado.
+
+### A.0 Sesión guiada con Playwright (recomendada)
+
+`scripts/qa/loralab/annex-a-session.cjs` produce la evidencia pedida en un contexto aislado de Chrome:
+
+- vídeo `session.webm`, `trace.zip` con capturas y snapshots, y capturas numeradas;
+- la descarga del JSON como `villa-original.json`, con su SHA-256;
+- errores de consola y `pageerror`;
+- `manifest.json` y `report.md`, con el minuto del vídeo y la captura de cada resultado.
+
+**No pulsa dentro del lienzo 3D ni adivina selectores.** Juanma realiza cada paso en la ventana mientras se graba. En la terminal pulsa Enter para capturar y clasificar el resultado («ejecutado y funciona», «ejecutado y falla», «solo control visible» o «no comprobado»), `s` para una captura adicional o `x` para saltar el paso.
+
+Al cerrar, comprueba que el vídeo se reproduce y marca las capturas casi uniformes (en blanco o negras). Orden de pasos: primero A–D (JSON de la villa, segunda planta, escalera con su hueco, subir la escalera en el recorrido libre), después guardar y recargar, importar, exterior, día y noche, altura de ojos, y puertas, ventanas, cortinas y luces.
+
+```powershell
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra fetch origin docs/loralab-study-gate
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-lora origin/docs/loralab-study-gate
+cd C:\Users\temp123\work\fp-lora
+npm init -y > $null; npm install --no-save playwright@1.62.1
+$env:CHROME = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+node scripts/qa/loralab/annex-a-session.cjs C:\Users\temp123\loralab-evidence
+node scripts/qa/loralab/analyze-export.cjs C:\Users\temp123\loralab-evidence\villa-original.json | Out-File -Encoding utf8 C:\Users\temp123\loralab-evidence\villa-structure.md
+```
+
+**Qué compartir para el repositorio:** `report.md`, `manifest.json`, `villa-structure.md` y las capturas revisadas. `villa-structure.md` contiene el árbol de claves del JSON, con los textos redactados a su longitud y un recuento de posibles datos sensibles (email, URL, JWT, data URI), sin valores. **No se suben** al repositorio el JSON original de un tercero, el vídeo, la traza ni datos de sesión; se conservan en la carpeta local y se citan por su SHA-256.
+
+Validación del script en este entorno, sin LoRA LAB:
+
+- contra una página local de prueba: descarga y hash, vídeo reproducible (`readyState` 4), errores de consola, informe y manifiesto;
+- contra la URL real bloqueada: registra el error de navegación y no ejecuta ninguna prueba;
+- contra `about:blank`: la captura uniforme queda marcada como en blanco.
+
+Esto valida la herramienta, **no la plataforma**.
+
+### A.1 Qué decidirá el JSON entre las opciones A y D de #50
+
+| En `villa-structure.md` | Favorece |
+| --- | --- |
+| Una imagen de fondo, una escala o una calibración **por planta** | D: un proyecto 1.x incrustado por planta |
+| Un único marco de coordenadas con elevación por planta y escaleras que referencian ambas | A: un 2.0 con `levelId`, o D con `offsetMm` cero |
+| Elementos que cruzan plantas (huecos de doble altura, cubierta ligada a varias) | A, o un dato de contenedor en D |
+| Sin imágenes ni escala (todo geométrico) | Neutro: decide la entrada típica de los clientes de D-01 |
+
+**Límite:** el JSON muestra cómo modela LoRA LAB, no qué traen los clientes de Rubik ni qué es correcto para `FloorPlanProjectV1`. Es evidencia de apoyo para #50; no decide el contrato ni se copia.
+
+### A.2 Procedimiento manual (alternativa)
 
 **Preparación:**
 
