@@ -249,6 +249,18 @@ Repeticiones alternadas, 4 por caso y versión, en las mismas condiciones (`docs
 
 Una corrección tentativa de la nota de sección durante el lote (`e440304`) no cambió el resultado (0/4) y se revirtió (`5e3c1f8`). El código del producto vuelve a ser idéntico a `9e3ba33`. Validación pendiente en un PC con GPU: `docs/qa/r10-gpu-regression.md`.
 
+### R10 — prueba M11 de cancelación corregida, 17-10-2026 (`1878f16`)
+
+La prueba esperaba al lote por tiempo (un retraso de 500 ms por captura) y pulsaba «Cancelar lote» con el clic de Playwright. A ~1 fps ese clic podía llegar con el lote ya terminado. Ahora la prueba retiene la primera captura hasta que se ha pulsado cancelar, espera una señal inequívoca de lote activo (`data-batch="true"`, botón de cancelar visible y captura retenida), pulsa y comprueba el estado «Cancelando…». Después libera la captura y mantiene las tres aserciones: cero descargas, estado «Lote cancelado» y cámara restaurada. No cambia ningún timeout ni código de producto.
+
+| Versión | Repeticiones alternadas | Duración |
+| --- | --- | --- |
+| `28e0428` con la misma prueba | 5/5 pass | 38–46 s |
+| #39, `1878f16` (producto = `9e3ba33`) | 5/5 pass | 39–40 s |
+| Control negativo: `cancelBatch` desactivado | 0/1, falla en «Cancelando» con «Capturando 1 de 3…» | — |
+
+No se ha repetido la suite completa con la prueba nueva; el recuento 170/17/9 del SHA `9e3ba33` sigue siendo el último resultado completo en el contenedor.
+
 ### R10 — límites del entorno de esta sesión
 
 - SwiftShader en 4 vCPU tarda 0,5–1,5 s por fotograma a 1440×900 tanto en `28e0428` como en el código nuevo; la medida inicial de 60 ms en una parada antigua fue un artefacto y no se repitió. No hay regresión de render medida. Los tiempos no representan GPU ni móvil físico.

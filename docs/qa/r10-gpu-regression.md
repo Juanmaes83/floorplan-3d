@@ -1,6 +1,6 @@
 # PR #39: comprobación pendiente en un PC con GPU
 
-Fecha: 17-10-2026. **Código a probar: `9e3ba33a867d995075889641f839c8fa38608acc`.** El HEAD de la rama tiene el mismo código: los commits posteriores son documentación, evidencia y un revert, con un diff de código de 0 líneas.
+Fecha: 17-10-2026. **SHA a probar: `1878f16`, el commit de la prueba M11 corregida** (`1878f1667f7f876ac36cf9d0636792f700617fed`). Su código de producto es idéntico a `9e3ba33a867d995075889641f839c8fa38608acc`: entre ambos sólo cambian documentación, evidencia, un revert y la prueba M11. Los commits posteriores de la rama son sólo documentación.
 
 ## Por qué hace falta
 
@@ -11,11 +11,13 @@ En el contenedor en la nube la suite de navegador del SHA probado da **196 casos
 | P07 ×4, P13 ×4, M10 ×6 | 14 FAIL | La prueba comprueba un estado *durante* un vuelo o revelado de 650 ms, que termina en el primer fotograma. Fallan igual en `28e0428`. |
 | M11 ZIP 1440×900, M20 ZIP | 2 FAIL | La descarga no llega en 30 s. Fallan igual en `28e0428`. |
 | M08, M09, M13, M16, M17, P08, P15 | 7 sin resultado | Límite de tiempo de la prueba. Fallan igual en `28e0428`. |
-| M11 cancelación | 1 FAIL | Repetida 4 veces: `28e0428` 3/4, `9e3ba33` 0/4. Una sonda funcional que pulsa «Cancelar lote» durante el lote da el mismo resultado en ambos: sin descarga, estado «Lote cancelado» y cámara restaurada. La prueba falla porque el clic de Playwright, a ~1 fps, llega cuando el lote ya terminó; en esta rama el lote termina antes. **No se ha encontrado un defecto funcional.** |
+| M11 cancelación | 1 FAIL con la prueba antigua | Era una carrera del clic de la prueba con un lote ya terminado, sin defecto funcional. **Prueba corregida en `1878f16`:** espera al lote activo y retenido antes de cancelar. 5/5 en `28e0428` y 5/5 en `1878f16`; el control con la cancelación desactivada falla. |
 | P05 1440×900 | 1 sin resultado | Repetida 4 veces: `28e0428` **0/4**, `9e3ba33` **3/4**, siempre junto al límite de 180 s. No es una regresión. |
 | Cámara 3D tras Escape/Atrás | 1 sin resultado | Repetida 4 veces: `28e0428` **0/4**, `9e3ba33` **2/4**, junto al límite de 120 s. No es una regresión. |
 
 Estos casos sólo se pueden confirmar con un renderizador representativo. La GPU sirve para validar el rendimiento y los tiempos de la experiencia web. El producto debe seguir funcionando en móviles sin esa GPU, lo que se comprueba aparte en dispositivos reales.
+
+P05 y Escape/Atrás no se han atribuido a `roomFrame`: sin una reproducción que lo demuestre, son tiempos agotados junto al límite en ambas versiones (P05: base 4 × 180 s; rama 3 pases en 177–179 s. Escape/Atrás: base 4 × 120 s; rama 2 pases en ~118 s).
 
 Medida aparte: la búsqueda de encuadres `roomFrame` cuesta en `9e3ba33` unas 3 veces lo que costaba en `bc1cee7`: 1578 frente a 532 ms para las 13 estancias en Node, mediana caliente, con 83–184 ms por estancia. Se calcula una vez por parada y se guarda en caché. **Es un riesgo de rendimiento en móviles lentos que conviene medir; no es la causa demostrada de ninguno de los síntomas anteriores.**
 
@@ -25,7 +27,7 @@ Requisitos: Git, Node 22 y Chrome o Chromium actualizados, con la aceleración p
 
 ```powershell
 git -C C:\Users\temp123\work\floorplan-3d-casa-serra fetch origin
-git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-39-gpu 9e3ba33a867d995075889641f839c8fa38608acc
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-39-gpu 1878f1667f7f876ac36cf9d0636792f700617fed
 cd C:\Users\temp123\work\fp-39-gpu
 npm init -y > $null; npm install --no-save playwright@1.62.1
 $env:CHROME = "C:\Program Files\Google\Chrome\Application\chrome.exe"   # o la ruta del Chromium de Playwright
@@ -58,7 +60,7 @@ $env:CHROME = "C:\Program Files\Google\Chrome\Application\chrome.exe"   # o la r
 
 ## Criterio de decisión
 
-- **0 fail y 0 sin resultado** con un renderizador representativo: regresión limpia del SHA `9e3ba33` y bloqueo técnico de #39 resuelto. CI sigue «no ejecutada» mientras Actions termine sin pasos.
+- **0 fail y 0 sin resultado** con un renderizador representativo: regresión limpia del SHA `1878f16` (producto `9e3ba33`) y bloqueo técnico de #39 resuelto. CI sigue «no ejecutada» mientras Actions termine sin pasos.
 - **Algún fallo:** comparar con el mismo archivo en `28e0428`, siguiendo el mismo procedimiento con `git worktree add ... 28e0428`, antes de atribuirlo a #39.
 
 `THREE_LOCAL_DIR` sólo es necesario si `cdn.jsdelivr.net` no es accesible; en un PC con red normal no se usa.
