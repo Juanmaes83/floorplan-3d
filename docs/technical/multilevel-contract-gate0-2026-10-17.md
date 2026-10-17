@@ -1,11 +1,13 @@
 # Gate 0 del contrato multipiso: «dos plantas y una escalera recta» (17-10-2026)
 
-**Estado: solicitud de decisión a Juanma. No aprueba el contrato ni una fase, no contiene código y no modifica `FloorPlanProjectV1`, su schema, la UI ni el importador.** D-16 sigue «en estudio; implementación no aprobada» ([F0-decisions](../product/F0-decisions.md)).
+**Estado, 18-10-2026: Juanma aprobó la opción D para el primer corte multipiso.** La decisión fija la arquitectura: un documento de edificio versionado que incrusta un `FloorPlanProjectV1` 1.x válido por planta, con los proyectos de una planta funcionando como hoy. **No aprueba un resultado sin probar, ni fusionar ni desplegar.** La implementación y su QA van en una PR separada, apilada sobre esta. El schema definitivo, las reglas y los resultados se documentan allí, y esta propuesta conserva el razonamiento de la decisión. D-16 pasa de «en estudio» a «primer corte en implementación» sólo cuando esa PR se integre.
+
+> Texto original del estado: «solicitud de decisión a Juanma. No aprueba el contrato ni una fase, no contiene código y no modifica `FloorPlanProjectV1`, su schema, la UI ni el importador.» Esta PR documental sigue sin código.
 
 **Contexto:**
 
 - **D-01**, integrada por #49 (`5c822cf`): público prioritario de inmobiliarias, promotoras y estudios de arquitectura; segundo público de reformas e interiorismo; problema prioritario, preparar y presentar viviendas completas.
-- **Estudio LoRA LAB #48**, en borrador: recomienda provisionalmente este corte. Falta su prueba directa (anexo A) y esta decisión de contrato.
+- **Estudio LoRA LAB #48**, en borrador. La sesión guiada de Juanma del 18-10-2026 (§1.1 de #48) confirma que la plantilla de villa exporta **tres plantas en un único JSON** (`floors[]` con alturas propias, escaleras en U y de caracol), **sin imagen ni escala por planta**. No demuestra crear una planta nueva, colocar ni subir una escalera, guardar y reabrir ni reimportar, y su recorrido sufrió errores de pointer lock dentro del iframe. Esa evidencia **no decide entre A y D**; la elección de D es una decisión de producto de Juanma. No se copia el formato de LoRA LAB.
 - Rubik sigue siendo una herramienta de **propuesta y comunicación**: nada de lo que sigue implica precisión profesional, documentación técnica, BIM ni cumplimiento normativo.
 
 **Base:** `master` `5c822cf`.
@@ -184,6 +186,21 @@ Si Juanma prefiere A, las §3–§7 se reescriben con la escala por nivel. Las r
 - **Alcance:** la tentación de añadir cubierta, exterior o recorrido entre plantas en el mismo corte. Quedan fuera explícitamente.
 
 ## 7. Decisión que se pide a Juanma
+
+> **Resuelto el 18-10-2026:**
+>
+> 1. **Opción D**, elegida por Juanma.
+> 2. Alcance del primer corte: el de la PR de implementación, con dos plantas, escalera recta, edición 2D por planta, 3D apilado e intercambio fiable. «Añadir planta desde imagen o PDF» **entra** en el corte.
+> 3. Los consumidores de una planta eligen planta explícitamente o rechazan el edificio con un mensaje claro.
+> 4. La revisión del MCP #40 → #41 → #43 sigue separada: la implementación no toca `tools/rubik-mcp` y prueba el rechazo a través del validador compartido.
+> 5. La prueba de LoRA LAB no cambió la elección (ver Contexto).
+>
+> Puntos pendientes:
+>
+> - La deduplicación de imágenes por SHA de la §3.6 se sustituye en la implementación por rutas por planta con manifiesto. Así la resolución es exacta y se evitan colisiones; queda documentado en la PR de implementación.
+> - La aceptación final sigue condicionada a la QA de esa PR, incluidos la GPU y el móvil físico.
+
+Texto original de la solicitud:
 
 1. **Opción de contrato:** D (recomendada), A (la de #48, con escala por nivel) u otra.
 2. **Alcance del primer corte:** dos plantas, escalera recta, editor 2D por planta, 3D apilado, intercambio y consumidores protegidos, sin recorrido entre plantas. Confirmar si «añadir planta desde imagen» entra en el primer corte.
