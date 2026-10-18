@@ -34,6 +34,7 @@ El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el pro
 - `diagnose_project`: primer error del validador canónico o, si el JSON es válido, hallazgos agrupados de escala, procedencia, puertas incompletas y relaciones espaciales inciertas.
 - `measure_elements`: distancia 2D determinista entre dos IDs, con modo explícito `reference_points` o `regions`, puntos justificativos, unidades y hash.
 - `inspect_pair_clearance`: inspecciona dos muebles con umbral explícito; distingue la distancia mínima recta, los obstáculos en ese segmento y una cadena de puertas documentada entre estancias. No certifica un paso.
+- `check_route_2d`: con dos puntos `{x,y}` explícitos y `widthMm` explícito, comprueba si un disco 2D de ese diámetro puede ir de uno a otro por estancias y huecos de paso documentados. Devuelve estado, trayectoria verificada, anchura limitante, razones y hash.
 
 Cada herramienta declara anotaciones MCP de solo lectura. No hay herramientas para mover, crear, borrar, guardar o exportar. La superficie se calcula desde polígonos guardados y no es una medición certificada.
 
@@ -81,6 +82,28 @@ inspect_pair_clearance({"idA":"obj_rect","idB":"obj_next","clearanceMm":600})
 
 La consulta usa la huella de dos muebles, identifica bandas sólidas, subtramos de hueco y otros muebles que cruzan el segmento mínimo, y registra una cadena de puertas entre las estancias derivadas. Una cadena documentada o un segmento sin obstáculos **no acredita una ruta ni su anchura**. [Reglas y pendientes](../../docs/technical/local-mcp-clearance-connectivity.md).
 
+### Recorrido 2D con desvíos y anchura (cuarto corte de Etapa 1, v0.1.4)
+
+```text
+check_route_2d({"start":{"x":1000,"y":2000},"end":{"x":5000,"y":2000},"widthMm":800})
+```
+
+- **Agente:** un disco de diámetro `widthMm` cuyo centro recorre la trayectoria. El contacto es admisible con una tolerancia de 10⁻⁶ mm.
+- **Puntos:** deben darse de forma explícita; no se infieren desde muebles ni estancias. Cada uno debe quedar dentro de una única estancia o hueco y con distancia libre ≥ radio.
+- **Dominio:** estancias, más puertas, correderas y huecos con antepecho 0 compartidos por dos estancias. Las ventanas, los muros activos y los muebles son obstáculo, salvo alfombras y splits.
+
+Estados:
+
+- `recorrido_demostrado_en_modelo_2d`: incluye una polilínea verificada con distancias exactas y la anchura limitante exacta sobre esa trayectoria.
+- `bloqueado_por_geometría_documentada`: la separación está demostrada por celdas certificadas. Las razones nombran el hueco o la puerta que la causa y su medida exacta.
+- `evidencia_insuficiente`: el margen es inferior a la resolución.
+- `no_evaluable`: un punto no es válido o hay estancias o huecos solapados.
+- `límite_de_cálculo`: se ha agotado un presupuesto de geometría, celdas, iteraciones o tiempo. Nunca se convierte en bloqueado ni en demostrado.
+
+Ningún estado acredita accesibilidad, evacuación, normativa, altura libre ni transitabilidad real. La anchura de un hueco es la nominal: no descuenta hoja ni marco. Con escala `estimated` o `pending` la respuesta lo indica en `limits`.
+
+[Contrato, garantías, presupuestos y límites](../../docs/technical/local-mcp-route-2d.md).
+
 ## Límites y privacidad
 
 - El proceso solo puede leer el archivo indicado al arrancar. Ninguna herramienta recibe rutas.
@@ -97,6 +120,9 @@ npm test
 npm run check
 ```
 
-Las pruebas comprueban validación, consultas y paginación, relaciones espaciales sintéticas, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente. En Windows sin privilegio de creación de symlinks se omite únicamente ese caso de seguridad; sigue ejecutándose en Linux CI. El rechazo de JSON inválido se comprueba por separado.
+Las pruebas comprueban validación, consultas y paginación, relaciones espaciales sintéticas, rechazo de symlinks, hash de la fuente, lectura sin mutaciones y reutilización de la revisión existente. Para `check_route_2d`:
+
+- una matriz sintética con medidas conocidas (`fixtures/route-projects.cjs`), cuyas trayectorias revisa un verificador independiente;
+- un contraste aleatorio con una búsqueda por fuerza bruta que no comparte código (`test/route-crosscheck.test.cjs`). En Windows sin privilegio de creación de symlinks se omite únicamente ese caso de seguridad; sigue ejecutándose en Linux CI. El rechazo de JSON inválido se comprueba por separado.
 
 El `package-lock.json` fija las dependencias de esta entrega. Se actualizó el SDK MCP a `1.32.1` tras detectar la alerta [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en la versión anterior; el servidor usa stdio y no el cliente OAuth afectado. `npm audit` queda sin vulnerabilidades reportadas para el lock actual.
