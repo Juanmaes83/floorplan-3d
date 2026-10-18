@@ -175,7 +175,7 @@
   if(polys.length){frame(polys);const panel=$('#relocationPanel'),stage=$('#stage').getBoundingClientRect(),r=panel?.getBoundingClientRect();
    // The panel sits at the top (or, on short screens, at the left) of the plan: the proposal is shifted next to it.
    if(r&&r.height){if(r.height>stage.height*.5)view.x0-=Math.min(r.right-stage.left+12,stage.width*.55)/2/view.s;else view.y0-=Math.min(r.bottom-stage.top+12,stage.height*.45)/2/view.s;applyView();}}
-  $('#relocationPanel')?.querySelector('button')?.focus();
+  $('#relocationTitle')?.focus({preventScroll:true});
  }
  function cancelProposal(message){if(!proposal)return;proposal=null;render();if(message)say(message,5000);}
  // Applies the whole proposal as ONE change (one undo step). It is re-validated first; if saving fails, it is undone.
@@ -204,10 +204,12 @@
   let box=$('#relocationPanel');
   if(!proposal){if(box)box.hidden=true;return;}
   if(!box){box=document.createElement('section');box.id='relocationPanel';box.className='relocation-panel';box.setAttribute('role','region');box.setAttribute('aria-label','Propuesta de recolocación');$('#stage').append(box);}
-  box.hidden=false;box.replaceChildren();const {set}=proposal,h=document.createElement('h3');h.textContent=`Propuesta en «${proposal.levelName}» · vista previa, sin aplicar`;box.append(h);
+  // Title and actions stay fixed; only the list scrolls, so neither can scroll out of view on short screens.
+  box.hidden=false;box.replaceChildren();const {set}=proposal,h=document.createElement('h3');h.id='relocationTitle';h.tabIndex=-1;h.textContent=`Propuesta en «${proposal.levelName}» · vista previa, sin aplicar`;box.setAttribute('aria-labelledby','relocationTitle');box.append(h);
+  const body=document.createElement('div');body.className='relocation-body';body.id='relocationBody';box.append(body);
   const ul=document.createElement('ul');for(const m of set.moves){const li=document.createElement('li');li.dataset.object=m.id;li.textContent=`«${m.name}»: de ${pt(m.from)} a ${pt(m.to)} · ${m.distanceMm} mm nominales, dentro de «${m.roomName}». Resuelve: ${proposal.resolves[m.id]||'—'}.`;ul.append(li);}
-  for(const f of set.failed){const li=document.createElement('li');li.dataset.failed=f.id;li.textContent=f.message;ul.append(li);}box.append(ul);
-  const note=document.createElement('p');note.className='relocation-note';note.textContent=`Comprobado: ${PL.CHECKED.join(', ')}. No comprobado: ${PL.NOT_CHECKED.join(', ')}.`;box.append(note);
+  for(const f of set.failed){const li=document.createElement('li');li.dataset.failed=f.id;li.textContent=f.message;ul.append(li);}body.append(ul);
+  const note=document.createElement('p');note.className='relocation-note';note.textContent=`Comprobado: ${PL.CHECKED.join(', ')}. No comprobado: ${PL.NOT_CHECKED.join(', ')}.`;body.append(note);
   const row=document.createElement('div');row.className='actions';box.append(row);
   // «Aplicar» exists only when there is a valid proposal; otherwise the panel only explains and closes.
   if(set.moves.length&&set.valid){const apply=document.createElement('button');apply.type='button';apply.className='btn primary';apply.id='relocationApply';apply.textContent=set.moves.length>1?`Aplicar las ${set.moves.length}`:'Aplicar';apply.onclick=()=>applyProposal();row.append(apply);}

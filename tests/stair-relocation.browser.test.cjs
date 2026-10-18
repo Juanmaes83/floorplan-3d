@@ -18,6 +18,21 @@ before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolv
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 const curl=target=>new Promise((resolve,reject)=>execFile('curl',['--fail','--silent','--show-error','--max-time','30',target],{maxBuffer:20e6},(e,out)=>e?reject(e):resolve(out)));
 const building=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)).entries.find(e=>e.kind==='building').building,KEY);
+// The proposal panel must be fully reachable: title, list and «Aplicar/Cancelar» inside the panel, the panel inside the
+// stage (between the top bar and the bottom bar), focus on the title, the list scrollable without moving the title or
+// the buttons, and the conflict chip not covered. Regression check for the clipped title at 844×390.
+async function panelReachable(page){
+ const m=await page.evaluate(async()=>{const r=e=>{if(!e)return null;const b=e.getBoundingClientRect();return {top:b.top,bottom:b.bottom,left:b.left,right:b.right};};
+  const p=document.querySelector('#relocationPanel'),body=document.querySelector('#relocationBody')||p,out={stage:r(document.querySelector('#stage')),panel:r(p),title:r(p.querySelector('h3')),apply:r(document.querySelector('#relocationApply')),cancel:r(document.querySelector('#relocationCancel')),chip:r(document.querySelector('#levelConflicts')),focus:document.activeElement.id,scrollable:body.scrollHeight>body.clientHeight+1,panelScroll:p.scrollTop};
+  body.scrollTop=body.scrollHeight;await new Promise(f=>requestAnimationFrame(()=>requestAnimationFrame(f)));out.afterScroll={title:r(p.querySelector('h3')),cancel:r(document.querySelector('#relocationCancel')),bodyTop:body.scrollTop,panelScroll:p.scrollTop};body.scrollTop=0;return out;});
+ const inside=(a,b,what)=>assert.ok(a&&a.top>=b.top-0.5&&a.bottom<=b.bottom+0.5&&a.left>=b.left-0.5&&a.right<=b.right+0.5,`${what} ${JSON.stringify(a)} inside ${JSON.stringify(b)}`);
+ inside(m.panel,m.stage,'panel');inside(m.title,m.panel,'title');inside(m.cancel,m.panel,'cancel');if(m.apply)inside(m.apply,m.panel,'apply');
+ assert.equal(m.focus,'relocationTitle','focus starts on the title');assert.equal(m.panelScroll,0,'the panel itself never scrolls');
+ inside(m.afterScroll.title,m.panel,'title after scrolling the list');inside(m.afterScroll.cancel,m.panel,'cancel after scrolling the list');assert.equal(m.afterScroll.panelScroll,0);
+ if(m.scrollable)assert.ok(m.afterScroll.bodyTop>0,'the list scrolls');
+ if(m.chip&&m.chip.bottom>m.chip.top)assert.ok(!(m.chip.left<m.panel.right&&m.panel.left<m.chip.right&&m.chip.top<m.panel.bottom&&m.panel.top<m.chip.bottom),'conflict chip not covered');
+ return m;
+}
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
 test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000},async t=>{
@@ -42,6 +57,7 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  assert.equal(await page.locator('#gStairs .level-proposal').count(),2);assert.match(await panel.textContent(),/«Cama»: de \(4600, 1900\) a \(\d+, \d+\)/);assert.match(await panel.textContent(),/«Baúl»: de \(5240, 2900\) a/);
  assert.match(await panel.textContent(),/No comprobado: altura libre, paso o recorrido, normativa/);
  assert.equal(B.canonical(await building(page)),B.canonical(imported),'preview stores nothing');
+ await panelReachable(page);
  const moves=await page.evaluate(()=>FloorPlanBuildingUI.proposal);
  const covered=await page.evaluate(()=>{const p=document.querySelector('#relocationPanel').getBoundingClientRect();return [...document.querySelectorAll('#gStairs .level-proposal-outline')].filter(e=>{const b=e.getBoundingClientRect();return b.top<p.bottom&&b.bottom>p.top&&b.left<p.right&&b.right>p.left;}).length;});
  assert.equal(covered,0,'the proposed footprints are not under the panel');
@@ -81,6 +97,7 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
 
  // 4. The ground sofa: no free place in «Paso» → reported, nothing to apply, manual correction offered.
  await openList();await tapOrClick(page.locator('#conflictsList li[data-object="obj_conflict-sofa"] [data-action="propose"]'));await panel.waitFor();await closePanel();
+ await panelReachable(page);
  assert.match(await panel.textContent(),/No se ha encontrado sitio libre para «Sofá» en «Paso»[^]*Corrígelo a mano/);assert.equal(await page.locator('#relocationApply').count(),0,'nothing to apply');assert.equal(await page.locator('#relocationCancel').textContent(),'Cerrar');
  await shot('04-lower-no-place');await tapOrClick(page.locator('#relocationCancel'));
 
@@ -88,5 +105,20 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  await page.reload();await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2);
  const stored=await building(page);assert.deepEqual(stored.levels[1].project.objects.filter(o=>o.id!=='obj_conflict-desk').map(o=>o.position),moves.map(m=>m.to));
  assert.deepEqual(stored.levels[0].project.objects,original.levels[0].project.objects,'ground level untouched');assert.equal(B.buildingStatus(stored).conflicts.length,1);
+ assert.deepEqual(errors,[]);
+});
+
+test('long proposal list on a short landscape screen stays readable and reachable 844x390',{timeout:300000},async t=>{
+ const context=await browser.newContext({viewport:{width:844,height:390},isMobile:true,hasTouch:true});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanBuildingUI);await require('./editor-fixture.cjs')(page);
+ const b=JSON.parse(JSON.stringify(original)),up=b.levels[1].project;
+ for(let i=0;i<5;i++)up.objects.push({id:`obj_box-${i}`,type:'box',name:`Caja ${i+1}`,position:{x:5000+(i%2)*400,y:900+i*450},size:{widthMm:300,depthMm:300},rotationDeg:0,color:'#7a6a5a',roomId:up.rooms[0].id});
+ B.validate(b);const {entries}=await B.packageEntries(b,()=>null,T.imageInfo),file=path.join(tmp,'long.zip');await fs.writeFile(file,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));
+ await page.locator('#uploadIn').setInputFiles(file);await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:60000});
+ await page.locator('#levelConflictsOpen').tap();await page.locator('#conflictsDialog[open]').waitFor();await page.locator('#conflictsList [data-action="propose-all"]').tap();await page.locator('#relocationPanel').waitFor();
+ await page.evaluate(()=>{if(document.querySelector('aside.right')?.classList.contains('open'))document.querySelector('#tgPanel').click();});await page.waitForTimeout(400);
+ const m=await panelReachable(page);assert.equal(m.scrollable,true,'the long list has to scroll');
+ assert.ok((await page.locator('#relocationBody li').count())>=6);await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);await page.screenshot({path:path.join(shots,'844x390-05-long-list.png')});
  assert.deepEqual(errors,[]);
 });

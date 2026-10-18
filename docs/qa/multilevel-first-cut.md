@@ -354,6 +354,16 @@ Apilada sobre BW5 (§5.2). Propone posiciones para muebles **existentes** que pi
 - Después se reevalúa el edificio.
 - Si queda algún conflicto, aparece otro problema evaluable o falla el guardado, se revierte entero y se explica.
 
+**Panel en móvil horizontal (corregido tras la revisión de Juanma):**
+
+- **Defecto:** a 844×390, el título «Propuesta… · vista previa, sin aplicar» quedaba cortado por arriba y sólo se veía «Aplicar las 2».
+- **Causa medida:** el panel estaba bien situado dentro del escenario (y 64–360, entre la barra superior, que termina en 58, y la inferior, que empieza en 366). Su contenido medía 327 px y el área visible 292 px. Al abrirse, el foco iba a «Aplicar», el último elemento, y eso desplazaba el panel 29 px: el título quedaba en y 43, fuera de la vista. Con una lista larga, el título llegaba a y −359. No intervenían el encuadre del plano ni el posicionamiento.
+- **Corrección:** el título y los botones son fijos y sólo se desplaza la lista (`#relocationBody`). El foco inicial va al título, de modo que se lee qué se moverá antes de llegar a «Aplicar». El panel nunca se desplaza entero.
+- **Prueba:** `panelReachable` mide el título, la lista y los botones dentro del panel, y el panel dentro del escenario, antes y después de desplazar la lista hasta el final. También comprueba el foco en el título y que el aviso de conflictos no queda tapado.
+  - Se ejecuta a 1440×900, 390×844 y 844×390.
+  - Hay un caso aparte a 844×390 con una lista de 7 muebles.
+  - Con el código anterior falla con las coordenadas citadas.
+
 **Sin sitio:**
 
 - «No se ha encontrado sitio libre para «Sofá» en «Paso» dentro del límite de búsqueda (N posiciones). Corrígelo a mano…», con «Aplicar» desactivado.
