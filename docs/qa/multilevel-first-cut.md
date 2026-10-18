@@ -8,8 +8,8 @@
 | | SHA |
 | --- | --- |
 | Base de la PR: #50, rama `docs/multilevel-contract-gate0` | `dc84066`; código igual a `master` `5c822cf` |
-| Código probado | `1a9cb8e` |
-| Commits posteriores | Sólo `docs/` y `scripts/qa/`; se comprueba con `git diff --stat 1a9cb8e HEAD -- js index.html css tests` |
+| Código probado | `fe2a1a1` |
+| Commits posteriores | Sólo `docs/` y `scripts/qa/`; se comprueba con `git diff --stat fe2a1a1 HEAD -- js index.html css tests` |
 
 ## 1. Qué hay
 
@@ -73,16 +73,30 @@
 
 ## 3. Resultados
 
-| Suite | Comando | Resultado en `1a9cb8e` |
+| Suite | Comando | Resultado en `fe2a1a1` |
 | --- | --- | --- |
-| Unitarias Node | `ls tests/*.test.cjs \| grep -v browser \| xargs node --test` | REGRESSION_NODE |
+| Unitarias Node | `ls tests/*.test.cjs \| grep -v browser \| xargs node --test` | 213 tests: 211 pass, 0 fail, 2 skip (preexistentes) |
 | Contrato del edificio | `node --test tests/building.test.cjs` | 11 pass, 0 fail (incluidas en la fila anterior) |
 | Schema (Python) | `python3 tests/building_schema.test.py` y los demás `tests/*.test.py` | 5 archivos OK |
 | MCP | `cd tools/rubik-mcp && node --test` | 6 pass, 0 fail |
-| Navegador, flujo multipiso | `node --test --test-concurrency=1 tests/building.browser.test.cjs` | REGRESSION_BUILDING |
-| Navegador, suite completa | 26 archivos, en serie y archivo a archivo | REGRESSION_FULL |
+| Navegador, flujo multipiso | `node --test --test-concurrency=1 tests/building.browser.test.cjs` | 3/3 viewports pass (139 s en la suite completa) |
+| Navegador, suite completa | 26 archivos, en serie y archivo a archivo | 236 tests: 201 pass, 27 fail, 7 sin resultado, 1 skip. Desglose abajo. **No es una regresión limpia.** |
 
-REGRESSION_TABLE
+**Suite de navegador completa, archivo a archivo.** Mismo entorno; la base es `5c822cf`, cuyo código es el de #50. Se ejecutaron en la base todos los archivos con algún fallo o caso sin resultado.
+
+| Archivo | `fe2a1a1` | `5c822cf` | Atribución |
+| --- | --- | --- | --- |
+| `browser.test.cjs` | 26 pass, 10 fail, 1 skip | Mismos 10 fallos | Entorno: `page.goto` agota 30 s. Este archivo trae three.js con `curl` desde el CDN, y el proxy lo bloquea. No es de este corte. |
+| `assets` | 24/25 (fallo en «furniture search … 1440x900», timeout) | 25/25 | Caso intermitente. En `fe2a1a1`: otras 2 ejecuciones completas 25/25 y 3/3 en solitario. En la base: 3/3 en solitario. Sin reproducción; queda registrado, no se cuenta como aprobado. |
+| `presentation` | 48 pass, 8 fail, 2 sin resultado | Mismos 10 casos | P13 ×4, P07 ×4 (estado durante un vuelo de 650 ms), P15 y P08 (sin resultado). Igual que en R10. |
+| `presentation-reveal` | 2 pass, 6 fail | Mismos 6 | M10, estado durante una animación. Igual que en R10. |
+| `presentation-batch` | 7 pass, 2 fail | Mismos 2 | M11 ZIP 1440×900 y M20: la descarga no llega en 30 s con SwiftShader. |
+| `material-detail` (M08), `presentation-light` (M09), `presentation-minimap` (M13), `procedural-details` (M17), `render-budget` (M16) | 1 caso sin resultado en cada uno | Los mismos sin resultado | Límite de tiempo con SwiftShader. Igual que en R10. |
+| Otros 16 archivos | Todo pass | — | `building` 3/3, `capture-3d` 3/3, `guide` 5/5, `guide-navigation` 4/4, `layout-review` 2/2, `mirror-pilot` 1/1, `multiformat-guide` 9/9, `presentation-contact` 5/5, `presentation-framing` 6/6, `presentation-route` 8/8, `room-layout` 5/5, `sheet` 7/7, `surfaces` 7/7, `upload` 8/8, `variants` 4/4, `variants-visual` 4/4. |
+
+**Fallo propio corregido durante el ciclo:** en `1a9cb8e`, `assets` daba 6 fallos (`net::ERR_ABORTED`). Al entrar en 3D se reenviaba un contexto de plantas sin cambios, se forzaba una reconstrucción y se abortaban las cargas GLB en curso. La corrección está en `fe2a1a1`: un contexto idéntico no reconstruye nada. Después, `assets` dio 25/25 en dos ejecuciones completas de las tres.
+
+Los fallos y casos sin resultado que coinciden con la base no son regresiones nuevas, pero **tampoco cuentan como aprobados**. La regresión limpia necesita el PC con GPU (§6.1). **CI:** se registra aparte en la PR.
 
 ## 4. Qué cubre el flujo de navegador (`tests/building.browser.test.cjs`)
 
@@ -119,7 +133,7 @@ En cada viewport (1440×900, 390×844 con tacto y 844×390 con tacto) y desde la
 12. Duplicar y borrar un edificio. La imagen compartida se conserva hasta que ninguna entrada la referencia, y entonces se borra.
 13. Sin `pageerror` ni errores de consola.
 
-Capturas en `docs/qa/artifacts/multilevel/<viewport>-NN-*.png`, generadas por esta prueba sobre el SHA probado.
+Capturas en `docs/qa/artifacts/multilevel/<viewport>-NN-*.png`, generadas por esta prueba durante la regresión completa de `fe2a1a1`.
 
 ## 5. Revisión visual
 
@@ -148,7 +162,7 @@ Se abrieron y revisaron las capturas de los tres viewports.
 
 ```powershell
 git -C C:\Users\temp123\work\floorplan-3d-casa-serra fetch origin feat/multilevel-first-cut
-git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-multilevel FINAL_SHA
+git -C C:\Users\temp123\work\floorplan-3d-casa-serra worktree add C:\Users\temp123\work\fp-multilevel fe2a1a1282f3980a45b7148fd8a55c476d777fa1
 cd C:\Users\temp123\work\fp-multilevel
 npm init -y > $null; npm install --no-save playwright@1.62.1
 $env:CHROME = "C:\Program Files\Google\Chrome\Application\chrome.exe"
@@ -180,7 +194,12 @@ Get-Content gpu-regression/summary.txt
 
 ## 7. Rendimiento medido aquí (no representativo)
 
-PERF_TABLE
+| Viewport | Una planta (mediana / p90) | Dos plantas, «Ver todas» (mediana / p90) | Ratio | Renderer |
+| --- | --- | --- | --- | --- |
+| 1440×900 | 162,3 / 186,9 ms | 192,7 / 220,4 ms | 1,19 | ANGLE SwiftShader (no representativo) |
+| 390×844 | 76,2 / 84,0 ms | 107,9 / 121,5 ms | 1,42 | ANGLE SwiftShader (no representativo) |
+
+Una medición anterior a 1440×900 dio 147,4 frente a 180,3 ms (ratio 1,22).
 
 Son SwiftShader en 4 vCPU: no sirven para GPU ni para móviles. El criterio sólo se dará por cumplido con §6.
 
