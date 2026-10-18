@@ -80,8 +80,9 @@
    const at=c.overlap.reduce((a,p)=>({x:a.x+p.x/c.overlap.length,y:a.y+p.y/c.overlap.length}),{x:0,y:0});
    el('circle',{cx:at.x,cy:at.y,r:150,class:'level-conflict-mark'},g);el('text',{x:at.x,y:at.y,class:'level-conflict-mark-text','text-anchor':'middle','dominant-baseline':'central'},g).textContent='!';
   }
-  // Stair texts stay on top of any conflict highlight, so both remain readable.
-  for(const label of [...stairs.querySelectorAll('.level-stair-label')])stairs.append(label);
+  // Over a conflict highlight the stair texts are repeated on top (visual copy, hidden from assistive technology), so
+  // both remain readable; the original text stays in its stair group.
+  if(stairs.querySelector('.level-conflict'))for(const label of [...stairs.querySelectorAll('.level-stair-label')]){label.id=`levelStairLabel-${label.closest('[data-stair]').dataset.stair}`;el('use',{href:'#'+label.id,class:'level-stair-label-top','aria-hidden':'true'},stairs);}
  }
  // Visible note over the plan and a one-time announcement when a conflict appears (adding, dragging, importing).
  function notify(b){
