@@ -213,9 +213,9 @@ test('room labels keep clear of stair zones without changing labelAt; a real con
  assert.equal(at.moved,true);assert.equal(at.blocked,false);assert.equal(B.convexOverlap(rect(at,100),zone),false);
  assert.ok(rect(at).every(p=>p.x>=400&&p.x<=4800&&p.y>=400&&p.y<=2800),'label stays inside the bedroom');
  assert.equal(B.canonical(building),before,'display only: the document is unchanged');
- const bed=objectFootprint(upper.project.objects[0]),preferred=B.labelAnchor(room.polygon,room.labelAt,box,[zone],{avoid:[bed]});
+ const bed=objectFootprint(upper.project.objects[0]),preferred=B.labelAnchor(room.polygon,room.labelAt,box,[zone],{prefer:[[bed]]});
  assert.equal(B.convexOverlap(rect(preferred,100),bed),false,'a moved label prefers a place clear of the furniture');assert.equal(B.convexOverlap(rect(preferred,100),zone),false);
- assert.equal(B.convexOverlap(rect(B.labelAnchor(room.polygon,room.labelAt,box,[zone],{avoid:[room.polygon]}),100),zone),false,'furniture everywhere: still clear of the stair');
+ assert.equal(B.convexOverlap(rect(B.labelAnchor(room.polygon,room.labelAt,box,[zone],{prefer:[[room.polygon]]}),100),zone),false,'furniture everywhere: still clear of the stair');
  assert.deepEqual(B.labelAnchor(room.polygon,{x:1300,y:900},box,[zone]),{x:1300,y:900,moved:false,blocked:false},'a clear anchor is kept');
  const full=[{x:0,y:0},{x:6000,y:0},{x:6000,y:4000},{x:0,y:4000}];
  assert.deepEqual(B.labelAnchor(room.polygon,room.labelAt,box,[full]),{x:2600,y:1600,moved:false,blocked:true},'no clear place: stored anchor, flagged');
