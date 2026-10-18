@@ -228,7 +228,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
 #gLevelGhost .level-ghost-room{fill:none;stroke:#8c8579;stroke-width:28;stroke-dasharray:120 90;opacity:.55}#gLevelGhost .level-ghost-wall{fill:#9a9388;opacity:.28}
-.level-stair-outline{fill:#efe4d4;fill-opacity:.65;stroke:#5a4a3a;stroke-width:24}.level-stair-to .level-stair-outline{fill:none;stroke-dasharray:140 90}.level-stair-tread{stroke:#5a4a3a;stroke-width:14}.level-stair-arrow{stroke:#5a4a3a;stroke-width:22}.level-stair-label{fill:#3d3128;paint-order:stroke;stroke:#fff;stroke-width:30px}
+.level-stair-outline{fill:#efe4d4;fill-opacity:.65;stroke:#5a4a3a;stroke-width:24}.level-stair-to .level-stair-outline{fill:none;stroke-dasharray:140 90}.level-stair-tread{stroke:#5a4a3a;stroke-width:14}.level-stair-arrow{stroke:#5a4a3a;stroke-width:22}.level-conflict-area{fill:url(#levelConflictHatch);stroke:none}.level-conflict-outline{fill:none;stroke:#a3261b;stroke-width:40;stroke-dasharray:160 90}.level-conflict-mark{fill:#a3261b;stroke:#fff;stroke-width:30}.level-conflict-mark-text{fill:#fff;font-size:220px;font-weight:700}.level-conflicts{position:absolute;left:14px;right:14px;top:12px;z-index:5;max-width:640px;background:#fff7f5;color:#5c1710;border:2px dashed #a3261b;border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.08)}.level-conflicts .btn{margin-left:6px;padding:2px 8px}main.is3d .level-conflicts{display:none}.level-stair-label{fill:#3d3128;paint-order:stroke;stroke:#fff;stroke-width:30px}
 #levelBar{flex-wrap:nowrap}#levelBar .btn[aria-pressed=true]{font-weight:600}#levelsDialog{width:min(640px,94vw)}.level-card{border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:6px 10px}.level-field{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.level-field input[type=number],.level-field input[type=text]{width:9em;max-width:100%}.level-field input[type=checkbox]{width:auto;margin:0}.level-check{display:flex;gap:8px;align-items:center;justify-content:flex-start;text-align:left;margin:6px 0}.level-field small{color:#6b6257}.level-warnings{margin:6px 0;padding-left:18px;font-size:13px}.level-derived,.level-alignment,.level-scale{font-size:13px;color:#4f463d}
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}#projectVariants{border-top:1px solid var(--line);margin-top:10px}#projectVariants h3{margin:10px 0 4px;font-size:15px}#variantsDialog{width:min(980px,96vw)}.variants-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0}.variant-card{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;min-width:0}.variant-card[data-active=true]{border-color:var(--accent,#b5653a);box-shadow:0 0 0 2px #b5653a33}.variant-card h3{margin:0 0 6px;font-size:15px;overflow-wrap:anywhere}.variant-card .role{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:6px;background:#efe8dc;margin-bottom:4px}.variant-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:6px 0;font-size:13px}.variant-card dt{color:var(--muted)}.variant-card dd{margin:0;text-align:right;overflow-wrap:anywhere}.variant-card .actions{display:flex;flex-wrap:wrap;gap:6px}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
@@ -452,7 +452,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
   <main id="stage">
     <svg id="plan" class="tool-select" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
       <defs id="defs"></defs>
-      <defs><marker id="levelArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a4a3a"/></marker></defs>
+      <defs><pattern id="levelConflictHatch" patternUnits="userSpaceOnUse" width="160" height="160" patternTransform="rotate(45)"><rect width="160" height="160" fill="#fff" fill-opacity=".35"/><rect width="60" height="160" fill="#a3261b" fill-opacity=".55"/></pattern><marker id="levelArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a4a3a"/></marker></defs>
       <g id="gGrid"></g>
       <g id="gLevelGhost" pointer-events="none" aria-hidden="true"></g>
       <g id="gRooms"></g>
@@ -479,6 +479,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn primary" id="walkExit" data-en="Exit walk">退出漫游</button>
       <div id="hint3d"></div>
     </div>
+    <div id="levelConflicts" class="level-conflicts" role="status" aria-live="polite" hidden></div>
     <div class="scalebar" id="scalebar"><span id="sbText">1 m</span><div class="bar" id="sbBar"></div></div>
     <div class="modehint" id="modehint"></div>
     <div id="fab"></div>
@@ -1462,14 +1463,28 @@ function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(
 function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => state.furniture = state.furniture.filter(f => f.id !== id)); } }
 function duplicateSel(){
   if (ui.sel?.kind !== 'furn') return;
-  const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200;
+  const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200; placeNew(n);
   ui.sel = {kind:'furn', id:n.id}; mutate(() => state.furniture.push(n));
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
+// Stair footprints and slab voids of the active level count as obstacles when a new item is placed (their bounding
+// rectangles, like the walls here); the exact BW5 check afterwards decides whether a conflict remains.
+function stairRects(){ return (window.FloorPlanBuildingUI?.stairZones() || []).map(z => { const xs = z.map(p => p.x), ys = z.map(p => p.y); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; }); }
+// A new or duplicated item (never a dragged one): pushed out of walls, windows and stairs. In a building with stairs, when
+// that leaves it on a wall or still over a stair there is no free place nearby: it stays where it was asked for and
+// BW5 tells the person, instead of being moved somewhere unexpected.
+function placeNew(f){
+  const asked = {cx:f.cx, cy:f.cy}, zones = window.FloorPlanBuildingUI?.stairZones() || [];
+  pushOut(f); if (!zones.length) return;
+  const {hw, hh} = aabb(f), onWall = snapRects().some(r => Math.min(f.cx+hw, r[2]) - Math.max(f.cx-hw, r[0]) > 0 && Math.min(f.cy+hh, r[3]) - Math.max(f.cy-hh, r[1]) > 0);
+  const fp = FloorPlanTracing.footprint({position:{x:f.cx, y:f.cy}, size:{widthMm:f.w, depthMm:f.d}, rotationDeg:f.rot});
+  if (onWall || zones.some(z => FloorPlanBuilding.zoneConflict(fp, z))){ f.cx = asked.cx; f.cy = asked.cy; }
+}
 function pushOut(f){
+  const obstacles = snapRects().concat(stairRects());
   for (let n = 0; n < 4; n++){
     let moved = false;
-    for (const r of snapRects()){
+    for (const r of obstacles){
       const {hw, hh} = aabb(f), ox = Math.min(f.cx+hw, r[2]) - Math.max(f.cx-hw, r[0]), oy = Math.min(f.cy+hh, r[3]) - Math.max(f.cy-hh, r[1]);
       if (ox <= 0 || oy <= 0) continue;
       if (ox < oy) f.cx = f.cx < (r[0]+r[2])/2 ? r[0]-hw : r[2]+hw;
@@ -1483,7 +1498,7 @@ function addItem(it, x, y){
   const [type,name,w,d,color,height] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
   f.size.heightMm=height;
   if(it[6])f.assetRef=FloorPlanAssets.associate(f,it[6]).assetRef;
-  pushOut(f);
+  placeNew(f);
   ui.sel = {kind:'furn', id:f.id};
   mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
   toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`));

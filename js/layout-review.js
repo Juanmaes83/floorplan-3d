@@ -65,6 +65,9 @@
    const s=separation(A.poly,B.poly);if(!(s.d<clearanceMm))continue;
    if(walls.some(W=>insideLength(s.a,s.b,W)>EPS)){excluded.push({objects:ids,reason:'La separación más corta atraviesa un muro; no es un hueco libre entre muebles.'});continue;}
    findings.push({code:'holgura',objects:ids,measurementMm:round(s.d),thresholdMm:clearanceMm,evidence:{kind:'clearance',a:{...s.a},b:{...s.b},footprints:[copy(A.poly),copy(B.poly)]},method:METHOD+'; distancia mínima exacta entre huellas',limitation:'Distancia en planta entre huellas; no garantiza un paso utilizable ni cumplimiento normativo.',message:s.d<0.05?`«${label(A.o)}» y «${label(B.o)}» están en contacto en planta (0 mm), menos que la holgura indicada (${clearanceMm} mm).`:`«${label(A.o)}» y «${label(B.o)}» quedan a ${round(s.d)} mm en planta, menos que la holgura indicada (${clearanceMm} mm).`});}
+  // Furniture over a stair of this level: the conflicts computed once by FloorPlanBuilding.stairConflicts (BW5) are
+  // reported as they are; this module never recomputes stair geometry, so both always agree.
+  for(const c of options.stairConflicts||[])findings.push({code:'escalera',objects:[c.objectId,c.stairId],measurementMm:c.penetrationMm,message:c.message,evidence:{kind:'overlap',polygon:copy(c.overlap),footprints:[copy(c.footprint),copy(c.stairPolygon)]},method:'Aviso BW5 del edificio: huella girada del mueble frente a la '+(c.zone==='hueco'?'del hueco':'de la escalera')+', penetración por ejes separadores',limitation:'Coherencia del dibujo en planta; no evalúa altura libre, paso ni normativa.'});
   const swingDoors=(project.openings||[]).filter(op=>op.kind==='door'&&project.walls.find(w=>w.id===op.wallId)?.status!=='demolished');
   let doorsChecked=0;
   for(const op of swingDoors){

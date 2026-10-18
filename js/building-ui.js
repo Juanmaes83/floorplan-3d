@@ -5,7 +5,7 @@
 (function(){
  const B=window.FloorPlanBuilding,P=window.FloorPlanPackage,T=window.FloorPlanTracing,I=window.FloorPlanImages;
  const NS='http://www.w3.org/2000/svg';
- const histories=new Map();let historyEntry=null,pendingLevel=null,adoptedLevel=false,showGhost=true,lastContext='',dialogError='';
+ const histories=new Map();let historyEntry=null,pendingLevel=null,adoptedLevel=false,showGhost=true,lastContext='',dialogError='',announced=null;
  const $=s=>document.querySelector(s);
  const isBuilding=()=>!!library?.isBuilding?.();
  // The stored building with the on-screen project as its active level (the editor may be ahead of storage).
@@ -30,7 +30,7 @@
   say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
  }
  // Called whenever the open entry changes (open, import, create): histories belong to one entry.
- function entryChanged(){if(historyEntry!==library?.activeId()){histories.clear();historyEntry=library?.activeId();}lastContext='';}
+ function entryChanged(){if(historyEntry!==library?.activeId()){histories.clear();historyEntry=library?.activeId();}lastContext='';announced=null;}
  function context(b){return b?{activeLevelId:library.activeLevelId(),levels:b.levels,stairs:b.stairs}:null;}
  function push3D(b){
   const ctx=context(b),key=ctx?JSON.stringify([ctx.activeLevelId,ctx.stairs,ctx.levels.map(l=>l.id===ctx.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l)]):'none';
@@ -71,12 +71,30 @@
    const label=el('text',{x:at.x,y:at.y,class:'level-stair-label','text-anchor':'middle','dominant-baseline':'central','font-size':at.fontMm,transform:`rotate(${at.angleDeg} ${at.x} ${at.y})`},g);
    label.textContent=text;
   }
+  // BW5: furniture over a stair of this level. Dashed outline, hatched shared area and a «!» mark, so the conflict
+  // does not rely on colour alone; the warning text is in #levelConflicts and in «Plantas…».
+  for(const c of B.stairConflicts(b,{levelId:A.id})){
+   const g=el('g',{class:'level-conflict','data-object':c.objectId,'data-stair':c.stairId,role:'img','aria-label':c.message},stairs);
+   el('title',{},g).textContent=c.message;
+   el('path',{d:pathOf(c.overlap),class:'level-conflict-area'},g);el('path',{d:pathOf(c.footprint),class:'level-conflict-outline'},g);
+   const at=c.overlap.reduce((a,p)=>({x:a.x+p.x/c.overlap.length,y:a.y+p.y/c.overlap.length}),{x:0,y:0});
+   el('circle',{cx:at.x,cy:at.y,r:150,class:'level-conflict-mark'},g);el('text',{x:at.x,y:at.y,class:'level-conflict-mark-text','text-anchor':'middle','dominant-baseline':'central'},g).textContent='!';
+  }
+ }
+ // Visible note over the plan and a one-time announcement when a conflict appears (adding, dragging, importing).
+ function notify(b){
+  const box=$('#levelConflicts');const list=b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];
+  if(box){box.hidden=!list.length;box.replaceChildren();if(list.length){const t=document.createElement('span');t.textContent=`⚠ Aviso BW5 · ${list.length===1?list[0].message.split(':')[0]:`${list.length} muebles pisan una escalera: ${list.map(c=>'«'+c.objectName+'»').join(', ')}`}.`;
+   const more=document.createElement('button');more.type='button';more.className='btn';more.id='levelConflictsOpen';more.textContent='Ver avisos';more.onclick=()=>open();box.append(t,' ',more);}}
+  const keys=new Set(list.map(c=>c.levelId+'|'+c.objectId+'|'+c.stairId)),fresh=list.filter(c=>announced&&!announced.has(c.levelId+'|'+c.objectId+'|'+c.stairId)||!announced);
+  if(fresh.length)say(fresh.length===1?fresh[0].message:`${fresh.length} muebles pisan una escalera de esta planta (BW5). Revisa «Plantas…».`,7000);
+  announced=keys;
  }
  // Stair footprints of the active level in its own frame (the slab void on the arriving level), for 2D labels.
  function stairZones(){const b=current();if(!b)return [];const A=activeLevel(b);return b.stairs.filter(s=>s.fromLevelId===A.id||s.toLevelId===A.id).map(s=>B.toLocal(B.stairFootprint(s),A));}
  function render(){
   if(!library)return;if(historyEntry!==library.activeId())entryChanged();
-  const b=current();bar(b);render2D(b);push3D(b);
+  const b=current();bar(b);render2D(b);notify(b);push3D(b);
   if($('#levelsDialog')?.open)fill();
  }
  /* ---------- dialog ---------- */
@@ -135,13 +153,17 @@
   const x=field(section,'Arranque X (mm)','stairX',d.startMm.x),y=field(section,'Arranque Y (mm)','stairY',d.startMm.y),rot=field(section,'Sentido de subida (°, horario)','stairRotation',d.rotationDeg,{min:0,max:359});
   const w=field(section,'Ancho (mm)','stairWidth',d.widthMm,{min:300,max:5000}),run=field(section,'Longitud en planta (mm)','stairRun',d.runLengthMm,{min:500,max:20000}),n=field(section,'Peldaños (contrahuellas)','stairRisers',d.risers,{min:2,max:40});
   const derived=document.createElement('p');derived.id='stairDerived';derived.className='level-derived';section.append(derived);
+  // Before saving: the furniture of either level that would sit on this stair (same BW5 computation).
+  const clash=document.createElement('p');clash.id='stairConflictsPreview';clash.className='level-derived';clash.setAttribute('aria-live','polite');section.append(clash);
+  const preview=()=>{let list;try{list=B.stairConflicts(B.setStair(b,{id:s?.id,fromLevelId:from.id,toLevelId:to.id,startMm:{x:int(x.value),y:int(y.value)},rotationDeg:int(rot.value),widthMm:int(w.value),runLengthMm:int(run.value),risers:int(n.value)}));}catch{clash.textContent='';return;}
+   clash.dataset.count=String(list.length);clash.textContent=list.length?`⚠ Quedarían sobre la escalera (BW5): ${list.map(c=>`«${c.objectName}» en «${c.levelName}» (${String(c.penetrationMm).replace('.',',')} mm)`).join('; ')}. Se puede guardar igualmente; muévelos si no es intencionado.`:'Ningún mueble queda sobre la huella ni sobre el hueco.';};
   const update=()=>{const rise=to.elevationMm-from.elevationMm,k=Math.max(1,Number(n.value)||1);derived.textContent=`Desnivel ${rise} mm · contrahuella ${(rise/k).toFixed(0)} mm · huella ${((Number(run.value)||0)/k).toFixed(0)} mm. Valores orientativos; no se comprueban contra ninguna normativa.`;};
-  for(const i of [n,run])i.oninput=update;update();
+  for(const i of [n,run])i.oninput=update;update();for(const i of [x,y,rot,w,run,n])i.addEventListener('input',preview);preview();
   const row=document.createElement('div');row.className='actions';section.append(row);
   button(row,'Situar en la estancia seleccionada','stairFromRoom',()=>{
    const sel=ui.sel?.kind==='room'?project.rooms.find(r=>r.id===ui.sel.id):null;if(!sel)throw Error('Selecciona primero una estancia en el plano 2D.');
    const xs=sel.polygon.map(p=>p.x),ys=sel.polygon.map(p=>p.y),c={x:(Math.min(...xs)+Math.max(...xs))/2+A.offsetMm.x,y:(Math.min(...ys)+Math.max(...ys))/2+A.offsetMm.y},r=Number(rot.value)*Math.PI/180,L=Number(run.value)||0;
-   x.value=String(Math.round(c.x-Math.cos(r)*L/2));y.value=String(Math.round(c.y-Math.sin(r)*L/2));});
+   x.value=String(Math.round(c.x-Math.cos(r)*L/2));y.value=String(Math.round(c.y-Math.sin(r)*L/2));preview();});
   button(row,s?'Guardar escalera':'Añadir escalera','stairSave',()=>{const next=B.setStair(b,{id:s?.id,fromLevelId:from.id,toLevelId:to.id,startMm:{x:int(x.value),y:int(y.value)},rotationDeg:int(rot.value),widthMm:int(w.value),runLengthMm:int(run.value),risers:int(n.value)});persist(next);renderAll();say(s?'Escalera actualizada.':'Escalera añadida: se dibuja en ambas plantas y abre el forjado de la planta superior.');},'btn primary');
   if(s)button(row,'Eliminar escalera','stairRemove',()=>{persist(B.removeStair(b,s.id));renderAll();say('Escalera eliminada.');},'btn danger');
  }
@@ -203,7 +225,7 @@
  $('#levelsBtn').onclick=open;
  $('#levelsClose').onclick=()=>$('#levelsDialog').close();
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
- window.FloorPlanBuildingUI={render,stairZones,open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
+ window.FloorPlanBuildingUI={render,stairZones,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
   get histories(){return histories;}};
  render();

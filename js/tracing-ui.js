@@ -133,12 +133,12 @@
   const label=document.createElement('label');label.textContent='Holgura mínima entre muebles (mm, opcional) ';const input=document.createElement('input');input.id='layoutReviewClearance';input.type='number';input.min='1';input.step='1';input.inputMode='numeric';input.value=layoutClearanceMm??'';
   input.onchange=()=>{const v=input.value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){report(Error('La holgura mínima debe ser un número de milímetros mayor que 0.'));input.value=layoutClearanceMm??'';return;}const next=n===null?null:Math.round(n);if(next===layoutClearanceMm)return;layoutClearanceMm=next;render();};
   label.append(input);box.append(label);
-  let result;try{result=L.review(project,{clearanceMm:layoutClearanceMm,label:o=>typeof nm==='function'?nm(o.name):o.name});}catch(e){layoutActive=null;drawReview(null);const error=document.createElement('p');error.id='layoutReviewStatus';error.textContent='No se pudo revisar: '+(e.message||e);box.append(error);return;}
+  let result;try{result=L.review(project,{clearanceMm:layoutClearanceMm,label:o=>typeof nm==='function'?nm(o.name):o.name,stairConflicts:window.FloorPlanBuildingUI?.conflicts()||[]});}catch(e){layoutActive=null;drawReview(null);const error=document.createElement('p');error.id='layoutReviewStatus';error.textContent='No se pudo revisar: '+(e.message||e);box.append(error);return;}
   const state={checked:'comprobado',partial:'parcial',insufficient_evidence:'evidencia insuficiente'};
   const summary=document.createElement('p');summary.id='layoutReviewStatus';summary.dataset.status=result.status;
   summary.textContent=`Estado: ${state[result.status]} · Solapes: ${state[result.checks.solapes.status]} · Holgura: ${state[result.checks.holgura.status]} · Puertas: ${state[result.checks.puertas.status]}`+[result.checks.holgura.reason,result.checks.puertas.status!=='checked'?result.checks.puertas.reason:null].filter(Boolean).map(r=>' · '+r).join('')+(result.scaleConfidence!=='real'?' · Escala no confirmada: distancias orientativas (W4).':'');box.append(summary);
   const list=document.createElement('div');list.id='layoutReviewFindings';box.append(list);
-  const kinds={solape:'Solape',holgura:'Holgura',puerta:'Puerta'};
+  const kinds={solape:'Solape',holgura:'Holgura',puerta:'Puerta',escalera:'Mueble sobre escalera (BW5)'};
   const active=result.findings.find(f=>findingKey(f)===layoutActive);if(!active)layoutActive=null;drawReview(active||null);
   for(const f of result.findings){const b=document.createElement('button');b.className='btn';b.dataset.code=f.code;b.dataset.key=findingKey(f);b.setAttribute('aria-pressed',String(f===active));b.textContent=`${kinds[f.code]} · ${f.objects.join(' + ')}: ${f.message}`;b.title=`${f.method}. ${f.limitation}`;b.onclick=()=>{layoutActive=findingKey(f);locate(f.code==='puerta'?f.objects[1]:f.objects[0]);render();};list.append(b);}
   if(active){const caption=document.createElement('p');caption.id='layoutReviewActive';caption.textContent='Resaltado en el plano · '+reviewCaption(active);box.append(caption);const clear=document.createElement('button');clear.className='btn';clear.id='layoutReviewClearHighlight';clear.textContent='Quitar resaltado del plano';clear.onclick=()=>{layoutActive=null;render();};box.append(clear);}
@@ -148,7 +148,7 @@
  }
 
  const findingKey=f=>f.code+':'+f.objects.join('+');
- const reviewCaption=f=>f.code==='solape'?`Solape de huellas: ${f.measurementMm} mm de penetración (${f.objects.join(' + ')})`:f.code==='holgura'?`Holgura: ${f.measurementMm} mm < umbral ${f.thresholdMm} mm (${f.objects.join(' + ')})`:`Puerta ${f.objects[0]}: la hoja alcanza ${f.objects[1]} a ≈${f.measurementDeg}° de 90°`;
+ const reviewCaption=f=>f.code==='escalera'?`Mueble sobre escalera (BW5): ${f.measurementMm} mm de penetración (${f.objects.join(' sobre ')})`:f.code==='solape'?`Solape de huellas: ${f.measurementMm} mm de penetración (${f.objects.join(' + ')})`:f.code==='holgura'?`Holgura: ${f.measurementMm} mm < umbral ${f.thresholdMm} mm (${f.objects.join(' + ')})`:`Puerta ${f.objects[0]}: la hoja alcanza ${f.objects[1]} a ≈${f.measurementDeg}° de 90°`;
  // Draws only the exact evidence computed by FloorPlanLayoutReview, in plan millimetres (same viewBox as the plan).
  function drawReview(f){const g=$('#gReview');if(!g)return;g.replaceChildren();delete g.dataset.finding;if(!f||!f.evidence)return;g.dataset.finding=findingKey(f);
   const ns=svg.namespaceURI,e=f.evidence,red='#d0103a',pts=P=>P.map(v=>`${v.x},${v.y}`).join(' ');
