@@ -150,10 +150,10 @@ Se abrieron y revisaron las capturas de los tres viewports.
 | La subida de una planta desde imagen anunciaba «nuevo proyecto». | Ahora dice «nueva planta del edificio». |
 | Guardar al recargar cambiaba `updatedAt` del edificio sin cambios reales. | Guardar una planta sin cambios no escribe nada nuevo. |
 
-**Límites visuales conocidos que se aceptan en este corte:**
+**Límites y seguimiento tras la revisión humana del 18-10-2026:**
 
-- En «Ver todas», la planta alta tapa el interior de la baja, como en cualquier apilado. Para ver la baja se usa «hasta la activa» o los muros seccionados.
-- En 2D, la etiqueta de una estancia puede solaparse con el contorno de la escalera.
+- **Pendiente de corrección visual posterior; Juanma no lo aprueba como resultado final:** en la planta primera del fixture, «Hueco de escalera» se solapa con la cama/mobiliario y con la etiqueta y cotas del dormitorio. Reproducir con `scripts/qa/multilevel/fixture-zip.cjs`, `tests/fixtures/building-fixture.cjs` y `docs/qa/artifacts/multilevel/1440x900-03-upper-2d.png`. Determinar si el fixture coloca el mueble sobre el hueco o si falla el dibujo; corregir y revisar capturas a 1440×900, 390×844 y 844×390. Este seguimiento no implica que la escalera sea transitable ni que cumpla normativa. GitHub Issues está desactivado en el repositorio (API 410), por lo que este informe y la conversación de #51 son el registro rastreable. Juanma autoriza integrar #50 y #51 con esta deuda explícita, sin declarar esta revisión visual aprobada.
+- En «Ver todas», la planta alta tapa el interior de la baja desde este ángulo; para ver la baja se usa «hasta la activa» o los muros seccionados.
 - En móvil, el panel de propiedades se abre al crear una estancia, como antes de este corte. La prueba lo cierra antes de capturar.
 
 ## 6. Gates que debe ejecutar Juanma
