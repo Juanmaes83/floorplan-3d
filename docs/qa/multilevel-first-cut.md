@@ -1,15 +1,16 @@
 # Primer corte multipiso — QA (18-10-2026)
 
-**Estado: implementado y probado en el contenedor; pendiente de aceptación.** Faltan dos gates que sólo puede ejecutar Juanma: GPU representativa y móvil físico (§6). No hay merge ni despliegue.
+**Estado vigente, 18-10-2026:** el contrato #50, el primer corte #51 y las correcciones #52 → #53 → #54 están fusionados en `master` (HEAD tras #54: `0766dc5`). La revisión visual conjunta y las pruebas dirigidas de las correcciones están registradas en §5; la regresión completa en el entorno de Claude no fue limpia y no se presenta como aprobada. La GPU representativa de Juanma se probó para el primer corte #51, pero no se ha repetido para #52–#54; faltan CI ejecutada y teléfonos físicos (§6). El sofá del edificio conflictivo en «Paso» sigue sin sitio válido y requiere corrección manual.
 
 - **Decisión:** opción D de [#50](../technical/multilevel-contract-gate0-2026-10-17.md), aprobada por Juanma.
 - **Contrato:** [FloorPlanBuildingV1](../contracts/FloorPlanBuildingV1.md).
 
 | | SHA |
 | --- | --- |
-| Base de la PR: #50, rama `docs/multilevel-contract-gate0` | `dc84066`; código igual a `master` `5c822cf` |
-| Código probado | `fe2a1a1` |
-| Commits posteriores | Sólo `docs/` y `scripts/qa/`; se comprueba con `git diff --stat fe2a1a1 HEAD -- js index.html css tests` |
+| Base histórica de #51: #50, rama `docs/multilevel-contract-gate0` | `dc84066`; código igual a `master` `5c822cf` en aquella prueba |
+| Código probado del primer corte #51 | `fe2a1a1` |
+| Commits posteriores de #51 | Sólo `docs/` y `scripts/qa/` hasta su HEAD de entonces; esta comparación no describe el `master` actual |
+| Correcciones ya integradas | #52 `5e945f3`, #53 `7dfaa64`, #54 `0766dc5` (commits de fusión) |
 
 ## 1. Qué hay
 
