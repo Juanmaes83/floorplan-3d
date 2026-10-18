@@ -45,6 +45,39 @@
  const toBuilding=(poly,level)=>poly.map(p=>({x:p.x+level.offsetMm.x,y:p.y+level.offsetMm.y}));
  function inPoly(p,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
  const areaMm2=poly=>Math.abs(poly.reduce((s,p,i)=>{const q=poly[(i+1)%poly.length];return s+p.x*q.y-q.x*p.y;},0))/2;
+ // 2D labels. Display only: neither function changes the document, and room.labelAt keeps its stored value.
+ // Convex polygons overlap unless an edge normal of one of them separates both (touching does not count).
+ function convexOverlap(a,b){
+  for(const poly of [a,b])for(let i=0;i<poly.length;i++){const p=poly[i],q=poly[(i+1)%poly.length],nx=q.y-p.y,ny=p.x-q.x;
+   const pa=a.map(v=>v.x*nx+v.y*ny),pb=b.map(v=>v.x*nx+v.y*ny);if(Math.max(...pa)<=Math.min(...pb)||Math.max(...pb)<=Math.min(...pa))return false;}
+  return true;
+ }
+ // Where to anchor a room label (block `box` = {left,right,above,below} mm around the anchor) so that it stays inside
+ // the room and clear of the stair zones of that level (footprints and slab voids, same frame), with `margin` mm.
+ // The stored anchor wins when it is clear; otherwise the nearest clear anchor on a `step` mm grid. `prefer` lists
+ // groups of polygons to keep clear as well, most important first (the editor passes the furniture): when no place is
+ // clear of all of them, the last group is dropped, and so on down to the stair zones alone. When no place is clear
+ // even of the stairs the stored anchor is kept with blocked:true, so a real conflict stays visible instead of hidden.
+ function labelAnchor(roomPolygon,at,box,zones,{prefer=[],margin=100,step=100}={}){
+  const rect=(x,y,m)=>[{x:x-box.left-m,y:y-box.above-m},{x:x+box.right+m,y:y-box.above-m},{x:x+box.right+m,y:y+box.below+m},{x:x-box.left-m,y:y+box.below+m}];
+  const clear=(x,y,polys)=>{const r=rect(x,y,0),[a,,c]=r;
+   return r.every(v=>inPoly(v,roomPolygon))&&!roomPolygon.some(v=>v.x>a.x&&v.x<c.x&&v.y>a.y&&v.y<c.y)&&!polys.some(z=>convexOverlap(rect(x,y,margin),z));};
+  if(!zones.some(z=>convexOverlap(rect(at.x,at.y,margin),z)))return {x:at.x,y:at.y,moved:false,blocked:false};
+  const xs=roomPolygon.map(v=>v.x),ys=roomPolygon.map(v=>v.y);
+  for(let k=prefer.length;k>=0;k--){const polys=[...zones,...prefer.slice(0,k).flat()];let best=null;
+   for(let x=Math.min(...xs);x<=Math.max(...xs);x+=step)for(let y=Math.min(...ys);y<=Math.max(...ys);y+=step){
+    const d=Math.hypot(x-at.x,y-at.y);if((!best||d<best.d)&&clear(x,y,polys))best={x,y,d};}
+   if(best)return {x:best.x,y:best.y,moved:true,blocked:false};}
+  return {x:at.x,y:at.y,moved:false,blocked:true};
+ }
+ // Label of a stair inside its own footprint (level frame): along the climbing direction, centred between the
+ // arrow and the side edge, kept upright, with the font reduced only when the text would not fit the footprint.
+ function stairLabel(s,level,text,{fontMm=170,charEm=0.6}={}){
+  const a=s.rotationDeg*Math.PI/180,d={x:Math.cos(a),y:Math.sin(a)},n={x:-d.y,y:d.x},mid=s.runLengthMm/2,side=s.widthMm/4;
+  const font=Math.max(1,Math.min(fontMm,s.runLengthMm*0.85/([...text].length*charEm),s.widthMm/2*0.7));
+  let angleDeg=s.rotationDeg;if(angleDeg>90&&angleDeg<270)angleDeg-=180;
+  return {x:s.startMm.x-level.offsetMm.x+d.x*mid+n.x*side,y:s.startMm.y-level.offsetMm.y+d.y*mid+n.y*side,angleDeg,fontMm:Math.round(font)};
+ }
  function stairInfo(building,s){
   const from=building.levels.find(l=>l.id===s.fromLevelId),to=building.levels.find(l=>l.id===s.toLevelId),riseMm=to.elevationMm-from.elevationMm;
   return {riseMm,riserMm:riseMm/s.risers,treadMm:s.runLengthMm/s.risers,footprint:stairFootprint(s)};
@@ -225,6 +258,6 @@
   if(used.size!==entries.size)throw Error('El ZIP de edificio contiene entradas ajenas.');
   return {building,images};
  }
- const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
+ const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
  if(typeof module==='object')module.exports=api;else root.FloorPlanBuilding=api;
 })(typeof globalThis==='object'?globalThis:this);

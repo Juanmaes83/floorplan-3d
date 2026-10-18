@@ -186,3 +186,48 @@ test('library stores, saves, duplicates, varies, reopens and removes a building 
  const data=JSON.parse(map.get(Library.KEY)),bad=data.entries.find(e=>e.kind==='building');bad.building.stairs=[{id:'str_bad-1'}];map.set(Library.KEY,JSON.stringify(data));const raw=map.get(Library.KEY);
  assert.throws(()=>Library.load(storage,C.initial()));assert.equal(map.get(Library.KEY),raw);
 });
+
+// Footprint of a 1.x object: centre `position`, `size` width (x) × depth (y) before the clockwise rotation.
+const objectFootprint=o=>{const a=o.rotationDeg*Math.PI/180,c=Math.cos(a),s=Math.sin(a),w=o.size.widthMm/2,d=o.size.depthMm/2;
+ return [[-w,-d],[w,-d],[w,d],[-w,d]].map(([x,y])=>({x:o.position.x+x*c-y*s,y:o.position.y+x*s+y*c}));};
+const zonesOf=(b,l)=>b.stairs.filter(s=>s.fromLevelId===l.id||s.toLevelId===l.id).map(s=>B.toLocal(B.stairFootprint(s),l));
+
+test('fixture furniture never sits on a stair footprint or slab void of its level',()=>{
+ const {building}=F.build();
+ for(const l of building.levels)for(const o of l.project.objects)for(const z of zonesOf(building,l))
+  assert.equal(B.convexOverlap(objectFootprint(o),z),false,`${o.name} of «${l.name}» overlaps the stair zone`);
+ // The detector itself: the previous bed (centre 2400,1500 · 1600×2000 · 90°) covered 1100×650 mm of the void, and
+ // the previous sofa (centre 6000,1300 · 2000×900) a 2000×100 mm strip of the stair on the ground level.
+ const upper=building.levels[1],[zone]=zonesOf(building,upper);
+ assert.deepEqual(zone,[{x:2300,y:1650},{x:2300,y:2550},{x:4700,y:2550},{x:4700,y:1650}]);
+ assert.equal(B.convexOverlap(objectFootprint({position:{x:2400,y:1500},size:{widthMm:1600,depthMm:2000},rotationDeg:90}),zone),true);
+ assert.equal(B.convexOverlap(objectFootprint({position:{x:6000,y:1300},size:{widthMm:2000,depthMm:900},rotationDeg:0}),zonesOf(building,building.levels[0])[0]),true);
+});
+
+test('room labels keep clear of stair zones without changing labelAt; a real conflict is reported, not hidden',()=>{
+ const {building}=F.build(),upper=building.levels[1],room=upper.project.rooms[0],[zone]=zonesOf(building,upper),before=B.canonical(building);
+ const box={left:700,right:700,above:230,below:500},rect=(p,m=0)=>[{x:p.x-box.left-m,y:p.y-box.above-m},{x:p.x+box.right+m,y:p.y-box.above-m},{x:p.x+box.right+m,y:p.y+box.below+m},{x:p.x-box.left-m,y:p.y+box.below+m}];
+ assert.deepEqual(room.labelAt,{x:2600,y:1600});
+ assert.equal(B.convexOverlap(rect(room.labelAt),zone),true,'the stored anchor overlaps the void: this is the reported defect');
+ const at=B.labelAnchor(room.polygon,room.labelAt,box,[zone]);
+ assert.equal(at.moved,true);assert.equal(at.blocked,false);assert.equal(B.convexOverlap(rect(at,100),zone),false);
+ assert.ok(rect(at).every(p=>p.x>=400&&p.x<=4800&&p.y>=400&&p.y<=2800),'label stays inside the bedroom');
+ assert.equal(B.canonical(building),before,'display only: the document is unchanged');
+ const bed=objectFootprint(upper.project.objects[0]),preferred=B.labelAnchor(room.polygon,room.labelAt,box,[zone],{prefer:[[bed]]});
+ assert.equal(B.convexOverlap(rect(preferred,100),bed),false,'a moved label prefers a place clear of the furniture');assert.equal(B.convexOverlap(rect(preferred,100),zone),false);
+ assert.equal(B.convexOverlap(rect(B.labelAnchor(room.polygon,room.labelAt,box,[zone],{prefer:[[room.polygon]]}),100),zone),false,'furniture everywhere: still clear of the stair');
+ assert.deepEqual(B.labelAnchor(room.polygon,{x:1300,y:900},box,[zone]),{x:1300,y:900,moved:false,blocked:false},'a clear anchor is kept');
+ const full=[{x:0,y:0},{x:6000,y:0},{x:6000,y:4000},{x:0,y:4000}];
+ assert.deepEqual(B.labelAnchor(room.polygon,room.labelAt,box,[full]),{x:2600,y:1600,moved:false,blocked:true},'no clear place: stored anchor, flagged');
+});
+
+test('stair label sits inside the stair footprint on both levels, upright and fitted',()=>{
+ const {building}=F.build(),[s]=building.stairs;
+ for(const [l,text] of [[building.levels[0],'Sube'],[building.levels[1],'Hueco de escalera']]){
+  const at=B.stairLabel(s,l,text),[zone]=zonesOf(building,l),w=[...text].length*at.fontMm*0.6/2,h=at.fontMm/2;
+  assert.equal(at.angleDeg,0);assert.ok(at.fontMm<=170&&at.fontMm>=100);
+  assert.ok([{x:at.x-w,y:at.y-h},{x:at.x+w,y:at.y+h}].every(p=>p.x>=zone[0].x&&p.x<=zone[2].x&&p.y>=zone[0].y&&p.y<=zone[2].y),`${text} inside the footprint`);
+ }
+ assert.equal(B.stairLabel({...s,rotationDeg:180},building.levels[0],'Sube').angleDeg,0,'kept upright when climbing west');
+ assert.equal(B.stairLabel({...s,rotationDeg:90},building.levels[0],'Sube').angleDeg,90);
+});

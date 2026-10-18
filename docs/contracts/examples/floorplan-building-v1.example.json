@@ -367,12 +367,12 @@
             "type": "sofa",
             "name": "Sofá",
             "position": {
-              "x": 6000,
-              "y": 1300
+              "x": 6900,
+              "y": 900
             },
             "size": {
-              "widthMm": 2000,
-              "depthMm": 900
+              "widthMm": 1400,
+              "depthMm": 800
             },
             "rotationDeg": 0,
             "color": "#9aa7b3",
@@ -643,14 +643,14 @@
             "type": "bed",
             "name": "Cama",
             "position": {
-              "x": 2400,
-              "y": 1500
+              "x": 1300,
+              "y": 1600
             },
             "size": {
               "widthMm": 1600,
               "depthMm": 2000
             },
-            "rotationDeg": 90,
+            "rotationDeg": 0,
             "color": "#d9cbb5",
             "roomId": "rom_db302f8e164b4de6825312908737b996"
           }
