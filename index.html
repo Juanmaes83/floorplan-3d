@@ -3882,7 +3882,8 @@ function presentationRestorePose(state){
 window.View3D = {
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
   // Changing the active level moves the world origin (the active level stays at y = 0), so the camera is re-framed.
-  setLevelContext(ctx,view){const before=levelContext?.activeLevelId,viewBefore=levelView;levelContext=ctx?structuredClone(ctx):null;if(view)levelView=view;sync();
+  // A context identical to the current one is a no-op: no rebuild, so in-flight asset loads are never aborted.
+  setLevelContext(ctx,view){const before=levelContext?.activeLevelId,viewBefore=levelView;if(JSON.stringify(ctx||null)===JSON.stringify(levelContext)&&(!view||view===levelView))return;levelContext=ctx?structuredClone(ctx):null;if(view)levelView=view;sync();
     if(active&&!anim&&opt.mode==='orbit'&&!window.FloorPlanPresentation?.active&&(levelContext?.activeLevelId!==before||levelView!==viewBefore))flyTo(isoWhole(),600);},
   get levelView(){return levelView;},
   levelInspect(){return {...structuredClone(levelBuildInfo),groundY:ground?ground.position.y:null,view:levelView,children:levelsG?levelsG.children.length:0,
