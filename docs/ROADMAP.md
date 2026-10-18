@@ -15,7 +15,13 @@ Juanma revisó visualmente la presentación y aceptó su calidad actual para ava
 
 - [#50](https://github.com/Juanmaes83/floorplan-3d/pull/50) (contrato, opción D) y [#51](https://github.com/Juanmaes83/floorplan-3d/pull/51) (primer corte: dos plantas y escalera recta) están fusionadas. Juanma no aprobó el solape visual del hueco de escalera.
 - [#52](https://github.com/Juanmaes83/floorplan-3d/pull/52) corrige el dibujo y el fixture. Está en borrador.
-- [#53](https://github.com/Juanmaes83/floorplan-3d/pull/53), apilada sobre #52, añade el aviso orientativo **BW5**, para un mueble sobre una escalera o su hueco, en el contrato, el editor y la revisión de distribución, sin cambiar el JSON. Está en borrador.
+- [#53](https://github.com/Juanmaes83/floorplan-3d/pull/53), apilada sobre #52, cierra **BW5** (mueble sobre una escalera o su hueco) sin cambiar el JSON. Está en borrador.
+  - Estado derivado para todo el edificio, visible en 2D y en 3D.
+  - Lista «Revisar», desde la que se localiza el mueble en 2D, se aísla su planta en 3D o se edita la escalera.
+  - Al añadir o duplicar se busca un sitio libre determinista; si no lo hay, el mueble no se añade.
+  - No se confirma ningún cambio que cree un conflicto nuevo.
+  - Las salidas de presentación se bloquean mientras la distribución esté pendiente.
+- Una PR apilada sobre #53 añade «Buscar sitio libre», una recolocación asistida con vista previa y aplicación expresa.
 - [Detalle y límites](qa/multilevel-first-cut.md#52-prevención-aviso-bw5-mueble-sobre-una-escalera).
 - Siguen pendientes la GPU representativa y los teléfonos físicos del primer corte.
 - No se aprueban recorrido por la escalera, normas de escaleras, exterior ni más plantas.
