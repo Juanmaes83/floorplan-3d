@@ -15,7 +15,7 @@ Juanma revisó visualmente la presentación y aceptó su calidad actual para ava
 
 - [#50](https://github.com/Juanmaes83/floorplan-3d/pull/50) (contrato, opción D) y [#51](https://github.com/Juanmaes83/floorplan-3d/pull/51) (primer corte: dos plantas y escalera recta) están fusionadas. Juanma no aprobó el solape visual del hueco de escalera.
 - [#52](https://github.com/Juanmaes83/floorplan-3d/pull/52) corrige el dibujo y el fixture. Está en borrador.
-- La PR apilada sobre #52 añade el aviso orientativo **BW5**, para un mueble sobre una escalera o su hueco, en el contrato, el editor y la revisión de distribución, sin cambiar el JSON. Está en borrador.
+- [#53](https://github.com/Juanmaes83/floorplan-3d/pull/53), apilada sobre #52, añade el aviso orientativo **BW5**, para un mueble sobre una escalera o su hueco, en el contrato, el editor y la revisión de distribución, sin cambiar el JSON. Está en borrador.
 - [Detalle y límites](qa/multilevel-first-cut.md#52-prevención-aviso-bw5-mueble-sobre-una-escalera).
 - Siguen pendientes la GPU representativa y los teléfonos físicos del primer corte.
 - No se aprueban recorrido por la escalera, normas de escaleras, exterior ni más plantas.
