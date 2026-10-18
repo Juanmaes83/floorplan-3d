@@ -66,10 +66,14 @@
    else{el('line',{x1:fp[0].x,y1:fp[0].y,x2:fp[2].x,y2:fp[2].y,class:'level-stair-tread'},g);el('line',{x1:fp[1].x,y1:fp[1].y,x2:fp[3].x,y2:fp[3].y,class:'level-stair-tread'},g);}
    const tip={x:start.x+d.x*s.runLengthMm,y:start.y+d.y*s.runLengthMm};
    el('line',{x1:start.x,y1:start.y,x2:tip.x,y2:tip.y,class:'level-stair-arrow','marker-end':'url(#levelArrow)'},g);
-   const label=el('text',{x:start.x+d.x*s.runLengthMm/2+n.x*(w+180),y:start.y+d.y*s.runLengthMm/2+n.y*(w+180),class:'level-stair-label','text-anchor':'middle'},g);
-   label.textContent=role==='from'?'Sube':'Hueco de escalera';
+   // The label sits inside the footprint, so it never lands on the room label, walls, furniture or dimensions.
+   const text=role==='from'?'Sube':'Hueco de escalera',at=B.stairLabel(s,A,text);
+   const label=el('text',{x:at.x,y:at.y,class:'level-stair-label','text-anchor':'middle','dominant-baseline':'central','font-size':at.fontMm,transform:`rotate(${at.angleDeg} ${at.x} ${at.y})`},g);
+   label.textContent=text;
   }
  }
+ // Stair footprints of the active level in its own frame (the slab void on the arriving level), for 2D labels.
+ function stairZones(){const b=current();if(!b)return [];const A=activeLevel(b);return b.stairs.filter(s=>s.fromLevelId===A.id||s.toLevelId===A.id).map(s=>B.toLocal(B.stairFootprint(s),A));}
  function render(){
   if(!library)return;if(historyEntry!==library.activeId())entryChanged();
   const b=current();bar(b);render2D(b);push3D(b);
@@ -199,7 +203,7 @@
  $('#levelsBtn').onclick=open;
  $('#levelsClose').onclick=()=>$('#levelsDialog').close();
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
- window.FloorPlanBuildingUI={render,open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
+ window.FloorPlanBuildingUI={render,stairZones,open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
   get histories(){return histories;}};
  render();

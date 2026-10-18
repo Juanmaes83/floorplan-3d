@@ -152,9 +152,59 @@ Se abrieron y revisaron las capturas de los tres viewports.
 
 **Límites y seguimiento tras la revisión humana del 18-10-2026:**
 
-- **Pendiente de corrección visual posterior; Juanma no lo aprueba como resultado final:** en la planta primera del fixture, «Hueco de escalera» se solapa con la cama/mobiliario y con la etiqueta y cotas del dormitorio. Reproducir con `scripts/qa/multilevel/fixture-zip.cjs`, `tests/fixtures/building-fixture.cjs` y `docs/qa/artifacts/multilevel/1440x900-03-upper-2d.png`. Determinar si el fixture coloca el mueble sobre el hueco o si falla el dibujo; corregir y revisar capturas a 1440×900, 390×844 y 844×390. Este seguimiento no implica que la escalera sea transitable ni que cumpla normativa. GitHub Issues está desactivado en el repositorio (API 410), por lo que este informe y la conversación de #51 son el registro rastreable. Juanma autoriza integrar #50 y #51 con esta deuda explícita, sin declarar esta revisión visual aprobada.
+- **Solape de «Hueco de escalera» (revisión humana del 18-10-2026).** Juanma **no aprobó** el resultado visual de #51: en la planta primera del fixture, «Hueco de escalera» se solapaba con la cama y con la etiqueta y las cotas del dormitorio. Se integraron #50 y #51 con esta deuda explícita. GitHub Issues está desactivado (API 410), así que este informe y las PR son el registro. **Resuelto en la PR de corrección** (ver §5.1); no implica que la escalera sea transitable ni que cumpla normativa.
 - En «Ver todas», la planta alta tapa el interior de la baja desde este ángulo; para ver la baja se usa «hasta la activa» o los muros seccionados.
 - En móvil, el panel de propiedades se abre al crear una estancia, como antes de este corte. La prueba lo cierra antes de capturar.
+
+### 5.1 Solape del hueco de escalera: causa y corrección
+
+Medido sobre el fixture (`tests/fixtures/building-fixture.cjs`) en el marco local de cada planta, en mm, y en pantalla con `tests/stair-overlap.browser.test.cjs`, que importa el ZIP del fixture desde la UI.
+
+**Causa 1 — datos: el fixture colocaba muebles sobre la escalera.** No era un efecto de dibujo.
+
+| Planta | Escalera / hueco | Mueble anterior | Solape |
+| --- | --- | --- | --- |
+| Primera | hueco x 2300–4700, y 1650–2550 | Cama, centro (2400, 1500), 1600×2000, 90° → x 1400–3400, y 700–2300 | 1100 × 650 mm (0,72 m²) |
+| Baja | escalera x 4900–7300, y 1650–2550 | Sofá, centro (6000, 1300), 2000×900 → x 5000–7000, y 850–1750 | 2000 × 100 mm |
+
+Corrección: cama en (1300, 1600) a 0° (x 500–2100, y 600–2600) y sofá en (6000, 1100) (y 650–1550), también en `docs/contracts/examples/floorplan-building-v1.example.json`. `tests/building.test.cjs` comprueba que ningún mueble del fixture pisa la escalera ni el hueco de su planta, y que el detector marca las dos posiciones anteriores.
+
+**Causa 2 — colocación de textos: no había ninguna regla respecto a la escalera.**
+
+- La etiqueta de estancia se dibujaba en `room.labelAt`, (2600, 1600) en el dormitorio. Su bloque (nombre, superficie y `4400 × 2400 mm`) ocupa y ≈ 1370–2100, así que entraba en el hueco desde y 1650. En la baja pasaba lo mismo con «Estar».
+- «Hueco de escalera» y «Sube» se dibujaban fuera de la huella, a `ancho/2 + 180 mm` del eje: y 2730 en la primera, encima del borde del hueco y pegado al muro.
+- El orden de capas no era la causa: la escalera ya se dibujaba encima de los muebles, y por eso el solape se veía.
+
+Corrección (sólo presentación; el documento y `labelAt` no cambian, comprobado tras importar):
+
+- `FloorPlanBuilding.stairLabel`: el texto de la escalera va dentro de su huella, centrado entre la flecha y el borde, derecho, y con letra reducida sólo si no cabe. En el fixture queda en (3500, 2325), con letra de 170 mm.
+- `FloorPlanBuilding.labelAnchor`: si el bloque de la etiqueta de estancia toca una huella o un hueco de su planta (con 100 mm de margen), se busca el punto más cercano de la estancia, en una rejilla de 100 mm, que esté libre de escaleras y, si es posible, también de muebles. El dormitorio queda en (3000, 1000), a 150 mm del hueco y a 125 mm de la cama. Si no hay ningún sitio libre de escalera, se mantiene `labelAt` y el conflicto sigue visible.
+- La escalera sigue dibujándose encima de los muebles, así que una colisión real de datos no se oculta.
+
+**Evidencia** (`docs/qa/artifacts/multilevel/stair-overlap/`): `before/` es `master` `54b9206` y `after/` es esta corrección, con el mismo test, el mismo fixture de cada rama y el mismo encuadre «Ajustar».
+
+| Viewport | Planta primera | Planta baja |
+| --- | --- | --- |
+| 1440×900 | [antes](artifacts/multilevel/stair-overlap/before/1440x900-upper.png) · [después](artifacts/multilevel/stair-overlap/after/1440x900-upper.png) | [antes](artifacts/multilevel/stair-overlap/before/1440x900-lower.png) · [después](artifacts/multilevel/stair-overlap/after/1440x900-lower.png) |
+| 390×844 | [antes](artifacts/multilevel/stair-overlap/before/390x844-upper.png) · [después](artifacts/multilevel/stair-overlap/after/390x844-upper.png) | [antes](artifacts/multilevel/stair-overlap/before/390x844-lower.png) · [después](artifacts/multilevel/stair-overlap/after/390x844-lower.png) |
+| 844×390 | [antes](artifacts/multilevel/stair-overlap/before/844x390-upper.png) · [después](artifacts/multilevel/stair-overlap/after/844x390-upper.png) | [antes](artifacts/multilevel/stair-overlap/before/844x390-lower.png) · [después](artifacts/multilevel/stair-overlap/after/844x390-lower.png) |
+
+Cada captura tiene al lado su `.json`, con los rectángulos en pantalla de la escalera, su texto, las etiquetas, las cotas, el mueble y el selector de planta.
+
+- **En `master`:** en los tres viewports y en ambas plantas, el mueble y las tres líneas de la etiqueta de estancia se solapan con la escalera, y el texto de la escalera queda fuera de su huella. El test da 0/3.
+- **Con la corrección:** el test da 3/3. Se revisaron las seis capturas:
+  - en la primera, «Hueco de escalera» se lee dentro del hueco;
+  - el dormitorio y sus cotas quedan por encima, sin tocar la cama;
+  - la cama queda fuera del hueco;
+  - la escalera aparece en ambas plantas;
+  - el selector de planta se ve.
+
+**Límites residuales:**
+
+- En la baja, «Estar» (3000×2400 mm) está ocupado casi entero por el sofá y la escalera. No hay ningún sitio libre de muebles donde quepa el bloque de la etiqueta, así que la etiqueta evita la escalera pero queda sobre el sofá, como ya pasaba en `master`, y tapa el rótulo «Sofá». No se cambia porque sería un ajuste de mobiliario ajeno a este defecto.
+- La regla no detecta ni avisa de un mueble del usuario colocado sobre un hueco. Se ve, porque la escalera se dibuja encima, pero no genera un aviso BW; añadirlo cambiaría el contrato.
+- El texto de la escalera cruza las diagonales del hueco y la flecha. Se lee gracias al halo blanco.
+- No es de este defecto: en móvil, el botón flotante «Inicio» tapa parcialmente el botón «Planta baja» del selector. Pasa igual en `master` (`before/390x844-*.png`).
 
 ## 6. Gates que debe ejecutar Juanma
 

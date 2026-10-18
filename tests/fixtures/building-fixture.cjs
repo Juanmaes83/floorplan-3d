@@ -15,7 +15,8 @@ function build(){
  ground.openings.push({id:'opn_fixture-ground-door',kind:'door',wallId:shared.id,offsetMm:800,widthMm:800,heightMm:2100,sillHeightMm:0,swing:{hinge:'start',side:'left'}});
  // Confirmed («real») scale and image of the F1b example, so the two levels have different confidences.
  ground.scale=f1b.scale;ground.sourceImages=f1b.sourceImages;
- ground.objects.push({...C.object('sofa','Sofá',6000,1300,2000,900,0,'#9aa7b3'),id:'obj_fixture-sofa',roomId:estar.id});
+ // The sofa stays clear of the stair footprint (x 4900–7300, y 1650–2550).
+ ground.objects.push({...C.object('sofa','Sofá',6000,1100,2000,900,0,'#9aa7b3'),id:'obj_fixture-sofa',roomId:estar.id});
  ground.objects=ground.objects.map(o=>{const {cx,cy,w,d,rot,...rest}=o;return rest;});
  ground.sourceImages[0].bytes=groundImage.length;ground.sourceImages[0].sha256=sha(groundImage);
  C.validate(ground,{strict:true});
@@ -28,7 +29,8 @@ function build(){
  upper.sourceImages=[{id:'img_fixture-upper',mediaType:'image/jpeg',widthPx:info.widthPx,heightPx:info.heightPx,bytes:upperImage.length,sha256:sha(upperImage),storage:{kind:'sidecar-file',ref:'images/img_fixture-upper.jpg'},placement:{originMm:{x:0,y:0},rotationDeg:0,mmPerPixel:10},visible:true,opacity:0.55}];
  const dorm=upper.rooms[0],wallTop=upper.walls.find(w=>w.start.y===w.end.y&&w.start.y<1000);
  upper.openings.push({id:'opn_fixture-upper-window',kind:'window',wallId:wallTop.id,offsetMm:1500,widthMm:1200,heightMm:1200,sillHeightMm:900});
- upper.objects.push({...C.object('bed','Cama',2400,1500,1600,2000,90,'#d9cbb5'),id:'obj_fixture-bed',roomId:dorm.id});
+ // The bed stays clear of the stair void (local x 2300–4700, y 1650–2550); tests/building.test.cjs checks it.
+ upper.objects.push({...C.object('bed','Cama',1300,1600,1600,2000,0,'#d9cbb5'),id:'obj_fixture-bed',roomId:dorm.id});
  upper.objects=upper.objects.map(o=>{const {cx,cy,w,d,rot,...rest}=o;return rest;});
  C.validate(upper,{strict:true});
 
