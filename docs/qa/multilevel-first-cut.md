@@ -171,16 +171,20 @@ node scripts/qa/multilevel/perf.cjs 1440x900               # criterio: ratio ≤
 node scripts/qa/multilevel/perf.cjs 390x844
 node --test --test-concurrency=1 tests/building.browser.test.cjs
 New-Item -ItemType Directory -Force gpu-regression > $null
-Get-ChildItem tests/*browser.test.cjs | % { $n=$_.BaseName; node --test --test-concurrency=1 $_.FullName *> "gpu-regression/$n.log"; "$n exit=$LASTEXITCODE " + ((Select-String -Path "gpu-regression/$n.log" -Pattern '^# (tests|pass|fail|cancelled|skipped) ').Line -join ' ') | Add-Content gpu-regression/summary.txt }
+Get-ChildItem tests/*browser.test.cjs | % { $n=$_.BaseName; node --test --test-concurrency=1 --test-reporter=tap $_.FullName *> "gpu-regression/$n.log"; "$n exit=$LASTEXITCODE " + ((Select-String -Path "gpu-regression/$n.log" -Pattern '^# (tests|pass|fail|cancelled|skipped) ').Line -join ' ') | Add-Content gpu-regression/summary.txt }
 Get-Content gpu-regression/summary.txt
 ```
 
 **A comunicar:** la salida de `gpu-check.cjs` y de los dos `perf.cjs`, y `gpu-regression/summary.txt`. `cancelled` significa sin resultado, no aprobado.
 
+`--test-reporter=tap` es obligatorio en el bucle: desde Node 23 el reporter por defecto es `spec` también al redirigir a un archivo, y `spec` no escribe las líneas `# tests`, `# pass`, `# fail`, `# cancelled` y `# skipped` de las que `summary.txt` toma los recuentos. Si una línea de `summary.txt` sólo tiene `exit=…` sin recuentos, ese archivo no cuenta como ejecutado.
+
 ### 6.2 Móvil físico (al menos un Android de gama media y un iPhone)
 
 1. En el PC, generar el ZIP del fixture: `node scripts/qa/multilevel/fixture-zip.cjs edificio-fixture.zip`. Pasarlo al teléfono.
-2. Abrir en el teléfono la preview de Vercel de la PR, con la sesión iniciada, y comprobar que es la del SHA final. «Subir plano» → `edificio-fixture.zip`.
+2. Abrir en el teléfono la preview de Vercel, con la sesión de Vercel iniciada (la protección de previews exige login). «Subir plano» → `edificio-fixture.zip`.
+   - **URL fija de `883ec8b`:** <https://floorplan-3d-9vscih4cj-juanma-espinosas-projects.vercel.app>. Es inmutable: no cambia con nuevos pushes. Los commits posteriores a `883ec8b` sólo tocan `docs/`.
+   - El alias de rama `floorplan-3d-git-feat-multilev-cb698f-juanma-espinosas-projects.vercel.app` apunta siempre al último push de la rama; si se usa, comprobar su SHA en el panel de Vercel.
 3. **Comprobar:**
    - el selector de planta funciona con el dedo;
    - «Plantas…» se puede leer y desplazar;
