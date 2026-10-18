@@ -1,0 +1,58 @@
+# Primer corte de experiencia contextual: editar puertas y ventanas en el plano
+
+**Decisión de alcance propuesta para revisión (19-10-2026).** Se apoya en el [estudio LoRA LAB #48](https://github.com/Juanmaes83/floorplan-3d/pull/48), §5, y en la [observación del vídeo corto #58](../technical/loralab-editor-ux-observation-2026-10-18.md). Ninguna de esas PR está integrada al escribir esto. La grabación externa de 104 s es evidencia secundaria para Claude, que no pudo abrirla; la tarea de Rubik sí fue medida directamente por él. No se implementa nada en este documento, no se aprueba todo Roadmap 2 y no se copia el diseño o los recursos de LoRA LAB.
+
+## 1. Problema y resultado buscado
+
+Rubik permite crear y editar huecos, pero la tarea medida por Claude en `master` `d9cd11b` exigió **26 acciones** para estancia con nombre, puerta, ventana, suelo y pared; **12 acciones y cuatro cambios de modo** correspondieron a los huecos. Para editarlos hay que entrar en «Plano propio → Seleccionar/editar». Una puerta recibe `swing:{hinge:'start',side:'left'}` por defecto y la interfaz no expone la corrección, aunque el dibujo, la revisión de puertas, el 3D y la visita usan el dato. Cerrar el panel de trazado puede dejar su modo activo y hacer que el siguiente clic no seleccione la estancia. [Capturas y medida en #48](https://github.com/Juanmaes83/floorplan-3d/tree/docs/loralab-study-gate/docs/qa/artifacts/loralab/rubik-room-task).
+
+**Primer corte elegido:** con «Seleccionar» en 2D, tocar una puerta o ventana, verla resaltada y editar sus propiedades en el panel normal; desde una estancia seleccionada, añadir un hueco a uno de sus muros sin cambiar al modo «Plano propio». Reutiliza `FloorPlanProjectV1`, el historial y los validadores actuales. El objetivo es hacer accesible una capacidad existente y evitar que un valor por defecto invisible gobierne la revisión y la visita. No afirmamos que LoRA LAB resuelva la tarea en menos acciones: no se midió allí una tarea equivalente.
+
+## 2. Decisiones de producto y semántica
+
+| Decisión | Regla para este corte | Motivo y límite |
+| --- | --- | --- |
+| «Abre hacia» | Mostrar **el nombre de la estancia** sólo si se puede atribuir cada lado del muro de forma única y estable. Presentar una flecha sobre el plano y un resumen «abre hacia X». Si hay exterior, solape, nombre repetido o atribución ambigua, mostrar lados A/B con flechas; cuando sea fiable, se puede rotular interior/exterior. Persistir únicamente `swing.side` relativo a `wall.start`→`wall.end`, nunca el texto ni un `roomId` calculado. | El usuario elige por el espacio visible, pero el contrato usa orientación del eje del muro. La conversión entre ambas debe comprobarse con muros en todas las orientaciones y extremos invertidos. No inventar una estancia cuando la relación es ambigua. |
+| Bisagra | La UI muestra y previsualiza los dos extremos sobre el dibujo, con letras A/B y el extremo resaltado. Persistir `swing.hinge` (`start`/`end`). Evitar «izquierda/derecha» aisladas, que cambian con la mirada y la dirección del muro. | El cambio debe coincidir con el barrido en 2D, la revisión y la representación 3D. |
+| Revisión | **Cambiar la orientación no marca `source.review:'confirmed'`.** Una acción explícita «Confirmar revisión de este hueco» puede usar el control global existente después de revisar posición, medidas y orientación; cualquier edición posterior de esos campos vuelve a `unreviewed`. La interfaz no dice «orientación verificada» a partir de `source.review`, pues este campo no registra una aprobación independiente del sentido y algunos proyectos antiguos ya están confirmados. | Evita confundir edición con verificación humana. Si el producto necesita acreditar por separado quién confirmó el sentido y cuándo, requiere una propuesta de contrato distinta. |
+| Huecos solapados | Una **regla de edición compartida** comprueba intervalos del mismo muro en todas las rutas que creen o cambien huecos, incluida «Plano propio», el nuevo panel y añadir desde estancia. Rechaza la operación nueva con mensaje y conserva el estado anterior. Los JSON/ZIP existentes con solapes se abren sin mover datos; se advierte del conflicto y se permite corregirlo, sin certificarlo como resuelto. No se endurece ahora el validador canónico. | Un rechazo global en `FloorPlanProjectV1` rompería proyectos previos e importaciones: requiere migración y decisión de contrato aparte. La guardia compartida evita que dos interfaces creen el mismo defecto. La PR debe mostrar la reproducción antes/después y cubrir deshacer/rehacer. |
+
+La atribución geométrica por estancia de #40 sirve como **criterio de comparación**, pero su módulo MCP de Node no se conecta sin más al navegador. La implementación debe extraer una función pura reutilizable o demostrar mediante pruebas de equivalencia que la atribución en cliente coincide. `swing.side` se traduce a un semiplano respecto al eje dirigido del muro y la UI comprueba qué estancia ocupa cada lado; una mera lista de nombres no determina el sentido. Si el muro se invierte en una edición posterior, hay que conservar el **sentido físico** de la hoja o avisar de que necesita revisión, nunca invertirlo silenciosamente.
+
+## 3. Alcance funcional del primer corte
+
+1. **Selección en 2D:** selección directa con ratón y tacto en el modo normal; objetivo táctil mínimo de 44×44 CSS px sin cambiar la geometría dibujada. Resolver prioridades donde coincidan muro, cota, etiqueta y hueco; resaltar el ID elegido. `Esc` cancela, el foco vuelve de forma predecible y cambiar de 2D a 3D no deja un modo oculto activo.
+2. **Panel contextual:** tipo entre `door`, `sliding-door`, `window` y `opening` con nombres en castellano; posición a lo largo del muro, ancho, alto, antepecho y «Centrar». Para `door`, bisagra y sentido con vista previa del barrido y las reglas anteriores. Para los demás, no permitir `swing`; al convertir a puerta pedir elección visible, y al salir de puerta informar de la eliminación de `swing` antes de confirmar. Los ajustes de antepecho y altura respetan la altura del muro. El ID no cambia.
+3. **Añadir desde estancia:** botones «Añadir puerta» y «Añadir ventana» en su panel, seguidos de selección de un muro activo que la bordee realmente; vista previa del ancho/posición y de otros huecos. Si no hay muro inequívoco, se explica y se ofrece el trazado existente. El hueco creado queda seleccionado. Ni una estancia vecina ni una planta distinta cambian en silencio.
+4. **Persistencia y reversibilidad:** una confirmación equivale a una transacción de historial; cancelar deja bytes y estado intactos, aplicar puede deshacerse y rehacerse en un paso, y un fallo de guardado no publica un estado parcial. Mantener JSON/ZIP, IDs, origen y campos ajenos al editor. En edificio, operar sólo en la planta activa.
+5. **Conflictos heredados:** destacar huecos ya solapados sin reescribirlos. La edición que los resuelve ha de ser posible; una operación que cree otro solape se rechaza. No hay falso «todo correcto» por abrir un proyecto antiguo.
+
+«Plano propio → Seleccionar/editar» continúa para trazado sobre imagen. El nuevo panel no promete estilos externos ni modifica el MCP, el importador, el contrato multipiso o el algoritmo de visita.
+
+## 4. Fuera de alcance y siguiente candidato
+
+Quedan fuera familias geométricas nuevas (pivotante, garaje, mirador), marcos, colores, cortinas, iluminación por estancia, tipos de estancia persistentes, dibujo directo de habitaciones, edición por arrastre de vértices y selección de pared por clic para materiales. La [observación #58](../technical/loralab-editor-ux-observation-2026-10-18.md) conserva su valor: **el siguiente candidato de UX** sería agrupar creación de estancias, nombres sugeridos y acabados visibles. La elección aquí responde al dato de orientación inaccesible y a la tarea medida; no demuestra que la experiencia completa de Rubik ya alcance la claridad de LoRA LAB. Ese segundo corte necesitará medir a usuarios y decidir reglas de unión de muros antes de aprobarlo.
+
+## 5. Aceptación y QA alta
+
+**Antes de modificar producto:** fijar una tarea y evidencia reproducible de la base `master` con 26 acciones, de las cuales 12 y cuatro cambios de modo son para huecos. Registrar exactos SHA, resolución, navegador, datos de entrada y definición de «acción». Un script de Playwright puede repetirla; la revisión humana valida que los clics correspondan a la tarea real.
+
+**Funcional:**
+
+- Selección de cada tipo, ratón y tacto, incluyendo huecos cortos, zoom, muros compartidos, geometría rotada, coincidencia con cotas y planta activa. Teclado, orden de foco, `Esc`, cancelación y salida del panel.
+- Conversión entre cuatro tipos; `swing` sólo en `door`, altura y antepecho dentro del muro, intervalo dentro de la longitud, sin solape nuevo. Casos de borde: huecos contiguos, uno ya solapado al importar, muro demolido, pared sin estancia única y nombres repetidos.
+- Sentido y bisagra en muros horizontales, verticales y oblicuos y con `start`/`end` invertidos: el semiplano elegido coincide con flecha y barrido en 2D, revisión de distribución, 3D y visita. Ningún estado de revisión confirmado por el mero cambio; botón explícito y persistencia en JSON/ZIP.
+- Guardar/F5/exportar/importar conserva IDs, tipo, posición y sentido; cancelar, deshacer/rehacer y fallo de almacenamiento no dejan datos a medias. Edificio de dos plantas: la otra planta conserva su hash. Los proyectos de una planta y las herramientas antiguas siguen funcionando.
+- Pruebas de la guardia común en **todas** las rutas de edición de huecos. Un solape importado queda visible y corregible. Tests unitarios del cálculo de lado, invariantes del intervalo y reversibilidad; suites afectadas `tracing`, `project`, `room-layout`, `building`, `layout-review`, `presentation`, `upload` y guiado. No relajar aserciones por un render lento.
+
+**Navegador y revisión humana:** Playwright/Chromium en 1440×900, 390×844 y 844×390, con capturas del hueco seleccionado, panel, cambio antes/después, advertencia y edificio. Medir rectángulos para detectar controles recortados, panel inaccesible, cota o etiqueta tapada, y objetivo táctil pequeño. Verificar visualmente 2D y 3D, y probar un teléfono físico cuando esté disponible; distinguir resultados de GPU, render por software, CI no ejecutada y revisión humana. La tarea repetida debe usar **menos de 12 acciones y menos de cuatro cambios de modo para los huecos**, sin subir errores ni perder precisión; reportar además el total, sin atribuir ahorro a LoRA LAB. Una sesión con un usuario D-01 comprueba si entiende bisagra y sentido sin explicación técnica.
+
+**Entrega:** una PR de producto desde el `master` vigente, preview del SHA final, vídeos/capturas comparables, comandos y PASS/FAIL/SKIP, límites y revisión humana. No merge por el simple hecho de que pase la suite: la persona revisa un caso nuevo con puerta hacia cada estancia. Si CI no ejecuta pasos, se registra así. No mezclar este corte con la Etapa 2 del MCP ni con el estudio externo.
+
+## 6. Dependencias y orden
+
+1. Reconciliar el estudio #48 con `master` y fusionar o cerrar su decisión documental; integrar #58 o trasladar explícitamente su evidencia a la documentación canónica. La PR de implementación no se apila sobre un estudio en borrador.
+2. Comprobar que esta decisión sigue siendo la mejor tras la prueba de Claude; resolver cualquier discrepancia de nomenclatura o semántica antes de tocar código.
+3. Implementar sólo el alcance de §3, con los gates de §5. Documentar el siguiente candidato de estancias/materiales como propuesta separada.
+
+La PR #57 del MCP y este trabajo de interfaz no dependen técnicamente una de otra. Su aprobación y merge se deciden por separado.
