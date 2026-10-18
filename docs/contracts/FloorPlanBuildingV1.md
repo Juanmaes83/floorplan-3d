@@ -70,6 +70,27 @@ Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 | BW2 | Un muro de la planta n supera la altura libre bajo el forjado de la planta n+1. |
 | BW3 | Las plantas tienen distinta confianza de escala, o alguna no está confirmada. Las distancias en mm son nominales y su confianza física difiere. |
 | BW4 | Un muro de la planta superior no tiene un muro de la planta inferior debajo (a ≤ grosor/2 + 20 mm en sus extremos y su punto medio). Es una comprobación de **coherencia visual de la alineación**, no un dictamen estructural. |
+| BW5 | Un mueble pisa la huella de una escalera que sale de su planta o el hueco de una que llega a ella. Ver §4.1. Es **coherencia del dibujo**, no una comprobación normativa ni de paso. |
+
+### 4.1 BW5: mueble sobre una escalera o su hueco
+
+- **Qué se compara:** cada mueble de una planta con las escaleras que **salen** de ella (su huella) o **llegan** a ella (el hueco del forjado), en el marco local de esa planta. Un mueble nunca se compara con escaleras de otra planta, aunque coincidan sus coordenadas locales.
+- **Huellas:** el rectángulo girado del mueble (`position`, `size.widthMm` × `size.depthMm`, `rotationDeg` horario), nunca su rectángulo envolvente, y la huella de §3.
+- **Regla:** hay conflicto cuando la penetración por ejes separadores entre las dos huellas supera **`CONTACT_TOLERANCE_MM` = 1 mm**.
+  - Compartir un borde o tocar una esquina (penetración 0) es contacto, no conflicto.
+  - También lo es un solape de 1 mm o menos, debido al redondeo.
+  - Un mueble sin geometría finita no se evalúa; el estado del edificio pasa a «evidencia insuficiente» (ver más abajo).
+- **Aviso:** `{code: "BW5", path: "/levels/<levelId>/objects/<objectId>", level, objectId, stairId, message, evidence}`.
+  - `evidence` contiene `rule`, `zone` (`escalera` o `hueco`), `penetrationMm`, `overlapAreaMm2`, el polígono compartido `overlap`, `footprint` del mueble y `stairPolygon`.
+  - Es un dato **derivado**: no se guarda en el documento, no cambia la versión ni la estructura y nunca impide validar, guardar, importar ni exportar.
+- **Implementación de referencia:** `FloorPlanBuilding.stairConflicts`. La usan el aviso, el resaltado 2D, el formulario de escalera y la revisión de distribución; esta última recibe los conflictos ya calculados y no repite la geometría.
+- **Correspondencia con el 3D:** la huella de §3 es la que el 3D construye. Los peldaños parten de `startMm` en el sentido de subida, con `widthMm` de ancho, y el hueco del forjado se recorta con el mismo polígono. Los muebles se colocan en `position` con el mismo giro. `tests/stair-conflicts.browser.test.cjs` compara las esquinas de la escalera construida y la pose 3D del mueble con la evidencia de BW5, con un margen de 1 mm.
+- **Estado del edificio (`FloorPlanBuilding.buildingStatus`):** dato derivado y global, calculado para todas las plantas:
+  - `clear`: se han evaluado todos los muebles y ninguno pisa una escalera;
+  - `pending`: hay al menos un BW5 («N conflictos en N plantas: distribución pendiente»);
+  - `insufficient`: no hay conflictos, pero algún mueble no se pudo evaluar, así que no se afirma que la distribución esté libre.
+
+  Cada conflicto incluye un resumen legible del tipo «Planta baja: «Sofá» sobre los peldaños 1 · 800 mm (escala pendiente: medida nominal)». Con escala estimada o pendiente, los milímetros son nominales.
 
 ## 5. Migración y exportación de una planta
 

@@ -18,6 +18,7 @@ async function setup(context){
   try{await route.fulfill({status:200,contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await p});}catch{await route.abort();}});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanBuildingUI&&window.View3D);await require('./editor-fixture.cjs')(page);return {page,errors};
 }
+const bw5Count=b=>B.warnings(b).filter(w=>w.code==='BW5').length;
 const digest=v=>require('node:crypto').createHash('sha256').update(typeof v==='string'?v:B.canonical(v)).digest('hex');
 const lib=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)),KEY);
 const ctx=page=>page.evaluate(()=>FloorPlanBuildingUI.context);
@@ -171,13 +172,15 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2&&FloorPlanApp.project.sourceImages?.length===1,null,{timeout:60000});
  await page.waitForFunction(()=>/Plano cargado como nueva planta del edificio/.test(document.querySelector('#toast').textContent+' '+document.body.innerText),null,{timeout:30000});
  data=await lib(page);const fromImage=data.entries.find(e=>e.id===data.activeId);assert.equal(fromImage.building.levels[1].project.sourceImages[0].mediaType,'image/png');
+ assert.deepEqual([fromImage.building.levels[1].project.objects.length,fromImage.building.stairs.length,bw5Count(fromImage.building)],[0,0,0],'a level from an image invents no furniture, stairs or BW5');
  assert.equal(digest(JSON.stringify(data.entries.find(e=>e.id===singleId))),digest(singleBefore));await shot('11-level-from-image');
  // 11. A level from a PDF through the same flow (another building from the untouched 1.x project).
  await press(page,'#projectsBtn',mobile);await page.selectOption('#projectList',singleId);await press(page,'#projectOpen',mobile);await page.waitForFunction(()=>!FloorPlanBuildingUI.context);
  await openLevels(page,mobile);await page.locator('#levelImageIn').setInputFiles(path.join(root,'tests/fixtures/intake/plan-one-page.pdf'));
  await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2&&FloorPlanApp.project.sourceImages?.length===1,null,{timeout:120000});
  await page.waitForFunction(()=>/PDF página 1 de 1.*Plano cargado como nueva planta del edificio/.test(document.querySelector('#toast').textContent),null,{timeout:30000});
- data=await lib(page);assert.equal(data.entries.find(e=>e.id===data.activeId).building.levels[1].project.sourceImages[0].mediaType,'image/png');
+ data=await lib(page);const fromPdf=data.entries.find(e=>e.id===data.activeId).building;assert.equal(fromPdf.levels[1].project.sourceImages[0].mediaType,'image/png');
+ assert.deepEqual([fromPdf.levels[1].project.objects.length,fromPdf.stairs.length,bw5Count(fromPdf)],[0,0,0],'a level from a PDF invents no furniture, stairs or BW5');
  assert.equal(digest(JSON.stringify(data.entries.find(e=>e.id===singleId))),digest(singleBefore));await shot('12-level-from-pdf');
  // 12. Duplicate and delete a building as one unit; image cleanup keeps bytes still referenced by another entry.
  const pdfEntry=data.activeId,ref=data.entries.find(e=>e.id===pdfEntry).building.levels[1].project.sourceImages[0].storage.ref;

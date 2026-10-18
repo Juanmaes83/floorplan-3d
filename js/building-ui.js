@@ -5,7 +5,7 @@
 (function(){
  const B=window.FloorPlanBuilding,P=window.FloorPlanPackage,T=window.FloorPlanTracing,I=window.FloorPlanImages;
  const NS='http://www.w3.org/2000/svg';
- const histories=new Map();let historyEntry=null,pendingLevel=null,adoptedLevel=false,showGhost=true,lastContext='',dialogError='';
+ const histories=new Map();let historyEntry=null,pendingLevel=null,adoptedLevel=false,showGhost=true,lastContext='',dialogError='',announced=null;
  const $=s=>document.querySelector(s);
  const isBuilding=()=>!!library?.isBuilding?.();
  // The stored building with the on-screen project as its active level (the editor may be ahead of storage).
@@ -30,7 +30,7 @@
   say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
  }
  // Called whenever the open entry changes (open, import, create): histories belong to one entry.
- function entryChanged(){if(historyEntry!==library?.activeId()){histories.clear();historyEntry=library?.activeId();}lastContext='';}
+ function entryChanged(){if(historyEntry!==library?.activeId()){histories.clear();historyEntry=library?.activeId();}lastContext='';announced=null;}
  function context(b){return b?{activeLevelId:library.activeLevelId(),levels:b.levels,stairs:b.stairs}:null;}
  function push3D(b){
   const ctx=context(b),key=ctx?JSON.stringify([ctx.activeLevelId,ctx.stairs,ctx.levels.map(l=>l.id===ctx.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l)]):'none';
@@ -71,12 +71,99 @@
    const label=el('text',{x:at.x,y:at.y,class:'level-stair-label','text-anchor':'middle','dominant-baseline':'central','font-size':at.fontMm,transform:`rotate(${at.angleDeg} ${at.x} ${at.y})`},g);
    label.textContent=text;
   }
+  // BW5: furniture over a stair of this level. Dashed outline, hatched shared area and a «!» mark, so the conflict
+  // does not rely on colour alone; the warning text is in #levelConflicts and in «Plantas…».
+  for(const c of B.stairConflicts(b,{levelId:A.id})){
+   const g=el('g',{class:'level-conflict','data-object':c.objectId,'data-stair':c.stairId,role:'img','aria-label':c.message},stairs);
+   el('title',{},g).textContent=c.message;
+   el('path',{d:pathOf(c.overlap),class:'level-conflict-area'},g);el('path',{d:pathOf(c.footprint),class:'level-conflict-outline'},g);
+   const at=c.overlap.reduce((a,p)=>({x:a.x+p.x/c.overlap.length,y:a.y+p.y/c.overlap.length}),{x:0,y:0});
+   el('circle',{cx:at.x,cy:at.y,r:150,class:'level-conflict-mark'},g);el('text',{x:at.x,y:at.y,class:'level-conflict-mark-text','text-anchor':'middle','dominant-baseline':'central'},g).textContent='!';
+  }
+  // Over a conflict highlight the stair texts are repeated on top (visual copy, hidden from assistive technology), so
+  // both remain readable; the original text stays in its stair group.
+  if(stairs.querySelector('.level-conflict'))for(const label of [...stairs.querySelectorAll('.level-stair-label')]){label.id=`levelStairLabel-${label.closest('[data-stair]').dataset.stair}`;el('use',{href:'#'+label.id,class:'level-stair-label-top','aria-hidden':'true'},stairs);}
  }
+ /* ---------- BW5: building-wide diagnosis, guard and guided correction ---------- */
+ const keyOf=c=>c.levelId+'|'+c.objectId+'|'+c.stairId;
+ function status(b=current()){return b?B.buildingStatus(b):{state:'clear',conflicts:[],unevaluated:[],conflictLevels:0,headline:''};}
+ // Chip over the plan (2D and 3D, bottom right, away from the toolbars and the top dimension) with the state of the
+ // WHOLE building, and a one-time announcement when a conflict appears (adding, dragging, importing, a new stair).
+ function notify(b){
+  const box=$('#levelConflicts'),st=status(b),list=st.conflicts;
+  if(box){box.hidden=st.state==='clear';box.dataset.state=st.state;box.replaceChildren();
+   if(st.state!=='clear'){const t=document.createElement('span');t.className='level-conflicts-full';t.textContent=`⚠ ${st.headline}`;
+    const short=document.createElement('span');short.className='level-conflicts-short';short.setAttribute('aria-hidden','true');short.textContent=`⚠ ${st.conflicts.length||st.unevaluated.length}`;box.append(short);
+    const more=document.createElement('button');more.type='button';more.className='btn';more.id='levelConflictsOpen';more.textContent='Revisar';more.onclick=()=>openConflicts();box.append(t,' ',more);}}
+  const keys=new Set(list.map(keyOf)),fresh=announced?list.filter(c=>!announced.has(keyOf(c))):list;
+  if(fresh.length)say(fresh.length===1?fresh[0].message:`${st.headline}. Pulsa «Revisar» para localizarlos.`,7000);
+  announced=keys;
+ }
+ // While a drag is in progress: the same highlight and chip, without announcements (the drop decides).
+ function preview(){const b=current();if(!b)return;render2D(b);const keep=announced;notify(b);announced=keep;}
+ // Frames a plan footprint in the 2D view.
+ function frame(poly){const xs=poly.map(p=>p.x),ys=poly.map(p=>p.y),w=Math.max(800,Math.max(...xs)-Math.min(...xs)),h=Math.max(800,Math.max(...ys)-Math.min(...ys)),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+  view.s=Math.max(.012,Math.min(.25,svg.clientWidth/(w*3),svg.clientHeight/(h*3)));view.x0=cx-svg.clientWidth/2/view.s;view.y0=cy-svg.clientHeight/2/view.s;applyView();}
+ // «Localizar»: the level of the conflict becomes active, the 2D plan opens, the furniture is selected and framed.
+ async function locate(c){
+  closeConflicts();if(typeof viewMode!=='undefined'&&viewMode!=='2d')await setView('2d');
+  if(library.activeLevelId()!==c.levelId)selectLevel(c.levelId);
+  const fresh=B.stairConflicts(current(),{levelId:c.levelId}).find(x=>x.objectId===c.objectId)||c;
+  select({kind:'furn',id:c.objectId});frame(fresh.footprint);
+  say(`Seleccionado «${c.objectName}» en «${c.levelName}». Arrástralo fuera de la escalera, o edita la escalera en «Plantas…». Rubik no lo mueve por sí solo.`,9000);
+ }
+ // 3D: show the conflicting level without the levels above it (it can then be orbited freely).
+ function isolate(c){closeConflicts();if(library.activeLevelId()!==c.levelId)selectLevel(c.levelId);lastContext='';window.View3D?.setLevelContext(context(current()),'active');bar(current());
+  say(`3D: se muestra «${c.levelName}» sin las plantas superiores. «Ver todas» las vuelve a mostrar.`,7000);}
+ function editStair(){closeConflicts();open();const f=$('#levelsDialog .level-stair-form');f?.scrollIntoView({block:'start'});$('#stairX')?.focus();}
+ function conflictsDialog(){let d=$('#conflictsDialog');if(d)return d;
+  d=document.createElement('dialog');d.id='conflictsDialog';d.className='conflicts-dialog';d.setAttribute('aria-labelledby','conflictsTitle');
+  d.innerHTML='<h2 id="conflictsTitle"></h2><p id="conflictsIntro"></p><ul id="conflictsList"></ul><div class="actions"><button type="button" class="btn" id="conflictsClose">Cerrar</button></div>';
+  document.body.append(d);d.querySelector('#conflictsClose').onclick=()=>closeConflicts();return d;}
+ function closeConflicts(){const d=$('#conflictsDialog');if(d?.open)d.close();}
+ function openConflicts(){
+  const d=conflictsDialog(),st=status(),in3D=typeof viewMode!=='undefined'&&viewMode==='3d';
+  d.querySelector('#conflictsTitle').textContent=st.state==='clear'?'Sin muebles sobre escaleras':st.headline;
+  d.querySelector('#conflictsIntro').textContent=st.state==='clear'?'Ningún mueble del edificio pisa una escalera ni un hueco.':'Coherencia del dibujo en planta, no una comprobación normativa. Las medidas son nominales cuando la escala no está confirmada. Para corregirlo: mueve el mueble fuera de la escalera, edita la escalera o cambia el mueble de estancia. Rubik no mueve nada por sí solo.';
+  const ul=d.querySelector('#conflictsList');ul.replaceChildren();
+  for(const c of st.conflicts){const li=document.createElement('li');li.dataset.object=c.objectId;li.dataset.level=c.levelId;
+   const t=document.createElement('p');t.textContent=c.summary;li.append(t);const row=document.createElement('div');row.className='actions';
+   const go=document.createElement('button');go.type='button';go.className='btn primary';go.dataset.action='locate';go.textContent='Localizar en el plano 2D';go.onclick=()=>locate(c);row.append(go);
+   if(in3D){const iso=document.createElement('button');iso.type='button';iso.className='btn';iso.dataset.action='isolate';iso.textContent='Ver esta planta en 3D';iso.onclick=()=>isolate(c);row.append(iso);}
+   const st2=document.createElement('button');st2.type='button';st2.className='btn';st2.dataset.action='stair';st2.textContent='Editar la escalera';st2.onclick=()=>editStair();row.append(st2);
+   li.append(row);ul.append(li);}
+  for(const u of st.unevaluated){const li=document.createElement('li');li.dataset.unevaluated=u.objectId||'';li.textContent=`${u.levelName}: «${u.objectName}» — evidencia insuficiente. ${u.reason}`;ul.append(li);}
+  if(!d.open)d.showModal();(d.querySelector('#conflictsList button')||d.querySelector('#conflictsClose')).focus();
+ }
+ // commit() guard: a change that creates a NEW conflict on the active level is refused (returns the reason).
+ function guard(before){
+  if(!isBuilding())return null;const b=library.building(),id=library.activeLevelId();let prev;
+  try{prev=B.setProject(b,id,JSON.parse(before));}catch{return null;}
+  const was=new Set(B.stairConflicts(prev,{levelId:id}).map(keyOf)),now=B.stairConflicts(current(),{levelId:id}).find(c=>!was.has(keyOf(c)));
+  return now?`No se ha aplicado el cambio: «${now.objectName}» quedaría sobre ${now.zone==='hueco'?'el hueco de la escalera':'los peldaños'} ${now.stairIndex}. Conserva su última posición válida; colócalo fuera de la escalera.`:null;
+ }
+ function refused(message){say(message,8000);}
+ // Add/duplicate without a demonstrated free place: nothing is added; the reason and the way out are explained.
+ function explainPlacement(result,name){
+  let d=$('#placementDialog');if(!d){d=document.createElement('dialog');d.id='placementDialog';d.className='conflicts-dialog';d.setAttribute('aria-labelledby','placementTitle');
+   d.innerHTML='<h2 id="placementTitle">No se ha añadido el mueble</h2><p id="placementReason"></p><p>Arrástralo desde la biblioteca a otra estancia, o selecciona otra estancia y vuelve a pulsarlo.</p><div class="actions"><button type="button" class="btn primary" id="placementClose">Entendido</button></div>';
+   document.body.append(d);d.querySelector('#placementClose').onclick=()=>d.close();}
+  d.querySelector('#placementReason').textContent=result.message||`No hay un sitio libre demostrado para «${name}».`;d.dataset.reason=result.reason||'';
+  if(!d.open)d.showModal();d.querySelector('#placementClose').focus();
+ }
+ /* Presentation outputs (presentation, its captures and image ZIP, sheet, image export): while the distribution is
+    not clear they are not produced; the person is offered the conflict list instead. 3D inspection and JSON/ZIP
+    backups stay available and say the state. Returns true when the output may proceed. */
+ function gate(what){const st=status();if(st.state==='clear')return true;
+  say(`${what}: ${st.state==='pending'?'la distribución está pendiente':'hay muebles sin evaluar'} (${st.headline}). Corrígelo antes de presentarla como propuesta.`,8000);openConflicts();return false;}
+ const pendingNote=()=>{const st=status();return st.state==='clear'?'':` Atención: ${st.headline}.`;};
+ // Stair zones of the active level with id and kind, for the placement search.
+ function stairZoneList(){const b=current();return b?B.stairZonesOf(b,activeLevel(b)):[];}
  // Stair footprints of the active level in its own frame (the slab void on the arriving level), for 2D labels.
  function stairZones(){const b=current();if(!b)return [];const A=activeLevel(b);return b.stairs.filter(s=>s.fromLevelId===A.id||s.toLevelId===A.id).map(s=>B.toLocal(B.stairFootprint(s),A));}
  function render(){
   if(!library)return;if(historyEntry!==library.activeId())entryChanged();
-  const b=current();bar(b);render2D(b);push3D(b);
+  const b=current();bar(b);render2D(b);notify(b);push3D(b);
   if($('#levelsDialog')?.open)fill();
  }
  /* ---------- dialog ---------- */
@@ -135,13 +222,17 @@
   const x=field(section,'Arranque X (mm)','stairX',d.startMm.x),y=field(section,'Arranque Y (mm)','stairY',d.startMm.y),rot=field(section,'Sentido de subida (°, horario)','stairRotation',d.rotationDeg,{min:0,max:359});
   const w=field(section,'Ancho (mm)','stairWidth',d.widthMm,{min:300,max:5000}),run=field(section,'Longitud en planta (mm)','stairRun',d.runLengthMm,{min:500,max:20000}),n=field(section,'Peldaños (contrahuellas)','stairRisers',d.risers,{min:2,max:40});
   const derived=document.createElement('p');derived.id='stairDerived';derived.className='level-derived';section.append(derived);
+  // Before saving: the furniture of either level that would sit on this stair (same BW5 computation).
+  const clash=document.createElement('p');clash.id='stairConflictsPreview';clash.className='level-derived';clash.setAttribute('aria-live','polite');section.append(clash);
+  const preview=()=>{let list;try{list=B.stairConflicts(B.setStair(b,{id:s?.id,fromLevelId:from.id,toLevelId:to.id,startMm:{x:int(x.value),y:int(y.value)},rotationDeg:int(rot.value),widthMm:int(w.value),runLengthMm:int(run.value),risers:int(n.value)}));}catch{clash.textContent='';return;}
+   clash.dataset.count=String(list.length);clash.textContent=list.length?`⚠ Quedarían sobre la escalera (BW5): ${list.map(c=>`«${c.objectName}» en «${c.levelName}» (${String(c.penetrationMm).replace('.',',')} mm)`).join('; ')}. Si guardas, la distribución quedará pendiente y cada mueble aparecerá en «Revisar» para corregirlo. Ningún mueble se moverá solo.`:'Ningún mueble queda sobre la huella ni sobre el hueco.';};
   const update=()=>{const rise=to.elevationMm-from.elevationMm,k=Math.max(1,Number(n.value)||1);derived.textContent=`Desnivel ${rise} mm · contrahuella ${(rise/k).toFixed(0)} mm · huella ${((Number(run.value)||0)/k).toFixed(0)} mm. Valores orientativos; no se comprueban contra ninguna normativa.`;};
-  for(const i of [n,run])i.oninput=update;update();
+  for(const i of [n,run])i.oninput=update;update();for(const i of [x,y,rot,w,run,n])i.addEventListener('input',preview);preview();
   const row=document.createElement('div');row.className='actions';section.append(row);
   button(row,'Situar en la estancia seleccionada','stairFromRoom',()=>{
    const sel=ui.sel?.kind==='room'?project.rooms.find(r=>r.id===ui.sel.id):null;if(!sel)throw Error('Selecciona primero una estancia en el plano 2D.');
    const xs=sel.polygon.map(p=>p.x),ys=sel.polygon.map(p=>p.y),c={x:(Math.min(...xs)+Math.max(...xs))/2+A.offsetMm.x,y:(Math.min(...ys)+Math.max(...ys))/2+A.offsetMm.y},r=Number(rot.value)*Math.PI/180,L=Number(run.value)||0;
-   x.value=String(Math.round(c.x-Math.cos(r)*L/2));y.value=String(Math.round(c.y-Math.sin(r)*L/2));});
+   x.value=String(Math.round(c.x-Math.cos(r)*L/2));y.value=String(Math.round(c.y-Math.sin(r)*L/2));preview();});
   button(row,s?'Guardar escalera':'Añadir escalera','stairSave',()=>{const next=B.setStair(b,{id:s?.id,fromLevelId:from.id,toLevelId:to.id,startMm:{x:int(x.value),y:int(y.value)},rotationDeg:int(rot.value),widthMm:int(w.value),runLengthMm:int(run.value),risers:int(n.value)});persist(next);renderAll();say(s?'Escalera actualizada.':'Escalera añadida: se dibuja en ambas plantas y abre el forjado de la planta superior.');},'btn primary');
   if(s)button(row,'Eliminar escalera','stairRemove',()=>{persist(B.removeStair(b,s.id));renderAll();say('Escalera eliminada.');},'btn danger');
  }
@@ -174,9 +265,9 @@
  }
  /* ---------- exchange ---------- */
  const fileName=(text,ext)=>(text||'edificio').replace(/[^\p{L}\p{N}_-]+/gu,'-').replace(/^-+|-+$/g,'').slice(0,80)+'.'+ext;
- function exportBuildingJson(){const b=current();download(fileName(b.name,'json'),new Blob([JSON.stringify(b,null,2)],{type:'application/json'}));say('Edificio exportado en JSON (sin bytes de imágenes; usa el ZIP para incluirlas).');}
+ function exportBuildingJson(){const b=current();download(fileName(b.name,'json'),new Blob([JSON.stringify(b,null,2)],{type:'application/json'}));say('Edificio exportado en JSON (sin bytes de imágenes; usa el ZIP para incluirlas).'+pendingNote());}
  async function bytesOf(im){const blob=await I.get(im.storage?.ref||im.id);return blob?new Uint8Array(await blob.arrayBuffer()):null;}
- async function exportBuildingZip(){try{const b=current(),{entries}=await B.packageEntries(b,im=>bytesOf(im),T.imageInfo);download(fileName(b.name,'zip'),P.zip(entries,{check:B.packagePath}));say('Edificio exportado en ZIP con las imágenes de cada planta.');}catch(e){dialogError=e.message;fill();toast(e.message,6000);}}
+ async function exportBuildingZip(){try{const b=current(),{entries}=await B.packageEntries(b,im=>bytesOf(im),T.imageInfo);download(fileName(b.name,'zip'),P.zip(entries,{check:B.packagePath}));say('Edificio exportado en ZIP con las imágenes de cada planta.'+pendingNote());}catch(e){dialogError=e.message;fill();toast(e.message,6000);}}
  async function exportLevel(levelId,kind){
   const {project:p,warning}=B.exportLevel(current(),levelId);
   if(kind==='zip'){for(const im of p.sourceImages||[])if(!await I.get(im.storage?.ref||im.id))throw Error('Falta una imagen local de esta planta; exporta el JSON.');download(fileName(p.name,'zip'),await P.encode(p,I.get));}
@@ -184,9 +275,10 @@
   dialogError='';const note=$('#levelsError');if(note)note.textContent=warning;toast(warning,8000);
  }
  // JSON import of a building document (menu «Importar» or «Subir plano»): a new entry; the open one is kept.
+ // The building keeps the name it carries; the file name is only a fallback.
  function importBuilding(value,name,operation){
   const b=B.prepare(value);if(!FloorPlanApp.fileImportCurrent(operation))return false;
-  switchProject(library.importBuilding(project,b,name||b.name));FloorPlanApp.fileImportCompleted(operation,'project');
+  switchProject(library.importBuilding(project,b,b.name||name));FloorPlanApp.fileImportCompleted(operation,'project');
   const missing=b.levels.reduce((n,l)=>n+(l.project.sourceImages||[]).length,0);
   say(`Edificio «${library.building().name}» importado con ${b.levels.length} planta(s)${missing?'; las imágenes no viajan en el JSON: usa el ZIP para traerlas':''}.`,7000);return true;
  }
@@ -196,14 +288,14 @@
   for(const {levelId,image,bytes}of images){const key=Core.id('img'),level=building.levels.find(l=>l.id===levelId),im=level.project.sourceImages.find(x=>x.id===image.id);im.storage={kind:'local-browser',ref:key};pending.push([key,new Blob([bytes],{type:image.mediaType})]);}
   B.validate(building);if(!FloorPlanApp.fileImportCurrent(operation))return false;
   await I.put(pending);
-  try{if(!FloorPlanApp.fileImportCurrent(operation)){await I.remove(pending.map(e=>e[0]));return false;}switchProject(library.importBuilding(project,building,name||building.name));FloorPlanApp.fileImportCompleted(operation,'project');}
+  try{if(!FloorPlanApp.fileImportCurrent(operation)){await I.remove(pending.map(e=>e[0]));return false;}switchProject(library.importBuilding(project,building,building.name||name));FloorPlanApp.fileImportCompleted(operation,'project');}
   catch(e){await I.remove(pending.map(e=>e[0]));throw e;}
   say(`Edificio «${building.name}» importado desde ZIP con ${images.length} imagen(es) verificadas.`,7000);return true;
  }
  $('#levelsBtn').onclick=open;
  $('#levelsClose').onclick=()=>$('#levelsDialog').close();
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
- window.FloorPlanBuildingUI={render,stairZones,open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
+ window.FloorPlanBuildingUI={render,stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
   get histories(){return histories;}};
  render();

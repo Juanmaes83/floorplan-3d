@@ -45,6 +45,45 @@
  const toBuilding=(poly,level)=>poly.map(p=>({x:p.x+level.offsetMm.x,y:p.y+level.offsetMm.y}));
  function inPoly(p,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
  const areaMm2=poly=>Math.abs(poly.reduce((s,p,i)=>{const q=poly[(i+1)%poly.length];return s+p.x*q.y-q.x*p.y;},0))/2;
+ /* BW5: furniture over a stair. One shared computation for the warning, the 2D highlight, the stair form and the
+    layout review. Footprints are the exact oriented rectangles (FloorPlanTracing.footprint), never their bounding
+    boxes, and the overlap test is the separating-axis penetration of FloorPlanLayoutReview. A pair conflicts only
+    with a positive penetration above CONTACT_TOLERANCE_MM: sharing an edge, touching a corner or a sub-millimetre
+    overlap from rounding is contact, not a conflict. Each level is compared only with the stairs that leave from it
+    (their footprint) or arrive at it (the slab void), both in that level's own frame. */
+ const CONTACT_TOLERANCE_MM=1;
+ const geometryLib=()=>typeof module==='object'?{T:require('./tracing-core.js'),R:require('./layout-review.js')}:{T:root.FloorPlanTracing,R:root.FloorPlanLayoutReview};
+ const finiteObject=o=>o&&o.position&&o.size&&[o.position.x,o.position.y,o.size.widthMm,o.size.depthMm,o.rotationDeg].every(Number.isFinite)&&o.size.widthMm>0&&o.size.depthMm>0;
+ const polyArea=P=>Math.abs(P.reduce((s,p,i)=>{const q=P[(i+1)%P.length];return s+p.x*q.y-q.x*p.y;},0))/2;
+ // Conflict between one footprint and one stair zone polygon (same frame), or null when they only touch or are apart.
+ function zoneConflict(footprint,zone){const {R}=geometryLib(),depth=R.penetration(footprint,zone);if(!(depth>CONTACT_TOLERANCE_MM))return null;
+  const overlap=R.intersection(footprint,zone);return {penetrationMm:Math.round(depth*10)/10,overlapAreaMm2:Math.round(polyArea(overlap)),overlap};}
+ // Stair zones of one level: index (1-based, as shown to people), id, kind ('escalera' leaving, 'hueco' arriving) and polygon.
+ function stairZonesOf(building,level){const out=[];building.stairs.forEach((s,i)=>{const kind=s.fromLevelId===level.id?'escalera':s.toLevelId===level.id?'hueco':null;
+  if(kind)out.push({stairId:s.id,index:i+1,kind,polygon:toLocal(stairFootprint(s),level)});});return out;}
+ // Every furniture/stair conflict of the building, or of `levelId` only; `objects` replaces that level's objects
+ // (used to check an unsaved edit). Objects without finite geometry are skipped, never guessed.
+ function stairConflicts(building,{levelId,objects}={}){const {T}=geometryLib(),out=[];
+  for(const l of building.levels){if(levelId&&l.id!==levelId)continue;const zones=stairZonesOf(building,l);if(!zones.length)continue;
+   for(const o of (objects&&l.id===levelId?objects:l.project.objects||[])){if(!finiteObject(o))continue;const footprint=T.footprint(o);
+    for(const z of zones){const c=zoneConflict(footprint,z.polygon);if(c){const x={levelId:l.id,levelName:l.name,objectId:o.id,objectName:o.name||o.type,stairId:z.stairId,stairIndex:z.index,zone:z.kind,scaleConfidence:l.project.scale?.confidence||'pending',...c,footprint,stairPolygon:z.polygon};x.message=conflictMessage(x);x.summary=conflictSummary(x);out.push(x);}}}}
+  return out;
+ }
+ const m2=mm2=>(Math.round(mm2/1e4)/100).toFixed(2).replace('.',',');
+ function conflictMessage(c){return `«${c.objectName}» de «${c.levelName}» pisa ${c.zone==='hueco'?'el hueco':'la huella'} de la escalera ${c.stairIndex}: ${String(c.penetrationMm).replace('.',',')} mm de penetración y ${m2(c.overlapAreaMm2)} m² compartidos en planta. Aviso de coherencia del dibujo; no es una comprobación normativa ni bloquea nada.`;}
+ const SCALE_LABEL={real:'escala confirmada',estimated:'escala estimada: medida nominal',pending:'escala pendiente: medida nominal'};
+ // Short, plain wording for lists: «Planta baja: «Sofá» sobre los peldaños».
+ function conflictSummary(c){return `${c.levelName}: «${c.objectName}» sobre ${c.zone==='hueco'?'el hueco de la escalera':'los peldaños'} ${c.stairIndex} · ${String(c.penetrationMm).replace('.',',')} mm (${SCALE_LABEL[c.scaleConfidence]||SCALE_LABEL.pending})`;}
+ /* Derived distribution state of the whole building (every level), never stored: 'clear' when every object of every
+    level with stairs could be evaluated and none conflicts; 'pending' when at least one BW5 conflict exists;
+    'insufficient' when there is no conflict but some object could not be evaluated, so «clear» cannot be claimed. */
+ function buildingStatus(building){
+  const conflicts=stairConflicts(building),unevaluated=[];
+  for(const l of building.levels)if(stairZonesOf(building,l).length)for(const o of l.project.objects||[])if(!finiteObject(o))unevaluated.push({levelId:l.id,levelName:l.name,objectId:o?.id,objectName:o?.name||o?.type||'objeto',reason:'Posición, tamaño o giro no válidos: no se puede evaluar.'});
+  const levels=new Set(conflicts.map(c=>c.levelId));
+  return {state:conflicts.length?'pending':unevaluated.length?'insufficient':'clear',conflicts,unevaluated,conflictLevels:levels.size,
+   headline:conflicts.length?`${conflicts.length} ${conflicts.length===1?'conflicto':'conflictos'} en ${levels.size} ${levels.size===1?'planta':'plantas'}: distribución pendiente`:unevaluated.length?`Evidencia insuficiente: ${unevaluated.length} mueble(s) sin evaluar`:'Sin muebles sobre escaleras'};
+ }
  // 2D labels. Display only: neither function changes the document, and room.labelAt keeps its stored value.
  // Convex polygons overlap unless an edge normal of one of them separates both (touching does not count).
  function convexOverlap(a,b){
@@ -141,6 +180,8 @@
   });
   const conf=building.levels.map(l=>l.project.scale.confidence),label=c=>c==='real'?'confirmada':c==='estimated'?'estimada':'pendiente';
   if(new Set(conf).size>1||conf.some(c=>c!=='real'))out.push({code:'BW3',path:'/levels',message:`Escala por planta: ${building.levels.map(l=>`«${l.name}» ${label(l.project.scale.confidence)}`).join(', ')}. ${new Set(conf).size>1?'Las distancias en mm son nominales y su confianza física difiere entre plantas.':'Ninguna escala está confirmada: las medidas de todas las plantas son orientativas.'}`});
+  for(const c of stairConflicts(building))out.push({code:'BW5',path:`/levels/${c.levelId}/objects/${c.objectId}`,level:c.levelId,objectId:c.objectId,stairId:c.stairId,message:c.message,
+   evidence:{rule:`penetración > ${CONTACT_TOLERANCE_MM} mm entre la huella girada del mueble y la ${c.zone==='hueco'?'del hueco':'de la escalera'} (ejes separadores, marco de la planta)`,zone:c.zone,penetrationMm:c.penetrationMm,overlapAreaMm2:c.overlapAreaMm2,overlap:c.overlap,footprint:c.footprint,stairPolygon:c.stairPolygon}});
   for(let i=1;i<building.levels.length;i++){const a=alignment(building,building.levels[i].id);if(a.unsupported.length)out.push({code:'BW4',path:`/levels/${building.levels[i].id}`,level:building.levels[i].id,message:`${a.unsupported.length} de ${a.checked} muro(s) de «${building.levels[i].name}» no tienen un muro de la planta inferior debajo. Aviso de coherencia visual, no un dictamen estructural.`});}
   return out;
  }
@@ -258,6 +299,6 @@
   if(used.size!==entries.size)throw Error('El ZIP de edificio contiene entradas ajenas.');
   return {building,images};
  }
- const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
+ const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,CONTACT_TOLERANCE_MM,zoneConflict,stairZonesOf,stairConflicts,conflictMessage,conflictSummary,buildingStatus,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
  if(typeof module==='object')module.exports=api;else root.FloorPlanBuilding=api;
 })(typeof globalThis==='object'?globalThis:this);
