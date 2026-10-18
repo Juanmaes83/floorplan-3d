@@ -80,6 +80,7 @@
    const at=c.overlap.reduce((a,p)=>({x:a.x+p.x/c.overlap.length,y:a.y+p.y/c.overlap.length}),{x:0,y:0});
    el('circle',{cx:at.x,cy:at.y,r:150,class:'level-conflict-mark'},g);el('text',{x:at.x,y:at.y,class:'level-conflict-mark-text','text-anchor':'middle','dominant-baseline':'central'},g).textContent='!';
   }
+  drawProposal(stairs,A);
   // Over a conflict highlight the stair texts are repeated on top (visual copy, hidden from assistive technology), so
   // both remain readable; the original text stays in its stair group.
   if(stairs.querySelector('.level-conflict'))for(const label of [...stairs.querySelectorAll('.level-stair-label')]){label.id=`levelStairLabel-${label.closest('[data-stair]').dataset.stair}`;el('use',{href:'#'+label.id,class:'level-stair-label-top','aria-hidden':'true'},stairs);}
@@ -130,8 +131,12 @@
    const t=document.createElement('p');t.textContent=c.summary;li.append(t);const row=document.createElement('div');row.className='actions';
    const go=document.createElement('button');go.type='button';go.className='btn primary';go.dataset.action='locate';go.textContent='Localizar en el plano 2D';go.onclick=()=>locate(c);row.append(go);
    if(in3D){const iso=document.createElement('button');iso.type='button';iso.className='btn';iso.dataset.action='isolate';iso.textContent='Ver esta planta en 3D';iso.onclick=()=>isolate(c);row.append(iso);}
+   const find=document.createElement('button');find.type='button';find.className='btn';find.dataset.action='propose';find.textContent='Buscar sitio libre';find.onclick=()=>propose(c.levelId,[c.objectId]);row.append(find);
    const st2=document.createElement('button');st2.type='button';st2.className='btn';st2.dataset.action='stair';st2.textContent='Editar la escalera';st2.onclick=()=>editStair();row.append(st2);
    li.append(row);ul.append(li);}
+  for(const [levelId,list] of Object.entries(Object.groupBy?Object.groupBy(st.conflicts,c=>c.levelId):st.conflicts.reduce((a,c)=>((a[c.levelId]||=[]).push(c),a),{})))if(list.length>1){
+   const li=document.createElement('li');li.dataset.level=levelId;const all=document.createElement('button');all.type='button';all.className='btn';all.dataset.action='propose-all';
+   all.textContent=`Buscar sitio para los ${list.length} de «${list[0].levelName}»`;all.onclick=()=>propose(levelId,[...new Set(list.map(c=>c.objectId))]);li.append(all);ul.append(li);}
   for(const u of st.unevaluated){const li=document.createElement('li');li.dataset.unevaluated=u.objectId||'';li.textContent=`${u.levelName}: «${u.objectName}» — evidencia insuficiente. ${u.reason}`;ul.append(li);}
   if(!d.open)d.showModal();(d.querySelector('#conflictsList button')||d.querySelector('#conflictsClose')).focus();
  }
@@ -157,13 +162,62 @@
  function gate(what){const st=status();if(st.state==='clear')return true;
   say(`${what}: ${st.state==='pending'?'la distribución está pendiente':'hay muebles sin evaluar'} (${st.headline}). Corrígelo antes de presentarla como propuesta.`,8000);openConflicts();return false;}
  const pendingNote=()=>{const st=status();return st.state==='clear'?'':` Atención: ${st.headline}.`;};
+ /* ---------- «Buscar sitio libre»: proposal with preview; nothing changes until «Aplicar» ---------- */
+ let proposal=null;
+ const PL=window.FloorPlanPlacement,pt=p=>`(${p.x}, ${p.y})`;
+ // Proposals for the given conflicting objects of one level; the preview is drawn in 2D and listed in a panel.
+ async function propose(levelId,ids){
+  closeConflicts();if(typeof viewMode!=='undefined'&&viewMode!=='2d')await setView('2d');
+  if(library.activeLevelId()!==levelId)selectLevel(levelId);
+  const b=current(),A=activeLevel(b),before=B.stairConflicts(b,{levelId:A.id}),set=PL.proposeSet(project,ids,{zones:B.stairZonesOf(b,A)});
+  proposal={levelId:A.id,levelName:A.name,sig:snap(),set,resolves:Object.fromEntries(before.map(c=>[c.objectId,c.summary]))};
+  render();const polys=set.moves.flatMap(m=>{const o=project.objects.find(x=>x.id===m.id);return [T.footprint(o),T.footprint({...o,position:m.to})];}).flat();if(polys.length)frame(polys);
+  $('#relocationPanel')?.querySelector('button')?.focus();
+ }
+ function cancelProposal(message){if(!proposal)return;proposal=null;render();if(message)say(message,5000);}
+ // Applies the whole proposal as ONE change (one undo step). It is re-validated first; if saving fails, it is undone.
+ function applyProposal(){
+  if(!proposal||proposal.sig!==snap()){cancelProposal('La propuesta ya no corresponde al plano actual: vuelve a buscar.');return;}
+  const {set}=proposal,check=PL.proposeSet(project,set.moves.map(m=>m.id),{zones:stairZoneList()});
+  const same=check.valid&&check.moves.length===set.moves.length&&check.moves.every((m,i)=>m.to.x===set.moves[i].to.x&&m.to.y===set.moves[i].to.y);
+  if(!same){cancelProposal('La propuesta ya no es válida con el plano actual: no se ha aplicado nada.');return;}
+  const before=snap(),undoDepth=undoStack.length;
+  for(const m of set.moves){const o=project.objects.find(x=>x.id===m.id);o.position={...m.to};}
+  refreshProject();const saved=commit(before);
+  const after=current(),left=B.stairConflicts(after,{levelId:proposal.levelId}).filter(c=>set.moves.some(m=>m.id===c.objectId)),bad=set.moves.some(m=>PL.problems(project,project.objects.find(x=>x.id===m.id),{zones:stairZoneList()}).length);
+  if(!saved||left.length||bad){
+   if(undoStack.length>undoDepth)undoStack.pop();project=JSON.parse(before);refreshProject();save();proposal=null;renderAll();
+   say(saved?'No se ha aplicado: la comprobación posterior encontró un conflicto. El plano queda como estaba.':'No se ha podido guardar: no se ha aplicado nada y el plano queda como estaba.',9000);return;}
+  proposal=null;renderAll();
+  say(`Aplicado: ${set.moves.map(m=>`«${m.name}» ${m.distanceMm} mm`).join(', ')} (medidas nominales). ${status().state==='clear'?'Sin conflictos en el edificio.':status().headline+'.'} «Deshacer» lo revierte en un paso.`,9000);
+ }
+ function drawProposal(stairs,A){
+  if(!proposal||proposal.levelId!==A.id)return;
+  for(const m of proposal.set.moves){const o=project.objects.find(x=>x.id===m.id);if(!o)continue;const g=el('g',{class:'level-proposal','data-object':m.id,role:'img','aria-label':`Propuesta: «${m.name}» a ${pt(m.to)}`},stairs);
+   el('path',{d:pathOf(T.footprint({...o,position:m.to})),class:'level-proposal-outline'},g);
+   el('line',{x1:m.from.x,y1:m.from.y,x2:m.to.x,y2:m.to.y,class:'level-proposal-arrow','marker-end':'url(#levelArrow)'},g);}
+ }
+ function proposalPanel(){
+  let box=$('#relocationPanel');
+  if(!proposal){if(box)box.hidden=true;return;}
+  if(!box){box=document.createElement('section');box.id='relocationPanel';box.className='relocation-panel';box.setAttribute('role','region');box.setAttribute('aria-label','Propuesta de recolocación');$('#stage').append(box);}
+  box.hidden=false;box.replaceChildren();const {set}=proposal,h=document.createElement('h3');h.textContent=`Propuesta en «${proposal.levelName}» · vista previa, sin aplicar`;box.append(h);
+  const ul=document.createElement('ul');for(const m of set.moves){const li=document.createElement('li');li.dataset.object=m.id;li.textContent=`«${m.name}»: de ${pt(m.from)} a ${pt(m.to)} · ${m.distanceMm} mm nominales, dentro de «${m.roomName}». Resuelve: ${proposal.resolves[m.id]||'—'}.`;ul.append(li);}
+  for(const f of set.failed){const li=document.createElement('li');li.dataset.failed=f.id;li.textContent=f.message;ul.append(li);}box.append(ul);
+  const note=document.createElement('p');note.className='relocation-note';note.textContent=`Comprobado: ${PL.CHECKED.join(', ')}. No comprobado: ${PL.NOT_CHECKED.join(', ')}.`;box.append(note);
+  const row=document.createElement('div');row.className='actions';box.append(row);
+  const apply=document.createElement('button');apply.type='button';apply.className='btn primary';apply.id='relocationApply';apply.textContent=set.moves.length>1?`Aplicar las ${set.moves.length}`:'Aplicar';apply.disabled=!set.moves.length||!set.valid;apply.onclick=()=>applyProposal();
+  const cancel=document.createElement('button');cancel.type='button';cancel.className='btn';cancel.id='relocationCancel';cancel.textContent='Cancelar';cancel.onclick=()=>cancelProposal('Propuesta descartada; no ha cambiado nada.');
+  row.append(apply,cancel);
+ }
  // Stair zones of the active level with id and kind, for the placement search.
  function stairZoneList(){const b=current();return b?B.stairZonesOf(b,activeLevel(b)):[];}
  // Stair footprints of the active level in its own frame (the slab void on the arriving level), for 2D labels.
  function stairZones(){const b=current();if(!b)return [];const A=activeLevel(b);return b.stairs.filter(s=>s.fromLevelId===A.id||s.toLevelId===A.id).map(s=>B.toLocal(B.stairFootprint(s),A));}
  function render(){
   if(!library)return;if(historyEntry!==library.activeId())entryChanged();
-  const b=current();bar(b);render2D(b);notify(b);push3D(b);
+  if(proposal&&(proposal.sig!==snap()||!isBuilding()||library.activeLevelId()!==proposal.levelId))proposal=null;
+  const b=current();bar(b);render2D(b);notify(b);proposalPanel();push3D(b);
   if($('#levelsDialog')?.open)fill();
  }
  /* ---------- dialog ---------- */
@@ -295,7 +349,7 @@
  $('#levelsBtn').onclick=open;
  $('#levelsClose').onclick=()=>$('#levelsDialog').close();
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
- window.FloorPlanBuildingUI={render,stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
+ window.FloorPlanBuildingUI={render,propose,applyProposal,cancelProposal,get proposal(){return proposal&&structuredClone(proposal.set.moves);},stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
   get histories(){return histories;}};
  render();

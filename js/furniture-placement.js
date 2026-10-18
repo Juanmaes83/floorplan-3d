@@ -93,6 +93,23 @@
   return {ok:false,reason:'no-space',roomId:room.id,roomName:room.name,tried,blockers,
    message:`No hay sitio libre para «${object.name||object.type}» en «${room.name}» sin pisar ${main.length?main.slice(0,3).join(', '):'los límites de la estancia'}. Elige otra estancia o haz sitio antes de colocarlo.`};
  }
- const api={TOLERANCE_MM,STEP_MM,MAX_CANDIDATES,scene,roomsAt,problems,problemsIn,find,candidates};
+ /* «Buscar sitio libre» for EXISTING furniture (proposal only, never applied here). Objects are proposed in the order
+    given, each one against the layout that already includes the previous proposals, so the set is compatible by
+    construction; the whole set is then validated again. Size, rotation and id are kept. Returns {moves:[{id,name,
+    from,to,distanceMm,roomId,roomName,tried}],failed:[{id,name,reason,message}],valid,project} where `project` is a
+    copy with the moves applied (the caller decides whether to apply it). */
+ function proposeSet(project,ids,{zones=[],stepMm=STEP_MM,maxCandidates=MAX_CANDIDATES,toleranceMm=TOLERANCE_MM}={}){
+  const work=C.clone(project),moves=[],failed=[];
+  for(const id of ids){const o=(work.objects||[]).find(x=>x.id===id);if(!o){failed.push({id,name:id,reason:'missing',message:'El mueble ya no existe.'});continue;}
+   const r=find(work,o,{near:o.position,zones,stepMm,maxCandidates,toleranceMm});
+   if(!r.ok){failed.push({id,name:o.name||o.type,reason:r.reason,message:r.reason==='no-space'?`No se ha encontrado sitio libre para «${o.name||o.type}» en «${r.roomName}» dentro del límite de búsqueda (${r.tried} posiciones). Corrígelo a mano: muévelo a otra estancia, haz sitio o edita la escalera.`:r.message});continue;}
+   const from={...o.position};o.position={...r.position};moves.push({id,name:o.name||o.type,from,to:{...r.position},distanceMm:r.distanceMm,roomId:r.roomId,roomName:r.roomName,tried:r.tried});
+  }
+  const sc=scene(work,{zones}),valid=moves.every(m=>{const o=work.objects.find(x=>x.id===m.id);return problemsIn(sc,o,m.roomId,toleranceMm).length===0;});
+  return {moves,failed,valid,project:work};
+ }
+ // What the search checks and what it does not, for the proposal panel.
+ const CHECKED=['la estancia completa','la escalera y su hueco','los muros','el barrido de las puertas','otros muebles'],NOT_CHECKED=['altura libre','paso o recorrido','normativa','muebles en otras plantas'];
+ const api={TOLERANCE_MM,STEP_MM,MAX_CANDIDATES,CHECKED,NOT_CHECKED,scene,roomsAt,problems,problemsIn,find,candidates,proposeSet};
  if(node)module.exports=api;else root.FloorPlanPlacement=api;
 })(globalThis);

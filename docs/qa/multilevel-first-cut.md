@@ -318,6 +318,69 @@ La corrección de §5.1 sólo arregla el dibujo y el fixture. BW5 detecta, evita
 - **Cámara, como seguimiento aparte:** en «Ver todas», desde un ángulo alto, la planta alta tapa la baja y el encuadre deja el edificio pequeño. Aquí sólo se ofrece «Ver esta planta en 3D»; no se ha rediseñado la cámara.
 - No se ha validado en teléfonos físicos, GPU real ni con CI.
 
+### 5.3 Recolocación asistida: «Buscar sitio libre»
+
+Apilada sobre BW5 (§5.2). Propone posiciones para muebles **existentes** que pisan una escalera. Nunca las aplica sin «Aplicar».
+
+**Dónde está:**
+
+- En «Revisar», cada conflicto tiene «Buscar sitio libre».
+- Con dos o más conflictos en una misma planta aparece también «Buscar sitio para los N de «planta»».
+
+**Cómo propone (`FloorPlanPlacement.proposeSet`, `js/furniture-placement.js`):**
+
+- Usa la misma búsqueda que al añadir: determinista, anillos de 50 mm alrededor de la posición actual y un máximo de 4000 posiciones por mueble.
+- Se queda **en la estancia que contiene el mueble**; si son varias o ninguna, no propone.
+- Conserva tamaño, giro e ID.
+- **Varios muebles:** se proponen en orden, cada uno contra la distribución que ya incluye las propuestas anteriores, y el conjunto se valida entero. No se aplican propuestas calculadas por separado: la prueba demuestra que dos propuestas aisladas chocarían entre sí y que la propuesta conjunta no choca.
+- **Comprobado:** la huella girada completa dentro de la estancia, la escalera y su hueco, los muros, el barrido de las puertas y otros muebles, con 1 mm de tolerancia.
+- **No comprobado** (y así se indica en el panel): altura libre, paso o recorrido, normativa y muebles en otras plantas.
+
+**Vista previa:**
+
+- Silueta verde discontinua en el destino y una flecha desde el origen.
+- Un panel indica, para cada mueble:
+  - origen y destino en mm;
+  - distancia nominal y estancia;
+  - el conflicto que resuelve;
+  - lo que no se comprueba.
+- Botones «Aplicar» y «Cancelar».
+- **No se guarda nada hasta «Aplicar».** Cancelar, recargar con F5 o cualquier cambio del plano descartan la propuesta.
+
+**Aplicar:**
+
+- Antes de aplicar, se recalcula y se exige que coincida con lo mostrado.
+- Se aplica como **un solo cambio**, por `commit()` (un paso de deshacer; «Rehacer» lo vuelve a aplicar).
+- Después se reevalúa el edificio.
+- Si queda algún conflicto, aparece otro problema evaluable o falla el guardado, se revierte entero y se explica.
+
+**Sin sitio:**
+
+- «No se ha encontrado sitio libre para «Sofá» en «Paso» dentro del límite de búsqueda (N posiciones). Corrígelo a mano…», con «Aplicar» desactivado.
+- Rubik no coloca el mueble en un sitio inseguro ni lo mueve en segundo plano.
+
+**Pruebas:**
+
+- `tests/furniture-relocation.test.cjs`:
+  - propuesta válida, con la entrada intacta y determinista;
+  - sin sitio;
+  - dos muebles que chocarían por separado;
+  - estancia ambigua.
+- `tests/stair-relocation.browser.test.cjs`, a 1440×900, 390×844 y 844×390:
+  - vista previa, cancelar y F5 durante la vista previa;
+  - guardado fallido sin cambios;
+  - aplicar en un paso, deshacer y rehacer;
+  - comprobación en 3D;
+  - «Paso» sin sitio;
+  - F5 después de aplicar.
+- Capturas en `docs/qa/artifacts/multilevel/stair-relocation/`.
+
+**Límites:**
+
+- Sólo mueve dentro de la misma estancia y la misma planta; no cambia muebles de estancia.
+- La propuesta para varios depende del orden: es determinista, pero no es la mejor posible.
+- No reorganiza la estancia: si nada cabe sin mover otros muebles, informa y no propone.
+
 ## 6. Gates que debe ejecutar Juanma
 
 ### 6.1 PC con GPU (Windows, PowerShell)
