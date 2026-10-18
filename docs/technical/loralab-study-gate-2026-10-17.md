@@ -45,11 +45,11 @@ Las referencias de Rubik son al código de `master` `b294739`; `5c822cf` (#49) s
 | Crear desde cero | **Ejecutado:** se abrió la plantilla «Solar vacío». **No comprobado:** trazar o guardar geometría nueva. | «Nuevo proyecto» vacío o desde imagen (#18), trazado y guía Distribuir → Amueblar → Revisar y guardar. | Ninguna demostrada. |
 | Importar JSON | **Visible:** «Importar diseño (.json)». No se ve importar. | JSON y ZIP de `FloorPlanProjectV1`; importación guiada de PDF, imagen, DXF, IFC, RoomPlan, JSON y ZIP (#38, `js/plan-intake*.js`). | Ninguna. Rubik acepta más formatos. No consta que LoRA LAB lea CAD. |
 | Guardar, recargar y exportar | **Ejecutado:** exportación JSON y captura 3D PNG de la villa; estructura resumida en §1.1. **Visible:** copiar enlace. **No comprobado:** guardar, recargar, reimportar ni el enlace. | Proyectos locales con IndexedDB, variantes (#30), JSON, ZIP, PNG, lámina SVG, paquete GLB/Blender (#24) y vídeo offline (#42). | Sin enlace compartible, que exige servicio, privacidad y caducidad (decisión 8 de Roadmap 2). |
-| Construir | **Visible:** pestaña Construir con estancias, muros, puertas, ventanas y seis tipos de escalera. **No comprobado:** crear o editar geometría. | Muros, huecos, estancias, cotas y edición numérica de rectángulos (#18); revisión de distribución (#27). | Ninguna en una planta. Las escaleras no existen en Rubik (ver «Plantas»). |
+| Construir | **Visible:** pestaña Construir con estancias, muros, puertas, ventanas y seis tipos de escalera. **Ejecutado según #58** (fuente secundaria, §5.1): delimitar estancias y seleccionar puerta y ventana. **No comprobado por mí:** guardar esa geometría. | Muros, huecos, estancias, cotas y edición numérica de rectángulos (#18); revisión de distribución (#27). | Ninguna en una planta. Las escaleras no existen en Rubik (ver «Plantas»). |
 | Amueblar | **Visible:** pestaña Amueblar y catálogo; Juanma confirma que puede añadir objetos. | Catálogo genérico, F3 local, doce GLB de Asset Lab (#20, #23), materiales de suelo y pared (#19). | Ninguna demostrada. |
 | Editar exterior | **Visible:** pestaña Exterior; materiales de fachada, cubierta y terreno; terraza, jardín y piscina en la villa. **No comprobado:** crear o editar nada exterior. | No hay terreno, fachada ni cubierta: un plano de suelo neutro (`ground`) y balcones como estancias. | **Brecha.** Depende de la envolvente y, para la cubierta, de las plantas. |
-| Cambiar entre plantas | **Ejecutado:** 1F/2F/3F, «Cubierta» y corte por nivel en la villa; altura y superficie por planta. | Una planta por proyecto (contrato §1 y riesgo C-4). El importador IFC escoge la planta con más muros y avisa de cuántas hay (`js/plan-intake.js`). | **Brecha estructural principal.** |
-| Usar escaleras | **Visible:** catálogo y escaleras de la villa; el JSON exportado incluye una U y una de caracol en dos plantas. **No comprobado:** construir una, comprobar su hueco o pasar por ella. | No hay entidad escalera. | **Brecha**, ligada a las plantas. |
+| Cambiar entre plantas | **Ejecutado:** 1F/2F/3F, «Cubierta» y corte por nivel en la villa; altura y superficie por planta. | Una planta por proyecto (contrato §1 y riesgo C-4). El importador IFC escoge la planta con más muros y avisa de cuántas hay (`js/plan-intake.js`). **Superado el 18-10-2026:** `master` `d9cd11b` tiene edificio con plantas, selector «Plantas» y 3D apilado (#51, contrato D de #50). | **Brecha cerrada en su primer corte** (ver §5.4). |
+| Usar escaleras | **Visible:** catálogo y escaleras de la villa; el JSON exportado incluye una U y una de caracol en dos plantas. **No comprobado:** construir una, comprobar su hueco o pasar por ella. | No hay entidad escalera. **Superado el 18-10-2026:** escalera recta con hueco, avisos BW5 y recolocación asistida (#51–#54). Recorrerla caminando sigue fuera. | Escalera recta resuelta; L, U, caracol y recorrido vertical siguen pendientes. |
 | Día y noche | **Ejecutado:** cambio de hora a noche, con oscurecimiento y luces visibles. **Visible:** norte, mes y latitud. | Botón «Noche» que baja sol y cielo y enciende una luz por estancia (`index.html`, `applyLight`); deslizador de hora de 7 a 18 h en arco estilizado; presets HDR en la presentación (#39). | Sin norte, fecha ni latitud. Menor; ya registrado como candidato «sol». |
 | Visita libre: entrada | **Ejecutado:** empieza en la puerta principal y la abre. | El modo «Recorrido» coloca la cámara en la puerta de entrada (`entry`, que viene de `isEntrance`) o, si no hay, en la primera puerta (`setMode('walk')`). | Ninguna. |
 | Visita libre: altura de ojos | **Visible:** opción adulto 1,70 m o niño 1,05 m. | Fija en 1,6 m en el recorrido libre y 1,5 m en la visita guiada (`js/presentation-route.js`). | Menor: sin selector. |
@@ -72,6 +72,8 @@ Las referencias de Rubik son al código de `master` `b294739`; `5c822cf` (#49) s
 | Enlace compartible | Enviar la vivienda sin archivo. | No en el proyecto; sí un servicio con privacidad y caducidad (decisión 8). | M |
 
 ## 4. Recomendación: un solo corte mínimo
+
+> **Actualización 18-10-2026:** este corte se aprobó con la opción D de #50 y está integrado en `master` (#51 y #52–#54). La recomendación vigente de entrega mínima de experiencia de usuario está en la **§5.6**.
 
 ### 4.1 Corte: «Dos plantas y una escalera recta en un mismo proyecto»
 
@@ -189,6 +191,183 @@ Reglas semánticas nuevas propuestas:
 3. **Cadena MCP #40 → #41 → #43:** cerrarla o fijar su comportamiento ante 2.0 antes del gate 0, porque el MCP lee el contrato.
 4. **Prueba de LoRA LAB del anexo A:** sobre todo el JSON exportado de la villa, para ver cómo modela niveles y escaleras sin copiar código.
 5. **Dispositivos físicos** para la línea base móvil. Un plano real de dos plantas autorizado es opcional; el fixture sintético va primero.
+
+## 5. Edición contextual: contraste con la observación de #58 (18-10-2026)
+
+[#58](https://github.com/Juanmaes83/floorplan-3d/pull/58) aporta `docs/technical/loralab-editor-ux-observation-2026-10-18.md`: un análisis de una grabación de LoRA LAB de 104 s centrada en tres cosas:
+
+- dibujar estancias sobre el plano;
+- elegir nombres reconocibles;
+- editar puertas, ventanas y materiales desde un panel contextual.
+
+**Límite de esta revisión:**
+
+- **No he visto ese vídeo.** No está en este entorno y el acceso a LoRA LAB sigue bloqueado (§1).
+- Cito sus filas como **evidencia secundaria** con los tiempos que da #58. No las presento como observación propia y no he contrastado esos tiempos.
+- La comparación con Rubik sí es directa: código de `master` `d9cd11b` y una tarea medida en el navegador (§5.3).
+
+### 5.1 Contraste por observación
+
+Leyenda (§1): **ejecutado** = acción y efecto visibles; **visible** = control en pantalla sin uso; **hipótesis** = interpretación de experiencia de usuario no medida.
+
+| # | Observación de #58 | Clase de evidencia | Contraste con mi evidencia de #48 | Rubik en `master` `d9cd11b` | Veredicto |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 0:12–0:20: se delimita una estancia sobre el plano y aparece «Garaje» con muros y superficie | Ejecutado (según #58) | En mi sesión y en la grabación de 3:24, «Construir» sólo era **visible**: no vi crear geometría (§2). | Dos caminos con resultado distinto. <br>• **«+ Estancia»:** diálogo modal con nombre, ancho, profundidad, posición X/Y o «a la derecha / debajo de» otra estancia, vista previa «Ver cambio» y «Confirmar y guardar». Crea la estancia **y sus 4 muros** (`js/room-layout-ui.js`, `L.create`). <br>• **«Plano propio → Estancia»:** se marcan vértices y se pulsa «Cerrar estancia». Crea **sólo el polígono**, sin muros (`T.room`); los muros se trazan aparte. <br>No hay rectángulo arrastrado sobre el lienzo. | **Confirmo** la diferencia de interacción y **corrijo** mi fila «Construir»: crear una estancia pasa a «ejecutado», con fuente secundaria. **Pendiente:** las reglas de unión de muros de LoRA LAB y su guardado. |
+| 2 | 0:24–0:40: «Habitación de invitados»; panel con `Tipo de estancia`, nombre, muestras de suelo y pared con nombre y color de luz | Ejecutado (selección); el resto, visible | No observado en mi evidencia. | El panel de estancia ya es **contextual**: nombre editable en el sitio, superficie, perímetro, medidas y **muestras de suelo en el propio panel** (los materiales de suelo del proyecto, 8 en un proyecto nuevo, `roomPanel` en `index.html`). El catálogo verificado de 50 acabados se abre en un **diálogo aparte** («Biblioteca de acabados · suelo»). No hay tipo de estancia ni color de luz por estancia: el nombre es libre, con «Estancia N» por defecto. | **Corrijo** #58: el suelo **no está sólo** en un diálogo; las muestras básicas ya son contextuales y el catálogo verificado es un diálogo. **Confirmo** que no hay tipo ni nombres sugeridos. El color de luz por estancia queda fuera: requiere una entidad nueva (§3). |
+| 3 | 0:40–0:52: se selecciona una puerta; el panel ofrece estilos con nombre, ancho, alto, color de marco y sentido | Ejecutado (selección); estilos, visibles | Mi §2: en la visita, una puerta se **abrió** (ejecutado); E sobre ventana y cortina era sólo visible. | **No se puede seleccionar una puerta en «Seleccionar».** Sólo se llega por «Plano propio → Seleccionar/editar». Ese panel tiene campos numéricos (distancia desde el inicio del muro, ancho, alto y antepecho), el ID del hueco y «Guardar geometría». **No hay control de sentido ni de bisagra**, aunque el contrato ya guarda `swing.hinge` y `swing.side` y los usan la revisión de puertas, el 3D y la visita. Tampoco se puede cambiar el tipo de hueco. | **Confirmo** la brecha y la **amplío**: además de estar en otro modo, el sentido no es editable (§5.2). Los estilos con nombre, el marco y su color **no se atribuyen a Rubik** ni se proponen. |
+| 4 | 1:00–1:16: ventana exterior con familias, dimensiones, antepecho, marco y cortina | Visible | Cortinas: sólo visibles en mi sesión. | Ventana con ancho, alto y antepecho editables por el mismo camino del punto 3. No hay familias, marcos ni cortinas. | **Confirmo** el antepecho y las medidas como capacidad existente. Familias, marcos y cortinas, **pendientes y sin proponer**: requieren contrato y 3D propios. |
+| 5 | 1:20–1:32: «Vestidor» y muestras en el mismo contexto de selección | Hipótesis de interfaz | — | Igual que el punto 2. | **Confirmo** que es una pauta, no una regla: el tipo no implica muebles ni comportamiento. |
+| 6 | Ayuda para añadir una esquina y arrastrar vértices | Visible | — | Rubik edita vértices como texto «X,Y» por línea en el panel de edición de estancia, no arrastrándolos. Sólo las estancias rectangulares con muros inequívocos admiten «Editar dimensiones interiores». | **Pendiente:** el arrastre de vértices no se ve ejecutado en LoRA LAB, y en Rubik implica unión de muros, así que queda fuera de una entrega mínima. |
+| 7 | Tabla §2 de #58: «Tipos de estancia y ejemplos» | Hipótesis | — | Correcta; además, el proyecto de referencia trae nombres de estancia reales. | **Confirmo.** |
+
+**Planta y escalera.** El vídeo de #58 no las trata. Mi §2 está corregida: `master` ya tiene un edificio con plantas y una escalera recta (#51–#54).
+
+### 5.2 ¿Capacidad técnica existente repartida en modos?
+
+Sí, en cuatro casos comprobados en el código:
+
+1. **Sentido de puerta.**
+   - El contrato lo guarda (`swing`) y lo consumen la revisión de distribución (comprobación «Puertas»), el 3D y la visita.
+   - Toda puerta creada a mano o **importada** recibe el valor por defecto `hinge:'start', side:'left'` (`T.opening`; `plan-intake.js` pasa por la misma función). No lee el arco del DXF ni la hoja de un IFC.
+   - Ninguna pantalla permite corregirlo, así que la revisión y la visita pueden basarse en un sentido supuesto.
+   - Este es el hallazgo de más impacto: un dato existente, sin control, que afecta a otros resultados.
+2. **Huecos.** Ancho, alto, antepecho y posición se editan, pero sólo tras entrar en «Plano propio», cambiar a «Seleccionar/editar», tocar el hueco y volver con «Navegar/cancelar». En mi medición:
+   - cerrar las herramientas sin «Navegar/cancelar» dejó activo el modo de edición;
+   - el toque siguiente sobre la estancia no la seleccionó.
+3. **Acabado de pared.** El diálogo pide elegir la pared en una lista de **IDs con coordenadas** (`wal_b23e… · (-120, -120) → (-120, 3120) mm`) que incluye todos los muros del proyecto, no sólo los de la estancia seleccionada.
+4. **Estancia.** «+ Estancia» crea los muros; el trazado libre no. Son dos resultados distintos para un mismo nombre de acción.
+
+### 5.3 Tarea medida en Rubik
+
+Se mide con el script `scripts/qa/loralab/rubik-room-task.cjs`, ejecutado sobre `master` `d9cd11b` en Chromium a 1440×900 con ratón, en 2D. Resultado en [`task.json`](../qa/artifacts/loralab/rubik-room-task/task.json).
+
+**Tarea:** desde un proyecto vacío, conseguir una estancia «Habitación de invitados» de 4000 × 3000 mm, con una puerta de 900 mm, una ventana, un suelo del catálogo verificado y un acabado en una pared.
+
+| Medida | Valor |
+| --- | --- |
+| Acciones desde el proyecto abierto («+ Estancia» incluida) | **26** (28 contando la creación del proyecto) |
+| Diálogos o paneles distintos recorridos | 4: diálogo de estancia, panel «Plano propio», panel de propiedades y biblioteca de acabados (dos veces) |
+| Cambios de modo dentro de «Plano propio» | 4: Puerta, Ventana, Seleccionar/editar, Navegar/cancelar |
+| Acciones para colocar y ajustar puerta y ventana | 12 de las 26 |
+| Resultado tras recargar | Estancia, huecos y muros idénticos; suelo `surface-wood-floor`; 1 pared con acabado |
+| Sentido de la puerta | `start/left` por defecto, sin control para cambiarlo |
+| Errores de consola o `pageerror` | Ninguno |
+
+**Capturas:**
+
+- [formulario de estancia](../qa/artifacts/loralab/rubik-room-task/1440x900-01-room-form.png);
+- [edición de hueco por campos](../qa/artifacts/loralab/rubik-room-task/1440x900-02-opening-edit.png);
+- [pared elegida por ID](../qa/artifacts/loralab/rubik-room-task/1440x900-03-wall-finish-by-id.png).
+
+**Sin comparación numérica con LoRA LAB:** no hay una tarea equivalente medida allí, y el vídeo de #58 parte de un proyecto abierto. No afirmo que LoRA LAB necesite menos pasos.
+
+### 5.4 Qué confirmo, corrijo y dejo pendiente
+
+- **Confirmo de #58:**
+  - Rubik tiene las entidades y operaciones básicas de estancia, hueco y acabado.
+  - La diferencia está en dónde y cómo se accede a ellas.
+  - No hay tipos de estancia con nombre sugerido.
+  - Los estilos de LoRA LAB no son capacidades de Rubik.
+- **Corrijo de #58:**
+  - las muestras de suelo ya están en el panel de estancia;
+  - los dos caminos de creación de estancia no dan el mismo resultado (con muros o sin ellos);
+  - el sentido de puerta no es sólo una brecha de interfaz, porque se asigna por defecto a puertas importadas.
+- **Corrijo de mi #48:**
+  - las filas «Cambiar entre plantas» y «Usar escaleras» (§2) y la recomendación §4, que ya están integradas;
+  - la fila «Construir», que pasa a «ejecutado» con fuente secundaria.
+- **Pendiente:**
+  - los tiempos del vídeo de 104 s;
+  - la persistencia en LoRA LAB de tipo, muestras y estilos tras recargar;
+  - las reglas de unión de muros de su dibujo directo;
+  - una tarea equivalente medida en LoRA LAB;
+  - arrastrar vértices.
+
+### 5.5 Hipótesis de experiencia de usuario, sin medir
+
+- **Hipótesis:** para el público D-01 (inmobiliarias, promotoras, estudios), editar una puerta donde se ve, con su sentido, reduce errores en la visita y en la revisión de puertas. Se validaría con la misma tarea medida antes y después, y con una sesión con un usuario. No hay cifras todavía.
+- **No es hipótesis:** el sentido por defecto no corregible es un hecho del código.
+
+### 5.6 Recomendación: una sola entrega mínima
+
+**«Seleccionar y editar una puerta o ventana donde está».**
+
+**Tarea de usuario.** En el plano 2D, con «Seleccionar» activo:
+
+1. tocar o hacer clic en una puerta o ventana;
+2. ver un panel con su tipo, medidas, posición y, si es una puerta, su sentido de apertura;
+3. cambiarlos con vista inmediata en el plano y deshacer en un paso;
+4. añadir una puerta o ventana a un muro de la estancia seleccionada sin entrar en «Plano propio».
+
+**Alcance:**
+
+1. **Selección.** Se añade la selección de un hueco al modo «Seleccionar» de 2D, con un área de toque mínima de 44 px en táctil. El hueco queda resaltado y el atajo `Esc` deselecciona.
+2. **Panel de propiedades del hueco.** Patrón del panel de mueble:
+   - **Tipo:** sólo los cuatro del contrato (`door`, `sliding-door`, `window`, `opening`), con sus nombres en castellano.
+   - **Medidas y posición:** ancho, alto, antepecho y posición en el muro, con un botón «Centrar en el muro».
+   - **Puerta abatible:** «Bisagra: izquierda / derecha» y «Abre hacia: «Estancia A» / «Estancia B»», con los nombres tomados de la relación espacial de #40. Si el hueco no está entre dos estancias únicas, se muestran «lado 1 / lado 2» con la flecha de barrido como guía.
+   - **Acciones:** «Eliminar» y «Volver».
+   - **Avisos:** los que hoy dan el validador y la revisión de puertas se muestran en el panel, junto al dato.
+3. **«Añadir puerta» y «Añadir ventana» en el panel de estancia.** Se toca un muro de esa estancia; un toque fuera de sus muros explica el motivo y no crea nada. Al terminar, el hueco nuevo queda seleccionado en el mismo modo.
+4. **Origen del sentido.** Se distingue en la interfaz entre una puerta sin sentido revisado («sentido por defecto, sin revisar») y una revisada. Revisar el sentido marca la `source.review` del hueco como `confirmed`, con el campo que ya existe.
+5. **Planta activa.** En un edificio, la edición es la de la planta activa, como hoy.
+
+**Reutilización:**
+
+- `T.opening` y `T.remove`, y la ruta `apply` con `Core.validate`;
+- la persistencia antes del estado y la pila de deshacer de 150 pasos;
+- el dibujo 2D de huecos y barridos existente;
+- `FloorPlanLayoutReview` para los avisos;
+- la relación espacial para nombrar las estancias;
+- el patrón de `furnPanel` y el `fab` táctil.
+
+«Plano propio → Seleccionar/editar» sigue disponible para el trazado sobre imagen.
+
+**Contrato:** sin cambios. `kind`, `swing.hinge`, `swing.side`, `offsetMm`, `widthMm`, `heightMm`, `sillHeightMm` y `source.review` ya existen. Las reglas que deben respetarse, y probarse:
+
+- `swing` sólo en `door`: al cambiar a otro tipo se elimina, y al volver a puerta se pide el sentido;
+- `sillHeightMm + heightMm ≤` altura del muro;
+- el hueco dentro del muro y sin solapar otro hueco del mismo muro (hoy el validador no lo impide; el panel lo rechazaría con un mensaje);
+- el ID del hueco se conserva.
+
+**Fuera de alcance:**
+
+- estilos, familias, marcos, colores, cortinas y luces;
+- tipo de estancia y nombres sugeridos;
+- dibujar estancias arrastrando y arrastrar vértices;
+- elegir la pared del acabado tocándola (es el **siguiente candidato natural**, sin aprobar);
+- huecos en 3D, MCP, #57 y cambios de contrato.
+
+**QA funcional** (Node y Playwright):
+
+- Seleccionar, editar y deshacer o rehacer cada tipo, conservando el ID; tras F5 y tras ida y vuelta de JSON y ZIP, los datos son idénticos.
+- Cambiar de puerta a ventana y vuelta: sin `swing` inválido; el validador acepta cada paso.
+- Una medida fuera del muro o solapada se rechaza con mensaje y sin cambio de estado; un fallo de guardado (cuota) deja el proyecto anterior.
+- El sentido cambiado se refleja en la comprobación «Puertas» de la revisión y en la geometría que usa la visita (`presentation-route`).
+- «Añadir puerta» desde el panel de estancia rechaza un muro ajeno y no deja huecos huérfanos.
+- Edificio de dos plantas: la edición sólo afecta a la planta activa; la otra mantiene su hash.
+- La tarea de §5.3 repetida con el script baja de 12 acciones y 4 cambios de modo para los huecos a un número menor, y se registra sin fijar un objetivo inventado.
+- Regresión: suites unitarias, `room-layout`, `building`, `layout-review`, `stair-*`, `upload` y `guide`.
+- La consola y `pageerror` quedan limpios.
+
+**QA visual:**
+
+- Capturas a 1440×900, 390×844 y 844×390 de:
+  - hueco seleccionado;
+  - panel de puerta;
+  - cambio de bisagra y de sentido, antes y después;
+  - ventana con antepecho;
+  - aviso de rechazo.
+- En ellas, el resaltado no tapa cotas ni etiquetas, el panel no recorta controles y el `fab` táctil no tapa el hueco.
+- Revisión humana en 2D y en 3D: el sentido coincide en ambos.
+- Teléfono físico cuando proceda.
+
+**Decisiones para Juanma y Codex antes del documento de implementación:**
+
+1. Si «Abre hacia» se expresa por nombre de estancia o por lado.
+2. Si revisar el sentido marca `source.review:'confirmed'` o sólo lo hace un botón explícito.
+3. Si el rechazo de huecos solapados se queda en la interfaz o se lleva al validador (eso sí sería un cambio de contrato y queda fuera de esta entrega).
+
+**Por qué esta y no otra.** Es la única brecha en la que Rubik **tiene el dato pero no el control**, y ese dato afecta a la revisión de puertas, al 3D y a la visita. Es la de más acciones en la tarea medida (12 de 26), no necesita contrato y se prueba en una PR acotada. Los nombres sugeridos y el dibujo directo de estancias aportan menos y dependen de decisiones de taxonomía o de unión de muros.
 
 ## Anexo A. Prueba de Juanma en Chrome para Windows
 
