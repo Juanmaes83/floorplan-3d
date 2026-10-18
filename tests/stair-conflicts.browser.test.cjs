@@ -7,21 +7,21 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const B=require('../js/building-core.js'),P=require('../js/project-package.js'),T=require('../js/tracing-core.js'),S=require('./fixtures/stair-conflict-building.cjs');
 const root=path.resolve(__dirname,'..'),shots=process.env.STAIR_SHOTS||path.join(root,'docs/qa/artifacts/multilevel/stair-conflicts'),KEY='rubik-sota-project-library-v1';
-let server,browser,url,tmp;
+let server,browser,url,tmp,original,pasoCenterX;
 before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.webp')?'image/webp':file.endsWith('.json')?'application/json':file.endsWith('.png')?'image/png':file.endsWith('.wasm')?'application/wasm':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
  browser=await chromium.launch({executablePath:process.env.CHROME||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});await fs.mkdir(shots,{recursive:true});
- tmp=await fs.mkdtemp(path.join(os.tmpdir(),'stair-conflicts-'));const {building}=S.build();
+ tmp=await fs.mkdtemp(path.join(os.tmpdir(),'stair-conflicts-'));const built=S.build(),{building}=built;original=building;pasoCenterX=built.pasoCenterX;
  await fs.writeFile(path.join(tmp,'duplex.json'),JSON.stringify(building,null,2));
  const {entries}=await B.packageEntries(building,()=>null,T.imageInfo);await fs.writeFile(path.join(tmp,'duplex.zip'),Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));
 });
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
-const stored=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)).entries.filter(e=>e.kind==='building'),KEY);
+const stored=page=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)).entries.filter(e=>e.kind==='building').map(e=>e.building),KEY);
 const objectsOf=(b,i)=>b.levels[i].project.objects;
 
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
 test(`BW5 furniture over a stair ${viewport.width}x${viewport.height}`,{timeout:300000},async t=>{
- const mobile=viewport.width<1000,name=`${viewport.width}x${viewport.height}`,original=S.build().building;
+ const mobile=viewport.width<1000,name=`${viewport.width}x${viewport.height}`;
  const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push('pageerror: '+e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push('console: '+m.text());});
  await page.route('https://cdn.jsdelivr.net/**',route=>route.abort());
@@ -52,7 +52,7 @@ test(`BW5 furniture over a stair ${viewport.width}x${viewport.height}`,{timeout:
  const preview=page.locator('#stairConflictsPreview');await preview.scrollIntoViewIfNeeded();
  assert.match(await preview.textContent(),/Quedarían sobre la escalera \(BW5\): «Zapatero» en «Baja» \(350 mm\); «Armario» en «Alta» \(600 mm\)/);
  await shot('03-levels-dialog');
- await page.fill('#stairX','2400');assert.equal(await preview.textContent(),'Ningún mueble queda sobre la huella ni sobre el hueco.');
+ await page.fill('#stairX','3300');assert.equal(await preview.textContent(),'Ningún mueble queda sobre la huella ni sobre el hueco.');
  await page.fill('#stairX',String(original.stairs[0].startMm.x));assert.equal(await preview.getAttribute('data-count'),'2');
  await tapOrClick(page.locator('#levelsClose'));[b]=await stored(page);assert.equal(B.canonical(b),B.canonical(original),'editing the form without saving changes nothing');
 
@@ -73,7 +73,7 @@ test(`BW5 furniture over a stair ${viewport.width}x${viewport.height}`,{timeout:
  await page.evaluate(()=>{select({kind:'furn',id:'obj_conflict-wardrobe'});duplicateSel();});
  assert.deepEqual(await conflictsOf(),['obj_conflict-wardrobe'],'the duplicate landed clear of the void');
  // 6. No free place: the narrow «Paso» is filled by the stair, so the item stays where it was asked and BW5 appears.
- await level(0);const paso=S.build().pasoCenterX;
+ await level(0);const paso=pasoCenterX;
  const bench=await add('Banco',Math.round(paso),2200,900,400);
  assert.deepEqual((await conflictsOf()).sort(),[bench,'obj_conflict-shoes'].sort(),'placed anyway and warned');
  const placed=await page.evaluate(id=>FloorPlanApp.project.objects.find(o=>o.id===id).position,bench);assert.deepEqual(placed,{x:Math.round(paso/10)*10,y:2200},'kept at the requested point');

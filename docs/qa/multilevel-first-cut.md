@@ -152,7 +152,7 @@ Se abrieron y revisaron las capturas de los tres viewports.
 
 **Límites y seguimiento tras la revisión humana del 18-10-2026:**
 
-- **Solape de «Hueco de escalera» (revisión humana del 18-10-2026).** Juanma **no aprobó** el resultado visual de #51: en la planta primera del fixture, «Hueco de escalera» se solapaba con la cama y con la etiqueta y las cotas del dormitorio. Se integraron #50 y #51 con esta deuda explícita. GitHub Issues está desactivado (API 410), así que este informe y las PR son el registro. **Resuelto en la PR de corrección** (ver §5.1); no implica que la escalera sea transitable ni que cumpla normativa.
+- **Solape de «Hueco de escalera» (revisión humana del 18-10-2026).** Juanma **no aprobó** el resultado visual de #51: en la planta primera del fixture, «Hueco de escalera» se solapaba con la cama y con la etiqueta y las cotas del dormitorio. Se integraron #50 y #51 con esta deuda explícita. GitHub Issues está desactivado (API 410), así que este informe y las PR son el registro. **Resuelto en la PR de corrección** (ver §5.1). La prevención para proyectos nuevos es BW5 (§5.2). Nada de esto implica que la escalera sea transitable ni que cumpla normativa.
 - En «Ver todas», la planta alta tapa el interior de la baja desde este ángulo; para ver la baja se usa «hasta la activa» o los muros seccionados.
 - En móvil, el panel de propiedades se abre al crear una estancia, como antes de este corte. La prueba lo cierra antes de capturar.
 
@@ -216,6 +216,58 @@ Cada captura tiene al lado su `.json`, con los rectángulos en pantalla de la es
 - El texto de la escalera cruza las diagonales del hueco y la flecha. Se lee gracias al halo blanco.
 - A 390×844 el plano encuadrado completo hace pequeños todos los textos, como antes de esta corrección. Se leen ampliando con dos dedos.
 - No es de este defecto: en móvil, el botón flotante «Inicio» tapa parcialmente el botón «Planta baja» del selector. Pasa igual en `master` (`before/390x844-*.png`).
+
+### 5.2 Prevención: aviso BW5, mueble sobre una escalera
+
+La corrección de §5.1 sólo arregla el dibujo y el fixture. Esta prevención detecta el mismo tipo de conflicto en **cualquier** proyecto: importado, creado o editado. La regla está en [FloorPlanBuildingV1 §4.1](../contracts/FloorPlanBuildingV1.md#41-bw5-mueble-sobre-una-escalera-o-su-hueco).
+
+**Cálculo:** un solo cálculo, `FloorPlanBuilding.stairConflicts`.
+
+- Compara la huella girada del mueble (no su envolvente) con la huella de la escalera que sale de la planta o con el hueco de la que llega.
+- Usa la penetración por ejes separadores de `FloorPlanLayoutReview`, con una tolerancia de 1 mm: el contacto no es conflicto.
+- Sólo compara cada mueble con escaleras de su propia planta.
+
+**Dónde se muestra:**
+
+- **Aviso:** `BW5` en «Plantas…», con planta, mueble, escalera, penetración y superficie compartida. También aparece una nota visible sobre el plano con «Ver avisos», y un anuncio `role=status` cuando el conflicto aparece.
+- **2D:** contorno discontinuo del mueble, trama sobre la zona compartida y una marca «!», con nombre accesible. No depende sólo del color.
+- **Formulario de escalera:** antes de guardar, lista los muebles de ambas plantas que quedarían sobre la huella y se actualiza al editar los campos. Guardar sigue permitido.
+- **Revisión de distribución:** el hallazgo «Mueble sobre escalera (BW5)» recibe los conflictos ya calculados y no repite la geometría.
+
+**Colocación:**
+
+- Al añadir o duplicar un mueble se usa la lógica existente `pushOut`, que ahora considera también las escaleras y huecos de la planta activa.
+- En un edificio con escaleras, si el mueble acaba sobre un muro o sigue sobre la escalera, se deja en el punto pedido y aparece BW5.
+- Al **arrastrar**, sólo se avisa: el mueble no se mueve solo.
+
+**Datos:**
+
+- El aviso es derivado: no se guarda, no cambia la versión ni la estructura del JSON y nunca bloquea validar, guardar, importar ni exportar.
+- Importar un edificio JSON o ZIP con conflictos conserva bytes y posiciones, abre el edificio y muestra BW5.
+- Crear una planta desde imagen o PDF no añade muebles ni escaleras.
+
+**Pruebas:**
+
+- `tests/stair-conflicts.test.cjs`, casos deterministas:
+  - cama sobre el hueco y sofá sobre la escalera inferior (las posiciones anteriores del fixture);
+  - mueble a 45° cuyo envolvente toca el hueco pero su huella no;
+  - borde compartido, esquina y 0,5 mm sin aviso, y 2 mm con aviso;
+  - plantas distintas con la misma XY local;
+  - escalera añadida después del mueble;
+  - ida y vuelta por JSON y ZIP;
+  - revisión de distribución.
+
+  Además, una comprobación generativa con semilla fija contra un oráculo de muestreo, que complementa los casos fijos sin sustituirlos.
+- `tests/stair-conflicts.browser.test.cjs`, a 1440×900, 390×844 y 844×390, con un edificio distinto del fixture (`tests/fixtures/stair-conflict-building.cjs`): importación JSON y ZIP, aviso, resaltado, lista en «Plantas…», formulario, revisión de distribución, añadir con sitio libre, duplicar, añadir sin sitio libre y arrastre.
+- **Capturas:** `docs/qa/artifacts/multilevel/stair-conflicts/`, revisadas.
+
+**Límites:**
+
+- El cálculo es en planta: no evalúa altura libre, paso ni normativa.
+- La colocación aparta de las escaleras usando su rectángulo envolvente, igual que hace con los muros. Una escalera girada puede apartar un mueble más de lo estrictamente necesario.
+- La colocación no evita otros muebles, como ya pasaba antes: un mueble apartado del hueco puede acabar solapando otro, y la revisión de distribución lo señala como «Solape».
+- La nota sobre el plano puede tapar parte de la cota superior en pantallas bajas.
+- No se ha validado en teléfonos físicos ni con CI.
 
 ## 6. Gates que debe ejecutar Juanma
 
