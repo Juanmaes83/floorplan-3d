@@ -67,10 +67,13 @@
     const x = cross(a,b,c), y = cross(a,b,d), z = cross(c,d,a), t = cross(c,d,b);
     return (x*y < 0 && z*t < 0) || onSegment(a,b,c) || onSegment(a,b,d) || onSegment(c,d,a) || onSegment(c,d,b);
   }
-  function validate(project) {
+  // `strict` treats every field the schema does not define as an error for any 1.x version. The building
+  // container (js/building-core.js) uses it so an embedded level cannot carry meaning a 1.x reader would ignore.
+  function validate(project, {strict = false} = {}) {
+    if (project?.schema === 'rubik-sota.floorplan-building') fail('/schema', 'this is a multi-level building, not a FloorPlanProjectV1 project; open it in Rubik or export a single level');
     const version = project?.schemaVersion;
     if (typeof version !== 'string' || !/^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) fail('/schemaVersion', 'unsupported version');
-    const future = version !== '1.0.0';
+    const future = version !== '1.0.0' && !strict;
     check(project, schema, '/', future);
     const ids = new Map([[project.id, 'project']]);
     const warnings = [];
