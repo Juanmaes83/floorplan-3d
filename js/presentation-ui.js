@@ -265,6 +265,8 @@
  }
  function open(){
   if(active||pendingStart){closeButton.focus();return;}
+  // A building with a pending distribution is not presented as a finished proposal (see FloorPlanBuildingUI.gate).
+  if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Presentar mi vivienda'))return;
   returnFocus=document.activeElement;
   config.replaceChildren();
   const heading=el('h2',tx('Presentar mi vivienda','Present my home','展示我的住宅'),config);heading.id='presentationConfigTitle';

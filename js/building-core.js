@@ -66,11 +66,24 @@
  function stairConflicts(building,{levelId,objects}={}){const {T}=geometryLib(),out=[];
   for(const l of building.levels){if(levelId&&l.id!==levelId)continue;const zones=stairZonesOf(building,l);if(!zones.length)continue;
    for(const o of (objects&&l.id===levelId?objects:l.project.objects||[])){if(!finiteObject(o))continue;const footprint=T.footprint(o);
-    for(const z of zones){const c=zoneConflict(footprint,z.polygon);if(c){const x={levelId:l.id,levelName:l.name,objectId:o.id,objectName:o.name||o.type,stairId:z.stairId,stairIndex:z.index,zone:z.kind,...c,footprint,stairPolygon:z.polygon};x.message=conflictMessage(x);out.push(x);}}}}
+    for(const z of zones){const c=zoneConflict(footprint,z.polygon);if(c){const x={levelId:l.id,levelName:l.name,objectId:o.id,objectName:o.name||o.type,stairId:z.stairId,stairIndex:z.index,zone:z.kind,scaleConfidence:l.project.scale?.confidence||'pending',...c,footprint,stairPolygon:z.polygon};x.message=conflictMessage(x);x.summary=conflictSummary(x);out.push(x);}}}}
   return out;
  }
  const m2=mm2=>(Math.round(mm2/1e4)/100).toFixed(2).replace('.',',');
  function conflictMessage(c){return `«${c.objectName}» de «${c.levelName}» pisa ${c.zone==='hueco'?'el hueco':'la huella'} de la escalera ${c.stairIndex}: ${String(c.penetrationMm).replace('.',',')} mm de penetración y ${m2(c.overlapAreaMm2)} m² compartidos en planta. Aviso de coherencia del dibujo; no es una comprobación normativa ni bloquea nada.`;}
+ const SCALE_LABEL={real:'escala confirmada',estimated:'escala estimada: medida nominal',pending:'escala pendiente: medida nominal'};
+ // Short, plain wording for lists: «Planta baja: «Sofá» sobre los peldaños».
+ function conflictSummary(c){return `${c.levelName}: «${c.objectName}» sobre ${c.zone==='hueco'?'el hueco de la escalera':'los peldaños'} ${c.stairIndex} · ${String(c.penetrationMm).replace('.',',')} mm (${SCALE_LABEL[c.scaleConfidence]||SCALE_LABEL.pending})`;}
+ /* Derived distribution state of the whole building (every level), never stored: 'clear' when every object of every
+    level with stairs could be evaluated and none conflicts; 'pending' when at least one BW5 conflict exists;
+    'insufficient' when there is no conflict but some object could not be evaluated, so «clear» cannot be claimed. */
+ function buildingStatus(building){
+  const conflicts=stairConflicts(building),unevaluated=[];
+  for(const l of building.levels)if(stairZonesOf(building,l).length)for(const o of l.project.objects||[])if(!finiteObject(o))unevaluated.push({levelId:l.id,levelName:l.name,objectId:o?.id,objectName:o?.name||o?.type||'objeto',reason:'Posición, tamaño o giro no válidos: no se puede evaluar.'});
+  const levels=new Set(conflicts.map(c=>c.levelId));
+  return {state:conflicts.length?'pending':unevaluated.length?'insufficient':'clear',conflicts,unevaluated,conflictLevels:levels.size,
+   headline:conflicts.length?`${conflicts.length} ${conflicts.length===1?'conflicto':'conflictos'} en ${levels.size} ${levels.size===1?'planta':'plantas'}: distribución pendiente`:unevaluated.length?`Evidencia insuficiente: ${unevaluated.length} mueble(s) sin evaluar`:'Sin muebles sobre escaleras'};
+ }
  // 2D labels. Display only: neither function changes the document, and room.labelAt keeps its stored value.
  // Convex polygons overlap unless an edge normal of one of them separates both (touching does not count).
  function convexOverlap(a,b){
@@ -286,6 +299,6 @@
   if(used.size!==entries.size)throw Error('El ZIP de edificio contiene entradas ajenas.');
   return {building,images};
  }
- const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,CONTACT_TOLERANCE_MM,zoneConflict,stairZonesOf,stairConflicts,conflictMessage,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
+ const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,CONTACT_TOLERANCE_MM,zoneConflict,stairZonesOf,stairConflicts,conflictMessage,conflictSummary,buildingStatus,areas,canonical,sha256,create,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
  if(typeof module==='object')module.exports=api;else root.FloorPlanBuilding=api;
 })(typeof globalThis==='object'?globalThis:this);
