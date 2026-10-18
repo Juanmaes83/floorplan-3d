@@ -171,7 +171,10 @@
   if(library.activeLevelId()!==levelId)selectLevel(levelId);
   const b=current(),A=activeLevel(b),before=B.stairConflicts(b,{levelId:A.id}),set=PL.proposeSet(project,ids,{zones:B.stairZonesOf(b,A)});
   proposal={levelId:A.id,levelName:A.name,sig:snap(),set,resolves:Object.fromEntries(before.map(c=>[c.objectId,c.summary]))};
-  render();const polys=set.moves.flatMap(m=>{const o=project.objects.find(x=>x.id===m.id);return [T.footprint(o),T.footprint({...o,position:m.to})];}).flat();if(polys.length)frame(polys);
+  render();const polys=set.moves.flatMap(m=>{const o=project.objects.find(x=>x.id===m.id);return [T.footprint(o),T.footprint({...o,position:m.to})];}).flat();
+  if(polys.length){frame(polys);const panel=$('#relocationPanel'),stage=$('#stage').getBoundingClientRect(),r=panel?.getBoundingClientRect();
+   // The panel sits at the top (or, on short screens, at the left) of the plan: the proposal is shifted next to it.
+   if(r&&r.height){if(r.height>stage.height*.5)view.x0-=Math.min(r.right-stage.left+12,stage.width*.55)/2/view.s;else view.y0-=Math.min(r.bottom-stage.top+12,stage.height*.45)/2/view.s;applyView();}}
   $('#relocationPanel')?.querySelector('button')?.focus();
  }
  function cancelProposal(message){if(!proposal)return;proposal=null;render();if(message)say(message,5000);}
@@ -206,9 +209,10 @@
   for(const f of set.failed){const li=document.createElement('li');li.dataset.failed=f.id;li.textContent=f.message;ul.append(li);}box.append(ul);
   const note=document.createElement('p');note.className='relocation-note';note.textContent=`Comprobado: ${PL.CHECKED.join(', ')}. No comprobado: ${PL.NOT_CHECKED.join(', ')}.`;box.append(note);
   const row=document.createElement('div');row.className='actions';box.append(row);
-  const apply=document.createElement('button');apply.type='button';apply.className='btn primary';apply.id='relocationApply';apply.textContent=set.moves.length>1?`Aplicar las ${set.moves.length}`:'Aplicar';apply.disabled=!set.moves.length||!set.valid;apply.onclick=()=>applyProposal();
-  const cancel=document.createElement('button');cancel.type='button';cancel.className='btn';cancel.id='relocationCancel';cancel.textContent='Cancelar';cancel.onclick=()=>cancelProposal('Propuesta descartada; no ha cambiado nada.');
-  row.append(apply,cancel);
+  // «Aplicar» exists only when there is a valid proposal; otherwise the panel only explains and closes.
+  if(set.moves.length&&set.valid){const apply=document.createElement('button');apply.type='button';apply.className='btn primary';apply.id='relocationApply';apply.textContent=set.moves.length>1?`Aplicar las ${set.moves.length}`:'Aplicar';apply.onclick=()=>applyProposal();row.append(apply);}
+  const cancel=document.createElement('button');cancel.type='button';cancel.className='btn';cancel.id='relocationCancel';cancel.textContent=set.moves.length?'Cancelar':'Cerrar';cancel.onclick=()=>cancelProposal(set.moves.length?'Propuesta descartada; no ha cambiado nada.':'');
+  row.append(cancel);
  }
  // Stair zones of the active level with id and kind, for the placement search.
  function stairZoneList(){const b=current();return b?B.stairZonesOf(b,activeLevel(b)):[];}

@@ -43,6 +43,8 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  assert.match(await panel.textContent(),/No comprobado: altura libre, paso o recorrido, normativa/);
  assert.equal(B.canonical(await building(page)),B.canonical(imported),'preview stores nothing');
  const moves=await page.evaluate(()=>FloorPlanBuildingUI.proposal);
+ const covered=await page.evaluate(()=>{const p=document.querySelector('#relocationPanel').getBoundingClientRect();return [...document.querySelectorAll('#gStairs .level-proposal-outline')].filter(e=>{const b=e.getBoundingClientRect();return b.top<p.bottom&&b.bottom>p.top&&b.left<p.right&&b.right>p.left;}).length;});
+ assert.equal(covered,0,'the proposed footprints are not under the panel');
  await shot('01-upper-preview');
  // Cancel: nothing changes. Preview again, then F5: still nothing.
  await tapOrClick(page.locator('#relocationCancel'));await panel.waitFor({state:'hidden'});assert.equal(await page.locator('#gStairs .level-proposal').count(),0);
@@ -79,7 +81,7 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
 
  // 4. The ground sofa: no free place in «Paso» → reported, nothing to apply, manual correction offered.
  await openList();await tapOrClick(page.locator('#conflictsList li[data-object="obj_conflict-sofa"] [data-action="propose"]'));await panel.waitFor();await closePanel();
- assert.match(await panel.textContent(),/No se ha encontrado sitio libre para «Sofá» en «Paso»[^]*Corrígelo a mano/);assert.equal(await page.locator('#relocationApply').isDisabled(),true);
+ assert.match(await panel.textContent(),/No se ha encontrado sitio libre para «Sofá» en «Paso»[^]*Corrígelo a mano/);assert.equal(await page.locator('#relocationApply').count(),0,'nothing to apply');assert.equal(await page.locator('#relocationCancel').textContent(),'Cerrar');
  await shot('04-lower-no-place');await tapOrClick(page.locator('#relocationCancel'));
 
  // 5. F5 after applying: the applied positions are stored; nothing else moved.
