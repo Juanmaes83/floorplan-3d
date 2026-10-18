@@ -113,6 +113,8 @@ La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-
 
 **Aporte de UX, 18-10-2026:** otra [grabación de 104 s sobre creación y edición contextual](technical/loralab-editor-ux-observation-2026-10-18.md) muestra una diferencia de presentación: estancia dibujada en el plano, ejemplos con nombres reconocibles y acabados en un panel junto a la selección. Rubik ya tiene las entidades y buena parte del catálogo, pero reparte la tarea entre formulario, trazado y biblioteca. La observación se entregará a Claude Code para reconciliarla con el estudio #48 y escoger **una sola mejora mínima** con contrato y QA propios. Ni los estilos de huecos ni las cortinas visibles se consideran implementados o aprobados por esta nota.
 
+**Resultado de contraste de #48, 19-10-2026:** Claude midió en Rubik 26 acciones para crear una estancia, puerta, ventana y aplicar acabados; 12 acciones y cuatro cambios de modo correspondieron a los huecos. La [propuesta de primer corte contextual](product/contextual-openings-first-cut-2026-10-19.md) prioriza seleccionar y editar puertas/ventanas en el plano y exponer la orientación de apertura ya almacenada, sin añadir tipos externos ni cambiar el contrato. Es una **decisión de alcance por revisar antes de implementar**, no una aprobación de Roadmap 2. Mantiene como siguiente candidato la creación de estancias y los acabados en un mismo flujo; no considera resuelta la experiencia de usuario completa.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
