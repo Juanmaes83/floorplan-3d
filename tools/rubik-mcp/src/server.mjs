@@ -42,12 +42,12 @@ async function main() {
   const reader = core.createProjectReader(projectPath);
   await reader.load();
 
-  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.0' });
+  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.1' });
   registerReadTool(server, 'get_project_summary', 'Resumen del proyecto',
     'Lee el resumen del JSON Rubik seleccionado al iniciar. Devuelve versión, hash, escala, recuentos y superficie aproximada. Nunca incluye imágenes ni rutas locales.',
     {}, () => core.getSummary(reader));
   registerReadTool(server, 'list_project_elements', 'Listar elementos',
-    'Consulta habitaciones, muros, huecos o muebles del único JSON seleccionado. Usa páginas con limit/offset. La respuesta excluye imágenes incrustadas, rutas locales y metadatos no necesarios.',
+    'Consulta habitaciones, muros, huecos o muebles del único JSON seleccionado. roomId usa la relación geométrica derivada, incluye elementos compartidos o ambiguos y filtra estancias por su propio ID. Usa páginas con limit/offset. Excluye imágenes, rutas y metadatos no necesarios.',
     { kind: z.enum(['rooms', 'walls', 'openings', 'objects']), query: z.string().optional(), roomId: z.string().optional(), offset: z.number().int().min(0).optional(), limit: z.number().int().min(1).max(100).optional() },
     args => core.listElements(reader, args));
   registerReadTool(server, 'get_project_element', 'Consultar elemento',

@@ -5,7 +5,7 @@
 
 Actualizado: 13-10-2026. Recuperado de PR #32, HEAD `918c134b85eee3f50f95cd20689a2592464c0bde`, y reconciliado sobre `master` `88b0cb568e9824533764518ec42e235e9c2774a9`. La base y evidencia originales del 07-10-2026 pertenecen al merge #31 `88aef0bfeea8abb67865c3d2a33a484c909511ea`. [Cierre y aportes preservados](../qa/documentation-reconciliation-2026-10-13.md).
 
-**Estado:** MCP v0.1.0 de lectura integrado; las cuatro etapas siguientes son propuestas sin implementación en esta actualización. Se conserva la evidencia de uso reportada, no se repite aquí la auditoría de producto.
+**Estado en `master`:** MCP v0.1.0 de lectura integrado. Esta rama propone v0.1.1 con el primer corte de relaciones por estancia de Etapa 1; no declara completa la etapa ni modifica las entregas #38/#39. Se conserva la evidencia de uso reportada, no se repite aquí la auditoría de producto.
 
 ## Objetivo
 
@@ -53,6 +53,14 @@ Ampliar el diagnóstico solo después de resolver las limitaciones observadas.
 - Mejorar holguras con obstáculos: separar elementos por muro, estancia y relación de empotramiento. No descartar un par atravesado por un muro sin comprobar geometría de extremo, huecos y conectividad.
 - Mantener umbral explícito y estados de evidencia. Ningún valor orientativo se convierte en defecto sin decisión de producto.
 - Aceptación: pruebas de habitaciones cóncavas, muros en el trayecto, puertas/huecos, muebles girados, empotrados, ambigüedad, escala estimada y proyectos inválidos.
+
+#### Primer corte de Etapa 1 — relaciones por estancia, rama independiente
+
+- Base `master` comprobada: `3fdbc0f34db9b545e5a2d4b037a66bcf841e23e4`; especificación y reproducción `ea3c227`; implementación de relaciones `1693ea0`; SHA completo probado con SDK actualizado `82b59cd952feab091875c9b91991394118093428`. Antes del cambio, el ejemplo contractual con `roomId:"rom_living"` devolvía 0 estancias, 0 muros, 0 huecos y 2 muebles. Después devuelve 1, 6, 3 y 2, respectivamente. La causa era la comparación literal de un `roomId` que solo es opcional en muebles; muros y huecos no lo guardan.
+- `list_project_elements` y `get_project_element` añaden una relación geométrica mínima con IDs, método, estado y evidencia de área/contacto. La huella girada del mueble se cruza con polígonos de estancia, incluida concavidad; el muro usa banda de eje/grosor y el hueco solo su subtramo del `wallId`. Un mueble que cruza, toca un límite, queda parcialmente fuera o contradice su `roomId` guardado indica ambigüedad. Muros y huecos compartidos conservan todas las estancias implicadas; fuera de todas quedan sin atribución. [Reglas y fixture reproducible](local-mcp-spatial-relations.md).
+- `roomId` filtra estancias por ID propio y los otros elementos por cualquier estancia derivada, incluidos compartidos/ambiguos, antes de paginar. No cambia el JSON, el editor, el contrato, las rutas de entrada, los límites de 15 MiB/750 KiB/100 por página ni la política de solo lectura.
+- Comprobación local en Windows, Node `v24.14.1`, npm `11.14.1`: `npm ci`; en `tools/rubik-mcp`, `npm test` **11 pass, 0 fail, 1 skip** y `npm run check` PASS; desde la raíz, `node --test tests/project.test.cjs tests/tracing.test.cjs tests/layout-review.test.cjs tests/room-layout.test.cjs` **88 pass, 0 fail, 0 skip**. El skip es solo la creación de un symlink, que este Windows niega con `EPERM`; la prueba de JSON inválido se separó y pasó. El protocolo stdio real pasó y los tests compararon SHA-256 y bytes originales antes/después de las consultas. `npm audit` detectó [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h) en el SDK anterior `1.30.0`; el lock fija `1.32.1` y el audit posterior reportó 0 vulnerabilidades. La alerta afecta al cliente OAuth, que este servidor stdio no utiliza.
+- **Pendiente en Etapa 1:** informe agrupado de validación y referencias, medidas entre elementos, holguras con obstáculos/conectividad y verificación adicional de proyectos inválidos, empotramientos y escala estimada para esas herramientas. Esta relación 2D no resuelve topología física cuando los polígonos de estancias se solapan o no corresponden a las caras de los muros; informa candidatos/ausencia sin inventar una estancia. CI remota y revisión humana se registran aparte de las pruebas locales.
 
 ### Etapa 2 — Propuestas de distribución explicables
 
