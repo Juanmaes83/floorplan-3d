@@ -43,7 +43,14 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanBuildingUI&&window.View3D);await require('./editor-fixture.cjs')(page);
  const tapOrClick=l=>mobile?l.tap():l.click();
  const closePanel=()=>page.evaluate(()=>{if(matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right')?.classList.contains('open'))document.querySelector('#tgPanel').click();});
- const shot=async step=>{await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);await page.screenshot({path:path.join(shots,`${name}-${step}.png`)});};
+ // With the proposal panel open (preview, no place, long list) nothing may scroll the page itself, so the top and
+ // bottom bars are never cut. Other captures: master already has a document 14 px taller than a 1440×900 window (the
+ // furniture library), so Playwright's scroll-into-view on a click can shift the window; it is reset for comparable
+ // captures and recorded in docs/qa/multilevel-first-cut.md §5.3 as a pre-existing limit.
+ const shot=async(step,{panel=false}={})=>{await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);
+  const off=await page.evaluate(()=>({win:scrollY,header:document.querySelector('header').getBoundingClientRect().top,inner:[...document.querySelectorAll('body, main, #stage')].filter(e=>e.scrollTop>0).map(e=>(e.id||e.tagName)+':'+e.scrollTop)}));
+  if(panel)assert.deepEqual(off,{win:0,header:0,inner:[]},`page not scrolled with the panel open (${step})`);else{assert.deepEqual(off.inner,[],`no inner container scrolled (${step})`);await page.evaluate(()=>scrollTo(0,0));}
+  await page.screenshot({path:path.join(shots,`${name}-${step}.png`)});};
  const openList=async()=>{await tapOrClick(page.locator('#levelConflictsOpen'));await page.locator('#conflictsDialog[open]').waitFor();};
  const panel=page.locator('#relocationPanel');
 
@@ -61,7 +68,7 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  const moves=await page.evaluate(()=>FloorPlanBuildingUI.proposal);
  const covered=await page.evaluate(()=>{const p=document.querySelector('#relocationPanel').getBoundingClientRect();return [...document.querySelectorAll('#gStairs .level-proposal-outline')].filter(e=>{const b=e.getBoundingClientRect();return b.top<p.bottom&&b.bottom>p.top&&b.left<p.right&&b.right>p.left;}).length;});
  assert.equal(covered,0,'the proposed footprints are not under the panel');
- await shot('01-upper-preview');
+ await shot('01-upper-preview',{panel:true});
  // Cancel: nothing changes. Preview again, then F5: still nothing.
  await tapOrClick(page.locator('#relocationCancel'));await panel.waitFor({state:'hidden'});assert.equal(await page.locator('#gStairs .level-proposal').count(),0);
  assert.equal(B.canonical(await building(page)),B.canonical(imported),'cancel stores nothing');
@@ -99,7 +106,7 @@ test(`assisted relocation ${viewport.width}x${viewport.height}`,{timeout:900000}
  await openList();await tapOrClick(page.locator('#conflictsList li[data-object="obj_conflict-sofa"] [data-action="propose"]'));await panel.waitFor();await closePanel();
  await panelReachable(page);
  assert.match(await panel.textContent(),/No se ha encontrado sitio libre para «Sofá» en «Paso»[^]*Corrígelo a mano/);assert.equal(await page.locator('#relocationApply').count(),0,'nothing to apply');assert.equal(await page.locator('#relocationCancel').textContent(),'Cerrar');
- await shot('04-lower-no-place');await tapOrClick(page.locator('#relocationCancel'));
+ await shot('04-lower-no-place',{panel:true});await tapOrClick(page.locator('#relocationCancel'));
 
  // 5. F5 after applying: the applied positions are stored; nothing else moved.
  await page.reload();await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2);
@@ -119,6 +126,8 @@ test('long proposal list on a short landscape screen stays readable and reachabl
  await page.locator('#levelConflictsOpen').tap();await page.locator('#conflictsDialog[open]').waitFor();await page.locator('#conflictsList [data-action="propose-all"]').tap();await page.locator('#relocationPanel').waitFor();
  await page.evaluate(()=>{if(document.querySelector('aside.right')?.classList.contains('open'))document.querySelector('#tgPanel').click();});await page.waitForTimeout(400);
  const m=await panelReachable(page);assert.equal(m.scrollable,true,'the long list has to scroll');
- assert.ok((await page.locator('#relocationBody li').count())>=6);await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);await page.screenshot({path:path.join(shots,'844x390-05-long-list.png')});
+ assert.ok((await page.locator('#relocationBody li').count())>=6);await page.locator('#toast:not(.show)').waitFor({state:'attached',timeout:20000});await page.waitForTimeout(300);
+ assert.deepEqual(await page.evaluate(()=>({win:scrollY,header:document.querySelector('header').getBoundingClientRect().top})),{win:0,header:0},'page not scrolled with the panel open (long list)');
+ await page.screenshot({path:path.join(shots,'844x390-05-long-list.png')});
  assert.deepEqual(errors,[]);
 });

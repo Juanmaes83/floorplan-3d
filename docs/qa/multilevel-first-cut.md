@@ -385,6 +385,13 @@ Apilada sobre BW5 (§5.2). Propone posiciones para muebles **existentes** que pi
   - F5 después de aplicar.
 - Capturas en `docs/qa/artifacts/multilevel/stair-relocation/`.
 
+**Revisión visual conjunta de #52 → #53 → #54 (versión apilada final):**
+
+- **Límite preexistente, también en `master` `54b9206`:** a 1440×900 el documento mide 914 px en una ventana de 900, porque la biblioteca de muebles sobresale. Un desplazamiento para mostrar un elemento, como el que hace Playwright al pulsar, puede mover la ventana 14 px y cortar la barra superior en una captura.
+  - No bloquea ningún flujo y es ajeno a #52, #53 y #54.
+  - La prueba exige que la página no se desplace con el panel de propuesta abierto. En las demás capturas restablece el desplazamiento para poder compararlas.
+- El diálogo «Revisar» a 844×390 se desplaza (592 px de contenido en 333 visibles). El título está visible al abrir y «Cerrar» y las acciones quedan alcanzables al final del desplazamiento.
+
 **Límites:**
 
 - Sólo mueve dentro de la misma estancia y la misma planta; no cambia muebles de estancia.
