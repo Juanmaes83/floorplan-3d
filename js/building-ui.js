@@ -92,7 +92,8 @@
  function notify(b){
   const box=$('#levelConflicts'),st=status(b),list=st.conflicts;
   if(box){box.hidden=st.state==='clear';box.dataset.state=st.state;box.replaceChildren();
-   if(st.state!=='clear'){const t=document.createElement('span');t.textContent=`⚠ ${st.headline}`;
+   if(st.state!=='clear'){const t=document.createElement('span');t.className='level-conflicts-full';t.textContent=`⚠ ${st.headline}`;
+    const short=document.createElement('span');short.className='level-conflicts-short';short.setAttribute('aria-hidden','true');short.textContent=`⚠ ${st.conflicts.length||st.unevaluated.length}`;box.append(short);
     const more=document.createElement('button');more.type='button';more.className='btn';more.id='levelConflictsOpen';more.textContent='Revisar';more.onclick=()=>openConflicts();box.append(t,' ',more);}}
   const keys=new Set(list.map(keyOf)),fresh=announced?list.filter(c=>!announced.has(keyOf(c))):list;
   if(fresh.length)say(fresh.length===1?fresh[0].message:`${st.headline}. Pulsa «Revisar» para localizarlos.`,7000);
@@ -274,9 +275,10 @@
   dialogError='';const note=$('#levelsError');if(note)note.textContent=warning;toast(warning,8000);
  }
  // JSON import of a building document (menu «Importar» or «Subir plano»): a new entry; the open one is kept.
+ // The building keeps the name it carries; the file name is only a fallback.
  function importBuilding(value,name,operation){
   const b=B.prepare(value);if(!FloorPlanApp.fileImportCurrent(operation))return false;
-  switchProject(library.importBuilding(project,b,name||b.name));FloorPlanApp.fileImportCompleted(operation,'project');
+  switchProject(library.importBuilding(project,b,b.name||name));FloorPlanApp.fileImportCompleted(operation,'project');
   const missing=b.levels.reduce((n,l)=>n+(l.project.sourceImages||[]).length,0);
   say(`Edificio «${library.building().name}» importado con ${b.levels.length} planta(s)${missing?'; las imágenes no viajan en el JSON: usa el ZIP para traerlas':''}.`,7000);return true;
  }
@@ -286,7 +288,7 @@
   for(const {levelId,image,bytes}of images){const key=Core.id('img'),level=building.levels.find(l=>l.id===levelId),im=level.project.sourceImages.find(x=>x.id===image.id);im.storage={kind:'local-browser',ref:key};pending.push([key,new Blob([bytes],{type:image.mediaType})]);}
   B.validate(building);if(!FloorPlanApp.fileImportCurrent(operation))return false;
   await I.put(pending);
-  try{if(!FloorPlanApp.fileImportCurrent(operation)){await I.remove(pending.map(e=>e[0]));return false;}switchProject(library.importBuilding(project,building,name||building.name));FloorPlanApp.fileImportCompleted(operation,'project');}
+  try{if(!FloorPlanApp.fileImportCurrent(operation)){await I.remove(pending.map(e=>e[0]));return false;}switchProject(library.importBuilding(project,building,building.name||name));FloorPlanApp.fileImportCompleted(operation,'project');}
   catch(e){await I.remove(pending.map(e=>e[0]));throw e;}
   say(`Edificio «${building.name}» importado desde ZIP con ${images.length} imagen(es) verificadas.`,7000);return true;
  }

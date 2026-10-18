@@ -219,55 +219,104 @@ Cada captura tiene al lado su `.json`, con los rectángulos en pantalla de la es
 
 ### 5.2 Prevención: aviso BW5, mueble sobre una escalera
 
-La corrección de §5.1 sólo arregla el dibujo y el fixture. Esta prevención detecta el mismo tipo de conflicto en **cualquier** proyecto: importado, creado o editado. La regla está en [FloorPlanBuildingV1 §4.1](../contracts/FloorPlanBuildingV1.md#41-bw5-mueble-sobre-una-escalera-o-su-hueco).
+La corrección de §5.1 sólo arregla el dibujo y el fixture. BW5 detecta, evita y ayuda a corregir el mismo tipo de conflicto en **cualquier** edificio. La regla está en [FloorPlanBuildingV1 §4.1](../contracts/FloorPlanBuildingV1.md#41-bw5-mueble-sobre-una-escalera-o-su-hueco).
 
-**Cálculo:** un solo cálculo, `FloorPlanBuilding.stairConflicts`.
+**Revisión humana de #53 (18-10-2026), reproducida en un contexto limpio** con un edificio distinto del fixture (`tests/fixtures/stair-conflict-building.cjs`):
 
-- Compara la huella girada del mueble (no su envolvente) con la huella de la escalera que sale de la planta o con el hueco de la que llega.
-- Usa la penetración por ejes separadores de `FloorPlanLayoutReview`, con una tolerancia de 1 mm: el contacto no es conflicto.
-- Sólo compara cada mueble con escaleras de su propia planta.
+- **Al pasar a 3D, el aviso desaparecía.** La causa era una regla CSS mía (`main.is3d .level-conflicts{display:none}`): el aviso seguía en el DOM pero oculto. No era caché ni almacenamiento anterior.
+- **El sofá seguía sobre la escalera en 3D.** Es correcto: el dato está ahí. Se comprobó que el 3D construye la misma huella que evalúa BW5 (ver «Pruebas»).
+- **Duplicar en un proyecto de una planta pasaba por `placeNew()`,** y por tanto por `pushOut`. Se ha restaurado el comportamiento anterior: copia a +200 mm, comprobado.
+- **`placeNew()` devolvía el mueble a la posición pedida,** sobre la escalera, cuando la búsqueda acababa en un muro, y lo colocaba con un aviso. Se ha eliminado: si no hay un sitio demostrado, el mueble no se añade.
 
-**Dónde se muestra:**
+**Detectar:**
 
-- **Aviso:** `BW5` en «Plantas…», con planta, mueble, escalera, penetración y superficie compartida. También aparece una nota visible sobre el plano con «Ver avisos», y un anuncio `role=status` cuando el conflicto aparece.
-- **2D:** contorno discontinuo del mueble, trama sobre la zona compartida y una marca «!», con nombre accesible. No depende sólo del color.
-- **Formulario de escalera:** antes de guardar, lista los muebles de ambas plantas que quedarían sobre la huella y se actualiza al editar los campos. Guardar sigue permitido.
-- **Revisión de distribución:** el hallazgo «Mueble sobre escalera (BW5)» recibe los conflictos ya calculados y no repite la geometría.
+- Un único cálculo derivado para **todas** las plantas (`buildingStatus`): sin conflicto, pendiente o evidencia insuficiente.
+- Se recalcula en cada render: importar, abrir, cambiar de planta, añadir, duplicar, mover, girar, dimensionar, editar la escalera, deshacer, rehacer y recargar.
+- No se guarda en el JSON.
 
-**Colocación:**
+**Diagnosticar:**
 
-- Al añadir o duplicar un mueble se usa la lógica existente `pushOut`, que ahora considera también las escaleras y huecos de la planta activa.
-- En un edificio con escaleras, si el mueble acaba sobre un muro o sigue sobre la escalera, se deja en el punto pedido y aparece BW5.
-- Al **arrastrar**, sólo se avisa: el mueble no se mueve solo.
+- **Aviso fijo en 2D y en 3D**, abajo a la derecha: «⚠ N conflictos en N plantas: distribución pendiente», con el botón «Revisar».
+  - Con un mueble seleccionado se eleva por encima de la barra flotante.
+  - En pantallas bajas se compacta a «⚠ N».
+  - La prueba comprueba que no tapa cotas, escala, selector de planta, selector 2D/3D, la barra flotante ni el mueble seleccionado.
+- **«Revisar»** abre un diálogo modal accesible: foco en la primera acción, navegable por teclado y tacto. Lista los conflictos por planta, con mueble, escalera, penetración nominal, confianza de escala y qué puede hacer la persona. Cada conflicto ofrece:
+  - **«Localizar en el plano 2D»:** pasa a 2D, activa la planta, selecciona el mueble y lo encuadra;
+  - **«Ver esta planta en 3D»** (en 3D): muestra esa planta sin las superiores, como forma fiable de aislarla con «Ver todas» activo;
+  - **«Editar la escalera»**.
+- **En 2D**, el mueble se marca con contorno discontinuo, trama y una marca «!», con nombre accesible.
 
-**Datos:**
+**Evitar:**
 
-- El aviso es derivado: no se guarda, no cambia la versión ni la estructura del JSON y nunca bloquea validar, guardar, importar ni exportar.
-- Importar un edificio JSON o ZIP con conflictos conserva bytes y posiciones, abre el edificio y muestra BW5.
-- Crear una planta desde imagen o PDF no añade muebles ni escaleras.
+- **Añadir o duplicar en un edificio con escalera** usa `FloorPlanPlacement.find` (`js/furniture-placement.js`):
+  - la búsqueda es determinista, en anillos de 50 mm alrededor del punto pedido, con un máximo de 4000 posiciones;
+  - la huella girada completa tiene que quedar dentro de **una sola estancia** y no penetrar en más de 1 mm la escalera o el hueco, los muros, el barrido documentado de las puertas ni otros muebles;
+  - si el punto no está en una estancia, o está en más de una, no se adivina;
+  - **si no hay sitio demostrado, el mueble no se añade**, y un diálogo explica el obstáculo y cómo elegir otra ubicación.
+- **Proyectos sin escalera:** se mantiene `pushOut` como antes.
+- **Política de confirmación:** `commit()` es el único punto de confirmación de cambios (arrastre 2D y 3D, giro, tamaño, teclado, panel, añadir y duplicar). Rechaza cualquier cambio que cree un BW5 nuevo en la planta activa:
+  - el mueble vuelve a su última posición válida, la del inicio de la operación;
+  - el historial de deshacer no cambia;
+  - se explica el motivo.
+
+  Durante el arrastre, el resaltado y el aviso se actualizan en vivo. Mover un mueble que ya estaba en conflicto se permite, porque no crea un conflicto nuevo.
+- **Datos antiguos:** un mueble antiguo o importado nunca se mueve solo, ni al abrir, ni al guardar, ni al cambiar de planta.
+
+**Escalera:**
+
+- El formulario lista, antes de guardar, los muebles de **ambas** plantas que quedarían sobre la huella, y explica que, si se guarda, la distribución queda pendiente con una ruta de corrección para cada mueble.
+- Cerrar sin guardar no cambia nada (comprobado byte a byte).
+
+**Borrador, importación y respaldo:**
+
+- **Importar un JSON o ZIP válido** conserva el contenido canónico, los IDs y las posiciones. El edificio conserva su propio nombre: el ZIP lo sustituía por el nombre del archivo, y se ha corregido.
+- **Guardar el borrador** sigue permitido.
+- **Exportar el JSON o ZIP de respaldo** sigue permitido y avisa «Atención: N conflictos…».
+- **Variantes:** la tarjeta de cada variante muestra «Muebles sobre escaleras (BW5)».
+
+**Política de salidas de presentación:**
+
+- Mientras el estado no es `clear`, no se genera **ninguna** salida que pueda verse como propuesta terminada. Se abre la lista de conflictos para corregirlos.
+- El bloqueo está en las primitivas, no en los botones, para que no se pueda eludir:
+  - `FloorPlanPresentation.open` (cubre el botón principal «Presentar mi vivienda» y la guía);
+  - `FloorPlanSheet.open` y su descarga (lámina);
+  - `exportPNG` (exportar imagen 2D/3D, también desde la guía);
+  - `View3D.shot` (toda captura 3D, incluidas las de la presentación y su ZIP de imágenes).
+- Siguen disponibles la inspección 3D, el guardado y los respaldos JSON/ZIP.
+
+**Corrección manual:**
+
+- Desde la lista se localiza el mueble; se arrastra fuera de la escalera o a otra estancia, o se edita la escalera.
+- Tras cada cambio se reevalúa todo el edificio. En la prueba, al recolocar el sofá y la cama, el estado pasa a `clear` en 2D y en 3D, el aviso desaparece, las salidas se permiten de nuevo, y tras F5 el estado sigue `clear`.
 
 **Pruebas:**
 
-- `tests/stair-conflicts.test.cjs`, casos deterministas:
-  - cama sobre el hueco y sofá sobre la escalera inferior (las posiciones anteriores del fixture);
-  - mueble a 45° cuyo envolvente toca el hueco pero su huella no;
-  - borde compartido, esquina y 0,5 mm sin aviso, y 2 mm con aviso;
-  - plantas distintas con la misma XY local;
-  - escalera añadida después del mueble;
-  - ida y vuelta por JSON y ZIP;
-  - revisión de distribución.
+- `tests/stair-conflicts.test.cjs` y `tests/furniture-placement.test.cjs`:
+  - casos deterministas, entre ellos estado global, evidencia insuficiente, estancia ambigua o ausente, Paso sin sitio, contacto con la cara del muro frente a 10 mm dentro, barrido de puerta, otro mueble y mueble girado;
+  - biblioteca con duplicado y variante;
+  - rendimiento: búsqueda con 40 muebles y diagnóstico con 300 objetos;
+  - correspondencia de la huella 3D.
+- `tests/stair-conflicts.browser.test.cjs` recorre el flujo completo en 3 viewports y la regresión de duplicar en una planta.
 
-  Además, una comprobación generativa con semilla fija contra un oráculo de muestreo, que complementa los casos fijos sin sustituirlos.
-- `tests/stair-conflicts.browser.test.cjs`, a 1440×900, 390×844 y 844×390, con un edificio distinto del fixture (`tests/fixtures/stair-conflict-building.cjs`): importación JSON y ZIP, aviso, resaltado, lista en «Plantas…», formulario, revisión de distribución, añadir con sitio libre, duplicar, añadir sin sitio libre y arrastre.
-- **Capturas:** `docs/qa/artifacts/multilevel/stair-conflicts/`, revisadas.
+**Capturas:** `docs/qa/artifacts/multilevel/stair-conflicts/` (11 por viewport), revisadas:
+
+- pendiente en 2D, en la planta baja y en la primera;
+- 3D de la planta baja y «Ver todas»;
+- lista de conflictos y planta aislada en 3D;
+- mueble localizado en 2D;
+- «sin sitio»;
+- estado `clear` en 2D y en 3D con «Ver todas»;
+- vista previa del formulario de escalera.
 
 **Límites:**
 
-- El cálculo es en planta: no evalúa altura libre, paso ni normativa.
-- La colocación aparta de las escaleras usando su rectángulo envolvente, igual que hace con los muros. Una escalera girada puede apartar un mueble más de lo estrictamente necesario.
-- La colocación no evita otros muebles, como ya pasaba antes: un mueble apartado del hueco puede acabar solapando otro, y la revisión de distribución lo señala como «Solape».
-- La nota sobre el plano puede tapar parte de la cota superior en pantallas bajas.
-- No se ha validado en teléfonos físicos ni con CI.
+- Es en planta: no evalúa altura libre, paso, recorrido ni normativa.
+- El barrido de las puertas se aproxima por el cuadrado de la hoja (conservador).
+- Las alfombras y los elementos colgados no bloquean la colocación, como en la revisión de distribución.
+- Al importar un ZIP con imágenes, las referencias de imagen pasan al almacén local, que es necesario para mostrarlas.
+- En una estancia ocupada por la escalera, como «Paso», la etiqueta de la estancia no encuentra sitio libre.
+- **Cámara, como seguimiento aparte:** en «Ver todas», desde un ángulo alto, la planta alta tapa la baja y el encuadre deja el edificio pequeño. Aquí sólo se ofrece «Ver esta planta en 3D»; no se ha rediseñado la cámara.
+- No se ha validado en teléfonos físicos, GPU real ni con CI.
 
 ## 6. Gates que debe ejecutar Juanma
 
