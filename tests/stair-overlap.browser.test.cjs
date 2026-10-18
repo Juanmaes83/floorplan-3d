@@ -52,9 +52,7 @@ test(`stair void and labels do not overlap ${viewport.width}x${viewport.height}`
   assert.ok(inside(m.stairLabel,m.stair),`«${text}» inside the stair footprint`);
   for(const l of [...m.roomLabels,...m.dims])assert.ok(!overlap(l,m.stair,2),`«${l.text}» clear of the stair (level ${level})`);
   for(const l of m.roomLabels)assert.ok(!overlap(l,m.stairLabel,2),`«${l.text}» clear of «${text}»`);
-  // The upper bedroom has a furniture-free place for its label. The ground «Estar» (3000×2400 mm) is filled by the
-  // sofa and the stair, so there the label stays clear of the stair and falls back onto the sofa, as on master.
-  if(level===1)for(const l of m.roomLabels)assert.ok(!overlap(l,m.furniture,2),`«${l.text}» clear of the furniture (level ${level})`);
+  for(const l of m.roomLabels)assert.ok(!overlap(l,m.furniture,2),`«${l.text}» clear of the furniture (level ${level})`);
   assert.ok(!overlap(m.furniture,m.stair),`furniture clear of the stair (level ${level})`);
   assert.ok(m.levelBar.right<=m.viewport.width&&m.levelBar.bottom<=m.viewport.height&&m.levelBar.right>m.levelBar.left,'level selector visible');
  }

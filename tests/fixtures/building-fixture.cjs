@@ -15,8 +15,9 @@ function build(){
  ground.openings.push({id:'opn_fixture-ground-door',kind:'door',wallId:shared.id,offsetMm:800,widthMm:800,heightMm:2100,sillHeightMm:0,swing:{hinge:'start',side:'left'}});
  // Confirmed («real») scale and image of the F1b example, so the two levels have different confidences.
  ground.scale=f1b.scale;ground.sourceImages=f1b.sourceImages;
- // The sofa stays clear of the stair footprint (x 4900–7300, y 1650–2550).
- ground.objects.push({...C.object('sofa','Sofá',6000,1100,2000,900,0,'#9aa7b3'),id:'obj_fixture-sofa',roomId:estar.id});
+ // A two-seat sofa in the top-right corner of «Estar», clear of the stair footprint (x 4900–7300, y 1650–2550) and
+ // leaving room for the label of the room.
+ ground.objects.push({...C.object('sofa','Sofá',6900,900,1400,800,0,'#9aa7b3'),id:'obj_fixture-sofa',roomId:estar.id});
  ground.objects=ground.objects.map(o=>{const {cx,cy,w,d,rot,...rest}=o;return rest;});
  ground.sourceImages[0].bytes=groundImage.length;ground.sourceImages[0].sha256=sha(groundImage);
  C.validate(ground,{strict:true});

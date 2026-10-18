@@ -1161,7 +1161,7 @@ function renderLabels(){
     return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([u,v]) => ({x:f.cx+u*f.w/2*c-v*f.d/2*s, y:f.cy+u*f.w/2*s+v*f.d/2*c})); }) : [];
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
     const name = nm(state.rooms[r.id].name), dims = designDimensions(r.id), half = Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, dims.length*140*.6)/2;
-    const {x,y} = zones.length ? FloorPlanBuilding.labelAnchor(r.poly.map(([x,y])=>({x,y})), {x:r.at[0],y:r.at[1]}, {left:half,right:half,above:230,below:dims?500:310}, zones, {avoid:furniture}) : {x:r.at[0],y:r.at[1]};
+    const {x,y} = zones.length ? FloorPlanBuilding.labelAnchor(r.poly.map(([x,y])=>({x,y})), {x:r.at[0],y:r.at[1]}, {left:half,right:half,above:230,below:dims?500:310}, zones, {prefer:[furniture]}) : {x:r.at[0],y:r.at[1]};
     const halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
     return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(name)}</text>
       <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${dims?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${dims}</text>`:''}`;

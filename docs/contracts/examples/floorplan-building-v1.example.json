@@ -367,12 +367,12 @@
             "type": "sofa",
             "name": "Sofá",
             "position": {
-              "x": 6000,
-              "y": 1100
+              "x": 6900,
+              "y": 900
             },
             "size": {
-              "widthMm": 2000,
-              "depthMm": 900
+              "widthMm": 1400,
+              "depthMm": 800
             },
             "rotationDeg": 0,
             "color": "#9aa7b3",

@@ -80,16 +80,17 @@
  }
  // Where to anchor a room label (block `box` = {left,right,above,below} mm around the anchor) so that it stays inside
  // the room and clear of the stair zones of that level (footprints and slab voids, same frame), with `margin` mm.
- // The stored anchor wins when it is clear; otherwise the nearest clear anchor on a `step` mm grid, preferring one
- // that is also clear of `avoid` (furniture). When no clear place exists the stored anchor is kept with blocked:true,
- // so a real conflict stays visible instead of hidden.
- function labelAnchor(roomPolygon,at,box,zones,{avoid=[],margin=100,step=100}={}){
+ // The stored anchor wins when it is clear; otherwise the nearest clear anchor on a `step` mm grid. `prefer` lists
+ // groups of polygons to keep clear as well, most important first (the editor passes the furniture): when no place is
+ // clear of all of them, the last group is dropped, and so on down to the stair zones alone. When no place is clear
+ // even of the stairs the stored anchor is kept with blocked:true, so a real conflict stays visible instead of hidden.
+ function labelAnchor(roomPolygon,at,box,zones,{prefer=[],margin=100,step=100}={}){
   const rect=(x,y,m)=>[{x:x-box.left-m,y:y-box.above-m},{x:x+box.right+m,y:y-box.above-m},{x:x+box.right+m,y:y+box.below+m},{x:x-box.left-m,y:y+box.below+m}];
   const clear=(x,y,polys)=>{const r=rect(x,y,0),[a,,c]=r;
    return r.every(v=>inPoly(v,roomPolygon))&&!roomPolygon.some(v=>v.x>a.x&&v.x<c.x&&v.y>a.y&&v.y<c.y)&&!polys.some(z=>convexOverlap(rect(x,y,margin),z));};
   if(!zones.some(z=>convexOverlap(rect(at.x,at.y,margin),z)))return {x:at.x,y:at.y,moved:false,blocked:false};
   const xs=roomPolygon.map(v=>v.x),ys=roomPolygon.map(v=>v.y);
-  for(const polys of [[...zones,...avoid],zones]){let best=null;
+  for(let k=prefer.length;k>=0;k--){const polys=[...zones,...prefer.slice(0,k).flat()];let best=null;
    for(let x=Math.min(...xs);x<=Math.max(...xs);x+=step)for(let y=Math.min(...ys);y<=Math.max(...ys);y+=step){
     const d=Math.hypot(x-at.x,y-at.y);if((!best||d<best.d)&&clear(x,y,polys))best={x,y,d};}
    if(best)return {x:best.x,y:best.y,moved:true,blocked:false};}
