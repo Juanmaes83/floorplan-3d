@@ -128,7 +128,7 @@
    const out=await convert(bytes,file.name,kind,session);if(!current())return;if(!out){say('Subida cancelada.');return;}
    if(out.project){if(!adopt(out.project,stem(file.name)))return;const r=out.report,o=r.openings,plural=(n,one,many)=>`${n} ${n===1?one:many}`;say(`PDF vectorial (página ${out.page} de ${out.pages}, escala 1:${r.scale}): ${plural(r.walls,'muro','muros')}, ${plural(o.door,'puerta','puertas')}, ${plural(o.window,'ventana','ventanas')}${o.opening?`, ${plural(o.opening,'hueco','huecos')}`:''} y ${plural(r.rooms,'estancia','estancias')}. Revisa el resultado.`,10000);return;}
    const image=await traceUI().addImage(out.file,true,stem(file.name),{transaction:session});
-   if(image)say(`${out.detail?out.detail+'. ':''}Plano cargado como nuevo proyecto. Calibra con una cota conocida antes de trazar.`,9000);
+   if(image)say(`${out.detail?out.detail+'. ':''}${window.FloorPlanBuildingUI?.takeAdoptedLevel()?'Plano cargado como nueva planta del edificio':'Plano cargado como nuevo proyecto'}. Calibra con una cota conocida antes de trazar.`,9000);
   }catch(err){if(current())say(err.message||String(err),9000);}
   finally{if(active===session){active=null;setBusy(false);}}
  }
