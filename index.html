@@ -227,6 +227,9 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .lib-grid{grid-template-columns:1fr 1fr 1fr}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
+#gLevelGhost .level-ghost-room{fill:none;stroke:#8c8579;stroke-width:28;stroke-dasharray:120 90;opacity:.55}#gLevelGhost .level-ghost-wall{fill:#9a9388;opacity:.28}
+.level-stair-outline{fill:#efe4d4;fill-opacity:.65;stroke:#5a4a3a;stroke-width:24}.level-stair-to .level-stair-outline{fill:none;stroke-dasharray:140 90}.level-stair-tread{stroke:#5a4a3a;stroke-width:14}.level-stair-arrow{stroke:#5a4a3a;stroke-width:22}.level-stair-label{font-size:170px;fill:#3d3128;paint-order:stroke;stroke:#fff;stroke-width:30px}
+#levelBar{flex-wrap:nowrap}#levelBar .btn[aria-pressed=true]{font-weight:600}#levelsDialog{width:min(640px,94vw)}.level-card{border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:6px 10px}.level-field{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.level-field input[type=number],.level-field input[type=text]{width:9em;max-width:100%}.level-field input[type=checkbox]{width:auto;margin:0}.level-check{display:flex;gap:8px;align-items:center;justify-content:flex-start;text-align:left;margin:6px 0}.level-field small{color:#6b6257}.level-warnings{margin:6px 0;padding-left:18px;font-size:13px}.level-derived,.level-alignment,.level-scale{font-size:13px;color:#4f463d}
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}#projectVariants{border-top:1px solid var(--line);margin-top:10px}#projectVariants h3{margin:10px 0 4px;font-size:15px}#variantsDialog{width:min(980px,96vw)}.variants-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0}.variant-card{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;min-width:0}.variant-card[data-active=true]{border-color:var(--accent,#b5653a);box-shadow:0 0 0 2px #b5653a33}.variant-card h3{margin:0 0 6px;font-size:15px;overflow-wrap:anywhere}.variant-card .role{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:6px;background:#efe8dc;margin-bottom:4px}.variant-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:6px 0;font-size:13px}.variant-card dt{color:var(--muted)}.variant-card dd{margin:0;text-align:right;overflow-wrap:anywhere}.variant-card .actions{display:flex;flex-wrap:wrap;gap:6px}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
@@ -345,6 +348,9 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     <button class="btn" id="newProjectBtn">Nuevo proyecto</button>
     <span id="uploadPlanHelp" class="sr-only" data-en="PDF (image or vector drawing), image (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, RoomPlan scan (JSON) or Rubik Sota project (JSON/ZIP). You can also drag the file onto the page." data-es="PDF (imagen o dibujo vectorial), imagen (PNG, JPG, WebP, HEIC, TIFF, BMP, GIF, AVIF), SVG, CAD DXF, BIM IFC, escaneo RoomPlan (JSON) o proyecto Rubik Sota (JSON/ZIP). También puedes arrastrar el archivo a la página.">PDF（图片或矢量图）、图片 (PNG、JPG、WebP、HEIC、TIFF、BMP、GIF、AVIF)、SVG、CAD DXF、BIM IFC、RoomPlan 扫描 (JSON) 或 Rubik Sota 项目 (JSON/ZIP)。也可以把文件拖到页面上。</span>
     <button class="btn" id="newRoomBtn">+ Estancia</button>
+    <button class="btn" id="levelsBtn" aria-haspopup="dialog">Plantas</button>
+    <div class="grp" id="levelBar" role="group" aria-label="Planta activa" hidden></div>
+    <span id="levelStatus" class="sr-only" role="status" aria-live="polite"></span>
     <div class="grp" id="paneBtns">
       <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
       <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
@@ -446,12 +452,15 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
   <main id="stage">
     <svg id="plan" class="tool-select" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
       <defs id="defs"></defs>
+      <defs><marker id="levelArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a4a3a"/></marker></defs>
       <g id="gGrid"></g>
+      <g id="gLevelGhost" pointer-events="none" aria-hidden="true"></g>
       <g id="gRooms"></g>
       <g id="gSource" pointer-events="none"></g>
       <g id="gFurn"></g>
       <g id="gWalls"></g>
       <g id="gOpen"></g>
+      <g id="gStairs" pointer-events="none"></g>
       <g id="gLabels" pointer-events="none"></g>
       <g id="gDims" pointer-events="none"></g>
       <g id="gMeasure" pointer-events="none"></g>
@@ -509,6 +518,8 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <section id="projectVariants" aria-labelledby="projectVariantsTitle"><h3 id="projectVariantsTitle">Variantes</h3>
 <p>Crea una copia independiente del proyecto abierto, tal como lo ves ahora, para probar otra distribución sin tocar el original (hasta 2 variantes por original). El vínculo entre original y variantes se guarda solo en este navegador: al exportar el JSON se exporta un proyecto normal, sin ese vínculo.</p>
 <div class="actions"><button id="projectVariant" class="btn">Crear variante del proyecto abierto</button><button id="projectCompare" class="btn">Comparar distribuciones</button></div></section></dialog>
+<dialog id="levelsDialog" aria-labelledby="levelsTitle"><h2 id="levelsTitle">Plantas del edificio</h2><div id="levelsBody"></div><p id="levelsError" role="alert"></p><div class="actions"><button id="levelsClose" class="btn">Cerrar</button></div></dialog>
+<input type="file" id="levelImageIn" hidden accept=".pdf,.png,.jpg,.jpeg,.webp,.heic,.tif,.tiff,.bmp,.gif,.avif,.svg,.dxf,.ifc,application/pdf,image/*" aria-label="Plano de la nueva planta: PDF, imagen o DXF">
 <dialog id="variantsDialog" aria-labelledby="variantsTitle"><h2 id="variantsTitle">Comparar distribuciones</h2>
 <p>Original y variantes guardados en este navegador. Las plantas usan el mismo marco y escala; beige: estancias y muebles, gris: muros, azul: puertas. Los avisos son geométricos y orientativos (revisión de distribución en planta); no certifican normativa ni accesibilidad.</p>
 <label>Holgura mínima entre muebles (mm, opcional) <input id="variantsClearance" type="number" min="1" step="1" inputmode="numeric"></label>
@@ -523,6 +534,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/furniture-search.js"></script>
 <script src="js/asset-catalog.js"></script>
 <script src="js/safe-dom.js"></script>
+<script src="js/building-core.js"></script>
 <script src="js/project-library.js"></script>
 <script src="js/tracing-core.js"></script>
 <script src="js/plan-intake.js"></script>
@@ -1230,6 +1242,7 @@ function renderAll(){
   window.View3D?.sync();
   window.FloorPlanTraceUI?.render();
   window.FloorPlanGuideUI?.sync();
+  window.FloorPlanBuildingUI?.render();
 }
 
 const REFERENCE_ID=Core.initial().id;
@@ -1908,7 +1921,8 @@ drawer(null);                                  // 恢复上次的面板收起状
 $('#exportPng').onclick = exportPNG;
 ['#shot3dSize','#shot3dAspect'].forEach(id => $(id).onchange = updateShot3dDims);
 $('#shot3dOptions').closest('details').addEventListener('toggle', updateShot3dDims);
-const exportProjectJson = () => download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
+// A building exports as a whole; a single level is exported explicitly from «Plantas…» with a warning.
+const exportProjectJson = () => library?.isBuilding()?window.FloorPlanBuildingUI.exportBuildingJson():download(tr('户型装修方案', 'floor-plan-design') + '.json', new Blob([JSON.stringify(project, null, 2)], {type:'application/json'}));
 $('#exportJson').onclick = exportProjectJson;
 $('#importJson').onclick = () => {document.querySelector('details.menu').open=false;$('#fileIn').click();};
 let importSequence=0;
@@ -1923,6 +1937,8 @@ async function importProjectFile(file,{fromUpload=false,transaction}={}){
     if(file.size>15*1024*1024)throw new Error(tr('项目文件超过 15 MB','Project file exceeds 15 MB'));
     if(!fromUpload&&(!/\.json$/i.test(file.name)||file.type&&!['application/json','text/plain'].includes(file.type)))throw new Error(tr('请选择 JSON 项目；PDF、图片或 DXF 请使用上传平面图。','Choose a project JSON file. For PDF, images or DXF, use Upload plan.'));
     const text=await file.text();if(!fileImportCurrent(operation))return false;
+    let parsed=null;try{parsed=JSON.parse(text);}catch{}
+    if(parsed?.schema===FloorPlanBuilding.SCHEMA)return window.FloorPlanBuildingUI.importBuilding(parsed,parsed.name||file.name.replace(/\.[^.]*$/,''),operation);
     const next=Core.prepare(text);
     if(!window.FloorPlanTraceUI.adoptProject(next.project,next.project.name||file.name.replace(/\.[^.]*$/,''),{transaction:operation,origin:'project'}))return false;
     toast(tr('方案已导入','Plan imported') + (next.migrated?tr(' — 已迁移旧格式',' — previous format migrated'):'') + (next.project.schemaVersion!=='1.0.0'?tr(' — 已保留 V1 新字段',' — newer V1 fields retained'):''));
@@ -1961,13 +1977,13 @@ $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
 if(loadedProject.message)toast(loadedProject.message,6000);
-function switchProject(next){window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;refreshProject();renderAll();fitView();}
+function switchProject(next){window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
 function listProjects(){
   const list=$('#projectList');list.replaceChildren();const names=Object.fromEntries(library.list().map(e=>[e.id,e.name]));
-  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=e.variantOf?`${e.name} — variante de «${names[e.variantOf]}»`:e.name;list.append(option);}
+  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=(e.variantOf?`${e.name} — variante de «${names[e.variantOf]}»`:e.name)+(e.kind==='building'?` — edificio, ${e.levels} plantas`:'');list.append(option);}
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
@@ -2011,7 +2027,7 @@ function renderVariants(){
     const data=g.id===library.activeId()?project:g.project;let m;
     try{m=FloorPlanVariants.metrics(data,{clearanceMm:variantsClearance});}catch(e){$('#variantsError').textContent=e.message;continue;}
     const card=document.createElement('article');card.className='variant-card';card.dataset.id=g.id;card.dataset.active=String(g.id===library.activeId());
-    const role=document.createElement('span');role.className='role';role.textContent=g.variantOf?'Variante':'Original';const h=document.createElement('h3');h.textContent=g.name+(g.id===library.activeId()?' (abierto)':'');
+    const role=document.createElement('span');role.className='role';role.textContent=g.variantOf?'Variante':'Original';const h=document.createElement('h3');h.textContent=g.name+(g.levelName?` · ${g.levelName}`:'')+(g.id===library.activeId()?' (abierto)':'');
     const dl=document.createElement('dl');const c=m.review.checks,row=(k,v,key)=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;if(key)dd.dataset.metric=key;dl.append(dt,dd);};
     row('Superficie útil',`${fmt(m.netAreaM2)} m²`,'area');row('Muebles',String(m.objects),'objects');
     row('Revisión de distribución',reviewState[m.review.status],'status');
@@ -2033,6 +2049,10 @@ $('#projectCompare').onclick=()=>{$('#projectsDialog').close();$('#variantsClear
 $('#variantsClose').onclick=()=>$('#variantsDialog').close();
 $('#variantsClearance').onchange=()=>{const v=$('#variantsClearance').value.trim(),n=v===''?null:Number(v);if(n!==null&&!(Number.isFinite(n)&&n>0)){$('#variantsError').textContent='La holgura mínima debe ser un número de milímetros mayor que 0.';$('#variantsClearance').value=variantsClearance??'';return;}const next=n===null?null:Math.round(n);if(next===variantsClearance)return;variantsClearance=next;renderVariants();};
 window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelFileImport,fileImportCompleted,
+  // Imports become a new library entry, or a new level when «Plantas…» requested it for this transaction.
+  adoptImported(visible,next,name,session){return window.FloorPlanBuildingUI?window.FloorPlanBuildingUI.adoptImported(visible,next,name,session):library.importProject(visible,next,name);},
+  // Single-level tools (presentation, sheet…) work on the active level; this names it when a building is open.
+  get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
   async enterPresentation3D(){await setView('3d',{presentation:true});return is3D();},
@@ -2064,6 +2084,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
+<script src="js/building-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
@@ -2095,6 +2116,9 @@ let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0, proceduralDetails = false; let renderedSource, renderedGeometry;
 const doors = [], keys = {};
+// Multi-level building context (js/building-ui.js). The active level keeps the editor's 3D at y = 0; the other
+// level, its slab opening and the stairs are rebuilt in levelsG, shifted by elevation and offset.
+let levelsG, levelLamps = [], levelContext = null, levelView = 'active', levelBuildInfo = {levels:[],stairs:0,voids:0};
 
 /* ======================= 初始化 ======================= */
 function init(){
@@ -2137,7 +2161,8 @@ function init(){
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
   archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
-  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG);
+  levelsG = new THREE.Group(); levelsG.name = 'building-levels';
+  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -2990,16 +3015,21 @@ function setPresentationContactShadows(enabled){
   return {enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount};
 }
 
-function buildArch(){
+// `other` = {ox, oy} builds another building level into the (temporarily swapped) archFloor/archUp/lampG groups,
+// without touching presentation state, camera limits or the shared surface material lifecycle.
+function buildArch(other){
+  if(!other){
   clearPresentationReveal();
   clearPresentationRoute();
   renderedSource=project; renderedGeometry=geometry;
+  }
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
   doors.length = 0; colliders = [];
-  surfaceRenderer.begin();
+  if(!other)surfaceRenderer.begin();
   OX=geometry.center.x; OY=geometry.center.y; H=project.defaults.wallHeightMm/1000;
-  const span=Math.hypot(geometry.envelope.w,geometry.envelope.h)/1000;camera.far=Math.max(300,span*10);camera.updateProjectionMatrix();orbit.maxDistance=Math.max(45,span*4);ground.scale.setScalar(Math.max(1,span/100));
+  if(other){OX=other.ox;OY=other.oy;}
+  else{const span=Math.hypot(geometry.envelope.w,geometry.envelope.h)/1000;camera.far=Math.max(300,span*10);camera.updateProjectionMatrix();orbit.maxDistance=Math.max(45,span*4);ground.scale.setScalar(Math.max(1,span/100));}
   const top = topHeight();
   geometry.rooms.forEach(r => {
     const m = floorMat(state.rooms[r.id].mat), bay = r.counted === false;
@@ -3010,7 +3040,7 @@ function buildArch(){
     if (bay){ fl.castShadow = true; archUp.add(fl); } else archFloor.add(fl);
     // 天花：法线朝下，只在室内仰视时可见
     const cg = new THREE.ShapeGeometry(shapeOf(r.poly, true)); cg.rotateX(Math.PI/2);
-    const ceil = new THREE.Mesh(cg, mat('#fbfaf7', {roughness:1})); ceil.position.y = H; ceil.visible = top >= H; archUp.add(ceil);
+    const ceil = new THREE.Mesh(cg, mat('#fbfaf7', {roughness:1})); ceil.position.y = H; ceil.visible = top >= H; ceil.userData.ceilRoom = r.id; archUp.add(ceil);
     if (r.at){
       const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
       lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
@@ -3056,7 +3086,79 @@ function buildArch(){
       [-1,1].forEach(e=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(.04,ph,.04),frameMat);fr.position.set(x+e*pl/2,ph/2,off);group.add(fr);});
     });
   });
+  if(other)return;
+  buildLevels();
   applyLight(); applyGrow(); surfaceRenderer.end();
+}
+
+/* ======================= 多层建筑 / building levels ======================= */
+// Sutherland–Hodgman: part of `subject` inside the convex polygon `clip` (both as [x, y] arrays, mm).
+function clipConvex(subject, clip){
+  const s=Math.sign(clip.reduce((a,p,i)=>{const q=clip[(i+1)%clip.length];return a+p[0]*q[1]-q[0]*p[1];},0))||1;let out=subject;
+  for(let i=0;i<clip.length&&out.length;i++){const a=clip[i],b=clip[(i+1)%clip.length],inside=p=>s*((b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]))>=0,input=out;out=[];
+    for(let j=0;j<input.length;j++){const p=input[j],q=input[(j+1)%input.length],pi=inside(p),qi=inside(q);
+      if(pi)out.push(p);if(pi!==qi){const dx=q[0]-p[0],dy=q[1]-p[1],ex=b[0]-a[0],ey=b[1]-a[1],t=(ex*(p[1]-a[1])-ey*(p[0]-a[0]))/(ey*dx-ex*dy);out.push([p[0]+t*dx,p[1]+t*dy]);}}}
+  return out;
+}
+const polyArea=poly=>Math.abs(poly.reduce((a,p,i)=>{const q=poly[(i+1)%poly.length];return a+p[0]*q[1]-q[0]*p[1];},0))/2;
+function holedShape(poly, holes, flip){const shape=shapeOf(poly,flip);for(const h of holes){const path=new THREE.Path();h.forEach(([x,y],i)=>path[i?'lineTo':'moveTo'](wx(x),flip?wz(y):-wz(y)));shape.holes.push(path);}return shape;}
+// Openings of one level, in its own frame: stairs arriving (slab and floor) and stairs leaving (ceiling below).
+function levelOpenings(L){
+  const local=s=>FloorPlanBuilding.toLocal(FloorPlanBuilding.stairFootprint(s),L).map(p=>[p.x,p.y]);
+  return {arriving:levelContext.stairs.filter(s=>s.toLevelId===L.id).map(local),leaving:levelContext.stairs.filter(s=>s.fromLevelId===L.id).map(local)};
+}
+function roomHoles(poly,openings){return openings.map(o=>clipConvex(poly,o)).filter(h=>h.length>=3&&polyArea(h)>1);}
+// Replaces floor and ceiling geometry of the rooms crossed by a stair; uses the current OX/OY mapping.
+function cutLevelOpenings(floorG, upG, L){
+  const {arriving,leaving}=levelOpenings(L);let cut=0;
+  for(const m of floorG.children)if(m.userData.room&&arriving.length){const r=geometry.rooms.find(x=>x.id===m.userData.room),holes=roomHoles(r.poly,arriving);if(!holes.length)continue;const g=new THREE.ShapeGeometry(holedShape(r.poly,holes));g.rotateX(-Math.PI/2);m.geometry.dispose();m.geometry=g;m.userData.holes=holes.length;cut+=holes.length;}
+  for(const m of upG.children)if(m.userData.ceilRoom&&leaving.length){const r=geometry.rooms.find(x=>x.id===m.userData.ceilRoom),holes=roomHoles(r.poly,leaving);if(!holes.length)continue;const g=new THREE.ShapeGeometry(holedShape(r.poly,holes,true));g.rotateX(Math.PI/2);m.geometry.dispose();m.geometry=g;m.userData.holes=holes.length;cut+=holes.length;}
+  return cut;
+}
+// Visual slab under a level (order ≥ 1): its room polygons minus stair openings, slabThicknessMm deep.
+function levelSlab(L){
+  const g=new THREE.Group(),{arriving}=levelOpenings(L),m=mat('#d9d3c8',{roughness:.95});
+  if(!L.slabThicknessMm)return g;
+  for(const r of geometry.rooms){const geo=new THREE.ExtrudeGeometry(holedShape(r.poly,roomHoles(r.poly,arriving)),{depth:L.slabThicknessMm/1000,bevelEnabled:false});geo.rotateX(-Math.PI/2);const o=new THREE.Mesh(geo,m);o.position.y=-L.slabThicknessMm/1000-.002;o.castShadow=o.receiveShadow=true;o.userData.slabRoom=r.id;g.add(o);}
+  return g;
+}
+function buildLevels(){
+  if(!levelsG)return;
+  clearGroup(levelsG);levelLamps=[];ground.position.y=-.015;levelBuildInfo={levels:[],stairs:0,voids:0};
+  if(!levelContext)return;
+  const A=levelContext.levels.find(l=>l.id===levelContext.activeLevelId);if(!A)return;
+  ground.position.y=-A.elevationMm/1000-.015;
+  const limit=levelView==='all'?Infinity:A.order,OXa=OX,OYa=OY;
+  levelBuildInfo.voids+=cutLevelOpenings(archFloor,archUp,A);
+  if(A.order>0){const slab=levelSlab(A);levelsG.add(slab);}
+  levelBuildInfo.levels.push({id:A.id,order:A.order,active:true,y:0,slabMeshes:A.order>0?geometry.rooms.length:0});
+  for(const L of levelContext.levels){
+    if(L.id===A.id||L.order>limit)continue;
+    const saved={project,archFloor,archUp,lampG,colliders,H},savedDoors=doors.splice(0),group=new THREE.Group();
+    group.position.y=(L.elevationMm-A.elevationMm)/1000;group.userData.levelId=L.id;
+    try{
+      project=L.project;refreshProject();archFloor=new THREE.Group();archUp=new THREE.Group();lampG=new THREE.Group();
+      buildArch({ox:OXa-(L.offsetMm.x-A.offsetMm.x),oy:OYa-(L.offsetMm.y-A.offsetMm.y)});
+      levelBuildInfo.voids+=cutLevelOpenings(archFloor,archUp,L);
+      const furniture=new THREE.Group();furniture.userData.levelFurniture=true;furniture.visible=opt.furn;
+      Core.editing(()=>L.project).furniture.forEach(f=>furniture.add(buildFurniture(f)));
+      group.add(archFloor,archUp,lampG,furniture);if(L.order>0)group.add(levelSlab(L));levelLamps.push(lampG);
+      levelBuildInfo.levels.push({id:L.id,order:L.order,active:false,y:group.position.y,walls:geometry.walls.length,objects:L.project.objects.length});
+    }finally{
+      project=saved.project;archFloor=saved.archFloor;archUp=saved.archUp;lampG=saved.lampG;colliders=saved.colliders;H=saved.H;OX=OXa;OY=OYa;
+      doors.length=0;doors.push(...savedDoors);refreshProject();
+    }
+    levelsG.add(group);
+  }
+  // Straight stairs (building frame → active frame), drawn when their lower level is visible.
+  const wood=mat('#b99a76',{roughness:.6});
+  for(const s of levelContext.stairs){
+    const from=levelContext.levels.find(l=>l.id===s.fromLevelId),to=levelContext.levels.find(l=>l.id===s.toLevelId);if(from.order>limit)continue;
+    const rise=(to.elevationMm-from.elevationMm)/1000,riser=rise/s.risers,tread=s.runLengthMm/1000/s.risers,width=s.widthMm/1000,g=new THREE.Group();
+    g.position.set(wx(s.startMm.x-A.offsetMm.x),(from.elevationMm-A.elevationMm)/1000,wz(s.startMm.y-A.offsetMm.y));g.rotation.y=-s.rotationDeg*Math.PI/180;g.userData.stairId=s.id;
+    for(let i=0;i<s.risers;i++){const h=riser*(i+1),step=new THREE.Mesh(new THREE.BoxGeometry(tread,h,width),wood);step.position.set((i+.5)*tread,h/2,0);step.castShadow=step.receiveShadow=true;g.add(step);}
+    levelsG.add(g);levelBuildInfo.stairs++;
+  }
 }
 
 const assetStates=new Map(),assetRequests=new Map();let assetGeneration=0;
@@ -3125,7 +3227,7 @@ function buildLabels(){
 // 只重建变化的部分
 function sync(force){
   if (!inited || (!active && !force)) return;
-  const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.defaults,opt.cut]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
+  const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.defaults,opt.cut,levelContext&&{id:levelContext.activeLevelId,view:levelView,levels:levelContext.levels.map(l=>l.id===levelContext.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l),stairs:levelContext.stairs},opt.furn]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
   const contactChanged=force||a!==sigArch||f!==sigFurn;
   if (force || a !== sigArch){ sigArch = a; buildArch(); }
   if (force || f !== sigFurn){ sigFurn = f; buildFurn(); }
@@ -3152,7 +3254,7 @@ function applyLight(){
   hemi.intensity = opt.night ? .12 : 1.1;
   scene.background = new THREE.Color(opt.night ? 0x1c2130 : 0xf7f4ee);
   ground.material.color.set(opt.night ? 0x2a2e38 : 0xf2eee7);
-  lampG.children.forEach(o => { if (o.isPointLight) o.intensity = opt.night ? 6 : 0; else o.material.emissiveIntensity = opt.night ? 2 : .3; });
+  [lampG,...levelLamps].forEach(group=>group.children.forEach(o => { if (o.isPointLight) o.intensity = opt.night ? 6 : 0; else o.material.emissiveIntensity = opt.night ? 2 : .3; }));
   renderer.toneMappingExposure = opt.night ? 1.25 : 1.05;
   envK = opt.night ? .15 : 1; matCache.forEach(m => { if (m.envMap) m.envMapIntensity = m.userData.env*envK; });
   if(lightPreset!=='off'){
@@ -3184,9 +3286,24 @@ function isoFrom(P){
   const d = THREE.MathUtils.clamp(P.p.y, 5, Math.max(30,Math.max(geometry.envelope.w,geometry.envelope.h)/1000*3)), dir = new THREE.Vector3(.3, .82, .49).normalize();
   return pose(P.t.clone(), P.t.clone().addScaledVector(dir, d));
 }
-const frameScale=()=>Math.max(.25,Math.max(geometry.envelope.w,geometry.envelope.h)/12330);
-const isoWhole = () => pose(new THREE.Vector3(0, 0, 0), new THREE.Vector3(5.5,15.5,10).multiplyScalar(frameScale()));
-const topWhole = () => pose(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0,19*frameScale(),1e-4));
+// Whole-view framing. With a building open it covers every visible level that has geometry (in the active
+// level's frame); a single project keeps the original framing around the origin.
+function wholeFrame(){
+  if(!levelContext)return {env:geometry.envelope,target:new THREE.Vector3(0,0,0)};
+  const A=levelContext.levels.find(l=>l.id===levelContext.activeLevelId),limit=levelView==='all'?Infinity:A.order,boxes=[];
+  for(const L of levelContext.levels){if(L.order>limit)continue;const p=L.id===A.id?project:L.project;if(!p.walls.length&&!p.rooms.length)continue;
+    const e=L.id===A.id?geometry.envelope:Core.geometry(p).envelope,dx=L.offsetMm.x-A.offsetMm.x,dy=L.offsetMm.y-A.offsetMm.y;boxes.push([e.x+dx,e.y+dy,e.x+e.w+dx,e.y+e.h+dy]);}
+  if(!boxes.length)return {env:geometry.envelope,target:new THREE.Vector3(0,0,0)};
+  const x0=Math.min(...boxes.map(b=>b[0])),y0=Math.min(...boxes.map(b=>b[1])),x1=Math.max(...boxes.map(b=>b[2])),y1=Math.max(...boxes.map(b=>b[3]));
+  // Vertical extent of the visible stack (active level floor at y = 0), so stacked levels fit in the frame too.
+  const visible=levelContext.levels.filter(L=>L.order<=limit),bottom=Math.min(...visible.map(L=>(L.elevationMm-A.elevationMm)/1000)),top=Math.max(...visible.map(L=>(L.elevationMm-A.elevationMm+(L.id===A.id?project:L.project).defaults.wallHeightMm)/1000)),tall=(top-bottom)*1000*1.8;
+  return {env:{x:x0,y:y0,w:Math.max(x1-x0,tall),h:Math.max(y1-y0,tall)},target:new THREE.Vector3(wx((x0+x1)/2),visible.length>1?(bottom+top)/2:0,wz((y0+y1)/2)),stacked:visible.length>1};
+}
+// Stacked levels in a portrait viewport need a little more distance to keep their width in frame.
+const frameScale=()=>{const f=wholeFrame(),e=f.env,portrait=f.stacked?Math.max(1,Math.sqrt(SH()/Math.max(1,SW()))):1;return Math.max(.25,Math.max(e.w,e.h)/12330)*portrait;};
+// Stacked levels use a lower, more oblique angle so the floors read as stacked rather than as one plan.
+const isoWhole = () => {const f=wholeFrame();return pose(f.target, f.target.clone().add((f.stacked?new THREE.Vector3(9,8.5,12.5):new THREE.Vector3(5.5,15.5,10)).multiplyScalar(frameScale())));};
+const topWhole = () => {const t=wholeFrame().target;return pose(t, t.clone().add(new THREE.Vector3(0,19*frameScale(),1e-4)));};
 const curPose = () => pose(orbit.target.clone(), camera.position.clone());
 // 以目标点为中心做球坐标插值：镜头沿弧线倾斜环绕，而不是直线穿越
 function camTween(A, B, e){
@@ -3272,6 +3389,7 @@ function flyToRoom(id){
 async function enter(){
   if(contextLost)throw Error('WebGL context lost; reload to retry');
   init(); active = true;
+  window.FloorPlanBuildingUI?.resend();
   renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH()); camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
   sync(true);
   opt.mode = 'orbit'; orbit.enabled = false; showLabels(false);
@@ -3481,7 +3599,7 @@ function bindUI(){
   document.querySelectorAll('[data-cut]').forEach(b => b.onclick = () => { if (opt.mode === 'walk') return; opt.cut = +b.dataset.cut; syncCutBtns(); sync(); });
   document.querySelectorAll('#toggles3d .btn').forEach(b => b.onclick = () => {
     const k = b.dataset.t; opt[k] = !opt[k]; b.classList.toggle('on', opt[k]);
-    if (k === 'furn'){ furnG.visible = opt.furn; if (!opt.furn && ui.sel?.kind === 'furn') window.select(null); }
+    if (k === 'furn'){ furnG.visible = opt.furn; levelsG?.traverse(o=>{if(o.userData.levelFurniture)o.visible=opt.furn;}); if (!opt.furn && ui.sel?.kind === 'furn') window.select(null); }
     if (k === 'labels') showLabels(opt.labels && opt.mode === 'orbit' && !anim);
     if (k === 'night') applyLight();
   });
@@ -3761,7 +3879,18 @@ function presentationRestorePose(state){
   camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
 }
 
-window.View3D = {shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+window.View3D = {
+  // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
+  // Changing the active level moves the world origin (the active level stays at y = 0), so the camera is re-framed.
+  // A context identical to the current one is a no-op: no rebuild, so in-flight asset loads are never aborted.
+  setLevelContext(ctx,view){const before=levelContext?.activeLevelId,viewBefore=levelView;if(JSON.stringify(ctx||null)===JSON.stringify(levelContext)&&(!view||view===levelView))return;levelContext=ctx?structuredClone(ctx):null;if(view)levelView=view;sync();
+    if(active&&!anim&&opt.mode==='orbit'&&!window.FloorPlanPresentation?.active&&(levelContext?.activeLevelId!==before||levelView!==viewBefore))flyTo(isoWhole(),600);},
+  get levelView(){return levelView;},
+  levelInspect(){return {...structuredClone(levelBuildInfo),groundY:ground?ground.position.y:null,view:levelView,children:levelsG?levelsG.children.length:0,
+    stairs:levelsG?levelsG.children.filter(g=>g.userData.stairId).map(g=>({id:g.userData.stairId,steps:g.children.length,y:g.position.y,top:new THREE.Box3().setFromObject(g).max.y})):[],
+    levelGroups:levelsG?levelsG.children.filter(g=>g.userData.levelId).map(g=>({id:g.userData.levelId,y:g.position.y,box:new THREE.Box3().setFromObject(g).min.toArray().concat(new THREE.Box3().setFromObject(g).max.toArray())})):[],
+    activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
+  shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
