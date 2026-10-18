@@ -5,7 +5,7 @@ Servidor MCP local para consultar un archivo JSON exportado desde Rubik Sota. Es
 ## Requisitos y arranque
 
 - Node.js 22.13 o posterior.
-- Un JSON exportado desde Rubik que cumpla `FloorPlanProjectV1`.
+- Un JSON exportado desde Rubik. Si no cumple `FloorPlanProjectV1`, solo la herramienta de diagnóstico podrá explicar el primer bloqueo.
 - El cliente MCP ejecutará el proceso local por `stdio`; el servidor no abre un puerto ni hace conexiones de red.
 
 Desde esta carpeta:
@@ -31,6 +31,8 @@ El servidor vuelve a leer ese mismo archivo en cada consulta. Si exportas el pro
 - `list_project_elements`: páginas de estancias, muros, huecos y muebles; permite filtrar por nombre/ID y estancia a partir de geometría.
 - `get_project_element`: consulta un elemento por ID con la misma relación espacial.
 - `review_layout`: reutiliza la geometría de la revisión de distribución de Rubik. La holgura es opcional y nunca se inventa un valor por defecto.
+- `diagnose_project`: primer error del validador canónico o, si el JSON es válido, hallazgos agrupados de escala, procedencia, puertas incompletas y relaciones espaciales inciertas.
+- `measure_elements`: distancia 2D determinista entre dos IDs, con modo explícito `reference_points` o `regions`, puntos justificativos, unidades y hash.
 
 Cada herramienta declara anotaciones MCP de solo lectura. No hay herramientas para mover, crear, borrar, guardar o exportar. La superficie se calcula desde polígonos guardados y no es una medición certificada.
 
@@ -54,12 +56,26 @@ El ejemplo procede del muro compartido del fixture sintético `fixtures/spatial-
 
 El filtro `roomId` de `list_project_elements` devuelve una estancia solo cuando coincide con **su propio ID**. Para muebles, muros y huecos, incluye los que tengan ese ID en `relation.roomIds`; un elemento compartido o ambiguo aparece en todas las estancias implicadas con el mismo ID original. Un ID inexistente devuelve `total:0`. Búsqueda y estancia se combinan antes de `offset`/`limit`; el máximo sigue en 100 elementos por página y la respuesta en 750 KiB. No se usa solo el centro del mueble ni se atribuye un hueco por todo el muro si su subtramo no llega a esa estancia.
 
-Las reglas, tolerancias numéricas y límites están en [relaciones espaciales](../../docs/technical/local-mcp-spatial-relations.md). Esta entrega no incluye aún el informe de validación, medidas entre elementos ni mejora de holguras con obstáculos previstos para el resto de Etapa 1.
+Las reglas, tolerancias numéricas y límites están en [relaciones espaciales](../../docs/technical/local-mcp-spatial-relations.md).
+
+### Diagnóstico y medidas (v0.1.2, segundo corte de Etapa 1)
+
+```text
+diagnose_project({})
+measure_elements({"idA":"obj_rect","idB":"obj_next","mode":"reference_points"})
+measure_elements({"idA":"obj_rect","idB":"obj_next","mode":"regions"})
+```
+
+El diagnóstico permite arrancar con JSON mal formado o contrato inválido para mostrar **un único error canónico**, su categoría y qué verificaciones no se ejecutaron. No acepta ese archivo para las otras herramientas. En un proyecto válido añade hallazgos independientes con severidad, ID, regla y evidencia; `estimated`/`pending` es un aviso informativo, no un defecto del contrato. La salida acota a 100 los hallazgos visibles e indica si hubo truncamiento.
+
+`reference_points` usa el centro guardado de cada mueble o el punto medio del eje de cada muro/hueco. No ofrece centro de estancia. `regions` mide la mínima distancia euclídea entre huellas giradas, bandas de muros, subtramos de huecos y polígonos de estancias; contacto o solape da 0 mm. Ambas salidas incluyen `pointA`, `pointB`, `units:mm`, `plane:2d`, `scaleConfidence`, estado de relación por estancia y SHA-256 del archivo. Si la relación espacial es ambigua, la medida geométrica sigue visible con `status:spatial_relation_uncertain`. IDs ausentes, geometría degenerada y combinaciones no soportadas dan error explícito. Ningún modo calcula holgura transitable, altura ni 3D.
+
+La [semántica completa, ejemplos y límites](../../docs/technical/local-mcp-diagnostics-measures.md) dejan definido el tercer corte de Etapa 1: holguras con muros, huecos, empotramientos y conectividad.
 
 ## Límites y privacidad
 
 - El proceso solo puede leer el archivo indicado al arrancar. Ninguna herramienta recibe rutas.
-- Rechaza enlaces simbólicos en el archivo final, JSON inválido, proyectos no válidos y archivos superiores a 15 MiB.
+- Rechaza enlaces simbólicos en el archivo final y archivos superiores a 15 MiB. Un JSON inválido solo puede diagnosticarse; las consultas ordinarias lo rechazan.
 - Respuestas limitadas a 750 KiB; las consultas de elementos se paginan.
 - La revisión MCP admite hasta 100 muebles para mantener acotado el coste geométrico. La app Rubik conserva su propio flujo de revisión.
 - Las salidas usan listas blancas de campos. No exponen `sourceImages`, imágenes incrustadas, rutas locales ni el documento completo.
