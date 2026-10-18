@@ -3,7 +3,7 @@
 
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
 
-Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La confirmación orienta el estudio LoRA LAB y la evaluación de multipiso, pero no aprueba D-16, un contrato 2.0 ni una fase de implementación. Se probará primero LoRA LAB con el guion de la PR #48 y sus límites de evidencia.
+Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La evaluación inicial desembocó en la aprobación del contrato de edificio (opción D, #50) y su primer corte (#51); eso no aprueba D-16, un contrato 2.0 ni las demás funciones de LoRA LAB. El estudio comparativo sigue en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), con límites de evidencia.
 
 ## Estado vigente tras la integración del 17-10-2026
 
@@ -11,19 +11,19 @@ Las PR [#38](https://github.com/Juanmaes83/floorplan-3d/pull/38) (importación g
 
 Juanma revisó visualmente la presentación y aceptó su calidad actual para avanzar. La regresión de navegador de #39 se ejecutó en su Windows con Chrome y NVIDIA RTX 5070 Ti: los 24 archivos salieron con código 0 y los casos dirigidos M11, P05 y retorno de cámara pasaron tres veces cada uno. [Alcance exacto de la evidencia](qa/casa-serra-larga-progress.md#r10--cierre-del-gate-de-navegador-con-gpu-17-10-2026-evidencia-aportada-por-juanma). No hay total agregado de casos en los logs compartidos ni CI aprobada; CI no ejecutó pasos. El piloto #42 se integró como cadena técnica offline con límites visuales declarados en su [informe](technical/offline-blender-pilot.md). Quedan para mejoras posteriores el encuadre cenital de baños, la llegada del baño en suite, el pasillo simple, un caso de suelo visible del plano girado (73,4 % frente al objetivo de 75 %), el coste de `roomFrame` en teléfono físico y los defectos de acabado del vídeo Blender. No son una nueva ronda de bloqueo de estas entregas.
 
-**Actualización 18-10-2026, multipiso (alcance exacto):**
+**Actualización 18-10-2026, multipiso (estado tras los merges):**
 
-- [#50](https://github.com/Juanmaes83/floorplan-3d/pull/50) (contrato, opción D) y [#51](https://github.com/Juanmaes83/floorplan-3d/pull/51) (primer corte: dos plantas y escalera recta) están fusionadas. Juanma no aprobó el solape visual del hueco de escalera.
-- [#52](https://github.com/Juanmaes83/floorplan-3d/pull/52) corrige el dibujo y el fixture. Está en borrador.
-- [#53](https://github.com/Juanmaes83/floorplan-3d/pull/53), apilada sobre #52, cierra **BW5** (mueble sobre una escalera o su hueco) sin cambiar el JSON. Está en borrador.
+- [#50](https://github.com/Juanmaes83/floorplan-3d/pull/50) (contrato, opción D) y [#51](https://github.com/Juanmaes83/floorplan-3d/pull/51) (primer corte: dos plantas y escalera recta) están fusionadas. El solape visual que Juanma no aprobó dio lugar a las tres correcciones siguientes.
+- [#52](https://github.com/Juanmaes83/floorplan-3d/pull/52) corrige el dibujo de etiquetas y el fixture; fusionada en `5e945f3`.
+- [#53](https://github.com/Juanmaes83/floorplan-3d/pull/53) cierra **BW5** (mueble sobre una escalera o su hueco) sin cambiar el JSON; fusionada en `7dfaa64`.
   - Estado derivado para todo el edificio, visible en 2D y en 3D.
   - Lista «Revisar», desde la que se localiza el mueble en 2D, se aísla su planta en 3D o se edita la escalera.
   - Al añadir o duplicar se busca un sitio libre determinista; si no lo hay, el mueble no se añade.
   - No se confirma ningún cambio que cree un conflicto nuevo.
   - Las salidas de presentación se bloquean mientras la distribución esté pendiente.
-- Una PR apilada sobre #53 añade «Buscar sitio libre», una recolocación asistida con vista previa y aplicación expresa.
-- [Detalle y límites](qa/multilevel-first-cut.md#52-prevención-aviso-bw5-mueble-sobre-una-escalera).
-- Siguen pendientes la GPU representativa y los teléfonos físicos del primer corte.
+- [#54](https://github.com/Juanmaes83/floorplan-3d/pull/54) añade «Buscar sitio libre», recolocación asistida con vista previa, aplicación expresa y panel accesible en móvil horizontal; fusionada en `0766dc5`. Si no hay lugar válido en la misma estancia, conserva el conflicto y explica la corrección manual.
+- [Detalle, pruebas y límites](qa/multilevel-first-cut.md#51-solape-del-hueco-de-escalera-causa-y-corrección).
+- La revisión visual conjunta a 1440×900, 390×844 y 844×390 y las pruebas dirigidas constan en #54. La regresión completa en este entorno no quedó limpia; CI, GPU representativa y teléfonos físicos no están acreditados para estas correcciones.
 - No se aprueban recorrido por la escalera, normas de escaleras, exterior ni más plantas.
 
 **Siguiente decisión por fases:** concluir la revisión de la Etapa 1 del MCP local en las PR apiladas [#40](https://github.com/Juanmaes83/floorplan-3d/pull/40) → [#41](https://github.com/Juanmaes83/floorplan-3d/pull/41) → [#43](https://github.com/Juanmaes83/floorplan-3d/pull/43), sin dar por completa la conectividad/holgura de trayectos. En paralelo, el siguiente **estudio**, no una fase de implementación aprobada, es contrastar LoRA LAB con Rubik sobre creación, guardado, varias plantas y visita en escritorio y móvil; [Roadmap 2 §3.4](ROADMAP-2-proposal.md#34-lora-lab-siguiente-evaluación-de-vivienda-completa). Después se elige una sola entrega mínima de acuerdo con el público y sus dependencias. El orden 4–8 de Roadmap 2 sigue orientativo; F2 continúa sin validación empírica.
