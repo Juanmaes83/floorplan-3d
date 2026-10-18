@@ -268,6 +268,8 @@
   returnFocus=document.activeElement;
   config.replaceChildren();
   const heading=el('h2',tx('Presentar mi vivienda','Present my home','展示我的住宅'),config);heading.id='presentationConfigTitle';
+  // A building is presented one level at a time, explicitly named; the other level and the stair are not included.
+  const level=app.levelContext;if(level){const note=el('p',tx(`Presentación de una planta: «${level.levelName}» del edificio «${level.buildingName}». Las demás plantas y la escalera no se incluyen; cambia de planta en «Plantas» para presentar otra.`,`Single-level presentation: «${level.levelName}» of building «${level.buildingName}». Other levels and the stair are not included.`,`单层展示：«${level.levelName}»。`),config,'presentation-level-note');note.id='presentationLevelNote';}
   const possible=Core.create(app.project,app.geometry,app.entryId,FloorPlanGuide.revision(app.project));
   if(!possible){
    el('p',tx('Primero crea una estancia con muros en Distribuir. El proyecto actual se conserva.','Create a room with walls in Layout first. The current project is kept.','请先在布局中创建带墙的房间。当前项目会保留。'),config);
