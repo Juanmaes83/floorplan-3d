@@ -3,13 +3,19 @@
 **Estado:** estudio documental de la PR [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), en borrador.
 
 - **No es una fase aprobada.** No contiene código de producto y no cambia `FloorPlanProjectV1`.
-- **La recomendación de la §8 queda pendiente de Juanma.**
+- **La recomendación de la §8 es un candidato aprobado por Juanma para implementación (19-10-2026).** Se implementa en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65), en borrador. Su beneficio sigue siendo una hipótesis no medida.
 - **Sustituye como referencia vigente** a la matriz §2, la recomendación §4 y la recomendación §5.6 del [estudio del 17-10-2026](loralab-study-gate-2026-10-17.md). Esas secciones se conservan como historia.
-- **Fuera de este estudio:** el MCP (#57, #64 y `tools/rubik-mcp`). No se usa como fuente ni se modifica.
+- **Fuera de este estudio:** el MCP (#57, ya fusionada; #64 y `tools/rubik-mcp`). No se usa como fuente ni se modifica.
 
 **Base de Rubik:** `master` `8590349`, incorporado a la rama de #48 por el merge `047f323`. #48 sólo añade documentación, scripts de QA y una prueba de esos scripts, así que el código de producto comparado es el de `8590349`.
 
-## 1. Estado reconstruido (19-10-2026, 20:29 UTC)
+**Actualización del 19-10-2026, después de #57:**
+
+- La rama de #48 incorpora `master` `bd153c76e493eb5dea1b2908c768f66935f5a192` (merge `125f1b5`), que integra #57.
+- Entre `8590349` y `bd153c7` sólo cambian `tools/rubik-mcp` y documentación (comprobado con `git diff --stat`). El código de producto es idéntico, así que la matriz de la §5 sigue siendo válida.
+- La tarea medida de la §10 **se tomó sobre `8590349`** y no se ha repetido sobre `bd153c7`.
+
+## 1. Estado reconstruido (19-10-2026, 20:29 UTC; actualizado tras #57)
 
 Consultado en GitHub y con `git fetch`. Los SHA de documentos anteriores no se dan por válidos.
 
@@ -21,8 +27,9 @@ Consultado en GitHub y con `git fetch`. Los SHA de documentos anteriores no se d
 | [#63](https://github.com/Juanmaes83/floorplan-3d/pull/63) | Fusionada (`7cdf866`) | Cierre de roadmap de #60/#62. |
 | [#58](https://github.com/Juanmaes83/floorplan-3d/pull/58) | Cerrada sin merge | Fuente secundaria: observación de un vídeo de LoRA LAB de 104 s. Juanma la cierra «por sustitución» y remite a #48. |
 | [#59](https://github.com/Juanmaes83/floorplan-3d/pull/59) | Cerrada sin merge | Su alcance se entregó en #60/#62. **No es una función pendiente.** |
-| [#57](https://github.com/Juanmaes83/floorplan-3d/pull/57) | Abierta, borrador (MCP) | No se toca. |
-| [#64](https://github.com/Juanmaes83/floorplan-3d/pull/64) | Abierta, borrador (documental) | No se toca. Mientras siga abierta, #48 no edita `docs/ROADMAP.md` ni `docs/ROADMAP-2-proposal.md`. |
+| [#57](https://github.com/Juanmaes83/floorplan-3d/pull/57) | **Fusionada** el 19-10-2026 a las 20:45 UTC (merge `bd153c76e493eb5dea1b2908c768f66935f5a192`) | MCP; fuera de este estudio. No cambia código de producto. |
+| [#64](https://github.com/Juanmaes83/floorplan-3d/pull/64) | Abierta, borrador (documental) | Lleva el estado del roadmap. Mientras siga abierta, #48 no edita `docs/ROADMAP.md` ni `docs/ROADMAP-2-proposal.md`. |
+| [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65) | Abierta, borrador | Implementación del candidato de la §8, en una rama propia basada en `master` `bd153c7`, no en #48. |
 | #48 | Abierta, borrador | Antes del merge de `master` tenía conflicto en `docs/ROADMAP-2-proposal.md`. |
 
 **Conflicto resuelto en `047f323`:**
@@ -180,7 +187,7 @@ Criterios:
 
 **Por qué no exterior ni escaleras complejas.** Sus requisitos se apoyan en capacidades de LoRA LAB sólo visibles o inferidas, cambian el contrato y su coste es L.
 
-## 8. Recomendación: un solo corte, pendiente de Juanma
+## 8. Recomendación: un solo corte, aprobado para implementación ([#65](https://github.com/Juanmaes83/floorplan-3d/pull/65))
 
 ### «Presentar las dos plantas de un edificio en una sola presentación»
 
@@ -234,11 +241,15 @@ Criterios:
 - Medir aquí daría un número no fiable. Se medirá antes y después en el PC de Juanma con GPU, o en CI cuando se ejecute.
 - **No se fija un objetivo inventado.**
 
-**Si Juanma no confirma la necesidad de presentar viviendas de varias plantas** (D-01 la deja por comprobar), la alternativa es la prioridad 2: acabado de pared eligiendo la pared en el plano, medible con `scripts/qa/openings/room-task.cjs` sin GPU.
+**Decisión (19-10-2026):** Juanma aprueba este candidato para implementación, que se hace en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65).
+
+- La aprobación no convierte en resultado la hipótesis de beneficio: sigue sin medirse con personas del público D-01.
+- La demanda comercial de viviendas de varias plantas sigue «por comprobar» en D-01.
+- La prioridad 2 (elegir la pared del acabado tocándola en el plano) queda como siguiente candidato, sin aprobar.
 
 ## 9. Pruebas que faltan y cómo obtenerlas
 
-1. **Demanda de varias plantas (decide la §8):** Juanma confirma con al menos un caso real o representativo de su público si presentan viviendas de dos plantas.
+1. **Demanda de varias plantas:** la §8 ya está decidida, pero la demanda sigue sin comprobar con un caso real o representativo del público D-01. Es la medida que validaría el beneficio de #65.
 2. **Anexo A, B–E6 en LoRA LAB** (sólo para la referencia, no bloquea la §8): ejecutar `annex-a-session.cjs` de esta rama en el PC de Juanma. Ya identifica las descargas por su contenido. Aportar `report.md`, `manifest.json` y capturas, y el resumen de `analyze-export.cjs` sobre el JSON válido.
 3. **Volver a comprobar S4:** pasar `analyze-export.cjs` al JSON válido y publicar sólo su resumen redactado. Así se confirmarán o corregirán las cifras de la §3.
 4. **Firma de S6:** `node -e "console.log(require('./scripts/qa/loralab/file-type.cjs').fileType(require('fs').readFileSync(process.argv[1])))" download-3-Villa_moderna-3d.png`.
