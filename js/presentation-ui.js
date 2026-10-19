@@ -16,7 +16,8 @@
  const top=el('div',undefined,card,'presentation-card-top');
  const title=el('h2',undefined,top),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
  const status=el('p',undefined,card,'presentation-status');status.setAttribute('role','status');
- const levelLine=el('p',undefined,card,'presentation-level');levelLine.id='presentationLevel';levelLine.hidden=true;levelLine.setAttribute('aria-live','polite');
+ // In the card header (sticky on short screens), so the level of the view stays visible when the card scrolls.
+ const levelLine=el('p',undefined,top,'presentation-level');levelLine.id='presentationLevel';levelLine.hidden=true;levelLine.setAttribute('aria-live','polite');
  const progress=el('p',undefined,card,'presentation-progress');progress.setAttribute('aria-live','polite');
  const info=el('p',undefined,card,'presentation-info');
  const sectionNote=el('p',undefined,card,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;

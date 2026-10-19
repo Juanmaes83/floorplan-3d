@@ -38,13 +38,14 @@ const snapshot=page=>page.evaluate(k=>{const lib=JSON.parse(localStorage.getItem
 const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:90000});
 const batchFile=name=>{if(name==='presentation.json'||name==='editable-building.zip'||name==='editable-project.zip'||/^views\/view-[0-9]{3}\.png$/.test(name))return name;throw Error('unexpected entry '+name);};
 async function readBatch(zip){const files=await P.unzip(zip,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});const manifest=JSON.parse(new TextDecoder().decode(files.get('presentation.json')));return {files,manifest,summary:Pres.readCaptures(manifest,[...files.keys()])};}
-async function download(page,trigger,timeout=240000){const pending=page.waitForEvent('download',{timeout});await trigger();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return {name:d.suggestedFilename(),bytes:Buffer.concat(chunks)};}
+async function download(page,trigger,timeout=240000){const pending=page.waitForEvent('download',{timeout});pending.catch(()=>{});await trigger();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);return {name:d.suggestedFilename(),bytes:Buffer.concat(chunks)};}
 async function inspectStop(page){return page.evaluate(()=>{const plan=FloorPlanPresentation.plan,on=document.querySelector('.presentation-stops button[aria-current="step"]'),r=e=>e?.getBoundingClientRect().toJSON();
  const card=document.querySelector('.presentation-card'),levelLine=document.querySelector('#presentationLevel');
  return {title:document.querySelector('.presentation-card h2').textContent,level:levelLine.textContent,levelHidden:levelLine.hidden,status:document.querySelector('.presentation-status').textContent,active:FloorPlanBuildingUI.context.levelId,
   active3d:View3D.levelInspect().levels.find(l=>l.active)?.id,current:on&&{text:on.textContent,level:on.dataset.level,label:on.getAttribute('aria-label')},
   headings:[...document.querySelectorAll('.presentation-stops-level')].map(e=>e.textContent),
   close:r(document.querySelector('#presentationClose')),title_:r(document.querySelector('.presentation-card h2')),card:r(card),levelBox:r(levelLine),currentBox:r(on),stopsBox:r(document.querySelector('.presentation-stops')),
+  levelOnTop:(()=>{const b=levelLine.getBoundingClientRect(),hit=document.elementFromPoint(b.left+Math.min(20,b.width/2),b.top+b.height/2);return !!hit&&levelLine.contains(hit);})(),
   viewport:[innerWidth,innerHeight],hScroll:document.documentElement.scrollWidth>innerWidth+1,cardScroll:card.scrollTop,stops:plan.stops.length};});}
 const inside=(box,[w,h])=>box&&box.left>=-1&&box.top>=-1&&box.right<=w+1&&box.bottom<=h+1;
 
@@ -80,7 +81,8 @@ test(`two-level building: one presentation and one batch with both levels ${view
   assert.equal(s.active,levelId,'the active level is the level of the stop');assert.equal(s.active3d,levelId,'3D shows that level as active');
   assert.equal(s.current.level,levelId);assert.equal(s.current.label,`${label} · ${upper?'Planta primera':'Planta baja'}`);
   assert.deepEqual(s.headings,['Planta baja','Planta primera']);
-  assert.ok(inside(s.close,s.viewport)&&inside(s.title_,s.viewport),`close and title visible at stop ${i+1}: ${JSON.stringify([s.close,s.title_])}`);
+  assert.ok(inside(s.close,s.viewport)&&inside(s.title_,s.viewport)&&inside(s.levelBox,s.viewport),`close, title and level visible at stop ${i+1}: ${JSON.stringify([s.close,s.title_,s.levelBox])}`);
+  assert.equal(s.levelOnTop,true,`level line not covered at stop ${i+1}`);
   assert.ok(s.card.left>=-1&&s.card.right<=viewport.width+1,'card not cut horizontally');assert.equal(s.hScroll,false);
   assert.ok(s.currentBox.right>s.stopsBox.left&&s.currentBox.left<s.stopsBox.right,'current stop button scrolled into its row');
   await page.screenshot({path:path.join(shots,`${size}-0${i+2}-stop-${i+1}${kind==='overview'?'-overview':''}-${upper?'upper':'ground'}.png`)});
@@ -130,7 +132,7 @@ test('equal room IDs and names on both levels: distinct stops, buttons, views an
  assert.deepEqual(await page.evaluate(()=>[...document.querySelectorAll('.presentation-stops button')].map(b=>b.getAttribute('aria-label'))),['Vista general · Planta baja','Cocina · Planta baja','Vista general · Planta primera','Cocina · Planta primera']);
  await page.locator('.presentation-stops button').nth(3).click();await settled(page);assert.equal((await inspectStop(page)).active,'lvl_fixture-upper');
  await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
- const {manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click())).bytes);
+ const {manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click({timeout:120000}))).bytes);
  const rooms=manifest.views.filter(v=>v.kind==='room');
  assert.deepEqual(rooms.map(v=>[v.levelId,v.roomId,v.label,v.filename]),[['lvl_fixture-ground',shared,'Cocina','views/view-002.png'],['lvl_fixture-upper',shared,'Cocina','views/view-004.png']]);
  assert.notEqual(rooms[0].sha256,rooms[1].sha256,'two different images');assert.deepEqual(summary.byLevel,{'lvl_fixture-ground':2,'lvl_fixture-upper':2});
@@ -145,6 +147,9 @@ test('pending distribution: no presentation, and no batch or PNG through any pat
  await page.locator('#presentationBtn').click();await page.waitForTimeout(500);
  assert.equal(await page.locator('#presentationConfig[open]').count(),0,'configuration not opened');assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),false);
  assert.match(await page.locator('#toast').textContent(),/^Presentar mi vivienda: la distribución está pendiente \(.+\)\. Corrígelo antes de presentarla como propuesta\.$/);
+ // The gate shows what is missing (the conflicts dialog); closing it returns to the editor.
+ assert.equal(await page.locator('#conflictsDialog[open]').count(),1,'the pending conflicts are listed');
+ await page.keyboard.press('Escape');await page.locator('#conflictsDialog:not([open])').waitFor({state:'attached'});
  // A clear building whose state turns pending while presenting (simulated): batch and PNG refuse, with the reason.
  const fx=F.build();await importBuilding(page,await buildingZip(fx.building,fx.bytesFor));
  await page.locator('#presentationBtn').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
@@ -171,7 +176,8 @@ async function singleLevel(at,tag){
   await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
   const plan=await page.evaluate(()=>FloorPlanPresentation.plan);
   await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
-  const file=await download(page,()=>page.locator('#presentationBatch').click()),files=await P.unzip(file.bytes,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});
+  // Software rendering keeps the main thread busy (≈2.5 s per evaluate on master and here): a longer click wait.
+  const file=await download(page,()=>page.locator('#presentationBatch').click({timeout:120000})),files=await P.unzip(file.bytes,{check:batchFile,required:'presentation.json',jsonNames:['presentation.json'],maxEntries:40});
   const manifest=JSON.parse(new TextDecoder().decode(files.get('presentation.json')));
   await page.screenshot({path:path.join(shots,`single-level-${tag}.png`)});
   const round=v=>JSON.parse(JSON.stringify(v,(_,x)=>typeof x==='number'?Math.round(x*1e6)/1e6:x));
@@ -182,7 +188,7 @@ async function singleLevel(at,tag){
 test('single-level project: same plan and batch format as before',{timeout:600000},async()=>{
  const mine=await singleLevel(url,'branch');
  assert.deepEqual(mine.errors,[]);assert.equal(mine.note,0,'no building note');assert.equal(mine.groups,0,'no level groups');
- assert.equal(mine.name,'presentacion-estancias.zip');assert.deepEqual(mine.files,['editable-project.zip','presentation.json','views/view-001.png','views/view-002.png']);
+ assert.equal(mine.name,'presentacion-estancias.zip');assert.deepEqual(mine.files,['editable-project.zip','presentation.json','views/view-001.png','views/view-002.png','views/view-003.png']);
  assert.equal(mine.plan.version,1);assert.equal(mine.plan.scope,undefined);assert.ok(mine.plan.stops.every(s=>!('levelId' in s)));
  assert.deepEqual(mine.manifest.keys,['format','version','viewRepresentation','projectId','entryId','revision','center','resources','views','portableProject']);
  assert.equal(Pres.readCaptures(mine.manifestRaw,[...mine.files_.keys()]).version,1);
