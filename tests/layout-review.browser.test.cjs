@@ -32,7 +32,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`lay
  await page.locator('#layoutReview').scrollIntoViewIfNeeded();await shot(page,false,name);
  // Door finding: sector, blocked part, leaf at the contact angle and the reached footprint.
  const door=page.locator('#layoutReviewFindings button[data-code="puerta"]');assert.equal(await door.count(),1);
- assert.match(await door.textContent(),/opn_door-3 \+ obj_template-016: La hoja de la puerta opn_door-3 \(785 mm\) alcanza «Mueble de baño» al abrir unos 6° de 90°/);
+ assert.match(await door.textContent(),/Puerta abatible de 785 mm \+ «Mueble de baño»: La hoja de la puerta de 785 mm alcanza «Mueble de baño» al abrir unos 6° de 90°/);
  await door.click();await page.waitForFunction(()=>document.querySelector('#gReview').dataset.finding==='puerta:opn_door-3+obj_template-016');
  assert.equal(await page.locator('#layoutReviewFindings button[data-code="puerta"]').getAttribute('aria-pressed'),'true');
  for(const cls of ['review-door-sweep','review-door-blocked','review-door-leaf','review-footprint'])assert.equal(await page.locator(`#gReview .${cls}`).count(),1,cls);

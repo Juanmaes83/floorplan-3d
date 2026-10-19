@@ -1,0 +1,1519 @@
+{
+ "commit": "c6fe639c7cd27db3bb38b0ac49444ac67ba25ad7",
+ "browser": "141.0.7390.37",
+ "steps": [
+  {
+   "viewport": "1440x900",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1154,
+    "clientHeight": 596
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explo"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explo"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1136,
+    "clientHeight": 596
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · Dormitorio juvenil. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado izquierdo no corresponde a un único muro completo por su cara interior. Usa «Plano propio → Seleccionar/editar» para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa Pared derecha de «Dormitorio juvenil» · 0,63 m Pared superior de «Dormitorio juvenil» (con «Dormitorio principal») · 3,36 m Pared derecha de «"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1366,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 120,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Añadir puerta a «Dormitorio juvenil»Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.Cancelar",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 884,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 152,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 1157,
+    "y": 728,
+    "w": 121,
+    "h": 40,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1006,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 224,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 1157,
+    "y": 728,
+    "w": 121,
+    "h": 40,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Ahora mide una segunda cota independiente con «Segunda cota». La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 2000 mm indicados (error 0,0 %; margen ±2 %). Concuerda: ya puedes pulsar «Confirmar escala».",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 3000 mm indicados (error −33,3 %; margen ±2 %). No concuerda: la escala no se confirma; repite la medida con más zoom o recalibra.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 497,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda: con la calibración actual mide 2000 mm y has indicado 3000 mm (error −33,3 %; margen ±2 %). La escala no se confirma. Repite la segunda cota ampliando el plano y tocando sus extremos exactos; si vuelve a fallar, recalibra con «Calibrar» usando la medida conocida más larga.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_e96847620c5f4ae7a1d9529dff651430",
+     "pointA": {
+      "x": 100.00001220703125,
+      "y": 99.9999755859375
+     },
+     "pointB": {
+      "x": 599.999951171875,
+      "y": 99.9999755859375
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 5.000000610351638,
+     "calibratedAt": "2026-10-19T19:29:32.893Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_e96847620c5f4ae7a1d9529dff651430",
+    "pointA": {
+     "x": 100.00003662108777,
+     "y": 200.00003662108628
+    },
+    "pointB": {
+     "x": 100.00003662108777,
+     "y": 599.9999755859315
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:29:34.484Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_e96847620c5f4ae7a1d9529dff651430",
+    "pointA": {
+     "x": 100.00003662108777,
+     "y": 200.00003662108628
+    },
+    "pointB": {
+     "x": 100.00003662108777,
+     "y": 599.9999755859315
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:29:37.101Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    5.000000610351638,
+    5.000000610351638,
+    5.000000610351638,
+    5.000000610351638
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "1440x900",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1402,
+    "clientHeight": 502
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. ↑ Subir un plano Si ya tienes un plano: PDF, imagen, DXF, IFC, RoomPl"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. ↑ Subir un plano Si ya tienes un plano: PDF, ima"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. ↑ Subir un plano Si ya tienes un plano: PDF, ima"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1384,
+    "clientHeight": 502
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 439,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "extra-action",
+   "note": "Estancia: panel oculto, hizo falta abrir «Propiedades»"
+  },
+  {
+   "viewport": "390x844",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · Dormitorio juvenil. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado izquierdo no corresponde a un único muro completo por su cara interior. Usa «Plano propio → Seleccionar/editar» para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa Pared derecha de «Dormitorio juvenil» · 0,63 m Pared superior de «Dormitorio juvenil» (con «Dormitorio principal») · 3,36 m Pared derecha de «"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 906,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 162,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 87,
+    "y": 672,
+    "w": 136,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1048,
+    "clientHeight": 502
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 87,
+    "y": 329,
+    "w": 239,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 87,
+    "y": 672,
+    "w": 136,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Ahora mide una segunda cota independiente con «Segunda cota». La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 2000 mm indicados (error 0,0 %; margen ±2 %). Concuerda: ya puedes pulsar «Confirmar escala».",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 3000 mm indicados (error −33,3 %; margen ±2 %). No concuerda: la escala no se confirma; repite la medida con más zoom o recalibra.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 543
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda: con la calibración actual mide 2000 mm y has indicado 3000 mm (error −33,3 %; margen ±2 %). La escala no se confirma. Repite la segunda cota ampliando el plano y tocando sus extremos exactos; si vuelve a fallar, recalibra con «Calibrar» usando la medida conocida más larga.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_a3ef4045a28f4d7b9a49bc51a7614990",
+     "pointA": {
+      "x": 100.00000610351563,
+      "y": 100.00000610351563
+     },
+     "pointB": {
+      "x": 600,
+      "y": 100.00000610351563
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 5.0000000610351565,
+     "calibratedAt": "2026-10-19T19:29:54.672Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_a3ef4045a28f4d7b9a49bc51a7614990",
+    "pointA": {
+     "x": 100.00000488281243,
+     "y": 200.00000976562487
+    },
+    "pointB": {
+     "x": 100.00000488281243,
+     "y": 599.9999926757813
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:29:56.682Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_a3ef4045a28f4d7b9a49bc51a7614990",
+    "pointA": {
+     "x": 100.00000488281243,
+     "y": 200.00000976562487
+    },
+    "pointB": {
+     "x": 100.00000488281243,
+     "y": 599.9999926757813
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:29:59.666Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    5.0000000610351565,
+    5.0000000610351565,
+    5.0000000610351565,
+    5.0000000610351565
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "390x844",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1402,
+    "clientHeight": 159
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explo"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional. 2D → 3D · A tu ritmo Proyecto de ejemplo · explo"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1384,
+    "clientHeight": 159
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 893,
+    "y": 217,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "extra-action",
+   "note": "Estancia: panel oculto, hizo falta abrir «Propiedades»"
+  },
+  {
+   "viewport": "844x390",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": 217,
+    "w": 128,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": -1141,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": -499,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · Dormitorio juvenil. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado izquierdo no corresponde a un único muro completo por su cara interior. Usa «Plano propio → Seleccionar/editar» para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": -720,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa Pared derecha de «Dormitorio juvenil» · 0,63 m Pared superior de «Dormitorio juvenil» (con «Dormitorio principal») · 3,36 m Pared derecha de «"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1517,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 893,
+    "y": -315,
+    "w": 128,
+    "h": 36,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Añadir puerta a «Dormitorio juvenil»Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.Cancelar",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 906,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 541,
+    "y": 217,
+    "w": 162,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 541,
+    "y": 965,
+    "w": 136,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1048,
+    "clientHeight": 159
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 541,
+    "y": 217,
+    "w": 239,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 541,
+    "y": 1107,
+    "w": 136,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Ahora mide una segunda cota independiente con «Segunda cota». La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 2000 mm indicados (error 0,0 %; margen ±2 %). Concuerda: ya puedes pulsar «Confirmar escala».",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota: 2000 mm frente a 3000 mm indicados (error −33,3 %; margen ±2 %). No concuerda: la escala no se confirma; repite la medida con más zoom o recalibra.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 595,
+    "clientHeight": 200
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda: con la calibración actual mide 2000 mm y has indicado 3000 mm (error −33,3 %; margen ±2 %). La escala no se confirma. Repite la segunda cota ampliando el plano y tocando sus extremos exactos; si vuelve a fallar, recalibra con «Calibrar» usando la medida conocida más larga.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_b1c1f4bacb4e4aa7afc469c3debffda3",
+     "pointA": {
+      "x": 100.000048828125,
+      "y": 99.99999389648437
+     },
+     "pointB": {
+      "x": 600.000048828125,
+      "y": 99.99999389648437
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 4.999999999999999,
+     "calibratedAt": "2026-10-19T19:30:16.886Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_b1c1f4bacb4e4aa7afc469c3debffda3",
+    "pointA": {
+     "x": 100.00006103515626,
+     "y": 199.9999877929688
+    },
+    "pointB": {
+     "x": 100.00006103515626,
+     "y": 599.9999511718751
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:30:18.904Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_b1c1f4bacb4e4aa7afc469c3debffda3",
+    "pointA": {
+     "x": 100.00006103515626,
+     "y": 199.9999877929688
+    },
+    "pointB": {
+     "x": 100.00006103515626,
+     "y": 599.9999511718751
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:30:21.866Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    4.999999999999999,
+    4.999999999999999,
+    4.999999999999999,
+    4.999999999999999
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "844x390",
+   "id": "errors",
+   "errors": []
+  }
+ ]
+}

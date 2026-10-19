@@ -55,3 +55,19 @@ test('image ingestion validates empty MIME, extensions, WebP bounds and unsuppor
  assert.throws(()=>T.imageInfo(Buffer.from('%PDF-1.7'),'application/pdf','plan.pdf'),/PDF no admitido/);
  assert.throws(()=>T.imageInfo(Buffer.alloc(30),'','plan.heic'),/HEIC\/HEIF no admitido/);
 });
+// Case reported from a screenshot (19-10-2026): «La segunda cota no concuerda» after calibrating. Numeric check that a
+// coherent pair is accepted, a contradictory one is refused with its numbers, and neither changes scale or geometry.
+test('second dimension: coherent accepted, contradictory refused with numbers, scale and geometry kept',()=>{
+ const p=seed();T.wall(p,{x:0,y:0},{x:3000,y:0});const walls=JSON.stringify(p.walls);
+ assert.throws(()=>T.confirm(p),/Calibra primero/);
+ T.calibrate(p,'img_synthetic',{x:50,y:50},{x:450,y:50},2000);const ratio=p.scale.calibration.mmPerPixel;assert.equal(ratio,5);
+ assert.throws(()=>T.confirm(p),/Falta la segunda cota/);
+ T.verify(p,{x:50,y:100},{x:50,y:300},1000);assert.deepEqual([p.scale.verification.measuredLengthMm,p.scale.verification.status],[1000,'consistent']);
+ T.confirm(p);assert.equal(p.scale.confidence,'real');
+ T.verify(p,{x:50,y:100},{x:50,y:300},1500);assert.deepEqual([p.scale.verification.measuredLengthMm,p.scale.verification.status],[1000,'discrepant']);
+ assert.equal(p.scale.confidence,'estimated','a contradictory dimension withdraws the earlier confirmation');
+ assert.throws(()=>T.confirm(p),/no concuerda: con la calibración actual mide 1000 mm y has indicado 1500 mm \(error −33,3 %; margen ±2 %\)\. La escala no se confirma\..*recalibra/);
+ assert.equal(p.scale.calibration.mmPerPixel,ratio,'ratio unchanged');assert.equal(p.sourceImages[0].placement.mmPerPixel,ratio);assert.equal(JSON.stringify(p.walls),walls,'geometry unchanged');
+ // 1,9 % is inside the provisional ±2 % margin; 2,1 % is not.
+ T.verify(p,{x:50,y:100},{x:50,y:300},981);assert.equal(p.scale.verification.status,'consistent');T.verify(p,{x:50,y:100},{x:50,y:300},979);assert.equal(p.scale.verification.status,'discrepant');
+});

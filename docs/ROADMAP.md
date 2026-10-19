@@ -5,6 +5,14 @@
 
 Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La evaluación inicial desembocó en la aprobación del contrato de edificio (opción D, #50) y su primer corte (#51); eso no aprueba D-16, un contrato 2.0 ni las demás funciones de LoRA LAB. El estudio comparativo sigue en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), con límites de evidencia.
 
+## Integrado el 19-10-2026
+
+- [#60](https://github.com/Juanmaes83/floorplan-3d/pull/60), merge `b4a91a7`: selección y edición de puertas/ventanas directamente en el plano, propiedades al seleccionar, alta desde una estancia, vista previa del sentido y cambios reversibles.
+- [#62](https://github.com/Juanmaes83/floorplan-3d/pull/62), merge `7ada526`, después de #60: patrón común de paneles, navegación «Volver», barra agrupada por tarea, flujo inicial, textos en castellano y mensajes de calibración.
+- El usuario revisó ambas previews y aprobó los flujos visuales y funcionales. La integración quedó en `master@7ada52655b5cc8eded21a11b0663d47f89db3803`.
+- **Límites de QA:** GitHub Actions terminó sin asignar runner ni ejecutar pasos; no se cuenta como CI aprobada. Las pruebas 3D de este entorno no sustituyen validación con GPU real. Se revisó el diseño adaptable en preview, pero no se probó en teléfonos físicos ni con participantes del público D-01.
+- Roadmap 2 §3.6 conserva la especificación y el informe de la entrega general de interfaz.
+
 ## Estado vigente tras la integración del 17-10-2026
 
 Las PR [#38](https://github.com/Juanmaes83/floorplan-3d/pull/38) (importación guiada multiformato), [#39](https://github.com/Juanmaes83/floorplan-3d/pull/39) (presentación por estancias y recorrido) y [#42](https://github.com/Juanmaes83/floorplan-3d/pull/42) (piloto Blender offline) están **fusionadas en master**, en ese orden. Merge commits: `34aff2c2b521b004aa007bfa8a7ed2356013dfb4`, `85aaf771ec3b1622313cbfd8bd44962ca2019b0a` y `05d5514fd46130bf81c9a1e6e6d2f0929518fad7`. Las referencias a PR abiertas en secciones fechadas anteriores describen el momento de aquellas auditorías. La presentación web, el piloto Blender y la referencia visual Candidate 04 de LAB Astra conviven; no se sustituye una por otra ni se declara el piloto de calidad Candidate 04.
