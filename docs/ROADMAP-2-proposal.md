@@ -1,6 +1,12 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
-> **Estado vigente a 18-10-2026:** D-01 ya está decidida (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público). El contrato de edificio, opción D (#50), el primer corte de dos plantas (#51) y el cierre de solapes y recolocación (#52 → #53 → #54) están integrados. Los cortes MCP #40 → #41 → #43 también están fusionados (`master` `6728e16`), pero no demuestran todavía un trayecto transitable con anchura. Este resultado no aprueba los órdenes futuros 4–8, exterior, más plantas, recorrer la escalera ni las Etapas 2–4 del MCP. Claude Code continúa la revisión profunda de LoRA LAB como estudio en #48; las pruebas no verificadas no deben convertirse en requisitos implementados. Las referencias de abajo a decisiones abiertas o PR futuras describen el estado de su propuesta original.
+> **Estado vigente a 18-10-2026:** D-01 ya está decidida (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público). El contrato de edificio, opción D (#50), el primer corte de dos plantas (#51) y el cierre de solapes y recolocación (#52 → #53 → #54) están integrados. Los cortes MCP #40 → #41 → #43 también están fusionados (`master` `6728e16`), pero no demuestran todavía un trayecto transitable con anchura. Este resultado no aprueba los órdenes futuros 4–8, exterior, más plantas, recorrer la escalera ni las Etapas 2–4 del MCP. **Actualización 19-10-2026:**
+>
+> - El cuarto corte MCP #57 está fusionado (`bd153c7`); la Etapa 1 sigue sin cerrarse.
+> - El estudio LoRA LAB de #48 eligió un candidato, ya aprobado y en curso en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65): presentar las dos plantas en una sola presentación y un solo lote (§3.4).
+> - Las pruebas no verificadas de LoRA LAB no deben convertirse en requisitos implementados.
+>
+> Las referencias de abajo a decisiones abiertas o PR futuras describen el estado de su propuesta original.
 
 
 > **Estado de integración a 17-10-2026:** #38, #39 y #42 ya están fusionadas en `master` (último merge `05d5514`). El piloto Blender #42 amplía la salida offline del paquete #24; no convierte la propuesta de orden 5 en una integración completa de LAB Astra ni aprueba Roadmap 2. La visita guiada web y el vídeo offline coexisten con Candidate 04. Las alusiones a PR abiertas más abajo son antecedentes fechados. La evaluación profunda de LoRA LAB de §3.4 puede comenzar ahora como estudio transversal. Debe comparar creación/importación/guardado, niveles, exterior, recorrido libre e interacción, y probar escritorio y móvil; de sus resultados se escogerá una sola entrega mínima y se fijará su contrato antes de implementarla. La cadena MCP #40→#41→#43 sigue en revisión separada.
@@ -105,7 +111,15 @@ pendientes para la validación empírica final de F2 y no bloquearon esta entreg
 
 ### 3.4 LoRA LAB: siguiente evaluación de vivienda completa
 
-**Gate D-01, 17-10-2026:** Juanma eligió como público prioritario inmobiliarias, promotoras y estudios de arquitectura, y como segundo público profesionales de reformas e interiorismo. El problema priorizado es preparar y presentar viviendas completas con plano editable, mobiliario y vistas coherentes; la utilidad para viviendas de varias plantas se evalúa sin prometer precisión profesional ni documentación técnica. [Decisión acotada](product/F0-decisions.md). El contrato de edificio (opción D) y su primer corte de dos plantas con escalera (#50/#51) ya están integrados. La sesión de LoRA LAB en Chrome de Juanma confirmó la descarga de una imagen PNG y de un JSON de villa con tres niveles; la descarga PNG quedó inicialmente mal nombrada como `villa-original.json`. No se han probado crear una planta, colocar una escalera, subirla en el recorrido, guardar/recargar ni los demás flujos B–E6. Claude Code continúa en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48) el análisis de esa evidencia y del vídeo; después propondrá una sola mejora acotada, sin implementar toda la demo. Los órdenes 4–8 no se reordenan automáticamente.
+**Gate D-01, 17-10-2026:** Juanma eligió como público prioritario inmobiliarias, promotoras y estudios de arquitectura, y como segundo público profesionales de reformas e interiorismo. El problema priorizado es preparar y presentar viviendas completas con plano editable, mobiliario y vistas coherentes; la utilidad para viviendas de varias plantas se evalúa sin prometer precisión profesional ni documentación técnica. [Decisión acotada](product/F0-decisions.md). El contrato de edificio (opción D) y su primer corte de dos plantas con escalera (#50/#51) ya están integrados. La sesión de LoRA LAB en Chrome de Juanma confirmó la descarga de una imagen PNG y de un JSON de villa con tres niveles; la descarga PNG quedó inicialmente mal nombrada como `villa-original.json`. No se han probado crear una planta, colocar una escalera, subirla en el recorrido, guardar/recargar ni los demás flujos B–E6. El estudio de [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48) ordenó esa evidencia (sin acceso directo a LoRA LAB; el vídeo de 104 s de #58 es evidencia secundaria) y propuso una sola mejora acotada, sin implementar toda la demo. Los órdenes 4–8 no se reordenan automáticamente.
+
+**Siguiente candidato aprobado y en curso (19-10-2026): presentar las dos plantas de un edificio en una sola presentación y un solo lote exportable.**
+
+- **Estado:** Juanma lo aprobó para implementación. Está en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65), en borrador y sin fusionar.
+- **Por qué:** hasta ahora, «Presentar mi vivienda» presenta una sola planta del edificio. La brecha está comprobada en el código de Rubik; no se atribuye a una capacidad validada de LoRA LAB.
+- **Contrato:** no cambian `FloorPlanProjectV1` ni el edificio. El manifiesto del lote pasa a versión 2 sólo para edificios.
+- **Fuera de alcance:** subir la escalera, tres o más plantas y exterior.
+- **Beneficio:** hipótesis no medida con personas del público D-01.
 
 La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-reference-2026-10-17.md) quedan registradas como **referencia separada**. Su demo muestra tres niveles, exterior/cubierta, controles de sol y presentación y recorrido en primera persona. La nota enumera candidatos para Rubik y un gate de revisión profunda en escritorio y móvil. La investigación comparativa es el siguiente estudio propuesto, no una nueva fase ni una orden de implementar todas las funciones. Tras la evaluación se escogería, si procede, una única entrega con contrato y pruebas propios. No hay evidencia de que esta demo implemente el CAD/Blender de Summerz3002.
 
@@ -158,7 +172,7 @@ Revisión general de la interfaz, separada del corte de huecos y completada desp
 - progreso propio para importaciones grandes;
 - validación con personas del público D-01.
 
-**Cierre documental de #58 y #59:** #59 es una propuesta ya entregada por #60/#62; no queda como trabajo de producto pendiente. La observación de vídeo de #58 se conserva como evidencia de apoyo al estudio LoRA LAB de #48; no certifica capacidades de LoRA LAB ni autoriza copiar su interfaz. Claude Code continuará el estudio en #48 y reconciliará allí cualquier evidencia de #58 que siga siendo útil. La evaluación de LoRA LAB permanece abierta y separada del MCP.
+**Cierre documental de #58 y #59:** #59 es una propuesta ya entregada por #60/#62; no queda como trabajo de producto pendiente. La observación de vídeo de #58 se conserva como evidencia de apoyo al estudio LoRA LAB de #48; no certifica capacidades de LoRA LAB ni autoriza copiar su interfaz. El estudio de #48 reconcilió la evidencia útil de #58 y eligió el candidato de §3.4, en curso en [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65). La evaluación de LoRA LAB sigue separada del MCP y sin prueba directa de la herramienta.
 
 ## 4. Especificación de las mejoras principales
 
