@@ -6,7 +6,10 @@
 const fs = require('node:fs'), crypto = require('node:crypto');
 const file = process.argv[2];
 if (!file) { console.error('Usage: node analyze-export.cjs <file.json>'); process.exit(2); }
-const bytes = fs.readFileSync(file), data = JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
+const bytes = fs.readFileSync(file), type = require('./file-type.cjs').fileType(bytes);
+// Refuse anything that is not JSON by content, whatever its extension (the PNG saved as villa-original.json).
+if (type !== 'json') { console.error(`${file}: el contenido es ${type}, no JSON; no se analiza.`); process.exit(3); }
+const data = JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
 const HINTS = {
  niveles: /level|floor|storey|story|楼层|层|elev/i,
  escalera: /stair|step|楼梯|台阶/i,

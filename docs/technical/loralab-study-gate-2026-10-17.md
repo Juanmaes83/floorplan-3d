@@ -1,5 +1,7 @@
 # Estudio LoRA LAB frente a Rubik: gate de Roadmap 2 §3.4 (17-10-2026)
 
+> **Vigente desde el 19-10-2026:** la evidencia ordenada, la matriz actual y la recomendación están en [`loralab-study-evidence-2026-10-19.md`](loralab-study-evidence-2026-10-19.md), sobre `master` `8590349`. Este documento se conserva como historia: la matriz §2, la recomendación §4 (dos plantas, integrada en #50–#54) y la §5.6 (huecos en contexto, integrada en #60/#62) **ya no son propuestas pendientes**.
+
 **Estado:** estudio documental para decisión. **No es una fase aprobada, no contiene código y no cambia `FloorPlanProjectV1`.** Responde a la evaluación transversal de [Roadmap 2 §3.4](../ROADMAP-2-proposal.md#34-lora-lab-siguiente-evaluación-de-vivienda-completa) que el [roadmap canónico](../ROADMAP.md#estado-vigente-tras-la-integración-del-17-10-2026) abrió tras integrar #38, #39 y #42. Amplía, sin sustituirlas, la [nota exploratoria](loralab-design-reference-2026-10-17.md), la [auditoría de la grabación](loralab-video-gap-audit-2026-10-17.md) y la [matriz de candidatos](loralab-deep-review-2026-10-17.md). El orden 4–8 de Roadmap 2 sigue siendo orientativo y la cadena MCP #40 → #41 → #43 queda fuera de este estudio.
 
 **Base comparada:** `master` `b294739`, posterior a los merges de #38 (`34aff2c`), #39 (`85aaf77`), #42 (`05d5514`) y la reconciliación #47. Candidate 04 de LAB Astra sigue siendo una referencia visual independiente; no se compara como capacidad de Rubik.
@@ -36,6 +38,8 @@ Sesión guiada con Chrome 153.0.8010.53, 1440×900, HTTP 200; vídeo `session.we
 **Implicación para #50:** LoRA LAB guarda esta villa como un documento con `floors[]`, pero este ejemplo de plantilla no contiene imágenes ni escala por planta. Favorece ver que un único archivo puede representar tres niveles; **no decide entre A y D** para Rubik. La elección sigue dependiendo del material de entrada prioritario de sus clientes (imagen/PDF por planta o modelo común), del validador actual y de los requisitos de compatibilidad. Tampoco prueba guardado/recarga, importación, edición exterior, controles de cortinas, alturas de ojos ni recorrido vertical.
 
 ## 2. Flujos pedidos: LoRA LAB frente a Rubik en `master`
+
+> **Histórica.** La matriz vigente, sobre `master` `8590349`, está en la [§5 de la evidencia del 19-10-2026](loralab-study-evidence-2026-10-19.md#5-matriz-función-por-función).
 
 Las referencias de Rubik son al código de `master` `b294739`; `5c822cf` (#49) sólo cambia documentación, así que siguen siendo válidas.
 
@@ -288,6 +292,8 @@ Se mide con el script `scripts/qa/loralab/rubik-room-task.cjs`, ejecutado sobre 
 - **No es hipótesis:** el sentido por defecto no corregible es un hecho del código.
 
 ### 5.6 Recomendación: una sola entrega mínima
+
+> **Actualización 19-10-2026:** esta entrega está integrada en `master` por #60 y #62. No es trabajo pendiente; ver la [evidencia vigente](loralab-study-evidence-2026-10-19.md#6-ya-integrado-se-descarta-como-candidato).
 
 **«Seleccionar y editar una puerta o ventana donde está».**
 

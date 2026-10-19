@@ -3,6 +3,7 @@
 // console errors and the exported JSON. It does NOT click inside the 3D canvas or guess selectors: the operator
 // performs each step in the window while it records, then classifies the result in this terminal.
 // Usage (repo root, PowerShell): $env:CHROME="C:\...\chrome.exe"; node scripts/qa/loralab/annex-a-session.cjs [outDir]
+const {fileType} = require('./file-type.cjs');
 const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto'), readline = require('node:readline');
 const {chromium} = require('playwright');
 
@@ -49,15 +50,7 @@ const ask = q => { process.stdout.write(q); return lines.length ? Promise.resolv
    const provisionalPath = path.join(out, provisional);
    await d.saveAs(provisionalPath);
    const bytes = fs.readFileSync(provisionalPath);
-   let type = 'otro';
-   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) type = 'png';
-   else if (bytes.subarray(0, 4).equals(Buffer.from([80, 75, 3, 4]))) type = 'zip';
-   else {
-    try {
-     const value = JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
-     if (value !== null && typeof value === 'object') type = 'json';
-    } catch {}
-   }
+   const type = fileType(bytes);
    const name = type === 'json' && !firstJson ? 'villa-original.json' : provisional;
    if (name !== provisional) fs.renameSync(provisionalPath, path.join(out, name));
    if (type === 'json' && !firstJson) firstJson = name;
