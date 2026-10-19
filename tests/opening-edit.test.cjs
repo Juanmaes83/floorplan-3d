@@ -58,14 +58,14 @@ test('interval guard: touching is fine; overlapping, outside the wall or worseni
  const p=home(),w=wallAt(p,4120),a=withDoor(p,w,800),b=withDoor(p,w,2200);
  assert.deepEqual([a.offsetMm,a.widthMm,b.offsetMm],[520,800,1920]);
  const touch=O.edit(p,b.id,{offsetMm:1320});assert.equal(touch.changed,true);assert.deepEqual(O.conflicts(touch.project),[]);
- assert.throws(()=>O.edit(p,b.id,{offsetMm:1300}),/Se solaparía 20 mm con Puerta abatible/);
+ assert.throws(()=>O.edit(p,b.id,{offsetMm:1300}),e=>{assert.match(e.message,/Se solaparía 20 mm con Puerta abatible · tramo 520–1320 mm/);assert.doesNotMatch(e.message,/opn_/);return true;});
  assert.throws(()=>O.edit(p,b.id,{widthMm:2000}),/no cabe/);
  assert.throws(()=>O.edit(p,b.id,{offsetMm:-10}),/antes del extremo A/);
  // Old file with an overlap: it opens unchanged, is reported, can be edited without worsening and can be resolved.
  const old=clone(p);old.openings[1].offsetMm=1200;C.validate(old);const bytes=JSON.stringify(old);
  assert.deepEqual(O.conflicts(old).map(c=>[c.overlapMm]),[[120]]);assert.equal(JSON.stringify(old),bytes);
  assert.equal(O.edit(old,b.id,{heightMm:2000}).changed,true,'unrelated edit allowed');
- assert.throws(()=>O.edit(old,b.id,{offsetMm:1100}),/Se solaparía 220 mm/);
+ assert.throws(()=>O.edit(old,b.id,{offsetMm:1100}),e=>{assert.match(e.message,/Se solaparía 220 mm/);assert.match(e.message,/Puerta abatible · tramo 520–1320 mm/);assert.doesNotMatch(e.message,/opn_/);return true;});
  assert.deepEqual(O.conflicts(O.edit(old,b.id,{offsetMm:1400}).project),[]);
 });
 

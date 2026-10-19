@@ -65,7 +65,7 @@
   for(const c of overlaps(after,o.wallId)){if(c.a!==id&&c.b!==id)continue;const prev=old.get(pairKey(c));if(prev===undefined||c.overlapMm>prev+EPS)problems.push({code:'overlap',other:c.a===id?c.b:c.a,overlapMm:c.overlapMm,message:`Se solaparía ${Math.round(c.overlapMm)} mm con ${describe(after,c.a===id?c.b:c.a)} en el mismo muro.`});}
   return problems;
  }
- function describe(p,id){const o=p.openings.find(x=>x.id===id);return o?`${LABEL[o.kind]||'hueco'} ${o.id}`:id;}
+ function describe(p,id){const o=p.openings.find(x=>x.id===id);return o?`${LABEL[o.kind]||'hueco'} · tramo ${Math.round(o.offsetMm)}–${Math.round(o.offsetMm+o.widthMm)} mm`:'otro hueco';}
  function assertGuard(before,after,id){const problems=guard(before,after,id);if(problems.length){const e=new Error(problems.map(x=>x.message).join(' '));e.problems=problems;throw e;}}
 
  const int=(v,name)=>{const n=Number(v);if(!Number.isFinite(n))fail(`${name}: introduce un número en milímetros.`);return Math.round(n);};
@@ -123,6 +123,6 @@
   }
   return moved;
  }
- const API={KINDS,LABEL,sides,sideLabels,spanSides,roomWalls,overlaps,conflicts,guard,assertGuard,edit,add,wallEdited,normal,length};
+ const API={KINDS,LABEL,sides,sideLabels,spanSides,roomWalls,overlaps,conflicts,guard,assertGuard,edit,add,wallEdited,normal,length,describe};
  if(node)module.exports=API;else root.FloorPlanOpenings=API;
 })(typeof globalThis==='object'?globalThis:this);

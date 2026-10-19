@@ -60,7 +60,7 @@ test(`contextual door and window editing ${viewport.width}x${viewport.height}`,{
  await tapPlan(openingAt(start,door));assert.deepEqual(await page.evaluate(()=>ui.sel),{kind:'opening',id:door});
  const hit=await page.locator(`[data-opening="${door}"]`).evaluate(e=>({w:e.getAttribute('stroke-width'),v:e.getAttribute('vector-effect')}));assert.deepEqual(hit,{w:'44',v:'non-scaling-stroke'});
  if(narrow)await shot('02a-selected-plan');await panelOpen();
- assert.equal(await page.locator('#openingTitle').textContent(),'Puerta abatible');
+ assert.equal(await page.locator('#openingTitle').textContent(),'Puerta abatible');assert.match(await page.locator('#panel .opening-id').textContent(),/Muro seleccionado/);assert.doesNotMatch(await page.locator('#panel .opening-id').textContent(),/opn_|wall_/);
  const labels=await page.locator('#openingSide label').allTextContents();assert.deepEqual(labels,['Hacia «Cocina»','Hacia «Salón»']);
  await panelReachable();await shot('02-selected-panel');
 
@@ -88,9 +88,9 @@ test(`contextual door and window editing ${viewport.width}x${viewport.height}`,{
  assert.equal(JSON.stringify(await proj(page)),beforeErr);
 
  // 5. Legacy overlap: a worse position is refused, a resolving one is accepted.
- await panelClose();await tapPlan(openingAt(applied,'opn_old-b'));await panelOpen();await page.locator('#openingLegacy').waitFor();
+ await panelClose();await tapPlan(openingAt(applied,'opn_old-b'));await panelOpen();await page.locator('#openingLegacy').waitFor();assert.match(await page.locator('#openingLegacy').textContent(),/Ventana · tramo \d+–\d+ mm/);assert.doesNotMatch(await page.locator('#openingLegacy').textContent(),/opn_old-/);
  const b0=applied.openings.find(o=>o.id==='opn_old-b'),a0=applied.openings.find(o=>o.id==='opn_old-a');
- await page.locator('#opening-offsetMm').fill(String(b0.offsetMm-100));assert.match(await page.locator('#openingError').textContent(),/Se solaparía/);
+ await page.locator('#opening-offsetMm').fill(String(b0.offsetMm-100));assert.match(await page.locator('#openingError').textContent(),/Se solaparía \d+ mm con Ventana · tramo \d+–\d+ mm/);assert.doesNotMatch(await page.locator('#openingError').textContent(),/opn_old-/);
  await page.locator('#opening-offsetMm').fill(String(a0.offsetMm+a0.widthMm));assert.equal(await page.locator('#openingApply').isDisabled(),false);await press('#openingApply');
  assert.deepEqual(O.conflicts(await proj(page)),[]);
 

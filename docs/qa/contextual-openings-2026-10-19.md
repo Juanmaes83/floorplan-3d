@@ -136,7 +136,7 @@ Los resultados de cada suite en el SHA final, con versiones, comandos y consola,
 2. **Valores del tipo nuevo.** El cambio de tipo enviaba el alto sin tocar e impedía aplicar los valores del nuevo tipo; la consecuencia era «Alto más antepecho supera la altura del muro». Ahora sólo se envían los campos cambiados, y los campos muestran los valores del nuevo tipo.
 3. **Modo oculto.** «Cerrar herramientas» en «Plano propio» dejaba activo el modo de trazado, y el siguiente toque no seleccionaba. Este defecto se midió en #48.
 4. **Nombres sin traducir.** Las estancias aparecían con su nombre interno; ahora usan la traducción visible.
-5. **Identificadores internos en el aviso.** Los botones del aviso de solapes mostraban `opn_old-a`. Ahora muestran tipo y tramo («Ventana · 620–1420 mm»), y la prueba lo comprueba.
+5. **Identificadores internos en la interfaz.** El panel del hueco ya no muestra IDs internos; el aviso de solapes y los errores describen el hueco por tipo y tramo (por ejemplo, «Ventana · tramo 620–1420 mm»). Las pruebas verifican que no aparece `opn_` en esos textos.
 
 ## 6. Límites
 

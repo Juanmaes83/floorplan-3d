@@ -69,9 +69,9 @@
   const w=wallOf(shown,o),L=Math.floor(O.length(w)),labels=O.sideLabels(shown,o,display),adding=draft?.mode==='add',raw=pending?.id===id?pending.raw:{};
   root.replaceChildren();const section=el('section',null,root,{class:'opening-panel','aria-labelledby':'openingTitle'});
   el('h3',`${adding?'Nueva ':''}${O.LABEL[o.kind]}${adding?' · vista previa':''}`,section,{id:'openingTitle',tabindex:'-1'});
-  el('p',`${o.id} · muro ${w.id} · ${L} mm · planta activa`,section,{class:'muted opening-id'});
+  el('p',`Muro seleccionado · ${L} mm · planta activa`,section,{class:'muted opening-id'});
   const legacy=O.conflicts(project).filter(c=>c.a===id||c.b===id);
-  if(legacy.length)el('p',`Aviso de datos existentes: este hueco ya se solapa ${legacy.map(c=>`${Math.round(c.overlapMm)} mm con ${c.a===id?c.b:c.a}`).join(', ')}. Cambia su posición o su ancho para resolverlo; no se corrige solo.`,section,{class:'opening-legacy',role:'note',id:'openingLegacy'});
+  if(legacy.length)el('p',`Aviso de datos existentes: este hueco ya se solapa ${legacy.map(c=>`${Math.round(c.overlapMm)} mm con ${O.describe(project,c.a===id?c.b:c.a)}`).join(', ')}. Cambia su posición o su ancho para resolverlo; no se corrige solo.`,section,{class:'opening-legacy',role:'note',id:'openingLegacy'});
   const form=el('form',null,section,{id:'openingForm'});form.onsubmit=e=>e.preventDefault();
   const field=(name,text,value,extra={})=>{const l=el('label',text,form);const i=el('input',null,l,{name,id:'opening-'+name,type:'number',inputmode:'numeric',step:'1',...extra});i.value=raw[name]??value;i.oninput=()=>recompute(form,id);return l;};
   const typeLabel=el('label','Tipo',form);const type=el('select',null,typeLabel,{name:'kind',id:'opening-kind'});for(const k of O.KINDS){const opt=el('option',O.LABEL[k],type);opt.value=k;}type.value=raw.kind??o.kind;type.onchange=()=>recompute(form,id,true);
