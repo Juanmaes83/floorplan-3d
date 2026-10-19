@@ -1,5 +1,7 @@
 # Roadmap 2 — propuesta de evolución de Rubik Sota
 
+> **Estado vigente a 18-10-2026:** D-01 ya está decidida (inmobiliarias, promotoras y estudios de arquitectura; reformas e interiorismo como segundo público). El contrato de edificio, opción D (#50), el primer corte de dos plantas (#51) y el cierre de solapes y recolocación (#52 → #53 → #54) están integrados. Los cortes MCP #40 → #41 → #43 también están fusionados (`master` `6728e16`), pero no demuestran todavía un trayecto transitable con anchura. Este resultado no aprueba los órdenes futuros 4–8, exterior, más plantas, recorrer la escalera ni las Etapas 2–4 del MCP. Claude Code continúa la revisión profunda de LoRA LAB como estudio en #48; las pruebas no verificadas no deben convertirse en requisitos implementados. Las referencias de abajo a decisiones abiertas o PR futuras describen el estado de su propuesta original.
+
 
 > **Estado de integración a 17-10-2026:** #38, #39 y #42 ya están fusionadas en `master` (último merge `05d5514`). El piloto Blender #42 amplía la salida offline del paquete #24; no convierte la propuesta de orden 5 en una integración completa de LAB Astra ni aprueba Roadmap 2. La visita guiada web y el vídeo offline coexisten con Candidate 04. Las alusiones a PR abiertas más abajo son antecedentes fechados. La evaluación profunda de LoRA LAB de §3.4 puede comenzar ahora como estudio transversal. Debe comparar creación/importación/guardado, niveles, exterior, recorrido libre e interacción, y probar escritorio y móvil; de sus resultados se escogerá una sola entrega mínima y se fijará su contrato antes de implementarla. La cadena MCP #40→#41→#43 sigue en revisión separada.
 
@@ -109,7 +111,52 @@ La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-refere
 
 La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, identifica como brecha estructural el **proyecto de varias plantas conectadas**, además de exterior y visita. Son candidatos para una decisión futura, **no el siguiente corte aprobado ni una alteración del orden orientativo 4–8**. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
 
-**Estudio del gate, 17-10-2026:** el [estudio comparativo frente a `master`](technical/loralab-study-gate-2026-10-17.md) recomienda, de forma provisional y ya con D-01 confirmada, un único corte: dos plantas y una escalera recta, precedido de una decisión de contrato. No aprueba la fase ni cambia el orden 4–8. Como LoRA LAB no fue accesible desde el contenedor, incluye el procedimiento para que Juanma aporte la prueba desde Chrome en Windows.
+### 3.5 Experiencia contextual: huecos en el plano (19-10-2026, PR de implementación en borrador)
+
+**Primer corte implementado en una PR en borrador, pendiente de auditoría y revisión humana: «Seleccionar y editar una puerta o ventana donde está».**
+
+- Con «Seleccionar», un hueco se pulsa en el plano 2D y se edita en el panel con vista previa: tipo, posición, medidas, antepecho, y bisagra y sentido.
+- Desde una estancia se añade una puerta o ventana a uno de sus muros.
+- El [informe QA](qa/contextual-openings-2026-10-19.md) recoge la base medida en `master` (26 acciones, 12 para huecos y 4 cambios de modo) y el resultado de la rama.
+- No cambia `FloorPlanProjectV1`.
+- No se afirma ninguna comparación de acciones con LoRA LAB.
+
+**Cierre funcional, segunda ronda (19-10-2026), en la misma PR:**
+
+- **Decisión de Juanma:** al seleccionar una puerta o ventana, sus propiedades se abren directamente, también en móvil y con la columna plegada.
+- **Panel:** cabecera con «Volver» arriba, grupos plegables («Posición y medidas», «Apertura», «Revisión del hueco») y acciones fijas: aplicar, descartar, deshacer, rehacer y eliminar. Cada error aparece junto al campo que lo causa.
+- **«Añadir puerta/ventana»:** un banner sobre el plano con el paso y «Cancelar»; los errores, junto a la causa.
+- **Prioridad de toque:** los objetivos ampliados no tapan muebles ni nombres de estancia, y entre huecos solapados gana el más cercano.
+- **Ventana de 3070 mm en el ejemplo:** es un dato de la plantilla, en la que cada hueco tiene su propio tramo de muro; el panel ahora lo explica.
+- [Detalle y pruebas](qa/contextual-openings-2026-10-19.md#7-cierre-funcional-segunda-ronda-19-10-2026).
+- La revisión general de interfaz (patrón de paneles en todo el editor, «Generar», castellano y calibración) va en una PR separada, apilada sobre esta.
+
+**Siguiente candidato, separado y sin aprobar:**
+
+- creación contextual de estancias;
+- nombres o tipos sugeridos;
+- muestras de acabados en una jerarquía más clara, incluida la elección de pared en el plano.
+
+Debe medirse con personas y decidir antes las reglas de unión de muros. No forma parte de esta PR.
+
+### 3.6 Patrón de paneles, «Generar», castellano y calibración (19-10-2026, PR en borrador apilada sobre #60)
+
+Revisión general de la interfaz, separada del corte de huecos. [Diseño](product/editor-ux-pattern-2026-10-19.md) · [QA](qa/editor-ux-2026-10-19.md).
+
+- **Panel automático.** Los huecos abren su panel al seleccionarse, por decisión de Juanma en #60. En escritorio, estancias y muebles muestran la columna de propiedades al seleccionarse. En móvil conservan «Propiedades» para no tapar el plano.
+- **Paneles y retorno.** Cabecera común con «Volver» primero y fijo. «Volver» sube un nivel: mueble → estancia → vista general, hueco → estancia, edición → herramientas de «Plano propio». En móvil, «Ver en el plano» va en la cabecera. Los grupos son plegables, las ayudas largas empiezan plegadas y hay acciones fijas donde hay un formulario.
+- **Barra superior por tarea.** Proyecto, edición y ajustes/archivo. «Vaciar» pasa a «Archivo» y las capas, a «Mostrar ▾».
+- **«Generar».** Es el recorrido de creación desde la bienvenida: primero las tres entradas, luego qué se obtiene y sus límites. El foco va al título y la guía puede compactarse. No promete capacidades nuevas.
+- **Castellano.** No aparecen IDs ni claves internas en los recorridos revisados. Los nombres del ejemplo se muestran traducidos sin cambiar el dato, y los nombres escritos por la persona se respetan. Una prueba lo vigila.
+- **Calibración.** La protección es la misma. Los mensajes dicen qué falta o qué no concuerda, con cifras y cómo recalibrar.
+
+**Pendiente, fuera de esta entrega:**
+
+- hoja inferior en teléfono vertical;
+- teclado dentro del plano SVG;
+- unificar «Plano propio» con el panel de estancia (siguiente candidato de §3.5);
+- progreso propio para importaciones grandes;
+- validación con personas del público D-01.
 
 ## 4. Especificación de las mejoras principales
 

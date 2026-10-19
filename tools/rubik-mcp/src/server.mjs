@@ -40,14 +40,26 @@ function registerReadTool(server, name, title, description, schema, handler) {
 async function main() {
   const projectPath = parseArgs(process.argv.slice(2));
   const reader = core.createProjectReader(projectPath);
-  await reader.load();
+  // File protections remain mandatory; contract errors are reported by the diagnostic tool.
+  await reader.inspect();
 
-  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.0' });
+  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.2' });
+  registerReadTool(server, 'diagnose_project', 'Diagnosticar proyecto',
+    'Informa el primer bloqueo del validador FloorPlanProjectV1 o, si es válido, hallazgos independientes de procedencia, escala y relaciones espaciales. Las demás consultas rechazan un JSON inválido.',
+    {}, () => core.diagnoseProject(reader));
+  registerReadTool(server, 'measure_elements', 'Medir elementos en planta',
+    'Mide dos IDs del JSON en mm. mode=reference_points compara centros de muebles o puntos medios de ejes de muros/huecos; mode=regions compara regiones 2D y devuelve puntos próximos. No calcula holgura de paso, altura ni 3D.',
+    { idA: z.string().min(1).max(160), idB: z.string().min(1).max(160), mode: z.enum(['reference_points', 'regions']) },
+    args => core.measureElements(reader, args));
+  registerReadTool(server, 'inspect_pair_clearance', 'Inspeccionar separación entre muebles',
+    'Compara dos muebles con umbral explícito en mm. Informa distancia mínima, obstáculos sobre ese segmento y una cadena de puertas documentada entre estancias. No acredita un paso utilizable ni calcula una ruta alternativa.',
+    { idA: z.string().min(1).max(160), idB: z.string().min(1).max(160), clearanceMm: z.number().positive() },
+    args => core.inspectPairClearance(reader, args));
   registerReadTool(server, 'get_project_summary', 'Resumen del proyecto',
     'Lee el resumen del JSON Rubik seleccionado al iniciar. Devuelve versión, hash, escala, recuentos y superficie aproximada. Nunca incluye imágenes ni rutas locales.',
     {}, () => core.getSummary(reader));
   registerReadTool(server, 'list_project_elements', 'Listar elementos',
-    'Consulta habitaciones, muros, huecos o muebles del único JSON seleccionado. Usa páginas con limit/offset. La respuesta excluye imágenes incrustadas, rutas locales y metadatos no necesarios.',
+    'Consulta habitaciones, muros, huecos o muebles del único JSON seleccionado. roomId usa la relación geométrica derivada, incluye elementos compartidos o ambiguos y filtra estancias por su propio ID. Usa páginas con limit/offset. Excluye imágenes, rutas y metadatos no necesarios.',
     { kind: z.enum(['rooms', 'walls', 'openings', 'objects']), query: z.string().optional(), roomId: z.string().optional(), offset: z.number().int().min(0).optional(), limit: z.number().int().min(1).max(100).optional() },
     args => core.listElements(reader, args));
   registerReadTool(server, 'get_project_element', 'Consultar elemento',

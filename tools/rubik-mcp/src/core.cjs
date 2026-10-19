@@ -6,6 +6,10 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const C = require('../../../js/project-core.js');
 const Review = require('../../../js/layout-review.js');
+const Spatial = require('./spatial.cjs');
+const Diagnostics = require('./diagnostics.cjs');
+const Measure = require('./measure.cjs');
+const Clearance = require('./clearance.cjs');
 
 const MAX_PROJECT_BYTES = 15 * 1024 * 1024;
 const MAX_LAYOUT_OBJECTS = 100;
@@ -26,9 +30,9 @@ function areaM2(polygon) {
 function snapshotMeta(project, bytes, stat) {
   return {
     sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
-    schemaVersion: project.schemaVersion,
-    projectId: project.id,
-    projectName: project.name,
+    ...(typeof project?.schemaVersion === 'string' ? { schemaVersion: project.schemaVersion } : {}),
+    ...(typeof project?.id === 'string' ? { projectId: project.id } : {}),
+    ...(typeof project?.name === 'string' ? { projectName: project.name } : {}),
     sizeBytes: bytes.byteLength,
     modifiedAt: stat.mtime.toISOString(),
   };
@@ -39,7 +43,7 @@ function createProjectReader(inputPath) {
   const requestedPath = path.resolve(inputPath);
   let canonicalPath = null;
 
-  async function load() {
+  async function inspect() {
     let linkInfo;
     try { linkInfo = await fs.lstat(requestedPath); }
     catch { fail('No se puede leer el archivo JSON seleccionado. Comprueba la ruta y los permisos.'); }
@@ -60,13 +64,32 @@ function createProjectReader(inputPath) {
     if (bytes.byteLength > MAX_PROJECT_BYTES) fail('El JSON supera el límite de 15 MiB.');
     let project;
     try { project = JSON.parse(bytes.toString('utf8')); }
-    catch { fail('El archivo seleccionado no contiene JSON válido.'); }
-    try { C.validate(project); }
-    catch (error) { fail('El JSON no cumple FloorPlanProjectV1: ' + error.message); }
-    return { project, snapshot: snapshotMeta(project, bytes, stat) };
+    catch { return { snapshot: snapshotMeta(null, bytes, stat), issue: { category: 'format', rule: 'JSON.parse', path: '/', message: 'El archivo seleccionado no contiene JSON válido.' } }; }
+    try {
+      const validation = C.validate(project);
+      return { project, validation, snapshot: snapshotMeta(project, bytes, stat) };
+    } catch (error) {
+      const message = String(error.message || 'Error de validación.');
+      const divider = message.indexOf(': ');
+      const rawPath = divider >= 0 ? message.slice(0, divider) : '/';
+      const pathParts = rawPath.split('/').filter(Boolean);
+      const safePath = '/' + pathParts.map(part => /^[A-Za-z0-9_-]{1,160}$/.test(part) ? part : '[field]').join('/');
+      const detail = divider >= 0 ? message.slice(divider + 2) : 'El contrato rechazó el proyecto.';
+      const category = /missing (?:walls|rooms|materials|sourceImages) reference/.test(detail) ? 'reference'
+        : /zero-length wall|polygon|opening extends|opening exceeds|repeated vertex|overlapping edges|self-intersection/.test(detail) ? 'geometry'
+        : 'contract';
+      return { snapshot: snapshotMeta(null, bytes, stat), issue: { category, rule: 'FloorPlanProjectV1', path: safePath, message: detail.slice(0, 220) } };
+    }
   }
 
-  return Object.freeze({ load });
+  async function load() {
+    const result = await inspect();
+    if (result.issue) fail(result.issue.category === 'format' ? result.issue.message
+      : `El JSON no cumple FloorPlanProjectV1: ${result.issue.path}: ${result.issue.message}`);
+    return result;
+  }
+
+  return Object.freeze({ load, inspect });
 }
 
 function safeJson(value) {
@@ -104,25 +127,27 @@ function projectElements(project, kind) {
   return project[key];
 }
 
-function publicElement(kind, item) {
+function publicElement(kind, item, relation) {
   if (kind === 'rooms') return {
     id: item.id, name: item.name, polygon: item.polygon,
     labelAt: item.labelAt, countsTowardArea: item.countsTowardArea,
-    areaM2: areaM2(item.polygon),
+    areaM2: areaM2(item.polygon), relation,
   };
   if (kind === 'walls') return {
     id: item.id, start: item.start, end: item.end, thicknessMm: item.thicknessMm,
-    heightMm: item.heightMm, structure: item.structure, status: item.status,
+    heightMm: item.heightMm, structure: item.structure, status: item.status, relation,
   };
   if (kind === 'openings') return {
     id: item.id, wallId: item.wallId, kind: item.kind, offsetMm: item.offsetMm,
     widthMm: item.widthMm, heightMm: item.heightMm, sillHeightMm: item.sillHeightMm,
     ...(item.swing ? { swing: item.swing } : {}),
+    relation,
   };
   return {
     id: item.id, type: item.type, name: item.name, position: item.position,
     size: item.size, rotationDeg: item.rotationDeg,
     ...(item.roomId ? { roomId: item.roomId } : {}),
+    relation,
   };
 }
 
@@ -130,17 +155,17 @@ async function listElements(reader, args = {}) {
   const { project, snapshot } = await reader.load();
   const kind = args.kind;
   const all = projectElements(project, kind);
+  const spatial = Spatial.createSpatialIndex(project);
   const query = typeof args.query === 'string' ? args.query.trim().toLocaleLowerCase() : '';
   const filtered = all.filter(item => {
-    if (args.roomId && item.roomId !== args.roomId) return false;
     if (!query) return true;
     return [item.id, item.name, item.type, item.kind].some(v => typeof v === 'string' && v.toLocaleLowerCase().includes(query));
-  });
+  }).filter(item => !args.roomId || spatial.relation(kind, item).roomIds.includes(args.roomId));
   const limit = Math.min(MAX_PAGE_SIZE, Math.max(1, Number.isSafeInteger(args.limit) ? args.limit : 50));
   const offset = Math.max(0, Number.isSafeInteger(args.offset) ? args.offset : 0);
   return safeJson({
     snapshot, kind, total: filtered.length, offset, limit,
-    items: filtered.slice(offset, offset + limit).map(item => publicElement(kind, item)),
+    items: filtered.slice(offset, offset + limit).map(item => publicElement(kind, item, spatial.relation(kind, item))),
   });
 }
 
@@ -149,7 +174,10 @@ async function getElement(reader, args = {}) {
   const collections = ['rooms', 'walls', 'openings', 'objects'];
   for (const kind of collections) {
     const item = project[kind].find(candidate => candidate.id === args.id);
-    if (item) return safeJson({ snapshot, kind, item: publicElement(kind, item) });
+    if (item) {
+      const spatial = Spatial.createSpatialIndex(project);
+      return safeJson({ snapshot, kind, item: publicElement(kind, item, spatial.relation(kind, item)) });
+    }
   }
   fail('No existe un elemento con ese ID en el JSON seleccionado.');
 }
@@ -165,7 +193,22 @@ async function reviewLayout(reader, args = {}) {
   return safeJson({ snapshot, ...result });
 }
 
+async function diagnoseProject(reader) {
+  return safeJson(await Diagnostics.diagnose(reader));
+}
+
+async function measureElements(reader, args = {}) {
+  const { project, snapshot } = await reader.load();
+  return safeJson(Measure.measure(project, snapshot, args));
+}
+
+async function inspectPairClearance(reader, args = {}) {
+  const { project, snapshot } = await reader.load();
+  return safeJson(Clearance.analyze(project, snapshot, args));
+}
+
 module.exports = {
   MAX_PROJECT_BYTES, MAX_LAYOUT_OBJECTS, MAX_RESPONSE_BYTES,
   createProjectReader, getSummary, listElements, getElement, reviewLayout,
+  diagnoseProject, measureElements, inspectPairClearance,
 };

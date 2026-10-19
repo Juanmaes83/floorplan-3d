@@ -1,0 +1,1798 @@
+{
+ "commit": "6fff3b6d8ecdb1b88455a2e5fb4ebc46d0f0c73b",
+ "browser": "141.0.7390.37",
+ "steps": [
+  {
+   "viewport": "1440x900",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1420,
+    "clientHeight": 596
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 781,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 781,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proy"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 781,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proy"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1420,
+    "clientHeight": 596
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1267,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1456,
+    "y": 1496,
+    "w": 182,
+    "h": 32,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "extra-action",
+   "note": "Estancia: panel oculto, hizo falta abrir «Propiedades»"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1247,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 1477,
+    "w": 182,
+    "h": 32,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1247,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 826,
+    "w": 182,
+    "h": 32,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1247,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 1477,
+    "w": 182,
+    "h": 32,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房",
+    "cjk: Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan.",
+    "key: El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1247,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 1014,
+    "w": 182,
+    "h": 32,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa wal_ref-w0 · (1580, -120) → (2120, -120) mm wal_ref-w1 · (1700, 0) → (1700, 300) mm wal_ref-w2 · (2120, -120) → (4580, -120) mm wal_ref-w3 · ("
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房",
+    "id: [option] wal_ref-w0 · (1580, -120) → (2120, -120) mm",
+    "id: [option] wal_ref-w1 · (1700, 0) → (1700, 300) mm",
+    "id: [option] wal_ref-w2 · (2120, -120) → (4580, -120) mm",
+    "id: [option] wal_ref-w3 · (4580, -120) → (5140, -120) mm",
+    "id: [option] wal_ref-w4 · (5760, -120) → (6050, -120) mm",
+    "id: [option] wal_ref-w5 · (6050, -120) → (6600, -120) mm",
+    "id: [option] wal_ref-w6 · (6480, 0) → (6480, 300) mm",
+    "id: [option] wal_ref-w7 · (6600, -120) → (9960, -120) mm",
+    "id: [option] wal_ref-w8 · (9960, -120) → (10510, -120) mm",
+    "id: [option] wal_ref-w9 · (10390, 0) → (10390, 300) mm",
+    "id: [option] wal_ref-w10 · (10390, 300) → (10390, 800) mm",
+    "id: [option] wal_ref-w11 · (10390, 2600) → (10390, 3090) mm",
+    "id: [option] wal_ref-w12 · (10390, 3090) → (10390, 4260) mm",
+    "id: [option] wal_ref-w13 · (10390, 5740) → (10390, 6370) mm",
+    "id: [option] wal_ref-w14 · (9960, 6490) → (10510, 6490) mm",
+    "id: [option] wal_ref-w15 · (10390, 6610) → (10390, 7400) mm",
+    "id: [option] wal_ref-w16 · (10390, 9770) → (10390, 10560) mm",
+    "id: [option] wal_ref-w17 · (9960, 10680) → (10510, 10680) mm",
+    "id: [option] wal_ref-w18 · (4580, 10680) → (9960, 10680) mm",
+    "id: [option] wal_ref-w19 · (10510, 10680) → (12090, 10680) mm",
+    "id: [option] wal_ref-w20 · (11970, 9960) → (11970, 10560) mm",
+    "id: [option] wal_ref-w21 · (4700, 9200) → (4700, 10560) mm",
+    "id: [option] wal_ref-w22 · (4700, 7960) → (4700, 8310) mm",
+    "id: [option] wal_ref-w23 · (3620, 8080) → (4580, 8080) mm",
+    "id: [option] wal_ref-w24 · (2180, 8080) → (3620, 8080) mm",
+    "id: [option] wal_ref-w25 · (2300, 7590) → (2300, 7960) mm",
+    "id: [option] wal_ref-w26 · (2180, 7495) → (2420, 7495) mm",
+    "id: [option] wal_ref-w27 · (-240, 8080) → (2180, 8080) mm",
+    "id: [option] wal_ref-w28 · (-120, 3610) → (-120, 7960) mm",
+    "id: [option] wal_ref-w29 · (100, 4950) → (100, 5190) mm",
+    "id: [option] wal_ref-w30 · (200, 5070) → (1275, 5070) mm",
+    "id: [option] wal_ref-w31 · (1580, 3598) → (2420, 3598) mm",
+    "id: [option] wal_ref-w32 · (2300, 4430) → (2300, 5796) mm",
+    "id: [option] wal_ref-w33 · (2135, 4950) → (2135, 5190) mm",
+    "id: [option] wal_ref-w34 · (2420, 5070) → (4580, 5070) mm",
+    "id: [option] wal_ref-w35 · (4700, 3280) → (4700, 4075) mm",
+    "id: [option] wal_ref-w36 · (4700, 4860) → (4700, 5190) mm",
+    "id: [option] wal_ref-w37 · (2420, 3490) → (4580, 3490) mm",
+    "id: [option] wal_ref-w38 · (4700, 0) → (4700, 2400) mm",
+    "id: [option] wal_ref-w39 · (4820, 2200) → (6360, 2200) mm",
+    "id: [option] wal_ref-w40 · (6480, 300) → (6480, 1198) mm",
+    "id: [option] wal_ref-w41 · (6480, 1983) → (6480, 2400) mm",
+    "id: [option] wal_ref-w42 · (6083, 3538) → (6600, 3538) mm",
+    "id: [option] wal_ref-w43 · (6360, 3325) → (6600, 3325) mm",
+    "id: [option] wal_ref-w44 · (6600, 3490) → (9960, 3490) mm",
+    "id: [option] wal_ref-w45 · (9960, 3490) → (10270, 3490) mm",
+    "id: [option] wal_ref-w46 · (6203, 4600) → (6203, 6610) mm",
+    "id: [option] wal_ref-w47 · (6323, 6490) → (9960, 6490) mm",
+    "id: [option] wal_ref-window-0 · (5140, -120) → (5760, -120) mm",
+    "id: [option] wal_ref-window-1 · (1700, 300) → (1700, 3370) mm",
+    "id: [option] wal_ref-window-2 · (-240, 3490) → (1580, 3490) mm",
+    "id: [option] wal_ref-window-3 · (2300, 3825) → (2300, 4430) mm",
+    "id: [option] wal_ref-window-4 · (10510, 6490) → (12090, 6490) mm",
+    "id: [option] wal_ref-window-5 · (11970, 6610) → (11970, 9960) mm",
+    "id: [option] wal_ref-window-6 · (10510, 710) → (11130, 710) mm",
+    "id: [option] wal_ref-window-7 · (11080, 760) → (11080, 2650) mm",
+    "id: [option] wal_ref-window-8 · (10510, 2700) → (11130, 2700) mm",
+    "id: [option] wal_ref-window-9 · (10510, 4160) → (11130, 4160) mm",
+    "id: [option] wal_ref-window-10 · (11080, 4210) → (11080, 5785) mm",
+    "id: [option] wal_ref-window-11 · (10510, 5835) → (11130, 5835) mm",
+    "id: [option] wal_ref-door-0 · (4700, 2400) → (4700, 3280) mm",
+    "id: [option] wal_ref-door-1 · (6480, 2400) → (6480, 3280) mm",
+    "id: [option] wal_ref-door-2 · (6480, 1198) → (6480, 1983) mm",
+    "id: [option] wal_ref-door-3 · (4700, 4075) → (4700, 4860) mm",
+    "id: [option] wal_ref-door-4 · (6203, 3707) → (6203, 4600) mm",
+    "id: [option] wal_ref-door-5 · (4700, 8310) → (4700, 9200) mm",
+    "id: [option] wal_ref-slide-0 · (10390, 7400) → (10390, 9770) mm",
+    "id: [option] wal_ref-slide-1 · (1275, 5070) → (2090, 5070) mm",
+    "id: [option] wal_ref-bay-0 · (10390, 800) → (10390, 2600) mm",
+    "id: [option] wal_ref-bay-1 · (10390, 4260) → (10390, 5740) mm"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1247,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 1157,
+    "y": 1341,
+    "w": 182,
+    "h": 32,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Añadir puerta a «Dormitorio juvenil»Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.Cancelar",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "cjk: 子女房"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 878,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 152,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 1157,
+    "y": 728,
+    "w": 121,
+    "h": 40,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1000,
+    "clientHeight": 596
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 1157,
+    "y": 284,
+    "w": 224,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 1157,
+    "y": 728,
+    "w": 121,
+    "h": 40,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 763,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Introduce una segunda cota independiente. La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_3a6471b21fa94e62b75a4adb68823773: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_6c6c425e2aa2480db30249008c9ef52d"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 763,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_3a6471b21fa94e62b75a4adb68823773: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_6c6c425e2aa2480db30249008c9ef52d"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 763,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: [option] img_6c6c425e2aa2480db30249008c9ef52d"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 763,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_3a6471b21fa94e62b75a4adb68823773: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_6c6c425e2aa2480db30249008c9ef52d"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 763,
+    "clientHeight": 621
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda. Revisa la calibración.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_3a6471b21fa94e62b75a4adb68823773: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_6c6c425e2aa2480db30249008c9ef52d"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_6c6c425e2aa2480db30249008c9ef52d",
+     "pointA": {
+      "x": 100.00001220703125,
+      "y": 99.9999755859375
+     },
+     "pointB": {
+      "x": 599.999951171875,
+      "y": 99.9999755859375
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 5.000000610351638,
+     "calibratedAt": "2026-10-19T19:28:27.024Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_6c6c425e2aa2480db30249008c9ef52d",
+    "pointA": {
+     "x": 100.00003662108777,
+     "y": 200.00003662108628
+    },
+    "pointB": {
+     "x": 100.00003662108777,
+     "y": 599.9999755859315
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:28:28.602Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_6c6c425e2aa2480db30249008c9ef52d",
+    "pointA": {
+     "x": 100.00003662108777,
+     "y": 200.00003662108628
+    },
+    "pointB": {
+     "x": 100.00003662108777,
+     "y": 599.9999755859315
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:28:31.236Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    5.000000610351638,
+    5.000000610351638,
+    5.000000610351638,
+    5.000000610351638
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "1440x900",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 2057,
+    "clientHeight": 446
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa el resultado; las imágenes necesitan calibración. + Crear desde cer"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa el resultado; las imágenes necesitan calibraci"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa el resultado; las imágenes necesitan calibraci"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 2057,
+    "clientHeight": 446
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 439,
+    "y": 1722,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "extra-action",
+   "note": "Estancia: panel oculto, hizo falta abrir «Propiedades»"
+  },
+  {
+   "viewport": "390x844",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 1722,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 765,
+    "w": 205,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 1314,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "cjk: Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan.",
+    "key: El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 87,
+    "y": 1303,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa wal_ref-w0 · (1580, -120) → (2120, -120) mm wal_ref-w1 · (1700, 0) → (1700, 300) mm wal_ref-w2 · (2120, -120) → (4580, -120) mm wal_ref-w3 · ("
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "id: [option] wal_ref-w0 · (1580, -120) → (2120, -120) mm",
+    "id: [option] wal_ref-w1 · (1700, 0) → (1700, 300) mm",
+    "id: [option] wal_ref-w2 · (2120, -120) → (4580, -120) mm",
+    "id: [option] wal_ref-w3 · (4580, -120) → (5140, -120) mm",
+    "id: [option] wal_ref-w4 · (5760, -120) → (6050, -120) mm",
+    "id: [option] wal_ref-w5 · (6050, -120) → (6600, -120) mm",
+    "id: [option] wal_ref-w6 · (6480, 0) → (6480, 300) mm",
+    "id: [option] wal_ref-w7 · (6600, -120) → (9960, -120) mm",
+    "id: [option] wal_ref-w8 · (9960, -120) → (10510, -120) mm",
+    "id: [option] wal_ref-w9 · (10390, 0) → (10390, 300) mm",
+    "id: [option] wal_ref-w10 · (10390, 300) → (10390, 800) mm",
+    "id: [option] wal_ref-w11 · (10390, 2600) → (10390, 3090) mm",
+    "id: [option] wal_ref-w12 · (10390, 3090) → (10390, 4260) mm",
+    "id: [option] wal_ref-w13 · (10390, 5740) → (10390, 6370) mm",
+    "id: [option] wal_ref-w14 · (9960, 6490) → (10510, 6490) mm",
+    "id: [option] wal_ref-w15 · (10390, 6610) → (10390, 7400) mm",
+    "id: [option] wal_ref-w16 · (10390, 9770) → (10390, 10560) mm",
+    "id: [option] wal_ref-w17 · (9960, 10680) → (10510, 10680) mm",
+    "id: [option] wal_ref-w18 · (4580, 10680) → (9960, 10680) mm",
+    "id: [option] wal_ref-w19 · (10510, 10680) → (12090, 10680) mm",
+    "id: [option] wal_ref-w20 · (11970, 9960) → (11970, 10560) mm",
+    "id: [option] wal_ref-w21 · (4700, 9200) → (4700, 10560) mm",
+    "id: [option] wal_ref-w22 · (4700, 7960) → (4700, 8310) mm",
+    "id: [option] wal_ref-w23 · (3620, 8080) → (4580, 8080) mm",
+    "id: [option] wal_ref-w24 · (2180, 8080) → (3620, 8080) mm",
+    "id: [option] wal_ref-w25 · (2300, 7590) → (2300, 7960) mm",
+    "id: [option] wal_ref-w26 · (2180, 7495) → (2420, 7495) mm",
+    "id: [option] wal_ref-w27 · (-240, 8080) → (2180, 8080) mm",
+    "id: [option] wal_ref-w28 · (-120, 3610) → (-120, 7960) mm",
+    "id: [option] wal_ref-w29 · (100, 4950) → (100, 5190) mm",
+    "id: [option] wal_ref-w30 · (200, 5070) → (1275, 5070) mm",
+    "id: [option] wal_ref-w31 · (1580, 3598) → (2420, 3598) mm",
+    "id: [option] wal_ref-w32 · (2300, 4430) → (2300, 5796) mm",
+    "id: [option] wal_ref-w33 · (2135, 4950) → (2135, 5190) mm",
+    "id: [option] wal_ref-w34 · (2420, 5070) → (4580, 5070) mm",
+    "id: [option] wal_ref-w35 · (4700, 3280) → (4700, 4075) mm",
+    "id: [option] wal_ref-w36 · (4700, 4860) → (4700, 5190) mm",
+    "id: [option] wal_ref-w37 · (2420, 3490) → (4580, 3490) mm",
+    "id: [option] wal_ref-w38 · (4700, 0) → (4700, 2400) mm",
+    "id: [option] wal_ref-w39 · (4820, 2200) → (6360, 2200) mm",
+    "id: [option] wal_ref-w40 · (6480, 300) → (6480, 1198) mm",
+    "id: [option] wal_ref-w41 · (6480, 1983) → (6480, 2400) mm",
+    "id: [option] wal_ref-w42 · (6083, 3538) → (6600, 3538) mm",
+    "id: [option] wal_ref-w43 · (6360, 3325) → (6600, 3325) mm",
+    "id: [option] wal_ref-w44 · (6600, 3490) → (9960, 3490) mm",
+    "id: [option] wal_ref-w45 · (9960, 3490) → (10270, 3490) mm",
+    "id: [option] wal_ref-w46 · (6203, 4600) → (6203, 6610) mm",
+    "id: [option] wal_ref-w47 · (6323, 6490) → (9960, 6490) mm",
+    "id: [option] wal_ref-window-0 · (5140, -120) → (5760, -120) mm",
+    "id: [option] wal_ref-window-1 · (1700, 300) → (1700, 3370) mm",
+    "id: [option] wal_ref-window-2 · (-240, 3490) → (1580, 3490) mm",
+    "id: [option] wal_ref-window-3 · (2300, 3825) → (2300, 4430) mm",
+    "id: [option] wal_ref-window-4 · (10510, 6490) → (12090, 6490) mm",
+    "id: [option] wal_ref-window-5 · (11970, 6610) → (11970, 9960) mm",
+    "id: [option] wal_ref-window-6 · (10510, 710) → (11130, 710) mm",
+    "id: [option] wal_ref-window-7 · (11080, 760) → (11080, 2650) mm",
+    "id: [option] wal_ref-window-8 · (10510, 2700) → (11130, 2700) mm",
+    "id: [option] wal_ref-window-9 · (10510, 4160) → (11130, 4160) mm",
+    "id: [option] wal_ref-window-10 · (11080, 4210) → (11080, 5785) mm",
+    "id: [option] wal_ref-window-11 · (10510, 5835) → (11130, 5835) mm",
+    "id: [option] wal_ref-door-0 · (4700, 2400) → (4700, 3280) mm",
+    "id: [option] wal_ref-door-1 · (6480, 2400) → (6480, 3280) mm",
+    "id: [option] wal_ref-door-2 · (6480, 1198) → (6480, 1983) mm",
+    "id: [option] wal_ref-door-3 · (4700, 4075) → (4700, 4860) mm",
+    "id: [option] wal_ref-door-4 · (6203, 3707) → (6203, 4600) mm",
+    "id: [option] wal_ref-door-5 · (4700, 8310) → (4700, 9200) mm",
+    "id: [option] wal_ref-slide-0 · (10390, 7400) → (10390, 9770) mm",
+    "id: [option] wal_ref-slide-1 · (1275, 5070) → (2090, 5070) mm",
+    "id: [option] wal_ref-bay-0 · (10390, 800) → (10390, 2600) mm",
+    "id: [option] wal_ref-bay-1 · (10390, 4260) → (10390, 5740) mm"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 439,
+    "y": 1303,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Añadir puerta a «Dormitorio juvenil»Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.Cancelar",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 893,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 87,
+    "y": 384,
+    "w": 162,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 87,
+    "y": 672,
+    "w": 136,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1035,
+    "clientHeight": 446
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 87,
+    "y": 384,
+    "w": 239,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 87,
+    "y": 672,
+    "w": 136,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Introduce una segunda cota independiente. La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_425b2e9c55ee4fcea85ddce4b04cf443: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_1a9ea33cf19340cf90955305111a4368"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_425b2e9c55ee4fcea85ddce4b04cf443: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_1a9ea33cf19340cf90955305111a4368"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: [option] img_1a9ea33cf19340cf90955305111a4368"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_425b2e9c55ee4fcea85ddce4b04cf443: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_1a9ea33cf19340cf90955305111a4368"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 489
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda. Revisa la calibración.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_425b2e9c55ee4fcea85ddce4b04cf443: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_1a9ea33cf19340cf90955305111a4368"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_1a9ea33cf19340cf90955305111a4368",
+     "pointA": {
+      "x": 100,
+      "y": 100.0000244140625
+     },
+     "pointB": {
+      "x": 600,
+      "y": 100.0000244140625
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 5,
+     "calibratedAt": "2026-10-19T19:28:48.720Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_1a9ea33cf19340cf90955305111a4368",
+    "pointA": {
+     "x": 99.99999389648437,
+     "y": 200.000048828125
+    },
+    "pointB": {
+     "x": 99.99999389648437,
+     "y": 599.999853515625
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:28:50.752Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_1a9ea33cf19340cf90955305111a4368",
+    "pointA": {
+     "x": 99.99999389648437,
+     "y": 200.000048828125
+    },
+    "pointB": {
+     "x": 99.99999389648437,
+     "y": 599.999853515625
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:28:53.741Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    5,
+    5,
+    5,
+    5
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "390x844",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g01-welcome",
+   "note": "Inicio: ¿Qué quieres hacer?",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 2057,
+    "clientHeight": 141
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": null,
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g02-blank",
+   "note": "Crear desde cero",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Nueva estancia Proyecto: Mi vivienda. Dimensiones interiores de diseño en milímetros; no son una medición profesional. Nombre de la estancia Ancho interior (mm) Profundidad interior (mm) Ubicación Independiente · posición X/Y Esquina interior izquierda X (mm) Esquina interior superior Y (mm) La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g03-blank-editor",
+   "note": "Proyecto vacío tras cancelar la primera estancia",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proy"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "g04-upload",
+   "note": "Selector de archivo del sistema abierto (no capturable); estado de la página",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "welcomeDialog",
+     "text": "Rubik Sota FLOOR PLAN DESIGNER Volver al proyecto → English TU ESPACIO, PASO A PASO ¿Qué quieres hacer? Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso. Escribe lo que necesitas Subir mi plano Poner una cama ¿Qué me falta? 2D → 3D · A tu ritmo Proyecto de ejemplo · explora antes de empezar ↑ Subir un plano PDF, imágenes, DXF, IFC, RoomPlan o proy"
+    }
+   ],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "e01-example",
+   "note": "Ejemplo abierto",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 2057,
+    "clientHeight": 141
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r01-room-tap",
+   "note": "Estancia «子女房» (Dormitorio juvenil) pulsada en el plano",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 893,
+    "y": 1573,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "extra-action",
+   "note": "Estancia: panel oculto, hizo falta abrir «Propiedades»"
+  },
+  {
+   "viewport": "844x390",
+   "id": "r02-room-panel",
+   "note": "Panel de la estancia (narrow: tras «Propiedades»)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": 1573,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r03-room-panel-end",
+   "note": "Final del panel de estancia",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": 311,
+    "w": 205,
+    "h": 42,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "r04-dimensions",
+   "note": "Diálogo «Dimensiones de la estancia»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": 1012,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "roomDesignDialog",
+     "text": "Dimensiones de la estancia Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan. ← Volver Trazado manual El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y muros manualmente."
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "cjk: Proyecto: Proyecto de ejemplo · 子女房. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan.",
+    "key: El lado left no corresponde a un único muro completo por su cara interior. Usa Plano propio → Seleccionar/editar para ajustar los vértices y"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "r05-wall-finish",
+   "note": "Diálogo «Acabado de una pared»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 541,
+    "y": 800,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [
+    {
+     "id": "surfaceDialog",
+     "text": "Biblioteca de acabados 50 acabados verificados · cinco familias de diez. Selecciona y compara antes de aplicar. Buscar acabado Familia Todas Madera Cerámica y porcelánico Piedra y mármol Cemento, microcemento y terrazo Yeso y acabados murales Pared completa wal_ref-w0 · (1580, -120) → (2120, -120) mm wal_ref-w1 · (1700, 0) → (1700, 300) mm wal_ref-w2 · (2120, -120) → (4580, -120) mm wal_ref-w3 · ("
+    }
+   ],
+   "hScroll": false,
+   "hits": [
+    "id: [option] wal_ref-w0 · (1580, -120) → (2120, -120) mm",
+    "id: [option] wal_ref-w1 · (1700, 0) → (1700, 300) mm",
+    "id: [option] wal_ref-w2 · (2120, -120) → (4580, -120) mm",
+    "id: [option] wal_ref-w3 · (4580, -120) → (5140, -120) mm",
+    "id: [option] wal_ref-w4 · (5760, -120) → (6050, -120) mm",
+    "id: [option] wal_ref-w5 · (6050, -120) → (6600, -120) mm",
+    "id: [option] wal_ref-w6 · (6480, 0) → (6480, 300) mm",
+    "id: [option] wal_ref-w7 · (6600, -120) → (9960, -120) mm",
+    "id: [option] wal_ref-w8 · (9960, -120) → (10510, -120) mm",
+    "id: [option] wal_ref-w9 · (10390, 0) → (10390, 300) mm",
+    "id: [option] wal_ref-w10 · (10390, 300) → (10390, 800) mm",
+    "id: [option] wal_ref-w11 · (10390, 2600) → (10390, 3090) mm",
+    "id: [option] wal_ref-w12 · (10390, 3090) → (10390, 4260) mm",
+    "id: [option] wal_ref-w13 · (10390, 5740) → (10390, 6370) mm",
+    "id: [option] wal_ref-w14 · (9960, 6490) → (10510, 6490) mm",
+    "id: [option] wal_ref-w15 · (10390, 6610) → (10390, 7400) mm",
+    "id: [option] wal_ref-w16 · (10390, 9770) → (10390, 10560) mm",
+    "id: [option] wal_ref-w17 · (9960, 10680) → (10510, 10680) mm",
+    "id: [option] wal_ref-w18 · (4580, 10680) → (9960, 10680) mm",
+    "id: [option] wal_ref-w19 · (10510, 10680) → (12090, 10680) mm",
+    "id: [option] wal_ref-w20 · (11970, 9960) → (11970, 10560) mm",
+    "id: [option] wal_ref-w21 · (4700, 9200) → (4700, 10560) mm",
+    "id: [option] wal_ref-w22 · (4700, 7960) → (4700, 8310) mm",
+    "id: [option] wal_ref-w23 · (3620, 8080) → (4580, 8080) mm",
+    "id: [option] wal_ref-w24 · (2180, 8080) → (3620, 8080) mm",
+    "id: [option] wal_ref-w25 · (2300, 7590) → (2300, 7960) mm",
+    "id: [option] wal_ref-w26 · (2180, 7495) → (2420, 7495) mm",
+    "id: [option] wal_ref-w27 · (-240, 8080) → (2180, 8080) mm",
+    "id: [option] wal_ref-w28 · (-120, 3610) → (-120, 7960) mm",
+    "id: [option] wal_ref-w29 · (100, 4950) → (100, 5190) mm",
+    "id: [option] wal_ref-w30 · (200, 5070) → (1275, 5070) mm",
+    "id: [option] wal_ref-w31 · (1580, 3598) → (2420, 3598) mm",
+    "id: [option] wal_ref-w32 · (2300, 4430) → (2300, 5796) mm",
+    "id: [option] wal_ref-w33 · (2135, 4950) → (2135, 5190) mm",
+    "id: [option] wal_ref-w34 · (2420, 5070) → (4580, 5070) mm",
+    "id: [option] wal_ref-w35 · (4700, 3280) → (4700, 4075) mm",
+    "id: [option] wal_ref-w36 · (4700, 4860) → (4700, 5190) mm",
+    "id: [option] wal_ref-w37 · (2420, 3490) → (4580, 3490) mm",
+    "id: [option] wal_ref-w38 · (4700, 0) → (4700, 2400) mm",
+    "id: [option] wal_ref-w39 · (4820, 2200) → (6360, 2200) mm",
+    "id: [option] wal_ref-w40 · (6480, 300) → (6480, 1198) mm",
+    "id: [option] wal_ref-w41 · (6480, 1983) → (6480, 2400) mm",
+    "id: [option] wal_ref-w42 · (6083, 3538) → (6600, 3538) mm",
+    "id: [option] wal_ref-w43 · (6360, 3325) → (6600, 3325) mm",
+    "id: [option] wal_ref-w44 · (6600, 3490) → (9960, 3490) mm",
+    "id: [option] wal_ref-w45 · (9960, 3490) → (10270, 3490) mm",
+    "id: [option] wal_ref-w46 · (6203, 4600) → (6203, 6610) mm",
+    "id: [option] wal_ref-w47 · (6323, 6490) → (9960, 6490) mm",
+    "id: [option] wal_ref-window-0 · (5140, -120) → (5760, -120) mm",
+    "id: [option] wal_ref-window-1 · (1700, 300) → (1700, 3370) mm",
+    "id: [option] wal_ref-window-2 · (-240, 3490) → (1580, 3490) mm",
+    "id: [option] wal_ref-window-3 · (2300, 3825) → (2300, 4430) mm",
+    "id: [option] wal_ref-window-4 · (10510, 6490) → (12090, 6490) mm",
+    "id: [option] wal_ref-window-5 · (11970, 6610) → (11970, 9960) mm",
+    "id: [option] wal_ref-window-6 · (10510, 710) → (11130, 710) mm",
+    "id: [option] wal_ref-window-7 · (11080, 760) → (11080, 2650) mm",
+    "id: [option] wal_ref-window-8 · (10510, 2700) → (11130, 2700) mm",
+    "id: [option] wal_ref-window-9 · (10510, 4160) → (11130, 4160) mm",
+    "id: [option] wal_ref-window-10 · (11080, 4210) → (11080, 5785) mm",
+    "id: [option] wal_ref-window-11 · (10510, 5835) → (11130, 5835) mm",
+    "id: [option] wal_ref-door-0 · (4700, 2400) → (4700, 3280) mm",
+    "id: [option] wal_ref-door-1 · (6480, 2400) → (6480, 3280) mm",
+    "id: [option] wal_ref-door-2 · (6480, 1198) → (6480, 1983) mm",
+    "id: [option] wal_ref-door-3 · (4700, 4075) → (4700, 4860) mm",
+    "id: [option] wal_ref-door-4 · (6203, 3707) → (6203, 4600) mm",
+    "id: [option] wal_ref-door-5 · (4700, 8310) → (4700, 9200) mm",
+    "id: [option] wal_ref-slide-0 · (10390, 7400) → (10390, 9770) mm",
+    "id: [option] wal_ref-slide-1 · (1275, 5070) → (2090, 5070) mm",
+    "id: [option] wal_ref-bay-0 · (10390, 800) → (10390, 2600) mm",
+    "id: [option] wal_ref-bay-1 · (10390, 4260) → (10390, 5740) mm"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "a01-add-door-pick",
+   "note": "Añadir puerta: elegir muro",
+   "panelShown": false,
+   "panelScroll": {
+    "scrollHeight": 1403,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "back": {
+    "x": 893,
+    "y": 1168,
+    "w": 205,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "apply": null,
+   "status": "Añadir puerta a «Dormitorio juvenil»Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.Cancelar",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "o01-door-tap",
+   "note": "Toque sobre opn_door-0 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 893,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_door-0"
+   },
+   "back": {
+    "x": 541,
+    "y": 235,
+    "w": 162,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 541,
+    "y": 970,
+    "w": 136,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "o02-window-3070-tap",
+   "note": "Toque sobre opn_window-1 con «Seleccionar»",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1035,
+    "clientHeight": 141
+   },
+   "selection": {
+    "kind": "opening",
+    "id": "opn_window-1"
+   },
+   "back": {
+    "x": 541,
+    "y": 235,
+    "w": 239,
+    "h": 36,
+    "inViewport": true,
+    "fullyVisible": true
+   },
+   "apply": {
+    "x": 541,
+    "y": 1112,
+    "w": 136,
+    "h": 42,
+    "inViewport": false,
+    "fullyVisible": false
+   },
+   "status": "Navegar: arrastra para desplazar; dos dedos o rueda para ampliar. Medidas orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "c01-calibrated",
+   "note": "Calibración 500 px = 2500 mm",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Calibración guardada. Introduce una segunda cota independiente. La geometría en mm se conserva; revisa su correspondencia con la imagen.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_e707df62c8664ad4a1b68cbf6d7952f8: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_2a64dd0bfe66422eb50809c5401b5c52"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "c02-second-valid",
+   "note": "Segunda cota 400 px = 2000 mm (coherente)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_e707df62c8664ad4a1b68cbf6d7952f8: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_2a64dd0bfe66422eb50809c5401b5c52"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "c03-confirm-valid",
+   "note": "Confirmar escala tras cota coherente",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Escala confirmada por la persona. Las medidas siguen siendo orientativas.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: [option] img_2a64dd0bfe66422eb50809c5401b5c52"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "c04-second-contradictory",
+   "note": "Segunda cota 400 px = 3000 mm (contradictoria)",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "Segunda cota guardada. Revisa el error antes de confirmar la escala.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_e707df62c8664ad4a1b68cbf6d7952f8: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_2a64dd0bfe66422eb50809c5401b5c52"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "c05-confirm-contradictory",
+   "note": "Confirmar escala tras cota contradictoria",
+   "panelShown": true,
+   "panelScroll": {
+    "scrollHeight": 1268,
+    "clientHeight": 182
+   },
+   "selection": null,
+   "back": null,
+   "apply": null,
+   "status": "La segunda cota no concuerda. Revisa la calibración.",
+   "dialog": [],
+   "hScroll": false,
+   "hits": [
+    "id: W4 · prj_e707df62c8664ad4a1b68cbf6d7952f8: Medidas orientativas: escala pendiente o no confirmada.",
+    "id: [option] img_2a64dd0bfe66422eb50809c5401b5c52"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "calibration-numbers",
+   "calibrated": {
+    "confidence": "estimated",
+    "method": "known-dimension",
+    "calibration": {
+     "sourceImageId": "img_2a64dd0bfe66422eb50809c5401b5c52",
+     "pointA": {
+      "x": 99.99996948242188,
+      "y": 99.9999755859375
+     },
+     "pointB": {
+      "x": 599.99990234375,
+      "y": 99.9999755859375
+     },
+     "knownLengthMm": 2500,
+     "mmPerPixel": 5.000000671386808,
+     "calibratedAt": "2026-10-19T19:29:11.140Z",
+     "confirmedByUser": false
+    }
+   },
+   "valid": {
+    "sourceImageId": "img_2a64dd0bfe66422eb50809c5401b5c52",
+    "pointA": {
+     "x": 99.9998217773659,
+     "y": 199.99992431641283
+    },
+    "pointB": {
+     "x": 99.9998217773659,
+     "y": 600.0000659179492
+    },
+    "knownLengthMm": 2000,
+    "measuredLengthMm": 2000,
+    "errorPercent": 0,
+    "thresholdPercent": 2,
+    "status": "consistent",
+    "verifiedAt": "2026-10-19T19:29:13.136Z"
+   },
+   "confirmed": "real",
+   "bad": {
+    "sourceImageId": "img_2a64dd0bfe66422eb50809c5401b5c52",
+    "pointA": {
+     "x": 99.9998217773659,
+     "y": 199.99992431641283
+    },
+    "pointB": {
+     "x": 99.9998217773659,
+     "y": 600.0000659179492
+    },
+    "knownLengthMm": 3000,
+    "measuredLengthMm": 2000,
+    "errorPercent": -33.33333333333333,
+    "thresholdPercent": 2,
+    "status": "discrepant",
+    "verifiedAt": "2026-10-19T19:29:16.153Z"
+   },
+   "badConfirm": "estimated",
+   "mmPerPixel": [
+    5.000000671386808,
+    5.000000671386808,
+    5.000000671386808,
+    5.000000671386808
+   ],
+   "wallsUnchanged": true
+  },
+  {
+   "viewport": "844x390",
+   "id": "errors",
+   "errors": []
+  }
+ ]
+}

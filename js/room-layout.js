@@ -4,7 +4,9 @@
  const C=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  const T=typeof module==='object'?require('./tracing-core.js'):root.FloorPlanTracing;
  const EPS=0.5,near=(a,b)=>Math.abs(a-b)<EPS,active=w=>w.status!=='demolished';
- const manual=' Usa Plano propio → Seleccionar/editar para ajustar los vértices y muros manualmente.';
+ const manual=' Usa «Plano propio → Seleccionar/editar» para ajustar los vértices y muros manualmente.';
+ // Words shown to people: never the internal side keys or IDs.
+ const SIDE={left:'izquierdo',right:'derecho',top:'superior',bottom:'inferior'},KIND={door:'Puerta','sliding-door':'Puerta corredera',window:'Ventana',opening:'Hueco de paso'};
  function fail(s){throw Error(s+manual);}
  function dimension(n){if(!Number.isInteger(n)||n<100||n>50000)throw Error('Introduce dimensiones enteras entre 100 y 50000 mm.');return n;}
  function rectangle(r){
@@ -20,8 +22,8 @@
   {key:'bottom',axis:'y',at:b.bottom,lo:b.x,hi:b.right,sign:1}];
  function matches(w,s){const other=s.axis==='x'?'y':'x';return active(w)&&near(w.start[s.axis],w.end[s.axis])&&near(w.start[s.axis]-s.sign*w.thicknessMm/2,s.at)&&Math.min(w.start[other],w.end[other])<=s.lo+EPS&&Math.max(w.start[other],w.end[other])>=s.hi-EPS;}
  function mapping(p,r){
-  const map=sides(rectangle(r)).map(s=>{const found=p.walls.filter(w=>matches(w,s));if(found.length!==1)fail(`El lado ${s.key} no corresponde a un único muro completo por su cara interior.`);return {...s,wall:found[0]};});
-  for(const s of map){const other=s.axis==='x'?'y':'x',perpendicular=map.filter(q=>q.axis===other).map(q=>q.wall.start[other]).sort((a,b)=>a-b),ends=[s.wall.start[other],s.wall.end[other]].sort((a,b)=>a-b);if(!ends.every((v,i)=>near(v,perpendicular[i])))fail(`El muro ${s.wall.id} se prolonga más allá de las esquinas de la estancia o no las alcanza.`);}
+  const map=sides(rectangle(r)).map(s=>{const found=p.walls.filter(w=>matches(w,s));if(found.length!==1)fail(found.length>1?`El lado ${SIDE[s.key]} está formado por ${found.length} tramos de muro (por ejemplo, junto a puertas o ventanas); solo se dimensionan lados de un único muro.`:`El lado ${SIDE[s.key]} no corresponde a un único muro completo por su cara interior.`);return {...s,wall:found[0]};});
+  for(const s of map){const other=s.axis==='x'?'y':'x',perpendicular=map.filter(q=>q.axis===other).map(q=>q.wall.start[other]).sort((a,b)=>a-b),ends=[s.wall.start[other],s.wall.end[other]].sort((a,b)=>a-b);if(!ends.every((v,i)=>near(v,perpendicular[i])))fail(`El muro del lado ${SIDE[s.key]} se prolonga más allá de las esquinas de la estancia o no las alcanza.`);}
   return map;
  }
  function touchesRoom(w,r){const axis=near(w.start.x,w.end.x)?'x':'y',other=axis==='x'?'y':'x';return r.polygon.some((a,i)=>{const b=r.polygon[(i+1)%r.polygon.length];return near(a[axis],b[axis])&&near(Math.abs(a[axis]-w.start[axis]),w.thicknessMm/2)&&Math.min(Math.max(a[other],b[other]),Math.max(w.start[other],w.end[other]))-Math.max(Math.min(a[other],b[other]),Math.min(w.start[other],w.end[other]))>EPS;});}
@@ -42,7 +44,7 @@
    if(newRoom&&pts.every(t=>inside(oldRoom.polygon,t))&&!pts.every(t=>inside(newRoom.polygon,t)))fail(`El mueble «${o.name}» quedaría fuera de su estancia. Muévelo primero.`);
    if(changed.some(w=>overlap(wallPoly(w),pts)&&!before.some(q=>q.id===w.id&&overlap(wallPoly(q),pts))))fail(`El muro colisionaría con el mueble «${o.name}». Muévelo primero.`);
   }
-  for(const w of changed)for(const other of p.walls.filter(q=>active(q)&&!changedIds.includes(q.id))){if(overlap(wallPoly(w),wallPoly(other))&&!['start','end'].some(a=>['start','end'].some(b=>near(w[a].x,other[b].x)&&near(w[a].y,other[b].y)))&&!before.some(q=>q.id===w.id&&overlap(wallPoly(q),wallPoly(other))))fail(`El cambio cruzaría otro muro (${other.id}).`);}
+  for(const w of changed)for(const other of p.walls.filter(q=>active(q)&&!changedIds.includes(q.id))){if(overlap(wallPoly(w),wallPoly(other))&&!['start','end'].some(a=>['start','end'].some(b=>near(w[a].x,other[b].x)&&near(w[a].y,other[b].y)))&&!before.some(q=>q.id===w.id&&overlap(wallPoly(q),wallPoly(other))))fail('El cambio cruzaría otro muro.');}
  }
  function create(p,{name,width,depth,x=0,y=0,neighborId,side='right'}){
   width=dimension(width);depth=dimension(depth);name=String(name||'').trim();if(!name||name.length>120)throw Error('Nombre de estancia: entre 1 y 120 caracteres.');
@@ -79,21 +81,21 @@
   for(const side of map){const w=next.walls.find(q=>q.id===side.wall.id);if(side.key===moving.key){w.start[coord]+=delta;w.end[coord]+=delta;}else if(side.axis!==coord){const ends=['start','end'].filter(key=>near(w[key][coord],oldAt));if(ends.length!==1)fail(`Los extremos del muro ${w.id} no forman una esquina inequívoca.`);w[ends[0]][coord]=newAt;}
    if(JSON.stringify(w)!==JSON.stringify(side.wall)){changedIds.push(w.id);
     for(const neighbor of p.rooms.filter(q=>q.id!==roomId))if(touchesRoom(side.wall,neighbor))fail(`El cambio modificaría un muro de la estancia vecina «${neighbor.name}». Mantén fijo el lado compartido o edita manualmente.`);
-    for(const q of p.walls.filter(q=>active(q)&&!map.some(s=>s.wall.id===q.id)))for(const old of [side.wall.start,side.wall.end]){const changedEndpoint=!['start','end'].some(k=>near(w[k].x,old.x)&&near(w[k].y,old.y));if(changedEndpoint&&[q.start,q.end].some(pt=>near(pt.x,old.x)&&near(pt.y,old.y)))fail(`La esquina está conectada a otro muro (${q.id}).`);}
+    for(const q of p.walls.filter(q=>active(q)&&!map.some(s=>s.wall.id===q.id)))for(const old of [side.wall.start,side.wall.end]){const changedEndpoint=!['start','end'].some(k=>near(w[k].x,old.x)&&near(w[k].y,old.y));if(changedEndpoint&&[q.start,q.end].some(pt=>near(pt.x,old.x)&&near(pt.y,old.y)))fail('La esquina está conectada a otro muro que no pertenece a esta estancia.');}
    }
   }
   let requiresOpenings=false;
   for(const o of next.openings.filter(o=>changedIds.includes(o.wallId))){const old=p.walls.find(w=>w.id===o.wallId),w=next.walls.find(w=>w.id===o.wallId),len=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),oldLen=Math.hypot(old.end.x-old.start.x,old.end.y-old.start.y);
-   if(o.wallId===moving.wall.id){requiresOpenings=true;impact.push(`${o.kind==='door'?'Puerta':'Ventana'} ${o.id}: se moverá ${delta} mm con su muro; conserva medidas y posición relativa.`);}
+   if(o.wallId===moving.wall.id){requiresOpenings=true;impact.push(`${KIND[o.kind]||'Hueco'} de ${o.widthMm} mm: se moverá ${delta} mm con su muro; conserva medidas y posición relativa.`);}
    else{const world={x:old.start.x+(old.end.x-old.start.x)*o.offsetMm/oldLen,y:old.start.y+(old.end.y-old.start.y)*o.offsetMm/oldLen};const offset=Math.round(((world.x-w.start.x)*(w.end.x-w.start.x)+(world.y-w.start.y)*(w.end.y-w.start.y))/len);
-    if(offset<0||offset+o.widthMm>len)fail(`El hueco ${o.id} quedaría fuera del muro. Reubícalo primero.`);if(offset!==o.offsetMm){impact.push(`Hueco ${o.id}: conserva su posición física; offset ${o.offsetMm} → ${offset} mm.`);o.offsetMm=offset;}
+    if(offset<0||offset+o.widthMm>len)fail(`El hueco (${KIND[o.kind]||'hueco'} de ${o.widthMm} mm) quedaría fuera del muro. Reubícalo primero.`);if(offset!==o.offsetMm){impact.push(`${KIND[o.kind]||'Hueco'} de ${o.widthMm} mm: conserva su posición física; distancia al inicio del muro ${o.offsetMm} → ${offset} mm.`);o.offsetMm=offset;}
    }
   }
   for(const m of p.measurements||[])for(const point of [m.a,m.b]){const n=rectangle(nr),oldInside=point.x>=b.x&&point.x<=b.right&&point.y>=b.y&&point.y<=b.bottom,newInside=point.x>=n.x&&point.x<=n.right&&point.y>=n.y&&point.y<=n.bottom;
-   if((near(point[coord],moving.at)||near(point[coord],oldAt))&&point[other]>=Math.min(moving.wall.start[other],moving.wall.end[other])&&point[other]<=Math.max(moving.wall.start[other],moving.wall.end[other])||oldInside!==newInside)fail(`La cota ${m.id} puede quedar desactualizada. Corrígela o elimínala manualmente antes de dimensionar.`);
+   if((near(point[coord],moving.at)||near(point[coord],oldAt))&&point[other]>=Math.min(moving.wall.start[other],moving.wall.end[other])&&point[other]<=Math.max(moving.wall.start[other],moving.wall.end[other])||oldInside!==newInside)fail(`Una cota del plano puede quedar desactualizada. Corrígela o elimínala manualmente antes de dimensionar.`);
   }
   protect(p,next,changedIds,r.id);C.validate(next);
-  impact.unshift(`«${r.name}»: ${axis==='width'?'ancho':'profundidad'} ${b[axis]} → ${value} mm interiores. Lado fijo: ${{left:'izquierdo',right:'derecho',top:'superior',bottom:'inferior'}[fixed]}. Área: ${(rectangle(nr).width*rectangle(nr).depth/1e6).toFixed(2)} m².`,`${changedIds.length} muros ajustados conservando sus IDs. Muebles, cotas, imagen y escala permanecen en sus coordenadas.`);
+  impact.unshift(`«${r.name}»: ${axis==='width'?'ancho':'profundidad'} ${b[axis]} → ${value} mm interiores. Lado fijo: ${{left:'izquierdo',right:'derecho',top:'superior',bottom:'inferior'}[fixed]}. Área: ${(rectangle(nr).width*rectangle(nr).depth/1e6).toFixed(2)} m².`,`${changedIds.length} muros ajustados; conservan su identidad en el proyecto. Muebles, cotas, imagen y escala permanecen en sus coordenadas.`);
   return {project:next,roomId:r.id,impact,requiresOpenings};
  }
  function blank(name){const p=T.blank(name);p.schemaVersion='1.3.0';C.validate(p);return p;}

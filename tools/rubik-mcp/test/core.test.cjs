@@ -46,16 +46,28 @@ test('layout review calls Rubik geometry and preserves explicit-threshold semant
   assert.equal(JSON.stringify(project), before);
 });
 
-test('rejects invalid project data and symbolic links', async t => {
+test('rejects invalid project data', async t => {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'rubik-mcp-security-'));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const invalid = path.join(dir, 'invalid.json');
   await fs.writeFile(invalid, '{"schemaVersion":"9.0.0"}');
   await assert.rejects(core.createProjectReader(invalid).load(), /no cumple FloorPlanProjectV1/);
+});
+
+test('rejects symbolic links when the platform permits creating one', async t => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'rubik-mcp-security-'));
+  t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const valid = path.join(dir, 'valid.json');
   await fs.writeFile(valid, JSON.stringify(C.initial()));
   const link = path.join(dir, 'link.json');
-  await fs.symlink(valid, link);
+  try { await fs.symlink(valid, link); }
+  catch (error) {
+    if (process.platform === 'win32' && error?.code === 'EPERM') {
+      t.skip('Windows no permite crear symlinks en esta sesión; la comprobación continúa en Linux CI.');
+      return;
+    }
+    throw error;
+  }
   await assert.rejects(core.createProjectReader(link).load(), /enlace simbólico/);
 });
 

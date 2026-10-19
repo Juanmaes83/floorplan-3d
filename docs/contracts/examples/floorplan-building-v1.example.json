@@ -1,0 +1,702 @@
+{
+  "schema": "rubik-sota.floorplan-building",
+  "schemaVersion": "1.0.0",
+  "id": "bld_fixture-house",
+  "name": "Casa sintética de dos plantas",
+  "createdAt": "2026-10-18T09:00:00.000Z",
+  "updatedAt": "2026-10-18T09:00:00.000Z",
+  "units": "mm",
+  "levels": [
+    {
+      "id": "lvl_fixture-ground",
+      "name": "Planta baja",
+      "order": 0,
+      "elevationMm": 0,
+      "slabThicknessMm": 0,
+      "offsetMm": {
+        "x": 0,
+        "y": 0
+      },
+      "project": {
+        "schema": "rubik-sota.floorplan-project",
+        "schemaVersion": "1.3.0",
+        "id": "prj_fixture-ground",
+        "name": "Casa sintética · planta baja",
+        "createdAt": "2026-10-17T23:13:24.832Z",
+        "updatedAt": "2026-10-17T23:13:24.832Z",
+        "units": "mm",
+        "coordinateSystem": {
+          "origin": "plan-top-left",
+          "xAxis": "right",
+          "yAxis": "down",
+          "rotation": "degrees-clockwise"
+        },
+        "scale": {
+          "confidence": "real",
+          "method": "known-dimension",
+          "calibration": {
+            "sourceImageId": "img_synthetic",
+            "pointA": {
+              "x": 50,
+              "y": 50
+            },
+            "pointB": {
+              "x": 450,
+              "y": 50
+            },
+            "knownLengthMm": 4000,
+            "mmPerPixel": 10,
+            "calibratedAt": "2026-09-30T11:40:11.332Z",
+            "confirmedByUser": true
+          },
+          "verification": {
+            "sourceImageId": "img_synthetic",
+            "pointA": {
+              "x": 50,
+              "y": 250
+            },
+            "pointB": {
+              "x": 450,
+              "y": 250
+            },
+            "knownLengthMm": 4000,
+            "measuredLengthMm": 4000,
+            "errorPercent": 0,
+            "thresholdPercent": 2,
+            "status": "consistent",
+            "verifiedAt": "2026-09-30T11:40:11.333Z"
+          }
+        },
+        "defaults": {
+          "wallHeightMm": 2800,
+          "wallThicknessMm": 240
+        },
+        "walls": [
+          {
+            "id": "wal_24fce046db574db6970eb09ea19efbef",
+            "start": {
+              "x": 280,
+              "y": 280
+            },
+            "end": {
+              "x": 280,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_b5cdc896728149218ecc1a7759ca6fd5",
+            "start": {
+              "x": 4520,
+              "y": 280
+            },
+            "end": {
+              "x": 4520,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_67f81b351621498491b8b1cd1e7c0541",
+            "start": {
+              "x": 280,
+              "y": 280
+            },
+            "end": {
+              "x": 4520,
+              "y": 280
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_875c37967fc14d4d9a77d1ff48b4e01a",
+            "start": {
+              "x": 280,
+              "y": 2920
+            },
+            "end": {
+              "x": 4520,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_316c85a0f47b4afd86640a4c93aa68c2",
+            "start": {
+              "x": 7760,
+              "y": 280
+            },
+            "end": {
+              "x": 7760,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_776c8a51dda0404c9864436b3e167652",
+            "start": {
+              "x": 4520,
+              "y": 280
+            },
+            "end": {
+              "x": 7760,
+              "y": 280
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_3fe86b66609143e3b350ca458934bcc1",
+            "start": {
+              "x": 4520,
+              "y": 2920
+            },
+            "end": {
+              "x": 7760,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "openings": [
+          {
+            "id": "opn_fixture-ground-door",
+            "kind": "door",
+            "wallId": "wal_b5cdc896728149218ecc1a7759ca6fd5",
+            "offsetMm": 800,
+            "widthMm": 800,
+            "heightMm": 2100,
+            "sillHeightMm": 0,
+            "swing": {
+              "hinge": "start",
+              "side": "left"
+            }
+          }
+        ],
+        "rooms": [
+          {
+            "id": "rom_eb1151f2a9dc4ead955fc4586f3e9d40",
+            "name": "Cocina",
+            "polygon": [
+              {
+                "x": 400,
+                "y": 400
+              },
+              {
+                "x": 4400,
+                "y": 400
+              },
+              {
+                "x": 4400,
+                "y": 2800
+              },
+              {
+                "x": 400,
+                "y": 2800
+              }
+            ],
+            "labelAt": {
+              "x": 2400,
+              "y": 1600
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "rom_10252fb92ad74545b12a1be60ead23b8",
+            "name": "Estar",
+            "polygon": [
+              {
+                "x": 4640,
+                "y": 400
+              },
+              {
+                "x": 7640,
+                "y": 400
+              },
+              {
+                "x": 7640,
+                "y": 2800
+              },
+              {
+                "x": 4640,
+                "y": 2800
+              }
+            ],
+            "labelAt": {
+              "x": 6140,
+              "y": 1600
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat_wood",
+            "name": "橡木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#d8b88a",
+              "preset": "wood"
+            }
+          },
+          {
+            "id": "mat_walnut",
+            "name": "胡桃木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#9b7250",
+              "preset": "walnut"
+            }
+          },
+          {
+            "id": "mat_tile800",
+            "name": "800 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#ebe6dc",
+              "preset": "tile-800"
+            }
+          },
+          {
+            "id": "mat_tile600",
+            "name": "600 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#dfe3e1",
+              "preset": "tile-600"
+            }
+          },
+          {
+            "id": "mat_marble",
+            "name": "大理石",
+            "category": "floor",
+            "appearance": {
+              "color": "#f1eee8",
+              "preset": "marble"
+            }
+          },
+          {
+            "id": "mat_antislip",
+            "name": "300 防滑砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#d3d8d4",
+              "preset": "tile-300"
+            }
+          },
+          {
+            "id": "mat_terrazzo",
+            "name": "水磨石",
+            "category": "floor",
+            "appearance": {
+              "color": "#e6dfd3",
+              "preset": "terrazzo"
+            }
+          },
+          {
+            "id": "mat_carpet",
+            "name": "满铺地毯",
+            "category": "floor",
+            "appearance": {
+              "color": "#c9c3d3",
+              "preset": "carpet"
+            }
+          }
+        ],
+        "objects": [
+          {
+            "id": "obj_fixture-sofa",
+            "type": "sofa",
+            "name": "Sofá",
+            "position": {
+              "x": 6900,
+              "y": 900
+            },
+            "size": {
+              "widthMm": 1400,
+              "depthMm": 800
+            },
+            "rotationDeg": 0,
+            "color": "#9aa7b3",
+            "roomId": "rom_10252fb92ad74545b12a1be60ead23b8"
+          }
+        ],
+        "measurements": [],
+        "sourceImages": [
+          {
+            "id": "img_synthetic",
+            "mediaType": "image/png",
+            "widthPx": 480,
+            "heightPx": 320,
+            "bytes": 1676,
+            "sha256": "caf740447fee0471b645667d8192faa94989e8ca9022696a8e194d070fd1f728",
+            "storage": {
+              "kind": "sidecar-file",
+              "ref": "images/img_synthetic.png"
+            },
+            "placement": {
+              "originMm": {
+                "x": 0,
+                "y": 0
+              },
+              "rotationDeg": 0,
+              "mmPerPixel": 10
+            },
+            "visible": true,
+            "opacity": 0.55
+          }
+        ]
+      }
+    },
+    {
+      "id": "lvl_fixture-upper",
+      "name": "Planta primera",
+      "order": 1,
+      "elevationMm": 3100,
+      "slabThicknessMm": 300,
+      "offsetMm": {
+        "x": 2600,
+        "y": 0
+      },
+      "project": {
+        "schema": "rubik-sota.floorplan-project",
+        "schemaVersion": "1.1.0",
+        "id": "prj_fixture-upper",
+        "name": "Casa sintética · planta primera",
+        "createdAt": "2026-10-17T23:13:24.843Z",
+        "updatedAt": "2026-10-17T23:13:24.843Z",
+        "units": "mm",
+        "coordinateSystem": {
+          "origin": "plan-top-left",
+          "xAxis": "right",
+          "yAxis": "down",
+          "rotation": "degrees-clockwise"
+        },
+        "scale": {
+          "confidence": "estimated",
+          "method": "declared-ratio",
+          "declaredRatio": "1:100",
+          "note": "Escala declarada en el plano de la planta alta; sin calibrar."
+        },
+        "defaults": {
+          "wallHeightMm": 2800,
+          "wallThicknessMm": 240
+        },
+        "walls": [
+          {
+            "id": "wal_5d38abd2c1964f29a6a221cc09468a57",
+            "start": {
+              "x": 280,
+              "y": 280
+            },
+            "end": {
+              "x": 280,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_e489f0240c744dbcba05826e536e0a5c",
+            "start": {
+              "x": 4920,
+              "y": 280
+            },
+            "end": {
+              "x": 4920,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_18eaf98c599b4ecf8da45683be078494",
+            "start": {
+              "x": 280,
+              "y": 280
+            },
+            "end": {
+              "x": 4920,
+              "y": 280
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          },
+          {
+            "id": "wal_a12bdb72cfab4cfda24ba6320446a909",
+            "start": {
+              "x": 280,
+              "y": 2920
+            },
+            "end": {
+              "x": 4920,
+              "y": 2920
+            },
+            "thicknessMm": 240,
+            "heightMm": 2800,
+            "structure": "unknown",
+            "status": "new",
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "openings": [
+          {
+            "id": "opn_fixture-upper-window",
+            "kind": "window",
+            "wallId": "wal_18eaf98c599b4ecf8da45683be078494",
+            "offsetMm": 1500,
+            "widthMm": 1200,
+            "heightMm": 1200,
+            "sillHeightMm": 900
+          }
+        ],
+        "rooms": [
+          {
+            "id": "rom_db302f8e164b4de6825312908737b996",
+            "name": "Dormitorio",
+            "polygon": [
+              {
+                "x": 400,
+                "y": 400
+              },
+              {
+                "x": 4800,
+                "y": 400
+              },
+              {
+                "x": 4800,
+                "y": 2800
+              },
+              {
+                "x": 400,
+                "y": 2800
+              }
+            ],
+            "labelAt": {
+              "x": 2600,
+              "y": 1600
+            },
+            "floorMaterialId": "mat_wood",
+            "countsTowardArea": true,
+            "source": {
+              "method": "manual",
+              "review": "unreviewed"
+            }
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat_wood",
+            "name": "橡木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#d8b88a",
+              "preset": "wood"
+            }
+          },
+          {
+            "id": "mat_walnut",
+            "name": "胡桃木地板",
+            "category": "floor",
+            "appearance": {
+              "color": "#9b7250",
+              "preset": "walnut"
+            }
+          },
+          {
+            "id": "mat_tile800",
+            "name": "800 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#ebe6dc",
+              "preset": "tile-800"
+            }
+          },
+          {
+            "id": "mat_tile600",
+            "name": "600 地砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#dfe3e1",
+              "preset": "tile-600"
+            }
+          },
+          {
+            "id": "mat_marble",
+            "name": "大理石",
+            "category": "floor",
+            "appearance": {
+              "color": "#f1eee8",
+              "preset": "marble"
+            }
+          },
+          {
+            "id": "mat_antislip",
+            "name": "300 防滑砖",
+            "category": "floor",
+            "appearance": {
+              "color": "#d3d8d4",
+              "preset": "tile-300"
+            }
+          },
+          {
+            "id": "mat_terrazzo",
+            "name": "水磨石",
+            "category": "floor",
+            "appearance": {
+              "color": "#e6dfd3",
+              "preset": "terrazzo"
+            }
+          },
+          {
+            "id": "mat_carpet",
+            "name": "满铺地毯",
+            "category": "floor",
+            "appearance": {
+              "color": "#c9c3d3",
+              "preset": "carpet"
+            }
+          }
+        ],
+        "objects": [
+          {
+            "id": "obj_fixture-bed",
+            "type": "bed",
+            "name": "Cama",
+            "position": {
+              "x": 1300,
+              "y": 1600
+            },
+            "size": {
+              "widthMm": 1600,
+              "depthMm": 2000
+            },
+            "rotationDeg": 0,
+            "color": "#d9cbb5",
+            "roomId": "rom_db302f8e164b4de6825312908737b996"
+          }
+        ],
+        "measurements": [],
+        "sourceImages": [
+          {
+            "id": "img_fixture-upper",
+            "mediaType": "image/jpeg",
+            "widthPx": 480,
+            "heightPx": 320,
+            "bytes": 9001,
+            "sha256": "1ba299e57f957c7315e3fc1238d9f7ca8b938c71df0a1c6228e73f6affca605a",
+            "storage": {
+              "kind": "sidecar-file",
+              "ref": "images/img_fixture-upper.jpg"
+            },
+            "placement": {
+              "originMm": {
+                "x": 0,
+                "y": 0
+              },
+              "rotationDeg": 0,
+              "mmPerPixel": 10
+            },
+            "visible": true,
+            "opacity": 0.55
+          }
+        ]
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "id": "str_fixture-main",
+      "kind": "straight",
+      "fromLevelId": "lvl_fixture-ground",
+      "toLevelId": "lvl_fixture-upper",
+      "startMm": {
+        "x": 4900,
+        "y": 2100
+      },
+      "rotationDeg": 0,
+      "widthMm": 900,
+      "runLengthMm": 2400,
+      "risers": 14
+    }
+  ]
+}
