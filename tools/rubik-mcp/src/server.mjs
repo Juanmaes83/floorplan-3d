@@ -43,7 +43,7 @@ async function main() {
   // File protections remain mandatory; contract errors are reported by the diagnostic tool.
   await reader.inspect();
 
-  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.2' });
+  const server = new McpServer({ name: 'rubik-floorplan-readonly', version: '0.1.4' });
   registerReadTool(server, 'diagnose_project', 'Diagnosticar proyecto',
     'Informa el primer bloqueo del validador FloorPlanProjectV1 o, si es válido, hallazgos independientes de procedencia, escala y relaciones espaciales. Las demás consultas rechazan un JSON inválido.',
     {}, () => core.diagnoseProject(reader));
@@ -55,6 +55,11 @@ async function main() {
     'Compara dos muebles con umbral explícito en mm. Informa distancia mínima, obstáculos sobre ese segmento y una cadena de puertas documentada entre estancias. No acredita un paso utilizable ni calcula una ruta alternativa.',
     { idA: z.string().min(1).max(160), idB: z.string().min(1).max(160), clearanceMm: z.number().positive() },
     args => core.inspectPairClearance(reader, args));
+  const point = z.object({ x: z.number().finite(), y: z.number().finite() }).strict();
+  registerReadTool(server, 'check_route_2d', 'Comprobar recorrido 2D con anchura',
+    'Con dos puntos explícitos {x,y} en mm del plano y widthMm explícito, comprueba si un disco 2D de ese diámetro puede ir de start a end por estancias y huecos de paso documentados sin invadir muros, ventanas ni muebles. Devuelve estado (recorrido_demostrado_en_modelo_2d, bloqueado_por_geometría_documentada, evidencia_insuficiente, no_evaluable o límite_de_cálculo), trayectoria verificada, anchura limitante, razones y hash. No acredita accesibilidad, evacuación, normativa, altura ni transitabilidad real.',
+    { start: point, end: point, widthMm: z.number().positive().max(100000) },
+    args => core.checkRoute2d(reader, args));
   registerReadTool(server, 'get_project_summary', 'Resumen del proyecto',
     'Lee el resumen del JSON Rubik seleccionado al iniciar. Devuelve versión, hash, escala, recuentos y superficie aproximada. Nunca incluye imágenes ni rutas locales.',
     {}, () => core.getSummary(reader));
