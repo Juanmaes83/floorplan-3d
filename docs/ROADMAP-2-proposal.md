@@ -121,6 +121,16 @@ La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-
 - No cambia `FloorPlanProjectV1`.
 - No se afirma ninguna comparación de acciones con LoRA LAB.
 
+**Cierre funcional, segunda ronda (19-10-2026), en la misma PR:**
+
+- **Decisión de Juanma:** al seleccionar una puerta o ventana, sus propiedades se abren directamente, también en móvil y con la columna plegada.
+- **Panel:** cabecera con «Volver» arriba, grupos plegables («Posición y medidas», «Apertura», «Revisión del hueco») y acciones fijas: aplicar, descartar, deshacer, rehacer y eliminar. Cada error aparece junto al campo que lo causa.
+- **«Añadir puerta/ventana»:** un banner sobre el plano con el paso y «Cancelar»; los errores, junto a la causa.
+- **Prioridad de toque:** los objetivos ampliados no tapan muebles ni nombres de estancia, y entre huecos solapados gana el más cercano.
+- **Ventana de 3070 mm en el ejemplo:** es un dato de la plantilla, en la que cada hueco tiene su propio tramo de muro; el panel ahora lo explica.
+- [Detalle y pruebas](qa/contextual-openings-2026-10-19.md#7-cierre-funcional-segunda-ronda-19-10-2026).
+- La revisión general de interfaz (patrón de paneles en todo el editor, «Generar», castellano y calibración) va en una PR separada, apilada sobre esta.
+
 **Siguiente candidato, separado y sin aprobar:**
 
 - creación contextual de estancias;
