@@ -3,6 +3,8 @@
 
 > **Estado vigente, 18-10-2026:** los tres cortes de la Etapa 1 están integrados: [#40](https://github.com/Juanmaes83/floorplan-3d/pull/40) (relaciones por estancia, merge `19f2f44`), [#41](https://github.com/Juanmaes83/floorplan-3d/pull/41) (diagnóstico y medidas 2D, `9c9e155`) y [#43](https://github.com/Juanmaes83/floorplan-3d/pull/43) (obstáculos del segmento mínimo y cadena de puertas, `6728e16`). Se probaron sucesivamente sobre el `master` posterior a #55 y el árbol de cada merge remoto coincidió con el probado: [evidencia](../qa/local-mcp-stage1-integration-2026-10-18.md). **Etapa 1 aún incompleta:** una cadena de puertas y una recta libre no prueban ruta transitable ni anchura; faltan desvíos, giros, extremos de muro, hojas y empotramientos. CI no ejecutó pruebas. Las Etapas 2–4 siguen propuestas.
 
+> **Cuarto corte, 18-10-2026, PR en borrador pendiente de auditoría:** `check_route_2d` comprueba un recorrido 2D con desvíos para un disco de diámetro explícito entre dos puntos explícitos. Positivo = polilínea verificada con distancias exactas; bloqueo = separación demostrada por celdas certificadas; el resto queda como incertidumbre o límite de cálculo. [Contrato](local-mcp-route-2d.md) · [QA](../qa/local-mcp-route-2d-2026-10-18.md). Con él, la Etapa 1 cubre en el **modelo 2D** relaciones, diagnóstico, medidas, obstáculos y recorrido con anchura. **No se declara cerrada:** falta validarla con proyectos reales de escala confirmada, y la hoja de puerta, la altura y la maniobra no circular siguen fuera del modelo.
+
 Actualizado: 13-10-2026. Recuperado de PR #32, HEAD `918c134b85eee3f50f95cd20689a2592464c0bde`, y reconciliado sobre `master` `88b0cb568e9824533764518ec42e235e9c2774a9`. La base y evidencia originales del 07-10-2026 pertenecen al merge #31 `88aef0bfeea8abb67865c3d2a33a484c909511ea`. [Cierre y aportes preservados](../qa/documentation-reconciliation-2026-10-13.md).
 
 **Estado actual en `master`:** MCP local v0.1.3 de solo lectura, con relaciones por estancia, diagnóstico controlado, medidas 2D y análisis limitado del segmento mínimo entre dos muebles. La descripción de v0.1.0 y de las fases propuestas más abajo conserva el contexto de su publicación original; el alcance y los límites de cada corte nuevo están en sus documentos específicos.
@@ -68,6 +70,29 @@ Ampliar el diagnóstico solo después de resolver las limitaciones observadas.
 - `measure_elements` compara dos IDs en `reference_points` (centros de muebles o puntos medios de ejes de muros/huecos) o `regions` (distancia mínima entre huellas, bandas, subtramos y polígonos 2D). Devuelve mm, puntos justificativos, hash, confianza de escala y estado de relación. Las estancias carecen de centro de referencia único; un proyecto inválido o geometría no medible se rechaza. La distancia 2D entre regiones no es holgura libre ni dictamen normativo. [Reglas, ejemplos y tercer corte](local-mcp-diagnostics-measures.md).
 - Fixture sintético: separación centro/huella 4000/3450 mm, objeto en concavidad exterior a 750 mm de la estancia, mueble girado frente a muro a 561,091 mm, contacto y solape a 0 mm, muro/hueco, escala estimada, ID ausente, referencia rota, geometría inválida, protocolo stdio y bytes/hash inmutados. Los comandos, versiones, SHA final y resultados locales/CI se consignan en la PR apilada tras la publicación.
 - **Pendiente tras #41:** holguras con umbral explícito, muros activos y huecos verdaderos, extremos, empotramientos y conectividad entre estancias. El corte parcial apilado descrito más abajo aborda el segmento mínimo y las conexiones documentadas; la ruta utilizable sigue pendiente. No se modifica `review_layout`.
+
+#### Cuarto corte de Etapa 1 — recorrido 2D con desvíos y anchura, rama independiente desde `master` `d9cd11b`
+
+- **Herramienta:** `check_route_2d` (`tools/rubik-mcp/src/route.cjs`), de solo lectura, con el lector seguro común (archivo explícito, sin symlinks, 15 MiB / 750 KiB, validación canónica y SHA-256 por consulta).
+- **Petición:** `start` y `end` explícitos en mm del plano y `widthMm` obligatorio. No hay ancho por defecto.
+- **Contrato geométrico:** un disco de diámetro `widthMm`, con contacto admitido (tolerancia de 10⁻⁶ mm).
+  - El dominio está formado por las estancias, más los huecos de paso con antepecho 0 compartidos por dos estancias y las bandas de muros demolidos compartidas por dos estancias.
+  - Son obstáculos los muros activos, las ventanas, los huecos no transitables y los muebles. Alfombras y splits no cuentan como obstáculo.
+- **Garantías:**
+  - Todo positivo es una polilínea verificada por fuerza bruta con distancias segmento–segmento exactas.
+  - Todo bloqueo se apoya en celdas bloqueadas con cota de Lipschitz y en la convexidad de la distancia, incluida la cota por pares que cierra pasillos estrechos.
+  - Lo indecidible por debajo de 0,25 mm de celda queda como `evidencia_insuficiente`.
+  - Agotar cualquier presupuesto da `límite_de_cálculo`.
+- **Razones de bloqueo:** son huecos que separan de verdad la región alcanzable desde el inicio, con su medida exacta y los elementos que lo forman, o puertas y ventanas no transitables.
+- **Pruebas:**
+  - una matriz con medidas conocidas;
+  - un verificador independiente de cada tramo y giro;
+  - un contraste aleatorio con fuerza bruta;
+  - protocolo stdio, determinismo, bytes y hash intactos y ausencia de filtraciones.
+- **Pendiente para declarar cerrada la Etapa 1:**
+  - validación con proyectos reales y escala `real`;
+  - decisión de producto sobre hoja de puerta, marco y altura;
+  - revisión de Juanma/Codex.
 
 ### Etapa 2 — Propuestas de distribución explicables
 

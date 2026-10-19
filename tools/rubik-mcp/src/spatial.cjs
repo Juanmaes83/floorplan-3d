@@ -204,4 +204,5 @@ function createSpatialIndex(project) {
   return { relation };
 }
 
-module.exports = { createSpatialIndex };
+// Shared with the route query (room overlap check); same tolerances as the relations above.
+module.exports = { createSpatialIndex, triangulate, clippedArea };
