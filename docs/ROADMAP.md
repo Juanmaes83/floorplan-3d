@@ -5,11 +5,13 @@
 
 Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La evaluación inicial desembocó en la aprobación del contrato de edificio (opción D, #50) y su primer corte (#51); eso no aprueba D-16, un contrato 2.0 ni las demás funciones de LoRA LAB. El estudio comparativo sigue en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), con límites de evidencia.
 
-## En revisión, sin integrar (19-10-2026)
+## Integrado el 19-10-2026
 
-- [#60](https://github.com/Juanmaes83/floorplan-3d/pull/60): seleccionar y editar puertas y ventanas en el plano, con el panel abierto al seleccionar y el cierre funcional de su segunda ronda.
-- PR general de interfaz, apilada sobre #60: patrón de paneles y retorno, barra superior por tarea, «Generar», castellano y mensajes de calibración. [Roadmap 2 §3.6](ROADMAP-2-proposal.md#36-patrón-de-paneles-generar-castellano-y-calibración-19-10-2026-pr-en-borrador-apilada-sobre-60).
-- Ninguna está fusionada ni desplegada. CI no ejecutó pasos, y no hay validación con GPU real, teléfonos físicos ni personas del público D-01.
+- [#60](https://github.com/Juanmaes83/floorplan-3d/pull/60), merge `b4a91a7`: selección y edición de puertas/ventanas directamente en el plano, propiedades al seleccionar, alta desde una estancia, vista previa del sentido y cambios reversibles.
+- [#62](https://github.com/Juanmaes83/floorplan-3d/pull/62), merge `7ada526`, después de #60: patrón común de paneles, navegación «Volver», barra agrupada por tarea, flujo inicial, textos en castellano y mensajes de calibración.
+- El usuario revisó ambas previews y aprobó los flujos visuales y funcionales. La integración quedó en `master@7ada52655b5cc8eded21a11b0663d47f89db3803`.
+- **Límites de QA:** GitHub Actions terminó sin asignar runner ni ejecutar pasos; no se cuenta como CI aprobada. Las pruebas 3D de este entorno no sustituyen validación con GPU real. Se revisó el diseño adaptable en preview, pero no se probó en teléfonos físicos ni con participantes del público D-01.
+- Roadmap 2 §3.6 conserva la especificación y el informe de la entrega general de interfaz.
 
 ## Estado vigente tras la integración del 17-10-2026
 
