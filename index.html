@@ -66,6 +66,8 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 #plan.tool-demolish .wall{pointer-events:all;cursor:pointer}
 #plan.tool-demolish .wall:hover{fill:#d9894f}
 #plan.tool-select .room:hover{opacity:.82}
+#plan:not(.tool-select) .opening-hit{pointer-events:none}#plan.tool-select .opening-hit{cursor:pointer}
+.opening-panel label{display:block;margin:6px 0}.opening-panel input[type=number],.opening-panel select{width:100%;min-height:40px;padding:6px 8px;font-size:15px}.opening-panel fieldset{border:1px solid var(--line,#ddd);border-radius:8px;margin:8px 0;padding:6px 10px}.opening-panel legend{font-weight:600;padding:0 4px}.opening-panel label.radio{display:flex;align-items:center;gap:8px;min-height:40px;margin:0}.opening-panel label.radio input{width:20px;height:20px}.opening-panel .opening-id{font-size:11px;word-break:break-all}.opening-error{color:#8f1d12;background:#fff1ef;border:1px solid #e3b2aa;border-radius:6px;padding:6px 8px}.opening-legacy{color:#5c1710;background:#fff7f5;border:2px dashed #a3261b;border-radius:8px;padding:6px 8px}.opening-panel #openingCentre{margin:2px 0 6px}.opening-panel .btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
 #plan .furn{cursor:move}
 @media (hover:hover){#plan .furn:hover{filter:drop-shadow(0 0 2px rgba(181,101,58,.7))}}
 [data-handle]{cursor:pointer}
@@ -549,6 +551,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/project-package.js"></script>
 <script src="js/guide-core.js"></script>
 <script src="js/presentation-core.js"></script>
+<script src="js/opening-edit.js"></script>
 <script>
 /* ======================= Multilingual UI: Español / English / 中文 ======================= */
 const LANG_KEY = 'rubik-sota-floorplan-lang';
@@ -927,7 +930,7 @@ function commit(before){
 function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
 function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
 function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
-function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id))ui.sel=null; }
+function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
 const getF = id => state.furniture.find(f => f.id === id);
 
 /* ======================= 几何工具 ======================= */
@@ -1152,6 +1155,9 @@ function renderOpenings(){
     const at=(distance,side=0)=>`${cx-nx*distance+tx*side} ${cy-ny*distance+ty*side}`;
     s+=`<path d="M${at(1470)}L${at(470)}M${at(670,155)}L${at(420)}L${at(670,-155)}" fill="none" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke"/><text x="${cx-nx*1440+tx*155}" y="${cy-ny*1440+ty*155}" font-size="200" fill="#b5653a">${tr('入户','Entry')}</text>`;
   }
+  // Hit targets for «Seleccionar»: 44 CSS px across the wall at any zoom, over the drawn opening.
+  for(const o of project.openings){const w=project.walls.find(x=>x.id===o.wallId);if(!w||w.status==='demolished')continue;const L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),ux=(w.end.x-w.start.x)/L,uy=(w.end.y-w.start.y)/L;
+    s+=`<line class="opening-hit" data-opening="${esc(o.id)}" x1="${w.start.x+ux*o.offsetMm}" y1="${w.start.y+uy*o.offsetMm}" x2="${w.start.x+ux*(o.offsetMm+o.widthMm)}" y2="${w.start.y+uy*(o.offsetMm+o.widthMm)}" stroke="transparent" stroke-width="44" stroke-linecap="square" vector-effect="non-scaling-stroke" pointer-events="stroke"><title>${esc(FloorPlanOpenings.LABEL[o.kind])} · pulsa para editar</title></line>`;}
   SafeDOM.markup($('#gOpen'), s);
 }
 
@@ -1244,6 +1250,7 @@ function renderSel(){
     const r = geometry.rooms.find(r => r.id === ui.sel.id);
     s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
   }
+  s += window.FloorPlanOpeningUI?.overlay() || '';
   SafeDOM.markup($('#gSel'), s);
 }
 
@@ -1275,6 +1282,7 @@ function renderPanel(){
   const p = $('#panel');
   if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
   if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); return; }
+  if (ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.panel(p, ui.sel.id)) return;
   SafeDOM.markup(p, overviewPanel()); bindOverview();
 }
 
@@ -1293,7 +1301,9 @@ function overviewPanel(){
     return `<tr><td><span class="sw" style="background:${esc(MATS[m].sw)}"></span>${esc(nm(MATS[m].name))}</td><td class="r">${fmt(a,1)} m²</td>${!showPrices?'':`<td class="r">¥${Math.round(c).toLocaleString()}</td>`}</tr>`; }).join('');
   const dem = geometry.walls.filter(w => w.status === 'demolished');
   const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
-  return `
+  const overlaps = FloorPlanOpenings.conflicts(project);
+  const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => `<button class="btn" data-opening-fix="${esc(id)}">${esc(id)}</button>`).join('')}</div></section>` : '';
+  return `${legacy}
   <section><h3>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></h3>
     <table>${rows}</table>
     <div class="total"><span>${tr('套内使用面积','Net floor area')}</span><b>${fmt(tot)} m²</b></div>
@@ -1334,12 +1344,18 @@ function overviewPanel(){
 function bindOverview(){
   document.querySelectorAll('#panel tr[data-room]').forEach(tr => tr.onclick = () => { select({kind:'room', id:tr.dataset.room}); if (is3D()) window.View3D.flyToRoom(tr.dataset.room); });
   $('#clearMeasure').onclick = () => state.measures.length && mutate(() => state.measures = []);
+  document.querySelectorAll('#panel [data-opening-fix]').forEach(b => b.onclick = () => select({kind:'opening', id:b.dataset.openingFix}));
   $('#clearFurn').onclick = clearLayout;
 }
 
 // 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
 function renderFab(){
-  const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && geometry.rooms.find(r => r.id === ui.sel.id);
+  const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && geometry.rooms.find(r => r.id === ui.sel.id), o = ui.sel?.kind === 'opening' && project.openings.find(x => x.id === ui.sel.id);
+  const od = ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.ready() && FloorPlanOpeningUI.draft(), on = od && od.project.openings.find(x => x.id === od.id);
+  if (on){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[on.kind])} · vista previa</span><button class="btn primary" data-a="apply">Aplicar</button><button class="btn narrow-only" data-a="prop">Editar</button><button class="btn" data-a="discard">Descartar</button>`); fab.classList.add('show');
+    fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { try { ({apply:() => FloorPlanOpeningUI.applyDraft(), prop:() => drawer('panel', true), discard:() => FloorPlanOpeningUI.discard()})[b.dataset.a](); } catch(e){ toast(e.message, 6000); } }); return; }
+  if (o){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[o.kind])}</span><button class="btn narrow-only" data-a="prop">Propiedades</button><button class="btn" data-a="done">Listo</button>`); fab.classList.add('show');
+    fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
   if (!f && !r){ fab.classList.remove('show'); return; }
   SafeDOM.markup(fab, f
     ? `<span class="name">${esc(nm(f.name))}</span><button class="btn" data-a="rotL">↺</button><button class="btn" data-a="rotR">↻ ${tr('旋转','Rotate')}</button>
@@ -1401,6 +1417,7 @@ function roomPanel(r){
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
     <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></section>
+  <section><h3>Puertas y ventanas</h3><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></section>
   <section><button class="btn primary" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></section>
   <section><h3>${tr('地面材料','Flooring')}</h3><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
     ${LANG==='es'||!Number.isFinite(MATS[st.mat].price)?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
@@ -1414,6 +1431,8 @@ function bindRoomPanel(){
   $('#surfaceWall').onclick=()=>FloorPlanSurfaceUI.open({kind:'wall',id});
   FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
+  document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => { select({kind:'opening', id:b.dataset.roomOpening}); $('#openingTitle')?.focus(); });
+  $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
@@ -1462,7 +1481,7 @@ function bindFurnPanel(f){
 }
 
 /* ======================= 操作 ======================= */
-function select(sel){ ui.sel = sel; renderSel(); renderPanel(); }
+function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); }
 function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(ui.sel.id); f.rot = norm(f.rot + d); }); }
 function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => state.furniture = state.furniture.filter(f => f.id !== id)); } }
 function duplicateSel(){
@@ -1517,7 +1536,7 @@ function toggleWall(id){
 }
 
 function setTool(t){
-  window.FloorPlanTraceUI?.cancel();
+  window.FloorPlanTraceUI?.cancel(); if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancel(); renderSel(); }
   ui.tool = t; ui.mA = null; ui.mCur = null;
   svg.setAttribute('class', 'tool-' + t);
   document.querySelectorAll('#tools .btn').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
@@ -1606,7 +1625,8 @@ function endDrag(cancel){
     renderMeasure(); return;                   // 没拖动：保留起点，等第二次点击
   }
   if (d.kind === 'pan'){
-    if (!cancel && !d.moved && ui.tool === 'select') select(d.room ? {kind:'room', id:d.room} : null);
+    if (!cancel && !d.moved && ui.tool === 'select' && window.FloorPlanOpeningUI?.picking()) return FloorPlanOpeningUI.pickAt(d.at);
+    if (!cancel && !d.moved && ui.tool === 'select') select(d.opening ? {kind:'opening', id:d.opening} : d.room ? {kind:'room', id:d.room} : null);
     return;
   }
   if (d.moved){ commit(d.before); renderAll(); }
@@ -1638,6 +1658,8 @@ svg.addEventListener('pointerdown', e => {
     drag = {kind:h.dataset.handle, id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false};
   } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
     toggleWall(t.closest('[data-wall]').dataset.wall); return;
+  } else if (ui.tool === 'select' && (t.closest('[data-opening]') || window.FloorPlanOpeningUI?.picking())){
+    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, opening:t.closest('[data-opening]')?.dataset.opening, at:p, moved:false};
   } else if (ui.tool === 'select' && t.closest('[data-fid]')){
     const f = getF(t.closest('[data-fid]').dataset.fid);
     if (ui.sel?.id !== f.id) select({kind:'furn', id:f.id});
@@ -1732,7 +1754,7 @@ document.addEventListener('keydown', e => {
   else if (k === 'f') fitView();
   else if (k === 'r') rotateSel(e.shiftKey ? -90 : 90);
   else if (k === 'delete' || k === 'backspace'){ e.preventDefault(); deleteSel(); }
-  else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
+  else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancel(); renderSel(); toast('Añadir hueco cancelado'); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
   else if (k.startsWith('arrow') && ui.sel?.kind === 'furn'){
     e.preventDefault(); const st = e.shiftKey ? 100 : 10;
     mutate(() => { const f = getF(ui.sel.id); if (k==='arrowleft') f.cx -= st; if (k==='arrowright') f.cx += st; if (k==='arrowup') f.cy -= st; if (k==='arrowdown') f.cy += st; });
@@ -1875,6 +1897,7 @@ const TIPS = () => COARSE
 async function setView(m,options={}){
   if (m === viewMode || switching) return;
   if (!window.View3D) return toast(tr('3D 引擎仍在加载或加载失败（需要联网加载 three.js）', '3D engine is still loading or failed to load (three.js needs a network connection)'));
+  if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancel(); renderSel(); }
   switching = true; document.body.classList.add('busy');
   try {
     if(m==='3d'){
@@ -2105,6 +2128,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
 </script>
 <script src="js/tracing-ui.js"></script>
+<script src="js/opening-ui.js"></script>
 <script src="js/plan-intake-ui.js"></script>
 <script src="js/room-layout-ui.js"></script>
 <script src="js/surface-ui.js"></script>
@@ -3935,6 +3959,8 @@ window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
 Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
+// Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
+Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
 Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});
