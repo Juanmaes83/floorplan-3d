@@ -194,7 +194,10 @@ main.animating #hint3d{opacity:0}
 #roomList small{color:var(--muted);font-variant-numeric:tabular-nums}
 .range{display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--muted);font-size:12px}
 .range input{width:100px;accent-color:var(--accent)}
-.menu,.layers-menu{position:relative}.layers-menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}.layers-menu summary::-webkit-details-marker{display:none}
+.menu{position:relative}
+/* The layers dropdown: no entry animation (its fill-mode transform would trap the dropdown under the plan and break
+   position:fixed on phones) and its own stacking level above the plan. */
+.layers-menu{position:relative;z-index:25}#layersMenu.only2d{animation:none}.layers-menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}.layers-menu summary::-webkit-details-marker{display:none}
 /* Header grouped by task. Row 1: identity and project actions. Row 2: how to edit. Row 3: status, file and settings. */
 @media (min-width:1101px){
   #presentationBtn{order:-1}#uploadPlanBtn,#uploadCancel{order:0}#newProjectBtn{order:1}#newRoomBtn{order:2}#levelsBtn,#levelBar{order:3}
@@ -203,7 +206,7 @@ main.animating #hint3d{opacity:0}
   header .hdr-break2{order:19;flex-basis:100%;height:0}
   header>.spacer{order:20}#scaleConfidence{order:21}#projectsBtn{order:22}header>details.menu{order:23}#langBtn{order:24}#fullscreen{order:25}#guideResume{order:26}header .plan-meta{order:27}
 }
-.layers-pop{min-width:190px}.layers-pop .btn.chip{text-align:left;border-radius:6px}.layers-pop .btn.chip.on::before{content:'✓ ';color:var(--accent)}.layers-pop .btn.chip:not(.on)::before{content:'  ';white-space:pre}
+.layers-pop{position:absolute;left:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:190px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(40,30,20,.14);z-index:20}.layers-pop .btn.chip{text-align:left;border-radius:6px}.layers-pop .btn.chip.on::before{content:'✓ ';color:var(--accent)}.layers-pop .btn.chip:not(.on)::before{content:'  ';white-space:pre}
 .menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}
 .menu summary::-webkit-details-marker{display:none}
 .menu-pop{position:absolute;right:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:150px;background:#fff;
@@ -278,7 +281,7 @@ dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var
 dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialog input,dialog select{display:block;width:100%;font-size:16px;padding:10px}dialog .actions{flex-wrap:wrap}#projectError{color:#b3372a}
 #assistCorrection .btn,#rawExportDialog .btn{min-height:44px;white-space:normal}#assistCorrection form,#rawExportDialog form{max-width:100%}
 @media(max-width:1100px) and (pointer:coarse){
- header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop{position:fixed;top:58px;right:4px}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
+ header{flex-wrap:nowrap;overflow-x:auto;max-width:100vw;padding:4px 6px;gap:4px;height:58px}header>*{flex-shrink:0}header .spacer,.plan-meta{display:none}header .brand{margin:0}header .grp{padding:1px}header .btn{min-height:44px;padding:8px}#fab{max-width:calc(100% - 16px);overflow-x:auto}#fab>*{flex-shrink:0}.menu-pop,.layers-pop{position:fixed;top:58px;right:4px;left:auto}footer{height:24px}.app{grid-template-rows:58px minmax(0,1fr) 24px}#hint3d{max-width:85%;font-size:10px}
 }
 #tracePanel{padding:10px;border-bottom:1px solid var(--line)}#tracePanel .actions{flex-wrap:wrap}#tracePanel label{display:block;margin:8px 0}#tracePanel input,#tracePanel select{max-width:100%;font-size:16px}#tracePanel .btn{border:1px solid var(--line);min-height:44px}#traceWarnings{max-height:160px;overflow:auto}#traceWarnings button{display:block;text-align:left;width:100%;margin:4px 0}#layoutReviewFindings{max-height:220px;overflow:auto}#layoutReviewFindings button{display:block;text-align:left;width:100%;margin:4px 0;white-space:normal;height:auto;line-height:1.35;padding:8px 10px}#layoutReviewLimits li{margin:4px 0;font-size:12px}#traceStatus{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12px}#traceStatus:empty{display:none}:focus-visible{outline:3px solid var(--teal);outline-offset:2px}#traceDistance label{display:block;margin:10px 0}#traceDistance input{font-size:16px;padding:8px;width:100%}
 .menu-pop{max-width:calc(100vw - 8px);max-height:calc(100dvh - 70px);overflow-y:auto}.menu-pop .btn{white-space:normal;overflow-wrap:anywhere}
@@ -430,7 +433,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     </div>
     <span class="hdr-break" aria-hidden="true"></span><span class="hdr-break2" aria-hidden="true"></span>
     <details class="menu-like layers-menu only2d" id="layersMenu"><summary class="btn" data-en="Show ▾" data-es="Mostrar ▾">显示 ▾</summary>
-      <div class="menu-pop layers-pop" id="layers">
+      <div class="layers-pop" id="layers">
         <button class="btn chip on" data-layer="dims" data-en="Dims">尺寸</button>
         <button class="btn chip on" data-layer="labels" data-en="Rooms">房间</button>
         <button class="btn chip on" data-layer="furn" data-en="Furniture">家具</button>

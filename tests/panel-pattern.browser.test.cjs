@@ -56,6 +56,11 @@ test(`panel head, «Volver» and «Ver en el plano» ${viewport.width}x${viewpor
  // Narrow: «Ver en el plano» from any head closes the drawer and keeps the selection.
  if(narrow){await open({kind:'room',id:ids.room});assert.equal((await head()).plan,true);await press('#panel [data-panel-plan]');
   assert.equal(await page.evaluate(()=>document.querySelector('aside.right').classList.contains('open')),false);assert.deepEqual(await page.evaluate(()=>ui.sel),{kind:'room',id:ids.room});}
+ // «Mostrar ▾» groups the display layers: its options sit above the plan, inside the viewport, and toggle the layer.
+ await page.evaluate(()=>drawer(null));await page.waitForTimeout(400);await press('#layersMenu summary');
+ const layer=await page.evaluate(()=>{const b=document.querySelector('#layers [data-layer=grid]'),r=b.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {onTop:hit===b,inside:r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth,before:ui.layers.grid};});
+ assert.deepEqual([layer.onTop,layer.inside],[true,true],'layer options above the plan and inside the viewport');
+ await press('#layers [data-layer=grid]');assert.equal(await page.evaluate(()=>ui.layers.grid),!layer.before,'the layer toggles');await press('#layers [data-layer=grid]');
  assert.equal(seen.some(([,x])=>x.hScroll),false,'no horizontal page scroll');assert.deepEqual(seen.filter(([,x])=>x.panelOverflow).map(([k])=>k),[],'no horizontal overflow inside panels');
  assert.deepEqual(errors,[]);
 });
