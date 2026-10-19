@@ -246,6 +246,11 @@ test(`tap priority and keyboard on the example ${viewport.width}x${viewport.heig
  await tap(cases.furn.x,cases.furn.y);assert.deepEqual(await page.evaluate(()=>ui.sel),{kind:'furn',id:cases.furn.id},'furniture wins');
  await page.evaluate(()=>{select(null);drawer(null);});await page.waitForTimeout(450);
  await tap(cases.door.x,cases.door.y);assert.deepEqual(await page.evaluate(()=>ui.sel),{kind:'opening',id:'opn_door-0'},'the wall itself selects the opening');
+ // Overlapping targets: tapping the centre of an opening selects that opening, not whichever target was drawn last.
+ const stacked=await page.evaluate(()=>FloorPlanApp.project.openings.map(o=>{const w=FloorPlanApp.project.walls.find(x=>x.id===o.wallId),L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),t=(o.offsetMm+o.widthMm/2)/L,m=new DOMPoint(w.start.x+(w.end.x-w.start.x)*t,w.start.y+(w.end.y-w.start.y)*t).matrixTransform(document.querySelector('#plan').getScreenCTM());
+  return {id:o.id,x:m.x,y:m.y,n:document.elementsFromPoint(m.x,m.y).filter(e=>e.matches?.('[data-opening]')).length};}).filter(c=>c.n>1&&c.x>0&&c.y>0&&c.x<innerWidth&&c.y<innerHeight));
+ assert.ok(stacked.length>0,'some opening targets overlap at this zoom');
+ for(const c of stacked.slice(0,4)){await page.evaluate(()=>{select(null);drawer(null);});await page.waitForTimeout(450);await tap(c.x,c.y);assert.deepEqual(await page.evaluate(()=>ui.sel),{kind:'opening',id:c.id},`nearest of ${c.n} overlapping targets`);}
  // Keyboard: from the room list an opening opens with focus on its title; «Volver» is the previous stop.
  if(!mobile){
   const room=await page.evaluate(()=>FloorPlanApp.project.rooms.find(r=>r.id==='rom_child').id);await page.evaluate(id=>{select({kind:'room',id});drawer('panel',true);},room);await page.waitForTimeout(350);

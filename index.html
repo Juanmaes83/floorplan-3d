@@ -1681,7 +1681,11 @@ svg.addEventListener('pointerdown', e => {
   const p = toMM(e);let t = e.target, labelRoom = null;
   // The 44 px opening target only wins over empty floor: away from the wall itself, furniture and room labels
   // under the pointer keep priority, so a small zoom does not turn a bed or a room name into a door.
-  const hitOpening = ui.tool === 'select' && t.closest('[data-opening]');
+  let hitOpening = ui.tool === 'select' && t.closest('[data-opening]');
+  // Zoomed out, several 44 px targets can overlap: the opening whose span is nearest to the point wins, not the last drawn.
+  if (hitOpening){ const span = id => { const o = project.openings.find(x => x.id === id), w = o && project.walls.find(x => x.id === o.wallId); if (!w) return Infinity; const L = Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y), ux = (w.end.x-w.start.x)/L, uy = (w.end.y-w.start.y)/L;
+      return FloorPlanTracing.segmentPoint(p, {x:w.start.x+ux*o.offsetMm, y:w.start.y+uy*o.offsetMm}, {x:w.start.x+ux*(o.offsetMm+o.widthMm), y:w.start.y+uy*(o.offsetMm+o.widthMm)}).distance; };
+    hitOpening = document.elementsFromPoint(e.clientX, e.clientY).filter(el => el.matches?.('[data-opening]')).sort((a, b) => span(a.dataset.opening) - span(b.dataset.opening))[0] || hitOpening; }
   if (hitOpening && !window.FloorPlanOpeningUI?.picking()){ const o = project.openings.find(x => x.id === hitOpening.dataset.opening), w = o && project.walls.find(x => x.id === o.wallId);
     if (w && FloorPlanTracing.segmentPoint(p, w.start, w.end).distance > w.thicknessMm/2 + 8/view.s){
       const under = document.elementsFromPoint(e.clientX, e.clientY).find(el => !el.closest('[data-opening]') && el.closest('#plan [data-fid]'));
@@ -1699,7 +1703,7 @@ svg.addEventListener('pointerdown', e => {
   } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
     toggleWall(t.closest('[data-wall]').dataset.wall); return;
   } else if (ui.tool === 'select' && (t.closest('[data-opening]') || window.FloorPlanOpeningUI?.picking())){
-    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, opening:t.closest('[data-opening]')?.dataset.opening, at:p, moved:false};
+    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, opening:(hitOpening && t === e.target ? hitOpening : t.closest('[data-opening]'))?.dataset.opening, at:p, moved:false};
   } else if (ui.tool === 'select' && t.closest('[data-fid]')){
     const f = getF(t.closest('[data-fid]').dataset.fid);
     if (ui.sel?.id !== f.id) select({kind:'furn', id:f.id});
