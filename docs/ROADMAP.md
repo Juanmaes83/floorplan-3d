@@ -5,6 +5,12 @@
 
 Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La evaluación inicial desembocó en la aprobación del contrato de edificio (opción D, #50) y su primer corte (#51); eso no aprueba D-16, un contrato 2.0 ni las demás funciones de LoRA LAB. El estudio comparativo sigue en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), con límites de evidencia.
 
+## En revisión, sin integrar (19-10-2026)
+
+- [#60](https://github.com/Juanmaes83/floorplan-3d/pull/60): seleccionar y editar puertas y ventanas en el plano, con el panel abierto al seleccionar y el cierre funcional de su segunda ronda.
+- PR general de interfaz, apilada sobre #60: patrón de paneles y retorno, barra superior por tarea, «Generar», castellano y mensajes de calibración. [Roadmap 2 §3.6](ROADMAP-2-proposal.md#36-patrón-de-paneles-generar-castellano-y-calibración-19-10-2026-pr-en-borrador-apilada-sobre-60).
+- Ninguna está fusionada ni desplegada. CI no ejecutó pasos, y no hay validación con GPU real, teléfonos físicos ni personas del público D-01.
+
 ## Estado vigente tras la integración del 17-10-2026
 
 Las PR [#38](https://github.com/Juanmaes83/floorplan-3d/pull/38) (importación guiada multiformato), [#39](https://github.com/Juanmaes83/floorplan-3d/pull/39) (presentación por estancias y recorrido) y [#42](https://github.com/Juanmaes83/floorplan-3d/pull/42) (piloto Blender offline) están **fusionadas en master**, en ese orden. Merge commits: `34aff2c2b521b004aa007bfa8a7ed2356013dfb4`, `85aaf771ec3b1622313cbfd8bd44962ca2019b0a` y `05d5514fd46130bf81c9a1e6e6d2f0929518fad7`. Las referencias a PR abiertas en secciones fechadas anteriores describen el momento de aquellas auditorías. La presentación web, el piloto Blender y la referencia visual Candidate 04 de LAB Astra conviven; no se sustituye una por otra ni se declara el piloto de calidad Candidate 04.

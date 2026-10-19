@@ -139,6 +139,25 @@ La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-
 
 Debe medirse con personas y decidir antes las reglas de unión de muros. No forma parte de esta PR.
 
+### 3.6 Patrón de paneles, «Generar», castellano y calibración (19-10-2026, PR en borrador apilada sobre #60)
+
+Revisión general de la interfaz, separada del corte de huecos. [Diseño](product/editor-ux-pattern-2026-10-19.md) · [QA](qa/editor-ux-2026-10-19.md).
+
+- **Panel automático.** Los huecos abren su panel al seleccionarse, por decisión de Juanma en #60. En escritorio, estancias y muebles muestran la columna de propiedades al seleccionarse. En móvil conservan «Propiedades» para no tapar el plano.
+- **Paneles y retorno.** Cabecera común con «Volver» primero y fijo. «Volver» sube un nivel: mueble → estancia → vista general, hueco → estancia, edición → herramientas de «Plano propio». En móvil, «Ver en el plano» va en la cabecera. Los grupos son plegables, las ayudas largas empiezan plegadas y hay acciones fijas donde hay un formulario.
+- **Barra superior por tarea.** Proyecto, edición y ajustes/archivo. «Vaciar» pasa a «Archivo» y las capas, a «Mostrar ▾».
+- **«Generar».** Es el recorrido de creación desde la bienvenida: primero las tres entradas, luego qué se obtiene y sus límites. El foco va al título y la guía puede compactarse. No promete capacidades nuevas.
+- **Castellano.** No aparecen IDs ni claves internas en los recorridos revisados. Los nombres del ejemplo se muestran traducidos sin cambiar el dato, y los nombres escritos por la persona se respetan. Una prueba lo vigila.
+- **Calibración.** La protección es la misma. Los mensajes dicen qué falta o qué no concuerda, con cifras y cómo recalibrar.
+
+**Pendiente, fuera de esta entrega:**
+
+- hoja inferior en teléfono vertical;
+- teclado dentro del plano SVG;
+- unificar «Plano propio» con el panel de estancia (siguiente candidato de §3.5);
+- progreso propio para importaciones grandes;
+- validación con personas del público D-01.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
