@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 13488)
-Total output lines: 499
-
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 
@@ -158,7 +155,64 @@ Tratamiento de las PR históricas (revisado el 30-09-2026 tras integrar PR #8):
    del plan histórico ni se inventa otro umbral en esta tarea.
 4. Juanma confirmó el 30-09-2026 que el flujo funciona en su teléfono físico.
    No consta el modelo ni una medición de rendimiento; medir rendimiento físico
-   sigue pendiente. SwiftShader y emulación t…1488 tokens truncated…ffa1368c95981`; no se toma como inventario actual. Antes de publicar cada modelo se vuelve a comprobar el fichero y hash, sus dimensiones verificables, compatibilidad del formato/extensiones, atribución y el alcance concreto del permiso. Se conserva el Asset Lab en solo lectura; los modelos se incorporarán al catálogo de este repo únicamente después de pasar esas comprobaciones.
+   sigue pendiente. SwiftShader y emulación táctil solo acreditan
+   comportamiento/renderizado por software.
+5. PDF y HEIC/HEIF diferidos: [decisión de formatos](technical/image-formats.md).
+   WebP estático quedó integrado por PR #7 con pruebas del recorrido completo;
+   quedan excluidos WebP animado y con EXIF.
+6. La corrección de importación fue revisada y aprobada por Juanma antes de
+   fusionar PR #7. La preview de referencia correspondió al SHA
+   `cbadb7d9a980eb688d9c7aaa1c768cc31e95bc6e`.
+
+La preparación de entrada se integró por PR #8 en `387a9bfd57630bced0d9fc1f858d9a0f3c181229` (protocolo, plantilla vacía y calculador offline). En ese cierre F2 estaba no iniciada; es un registro histórico. Después, PR #9 integró el prototipo experimental, sin completar la evaluación ni cambiar los umbrales pendientes.
+
+## Cierre del prototipo experimental F2 — PR #9 (30-09-2026)
+
+Juanma aprobó y fusionó la [PR #9](https://github.com/Juanmaes83/floorplan-3d/pull/9) hacia `master`. HEAD revisado: `3e3e6117770d97cb6e82f73fa06613d31a506019`; merge commit: `10f7439b3fc86b0a0bd325d94531709d45cbcad4`. El deployment de Vercel estuvo `READY` y se verificó contra el mismo SHA. La revisión humana aprobó el prototipo. La preview requiere autorización Vercel; el enlace temporal de revisión no es permanente.
+
+F2 queda en estado **prototipo experimental integrado; no validado**. La prueba reportada fue 98/98 antes del último ajuste y 13/13 dirigida F2 después; no se afirma que la suite completa se repitiera tras ese ajuste. 3D se verificó con SwiftShader. No se evaluó con planos reales, no se midió rendimiento en teléfono físico y no se establecieron umbrales. La siguiente etapa es preparar y registrar los datos locales autorizados, completar cinco sesiones manuales de línea base, congelar al menos veinte planos de evaluación con referencias y acordar criterios antes de atribuir precisión, mejora temporal o cobertura a la asistencia.
+
+La interfaz no se desplegó manualmente a producción; Vercel genera deployments vinculados al flujo Git. Los links y evidencias por SHA constan en [DEVELOPMENT-WORKFLOW.md](DEVELOPMENT-WORKFLOW.md) y el [informe técnico](technical/F2-wall-assist.md).
+
+CRM, cuentas, backend, IA, Asset Lab, precios y publicación de planos a terceros
+no forman parte de este seguimiento. Integraciones futuras requerirán alcance,
+contratos, permisos y evaluación propios.
+
+
+## Evaluador F2 y decisión métrica (30-09-2026)
+
+La PR #10 quedó fusionada en `master` mediante merge commit `c8a62de89f3fa3c5cd4e6de75ec514f56929a6e7`. Incorpora un evaluador geométrico offline con datos sintéticos de prueba; no cambia el detector ni la interfaz. Juanma aprobó el método de longitud cubierta y la regla explícita de que este comparador de ejes no acredita diagonales, que siguen en los denominadores globales. La exhaustividad sobre ejes soportados se muestra aparte. Esta decisión no establece tolerancia o umbrales de producto ni valida F2. El desarrollo del prototipo puede continuar con la evidencia sintética y las limitaciones declaradas; cinco sesiones y veinte planos reales se reservan para la validación empírica posterior y no son un bloqueo de implementación. La propuesta entonces candidata de exportar sugerencias crudas bajo acción expresa del usuario ya se integró por PR #11, sin imágenes, red ni persistencia automática ni modificación de FloorPlanProjectV1. Véase el cierre siguiente; no se marca esa implementación como pendiente.
+
+
+
+## Exportación cruda F2 — cierre de PR #11 (30-09-2026)
+
+La [PR #11](https://github.com/Juanmaes83/floorplan-3d/pull/11) integró en
+`master` la exportación local voluntaria de sugerencias crudas y su conversión
+para el evaluador. Merge commit: `49ea432f7d8eba75042e00762c902a7d3830040d`;
+HEAD de la PR revisado: `86479409567efb5df180c4d161ec9232059fa210`.
+No cambia el detector ni FloorPlanProjectV1, y no persiste sugerencias ni imágenes.
+
+La preview Vercel fue `READY` para el SHA revisado y está protegida por
+autenticación Vercel. Eso acredita el deployment; no acredita acceso público ni
+una revisión humana visual completada. No se hizo despliegue manual a producción.
+[Informe técnico actualizado](technical/F2-raw-export.md).
+
+F2 continúa **experimental y no validada empíricamente**. Codex reportó 110/110
+Node/navegador, 10/10 schema, 12/12 readiness, 16/16 evaluador y 3/3 exportación;
+la revisión del reporte no repitió esas suites. 3D usa SwiftShader, sin medición
+de rendimiento en GPU o teléfono físico. Las cinco sesiones autorizadas y los
+veinte planos con referencias siguen pendientes para evaluar calidad, tiempos y
+umbrales; no bloquean continuar el desarrollo de F2.
+
+
+## F3 — entrega inicial integrada (PR #12, 30-09-2026)
+
+PR #12 ([F3: initial authorized 3D asset catalog](https://github.com/Juanmaes83/floorplan-3d/pull/12)) fue revisada visualmente y aprobada por Juanma antes del merge. HEAD revisado: `b3c72d0c6fae1290c9a7b4e449aa388c3f878531`; base: `fdd3d803d537871ce9b2e37b2f87578dd5ae7f1f`; merge commit: `95fcf0da989a9e3bf85f8747c19fc4a9a13426ab`. Vercel confirmó READY con el SHA de la rama; deployment `dpl_F8NcvTSZF37VdrUBi2c7Kqx9W8uw`, preview [protegida por Vercel Authentication](https://floorplan-3d-git-feat-f3-autho-dce6ec-juanma-espinosas-projects.vercel.app/). No se cambió production manualmente.
+
+La entrega integra catálogo genérico con alturas explícitas, asociación de `assetRef`, normalización/validación de GLB local, preservación del objeto y fallback. Incluye un banco sintético original con licencia MIT específica. No incluye modelos de Asset Lab ni catálogo comercial.
+
+Juanma confirma el 30-09-2026 que el proyecto tiene permiso para usar los assets de Asset Lab. Esta confirmación sustituye el bloqueo previo de autorización para continuar el trabajo. La auditoría referenciada en el informe es una instantánea histórica del commit `5dc7b182c5c227472b84aea66a3ffa1368c95981`; no se toma como inventario actual. Antes de publicar cada modelo se vuelve a comprobar el fichero y hash, sus dimensiones verificables, compatibilidad del formato/extensiones, atribución y el alcance concreto del permiso. Se conserva el Asset Lab en solo lectura; los modelos se incorporarán al catálogo de este repo únicamente después de pasar esas comprobaciones.
 
 **Estado en aquel cierre de #12:** F3 inicial integrada; catálogo externo aún pendiente entonces. Después se integraron #17, #19 y #20 dentro de sus alcances. Nuevos candidatos, extensiones y perfiles generales requieren otra entrega. La medición en móvil físico sigue pendiente; SwiftShader no la sustituye. F2 continúa experimental y no validada empíricamente.
 
