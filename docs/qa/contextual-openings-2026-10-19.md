@@ -149,3 +149,46 @@ Los resultados de cada suite en el SHA final, con versiones, comandos y consola,
 - La atribución por sondas no resuelve estancias solapadas, nombres repetidos ni lados exteriores: en esos casos se muestran lados numerados.
 - La edición de muro en «Plano propio» conserva los huecos sólo si se invierte el eje; un cambio de longitud sigue sujeto al validador.
 - Los solapes heredados no se corrigen solos ni bloquean la apertura.
+
+## 7. Cierre funcional, segunda ronda (19-10-2026)
+
+**Estado recuperado antes de editar**
+
+- `master` sigue en `d9cd11b`.
+- La rama tenía un commit nuevo de Juanma, `292b55f`, que oculta IDs internos en el panel y en los mensajes de la guarda. Se integró por avance rápido, sin reescribir nada.
+- Los checks de Actions de `292b55f` figuran como fallidos, pero no llegaron a ejecutarse (`runner_id` 0, un segundo, sin registros): **CI no ejecutada**.
+- La preview de Vercel figuraba «Ready». No se publica su enlace de acceso.
+- La especificación (`docs/opening-contextual-ux-gate`) se leyó en su versión actual (`0effeed`).
+
+**Decisión de producto aplicada (Juanma, 19-10-2026):** al seleccionar una puerta o ventana, sus propiedades se abren directamente, en escritorio y en el cajón móvil, sin pulsar «Propiedades». Se abren igual desde la lista de la estancia, desde el aviso de solapes heredados y al terminar «Añadir». Cerrar el panel conserva la selección.
+
+**Casos de las capturas que tocan este corte**
+
+| Caso | Reproducción en el código previo (`292b55f`) | Clase | Corrección y prueba |
+| --- | --- | --- | --- |
+| Las propiedades no aparecían hasta activar «Propiedades» | Se reprodujo. En el ejemplo guiado la columna de propiedades empieza plegada también a 1440 px; tocar una puerta sólo mostraba la barra inferior. En móvil, el cajón no se abría. | Descubribilidad | `openOpening()` abre el panel. Prueba: panel visible tras el toque en los tres tamaños, también con la columna plegada en escritorio. |
+| En «Añadir puerta» la instrucción era discreta y la salida dependía de Escape | Se reprodujo. La instrucción iba en la barra de estado, cortada a 390 px, y en un teléfono no hay Escape. | Descubribilidad y funcional en táctil | Banner sobre el plano con el paso, «Cancelar» visible y errores junto a la causa. La persona puede reintentar. El encuadre de la estancia deja sus muros fuera del banner. Prueba: muro de otra estancia, solape, «Cancelar», Escape y hueco fuera de límites en la propuesta. |
+| Ventana de ancho 3070 mm en un muro de 3070 mm (ejemplo) | Se reprodujo. En la plantilla del ejemplo, cada puerta y ventana tiene su propio tramo de muro, exactamente de su ancho: `wal_ref-window-1` mide 3070 mm y contiene `opn_window-1` de 3070 mm en la posición 0. Ocurre en los 18 huecos de la plantilla. | Dato de ejemplo con mensaje mejorable; no es un defecto de selección | No se cambia el dato. El panel indica que el hueco ocupa todo su tramo y que ensancharlo exige alargar el tramo en «Plano propio». «Centrar en el muro» muestra el muro libre a cada lado. |
+
+Los demás casos de las capturas (nombre chino y «left» en un modal, «Volver a la vista general» al final del panel, mensaje de la segunda cota) pertenecen a la PR general de interfaz, que los clasifica y corrige.
+
+**Otros defectos encontrados y corregidos en esta ronda**
+
+1. **Prioridad de toque.** El objetivo de 44 px de un hueco tapaba, con poco zoom, el nombre de una estancia y muebles junto al muro. Con el ejemplo a 844×390, tocar el nombre «Dormitorio juvenil» seleccionaba un hueco. Ahora el objetivo ampliado sólo gana sobre suelo vacío; tocar el propio muro sigue seleccionando el hueco. Prueba con zoom forzado en el ejemplo.
+2. **El banner tapaba los muros** en pantallas bajas: un toque válido sobre el muro superior caía en el banner. Ahora se reencuadra la estancia bajo el banner, también cuando crece con un error.
+3. **Error lejos de su causa.** «No cabe» aparecía debajo de «Apertura», lejos del ancho. Ahora aparece bajo el campo que lo causa, marcado `aria-invalid` y con su grupo abierto.
+4. **Etiqueta errónea introducida en esta ronda y corregida antes del commit:** «Distancia desde el extremo A del muro». En el plano, A es un extremo del hueco y «0» el inicio del muro. Ahora pone «Distancia desde el inicio del muro «0»». La guarda dice «antes del inicio del muro, marcado «0» en el plano».
+
+**Panel**
+
+- Cabecera con «← Estancia «X»» (o «← Vista general»), título y contexto.
+- «Tipo» siempre visible.
+- Grupos plegables:
+  - «Posición y medidas», abierto para ventanas, huecos de paso, propuestas y solapes heredados;
+  - «Apertura», sólo para puertas abatibles y abierto;
+  - «Revisión del hueco», plegado.
+- El estado de los grupos se conserva mientras se edita, también tras el cambio de tipo.
+- Pie fijo: «Aplicar cambios», «Descartar cambios», «Ver en el plano» (estrecho), «Deshacer», «Rehacer» y «Eliminar hueco». «Deshacer/Rehacer» esperan a que la vista previa se aplique o se descarte.
+- Tras aplicar se lee «Cambio aplicado. Puedes deshacerlo con «Deshacer».».
+
+**Sin cambios:** `FloorPlanProjectV1`, el validador, las reglas geométricas y los datos importados. No hay tipos, estilos, familias, cortinas ni campos nuevos.
