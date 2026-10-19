@@ -25,7 +25,13 @@
  const bar=el('section',undefined,undefined,'guide-bar');bar.id='guideBar';bar.setAttribute('aria-label','Objetivo y progreso');header.after(bar);
  const top=el('div',undefined,bar,'guide-top'),identity=el('div',undefined,top,'guide-identity');
  const projectLabel=el('span',undefined,identity,'guide-project'),goalLabel=el('span',undefined,identity,'guide-goal');
- const topActions=el('div',undefined,top,'guide-controls');btn('guidePrevious','',()=>previousTask(),topActions);btn('guideGoalChange','',()=>openGoal(),topActions);btn('guideDetails','',()=>openDetails(),topActions);btn('guideClose','',()=>{state().closed=true;store();render();resume.focus();},topActions);
+ const topActions=el('div',undefined,top,'guide-controls');btn('guidePrevious','',()=>previousTask(),topActions);btn('guideGoalChange','',()=>openGoal(),topActions);btn('guideDetails','',()=>openDetails(),topActions);
+ // Compact guide (default on phones and short screens): goal, current task and its buttons stay; the step list,
+ // the progress line and long descriptions are hidden until «Ver más». The choice is remembered per browser.
+ const compactKey='rubik-guide-compact',compactDefault=()=>matchMedia('(max-width:600px),(max-height:500px)').matches;
+ let compact=(()=>{try{const v=localStorage.getItem(compactKey);return v===null?compactDefault():v==='1';}catch{return compactDefault();}})();
+ const compactBtn=btn('guideCompact','',()=>{compact=!compact;try{localStorage.setItem(compactKey,compact?'1':'0');}catch{}applyCompact();},topActions);
+ function applyCompact(){bar.classList.toggle('guide-compact',compact);compactBtn.textContent=compact?tx('Ver más','Show more','显示更多'):tx('Ver menos','Show less','显示更少');compactBtn.setAttribute('aria-expanded',String(!compact));compactBtn.title=compact?tx('Mostrar etapas y progreso de la guía','Show guide stages and progress','显示指南阶段和进度'):tx('Ocultar etapas y progreso para dejar más plano a la vista','Hide stages and progress to show more of the plan','隐藏阶段和进度以显示更多平面图');}btn('guideClose','',()=>{state().closed=true;store();render();resume.focus();},topActions);
  const progressLine=el('div',undefined,bar,'guide-progress-line'),progressText=el('strong',undefined,progressLine),meter=el('div',undefined,progressLine,'guide-progress');meter.setAttribute('role','progressbar');meter.setAttribute('aria-valuemin','0');meter.setAttribute('aria-valuemax','100');const fill=el('span',undefined,meter);
  const optionalText=el('span',undefined,progressLine),steps=el('ol',undefined,bar,'guide-steps');
  for(let i=0;i<5;i++){const li=el('li',undefined,steps),b=btn('guideStage'+i,'',()=>{const p=progress(),tasks=p.tasks.filter(t=>t.stage===i);if(tasks.length){state().current=(tasks.find(t=>t.status!=='completed'&&!t.skipped)||tasks[0]).id;state().manualTask=true;store();render();}else{toast(tx('Esta etapa no requiere tareas para tu objetivo.','This stage has no tasks for your goal.','此阶段没有目标任务。'));}},li);el('span',String(i+1),b,'step-number');el('span',undefined,b,'step-label');}
@@ -33,6 +39,7 @@
  const currentAction=btn('guidePrimary','',()=>runTask(progress().current),current,true);
  const presentAction=btn('guidePresent','',()=>window.FloorPlanPresentation?.open(),current);
  const exampleLine=el('div',undefined,bar,'guide-example'),exampleNote=el('span',undefined,exampleLine);btn('guideCopyExample','',()=>copyExample(),exampleLine);
+ applyCompact();
  const empty=el('div',undefined,$('#stage'),'plan-empty');empty.id='guideEmpty';const emptyBox=el('div',undefined,empty),emptyTitle=el('h2',undefined,emptyBox),emptyText=el('p',undefined,emptyBox);btn('guideEmptyAction','',()=>runTask(progress().tasks.find(t=>t.id==='geometry')),emptyBox,true);
  const announcement=el('p',undefined,undefined);announcement.id='guideAnnouncement';announcement.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';announcement.setAttribute('role','status');announcement.setAttribute('aria-live','polite');document.body.append(announcement);
  function dialog(id){const d=el('dialog',undefined,document.body,'guide-dialog');d.id=id;d.setAttribute('aria-labelledby',id+'Title');return d;}
@@ -68,7 +75,7 @@
   if(!library)throw Error(tx('No está disponible la colección local. Exporta el proyecto.','Local collection is unavailable. Export the project.','本地项目集不可用。请导出项目。'));
   const fromWelcome=welcome.open;pendingEntry={goal};pendingIds=library.list().map(e=>e.id);entryOrigin=origin;closeWelcome();roomReturnToWelcome=fromWelcome;FloorPlanRoomUI.createBlankProject(tx('Mi vivienda','My home','我的住宅'));
  }
- function openWelcome(record=true){closeDialogs(welcome);closeDrawers();if(record)setRoute('welcome');buildWelcome();show(welcome);welcome.querySelector('input')?.focus();}
+ function openWelcome(record=true){closeDialogs(welcome);closeDrawers();if(record)setRoute('welcome');buildWelcome();show(welcome);const heading=welcome.querySelector('#welcomeDialogTitle');heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true});}
  function ownRecoverable(){return library?.all().some(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));}
  function buildWelcome(){welcome.replaceChildren();const shell=el('div',undefined,welcome,'welcome-shell'),brand=el('div',undefined,shell,'welcome-brand'),mark=el('div',undefined,brand,'brand-mark'),glyph=el('span',undefined,mark,'brand-glyph');glyph.setAttribute('aria-hidden','true');for(let i=0;i<4;i++)el('i',undefined,glyph);const words=el('div',undefined,mark);el('strong','Rubik Sota',words);el('small','Floor Plan Designer',words);
   const nav=el('div',undefined,brand,'welcome-nav');
@@ -77,14 +84,15 @@
   const intro=el('section',undefined,shell,'welcome-intro'),left=el('div',undefined,intro);
   el('p',tx('Tu espacio, paso a paso','Your space, step by step','一步一步设计空间'),left,'welcome-eyebrow');const h=el('h1',tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'),left);h.id='welcomeDialogTitle';
   el('p',tx('Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso.','Draw your layout, try furniture and explore your idea in 3D. We guide you from the first step.','绘制布局、尝试家具并在 3D 中浏览。从第一步开始提供指南。'),left,'lead');
-  search(left,'welcome',true);
+  el('p',tx('Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional.','You get an editable 2D plan and its 3D view, stored in this browser. Measurements are indicative, not a professional survey.','你将得到可编辑的 2D 平面图及其 3D 视图，保存在此浏览器中。尺寸仅供参考，不能替代专业测量。'),left,'welcome-result');
   const figure=el('figure',undefined,intro,'welcome-visual');el('span',tx('2D → 3D · A tu ritmo','2D → 3D · At your pace','2D → 3D · 按自己的节奏'),figure,'visual-tag');drawExample(figure);el('figcaption',tx('Proyecto de ejemplo · explora antes de empezar','Example project · explore before starting','示例项目 · 开始前先探索'),figure);
   const entries=el('div',undefined,shell,'welcome-entries');
   for(const [id,icon,title,description,fn]of [
-   ['welcomeUpload','↑',['Subir un plano','Upload a floor plan','上传平面图'],['PDF, imágenes, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisa el resultado; las imágenes necesitan calibración.','PDF, images, DXF, IFC, RoomPlan or a JSON/ZIP project. Review the result; images need calibration.','PDF、图片、DXF、IFC、RoomPlan 或 JSON/ZIP 项目。检查结果；图片需要校准。'],()=>beginUpload()],
-   ['welcomeBlank','+',['Crear desde cero','Create from scratch','从零创建'],['Empieza con un proyecto vacío y crea estancias con las herramientas de dibujo.','Start with an empty project and create rooms using the drawing tools.','从空项目开始，用绘图工具创建房间。'],()=>createOwn('create')],
-   ['welcomeExample','◇',['Probar el ejemplo','Try the example','试用示例'],['Explora una vivienda ya preparada. Después podrás crear tu propia copia.','Explore a prepared home. Then you can create your own copy.','浏览准备好的住宅，然后可创建自己的副本。'],()=>example()]
+   ['welcomeUpload','↑',['Subir un plano','Upload a floor plan','上传平面图'],['Si ya tienes un plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisarás el resultado antes de usarlo; las imágenes se calibran con una medida conocida.','If you already have a plan: PDF, image, DXF, IFC, RoomPlan or a JSON/ZIP project. You review the result before using it; images are calibrated with a known measurement.','如果已有平面图：PDF、图片、DXF、IFC、RoomPlan 或 JSON/ZIP 项目。使用前先检查结果；图片需用已知尺寸校准。'],()=>beginUpload()],
+   ['welcomeBlank','+',['Crear desde cero','Create from scratch','从零创建'],['Proyecto vacío: añade estancias indicando ancho y fondo, o dibújalas sobre el plano.','An empty project: add rooms by width and depth, or draw them on the plan.','空项目：输入宽度和进深添加房间，或在平面图上绘制。'],()=>createOwn('create')],
+   ['welcomeExample','◇',['Probar el ejemplo','Try the example','试用示例'],['Explora en 2D y 3D una vivienda ya preparada. Para guardar cambios como tuyos, crea una copia.','Explore a prepared home in 2D and 3D. To keep changes as yours, create a copy.','在 2D 和 3D 中浏览准备好的住宅。要保存为自己的修改，请创建副本。'],()=>example()]
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
+  const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
   if(ownRecoverable())btn('welcomeContinue',tx('Continuar mi proyecto →','Continue my project →','继续我的项目 →'),()=>{const own=library.all().find(e=>e.id===library.activeId()&&data.entries[e.id]?.kind==='own')||library.all().find(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));if(own)switchProject(library.open(own.id));closeWelcome();render();},foot);
  }

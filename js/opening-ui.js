@@ -63,9 +63,6 @@
   const go=button('openingApply',adding?'Aplicar y añadir':'Aplicar cambios',()=>{if(!ready)throw Error(error||'No hay cambios que aplicar.');apply(draft.project,id,adding?'Hueco añadido. Puedes deshacerlo con «Deshacer».':undefined);},'btn primary');go.disabled=!ready;
   if(!ready)go.title=error?'Corrige el error indicado para poder aplicar.':'Cambia algún valor para poder aplicar.';
   if(adding||draft||error)button('openingDiscard',adding?'Descartar':'Descartar cambios',discard);
-  // On narrow screens the panel is a drawer over the plan: «Ver en el plano» closes it and keeps the selection and
-  // any preview, with «Aplicar / Editar / Descartar» or «Propiedades» in the bottom bar.
-  const look=button('openingShowPlan','Ver en el plano',()=>{closeDrawers();renderFab();});look.classList.add('narrow-only');
   // History is reachable from the panel; while a preview is pending it must be applied or discarded first.
   const busy=!!draft||!!error;
   const u=button('openingUndo','Deshacer',()=>undo(),'btn',more),r=button('openingRedo','Rehacer',()=>redo(),'btn',more);
@@ -93,6 +90,9 @@
   const back=el('button',sideRoom?`← Estancia «${display(sideRoom.name)}»`:'← Vista general',head,{type:'button',class:'btn panel-back',id:'openingBack','data-panel-back':''});
   back.onclick=()=>{if(adding){discard();return;}select(sideRoom?{kind:'room',id:sideRoom.roomId}:null);};
   if(adding)back.title='Descarta la propuesta y vuelve a la estancia.';
+  // On narrow screens the panel is a drawer over the plan: «Ver en el plano» closes it and keeps the selection and
+  // any preview, with «Aplicar / Editar / Descartar» or «Propiedades» in the bottom bar. Same place as in every panel.
+  const look=el('button','Ver en el plano',head,{type:'button',class:'btn narrow-only panel-plan',id:'openingShowPlan','data-panel-plan':''});look.onclick=()=>{closeDrawers();renderFab();};
   el('h3',`${adding?'Nueva ':''}${O.LABEL[o.kind]}${adding?' · vista previa':''}`,head,{id:'openingTitle',tabindex:'-1'});
   el('p',`Muro seleccionado · ${L} mm · planta activa`,head,{class:'muted opening-id panel-context'});
   const legacy=O.conflicts(project).filter(c=>c.a===id||c.b===id);

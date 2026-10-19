@@ -22,8 +22,8 @@
   if(!library)return toast('Colección local no disponible; exporta tu proyecto.',6000);start('Nuevo proyecto');
   element('p','Cada proyecto se guarda por separado en este navegador. Puedes abrir los anteriores en Proyectos.');
   const name=input('newProjectName','Nombre del proyecto','Mi vivienda','text',body);
-  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;createBlankProject(name.value.trim());}catch(e){error.textContent=e.message;}});createBlank.classList.add('primary');
-  button('newProjectImage','Desde una imagen',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean||clean.length>120)throw Error('Nombre: entre 1 y 120 caracteres.');close();FloorPlanTraceUI.openImage(true,clean);}catch(e){error.textContent=e.message;}});
+  const createBlank=button('newProjectBlank','Plano vacío',()=>{try{if(!name.reportValidity())return;createBlankProject(name.value.trim());}catch(e){error.textContent=human(e.message);}});createBlank.classList.add('primary');
+  button('newProjectImage','Desde una imagen',()=>{try{if(!name.reportValidity())return;const clean=name.value.trim();if(!clean||clean.length>120)throw Error('Nombre: entre 1 y 120 caracteres.');close();FloorPlanTraceUI.openImage(true,clean);}catch(e){error.textContent=human(e.message);}});
   element('p','Imagen PNG, JPG/JPEG o WebP estática · hasta 15 MiB y 8000 px por lado. No se crea otro proyecto si cancelas o la imagen no es válida. Calibra y traza con Plano propio.');button('roomDesignCancel','Cancelar',close);name.focus();
  }
  function createBlankProject(name='Mi vivienda'){
@@ -33,7 +33,7 @@
  function setupPreview(){
   preview=element('section');preview.id='roomDesignPreview';preview.setAttribute('aria-label','Vista previa del plano');
   const row=element('div');row.className='actions';const review=button('roomDesignReview','Ver cambio',()=>{},row);review.type='submit';form.append(row);
-  confirmButton=button('roomDesignConfirm','Confirmar y guardar',()=>{try{if(!result)throw Error('Revisa la vista previa primero.');if(result.requiresOpenings&&!consent?.checked)throw Error('Confirma explícitamente el movimiento de puertas y ventanas.');apply(result.project,result.roomId);}catch(e){error.textContent=e.message;}});confirmButton.classList.add('primary');confirmButton.disabled=true;actions();
+  confirmButton=button('roomDesignConfirm','Confirmar y guardar',()=>{try{if(!result)throw Error('Revisa la vista previa primero.');if(result.requiresOpenings&&!consent?.checked)throw Error('Confirma explícitamente el movimiento de puertas y ventanas.');apply(result.project,result.roomId);}catch(e){error.textContent=human(e.message);}});confirmButton.classList.add('primary');confirmButton.disabled=true;actions();
   form.addEventListener('input',invalidate);form.addEventListener('change',invalidate);
  }
  function invalidate(){result=null;confirmButton.disabled=true;preview.replaceChildren();error.textContent='';}
@@ -44,23 +44,25 @@
   // Existing furniture stays at its world coordinates; openings show both positions.
   for(const o of project.objects){const rect=document.createElementNS(svgPreview.namespaceURI,'rect');for(const [key,val]of Object.entries({x:-o.size.widthMm/2,y:-o.size.depthMm/2,width:o.size.widthMm,height:o.size.depthMm,fill:'none',stroke:'#525252','stroke-width':1,'vector-effect':'non-scaling-stroke',transform:`translate(${o.position.x} ${o.position.y}) rotate(${o.rotationDeg})`}))rect.setAttribute(key,val);const caption=document.createElementNS(svgPreview.namespaceURI,'title');caption.textContent=`${o.name}: posición y tamaño conservados`;rect.append(caption);svgPreview.append(rect);}
   for(const [p,old]of [[project,true],[result.project,false]])for(const o of p.openings){const w=p.walls.find(w=>w.id===o.wallId),len=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),dx=(w.end.x-w.start.x)/len,dy=(w.end.y-w.start.y)/len,line=document.createElementNS(svgPreview.namespaceURI,'line');for(const [key,val]of Object.entries({x1:w.start.x+dx*o.offsetMm,y1:w.start.y+dy*o.offsetMm,x2:w.start.x+dx*(o.offsetMm+o.widthMm),y2:w.start.y+dy*(o.offsetMm+o.widthMm),stroke:'#68452c','stroke-width':4,'vector-effect':'non-scaling-stroke'}))line.setAttribute(key,val);if(old)line.setAttribute('stroke-dasharray','4 4');svgPreview.append(line);}
-  element('p','Discontinuo: antes. Continuo: después. Muebles: contorno gris; huecos: líneas gruesas. La vista principal se conserva hasta confirmar.',preview);const list=element('ul',undefined,preview);for(const line of result.impact)element('li',line,list);
+  element('p','Discontinuo: antes. Continuo: después. Muebles: contorno gris; huecos: líneas gruesas. La vista principal se conserva hasta confirmar.',preview);const list=element('ul',undefined,preview);for(const line of result.impact)element('li',human(line),list);
   if(result.requiresOpenings){const label=element('label','Acepto mover los huecos con el muro según el detalle anterior.',preview);consent=element('input',undefined,label);consent.id='roomDesignConsent';consent.type='checkbox';}else consent=null;
   confirmButton.disabled=false;preview.scrollIntoView({block:'nearest'});
  }
- function createRoom(){start('Nueva estancia');element('p',`Proyecto: ${project.name}. Dimensiones interiores de diseño en milímetros; no son una medición profesional.`);form=element('form');form.id='roomDesignForm';
+ // Names are shown with their visible translation (example content); project data keeps the stored names.
+ const shown=n=>typeof nm==='function'?nm(n):n,human=t=>String(t).replace(/«([^»]+)»/g,(m,n)=>`«${shown(n)}»`);
+ function createRoom(){start('Nueva estancia');element('p',`Proyecto: ${shown(project.name)}. Dimensiones interiores de diseño en milímetros; no son una medición profesional.`);form=element('form');form.id='roomDesignForm';
   const name=input('roomDesignName','Nombre de la estancia',`Estancia ${project.rooms.length+1}`,'text'),width=input('roomDesignWidth','Ancho interior (mm)',3000),depth=input('roomDesignDepth','Profundidad interior (mm)',4000);
   width.min=depth.min=100;width.max=depth.max=50000;
-  const options=[['','Independiente · posición X/Y'],...project.rooms.filter(r=>{try{L.mapping(project,r);return true;}catch{return false;}}).flatMap(r=>[[`${r.id}:right`,`A la derecha de ${r.name}`],[`${r.id}:bottom`,`Debajo de ${r.name}`]])];
+  const options=[['','Independiente · posición X/Y'],...project.rooms.filter(r=>{try{L.mapping(project,r);return true;}catch{return false;}}).flatMap(r=>[[`${r.id}:right`,`A la derecha de «${shown(r.name)}»`],[`${r.id}:bottom`,`Debajo de «${shown(r.name)}»`]])];
   const placement=selectInput('roomDesignPlacement','Ubicación',options),b=project.rooms.length?project.rooms.flatMap(r=>r.polygon):[],x=input('roomDesignX','Esquina interior izquierda X (mm)',b.length?Math.max(...b.map(p=>p.x))+1000:0),y=input('roomDesignY','Esquina interior superior Y (mm)',0);
   placement.addEventListener('change',()=>{const [id,side]=placement.value.split(':');x.disabled=y.disabled=!!id;if(id){const r=L.rectangle(project.rooms.find(r=>r.id===id));if(side==='right')depth.value=r.depth;else width.value=r.width;}});
-  element('p','La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia.',form);setupPreview();form.onsubmit=e=>{e.preventDefault();try{const [neighborId,side]=placement.value.split(':');show(L.create(project,{name:name.value,width:Number(width.value),depth:Number(depth.value),x:Number(x.value),y:Number(y.value),neighborId,side}));}catch(e){invalidate();error.textContent=e.message;}};name.focus();
+  element('p','La unión comparte un muro completo: debe coincidir la dimensión del lado vecino. La otra estancia no cambia.',form);setupPreview();form.onsubmit=e=>{e.preventDefault();try{const [neighborId,side]=placement.value.split(':');show(L.create(project,{name:name.value,width:Number(width.value),depth:Number(depth.value),x:Number(x.value),y:Number(y.value),neighborId,side}));}catch(e){invalidate();error.textContent=human(e.message);}};name.focus();
  }
- function dimensions(id){start('Dimensiones de la estancia');const r=project.rooms.find(r=>r.id===id);element('p',`Proyecto: ${project.name} · ${r?.name||'Estancia'}. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan.`);
+ function dimensions(id){start('Dimensiones de la estancia');const r=project.rooms.find(r=>r.id===id);element('p',`Proyecto: ${shown(project.name)} · ${r?shown(r.name):'Estancia'}. Se cambia una dimensión por operación. Los muebles y la escala no se redimensionan.`);
   try{const b=L.rectangle(r);L.mapping(project,r);element('p',`Medidas actuales: ${b.width} × ${b.depth} mm · ${(b.width*b.depth/1e6).toFixed(2)} m².`);form=element('form');form.id='roomDesignForm';const axis=selectInput('roomDesignAxis','Dimensión',[['width',`Ancho actual: ${b.width} mm`],['depth',`Profundidad actual: ${b.depth} mm`]]),value=input('roomDesignValue','Nueva dimensión interior (mm)',b.width),fixed=selectInput('roomDesignFixed','Lado que permanece fijo',[['','Elige un lado fijo'],['left','Izquierdo'],['right','Derecho']]);value.min=100;value.max=50000;fixed.required=true;
    axis.onchange=()=>{value.value=b[axis.value];fixed.replaceChildren();for(const [v,text]of axis.value==='width'?[['','Elige un lado fijo'],['left','Izquierdo'],['right','Derecho']]:[['','Elige un lado fijo'],['top','Superior'],['bottom','Inferior']]){const o=element('option',text,fixed);o.value=v;}};
-   setupPreview();form.onsubmit=e=>{e.preventDefault();try{show(L.resize(project,{roomId:id,axis:axis.value,value:Number(value.value),fixed:fixed.value}));}catch(e){invalidate();error.textContent=e.message;}};value.focus();
-  }catch(e){error.textContent=e.message;actions();}
+   setupPreview();form.onsubmit=e=>{e.preventDefault();try{show(L.resize(project,{roomId:id,axis:axis.value,value:Number(value.value),fixed:fixed.value}));}catch(e){invalidate();error.textContent=human(e.message);}};value.focus();
+  }catch(e){error.textContent=human(e.message);actions();}
  }
  $('#newProjectBtn').onclick=createProject;$('#newRoomBtn').onclick=createRoom;
  window.FloorPlanRoomUI={dimensions,createRoom,createProject,createBlankProject,cancel:close};

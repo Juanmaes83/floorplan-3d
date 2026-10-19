@@ -75,6 +75,11 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 .panel-context{margin:0;font-size:12px}
 .btn.panel-back{display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .panel-view>.opening-legacy{margin:10px 16px 0}
+.panel-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px}.panel-head .panel-back{grid-column:1/-1;grid-row:1;justify-self:start}.panel-head h3{grid-column:1;grid-row:2}.panel-head .panel-plan{grid-column:2;grid-row:2;justify-self:end;min-height:34px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;margin-top:6px}.panel-head .panel-context{grid-column:1/-1;grid-row:3}
+#panel .panel-head h3,#tracePanel .panel-head h3{font-size:16px;margin:8px 0 2px}
+.panel-body{padding:4px 16px 0}.panel-body>.panel-group:first-child{border-top:0}.panel-body>section.opening-legacy{margin:8px 0}
+.panel-body .panel-group section{padding:0;border:0}.panel-body .panel-help section>h3{display:none}
+.panel-body .form{margin-top:4px}
 .panel-view form{padding:4px 16px 0}
 .panel-group{border-bottom:1px solid var(--line);padding:6px 0}.panel-group:last-child{border-bottom:0}
 details.panel-group>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
@@ -190,6 +195,15 @@ main.animating #hint3d{opacity:0}
 .range{display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--muted);font-size:12px}
 .range input{width:100px;accent-color:var(--accent)}
 .menu{position:relative}
+/* Header grouped by task. Row 1: identity and project actions. Row 2: how to edit. Row 3: status, file and settings. */
+@media (min-width:1101px){
+  #presentationBtn{order:-1}#uploadPlanBtn,#uploadCancel{order:0}#newProjectBtn{order:1}#newRoomBtn{order:2}#levelsBtn,#levelBar{order:3}
+  header .hdr-break{order:9;flex-basis:100%;height:0}
+  #viewSeg{order:10}#tools,#modes3d{order:11}header>.grp.only2d:not(#tools),header>.grp.only3d:not(#modes3d):not(#toggles3d){order:12}header>.grp:has(#undo){order:13}#layersMenu,#toggles3d{order:14}#traceBtn{order:15}#paneBtns{order:16}
+  header .hdr-break2{order:19;flex-basis:100%;height:0}
+  header>.spacer{order:20}#scaleConfidence{order:21}#projectsBtn{order:22}header>details.menu:not(#layersMenu){order:23}#langBtn{order:24}#fullscreen{order:25}#guideResume{order:26}header .plan-meta{order:27}
+}
+.layers-pop{min-width:190px}.layers-pop .btn.chip{text-align:left;border-radius:6px}.layers-pop .btn.chip.on::before{content:'✓ ';color:var(--accent)}.layers-pop .btn.chip:not(.on)::before{content:'  ';white-space:pre}
 .menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}
 .menu summary::-webkit-details-marker{display:none}
 .menu-pop{position:absolute;right:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:150px;background:#fff;
@@ -413,16 +427,17 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
     <div class="grp">
       <button class="btn" id="undo" title="撤销 (Ctrl+Z)" data-en-title="Undo (Ctrl+Z)" data-en="Undo">撤销</button>
       <button class="btn" id="redo" title="重做 (Ctrl+Shift+Z)" data-en-title="Redo (Ctrl+Shift+Z)" data-en="Redo">重做</button>
-      <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear">清空布置</button>
     </div>
-    <div class="grp only2d" id="layers">
-      <button class="btn chip on" data-layer="dims" data-en="Dims">尺寸</button>
-      <button class="btn chip on" data-layer="labels" data-en="Rooms">房间</button>
-      <button class="btn chip on" data-layer="furn" data-en="Furniture">家具</button>
-      <button class="btn chip" data-layer="grid" data-en="Grid">网格</button>
-      <button class="btn chip" data-layer="bearing" data-en="Bearing walls">承重墙</button>
-      <button class="btn chip on" data-layer="wallSnap" title="拖动家具时贴墙吸附" data-en-title="Snap furniture to walls while dragging" data-en="Wall snap">贴墙吸附</button>
-    </div>
+    <span class="hdr-break" aria-hidden="true"></span><span class="hdr-break2" aria-hidden="true"></span>
+    <details class="menu only2d" id="layersMenu"><summary class="btn" data-en="Show ▾" data-es="Mostrar ▾">显示 ▾</summary>
+      <div class="menu-pop layers-pop" id="layers">
+        <button class="btn chip on" data-layer="dims" data-en="Dims">尺寸</button>
+        <button class="btn chip on" data-layer="labels" data-en="Rooms">房间</button>
+        <button class="btn chip on" data-layer="furn" data-en="Furniture">家具</button>
+        <button class="btn chip" data-layer="grid" data-en="Grid">网格</button>
+        <button class="btn chip" data-layer="bearing" data-en="Bearing walls">承重墙</button>
+        <button class="btn chip on" data-layer="wallSnap" title="拖动家具时贴墙吸附" data-en-title="Snap furniture to walls while dragging" data-en="Wall snap">贴墙吸附</button>
+      </div></details>
     <div class="grp only3d">
       <button class="btn chip on" data-cut="2.8" data-en="Full walls">全高墙</button>
       <button class="btn chip" data-cut="1.2" data-en="Cut walls">剖切墙</button>
@@ -464,6 +479,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
         <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
+        <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear">清空布置</button>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
     <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
@@ -760,6 +776,8 @@ function translateEs(zh, en){
 }
 // 内置的房间 / 材料 / 家具名称存的是中文；英文界面下显示译名，用户自己改过的名称原样显示
 const NAMES_EN = {
+  // Example content: the reference project's stored name is shown translated; the data keeps it.
+  '三室两厅两卫': 'Example home (3 bedrooms, 2 living areas, 2 bathrooms)',
   '主卧室':'Master Bedroom', '主卫浴':'Master Bath', '小孩房':"Kids' Room", '客卫浴':'Guest Bath', '洗衣阳台':'Laundry Balcony',
   '子女房':"Children's Room", '厨房':'Kitchen', '餐厅':'Dining', '过道':'Hallway', '客厅':'Living Room', '休闲阳台':'Leisure Balcony',
   '主卧飘窗':'Master Bay Window', '子女房飘窗':"Children's Bay Window",
@@ -780,6 +798,8 @@ const NAMES_EN = {
   '大书架':'Large Bookshelf', '立式钢琴':'Upright Piano', '跑步机':'Treadmill', '阅读椅':'Reading Chair', '茶桌':'Tea Table', '休闲椅':'Lounge Chair',
 };
 const NAMES_ES = {
+  // Example content: the reference project's stored name is shown translated; the data keeps it.
+  '三室两厅两卫': 'Vivienda de ejemplo (3 dormitorios, 2 salas, 2 baños)',
   "主卧室": "Dormitorio principal",
   "主卫浴": "Baño en suite",
   "小孩房": "Dormitorio infantil",
@@ -1315,6 +1335,15 @@ function renderPanel(){
   SafeDOM.markup(p, overviewPanel()); bindOverview();
 }
 
+// Shared panel head: «Volver» first and fixed at the top (same place, look and meaning in every panel), the name
+// of what is shown and its context. On narrow screens «Ver en el plano» closes the drawer and keeps the selection.
+function panelHead({title, context = '', back = '', backId = 'back', backTitle = ''}){
+  return `<div class="panel-head">${back ? `<button type="button" class="btn panel-back" id="${backId}" data-panel-back${backTitle ? ` title="${esc(backTitle)}"` : ''}>${esc(back)}</button>` : ''}<button type="button" class="btn narrow-only panel-plan" data-panel-plan>Ver en el plano</button>
+    <h3 id="panelTitle" tabindex="-1">${esc(title)}</h3>${context ? `<p class="muted panel-context">${esc(context)}</p>` : ''}</div>`;
+}
+const group = (key, title, body, open = true, note = '') => `<details class="panel-group" data-group="${key}"${open ? ' open' : ''}><summary>${title}${note ? ` <small>${note}</small>` : ''}</summary><div class="panel-group-body">${body}</div></details>`;
+function bindPanelHead(){ document.querySelectorAll('#panel [data-panel-plan]').forEach(b => b.onclick = () => { closeDrawers(); renderFab(); }); }
+function roomOf(x, y){ return geometry.rooms.find(r => { let inside = false; for (let i = 0, j = r.poly.length - 1; i < r.poly.length; j = i++){ const [ax, ay] = r.poly[i], [bx, by] = r.poly[j]; if ((ay > y) !== (by > y) && x < (bx - ax) * (y - ay) / (by - ay) + ax) inside = !inside; } return inside; }); }
 function overviewPanel(){
   const rows = geometry.rooms.map(r => {
     const st = state.rooms[r.id];
@@ -1332,20 +1361,20 @@ function overviewPanel(){
   const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
   const overlaps = FloorPlanOpenings.conflicts(project);
   const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => { const o = project.openings.find(x => x.id === id); return `<button class="btn" data-opening-fix="${esc(id)}" title="${esc(id)}">${o ? esc(FloorPlanOpenings.LABEL[o.kind] + ' · ' + o.offsetMm + '–' + (o.offsetMm + o.widthMm) + ' mm') : esc(id)}</button>`; }).join('')}</div></section>` : '';
-  return `${legacy}
-  <section><h3>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></h3>
+  return `<div class="panel-view overview-panel">${panelHead({title:'Vista general del plano', context:`${nm(project.name)} · ${fmt(tot)} m² útiles`})}<div class="panel-body">${legacy}
+  <details class="panel-group" data-group="areas" open><summary>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></summary>
     <table>${rows}</table>
     <div class="total"><span>${tr('套内使用面积','Net floor area')}</span><b>${fmt(tot)} m²</b></div>
-    <div class="muted" style="font-size:11px;margin-top:4px">${tr('* 飘窗不计入使用面积；面积按墙体内净尺寸计算','* Bay windows are excluded; areas use net inner wall dimensions')}</div></section>
-  <section><h3>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></h3>
+    <div class="muted" style="font-size:11px;margin-top:4px">${tr('* 飘窗不计入使用面积；面积按墙体内净尺寸计算','* Bay windows are excluded; areas use net inner wall dimensions')}</div></details>
+  <details class="panel-group" data-group="estimate" open><summary>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></summary>
     <table>${matRows}</table>
-    ${!showPrices?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</section>
-  <section><h3>${tr('方案统计','Plan Stats')}</h3>
+    ${!showPrices?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</details>
+  <details class="panel-group" data-group="stats" open><summary>${tr('方案统计','Plan Stats')}</summary>
     <div class="stats"><div><small>${tr('家具数量','Furniture')}</small><span class="big">${state.furniture.length}</span></div>
       <div><small>${tr('拆除墙体','Walls removed')}</small><span class="big">${fmt(demLen,1)}</span> m</div></div>
     <div class="actions"><button class="btn" id="clearMeasure">${tr('清除测量','Clear measures')} (${state.measures.length})</button>
-      <button class="btn danger" id="clearFurn">${tr('清空布置','Clear layout')}</button></div></section>
-  ${COARSE ? tr(`<section><h3>触屏操作</h3><div class="kbd">
+      <button class="btn danger" id="clearFurn">${tr('清空布置','Clear layout')}</button></div></details>
+  ${COARSE ? `<details class="panel-group panel-help" data-group="touch"><summary>${tr('触屏操作','Touch Controls')}</summary>` + tr(`<section><h3>触屏操作</h3><div class="kbd">
     <kbd>单指拖动</kbd><span>空白处平移画面</span><kbd>双指</kbd><span>捏合缩放、拖动平移</span>
     <kbd>家具库</kbd><span>点一下放到画面中央，或按住向右拖到指定位置</span>
     <kbd>点家具</kbd><span>选中后拖动移动；拖顶部圆点旋转、右下方块改尺寸</span>
@@ -1359,8 +1388,8 @@ function overviewPanel(){
     <kbd>Toolbar</kbd><span>Bottom bar can rotate / duplicate / delete</span>
     <kbd>Measure</kbd><span>Hold and drag a line, or tap two points</span>
     <kbd>3D walk</kbd><span>Joystick moves, drag to look, tap doors to open</span>
-  </div></section>`) : ''}
-  ${tr(`<section><h3>键盘快捷键</h3><div class="kbd">
+  </div></section>`) + '</details>' : ''}
+  <details class="panel-group panel-help" data-group="keys"><summary>${tr('键盘快捷键','Keyboard Shortcuts')}</summary>${tr(`<section><h3>键盘快捷键</h3><div class="kbd">
     <kbd>拖拽</kbd><span>左侧家具拖入平面图</span><kbd>V</kbd><span>选择 / 移动</span><kbd>M</kbd><span>测量（Shift 水平/垂直）</span>
     <kbd>X</kbd><span>拆改非承重墙（黑色为承重墙）</span><kbd>R</kbd><span>旋转 90°（Shift 反向）</span><kbd>方向键</kbd><span>微调 10mm（Shift 100mm）</span>
     <kbd>⌘/Ctrl D</kbd><span>复制</span><kbd>Delete</kbd><span>删除</span><kbd>⌘/Ctrl Z</kbd><span>撤销</span><kbd>T</kbd><span>切换 2D / 3D</span><kbd>F</kbd><span>适应窗口</span><kbd>Esc</kbd><span>取消选择</span>
@@ -1368,9 +1397,10 @@ function overviewPanel(){
     <kbd>Drag</kbd><span>Drag furniture onto the plan</span><kbd>V</kbd><span>Select / move</span><kbd>M</kbd><span>Measure (Shift: horizontal/vertical)</span>
     <kbd>X</kbd><span>Demolish non-bearing walls (black = bearing)</span><kbd>R</kbd><span>Rotate 90° (Shift reverses)</span><kbd>Arrows</kbd><span>Nudge 10mm (Shift 100mm)</span>
     <kbd>⌘/Ctrl D</kbd><span>Duplicate</span><kbd>Delete</kbd><span>Delete</span><kbd>⌘/Ctrl Z</kbd><span>Undo</span><kbd>T</kbd><span>Toggle 2D / 3D</span><kbd>F</kbd><span>Fit to window</span><kbd>Esc</kbd><span>Deselect</span>
-  </div></section>`)}`;
+  </div></section>`)}</details></div></div>`;
 }
 function bindOverview(){
+  bindPanelHead();
   document.querySelectorAll('#panel tr[data-room]').forEach(tr => tr.onclick = () => { select({kind:'room', id:tr.dataset.room}); if (is3D()) window.View3D.flyToRoom(tr.dataset.room); });
   $('#clearMeasure').onclick = () => state.measures.length && mutate(() => state.measures = []);
   document.querySelectorAll('#panel [data-opening-fix]').forEach(b => b.onclick = () => openOpening(b.dataset.openingFix));
@@ -1439,24 +1469,25 @@ function closeDrawers(){ if (narrow()) drawer(null); }
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
-  return `<section><h3>${tr('房间','Room')}</h3>
+  const lvl = window.FloorPlanBuildingUI?.context?.levels > 1 ? ' · planta activa' : '';
+  return `<div class="panel-view room-panel">${panelHead({title:nm(st.name), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
+  <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
     <div class="form"><label class="full">${tr('名称','Name')}<input id="rName" value="${esc(nm(st.name))}"></label></div>
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
       <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
       <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
       <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
-    <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></section>
-  <section><h3>Puertas y ventanas</h3><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></section>
-  <section><button class="btn primary" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></section>
-  <section><h3>${tr('地面材料','Flooring')}</h3><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
-    ${LANG==='es'||!Number.isFinite(MATS[st.mat].price)?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</section>
-  <section><h3>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></h3>
-    <table>${inside.map(f => `<tr class="click" data-fid="${esc(f.id)}"><td>${esc(nm(f.name))}</td><td class="r muted">${f.w}×${f.d}</td></tr>`).join('') || `<tr><td class="muted">${tr('暂无','None')}</td></tr>`}</table>
-    <div class="actions"><button class="btn" id="back">${tr('← 返回总览','← Back to overview')}</button></div></section>`;
+    <div class="muted">${tr(`墙面面积（层高 2.8m，未扣门窗）约 ${fmt(perim(r.poly)*2.8,1)} m²`, `Wall area (2.8m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*2.8,1)} m²`)}</div></details>
+  <details class="panel-group" data-group="room-openings" open><summary>Puertas y ventanas</summary><div class="actions" id="roomOpenings">${project.openings.filter(o => { const sd = FloorPlanOpenings.sides(project, o); return sd.left.roomId === r.id || sd.right.roomId === r.id; }).map(o => `<button class="btn" data-room-opening="${esc(o.id)}">${esc(FloorPlanOpenings.LABEL[o.kind])} · ${o.widthMm} mm</button>`).join('')}</div><div class="actions"><button class="btn" id="roomAddDoor">Añadir puerta</button><button class="btn" id="roomAddWindow">Añadir ventana</button></div><p class="muted">Añadir: después toca uno de sus muros. Editar: pulsa el hueco en el plano o en esta lista.</p></details>
+  <details class="panel-group" data-group="room-dimensions" open><summary>Dimensiones</summary><button class="btn" id="roomDimensions">Editar dimensiones interiores</button><p class="muted">Rectángulos con muros inequívocos. Medidas de diseño orientativas.</p></details>
+  <details class="panel-group" data-group="room-finishes" open><summary>Suelo y paredes</summary><div class="actions"><button class="btn" id="surfaceFloor">Biblioteca de acabados · suelo</button><button class="btn" id="surfaceWall">Acabado de una pared</button></div><p class="muted" id="surfaceRoomStatus"></p><div class="mats">${mats}</div>
+    ${LANG==='es'||!Number.isFinite(MATS[st.mat].price)?'':`<div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>¥${Math.round(a*MATS[st.mat].price*1.05).toLocaleString()}</b></div>`}</details>
+  <details class="panel-group" data-group="room-furniture" open><summary>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></summary>
+    <table>${inside.map(f => `<tr class="click" data-fid="${esc(f.id)}"><td>${esc(nm(f.name))}</td><td class="r muted">${f.w}×${f.d}</td></tr>`).join('') || `<tr><td class="muted">${tr('暂无','None')}</td></tr>`}</table></details></div></div>`;
 }
 function bindRoomPanel(){
-  const id = ui.sel.id;
+  const id = ui.sel.id;bindPanelHead();
   $('#surfaceFloor').onclick=()=>FloorPlanSurfaceUI.open({kind:'floor',id});
   $('#surfaceWall').onclick=()=>FloorPlanSurfaceUI.open({kind:'wall',id});
   FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
@@ -1470,7 +1501,9 @@ function bindRoomPanel(){
 }
 
 function furnPanel(f){
-  return `<section><h3>${tr('家具属性','Furniture')}</h3>
+  const room = roomOf(f.cx, f.cy), back = room ? `← Estancia «${nm(state.rooms[room.id]?.name || '')}»` : '← Vista general';
+  return `<div class="panel-view furn-panel">${panelHead({title:nm(f.name), context:`${tr('家具','Furniture')} · ${f.w} × ${f.d} mm`, back, backTitle: room ? 'Volver a la estancia' : 'Volver a la vista general del plano'})}<div class="panel-body">
+  <details class="panel-group" data-group="furn-data" open><summary>Medidas, posición y modelo</summary>
     <div class="form">
       <label class="full">${tr('名称','Name')}<input id="fName" value="${esc(nm(f.name))}"></label>
       <label>${tr('宽','Width')} (mm)<input type="number" id="fW" value="${f.w}" min="50" step="10"></label>
@@ -1483,13 +1516,10 @@ function furnPanel(f){
       <label>${tr('旋转','Rotation')} (°)<input type="number" id="fR" value="${f.rot}" step="15"></label>
       <label>${tr('颜色','Color')}<input type="color" id="fC" value="${esc(f.color || typeColor(f.type))}"></label>
     </div>
-    <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div>
-    <div class="actions">
-      <button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button>
-      <button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button>
-      <button class="btn danger" id="aDel">${tr('删除','Delete')}</button><button class="btn" id="back">${tr('← 返回','← Back')}</button>
-    </div></section>
-  <section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section>`;
+    <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div></details>
+  <details class="panel-group panel-help" data-group="furn-help"><summary>Cómo moverlo en el plano</summary><section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section></details></div>
+  <div class="panel-foot actions"><div class="panel-foot-row"><button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button><button class="btn danger" id="aDel">${tr('删除','Delete')}</button></div>
+    <div class="panel-foot-row"><button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button></div></div></div>`;
 }
 function bindFurnPanel(f){
   const upd = (fn) => mutate(() => { const g = getF(f.id); if (g) fn(g); });
@@ -1507,11 +1537,16 @@ function bindFurnPanel(f){
   $('#aDel').onclick = deleteSel;
   $('#aTop').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.push(...state.furniture.splice(i,1)); });
   $('#aBot').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.unshift(...state.furniture.splice(i,1)); });
-  $('#back').onclick = () => select(null);
+  const room = roomOf(f.cx, f.cy);bindPanelHead();
+  $('#back').onclick = () => select(room ? {kind:'room', id:room.id} : null);
 }
 
 /* ======================= 操作 ======================= */
 function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); }
+// On desktop the properties column sits beside the plan, so a tap that selects a room or a piece of furniture shows
+// it even if it was collapsed (the guided mode starts collapsed). On phones the drawer would cover the plan: rooms and
+// furniture keep «Propiedades» in the bottom bar. Not on pointerdown: resizing the plan during a drag would move it.
+function showProperties(){ if (!narrow() && ui.sel) drawer('panel', true); }
 // Selecting a door or window opens its properties directly (decision 19-10-2026): no extra «Propiedades».
 function openOpening(id){ select({kind:'opening', id}); drawer('panel', true); $('#openingTitle')?.focus({preventScroll:true}); }
 function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(ui.sel.id); f.rot = norm(f.rot + d); }); }
@@ -1658,15 +1693,16 @@ function endDrag(cancel){
   }
   if (d.kind === 'pan'){
     if (!cancel && !d.moved && ui.tool === 'select' && window.FloorPlanOpeningUI?.picking()) return FloorPlanOpeningUI.pickAt(d.at);
-    if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else select(d.room ? {kind:'room', id:d.room} : null); }
+    if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
     return;
   }
   if (d.moved){ commit(d.before); renderAll(); }
+  else if (d.kind === 'move' && !cancel) showProperties();
 }
 
 svg.addEventListener('pointerdown', e => {
   if (e.button === 1 || e.button === 2) return;
-  closeDrawers(); $('details.menu').open = false;
+  closeDrawers(); document.querySelectorAll('details.menu[open]').forEach(m => m.open = false);
   if (e.pointerType !== 'mouse'){
     touches.set(e.pointerId, {x:e.clientX, y:e.clientY});
     svg.setPointerCapture(e.pointerId);
@@ -1727,7 +1763,7 @@ svg.addEventListener('pointermove', e => {
   $('#cx').textContent = Math.round(p.x) + ' mm'; $('#cy').textContent = Math.round(p.y) + ' mm';
   if (!drag){
     const room = e.target.closest && e.target.closest('[data-room]');
-    SafeDOM.markup($('#hover'), room ? `<b>${esc(state.rooms[room.dataset.room].name)}</b> ${fmt(area(geometry.rooms.find(r=>r.id===room.dataset.room).poly))} m²` : '');
+    SafeDOM.markup($('#hover'), room ? `<b>${esc(nm(state.rooms[room.dataset.room].name))}</b> ${fmt(area(geometry.rooms.find(r=>r.id===room.dataset.room).poly))} m²` : '');
     if (ui.tool === 'measure' && ui.mA){ ui.mCur = snapPoint(p, e.shiftKey); renderMeasure(); }
     return;
   }
@@ -2008,7 +2044,7 @@ if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) $(
 $('#tgLib').onclick = () => drawer('lib');
 $('#tgPanel').onclick = () => drawer('panel');
 // 触屏上点菜单以外的地方收起「文件」菜单
-document.addEventListener('pointerdown', e => { const m = $('details.menu'); if (m.open && !m.contains(e.target)) m.open = false; });
+document.addEventListener('pointerdown', e => { for (const m of document.querySelectorAll('details.menu[open]')) if (!m.contains(e.target)) m.open = false; });
 matchMedia('(max-width:1100px)').addEventListener('change', () => drawer(null));
 drawer(null);                                  // 恢复上次的面板收起状态
 $('#exportPng').onclick = exportPNG;
@@ -2076,7 +2112,7 @@ function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),vari
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
 function listProjects(){
   const list=$('#projectList');list.replaceChildren();const names=Object.fromEntries(library.list().map(e=>[e.id,e.name]));
-  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=(e.variantOf?`${e.name} — variante de «${names[e.variantOf]}»`:e.name)+(e.kind==='building'?` — edificio, ${e.levels} plantas`:'');list.append(option);}
+  for(const e of library.list()){const option=document.createElement('option');option.value=e.id;option.textContent=(e.variantOf?`${nm(e.name)} — variante de «${nm(names[e.variantOf])}»`:nm(e.name))+(e.kind==='building'?` — edificio, ${e.levels} plantas`:'');list.append(option);}
   list.value=library.activeId();$('#projectName').value=library.list().find(e=>e.id===list.value).name;
   $('#projectDelete').disabled=library.list().length===1;
 }
