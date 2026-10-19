@@ -53,7 +53,7 @@ test(`contextual door and window editing ${viewport.width}x${viewport.height}`,{
  assert.deepEqual(start.openings.map(o=>[o.id,o.offsetMm]),p0.openings.map(o=>[o.id,o.offsetMm]),'old overlap imported unchanged');
 
  // 1. The legacy overlap is reported, not rewritten.
- if(narrow)await press('#tgPanel');await page.locator('#openingConflicts').waitFor();assert.match(await page.locator('#openingConflicts').textContent(),/Un par de huecos se solapa/);
+ if(narrow)await press('#tgPanel');await page.locator('#openingConflicts').waitFor();assert.match(await page.locator('#openingConflicts').textContent(),/Un par de huecos se solapa/);assert.doesNotMatch(await page.locator('#openingConflicts .actions').textContent(),/opn_/);assert.match(await page.locator('#openingConflicts [data-opening-fix]').first().textContent(),/^(Puerta abatible|Puerta corredera|Ventana|Hueco de paso) · \d+–\d+ mm$/);
  await shot('01-legacy-notice');await panelClose();
 
  // 2. Tap the door with «Seleccionar»: selected and editable without «Plano propio».

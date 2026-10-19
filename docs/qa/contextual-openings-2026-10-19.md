@@ -72,7 +72,13 @@ Los 8 pasos del flujo contextual para los huecos:
 7. Tocar el muro.
 8. Aplicar y añadir.
 
-**No se compara con LoRA LAB.** Con el flujo contextual, el sentido de la puerta abre hacia la estancia desde la que se añade. En el flujo base queda en el valor por defecto `start/left`.
+**No se compara con LoRA LAB.** En el flujo contextual la puerta se crea abriendo hacia la estancia desde la que se añade, por construcción. En el flujo base queda en el valor por defecto `start/left`, que en esta estancia coincide con la misma dirección; ambos JSON registran `opensIntoRoom: true`, calculado con las sondas de la rama. En otra geometría el valor por defecto puede abrir hacia fuera, y el flujo contextual no.
+
+Resultados en `docs/qa/artifacts/contextual-openings/task/`:
+
+- `master-base-task.json`, medido en `master` con el mismo guion;
+- `base-task.json` y `contextual-task.json`, medidos en esta rama;
+- capturas `*-NN.png` de cada flujo.
 
 ## 4. Pruebas
 
@@ -130,6 +136,7 @@ Los resultados de cada suite en el SHA final, con versiones, comandos y consola,
 2. **Valores del tipo nuevo.** El cambio de tipo enviaba el alto sin tocar e impedía aplicar los valores del nuevo tipo; la consecuencia era «Alto más antepecho supera la altura del muro». Ahora sólo se envían los campos cambiados, y los campos muestran los valores del nuevo tipo.
 3. **Modo oculto.** «Cerrar herramientas» en «Plano propio» dejaba activo el modo de trazado, y el siguiente toque no seleccionaba. Este defecto se midió en #48.
 4. **Nombres sin traducir.** Las estancias aparecían con su nombre interno; ahora usan la traducción visible.
+5. **Identificadores internos en el aviso.** Los botones del aviso de solapes mostraban `opn_old-a`. Ahora muestran tipo y tramo («Ventana · 620–1420 mm»), y la prueba lo comprueba.
 
 ## 6. Límites
 

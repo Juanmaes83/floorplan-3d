@@ -66,7 +66,7 @@ const types={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css',
  const commit=(await require('node:util').promisify(require('node:child_process').execFile)('git',['-C',root,'rev-parse','HEAD'])).stdout.trim();
  const result={flow,commit,viewport:'1440x900, mouse, 2D, software rendering without WebGL',definition:'action = click, tap, field fill or option choice; mode change = control that changes what the next plan tap does',
   actions:log.length,openings:{actions:count('huecos'),modeChanges:log.filter(a=>a.modeChange).length},bySection:{estancia:count('estancia'),huecos:count('huecos'),acabados:count('acabados')},log,
-  outcome:{room:p.rooms[0]?.name,door:door&&{widthMm:door.widthMm,swing:door.swing,review:door.source?.review},window:win&&{widthMm:win.widthMm,sillHeightMm:win.sillHeightMm},
+  outcome:{room:p.rooms[0]?.name,door:door&&{widthMm:door.widthMm,swing:door.swing,review:door.source?.review,opensIntoRoom:door.swing?await page.evaluate(([p,o])=>window.FloorPlanOpenings?FloorPlanOpenings.sides(p,o)[o.swing.side].roomId===p.rooms[0].id:null,[p,door]):null},window:win&&{widthMm:win.widthMm,sillHeightMm:win.sillHeightMm},
    floorPreset:p.materials.find(m=>m.id===p.rooms[0].floorMaterialId)?.appearance.preset,wallFinishes:p.walls.filter(w=>w.surfaceMaterialId).length,
    persistedAfterReload:JSON.stringify([q.rooms,q.openings,q.walls])===JSON.stringify([p.rooms,p.openings,p.walls])},errors};
  await fs.writeFile(path.join(out,`${flow}-task.json`),JSON.stringify(result,null,1));

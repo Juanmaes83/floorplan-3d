@@ -1302,7 +1302,7 @@ function overviewPanel(){
   const dem = geometry.walls.filter(w => w.status === 'demolished');
   const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
   const overlaps = FloorPlanOpenings.conflicts(project);
-  const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => `<button class="btn" data-opening-fix="${esc(id)}">${esc(id)}</button>`).join('')}</div></section>` : '';
+  const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => { const o = project.openings.find(x => x.id === id); return `<button class="btn" data-opening-fix="${esc(id)}" title="${esc(id)}">${o ? esc(FloorPlanOpenings.LABEL[o.kind] + ' · ' + o.offsetMm + '–' + (o.offsetMm + o.widthMm) + ' mm') : esc(id)}</button>`; }).join('')}</div></section>` : '';
   return `${legacy}
   <section><h3>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></h3>
     <table>${rows}</table>

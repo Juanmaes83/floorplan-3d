@@ -1,0 +1,172 @@
+{
+ "flow": "base",
+ "commit": "b35df92b7190bfbb32e1a4bdbfa31cd2c5ccfd8d",
+ "viewport": "1440x900, mouse, 2D, software rendering without WebGL",
+ "definition": "action = click, tap, field fill or option choice; mode change = control that changes what the next plan tap does",
+ "actions": 26,
+ "openings": {
+  "actions": 12,
+  "modeChanges": 4
+ },
+ "bySection": {
+  "estancia": 6,
+  "huecos": 12,
+  "acabados": 8
+ },
+ "log": [
+  {
+   "n": 1,
+   "section": "estancia",
+   "label": "+ Estancia"
+  },
+  {
+   "n": 2,
+   "section": "estancia",
+   "label": "Escribir nombre de la estancia"
+  },
+  {
+   "n": 3,
+   "section": "estancia",
+   "label": "Escribir ancho"
+  },
+  {
+   "n": 4,
+   "section": "estancia",
+   "label": "Escribir profundidad"
+  },
+  {
+   "n": 5,
+   "section": "estancia",
+   "label": "Ver cambio"
+  },
+  {
+   "n": 6,
+   "section": "estancia",
+   "label": "Confirmar y guardar"
+  },
+  {
+   "n": 7,
+   "section": "huecos",
+   "label": "Plano propio (herramientas)"
+  },
+  {
+   "n": 8,
+   "section": "huecos",
+   "label": "Puerta",
+   "modeChange": true
+  },
+  {
+   "n": 9,
+   "section": "huecos",
+   "label": "Tocar el muro inferior"
+  },
+  {
+   "n": 10,
+   "section": "huecos",
+   "label": "Ventana",
+   "modeChange": true
+  },
+  {
+   "n": 11,
+   "section": "huecos",
+   "label": "Tocar el muro superior"
+  },
+  {
+   "n": 12,
+   "section": "huecos",
+   "label": "Seleccionar/editar",
+   "modeChange": true
+  },
+  {
+   "n": 13,
+   "section": "huecos",
+   "label": "Tocar la puerta"
+  },
+  {
+   "n": 14,
+   "section": "huecos",
+   "label": "Escribir ancho de puerta 900"
+  },
+  {
+   "n": 15,
+   "section": "huecos",
+   "label": "Guardar geometría"
+  },
+  {
+   "n": 16,
+   "section": "huecos",
+   "label": "Volver"
+  },
+  {
+   "n": 17,
+   "section": "huecos",
+   "label": "Navegar/cancelar",
+   "modeChange": true
+  },
+  {
+   "n": 18,
+   "section": "huecos",
+   "label": "Cerrar herramientas"
+  },
+  {
+   "n": 19,
+   "section": "acabados",
+   "label": "Tocar la estancia"
+  },
+  {
+   "n": 20,
+   "section": "acabados",
+   "label": "Biblioteca de acabados · suelo"
+  },
+  {
+   "n": 21,
+   "section": "acabados",
+   "label": "Elegir un acabado"
+  },
+  {
+   "n": 22,
+   "section": "acabados",
+   "label": "Aplicar"
+  },
+  {
+   "n": 23,
+   "section": "acabados",
+   "label": "Acabado de una pared"
+  },
+  {
+   "n": 24,
+   "section": "acabados",
+   "label": "Elegir pared en la lista"
+  },
+  {
+   "n": 25,
+   "section": "acabados",
+   "label": "Elegir un acabado"
+  },
+  {
+   "n": 26,
+   "section": "acabados",
+   "label": "Aplicar"
+  }
+ ],
+ "outcome": {
+  "room": "Habitación de invitados",
+  "door": {
+   "widthMm": 900,
+   "swing": {
+    "hinge": "start",
+    "side": "left"
+   },
+   "review": "unreviewed",
+   "opensIntoRoom": true
+  },
+  "window": {
+   "widthMm": 800,
+   "sillHeightMm": 900
+  },
+  "floorPreset": "surface-wood-floor",
+  "wallFinishes": 1,
+  "persistedAfterReload": true
+ },
+ "errors": []
+}
