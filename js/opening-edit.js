@@ -59,7 +59,7 @@
  function guard(before,after,id){
   const o=after.openings.find(x=>x.id===id);if(!o)return [];
   const w=wallOf(after,o),L=length(w),problems=[];
-  if(o.offsetMm<0)problems.push({code:'before-start',message:`El hueco empieza antes del extremo A del muro (posición ${o.offsetMm} mm).`});
+  if(o.offsetMm<0)problems.push({code:'before-start',message:`El hueco empieza antes del inicio del muro, marcado «0» en el plano (posición ${o.offsetMm} mm).`});
   if(o.offsetMm+o.widthMm>L+EPS)problems.push({code:'past-end',message:`El hueco termina en ${o.offsetMm+o.widthMm} mm y el muro mide ${Math.floor(L)} mm: no cabe.`});
   const old=new Map(overlaps(before,o.wallId).map(c=>[pairKey(c),c.overlapMm]));
   for(const c of overlaps(after,o.wallId)){if(c.a!==id&&c.b!==id)continue;const prev=old.get(pairKey(c));if(prev===undefined||c.overlapMm>prev+EPS)problems.push({code:'overlap',other:c.a===id?c.b:c.a,overlapMm:c.overlapMm,message:`Se solaparía ${Math.round(c.overlapMm)} mm con ${describe(after,c.a===id?c.b:c.a)} en el mismo muro.`});}

@@ -68,6 +68,33 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 #plan.tool-select .room:hover{opacity:.82}
 #plan:not(.tool-select) .opening-hit{pointer-events:none}#plan.tool-select .opening-hit{cursor:pointer}
 .opening-panel label{display:block;margin:6px 0}.opening-panel input[type=number],.opening-panel select{width:100%;min-height:40px;padding:6px 8px;font-size:15px}.opening-panel fieldset{border:1px solid var(--line,#ddd);border-radius:8px;margin:8px 0;padding:6px 10px}.opening-panel legend{font-weight:600;padding:0 4px}.opening-panel label.radio{display:flex;align-items:center;gap:8px;min-height:40px;margin:0}.opening-panel label.radio input{width:20px;height:20px}.opening-panel .opening-id{font-size:11px;word-break:break-all}.opening-error{color:#8f1d12;background:#fff1ef;border:1px solid #e3b2aa;border-radius:6px;padding:6px 8px}.opening-legacy{color:#5c1710;background:#fff7f5;border:2px dashed #a3261b;border-radius:8px;padding:6px 8px}.opening-panel #openingCentre{margin:2px 0 6px}.opening-panel .btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+/* Shared panel pattern: «Volver» first and fixed at the top, context, groups, actions fixed at the bottom. */
+#panel .panel-view{padding:0;border-bottom:0}
+.panel-head{position:sticky;top:0;z-index:3;background:var(--panel);padding:10px 16px 8px;border-bottom:1px solid var(--line)}
+.panel-head h3{margin:6px 0 2px;font-size:15px}.panel-head h3:focus{outline:0}.panel-head h3:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel-context{margin:0;font-size:12px}
+.btn.panel-back{display:inline-flex;align-items:center;min-height:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel-view>.opening-legacy{margin:10px 16px 0}
+.panel-view form{padding:4px 16px 0}
+.panel-group{border-bottom:1px solid var(--line);padding:6px 0}.panel-group:last-child{border-bottom:0}
+details.panel-group>summary{cursor:pointer;font-weight:600;font-size:13px;min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
+details.panel-group>summary::-webkit-details-marker{display:none}
+details.panel-group>summary::before{content:'▸';color:var(--muted);transition:transform .15s}details.panel-group[open]>summary::before{transform:rotate(90deg)}
+details.panel-group>summary small{color:var(--muted);font-weight:400}
+.panel-group-body{padding:0 0 6px}
+.opening-status{padding:8px 16px;font-size:13px}.opening-status p{margin:0 0 4px}.opening-status ul{margin:2px 0;padding-left:18px}
+.field-error{margin:2px 0 6px;font-size:13px}.opening-panel input[aria-invalid=true]{border-color:#a3261b;box-shadow:0 0 0 2px #f3c9c2}.opening-error-note{color:#8f1d12;font-weight:600}
+.opening-applied{color:#1e5c38;background:#eef7f1;border:1px solid #b9dcc6;border-radius:6px;padding:6px 8px}
+.panel-foot{position:sticky;bottom:0;z-index:3;background:var(--panel);border-top:1px solid var(--line);padding:8px 16px 10px;display:flex;flex-direction:column;gap:6px}
+.panel-foot-row{display:flex;flex-wrap:wrap;gap:6px}.panel-foot-row:empty{display:none}.panel-foot .btn{min-height:40px;padding:7px 10px}
+@media(max-height:500px){.panel-foot{position:static}.panel-head{position:static}}
+.opening-pick-banner{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:7;display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 20px);background:#fff;border:2px solid #2f7d4f;border-radius:10px;padding:8px 10px;box-shadow:0 4px 14px rgba(0,0,0,.14);font-size:14px}
+.opening-pick-banner[hidden]{display:none}
+.opening-pick-copy{display:flex;flex-direction:column;gap:2px;min-width:0}.opening-pick-copy strong{color:#1e5c38}
+.opening-pick-banner .btn{flex:none;min-height:44px;border:1px solid var(--line)}
+.opening-pick-banner .opening-error{margin-top:4px}
+@media(max-width:600px){.opening-pick-banner{width:calc(100% - 20px);font-size:13px}}
+@media(max-height:500px){.opening-pick-banner{top:6px;padding:4px 8px;font-size:12px;gap:8px}.opening-pick-banner .btn{min-height:40px}.opening-pick-banner .opening-error{padding:3px 6px}}
 #plan .furn{cursor:move}
 @media (hover:hover){#plan .furn:hover{filter:drop-shadow(0 0 2px rgba(181,101,58,.7))}}
 [data-handle]{cursor:pointer}
@@ -1162,8 +1189,9 @@ function renderOpenings(){
 }
 
 function designDimensions(id){const r=project.rooms.find(q=>q.id===id);if(r?.source?.method!=='manual')return '';try{const b=FloorPlanRoomLayout.rectangle(r);return `${b.width} × ${b.depth} mm`;}catch{return '';}}
+let labelBoxes = [];
 function renderLabels(){
-  const g = $('#gLabels');
+  const g = $('#gLabels');labelBoxes = [];
   g.setAttribute('display', ui.layers.labels ? 'inline' : 'none');
   // Room labels keep clear of stair footprints and slab voids of the active level (display only; labelAt is kept).
   // When a label has to move it also prefers a place clear of the furniture.
@@ -1172,6 +1200,7 @@ function renderLabels(){
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
     const name = nm(state.rooms[r.id].name), dims = designDimensions(r.id), half = Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, dims.length*140*.6)/2;
     const {x,y} = zones.length ? FloorPlanBuilding.labelAnchor(r.poly.map(([x,y])=>({x,y})), {x:r.at[0],y:r.at[1]}, {left:half,right:half,above:230,below:dims?500:310}, zones, {prefer:[furniture]}) : {x:r.at[0],y:r.at[1]};
+    if (ui.layers.labels) labelBoxes.push({room:r.id, x0:x-half, x1:x+half, y0:y-230, y1:y+(dims?500:310)});
     const halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
     return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(name)}</text>
       <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${dims?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${dims}</text>`:''}`;
@@ -1344,13 +1373,14 @@ function overviewPanel(){
 function bindOverview(){
   document.querySelectorAll('#panel tr[data-room]').forEach(tr => tr.onclick = () => { select({kind:'room', id:tr.dataset.room}); if (is3D()) window.View3D.flyToRoom(tr.dataset.room); });
   $('#clearMeasure').onclick = () => state.measures.length && mutate(() => state.measures = []);
-  document.querySelectorAll('#panel [data-opening-fix]').forEach(b => b.onclick = () => select({kind:'opening', id:b.dataset.openingFix}));
+  document.querySelectorAll('#panel [data-opening-fix]').forEach(b => b.onclick = () => openOpening(b.dataset.openingFix));
   $('#clearFurn').onclick = clearLayout;
 }
 
 // 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
 function renderFab(){
   const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && geometry.rooms.find(r => r.id === ui.sel.id), o = ui.sel?.kind === 'opening' && project.openings.find(x => x.id === ui.sel.id);
+  if (window.FloorPlanOpeningUI?.picking()){ fab.classList.remove('show'); return; }
   const od = ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.ready() && FloorPlanOpeningUI.draft(), on = od && od.project.openings.find(x => x.id === od.id);
   if (on){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[on.kind])} · vista previa</span><button class="btn primary" data-a="apply">Aplicar</button><button class="btn narrow-only" data-a="prop">Editar</button><button class="btn" data-a="discard">Descartar</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { try { ({apply:() => FloorPlanOpeningUI.applyDraft(), prop:() => drawer('panel', true), discard:() => FloorPlanOpeningUI.discard()})[b.dataset.a](); } catch(e){ toast(e.message, 6000); } }); return; }
@@ -1431,7 +1461,7 @@ function bindRoomPanel(){
   $('#surfaceWall').onclick=()=>FloorPlanSurfaceUI.open({kind:'wall',id});
   FloorPlanSurfaceUI.describe(id,$('#surfaceRoomStatus'));
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
-  document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => { select({kind:'opening', id:b.dataset.roomOpening}); $('#openingTitle')?.focus(); });
+  document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
   $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
@@ -1482,6 +1512,8 @@ function bindFurnPanel(f){
 
 /* ======================= 操作 ======================= */
 function select(sel){ window.FloorPlanOpeningUI?.selected(sel); ui.sel = sel; renderSel(); renderPanel(); }
+// Selecting a door or window opens its properties directly (decision 19-10-2026): no extra «Propiedades».
+function openOpening(id){ select({kind:'opening', id}); drawer('panel', true); $('#openingTitle')?.focus({preventScroll:true}); }
 function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(ui.sel.id); f.rot = norm(f.rot + d); }); }
 function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => state.furniture = state.furniture.filter(f => f.id !== id)); } }
 function duplicateSel(){
@@ -1626,7 +1658,7 @@ function endDrag(cancel){
   }
   if (d.kind === 'pan'){
     if (!cancel && !d.moved && ui.tool === 'select' && window.FloorPlanOpeningUI?.picking()) return FloorPlanOpeningUI.pickAt(d.at);
-    if (!cancel && !d.moved && ui.tool === 'select') select(d.opening ? {kind:'opening', id:d.opening} : d.room ? {kind:'room', id:d.room} : null);
+    if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else select(d.room ? {kind:'room', id:d.room} : null); }
     return;
   }
   if (d.moved){ commit(d.before); renderAll(); }
@@ -1646,7 +1678,15 @@ svg.addEventListener('pointerdown', e => {
     }
   }
   if (pinch) return;
-  const p = toMM(e), t = e.target;
+  const p = toMM(e);let t = e.target, labelRoom = null;
+  // The 44 px opening target only wins over empty floor: away from the wall itself, furniture and room labels
+  // under the pointer keep priority, so a small zoom does not turn a bed or a room name into a door.
+  const hitOpening = ui.tool === 'select' && t.closest('[data-opening]');
+  if (hitOpening && !window.FloorPlanOpeningUI?.picking()){ const o = project.openings.find(x => x.id === hitOpening.dataset.opening), w = o && project.walls.find(x => x.id === o.wallId);
+    if (w && FloorPlanTracing.segmentPoint(p, w.start, w.end).distance > w.thicknessMm/2 + 8/view.s){
+      const under = document.elementsFromPoint(e.clientX, e.clientY).find(el => !el.closest('[data-opening]') && el.closest('#plan [data-fid]'));
+      const label = labelBoxes.find(b => p.x >= b.x0 && p.x <= b.x1 && p.y >= b.y0 && p.y <= b.y1);
+      if (under) t = under; else if (label){ labelRoom = label.room; t = svg; } } }
   if (ui.tool === 'measure'){
     const q = snapPoint(p, e.shiftKey);
     if (!ui.mA){ ui.mA = q; ui.mCur = q; drag = {kind:'measure', sx:e.clientX, sy:e.clientY, moved:false}; svg.setPointerCapture(e.pointerId); }
@@ -1666,7 +1706,7 @@ svg.addEventListener('pointerdown', e => {
     drag = {kind:'move', id:f.id, sx:e.clientX, sy:e.clientY, ox:p.x-f.cx, oy:p.y-f.cy, before:snap(), moved:false};
   } else {
     const room = t.closest('[data-room]');
-    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, room:room && room.dataset.room, moved:false};
+    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, room:labelRoom || room && room.dataset.room, moved:false};
   }
   svg.setPointerCapture(e.pointerId);
 });
@@ -1754,7 +1794,7 @@ document.addEventListener('keydown', e => {
   else if (k === 'f') fitView();
   else if (k === 'r') rotateSel(e.shiftKey ? -90 : 90);
   else if (k === 'delete' || k === 'backspace'){ e.preventDefault(); deleteSel(); }
-  else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancel(); renderSel(); toast('Añadir hueco cancelado'); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
+  else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else if (window.FloorPlanOpeningUI?.picking()){ FloorPlanOpeningUI.cancelPick(); toast('Añadir hueco cancelado'); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
   else if (k.startsWith('arrow') && ui.sel?.kind === 'furn'){
     e.preventDefault(); const st = e.shiftKey ? 100 : 10;
     mutate(() => { const f = getF(ui.sel.id); if (k==='arrowleft') f.cx -= st; if (k==='arrowright') f.cx += st; if (k==='arrowup') f.cy -= st; if (k==='arrowdown') f.cy += st; });
