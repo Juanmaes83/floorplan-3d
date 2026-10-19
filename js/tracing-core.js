@@ -81,7 +81,12 @@
   const measuredLengthMm=Math.round(distance(a,b)*c.mmPerPixel),errorPercent=(measuredLengthMm-known)/known*100;
   p.scale.verification={sourceImageId:image.id,pointA:a,pointB:b,knownLengthMm:known,measuredLengthMm,errorPercent,thresholdPercent:2,status:Math.abs(errorPercent)<=2?'consistent':'discrepant',verifiedAt:new Date().toISOString()};p.scale.confidence='estimated';c.confirmedByUser=false;C.validate(p);return p;
  }
- function confirm(p){if(p.scale.verification?.status!=='consistent')throw Error('La segunda cota no concuerda. Revisa la calibración.');p.scale.calibration.confirmedByUser=true;p.scale.confidence='real';C.validate(p);return p;}
+ function confirm(p){const v=p.scale.verification;
+  if(!p.scale.calibration)throw Error('Calibra primero: con «Calibrar», toca los dos extremos de una medida conocida e indica su longitud.');
+  if(!v)throw Error('Falta la segunda cota: con «Segunda cota», mide otra distancia conocida e independiente antes de confirmar la escala.');
+  if(v.status!=='consistent')throw Error(`La segunda cota no concuerda: con la calibración actual mide ${v.measuredLengthMm} mm y has indicado ${v.knownLengthMm} mm (${verificationText(v)}). La escala no se confirma. Repite la segunda cota ampliando el plano y tocando sus extremos exactos; si vuelve a fallar, recalibra con «Calibrar» usando la medida conocida más larga.`);p.scale.calibration.confirmedByUser=true;p.scale.confidence='real';C.validate(p);return p;}
+ // Error of the second dimension in words: signed percentage with a decimal comma and the provisional margin.
+ function verificationText(v){const e=v.errorPercent;return `error ${e>0?'+':e<0?'−':''}${Math.abs(e).toFixed(1).replace('.',',')} %; margen ±${v.thresholdPercent} %`;}
  function snap(p,anchor,walls,enabled,tolerance){if(!enabled)return C.point(p);let q={x:p.x,y:p.y};for(const v of walls.flatMap(w=>[w.start,w.end]))if(distance(p,v)<=tolerance)return {...v};if(anchor){const d=distance(anchor,p),angle=Math.round(Math.atan2(p.y-anchor.y,p.x-anchor.x)/(Math.PI/4))*Math.PI/4;q={x:anchor.x+d*Math.cos(angle),y:anchor.y+d*Math.sin(angle)};}return C.point(q);}
  function segmentPoint(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,l=dx*dx+dy*dy,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/l));return {point:{x:a.x+t*dx,y:a.y+t*dy},t,distance:distance(p,{x:a.x+t*dx,y:a.y+t*dy})};}
  function wall(p,a,b){const w={id:C.id('wal'),start:C.point(a),end:C.point(b),thicknessMm:p.defaults.wallThicknessMm,heightMm:p.defaults.wallHeightMm,structure:'unknown',status:'new',source:{method:'manual',review:'unreviewed'}};p.walls.push(w);C.validate(p);return w;}
@@ -123,5 +128,5 @@
   }
   if(p.scale.confidence!=='real')add('W4',p.id,'Medidas orientativas: escala pendiente o no confirmada.');return out;
  }
- const api={LIMITS,imageInfo,renderBytes,orientationAngle,blank,imageToWorld,worldToImage,calibrate,verify,confirm,snap,segmentPoint,wall,opening,room,remove,footprint,warnings};if(typeof module==='object')module.exports=api;else root.FloorPlanTracing=api;
+ const api={LIMITS,verificationText,imageInfo,renderBytes,orientationAngle,blank,imageToWorld,worldToImage,calibrate,verify,confirm,snap,segmentPoint,wall,opening,room,remove,footprint,warnings};if(typeof module==='object')module.exports=api;else root.FloorPlanTracing=api;
 })(globalThis);
