@@ -111,6 +111,34 @@ La [herramienta de diseño de LoRA LAB y su URL](technical/loralab-design-refere
 
 La [auditoría de una grabación de 3:24 aportada por Juanma](technical/loralab-video-gap-audit-2026-10-17.md) distingue funciones ejecutadas, controles visibles y pendientes. Frente al editor de una planta de Rubik, identifica como brecha estructural el **proyecto de varias plantas conectadas**, además de exterior y visita. Son candidatos para una decisión futura, **no el siguiente corte aprobado ni una alteración del orden orientativo 4–8**. La visita guiada de #39, el Candidato 04 de LAB Astra y Blender #42 conviven. No se duplican el importador, catálogo, materiales, JSON ni captura ya existentes o en PR.
 
+### 3.5 Experiencia contextual: huecos en el plano (19-10-2026, PR de implementación en borrador)
+
+**Primer corte implementado en una PR en borrador, pendiente de auditoría y revisión humana: «Seleccionar y editar una puerta o ventana donde está».**
+
+- Con «Seleccionar», un hueco se pulsa en el plano 2D y se edita en el panel con vista previa: tipo, posición, medidas, antepecho, y bisagra y sentido.
+- Desde una estancia se añade una puerta o ventana a uno de sus muros.
+- El [informe QA](qa/contextual-openings-2026-10-19.md) recoge la base medida en `master` (26 acciones, 12 para huecos y 4 cambios de modo) y el resultado de la rama.
+- No cambia `FloorPlanProjectV1`.
+- No se afirma ninguna comparación de acciones con LoRA LAB.
+
+**Cierre funcional, segunda ronda (19-10-2026), en la misma PR:**
+
+- **Decisión de Juanma:** al seleccionar una puerta o ventana, sus propiedades se abren directamente, también en móvil y con la columna plegada.
+- **Panel:** cabecera con «Volver» arriba, grupos plegables («Posición y medidas», «Apertura», «Revisión del hueco») y acciones fijas: aplicar, descartar, deshacer, rehacer y eliminar. Cada error aparece junto al campo que lo causa.
+- **«Añadir puerta/ventana»:** un banner sobre el plano con el paso y «Cancelar»; los errores, junto a la causa.
+- **Prioridad de toque:** los objetivos ampliados no tapan muebles ni nombres de estancia, y entre huecos solapados gana el más cercano.
+- **Ventana de 3070 mm en el ejemplo:** es un dato de la plantilla, en la que cada hueco tiene su propio tramo de muro; el panel ahora lo explica.
+- [Detalle y pruebas](qa/contextual-openings-2026-10-19.md#7-cierre-funcional-segunda-ronda-19-10-2026).
+- La revisión general de interfaz (patrón de paneles en todo el editor, «Generar», castellano y calibración) va en una PR separada, apilada sobre esta.
+
+**Siguiente candidato, separado y sin aprobar:**
+
+- creación contextual de estancias;
+- nombres o tipos sugeridos;
+- muestras de acabados en una jerarquía más clara, incluida la elección de pared en el plano.
+
+Debe medirse con personas y decidir antes las reglas de unión de muros. No forma parte de esta PR.
+
 ## 4. Especificación de las mejoras principales
 
 ### 4.1 Nuevo proyecto y dimensiones: entrega ya integrada, límites actuales
