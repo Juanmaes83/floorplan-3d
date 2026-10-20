@@ -93,9 +93,11 @@ test(`professional brand ${viewport.width}x${viewport.height}`,{timeout:420000},
    assert.equal(strip.w,manifest.views[0].width);assert.equal(strip.h,manifest.views[0].height);
    assert.ok(strip.bg.every(v=>v>=225),`the PNG view carries the light brand strip (${strip.bg})`);assert.deepEqual(strip.line,[213,217,219],'strip top rule');
   }
-  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:60000});
+  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting')&&location.hash!=='#presentacion',null,{timeout:60000});
  }
 
+ // The presentation exit ends with history.back() to #editor, which closes open dialogs: wait for the exit to finish
+ // (not only for `active`, which turns false when the exit starts). People cannot open menus during the exit.
  // Removing a profile: its projects go back to «Sin marca» and deliver the complete sheet as before.
  await openMenuItem('brandManage');await page.locator('#brandDialog[open]').waitFor();
  await page.getByRole('button',{name:'Borrar «Inmobiliaria Sol y Mar»'}).click();await page.waitForFunction(()=>document.querySelectorAll('.brand-item').length===1);await page.locator('#brandClose').click();
