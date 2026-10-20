@@ -128,6 +128,8 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   aside.lib,aside.right{margin-bottom:0}aside.right.open{margin-right:112px}
   /* The guide bar spans the width under the header: its controls (close, «Ver más») stay left of the column. */
   .guide-bar{margin-right:112px}
+  /* The plan is narrower here: the building warning moves above the selection bar instead of sitting beside it. */
+  #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
 }
 
 /* 3D setting selector (decorative backdrop), next to the sun control. */
