@@ -70,6 +70,7 @@ Ver §6 para los resultados en el SHA final.
 | 4 | Con otro hueco seleccionado, añadir desde la paleta dejaba visible el panel del hueco anterior | Se selecciona la estancia antes de `startAdd` |
 | 5 | Contraste: el naranja de marca da 4,3:1 y el texto gris 3,8:1 | `#9c4f28` (5,9:1) y `#655d52` (6,4:1) |
 | 6 | **Con el ratón encima, o tras un toque en esa zona, la regla genérica `.btn:hover` pintaba de beige «Nueva estancia» con texto blanco, ilegible.** Visto en la captura a 844×390 y reproducido con `getComputedStyle` | Regla específica `.btn.palette-primary:hover` (hover `#86421f`) y aserción de contraste en la prueba |
+| 7 | La acción de la guía «poner una cama» rellenaba y enfocaba un buscador oculto: un proyecto vacío arranca en «Construir». Lo detectó `guide.browser` | La acción abre la pestaña «Amueblar» (`2c4a812`) |
 
 ## 5. Revisión visual
 
@@ -85,7 +86,54 @@ Capturas en [`artifacts/ux-program/palette/`](artifacts/ux-program/palette/), co
 
 ## 6. Resultados en el SHA final
 
-PENDIENTE
+Las pruebas y mediciones se ejecutaron sobre **`2c4a812`** en un worktree desechable. Cada suite de navegador que falló se repitió sobre `master` `bd153c7` en las mismas condiciones.
+
+| Suite | Rama `2c4a812` | `master` `bd153c7` | Lectura |
+| --- | --- | --- | --- |
+| Unitarias: 23 archivos, todos los `tests/*.test.cjs` sin navegador | **246/246** | — | PASS |
+| `build-palette.browser` (3 medidas) | **3/3** | — (nueva) | PASS |
+| `guide.browser` | **5/5** | — | PASS tras corregir `2c4a812` (ver más abajo) |
+| `guide-navigation`, `welcome-generar`, `panel-pattern`, `ui-language`, `opening-contextual`, `room-layout`, `upload`, `multiformat-guide`, `layout-review`, `surfaces`, `building`, `variants` | 4/4, 3/3, 5/5, 3/3, 9/9, 5/5, 8/8, 9/9, 2/2, 7/7, 3/3, 4/4 | — | PASS |
+| `browser.test.cjs` | 26 pasan, 10 fallan | 26 pasan, 10 fallan, **los mismos** | Previo. `page.goto` agota 30 s al esperar `load`: causa probable: el proxy de este entorno rechaza recursos externos (no demostrado) |
+| `assets.browser` | 19 pasan, 6 fallan | 18 pasan, 7 fallan; las 6 de la rama están incluidas | Previo. «Loading aborted» y esperas a GLB con SwiftShader |
+| `presentation-batch.browser` | 7 pasan, 2 fallan | 7 pasan, 2 fallan, **los mismos** | Previo. No llega la descarga del ZIP |
+
+**Regresión encontrada y corregida.** La primera pasada de `guide.browser` falló 3/3: la acción de la guía «poner una cama» rellenaba el buscador de la biblioteca con la pestaña «Construir» abierta (proyecto vacío), así que el catálogo estaba oculto. `2c4a812` hace que esa acción abra «Amueblar» antes de mostrar la biblioteca. Después pasa 5/5.
+
+**Mediciones en `2c4a812`:**
+
+- **Tarea:** 21 acciones (estancia 6, huecos 7, acabados 8) y 2 cambios de modo; persiste y no da errores. Archivo: [`task-21.json`](artifacts/ux-program/palette/task-21.json).
+- **Acceso a propiedades:**
+  - sin cambios frente a `master`: escritorio 1/1/1; teléfono 2/2/1;
+  - es el objetivo de la fase 2;
+  - archivo: [`access.json`](artifacts/ux-program/palette/access.json).
+- **Paleta:**
+  - en ninguna de las 3 medidas hay desplazamiento horizontal;
+  - el banner del hueco y el de muros quedan visibles;
+  - tras «Terminar», el modo vuelve a `navigate` y el banner se oculta;
+  - sin errores de consola;
+  - archivo: [`palette.json`](artifacts/ux-program/palette/palette.json).
+- **Recorridos (`flows.cjs`):**
+  - sin texto en chino ni IDs internos;
+  - sin desplazamiento horizontal.
+
+**Antes y después de la columna izquierda:**
+
+- [1440×900](artifacts/ux-program/palette/compare-1440x900.png)
+- [390×844](artifacts/ux-program/palette/compare-390x844.png)
+- [844×390](artifacts/ux-program/palette/compare-844x390.png)
+
+**Comandos:**
+
+```sh
+export CHROME=/opt/pw-browsers/chromium THREE_LOCAL_DIR=<three.js local>
+node --test $(ls tests/*.test.cjs | grep -v browser)
+node --test --test-concurrency=1 tests/build-palette.browser.test.cjs   # y las suites de la tabla
+node scripts/qa/openings/room-task.cjs . <out> palette
+node scripts/qa/ux/access.cjs . <out>
+node scripts/qa/ux/palette.cjs . <out>
+node scripts/qa/ux/flows.cjs . <out>
+```
 
 ## 7. Límites
 
