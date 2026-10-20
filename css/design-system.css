@@ -131,4 +131,5 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   /* The plan is narrower here: the building warning moves above the selection bar instead of sitting beside it. */
   #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
 }
-
+/* Presenting: the header (and the bar inside it) is hidden, so the work area takes the whole screen again. */
+body.presenting .app>main,body.presenting aside.lib,body.presenting aside.right{margin-bottom:0;margin-right:0}
