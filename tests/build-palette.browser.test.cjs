@@ -28,6 +28,11 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
 
  // The example (with rooms) opens on «Amueblar»; a new blank project (no rooms) switches to «Construir».
  await openPalette();assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'furnish','example with rooms: «Amueblar»');
+ // A selected piece of furniture gives the room that contains it (furniture has no room field), as its panel does.
+ const furnCtx=await page.evaluate(()=>{const f=project.objects.find(o=>roomOf(getF(o.id).cx,getF(o.id).cy));const id=roomOf(getF(f.id).cx,getF(f.id).cy).id;select({kind:'furn',id:f.id});FloorPlanBuildPalette.render();return {expected:id,got:FloorPlanBuildPalette.contextRoom(),name:project.rooms.find(r=>r.id===id).name};});
+ assert.equal(furnCtx.got,furnCtx.expected,'furniture selection resolves its room');
+ await press('#paletteTabBuild');assert.match(await page.locator('#paletteOpeningContext').textContent(),/Se añadirá a «/);await press('#paletteTabFurnish');
+ await page.evaluate(()=>select(null));
  await page.evaluate(()=>drawer(null));await page.waitForTimeout(350);
  await press('#newProjectBtn');await page.fill('#newProjectName','Prueba de paleta');await press('#newProjectBlank');await page.locator('#roomDesignCancel').first().click();
  // Tabs follow ARIA and the arrow keys.

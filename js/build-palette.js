@@ -64,7 +64,8 @@
   const sel=typeof ui==='object'?ui.sel:null;if(!sel)return null;
   const has=id=>project.rooms.some(r=>r.id===id);
   if(sel.kind==='room'&&has(sel.id))return sel.id;
-  if(sel.kind==='furniture'){const o=project.objects.find(o=>o.id===sel.id);return o?.roomId&&has(o.roomId)?o.roomId:null;}
+  // Furniture has no room field: its room is the one containing its centre, as in the furniture panel's «← Estancia».
+  if(sel.kind==='furn'){const f=typeof getF==='function'&&getF(sel.id),r=f&&typeof roomOf==='function'?roomOf(f.cx,f.cy):null;return r&&has(r.id)?r.id:null;}
   if(sel.kind==='opening'){const o=project.openings.find(o=>o.id===sel.id),w=o&&project.walls.find(w=>w.id===o.wallId);if(!w)return null;
    try{const s=FloorPlanOpenings.spanSides(project,w,o.offsetMm,o.offsetMm+o.widthMm);return [s.left.roomId,s.right.roomId].find(id=>id&&has(id))||null;}catch{return null;}}
   return null;
