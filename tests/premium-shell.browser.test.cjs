@@ -99,6 +99,9 @@ test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>
 
  // 5. Spanish labels and visible keyboard focus.
  const texts=await page.evaluate(()=>({keys:[...document.querySelectorAll('#panel summary')].map(s=>s.textContent.trim()),clear:document.querySelector('#clearAll').textContent.trim()}));
+ // Presenting hides the header and its bar: the work area must not keep the space reserved for the bar.
+ const presentMargins=await page.evaluate(()=>{document.body.classList.add('presenting');const m=getComputedStyle(document.querySelector('.app>main'));const r=[m.marginRight,m.marginBottom];document.body.classList.remove('presenting');return r;});
+ assert.deepEqual(presentMargins,['0px','0px'],'no reserved bar space while presenting');
  assert.ok(texts.keys.includes('Atajos de teclado'),'«Atajos de teclado» translated');assert.ok(!texts.keys.includes('Keyboard Shortcuts'));
  assert.equal(texts.clear,'Vaciar distribución','one name for the same action');
  if(!mobile){await page.locator('#undo').focus();await page.keyboard.press('Tab');const ring=await page.evaluate(()=>{const s=getComputedStyle(document.activeElement);return {w:s.outlineWidth,st:s.outlineStyle};});assert.equal(ring.st,'solid');assert.equal(ring.w,'3px','visible keyboard focus ring');}
