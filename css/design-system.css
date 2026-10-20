@@ -23,9 +23,10 @@
 :where(button,a[href],summary,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 
 /* Buttons. Secondary is the default; .primary is the single dominant action of a state. */
-.btn:hover{background:var(--surface-hover)}
-.btn:active{background:#dde1e3}
-.btn:disabled,.btn[aria-disabled=true]{color:#6e757a;cursor:default}
+/* Generic states with the weight of the original `.btn:hover` (one class): any component rule still wins. */
+:where(.btn):hover{background:var(--surface-hover)}
+:where(.btn):active{background:#dde1e3}
+:where(.btn):disabled,:where(.btn)[aria-disabled=true]{color:#6e757a;cursor:default}
 .btn.primary,.actions .btn.primary,.presentation-config-actions .btn:first-child,.guide-dialog .primary{background:var(--action)!important;border-color:var(--action)!important;color:var(--action-ink)!important}
 .btn.primary:hover,.actions .btn.primary:hover,.presentation-config-actions .btn:first-child:hover{background:var(--action-hover)!important}
 .btn.primary:active{background:var(--action-pressed)!important}
@@ -111,8 +112,7 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   header{scroll-padding-inline-start:84px;scroll-padding-inline-end:36px}
   /* The plan never lies under the bar: the work area ends above it, so taps on walls near the bottom edge, the
      selection bar, the scale and the walk joystick keep their place inside the plan. */
-  .app>main{margin-bottom:60px}
-  aside.lib,aside.right{padding-bottom:64px}
+  .app>main,aside.lib,aside.right{margin-bottom:60px}
   /* Header scroll cue: a sticky fade at the right edge while more controls are hidden to the right. A mask on the
      header would also clip the fixed bottom bar, which is a descendant of the header. */
   header::after{content:'';position:sticky;right:-6px;flex:0 0 32px;align-self:stretch;margin-left:-32px;pointer-events:none;opacity:0;transition:opacity .2s;
@@ -125,7 +125,9 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   #mobileDock #viewSeg{grid-template-columns:1fr;grid-row:span 2}
   #mobileDock .btn{min-height:40px}
   .app>main{margin-bottom:0;margin-right:112px}
-  aside.lib,aside.right{padding-bottom:0}aside.right.open{margin-right:112px}
+  aside.lib,aside.right{margin-bottom:0}aside.right.open{margin-right:112px}
+  /* The guide bar spans the width under the header: its controls (close, «Ver más») stay left of the column. */
+  .guide-bar{margin-right:112px}
 }
 
 /* 3D setting selector (decorative backdrop), next to the sun control. */
