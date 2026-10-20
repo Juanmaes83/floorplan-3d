@@ -32,7 +32,7 @@
 
 ## 3. Pruebas nuevas
 
-`tests/premium-shell.browser.test.cjs`, en 1440×900, 390×844 y 844×390, comprueba:
+`tests/premium-shell.browser.test.cjs`, en 1440×900, 390×844 y 844×390 (esta última con táctil y con ratón), comprueba:
 
 - **Inventario de capacidades:** los 72 controles de la cabecera y de la columna izquierda registrados antes del corte (`tests/fixtures/capability-inventory.json`, generado sobre `5967fa2`):
   - existen;
@@ -66,6 +66,7 @@
 | A9 | Recolocación (390×844): una propuesta quedaba bajo el panel; el código suponía que un panel alto está a la izquierda | Encuadre dentro de la parte libre mayor, debajo o a la derecha del panel |
 | A10 | Aviso de conflictos (844×390): sobre la barra de selección en el plano más estrecho | En horizontal se coloca encima de la barra de selección |
 | A11 | La comprobación de solapes con la barra contaba elementos recortados por su contenedor | La prueba mide sólo la parte visible |
+| A12 | **Regresión detectada por `variants-visual`:** a 844×390 con ratón (ventana estrecha, sin táctil) la cabecera ocupa 3 filas (178 px) y la columna, fija a 64 px, tapaba «Proyectos» e idioma. `premium-shell` sólo probaba 844×390 con táctil | La columna empieza donde termina la cabecera real (`--shell-header-bottom`, medido con `ResizeObserver`). `premium-shell` añade la variante «844×390 mouse», que falla con el código anterior (`projectsBtn` y `langBtn` tapados por `tgLib`) |
 
 ## 5. Regresión
 
@@ -78,13 +79,14 @@
 | 1 | `529bec0` | `build-palette` 844×390: la barra tapaba el muro inferior | `6009353` (A4) |
 | 2 | `6009353` | `guide` y `welcome-generar` 844×390: la columna tapaba «×» y «Ver más» de la guía. `panel-pattern` 1440×900: el *hover* genérico repintaba «Volver» | `ec55e43` |
 | 3 | `ec55e43` | `stair-relocation` 390×844: una propuesta quedaba bajo el panel. `stair-conflicts` 844×390: el aviso se solapaba con la barra de selección | `3606c95` |
+| 4 (tanda 3D y presentación) | `4672710` (B) | `variants-visual` 844×390 con ratón: la columna tapaba «Proyectos» (A12) | este commit |
 
 **Resultado final.** Las suites del editor se ejecutaron sobre `9adf989`, la cabeza de C, que contiene el corte A completo (`3606c95`) más la marca:
 
 | Suite | Resultado |
 | --- | --- |
 | Unitarias | 249/249 (incluye 3 de marca) |
-| `premium-shell` | 3/3 |
+| `premium-shell` | 4/4 (tras A12; incluye la variante con ratón) |
 | `brand` | 3/3 |
 | `build-palette` | 3/3 |
 | `guide`, `guide-navigation`, `welcome-generar`, `panel-pattern`, `ui-language`, `opening-contextual`, `room-layout`, `upload`, `multiformat-guide`, `layout-review`, `surfaces`, `building`, `variants`, `stair-conflicts`, `stair-overlap`, `stair-relocation` y `sheet` | **todas PASS** |
