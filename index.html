@@ -3415,12 +3415,12 @@ function applyGrow(){
 }
 
 /* 3D setting: a decorative context around the home — studio (default), soft garden or city, each with a day and a
-   night look. It is a preference of this browser (not project data) and the editor, 3D captures and the
+   night look (backdrop colour and a ground that fades to a quiet edge). It is a preference of this browser (not project data) and the editor, 3D captures and the
    presentation share it. It does not represent terrain, a measured garden or urban information. */
 const ENV3D_KEY='rubik-sota-3d-environment',ENV3D={
-  studio:{day:{sky:['#f5f6f6','#e2e5e6'],ground:'#e8eaea',edge:'#e8eaea'},night:{sky:['#22262d','#15181d'],ground:'#272b31',edge:'#272b31'}},
-  garden:{day:{sky:['#eef3f4','#d6e2e6'],ground:'#a7b594',edge:'#dde3dc'},night:{sky:['#1c2329','#11161a'],ground:'#2a3229',edge:'#1d231f'}},
-  city:{day:{sky:['#efefed','#dadad7'],ground:'#c2c4c4',edge:'#d7d8d7',grid:'#b0b3b4'},night:{sky:['#202327','#14161a'],ground:'#2e3134',edge:'#24272a',grid:'#3a3e42'}}};
+  studio:{day:{sky:'#f1f2f2',ground:'#e8eaea',edge:'#e8eaea'},night:{sky:'#1d2129',ground:'#272b31',edge:'#272b31'}},
+  garden:{day:{sky:'#e4ecee',ground:'#a7b594',edge:'#dde3dc'},night:{sky:'#1a2127',ground:'#2a3229',edge:'#1d231f'}},
+  city:{day:{sky:'#e8e8e5',ground:'#c2c4c4',edge:'#d7d8d7',grid:'#b0b3b4'},night:{sky:'#1e2125',ground:'#2e3134',edge:'#24272a',grid:'#3a3e42'}}};
 let env3d=(()=>{try{const v=localStorage.getItem(ENV3D_KEY);return ENV3D[v]?v:'studio';}catch{return 'studio';}})();
 const envTextures=new Map();
 function envTexture(key,draw,w,h){
@@ -3431,11 +3431,15 @@ function envTexture(key,draw,w,h){
 function applyEnvironment3D(){
   if(!scene||!ground)return;
   const look=ENV3D[env3d][opt.night?'night':'day'],id=`${env3d}-${opt.night?'n':'d'}`;
-  scene.background=envTexture('sky-'+id,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,look.sky[0]);g.addColorStop(1,look.sky[1]);x.fillStyle=g;x.fillRect(0,0,w,h);},4,256);
+  // A solid backdrop colour, like before this cut: it is the renderer clear colour, so tone mapping never darkens it
+  // (a gradient texture went pure black at night and greyer by day).
+  scene.background=new THREE.Color(look.sky);
   // Ground: the setting colour near the home fading to a quiet edge, so the plane never reads as a real plot.
   ground.material.map=envTexture('ground-'+id,(x,w,h)=>{x.fillStyle=look.edge;x.fillRect(0,0,w,h);const g=x.createRadialGradient(w/2,h/2,w*.04,w/2,h/2,w*.5);g.addColorStop(0,look.ground);g.addColorStop(.55,look.ground);g.addColorStop(1,look.edge);x.fillStyle=g;x.fillRect(0,0,w,h);
     if(look.grid){x.strokeStyle=look.grid;x.globalAlpha=.55;x.lineWidth=1;for(let i=0;i<=w;i+=16){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(w,i);x.stroke();}x.globalAlpha=1;}},512,512);
-  ground.material.color.set(0xffffff);ground.material.needsUpdate=true;
+  // At night the scene light is very low and the ground went pure black (also before this cut): a faint self-light
+  // of the same texture keeps the setting readable without lighting the home.
+  ground.material.color.set(0xffffff);ground.material.emissiveMap=opt.night?ground.material.map:null;ground.material.emissive.set(opt.night?0xffffff:0x000000);ground.material.emissiveIntensity=opt.night?.55:0;ground.material.needsUpdate=true;
   const sel=document.getElementById('env3d');if(sel&&sel.value!==env3d)sel.value=env3d;
 }
 function setEnvironment3D(value){

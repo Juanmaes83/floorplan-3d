@@ -37,6 +37,7 @@ test(`3D setting ${viewport.width}x${viewport.height}`,{timeout:300000,skip:!pro
  if(shots)await page.screenshot({path:path.join(shots,`${name}-garden-day.png`)});
  await page.evaluate(()=>document.querySelector('header [data-t="night"]').click());await page.waitForTimeout(800);const night=await sky();
  assert.ok(night.reduce((a,b)=>a+b,0)<garden.reduce((a,b)=>a+b,0)-150,`night is darker (${garden} → ${night})`);
+ assert.ok(night.reduce((a,b)=>a+b,0)>=30,`the night setting stays readable, not black (${night})`);
  await page.evaluate(()=>document.querySelector('header [data-t="night"]').click());await page.waitForTimeout(500);
  // The exported 3D PNG carries the same backdrop.
  const dl=page.waitForEvent('download',{timeout:30000});await page.evaluate(()=>{document.querySelector('header details.menu').open=true;document.querySelector('#exportPng').click();});
