@@ -27,10 +27,11 @@ const COLOR_FNS=`const rgb=c=>{const m=String(c).match(/[\\d.]+/g)||[];return m.
  const contrast=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
  const action=(()=>{const p=document.createElement('i');p.style.color='var(--action)';document.body.append(p);const c=getComputedStyle(p).color;p.remove();return rgb(c);})();`;
 
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])
-test(`premium shell ${viewport.width}x${viewport.height}`,{timeout:420000},async t=>{
- const mobile=viewport.width<=1100,name=`${viewport.width}x${viewport.height}`;
- const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
+// 844×390 runs twice: with touch (phone, one-row header) and with a mouse (narrow window, the header wraps to three rows).
+for(const [viewport,touch] of [[{width:1440,height:900},false],[{width:390,height:844},true],[{width:844,height:390},true],[{width:844,height:390},false]])
+test(`premium shell ${viewport.width}x${viewport.height}${touch||viewport.width>1100?'':' mouse'}`,{timeout:420000},async t=>{
+ const mobile=viewport.width<=1100,name=`${viewport.width}x${viewport.height}${touch||!mobile?'':'-mouse'}`;
+ const context=await browser.newContext({viewport,isMobile:touch,hasTouch:touch});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
  await page.route('https://cdn.jsdelivr.net/**',async r=>{if(!process.env.THREE_LOCAL_DIR)return r.abort();try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await require('./editor-fixture.cjs')(page);
@@ -65,8 +66,8 @@ test(`premium shell ${viewport.width}x${viewport.height}`,{timeout:420000},async
   const dock=await page.evaluate(()=>{const h=document.querySelector('header');h.scrollLeft=0;return ['#tgLib','#tgPanel','[data-view="2d"]','[data-view="3d"]'].map(s=>{const e=document.querySelector(s),b=e.getBoundingClientRect(),hit=document.elementFromPoint(b.left+b.width/2,b.top+b.height/2);
    return {s,inside:b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight,hit:!!hit&&(hit===e||e.contains(hit)),h:Math.round(b.height)};});});
   for(const d of dock){assert.ok(d.inside&&d.hit,`${d.s} visible without scrolling the header`);assert.ok(d.h>=40,`${d.s} touch height ${d.h}`);}
-  await page.locator('#tgLib').tap();await page.waitForTimeout(400);assert.equal(await page.evaluate(()=>document.querySelector('aside.lib').classList.contains('open')),true,'the bar opens the palette');
-  await page.locator('#tgLib').tap();await page.waitForTimeout(400);
+  await page.locator('#tgLib')[touch?'tap':'click']();await page.waitForTimeout(400);assert.equal(await page.evaluate(()=>document.querySelector('aside.lib').classList.contains('open')),true,'the bar opens the palette');
+  await page.locator('#tgLib')[touch?'tap':'click']();await page.waitForTimeout(400);
  }
  await shot('01-editor');
  // The phone bar never covers another visible control (its part not clipped by a scrolling container): full editor,
