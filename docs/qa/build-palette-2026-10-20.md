@@ -72,6 +72,15 @@ Ver §6 para los resultados en el SHA final.
 | 6 | **Con el ratón encima, o tras un toque en esa zona, la regla genérica `.btn:hover` pintaba de beige «Nueva estancia» con texto blanco, ilegible.** Visto en la captura a 844×390 y reproducido con `getComputedStyle` | Regla específica `.btn.palette-primary:hover` (hover `#86421f`) y aserción de contraste en la prueba |
 | 7 | La acción de la guía «poner una cama» rellenaba y enfocaba un buscador oculto: un proyecto vacío arranca en «Construir». Lo detectó `guide.browser` | La acción abre la pestaña «Amueblar» (`2c4a812`) |
 | 8 | Con un mueble seleccionado, la paleta no encontraba su estancia: comprobaba el tipo `'furniture'` y un campo `roomId`, pero el editor usa `'furn'` y el mueble no guarda estancia. Se encontró al releer el código servido en la vista previa | Se usa la estancia que contiene el centro del mueble, como en su panel (`c67e436`). La prueba falla con el código anterior y pasa con el nuevo |
+| 9 | **Revisión de Juanma.** `Fin` llevaba a «Construir» si el foco estaba en «Amueblar». La especificación dice que `Inicio` lleva a la primera pestaña y `Fin` a la última. La prueba sólo cubría las flechas | `Inicio` → «Construir» y `Fin` → «Amueblar» desde cualquiera de las dos pestañas, y el foco va con ellas. La prueba recorre los 4 casos y falla con el código anterior («End from paletteTabFurnish») |
+| 10 | **Revisión de Juanma.** Con una puerta seleccionada entre dos estancias, la paleta elegía la primera que devolvía la geometría y anunciaba «Se añadirá a …». Para el usuario, esa elección era arbitraria | Con dos estancias posibles no se elige ninguna. La paleta nombra las dos («Este hueco separa «A» y «B»…»), pide tocar la estancia y **no inicia la colocación**. La prueba falla con el código anterior («no room is chosen for a shared door») |
+
+## 4 bis. Decisiones de Juanma en la revisión (20-10-2026)
+
+- **Nombres de ejemplo:** se mantienen los 6 visibles y «Más nombres». Son sugerencias, no tipos guardados, y la lista se ajustará con el uso real.
+- **Columna de 256 px:** aceptada provisionalmente. Cuesta 20 px de plano y permite leer las acciones; la revisión visual debe confirmar que no perjudica al editor.
+- **Especificación de la fase 0:** aprobada como guía de las fases 2 y 3, una vez hechas las correcciones 9 y 10.
+- **Fuera de esta PR:** identidad cromática, entorno 3D y «Marca» van con su propio diseño y sus propias PR.
 
 ## 5. Revisión visual
 
@@ -86,6 +95,21 @@ Capturas en [`artifacts/ux-program/palette/`](artifacts/ux-program/palette/), co
 - **Previo y ajeno a esta PR:** en teléfono, el botón flotante «← Inicio» tapa parte de la cabecera («Crear y amueblar»). No se corrige aquí; queda para la fase 2 o 3.
 
 ## 6. Resultados en el SHA final
+
+**Correcciones de la revisión de Juanma (defectos 9 y 10).** Sólo cambian `js/build-palette.js` y su prueba.
+
+- **Pruebas nuevas:**
+  - `Inicio`/`Fin` desde las dos pestañas;
+  - puerta entre dos estancias.
+  - Cada una falla con el código anterior: «End from paletteTabFurnish» y «no room is chosen for a shared door».
+- **Repetición de lo afectado:**
+  - unitarias **246/246**;
+  - `build-palette` **3/3**;
+  - `opening-contextual` **9/9**;
+  - `guide` **5/5**;
+  - `panel-pattern` **5/5**;
+  - `room-layout` **5/5**;
+  - `ui-language` **3/3**.
 
 **Corrección posterior, `c67e436` (defecto 8).** Sólo cambian `js/build-palette.js` y su prueba. En `c67e436` se repitió lo afectado:
 

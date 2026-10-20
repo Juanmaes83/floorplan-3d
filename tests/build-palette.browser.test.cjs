@@ -32,6 +32,13 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  const furnCtx=await page.evaluate(()=>{const f=project.objects.find(o=>roomOf(getF(o.id).cx,getF(o.id).cy));const id=roomOf(getF(f.id).cx,getF(f.id).cy).id;select({kind:'furn',id:f.id});FloorPlanBuildPalette.render();return {expected:id,got:FloorPlanBuildPalette.contextRoom(),name:project.rooms.find(r=>r.id===id).name};});
  assert.equal(furnCtx.got,furnCtx.expected,'furniture selection resolves its room');
  await press('#paletteTabBuild');assert.match(await page.locator('#paletteOpeningContext').textContent(),/Se añadirá a «/);await press('#paletteTabFurnish');
+ // A door shared by two rooms does not choose one of them: the palette names both, asks for the room and starts no mode.
+ const shared=await page.evaluate(()=>{for(const o of project.openings){const w=project.walls.find(w=>w.id===o.wallId),s=FloorPlanOpenings.spanSides(project,w,o.offsetMm,o.offsetMm+o.widthMm),ids=[s.left.roomId,s.right.roomId].filter(Boolean);if(new Set(ids).size===2)return {id:o.id,names:ids.map(id=>nm(project.rooms.find(r=>r.id===id).name))};}return null;});
+ assert.ok(shared,'the example has a door between two rooms');
+ await page.evaluate(id=>{select({kind:'opening',id});FloorPlanBuildPalette.render();},shared.id);assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.contextRoom()),null,'no room is chosen for a shared door');
+ await press('#paletteTabBuild');const sharedText=await page.locator('#paletteOpeningContext').textContent();assert.match(sharedText,/Este hueco separa/);for(const n of shared.names)assert.ok(sharedText.includes(n),`names «${n}»`);
+ await press('#paletteOpening-window');assert.equal((await state()).picking,false,'no pick mode for a shared door');assert.match(await page.locator('#paletteOpeningContext').textContent(),/«Ventana»/);
+ await page.evaluate(()=>select(null));await openPalette('furnish');
  await page.evaluate(()=>select(null));
  await page.evaluate(()=>drawer(null));await page.waitForTimeout(350);
  await press('#newProjectBtn');await page.fill('#newProjectName','Prueba de paleta');await press('#newProjectBlank');await page.locator('#roomDesignCancel').first().click();
@@ -41,6 +48,10 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  assert.equal(await page.locator('#paletteTabBuild').getAttribute('aria-selected'),'true');assert.equal(await page.locator('#paletteFurnish').isHidden(),true);
  await page.locator('#paletteTabBuild').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.evaluate(()=>document.activeElement.id),'paletteTabFurnish');assert.equal(await page.locator('#furnitureSearch').isVisible(),true,'«Amueblar» is the existing library');
  await page.keyboard.press('ArrowLeft');assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'build');
+ // Home always goes to «Construir» and End to «Amueblar», from either tab, and the focus follows.
+ for(const [from,key,to] of [['paletteTabBuild','End','furnish'],['paletteTabFurnish','End','furnish'],['paletteTabFurnish','Home','build'],['paletteTabBuild','Home','build']]){
+  await page.locator('#'+from).focus();await page.keyboard.press(key);
+  assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),to,`${key} from ${from}`);assert.equal(await page.evaluate(()=>document.activeElement.id),to==='build'?'paletteTabBuild':'paletteTabFurnish',`${key} from ${from}: focus`);}
  // Only the four contract kinds are offered; no stair types, exterior or third level.
  assert.deepEqual(await page.locator('#paletteBuild .palette-grid[aria-label="Tipos de hueco"] .palette-action').allTextContents(),['Puerta abatible','Puerta corredera','Ventana','Hueco de paso']);
  assert.equal(await page.locator('aside.lib').getByText(/Exterior|Escalera en U|caracol|3F/).count(),0,'no unsupported capability is offered');
