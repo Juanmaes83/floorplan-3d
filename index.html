@@ -477,7 +477,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn chip on" data-t="labels" data-en="Labels">房间名</button>
       <button class="btn chip" data-t="night" data-en="Night">夜景</button>
     </div>
-    <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
+    <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label><label class="range env3d" for="env3d" title="Fondo decorativo: no representa terreno, jardín ni entorno urbano reales" data-en-title="Decorative backdrop: it does not represent real terrain, garden or surroundings"><span data-en="Setting" data-es="Entorno">Entorno</span> <select id="env3d" aria-describedby="env3dNote"><option value="studio" data-en="Studio" data-es="Estudio">Estudio</option><option value="garden" data-en="Soft garden" data-es="Jardín suave">Jardín suave</option><option value="city" data-en="City" data-es="Ciudad">Ciudad</option></select><small class="env3d-note" aria-hidden="true" data-en="decorative" data-es="decorativo">decorativo</small></label><span id="env3dNote" class="sr-only" data-en="Decorative backdrop: it does not represent real terrain, garden or surroundings." data-es="Fondo decorativo: no representa terreno, jardín ni entorno urbano reales.">Fondo decorativo: no representa terreno, jardín ni entorno urbano reales.</span></div>
     <div class="spacer"></div>
     <button class="btn" id="traceBtn">Plano propio</button><span id="scaleConfidence" style="font-size:11px">Medidas orientativas</span>
     <button class="btn" id="projectsBtn" data-en="Projects" data-es="Proyectos">Proyectos</button>
@@ -3414,6 +3414,35 @@ function applyGrow(){
   lampG.visible = grow > .99;
 }
 
+/* 3D setting: a decorative context around the home — studio (default), soft garden or city, each with a day and a
+   night look. It is a preference of this browser (not project data) and the editor, 3D captures and the
+   presentation share it. It does not represent terrain, a measured garden or urban information. */
+const ENV3D_KEY='rubik-sota-3d-environment',ENV3D={
+  studio:{day:{sky:['#f5f6f6','#e2e5e6'],ground:'#e8eaea',edge:'#e8eaea'},night:{sky:['#22262d','#15181d'],ground:'#272b31',edge:'#272b31'}},
+  garden:{day:{sky:['#eef3f4','#d6e2e6'],ground:'#a7b594',edge:'#dde3dc'},night:{sky:['#1c2329','#11161a'],ground:'#2a3229',edge:'#1d231f'}},
+  city:{day:{sky:['#efefed','#dadad7'],ground:'#c2c4c4',edge:'#d7d8d7',grid:'#b0b3b4'},night:{sky:['#202327','#14161a'],ground:'#2e3134',edge:'#24272a',grid:'#3a3e42'}}};
+let env3d=(()=>{try{const v=localStorage.getItem(ENV3D_KEY);return ENV3D[v]?v:'studio';}catch{return 'studio';}})();
+const envTextures=new Map();
+function envTexture(key,draw,w,h){
+  if(envTextures.has(key))return envTextures.get(key);
+  const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;envTextures.set(key,t);return t;
+}
+function applyEnvironment3D(){
+  if(!scene||!ground)return;
+  const look=ENV3D[env3d][opt.night?'night':'day'],id=`${env3d}-${opt.night?'n':'d'}`;
+  scene.background=envTexture('sky-'+id,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,look.sky[0]);g.addColorStop(1,look.sky[1]);x.fillStyle=g;x.fillRect(0,0,w,h);},4,256);
+  // Ground: the setting colour near the home fading to a quiet edge, so the plane never reads as a real plot.
+  ground.material.map=envTexture('ground-'+id,(x,w,h)=>{x.fillStyle=look.edge;x.fillRect(0,0,w,h);const g=x.createRadialGradient(w/2,h/2,w*.04,w/2,h/2,w*.5);g.addColorStop(0,look.ground);g.addColorStop(.55,look.ground);g.addColorStop(1,look.edge);x.fillStyle=g;x.fillRect(0,0,w,h);
+    if(look.grid){x.strokeStyle=look.grid;x.globalAlpha=.55;x.lineWidth=1;for(let i=0;i<=w;i+=16){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(w,i);x.stroke();}x.globalAlpha=1;}},512,512);
+  ground.material.color.set(0xffffff);ground.material.needsUpdate=true;
+  const sel=document.getElementById('env3d');if(sel&&sel.value!==env3d)sel.value=env3d;
+}
+function setEnvironment3D(value){
+  if(!ENV3D[value])return false;env3d=value;try{localStorage.setItem(ENV3D_KEY,value);}catch{}
+  if(scene)applyEnvironment3D();return true;
+}
+
 /* ======================= 日照 / 夜景 ======================= */
 function applyLight(){
   hemi.color.set(0xfff8ee);hemi.groundColor.set(0xb9a88f);
@@ -3422,8 +3451,7 @@ function applyLight(){
   sun.color.setHSL(.09, .5 + warm*.4, .92 - warm*.12);
   sun.intensity = opt.night ? .05 : 1.4 + Math.sin(Math.PI*t)*1.6;
   hemi.intensity = opt.night ? .12 : 1.1;
-  scene.background = new THREE.Color(opt.night ? 0x1c2130 : 0xf7f4ee);
-  ground.material.color.set(opt.night ? 0x2a2e38 : 0xf2eee7);
+  applyEnvironment3D();
   [lampG,...levelLamps].forEach(group=>group.children.forEach(o => { if (o.isPointLight) o.intensity = opt.night ? 6 : 0; else o.material.emissiveIntensity = opt.night ? 2 : .3; }));
   renderer.toneMappingExposure = opt.night ? 1.25 : 1.05;
   envK = opt.night ? .15 : 1; matCache.forEach(m => { if (m.envMap) m.envMapIntensity = m.userData.env*envK; });
@@ -3433,7 +3461,6 @@ function applyLight(){
     hemi.intensity=warm?.9:1.05;
     sun.color.set(warm?0xffc998:0xfff6e8);sun.intensity=warm?2.05:2.25;
     renderer.toneMappingExposure=warm?1.12:1.04;
-    scene.background.set(warm?0xf2eee8:0xf4f4f2);
     scene.environment=envTex;
     envK=warm?.8:.75;
     matCache.forEach(m=>{if(m.userData.env){m.envMap=envTex;m.envMapIntensity=m.userData.env*envK;m.needsUpdate=true;}});
@@ -3774,6 +3801,7 @@ function bindUI(){
     if (k === 'night') applyLight();
   });
   $('#sun').oninput = e => { opt.hour = +e.target.value; applyLight(); };
+  $('#env3d').value = env3d; $('#env3d').onchange = e => setEnvironment3D(e.target.value);
 }
 
 /* ======================= 主循环 ======================= */
@@ -4065,7 +4093,7 @@ window.View3D = {
       return {id:g.userData.stairId,corners:[[0,-w/2],[0,w/2],[run,w/2],[run,-w/2]].map(([x,z])=>{const v=g.localToWorld(new THREE.Vector3(x,0,z));return {x:Math.round(v.x*1000+OX),y:Math.round(v.z*1000+OY)};})};}):[],
     furniturePlan:furnG?furnG.children.map(g=>({id:g.userData.fid,x:Math.round(g.position.x*1000+OX),y:Math.round(g.position.z*1000+OY),rotationDeg:Math.round(((-g.rotation.y*180/Math.PI)%360+360)%360)})):[],
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
-  shotSize,presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
