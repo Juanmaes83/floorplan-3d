@@ -69,6 +69,16 @@ test(`premium shell ${viewport.width}x${viewport.height}`,{timeout:420000},async
   await page.locator('#tgLib').tap();await page.waitForTimeout(400);
  }
  await shot('01-editor');
+ // The phone bar never covers another visible control (its part not clipped by a scrolling container): full editor,
+ // both drawers open, and the guided editor.
+ const coveredByDock=()=>page.evaluate(()=>{const dock=document.querySelector('#mobileDock');return [...document.querySelectorAll('button,summary,select,input:not([type=hidden]):not([type=file]),a[href]')].filter(e=>!dock.contains(e)&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{let b=e.getBoundingClientRect(),l=b.left,t=b.top,r=b.right,bo=b.bottom;for(let a=e.parentElement;a;a=a.parentElement){const st=getComputedStyle(a);if(/auto|scroll|hidden|clip/.test(st.overflow+st.overflowX+st.overflowY)){const c=a.getBoundingClientRect();l=Math.max(l,c.left);t=Math.max(t,c.top);r=Math.min(r,c.right);bo=Math.min(bo,c.bottom);}}l=Math.max(l,0);t=Math.max(t,0);r=Math.min(r,innerWidth);bo=Math.min(bo,innerHeight);if(r-l<2||bo-t<2)return false;const hit=document.elementFromPoint((l+r)/2,(t+bo)/2);return hit&&dock.contains(hit);}).map(e=>e.id||e.textContent.trim().slice(0,30));});
+ if(mobile){
+  assert.deepEqual(await coveredByDock(),[],'editor: nothing under the bar');
+  for(const side of ['lib','panel']){await page.evaluate(s=>drawer(s,true),side);await page.waitForTimeout(450);assert.deepEqual(await coveredByDock(),[],`${side} drawer: nothing under the bar`);await page.evaluate(()=>drawer(null));await page.waitForTimeout(400);}
+  await page.evaluate(()=>document.querySelector('#guideResume').click());await page.waitForTimeout(600);
+  assert.deepEqual(await coveredByDock(),[],'guided editor: nothing under the bar');await shot('01b-guided');
+  await page.evaluate(()=>{document.querySelector('#guideDetails').click();document.querySelector('#guideAllTools').click();drawer(null);});await page.waitForTimeout(600);
+ }
 
  // 3. Hierarchy with something to present: «Presentar mi vivienda» is the only action-filled control.
  assert.deepEqual(await filledWithAction(),['presentationBtn'],'one dominant action in the editor with rooms');
