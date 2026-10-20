@@ -45,7 +45,10 @@ test(`3D setting ${viewport.width}x${viewport.height}`,{timeout:300000,skip:!pro
  // A preference, not project data: no change to the project or its history; it survives a reload.
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length})),before,'the project and its history are unchanged');
  assert.ok(!(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project))).includes('garden'));
- await page.reload();await page.waitForFunction(()=>window.FloorPlanApp&&FloorPlanApp.project&&window.View3D);if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');await to3D();
+ await page.reload();await page.waitForFunction(()=>window.FloorPlanApp&&FloorPlanApp.project&&window.View3D);if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');
+ // The guided editor keeps the advanced 3D controls (sun, setting) hidden, as before; open the full editor again.
+ if(await page.locator('#guideDetails').isVisible()){await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();await page.waitForTimeout(400);}
+ await to3D();
  assert.equal(await page.evaluate(()=>View3D.environment3D),'garden','kept after reload');assert.equal(await sel.inputValue(),'garden');
  await sel.selectOption('city');await page.waitForTimeout(500);assert.equal(await page.evaluate(()=>View3D.environment3D),'city');
  if(shots)await page.screenshot({path:path.join(shots,`${name}-city-day.png`)});
