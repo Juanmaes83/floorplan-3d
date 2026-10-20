@@ -167,8 +167,8 @@
   if(!pick){if(b)b.hidden=true;return;}
   if(!b){b=el('div',null,document.getElementById('stage'),{id:'openingPick',class:'opening-pick-banner',role:'region','aria-label':'Añadir hueco'});}
   b.hidden=false;b.replaceChildren();
-  const what=pick.kind==='door'?'puerta':'ventana',copy=el('div',null,b,{class:'opening-pick-copy'});
-  el('strong',`Añadir ${what} a «${display(pick.name||'')}»`,copy,{id:'openingPickTitle'});
+  const copy=el('div',null,b,{class:'opening-pick-copy'});
+  el('strong',`Añadir ${(O.LABEL[pick.kind]||'hueco').toLowerCase()} a «${display(pick.name||'')}»`,copy,{id:'openingPickTitle'});
   if(pick.error)el('span',pick.error,copy,{role:'alert',class:'opening-error',id:'openingPickError'});
   else el('span','Paso 1 de 2: toca uno de sus muros resaltados en verde. Verás la propuesta antes de añadirla.',copy,{id:'openingPickHint'});
   const c=el('button','Cancelar',b,{type:'button',class:'btn',id:'openingPickCancel'});c.onclick=()=>cancelPick();
