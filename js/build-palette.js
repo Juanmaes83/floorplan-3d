@@ -49,7 +49,8 @@
  // Otherwise the last tab chosen is kept (also for the next session).
  let shownProject=null;
  tBuild.onclick=()=>selectTab('build');tFurnish.onclick=()=>selectTab('furnish');
- tabs.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();selectTab(e.target===tBuild&&e.key!=='Home'?'furnish':'build',true);});
+ // Arrows move to the other tab; Home always goes to the first tab («Construir») and End to the last («Amueblar»).
+ tabs.addEventListener('keydown',e=>{const to=e.key==='Home'?'build':e.key==='End'?'furnish':['ArrowLeft','ArrowRight'].includes(e.key)?(e.target===tBuild?'furnish':'build'):null;if(!to)return;e.preventDefault();selectTab(to,true);});
 
  // Building blocks of the «Construir» panel: a titled group, a grid of icon+label actions and short help.
  const groupOf=(title,help)=>{const g=el('section',{class:'palette-group'},build);el('h4',{},g).textContent=title;if(help){const p=el('p',{class:'palette-help'},g);p.textContent=help;}return g;};
@@ -66,9 +67,22 @@
   if(sel.kind==='room'&&has(sel.id))return sel.id;
   // Furniture has no room field: its room is the one containing its centre, as in the furniture panel's «← Estancia».
   if(sel.kind==='furn'){const f=typeof getF==='function'&&getF(sel.id),r=f&&typeof roomOf==='function'?roomOf(f.cx,f.cy):null;return r&&has(r.id)?r.id:null;}
-  if(sel.kind==='opening'){const o=project.openings.find(o=>o.id===sel.id),w=o&&project.walls.find(w=>w.id===o.wallId);if(!w)return null;
-   try{const s=FloorPlanOpenings.spanSides(project,w,o.offsetMm,o.offsetMm+o.widthMm);return [s.left.roomId,s.right.roomId].find(id=>id&&has(id))||null;}catch{return null;}}
+  if(sel.kind==='opening')return openingRooms(sel.id).length===1?openingRooms(sel.id)[0]:null;
   return null;
+ }
+ // Rooms on either side of a selected opening. A door shared by two rooms gives two: the palette then asks for the
+ // room instead of choosing one of them for the person.
+ function openingRooms(id){
+  const o=project.openings.find(o=>o.id===id),w=o&&project.walls.find(w=>w.id===o.wallId);if(!w)return [];
+  try{const s=FloorPlanOpenings.spanSides(project,w,o.offsetMm,o.offsetMm+o.widthMm);return [...new Set([s.left.roomId,s.right.roomId].filter(r=>r&&project.rooms.some(x=>x.id===r)))];}catch{return [];}
+ }
+ // Text of the opening group: where the next door or window goes, or what to tap first.
+ function contextText(label){
+  const sel=ui?.sel,roomId=contextRoom(),room=project.rooms.find(r=>r.id===roomId);
+  if(room)return {warn:false,text:`Se añadirá a «${shown(room.name)}»: toca después uno de sus muros.`};
+  if(sel?.kind==='opening'){const names=openingRooms(sel.id).map(id=>`«${shown(project.rooms.find(r=>r.id===id).name)}»`);
+   if(names.length>1)return {warn:true,text:`Este hueco separa ${names.join(' y ')}. Toca en el plano la estancia donde quieres añadir ${label?`«${label}»`:'el hueco'}.`};}
+  return {warn:!!label,text:label?`Para añadir «${label}», toca antes en el plano la estancia donde va y vuelve a pulsar «${label}».`:'Toca antes en el plano la estancia donde va el hueco.'};
  }
 
  let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null;
@@ -108,7 +122,7 @@
 
  async function addOpening(kind,label){
   const roomId=contextRoom();
-  if(!roomId){openingContext.textContent=`Para añadir «${label}», toca antes en el plano la estancia donde va y vuelve a pulsar «${label}».`;openingContext.classList.add('palette-warn');openingContext.focus?.();toPlan();return;}
+  if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');toPlan();return;}
   // The room becomes the selection first, so the properties column shows the room the opening is added to (as in
   // «Añadir puerta» of the room panel) instead of the previous item.
   await in2D();if(ui.sel?.kind!=='room'||ui.sel.id!==roomId)select({kind:'room',id:roomId});toPlan();FloorPlanOpeningUI.startAdd(roomId,kind);
@@ -135,9 +149,7 @@
   const three=typeof is3D==='function'&&is3D();mode3d.hidden=!three;
   for(const g of build.querySelectorAll('.palette-group'))g.hidden=three;
   for(const b of toolButtons){const on=ui.tool===b.dataset.tool;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));}
-  const roomId=contextRoom(),room=project.rooms.find(r=>r.id===roomId);
-  openingContext.classList.remove('palette-warn');
-  openingContext.textContent=room?`Se añadirá a «${shown(room.name)}»: toca después uno de sus muros.`:'Toca antes en el plano la estancia donde va el hueco.';
+  const c=contextText();openingContext.classList.toggle('palette-warn',c.warn);openingContext.textContent=c.text;
   for(const b of openingButtons)b.setAttribute('aria-describedby','paletteOpeningContext');
   const levels=window.FloorPlanBuildingUI?.context?.levels||1;
   stairNote.textContent=levels>1?'La escalera recta une las dos plantas del edificio.':'La escalera une dos plantas: añade la segunda en «Plantas…».';

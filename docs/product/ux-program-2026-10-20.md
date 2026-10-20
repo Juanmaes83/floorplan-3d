@@ -121,6 +121,8 @@ Clasificación:
 
 ## 7. Secuencia de PR y puertas de decisión
 
+**Revisión de Juanma (20-10-2026):** aprueba esta especificación como guía de las fases 2 y 3, después de corregir la tecla `Fin` y el hueco compartido entre dos estancias. Mantiene los 6 nombres de ejemplo más «Más nombres» y acepta provisionalmente la columna de 256 px. La identidad cromática, el entorno 3D y la «Marca» van en un programa de diseño propio, con sus propias PR.
+
 | Fase | PR | Contenido | Puerta |
 | --- | --- | --- | --- |
 | 0 | Junto a F1 | Esta especificación, la línea base y la nota de roadmap | Revisión de Juanma |
