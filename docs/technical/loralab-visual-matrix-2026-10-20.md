@@ -1,4 +1,4 @@
-# LoRA LAB frente a Rubik: matriz visual de 4 capturas y un vídeo de 27,8 s (20-10-2026)
+# LoRA LAB frente a Rubik: matriz visual de 4 capturas y dos vídeos (20-10-2026)
 
 Anexo del [estudio vigente de #48](loralab-study-evidence-2026-10-19.md). Sirve para priorizar **cortes futuros, por separado**, de producto y de UI/UX.
 
@@ -11,13 +11,41 @@ Anexo del [estudio vigente de #48](loralab-study-evidence-2026-10-19.md). Sirve 
 
 | Id | Fuente | Cómo se revisó | Límite |
 | --- | --- | --- | --- |
-| C1 | Captura de Juanma: 2D de la planta 1F de «Villa moderna», con «Coche» seleccionado y la columna izquierda «Construir» arriba. SHA-256 `4688386f…7d8e`. | Vista completa | Imagen fija: muestra controles y un estado, no su efecto. |
-| C2 | Captura: el mismo 2D; columna izquierda hasta «Escaleras» y columna derecha con «Fachada», «Cubierta», «Marcos», «Terreno», «1F planta actual» y «Estadísticas». SHA-256 `2ce853df…6d93b`. | Vista completa | Igual |
-| C3 | Captura: columna derecha «Proyecto», «Sol y orientación», «Luces interiores» y «Exterior». SHA-256 `892a89c0…a048`. | Vista completa | Igual |
-| C4 | Captura: 2D ampliado de la planta 1F, con escala de 2 m. SHA-256 `5ab1ff13…87b8`. | Vista completa | Igual |
-| V2 | Vídeo de Juanma, 27,8 s, 2558×1360, 30 fps. SHA-256 `b28ae972eaefa797a384219c65d175babe361d4aba95f652326aa43033d39def`. | **Revisado por fotogramas cada 0,5 s y con recortes ampliados.** No se ha escuchado el audio. | Una sola sesión, sobre la plantilla de ejemplo. |
+| C1 | Captura de Juanma: 2D de la planta 1F de «Villa moderna», con «Coche» seleccionado y la columna izquierda «Construir» arriba. Original PNG 2559×1347: [`c1-2d-construir-objeto-coche.png`](../qa/artifacts/loralab/references-2026-10-19/c1-2d-construir-objeto-coche.png), SHA-256 `4c4c97dd…0bf5`. Copia WebP revisada el 20-10: `4688386f…7d8e`. | Vista completa | Imagen fija: muestra controles y un estado, no su efecto. |
+| C2 | Captura: el mismo 2D; columna izquierda hasta «Escaleras» y columna derecha con «Fachada», «Cubierta», «Marcos», «Terreno», «1F planta actual» y «Estadísticas». Original: [`c2-2d-ventanas-escaleras-exterior-planta.png`](../qa/artifacts/loralab/references-2026-10-19/c2-2d-ventanas-escaleras-exterior-planta.png), `fda61fa5…275f`. WebP: `2ce853df…6d93b`. | Vista completa | Igual |
+| C3 | Captura: columna derecha «Proyecto», «Sol y orientación», «Luces interiores» y «Exterior». Original: [`c3-2d-proyecto-sol-exterior.png`](../qa/artifacts/loralab/references-2026-10-19/c3-2d-proyecto-sol-exterior.png), `f48fe45b…7e73`. WebP: `892a89c0…a048`. | Vista completa | Igual |
+| C4 | Captura: 2D ampliado de la planta 1F, con escala de 2 m. Original: [`c4-2d-planta-ampliada.png`](../qa/artifacts/loralab/references-2026-10-19/c4-2d-planta-ampliada.png), `bb60372f…aee8`. WebP: `5ab1ff13…87b8`. | Vista completa | Igual |
+| V2 | Vídeo de Juanma, 27,8 s, 2558×1360, 30 fps. SHA-256 `b28ae972eaefa797a384219c65d175babe361d4aba95f652326aa43033d39def`. **No está en el repositorio.** | **Revisado por fotogramas cada 0,5 s y con recortes ampliados.** No se ha escuchado el audio. | Una sola sesión, sobre la plantilla de ejemplo. |
+| V3 | Vídeo de Juanma, **otro archivo**: 47,07 s, 1600×852, 30 fps, 2 593 478 bytes. [`v3-loralab-referencia-47s.mp4`](../qa/artifacts/loralab/references-2026-10-19/v3-loralab-referencia-47s.mp4), SHA-256 `096c85f0ed6006022b7fb9d54e14ef34b73584d5a0b9f6252b342bd9f5a07416`. | **Revisados los 47 s completos** por fotogramas cada 0,5 s, con recortes del menú 3D, la barra de horas y el corte por planta. Audio no escuchado. | Comprimido: menos detalle que V2. Una sola sesión. |
 
-Los originales siguen fuera del repositorio. Del vídeo se registran **acciones con efecto visible**, que aquí cuentan como «ejecutada»:
+**Identificación de las capturas.** Las 4 PNG subidas por Juanma a #48 son los **originales de las mismas 4 pantallas** que las copias WebP revisadas el 20-10. Se comprobó comparando miniaturas en escala de grises (diferencia media 0,5–0,6 sobre 255 frente a 5,8–29 con las demás). Ahora están en [`references-2026-10-19/`](../qa/artifacts/loralab/references-2026-10-19/README.md), separadas de las capturas de la tarea de Rubik (`rubik-room-task/`).
+
+**V3: acciones con efecto visible**, que aquí cuentan como «ejecutada»:
+
+| Tiempo | Acción |
+| --- | --- |
+| 0–9 s | Desplazar la columna «Construir» (estructura, estancias, puertas, ventanas, escaleras), con «Coche» seleccionado |
+| ≈10–11 s | Pulsar «Amueblar» |
+| 11–22 s | Recorrer el catálogo de muebles |
+| ≈23 s | Pulsar «Exterior» |
+| 23–29 s | Recorrer el catálogo exterior |
+| ≈29–30 s | Pasar de 2D a 3D, en «Órbita» |
+| 30–35 s | Girar la cámara |
+| ≈36 s | Pulsar «Construir» con el 3D abierto |
+| ≈39 s | Volver a 2D |
+| ≈42–43 s | Volver a 3D |
+| 43–46 s | Girar la cámara |
+
+**En V3 no se ejecuta:**
+
+- ninguna opción del menú 3D: «Vista general», «Vista superior», «Muros cortados», «Luces: Auto», «Cortinas», «Abrir todo», «Captura» y «Calidad: Alta» quedan sin activar en todos los recortes;
+- el corte por planta, que sigue en «Cubierta»;
+- un cambio de hora, que sigue en 16:00;
+- colocar o editar objetos, el recorrido ni guardar.
+
+Por eso V3 **no añade funciones ejecutadas** a las de V2. Confirma la organización por pestañas, el contenido de los catálogos y el paso entre 2D y 3D.
+
+**V2: acciones con efecto visible**, que aquí cuentan como «ejecutada»:
 
 | Tiempo | Acción |
 | --- | --- |
