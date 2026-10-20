@@ -38,6 +38,8 @@
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  let mapOpen=false;
+ // Brand snapshot taken when the presentation starts (FloorPlanBrandUI): what the client sees and receives.
+ let brandSnap=null;
  const svgEl=(tag,parent,attributes={})=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,String(value));parent.append(node);return node;};
  function renderMinimap(){
   map.hidden=!active||!sourceCurrent();if(map.hidden)return;
@@ -99,6 +101,8 @@
  function capture(){
   if(!captureReady())return;
   captureButton.disabled=true;
+  // With a brand, the PNG the client receives carries its strip (same size); without a brand, as before.
+  if(brandSnap){const stop=plan.stops[index];Promise.resolve().then(async()=>{const shot=View3D.shot({...captureOptions,download:false});const url=await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览'));const a=document.createElement('a');a.download='rubik-sota-presentacion.png';a.href=url;a.click();}).catch(error=>toast(error.message||String(error),6000)).finally(()=>updateCapture());return;}
   try{View3D.shot(captureOptions);}
   catch(error){toast(error.message||String(error),6000);}
   finally{updateCapture();}
@@ -127,7 +131,9 @@
     await View3D.presentationGo(sourcePlan.stops[i],true);await nextFrame();
     if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true'||View3D.lifecycleMetrics.pendingAssets)return;
     const camera=View3D.presentationPose(),shot=View3D.shot({...captureOptions,download:false});
-    const encoded=shot.dataUrl.split(',')[1],bytes=Uint8Array.from(atob(encoded),char=>char.charCodeAt(0));
+    const stopLabel=sourcePlan.stops[i].kind==='room'?roomName(sourcePlan.stops[i].label):tx('Vista general','Overview','总览');
+    const stamped=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,stopLabel):shot.dataUrl;
+    const encoded=stamped.split(',')[1],bytes=Uint8Array.from(atob(encoded),char=>char.charCodeAt(0));
     if(bytes.length<24||bytes[0]!==137||bytes[1]!==80||bytes[2]!==78||bytes[3]!==71)throw Error('PNG incompleto.');
     const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
     if(view.getUint32(16)!==shot.width||view.getUint32(20)!==shot.height)throw Error('Dimensiones PNG incoherentes.');
@@ -242,6 +248,7 @@
   routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
+  window.FloorPlanBrandUI?.decorate(card,brandSnap,{index,count:plan.stops.length,kind:stop.kind});
   status.textContent=tx(`Vista ${index+1} de ${plan.stops.length}`,`View ${index+1} of ${plan.stops.length}`,`视图 ${index+1} / ${plan.stops.length}`);
   progress.textContent=tx(`Recorrido: ${visited.size} de ${plan.stops.length} vistas visitadas`,`Tour: ${visited.size} of ${plan.stops.length} views visited`,`参观：已访问 ${visited.size} / ${plan.stops.length} 个视图`);
   const framed=stop.kind==='room'?window.View3D?.presentationFrameInfo:null,section=framed?.roomId===stop.roomId&&framed.section;
@@ -291,6 +298,7 @@
    else if(result.changed)configMessage.textContent=tx(result.missing?`El plano cambió: ${result.missing} estancia(s) ya no existen. Revisa la selección.`:'El plano cambió. Las vistas se calcularán de nuevo.','The layout changed. Review the room selection; views will be recalculated.','布局已更改。请检查房间选择；视图将重新计算。');
    else configMessage.textContent=tx('Selecciona y ordena las estancias. La vista general va primero.','Select and order rooms. Overview comes first.','选择并排序房间。总览始终在前。');
    roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias','Rooms','房间'));
+   window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
    renderConfig();
@@ -319,6 +327,7 @@
   const token=++epoch;
   batchStatus.hidden=true;batchStatus.textContent='';
   entry=app.capturePresentationEntry();entry.focus=returnFocus;
+  brandSnap=window.FloorPlanBrandUI?.snapshot()||null;
   const selected=roomOrder.filter(id=>selectedRooms.includes(id));
   plan=Core.create(app.project,app.geometry,app.entryId,FloorPlanGuide.revision(app.project),selected);
   if(!plan){config.close();return;}

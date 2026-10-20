@@ -1,0 +1,29 @@
+/* «Tu marca profesional» (premium UX cut C): management dialog, «Firmar con», delivery fields and the brand shown
+   to the client in the presentation card. Uses the role tokens of css/design-system.css. */
+.brand-dialog{width:min(640px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
+.brand-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand-head h2{margin:0;font-size:20px}.brand-head h2:focus{outline:0}
+.brand-lead,.brand-help{color:var(--ink-muted);font-size:13px}.brand-help{display:block;margin-top:6px}
+.brand-list{list-style:none;margin:12px 0;padding:0;display:grid;gap:6px}
+.brand-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface-panel)}
+.brand-item img{width:56px;height:32px;object-fit:contain}.brand-item-text{flex:1;min-width:0;display:flex;flex-direction:column}.brand-item-text small{color:var(--ink-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand-item .btn,.brand-actions .btn,.brand-head .btn,.brand-logo .btn,.brand-config .btn{border:1px solid var(--line);min-height:40px}
+.brand-empty{color:var(--ink-muted);font-size:13px}
+.brand-form{border-top:1px solid var(--line);padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.brand-form h3,.brand-logo,.brand-preview,.brand-actions,.brand-status{grid-column:1/-1}.brand-form h3{margin:0;font-size:15px}
+.brand-field{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-muted)}
+.brand-field input,.brand-field textarea,.brand-select{font:inherit;font-size:16px;color:var(--ink);border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;background:var(--surface-panel);min-height:44px}
+.brand-error{color:var(--danger);font-size:12px}.brand-error:empty{display:none}.brand-file{color:var(--ink-muted)}
+.brand-logo{align-items:flex-start}
+.brand-logo-preview{max-width:220px;max-height:80px;object-fit:contain;border:1px dashed var(--line);border-radius:6px;padding:4px;background:#fff}
+.brand-preview{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface-sunken)}.brand-preview-label{font-size:12px;color:var(--ink-muted)}
+.brand-band{display:flex;align-items:center;gap:10px;margin:6px 0;padding:8px;background:#fff;border-radius:6px}.brand-band img{max-height:40px;max-width:120px;object-fit:contain}.brand-band div{display:flex;flex-direction:column}.brand-band small,.brand-credit{color:var(--ink-muted);font-size:12px}
+.brand-credit{margin:4px 0 0}
+.brand-actions{display:flex;flex-wrap:wrap;gap:8px}.brand-status{margin:0;font-size:13px}
+.brand-sign{display:flex;align-items:center;gap:6px;font-size:13px}.brand-sign .brand-select{min-height:38px;font-size:14px;padding:4px 8px}
+.brand-config{border:1px solid var(--line);border-radius:10px;margin:12px 0;padding:10px 12px;display:grid;gap:8px}.brand-config legend{font-weight:650;padding:0 4px}
+.presentation-brand{display:flex;align-items:center;gap:10px;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.presentation-brand img{max-height:36px;max-width:110px;object-fit:contain}.presentation-brand div{display:flex;flex-direction:column;min-width:0}.presentation-brand strong{font-size:14px}.presentation-brand small{color:var(--ink-muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.presentation-intro{font-size:13px;color:var(--ink);margin:4px 0 8px}
+.presentation-next{font-size:13px;margin:6px 0;padding:8px 10px;border-radius:8px;background:var(--action-soft);color:var(--ink)}
+@media (max-width:600px){.brand-form{grid-template-columns:1fr}.brand-dialog{padding:14px}}
+@media (max-height:500px){.presentation-brand img{max-height:24px}.presentation-intro{display:none}}
