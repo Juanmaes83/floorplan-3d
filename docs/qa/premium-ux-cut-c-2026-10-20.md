@@ -105,4 +105,20 @@ Caben varios perfiles por navegador, para quien trabaja con más de una empresa.
 
 ## 7. Regresión
 
-**PENDIENTE.** Faltan las suites de presentación, lámina y edición, comparadas con la base.
+**Base de comparación:** #66 `5967fa2`. Mismo entorno: Chromium 141, SwiftShader, three.js local, ejecución secuencial. Cabeza final `4407af2`, que contiene el corte A completo (A12 y A13).
+
+| Suite | C | Base | Lectura |
+| --- | --- | --- | --- |
+| Unitarias | 249/249 | — | PASS (incluye 3 de marca) |
+| `brand` | 3/3 | — (no existe) | PASS tras corregir la espera de la prueba (abajo) |
+| `premium-shell` | 4/4 | — | PASS, incluida 844×390 con ratón |
+| `build-palette`, `guide`, `guide-navigation`, `welcome-generar`, `panel-pattern`, `stair-conflicts`, `stair-relocation`, `variants`, `variants-visual`, `sheet` | todas PASS | — | PASS |
+| `presentation-framing` | 6/6 | — | PASS |
+| `presentation-batch` | 7 pasan, 2 fallan | 7 pasan, 2 fallan (las mismas: ZIP del lote 1440×900 y ZIP portable; agotan la espera de la descarga) | Fallo previo, idéntico |
+| `presentation-contact` | 4 pasan, 1 cancelada por tiempo | idéntico | Timeout previo, **no** es PASS |
+| `presentation-route` | 7 pasan, 1 cancelada por tiempo | idéntico | Timeout previo, **no** es PASS |
+| `browser.test.cjs` | 26 pasan, 10 fallan | los mismos 10 | Fallo previo (`page.goto` espera `load`) |
+
+**Defecto de la prueba corregido:** a 844×390, `brand` abría el diálogo de marca justo cuando `FloorPlanPresentation.active` pasaba a `false`. Eso ocurre al **empezar** la salida de la presentación; la salida termina con `history.back()` a `#editor`, cuya ruta cierra los diálogos abiertos. Se reproducía siempre. La prueba ahora espera a que la salida termine. No se relaja ninguna comprobación. Una persona no puede provocarlo: durante la salida la cabecera no admite clics.
+
+**No ejecutado completo en este entorno:** la suite `presentation` agota el límite de 1700 s, tanto en B como en la base, y queda **sin resultado**.
