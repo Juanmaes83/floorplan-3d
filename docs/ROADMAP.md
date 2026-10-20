@@ -295,6 +295,33 @@ No se aprueba globalmente F3/Roadmap 2 ni se promueve producción manualmente.
 Siguiente entrega autorizada, **solo tras MERGED**: LAB v03 desde la v02 integrada,
 con seis modelos nuevos y cinco familias de superficie; revisión humana propia.
 
+## Experiencia profesional premium — en revisión (20-10-2026)
+
+Juanma pidió una experiencia visual y de uso propia de una herramienta profesional de arquitectura, sobria y minimalista, y entregas con la identidad del profesional. Es un programa de diseño propio, apilado sobre la paleta de [#66](https://github.com/Juanmaes83/floorplan-3d/pull/66).
+
+[Diagnóstico, direcciones comparadas y cortes](product/premium-ux-design-2026-10-20.md).
+
+| Corte | Rama | Resultado para el usuario | Estado |
+| --- | --- | --- | --- |
+| A. Sistema visual y jerarquía | `feat/premium-ux-system` | Dirección «Perla». Una acción dominante por estado. Acción y selección distintas. Contraste AA. En el teléfono, la paleta, 2D/3D y las propiedades siempre visibles (barra inferior, o columna lateral en horizontal). «Atajos de teclado». Un solo nombre para «Vaciar distribución» | PR en borrador. [QA](qa/premium-ux-cut-a-2026-10-20.md) |
+| B. Entorno 3D | `feat/premium-3d-setting` | Estudio (por defecto), Jardín suave y Ciudad, de día y de noche. Es decorativo y no es dato del proyecto. La captura usa el mismo fondo | PR en borrador. [QA](qa/premium-ux-cut-b-2026-10-20.md) |
+| C. «Tu marca profesional» | `feat/premium-brand` | Perfiles locales y elección por proyecto. Lámina, presentación y vistas PNG firmadas con una instantánea. Sin cambio de contrato | PR en borrador. [QA](qa/premium-ux-cut-c-2026-10-20.md) |
+
+**Decisiones de Juanma recogidas en el diseño:**
+- Los perfiles de marca son datos locales del navegador, como el vínculo de variantes de D-C1.
+- La marca se incrusta como instantánea en lo que recibe el cliente.
+- No cambia ningún contrato ni la lista de rutas de los ZIP.
+
+**Pendiente de validación humana:**
+- revisión visual de Juanma;
+- GPU real y teléfonos físicos;
+- sesiones con el público D-01 (el protocolo está preparado en el diseño, §7).
+
+**Queda fuera:**
+- portada y cierre como vistas propias del lote, y la lámina dentro del ZIP de la presentación: necesitan una decisión, porque cambian el contrato;
+- la integración con las vistas por planta de #65, cuando se fusione;
+- la migración de los colores incrustados que quedan en componentes antiguos.
+
 ## Programa de UI/UX por fases — autorizado (20-10-2026)
 
 Juanma autoriza una mejora **general** de la experiencia UI/UX, por fases y con QA alta, inspirada en la claridad de LoRA LAB (sin copiar su marca, su código ni funciones no comprobadas).
