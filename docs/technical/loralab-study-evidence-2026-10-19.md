@@ -7,6 +7,8 @@
 - **Sustituye como referencia vigente** a la matriz §2, la recomendación §4 y la recomendación §5.6 del [estudio del 17-10-2026](loralab-study-gate-2026-10-17.md). Esas secciones se conservan como historia.
 - **Fuera de este estudio:** el MCP (#57, ya fusionada; #64 y `tools/rubik-mcp`). No se usa como fuente ni se modifica.
 
+**Anexo del 20-10-2026:** [matriz visual de 4 capturas y un vídeo de 27,8 s](loralab-visual-matrix-2026-10-20.md), ordenada por columna y sección, con qué tenemos y qué no. Sirve para priorizar cortes futuros de producto y UI/UX por separado; no aprueba ninguno.
+
 **Base de Rubik:** `master` `8590349`, incorporado a la rama de #48 por el merge `047f323`. #48 sólo añade documentación, scripts de QA y una prueba de esos scripts, así que el código de producto comparado es el de `8590349`.
 
 **Actualización del 19-10-2026, después de #57:**
