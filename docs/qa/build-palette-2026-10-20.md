@@ -71,6 +71,7 @@ Ver §6 para los resultados en el SHA final.
 | 5 | Contraste: el naranja de marca da 4,3:1 y el texto gris 3,8:1 | `#9c4f28` (5,9:1) y `#655d52` (6,4:1) |
 | 6 | **Con el ratón encima, o tras un toque en esa zona, la regla genérica `.btn:hover` pintaba de beige «Nueva estancia» con texto blanco, ilegible.** Visto en la captura a 844×390 y reproducido con `getComputedStyle` | Regla específica `.btn.palette-primary:hover` (hover `#86421f`) y aserción de contraste en la prueba |
 | 7 | La acción de la guía «poner una cama» rellenaba y enfocaba un buscador oculto: un proyecto vacío arranca en «Construir». Lo detectó `guide.browser` | La acción abre la pestaña «Amueblar» (`2c4a812`) |
+| 8 | Con un mueble seleccionado, la paleta no encontraba su estancia: comprobaba el tipo `'furniture'` y un campo `roomId`, pero el editor usa `'furn'` y el mueble no guarda estancia. Se encontró al releer el código servido en la vista previa | Se usa la estancia que contiene el centro del mueble, como en su panel (`c67e436`). La prueba falla con el código anterior y pasa con el nuevo |
 
 ## 5. Revisión visual
 
@@ -85,6 +86,17 @@ Capturas en [`artifacts/ux-program/palette/`](artifacts/ux-program/palette/), co
 - **Previo y ajeno a esta PR:** en teléfono, el botón flotante «← Inicio» tapa parte de la cabecera («Crear y amueblar»). No se corrige aquí; queda para la fase 2 o 3.
 
 ## 6. Resultados en el SHA final
+
+**Corrección posterior, `c67e436` (defecto 8).** Sólo cambian `js/build-palette.js` y su prueba. En `c67e436` se repitió lo afectado:
+
+- unitarias: **246/246**;
+- `build-palette`: **3/3**;
+- `guide`: **5/5**;
+- `opening-contextual`: **9/9**;
+- `panel-pattern`: **5/5**;
+- `room-layout`: **5/5**.
+
+La regresión completa y las mediciones de abajo son de `2c4a812`.
 
 Las pruebas y mediciones se ejecutaron sobre **`2c4a812`** en un worktree desechable. Cada suite de navegador que falló se repitió sobre `master` `bd153c7` en las mismas condiciones.
 
