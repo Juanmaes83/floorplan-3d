@@ -20,7 +20,11 @@
   if(entry){if(pending)entry.setAttribute('aria-description',`Presentación bloqueada: ${st.headline}. Pulsa para ver qué resolver.`);else entry.removeAttribute('aria-description');}
  }
  function edge(){header.classList.toggle('can-scroll-end',header.scrollWidth-header.clientWidth-header.scrollLeft>4);}
- header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',edge);
+ // The landscape column starts where the header really ends: the header has one row with touch and wraps to three
+ // rows in a narrow window with a mouse, so a fixed offset would cover its right-hand controls.
+ const headerEnd=()=>document.documentElement.style.setProperty('--shell-header-bottom',`${Math.round(header.getBoundingClientRect().bottom)}px`);
+ if(typeof ResizeObserver==='function')new ResizeObserver(headerEnd).observe(header);
+ header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',()=>{edge();headerEnd();});headerEnd();
  update();edge();
  window.FloorPlanAppShell={update(){update();edge();}};
 })();

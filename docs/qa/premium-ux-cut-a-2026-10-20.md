@@ -32,7 +32,7 @@
 
 ## 3. Pruebas nuevas
 
-`tests/premium-shell.browser.test.cjs`, en 1440×900, 390×844 y 844×390, comprueba:
+`tests/premium-shell.browser.test.cjs`, en 1440×900, 390×844 y 844×390 (esta última con táctil y con ratón), comprueba:
 
 - **Inventario de capacidades:** los 72 controles de la cabecera y de la columna izquierda registrados antes del corte (`tests/fixtures/capability-inventory.json`, generado sobre `5967fa2`):
   - existen;
@@ -61,10 +61,42 @@
 | A4 | **Regresión detectada por `build-palette`:** a 844×390 la barra tapaba el muro inferior y el toque de colocación caía en ella | El plano termina antes de la barra; en horizontal la barra es una columna lateral |
 | A5 | En horizontal, el panel de propiedades cerrado asomaba por detrás de la columna | El margen sólo se aplica con el panel abierto |
 | A6 | En el teléfono, la barra de selección tapaba la escala | Resuelto por A4: ya no hay solape |
+| A7 | La columna horizontal tapaba «×» y «Ver más» de la guía (`guide` y `welcome-generar`) | La barra de la guía termina a la izquierda de la columna |
+| A8 | El *hover* genérico era más específico que el original y repintaba «Volver» bajo el puntero (`panel-pattern`) | Estados genéricos con `:where(.btn)`, el mismo peso que la regla original |
+| A9 | Recolocación (390×844): una propuesta quedaba bajo el panel; el código suponía que un panel alto está a la izquierda | Encuadre dentro de la parte libre mayor, debajo o a la derecha del panel |
+| A10 | Aviso de conflictos (844×390): sobre la barra de selección en el plano más estrecho | En horizontal se coloca encima de la barra de selección |
+| A11 | La comprobación de solapes con la barra contaba elementos recortados por su contenedor | La prueba mide sólo la parte visible |
+| A12 | **Regresión detectada por `variants-visual`:** a 844×390 con ratón (ventana estrecha, sin táctil) la cabecera ocupa 3 filas (178 px) y la columna, fija a 64 px, tapaba «Proyectos» e idioma. `premium-shell` sólo probaba 844×390 con táctil | La columna empieza donde termina la cabecera real (`--shell-header-bottom`, medido con `ResizeObserver`). `premium-shell` añade la variante «844×390 mouse», que falla con el código anterior (`projectsBtn` y `langBtn` tapados por `tgLib`) |
 
 ## 5. Regresión
 
-PENDIENTE: suites completas en el SHA final, comparadas con la base `5967fa2` en las mismas condiciones.
+**Base de comparación:** #66 `5967fa2`, con el mismo entorno (Chromium 141, SwiftShader, three.js local) y ejecución secuencial.
+
+**Rondas.** La regresión se ejecutó tres veces. Cada ronda encontró fallos que no aparecían en la base, se corrigieron y se volvió a ejecutar:
+
+| Ronda | SHA | Fallos que no aparecían en la base | Corrección |
+| --- | --- | --- | --- |
+| 1 | `529bec0` | `build-palette` 844×390: la barra tapaba el muro inferior | `6009353` (A4) |
+| 2 | `6009353` | `guide` y `welcome-generar` 844×390: la columna tapaba «×» y «Ver más» de la guía. `panel-pattern` 1440×900: el *hover* genérico repintaba «Volver» | `ec55e43` |
+| 3 | `ec55e43` | `stair-relocation` 390×844: una propuesta quedaba bajo el panel. `stair-conflicts` 844×390: el aviso se solapaba con la barra de selección | `3606c95` |
+| 4 (tanda 3D y presentación) | `4672710` (B) | `variants-visual` 844×390 con ratón: la columna tapaba «Proyectos» (A12) | este commit |
+
+**Resultado final.** Las suites del editor se ejecutaron sobre `9adf989`, la cabeza de C, que contiene el corte A completo (`3606c95`) más la marca:
+
+| Suite | Resultado |
+| --- | --- |
+| Unitarias | 249/249 (incluye 3 de marca) |
+| `premium-shell` | 4/4 (tras A12; incluye la variante con ratón) |
+| `brand` | 3/3 |
+| `build-palette` | 3/3 |
+| `guide`, `guide-navigation`, `welcome-generar`, `panel-pattern`, `ui-language`, `opening-contextual`, `room-layout`, `upload`, `multiformat-guide`, `layout-review`, `surfaces`, `building`, `variants`, `stair-conflicts`, `stair-overlap`, `stair-relocation` y `sheet` | **todas PASS** |
+| `browser.test.cjs` | 26 pasan y 10 fallan: **los mismos 10 que en la base** (`page.goto` agota el tiempo esperando `load`) |
+
+**Pendiente.** Las suites de 3D y presentación se ejecutan sobre la cabeza de B (corte B); su resultado figura en el informe de B.
+
+**Problemas previos corregidos de paso:**
+- El «← Inicio» fijo tapaba controles en la cabecera del teléfono.
+- El encuadre de la propuesta de recolocación asumía que un panel alto estaba a la izquierda.
 
 ## 6. Límites y decisiones abiertas
 
