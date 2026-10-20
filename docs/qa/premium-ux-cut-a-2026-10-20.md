@@ -67,6 +67,7 @@
 | A10 | Aviso de conflictos (844×390): sobre la barra de selección en el plano más estrecho | En horizontal se coloca encima de la barra de selección |
 | A11 | La comprobación de solapes con la barra contaba elementos recortados por su contenedor | La prueba mide sólo la parte visible |
 | A12 | **Regresión detectada por `variants-visual`:** a 844×390 con ratón (ventana estrecha, sin táctil) la cabecera ocupa 3 filas (178 px) y la columna, fija a 64 px, tapaba «Proyectos» e idioma. `premium-shell` sólo probaba 844×390 con táctil | La columna empieza donde termina la cabecera real (`--shell-header-bottom`, medido con `ResizeObserver`). `premium-shell` añade la variante «844×390 mouse», que falla con el código anterior (`projectsBtn` y `langBtn` tapados por `tgLib`) |
+| A13 | **Regresión detectada por `presentation-batch` (redimensionar):** los márgenes que dejan sitio a la barra (60 px abajo; 112 px a la derecha en horizontal) seguían al presentar, aunque la cabecera y la barra se ocultan: el 3D del cliente era más estrecho que la pantalla | Al presentar, el área de trabajo recupera toda la pantalla. `premium-shell` comprueba los márgenes; falla con el código anterior |
 
 ## 5. Regresión
 
@@ -79,7 +80,8 @@
 | 1 | `529bec0` | `build-palette` 844×390: la barra tapaba el muro inferior | `6009353` (A4) |
 | 2 | `6009353` | `guide` y `welcome-generar` 844×390: la columna tapaba «×» y «Ver más» de la guía. `panel-pattern` 1440×900: el *hover* genérico repintaba «Volver» | `ec55e43` |
 | 3 | `ec55e43` | `stair-relocation` 390×844: una propuesta quedaba bajo el panel. `stair-conflicts` 844×390: el aviso se solapaba con la barra de selección | `3606c95` |
-| 4 (tanda 3D y presentación) | `4672710` (B) | `variants-visual` 844×390 con ratón: la columna tapaba «Proyectos» (A12) | este commit |
+| 4 (tanda 3D y presentación) | `4672710` (B) | `variants-visual` 844×390 con ratón: la columna tapaba «Proyectos» (A12) | `1b20657` |
+| 5 (tanda 3D y presentación) | `e7442e0` (B) | `presentation-batch`: al redimensionar presentando, el lienzo no ocupaba toda la pantalla (A13) | `864631d` |
 
 **Resultado final.** Las suites del editor se ejecutaron sobre `9adf989`, la cabeza de C, que contiene el corte A completo (`3606c95`) más la marca:
 
