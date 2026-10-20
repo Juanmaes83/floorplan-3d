@@ -1,0 +1,127 @@
+/* Rubik design system, direction «Perla» (docs/product/premium-ux-design-2026-10-20.md §2–3).
+   Role tokens for the interface chrome; loaded last, so the legacy variables and the role-bearing selectors of the
+   editor, the guide and the palette resolve to these roles. Plan, furniture and material colours are content and
+   are not changed here. Every role keeps WCAG AA (≥ 4.5:1) for its text in normal, hover, pressed and selected
+   states; the focus ring does not depend on the background. Action and selection never share a colour:
+   action = petrol fill, selection = graphite (with a shape cue: dark pill, underline, inset ring or ✓). */
+:root{
+  --surface-app:#eceeee; --surface-panel:#ffffff; --surface-sunken:#f3f4f4; --surface-hover:#e6e9ea;
+  --line:#d5d9db; --line-strong:#aeb5b9;
+  --ink:#1f2326; --ink-muted:#5b6266;
+  --action:#1f5a66; --action-hover:#174952; --action-pressed:#123b42; --action-ink:#ffffff; --action-soft:#e3ecee;
+  --select:#2b3034; --select-ink:#ffffff; --select-soft:#e9ebec;
+  --focus:#1f6f8b;
+  --info:#2c5d8a; --warn:#7a5200; --warn-soft:#fff4dc; --danger:#a3261b; --danger-soft:#fbe9e7; --success:#2f6e4a;
+  --brand-trace:#b5653a;
+  --shadow:0 10px 30px rgba(20,26,30,.12);
+  /* Legacy names used across the editor, mapped onto the roles. */
+  --bg:var(--surface-app); --paper:var(--surface-sunken); --panel:var(--surface-panel); --muted:var(--ink-muted);
+  --accent:var(--action); --accent-soft:var(--action-soft); --teal:var(--action);
+}
+
+/* Focus: one visible ring for every interactive element (keyboard only). */
+:where(button,a[href],summary,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Buttons. Secondary is the default; .primary is the single dominant action of a state. */
+.btn:hover{background:var(--surface-hover)}
+.btn:active{background:#dde1e3}
+.btn:disabled,.btn[aria-disabled=true]{color:#6e757a;cursor:default}
+.btn.primary,.actions .btn.primary,.presentation-config-actions .btn:first-child,.guide-dialog .primary{background:var(--action)!important;border-color:var(--action)!important;color:var(--action-ink)!important}
+.btn.primary:hover,.actions .btn.primary:hover,.presentation-config-actions .btn:first-child:hover{background:var(--action-hover)!important}
+.btn.primary:active{background:var(--action-pressed)!important}
+.btn.danger{color:var(--danger)}
+/* Selection: graphite, never the action colour. */
+.btn.on{background:var(--select);color:var(--select-ink)}
+.btn.chip.on,#roomList button.on{background:var(--select-soft);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--select);font-weight:600}
+.layers-pop .btn.chip.on::before{color:var(--ink)}
+.seg .pill{background:var(--select)}
+.mat.on{border-color:var(--select);box-shadow:0 0 0 2px var(--select-soft),0 0 0 3px var(--select)}
+.range input{accent-color:var(--select)}
+.total b{color:var(--ink)}
+.item.dragging{border-color:var(--select)}
+@media (hover:hover){.item:hover{border-color:var(--line-strong)}}
+.grp,.layers-menu summary,.menu summary{background:var(--surface-panel)}
+.layers-pop,.menu-pop{box-shadow:var(--shadow)}
+
+/* Header: «Subir plano» stays visible but is secondary inside the editor; «Presentar mi vivienda» is the editor's
+   next step for the professional, filled only when there is something to present and nothing pending. */
+#uploadPlanBtn.btn.primary{background:var(--surface-panel)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1px var(--line-strong);border-color:transparent!important}
+#uploadPlanBtn.btn.primary:hover{background:var(--surface-hover)!important}
+.presentation-entry{border:1px solid var(--line-strong);color:var(--ink);background:var(--surface-panel)}
+body.has-rooms:not(.distribution-pending) .presentation-entry{background:var(--action);border-color:var(--action);color:var(--action-ink)}
+body.has-rooms:not(.distribution-pending) .presentation-entry:hover{background:var(--action-hover)}
+body.distribution-pending .presentation-entry{border-style:dashed;border-color:var(--warn);color:var(--warn)}
+body.distribution-pending .presentation-entry::after{content:' · pendiente';font-weight:500}
+#guideResume{border-color:var(--line-strong);color:var(--ink)}
+#actionSearchBtn{background:var(--surface-sunken);color:var(--ink-muted)}
+
+/* Guide and welcome: neutral surfaces; the guide's current step uses the selection role. */
+.guide-current{background:var(--surface-sunken)}
+.guide-progress{background:#dde1e3}.guide-progress>span{background:var(--select)}
+.guide-progress-line strong,.guide-steps button[aria-current=step]{color:var(--ink)}
+.guide-steps button[aria-current=step] .step-number{background:var(--select);border-color:var(--select);color:var(--select-ink)}
+.guide-project,.guide-progress-line,.guide-steps button,.guide-current p,.search-feedback,.guide-dialog p{color:var(--ink-muted)}
+.guide-example{color:var(--ink-muted)}
+.guide-outcome{background:var(--surface-sunken);border-color:var(--line)}.guide-outcome strong{color:var(--ink)}
+#welcomeDialog{background:var(--surface-app)}
+.welcome-entry,.action-result{background:var(--surface-panel);border-color:var(--line)}
+.welcome-entry:first-child{background:var(--surface-panel);border-color:var(--line-strong)}
+.welcome-entry:hover{border-color:var(--select)}
+.welcome-entry .entry-icon{color:var(--action)}
+.welcome-eyebrow{color:var(--ink-muted)}
+.welcome-result{border-left-color:var(--select);color:var(--ink)}
+.welcome-intro .lead,.welcome-visual figcaption,.welcome-foot,.welcome-search label{color:var(--ink-muted)}
+.welcome-visual{background:#e1e4e5}
+.action-search input{background:var(--surface-panel);border-color:var(--line-strong)}
+.plan-empty>div{background:rgba(255,255,255,.92);border-color:var(--line-strong)}
+
+/* Creation palette (#66): selected tab underlined (selection), «Nueva estancia» is the action of an empty project. */
+.palette-tab{background:var(--surface-panel);color:var(--ink-muted)}
+.palette-tab[aria-selected=true]{background:var(--surface-panel);border-color:var(--line);color:var(--ink);box-shadow:inset 0 -3px 0 var(--select)}
+.palette-group h4,.palette-help{color:var(--ink-muted)}
+.palette-action.on{border-color:var(--select);background:var(--select-soft);color:var(--ink)}
+@media (hover:hover){.palette-action:hover,.palette-chip:hover{border-color:var(--line-strong)}}
+.palette-more summary{color:var(--ink)}
+.palette-primary,.btn.palette-primary:hover{background:var(--surface-panel);border-color:var(--line-strong);color:var(--ink)}
+body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:hover{background:var(--action);border-color:var(--action);color:var(--action-ink)}
+@media (hover:hover){body:not(.has-rooms) .btn.palette-primary:hover{background:var(--action-hover);border-color:var(--action-hover)}body.has-rooms .btn.palette-primary:hover{background:var(--surface-hover)}}
+.palette-warn{color:var(--warn)!important}
+.presentation-stops .on{background:var(--select);color:var(--select-ink)}
+
+/* Phones and small tablets: the essential controls (library/palette, 2D/3D and properties) leave the horizontally
+   scrolling header for a bottom bar within thumb reach. They are the same buttons (same ids and handlers). */
+#mobileDock{display:contents}
+@media (max-width:1100px){
+  #mobileDock{position:fixed;left:8px;right:8px;bottom:calc(28px + env(safe-area-inset-bottom));z-index:30;display:grid;grid-template-columns:1fr 1.25fr 1fr;align-items:stretch;gap:4px;padding:4px;
+    background:var(--surface-panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+  #mobileDock #paneBtns{display:contents}
+  #mobileDock #tgLib{order:1}#mobileDock #viewSeg{order:2}#mobileDock #tgPanel{order:3}
+  #mobileDock .btn{min-height:44px;white-space:normal;line-height:1.15;font-size:12px;padding:4px 6px;border:1px solid var(--line);background:var(--surface-panel)}
+  #mobileDock .btn.chip.on{border-color:var(--select)}
+  #mobileDock #viewSeg{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:0;border:0;background:transparent}
+  #mobileDock #viewSeg .pill{display:none}
+  #mobileDock #viewSeg .btn{width:auto}
+  #mobileDock #viewSeg .btn[data-view="2d"],body.m3d #mobileDock #viewSeg .btn[data-view="3d"]{background:var(--select);color:var(--select-ink);border-color:var(--select)}
+  body.m3d #mobileDock #viewSeg .btn[data-view="2d"]{background:var(--surface-panel);color:var(--ink);border-color:var(--line)}
+  body.presenting #mobileDock{display:none}
+  /* Menus of the header open above the bottom bar and end before it. */
+  .menu-pop,.layers-pop{z-index:40;max-height:calc(100dvh - 150px)!important;overflow-y:auto}
+  /* The sticky «Inicio» stays at the left edge: scrolling a header control into view leaves it uncovered. */
+  header{scroll-padding-inline-start:84px;scroll-padding-inline-end:36px}
+  /* Keep what lives at the bottom of the plan above the bar. */
+  #fab{bottom:76px}
+  #joy{bottom:84px}#walkExit{bottom:84px}
+  aside.lib,aside.right{padding-bottom:64px}
+  .scalebar{margin-bottom:60px}
+  main:has(#fab.show) .scalebar{opacity:0}
+  /* Header scroll cue: a sticky fade at the right edge while more controls are hidden to the right. A mask on the
+     header would also clip the fixed bottom bar, which is a descendant of the header. */
+  header::after{content:'';position:sticky;right:-6px;flex:0 0 32px;align-self:stretch;margin-left:-32px;pointer-events:none;opacity:0;transition:opacity .2s;
+    background:linear-gradient(90deg,rgba(255,255,255,0),var(--surface-panel) 80%)}
+  header.can-scroll-end::after{opacity:1}
+}
+@media (max-width:1100px) and (max-height:500px){
+  #mobileDock{bottom:calc(26px + env(safe-area-inset-bottom));left:auto;right:8px;width:min(460px,calc(100vw - 16px));padding:3px}
+  #mobileDock .btn{min-height:40px}
+  #fab{bottom:66px}
+}

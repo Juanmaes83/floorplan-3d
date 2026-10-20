@@ -411,6 +411,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 </script>
 <link rel="stylesheet" href="css/surface-library.css">
 <link rel="stylesheet" href="css/guided-experience.css">
+<link rel="stylesheet" href="css/design-system.css">
 </head>
 <body>
 <div class="app">
@@ -508,7 +509,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
         <button class="btn" id="importJson" data-en="Import project JSON" data-es="Importar proyecto JSON" aria-describedby="importJsonHelp">导入项目 JSON</button>
         <span id="importJsonHelp" class="import-help" data-en="Creates a new local project and keeps the current one. For other formats use Upload plan." data-es="Crea un proyecto local nuevo y conserva el actual. Para otros formatos usa Subir plano.">创建新的本地项目并保留当前项目。其他格式请使用上传平面图。</span>
         <button class="btn" id="importImage" data-en="Upload a floor plan or project" data-es="Subir plano o proyecto" aria-describedby="uploadPlanHelp">上传平面图或项目</button>
-        <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear">清空布置</button>
+        <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear" data-es="Vaciar distribución">清空布置</button>
         <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
       </div></details>
     <input type="file" id="fileIn" aria-label="Proyecto JSON" accept=".json,application/json" hidden>
@@ -648,6 +649,7 @@ const ES_TEXT = {
   "Walls removed": "Muros retirados",
   "Clear measures": "Borrar mediciones",
   "Clear layout": "Vaciar distribución",
+  "Keyboard Shortcuts": "Atajos de teclado",
   "Rotate": "Girar",
   "Duplicate": "Duplicar",
   "Delete": "Eliminar",
@@ -1355,6 +1357,7 @@ function updateHeader(){
 const esc = SafeDOM.value;
 
 function renderPanel(){
+  window.FloorPlanAppShell?.update();
   window.FloorPlanBuildPalette?.render();
   if(window.FloorPlanTraceUI?.editPanel())return;
   renderFab();
@@ -2250,6 +2253,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/sheet-ui.js"></script>
 <script src="js/building-ui.js"></script>
 <script src="js/build-palette.js"></script>
+<script src="js/app-shell.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：

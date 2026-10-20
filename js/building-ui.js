@@ -99,6 +99,7 @@
   const keys=new Set(list.map(keyOf)),fresh=announced?list.filter(c=>!announced.has(keyOf(c))):list;
   if(fresh.length)say(fresh.length===1?fresh[0].message:`${st.headline}. Pulsa «Revisar» para localizarlos.`,7000);
   announced=keys;
+  window.FloorPlanAppShell?.update();
  }
  // While a drag is in progress: the same highlight and chip, without announcements (the drop decides).
  function preview(){const b=current();if(!b)return;render2D(b);const keep=announced;notify(b);announced=keep;}

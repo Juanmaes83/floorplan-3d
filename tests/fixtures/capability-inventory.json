@@ -1,0 +1,581 @@
+{
+ "source": "feat/ux-build-palette 5967fa2 (before premium cut A), full editor 1440x900",
+ "controls": [
+  {
+   "id": "uploadPlanBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Subir plano"
+  },
+  {
+   "id": "uploadCancel",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Cancelar importación"
+  },
+  {
+   "id": "newProjectBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Nuevo proyecto"
+  },
+  {
+   "id": "newRoomBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "+ Estancia"
+  },
+  {
+   "id": "levelsBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Plantas"
+  },
+  {
+   "id": "tgLib",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "◧ Crear y amueblar"
+  },
+  {
+   "id": "tgPanel",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Propiedades ◨"
+  },
+  {
+   "id": "zoomOut",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "−"
+  },
+  {
+   "id": "zoomIn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "＋"
+  },
+  {
+   "id": "fit",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "Ajustar"
+  },
+  {
+   "id": "s60",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "1:60"
+  },
+  {
+   "id": "s100",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "1:100"
+  },
+  {
+   "id": "vIso",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Isométrica"
+  },
+  {
+   "id": "vTop",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Superior"
+  },
+  {
+   "id": "undo",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Deshacer"
+  },
+  {
+   "id": "redo",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Rehacer"
+  },
+  {
+   "id": "sun",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": ""
+  },
+  {
+   "id": "traceBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Plano propio"
+  },
+  {
+   "id": "projectsBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Proyectos"
+  },
+  {
+   "id": "langBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "EN"
+  },
+  {
+   "id": "fullscreen",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "⛶ Pantalla completa"
+  },
+  {
+   "id": "exportPng",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "openSheet",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "shot3dSize",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "shot3dAspect",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "exportJson",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "importJson",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "importImage",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "clearAll",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "reset",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "id": "actionSearchBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "⌕ ¿Qué quieres hacer?"
+  },
+  {
+   "id": "welcomeBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "← Inicio"
+  },
+  {
+   "id": "guideResume",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Recuperar guía"
+  },
+  {
+   "id": "presentationBtn",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Presentar mi vivienda"
+  },
+  {
+   "id": "paletteTabBuild",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Construir"
+  },
+  {
+   "id": "paletteTabFurnish",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Amueblar"
+  },
+  {
+   "id": "palettePlan2d",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Ir al plano 2D"
+  },
+  {
+   "id": "paletteTool-select",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Seleccionar"
+  },
+  {
+   "id": "paletteTool-measure",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Medir"
+  },
+  {
+   "id": "paletteTool-demolish",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Modificar muros"
+  },
+  {
+   "id": "paletteNewRoom",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Nueva estancia"
+  },
+  {
+   "id": "paletteOpening-door",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Puerta abatible"
+  },
+  {
+   "id": "paletteOpening-sliding-door",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Puerta corredera"
+  },
+  {
+   "id": "paletteOpening-window",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Ventana"
+  },
+  {
+   "id": "paletteOpening-opening",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Hueco de paso"
+  },
+  {
+   "id": "paletteWall",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Dibujar muro"
+  },
+  {
+   "id": "paletteTrace",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Plano propio"
+  },
+  {
+   "id": "paletteLevels",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Plantas…"
+  },
+  {
+   "id": "paletteStair",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Escalera recta"
+  },
+  {
+   "id": "furnitureSearch",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": ""
+  },
+  {
+   "id": "searchClear",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Borrar"
+  },
+  {
+   "id": "searchRoom",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Todas las estancias\nDormitorio\nSalón\nCoc"
+  },
+  {
+   "id": "searchFamily",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Todas las familias\nAsientos\nCamas\nMesas\n"
+  },
+  {
+   "id": "searchAll",
+   "scope": "aside.lib",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Todos"
+  },
+  {
+   "selector": "header [data-view=\"2d\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Plano 2D"
+  },
+  {
+   "selector": "header [data-view=\"3d\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Escena 3D"
+  },
+  {
+   "selector": "header [data-tool=\"select\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "Seleccionar"
+  },
+  {
+   "selector": "header [data-tool=\"measure\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "Medir"
+  },
+  {
+   "selector": "header [data-tool=\"demolish\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": false,
+   "label": "Modificar muros"
+  },
+  {
+   "selector": "header [data-mode=\"orbit\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Vista aérea"
+  },
+  {
+   "selector": "header [data-mode=\"walk\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Recorrer"
+  },
+  {
+   "selector": "header [data-layer=\"dims\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-layer=\"labels\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-layer=\"furn\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-layer=\"grid\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-layer=\"bearing\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-layer=\"wallSnap\"]",
+   "scope": "header",
+   "only3d": false,
+   "only2d": true,
+   "inMenu": true,
+   "label": ""
+  },
+  {
+   "selector": "header [data-cut=\"2.8\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Muros completos"
+  },
+  {
+   "selector": "header [data-cut=\"1.2\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Muros seccionados"
+  },
+  {
+   "selector": "header [data-t=\"furn\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Muebles"
+  },
+  {
+   "selector": "header [data-t=\"labels\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Nombres"
+  },
+  {
+   "selector": "header [data-t=\"night\"]",
+   "scope": "header",
+   "only3d": true,
+   "only2d": false,
+   "inMenu": false,
+   "label": "Noche"
+  }
+ ]
+}
