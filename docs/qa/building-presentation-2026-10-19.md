@@ -94,7 +94,22 @@ THREE_LOCAL_DIR=… CHROME=/opt/pw-browsers/chromium PRESENTATION_BASE=<worktree
 | `building`, `building-presentation` | 3 PASS, 6 PASS |
 | `stair-conflicts`, `stair-overlap`, `stair-relocation`, `sheet`, `variants` | 4, 3, 4, 7 y 4 PASS; 0 FAIL, 0 SKIP |
 | `panel-pattern`, `ui-language`, `guide`, `guide-navigation` | 5, 3, 5 y 4 PASS; 0 FAIL, 0 SKIP |
-| Suites de presentación 3D | Ver la descripción de la PR, con la comparación prueba a prueba frente a `master` |
+| Suites de presentación 3D | Tabla siguiente, comparadas prueba a prueba con `master` `bd153c7` |
+
+**Suites de presentación 3D.** Se ejecutaron en la rama y después en `master`, una a una, con un corte de 850 s por suite (`timeout 850`).
+
+| Suite | Rama `d1bdf77` | `master` `bd153c7` | Clasificación |
+| --- | --- | --- | --- |
+| `presentation-framing` | 6 PASS | 6 PASS | Sin cambios |
+| `presentation-batch` | 7 PASS, 2 FAIL | 7 PASS, 2 FAIL (los mismos) | Preexistente: los casos de 1440×900 pulsan `#guidePresent`, que tras #62 no es visible |
+| `presentation-minimap` | 4 PASS, 1 FAIL | 4 PASS, 1 FAIL (el mismo) | Preexistente |
+| `presentation-reveal` | 1 PASS, 7 FAIL | 1 PASS, 7 FAIL (los mismos) | Preexistente |
+| `presentation-light` | 0 PASS, 5 FAIL; corte a 850 s | 0 PASS, 5 FAIL; corte | Preexistente |
+| `presentation-contact` | 3 PASS, 2 FAIL | 3 PASS, 2 FAIL (los mismos) | Preexistente |
+| `presentation` | 9 PASS, 5 FAIL, 14 con resultado; corte | 8 PASS, 5 FAIL, 13 con resultado; corte | Mismos fallos; el corte deja casos sin resultado. **No concluyente**, no aprobado |
+| `presentation-route` | 5 PASS, 2 FAIL; corte | 6 PASS, 1 FAIL; corte | El fallo extra («M18 reduced motion, missing entrance and context loss stay recoverable») tarda 115–121 s con un límite de 120 s. Repetido aislado dos veces en cada lado: en la rama pasa a 120,8 s y falla a 120,8 s; en `master`, pasa a 119,3 s y falla a 120,8 s. **No concluyente** por tiempo, igual en los dos lados |
+
+Ningún fallo aparece sólo en la rama de forma reproducible. Los fallos y cortes de estas suites **no cuentan como aprobados**.
 
 Comando de cada suite: `node --test --test-concurrency=1 tests/<suite>.browser.test.cjs`, con las mismas variables de entorno.
 
@@ -138,4 +153,4 @@ Las capturas `docs/qa/artifacts/multilevel/*-08-presentation-note.png` se regene
 - GPU real y teléfonos físicos.
 - **CI no ejecutada:** los jobs de Actions terminan sin runner.
 - La medición con personas del público D-01. El beneficio sigue siendo una hipótesis.
-- `tests/presentation-batch.browser.test.cjs` pulsa `#guidePresent`, que tras #62 no es visible en la guía compacta. Falla igual en `master` y no se corrige aquí porque queda fuera del alcance. Comparación en la descripción de la PR.
+- Las suites de presentación 3D que fallan o se cortan también lo hacen en `master` (§3). `presentation-batch`, a 1440×900, pulsa `#guidePresent`, que tras #62 no es visible en la guía compacta. No se corrige aquí porque queda fuera del alcance.
