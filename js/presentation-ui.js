@@ -40,6 +40,8 @@
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  let mapOpen=false;
+ // Brand snapshot taken when the presentation starts (FloorPlanBrandUI): what the client sees and receives.
+ let brandSnap=null;
  // Building presentation (two levels): the configuration per level, the level that was active when it started (it
  // comes back when the presentation ends).
  let buildingConfig=null,startLevelId=null;
@@ -140,6 +142,8 @@
   if(!captureReady())return;
   const st=blocked();if(st){toast(blockedMessage(st),8000);return;}
   captureButton.disabled=true;
+  // With a brand, the PNG the client receives carries its strip (same size); without a brand, as before.
+  if(brandSnap){const stop=plan.stops[index];Promise.resolve().then(async()=>{const shot=View3D.shot({...captureOptions,download:false});const url=await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览'));const a=document.createElement('a');a.download='rubik-sota-presentacion.png';a.href=url;a.click();}).catch(error=>toast(error.message||String(error),6000)).finally(()=>updateCapture());return;}
   try{View3D.shot(captureOptions);}
   catch(error){toast(error.message||String(error),6000);}
   finally{updateCapture();}
@@ -156,9 +160,10 @@
   };
  }
  // One PNG of the current view, checked (signature and IHDR size) before it goes into a batch.
- function pngShot(){
+ async function pngShot(label){
   const shot=View3D.shot({...captureOptions,download:false});
-  const encoded=shot.dataUrl.split(',')[1],bytes=Uint8Array.from(atob(encoded),char=>char.charCodeAt(0));
+  const image=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,label):shot.dataUrl;
+  const encoded=image.split(',')[1],bytes=Uint8Array.from(atob(encoded),char=>char.charCodeAt(0));
   if(bytes.length<24||bytes[0]!==137||bytes[1]!==80||bytes[2]!==78||bytes[3]!==71)throw Error('PNG incompleto.');
   const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
   if(view.getUint32(16)!==shot.width||view.getUint32(20)!==shot.height)throw Error('Dimensiones PNG incoherentes.');
@@ -191,7 +196,9 @@
     await View3D.presentationGo(stop,true);await nextFrame();
     if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true')return;
     if(View3D.lifecycleMetrics.pendingAssets)throw Error(tx('Los modelos 3D siguen cargando; no se descargó ningún archivo. Vuelve a intentarlo.','3D models are still loading; nothing was downloaded. Try again.','3D 模型仍在加载；未下载任何文件。'));
-    const camera=View3D.presentationPose(),{shot,bytes}=pngShot();
+    const label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
+    const camera=View3D.presentationPose(),{shot,bytes}=await pngShot(`${stop.levelName} · ${label}`);
+    if(!batchCurrent(serial,sourceEpoch))return;
     const filename=`views/view-${String(i+1).padStart(3,'0')}.png`;
     if(entries.has(filename))throw Error('Vista repetida en el lote.');
     entries.set(filename,bytes);
@@ -246,7 +253,9 @@
     batchStatus.textContent=tx(`Capturando ${i+1} de ${sourcePlan.stops.length}…`,`Capturing ${i+1} of ${sourcePlan.stops.length}…`,`正在截取 ${i+1} / ${sourcePlan.stops.length}…`);
     await View3D.presentationGo(sourcePlan.stops[i],true);await nextFrame();
     if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true'||View3D.lifecycleMetrics.pendingAssets)return;
-    const camera=View3D.presentationPose(),{shot,bytes}=pngShot();
+    const stopLabel=sourcePlan.stops[i].kind==='room'?roomName(sourcePlan.stops[i].label):tx('Vista general','Overview','总览');
+    const camera=View3D.presentationPose(),{shot,bytes}=await pngShot(stopLabel);
+    if(!batchCurrent(serial,sourceEpoch))return;
     const filename=`views/view-${String(i+1).padStart(3,'0')}.png`;
     entries.set(filename,bytes);
     views.push({order:i+1,kind:sourcePlan.stops[i].kind,roomId:sourcePlan.stops[i].roomId,label:sourcePlan.stops[i].label,filename,width:shot.width,height:shot.height,bytes:bytes.length,sha256:await FloorPlanPackage.digest(bytes),camera});
@@ -358,6 +367,7 @@
   routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
+  window.FloorPlanBrandUI?.decorate(card,brandSnap,{index,count:plan.stops.length,kind:stop.kind});
   // Building: the level of every view is named; the first view of a level says that the level changes.
   levelLine.hidden=!isBuildingPlan();
   if(isBuildingPlan()){
@@ -423,6 +433,7 @@
    else if(result.changed)configMessage.textContent=tx(result.missing?`El plano cambió: ${result.missing} estancia(s) ya no existen. Revisa la selección.`:'El plano cambió. Las vistas se calcularán de nuevo.','The layout changed. Review the room selection; views will be recalculated.','布局已更改。请检查房间选择；视图将重新计算。');
    else configMessage.textContent=tx('Selecciona y ordena las estancias. La vista general va primero.','Select and order rooms. Overview comes first.','选择并排序房间。总览始终在前。');
    roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias','Rooms','房间'));
+   window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
    renderConfig();
@@ -450,6 +461,7 @@
    :buildingConfig.some(l=>l.message==='changed')?tx('El plano cambió. Revisa la selección de cada planta.','The layout changed. Review the selection of each level.','布局已更改。请检查各楼层的选择。')
    :tx('Selecciona y ordena las estancias de cada planta. Las plantas se presentan en orden, de abajo arriba.','Select and order the rooms of each level. Levels are presented from the bottom up.','选择并排序各楼层的房间。');
   roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias por planta','Rooms by level','按楼层的房间'));
+  window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
   renderConfig();return true;
@@ -495,6 +507,7 @@
   const token=++epoch;
   batchStatus.hidden=true;batchStatus.textContent='';
   entry=app.capturePresentationEntry();entry.focus=returnFocus;
+  brandSnap=window.FloorPlanBrandUI?.snapshot()||null;
   if(buildingConfig){
    const sources=building().presentationSources();
    const selection=buildingConfig.flatMap(level=>level.roomOrder.filter(id=>level.selected.includes(id)).map(roomId=>({levelId:level.levelId,roomId})));

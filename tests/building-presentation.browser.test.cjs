@@ -139,6 +139,40 @@ test('equal room IDs and names on both levels: distinct stops, buttons, views an
  assert.deepEqual(errors,[]);
 });
 
+test('professional brand reaches both levels of the building presentation batch',{timeout:900000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
+ const {page,errors}=await setup(context),fx=F.build();
+ await importBuilding(page,await buildingZip(fx.building,fx.bytesFor));
+ const original=await snapshot(page);
+ const profile=await page.evaluate(()=>{
+  const store=FloorPlanBrandUI.store;
+  const p=FloorPlanBrand.saveProfile(store,{name:'Estudio Dos Plantas',email:'hola@estudio.es'});
+  return p;
+ });
+ await page.locator('#presentationBtn').click();await page.locator('#presentationConfig[open]').waitFor();
+ await page.locator('.brand-config .brand-select').selectOption(profile.id);
+ await page.locator('#brandDeliveryTitle').fill('Casa para cliente');
+ await page.locator('#brandDeliveryIntro').fill('Dos plantas en una entrega.');
+ assert.equal(await page.locator('.brand-config .brand-select').inputValue(),profile.id,'brand is selectable in the building configuration');
+ await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
+ assert.match(await page.locator('.presentation-brand').textContent(),/Estudio Dos Plantas[\s\S]*Casa para cliente/);
+ assert.match(await page.locator('.presentation-intro').textContent(),/Dos plantas en una entrega/);
+ await page.waitForFunction(()=>!document.querySelector('#presentationBatch').disabled,null,{timeout:60000});
+ const {files,manifest,summary}=await readBatch((await download(page,()=>page.locator('#presentationBatch').click())).bytes);
+ assert.equal(summary.version,2);assert.deepEqual(summary.levels,['lvl_fixture-ground','lvl_fixture-upper']);
+ assert.equal(manifest.views.length,4,'two overviews and one chosen room per level');
+ assert.ok(!/Estudio Dos Plantas|Casa para cliente|brd_/.test(Buffer.from(files.get('presentation.json')).toString()+Buffer.from(files.get('editable-building.zip')).toString('latin1')),'manifest and editable building remain brand-free');
+ const samples=[manifest.views[0],manifest.views.find(v=>v.levelId==='lvl_fixture-upper')];
+ for(const view of samples){
+  const png=Buffer.from(files.get(view.filename));assert.equal(sha(png),view.sha256,'the manifest hashes the delivered branded PNG');
+  const strip=await page.evaluate(async b64=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);const band=Math.max(44,Math.round(img.height*.075));return [...x.getImageData(Math.round(img.width/2),img.height-band,1,1).data].slice(0,3);},png.toString('base64'));
+  assert.deepEqual(strip,[213,217,219],`${view.levelName} has the brand strip`);
+ }
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:60000});
+ assert.deepEqual(await snapshot(page),original,'brand presentation does not modify the building or editor');
+ assert.deepEqual(errors,[]);
+});
+
 test('pending distribution: no presentation, and no batch or PNG through any path',{timeout:600000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
  const {page,errors}=await setup(context),downloads=[];page.on('download',d=>downloads.push(d.suggestedFilename()));

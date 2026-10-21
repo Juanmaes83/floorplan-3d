@@ -24,12 +24,24 @@
  function build(){
   const project=app.project,geometry=app.geometry,source=document.querySelector('#plan');
   if(!project||!geometry||app.source2D!==project||!source)throw Error(tr('La planta 2D aún no está lista. Vuelve a abrir el editor.','The 2D plan is not ready yet. Return to the editor.','二维平面图尚未就绪，请返回编辑器。'));
+  // Optional professional brand (FloorPlanBrandUI): a snapshot drawn into the title band and the credit line.
+  const brand=window.FloorPlanBrandUI?.snapshot()||null;
   const revision=FloorPlanGuide.revision(project),sheet=svgNode('svg',{xmlns:NS,viewBox:'0 0 1600 1100',width:1600,height:1100,'data-project-id':project.id,'data-revision':revisionCode(revision)});
   svgNode('rect',{width:1600,height:1100,fill:'#fcfaf6'},sheet);
   svgNode('rect',{x:22,y:22,width:1556,height:1056,fill:'none',stroke:'#81796e','stroke-width':2},sheet);
-  const title=localized(project.name||tr('Proyecto sin nombre','Untitled project','未命名项目'));
-  text(sheet,tr('LÁMINA DE DISTRIBUCIÓN','FLOOR PLAN SHEET','平面设计图'),50,66,20,700,'#315e62');
-  text(sheet,title.length>62?title.slice(0,59)+'…':title,50,112,Math.max(23,Math.min(38,1250/(title.length*.65||1))),700);
+  const title=brand?.title||localized(project.name||tr('Proyecto sin nombre','Untitled project','未命名项目')),maxTitle=brand?46:62,titleRoom=brand?950:1250;
+  text(sheet,tr('LÁMINA DE DISTRIBUCIÓN','FLOOR PLAN SHEET','平面设计图'),50,66,20,700,'#1f5a66');
+  text(sheet,title.length>maxTitle?title.slice(0,maxTitle-3)+'…':title,50,112,Math.max(23,Math.min(38,titleRoom/(title.length*.65||1))),700);
+  if(brand){
+   const p=brand.profile,cut=(v,n)=>v.length>n?v.slice(0,n-1)+'…':v;let x=1060;
+   const g=svgNode('g',{'data-brand':'true'},sheet);
+   if(p.logo){svgNode('image',{href:p.logo,x:1060,y:36,width:140,height:84,preserveAspectRatio:'xMinYMid meet'},g);x=1214;}
+   // Name, then the contact in two short lines (person and phone; e-mail and web) so nothing is cut, then the motto.
+   const chars=Math.floor((1550-x)/7.2);text(g,cut(p.name,Math.floor((1550-x)/11)),x,62,21,700,'#1f2326');
+   const lines=[[p.person,p.phone],[p.email,p.web&&p.web.replace(/^https?:\/\//,'')]].map(l=>l.filter(Boolean).join(' · ')).filter(Boolean);
+   lines.forEach((l,i)=>text(g,cut(l,chars),x,86+i*19,13.5,400,'#5b6266'));
+   if(p.tagline)text(g,cut(p.tagline,chars),x,86+lines.length*19,12.5,400,'#5b6266');
+  }
   svgNode('line',{x1:50,y1:132,x2:1550,y2:132,stroke:'#b9b1a5'},sheet);
   svgNode('rect',{x:45,y:154,width:1095,height:792,fill:'#f7f4ee',stroke:'#c8c0b5'},sheet);
   const drawing=source.cloneNode(true),bounds=geometry.bounds;
@@ -65,6 +77,7 @@
   text(sheet,tr('Revisión','Revision','修订')+`: ${revisionCode(revision)}`,50,1035,16);
   text(sheet,tr('Unidades del modelo: mm · Sin escala de impresión declarada','Model units: mm · No print scale declared','模型单位：毫米 · 未声明打印比例'),780,1007,15);
   text(sheet,tr('Cotas y superficies orientativas; verifica medidas in situ.','Dimensions and areas are indicative; verify on site.','尺寸和面积仅供参考，请实地核验。'),780,1035,15,'400','#625b53');
+  if(brand)text(sheet,FloorPlanBrand.credit(brand.profile),50,1062,14,400,'#5b6266').setAttribute('data-brand-credit','true');
   return {sheet,projectId:project.id,revision};
  }
  const entry=document.createElement('button');entry.type='button';entry.id='openSheet';entry.className='btn';document.querySelector('#exportPng').after(entry);
@@ -72,11 +85,13 @@
  const top=document.createElement('div');top.className='sheet-toolbar';dialog.append(top);
  const heading=document.createElement('h2');heading.id='sheetTitle';top.append(heading);
  const save=document.createElement('button'),zoom=document.createElement('button'),close=document.createElement('button');for(const button of [save,zoom,close]){button.type='button';button.className='btn';top.append(button);}save.id='sheetDownload';zoom.id='sheetZoom';close.id='sheetClose';
+ // «Firmar con» in the toolbar rebuilds the preview, which is also what «Descargar SVG» saves.
+ const sign=window.FloorPlanBrandUI?.profileSelect(()=>{if(!dialog.open)return;try{current=build();if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(current.sheet)],{type:'image/svg+xml;charset=utf-8'}));preview.src=previewUrl;}catch(error){toast(error.message||String(error),6000);}});if(sign){sign.element.id='sheetBrand';top.insertBefore(sign.element,save);}
  const scroll=document.createElement('div');scroll.className='sheet-scroll';const preview=document.createElement('img');preview.id='sheetPreview';preview.alt='';scroll.append(preview);dialog.append(scroll);document.body.append(dialog);
  let current=null,previewUrl=null,focus=null;
  function relang(){entry.textContent=tr('Abrir lámina','Open sheet','打开图纸');heading.textContent=tr('Lámina del proyecto','Project sheet','项目图纸');save.textContent=tr('Descargar SVG','Download SVG','下载 SVG');zoom.textContent=scroll.classList.contains('zoomed')?tr('Ajustar','Fit','适合窗口'):tr('Ampliar','Zoom','放大');close.textContent=tr('Cerrar','Close','关闭');preview.alt=tr('Lámina arquitectónica del proyecto activo','Architectural sheet of the active project','当前项目平面图');}
  function clear(){if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=null;preview.removeAttribute('src');scroll.classList.remove('zoomed');current=null;focus?.focus?.({preventScroll:true});}
- function open(){if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Lámina'))return;try{focus=document.activeElement;current=build();relang();const level=app.levelContext;if(level)heading.textContent=tr(`Lámina de la planta «${level.levelName}» · edificio «${level.buildingName}»`,`Sheet of level «${level.levelName}» · building «${level.buildingName}»`,`图纸：${level.levelName}`);const bytes=new XMLSerializer().serializeToString(current.sheet);previewUrl=URL.createObjectURL(new Blob([bytes],{type:'image/svg+xml;charset=utf-8'}));preview.src=previewUrl;dialog.showModal();}catch(error){current=null;toast(error.message||String(error),6000);}}
+ function open(){if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Lámina'))return;try{focus=document.activeElement;sign?.refresh();current=build();relang();const level=app.levelContext;if(level)heading.textContent=tr(`Lámina de la planta «${level.levelName}» · edificio «${level.buildingName}»`,`Sheet of level «${level.levelName}» · building «${level.buildingName}»`,`图纸：${level.levelName}`);const bytes=new XMLSerializer().serializeToString(current.sheet);previewUrl=URL.createObjectURL(new Blob([bytes],{type:'image/svg+xml;charset=utf-8'}));preview.src=previewUrl;dialog.showModal();}catch(error){current=null;toast(error.message||String(error),6000);}}
  function download(){if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Lámina')){dialog.close();return;}if(!current||current.projectId!==app.project.id||current.revision!==FloorPlanGuide.revision(app.project)){dialog.close();toast(tr('El proyecto cambió. Abre de nuevo la lámina.','The project changed. Open the sheet again.','项目已更改，请重新打开图纸。'),6000);return;}const name='rubik-sota-sheet-'+current.projectId.replace(/[^a-zA-Z0-9_-]/g,'_')+'.svg',link=document.createElement('a');link.href=previewUrl;link.download=name;link.click();}
  entry.onclick=()=>{entry.closest('details')?.removeAttribute('open');open();};save.onclick=download;zoom.onclick=()=>{scroll.classList.toggle('zoomed');relang();};close.onclick=()=>dialog.close();dialog.addEventListener('close',clear);document.querySelector('#langBtn')?.addEventListener('click',()=>queueMicrotask(relang));relang();
  window.FloorPlanSheet={open,get active(){return dialog.open;}};
