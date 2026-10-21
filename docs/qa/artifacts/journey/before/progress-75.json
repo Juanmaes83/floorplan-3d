@@ -1,0 +1,122 @@
+[
+ {
+  "label": "1. Ejemplo (perfil limpio)",
+  "file": "01.png",
+  "progress": "67 % completado · 2 de 3 tareas necesarias listas",
+  "stage": "Revisar y guardar",
+  "task": "Revisa la distribución en 3D",
+  "button": "Abrir 3D",
+  "stored": {
+   "goal": "review",
+   "kind": "example",
+   "current": "view3d",
+   "manualTask": false
+  },
+  "welcome": false
+ },
+ {
+  "label": "2. «Crear a partir del ejemplo»: copia propia",
+  "file": "02.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Revisar y guardar",
+  "task": "Revisa la distribución en 3D",
+  "button": "Abrir 3D",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "view3d",
+   "manualTask": false
+  },
+  "welcome": false
+ },
+ {
+  "label": "3.1 «← Paso anterior»",
+  "file": "03.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Amueblar",
+  "task": "Coloca muebles en la estancia",
+  "button": "Buscar muebles",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "furniture",
+   "manualTask": true
+  },
+  "welcome": false
+ },
+ {
+  "label": "3.2 «← Paso anterior»",
+  "file": "04.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Distribuir",
+  "task": "Crea o revisa las estancias",
+  "button": "Abrir dibujo",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "geometry",
+   "manualTask": true
+  },
+  "welcome": false
+ },
+ {
+  "label": "3.3 «← Paso anterior»",
+  "file": "05.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Empezar",
+  "task": "Prepara tu proyecto",
+  "button": "Volver al inicio",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "start",
+   "manualTask": true
+  },
+  "welcome": false
+ },
+ {
+  "label": "4. Recargar (F5) con #editor",
+  "file": "06.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Empezar",
+  "task": "Prepara tu proyecto",
+  "button": "Volver al inicio",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "start",
+   "manualTask": true
+  },
+  "welcome": false
+ },
+ {
+  "label": "5. Nueva visita desde la URL de entrada",
+  "file": "07.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Empezar",
+  "task": "Prepara tu proyecto",
+  "button": "Volver al inicio",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "start",
+   "manualTask": true
+  },
+  "welcome": true
+ },
+ {
+  "label": "6. «Continuar mi proyecto»",
+  "file": "08.png",
+  "progress": "75 % completado · 3 de 4 tareas necesarias listas",
+  "stage": "Empezar",
+  "task": "Prepara tu proyecto",
+  "button": "Volver al inicio",
+  "stored": {
+   "goal": "save3d",
+   "kind": "own",
+   "current": "start",
+   "manualTask": true
+  },
+  "welcome": false
+ }
+]
