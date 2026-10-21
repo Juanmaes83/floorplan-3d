@@ -45,7 +45,7 @@ function probe(BADS){
   palette:{open:open(lib),tab:window.FloorPlanBuildPalette?.tab||null,newRoomVisible:vis(g('paletteNewRoom')),opening:vis(g('paletteOpeningContext'))?txt(g('paletteOpeningContext')):null},
   panel:{open:open(right),title:txt(g('panelTitle'))},
   tool:typeof ui==='object'?ui.tool:null,sel:typeof ui==='object'&&ui.sel?`${ui.sel.kind}:${ui.sel.kind==='room'?txt(document.querySelector('#panelTitle')):ui.sel.id}`:null,
-  view:window.FloorPlanApp?.viewMode||null,walk:!!window.View3D?.walking||(()=>{const w=document.querySelector('#walkOverlay');return !!w&&getComputedStyle(w).display!=='none'&&w.getBoundingClientRect().width>0;})(),
+  view:window.FloorPlanApp?.viewMode||null,mode3d:txt(document.querySelector('#modes3d .btn.on'))||null,
   level:bctx?{order:bctx.order,levels:bctx.levels}:null,status:st?{state:st.state,headline:st.headline}:null,
   banners:[...document.querySelectorAll('.opening-pick-banner,#paletteWallBanner,#traceStatus,.palette-warn,#levelConflicts,#relocationPanel,.mode-hint,#modehint')].filter(vis).map(e=>`${e.id||e.className}: ${txt(e).slice(0,140)}`),
   toast:g('toast')?.classList.contains('show')?txt(g('toast')):null,
@@ -93,11 +93,13 @@ function probe(BADS){
    const loc=sel=>page.locator(sel).first();
    // A person's press: the control must be visible and not covered (Playwright actionability), scrolled into view if
    // its container scrolls. Records whether it was already inside the viewport.
-   const press=async(sel,{timeout=5000}={})=>{const l=loc(sel);await l.waitFor({state:'visible',timeout});const inView=await l.evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth;});await l.scrollIntoViewIfNeeded({timeout});if(narrow)await l.tap({timeout});else await l.click({timeout});await page.waitForTimeout(300);return inView;};
+   // In 3D, SwiftShader keeps the main thread busy (~14 s per click measured): presses get a long timeout there.
+   const press=async(sel,{timeout}={})=>{timeout??=await page.evaluate(()=>window.FloorPlanApp?.viewMode==='3d'||!!window.FloorPlanPresentation?.active).catch(()=>false)?120000:5000;const l=loc(sel);await l.waitFor({state:'visible',timeout});const inView=await l.evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth;});await l.scrollIntoViewIfNeeded({timeout});if(narrow)await l.tap({timeout});else await l.click({timeout});await page.waitForTimeout(300);return inView;};
    const tapAt=async(x,y)=>{if(narrow)await page.touchscreen.tap(x,y);else await page.mouse.click(x,y);await page.waitForTimeout(300);};
    const world=async pt=>page.evaluate(p=>{const s=new DOMPoint(p.x,p.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:s.x,y:s.y};},pt);
+   const closeDrawersEarly=async()=>{for(const [aside,toggle] of [['aside.lib','#tgLib'],['aside.right','#tgPanel']])if(await page.evaluate(a=>matchMedia('(max-width:1100px)').matches&&document.querySelector(a).classList.contains('open'),aside)){await press(toggle);await page.waitForTimeout(450);}};
    const roomCentre=name=>page.evaluate(n=>{const r=project.rooms.find(r=>nm(r.name)===n||r.name===n);if(!r)return null;const xs=r.polygon.map(p=>p.x),ys=r.polygon.map(p=>p.y);return {x:(Math.min(...xs)+Math.max(...xs))/2,y:(Math.min(...ys)+Math.max(...ys))/2+250};},name);
-   const tapRoom=async name=>{const c=await roomCentre(name);if(!c)throw Error(`no room ${name}`);const s=await world(c);await tapAt(s.x,s.y);};
+   const tapRoom=async name=>{await closeDrawersEarly();const c=await roomCentre(name);if(!c)throw Error(`no room ${name}`);const s=await world(c);await tapAt(s.x,s.y);};
    const visible=sel=>page.locator(sel).first().isVisible();
    // A control hidden in the guided header: recorded as a finding, then reached through «Tareas y ayuda → Ver todas
    // las herramientas» (the visible way out of the guided header).
@@ -166,8 +168,8 @@ function probe(BADS){
    // Points as fractions of the image (the fixture is small): a horizontal known distance and a vertical second one.
    const size=await page.evaluate(()=>({w:project.sourceImages[0].widthPx,h:project.sourceImages[0].heightPx}));
    const imgTap=async f=>{const pt={x:f.x*size.w,y:f.y*size.h};const s=await page.evaluate(p=>{const im=project.sourceImages[0],q=FloorPlanTracing.imageToWorld(im,p),sc=new DOMPoint(q.x,q.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:sc.x,y:sc.y};},pt);await tapAt(s.x,s.y);};
-   await step('calibrate',async()=>{await imgTap({x:.2,y:.2});await imgTap({x:.8,y:.2});await page.locator('#traceKnown').fill('2500');await press('#traceDistanceSave');await snap('calibrated','Primera cota hecha: ¿y ahora?','Dos puntos y 2500 mm');});
-   await step('second-bad',async()=>{if(await page.locator('#guidePrimary').isVisible())await press('#guidePrimary');await imgTap({x:.2,y:.3});await imgTap({x:.2,y:.8});await page.locator('#traceKnown').fill('3000');await press('#traceDistanceSave');await snap('second-contradictory','Segunda cota contradictoria: ¿cómo corregir?','Dos puntos y 3000 mm (contradice)');});
+   await step('calibrate',async()=>{await imgTap({x:.3,y:.35});await imgTap({x:.7,y:.35});await page.locator('#traceKnown').fill('2500');await press('#traceDistanceSave');await snap('calibrated','Primera cota hecha: ¿y ahora?','Dos puntos y 2500 mm');});
+   await step('second-bad',async()=>{if(await page.locator('#guidePrimary').isVisible())await press('#guidePrimary');await imgTap({x:.35,y:.4});await imgTap({x:.35,y:.7});await page.locator('#traceKnown').fill('3000');await press('#traceDistanceSave');await snap('second-contradictory','Segunda cota contradictoria: ¿cómo corregir?','Dos puntos y 3000 mm (contradice)');});
    await step('second-good',async()=>{if(await page.locator('#guidePrimary').isVisible())await press('#guidePrimary');await snap('after-bad-guide','Siguiente acción tras el error','Botón de la guía');});
   });
 
@@ -227,7 +229,7 @@ function probe(BADS){
    await press('#welcomeExample');await page.waitForTimeout(400);
    await step('select',async()=>{if(await page.evaluate(()=>matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right').classList.contains('open')))await press('#tgPanel');await tapRoom('Salón');await snap('selected-2d','Selección en 2D','Tocar «Salón»');});
    await step('3d',async()=>{await press('#viewSeg [data-view="3d"]').catch(()=>{});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});await page.waitForTimeout(1500);await snap('3d','Entender la vista 3D y sus controles','Pulsar 3D');});
-   await step('walk',async()=>{await reach('#wo3','Recorrer');await page.waitForTimeout(1500);await snap('walk','Recorrer','«Recorrer»');if(await page.locator('#walkExit').isVisible())await press('#walkExit');await snap('walk-exit','Salir del recorrido','«Salir»');});
+   await step('walk',async()=>{await reach('#modes3d [data-mode="walk"]','Recorrer');await page.waitForTimeout(1500);await snap('walk','Recorrer','«Recorrer»');if(await page.locator('#walkExit').isVisible())await press('#walkExit');else await press('#modes3d [data-mode="orbit"]');await snap('walk-exit','Salir del recorrido','«Salir»');});
    await step('2d',async()=>{await c.pressThen('#viewSeg [data-view="2d"]',()=>FloorPlanApp.viewMode==='2d');await page.waitForTimeout(800);await snap('back-2d','Volver a 2D con el contexto','Pulsar 2D');});
   });
 
