@@ -335,7 +335,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 }
 
 .presentation-entry{order:-1;border:1px solid var(--teal,#2f5d62);color:var(--teal,#2f5d62);font-weight:650}
-body.guided .presentation-entry{display:none!important}
+/* The presentation entry stays in the guided header (secondary; design-system.css): presenting is the professional's
+   next step from any stage, not only from the guide's last one (docs/product/journey-orientation-2026-10-21.md §4.3). */
 .presentation-config{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
 .presentation-config h2{margin:0 0 10px;font-size:20px}
 .presentation-config p{line-height:1.5}

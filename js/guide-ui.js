@@ -195,7 +195,9 @@
   const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'};
   if(s.kind!=='example'&&st.state!=='clear'&&st.headline&&G.geometryReady(project))return {mode:'journey',r:journeyResult(s)};
   if(s.manualTask&&p.current.status==='completed'){const pending=p.pending.find(t=>t.id!==p.current.id);return {mode:'done-task',task:p.current,next:pending||null,r:pending?null:journeyResult(s)};}
-  if(!p.finished){const block=p.current.blockers.length?p.tasks.find(t=>t.id===p.current.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:p.current};}
+  // The stored task can lag behind (e.g. after importing a building it may still be a completed one): show the first
+  // pending task of the goal instead.
+  if(!p.finished){const cur=p.current.status==='completed'&&p.pending[0]?p.pending[0]:p.current,block=cur.blockers.length?p.tasks.find(t=>t.id===cur.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:cur};}
   return {mode:'journey',r:journeyResult(s)};
  }
  function runJourney(id,r){
