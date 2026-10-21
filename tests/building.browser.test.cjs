@@ -148,9 +148,11 @@ test(`multi-level first cut end to end ${viewport.width}x${viewport.height}`,{ti
  await fs.writeFile(path.join(tmp,'edificio.zip'),zip.bytes);await page.locator('#uploadIn').setInputFiles(path.join(tmp,'edificio.zip'));
  await page.waitForFunction(n=>JSON.parse(localStorage.getItem('rubik-sota-project-library-v1')).entries.length===n+2,count);
 
- // 9. Single-level consumers name the active level: presentation, sheet and variant comparison.
+ // 9. The presentation covers the whole building (both levels, grouped); single-level consumers (sheet, variant
+ // comparison) name the active level.
  await press(page,'#presentationBtn',mobile);await page.locator('#presentationConfig[open]').waitFor();
- assert.match(await page.locator('#presentationLevelNote').textContent(),/Presentación de una planta: «Planta baja» del edificio .*Las demás plantas y la escalera no se incluyen/);
+ assert.match(await page.locator('#presentationLevelNote').textContent(),/Presentación del edificio «.+»: las estancias elegidas de sus 2 plantas, en una sola presentación y un solo lote\..*la escalera no se recorre/);
+ assert.deepEqual(await page.locator('.presentation-level-group legend').allTextContents(),['Planta baja','Planta primera']);
  await shot('08-presentation-note');await page.keyboard.press('Escape');await page.locator('#presentationConfig:not([open])').waitFor({state:'attached'});
  await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetDialog[open]').waitFor();
  assert.match(await page.locator('#sheetTitle').textContent(),/Lámina de la planta «Planta baja» · edificio/);await page.locator('#sheetClose').click();

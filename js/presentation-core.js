@@ -172,6 +172,71 @@
     elevationDeg:c.elevation,azimuthDeg:c.azimuth,floorVisible:+c.visible.toFixed(3),share:+c.share.toFixed(3),otherShare:+c.other.toFixed(3),accepted:c.ok};
   }
  }
- const api={create,current,area,bounds,reconcile,sidecar,key,minimap,roomFrame};
+ // Building plan (two levels at most in this cut): one presentation over the chosen rooms of every level. `levels`
+ // are {levelId,name,order,project,geometry,revision}; `selection` is an ordered list of {levelId,roomId}. Levels are
+ // presented in building order; each level with chosen rooms opens with its own overview, which marks the change of
+ // level. Room IDs only need to be unique within a level, so every stop is keyed by level and room.
+ const MAX_LEVELS=2;
+ function createBuilding(building,levels,entryId,selection){
+  if(!building?.id||!entryId||!Array.isArray(levels)||!Array.isArray(selection))throw Error('Presentation source is incomplete');
+  if(levels.length<2||levels.length>MAX_LEVELS)return null;
+  const sorted=[...levels].sort((a,b)=>a.order-b.order),seen=new Set(),stops=[],used=[];
+  for(const level of sorted){
+   if(!level.project?.id||!level.geometry?.center||!level.revision)throw Error('Presentation source is incomplete');
+   const rooms=level.geometry.rooms.filter(r=>r.poly.length>=3&&area(r.poly)>0);
+   if(!rooms.length||!level.project.walls.some(w=>w.status!=='demolished'))continue;
+   const chosen=[];
+   for(const s of selection){
+    const room=s?.levelId===level.levelId&&rooms.find(r=>r.id===s.roomId),pair=`${level.levelId}\u0000${s?.roomId}`;
+    if(room&&!seen.has(pair)){seen.add(pair);chosen.push(room);}
+   }
+   if(!chosen.length)continue;
+   const base={levelId:level.levelId,levelName:level.name,levelOrder:level.order};
+   stops.push({...base,id:`level:${level.levelId}:overview`,kind:'overview',roomId:null,label:'Vista general',
+    areaM2:rooms.filter(x=>x.counted).reduce((n,x)=>n+area(x.poly),0),bounds:{...level.geometry.envelope}});
+   for(const r of chosen)stops.push({...base,id:`level:${level.levelId}:room:${r.id}`,kind:'room',roomId:r.id,label:r.name,areaM2:area(r.poly),bounds:bounds(r.poly)});
+   used.push({levelId:level.levelId,name:level.name,order:level.order,projectId:level.project.id,revision:level.revision,center:{x:level.geometry.center.x,y:level.geometry.center.y}});
+  }
+  if(!stops.length)return null;
+  return {version:2,scope:'building',buildingId:building.id,buildingName:building.name,entryId,levels:used,stops};
+ }
+ // A building plan stays valid while the open entry is the same and every presented level keeps its revision.
+ const currentBuilding=(plan,entryId,levelRevisions)=>!!plan&&plan.scope==='building'&&plan.entryId===entryId&&
+  plan.levels.every(level=>levelRevisions.get(level.levelId)?.projectId===level.projectId&&levelRevisions.get(level.levelId)?.revision===level.revision);
+ // Reads a presentation capture batch («presentation.json» plus its files) without trusting it: version 1 (one
+ // level, with or without the editable project of later batches) and version 2 (a building). Every view file must
+ // exist, be unique and be listed once; in version 2 every view names a presented level, and (level, room) pairs are
+ // unique, so equal room IDs on different levels never share or overwrite a view. Returns a summary or throws.
+ const VIEW=/^views\/view-[0-9]{3}\.png$/;
+ function readCaptures(manifest,names){
+  const fail=message=>{throw Error('Lote de presentación no válido: '+message);};
+  const files=new Set(names);
+  if(!manifest||typeof manifest!=='object'||manifest.format!=='rubik-sota.presentation-captures')fail('formato desconocido');
+  if(manifest.version!==1&&manifest.version!==2)fail(`versión ${manifest.version} no compatible`);
+  if(!Array.isArray(manifest.views)||!manifest.views.length)fail('no hay vistas');
+  const filenames=new Set(),pairs=new Set(),levels=new Map();
+  if(manifest.version===2){
+   if(manifest.scope!=='building'||typeof manifest.buildingId!=='string'||!Array.isArray(manifest.levels)||!manifest.levels.length||manifest.levels.length>MAX_LEVELS)fail('edificio o plantas no válidos');
+   for(const level of manifest.levels){if(typeof level?.levelId!=='string'||levels.has(level.levelId)||typeof level.projectId!=='string')fail('planta repetida o incompleta');levels.set(level.levelId,level);}
+  }else if(typeof manifest.projectId!=='string')fail('falta el proyecto');
+  manifest.views.forEach((view,i)=>{
+   if(view?.order!==i+1)fail(`orden ${i+1} incorrecto`);
+   if(!VIEW.test(view.filename)||filenames.has(view.filename))fail(`archivo de vista repetido o no permitido: ${view.filename}`);
+   if(!files.has(view.filename))fail(`falta ${view.filename}`);
+   if(!['overview','room'].includes(view.kind)||(view.kind==='room')!==(typeof view.roomId==='string'))fail(`vista ${view.order} sin estancia coherente`);
+   filenames.add(view.filename);
+   if(manifest.version===2){
+    if(!levels.has(view.levelId))fail(`la vista ${view.order} no pertenece a una planta del lote`);
+    const pair=`${view.levelId}\u0000${view.roomId??''}`;if(pairs.has(pair))fail(`vista repetida de la misma estancia y planta (${view.order})`);pairs.add(pair);
+   }
+  });
+  const portable=manifest.version===2?manifest.portableBuilding:manifest.portableProject;
+  if(portable!==undefined&&(typeof portable?.filename!=='string'||!files.has(portable.filename)))fail('falta el proyecto editable');
+  const extra=[...files].filter(name=>name!=='presentation.json'&&!filenames.has(name)&&name!==portable?.filename);
+  if(extra.length)fail(`archivos no declarados: ${extra.join(', ')}`);
+  return {version:manifest.version,views:manifest.views.length,levels:manifest.version===2?[...levels.keys()]:null,
+   byLevel:manifest.version===2?Object.fromEntries([...levels.keys()].map(id=>[id,manifest.views.filter(v=>v.levelId===id).length])):null,portable:portable?.filename||null};
+ }
+ const api={create,current,area,bounds,reconcile,sidecar,key,minimap,roomFrame,MAX_LEVELS,createBuilding,currentBuilding,readCaptures};
  if(typeof module==='object')module.exports=api;else root.FloorPlanPresentationCore=api;
 })(globalThis);

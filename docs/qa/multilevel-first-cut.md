@@ -42,6 +42,7 @@
   - materiales y objetos de cada planta. Las plantas no activas usan mobiliario genérico, porque los GLB autorizados sólo se cargan en la activa.
 - **Superficies** por planta y total.
 - **Consumidores de una planta** (presentación, lámina, variantes) nombran la planta activa. Una planta exportada funciona en Blender (#24/#42) y en el MCP. La revisión de distribución opera por planta.
+  - **Actualización 19-10-2026:** la presentación ya no es de una planta. Un edificio de dos plantas se presenta entero, en una presentación y un lote ([diseño](../product/building-presentation-2026-10-19.md), [QA](building-presentation-2026-10-19.md)). La lámina y las variantes siguen siendo de la planta activa.
 
 ### Implementado, pendiente de gate externo
 

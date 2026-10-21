@@ -319,6 +319,9 @@ body.guided .presentation-entry{display:none!important}
 .presentation-room-row label{display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere}
 .presentation-room-row input{width:20px;height:20px;flex:none}
 .presentation-room-row .btn{min-height:44px;border:1px solid var(--line)}
+.presentation-level-group{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:4px 8px 8px;display:grid;gap:5px;min-width:0}
+.presentation-level-group legend{font-weight:600;padding:0 4px}
+.presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .presentation-config-actions .btn{border:1px solid var(--line);min-height:44px}
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
@@ -344,6 +347,12 @@ body.guided .presentation-entry{display:none!important}
 .presentation-status,.presentation-progress,.presentation-info{margin:4px 0;font-size:12px}
 .presentation-section{margin:4px 0;padding:5px 8px;border-radius:6px;background:#e6f0ef;color:#184e52;font-size:12px;overflow-wrap:anywhere}
 .presentation-section[hidden]{display:none}
+.presentation-level{flex:1 0 100%;order:3;margin:0;font-size:12px;font-weight:600;color:#184e52;overflow-wrap:anywhere}
+.presentation-level[hidden]{display:none}
+.presentation-level.changed{padding:5px 8px;border-radius:6px;background:#e6f0ef}
+.presentation-stops-level{flex:1 0 100%;font-size:12px;font-weight:700;color:var(--muted);padding:0 2px;white-space:nowrap}
+/* A single scrolling row (phones, short screens): each level heading sits inline before its views. */
+@media(max-width:600px),(max-height:500px){.presentation-stops-level{flex:0 0 auto;align-self:center}.presentation-stops-level:not(:first-child){margin-left:4px;padding-left:6px;border-left:1px solid var(--line)}}
 .presentation-warning{margin:6px 0;padding:7px 9px;border-radius:6px;background:#fff1d2;color:#5b3b00;font-size:12px;overflow-wrap:anywhere}
 .presentation-stops{margin-top:8px}
 .presentation-stops .btn{flex:0 0 auto;min-width:0;max-width:100%;overflow-wrap:anywhere}
