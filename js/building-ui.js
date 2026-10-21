@@ -15,19 +15,27 @@
  const say=(text,ms=5000)=>{const s=$('#levelStatus');if(s)s.textContent=text;toast(text,ms);};
  function blank(name){return FloorPlanRoomLayout.blank(name);}
  function persist(b,opts={}){library.saveBuilding(b,{visible:project,...opts});}
- // Switches the editor to another level of the open building; one undo/redo history per level.
- function selectLevel(levelId){
+ // Switches the editor to another level of the open building; one undo/redo history per level. A presentation of
+ // the whole building switches levels itself ({presentation:true}): it is not invalidated and no notice is shown.
+ function selectLevel(levelId,{presentation=false}={}){
   if(!isBuilding()||levelId===library.activeLevelId())return;
   const b=current(),from=activeLevel(b),to=b.levels.find(l=>l.id===levelId);if(!to)return;
   if(!save())return;
   histories.set(from.id,{undo:undoStack.splice(0),redo:redoStack.splice(0)});
   project=library.setActiveLevel(levelId);
   const h=histories.get(levelId);if(h){undoStack.push(...h.undo);redoStack.push(...h.redo);}
-  ui.sel=null;ui.mA=ui.mCur=null;window.FloorPlanTraceUI?.cancel();window.FloorPlanPresentation?.invalidate();
+  ui.sel=null;ui.mA=ui.mCur=null;window.FloorPlanTraceUI?.cancel();if(!presentation)window.FloorPlanPresentation?.invalidate();
   // Keep the same building point under the viewport centre: local coordinates differ by the offsets.
   view.x0+=from.offsetMm.x-to.offsetMm.x;view.y0+=from.offsetMm.y-to.offsetMm.y;
   refreshProject();renderAll();applyView();
-  say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
+  if(!presentation)say(`Planta activa: «${to.name}» (${to.order+1} de ${b.levels.length}). Sólo se edita esta planta.`,3500);
+ }
+ // Read-only sources for the building presentation: every level's project (the active one as shown on screen), its
+ // geometry and revision. Nothing is stored or changed.
+ function presentationSources(){
+  const b=current();if(!b)return null;
+  return {building:{id:b.id,name:b.name},activeLevelId:library.activeLevelId(),levels:b.levels.map(l=>({levelId:l.id,name:l.name,order:l.order,elevationMm:l.elevationMm,
+   project:Core.clone(l.project),geometry:Core.geometry(l.project),revision:FloorPlanGuide.revision(l.project)}))};
  }
  // Called whenever the open entry changes (open, import, create): histories belong to one entry.
  function entryChanged(){if(historyEntry!==library?.activeId()){histories.clear();historyEntry=library?.activeId();}lastContext='';announced=null;}
@@ -333,6 +341,8 @@
  const fileName=(text,ext)=>(text||'edificio').replace(/[^\p{L}\p{N}_-]+/gu,'-').replace(/^-+|-+$/g,'').slice(0,80)+'.'+ext;
  function exportBuildingJson(){const b=current();download(fileName(b.name,'json'),new Blob([JSON.stringify(b,null,2)],{type:'application/json'}));say('Edificio exportado en JSON (sin bytes de imágenes; usa el ZIP para incluirlas).'+pendingNote());}
  async function bytesOf(im){const blob=await I.get(im.storage?.ref||im.id);return blob?new Uint8Array(await blob.arrayBuffer()):null;}
+ // The open building as an editable ZIP (same layout as «Exportar edificio (ZIP)»), for the presentation batch.
+ async function packageBuilding(){const b=current(),{entries,building}=await B.packageEntries(b,im=>bytesOf(im),T.imageInfo);return {archive:P.zip(entries,{check:B.packagePath}),building};}
  async function exportBuildingZip(){try{const b=current(),{entries}=await B.packageEntries(b,im=>bytesOf(im),T.imageInfo);download(fileName(b.name,'zip'),P.zip(entries,{check:B.packagePath}));say('Edificio exportado en ZIP con las imágenes de cada planta.'+pendingNote());}catch(e){dialogError=e.message;fill();toast(e.message,6000);}}
  async function exportLevel(levelId,kind){
   const {project:p,warning}=B.exportLevel(current(),levelId);
@@ -361,7 +371,7 @@
  $('#levelsBtn').onclick=open;
  $('#levelsClose').onclick=()=>$('#levelsDialog').close();
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
- window.FloorPlanBuildingUI={render,propose,applyProposal,cancelProposal,get proposal(){return proposal&&structuredClone(proposal.set.moves);},stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
+ window.FloorPlanBuildingUI={presentationSources,presentLevel:levelId=>selectLevel(levelId,{presentation:true}),packageBuilding,render,propose,applyProposal,cancelProposal,get proposal(){return proposal&&structuredClone(proposal.set.moves);},stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
   get histories(){return histories;}};
  render();

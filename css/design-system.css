@@ -131,5 +131,10 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   /* The plan is narrower here: the building warning moves above the selection bar instead of sitting beside it. */
   #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
 }
+
+/* 3D setting selector (decorative backdrop), next to the sun control. */
+.env3d{margin-left:8px}.env3d select{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:6px;background:var(--surface-panel);color:var(--ink);padding:2px 4px;margin-left:4px}
+.env3d-note{color:var(--ink-muted);font-size:11px;margin-left:4px}
+@media (max-width:1100px){.env3d select{font-size:16px;min-height:40px}}
 /* Presenting: the header (and the bar inside it) is hidden, so the work area takes the whole screen again. */
 body.presenting .app>main,body.presenting aside.lib,body.presenting aside.right{margin-bottom:0;margin-right:0}

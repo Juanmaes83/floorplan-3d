@@ -1,0 +1,189 @@
+{
+ "commit": "c53ca50867b3047316b4f684c261c8bcf14125ee",
+ "browser": "141.0.7390.37",
+ "cases": [
+  {
+   "viewport": "1440x900",
+   "env": "studio",
+   "night": false,
+   "environment": "studio",
+   "frames": 3,
+   "msPerFrame": 1220.1,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     226,
+     225,
+     223
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "env": "studio",
+   "night": true,
+   "environment": "studio",
+   "frames": 3,
+   "msPerFrame": 1109.1,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     15,
+     19,
+     23
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "env": "garden",
+   "night": false,
+   "environment": "garden",
+   "frames": 3,
+   "msPerFrame": 1175.5,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     196,
+     201,
+     175
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "env": "garden",
+   "night": true,
+   "environment": "garden",
+   "frames": 3,
+   "msPerFrame": 1176.7,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     18,
+     25,
+     17
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "env": "city",
+   "night": false,
+   "environment": "city",
+   "frames": 3,
+   "msPerFrame": 1074.3,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     211,
+     210,
+     207
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "env": "city",
+   "night": true,
+   "environment": "city",
+   "frames": 3,
+   "msPerFrame": 1188.7,
+   "exported": {
+    "width": 884,
+    "height": 678,
+    "topLeft": [
+     22,
+     24,
+     27
+    ]
+   }
+  },
+  {
+   "viewport": "1440x900",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "env": "studio",
+   "night": false,
+   "environment": "studio",
+   "frames": 4,
+   "msPerFrame": 723.3,
+   "exported": null
+  },
+  {
+   "viewport": "390x844",
+   "env": "studio",
+   "night": true,
+   "environment": "studio",
+   "frames": 3,
+   "msPerFrame": 722.7,
+   "exported": null
+  },
+  {
+   "viewport": "390x844",
+   "env": "garden",
+   "night": false,
+   "environment": "garden",
+   "frames": 4,
+   "msPerFrame": 651.9,
+   "exported": {
+    "width": 390,
+    "height": 702,
+    "topLeft": [
+     196,
+     201,
+     175
+    ]
+   }
+  },
+  {
+   "viewport": "390x844",
+   "env": "garden",
+   "night": true,
+   "environment": "garden",
+   "frames": 4,
+   "msPerFrame": 572.5,
+   "exported": {
+    "width": 390,
+    "height": 702,
+    "topLeft": [
+     18,
+     25,
+     17
+    ]
+   }
+  },
+  {
+   "viewport": "390x844",
+   "env": "city",
+   "night": false,
+   "environment": "city",
+   "frames": 4,
+   "msPerFrame": 658,
+   "exported": null
+  },
+  {
+   "viewport": "390x844",
+   "env": "city",
+   "night": true,
+   "environment": "city",
+   "frames": 4,
+   "msPerFrame": 649.8,
+   "exported": null
+  },
+  {
+   "viewport": "390x844",
+   "id": "errors",
+   "errors": []
+  }
+ ],
+ "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+}
