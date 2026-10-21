@@ -14,7 +14,7 @@ Estado: propuesta de producto del 21-10-2026. D-01 define como público inicial 
 
 ## Orden y criterio de entrega
 
-1. Esta rama implementa **solo el selector de perfil**. No añade un paso obligatorio ni modifica `FloorPlanProjectV1`, proyectos existentes, presentación, marca o exportadores.
+1. Esta rama implementa **solo el selector de perfil**, debajo de las tres acciones iniciales para que sigan siendo el primer paso visible incluso en móvil horizontal. No añade un paso obligatorio ni modifica `FloorPlanProjectV1`, proyectos existentes, presentación, marca o exportadores.
 2. Reconciliar con el corte de orientación de Claude sobre el `master` que resulte. Inspeccionar en escritorio, móvil vertical y horizontal que el primer acceso sigue ofreciendo las tres entradas sin desplazamiento horizontal, que elegir perfil se puede omitir, cambiar y recordar en el mismo navegador, y que idioma y teclado funcionan.
 3. Prototipar por separado la línea 2 y medir comprensión con inmobiliaria, promotora y estudio. Continuar una línea por PR con contrato, datos de ejemplo, criterios de aceptación y revisión humana. Las líneas 3–5 exigen decisiones de arquitectura antes de prometer producto.
 

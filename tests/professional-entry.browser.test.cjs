@@ -30,6 +30,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   const ids=await page.locator('.welcome-audience-option').evaluateAll(nodes=>nodes.map(node=>node.id));
   assert.deepEqual(ids,['welcomeAudience-architecture','welcomeAudience-real-estate','welcomeAudience-developer','welcomeAudience-renovation','welcomeAudience-interior']);
   assert.deepEqual(await page.locator('.welcome-entry strong').allTextContents(),['Subir un plano','Crear desde cero','Probar el ejemplo']);
+  assert.equal(await page.evaluate(()=>!!(document.querySelector('.welcome-entries').compareDocumentPosition(document.querySelector('.welcome-audience'))&Node.DOCUMENT_POSITION_FOLLOWING)),true,'el perfil opcional va tras las tres acciones');
   await page.locator('#welcomeAudience-developer').click();
   assert.equal(await page.locator('#welcomeAudience-developer').getAttribute('aria-pressed'),'true');
   assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeProject,'perfil no modifica el plano');
