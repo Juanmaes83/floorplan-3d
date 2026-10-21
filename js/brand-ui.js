@@ -91,7 +91,9 @@
   const d=B.delivery(store,app.entryId);
   const tl=el('label',undefined,box,'brand-field');el('span','Título para el cliente',tl);const title=el('input',undefined,tl);title.id='brandDeliveryTitle';title.maxLength=B.LIMITS.title;title.value=d.title;title.placeholder=typeof nm==='function'?nm(app.project.name||''):app.project.name||'';
   const il=el('label',undefined,box,'brand-field');el('span','Introducción (aparece en la vista general)',il);const intro=el('textarea',undefined,il);intro.id='brandDeliveryIntro';intro.maxLength=B.LIMITS.intro;intro.rows=2;intro.value=d.intro;
-  const persist=()=>{try{B.setDelivery(store,app.entryId,{title:title.value,intro:intro.value});}catch(e){say(e.message,5000);}};title.onchange=persist;intro.onchange=persist;
+  // Save while typing: starting the presentation can close this dialog before a pending change event fires.
+  const persist=()=>{try{B.setDelivery(store,app.entryId,{title:title.value,intro:intro.value});}catch(e){say(e.message,5000);}};
+  title.oninput=title.onchange=persist;intro.oninput=intro.onchange=persist;
   el('small','Sin marca, la presentación queda como hasta ahora. La marca se guarda en este navegador y no viaja en el proyecto exportado.',box,'brand-help');
   return box;
  }

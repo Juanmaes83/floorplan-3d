@@ -147,10 +147,12 @@ test('professional brand reaches both levels of the building presentation batch'
  const profile=await page.evaluate(()=>{
   const store=FloorPlanBrandUI.store;
   const p=FloorPlanBrand.saveProfile(store,{name:'Estudio Dos Plantas',email:'hola@estudio.es'});
-  FloorPlanBrand.setDelivery(store,FloorPlanApp.entryId,{profileId:p.id,title:'Casa para cliente',intro:'Dos plantas en una entrega.'});
   return p;
  });
  await page.locator('#presentationBtn').click();await page.locator('#presentationConfig[open]').waitFor();
+ await page.locator('.brand-config .brand-select').selectOption(profile.id);
+ await page.locator('#brandDeliveryTitle').fill('Casa para cliente');
+ await page.locator('#brandDeliveryIntro').fill('Dos plantas en una entrega.');
  assert.equal(await page.locator('.brand-config .brand-select').inputValue(),profile.id,'brand is selectable in the building configuration');
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
  assert.match(await page.locator('.presentation-brand').textContent(),/Estudio Dos Plantas[\s\S]*Casa para cliente/);
