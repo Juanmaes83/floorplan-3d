@@ -25,6 +25,11 @@
  const headerEnd=()=>document.documentElement.style.setProperty('--shell-header-bottom',`${Math.round(header.getBoundingClientRect().bottom)}px`);
  if(typeof ResizeObserver==='function')new ResizeObserver(headerEnd).observe(header);
  header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',()=>{edge();headerEnd();});headerEnd();
+ // Top of the selection bar, for the temporary message to sit above it on phones (design-system.css).
+ const fab=document.getElementById('fab');
+ const fabTop=()=>{if(fab)document.documentElement.style.setProperty('--fab-top',`${Math.round(fab.classList.contains('show')?fab.getBoundingClientRect().top:innerHeight)}px`);};
+ if(fab&&typeof ResizeObserver==='function'){new ResizeObserver(fabTop).observe(fab);new MutationObserver(fabTop).observe(fab,{attributes:true,attributeFilter:['class']});}
+ addEventListener('resize',fabTop);fabTop();
  update();edge();
  window.FloorPlanAppShell={update(){update();edge();}};
 })();

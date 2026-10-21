@@ -1486,6 +1486,12 @@ const PANES = 'huxing-panes';
 const panes = (() => { try { return JSON.parse(localStorage.getItem(PANES)) || {}; } catch(e) { return {}; } })();
 function drawer(which, open){
   const app = $('.app'), els = {lib:$('aside.lib'), panel:$('aside.right')}, n = narrow();
+  // On narrow screens the palette covers the plan: a door/window being placed would stay active behind it, with its
+  // banner over the palette. Opening the palette cancels it (nothing was added) and says so.
+  if (n && which === 'lib' && (open ?? !els.lib.classList.contains('open')) && window.FloorPlanOpeningUI?.picking()){
+    FloorPlanOpeningUI.cancel(); renderSel();
+    toast(LANG === 'es' ? 'Se canceló la colocación de la puerta o ventana: no se añadió nada.' : tr('已取消放置门窗：未添加任何内容。', 'Placing the door or window was cancelled: nothing was added.'), 4000);
+  }
   if (n){
     Object.entries(els).forEach(([k, el]) => el.classList.toggle('open', k === which && (open ?? !el.classList.contains('open'))));
   } else {
@@ -2257,6 +2263,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/room-layout-ui.js"></script>
 <script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
+<script src="js/journey-core.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-ui.js"></script>

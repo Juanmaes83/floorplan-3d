@@ -20,7 +20,9 @@
  const header=$('header'),searchBtn=btn('actionSearchBtn','',()=>openSearch(),header);searchBtn.setAttribute('aria-haspopup','dialog');
  const homeBtn=btn('welcomeBtn','',()=>openWelcome(),header);homeBtn.title=tx('Volver a la bienvenida','Open welcome','打开欢迎页');
  const resume=btn('guideResume','',()=>{state().closed=false;state().fullTools=false;fullEditor=false;store();render();},header);
- const essentials=new Set(['uploadPlanBtn','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume']);
+ // The guided header keeps what the journey needs: the level switch of a building, the 3D modes (in 3D only) and the
+ // presentation entry (secondary here: the guide's own button is the dominant action).
+ const essentials=new Set(['uploadPlanBtn','uploadCancel','paneBtns','viewSeg','projectsBtn','langBtn','actionSearchBtn','welcomeBtn','guideResume','levelBar','modes3d','presentationBtn']);
  for(const child of header.children)if(!essentials.has(child.id)&&!child.classList.contains('brand')&&!child.querySelector('#undo'))child.classList.add('advanced-control');
  const bar=el('section',undefined,undefined,'guide-bar');bar.id='guideBar';bar.setAttribute('aria-label','Objetivo y progreso');header.after(bar);
  const top=el('div',undefined,bar,'guide-top'),identity=el('div',undefined,top,'guide-identity');
@@ -37,6 +39,8 @@
  for(let i=0;i<5;i++){const li=el('li',undefined,steps),b=btn('guideStage'+i,'',()=>{const p=progress(),tasks=p.tasks.filter(t=>t.stage===i);if(tasks.length){state().current=(tasks.find(t=>t.status!=='completed'&&!t.skipped)||tasks[0]).id;state().manualTask=true;store();render();}else{toast(tx('Esta etapa no requiere tareas para tu objetivo.','This stage has no tasks for your goal.','此阶段没有目标任务。'));}},li);el('span',String(i+1),b,'step-number');el('span',undefined,b,'step-label');}
  const current=el('div',undefined,bar,'guide-current'),copy=el('div',undefined,current,'guide-task-copy'),currentTitle=el('h2',undefined,copy),currentInstruction=el('p',undefined,copy);
  const currentAction=btn('guidePrimary','',()=>runTask(progress().current),current,true);
+ const secondaryAction=btn('guideSecondary','',()=>{},current);secondaryAction.classList.add('guide-link');const laterAction=btn('guideLater','',()=>{},current);laterAction.classList.add('guide-link');
+ const goalDone=el('p',undefined,copy,'guide-goal-done');
  const presentAction=btn('guidePresent','',()=>window.FloorPlanPresentation?.open(),current);
  const exampleLine=el('div',undefined,bar,'guide-example'),exampleNote=el('span',undefined,exampleLine);btn('guideCopyExample','',()=>copyExample(),exampleLine);
  applyCompact();
@@ -68,7 +72,7 @@
  addEventListener('popstate',restoreRoute);
  addEventListener('hashchange',()=>{const screen=location.hash==='#inicio'?'welcome':location.hash==='#editor'?'editor':null;if(screen&&history.state?.rubikScreen!==screen)restoreRoute();});
  function previousTask(){const p=progress(),tasks=p.tasks.filter(t=>!t.skipped),index=tasks.findIndex(t=>t.id===p.current.id);
-  if(index<=0)return openWelcome();state().current=tasks[index-1].id;state().manualTask=true;store();render();
+  if(index<=0)return;state().current=tasks[index-1].id;state().manualTask=true;store();render();
  }
  function returnFromRoom(){if(roomReturnToWelcome){roomReturnToWelcome=false;openWelcome();}}
  function createOwn(goal='save3d',origin='blank'){
@@ -173,12 +177,62 @@
    if(!t.necessary&&t.status!=='completed')btn('guideSkip-'+t.id,t.skipped?tx('Recuperar tarea','Restore task','恢复任务'):tx('Saltar por ahora','Skip for now','暂时跳过'),()=>{const s=state();s.skipped=t.skipped?s.skipped.filter(id=>id!==t.id):[...new Set([...s.skipped,t.id])];const next=p.tasks.find(q=>q.stage>=t.stage&&q.id!==t.id&&q.status!=='completed'&&!s.skipped.includes(q.id));if(next)s.current=next.id;store();render();renderDetails();},row);
    const help=el('details',undefined,box);el('summary',tx('Ver cómo hacerlo','See how to do it','查看操作方法'),help);el('p',t.id==='scale'?tx('Una primera cota deja la escala estimada. La segunda debe ser independiente y concordar con el umbral provisional del 2 %. Confirma después. Las medidas siguen siendo orientativas.','A first dimension gives an estimated scale. A second independent dimension must agree within the provisional 2% threshold. Then confirm. Measurements remain indicative.','第一尺寸仅估算比例。独立的第二尺寸必须符合临时 2% 阈值后再确认。测量仍仅供参考。'):tx('La tarea se marca al comprobar el resultado real. Usa Deshacer para recuperar el último cambio. Puedes acceder a todas las herramientas sin perder el avance.','The task is marked after checking the actual result. Use Undo to restore the last change. All tools remain accessible without losing progress.','检查实际结果后才标记任务。使用撤销恢复上一步。可随时使用全部工具。'),help);
   }
-  const row=el('div',undefined,details,'actions');btn('guideAllTools',tx('Ver todas las herramientas','See all tools','查看所有工具'),()=>{details.close();fullEditor=true;state().fullTools=true;store();render();drawer('lib',true);drawer('panel',true);searchBtn.focus();},row);btn('guideSaveNow',tx('Guardar ahora','Save now','立即保存'),()=>safe(()=>execute({id:'save'})),row);btn('guideCopyNow',tx('Exportar copia JSON / ZIP','Export JSON / ZIP copy','导出 JSON / ZIP'),()=>safe(exportCopy),row);
+  const row=el('div',undefined,details,'actions');btn('guideAllTools',tx('Ver todas las herramientas','See all tools','查看所有工具'),()=>{details.close();fullEditor=true;state().fullTools=true;store();render();drawer('lib',true);drawer('panel',true);searchBtn.focus();},row);btn('guideSaveNow',tx('Guardar ahora','Save now','立即保存'),()=>safe(()=>execute({id:'save'})),row);btn('guideGoalFromDetails',tx('Cambiar objetivo','Change goal','更改目标'),()=>{details.close();openGoal();},row);
+  if(state().journeySkipped?.length)btn('guideRestoreSuggestions',tx('Recuperar sugerencias aplazadas','Bring back put-off suggestions','恢复暂缓的建议'),()=>{state().journeySkipped=[];store();render();renderDetails();},row);btn('guideCopyNow',tx('Exportar copia JSON / ZIP','Export JSON / ZIP copy','导出 JSON / ZIP'),()=>safe(exportCopy),row);
   if(storageError)el('p',storageError,details).setAttribute('role','alert');details.scrollTop=scroll;
  }
  const statusLabel=t=>t.skipped?tx('Saltada por ahora','Skipped for now','暂时跳过'):label(({pending:['○ Pendiente','○ Pending','○ 待完成'],active:['◉ En curso','◉ In progress','◉ 进行中'],completed:['✓ Completada','✓ Complete','✓ 已完成'],review:['! Necesita revisión','! Needs review','! 需要检查']})[t.status]);
  function summary(p){return tx(`${p.percent} % completado · ${p.done} de ${p.required} tareas necesarias listas`,`${p.percent}% complete · ${p.done} of ${p.required} required tasks ready`,`${p.percent}% 已完成 · ${p.done}/${p.required} 必要任务完成`);}
  function record(kind,rev=G.revision(project)){state().evidence[kind]=rev;store();render();}
+
+ // What the guide row shows (docs/product/journey-orientation-2026-10-21.md §4): building conflicts first; a task the
+ // person went back to and that is already done says so and offers to go on; a pending goal shows its task (or, if a
+ // requirement blocks it, the requirement itself, which its button runs); a finished goal shows the professional's next
+ // action from FloorPlanJourney. One primary action at most; the secondary ones are plain links.
+ const Journey=window.FloorPlanJourney;
+ function journeyResult(s){const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'};return Journey.next({project,kind:s.kind,revision:G.revision(project),evidence:s.evidence,skipped:s.journeySkipped||[],view:is3D()?'3d':'2d',building:st});}
+ function decideNext(s,p){
+  const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'};
+  if(s.kind!=='example'&&st.state!=='clear'&&st.headline&&G.geometryReady(project))return {mode:'journey',r:journeyResult(s)};
+  if(s.manualTask&&p.current.status==='completed'){const pending=p.pending.find(t=>t.id!==p.current.id);return {mode:'done-task',task:p.current,next:pending||null,r:pending?null:journeyResult(s)};}
+  if(!p.finished){const block=p.current.blockers.length?p.tasks.find(t=>t.id===p.current.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:p.current};}
+  return {mode:'journey',r:journeyResult(s)};
+ }
+ function runJourney(id,r){
+  const s=state();
+  switch(id){
+   case 'view3d':return setView('3d');
+   case 'plan2d':return setView('2d');
+   case 'copy':return copyExample();
+   case 'calibrate':case 'recalibrate':case 'verify':case 'reverify':case 'trace':return (async()=>{await setView('2d');if(!$('#tracePanel')||$('#tracePanel').hidden)$('#traceBtn').click();await FloorPlanTraceUI.start(id==='trace'?'room':/verify/.test(id)?'verify':'calibrate');render();})();
+   case 'confirm':return $('#traceConfirm').click();
+   case 'conflicts':return window.FloorPlanBuildingUI?.openConflicts();
+   case 'openings':case 'opening':return window.FloorPlanBuildPalette?.focusOpenings();
+   case 'room':return (async()=>{await setView('2d');FloorPlanRoomUI.createRoom();})();
+   case 'furnish':case 'keepFurnishing':return execute({id:'furniture',...G.actions.furniture,goal:undefined});
+   case 'present':return window.FloorPlanPresentation?.open();
+   case 'exportCopy':return exportCopy();
+   case 'later':s.journeySkipped=[...new Set([...(s.journeySkipped||[]),r.id])];store();render();announce(tx('Sugerencia aplazada para este proyecto. Puedes recuperarla en «Tareas y ayuda».','Suggestion put off for this project. You can bring it back in “Tasks & help”.','已为此项目暂缓该建议。可在“任务及帮助”中恢复。'));return;
+  }
+ }
+ function renderNext(s,p){
+  const d=decideNext(s,p),link=(b,action,fn)=>{b.hidden=!action;if(action){b.textContent=label(action.label);b.onclick=()=>safe(fn);}};
+  laterAction.hidden=secondaryAction.hidden=true;goalDone.hidden=true;presentAction.hidden=true;currentAction.hidden=false;
+  document.body.classList.toggle('next-present',false);
+  if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(()=>runTask(t));presentAction.hidden=p.stage!==4;}
+  else if(d.mode==='done-task'){const next=d.next;currentTitle.textContent=tx('Ya hecho: ','Done: ','已完成：')+label(d.task.title);
+   currentInstruction.textContent=next?tx('Puedes repasarlo o seguir con lo pendiente.','You can review it or go on with what is left.','可以复查，或继续未完成的任务。'):tx('Tu objetivo está completo. Puedes seguir con la vivienda.','Your goal is complete. You can go on with the home.','目标已完成。可以继续完善住宅。');
+   if(next){currentAction.textContent=tx('Seguir con: ','Go on with: ','继续：')+label(next.title);currentAction.onclick=()=>safe(()=>{state().manualTask=false;runTask(next);});}
+   else{const r=d.r;currentAction.hidden=!r.primary;if(r.primary){currentAction.textContent=tx('Seguir con: ','Go on with: ','继续：')+label(r.title);currentAction.onclick=()=>safe(()=>{state().manualTask=false;store();runJourney(r.primary.id,r);});}}}
+  else{const r=d.r;currentTitle.textContent=label(r.title);currentInstruction.textContent=label(r.text);currentAction.hidden=!r.primary;
+   if(r.primary){currentAction.textContent=label(r.primary.label);currentAction.onclick=()=>safe(()=>runJourney(r.primary.id,r));document.body.classList.toggle('next-present',r.primary.id==='present');}
+   link(secondaryAction,r.secondary,()=>runJourney(r.secondary.id,r));link(laterAction,r.later,()=>runJourney('later',r));
+   if(p.finished){goalDone.hidden=false;goalDone.textContent=tx(`✓ Objetivo «${label(G.goals[p.goal])}» completado · resultados en «Tareas y ayuda»`,`✓ Goal “${label(G.goals[p.goal])}” complete · results in “Tasks & help”`,`✓ 目标“${label(G.goals[p.goal])}”已完成 · 结果见“任务及帮助”`);}}
+  // The example line offers the copy; when the copy is the guide's own button, the line would only repeat it.
+  exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy';exampleNote.textContent=tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');$('#guideCopyExample').textContent=tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
+  presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
+  const tasks=p.tasks.filter(t=>!t.skipped),first=tasks.findIndex(t=>t.id===p.current.id)<=0,prev=$('#guidePrevious');prev.disabled=first;prev.title=first?tx('Es la primera tarea de tu objetivo','This is the first task of your goal','这是目标的第一个任务'):'';
+ }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
   searchBtn.textContent=tx('⌕ ¿Qué quieres hacer?','⌕ What would you like to do?','⌕ 你想做什么？');resume.textContent=tx('Recuperar guía','Resume guide','恢复指南');bar.hidden=s.closed||s.fullTools||fullEditor;resume.hidden=!bar.hidden;document.body.classList.toggle('guided',!bar.hidden);
@@ -187,21 +241,20 @@
   $('#guideGoalChange').textContent=tx('Cambiar objetivo','Change goal','更改目标');$('#guideDetails').textContent=tx('Tareas y ayuda','Tasks & help','任务及帮助');$('#guideClose').textContent='×';$('#guideClose').setAttribute('aria-label',tx('Cerrar guía','Close guide','关闭指南'));
   progressText.textContent=summary(p);meter.setAttribute('aria-valuenow',String(p.percent));meter.setAttribute('aria-label',summary(p));fill.style.width=p.percent+'%';optionalText.textContent=tx(`Opcionales ${p.optionalDone}/${p.optionalTotal}`,`Optional ${p.optionalDone}/${p.optionalTotal}`,`可选 ${p.optionalDone}/${p.optionalTotal}`);
   for(const [i,b]of [...steps.querySelectorAll('button')].entries()){b.querySelector('.step-label').textContent=label(G.stages[i]);if(i===p.stage)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.title=label(G.stages[i]);}
-  currentTitle.textContent=showOutcome?tx('✓ Objetivo completado','✓ Goal complete','✓ 目标已完成'):label(p.current.title);currentInstruction.textContent=showOutcome?saved()?tx('Guardado en este navegador. Exporta una copia para conservarlo fuera.','Saved in this browser. Export a copy to keep it elsewhere.','保存在此浏览器。请导出副本以在其他位置保存。'):tx('Resultado listo. Confirma el guardado local.','Result ready. Confirm local saving.','结果已准备。请确认本地保存。'):p.current.blockers.length?tx('Antes: ','First: ','先完成：')+p.current.blockers.map(id=>label(G.definitions[id].title)).join(' · '):label(p.current.instruction);
-  currentAction.textContent=showOutcome?tx('Ver resultado y exportar','View result & export','查看结果并导出'):primaryLabel(p.current);currentAction.onclick=()=>safe(()=>showOutcome?openDetails():runTask(p.current));
-  presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');presentAction.hidden=p.stage!==4;
-  exampleLine.hidden=s.kind!=='example';exampleNote.textContent=tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');$('#guideCopyExample').textContent=tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
+  renderNext(s,p);
   empty.hidden=G.geometryReady(project)||is3D()||!!project.sourceImages?.length;emptyTitle.textContent=tx('Aquí empieza tu distribución','Your layout starts here','从这里开始布局');emptyText.textContent=tx('Crea tu primera estancia con dimensiones interiores o utiliza el trazado manual.','Create your first room with interior dimensions or use manual drawing.','输入内部尺寸创建房间，或手动绘图。');$('#guideEmptyAction').textContent=tx('Crear primera estancia','Create first room','创建第一个房间');
   const completed=p.tasks.filter(t=>t.status==='completed').map(t=>t.id);s.completed=[...new Set([...s.completed,...completed])];
   if(lastResult&&lastResult.projectId===project.id){const done=p.tasks.filter(t=>t.status==='completed'&&!lastResult.done.includes(t.id));if(done.length)announcement.textContent=label(done[0].title)+tx(' · Resultado comprobado. ',' · Result verified. ',' · 结果已验证。')+(p.pending[0]?tx('Te queda: ','Next: ','下一步：')+label(p.pending[0].title):tx('Objetivo completado.','Goal complete.','目标已完成。'));}
   lastResult={projectId:project.id,done:completed};if(details.open)renderDetails();
  }
  function sync(){const id=library?.activeId()||project.id,s=state();if(s.fullTools)fullEditor=true;if(fullEditor)s.fullTools=true;if(currentId!==id||s.projectId!==project.id){currentId=id;lastResult=null;if(pendingEntry&&!pendingIds.includes(id)){Object.assign(s,pendingEntry);s.origin=project.sourceImages?.length?'image':entryOrigin||s.origin;s.current='geometry';pendingEntry=null;entryOrigin=null;}if(s.kind==='example'&&project.sourceImages?.length)s.kind='own';}
-  const old=lastSnapshot;lastSnapshot=JSON.stringify([id,project,LANG,facts(),s.goal,s.current]);if(old===lastSnapshot)return;
+  const old=lastSnapshot;lastSnapshot=JSON.stringify([id,project,LANG,facts(),s.goal,s.current,window.FloorPlanBuildingUI?.status?.()?.headline||'',typeof is3D==='function'&&is3D()]);if(old===lastSnapshot)return;
   const p=progress();if(p.current.status==='completed'&&!s.manualTask){s.current=(p.pending[0]||p.current).id;}render();store();
  }
  window.FloorPlanGuideUI={sync,progress,state,record,captureImport,importRouteCurrent,imported,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
  addEventListener('floorplan-view-ready',()=>record('view3d'));
+ // Presenting is a 3D view of the same plan: it reviews this version and marks it as presented.
+ addEventListener('floorplan-presentation-started',()=>{const rev=G.revision(project);state().evidence.view3d=rev;state().evidence.present=rev;store();render();});
  addEventListener('floorplan-export-ready',e=>{if(e.detail.projectId===project.id&&e.detail.revision===G.revision(project)){state().exportName=e.detail.filename;record('export',e.detail.revision);}});
  addEventListener('floorplan-images-ready',sync);
  // Entry URL means welcome; #editor reload resumes. Project persistence is independent of the screen.

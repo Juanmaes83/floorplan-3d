@@ -533,6 +533,7 @@
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
    sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;updateAssetWarning();
+   window.dispatchEvent(new Event('floorplan-presentation-started'));
    updateMaterialButton();
    if(!materialButton.hidden)View3D.setSurfaceQuality('enhanced');
    await View3D.setPresentationLightPreset('neutral');
