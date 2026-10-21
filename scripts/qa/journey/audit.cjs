@@ -185,7 +185,7 @@ function probe(BADS){
   // F. Doors and windows.
   await journey('F','Puertas y ventanas: añadir, seleccionar, editar y volver',async c=>{const {snap,press,page,step,tapRoom,world,tapAt}=c;
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(400);
-   await step('palette-window-no-room',async()=>{if(await c.visible('#fab.show [data-a=done]'))await press('#fab.show [data-a=done]');await openPalette(c);await press('#paletteTabBuild');await press('#paletteOpening-window');await snap('window-without-room','Añadir una ventana sin estancia seleccionada','«Ventana» en la paleta');});
+   await step('palette-window-no-room',async()=>{await c.closeDrawers();if(await c.visible('#fab.show [data-a=done]'))await press('#fab.show [data-a=done]');await openPalette(c);await press('#paletteTabBuild');await press('#paletteOpening-window');await snap('window-without-room','Añadir una ventana sin estancia seleccionada','«Ventana» en la paleta');});
    await step('window',async()=>{await tapRoom('Salón');await openPalette(c);await press('#paletteTabBuild');await press('#paletteOpening-window');await snap('window-pick','Elegir el muro','Seleccionar estancia y «Ventana»');
     const p=await page.evaluate(()=>{const r=project.rooms[0],xs=r.polygon.map(p=>p.x),ys=r.polygon.map(p=>p.y);return {x:(Math.min(...xs)+Math.max(...xs))/2,y:Math.min(...ys)-60};});const s=await world(p);await tapAt(s.x,s.y);await snap('window-placed','Ver el resultado y la siguiente acción','Tocar el muro superior');});
    await step('escape',async()=>{await page.keyboard.press('Escape');await snap('window-escape','Volver','Escape');});
