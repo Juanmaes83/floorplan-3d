@@ -5,6 +5,16 @@
  const hadLibrary=(()=>{try{return originalStorage.getItem(FloorPlanLibrary.KEY)!==null;}catch{return false;}})();
  let navigationEpoch=0,roomReturnToWelcome=false;
  let data={version:1,seen:false,entries:{}},storageError='',currentId=null,lastSnapshot='',lastResult=null,pendingEntry=null,entryOrigin=null,pendingIds=[],afterCopy=null,fullEditor=false;
+ const audienceKey='rubik-professional-audience-v1';
+ const audiences=[
+  ['architecture',['Estudio de arquitectura','Architecture studio','建筑设计事务所']],
+  ['real-estate',['Inmobiliaria','Real estate agency','房地产机构']],
+  ['developer',['Promotora','Property developer','房地产开发商']],
+  ['renovation',['Reformas','Renovation','装修施工']],
+  ['interior',['Decoración e interiorismo','Interior design','室内设计']]
+ ];
+ let audience='';
+ try{const stored=originalStorage.getItem(audienceKey);if(audiences.some(([id])=>id===stored))audience=stored;}catch{}
  try{const raw=originalStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version===1&&parsed.entries&&typeof parsed.entries==='object'&&!Array.isArray(parsed.entries))data=parsed;}}catch{storageError=tx('No se pudo recuperar la guía. El plano se conserva.','The guide could not be restored. The plan is preserved.','无法恢复指南。平面图已保留。');}
  function el(tag,text,parent,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;if(parent)parent.append(n);return n;}
  function btn(id,text,fn,parent,primary=false){const n=el('button',text,parent,'btn'+(primary?' primary':''));n.id=id;n.type='button';n.onclick=fn;return n;}
@@ -86,6 +96,15 @@
   el('p',tx('Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso.','Draw your layout, try furniture and explore your idea in 3D. We guide you from the first step.','绘制布局、尝试家具并在 3D 中浏览。从第一步开始提供指南。'),left,'lead');
   el('p',tx('Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional.','You get an editable 2D plan and its 3D view, stored in this browser. Measurements are indicative, not a professional survey.','你将得到可编辑的 2D 平面图及其 3D 视图，保存在此浏览器中。尺寸仅供参考，不能替代专业测量。'),left,'welcome-result');
   const figure=el('figure',undefined,intro,'welcome-visual');el('span',tx('2D → 3D · A tu ritmo','2D → 3D · At your pace','2D → 3D · 按自己的节奏'),figure,'visual-tag');drawExample(figure);el('figcaption',tx('Proyecto de ejemplo · explora antes de empezar','Example project · explore before starting','示例项目 · 开始前先探索'),figure);
+  const audienceSection=el('section',undefined,shell,'welcome-audience');
+  const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
+  el('p',tx('Opcional. Elige tu perfil para identificarte; las herramientas son las mismas para todos.','Optional. Choose your field; everyone has access to the same tools.','可选。选择你的领域；所有人使用相同的工具。'),audienceSection);
+  const audienceOptions=el('div',undefined,audienceSection,'welcome-audience-options');audienceOptions.setAttribute('role','group');audienceOptions.setAttribute('aria-labelledby',audienceTitle.id);
+  for(const [id,names] of audiences){const option=btn('welcomeAudience-'+id,label(names),()=>{
+   audience=audience===id?'':id;
+   try{if(audience)originalStorage.setItem(audienceKey,audience);else originalStorage.removeItem(audienceKey);}catch{}
+   for(const node of audienceOptions.children)node.setAttribute('aria-pressed',String(node.id==='welcomeAudience-'+audience));
+  },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));}
   const entries=el('div',undefined,shell,'welcome-entries');
   for(const [id,icon,title,description,fn]of [
    ['welcomeUpload','↑',['Subir un plano','Upload a floor plan','上传平面图'],['Si ya tienes un plano: PDF, imagen, DXF, IFC, RoomPlan o proyecto JSON/ZIP. Revisarás el resultado antes de usarlo; las imágenes se calibran con una medida conocida.','If you already have a plan: PDF, image, DXF, IFC, RoomPlan or a JSON/ZIP project. You review the result before using it; images are calibrated with a known measurement.','如果已有平面图：PDF、图片、DXF、IFC、RoomPlan 或 JSON/ZIP 项目。使用前先检查结果；图片需用已知尺寸校准。'],()=>beginUpload()],

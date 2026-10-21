@@ -1,5 +1,9 @@
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
+## Propuesta paralela del 21-10-2026 — entrada profesional y entrega al cliente
+
+Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco líneas de mejora de experiencia y entrega. [Alcance, orden, límites y decisiones abiertas](product/professional-client-experience-2026-10-21.md). El selector de perfil es un primer corte opcional en una rama separada; los ejemplos, la revisión de cliente, los formatos 3D y la asistencia IA son propuestas por fases, no capacidades integradas. Reconciliar esta rama con el corte de orientación que Claude prepara antes de decidir su integración.
+
 
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
 
