@@ -66,7 +66,29 @@
 
 ## 5. Regresión
 
-**PENDIENTE.** Falta pasar las suites 3D, de captura y de presentación, comparadas con la base.
+**Base de comparación:** #66 `5967fa2`. Mismo entorno: Chromium 141, SwiftShader, three.js local, ejecución secuencial. Cabeza final `3eb1411`, que contiene el corte A completo (A12 y A13). Las suites del editor se cuentan en el informe de A y en el de C.
+
+| Suite | B | Base | Lectura |
+| --- | --- | --- | --- |
+| Unitarias | 246/246 | — | PASS |
+| `environment-3d` | 3/3 | — (no existe) | PASS |
+| `capture-3d` | 3/3 | — | PASS |
+| `mirror-pilot` | 1/1 | — | PASS |
+| `premium-shell` | 4/4 | — | PASS |
+| `variants-visual` | 4/4 | 4/4 | PASS (falló en la ronda 1: defecto A12, corregido) |
+| `presentation-framing` | 6/6 | — | PASS |
+| `material-detail` | 4 pasan, 1 falla (1440×900) | la misma prueba falla | Fallo previo |
+| `assets` (aislada) | 20 pasan, 5 fallan | los mismos 5 | Fallo previo (cargas de GLB abortadas). Con otra suite en paralelo fallaban 11; aislada, idéntico a la base |
+| `presentation-batch` | 7 pasan, 2 fallan | los mismos 2 | Fallo previo (no llega la descarga). La prueba de redimensionar falló en la ronda 2: defecto A13, corregido |
+| `presentation-light` | 3 pasan, 3 canceladas | idéntico | Timeout previo, **no** es PASS |
+| `presentation-minimap` | 4 pasan, 1 cancelada | idéntico | Timeout previo, **no** es PASS |
+| `presentation-reveal` | 2 pasan, 6 fallan por espera | idéntico | Timeout previo, **no** es PASS |
+| `presentation-contact` | 4 pasan, 1 cancelada | idéntico | Timeout previo, **no** es PASS |
+| `presentation-route` | 7 pasan, 1 cancelada | idéntico | Timeout previo, **no** es PASS |
+| `procedural-details`, `render-budget` | sin resultado (timeout) | sin resultado | **No ejecutado** en este entorno |
+| `presentation` | sin resultado (límite de 1700 s) | sin resultado | **No ejecutado** en este entorno |
+
+**Conclusión:** ninguna suite falla en B y pasa en la base. Las dos diferencias encontradas eran del corte A (A12 y A13), se corrigieron con una prueba que falla con el código anterior y están en `3eb1411`. Las suites con timeout necesitan GPU real para dar un resultado; no se cuentan como PASS.
 
 ## 6. Límites
 
