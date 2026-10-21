@@ -109,11 +109,12 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  const c=await open(t,viewport,{three:true}),{page,press,guide}=c;await press('#welcomeExample');
  await press('#tgLib');assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'build','the furnished example does not decide the person wants to furnish');await c.closeDrawers();
  let g=await guide();assert.equal(g.primary,'Abrir 3D');
- await press('#guidePrimary');await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
+ // Opening 3D keeps SwiftShader busy: the press that starts it gets the long 3D timeout.
+ await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
  g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi vivienda desde el ejemplo');
  assert.equal(await page.locator('#modes3d').isVisible(),true,'«Vista aérea / Recorrer» visible in the guided header in 3D');await c.shot('t2-example-3d');
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
- await press('#guidePrimary');await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
+ await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  if(await page.evaluate(()=>FloorPlanApp.viewMode==='3d')){await press('#viewSeg [data-view="2d"]');await page.waitForFunction(()=>FloorPlanApp.viewMode==='2d',null,{timeout:180000});}
  await press('#presentationBtn');await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',null,{timeout:300000});
