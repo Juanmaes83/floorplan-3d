@@ -189,14 +189,17 @@
  // person went back to and that is already done says so and offers to go on; a pending goal shows its task (or, if a
  // requirement blocks it, the requirement itself, which its button runs); a finished goal shows the professional's next
  // action from FloorPlanJourney. One primary action at most; the secondary ones are plain links.
- const Journey=window.FloorPlanJourney;
- function journeyResult(s){const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'};return Journey.next({project,kind:s.kind,revision:G.revision(project),evidence:s.evidence,skipped:s.journeySkipped||[],view:is3D()?'3d':'2d',building:st});}
+ const Journey=window.FloorPlanJourney,JOURNEY_KEY='rubik-sota-journey-v1';
+ // A presented version counts as reviewed in 3D and as delivered (browser data, never in the project or the guide entry).
+ function presented(){try{return JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}')[library?.activeId()||project.id]?.presented===G.revision(project);}catch{return false;}}
+ function journeyResult(s){const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'},rev=G.revision(project),done=presented();return Journey.next({project,kind:s.kind,revision:rev,evidence:{view3d:done?rev:s.evidence.view3d,present:done?rev:undefined},skipped:s.journeySkipped||[],view:is3D()?'3d':'2d',building:st});}
  function decideNext(s,p){
   const st=window.FloorPlanBuildingUI?.status?.()||{state:'clear'};
   if(s.kind!=='example'&&st.state!=='clear'&&st.headline&&G.geometryReady(project))return {mode:'journey',r:journeyResult(s)};
   if(s.manualTask&&p.current.status==='completed'){const pending=p.pending.find(t=>t.id!==p.current.id);return {mode:'done-task',task:p.current,next:pending||null,r:pending?null:journeyResult(s)};}
   // The stored task can lag behind (e.g. after importing a building it may still be a completed one): show the first
   // pending task of the goal instead.
+  if(!p.finished&&p.pending.every(t=>t.id==='view3d')&&presented())return {mode:'journey',r:journeyResult(s)};
   if(!p.finished){const cur=p.current.status==='completed'&&p.pending[0]?p.pending[0]:p.current,block=cur.blockers.length?p.tasks.find(t=>t.id===cur.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:cur};}
   return {mode:'journey',r:journeyResult(s)};
  }
@@ -256,7 +259,8 @@
  window.FloorPlanGuideUI={sync,progress,state,record,captureImport,importRouteCurrent,imported,openWelcome,openSearch,openDetails,execute,setGoal,returnFromRoom,roomCommitted(){roomReturnToWelcome=false;}};
  addEventListener('floorplan-view-ready',()=>record('view3d'));
  // Presenting is a 3D view of the same plan: it reviews this version and marks it as presented.
- addEventListener('floorplan-presentation-started',()=>{const rev=G.revision(project);state().evidence.view3d=rev;state().evidence.present=rev;store();render();});
+ // Kept apart from the guide entry (rubik-sota-journey-v1): a presentation restores the guide state exactly.
+ addEventListener('floorplan-presentation-started',()=>{const id=library?.activeId()||project.id,rev=G.revision(project);try{const all=JSON.parse(originalStorage.getItem(JOURNEY_KEY)||'{}');all[id]={presented:rev};originalStorage.setItem(JOURNEY_KEY,JSON.stringify(all));}catch{}});
  addEventListener('floorplan-export-ready',e=>{if(e.detail.projectId===project.id&&e.detail.revision===G.revision(project)){state().exportName=e.detail.filename;record('export',e.detail.revision);}});
  addEventListener('floorplan-images-ready',sync);
  // Entry URL means welcome; #editor reload resumes. Project persistence is independent of the screen.

@@ -120,6 +120,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',null,{timeout:300000});
  await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:300000});await page.waitForTimeout(800);
  g=await guide();assert.notEqual(g.primary,'Abrir 3D','a presented home is not asked to be opened in 3D');assert.notEqual(g.primary,'Ver en 3D');
- const ev=await page.evaluate(()=>{const s=FloorPlanGuideUI.state(),r=FloorPlanGuide.revision(FloorPlanApp.project);return {view3d:s.evidence.view3d===r,present:s.evidence.present===r};});assert.deepEqual(ev,{view3d:true,present:true});
+ // Recorded apart from the guide entry, which a presentation restores exactly.
+ const ev=await page.evaluate(()=>{const all=JSON.parse(localStorage.getItem('rubik-sota-journey-v1')||'{}'),r=FloorPlanGuide.revision(FloorPlanApp.project);return Object.values(all).some(e=>e.presented===r);});assert.equal(ev,true,'this version is recorded as presented');
  await c.shot('t6-after-presenting');assert.deepEqual(c.errors,[]);
 });
