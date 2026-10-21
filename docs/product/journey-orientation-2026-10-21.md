@@ -74,7 +74,7 @@ Más problemas reproducidos, en teléfono **emulado**:
 
 ## 3. Alternativas comparadas
 
-Las tres se prototiparon sobre la aplicación real, en los mismos cuatro estados (vacío tras la primera estancia, ejemplo, imagen sin escala y dúplex con conflictos), a 1440×900 y 390×844. Capturas en [`docs/qa/artifacts/journey/prototypes/`](../qa/artifacts/journey/prototypes/).
+La comparación se apoya en las capturas reales de la auditoría ([QA](../qa/journey-orientation-2026-10-21.md)). El script `scripts/qa/journey/prototypes.cjs` dibuja las tres alternativas sobre la aplicación en los mismos cuatro estados (vacío tras la primera estancia, ejemplo, imagen sin escala y dúplex con conflictos), a 1440×900 y 390×844. **Sus capturas no se han generado en esta entrega**; quedan para la revisión visual.
 
 | Criterio | A. Guía compacta con «siguiente acción» | B. Tarjeta flotante en el plano | C. «Ahora» dentro de la paleta |
 | --- | --- | --- | --- |
