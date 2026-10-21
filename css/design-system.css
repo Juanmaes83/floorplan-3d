@@ -129,7 +129,7 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   /* The guide bar spans the width under the header: its controls (close, «Ver más») stay left of the column. */
   .guide-bar{margin-right:112px}
   /* The plan is narrower here: the building warning moves above the selection bar instead of sitting beside it. */
-  #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
+  #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + var(--fab-h,56px) + 8px)}
 }
 
 /* 3D setting selector (decorative backdrop), next to the sun control. */
@@ -151,10 +151,11 @@ body.guided.has-rooms:not(.distribution-pending) .presentation-entry:hover{backg
 @media (max-width:600px){
   /* Phones: the selection bar wraps instead of hiding «Eliminar» beyond the right edge. */
   #fab{flex-wrap:wrap;justify-content:center;overflow-x:visible}
-  #fab .name{flex-basis:100%;text-align:center;max-width:none}
   .guide-current{flex-wrap:wrap}
 }
 @media (max-width:1100px){
   /* A temporary message never covers the selection bar: it sits above it (--fab-top is measured by app-shell.js). */
   body:has(#fab.show) #toast{bottom:calc(100vh - var(--fab-top,100vh) + 8px)}
+  /* The building warning sits above the selection bar, whatever its height (it wraps on phones). */
+  #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + var(--fab-h,56px) + 8px)!important}
 }

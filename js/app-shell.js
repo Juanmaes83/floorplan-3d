@@ -27,7 +27,7 @@
  header.addEventListener('scroll',edge,{passive:true});addEventListener('resize',()=>{edge();headerEnd();});headerEnd();
  // Top of the selection bar, for the temporary message to sit above it on phones (design-system.css).
  const fab=document.getElementById('fab');
- const fabTop=()=>{if(fab)document.documentElement.style.setProperty('--fab-top',`${Math.round(fab.classList.contains('show')?fab.getBoundingClientRect().top:innerHeight)}px`);};
+ const fabTop=()=>{if(!fab)return;const r=fab.getBoundingClientRect(),on=fab.classList.contains('show'),s=document.documentElement.style;s.setProperty('--fab-top',`${Math.round(on?r.top:innerHeight)}px`);s.setProperty('--fab-h',`${Math.round(on?r.height:0)}px`);};
  if(fab&&typeof ResizeObserver==='function'){new ResizeObserver(fabTop).observe(fab);new MutationObserver(fabTop).observe(fab,{attributes:true,attributeFilter:['class']});}
  addEventListener('resize',fabTop);fabTop();
  update();edge();
