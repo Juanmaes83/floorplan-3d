@@ -1,0 +1,183 @@
+{
+ "rubikRoot": "master d9cd11b (worktree local)",
+ "viewport": "1440x900 mouse, 2D",
+ "actions": 28,
+ "surfaceChanges": 8,
+ "log": [
+  {
+   "n": 1,
+   "label": "Nuevo proyecto",
+   "surface": "propertiesPanel",
+   "opens": "roomDesignDialog"
+  },
+  {
+   "n": 2,
+   "label": "Escribir nombre del proyecto",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 3,
+   "label": "Plano vacío",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 4,
+   "label": "Escribir nombre de la estancia",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 5,
+   "label": "Escribir ancho",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 6,
+   "label": "Escribir profundidad",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 7,
+   "label": "Ver cambio",
+   "surface": "roomDesignDialog"
+  },
+  {
+   "n": 8,
+   "label": "Confirmar y guardar",
+   "surface": "roomDesignDialog",
+   "opens": "propertiesPanel"
+  },
+  {
+   "n": 9,
+   "label": "Plano propio (herramientas)",
+   "surface": "propertiesPanel",
+   "opens": "tracePanel"
+  },
+  {
+   "n": 10,
+   "label": "Puerta",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 11,
+   "label": "Tocar el muro inferior",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 12,
+   "label": "Ventana",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 13,
+   "label": "Tocar el muro superior",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 14,
+   "label": "Seleccionar/editar",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 15,
+   "label": "Tocar la puerta",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 16,
+   "label": "Escribir ancho de puerta 900",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 17,
+   "label": "Guardar geometría",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 18,
+   "label": "Volver",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 19,
+   "label": "Navegar/cancelar",
+   "surface": "tracePanel"
+  },
+  {
+   "n": 20,
+   "label": "Cerrar herramientas",
+   "surface": "tracePanel",
+   "opens": "propertiesPanel"
+  },
+  {
+   "n": 21,
+   "label": "Tocar la estancia",
+   "surface": "propertiesPanel"
+  },
+  {
+   "n": 22,
+   "label": "Biblioteca de acabados · suelo",
+   "surface": "propertiesPanel",
+   "opens": "surfaceDialog"
+  },
+  {
+   "n": 23,
+   "label": "Elegir un acabado",
+   "surface": "surfaceDialog"
+  },
+  {
+   "n": 24,
+   "label": "Aplicar",
+   "surface": "surfaceDialog",
+   "opens": "propertiesPanel"
+  },
+  {
+   "n": 25,
+   "label": "Acabado de una pared",
+   "surface": "propertiesPanel",
+   "opens": "surfaceDialog"
+  },
+  {
+   "n": 26,
+   "label": "Elegir pared en la lista",
+   "surface": "surfaceDialog"
+  },
+  {
+   "n": 27,
+   "label": "Elegir un acabado",
+   "surface": "surfaceDialog"
+  },
+  {
+   "n": 28,
+   "label": "Aplicar",
+   "surface": "surfaceDialog",
+   "opens": "propertiesPanel"
+  }
+ ],
+ "outcome": {
+  "room": "Habitación de invitados",
+  "door": {
+   "widthMm": 900,
+   "swing": {
+    "hinge": "start",
+    "side": "left"
+   }
+  },
+  "window": {
+   "widthMm": 800,
+   "sillHeightMm": 900
+  },
+  "floorPreset": "surface-wood-floor",
+  "wallFinishes": 1,
+  "persistedAfterReload": true
+ },
+ "observed": {
+  "swingControlInOpeningPanel": false,
+  "inlineFloorSwatchesInRoomPanel": true,
+  "wallTargetOptions": [
+   "wal_0a02061c61fc4a83970f5cef763b64c6 · (-120, -120) → (-120, 3120) mm",
+   "wal_046e442fe36e4a74a3ea4e164a005260 · (4120, -120) → (4120, 3120) mm",
+   "wal_c030233472c4421cad6537add7f48916 · (-120, -120) → (4120, -120) mm"
+  ]
+ },
+ "errors": []
+}
