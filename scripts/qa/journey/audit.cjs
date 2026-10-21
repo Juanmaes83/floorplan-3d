@@ -77,7 +77,7 @@ function probe(BADS){
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/ERR_FAILED|cdn\.jsdelivr|Failed to load resource/.test(m.text()))errors.push(m.text());});
    await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await threeModule(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
-   const J={viewport:vp,id,title,steps:[],blocked:[],errors};let n=0;
+   const J={viewport:vp,id,title,steps:[],blocked:[],hidden:[],searches:[],notes:[],errors};let n=0;
    const snap=async(step,intent,did)=>{await page.waitForTimeout(450);const file=`${String(++n).padStart(2,'0')}-${step}.png`;await page.screenshot({path:path.join(dir,file)});J.steps.push({step,intent,did,shot:path.join(vp,id,file),...await page.evaluate(probe,BAD.map(([r,c])=>[r.source,c]))});};
    const loc=sel=>page.locator(sel).first();
    // A person's press: the control must be visible and not covered (Playwright actionability), scrolled into view if
@@ -87,9 +87,19 @@ function probe(BADS){
    const world=async pt=>page.evaluate(p=>{const s=new DOMPoint(p.x,p.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:s.x,y:s.y};},pt);
    const roomCentre=name=>page.evaluate(n=>{const r=project.rooms.find(r=>nm(r.name)===n||r.name===n);if(!r)return null;const xs=r.polygon.map(p=>p.x),ys=r.polygon.map(p=>p.y);return {x:(Math.min(...xs)+Math.max(...xs))/2,y:(Math.min(...ys)+Math.max(...ys))/2+250};},name);
    const tapRoom=async name=>{const c=await roomCentre(name);if(!c)throw Error(`no room ${name}`);const s=await world(c);await tapAt(s.x,s.y);};
+   const visible=sel=>page.locator(sel).first().isVisible();
+   // A control hidden in the guided header: recorded as a finding, then reached through «Tareas y ayuda → Ver todas
+   // las herramientas» (the visible way out of the guided header).
+   const reach=async(sel,why)=>{if(await visible(sel))return press(sel);J.hidden.push({control:sel,why,guided:await page.evaluate(()=>document.body.classList.contains('guided'))});
+    if(await visible('#guideDetails')){await press('#guideDetails');await press('#guideAllTools');await page.waitForTimeout(400);if(narrow)await page.evaluate(()=>drawer(null));await page.waitForTimeout(400);}
+    return press(sel);};
+   // The search «¿Qué quieres hacer?»: writes the words and takes the first result. Records what it offered.
+   const ask=async(words)=>{await press('#actionSearchBtn');await page.locator('#editorActionInput').fill(words);await page.waitForTimeout(300);const offered=await page.locator('#editorActionResults .action-result strong').allTextContents();J.searches.push({words,offered});return offered;};
+   const pressThen=async(sel,cond,timeout=60000)=>{await press(sel).catch(()=>{});await page.waitForFunction(cond,null,{timeout});};
+   const props=async()=>{if(narrow&&!(await page.evaluate(()=>document.querySelector('aside.right').classList.contains('open')))){await press('#fab [data-a=prop]');await page.waitForTimeout(450);}};
    const step=async(label,fn)=>{try{await fn();return true;}catch(e){J.blocked.push({step:label,reason:String(e.message).split('\n')[0].slice(0,220)});await snap(`${label}-blocked`,'',`BLOQUEADO: ${String(e.message).split('\n')[0].slice(0,120)}`).catch(()=>{});return false;}};
    const t0=Date.now();
-   try{await page.goto(url);await page.waitForFunction(()=>window.FloorPlanGuideUI&&window.FloorPlanBuildPalette,null,{timeout:20000});await fn({page,snap,press,tapAt,tapRoom,world,step,loc,J,ctx,narrow});}
+   try{await page.goto(url);await page.waitForFunction(()=>window.FloorPlanGuideUI&&window.FloorPlanBuildPalette,null,{timeout:20000});await fn({page,snap,press,tapAt,tapRoom,world,step,loc,J,ctx,narrow,reach,ask,visible,props,pressThen});}
    catch(e){J.blocked.push({step:'journey',reason:String(e.message).split('\n')[0]});}
    J.ms=Date.now()-t0;
    if(!report.renderer)report.renderer=await page.evaluate(()=>{try{const c=document.createElement('canvas').getContext('webgl');const d=c.getExtension('WEBGL_debug_renderer_info');return c.getParameter(d?d.UNMASKED_RENDERER_WEBGL:c.RENDERER);}catch{return 'n/a';}}).catch(()=>null);
@@ -127,14 +137,14 @@ function probe(BADS){
     await press('#paletteTabBuild');await snap('build-tab','Ir a «Construir»','Pulsar la pestaña «Construir»');
     await press('#paletteNewRoom');await snap('new-room-example','Crear una estancia en el ejemplo','«Nueva estancia»');await page.keyboard.press('Escape');await snap('cancel-room','Cancelar','Escape');});
    await step('furnish-intent',async()=>{await openPalette(c);await press('#paletteTabFurnish');await furnishFirst(c,'cama');await snap('furnished','Colocar un mueble','Buscar «cama» y pulsar el primer resultado');});
-   await step('review-intent',async()=>{await press('#guidePrimary');await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});await page.waitForTimeout(1500);await snap('review','Revisar el ejemplo (acción de la guía)','Botón principal de la guía');});
+   await step('review-intent',async()=>{await c.pressThen('#guidePrimary',()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'));await page.waitForTimeout(1500);await snap('review','Revisar el ejemplo (acción de la guía)','Botón principal de la guía');});
   });
 
   // D. Image import, scale and recovery.
   await journey('D','Subir una imagen: escala, segunda cota y trazado',async c=>{const {snap,press,page,step,tapAt}=c;
    const fc=page.waitForEvent('filechooser',{timeout:5000});await press('#welcomeUpload');await (await fc).setFiles(planPng);
-   await page.waitForTimeout(2500);await snap('imported','Qué hacer después de subir la imagen','Elegir manual-plan.png');
-   await step('guide-scale',async()=>{await press('#guidePrimary');await snap('scale-start','Empezar a ajustar la escala','Botón principal de la guía');});
+   await page.waitForFunction(()=>project.sourceImages?.length&&project.sourceImages.every(i=>FloorPlanTraceUI.imageReady(i.id)),null,{timeout:30000}).catch(()=>{});await page.waitForTimeout(800);await snap('imported','Qué hacer después de subir la imagen','Elegir manual-plan.png');
+   await step('guide-scale',async()=>{await press('#guidePrimary');await snap('scale-start','Empezar a ajustar la escala','Botón principal de la guía');if(await page.locator('#guideDialog').evaluate(d=>d.open)){c.J.notes.push('«Empezar a ajustar» abrió «Tu recorrido» en vez de la calibración');await press('#guideTask-scale');await snap('scale-from-list','Segundo intento desde la lista de tareas','«Empezar a ajustar» en «Tu recorrido»');}});
    const imgTap=async pt=>{const s=await page.evaluate(p=>{const im=project.sourceImages[0],q=FloorPlanTracing.imageToWorld(im,p),sc=new DOMPoint(q.x,q.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:sc.x,y:sc.y};},pt);await tapAt(s.x,s.y);};
    await step('calibrate',async()=>{await imgTap({x:100,y:100});await imgTap({x:600,y:100});await page.locator('#traceKnown').fill('2500');await press('#traceDistanceSave');await snap('calibrated','Primera cota hecha: ¿y ahora?','Dos puntos y 2500 mm');});
    await step('second-bad',async()=>{if(await page.locator('#guidePrimary').isVisible())await press('#guidePrimary');await imgTap({x:100,y:200});await imgTap({x:100,y:600});await page.locator('#traceKnown').fill('3000');await press('#traceDistanceSave');await snap('second-contradictory','Segunda cota contradictoria: ¿cómo corregir?','Dos puntos y 3000 mm (contradice)');});
@@ -142,12 +152,12 @@ function probe(BADS){
   });
 
   // E. Rooms and walls: select, edit, cancel, undo/redo.
-  await journey('E','Estancias y muros: seleccionar, editar, cancelar y deshacer',async c=>{const {snap,press,page,step,tapRoom}=c;
+  await journey('E','Estancias y muros: seleccionar, editar, cancelar y deshacer',async c=>{const {snap,press,page,step,tapRoom,reach}=c;
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(400);
    await step('select-room',async()=>{if(await page.evaluate(()=>matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right').classList.contains('open')))await press('#tgPanel');await tapRoom('Salón');await snap('room-selected','Editar la estancia: ¿dónde están sus acciones?','Tocar la estancia en el plano');});
-   await step('dimensions',async()=>{await press('#roomDimensions');await snap('dimensions','Cambiar una dimensión','«Dimensiones»');await page.keyboard.press('Escape');await snap('dimensions-cancel','Cancelar el cambio','Escape');});
+   await step('dimensions',async()=>{await c.props();await press('#roomDimensions');await snap('dimensions','Cambiar una dimensión','«Dimensiones»');await page.keyboard.press('Escape');await snap('dimensions-cancel','Cancelar el cambio','Escape');});
    await step('wall',async()=>{await openPalette(c);await press('#paletteTabBuild');await press('#paletteWall');await snap('wall-mode','Dibujar un muro','«Dibujar muro»');await page.keyboard.press('Escape');await snap('wall-escape','Salir del modo muro','Escape');});
-   await step('undo-redo',async()=>{await press('#undo');await snap('undo','Deshacer la estancia','Deshacer');await press('#redo');await snap('redo','Rehacer','Rehacer');});
+   await step('undo-redo',async()=>{await reach('#undo','Deshacer');await snap('undo','Deshacer la estancia','Deshacer');await reach('#redo','Rehacer');await snap('redo','Rehacer','Rehacer');});
   });
 
   // F. Doors and windows.
@@ -163,7 +173,7 @@ function probe(BADS){
   await journey('G','Muebles: buscar, añadir, duplicar, sin sitio y conflicto con escalera',async c=>{const {snap,press,page,step}=c;
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(400);
    await step('find',async()=>{await openPalette(c);await snap('palette','Amueblar: ¿dónde están los muebles?','Abrir «Crear y amueblar»');await press('#paletteTabFurnish');await furnishFirst(c,'sofá');await snap('added','Mueble añadido: ¿dónde está y qué hago?','Buscar «sofá» y pulsar el primero');});
-   await step('duplicate',async()=>{await press('#aDup');await snap('duplicated','Duplicar','Duplicar en la barra de selección');});
+   await step('duplicate',async()=>{const dup=narrow?'#fab [data-a=dup]':'#aDup';const covered=await page.evaluate(()=>{const t=document.querySelector('#toast.show'),b=document.querySelector('#fab.show');if(!t||!b)return false;const a=t.getBoundingClientRect(),c=b.getBoundingClientRect();return a.left<c.right&&c.left<a.right&&a.top<c.bottom&&c.top<a.bottom;});if(covered)c.J.notes.push('El aviso «Añadido…» tapa la barra de selección tras añadir un mueble');await page.waitForFunction(()=>!document.querySelector('#toast').classList.contains('show'),null,{timeout:8000}).catch(()=>{});await page.waitForTimeout(400);await press(dup);await snap('duplicated','Duplicar','Duplicar en la barra de selección');});
    await step('no-space',async()=>{for(let i=0;i<6;i++){await openPalette(c);await press('#paletteTabFurnish');await furnishFirst(c,'cama');}await snap('crowded','Sin sitio válido','Añadir seis camas');});
    await step('stair-conflict',async()=>{await page.locator('#uploadIn').setInputFiles(path.join(tmp,'duplex.zip'));await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(800);await snap('duplex','Dúplex con muebles sobre la escalera','Importar dúplex (ZIP)');});
   });
@@ -172,49 +182,49 @@ function probe(BADS){
   await journey('H','Suelos y paredes: encontrar, previsualizar, aplicar y deshacer',async c=>{const {snap,press,page,step,tapRoom}=c;
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(400);
    await step('select',async()=>{if(await page.evaluate(()=>matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right').classList.contains('open')))await press('#tgPanel');await tapRoom('Salón');await snap('room','Cambiar el suelo: ¿dónde?','Tocar la estancia');});
-   await step('floor',async()=>{await press('#surfaceFloor');await snap('floor-dialog','Elegir un suelo','«Suelo»');await press('#surfaceCards button');await snap('floor-preview','Previsualizar y aplicar','Elegir el primer acabado');});
+   await step('floor',async()=>{await c.props();await press('#surfaceFloor');await snap('floor-dialog','Elegir un suelo','«Suelo»');await press('#surfaceCards button');await snap('floor-preview','Previsualizar y aplicar','Elegir el primer acabado');});
    await step('close',async()=>{await page.keyboard.press('Escape');await snap('floor-close','Cerrar','Escape');await press('#undo');await snap('undo','Deshacer','Deshacer');});
   });
 
   // I. Multi-level: change level, all levels, conflicts.
-  await journey('I','Edificio de dos plantas: cambiar planta, ver todas y resolver conflictos',async c=>{const {snap,press,page,step}=c;
+  await journey('I','Edificio de dos plantas: cambiar planta, ver todas y resolver conflictos',async c=>{const {snap,press,page,step,reach,ask}=c;
    await page.keyboard.press('Escape');await page.locator('#uploadIn').setInputFiles(path.join(tmp,'duplex.zip'));await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(800);
    await snap('duplex','Entender el estado del edificio','Importar dúplex con conflictos');
-   await step('level',async()=>{await press('#levelBar [data-level]:nth-child(2), #levelBar [data-level] >> nth=1');await snap('upper','Cambiar a la planta alta','Pulsar la planta alta');});
+   await step('level',async()=>{await reach('#levelBar [data-level] >> nth=1','Cambiar de planta');await snap('upper','Cambiar a la planta alta','Pulsar la planta alta');});
    await step('conflicts',async()=>{await press('#levelConflicts');await snap('conflicts','Ver y localizar los conflictos','Pulsar el aviso de conflictos');});
-   await step('presentation-blocked',async()=>{await page.keyboard.press('Escape');await press('#presentationBtn');await snap('presentation-blocked','Presentar con conflictos','«Presentar mi vivienda»');});
+   await step('presentation-blocked',async()=>{await page.keyboard.press('Escape');await reach('#presentationBtn','Presentar');await snap('presentation-blocked','Presentar con conflictos','«Presentar mi vivienda»');});
   });
 
   // J. Layout review and diagnostics (example).
-  await journey('J','Revisar distribución y diagnósticos',async c=>{const {snap,press,page,step}=c;
+  await journey('J','Revisar distribución y diagnósticos',async c=>{const {snap,press,page,step,reach,ask}=c;
    await press('#welcomeExample');
-   await step('search-review',async()=>{await press('#actionSearchBtn');await page.locator('#editorActionInput').fill('revisar distribución');await page.waitForTimeout(300);await snap('search','Buscar cómo revisar','Buscar «revisar distribución»');await page.keyboard.press('Escape');});
-   await step('review',async()=>{await press('#traceBtn').catch(async()=>{await press('#paletteTrace');});await snap('trace-panel','Abrir «Plano propio»','«Plano propio»');if(await page.locator('#layoutReview').isVisible())await press('#layoutReview');await snap('review','Revisión de distribución','«Revisar distribución»');});
+   await step('search-review',async()=>{await ask('revisar distribución');await snap('search','Buscar cómo revisar','Buscar «revisar distribución»');await page.keyboard.press('Escape');await page.keyboard.press('Escape');});
+   await step('review',async()=>{await openPalette(c);await press('#paletteTabBuild');await press('#paletteTrace');await snap('trace-panel','Abrir «Plano propio»','«Plano propio»');if(await page.locator('#layoutReview').isVisible())await press('#layoutReview');await snap('review','Revisión de distribución','«Revisar distribución»');});
   });
 
   // K. 2D / 3D / walk.
-  await journey('K','2D, 3D y recorrido: entrar, entender y volver',async c=>{const {snap,press,page,step,tapRoom}=c;
+  await journey('K','2D, 3D y recorrido: entrar, entender y volver',async c=>{const {snap,press,page,step,tapRoom,reach}=c;
    await press('#welcomeExample');await page.waitForTimeout(400);
    await step('select',async()=>{if(await page.evaluate(()=>matchMedia('(max-width:1100px)').matches&&document.querySelector('aside.right').classList.contains('open')))await press('#tgPanel');await tapRoom('Salón');await snap('selected-2d','Selección en 2D','Tocar «Salón»');});
-   await step('3d',async()=>{await press('#viewSeg [data-view="3d"]');await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});await page.waitForTimeout(1500);await snap('3d','Entender la vista 3D y sus controles','Pulsar 3D');});
-   await step('walk',async()=>{if(await page.locator('#wo3').isVisible())await press('#wo3');await page.waitForTimeout(1500);await snap('walk','Recorrer','«Recorrer»');if(await page.locator('#walkExit').isVisible())await press('#walkExit');await snap('walk-exit','Salir del recorrido','«Salir»');});
-   await step('2d',async()=>{await press('#viewSeg [data-view="2d"]');await page.waitForTimeout(800);await snap('back-2d','Volver a 2D con el contexto','Pulsar 2D');});
+   await step('3d',async()=>{await press('#viewSeg [data-view="3d"]').catch(()=>{});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:60000});await page.waitForTimeout(1500);await snap('3d','Entender la vista 3D y sus controles','Pulsar 3D');});
+   await step('walk',async()=>{await reach('#wo3','Recorrer');await page.waitForTimeout(1500);await snap('walk','Recorrer','«Recorrer»');if(await page.locator('#walkExit').isVisible())await press('#walkExit');await snap('walk-exit','Salir del recorrido','«Salir»');});
+   await step('2d',async()=>{await c.pressThen('#viewSeg [data-view="2d"]',()=>FloorPlanApp.viewMode==='2d');await page.waitForTimeout(800);await snap('back-2d','Volver a 2D con el contexto','Pulsar 2D');});
   });
 
   // L. Presentation (one level) and blocked presentation is in I.
-  await journey('L','Presentar la vivienda (una planta)',async c=>{const {snap,press,page,step}=c;
+  await journey('L','Presentar la vivienda (una planta)',async c=>{const {snap,press,page,step,reach,visible}=c;
    await press('#welcomeExample');
-   await step('open',async()=>{await press('#presentationBtn');await snap('config','Preparar la presentación','«Presentar mi vivienda»');});
-   await step('start',async()=>{await press('#presentationConfig .presentation-config-actions .btn');await page.waitForFunction(()=>FloorPlanPresentation.active,null,{timeout:60000});await page.waitForTimeout(2500);await snap('presenting','Presentar al cliente','Iniciar');});
-   await step('close',async()=>{await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:60000});await page.waitForTimeout(800);await snap('after','Volver al editor: ¿qué sigue?','Cerrar presentación');});
+   await step('open',async()=>{if(await visible('#guidePresent'))await press('#guidePresent');else await reach('#presentationBtn','Presentar');await snap('config','Preparar la presentación','«Presentar mi vivienda»');});
+   await step('start',async()=>{await c.pressThen('#presentationConfig .presentation-config-actions .btn',()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',90000);await page.waitForTimeout(2500);await snap('presenting','Presentar al cliente','Iniciar');});
+   await step('close',async()=>{await page.locator('#presentationClose').waitFor({state:'visible',timeout:30000});await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:60000});await page.waitForTimeout(800);await snap('after','Volver al editor: ¿qué sigue?','Cerrar presentación');});
   });
 
   // M. Save, export and what the client receives.
-  await journey('M','Guardar, exportar y entregar',async c=>{const {snap,press,page,step}=c;
+  await journey('M','Guardar, exportar y entregar',async c=>{const {snap,press,page,step,reach}=c;
    await press('#welcomeExample');
    await step('projects',async()=>{await press('#projectsBtn');await snap('projects','Dónde está guardado mi trabajo','«Proyectos»');await page.keyboard.press('Escape');});
-   await step('file-menu',async()=>{const menu=page.locator('#exportJson').locator('xpath=ancestor::details[1]');await press(await menu.count()?'#exportJson >> xpath=ancestor::details[1]/summary':'#exportJson');await snap('file-menu','Exportar: ¿qué recibe el cliente?','Abrir el menú de archivo');});
-   await step('sheet',async()=>{await press('#openSheet');await page.waitForTimeout(800);await snap('sheet','Lámina para el cliente','«Lámina»');await page.keyboard.press('Escape');});
+   await step('file-menu',async()=>{await reach('#exportJson >> xpath=ancestor::details[1]/summary','Menú Archivo');await snap('file-menu','Exportar: ¿qué recibe el cliente?','Abrir el menú de archivo');});
+   await step('sheet',async()=>{await reach('#openSheet','Lámina');await page.waitForTimeout(800);await snap('sheet','Lámina para el cliente','«Lámina»');await page.keyboard.press('Escape');});
   });
 
   // N. Resume: an own project half done, opened again from the entry URL.
@@ -222,7 +232,7 @@ function probe(BADS){
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(500);
    await page.goto(url);await page.waitForFunction(()=>window.FloorPlanGuideUI);await snap('return','Volver a la herramienta otro día','Abrir la URL de entrada');
    await step('continue',async()=>{const id=await page.locator('#welcomeContinue').isVisible()?'#welcomeContinue':'#welcomeReturn';await press(id);await snap('continued','Continuar donde lo dejé','«Continuar mi proyecto»');});
-   await step('previous-steps',async()=>{for(let i=0;i<4;i++){if(!(await page.locator('#guidePrevious').isVisible()))break;await press('#guidePrevious');}await snap('previous','«← Paso anterior» hasta el principio (caso 75 %)','«← Paso anterior» repetido');});
+   await step('previous-steps',async()=>{for(let i=1;i<=4;i++){if(!(await page.locator('#guidePrevious').isVisible()))break;await press('#guidePrevious');await snap(`previous-${i}`,'«← Paso anterior»',`«← Paso anterior» (${i})`);if(await page.locator('#welcomeDialog').evaluate(d=>d.open))break;}});
   });
 
   // O. Change of intention, close, back, cancel, undo/redo, browser back.
