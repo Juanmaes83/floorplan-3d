@@ -149,9 +149,6 @@ body.guided.has-rooms:not(.distribution-pending) .presentation-entry:hover{backg
 .guide-goal-done{margin:4px 0 0;font-size:12px;color:var(--success)}
 .guide-current #guidePrevious:disabled,#guidePrevious:disabled{opacity:.55}
 @media (max-width:600px){
-  /* Phones: the selection bar keeps one row (the building warning is placed for it) and fits «Eliminar» on screen:
-     tighter buttons and a shorter name instead of a bar wider than the screen. */
-  #fab{gap:2px;padding:4px}#fab .btn{padding:9px 8px}#fab .name{max-width:6.5em;padding:0 4px}
   .guide-current{flex-wrap:wrap}
 }
 @media (max-width:1100px){

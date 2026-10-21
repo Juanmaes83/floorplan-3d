@@ -144,7 +144,7 @@ Por orden de prioridad, la primera regla que se cumple decide:
 
 ### 4.4 Teléfono
 
-- **M1:** la barra de selección cabe en 390 px: los botones bajan a dos filas en lugar de salirse.
+- **M1, pendiente:** la barra de selección sigue siendo más ancha que 390 px y deja «Eliminar» o «Propiedades» fuera de la pantalla. Se probaron dos arreglos: bajar los botones a dos filas, que empujaba el aviso de conflictos sobre cotas y controles (`stair-conflicts`, `opening-contextual`), y compactarlos, que no basta con siete botones. Necesita su propio diseño, por ejemplo agrupar acciones en «Más».
 - **M2:** con la barra de selección visible, el aviso temporal se coloca por encima de ella.
 - **M3:** abrir la paleta con un hueco a medio colocar cancela ese modo y lo anuncia. No se habrá añadido nada, y elegir otro tipo vuelve a empezarlo. Abrir «Propiedades» no lo cancela, porque la propia barra de selección lo ofrece durante la colocación.
 - **M4, pendiente:** la altura de la guía en el teléfono (~220 px) no cambia en este corte. La reducción del prototipo A necesita mover «← Paso anterior» y «Cambiar objetivo», y su reorganización se decidirá con la revisión visual de Juanma.
