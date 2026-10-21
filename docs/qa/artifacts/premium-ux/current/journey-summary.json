@@ -1,0 +1,500 @@
+{
+ "commit": "5b3bea2fb1d68b3ac82bcb87ee92d8ba89829f6a",
+ "browser": "141.0.7390.37",
+ "theme": null,
+ "states": [
+  {
+   "viewport": "1440x900",
+   "id": "j01-welcome",
+   "note": "Llegada: elegir cómo empezar",
+   "controls": 8,
+   "byRegion": {
+    "dialog": 8
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": [
+    "welcomeDialog"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j02-guided",
+   "note": "Editor guiado con el ejemplo",
+   "controls": 24,
+   "byRegion": {
+    "header": 10,
+    "other": 14
+   },
+   "dominant": [
+    "header: Subir plano",
+    "other: Abrir 3D"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j03-editor",
+   "note": "Editor completo sin selección",
+   "controls": 43,
+   "byRegion": {
+    "header": 29,
+    "left": 11,
+    "right": 2,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano",
+    "header: Seleccionar",
+    "left: Amueblar"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j04-room-selected",
+   "note": "Estancia seleccionada",
+   "controls": 51,
+   "byRegion": {
+    "header": 29,
+    "left": 11,
+    "bottom": 1,
+    "right": 9,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano",
+    "header: Seleccionar",
+    "left: Amueblar"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j05-file-menu",
+   "note": "Menú «Archivo»",
+   "controls": 50,
+   "byRegion": {
+    "header": 36,
+    "left": 11,
+    "right": 2,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano",
+    "header: Seleccionar",
+    "left: Amueblar"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j06-3d",
+   "note": "Vista 3D",
+   "controls": 50,
+   "byRegion": {
+    "header": 29,
+    "left": 19,
+    "right": 1,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano",
+    "header: Vista aérea",
+    "left: Amueblar"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j07-presentation",
+   "note": "Presentar mi vivienda: configuración",
+   "controls": 34,
+   "byRegion": {
+    "dialog": 34
+   },
+   "dominant": [
+    "dialog: Iniciar presentación"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": [
+    "presentationConfig"
+   ]
+  },
+  {
+   "viewport": "1440x900",
+   "id": "j08-warning",
+   "note": "Edificio con aviso pendiente (mueble sobre la escalera)",
+   "controls": 50,
+   "byRegion": {
+    "header": 31,
+    "left": 11,
+    "plan": 1,
+    "right": 6,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano",
+    "header: Seleccionar",
+    "left: Amueblar"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "1440x900",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "j01-welcome",
+   "note": "Llegada: elegir cómo empezar",
+   "controls": 8,
+   "byRegion": {
+    "dialog": 8
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 3,
+   "smallSample": [
+    "dialog: Subir mi plano (103×30)",
+    "dialog: Poner una cama (114×30)",
+    "dialog: ¿Qué me falta? (107×30)"
+   ],
+   "hScroll": false,
+   "dialogs": [
+    "welcomeDialog"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "j02-guided",
+   "note": "Editor guiado con el ejemplo",
+   "controls": 12,
+   "byRegion": {
+    "header": 3,
+    "other": 9
+   },
+   "dominant": [
+    "header: Subir plano",
+    "other: Abrir 3D"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 10,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: ← Paso anterior (99×34)",
+    "other: Cambiar objetivo (104×34)",
+    "other: Tareas y ayuda (95×34)",
+    "other: Ver más (58×34)",
+    "other: Cerrar guía (23×34)",
+    "other: Abrir 3D (59×38)",
+    "other: Presentar mi vivienda (128×38)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "j03-editor",
+   "note": "Editor completo sin selección",
+   "controls": 4,
+   "byRegion": {
+    "header": 3,
+    "other": 1
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "j04-room-selected",
+   "note": "Estancia seleccionada",
+   "controls": 6,
+   "byRegion": {
+    "header": 3,
+    "bottom": 2,
+    "other": 1
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "j06-3d",
+   "note": "Vista 3D",
+   "controls": 4,
+   "byRegion": {
+    "header": 3,
+    "other": 1
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "j07-presentation",
+   "note": "Presentar mi vivienda: configuración",
+   "controls": 32,
+   "byRegion": {
+    "dialog": 32
+   },
+   "dominant": [
+    "dialog: Iniciar presentación"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 10,
+   "smallSample": [
+    "dialog: rom_master (20×20)",
+    "dialog: rom_mbath (20×20)",
+    "dialog: rom_kid (20×20)",
+    "dialog: rom_gbath (20×20)",
+    "dialog: rom_laundry (20×20)",
+    "dialog: rom_child (20×20)",
+    "dialog: rom_kitchen (20×20)",
+    "dialog: rom_dining (20×20)"
+   ],
+   "hScroll": false,
+   "dialogs": [
+    "presentationConfig"
+   ]
+  },
+  {
+   "viewport": "390x844",
+   "id": "j08-warning",
+   "note": "Edificio con aviso pendiente (mueble sobre la escalera)",
+   "controls": 5,
+   "byRegion": {
+    "header": 3,
+    "plan": 1,
+    "other": 1
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 3,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "plan: Revisar (58×38)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "j01-welcome",
+   "note": "Llegada: elegir cómo empezar",
+   "controls": 4,
+   "byRegion": {
+    "dialog": 4
+   },
+   "dominant": [],
+   "duplicates": [],
+   "smallTouchTargets": 0,
+   "smallSample": [],
+   "hScroll": false,
+   "dialogs": [
+    "welcomeDialog"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "j02-guided",
+   "note": "Editor guiado con el ejemplo",
+   "controls": 15,
+   "byRegion": {
+    "header": 6,
+    "other": 9
+   },
+   "dominant": [
+    "header: Subir plano",
+    "other: Abrir 3D"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 10,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: ← Paso anterior (131×39)",
+    "other: Cambiar objetivo (138×39)",
+    "other: Tareas y ayuda (126×39)",
+    "other: Ver más (80×39)",
+    "other: Cerrar guía (35×39)",
+    "other: Abrir 3D (79×37)",
+    "other: Presentar mi vivienda (167×37)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "j03-editor",
+   "note": "Editor completo sin selección",
+   "controls": 8,
+   "byRegion": {
+    "header": 7,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "j04-room-selected",
+   "note": "Estancia seleccionada",
+   "controls": 10,
+   "byRegion": {
+    "header": 7,
+    "bottom": 2,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "j06-3d",
+   "note": "Vista 3D",
+   "controls": 8,
+   "byRegion": {
+    "header": 7,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 2,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "j07-presentation",
+   "note": "Presentar mi vivienda: configuración",
+   "controls": 11,
+   "byRegion": {
+    "dialog": 11
+   },
+   "dominant": [
+    "dialog: Iniciar presentación"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 3,
+   "smallSample": [
+    "dialog: rom_master (20×20)",
+    "dialog: rom_mbath (20×20)",
+    "dialog: rom_gbath (20×20)"
+   ],
+   "hScroll": false,
+   "dialogs": [
+    "presentationConfig"
+   ]
+  },
+  {
+   "viewport": "844x390",
+   "id": "j08-warning",
+   "note": "Edificio con aviso pendiente (mueble sobre la escalera)",
+   "controls": 9,
+   "byRegion": {
+    "header": 7,
+    "plan": 1,
+    "other": 1
+   },
+   "dominant": [
+    "header: Subir plano"
+   ],
+   "duplicates": [],
+   "smallTouchTargets": 3,
+   "smallSample": [
+    "header: ← Inicio (71×39)",
+    "plan: Revisar (58×38)",
+    "other: Legal y uso (65×18)"
+   ],
+   "hScroll": false,
+   "dialogs": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "errors",
+   "errors": []
+  }
+ ]
+}

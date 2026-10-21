@@ -107,6 +107,7 @@
   const keys=new Set(list.map(keyOf)),fresh=announced?list.filter(c=>!announced.has(keyOf(c))):list;
   if(fresh.length)say(fresh.length===1?fresh[0].message:`${st.headline}. Pulsa «Revisar» para localizarlos.`,7000);
   announced=keys;
+  window.FloorPlanAppShell?.update();
  }
  // While a drag is in progress: the same highlight and chip, without announcements (the drop decides).
  function preview(){const b=current();if(!b)return;render2D(b);const keep=announced;notify(b);announced=keep;}
@@ -181,8 +182,13 @@
   proposal={levelId:A.id,levelName:A.name,sig:snap(),set,resolves:Object.fromEntries(before.map(c=>[c.objectId,c.summary]))};
   render();const polys=set.moves.flatMap(m=>{const o=project.objects.find(x=>x.id===m.id);return [T.footprint(o),T.footprint({...o,position:m.to})];}).flat();
   if(polys.length){frame(polys);const panel=$('#relocationPanel'),stage=$('#stage').getBoundingClientRect(),r=panel?.getBoundingClientRect();
-   // The panel sits at the top (or, on short screens, at the left) of the plan: the proposal is shifted next to it.
-   if(r&&r.height){if(r.height>stage.height*.5)view.x0-=Math.min(r.right-stage.left+12,stage.width*.55)/2/view.s;else view.y0-=Math.min(r.bottom-stage.top+12,stage.height*.45)/2/view.s;applyView();}}
+   // The panel sits at the top (phones, desktop) or at the left (short screens) of the plan: the proposal is framed
+   // inside the larger part the panel leaves free, below or to its right (zooming out only if it does not fit), so
+   // no footprint is under it.
+   if(r&&r.height){const gap=12,below={x:0,y:r.bottom-stage.top+gap,w:stage.width},right={x:r.right-stage.left+gap,y:0,h:stage.height};
+    below.h=stage.height-below.y;right.w=stage.width-right.x;const free=below.w*Math.max(0,below.h)>=Math.max(0,right.w)*right.h?below:right;
+    const xs=polys.map(p=>p.x),ys=polys.map(p=>p.y),w=Math.max(800,Math.max(...xs)-Math.min(...xs)),h=Math.max(800,Math.max(...ys)-Math.min(...ys)),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+    if(free.w>40&&free.h>40){view.s=Math.max(.012,Math.min(view.s,free.w/(w*1.4),free.h/(h*1.4)));view.x0=cx-(free.x+free.w/2)/view.s;view.y0=cy-(free.y+free.h/2)/view.s;applyView();}}}
   $('#relocationTitle')?.focus({preventScroll:true});
  }
  function cancelProposal(message){if(!proposal)return;proposal=null;render();if(message)say(message,5000);}
