@@ -21,7 +21,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hi
   -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
   font:13px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
 button,input,select{font:inherit;color:inherit}
-.app{display:grid;grid-template-rows:auto minmax(0,1fr) 30px;grid-template-columns:236px minmax(0,1fr) 300px;height:100vh;height:100dvh;
+.app{display:grid;grid-template-rows:auto minmax(0,1fr) 30px;grid-template-columns:256px minmax(0,1fr) 300px;height:100vh;height:100dvh;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input{-webkit-user-select:text;user-select:text}
@@ -254,7 +254,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
 @media (min-width:1101px){
   .app{transition:grid-template-columns .3s cubic-bezier(.3,.7,.3,1)}
   .app.hide-lib{grid-template-columns:0 minmax(0,1fr) 300px}
-  .app.hide-panel{grid-template-columns:236px minmax(0,1fr) 0}
+  .app.hide-panel{grid-template-columns:256px minmax(0,1fr) 0}
   .app.hide-lib.hide-panel{grid-template-columns:0 minmax(0,1fr) 0}
   .app.hide-lib aside.lib,.app.hide-panel aside.right{overflow:hidden;border:0}
   aside{overflow-x:hidden}
@@ -289,6 +289,32 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .import-help{display:block;max-width:280px;padding:4px 8px;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;}
 /* Search controls remain above results inside the existing library drawer. */
 .lib-controls{padding:10px;border-bottom:1px solid var(--line);background:var(--panel)}
+/* Creation palette (left column): «Construir» / «Amueblar» tabs, task groups, icon + text actions. */
+.palette-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
+.palette-tab{font:inherit;font-size:14px;font-weight:600;min-height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer}
+.palette-tab[aria-selected=true]{background:#9c4f28;border-color:#9c4f28;color:#fff}
+.palette-tab:focus-visible,.palette-action:focus-visible,.palette-chip:focus-visible{outline:3px solid #1f6f8b;outline-offset:2px}
+.palette-build{padding:4px 10px 14px}
+.palette-group{margin:10px 0 4px}
+.palette-group[hidden],.palette-3d-note[hidden]{display:none}
+.palette-group h4{margin:0 0 6px;padding:0;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#655d52;position:static;background:none}
+.palette-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}
+.palette-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:64px;padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:12px;line-height:1.25;text-align:center;white-space:normal;overflow-wrap:anywhere}
+.palette-action svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.palette-action.on{border-color:var(--accent);background:#fbf1ea;color:#7a3d1c;font-weight:600}
+@media (hover:hover){.palette-action:hover,.palette-chip:hover{border-color:var(--accent)}}
+.palette-primary{flex-direction:row;width:100%;min-height:48px;background:#9c4f28;border-color:#9c4f28;color:#fff;font-size:14px;font-weight:600;margin-bottom:6px}
+.palette-primary svg{width:20px;height:20px}
+.btn.palette-primary:hover{background:#9c4f28}@media (hover:hover){.btn.palette-primary:hover{background:#86421f;border-color:#86421f}}
+.palette-examples{display:flex;flex-wrap:wrap;gap:4px}
+.palette-tools{grid-template-columns:repeat(3,minmax(0,1fr))}.palette-tools .palette-action{min-height:58px;padding:6px 2px;font-size:11.5px;overflow-wrap:normal;hyphens:manual}
+.palette-more{margin-top:4px}.palette-more summary{cursor:pointer;font-size:12px;color:#7a3d1c;padding:6px 0;min-height:32px;display:flex;align-items:center}.palette-more .palette-examples{padding-top:2px}
+.palette-chip{font:inherit;font-size:12px;min-height:36px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);cursor:pointer}
+.palette-help{margin:0 0 6px;font-size:12px;line-height:1.4;color:#655d52}
+.palette-help.palette-warn{color:#8a3a12;background:#fff3e8;border-radius:6px;padding:6px 8px}
+.palette-tip{margin:14px 0 0;padding:8px 10px;border-radius:8px;background:#f4efe6;font-size:12px;line-height:1.4;color:var(--ink)}
+.palette-3d-note{padding:10px 0}.palette-3d-note p{margin:0 0 8px;font-size:13px}
+@media(max-width:1100px){.palette-action,.palette-chip,.palette-tab,.palette-more summary{min-height:44px}.palette-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.palette-tools{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .search-filters{display:grid;grid-template-columns:1fr 1fr;gap:6px}.search-summary{display:flex;align-items:center;gap:8px}
 .lib-controls label{display:block;font-size:12px;margin:6px 0}.search-row{display:flex;gap:4px}
 .lib-controls input,.lib-controls select{font:inherit;font-size:16px;min-height:44px;width:100%;min-width:0;border:1px solid var(--line);border-radius:6px;padding:6px}
@@ -697,7 +723,7 @@ const ES_TEXT = {
   "Click to start at the front door": "Pulsa para empezar desde la puerta principal",
   "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move · mouse looks · <kbd>Shift</kbd> runs": "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> moverse · ratón mirar · <kbd>Mayús</kbd> correr",
   "<kbd>E</kbd> opens the door ahead · <kbd>Esc</kbd> pauses": "<kbd>E</kbd> abre la puerta de delante · <kbd>Esc</kbd> pausa",
-  "◧ Library": "◧ Biblioteca",
+  "◧ Library": "◧ Crear y amueblar",
   "Properties ◨": "Propiedades ◨",
   "3BR 2LR 2BA · Interior Design": "3 dormitorios · 2 salones · 2 baños",
   "2D Plan": "Plano 2D",
@@ -1338,6 +1364,7 @@ function updateHeader(){
 const esc = SafeDOM.value;
 
 function renderPanel(){
+  window.FloorPlanBuildPalette?.render();
   if(window.FloorPlanTraceUI?.editPanel())return;
   renderFab();
   const p = $('#panel');
@@ -1619,6 +1646,7 @@ function setTool(t){
   ui.tool = t; ui.mA = null; ui.mCur = null;
   svg.setAttribute('class', 'tool-' + t);
   document.querySelectorAll('#tools .btn').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  window.FloorPlanBuildPalette?.render();
   syncModeHint();
   renderMeasure();
 }
@@ -2230,6 +2258,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
 <script src="js/building-ui.js"></script>
+<script src="js/build-palette.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：

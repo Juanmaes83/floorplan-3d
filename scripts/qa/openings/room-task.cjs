@@ -5,7 +5,8 @@
    tap on the plan does («Plano propio» tools Puerta, Ventana, Seleccionar/editar, Navegar/cancelar; the new
    «Añadir puerta/ventana» pick). Creating the empty project and closing its automatic room dialog are not counted,
    as in #48, which counted from «+ Estancia».
-   Usage: node scripts/qa/openings/room-task.cjs <rubik checkout> <out dir> <base|contextual> */
+   Usage: node scripts/qa/openings/room-task.cjs <rubik checkout> <out dir> <base|contextual|palette>
+   «palette» (20-10-2026) uses the creation palette of the left column for the room and the openings. */
 const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const [root,out,flow='base']=process.argv.slice(2).map((v,i)=>i<2?path.resolve(v):v);
 const types={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg'};
@@ -20,8 +21,15 @@ const types={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css',
  const log=[];let shots=0,section='estancia';
  async function act(label,fn,{mode=false,shot=false}={}){await fn();await page.waitForTimeout(150);log.push({n:log.length+1,section,label,...(mode?{modeChange:true}:{})});if(shot)await page.screenshot({path:path.join(out,`${flow}-${String(++shots).padStart(2,'0')}.png`)});}
  const tapWorld=async q=>{const s=await page.evaluate(p=>{const m=new DOMPoint(p.x,p.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:m.x,y:m.y};},q);await page.mouse.click(s.x,s.y);};
+ if(flow==='palette'){
+  // Creation palette (left column): the «Construir» tab, then the room example that suggests the name.
+  if(await page.evaluate(()=>window.FloorPlanBuildPalette?.tab!=='build'))await act('Pestaña «Construir»',()=>page.click('#paletteTabBuild'));
+  if(!(await page.locator('[data-room-name="Habitación de invitados"]').isVisible()))await act('Más nombres',()=>page.click('#paletteMoreNames summary'));
+  await act('Ejemplo «Habitación de invitados»',()=>page.click('[data-room-name="Habitación de invitados"]'));
+ }else{
  await act('+ Estancia',()=>page.click('#newRoomBtn'));
  await act('Escribir nombre de la estancia',()=>page.fill('#roomDesignName','Habitación de invitados'));
+ }
  await act('Escribir ancho',()=>page.fill('#roomDesignWidth','4000'));
  await act('Escribir profundidad',()=>page.fill('#roomDesignDepth','3000'));
  await act('Ver cambio',()=>page.click('#roomDesignReview'));
@@ -42,6 +50,14 @@ const types={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css',
   await act('Volver',()=>page.click('#traceEditBack'));
   await act('Navegar/cancelar',()=>page.click('#traceNavigate'),{mode:true});
   await act('Cerrar herramientas',()=>page.click('#traceHidePanel'));
+ }else if(flow==='palette'){
+  await act('Puerta abatible (paleta)',()=>page.click('#paletteOpening-door'),{mode:true,shot:true});
+  await act('Tocar el muro inferior',()=>tapWorld(bottom),{shot:true});
+  await act('Escribir ancho de puerta 900',()=>page.fill('#opening-widthMm','900'));
+  await act('Aplicar y añadir',()=>page.click('#openingApply'),{shot:true});
+  await act('Ventana (paleta)',()=>page.click('#paletteOpening-window'),{mode:true});
+  await act('Tocar el muro superior',()=>tapWorld(top));
+  await act('Aplicar y añadir',()=>page.click('#openingApply'),{shot:true});
  }else{
   await act('Añadir puerta',()=>page.click('#roomAddDoor'),{mode:true,shot:true});
   await act('Tocar el muro inferior',()=>tapWorld(bottom),{shot:true});

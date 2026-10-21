@@ -1,0 +1,542 @@
+{
+ "browser": "141.0.7390.37",
+ "steps": [
+  {
+   "viewport": "1440x900",
+   "id": "p01-build",
+   "note": "Construir, sin selección",
+   "aside": {
+    "x": 0,
+    "w": 256
+   },
+   "planVisibleWidth": 884,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 244,
+    "w": 74,
+    "h": 69,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 402,
+    "w": 235,
+    "h": 48,
+    "inView": true
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "p02-furnish",
+   "note": "Amueblar",
+   "aside": {
+    "x": 0,
+    "w": 256
+   },
+   "planVisibleWidth": 884,
+   "hScroll": false,
+   "tab": "furnish",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "newRoom": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "p03-build-room",
+   "note": "Construir con una estancia seleccionada",
+   "aside": {
+    "x": 0,
+    "w": 256
+   },
+   "planVisibleWidth": 884,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 244,
+    "w": 74,
+    "h": 69,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 402,
+    "w": 235,
+    "h": 48,
+    "inView": true
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "p04-opening-pick",
+   "note": "Ventana desde la paleta: elegir muro",
+   "aside": {
+    "x": 0,
+    "w": 256
+   },
+   "planVisibleWidth": 884,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": {
+    "x": 331,
+    "y": 161,
+    "w": 735,
+    "h": 64,
+    "inView": true
+   },
+   "firstAction": {
+    "x": 10,
+    "y": 244,
+    "w": 74,
+    "h": 69,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 402,
+    "w": 235,
+    "h": 48,
+    "inView": true
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "p05-wall",
+   "note": "Dibujar muro: banner visible",
+   "aside": {
+    "x": 0,
+    "w": 256
+   },
+   "planVisibleWidth": 884,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": {
+    "x": 372,
+    "y": 161,
+    "w": 653,
+    "h": 64,
+    "inView": true
+   },
+   "firstAction": {
+    "x": 10,
+    "y": 244,
+    "w": 74,
+    "h": 69,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 402,
+    "w": 235,
+    "h": 48,
+    "inView": true
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "1440x900",
+   "id": "p06-after-wall",
+   "traceMode": "navigate",
+   "bannerHidden": true
+  },
+  {
+   "viewport": "1440x900",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "id": "p01-build",
+   "note": "Construir, sin selección",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 390,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": true
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "390x844",
+   "id": "p02-furnish",
+   "note": "Amueblar",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 390,
+   "hScroll": false,
+   "tab": "furnish",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "newRoom": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "390x844",
+   "id": "p03-build-room",
+   "note": "Construir con una estancia seleccionada",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 390,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": true
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "390x844",
+   "id": "p04-opening-pick",
+   "note": "Ventana desde la paleta: elegir muro",
+   "aside": {
+    "x": -352,
+    "w": 320
+   },
+   "planVisibleWidth": 390,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": {
+    "x": 10,
+    "y": 68,
+    "w": 370,
+    "h": 100,
+    "inView": true
+   },
+   "firstAction": {
+    "x": -342,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": false
+   },
+   "newRoom": {
+    "x": -342,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": false
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "390x844",
+   "id": "p05-wall",
+   "note": "Dibujar muro: banner visible",
+   "aside": {
+    "x": -352,
+    "w": 320
+   },
+   "planVisibleWidth": 390,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": {
+    "x": 10,
+    "y": 68,
+    "w": 370,
+    "h": 100,
+    "inView": true
+   },
+   "firstAction": {
+    "x": -342,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": false
+   },
+   "newRoom": {
+    "x": -342,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": false
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "390x844",
+   "id": "p06-after-wall",
+   "traceMode": "navigate",
+   "bannerHidden": true
+  },
+  {
+   "viewport": "390x844",
+   "id": "errors",
+   "errors": []
+  },
+  {
+   "viewport": "844x390",
+   "id": "p01-build",
+   "note": "Construir, sin selección",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 844,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": true
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "844x390",
+   "id": "p02-furnish",
+   "note": "Amueblar",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 844,
+   "hScroll": false,
+   "tab": "furnish",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": null,
+   "firstAction": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "newRoom": {
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "inView": false
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "844x390",
+   "id": "p03-build-room",
+   "note": "Construir con una estancia seleccionada",
+   "aside": {
+    "x": 0,
+    "w": 320
+   },
+   "planVisibleWidth": 844,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": null,
+   "firstAction": {
+    "x": 10,
+    "y": 156,
+    "w": 96,
+    "h": 58,
+    "inView": true
+   },
+   "newRoom": {
+    "x": 10,
+    "y": 302,
+    "w": 299,
+    "h": 44,
+    "inView": true
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "844x390",
+   "id": "p04-opening-pick",
+   "note": "Ventana desde la paleta: elegir muro",
+   "aside": {
+    "x": -352,
+    "w": 320
+   },
+   "planVisibleWidth": 844,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Se añadirá a «Dormitorio juvenil»: toca después uno de sus muros.",
+   "banner": {
+    "x": 103,
+    "y": 64,
+    "w": 638,
+    "h": 52,
+    "inView": true
+   },
+   "firstAction": {
+    "x": -342,
+    "y": -291,
+    "w": 96,
+    "h": 58,
+    "inView": false
+   },
+   "newRoom": {
+    "x": -342,
+    "y": -145,
+    "w": 299,
+    "h": 44,
+    "inView": false
+   },
+   "selection": {
+    "kind": "room",
+    "id": "rom_child"
+   },
+   "tool": "select"
+  },
+  {
+   "viewport": "844x390",
+   "id": "p05-wall",
+   "note": "Dibujar muro: banner visible",
+   "aside": {
+    "x": -352,
+    "w": 320
+   },
+   "planVisibleWidth": 844,
+   "hScroll": false,
+   "tab": "build",
+   "context": "Toca antes en el plano la estancia donde va el hueco.",
+   "banner": {
+    "x": 138,
+    "y": 64,
+    "w": 567,
+    "h": 52,
+    "inView": true
+   },
+   "firstAction": {
+    "x": -342,
+    "y": -291,
+    "w": 96,
+    "h": 58,
+    "inView": false
+   },
+   "newRoom": {
+    "x": -342,
+    "y": -145,
+    "w": 299,
+    "h": 44,
+    "inView": false
+   },
+   "selection": null,
+   "tool": "select"
+  },
+  {
+   "viewport": "844x390",
+   "id": "p06-after-wall",
+   "traceMode": "navigate",
+   "bannerHidden": true
+  },
+  {
+   "viewport": "844x390",
+   "id": "errors",
+   "errors": []
+  }
+ ]
+}

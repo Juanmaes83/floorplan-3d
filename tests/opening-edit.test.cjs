@@ -110,3 +110,13 @@ test('a wall reversed in «Plano propio» keeps its openings in place with the s
  assert.ok(q.openings.every(x=>x.source.review==='unreviewed'));
  assert.deepEqual(O.wallEdited(p,clone(p),w.id),[],'same direction: nothing moves');
 });
+
+// Creation palette (20-10-2026): the four contract kinds can be added from a room; only a hinged door gets a swing,
+// and an unknown kind is refused without touching the project.
+test('add creates every contract kind from a room; swing only for a hinged door',()=>{
+ const p=home(),salon=p.rooms[0],before=JSON.stringify(p),w=wallAt(p,4120);
+ for(const kind of O.KINDS){const r=O.add(p,salon.id,w.id,kind,{x:4120,y:1500}),o=r.project.openings.find(x=>x.id===r.id);
+  assert.equal(o.kind,kind);assert.equal('swing' in o,kind==='door');C.validate(r.project);}
+ assert.throws(()=>O.add(p,salon.id,w.id,'garage-door',{x:4120,y:1500}),/Tipo de hueco no admitido/);
+ assert.equal(JSON.stringify(p),before,'previews never change the project');
+});

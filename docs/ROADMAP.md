@@ -295,6 +295,23 @@ No se aprueba globalmente F3/Roadmap 2 ni se promueve producción manualmente.
 Siguiente entrega autorizada, **solo tras MERGED**: LAB v03 desde la v02 integrada,
 con seis modelos nuevos y cinco familias de superficie; revisión humana propia.
 
+## Programa de UI/UX por fases — autorizado (20-10-2026)
+
+Juanma autoriza una mejora **general** de la experiencia UI/UX, por fases y con QA alta, inspirada en la claridad de LoRA LAB (sin copiar su marca, su código ni funciones no comprobadas).
+
+| Fase | Contenido | Estado |
+| --- | --- | --- |
+| 0 | Mapa de pantallas y controles, línea base medida y especificación | En revisión |
+| 1 | Paleta «Construir / Amueblar» sobre las capacidades existentes | PR borrador; espera revisión visual y auditoría |
+| 2 | Inspector contextual y hoja inferior en móvil | Espera aprobación y merge de la fase 1 |
+| 3 | «Generar», guía y controles 3D; se reconcilia con [#65](https://github.com/Juanmaes83/floorplan-3d/pull/65) | Espera aprobación y merge de la fase 2 |
+
+**Esta autorización no aprueba las nuevas capacidades de producto** de la matriz LoRA LAB: tipo de muro, orientación solar, catálogo ampliado, geometrías de puerta, presupuesto, tercera planta, escaleras avanzadas, exterior y cortinas. Están priorizadas en la fase 4 y cada una necesita su propia decisión, contrato y PR.
+
+Lo que #62 ya resolvió no se rehace.
+
+[Especificación y línea base](product/ux-program-2026-10-20.md).
+
 ## Experiencia unificada UI/UX — integrada (13-10-2026)
 
 Juanma autorizó implementar bienvenida, objetivos, cinco etapas, buscador local de

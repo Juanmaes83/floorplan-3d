@@ -50,8 +50,8 @@
  }
  // Names are shown with their visible translation (example content); project data keeps the stored names.
  const shown=n=>typeof nm==='function'?nm(n):n,human=t=>String(t).replace(/«([^»]+)»/g,(m,n)=>`«${shown(n)}»`);
- function createRoom(){start('Nueva estancia');element('p',`Proyecto: ${shown(project.name)}. Dimensiones interiores de diseño en milímetros; no son una medición profesional.`);form=element('form');form.id='roomDesignForm';
-  const name=input('roomDesignName','Nombre de la estancia',`Estancia ${project.rooms.length+1}`,'text'),width=input('roomDesignWidth','Ancho interior (mm)',3000),depth=input('roomDesignDepth','Profundidad interior (mm)',4000);
+ function createRoom(opts={}){start('Nueva estancia');element('p',`Proyecto: ${shown(project.name)}. Dimensiones interiores de diseño en milímetros; no son una medición profesional.`);form=element('form');form.id='roomDesignForm';
+  const name=input('roomDesignName','Nombre de la estancia',typeof opts.name==='string'&&opts.name.trim()?opts.name.trim():`Estancia ${project.rooms.length+1}`,'text'),width=input('roomDesignWidth','Ancho interior (mm)',3000),depth=input('roomDesignDepth','Profundidad interior (mm)',4000);
   width.min=depth.min=100;width.max=depth.max=50000;
   const options=[['','Independiente · posición X/Y'],...project.rooms.filter(r=>{try{L.mapping(project,r);return true;}catch{return false;}}).flatMap(r=>[[`${r.id}:right`,`A la derecha de ${shown(r.name)}`],[`${r.id}:bottom`,`Debajo de ${shown(r.name)}`]])];
   const placement=selectInput('roomDesignPlacement','Ubicación',options),b=project.rooms.length?project.rooms.flatMap(r=>r.polygon):[],x=input('roomDesignX','Esquina interior izquierda X (mm)',b.length?Math.max(...b.map(p=>p.x))+1000:0),y=input('roomDesignY','Esquina interior superior Y (mm)',0);
@@ -64,6 +64,6 @@
    setupPreview();form.onsubmit=e=>{e.preventDefault();try{show(L.resize(project,{roomId:id,axis:axis.value,value:Number(value.value),fixed:fixed.value}));}catch(e){invalidate();error.textContent=human(e.message);}};value.focus();
   }catch(e){error.textContent=human(e.message);actions();}
  }
- $('#newProjectBtn').onclick=createProject;$('#newRoomBtn').onclick=createRoom;
+ $('#newProjectBtn').onclick=createProject;$('#newRoomBtn').onclick=()=>createRoom();
  window.FloorPlanRoomUI={dimensions,createRoom,createProject,createBlankProject,cancel:close};
 })();

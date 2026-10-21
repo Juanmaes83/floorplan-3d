@@ -1,0 +1,223 @@
+{
+ "commit": "bd153c76e493eb5dea1b2908c768f66935f5a192",
+ "browser": "141.0.7390.37",
+ "viewports": [
+  {
+   "viewport": "1440x900",
+   "access": {
+    "room": {
+     "id": "rom_child",
+     "hit": true,
+     "selected": {
+      "kind": "room",
+      "id": "rom_child"
+     },
+     "actions": 1,
+     "extra": null,
+     "editable": true
+    },
+    "furniture": {
+     "id": "obj_template-001",
+     "hit": true,
+     "selected": {
+      "kind": "furn",
+      "id": "obj_template-001"
+     },
+     "actions": 1,
+     "extra": null,
+     "editable": true
+    },
+    "opening": {
+     "id": "opn_door-0",
+     "hit": true,
+     "selected": {
+      "kind": "opening",
+      "id": "opn_door-0"
+     },
+     "actions": 1,
+     "extra": null,
+     "editable": true
+    }
+   },
+   "leftColumn": {
+    "width": 236,
+    "visibleControls": [
+     "Sofá, cama, mesa…",
+     "Borrar",
+     "Todas las estanciasDormitorioSalónCocina y comedorBañoElectrodomésticosEstudio y ocio",
+     "Todas las familiasAsientosCamasMesasAlmacenajeIluminaciónDecoración y plantasElectrodomésticosSanitariosSuperficies de cocinaOcio",
+     "Todos",
+     "Cama doble 1,8 m · Genérico · 1800 × 1100 × 2000 mm",
+     "Cama doble 1,5 m · Genérico · 1500 × 1100 × 2000 mm",
+     "Cama individual · Genérico · 1200 × 1100 × 2000 mm",
+     "Cuna · Genérico · 1250 × 950 × 700 mm",
+     "Mesilla · Genérico · 450 × 500 × 400 mm",
+     "Armario · Genérico · 2000 × 2200 × 600 mm"
+    ],
+    "count": 11,
+    "creationEntries": [
+     {
+      "id": "#newRoomBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#traceBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#levelsBtn",
+      "visible": true,
+      "inLeftColumn": false
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "viewport": "390x844",
+   "access": {
+    "room": {
+     "id": "rom_child",
+     "hit": true,
+     "selected": {
+      "kind": "room",
+      "id": "rom_child"
+     },
+     "actions": 2,
+     "extra": "«Propiedades» en la barra inferior",
+     "editable": true
+    },
+    "furniture": {
+     "id": "obj_template-001",
+     "hit": true,
+     "selected": {
+      "kind": "furn",
+      "id": "obj_template-001"
+     },
+     "actions": 2,
+     "extra": "«Propiedades» en la barra inferior",
+     "editable": true
+    },
+    "opening": {
+     "id": "opn_door-0",
+     "hit": true,
+     "selected": {
+      "kind": "opening",
+      "id": "opn_door-0"
+     },
+     "actions": 1,
+     "extra": null,
+     "editable": true
+    }
+   },
+   "leftColumn": {
+    "width": 320,
+    "visibleControls": [
+     "Sofá, cama, mesa…",
+     "Borrar",
+     "Todas las estanciasDormitorioSalónCocina y comedorBañoElectrodomésticosEstudio y ocio",
+     "Todas las familiasAsientosCamasMesasAlmacenajeIluminaciónDecoración y plantasElectrodomésticosSanitariosSuperficies de cocinaOcio",
+     "Todos",
+     "Cama doble 1,8 m · Genérico · 1800 × 1100 × 2000 mm",
+     "Cama doble 1,5 m · Genérico · 1500 × 1100 × 2000 mm",
+     "Cama individual · Genérico · 1200 × 1100 × 2000 mm",
+     "Cuna · Genérico · 1250 × 950 × 700 mm",
+     "Mesilla · Genérico · 450 × 500 × 400 mm",
+     "Armario · Genérico · 2000 × 2200 × 600 mm",
+     "Armario pequeño · Genérico · 1200 × 2200 × 550 mm",
+     "Tocador · Genérico · 1000 × 750 × 450 mm"
+    ],
+    "count": 13,
+    "creationEntries": [
+     {
+      "id": "#newRoomBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#traceBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#levelsBtn",
+      "visible": true,
+      "inLeftColumn": false
+     }
+    ]
+   },
+   "errors": []
+  },
+  {
+   "viewport": "844x390",
+   "access": {
+    "room": {
+     "id": "rom_child",
+     "hit": true,
+     "selected": {
+      "kind": "room",
+      "id": "rom_child"
+     },
+     "actions": 2,
+     "extra": "«Propiedades» en la barra inferior",
+     "editable": true
+    },
+    "furniture": {
+     "id": "obj_template-001",
+     "hit": true,
+     "selected": {
+      "kind": "furn",
+      "id": "obj_template-001"
+     },
+     "actions": 2,
+     "extra": "«Propiedades» en la barra inferior",
+     "editable": true
+    },
+    "opening": {
+     "id": "opn_door-0",
+     "hit": true,
+     "selected": {
+      "kind": "opening",
+      "id": "opn_door-0"
+     },
+     "actions": 1,
+     "extra": null,
+     "editable": true
+    }
+   },
+   "leftColumn": {
+    "width": 320,
+    "visibleControls": [
+     "Sofá, cama, mesa…",
+     "Borrar",
+     "Todas las estanciasDormitorioSalónCocina y comedorBañoElectrodomésticosEstudio y ocio",
+     "Todas las familiasAsientosCamasMesasAlmacenajeIluminaciónDecoración y plantasElectrodomésticosSanitariosSuperficies de cocinaOcio",
+     "Todos",
+     "Cama doble 1,8 m · Genérico · 1800 × 1100 × 2000 mm",
+     "Cama doble 1,5 m · Genérico · 1500 × 1100 × 2000 mm"
+    ],
+    "count": 7,
+    "creationEntries": [
+     {
+      "id": "#newRoomBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#traceBtn",
+      "visible": true,
+      "inLeftColumn": false
+     },
+     {
+      "id": "#levelsBtn",
+      "visible": true,
+      "inLeftColumn": false
+     }
+    ]
+   },
+   "errors": []
+  }
+ ]
+}

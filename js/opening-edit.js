@@ -99,9 +99,10 @@
   assertGuard(p,next,id);C.validate(next);
   return {project:next,notes,changed:true};
  }
- // Preview of a new opening on a wall of a room, centred where the wall was touched. Doors open into that room.
+ // Preview of a new opening of any contract kind on a wall of a room, centred where the wall was touched. A hinged
+ // door opens into that room; the other kinds carry no swing.
  function add(p,roomId,wallId,kind,point,width=800){
-  if(!['door','window'].includes(kind))fail('Sólo se añaden puertas o ventanas desde la estancia.');
+  if(!KINDS.includes(kind))fail('Tipo de hueco no admitido.');
   if(!roomWalls(p,roomId).some(w=>w.id===wallId))fail('Ese muro no bordea la estancia seleccionada. Toca uno de sus muros resaltados.');
   const next=C.clone(p),o=T.opening(next,wallId,point,kind,width),w=wallOf(next,o);
   const s=spanSides(next,w,o.offsetMm,o.offsetMm+o.widthMm);
