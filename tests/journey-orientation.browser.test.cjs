@@ -82,9 +82,10 @@ for(const viewport of [VIEWPORTS[1],VIEWPORTS[2]])test(`T7 phone: a message sits
  const buttons=await page.evaluate(()=>[...document.querySelectorAll('#fab.show button')].map(b=>{const r=b.getBoundingClientRect(),h=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return {label:b.textContent.trim(),inside:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,hit:!!h&&(h===b||b.contains(h))};}));
  await page.waitForFunction(()=>!document.querySelector('#toast').classList.contains('show'),null,{timeout:10000});
  const after=await page.evaluate(()=>[...document.querySelectorAll('#fab.show button')].map(b=>{const r=b.getBoundingClientRect(),h=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return {label:b.textContent.trim(),inside:r.left>=0&&r.right<=innerWidth,hit:!!h&&(h===b||b.contains(h))};}));
- // M1 (the bar wider than a 390 px screen) is not solved in this cut: recorded, not asserted (docs/qa §4).
- t.diagnostic(`selection bar buttons off screen after the message: ${after.filter(b=>!b.inside).map(b=>b.label).join(', ')||'none'}`);
+ // M1: every button of the selection bar is on screen and reachable by touch, without scrolling the bar.
+ assert.deepEqual(after.filter(b=>!b.inside||!b.hit).map(b=>b.label),[],'selection bar buttons on screen and not covered');
  assert.ok(buttons.some(b=>/Eliminar/.test(b.label)),'«Eliminar» is part of the bar');
+ assert.deepEqual(await page.locator('#fab.show button').evaluateAll(n=>n.map(b=>b.getAttribute('aria-label')||b.textContent.trim())),['Girar a la izquierda','Girar','Duplicar','Eliminar','Propiedades','Listo'],'the six actions keep their names');
  // A door being placed is cancelled when the palette opens, and the person is told.
  // Tap the room in a corner clear of the sofa, so the room becomes the context of the door.
  const corner=await page.evaluate(()=>{const r=FloorPlanApp.project.rooms[0],xs=r.polygon.map(p=>p.x),ys=r.polygon.map(p=>p.y),s=new DOMPoint(Math.min(...xs)+450,Math.min(...ys)+450).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:s.x,y:s.y};});
@@ -124,4 +125,16 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  // Recorded apart from the guide entry, which a presentation restores exactly.
  const ev=await page.evaluate(()=>{const all=JSON.parse(localStorage.getItem('rubik-sota-journey-v1')||'{}'),r=FloorPlanGuide.revision(FloorPlanApp.project);return Object.values(all).some(e=>e.presented===r);});assert.equal(ev,true,'this version is recorded as presented');
  await c.shot('t6-after-presenting');assert.deepEqual(c.errors,[]);
+});
+
+test('T11 phone guide (M4): one row of controls, every control on screen, more plan visible; desktop header keeps one line and one presentation entry',{timeout:180000},async t=>{
+ const c=await open(t,{width:390,height:844}),{page}=c;await c.firstRoom();
+ const g=await page.evaluate(()=>{const b=document.querySelector('#guideBar').getBoundingClientRect(),ids=['guidePrevious','guideGoalChange','guideDetails','guideCompact','guideClose'];return {h:b.height,ctl:ids.map(id=>{const r=document.getElementById(id).getBoundingClientRect();return {id,top:Math.round(r.top),inside:r.left>=0&&r.right<=innerWidth&&r.width>0,name:document.getElementById(id).textContent.trim()};})};});
+ assert.ok(g.h<=170,`guide height ${Math.round(g.h)} px ≤ 170 (master: 217)`);
+ assert.deepEqual(g.ctl.filter(x=>!x.inside).map(x=>x.id),[]);assert.equal(new Set(g.ctl.map(x=>x.top)).size,1,'one row of controls');
+ assert.equal(g.ctl[0].name,'← Paso anterior','the previous-step button keeps its name');await c.shot('t11-phone-guide');
+ const d=await open(t,{width:1440,height:900});await d.press('#welcomeExample');await d.page.waitForTimeout(500);
+ assert.ok(await d.page.evaluate(()=>document.querySelector('header').getBoundingClientRect().height)<=80,'guided header stays on one line');
+ assert.equal(await d.page.locator('button:visible',{hasText:'Presentar mi vivienda'}).count(),1,'one presentation entry at a time');
+ assert.deepEqual([...c.errors,...d.errors],[]);
 });
