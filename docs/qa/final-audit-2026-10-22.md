@@ -17,7 +17,7 @@ Entorno local: Chromium 141 + SwiftShader (sin GPU), Node 22, Playwright; Three.
 | integración (antes de corregir) | 43 | 13 | 2 cancelados |
 | integración `fa76113` (medido) | 54 | 0 | 4 (P13 1440, P15, P08, «Escape and browser Back») |
 
-Causas en la integración, todas originadas en #73 (journey):
+Causas en la integración, todas originadas en #71 (`feat/journey-orientation`, orientación del recorrido):
 1. Tras presentar, la guía mueve la única entrada de presentación a la cabecera (`#presentationBtn`); el test
    suponía siempre `#guidePresent`. Ahora el test exige exactamente una entrada visible.
 2. Defecto real de accesibilidad: al salir (Cerrar, Escape o Atrás) el foco caía en la búsqueda o en `body`.
@@ -37,5 +37,5 @@ Pendiente de ejecución con GPU real: ver `manual-gpu-phone-protocol-2026-10-22.
 ## Evidencia
 `artifacts/integration-2026-10-22/` (regeneradas sobre `fa76113`): 21 capturas (1440×900, 390×844, 844×390), `qa-log.txt` y dos vídeos.
 
-Logs: `artifacts/integration-2026-10-22/logs/` — suite `presentation` sobre la integración `fa76113` (int3) y sobre #73 `0c9c6b0`
+Logs: `artifacts/integration-2026-10-22/logs/` — suite `presentation` sobre la integración `fa76113` (int3) y sobre #71 `0c9c6b0`
 (antes del arreglo de Atrás), y la batería completa de 28 suites sobre `da4c5c1`.
