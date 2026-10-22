@@ -1,0 +1,30 @@
+1440x900-01-welcome-top
+1440x900-02-welcome-plan-vs-3d
+1440x900-03-profile-real-estate
+1440x900-04-walk-band
+1440x900-05-solutions-hover
+1440x900 developer card aria-expanded after hover-out: false
+1440x900-06-guide-first-room
+1440x900-07-present-config-provenance
+1440x900 start button visible: true
+1440x900 errors: []
+390x844-01-welcome-top
+390x844-02-welcome-plan-vs-3d
+390x844-03-profile-real-estate
+390x844-04-walk-band
+390x844-05-solutions-tap
+390x844 developer card aria-expanded after tap: true
+390x844-06-guide-first-room
+390x844-07-present-config-provenance
+390x844 start button visible: true
+390x844 errors: []
+844x390-01-welcome-top
+844x390-02-welcome-plan-vs-3d
+844x390-03-profile-real-estate
+844x390-04-walk-band
+844x390-05-solutions-tap
+844x390 developer card aria-expanded after tap: true
+844x390-06-guide-first-room
+844x390-07-present-config-provenance
+844x390 start button visible: true
+844x390 errors: []
