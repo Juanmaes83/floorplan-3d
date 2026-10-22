@@ -112,3 +112,50 @@ Base: `master` `e796e3d` en una copia limpia, en el mismo entorno y con ejecuci�
 | P | Tras entregar el dúplex (lote ZIP con las 4 vistas, `editable-building.zip` y `presentation.json`) | «Revisa la distribución en 3D» → «Abrir 3D» | «Guarda tu proyecto» → «Confirmar guardado» | sí |
 
 **Pendiente:** M1 (barra de selección más ancha que 390 px), M4 (altura de la guía en el teléfono), el corte B (cromático), las capturas de los prototipos, la GPU real, el teléfono físico y la prueba D-01.
+
+## 7. Cierre del 22-10-2026: M1, M4, cabecera guiada y colores
+
+**SHA probado:** `1830830`. La cabeza publicada es `c475cba`. Entre ambos **no cambia código de la aplicación** (`git diff 1830830 c475cba -- js css index.html` vacío); solo pruebas y documentación. La suite `build-palette`, cuyo archivo cambió, se repitió sobre `c475cba`.
+
+Base: `master` `e796e3d`, mismo entorno: Chromium 141 con SwiftShader, sin GPU, teléfono emulado. CI: **no ejecutada**.
+
+| Suite | Rama | `master` | Resultado |
+| --- | --- | --- | --- |
+| Unitarias | 262/262 | — | PASS |
+| `journey-orientation` | 15/15 (incluye T11 nuevo y T7 con la barra completa) | 0/14 de los casos previos | PASS |
+| `opening-contextual` | 9/9 | — | PASS |
+| `panel-pattern` | 5/5 | — | PASS |
+| `premium-shell` | 4/4 | — | PASS |
+| `stair-conflicts` | 4/4 | — | PASS |
+| `guide` | 5/5 | — | PASS |
+| `guide-navigation` | 4/4 | — | PASS |
+| `welcome-generar` | 3/3 | — | PASS |
+| `ui-language` | 3/3 | — | PASS |
+| `room-layout` | 5/5 | — | PASS |
+| `surfaces` | 7/7 | — | PASS |
+| `building` | 3/3 | — | PASS |
+| `brand` | 3/3 | — | PASS |
+| `sheet` | 7/7 | — | PASS |
+| `upload` | 8/8 | — | PASS |
+| `multiformat-guide` | 9/9 | — | PASS |
+| `layout-review` | 2/2 | — | PASS |
+| `variants` | 4/4 | — | PASS |
+| `stair-overlap` | 3/3 | — | PASS |
+| `stair-relocation` | 4/4 | — | PASS |
+| `build-palette` | 0/3 en `1830830` → **3/3 en `c475cba`** | 3/3 | PASS tras corregir la preparación (ver abajo) |
+| `browser` (suite antigua del editor) | 26 pasan, 10 fallan | 26 pasan y **los mismos 10** fallan | Fallo previo idéntico; no es regresión |
+| `presentation` | Corte por tiempo a 1700 s | Corte por tiempo a 1700 s | **SIN RESULTADO** en ambas; no se cuenta como PASS |
+
+**Defectos encontrados y corregidos en este cierre:**
+
+- **Regresión de este corte en `browser` (14 fallos en `4dd4e5d`).** La suite antigua pulsaba muebles dando por hecho que la paleta abría en «Amueblar», pero desde O6 abre en «Construir».
+  - La preparación `editor-fixture` arranca ahora como una persona cuya última elección fue «Amueblar», el mismo estado que en `master` (`1830830`).
+  - `build-palette`, que comprueba justamente la pestaña inicial, prescinde de esa preparación (`keepPalette`, `c475cba`).
+  - No se ha relajado ninguna aserción.
+- **Cabecera guiada de escritorio a 116 px y dos «Presentar mi vivienda» visibles.** Las introdujo este corte; se corrigieron en `4dd4e5d` (ver diseño, §4.4).
+
+**Sigue pendiente:**
+
+- A 360 px la barra de selección necesita 18 px más; conserva el desplazamiento horizontal. Aceptable.
+- Prueba D-01 con personas.
+- Validación con GPU real y en un teléfono físico.
