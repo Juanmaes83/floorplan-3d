@@ -25,6 +25,7 @@
  const controls=el('div',undefined,card,'presentation-controls');
  const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
  const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
+ const shareButton=button('',controls,()=>share());shareButton.id='presentationShare';
  const materialButton=button('',controls,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
  const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
  const revealButton=button('',controls,()=>{revealCurrent();});revealButton.id='presentationReveal';
@@ -129,6 +130,7 @@
  }
  function updateCapture(){
   captureButton.disabled=!captureReady();
+  shareButton.disabled=!captureReady();shareButton.textContent=tx('Compartir imagen','Share image','分享图片');
   const busy=window.View3D?.lifecycleMetrics;
   batchButton.disabled=!captureReady()||!!busy?.pendingAssets||!!busy?.animating||!!busy?.flying;
   batchButton.textContent=tx('Vistas + proyecto ZIP','Views + project ZIP','视图 + 项目 ZIP');
@@ -137,6 +139,30 @@
   if(!active)return;
   try{const size=View3D.shotSize(captureOptions);captureButton.textContent=tx(`Guardar PNG ${size.width}×${size.height}` ,`Save PNG ${size.width}×${size.height}`,`保存 PNG ${size.width}×${size.height}`);}
   catch{captureButton.disabled=true;captureButton.textContent=tx('PNG no disponible','PNG unavailable','PNG 不可用');}
+ }
+ // «Compartir imagen»: the same view the capture saves (with the brand strip when there is a brand), handed to the
+ // system share sheet (WhatsApp, Gmail, LinkedIn… on phones that support sharing files). Without it, a small panel
+ // offers download, WhatsApp and e-mail with a text — the image is attached by the person. It shares an IMAGE, never
+ // a link to the project: nothing is uploaded by Rubik.
+ async function viewImage(){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');const shot=View3D.shot({...captureOptions,download:false});
+  const url=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,label):shot.dataUrl;const blob=await (await fetch(url)).blob();return {url,label,file:new File([blob],'rubik-sota-vivienda.png',{type:'image/png'})};}
+ const shareDialog=el('dialog',undefined,document.body,'share-dialog');shareDialog.id='shareDialog';shareDialog.setAttribute('aria-labelledby','shareTitle');
+ async function share(){
+  if(!captureReady())return;const st=blocked();if(st){toast(blockedMessage(st),8000);return;}
+  shareButton.disabled=true;
+  try{const img=await viewImage(),name=(brandSnap?.title||app.project.name||'').trim(),text=tx(`${name?name+' · ':''}${img.label}. Imagen creada con Rubik Sota; medidas orientativas.`,`${name?name+' · ':''}${img.label}. Image made with Rubik Sota; indicative dimensions.`,`${name?name+' · ':''}${img.label}。由 Rubik Sota 生成的图片；尺寸仅供参考。`);
+   if(navigator.canShare?.({files:[img.file]})){try{await navigator.share({files:[img.file],title:name||'Rubik Sota',text});}catch(e){if(e?.name!=='AbortError')throw e;}return;}
+   shareDialog.replaceChildren();const h=el('h2',tx('Compartir imagen','Share image','分享图片'),shareDialog);h.id='shareTitle';h.tabIndex=-1;
+   const preview=el('img',undefined,shareDialog,'share-preview');preview.src=img.url;preview.alt=img.label;
+   el('p',tx('Se comparte una imagen de esta vista, no un enlace al proyecto. Descárgala y adjúntala en WhatsApp, Gmail, LinkedIn o el portal inmobiliario.','You share an image of this view, not a link to the project. Download it and attach it in WhatsApp, Gmail, LinkedIn or a property portal.','分享的是此视图的图片，而不是项目链接。下载后在 WhatsApp、Gmail、LinkedIn 或房产平台中附上。'),shareDialog,'share-note');
+   const row=el('div',undefined,shareDialog,'share-actions');
+   const dl=el('a',tx('Descargar imagen','Download image','下载图片'),row,'btn primary');dl.href=img.url;dl.download='rubik-sota-vivienda.png';dl.id='shareDownload';
+   const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.href='https://wa.me/?text='+encodeURIComponent(text);wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
+   const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text+'\n\n'+tx('(Adjunta la imagen descargada.)','(Attach the downloaded image.)','（请附上下载的图片。）'));mail.id='shareMail';
+   const close=el('button',tx('Cerrar','Close','关闭'),row,'btn');close.type='button';close.onclick=()=>shareDialog.close();
+   shareDialog.showModal();h.focus();
+  }catch(error){toast(error.message||String(error),6000);}
+  finally{shareButton.disabled=false;updateCapture();}
  }
  function capture(){
   if(!captureReady())return;
