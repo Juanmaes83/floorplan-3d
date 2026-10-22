@@ -622,7 +622,7 @@
    const focus=saved?.focus;
    addEventListener('popstate',()=>refocus(focus),{once:true});
    history.back();
-  }
+  }else if(document.activeElement===document.body||!shown(document.activeElement))refocus(saved?.focus);
   stopping=false;
  }
  function invalidate(){
