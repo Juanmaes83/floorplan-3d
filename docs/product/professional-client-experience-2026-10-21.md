@@ -217,3 +217,53 @@ Las pruebas automáticas no acreditan que la experiencia sea comprensible.
 | En el teléfono, «Propiedades» aparece en la barra de selección y en la barra inferior | Pendiente: son dos caminos al mismo cajón. Se aceptan porque la barra de selección es contextual; no se elimina ninguna |
 | El perfil profesional de la bienvenida y el «perfil de marca» de la entrega usan la misma palabra para dos cosas | Aceptado por ahora; se propone llamar al segundo «Tu marca» de forma consistente |
 | Editor → presentación → cliente: el cliente no tiene superficie propia; recibe un ZIP | Resultado 3, pendiente de decisión |
+
+## 10. Matriz de las cinco referencias de Enviz (22-10-2026)
+
+Las cinco son capturas de la web comercial de Enviz ([`references/enviz-2026-10-22/`](references/enviz-2026-10-22/)). Ninguna es una sesión de la herramienta.
+
+| Ref. | Qué muestra realmente | Solo afirmación comercial | Qué puede hacer Rubik ahora (código o prueba) | Experiencia deseada para D-01 | Evidencia que demostraría la mejora |
+| --- | --- | --- | --- | --- | --- |
+| e1 «Own the model» | Un rótulo, una foto de cocina con una burbuja «AI Modelling Agent: widen the kitchen island by 200mm · Updating model…» y un icono de carpeta | Agente de IA que remodela; descarga en SKP, GLB, FBX, USDZ y BLEND; «works with SketchUp, Revit…» | Exporta JSON/ZIP del proyecto y del edificio y el lote de presentación. GLB y `.blend` solo por línea de comandos (`scripts/interop`, `tests/interop.test.cjs`). Lámina a escala (#72, `tests/sheet-scale.browser.test.cjs`). Sin IA | El estudio se lleva un archivo que abre en su software con unidades e identidad comprobables | Apertura independiente: un visor CAD o glTF y medidas contra el JSON; ida y vuelta automatizada |
+| e2 «Change it by asking» | Una ilustración con tres burbujas de voz sobre un dormitorio y una lista de ventajas | Mover muros, añadir ventanas o cambiar acabados hablando; «the model rebuilds» | La edición manual es completa (muros, huecos, estancias, acabados, muebles) y tiene deshacer y rehacer. El MCP local es de solo lectura (`tools/rubik-mcp`) | La persona entiende qué cambiará, lo aprueba o lo rechaza y puede deshacerlo. Sin IA, todo sigue siendo posible | Una prueba que demuestre que la propuesta no cambia nada hasta aprobarla, que rechazar no deja efectos y que deshacer devuelve el proyecto idéntico. Además, comprensión en la sesión D-01 |
+| e3/e4 «See what you could hand your clients» | Dos tarjetas (una y dos plantas) con un selector «The plan / The experience» que cambia el plano escaneado por un render | «Hours later», «stairs, landings and ceiling heights all to scale» | Bienvenida «El plano / La vivienda en 3D» con una captura real de Rubik (#73). Edificios de dos plantas con escalera (#51–#54). Procedencia y precisión en «Presentar mi vivienda» (#74). Subir PDF, imagen, DXF o IFC | El profesional y su cliente ven el mismo proyecto como plano y como experiencia, y saben qué es original y qué precisión tiene | `tests/professional-entry` (alternancia y captura real), `tests/provenance.browser` (líneas iguales a los datos). En D-01: «¿de dónde salen estas medidas?» |
+| e5 «Send one link» | Una maqueta del cuadro «Share» con WhatsApp, iMessage, correo y la URL `enviz.co/share/abc123` | Un enlace en cualquier dispositivo; todos ven la misma versión | No hay enlace ni servidor. El lote ZIP identifica la versión con `projectId`, `revision` y sha256 (`tests/presentation-batch`) | El cliente ve una versión identificable y responde; el profesional decide qué se incorpora | Identidad de versión comprobada en la ida y vuelta de las observaciones, y que una observación no edite nada (§11) |
+
+## 11. Decisiones preparadas (no aprobadas)
+
+Ninguna de estas opciones está aprobada. Las preferencias provisionales de Juanma se tratan como hipótesis.
+
+### 11.1 Revisión del cliente
+
+| Opción | Alcance | Beneficio | Riesgos | Coste aproximado | Recomendación |
+| --- | --- | --- | --- | --- | --- |
+| **A. Archivo, sin servidor** | Paquete de revisión, modo de solo lectura, observaciones ancladas a estancia o vista, `observaciones.json` con `projectId` y `revision`, importar y decidir | Funciona hoy, sin datos fuera del navegador ni costes recurrentes; el control queda en el profesional | Fricción: el cliente abre la web y un archivo, y no hay avisos | Desarrollo medio; cero de infraestructura | **Recomendada como primer corte** |
+| B. Enlace alojado | Almacenamiento del proyecto, enlace con caducidad, retirada y acceso | Experiencia de un enlace | Datos personales en servidor (D-08), retención (D-09), seguridad de enlaces, coste | Alojamiento y base de datos con un coste mensual recurrente, además de autenticación; desarrollo alto | Después de A y de decidir D-06, D-08 y D-09 |
+| C. Correo con lámina y vistas | Sin código nuevo | Inmediato | Sin trazabilidad ni anclaje | Ninguno | Alternativa provisional |
+
+### 11.2 Datos del proyecto
+
+| Opción | Recomendación |
+| --- | --- |
+| **Mantenerlos en el navegador**, con exportación explícita | **Recomendada ahora.** Es coherente con D-08 y D-09, y A no la necesita cambiar |
+| Sincronizar o alojar en la nube | Solo con la opción B, previa decisión |
+
+### 11.3 «Soluciones» por perfil
+
+| Opción | Beneficio | Riesgo | Recomendación |
+| --- | --- | --- | --- |
+| **Sección «Soluciones» bajo la bienvenida**, con una ficha por perfil (problema, pasos con capturas reales, qué entrega al cliente, botón «Empezar»), después de las tres entradas | El profesional se reconoce sin un paso obligatorio | Alarga la bienvenida en el teléfono | **Recomendada**, plegada en el teléfono |
+| Página comercial aparte | Libertad de diseño | Duplica mensajes y puede prometer más de lo que hace la app | Más adelante, a partir del mismo contenido |
+| Pestaña dentro del editor | — | Compite con la guía | No |
+
+Regla: solo se muestra lo que ya funciona. Lo demás aparece como «en preparación» o no aparece.
+
+### 11.4 Ayuda inteligente
+
+| Nivel | Qué es | Requiere decisión |
+| --- | --- | --- |
+| Ayuda local determinista | Explicaciones del estado y de la siguiente acción, a partir de la guía y la búsqueda local | No |
+| Prototipo | Propuestas estructuradas (por ejemplo, «ensanchar 200 mm») simuladas sobre una copia, con aprobación, rechazo y deshacer, **sin modelo de lenguaje** | No: es código local |
+| Agente conectado real | Un proveedor de IA interpreta texto y genera propuestas | **Sí:** si la geometría sale del navegador (D-08), proveedor, presupuesto con coste por uso, consentimiento por proyecto y registro |
+
+**Recomendación:** primero la ayuda local, después el prototipo. El agente real solo tras la decisión, con un piloto acotado.
