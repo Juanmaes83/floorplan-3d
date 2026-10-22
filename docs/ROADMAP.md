@@ -2,7 +2,7 @@
 
 ## Propuesta paralela del 21-10-2026 — entrada profesional y entrega al cliente
 
-Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco líneas de mejora de experiencia y entrega. [Alcance, orden, límites y decisiones abiertas](product/professional-client-experience-2026-10-21.md). El selector de perfil es un primer corte opcional en una rama separada; los ejemplos, la revisión de cliente, los formatos 3D y la asistencia IA son propuestas por fases, no capacidades integradas. Reconciliar esta rama con el corte de orientación que Claude prepara antes de decidir su integración.
+Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco resultados de experiencia y entrega. [Programa, auditoría de #70 y estado de las cinco líneas](product/professional-client-experience-2026-10-21.md). Estado al 22-10-2026: entrada profesional (`feat/professional-entry`, sobre #71), del plano a la vivienda (`feat/plan-provenance`) y lámina a escala (`feat/scaled-sheet`) en PR Draft; revisión de cliente y ayuda con IA **pendientes de decisión** (D-06/D-08/D-09). Nada integrado; CI no ejecutada; prueba D-01 pendiente.
 
 
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
