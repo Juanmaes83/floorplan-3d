@@ -20,27 +20,42 @@ Chromium 141 + SwiftShader (sin GPU), Playwright, Node 22. Sin merge ni desplieg
 - Sin datos inventados: un dato ausente se omite (sin marcadores); la superficie es siempre «aprox.»; no hay
   ubicación (Rubik no la guarda); textos acotados terminan siempre en «…».
 
-## Resultados
+## Comparación de composiciones (mismo proyecto, cámara, formato y marca)
+Medida: caja de los píxeles que difieren del fondo (umbral 30, paso 2 px; `scratchpad/measure.py`), como fracción de
+la zona de imagen y del PNG completo. La caja incluye la sombra de la vivienda. Sin recortar ni deformar: la cámara solo
+se acerca a lo largo de su dirección y la fov no cambia.
+
+| Horizontal 1600×1000 | Zona de imagen | PNG completo | Vivienda (px) | Revisión visual |
+|---|---|---|---|---|
+| Antes, #78 (1280×800, sin datos) | 51,0 % | 51,0 % | 714×732 | sin identidad ni datos |
+| B — franja inferior | 40,0 % | 32,8 % | 701×750 | legible; la franja quita altura |
+| C — cabecera + pie | 40,0 % | 32,8 % | 701×750 | **defecto:** con nombres largos el nombre del estudio y el contacto se pisan |
+| **D — columna lateral (elegida)** | **66,5 %** | **44,9 %** | **818×878** | título en 3 líneas, estudio en 2, contacto separado |
+
+Vertical 1080×1350 (B, elegida): 66,5 % de la zona de imagen, 49,3 % del archivo (C idéntica en área, sin ventaja).
+
+**Resultado que no se iguala:** en horizontal la vivienda ocupa menos fracción del archivo que antes (44,9 % frente a
+51,0 %) porque el archivo incluye ahora una columna de datos que antes no existía. La vivienda es mayor en píxeles
+(+37 % de superficie) y está completa. Subir la fracción exigiría recortar la vivienda o quitar los datos.
+
+## Resultados (diálogo real, PNG descargado)
 | Caso | Antes (#78) | Después |
 |---|---|---|
-| Teléfono, vista general | 20 % del área, sin datos | vertical: 63 % del área (74 % ancho, 85 % alto) con datos |
-| Escritorio, vista general | 92 % alto · 56 % ancho, sin datos | horizontal: 89 % alto · 40 % ancho, con datos (**algo más pequeña**) |
-| Dos plantas | 88 % alto | horizontal 89 % alto; vertical 72 % del área; indica «Planta baja · Vista general» |
+| Teléfono, vista general | 19,7 % del archivo, sin datos | vertical 49,3 % del archivo (66,5 % de la imagen), con datos |
+| Escritorio, vista general | 51,0 % | horizontal D 44,9 % del archivo (66,5 % de la imagen) |
+| Dos plantas, con marca | 46,2 % del archivo | horizontal 52,1 %, vertical 57,2 %; «Planta baja · Vista general» |
 | Vista previa = descarga | sí | sí en los 12 casos (bytes idénticos) |
 
-Pruebas: `tests/delivery-image.test.cjs` 4/4; `tests/delivery-image.browser.test.cjs` 4/4 (1440 y 390, marca con
-contacto opcional, dos plantas; aserciones sobre píxeles del PNG descargado); `share-image` 3/3 (expectativa de
-nombre de archivo actualizada a `rubik-sota-vivienda-horizontal.png`); `brand` 3/3; unitarias 258/258.
+Pruebas (SHA del commit de esta actualización): `delivery-image.test.cjs` 4/4; `delivery-image.browser.test.cjs` 4/4;
+`share-image` 3/3; `brand` 3/3; unitarias 258/258. Suite `presentation` **no ejecutada** sobre esta rama.
 
-## Abierto (no resuelto en este corte)
-1. En escritorio horizontal la vivienda queda algo más pequeña que la vista de #78; ajustar margen/área.
-2. Composición alternativa «C» (cabecera + imagen + pie de marca): implementada en `compose(layout:'header')` pero
-   **sin comparar todavía** con imágenes reales; la elección de «B» es provisional.
-3. Nombres de estudio muy largos en horizontal se recortan a una línea («Estudio Norte Arqu…»).
-4. «Compartir…» con el archivo compuesto en un teléfono físico: pendiente (protocolo en
-   `docs/qa/manual-gpu-phone-protocol-2026-10-22.md` de la integración).
-5. Superficie de una planta en edificios: se muestra la de la planta visible, con su nombre; no hay total del edificio.
+## Abierto
+1. Horizontal: 44,9 % del archivo frente al 51 % previo (explicado arriba); decisión de Juanma si prefiere menos datos.
+2. A 844×390 la vista previa del diálogo es pequeña y los botones requieren desplazar el diálogo.
+3. Sin marca, la columna lateral deja espacio en blanco bajo los datos.
+4. «Compartir…» en teléfono físico: pendiente.
+5. Edificios: superficie de la planta visible, no total.
 
 ## Evidencia
-`artifacts/delivery-image/`: hoja de contacto antes/después, PNG finales en WebP (antes y después), diálogo en
+`artifacts/delivery-image/`: hoja de contacto antes/después, `layouts/` (B, C y D con nombres cortos, largos y sin marca), diálogo en 1440/390/844, PNG finales en WebP (antes y después), diálogo en
 teléfono, medidas JSON.

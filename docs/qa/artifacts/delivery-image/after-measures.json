@@ -5,9 +5,9 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.404,
-  "fillY": 0.887,
-  "fillArea": 0.358
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "after-1level-nobrand-1440-overview-port",
@@ -15,9 +15,9 @@
   "previewEqualsDownload": true,
   "width": 1080,
   "height": 1350,
-  "fillX": 0.735,
-  "fillY": 0.852,
-  "fillArea": 0.626
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "after-1level-nobrand-1440-room-land",
@@ -25,8 +25,8 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.999,
-  "fillY": 0.997,
+  "fillX": 0.998,
+  "fillY": 0.998,
   "fillArea": 0.996
  },
  {
@@ -39,9 +39,9 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.404,
-  "fillY": 0.887,
-  "fillArea": 0.358
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "after-1level-nobrand-390-overview-port",
@@ -49,9 +49,9 @@
   "previewEqualsDownload": true,
   "width": 1080,
   "height": 1350,
-  "fillX": 0.735,
-  "fillY": 0.852,
-  "fillArea": 0.626
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "after-1level-nobrand-390-room-land",
@@ -59,9 +59,9 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.616,
-  "fillY": 0.628,
-  "fillArea": 0.387
+  "fillX": 0.722,
+  "fillY": 0.526,
+  "fillArea": 0.38
  },
  {
   "tag": "after-1level-nobrand-390",
@@ -73,9 +73,9 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.404,
-  "fillY": 0.887,
-  "fillArea": 0.358
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "after-1level-brand-overview-port-contact",
@@ -83,9 +83,9 @@
   "previewEqualsDownload": true,
   "width": 1080,
   "height": 1350,
-  "fillX": 0.735,
-  "fillY": 0.852,
-  "fillArea": 0.626
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
  },
  {
   "tag": "brand",
@@ -97,9 +97,9 @@
   "previewEqualsDownload": true,
   "width": 1600,
   "height": 1000,
-  "fillX": 0.426,
-  "fillY": 0.89,
-  "fillArea": 0.379
+  "fillX": 0.839,
+  "fillY": 0.92,
+  "fillArea": 0.772
  },
  {
   "tag": "after-2levels-brand-overview-port",
@@ -107,9 +107,9 @@
   "previewEqualsDownload": true,
   "width": 1080,
   "height": 1350,
-  "fillX": 0.809,
-  "fillY": 0.892,
-  "fillArea": 0.722
+  "fillX": 0.839,
+  "fillY": 0.92,
+  "fillArea": 0.772
  },
  {
   "tag": "2levels",
