@@ -38,6 +38,10 @@
  const captureOptions={size:'1280',aspect:'view'};
  const stops=el('div',undefined,card,'presentation-stops');
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
+ // Focus goes back to the control that opened the presentation; if the guide has since moved the entry (one
+ // presentation entry at a time), to the presentation entry that is visible now, never to an unrelated control.
+ const shown=el=>!!el?.isConnected&&!el.closest('[hidden]')&&el.getClientRects().length>0;
+ function refocus(target){(shown(target)?target:['#guidePresent','#presentationBtn'].map(q=>document.querySelector(q)).find(shown))?.focus?.({preventScroll:true});}
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  let mapOpen=false;
@@ -587,7 +591,7 @@
     document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
     if(startLevelId&&activeLevelId()!==startLevelId)building()?.presentLevel(startLevelId);startLevelId=null;
     await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;entry=null;plan=null;sceneState=null;
-    if(location.hash==='#presentacion')history.back();returnFocus?.focus?.({preventScroll:true});}
+    if(location.hash==='#presentacion')history.back();refocus(returnFocus);}
   }
  }
  async function go(target,token=epoch){
@@ -616,7 +620,7 @@
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presentation-exiting');
   if(!fromPop&&location.hash==='#presentacion'){
    const focus=saved?.focus;
-   addEventListener('popstate',()=>{if(focus?.isConnected)focus.focus({preventScroll:true});},{once:true});
+   addEventListener('popstate',()=>refocus(focus),{once:true});
    history.back();
   }
   stopping=false;
@@ -658,7 +662,7 @@
   });
  });
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
- config.addEventListener('close',()=>{if(!active&&!pendingStart)returnFocus?.focus?.({preventScroll:true});});
+ config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
  window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;}};
 })();
