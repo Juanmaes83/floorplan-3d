@@ -25,6 +25,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await client.page.waitForFunction(id=>FloorPlanApp.project.id===id,sentProject.id);
  const clientBefore=await client.project();
  await client.openMenu();await client.press('#reviewNotesBtn');await client.page.locator('#reviewDialog[open]').waitFor();
+ assert.match(await client.page.locator('#reviewCopyNote').textContent(),/esta es tu copia de la vivienda\. Lo que cambies en ella no llega al profesional/);
  assert.match(await client.page.locator('#reviewIdentity').textContent(),/versión [0-9a-f]{8}\. Las observaciones no cambian la vivienda/);
  assert.equal(await client.page.locator('#reviewDownload').isDisabled(),true,'nothing to download yet');
  const room=sentProject.rooms[0];
@@ -48,17 +49,39 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const [first,second]=doc.notes.map(n=>pro.page.locator(`[data-note="${n.id}"]`));
  await first.locator('[data-decision=incorporate]').click();await pro.page.locator(`[data-note="${doc.notes[1].id}"] [data-decision=discard]`).click();
  assert.equal(await pro.page.locator(`[data-note="${doc.notes[0].id}"] [data-decision=incorporate]`).getAttribute('aria-pressed'),'true');
- assert.match(await pro.page.locator('.review-counts').textContent(),/Por incorporar: 1 · descartadas: 1 · pendientes: 0/);
+ assert.match(await pro.page.locator('.review-counts').textContent(),/Implementadas: 0 · se incorporarán: 1 · descartadas: 1 · sin decidir: 0/);
+ assert.match(await pro.page.locator(`[data-note="${doc.notes[0].id}"] .review-status`).textContent(),/Se incorporará \(aún no está en la vivienda\)/);
  assert.equal(await pro.project(),proBefore,'deciding does not change the project');
  await pro.page.screenshot({path:path.join(out,`${size}-professional-decides.png`)});
  // 4. Decisions persist in this browser.
  await pro.page.reload();await pro.page.waitForFunction(()=>window.FloorPlanReviewUI);await require('./editor-fixture.cjs')(pro.page);
  await pro.page.evaluate(()=>FloorPlanReviewUI.open());
  assert.equal(await pro.page.locator(`[data-note="${doc.notes[1].id}"] [data-decision=discard]`).getAttribute('aria-pressed'),'true');
- // 5. After the professional changes the home, the same file says it refers to an earlier version.
+ // 5. The professional makes the change, declares it «Hecho en esta versión» and answers the client.
  await pro.page.locator('#reviewDialog .review-close').click();
  await pro.page.evaluate(()=>{FloorPlanApp.project.rooms[0].name+=' ';});await pro.page.evaluate(()=>FloorPlanReviewUI.open());
  assert.match(await pro.page.locator('.review-received .review-warn').textContent(),/la vivienda ha cambiado/);
+ const impl=pro.page.locator(`[data-note="${doc.notes[0].id}"] [data-decision=implemented]`);assert.equal(await impl.isDisabled(),false);
+ assert.equal(await pro.page.locator(`[data-note="${doc.notes[1].id}"] [data-decision=implemented]`).isDisabled(),true,'only what will be incorporated can be marked done');
+ await impl.click();const newVersion=await pro.page.evaluate(()=>FloorPlanReviewNotes.versionCode(FloorPlanGuide.revision(FloorPlanApp.project)));
+ assert.equal(await pro.page.locator(`[data-note="${doc.notes[0].id}"] .review-status`).textContent(),`Implementada en la versión ${newVersion}`);
+ const answer=await download(pro.page,()=>pro.page.locator('.review-answer').click());const reply=JSON.parse(answer.text);
+ assert.deepEqual(reply.items.map(x=>[x.status,x.implementedIn||null]),[['implemented',newVersion],['discarded',null]]);
+ await pro.page.locator('#reviewDialog .review-close').click();await pro.openMenu();const sentV2=await download(pro.page,()=>pro.press('#exportJson'));
+ // 6. The client opens the answer in the old version (told where the change is), then opens the new version.
+ await client.page.locator('#reviewAnswerFile').setInputFiles({name:answer.name,mimeType:'application/json',buffer:Buffer.from(answer.text)});
+ await client.page.locator('#reviewAnswerList').waitFor();
+ const answered=client.page.locator(`[data-answer="${doc.notes[0].id}"]`);
+ assert.match(await answered.textContent(),new RegExp(`Implementada en la versión ${newVersion} · Tienes abierta la versión [0-9a-f]{8}: pide al profesional el proyecto de la versión ${newVersion}`));
+ assert.match(await client.page.locator(`[data-answer="${doc.notes[1].id}"]`).textContent(),/Descartada/);
+ await client.page.screenshot({path:path.join(out,`${size}-client-answer-old-version.png`)});
+ await client.page.locator('#reviewDialog .review-close').click();
+ await client.page.locator('#fileIn').setInputFiles({name:sentV2.name,mimeType:'application/json',buffer:Buffer.from(sentV2.text)});
+ await client.page.waitForFunction(v=>FloorPlanReviewNotes.versionCode(FloorPlanGuide.revision(FloorPlanApp.project))===v,newVersion);
+ await client.page.evaluate(()=>FloorPlanReviewUI.open());
+ assert.match(await client.page.locator(`[data-answer="${doc.notes[0].id}"]`).textContent(),/Es la versión que tienes abierta: puedes verlo/);
+ await client.page.screenshot({path:path.join(out,`${size}-client-answer-new-version.png`)});
+ await pro.page.evaluate(()=>FloorPlanReviewUI.open());
  // 6. A file from another project is refused.
  const other={...doc,projectId:'prj_other',projectName:'Otra vivienda'};
  await pro.page.locator('#reviewImportFile').setInputFiles({name:'otra.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(other))});

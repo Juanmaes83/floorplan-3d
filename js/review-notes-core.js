@@ -41,5 +41,26 @@
   return {sameProject,sameVersion,missingRooms:doc.notes.filter(n=>n.anchor.kind==='room'&&!rooms.has(n.anchor.roomId)).map(n=>n.id)};
  }
  const DECISIONS=['pending','incorporate','discard'];
- return {FORMAT,VERSION,MAX_TEXT,versionCode,create,add,remove,read,match,DECISIONS};
+ // The professional's answer (format rubik-sota.review-response v1): per observation, received / planned («se
+ // incorporará», a decision that changes nothing) / discarded / implemented in version X (declared by the
+ // professional when the change is made, with the version code of the project at that moment). Texts are copied so
+ // the client reads it on its own; no project data.
+ const RESPONSE='rubik-sota.review-response',STATUS={pending:'received',incorporate:'planned',discard:'discarded'};
+ function respond(doc,decisions,implemented,project,revision,now=new Date().toISOString()){
+  if(doc.projectId!==project?.id)throw Error('La respuesta debe salir del mismo proyecto.');
+  return {format:RESPONSE,version:1,projectId:project.id,projectName:clean(project.name,120),versionCode:versionCode(revision),answeredAt:now,notesCreatedAt:doc.createdAt,reviewer:doc.reviewer,
+   items:doc.notes.map(n=>{const v=implemented?.[n.id];return v?{id:n.id,anchor:n.anchor,text:n.text,status:'implemented',implementedIn:v}:{id:n.id,anchor:n.anchor,text:n.text,status:STATUS[decisions?.[n.id]]||'received'};})};
+ }
+ function readResponse(value){
+  const d=typeof value==='string'?JSON.parse(value):value;
+  if(!d||d.format!==RESPONSE)throw Error('No es una respuesta de observaciones de Rubik.');
+  if(d.version!==1||typeof d.projectId!=='string'||!/^[0-9a-f]{8}$/.test(d.versionCode||''))throw Error('Respuesta sin identidad válida.');
+  if(!Array.isArray(d.items)||d.items.length>MAX_NOTES)throw Error('Lista de respuestas no válida.');
+  const items=d.items.map(i=>{const status=['received','planned','discarded','implemented'].includes(i?.status)?i.status:null;if(!status||typeof i.id!=='string')throw Error('Respuesta con un estado no válido.');
+   if(status==='implemented'&&!/^[0-9a-f]{8}$/.test(i.implementedIn||''))throw Error('Una observación implementada debe indicar su versión.');
+   const a=i.anchor?.kind==='room'?{kind:'room',roomId:clean(i.anchor.roomId,80),label:clean(i.anchor.label,100)}:{kind:'project'};
+   return {id:clean(i.id,40),anchor:a,text:clean(i.text,MAX_TEXT),status,...(status==='implemented'?{implementedIn:i.implementedIn}:{})};});
+  return {format:RESPONSE,version:1,projectId:clean(d.projectId,80),projectName:clean(d.projectName,120),versionCode:d.versionCode,answeredAt:clean(d.answeredAt,40),notesCreatedAt:clean(d.notesCreatedAt,40),reviewer:clean(d.reviewer,MAX_NAME),items};
+ }
+ return {FORMAT,VERSION,MAX_TEXT,versionCode,create,add,remove,read,match,DECISIONS,RESPONSE,respond,readResponse};
 });

@@ -23,3 +23,15 @@ test('received files are read strictly',()=>{
  assert.equal(long.notes[0].text.length,R.MAX_TEXT);assert.equal(long.extra,undefined);assert.equal(long.notes[0].anchor.evil,undefined);
  assert.throws(()=>R.read({format:R.FORMAT,version:1,projectId:'p',versionCode:'0000abcd',notes:[{id:'o',text:'a'},{id:'o',text:'b'}]}),/repetidas/);
 });
+test('the answer separates received, planned, discarded and implemented-in-version, and is read strictly',()=>{
+ let d=R.create(project,'rev-1',{reviewer:'Ana'});
+ for(const t of ['Ampliar ventana','Cambiar suelo','Quitar tabique','Me gusta'])d=R.add(d,{anchor:{kind:'project'},text:t});
+ const [a,b,c,e]=d.notes.map(n=>n.id);
+ const r=R.respond(d,{[a]:'incorporate',[b]:'incorporate',[c]:'discard'},{[b]:R.versionCode('rev-2')},project,'rev-2');
+ assert.deepEqual(r.items.map(i=>[i.status,i.implementedIn||null]),[['planned',null],['implemented',R.versionCode('rev-2')],['discarded',null],['received',null]]);
+ assert.equal(r.versionCode,R.versionCode('rev-2'));assert.ok(!JSON.stringify(r).includes('rooms'));
+ assert.deepEqual(R.readResponse(JSON.stringify(r)),r);
+ assert.throws(()=>R.respond(d,{},{},{id:'prj_other'},'x'),/mismo proyecto/);
+ assert.throws(()=>R.readResponse({...r,items:[{id:'x',status:'implemented'}]}),/indicar su versión/);
+ assert.throws(()=>R.readResponse({...r,items:[{id:'x',status:'done'}]}),/estado no válido/);
+});
