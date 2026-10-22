@@ -132,6 +132,9 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
   #stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}
 }
 
+/* Phones: the selection bar sits over the bottom-left scale; while it is shown the scale moves above it. */
+@media(max-width:600px){#stage:has(#fab.show) .scalebar{bottom:calc(12px + 54px + 8px)}}
+
 /* 3D setting selector (decorative backdrop), next to the sun control. */
 .env3d{margin-left:8px}.env3d select{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:6px;background:var(--surface-panel);color:var(--ink);padding:2px 4px;margin-left:4px}
 .env3d-note{color:var(--ink-muted);font-size:11px;margin-left:4px}
