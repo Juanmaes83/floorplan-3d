@@ -9,17 +9,18 @@
 | CI | No ejecutada en ninguno de los cortes |
 | Prueba con personas D-01 | Preparada (§8); **resultados pendientes** |
 
-## 1. Estado único de las cinco líneas
+## 1. Estado único de las cinco líneas (22-10-2026)
 
-| Resultado | Estado | Dónde |
+| Resultado | Estado | PR (base → HEAD) |
 | --- | --- | --- |
-| 1. Identificación profesional al entrar | **PR en revisión** | `feat/professional-entry` (incluye los commits de #70 mediante una fusión, sin reescribirlos), apilada sobre #71 |
-| 2. Del plano a la experiencia | **PR en revisión** | `feat/plan-provenance`, sobre `master` |
-| 3. Revisión y participación del cliente | **Pendiente de decisión** | §5; sin código |
-| 4. Entrega profesional reutilizable | **PR en revisión** | `feat/scaled-sheet`, sobre `master` |
-| 5. Ayuda inteligente opcional | **Pendiente de decisión** (especificación) | §7; sin código ni proveedor |
+| Orientación del recorrido (trabajo previo) | **PR en revisión** | #71 `master` → `c475cba` |
+| 1. Identificación profesional al entrar | **PR en revisión** | #73 `feat/journey-orientation` → esta rama (incluye #70 por fusión; #70 queda cubierta si se integra #73). «Soluciones»: #76 apilada sobre #73 |
+| 2. Del plano a la experiencia | **PR en revisión** | #74 `master` → `e71b901`; el selector «El plano / La vivienda en 3D» de la bienvenida está en #73 |
+| 3. Revisión y participación del cliente | **PR en revisión** (opción A, por archivo); enlace alojado **pendiente de decisión** | #75 `master` → `23bc097` |
+| 4. Entrega profesional reutilizable | **PR en revisión** (lámina a escala); DXF **candidato, no aprobado** | #72 `master` → `77eeffe` |
+| 5. Ayuda inteligente opcional | **Pendiente de decisión** (§11.4); prototipo sin IA **no iniciado** | — |
 
-«Integrado» no se aplica a ninguno: no se ha hecho merge ni despliegue.
+Ninguna está integrada: no se ha hecho merge ni despliegue. CI no ejecutada en ninguna.
 
 ## 2. Auditoría de la propuesta de #70
 
