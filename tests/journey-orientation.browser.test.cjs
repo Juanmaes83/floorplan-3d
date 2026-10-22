@@ -118,7 +118,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  if(await page.evaluate(()=>FloorPlanApp.viewMode==='3d')){await press('#viewSeg [data-view="2d"]');await page.waitForFunction(()=>FloorPlanApp.viewMode==='2d',null,{timeout:180000});}
- await press('#presentationBtn');await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
+ await press('button:visible:has-text("Presentar mi vivienda")');await page.locator('#presentationConfig[open]').waitFor();await press('#presentationConfig .presentation-config-actions .btn');
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay')?.dataset.moving==='false',null,{timeout:300000});
  await press('#presentationClose');await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:300000});await page.waitForTimeout(800);
  g=await guide();assert.notEqual(g.primary,'Abrir 3D','a presented home is not asked to be opened in 3D');assert.notEqual(g.primary,'Ver en 3D');
