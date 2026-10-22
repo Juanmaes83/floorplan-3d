@@ -54,16 +54,18 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`del
  await close(page);assert.deepEqual(errors,[]);
 });
 
-test('delivery image with a brand: name and data in their band, contact only when asked; two-level building names the level',{timeout:900000},async t=>{
+test('delivery image with a brand: name and data in their band, contact only when asked',{timeout:900000},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();
  await present(page,{brand:'Estudio Norte Arquitectura y Promoción Inmobiliaria del Mediterráneo',title:'Ático con terraza, bloque B, escalera 2 — vivienda tipo C de cuatro dormitorios'});
  await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
  const plain=await take(page,'brand-landscape');assert.equal(plain.contact,'hidden','contact is off by default');
  await page.locator('#shareContact').check();const withContact=await take(page,'brand-portrait-contact','portrait');assert.equal(withContact.contact,'shown');
- await close(page);
- // Two-level building: the image says which level it shows.
+ await close(page);assert.deepEqual(errors,[]);
+});
+
+test('delivery image of a two-level building names the level it shows',{timeout:900000},async t=>{
+ const {page,errors}=await open(t,{width:1440,height:900});
  await require('./editor-fixture.cjs')(page);const fx=F.build(),{entries}=await B.packageEntries(fx.building,im=>fx.bytesFor(im.id),T.imageInfo);
- await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);
  await page.locator('#uploadIn').setInputFiles({name:'edificio.zip',mimeType:'application/zip',buffer:Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer())});
  await page.waitForFunction(()=>FloorPlanBuildingUI.context?.levels===2,null,{timeout:60000});
  await present(page);await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
