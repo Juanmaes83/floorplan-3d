@@ -37,3 +37,21 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.locator('#sheetClose').click();await press('details.menu summary');await press('#openSheet');assert.equal(await page.locator('#sheetScale').inputValue(),'0','each sheet starts unscaled');
  assert.deepEqual(errors,[]);
 });
+
+test('an estimated calibration is stated on the scaled sheet; an uncalibrated plan cannot be printed to scale',{timeout:120000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();
+ const confidence=await page.evaluate(()=>FloorPlanApp.project.scale.confidence);assert.notEqual(confidence,'real','the example is not calibrated by a person');
+ await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetDialog[open]').waitFor();
+ await page.locator('#sheetScale').selectOption('100');assert.match(await page.locator('#toast').textContent(),/calibración del inmueble es estimada/);
+ const p1=page.waitForEvent('download');await page.locator('#sheetDownload').click();const svg=await require('node:fs/promises').readFile(await (await p1).path(),'utf8');
+ assert.match(svg,/data-scale-warning="estimated"/);assert.match(svg,/La escala reproduce las medidas del modelo\. La calibración del inmueble es estimada: las medidas reales pueden diferir\./);
+ await page.locator('#sheetClose').click();
+ // The same plan marked uncalibrated: the scale is refused with the reason, «Ajustar a la hoja» still works.
+ await page.evaluate(()=>{FloorPlanApp.project.scale={confidence:'pending',method:'none'};});
+ await page.locator('details.menu summary').click();await page.locator('#openSheet').click();await page.locator('#sheetDialog[open]').waitFor();
+ await page.locator('#sheetScale').selectOption('100');assert.equal(await page.locator('#sheetScale').inputValue(),'0');
+ assert.match(await page.locator('#toast').textContent(),/no está calibrado: sus medidas no son reales y no se puede imprimir a escala/);
+ assert.deepEqual(errors,[]);
+});
