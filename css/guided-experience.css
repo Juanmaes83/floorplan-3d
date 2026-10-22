@@ -123,8 +123,8 @@ body.guided #newRoomBtn{display:none}
 .solutions-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease;padding:0 12px}
 .solutions-body>*{overflow:hidden;min-height:0}
 .solutions-body p,.solutions-body ul{margin:0}.solutions-body ul{padding-left:18px;font-size:12px;line-height:1.5}
-.solutions-card.open .solutions-body,.solutions-card.hover .solutions-body{grid-template-rows:1fr}.solutions-inner{padding-bottom:0;transition:padding .25s}.solutions-card.open .solutions-inner,.solutions-card.hover .solutions-inner{padding-bottom:12px}
-.solutions-card.open,.solutions-card.hover{background:var(--action-soft);border-color:var(--action);box-shadow:0 8px 22px rgba(20,26,30,.08);transform:translateY(-2px)}
+.solutions-card.open .solutions-body{grid-template-rows:1fr}.solutions-inner{padding-bottom:0;transition:padding .25s}.solutions-card.open .solutions-inner{padding-bottom:12px}
+.solutions-card.open{background:var(--action-soft);border-color:var(--action);box-shadow:0 8px 22px rgba(20,26,30,.08);transform:translateY(-2px)}
 .solutions-card.chosen{box-shadow:inset 0 0 0 1px var(--select)}
 .solutions-label{font-weight:650;font-size:12px;color:var(--ink);margin-bottom:4px!important}
 .solutions-note{font-size:12px;color:var(--ink-muted);margin-top:10px}

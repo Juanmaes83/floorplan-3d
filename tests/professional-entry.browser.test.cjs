@@ -98,8 +98,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const head=page.locator('[data-audience="real-estate"] .solutions-head');await head.scrollIntoViewIfNeeded();
  if(narrow){await head.tap();}else{await head.hover();}
  await page.waitForTimeout(350);assert.ok(await bodyH('real-estate')>20,'opens on hover (mouse) or tap');
- if(narrow)assert.equal(await head.getAttribute('aria-expanded'),'true');
- if(!narrow){await page.mouse.move(2,2);await page.waitForTimeout(350);assert.ok(await bodyH('real-estate')<2,'closes when the mouse leaves');
+ assert.equal(await head.getAttribute('aria-expanded'),'true','announced state matches what is seen (mouse, tap)');
+ if(!narrow){await page.mouse.move(2,2);await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'false','closed again when the mouse leaves');await head.hover();await page.waitForTimeout(350);await head.click();await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'false','a click toggles what is seen: it closes while the mouse stays');assert.ok(await bodyH('real-estate')<2);await page.mouse.move(2,2);await page.waitForTimeout(350);await page.waitForTimeout(350);assert.ok(await bodyH('real-estate')<2,'closes when the mouse leaves');
   await head.focus();await page.keyboard.press('Enter');await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'true');assert.ok(await bodyH('real-estate')>20,'keyboard opens it');}
  assert.doesNotMatch(await page.locator('#welcomeSolutions').textContent(),/\bIA\b|[Ee]nlace|SKP|FBX|USDZ|GLB|DXF|1:50|1:100/,'no promise of features that are not in master');
  const press=async s=>{const l=page.locator(s).first();await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};

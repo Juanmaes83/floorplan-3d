@@ -170,12 +170,13 @@
    const head=el('button',undefined,card,'solutions-head');head.type='button';head.setAttribute('aria-expanded','false');const body=el('div',undefined,card,'solutions-body');body.id='solutionsBody-'+id;head.setAttribute('aria-controls',body.id);
    icon(ic,head,'icon card-icon');const t=el('span',undefined,head,'solutions-head-text');el('strong',label(audiences.find(a=>a[0]===id)[1]),t);el('span',label(problem),t);
    const inner=el('div',undefined,body,'solutions-inner');el('p',tx('Entregas a tu cliente','What your client receives','客户收到'),inner,'solutions-label');const ul=el('ul',undefined,inner);for(const g of gives)el('li',label(deliver[g]),ul);
-   const set=open=>{head.setAttribute('aria-expanded',String(open));card.classList.toggle('open',open);};
-   head.onclick=()=>set(head.getAttribute('aria-expanded')!=='true');
-   // Mouse: opens while the pointer is over the card (a tap or keyboard keeps it open until toggled).
-   card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')card.classList.add('hover');});card.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')card.classList.remove('hover');});}
+   // One state for what is seen and what is announced: open = pinned (click, tap, keyboard) or mouse over it.
+   let pinned=false,hovered=false;const sync=()=>{const open=pinned||hovered;head.setAttribute('aria-expanded',String(open));card.classList.toggle('open',open);};
+   card._pin=v=>{pinned=v;sync();};
+   head.onclick=()=>{pinned=!(pinned||hovered);hovered=false;sync();};
+   card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;sync();}});card.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){hovered=false;sync();}});}
   el('p',tx('Todo lo que aparece aquí ya funciona en Rubik. Medidas orientativas: no sustituye una medición profesional.','Everything listed here already works in Rubik. Dimensions are indicative, not a professional survey.','此处所列功能均已在 Rubik 中可用。尺寸仅供参考，不能替代专业测量。'),sol,'solutions-note');
-  const markSolution=()=>{for(const c of cards.children)c.classList.toggle('chosen',c.dataset.audience===audience);if(audience){const c=cards.querySelector(`[data-audience="${audience}"]`);cards.prepend(c);c.classList.add('open');c.querySelector('.solutions-head').setAttribute('aria-expanded','true');}};markSolution();
+  const markSolution=()=>{for(const c of cards.children)c.classList.toggle('chosen',c.dataset.audience===audience);if(audience){const c=cards.querySelector(`[data-audience="${audience}"]`);cards.prepend(c);c._pin(true);}};markSolution();
   audienceOptions.addEventListener('click',()=>queueMicrotask(markSolution));
   const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
