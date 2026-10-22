@@ -100,3 +100,14 @@ body.guided #newRoomBtn{display:none}
 .welcome-views .btn{border:0;border-radius:999px;min-height:34px;padding:4px 12px;font-size:12px;background:transparent;color:var(--ink)}
 .welcome-views .btn[aria-pressed=true]{background:var(--select);color:var(--select-ink)}
 .welcome-visual .welcome-shot{width:100%;height:100%;max-height:340px;object-fit:contain;border-radius:16px;mix-blend-mode:multiply}
+/* «Soluciones» under the welcome entries: phases strip and one card per field (the chosen one first). */
+.welcome-solutions{margin-top:20px;border:1px solid var(--line);border-radius:14px;background:var(--surface-panel);padding:4px 14px}
+.welcome-solutions summary{cursor:pointer;font-weight:650;min-height:44px;display:flex;align-items:center}
+.solutions-phases{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:0;margin:8px 0 14px;list-style:none;counter-reset:phase}
+.solutions-phases li{counter-increment:phase;border-top:3px solid var(--action);padding-top:6px;font-size:12px;color:var(--ink-muted)}
+.solutions-phases strong{display:block;color:var(--ink);font-size:13px}.solutions-phases strong::before{content:counter(phase) '. '}
+.solutions-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.solutions-card{border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px}.solutions-card h3{font-size:14px;margin:0 0 4px}.solutions-card p{margin:0 0 6px}.solutions-card ul{margin:0;padding-left:18px}
+.solutions-card.chosen{border-color:var(--select);box-shadow:inset 0 0 0 1px var(--select)}.solutions-label{font-weight:600}
+.solutions-note{font-size:12px;color:var(--ink-muted)}
+@media(max-width:600px){.solutions-phases{grid-template-columns:1fr}}

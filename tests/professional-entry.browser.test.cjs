@@ -83,3 +83,21 @@ test('«El plano | La vivienda en 3D» shows the same example drawn and as a rea
  assert.match(await page.locator('.welcome-visual figcaption').textContent(),/Captura real de Rubik/);
  await page.locator('#welcomeView-plan').click();assert.equal(await page.locator('.welcome-shot').isVisible(),false);assert.deepEqual(errors,[]);
 });
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`«Soluciones»: collapsed after the entries, five phases as in the guide, chosen field first ${viewport.width}x${viewport.height}`,{timeout:60000},async t=>{
+ const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+ const sol=page.locator('#welcomeSolutions');assert.equal(await sol.evaluate(d=>d.open),false,'collapsed: the three entries stay first');
+ assert.equal(await page.evaluate(()=>!!(document.querySelector('.welcome-entries').compareDocumentPosition(document.querySelector('#welcomeSolutions'))&Node.DOCUMENT_POSITION_FOLLOWING)),true);
+ const press=async s=>{const l=page.locator(s).first();await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
+ await press('#welcomeSolutions summary');
+ assert.deepEqual((await page.locator('.solutions-phases strong').allTextContents()),['Empezar','Preparar','Distribuir','Amueblar','Revisar y guardar']);
+ assert.equal(await page.locator('.solutions-card').count(),5);
+ assert.doesNotMatch(await sol.textContent(),/\bIA\b|[Ee]nlace|SKP|FBX|USDZ|GLB|DXF|1:50|1:100/,'no promise of features that are not in master');
+ await press('#welcomeAudience-interior');await page.waitForTimeout(50);
+ assert.equal(await page.locator('.solutions-card').first().getAttribute('data-audience'),'interior');assert.equal(await page.locator('.solutions-card.chosen').count(),1);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+ await sol.scrollIntoViewIfNeeded();await page.screenshot({path:require('node:path').join(require('node:os').tmpdir(),`solutions-${viewport.width}.png`)});
+ assert.deepEqual(errors,[]);
+});

@@ -140,6 +140,27 @@
    btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();
+  // «Soluciones»: the project phases (the same five stages as the guide) and, per field, the problem, what is
+  // prepared and what the client receives, built only on features that exist today. Collapsed, after the entries.
+  const sol=el('details',undefined,shell,'welcome-solutions');sol.id='welcomeSolutions';
+  el('summary',tx('Soluciones: fases del proyecto y qué entregas a tu cliente','Solutions: project phases and what you hand your client','解决方案：项目阶段和交付给客户的内容'),sol);
+  const phases=el('ol',undefined,sol,'solutions-phases');phases.setAttribute('aria-label',tx('Fases del proyecto','Project phases','项目阶段'));
+  for(const [stage,what] of [[G.stages[0],['Sube el plano o empieza desde cero','Upload the plan or start from scratch','上传平面图或从零开始']],[G.stages[1],['Comprueba la escala con una medida conocida','Check the scale with a known length','用已知尺寸核对比例']],[G.stages[2],['Estancias, muros, puertas y ventanas; una o dos plantas','Rooms, walls, doors and windows; one or two levels','房间、墙体、门窗；一层或两层']],[G.stages[3],['Muebles y acabados','Furniture and finishes','家具和饰面']],[G.stages[4],['Revisa en 3D, presenta y entrega','Review in 3D, present and deliver','3D 检查、展示并交付']]]){const li=el('li',undefined,phases);el('strong',label(stage),li);el('span',label(what),li);}
+  const deliver={sheet:['Lámina de distribución (SVG) con tu marca','Floor plan sheet (SVG) with your brand','带品牌的平面图纸（SVG）'],batch:['Lote ZIP con vistas 3D y el proyecto editable','ZIP batch with 3D views and the editable project','含 3D 视图和可编辑项目的 ZIP'],present:['Presentación 3D guiada por estancias','Guided 3D presentation by room','按房间引导的 3D 展示'],project:['Proyecto editable (JSON/ZIP) para seguir trabajando','Editable project (JSON/ZIP) to keep working','可继续编辑的项目（JSON/ZIP）']};
+  const cards=el('div',undefined,sol,'solutions-cards');
+  const fields=[
+   ['architecture',['Del plano del estudio a una propuesta que el cliente entiende','From the studio plan to a proposal the client understands','从事务所平面图到客户能看懂的方案'],['sheet','present','project']],
+   ['real-estate',['Que el comprador recorra el inmueble antes de visitarlo','Let the buyer walk through the property before visiting','让买家在看房前先浏览房源'],['present','batch','sheet']],
+   ['developer',['Cada tipología, también de dos plantas, con la misma imagen de marca','Each unit type, two-storey ones included, with the same brand','每种户型（含两层）统一品牌形象'],['batch','present','sheet']],
+   ['renovation',['Enseñar la propuesta de reforma sobre el plano actual','Show the renovation proposal on the current plan','在现有平面图上展示改造方案'],['present','sheet','project']],
+   ['interior',['Presentar ambientes amueblados y sus acabados','Present furnished rooms and their finishes','展示带家具的空间及饰面'],['present','batch','sheet']]
+  ];
+  for(const [id,problem,gives] of fields){const card=el('article',undefined,cards,'solutions-card');card.dataset.audience=id;
+   el('h3',label(audiences.find(a=>a[0]===id)[1]),card);el('p',label(problem),card);
+   el('p',tx('Entregas:','You deliver:','交付：'),card,'solutions-label');const ul=el('ul',undefined,card);for(const g of gives)el('li',label(deliver[g]),ul);}
+  el('p',tx('Todo lo que aparece aquí ya funciona en Rubik. Medidas orientativas: no sustituye una medición profesional.','Everything listed here already works in Rubik. Dimensions are indicative, not a professional survey.','此处所列功能均已在 Rubik 中可用。尺寸仅供参考，不能替代专业测量。'),sol,'solutions-note');
+  const markSolution=()=>{for(const c of cards.children)c.classList.toggle('chosen',c.dataset.audience===audience);if(audience){const c=cards.querySelector(`[data-audience="${audience}"]`);cards.prepend(c);}};markSolution();
+  audienceOptions.addEventListener('click',()=>queueMicrotask(markSolution));
   const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
   if(ownRecoverable())btn('welcomeContinue',tx('Continuar mi proyecto →','Continue my project →','继续我的项目 →'),()=>{const own=library.all().find(e=>e.id===library.activeId()&&data.entries[e.id]?.kind==='own')||library.all().find(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));if(own)switchProject(library.open(own.id));closeWelcome();render();},foot);
