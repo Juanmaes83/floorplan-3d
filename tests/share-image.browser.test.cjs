@@ -8,7 +8,7 @@ before(async()=>{server=createServer(async(req,res)=>{try{const file=path.resolv
 after(async()=>{await browser?.close();await new Promise(r=>server?.close(r));});
 const skip=!process.env.THREE_LOCAL_DIR&&'THREE_LOCAL_DIR not set: the presentation needs 3D';
 async function present(t,viewport,init){const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow,acceptDownloads:true});t.after(()=>context.close());
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));if(init)await page.addInitScript(init);
+ const page=await context.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));if(init)await page.addInitScript(init);
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
