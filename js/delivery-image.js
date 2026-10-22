@@ -41,14 +41,18 @@
   if(F===SIDE){
    imgY=0;bandY=0;bandH=F.h;x.drawImage(img,0,0,F.image.w,F.image.h);
    const cx=F.image.w,cw=F.w-cx,p=Math.round(44*S);x.fillStyle='#ffffff';x.fillRect(cx,0,cw,F.h);x.fillStyle='#d5d9db';x.fillRect(cx,0,2,F.h);
-   x.textBaseline='alphabetic';const tw=cw-p*2;let y=p+30;
+   x.textBaseline='alphabetic';const tw=cw-p*2;let y=0,draw=false;const put=(t,X,Y)=>{if(draw)x.fillText(t,X,Y);};
    // Wrapped title (up to three lines), then view, facts one per line, note; the brand block sits at the bottom.
+   // Measured once without drawing: without a brand the block is centred in the column instead of leaving a gap.
    const wrap=(text,f,lh,max)=>{x.font=f;const words=text.split(' ');let line='',n=0;for(let i=0;i<words.length;i++){const t=line?line+' '+words[i]:words[i];
-    if(x.measureText(t).width>tw&&line){if(n===max-1){x.fillText(fit(line+' '+words.slice(i).join(' '),tw,f),cx+p,y);y+=lh;return;}x.fillText(line,cx+p,y);y+=lh;n++;line=words[i];}else line=t;}if(line){x.fillText(line,cx+p,y);y+=lh;}};
-   if(data.title){x.fillStyle='#1f2326';wrap(data.title,font(650,36),46,3);y+=8;}
-   if(data.view){x.fillStyle='#2f6f78';wrap(data.view,font(600,26),34,2);y+=14;}
-   x.fillStyle='#4a5256';for(const f of data.facts){x.fillText(fit(f,tw,font(500,24)),cx+p,y);y+=34;}
-   y+=6;x.fillStyle='#7a8286';wrap(data.note,font(400,18),24,2);
+    if(x.measureText(t).width>tw&&line){if(n===max-1){put(fit(line+' '+words.slice(i).join(' '),tw,f),cx+p,y);y+=lh;return;}put(line,cx+p,y);y+=lh;n++;line=words[i];}else line=t;}if(line){put(line,cx+p,y);y+=lh;}};
+   const block=()=>{
+    if(data.title){x.fillStyle='#1f2326';wrap(data.title,font(650,36),46,3);y+=8;}
+    if(data.view){x.fillStyle='#2f6f78';wrap(data.view,font(600,26),34,2);y+=14;}
+    x.fillStyle='#4a5256';for(const f of data.facts){x.font=font(500,24);put(fit(f,tw,font(500,24)),cx+p,y);y+=34;}
+    y+=6;x.fillStyle='#7a8286';wrap(data.note,font(400,18),24,2);};
+   const top=p+30;y=top;block();const blockH=y-top;
+   y=data.brand?top:Math.max(top,Math.round((F.h-blockH)/2)+30);draw=true;block();
    if(data.brand){
     // Brand stacked at the foot of the column: logo, name on up to two lines, contact (only when asked for).
     const b=data.brand;let logo=null;if(b.logo){try{logo=new Image();logo.src=b.logo;await logo.decode();}catch{logo=null;}}
