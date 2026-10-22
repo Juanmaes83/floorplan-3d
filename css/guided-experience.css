@@ -131,3 +131,5 @@ body.guided #newRoomBtn{display:none}
 @media(max-width:1100px){.solutions-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.solutions-phases{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.welcome-walk{grid-template-columns:1fr;padding:18px}.welcome-walk h2{font-size:20px}.welcome-walk-shot{height:200px}.solutions-phases,.solutions-cards{grid-template-columns:1fr}.solutions-phases li{flex-direction:row;flex-wrap:wrap;align-items:center}.solutions-phases li span{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){.solutions-card,.solutions-phases li,.solutions-body{transition:none}}
+/* 3D capture: the caption sits under the image in the flow (it wraps on short screens), never over it; the top padding keeps the view switch clear. */
+.welcome-visual[data-view="home"]{flex-direction:column;gap:10px;padding-top:64px}.welcome-visual[data-view="home"] .welcome-shot{flex:1 1 auto;min-height:0;max-height:none}.welcome-visual[data-view="home"] figcaption{position:static;flex:none}
