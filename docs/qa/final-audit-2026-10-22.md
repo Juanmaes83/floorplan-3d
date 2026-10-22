@@ -39,3 +39,16 @@ Pendiente de ejecución con GPU real: ver `manual-gpu-phone-protocol-2026-10-22.
 
 Logs: `artifacts/integration-2026-10-22/logs/` — suite `presentation` sobre la integración `fa76113` (int3) y sobre #71 `0c9c6b0`
 (antes del arreglo de Atrás), y la batería completa de 28 suites sobre `da4c5c1`.
+
+## Comparación controlada de «Escape and browser Back» (mismo equipo, ejecuciones alternas, límite ampliado solo para cronometrar)
+| Ejecución | #79 `5c80049` | Integración `9398394` (código = `fa76113`) |
+|---|---|---|
+| 1 | 109,8 s | 117,9 s |
+| 2 | 107,8 s | 113,1 s |
+| 3 | 106,3 s | 114,2 s |
+| Media | 108,0 s | 115,0 s |
+
+Todas las aserciones pasan en las 6 ejecuciones. La integración es **~7 s (≈6,5 %) más lenta en los 3 pares**: diferencia
+reproducible, no ruido, y no atribuible solo al entorno. Causa sin identificar (candidatos: más DOM y escuchas de las PR
+combinadas). Con el límite real de 120 s el caso sigue clasificado como **TIMEOUT sin resolver**; pendiente perfilar y
+ejecutar con GPU. Log: `artifacts/integration-2026-10-22/logs/escback-controlled.txt`.

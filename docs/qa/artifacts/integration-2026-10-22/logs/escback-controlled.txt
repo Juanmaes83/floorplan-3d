@@ -1,0 +1,6 @@
+fp-fix run1 5c80049 # TOTAL 109791 # fail 0 
+fp-int run1 9398394 # TOTAL 117884 # fail 0 
+fp-fix run2 5c80049 # TOTAL 107803 # fail 0 
+fp-int run2 9398394 # TOTAL 113062 # fail 0 
+fp-fix run3 5c80049 # TOTAL 106302 # fail 0 
+fp-int run3 9398394 # TOTAL 114150 # fail 0 
