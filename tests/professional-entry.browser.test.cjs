@@ -47,3 +47,26 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   assert.deepEqual(errors,[]);
  });
 }
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}]){
+ test(`el perfil explica para qué sirve Rubik y su primera acción es una entrada existente ${viewport.width}x${viewport.height}`,{timeout:60000},async t=>{
+  const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow});t.after(()=>context.close());
+  const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.route('https://cdn.jsdelivr.net/**',route=>route.abort());
+  await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+  assert.match(await page.locator('.welcome-eyebrow').textContent(),/inmobiliarias, promotoras y estudios/);
+  assert.equal(await page.locator('#welcomeAudiencePurpose').isHidden(),true,'sin perfil no hay texto añadido');
+  const press=async s=>{const l=page.locator(s);await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
+  await press('#welcomeAudience-real-estate');
+  assert.match(await page.locator('#welcomeAudiencePurpose p').textContent(),/comprador puede recorrer en 3D/);
+  assert.doesNotMatch(await page.locator('.welcome-audience').textContent(),/personalizad|exclusiv|solo para/i,'no promete herramientas distintas');
+  await press('#welcomeAudience-developer');assert.match(await page.locator('#welcomeAudiencePurpose p').textContent(),/dos plantas/);
+  // The first action is the same upload entry: it opens the file picker of «Subir un plano».
+  const chooser=page.waitForEvent('filechooser',{timeout:8000});await press('#welcomeAudienceStart');await chooser;
+  const stored=await page.evaluate(()=>({audience:localStorage.getItem('rubik-professional-audience-v1'),inProject:JSON.stringify(FloorPlanApp.project).includes('developer')}));
+  assert.deepEqual(stored,{audience:'developer',inProject:false},'preferencia local, fuera del proyecto');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+  await page.screenshot({path:require('node:path').join(require('node:os').tmpdir(),`entry-${viewport.width}.png`)});
+  assert.deepEqual(errors,[]);
+ });
+}

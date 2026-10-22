@@ -13,6 +13,15 @@
   ['renovation',['Reformas','Renovation','装修施工']],
   ['interior',['Decoración e interiorismo','Interior design','室内设计']]
  ];
+ // What Rubik is for in each field, using only what the editor does today; the first action is one of the three
+ // welcome entries, never a different tool set (docs/product/professional-client-experience-2026-10-21.md, result 1).
+ const audiencePurpose={
+  architecture:['Sube el plano (PDF, imagen, DXF o IFC), comprueba la escala y entrega a tu cliente una vivienda editable en 2D y 3D.','Upload the plan (PDF, image, DXF or IFC), check its scale and give your client an editable home in 2D and 3D.','上传平面图（PDF、图片、DXF 或 IFC），检查比例，并向客户交付可编辑的 2D 和 3D 住宅。'],
+  'real-estate':['Convierte el plano del inmueble en una vivienda amueblada que el comprador puede recorrer en 3D, con tu marca.','Turn the property plan into a furnished home the buyer can walk through in 3D, with your brand.','将房源平面图变成买家可在 3D 中浏览的带家具住宅，并附上你的品牌。'],
+  developer:['Prepara cada tipología, también de dos plantas, y preséntala con la misma identidad de marca.','Prepare each unit type, two-storey ones included, and present it with the same brand identity.','准备每种户型（包括两层），并以统一的品牌形象展示。'],
+  renovation:['Parte del plano actual, ajusta estancias y huecos y enseña al cliente la propuesta en 3D.','Start from the current plan, adjust rooms and openings and show the client the proposal in 3D.','从现有平面图开始，调整房间和门窗，并在 3D 中向客户展示方案。'],
+  interior:['Amuebla, elige acabados y presenta cada ambiente en 3D a tu cliente.','Furnish, choose finishes and present each room in 3D to your client.','布置家具、选择饰面，并在 3D 中向客户展示每个空间。']
+ };
  let audience='';
  try{const stored=originalStorage.getItem(audienceKey);if(audiences.some(([id])=>id===stored))audience=stored;}catch{}
  try{const raw=originalStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version===1&&parsed.entries&&typeof parsed.entries==='object'&&!Array.isArray(parsed.entries))data=parsed;}}catch{storageError=tx('No se pudo recuperar la guía. El plano se conserva.','The guide could not be restored. The plan is preserved.','无法恢复指南。平面图已保留。');}
@@ -96,8 +105,8 @@
   if(data.seen||hadLibrary)btn('welcomeReturn',tx('Volver al proyecto →','Return to project →','返回项目 →'),closeWelcome,nav);
   btn('welcomeLanguage',({es:'English',en:'中文',zh:'Español'})[LANG],()=>{setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();},nav);
   const intro=el('section',undefined,shell,'welcome-intro'),left=el('div',undefined,intro);
-  el('p',tx('Tu espacio, paso a paso','Your space, step by step','一步一步设计空间'),left,'welcome-eyebrow');const h=el('h1',tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'),left);h.id='welcomeDialogTitle';
-  el('p',tx('Dibuja tu distribución, prueba muebles y recorre tu idea en 3D. Te acompañamos desde el primer paso.','Draw your layout, try furniture and explore your idea in 3D. We guide you from the first step.','绘制布局、尝试家具并在 3D 中浏览。从第一步开始提供指南。'),left,'lead');
+  el('p',tx('Para inmobiliarias, promotoras y estudios','For agencies, developers and studios','面向房产中介、开发商和设计事务所'),left,'welcome-eyebrow');const h=el('h1',tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'),left);h.id='welcomeDialogTitle';
+  el('p',tx('Convierte un plano en una vivienda editable en 2D y 3D, amuéblala y preséntala a tu cliente. Te acompañamos desde el primer paso.','Turn a plan into an editable home in 2D and 3D, furnish it and present it to your client. We guide you from the first step.','把平面图变成可编辑的 2D 和 3D 住宅，布置家具并展示给客户。从第一步开始提供指南。'),left,'lead');
   el('p',tx('Obtendrás un plano 2D editable y su vista 3D, guardados en este navegador. Las medidas son orientativas: no sustituyen a una medición profesional.','You get an editable 2D plan and its 3D view, stored in this browser. Measurements are indicative, not a professional survey.','你将得到可编辑的 2D 平面图及其 3D 视图，保存在此浏览器中。尺寸仅供参考，不能替代专业测量。'),left,'welcome-result');
   const figure=el('figure',undefined,intro,'welcome-visual');el('span',tx('2D → 3D · A tu ritmo','2D → 3D · At your pace','2D → 3D · 按自己的节奏'),figure,'visual-tag');drawExample(figure);el('figcaption',tx('Proyecto de ejemplo · explora antes de empezar','Example project · explore before starting','示例项目 · 开始前先探索'),figure);
   const entries=el('div',undefined,shell,'welcome-entries');
@@ -108,13 +117,21 @@
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
   const audienceSection=el('section',undefined,shell,'welcome-audience');
   const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
-  el('p',tx('Opcional. Elige tu perfil para identificarte; las herramientas son las mismas para todos.','Optional. Choose your field; everyone has access to the same tools.','可选。选择你的领域；所有人使用相同的工具。'),audienceSection);
+  el('p',tx('Opcional. Te mostramos para qué te sirve Rubik. Las herramientas son las mismas para todos y tu proyecto no cambia.','Optional. We show what Rubik does for you. Everyone has the same tools and your project does not change.','可选。我们会说明 Rubik 对你的用途。所有人使用相同的工具，你的项目不会改变。'),audienceSection);
   const audienceOptions=el('div',undefined,audienceSection,'welcome-audience-options');audienceOptions.setAttribute('role','group');audienceOptions.setAttribute('aria-labelledby',audienceTitle.id);
   for(const [id,names] of audiences){const option=btn('welcomeAudience-'+id,label(names),()=>{
    audience=audience===id?'':id;
    try{if(audience)originalStorage.setItem(audienceKey,audience);else originalStorage.removeItem(audienceKey);}catch{}
    for(const node of audienceOptions.children)node.setAttribute('aria-pressed',String(node.id==='welcomeAudience-'+audience));
+   showPurpose();
   },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));}
+  // The chosen field answers «what is it for me» and offers the same first action as the entries above.
+  const purpose=el('div',undefined,audienceSection,'welcome-audience-purpose');purpose.id='welcomeAudiencePurpose';purpose.setAttribute('aria-live','polite');
+  function showPurpose(){purpose.replaceChildren();purpose.hidden=!audience;if(!audience)return;
+   el('p',label(audiencePurpose[audience]),purpose);const row=el('div',undefined,purpose,'welcome-audience-actions');
+   btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
+   btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
+  showPurpose();
   const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
   if(ownRecoverable())btn('welcomeContinue',tx('Continuar mi proyecto →','Continue my project →','继续我的项目 →'),()=>{const own=library.all().find(e=>e.id===library.activeId()&&data.entries[e.id]?.kind==='own')||library.all().find(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));if(own)switchProject(library.open(own.id));closeWelcome();render();},foot);
