@@ -46,7 +46,8 @@
   if(isBuild)render();
  }
  // When another project opens and it has no rooms, the palette shows «Construir»: there is nothing to furnish yet.
- // Otherwise the last tab chosen is kept (also for the next session).
+ // Otherwise the last tab chosen is kept (also for the next session). Without a stored choice it starts on «Construir»,
+ // even in the furnished example: furniture alone says nothing about what the person wants to do.
  let shownProject=null;
  tBuild.onclick=()=>selectTab('build');tFurnish.onclick=()=>selectTab('furnish');
  // Arrows move to the other tab; Home always goes to the first tab («Construir») and End to the last («Amueblar»).
@@ -154,7 +155,10 @@
   const levels=window.FloorPlanBuildingUI?.context?.levels||1;
   stairNote.textContent=levels>1?'La escalera recta une las dos plantas del edificio.':'La escalera une dos plantas: añade la segunda en «Plantas…».';
  }
- let initial='build';try{initial=localStorage.getItem(KEY)||(project.rooms.length?'furnish':'build');}catch{}
+ let initial='build';try{initial=localStorage.getItem(KEY)||'build';}catch{}
  construct();selectTab(initial==='furnish'?'furnish':'build');
- window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,get tab(){return build.hidden?'furnish':'build';}};
+ // «Añadir puertas y ventanas» of the guide: the palette opens on «Construir» with the focus on the first opening type and
+ // the group's own instruction (which room it goes to, or what to tap first) in view.
+ async function focusOpenings(){await in2D();selectTab('build');if(typeof drawer==='function')drawer('lib',true);render();const first=openingButtons[0];first?.closest('.palette-group')?.scrollIntoView({block:'start'});first?.focus({preventScroll:true});}
+ window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,focusOpenings,get tab(){return build.hidden?'furnish':'build';}};
 })();

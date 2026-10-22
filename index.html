@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#fffdf9">
+<meta name="theme-color" content="#ffffff">
 <meta name="description" content="Diseña distribuciones de interiores en 2D y recórrelas en 3D con Rubik Sota Floor Plan Designer.">
 <meta property="og:title" content="Rubik Sota Floor Plan Designer">
 <meta property="og:description" content="Diseña y visualiza tu vivienda en 2D y 3D.">
@@ -32,7 +32,7 @@ header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 1
 .brand span{color:var(--muted);font-size:12px}
 .grp{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .btn{border:0;background:transparent;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
-.btn:hover{background:#f2ece2}
+.btn:hover{background:var(--surface-hover,#f2ece2)}
 .btn.on{background:var(--ink);color:#fff}
 .btn.chip.on{background:var(--accent-soft);color:var(--accent)}
 .btn.primary{background:var(--accent);color:#fff}
@@ -104,7 +104,7 @@ details.panel-group>summary small{color:var(--muted);font-weight:400}
 @media (hover:hover){#plan .furn:hover{filter:drop-shadow(0 0 2px rgba(181,101,58,.7))}}
 [data-handle]{cursor:pointer}
 [data-handle=size]{cursor:nwse-resize}
-.scalebar{position:absolute;left:14px;bottom:12px;background:rgba(255,253,249,.92);border:1px solid var(--line);
+.scalebar{position:absolute;left:14px;bottom:12px;background:rgba(255,255,255,.92);border:1px solid var(--line);
   border-radius:8px;padding:6px 10px;font-size:12px;pointer-events:none}
 .scalebar .bar{height:6px;border:1.5px solid var(--ink);border-top:0;margin-top:3px}
 .modehint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:#fff;
@@ -146,10 +146,10 @@ tr.click:hover td{background:#faf5ee}
 .mat span{font-size:12px;line-height:1.3}
 .mat small{display:block;color:var(--muted)}
 .kbd{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)}
-kbd{font:11px ui-monospace,Menlo,monospace;background:#f2ece2;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink)}
+kbd{font:11px ui-monospace,Menlo,monospace;background:var(--surface-sunken,#f2ece2);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink)}
 .big{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
-.stats div{background:#faf6ef;border-radius:8px;padding:8px}
+.stats div{background:var(--surface-sunken,#faf6ef);border-radius:8px;padding:8px}
 .stats small{display:block;color:var(--muted);font-size:11px}
 #toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
   padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
@@ -189,7 +189,7 @@ main.animating #hint3d{opacity:0}
 .rlabel small{font-weight:400;color:var(--muted);margin-left:4px}
 #roomList{padding:0 10px 6px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
 #roomList button{display:flex;flex-direction:column;width:100%;border:1px solid var(--line);background:#fff;padding:5px 8px;border-radius:7px;cursor:pointer;text-align:left;line-height:1.3}
-#roomList button:hover{background:#f2ece2}
+#roomList button:hover{background:var(--surface-hover,#f2ece2)}
 #roomList button.on{background:var(--accent-soft);color:var(--accent)}
 #roomList small{color:var(--muted);font-variant-numeric:tabular-nums}
 .range{display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--muted);font-size:12px}
@@ -217,13 +217,18 @@ main.animating #hint3d{opacity:0}
 .range span{font-variant-numeric:tabular-nums;color:var(--ink)}
 /* ---------- 选中后的浮动工具条 ---------- */
 #fab{position:absolute;left:50%;bottom:16px;transform:translate(-50%,12px);display:flex;align-items:center;gap:4px;padding:5px;
-  background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 26px rgba(40,30,20,.16);
+  background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 26px rgba(20,26,30,.16);
   z-index:4;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility 0s linear .2s;max-width:calc(100% - 24px)}
 main.drawer-panel #fab{opacity:0;visibility:hidden}
 #fab.show{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .2s,transform .2s}
 #fab .name{padding:0 8px 0 6px;font-weight:600;max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #fab .btn{border:1px solid transparent}
 #fab .sep{width:1px;align-self:stretch;margin:4px 2px;background:var(--line)}
+#fab .fab-glyph{display:none}
+/* On a phone the furniture bar needs ~600 px with text labels and would hide Delete/Properties off-screen: rotate,
+   duplicate and delete become 44 px icon buttons (their names stay as aria-label/title); the item name stays for screen
+   readers only, since the item is highlighted on the plan and named in Properties. */
+@media (max-width:600px){#fab:has(.fab-icon){gap:2px}#fab:has(.fab-icon) .name{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}#fab:has(.fab-icon) .btn:not(.fab-icon){padding-inline:10px}#fab .fab-icon{min-width:44px;padding:9px 0}#fab .fab-icon .fab-text{display:none}#fab .fab-glyph{display:inline}}
 /* ---------- 触屏漫游摇杆 ---------- */
 #joy{position:absolute;left:28px;bottom:28px;width:130px;height:130px;border-radius:50%;background:rgba(255,253,249,.25);
   border:2px solid rgba(255,255,255,.7);box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:3;display:none;touch-action:none;backdrop-filter:blur(3px)}
@@ -335,7 +340,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 }
 
 .presentation-entry{order:-1;border:1px solid var(--teal,#2f5d62);color:var(--teal,#2f5d62);font-weight:650}
-body.guided .presentation-entry{display:none!important}
+/* The presentation entry stays in the guided header (secondary; design-system.css): presenting is the professional's
+   next step from any stage, not only from the guide's last one (docs/product/journey-orientation-2026-10-21.md §4.3). */
 .presentation-config{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
 .presentation-config h2{margin:0 0 10px;font-size:20px}
 .presentation-config p{line-height:1.5}
@@ -661,6 +667,7 @@ const ES_TEXT = {
   "Clear layout": "Vaciar distribución",
   "Keyboard Shortcuts": "Atajos de teclado",
   "Rotate": "Girar",
+  "Rotate left": "Girar a la izquierda",
   "Duplicate": "Duplicar",
   "Delete": "Eliminar",
   "Properties": "Propiedades",
@@ -1359,6 +1366,7 @@ function updateHeader(){
   const ratio=project.scale.declaredRatio;
   const meta=document.querySelector('.plan-meta');if(meta)meta.hidden=project.id!==REFERENCE_ID;
   $('#subtitle').textContent=tr(`套内使用面积约 ${fmt(tot)} m² · 尺寸单位 mm${ratio?' · 原图比例 '+ratio:''}`,`Net floor area ≈ ${fmt(tot)} m² · Units: mm${ratio?' · Original scale '+ratio:''}`);
+  $('#subtitle').title=$('#subtitle').textContent;
   $('#undo').disabled = !undoStack.length; $('#redo').disabled = !redoStack.length;
   $('#undo').style.opacity = undoStack.length ? 1 : .4; $('#redo').style.opacity = redoStack.length ? 1 : .4;
 }
@@ -1461,8 +1469,8 @@ function renderFab(){
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
   if (!f && !r){ fab.classList.remove('show'); return; }
   SafeDOM.markup(fab, f
-    ? `<span class="name">${esc(nm(f.name))}</span><button class="btn" data-a="rotL">↺</button><button class="btn" data-a="rotR">↻ ${tr('旋转','Rotate')}</button>
-       <button class="btn" data-a="dup">${tr('复制','Duplicate')}</button><button class="btn danger" data-a="del">${tr('删除','Delete')}</button><span class="sep"></span>
+    ? `<span class="name">${esc(nm(f.name))}</span><button class="btn fab-icon" data-a="rotL" aria-label="${tr('向左旋转','Rotate left')}" title="${tr('向左旋转','Rotate left')}">↺</button><button class="btn fab-icon" data-a="rotR" aria-label="${tr('旋转','Rotate')}" title="${tr('旋转','Rotate')}">↻<span class="fab-text"> ${tr('旋转','Rotate')}</span></button>
+       <button class="btn fab-icon" data-a="dup" aria-label="${tr('复制','Duplicate')}" title="${tr('复制','Duplicate')}"><span class="fab-glyph" aria-hidden="true">⧉</span><span class="fab-text">${tr('复制','Duplicate')}</span></button><button class="btn danger fab-icon" data-a="del" aria-label="${tr('删除','Delete')}" title="${tr('删除','Delete')}"><span class="fab-glyph" aria-hidden="true">🗑</span><span class="fab-text">${tr('删除','Delete')}</span></button><span class="sep"></span>
        <button class="btn narrow-only" data-a="prop">${tr('属性','Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`
     : `<span class="name">${esc(nm(state.rooms[r.id].name))}</span><button class="btn narrow-only" data-a="prop">${tr('地面 / 属性','Floor / Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`);
   fab.classList.add('show');
@@ -1486,6 +1494,12 @@ const PANES = 'huxing-panes';
 const panes = (() => { try { return JSON.parse(localStorage.getItem(PANES)) || {}; } catch(e) { return {}; } })();
 function drawer(which, open){
   const app = $('.app'), els = {lib:$('aside.lib'), panel:$('aside.right')}, n = narrow();
+  // On narrow screens the palette covers the plan: a door/window being placed would stay active behind it, with its
+  // banner over the palette. Opening the palette cancels it (nothing was added) and says so.
+  if (n && which === 'lib' && (open ?? !els.lib.classList.contains('open')) && window.FloorPlanOpeningUI?.picking()){
+    FloorPlanOpeningUI.cancel(); renderSel();
+    toast(LANG === 'es' ? 'Se canceló la colocación de la puerta o ventana: no se añadió nada.' : tr('已取消放置门窗：未添加任何内容。', 'Placing the door or window was cancelled: nothing was added.'), 4000);
+  }
   if (n){
     Object.entries(els).forEach(([k, el]) => el.classList.toggle('open', k === which && (open ?? !el.classList.contains('open'))));
   } else {
@@ -2257,6 +2271,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/room-layout-ui.js"></script>
 <script src="js/surface-ui.js"></script>
 <script src="js/asset-ui.js"></script>
+<script src="js/journey-core.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-ui.js"></script>
