@@ -20,7 +20,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`wit
  const {page,errors,before}=await present(t,viewport,()=>{Object.defineProperty(navigator,'canShare',{value:undefined,configurable:true});});
  await page.locator('#presentationShare').click({timeout:120000});await page.locator('#shareDialog[open]').waitFor({timeout:120000});
  assert.ok(await page.locator('.share-preview').evaluate(i=>i.complete?i.naturalWidth:new Promise(r=>i.onload=()=>r(i.naturalWidth)))>200,'the preview is the real image');
- assert.match(await page.locator('.share-note').textContent(),/no un enlace al proyecto/);
+ assert.match(await page.locator('.share-note').textContent(),/no un enlace al proyecto/);assert.equal(await page.locator('#shareNative').count(),0,'no native button without file sharing');
  assert.match(await page.locator('#shareWhatsApp').getAttribute('href'),/^https:\/\/wa\.me\/\?text=.+medidas%20orientativas/);
  assert.match(await page.locator('#shareMail').getAttribute('href'),/^mailto:\?subject=.+&body=.+Adjunta%20la%20imagen/);
  const p=page.waitForEvent('download');await page.locator('#shareDownload').click({timeout:120000});const d=await p,bytes=await fs.readFile(await d.path());
@@ -32,10 +32,14 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`wit
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'nothing changes in the project');assert.deepEqual(errors,[]);
 });
 
-test('with file sharing (phone): the PNG goes to the system share sheet with a text, no panel 390x844',{timeout:300000,skip},async t=>{
- const {page,errors}=await present(t,{width:390,height:844},()=>{window.__shared=null;navigator.canShare=d=>!!d?.files?.length;navigator.share=async d=>{window.__shared={type:d.files[0].type,name:d.files[0].name,size:d.files[0].size,text:d.text,url:d.url||null};};});
- await page.locator('#presentationShare').tap({timeout:120000});await page.waitForFunction(()=>window.__shared,null,{timeout:120000});
+test('with file sharing (phone): the panel opens with the prepared PNG; «Compartir…» calls the share sheet inside its own tap 390x844',{timeout:300000,skip},async t=>{
+ const {page,errors}=await present(t,{width:390,height:844},()=>{window.__shared=null;navigator.canShare=d=>!!d?.files?.length;navigator.share=async d=>{window.__shared={type:d.files[0].type,name:d.files[0].name,size:d.files[0].size,text:d.text,url:d.url||null,activation:navigator.userActivation?.isActive??null};};});
+ await page.locator('#presentationShare').tap();await page.locator('#shareDialog[open]').waitFor();
+ assert.equal(await page.evaluate(()=>window.__shared),null,'nothing is shared before the person taps «Compartir…»');
+ assert.match(await page.locator('.share-note').textContent(),/no un enlace al proyecto/);
+ await page.locator('#shareNative').tap();await page.waitForFunction(()=>window.__shared);
  const shared=await page.evaluate(()=>window.__shared);
+ assert.equal(shared.activation,true,'navigator.share runs while the tap still grants user activation');
  assert.equal(shared.type,'image/png');assert.equal(shared.name,'rubik-sota-vivienda.png');assert.ok(shared.size>5000);assert.equal(shared.url,null,'no link');assert.match(shared.text,/medidas orientativas/);
- assert.equal(await page.locator('#shareDialog[open]').count(),0);assert.deepEqual(errors,[]);
+ await page.waitForFunction(()=>!document.querySelector('#shareDialog').open);assert.deepEqual(errors,[]);
 });
