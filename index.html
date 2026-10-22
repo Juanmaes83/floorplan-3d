@@ -3892,7 +3892,7 @@ function shot(opts = {}){
 // Delivery image (client-facing): the WHOLE home framed to fill a w×h image in the current viewing direction. A cloned
 // camera only moves along that direction (and the fov is not changed), so the geometry is never stretched or cropped;
 // the working view, camera and canvas are restored before the browser paints, exactly as in shot().
-function deliveryShot({width, height, margin = .06, frame = true} = {}){
+function deliveryShot({width, height, margin = .03, frame = true} = {}){
   if (window.FloorPlanBuildingUI && !window.FloorPlanBuildingUI.gate('Captura 3D')) throw Error('Distribución pendiente: corrige los muebles sobre escaleras antes de generar imágenes.');
   const w = Math.round(width), h = Math.round(height);
   if (!(w > 0 && h > 0) || w*h > SHOT_MAX_PIXELS || Math.max(w, h) > shotLimit()) throw Error(tr('截图选项无效。', 'Invalid capture option.'));

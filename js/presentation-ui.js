@@ -148,12 +148,14 @@
  // camera on a room; the project data and the brand go in their own band (never over the home). The preview IS the
  // file that is downloaded or shared: same data URL, same bytes.
  async function viewImage({format='landscape',contact=false}={}){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
-  const D=window.FloorPlanDeliveryImage,F=D.FORMATS[format];
-  const shot=View3D.deliveryShot({width:F.image.w,height:F.image.h,frame:stop.kind!=='room'});
+  // Landscape: image on the left and the data in a side column (a compact home keeps the whole height; measured in
+  // docs/qa/delivery-image-2026-10-22.md). Portrait: image above a data band.
+  const D=window.FloorPlanDeliveryImage,layout=format==='landscape'?'side':'band',A=D.imageArea(format,layout);
+  const shot=View3D.deliveryShot({width:A.w,height:A.h,frame:stop.kind!=='room'});
   const room=stop.kind==='room'?app.geometry.rooms.find(r=>r.id===stop.roomId):null;
   const p=brandSnap?.profile,data=D.content({title:brandSnap?.title||app.project.name,view:label,level:(plan.levels?.length||0)>1?stop.levelName:'',rooms:room?[room]:app.geometry.rooms,
    brand:p&&p.name?{name:p.name,logo:p.logo,contact:contact?window.FloorPlanBrand?.contactLine?.(p)||'':''}:null});
-  const out=await D.compose({image:shot.dataUrl,format,layout:'band',data});const blob=await (await fetch(out.dataUrl)).blob();
+  const out=await D.compose({image:shot.dataUrl,format,layout,data});const blob=await (await fetch(out.dataUrl)).blob();
   return {url:out.dataUrl,label,format,fill:shot.fill,data,file:new File([blob],`rubik-sota-vivienda-${format==='portrait'?'vertical':'horizontal'}.png`,{type:'image/png'})};}
  const shareDialog=el('dialog',undefined,document.body,'share-dialog');shareDialog.id='shareDialog';shareDialog.setAttribute('aria-labelledby','shareTitle');
  async function share(){

@@ -5,7 +5,11 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanDeliveryImage=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
  // Output formats. The image area keeps the home's aspect from the 3D camera; the band is extra canvas, not an overlay.
- const FORMATS={landscape:{w:1600,h:1000,image:{w:1600,h:780}},portrait:{w:1080,h:1350,image:{w:1080,h:1000}}};
+ const FORMATS={landscape:{w:1600,h:1000,image:{w:1600,h:820}},portrait:{w:1080,h:1350,image:{w:1080,h:1000}}};
+ // Layout 'side' (landscape only): a near-square image on the left uses the whole height for the home, and the data take
+ // the width that a wide frame would otherwise leave empty around a compact home.
+ const SIDE={w:1600,h:1000,image:{w:1080,h:1000}};
+ const imageArea=(format,layout)=>(layout==='side'&&format==='landscape'?SIDE:FORMATS[format]).image;
  const clean=v=>String(v??'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim();
  // Bounded text: a cut is always marked with «…», never a silent truncation.
  const cap=(v,n)=>{const s=clean(v);return s.length>n?s.slice(0,n-1).trimEnd()+'…':s;};
@@ -26,7 +30,7 @@
  }
  // Canvas drawing (browser only). layout 'band' (B: image, then a band) or 'header' (C: header, image, footer).
  async function compose({image,format='landscape',layout='band',data}){
-  const F=FORMATS[format];if(!F)throw Error('Formato no válido');
+  const F=layout==='side'&&format==='landscape'?SIDE:FORMATS[format];if(!F)throw Error('Formato no válido');
   const c=document.createElement('canvas');c.width=F.w;c.height=F.h;const x=c.getContext('2d');
   const img=new Image();img.src=image;await img.decode();
   x.fillStyle='#f4f5f3';x.fillRect(0,0,F.w,F.h);
@@ -34,7 +38,28 @@
   const fit=(s,max,f)=>{x.font=f;if(x.measureText(s).width<=max)return s;while(s.length>1&&x.measureText(s+'…').width>max)s=s.slice(0,-1);return s.trimEnd()+'…';};
   const pad=Math.round(48*S*(format==='portrait'?1.2:1));
   let imgY,bandY,bandH;
-  if(layout==='header'){
+  if(F===SIDE){
+   imgY=0;bandY=0;bandH=F.h;x.drawImage(img,0,0,F.image.w,F.image.h);
+   const cx=F.image.w,cw=F.w-cx,p=Math.round(44*S);x.fillStyle='#ffffff';x.fillRect(cx,0,cw,F.h);x.fillStyle='#d5d9db';x.fillRect(cx,0,2,F.h);
+   x.textBaseline='alphabetic';const tw=cw-p*2;let y=p+30;
+   // Wrapped title (up to three lines), then view, facts one per line, note; the brand block sits at the bottom.
+   const wrap=(text,f,lh,max)=>{x.font=f;const words=text.split(' ');let line='',n=0;for(let i=0;i<words.length;i++){const t=line?line+' '+words[i]:words[i];
+    if(x.measureText(t).width>tw&&line){if(n===max-1){x.fillText(fit(line+' '+words.slice(i).join(' '),tw,f),cx+p,y);y+=lh;return;}x.fillText(line,cx+p,y);y+=lh;n++;line=words[i];}else line=t;}if(line){x.fillText(line,cx+p,y);y+=lh;}};
+   if(data.title){x.fillStyle='#1f2326';wrap(data.title,font(650,36),46,3);y+=8;}
+   if(data.view){x.fillStyle='#2f6f78';wrap(data.view,font(600,26),34,2);y+=14;}
+   x.fillStyle='#4a5256';for(const f of data.facts){x.fillText(fit(f,tw,font(500,24)),cx+p,y);y+=34;}
+   y+=6;x.fillStyle='#7a8286';wrap(data.note,font(400,18),24,2);
+   if(data.brand){
+    // Brand stacked at the foot of the column: logo, name on up to two lines, contact (only when asked for).
+    const b=data.brand;let logo=null;if(b.logo){try{logo=new Image();logo.src=b.logo;await logo.decode();}catch{logo=null;}}
+    const lh=logo?64:0,nameLines=(()=>{x.font=font(650,26);const w=b.name.split(' ');const L=[];let l='';for(const word of w){const t=l?l+' '+word:word;if(x.measureText(t).width>tw&&l){L.push(l);l=word;}else l=t;}if(l)L.push(l);return L.length>2?[L[0],fit(L.slice(1).join(' '),tw,font(650,26))]:L;})();
+    const blockH=lh+(lh?16:0)+nameLines.length*34+(b.contact?32:0);let by=F.h-p-blockH;
+    x.fillStyle='#e6e9ea';x.fillRect(cx+p,by-22,tw,1);
+    if(logo){const lw=Math.min(lh*2.6,logo.width*lh/logo.height);x.drawImage(logo,cx+p,by,lw,lh);by+=lh+16;}
+    x.textBaseline='top';x.fillStyle='#1f2326';x.font=font(650,26);for(const line of nameLines){x.fillText(line,cx+p,by);by+=34;}
+    if(b.contact){x.fillStyle='#4a5256';x.fillText(fit(b.contact,tw,font(500,20)),cx+p,by+2);}x.textBaseline='alphabetic';
+   }
+  }else if(layout==='header'){
    const headH=Math.round((F.h-F.image.h)*.5);imgY=headH;bandY=headH+F.image.h;bandH=F.h-bandY;
    x.drawImage(img,0,imgY,F.image.w,F.image.h);
    x.fillStyle='#1f2326';x.textBaseline='middle';
@@ -75,5 +100,5 @@
   if(brand.contact){x.fillStyle='#4a5256';x.fillText(fit(brand.contact,textW,font(500,20)),rx,y+h*.72);}
   x.textAlign='left';
  }
- return {FORMATS,content,compose,shoelace};
+ return {FORMATS,SIDE,imageArea,content,compose,shoelace};
 });

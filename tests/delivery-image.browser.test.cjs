@@ -33,7 +33,7 @@ async function take(page,tag,format){
  const pending=page.waitForEvent('download');await page.locator('#shareDownload').click();const d=await pending,chunks=[];for await(const c of await d.createReadStream())chunks.push(c);const bytes=Buffer.concat(chunks);
  assert.equal(src,href,`${tag}: the preview is the downloaded image`);assert.ok(bytes.equals(Buffer.from(href.split(',')[1],'base64')),`${tag}: same bytes`);
  if(shots)await fs.writeFile(path.join(shots,tag+'.png'),bytes);
- const px=await page.evaluate(async([u,f])=>{const A=FloorPlanDeliveryImage.FORMATS[f],i=new Image();i.src=u;await i.decode();const c=document.createElement('canvas');c.width=i.width;c.height=i.height;const x=c.getContext('2d');x.drawImage(i,0,0);
+ const px=await page.evaluate(async([u,f])=>{const A={image:FloorPlanDeliveryImage.imageArea(f,f==='landscape'?'side':'band')},i=new Image();i.src=u;await i.decode();const c=document.createElement('canvas');c.width=i.width;c.height=i.height;const x=c.getContext('2d');x.drawImage(i,0,0);
   const d=x.getImageData(0,0,A.image.w,A.image.h).data,bg=[d[0],d[1],d[2]];let a=A.image.w,b=A.image.h,e=-1,g=-1;
   for(let y=0;y<A.image.h;y+=2)for(let X=0;X<A.image.w;X+=2){const k=(y*A.image.w+X)*4;if(Math.abs(d[k]-bg[0])+Math.abs(d[k+1]-bg[1])+Math.abs(d[k+2]-bg[2])>30){a=Math.min(a,X);e=Math.max(e,X);b=Math.min(b,y);g=Math.max(g,y);}}
   return {width:i.width,height:i.height,fx:(e-a)/A.image.w,fy:(g-b)/A.image.h};},[href,format||'landscape']);
@@ -46,7 +46,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`del
  assert.equal(await page.locator('#shareContact').count(),0,'no brand: no contact option');
  const land=await take(page,`${viewport.width}-overview-landscape`);
  assert.deepEqual([land.width,land.height,land.name],[1600,1000,'rubik-sota-vivienda-horizontal.png']);
- assert.ok(land.fy>=.8,`landscape overview fills the height (${land.fy})`);
+ assert.ok(land.fy>=.8&&land.fx*land.fy>=.55,`landscape overview fills the image area (${land.fx}, ${land.fy})`);
  const port=await take(page,`${viewport.width}-overview-portrait`,'portrait');
  assert.deepEqual([port.width,port.height,port.name],[1080,1350,'rubik-sota-vivienda-vertical.png']);
  assert.ok(port.fx>=.65&&port.fy>=.75,`portrait overview fills the picture (${port.fx}, ${port.fy})`);
