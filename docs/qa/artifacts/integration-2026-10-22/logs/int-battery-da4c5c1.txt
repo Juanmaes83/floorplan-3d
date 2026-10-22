@@ -1,0 +1,30 @@
+int unit # pass 269 # fail 0  @da4c5c1
+int journey-orientation exit=0 # pass 15 # fail 0 # cancelled 0  @da4c5c1
+int professional-entry exit=0 # pass 11 # fail 0 # cancelled 0  @da4c5c1
+int provenance exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int client-review exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int share-image exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int sheet-scale exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int sheet exit=0 # pass 7 # fail 0 # cancelled 0  @da4c5c1
+int brand exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int building-presentation exit=0 # pass 7 # fail 0 # cancelled 0  @da4c5c1
+int guide exit=0 # pass 5 # fail 0 # cancelled 0  @da4c5c1
+int guide-navigation exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int build-palette exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int opening-contextual exit=0 # pass 9 # fail 0 # cancelled 0  @da4c5c1
+int premium-shell exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int stair-conflicts exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int welcome-generar exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int ui-language exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int upload exit=0 # pass 8 # fail 0 # cancelled 0  @da4c5c1
+int multiformat-guide exit=0 # pass 9 # fail 0 # cancelled 0  @da4c5c1
+int room-layout exit=0 # pass 5 # fail 0 # cancelled 0  @da4c5c1
+int surfaces exit=0 # pass 7 # fail 0 # cancelled 0  @da4c5c1
+int building exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int layout-review exit=0 # pass 2 # fail 0 # cancelled 0  @da4c5c1
+int variants exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int stair-overlap exit=0 # pass 3 # fail 0 # cancelled 0  @da4c5c1
+int stair-relocation exit=0 # pass 4 # fail 0 # cancelled 0  @da4c5c1
+int panel-pattern exit=0 # pass 5 # fail 0 # cancelled 0  @da4c5c1
+int presentation exit=1 # pass 43 # fail 13 # cancelled 2  @da4c5c1
+DONE int

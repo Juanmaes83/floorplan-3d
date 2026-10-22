@@ -15,7 +15,7 @@ Entorno local: Chromium 141 + SwiftShader (sin GPU), Node 22, Playwright; Three.
 |---|---|---|---|
 | #79 `5c80049` | 55 | 0 | 3 (P13 1440 bajo carga, P15, P08) |
 | integración (antes de corregir) | 43 | 13 | 2 cancelados |
-| integración (después) | 54 | 0 | 4 (P13 1440, P15, P08, «Escape and browser Back») |
+| integración `fa76113` (medido) | 54 | 0 | 4 (P13 1440, P15, P08, «Escape and browser Back») |
 
 Causas en la integración, todas originadas en #73 (journey):
 1. Tras presentar, la guía mueve la única entrada de presentación a la cabecera (`#presentationBtn`); el test
@@ -23,8 +23,10 @@ Causas en la integración, todas originadas en #73 (journey):
 2. Defecto real de accesibilidad: al salir (Cerrar, Escape o Atrás) el foco caía en la búsqueda o en `body`.
    Corregido: vuelve a quien abrió la presentación o, si ya no se ve, a la entrada visible.
 
-Timeouts: ningún límite se ha subido. P15 y P08 pasan todas sus aserciones con límites ×4 en una copia de
-diagnóstico (borrada). «Escape and browser Back» tarda 112 s en #79 y 122 s en la integración (límite 120 s).
+Los 4 timeouts NO son PASS y la suite NO está limpia: 54/58 medidos. Ningún límite se ha subido. P15 y P08 pasan todas sus aserciones con límites ×4 en una copia de
+diagnóstico (borrada). «Escape and browser Back» queda como timeout SIN RESOLVER: en ejecución aislada tardó 112 s en #79
+(`5c80049`) y 122 s en la integración (límite 120 s). Una sola medida por lado: la diferencia de 10 s no está atribuida
+todavía al entorno; requiere comparación controlada (varias repeticiones, mismo equipo) y ejecución con GPU.
 Pendiente de ejecución con GPU real: ver `manual-gpu-phone-protocol-2026-10-22.md`.
 
 ## Pendiente (no verificable en este entorno)
@@ -33,4 +35,7 @@ Pendiente de ejecución con GPU real: ver `manual-gpu-phone-protocol-2026-10-22.
 - Medida con regla de una hoja A3 impresa (#72).
 
 ## Evidencia
-`artifacts/integration-2026-10-22/`: 21 capturas (1440×900, 390×844, 844×390), `qa-log.txt` y dos vídeos.
+`artifacts/integration-2026-10-22/` (regeneradas sobre `fa76113`): 21 capturas (1440×900, 390×844, 844×390), `qa-log.txt` y dos vídeos.
+
+Logs: `artifacts/integration-2026-10-22/logs/` — suite `presentation` sobre la integración `fa76113` (int3) y sobre #73 `0c9c6b0`
+(antes del arreglo de Atrás), y la batería completa de 28 suites sobre `da4c5c1`.
