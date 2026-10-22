@@ -14,9 +14,11 @@ async function setup(t,viewport,webgl=true){const browser=await chromium.launch(
 const state=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,goal:FloorPlanGuideUI.state().goal,guideEvidence:JSON.stringify(FloorPlanGuideUI.state().evidence),undo:undoStack.length,redo:redoStack.length,selection:JSON.stringify(ui.sel),view:FloorPlanApp.viewMode}));
 // One presentation entry at a time (#guidePresent in the guide row, or #presentationBtn in the guided header once the
 // guide moves on, e.g. after a presented version): exactly one is visible, and it is the one a person would use.
-async function presentEntry(page){const ids=await page.evaluate(()=>['guidePresent','presentationBtn'].filter(id=>{const e=document.getElementById(id);return e&&!e.closest('[hidden]')&&e.getClientRects().length>0;}));
- assert.equal(ids.length,1,`one visible presentation entry, got ${JSON.stringify(ids)}`);return page.locator('#'+ids[0]);}
-const entryId=async page=>(await (await presentEntry(page)).getAttribute('id'));
+// Playwright strict mode: the click fails if both entries are visible and waits if none is, so exactly one is required.
+const presentEntry=async page=>page.locator('#guidePresent:visible, #presentationBtn:visible');
+// Focus is on the one visible presentation entry: a single round trip (the 3D loop keeps the page busy under SwiftShader).
+async function assertFocusOnEntry(page,message){const {active,ids}=await page.evaluate(()=>({active:document.activeElement?.id||'',ids:['guidePresent','presentationBtn'].filter(id=>{const e=document.getElementById(id);return e&&!e.closest('[hidden]')&&e.getClientRects().length>0;})}));
+ assert.equal(ids.length,1,`one visible presentation entry, got ${JSON.stringify(ids)}`);assert.equal(active,ids[0],message);}
 async function screenshot(page,name){const dir=process.env.PRESENTATION_ARTIFACTS||'qa-results/serra-r1';await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,name+'.png')});}
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`R2 P01/P02 search and closed-guide entry preserve the project ${viewport.width}x${viewport.height}`,{timeout:150000},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,initial=await state(page),consoleErrors=[];
@@ -295,7 +297,7 @@ test('3D camera, focus and editor state return after Escape and browser Back',{t
   const restored=await page.evaluate(()=>View3D.presentationInspect());for(const key of ['position','quaternion','target'])for(let i=0;i<restored[key].length;i++)assert.ok(Math.abs(restored[key][i]-camera[key][i])<1e-5,`${exit}: camera ${key}[${i}]`);
   assert.ok(Math.abs(restored.fov-camera.fov)<1e-5);assert.equal(restored.aspect,camera.aspect);
   assert.deepEqual(restored.options,camera.options);assert.deepEqual(restored.doors,camera.doors);assert.deepEqual(restored.canvas,camera.canvas);
-  assert.equal(await page.evaluate(()=>document.activeElement.id),await entryId(page));
+  await assertFocusOnEntry(page);
  }
  assert.deepEqual(errors,[]);
 });
@@ -388,7 +390,7 @@ for(const {viewport,exit} of [
  assert.equal(await page.locator('#presentationOverlay').isVisible(),false,'no late reopening after load cancellation');
  await screenshot(page,`${size}-p07-${exit.toLowerCase()}-returned`);
  assert.equal(new URL(page.url()).hash,'#editor',`${exit} consumes presentation entry during load`);
- assert.deepEqual(await state(page),beforeState);assert.equal(await page.evaluate(()=>document.activeElement?.id),await entryId(page));
+ assert.deepEqual(await state(page),beforeState);await assertFocusOnEntry(page);
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
@@ -410,7 +412,7 @@ for(const {viewport,exit} of [
  await page.waitForTimeout(750);
  assert.equal(await page.locator('#presentationOverlay').isVisible(),false,'late flight cannot reopen presentation');
  await screenshot(page,`${size}-p07-${exit.toLowerCase()}-flight-returned`);
- assert.deepEqual(await state(page),beforeState);assert.equal(await page.evaluate(()=>document.activeElement?.id),await entryId(page));
+ assert.deepEqual(await state(page),beforeState);await assertFocusOnEntry(page);
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
 
