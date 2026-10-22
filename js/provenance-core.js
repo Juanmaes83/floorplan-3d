@@ -1,4 +1,6 @@
-/* «Del plano a la vivienda» (result 2, docs/product/professional-client-experience-2026-10-21.md): what came from
+/* Three kinds of statement, each backed by data: recorded origin (source.method of walls, openings, rooms), drawn
+   by hand in Rubik (method «manual»), and no recorded origin (furniture and finishes: counted, never attributed).
+   «Del plano a la vivienda» (result 2, docs/product/professional-client-experience-2026-10-21.md): what came from
    the plan, what was drawn or adjusted in Rubik and what the presentation will show, read only from fields the
    project already stores (`source.method`/`source.review` of walls, openings and rooms; `scale`; `sourceImages`;
    `objects`; `materials`). It never infers an origin that is not recorded and never changes the project. */
@@ -38,12 +40,12 @@
   scaleEstimated:['Escala estimada, sin comprobar con una medida conocida','Estimated scale, not checked against a known length','比例为估算，未用已知尺寸核对'],
   scalePending:['Escala sin calibrar: las medidas no son reales','Uncalibrated scale: dimensions are not real','比例未校准：尺寸不真实'],
   fromPlan:n=>[`Elementos que vienen del plano importado: ${n}`,`${n} elements come from the imported plan`,`${n} 个元素来自导入的平面图`],
-  drawn:n=>[`Muros, huecos o estancias dibujados en Rubik: ${n}`,`${n} walls, openings or rooms were drawn in Rubik`,`${n} 个墙体、门窗或房间在 Rubik 中绘制`],
+  drawn:n=>[`Muros, huecos o estancias dibujados a mano en Rubik: ${n}`,`Walls, openings or rooms drawn by hand in Rubik: ${n}`,`在 Rubik 中手绘的墙体、门窗或房间：${n}`],
   template:n=>[`Elementos de la plantilla: ${n}`,`${n} elements come from a template`,`${n} 个元素来自模板`],
   suggested:n=>[`Muros propuestos por la ayuda automática: ${n}`,`${n} walls proposed by the automatic assistance`,`${n} 面墙由自动辅助建议`],
   unreviewed:n=>[`Sin revisar por una persona: ${n}`,`${n} not reviewed by a person`,`${n} 个未经人工复核`],
   unrecorded:n=>[`Sin procedencia registrada (proyectos anteriores): ${n}`,`${n} with no recorded origin (earlier projects or example)`,`${n} 个未记录来源（旧项目或示例）`],
-  added:(f,m)=>[`Propuesta de Rubik · muebles: ${f} · acabados de suelo: ${m}`,`Rubik proposal · furniture: ${f} · floor finishes: ${m}`,`Rubik 方案 · 家具：${f} · 地面材料：${m}`],
+  added:(f,m)=>[`Muebles: ${f} · acabados de suelo: ${m}. Rubik no registra quién los eligió (el profesional, la distribución automática o la plantilla)`,`Furniture: ${f} · floor finishes: ${m}. Rubik does not record who chose them (the professional, the automatic layout or the template)`,`家具：${f} · 地面材料：${m}。Rubik 不记录由谁选择（专业人士、自动布局或模板）`],
   experience:['Tu cliente verá esta misma vivienda en 3D: vista general y las estancias que elijas. Las medidas son orientativas.','Your client will see this same home in 3D: overview and the rooms you choose. Dimensions are indicative.','客户将在 3D 中看到同一住宅：总览和你选择的房间。尺寸仅供参考。']
  };
  // Plain lines for the interface, in order; `lang` is es/en/zh.
