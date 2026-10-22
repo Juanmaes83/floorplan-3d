@@ -19,7 +19,7 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
  // three.js from THREE_LOCAL_DIR when set (the CDN is unreachable here), so the 3D note is really exercised.
  await page.route('https://cdn.jsdelivr.net/**',async r=>{if(!process.env.THREE_LOCAL_DIR)return r.abort();try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
- await page.goto(url);await require('./editor-fixture.cjs')(page);
+ await page.goto(url);await require('./editor-fixture.cjs')(page,{keepPalette:true});
  const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();await page.waitForTimeout(200);};
  const openPalette=async tab=>{await page.evaluate(()=>drawer('lib',true));await page.waitForTimeout(400);if(tab)await press(tab==='build'?'#paletteTabBuild':'#paletteTabFurnish');};
  const tapWorld=async q=>{const s=await page.evaluate(p=>{const m=new DOMPoint(p.x,p.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:m.x,y:m.y};},q);if(mobile)await page.touchscreen.tap(s.x,s.y);else await page.mouse.click(s.x,s.y);await page.waitForTimeout(300);};
