@@ -95,3 +95,8 @@ body.guided #newRoomBtn{display:none}
 .guide-bar.guide-compact{padding-top:6px;padding-bottom:6px}.guide-bar.guide-compact .guide-current{padding:6px 10px;margin-top:4px}.guide-bar.guide-compact .guide-current h2{margin:0;font-size:13px}.guide-bar.guide-compact .guide-example{padding-top:3px}
 #guideCompact{border:1px solid var(--line)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Welcome «El plano | La vivienda en 3D»: segmented control over the example; the selected view uses the selection role. */
+.welcome-visual .welcome-views{display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--surface-panel);border:1px solid var(--line);z-index:1}
+.welcome-views .btn{border:0;border-radius:999px;min-height:34px;padding:4px 12px;font-size:12px;background:transparent;color:var(--ink)}
+.welcome-views .btn[aria-pressed=true]{background:var(--select);color:var(--select-ink)}
+.welcome-visual .welcome-shot{width:100%;height:100%;max-height:340px;object-fit:contain;border-radius:16px;mix-blend-mode:multiply}

@@ -70,3 +70,16 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   assert.deepEqual(errors,[]);
  });
 }
+
+test('«El plano | La vivienda en 3D» shows the same example drawn and as a real Rubik capture 1440x900',{timeout:60000},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+ assert.equal(await page.locator('#welcomeView-plan').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.welcome-visual svg').isVisible(),true);
+ await page.locator('#welcomeView-home').click();
+ assert.equal(await page.locator('#welcomeView-home').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('.welcome-visual svg').isVisible(),false);
+ await page.locator('.welcome-shot').evaluate(img=>img.complete&&img.naturalWidth?0:new Promise((ok,ko)=>{img.onload=ok;img.onerror=()=>ko(Error('no image'));}));
+ assert.ok(await page.locator('.welcome-shot').evaluate(img=>img.naturalWidth>=600));
+ assert.match(await page.locator('.welcome-visual figcaption').textContent(),/Captura real de Rubik/);
+ await page.locator('#welcomeView-plan').click();assert.equal(await page.locator('.welcome-shot').isVisible(),false);assert.deepEqual(errors,[]);
+});

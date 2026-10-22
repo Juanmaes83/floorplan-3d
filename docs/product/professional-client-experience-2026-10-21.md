@@ -33,6 +33,7 @@ Lo que se corrige:
 | # | Hallazgo | Corrección |
 | --- | --- | --- |
 | A1 | Elegir un perfil no producía ninguna respuesta: el botón quedaba pulsado y nada más. El profesional no «se reconoce». | Al elegirlo aparece una frase sobre para qué le sirve Rubik y la primera acción, que ejecuta la misma entrada «Subir un plano» (o «Crear desde cero»). |
+| A8 | La bienvenida describía el paso del plano a la vivienda sin mostrarlo (patrón visto en Enviz e3/e4) | Selector «El plano / La vivienda en 3D» sobre el mismo ejemplo: dibujo 2D y captura real del 3D de Rubik (`assets/welcome/example-3d.webp`, 29 KB), con el pie «Captura real de Rubik». En el teléfono la figura sigue oculta para que las tres entradas vayan primero |
 | A2 | El titular hablaba a un particular («Tu espacio, paso a paso», «recorre tu idea»). | Antetítulo «Para inmobiliarias, promotoras y estudios» y una entradilla sobre convertir el plano en una vivienda editable y presentarla al cliente. Se conserva el título «¿Qué quieres hacer?». |
 | A3 | Restos de color crema en la bienvenida. | Pasan a los roles «Perla». Se conserva el logotipo. |
 | A4 | El documento omitía la cadena GLB/Blender que ya existe fuera de la aplicación (#24, #42) y el orden 5 de la hoja de ruta 2 (glTF). | §6 |
@@ -42,7 +43,7 @@ Lo que se corrige:
 
 **Evidencia de las referencias:**
 
-- **Enviz.** No hay ninguna referencia visual en el repositorio: `git grep -i enviz` en todas las ramas solo encuentra este documento. Todo lo atribuido a Enviz es **afirmación comercial** o captura no versionada, y no se presenta como capacidad de Rubik.
+- **Enviz.** Juanma aportó cinco capturas de su web comercial el 22-10, versionadas en [`references/enviz-2026-10-22/`](references/enviz-2026-10-22/). Son páginas de marketing con ilustraciones, no sesiones de la herramienta: todo lo que muestran es **afirmación comercial** salvo el selector «The plan / The experience», que es un **control visible** de la propia página. Nada se presenta como capacidad de Rubik.
 - **LoRA LAB.** Se usan las clases del estudio de #48 (rama `docs/loralab-study-gate`).
 
 | Observación | Clase | Uso aquí |
@@ -52,7 +53,10 @@ Lo que se corrige:
 | LoRA LAB: «Copiar enlace» en el menú, sin enlace generado | Control visible | No prueba un servicio de revisión |
 | LoRA LAB: exporta JSON y PNG 3D; no hay CAD en el menú | Función ejecutada / control visible | Contexto del resultado 4 |
 | LoRA LAB: no se observa asistente de IA ni comentarios | Inferencia por ausencia | — |
-| Enviz: perfiles, revisión de cliente, SKP/FBX/USDZ/BLEND, IA | Afirmación comercial | No se anuncian en Rubik |
+| Enviz e1 «Own the model / Download the 3D model»: SKP, GLB, FBX, USDZ, BLEND; «Works with SketchUp, Revit…» | Afirmación comercial | Resultado 4: no se anuncia ningún formato no comprobado; Rubik solo tiene GLB fuera de la aplicación |
+| Enviz e1/e2 «AI Modelling Agent», «widen the kitchen island by 200mm», «You approve every change before it lands» | Afirmación comercial (maqueta ilustrada) | Resultado 5: se adopta el principio «apruebas cada cambio»; no la capacidad |
+| Enviz e3/e4 ejemplos de una y dos plantas con selector «The plan / The experience» y «Upload Your Plans» | Control visible en la web + afirmación («hours later») | Resultado 1/2: **se adopta el patrón**, con material propio: la bienvenida alterna «El plano / La vivienda en 3D» del mismo ejemplo con una captura real de Rubik |
+| Enviz e5 «Send one link. Everyone gets it», `enviz.co/share/abc123` | Afirmación comercial (ilustración) | Resultado 3: no se simula un enlace; pendiente de decisión |
 
 ## 3. Resultado 1 — identificación profesional al entrar
 
