@@ -2,7 +2,7 @@
 
 ## Propuesta paralela del 21-10-2026 — entrada profesional y entrega al cliente
 
-Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco resultados de experiencia y entrega. [Programa, auditoría de #70 y estado de las cinco líneas](product/professional-client-experience-2026-10-21.md). Estado al 22-10-2026: entrada profesional (`feat/professional-entry`, sobre #71), del plano a la vivienda (`feat/plan-provenance`) y lámina a escala (`feat/scaled-sheet`) en PR Draft; revisión de cliente y ayuda con IA **pendientes de decisión** (D-06/D-08/D-09). Nada integrado; CI no ejecutada; prueba D-01 pendiente.
+Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco resultados de experiencia y entrega. [Programa, auditoría de #70 y estado de las cinco líneas](product/professional-client-experience-2026-10-21.md). Estado al 22-10-2026 (sin merge ni despliegue; CI no ejecutada): orientación #71 Draft; entrada profesional #73 Draft (incluye #70) y «Soluciones» #76 Draft; del plano a la vivienda #74 Draft; revisión del cliente por archivo #75 Draft (enlace alojado pendiente de decisión D-06/D-08/D-09); lámina a escala #72 Draft (DXF candidato, no aprobado); ayuda con IA pendiente de decisión, prototipo sin IA no iniciado. Prueba D-01 pendiente.
 
 
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
