@@ -68,11 +68,23 @@ Sin datos personales: no hay campo de autor ni de cliente; `request` no copia el
 Atajo propuesto: desde una observación marcada «Hecho en esta versión», «Crear punto de interés» abre una tarjeta
 vacía anclada a la misma estancia, con `implementedIn` precargado; el texto lo escribe el profesional.
 
-## 6. Interacción (referencia Matterport, sin copiar)
-Pendiente de consultar en fuentes oficiales de Matterport (Mattertags) antes de implementar; se usará como
-referencia de **interacción** (marca → tarjeta → cerrar recupera la vista), no de diseño. Decisiones propias:
-marcas solo con la capa activa; densidad máxima por vista; la lista es el acceso principal en teléfono; teclado:
-la lista es navegable y cada marca es un botón con nombre accesible; foco vuelve a la marca al cerrar.
+## 6. Interacción — referencia Matterport (fuentes oficiales, consultadas el 22-10-2026)
+Según la documentación de soporte y del SDK de Matterport (no verificado en uso propio):
+- Se crean en modo edición: botón «+», clic en el punto del modelo (ancla) y barra lateral con **título (≤ 60
+  caracteres) y descripción (≤ 2 000)**; enlaces solo `https://`. [Add Tags to Your Matterport Space](https://support.matterport.com/s/article/Create-a-Mattertag-Post?language=en_US)
+- Admiten multimedia enlazada o adjunta (hasta 25 adjuntos de ≤ 500 MB por etiqueta). [Add Multimedia to a Tag](https://support.matterport.com/s/article/Add-Multimedia-to-a-Mattertag-Post?language=en_US)
+- Se anclan a la **malla** del modelo, no a la vista; pueden «flotar» o verse a través de muros si la malla difiere.
+  Recomiendan **menos de 100 etiquetas** por espacio por rendimiento. (mismo artículo de soporte)
+- En el SDK, `Tag.add` recibe posición de anclaje y vector del «tallo»; `Mattertag.add` está obsoleto.
+  [Showcase SDK — Tag](https://matterport.github.io/showcase-sdk/docs/reference/current/modules/tag.html)
+
+**Qué tomamos para Rubik:** marca → tarjeta breve → cerrar recupera la vista; límites de longitud cortos (proponemos
+título ≤ 80, texto ≤ 400, más estrictos que Matterport porque son tarjetas de entrega, no fichas).
+**Qué no tomamos:** anclaje a una malla escaneada (Rubik ancla a **entidades con ID**: estancia, objeto, hueco, pared,
+lo que evita etiquetas «flotantes» al editar); multimedia adjunta en el primer corte (peso y privacidad); etiquetas
+ilimitadas (Rubik limitará la densidad por vista).
+Decisiones propias: marcas solo con la capa activa; la lista es el acceso principal en teléfono; cada marca es un botón
+con nombre accesible y el foco vuelve a ella al cerrar.
 
 ## 7. Primer corte propuesto (PR de implementación, tras decidir A/B)
 1. Modelo y validación (unitarias): crear, editar, ordenar, ocultar, publicar; ancla eliminada → «sin ancla».
