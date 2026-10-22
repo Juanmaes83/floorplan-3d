@@ -100,3 +100,5 @@ body.guided #newRoomBtn{display:none}
 .welcome-views .btn{border:0;border-radius:999px;min-height:34px;padding:4px 12px;font-size:12px;background:transparent;color:var(--ink)}
 .welcome-views .btn[aria-pressed=true]{background:var(--select);color:var(--select-ink)}
 .welcome-visual .welcome-shot{width:100%;height:100%;max-height:340px;object-fit:contain;border-radius:16px;mix-blend-mode:multiply}
+/* 3D capture: the caption sits under the image in the flow (it wraps on short screens), never over it; the top padding keeps the view switch clear. */
+.welcome-visual[data-view="home"]{flex-direction:column;gap:10px;padding-top:64px}.welcome-visual[data-view="home"] .welcome-shot{flex:1 1 auto;min-height:0;max-height:none}.welcome-visual[data-view="home"] figcaption{position:static;flex:none}
