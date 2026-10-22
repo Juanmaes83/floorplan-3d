@@ -16,7 +16,8 @@ test('missing data is omitted, not replaced by placeholders',()=>{
 test('brand and contact only when given; long texts are bounded; level joins the view',()=>{
  const long='Promoción Residencial Las Terrazas del Mediterráneo, bloque B, escalera 2, vivienda tipo C con terraza y vistas';
  const c=D.content({title:long,view:'Salón',level:'Planta 1',rooms:[{poly:sq(0,0,5000,4000)}],brand:{name:'Estudio Norte',logo:null,contact:''}});
- assert.ok(c.title.length<=90);assert.equal(c.view,'Planta 1 · Salón');assert.deepEqual(c.facts,['1 estancia','Superficie útil aprox. 20 m²']);
+ assert.ok(c.title.length<=90&&c.title.endsWith('…'),'a cut title is marked');
+ const longBrand=D.content({brand:{name:'Estudio Norte Arquitectura y Promoción Inmobiliaria del Mediterráneo Oriental'}});assert.ok(longBrand.brand.name.endsWith('…')&&longBrand.brand.name.length<=60);assert.equal(c.view,'Planta 1 · Salón');assert.deepEqual(c.facts,['1 estancia','Superficie útil aprox. 20 m²']);
  assert.deepEqual(c.brand,{name:'Estudio Norte',logo:null,contact:null});assert.equal(c.note,'Imagen orientativa · medidas aproximadas');
  const withContact=D.content({title:'Casa',brand:{name:'Estudio Norte',contact:'600 000 000 · hola@norte.es'}});assert.equal(withContact.brand.contact,'600 000 000 · hola@norte.es');
 });

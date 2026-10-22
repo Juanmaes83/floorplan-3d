@@ -7,6 +7,8 @@
  // Output formats. The image area keeps the home's aspect from the 3D camera; the band is extra canvas, not an overlay.
  const FORMATS={landscape:{w:1600,h:1000,image:{w:1600,h:780}},portrait:{w:1080,h:1350,image:{w:1080,h:1000}}};
  const clean=v=>String(v??'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim();
+ // Bounded text: a cut is always marked with «…», never a silent truncation.
+ const cap=(v,n)=>{const s=clean(v);return s.length>n?s.slice(0,n-1).trimEnd()+'…':s;};
  function shoelace(poly){let a=0;for(let i=0;i<poly.length;i++){const [x1,y1]=poly[i],[x2,y2]=poly[(i+1)%poly.length];a+=x1*y2-x2*y1;}return Math.abs(a)/2;}
  const fmtArea=m2=>m2.toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:m2<100?1:0});
  // What the image says. rooms: [{poly:[[mm,mm]…], counted}] of what is shown (one level or the whole home).
@@ -17,8 +19,8 @@
   const facts=[];
   if(counted.length)facts.push(counted.length===1?'1 estancia':`${counted.length} estancias`);
   if(area>=1)facts.push(`Superficie útil aprox. ${fmtArea(area)} m²`);
-  const t=clean(title).slice(0,90),v=clean(view).slice(0,60),l=clean(level).slice(0,40);
-  const b=brand&&clean(brand.name)?{name:clean(brand.name).slice(0,60),logo:brand.logo||null,contact:clean(brand.contact).slice(0,80)||null}:null;
+  const t=cap(title,90),v=cap(view,60),l=cap(level,40);
+  const b=brand&&clean(brand.name)?{name:cap(brand.name,60),logo:brand.logo||null,contact:cap(brand.contact,80)||null}:null;
   return {title:t||null,view:[l,v].filter(Boolean).join(' · ')||null,facts,brand:b,
    note:b?'Imagen orientativa · medidas aproximadas':'Imagen orientativa creada con Rubik Sota · medidas aproximadas'};
  }

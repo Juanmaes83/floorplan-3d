@@ -178,7 +178,7 @@
    const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
    const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.id='shareMail';
    const close=el('button',tx('Cerrar','Close','关闭'),row,'btn');close.type='button';close.onclick=()=>shareDialog.close();
-   const show=()=>{preview.src=img.url;preview.alt=tx(`Imagen que se compartirá: ${img.label}`,`Image to be shared: ${img.label}`,`将分享的图片：${img.label}`);preview.dataset.format=img.format;
+   const show=()=>{preview.src=img.url;preview.alt=tx(`Imagen que se compartirá: ${img.label}`,`Image to be shared: ${img.label}`,`将分享的图片：${img.label}`);preview.dataset.format=img.format;shareDialog.dataset.contact=img.data.brand?.contact?'shown':'hidden';
     dl.href=img.url;dl.download=img.file.name;wa.href='https://wa.me/?text='+encodeURIComponent(text());
     mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text()+'\n\n'+tx('(Adjunta la imagen descargada.)','(Attach the downloaded image.)','（请附上下载的图片。）'));
     for(const b of fmtButtons)b.setAttribute('aria-pressed',String(b.dataset.format===img.format));};
