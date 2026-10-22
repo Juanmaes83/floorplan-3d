@@ -12,7 +12,8 @@ Chromium 141 + SwiftShader (sin GPU), Playwright, Node 22. Sin merge ni desplieg
 ## Qué cambia
 - Vista general: una cámara clonada se desplaza solo a lo largo de la dirección de vista actual para encuadrar la caja
   de la vivienda (sin cambiar la fov: sin deformar ni recortar). Estancias: su propia cámara, regla «contener».
-- Composición «B»: imagen arriba y una franja propia debajo (no superpuesta) con nombre del inmueble, planta y vista,
+- Composición: horizontal «D» (imagen a la izquierda, columna de datos a la derecha) y vertical «B» (imagen arriba,
+  franja debajo); nunca superpuesta. Contiene nombre del inmueble, planta y vista,
   «N estancias · Superficie útil aprox. X m²» y, si existe, logo y nombre del profesional. Contacto **solo si el
   profesional marca** «Mostrar mi contacto en la imagen» (desactivado por defecto).
 - Formatos: horizontal 1600×1000 y vertical 1080×1350, elegibles en el diálogo. La vista previa **es** el archivo:
