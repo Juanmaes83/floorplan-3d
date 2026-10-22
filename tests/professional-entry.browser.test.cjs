@@ -11,7 +11,7 @@ before(async()=>{
  server=createServer(async(req,res)=>{try{
   const file=path.resolve(root,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));
   if(!file.startsWith(root+path.sep))throw Error('path');
-  res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');
+  res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':'text/html');
   res.end(await fs.readFile(file));
  }catch{res.statusCode=404;res.end();}});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
@@ -82,4 +82,40 @@ test('«El plano | La vivienda en 3D» shows the same example drawn and as a rea
  assert.ok(await page.locator('.welcome-shot').evaluate(img=>img.naturalWidth>=600));
  assert.match(await page.locator('.welcome-visual figcaption').textContent(),/Captura real de Rubik/);
  await page.locator('#welcomeView-plan').click();assert.equal(await page.locator('.welcome-shot').isVisible(),false);assert.deepEqual(errors,[]);
+});
+
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`«Recórrela en 3D» and «Soluciones»: a reading path after the entries, cards open on demand ${viewport.width}x${viewport.height}`,{timeout:60000},async t=>{
+ const narrow=viewport.width<=1100,context=await browser.newContext({viewport,isMobile:narrow,hasTouch:narrow});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());
+ await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+ const order=await page.evaluate(()=>['.welcome-entries','#welcomeWalk','#welcomeSolutions'].map(s=>document.querySelector(s).getBoundingClientRect().top));
+ assert.ok(order[0]<order[1]&&order[1]<order[2],'entries, then the 3D walk band, then the solutions');
+ assert.match(await page.locator('#welcomeWalk h2').textContent(),/recórrela en 3D/);
+ assert.deepEqual(await page.locator('.solutions-phases strong').allTextContents(),['Empezar','Preparar','Distribuir','Amueblar','Revisar y guardar']);
+ assert.equal(await page.locator('.solutions-card').count(),5);assert.equal(await page.locator('.solutions-phases svg.icon').count(),5);
+ const bodyH=id=>page.locator(`#solutionsBody-${id}`).evaluate(b=>b.getBoundingClientRect().height);
+ assert.ok(await bodyH('real-estate')<2,'cards start closed: not everything at once');
+ const head=page.locator('[data-audience="real-estate"] .solutions-head');await head.scrollIntoViewIfNeeded();
+ if(narrow){await head.tap();}else{await head.hover();}
+ await page.waitForTimeout(350);assert.ok(await bodyH('real-estate')>20,'opens on hover (mouse) or tap');
+ assert.equal(await head.getAttribute('aria-expanded'),'true','announced state matches what is seen (mouse, tap)');
+ if(!narrow){await page.mouse.move(2,2);await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'false','closed again when the mouse leaves');await head.hover();await page.waitForTimeout(350);await head.click();await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'false','a click toggles what is seen: it closes while the mouse stays');assert.ok(await bodyH('real-estate')<2);await page.mouse.move(2,2);await page.waitForTimeout(350);await page.waitForTimeout(350);assert.ok(await bodyH('real-estate')<2,'closes when the mouse leaves');
+  await head.focus();await page.keyboard.press('Enter');await page.waitForTimeout(350);assert.equal(await head.getAttribute('aria-expanded'),'true');assert.ok(await bodyH('real-estate')>20,'keyboard opens it');}
+ assert.doesNotMatch(await page.locator('#welcomeSolutions').textContent(),/\bIA\b|[Ee]nlace|SKP|FBX|USDZ|GLB|DXF|1:50|1:100/,'no promise of features that are not in master');
+ const press=async s=>{const l=page.locator(s).first();await l.scrollIntoViewIfNeeded();if(narrow)await l.tap();else await l.click();};
+ await press('#welcomeAudience-interior');await page.waitForTimeout(350);
+ assert.equal(await page.locator('.solutions-card').first().getAttribute('data-audience'),'interior');assert.ok(await bodyH('interior')>20,'the chosen field opens first');
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+ for(const id of ['#welcomeWalk','#welcomeSolutions']){await page.locator(id).scrollIntoViewIfNeeded();await page.screenshot({path:require('node:path').join(require('node:os').tmpdir(),`sol-${id.slice(8)}-${viewport.width}.png`)});}
+ assert.deepEqual(errors,[]);
+});
+
+test('«Recorrer el ejemplo en 3D» opens the example in the 3D walk 1440x900',{timeout:240000,skip:!process.env.THREE_LOCAL_DIR&&'THREE_LOCAL_DIR not set: 3D cannot load offline'},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
+ await page.goto(url);await page.locator('#welcomeDialog[open]').waitFor();
+ await page.locator('#welcomeWalkExample').click();
+ await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&document.querySelector('#modes3d [data-mode="walk"]')?.classList.contains('on'),null,{timeout:200000});
+ assert.equal(await page.locator('#welcomeDialog[open]').count(),0);assert.deepEqual(errors,[]);
 });
