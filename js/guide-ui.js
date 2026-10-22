@@ -5,6 +5,16 @@
  const hadLibrary=(()=>{try{return originalStorage.getItem(FloorPlanLibrary.KEY)!==null;}catch{return false;}})();
  let navigationEpoch=0,roomReturnToWelcome=false;
  let data={version:1,seen:false,entries:{}},storageError='',currentId=null,lastSnapshot='',lastResult=null,pendingEntry=null,entryOrigin=null,pendingIds=[],afterCopy=null,fullEditor=false;
+ const audienceKey='rubik-professional-audience-v1';
+ const audiences=[
+  ['architecture',['Estudio de arquitectura','Architecture studio','建筑设计事务所']],
+  ['real-estate',['Inmobiliaria','Real estate agency','房地产机构']],
+  ['developer',['Promotora','Property developer','房地产开发商']],
+  ['renovation',['Reformas','Renovation','装修施工']],
+  ['interior',['Decoración e interiorismo','Interior design','室内设计']]
+ ];
+ let audience='';
+ try{const stored=originalStorage.getItem(audienceKey);if(audiences.some(([id])=>id===stored))audience=stored;}catch{}
  try{const raw=originalStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version===1&&parsed.entries&&typeof parsed.entries==='object'&&!Array.isArray(parsed.entries))data=parsed;}}catch{storageError=tx('No se pudo recuperar la guía. El plano se conserva.','The guide could not be restored. The plan is preserved.','无法恢复指南。平面图已保留。');}
  function el(tag,text,parent,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;if(parent)parent.append(n);return n;}
  function btn(id,text,fn,parent,primary=false){const n=el('button',text,parent,'btn'+(primary?' primary':''));n.id=id;n.type='button';n.onclick=fn;return n;}
@@ -96,6 +106,15 @@
    ['welcomeBlank','+',['Crear desde cero','Create from scratch','从零创建'],['Proyecto vacío: añade estancias indicando ancho y fondo, o dibújalas sobre el plano.','An empty project: add rooms by width and depth, or draw them on the plan.','空项目：输入宽度和进深添加房间，或在平面图上绘制。'],()=>createOwn('create')],
    ['welcomeExample','◇',['Probar el ejemplo','Try the example','试用示例'],['Explora en 2D y 3D una vivienda ya preparada. Para guardar cambios como tuyos, crea una copia.','Explore a prepared home in 2D and 3D. To keep changes as yours, create a copy.','在 2D 和 3D 中浏览准备好的住宅。要保存为自己的修改，请创建副本。'],()=>example()]
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
+  const audienceSection=el('section',undefined,shell,'welcome-audience');
+  const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
+  el('p',tx('Opcional. Elige tu perfil para identificarte; las herramientas son las mismas para todos.','Optional. Choose your field; everyone has access to the same tools.','可选。选择你的领域；所有人使用相同的工具。'),audienceSection);
+  const audienceOptions=el('div',undefined,audienceSection,'welcome-audience-options');audienceOptions.setAttribute('role','group');audienceOptions.setAttribute('aria-labelledby',audienceTitle.id);
+  for(const [id,names] of audiences){const option=btn('welcomeAudience-'+id,label(names),()=>{
+   audience=audience===id?'':id;
+   try{if(audience)originalStorage.setItem(audienceKey,audience);else originalStorage.removeItem(audienceKey);}catch{}
+   for(const node of audienceOptions.children)node.setAttribute('aria-pressed',String(node.id==='welcomeAudience-'+audience));
+  },audienceOptions);option.classList.add('welcome-audience-option');option.setAttribute('aria-pressed',String(audience===id));}
   const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
   if(ownRecoverable())btn('welcomeContinue',tx('Continuar mi proyecto →','Continue my project →','继续我的项目 →'),()=>{const own=library.all().find(e=>e.id===library.activeId()&&data.entries[e.id]?.kind==='own')||library.all().find(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));if(own)switchProject(library.open(own.id));closeWelcome();render();},foot);
