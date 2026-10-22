@@ -199,8 +199,10 @@
   if(s.manualTask&&p.current.status==='completed'){const pending=p.pending.find(t=>t.id!==p.current.id);return {mode:'done-task',task:p.current,next:pending||null,r:pending?null:journeyResult(s)};}
   // The stored task can lag behind (e.g. after importing a building it may still be a completed one): show the first
   // pending task of the goal instead.
-  if(!p.finished&&p.pending.every(t=>t.id==='view3d')&&presented())return {mode:'journey',r:journeyResult(s)};
-  if(!p.finished){const cur=p.current.status==='completed'&&p.pending[0]?p.pending[0]:p.current,block=cur.blockers.length?p.tasks.find(t=>t.id===cur.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:cur};}
+  // A presented version has been reviewed in 3D: the 3D task is not offered again; the next pending one is.
+  const pending=presented()?p.pending.filter(t=>t.id!=='view3d'):p.pending;
+  if(!p.finished&&!pending.length)return {mode:'journey',r:journeyResult(s)};
+  if(!p.finished){const cur=(p.current.status==='completed'||presented()&&p.current.id==='view3d')&&pending[0]?pending[0]:p.current,block=cur.blockers.length?p.tasks.find(t=>t.id===cur.blockers[0]):null;return {mode:'goal',task:block&&!block.blockers.length?block:cur};}
   return {mode:'journey',r:journeyResult(s)};
  }
  function runJourney(id,r){
