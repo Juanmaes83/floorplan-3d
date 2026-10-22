@@ -144,10 +144,12 @@ Por orden de prioridad, la primera regla que se cumple decide:
 
 ### 4.4 Teléfono
 
-- **M1, pendiente:** la barra de selección sigue siendo más ancha que 390 px y deja «Eliminar» o «Propiedades» fuera de la pantalla. Se probaron dos arreglos: bajar los botones a dos filas, que empujaba el aviso de conflictos sobre cotas y controles (`stair-conflicts`, `opening-contextual`), y compactarlos, que no basta con siete botones. Necesita su propio diseño, por ejemplo agrupar acciones en «Más».
+- **M1, resuelto el 22-10 (`4dd4e5d`):** se compararon tres opciones: dos filas (empujaba el aviso de conflictos: `stair-conflicts`, `opening-contextual`), un menú «Más» (esconde «Eliminar» tras otro toque) y botones de icono. Se eligió la tercera: en el teléfono, girar, duplicar y eliminar son botones de 44 px con su nombre como `aria-label`/`title`, y el nombre del mueble queda solo para lectores de pantalla (el mueble ya está resaltado en el plano y nombrado en «Propiedades»). Las seis acciones caben en 390 px (antes necesitaban 602 px). A 360 px sobran 18 px y la barra conserva el desplazamiento horizontal como último recurso: aceptable, no bloqueante.
 - **M2:** con la barra de selección visible, el aviso temporal se coloca por encima de ella.
 - **M3:** abrir la paleta con un hueco a medio colocar cancela ese modo y lo anuncia. No se habrá añadido nada, y elegir otro tipo vuelve a empezarlo. Abrir «Propiedades» no lo cancela, porque la propia barra de selección lo ofrece durante la colocación.
-- **M4, pendiente:** la altura de la guía en el teléfono (~220 px) no cambia en este corte. La reducción del prototipo A necesita mover «← Paso anterior» y «Cambiar objetivo», y su reorganización se decidirá con la revisión visual de Juanma.
+- **M4, resuelto el 22-10 (`4dd4e5d`):** a ≤ 600 px, proyecto y objetivo comparten una línea y los cinco controles de la guía una fila; «← Paso anterior» muestra solo la flecha y conserva su nombre accesible. No se quita ningún control. 390×844: de 217 a 153 px tras la primera estancia y de 258 a 194 px en el ejemplo (+64 px de plano).
+- **Cabecera guiada en escritorio (regresión de este corte, corregida):** mostrar «Rehacer» y «Presentar mi vivienda» comprimía el resumen del plano a cinco líneas (cabecera de 71 a 116 px). Ahora el resumen ocupa una línea con el texto completo en su `title` (64 px), y solo hay una entrada «Presentar mi vivienda» visible a la vez: la de la guía cuando la ofrece, si no la de la cabecera.
+- **Colores del editor:** el estado de pasar por encima, las estadísticas, `kbd`, la escala y la barra de selección usan los roles «Perla». Los restos de la bienvenida van con el resultado 1 del programa profesional, que rediseña esa pantalla.
 
 ### 4.5 Texto exacto (es / en / zh)
 
