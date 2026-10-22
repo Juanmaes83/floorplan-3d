@@ -22,8 +22,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.equal(await page.locator('#sheetScale').inputValue(),'0');assert.match(await page.locator('#toast').textContent(),/no cabe en la hoja a 1:50/);
  await page.locator('#sheetScale').selectOption('100');assert.equal(await page.locator('#sheetScale').inputValue(),'100');
  const pending=page.waitForEvent('download');await press('#sheetDownload');const file=await pending,svg=await fs.readFile(await file.path(),'utf8');
- assert.match(svg,/width="420mm"/);assert.match(svg,/data-scale="1:100"/);assert.match(svg,/Escala 1:100/);assert.match(svg,/imprime al 100 %/);
- const out=path.join(os.tmpdir(),`sheet-1-100-${viewport.width}.svg`);await fs.writeFile(out,svg);
+ assert.match(svg,/width="420mm"/);assert.match(svg,/data-scale="1:100"/);assert.match(svg,/Escala 1:100/);assert.match(svg,/imprime al 100 % y comprueba la barra con una regla/);
+ const out=path.join(process.env.SHEET_SCALE_ARTIFACTS||os.tmpdir(),`sheet-1-100-${viewport.width}.svg`);await fs.writeFile(out,svg);
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'the sheet does not change the project');
  // Independent opening: a fresh page with only the file, at CSS 96 dpi (1 mm = 3.7795 px).
  const viewer=await context.newPage();await viewer.goto('file://'+out);
@@ -32,7 +32,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  assert.ok(Math.abs(m.root[0]/PX_PER_MM-420)<0.5,`sheet 420 mm wide (${(m.root[0]/PX_PER_MM).toFixed(2)})`);
  for(const [k,mm] of [[0,geo.w],[1,geo.h]])assert.ok(Math.abs(m.room[k]/PX_PER_MM-mm/100)<0.6,`room ${k?'depth':'width'} ${mm} mm → ${(mm/100).toFixed(2)} mm on paper, measured ${(m.room[k]/PX_PER_MM).toFixed(2)}`);
  assert.ok(Math.abs(m.bar/PX_PER_MM-m.metres*10)<0.6,`scale bar ${m.metres} m → ${m.metres*10} mm, measured ${(m.bar/PX_PER_MM).toFixed(2)}`);
- await viewer.screenshot({path:path.join(os.tmpdir(),`sheet-viewer-${viewport.width}.png`)});
+ if(process.env.SHEET_SCALE_ARTIFACTS)await fs.writeFile(path.join(process.env.SHEET_SCALE_ARTIFACTS,`sheet-1-100-${viewport.width}-measures.json`),JSON.stringify({viewport:`${viewport.width}x${viewport.height}`,method:'SVG opened alone in Chromium, CSS 96 dpi; not a printed sheet',sheetWidthMm:+(m.root[0]/PX_PER_MM).toFixed(2),room:{id:geo.id,modelMm:[geo.w,geo.h],expectedPaperMm:[geo.w/100,geo.h/100],measuredPaperMm:m.room.map(v=>+(v/PX_PER_MM).toFixed(2))},scaleBar:{metres:m.metres,expectedMm:m.metres*10,measuredMm:+(m.bar/PX_PER_MM).toFixed(2)}},null,1));
+ await viewer.screenshot({path:path.join(process.env.SHEET_SCALE_ARTIFACTS||os.tmpdir(),`sheet-viewer-${viewport.width}.png`)});
  await page.locator('#sheetClose').click();await press('details.menu summary');await press('#openSheet');assert.equal(await page.locator('#sheetScale').inputValue(),'0','each sheet starts unscaled');
  assert.deepEqual(errors,[]);
 });
