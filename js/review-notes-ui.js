@@ -14,7 +14,7 @@
  const load=()=>{try{const v=JSON.parse(localStorage.getItem(KEY));return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}catch{return {};}};
  const save=all=>{try{localStorage.setItem(KEY,JSON.stringify(all));}catch{say(tx('No se pudieron guardar las observaciones en este navegador.','Observations could not be saved in this browser.','无法在此浏览器中保存意见。'),6000);}};
  const revision=()=>FloorPlanGuide.revision(app.project);
- const roomName=r=>typeof nm==='function'?nm(r.name):r.name;
+ const local=v=>typeof nm==='function'?nm(v):v,roomName=r=>local(r.name);
  function slot(){const all=load(),id=app.project.id;all[id]=all[id]||{draft:null,received:[]};return {all,s:all[id]};}
  function draft(s){if(!s.draft||s.draft.versionCode!==R.versionCode(revision()))s.draft=R.create(app.project,revision(),{reviewer:s.draft?.reviewer||''});return s.draft;}
 
@@ -25,7 +25,7 @@
   const head=el('div',undefined,dialog,'review-head');const h=el('h2',tx('Observaciones del cliente','Client observations','客户意见'),head);h.id='reviewTitle';h.tabIndex=-1;
   button('×',head,()=>dialog.close(),'btn review-close').setAttribute('aria-label',tx('Cerrar','Close','关闭'));
   const id=el('p',undefined,dialog,'review-identity');id.id='reviewIdentity';
-  id.textContent=tx(`«${app.project.name}» · versión ${d.versionCode}. Las observaciones no cambian la vivienda.`,`“${app.project.name}” · version ${d.versionCode}. Observations do not change the home.`,`“${app.project.name}” · 版本 ${d.versionCode}。意见不会更改住宅。`);
+  id.textContent=tx(`«${local(app.project.name)}» · versión ${d.versionCode}. Las observaciones no cambian la vivienda.`,`“${local(app.project.name)}” · version ${d.versionCode}. Observations do not change the home.`,`“${local(app.project.name)}” · 版本 ${d.versionCode}。意见不会更改住宅。`);
   // Writing (client side).
   const write=el('section',undefined,dialog,'review-section');el('h3',tx('Escribir observaciones','Write observations','填写意见'),write);
   const nameLabel=el('label',tx('Tu nombre (opcional)','Your name (optional)','你的名字（可选）'),write);const name=el('input',undefined,nameLabel);name.id='reviewName';name.maxLength=80;name.value=d.reviewer;name.onchange=()=>{d.reviewer=name.value.trim().slice(0,80);save(all);};
@@ -69,6 +69,8 @@
    el('p',tx(`Por incorporar: ${counts.incorporate||0} · descartadas: ${counts.discard||0} · pendientes: ${counts.pending||0}`,`To incorporate: ${counts.incorporate||0} · discarded: ${counts.discard||0} · pending: ${counts.pending||0}`,`待采纳：${counts.incorporate||0} · 已放弃：${counts.discard||0} · 待定：${counts.pending||0}`),box,'review-counts');
    button(tx('Quitar este archivo','Remove this file','移除此文件'),box,()=>{s.received.splice(i,1);save(all);render();},'btn review-small');
   });
+  // The professional who has received observations sees them first; writing stays below.
+  if(s.received.length)write.before(recv);
   save(all);
  }
  function open(roomId=null){presetRoom=roomId;render();if(!dialog.open)dialog.showModal();dialog.querySelector('#reviewTitle').focus();}
