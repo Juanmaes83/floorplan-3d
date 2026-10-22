@@ -151,7 +151,7 @@
   const D=window.FloorPlanDeliveryImage,F=D.FORMATS[format];
   const shot=View3D.deliveryShot({width:F.image.w,height:F.image.h,frame:stop.kind!=='room'});
   const room=stop.kind==='room'?app.geometry.rooms.find(r=>r.id===stop.roomId):null;
-  const p=brandSnap?.profile,data=D.content({title:brandSnap?.title||app.project.name,view:label,level:plan.levels.length>1?stop.levelName:'',rooms:room?[room]:app.geometry.rooms,
+  const p=brandSnap?.profile,data=D.content({title:brandSnap?.title||app.project.name,view:label,level:(plan.levels?.length||0)>1?stop.levelName:'',rooms:room?[room]:app.geometry.rooms,
    brand:p&&p.name?{name:p.name,logo:p.logo,contact:contact?window.FloorPlanBrand?.contactLine?.(p)||'':''}:null});
   const out=await D.compose({image:shot.dataUrl,format,layout:'band',data});const blob=await (await fetch(out.dataUrl)).blob();
   return {url:out.dataUrl,label,format,fill:shot.fill,data,file:new File([blob],`rubik-sota-vivienda-${format==='portrait'?'vertical':'horizontal'}.png`,{type:'image/png'})};}
