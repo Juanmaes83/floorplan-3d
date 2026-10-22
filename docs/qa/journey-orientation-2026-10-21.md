@@ -84,4 +84,31 @@ Base: `master` `e796e3d` en una copia limpia, en el mismo entorno y con ejecuci�
 
 ## 6. Resultado final
 
-*(se completa con la ronda final y la auditoría «después»)*
+**Suites del navegador sobre la cabeza final:**
+
+| Suite | Rama | Base `e796e3d` | Lectura |
+| --- | --- | --- | --- |
+| Unitarias | 262/262 | — | PASS (incluye las 8 de `journey-core`) |
+| `journey-orientation` | 14/14 (`d1bb57b`) | 0/14 | PASS; los 14 casos fallan en la base |
+| `guide`, `guide-navigation`, `welcome-generar`, `panel-pattern`, `ui-language`, `room-layout`, `upload`, `multiformat-guide`, `layout-review`, `surfaces`, `building`, `variants`, `stair-overlap`, `stair-relocation`, `sheet`, `brand` | todas PASS (`4e2c0fd`; los cambios posteriores no tocan esas áreas) | — | PASS |
+| `build-palette` | 3/3 (`27613a5`) | 3/3 con la aserción antigua | PASS con la nueva especificación (O6) |
+| `opening-contextual`, `stair-conflicts`, `premium-shell` | 9/9, 4/4 y 4/4 (`5f86c43`) | 9/9, 4/4 y 4/4 | PASS |
+| `presentation-framing`, `environment-3d`, `variants-visual` | 6/6, 3/3 y 4/4 (`27613a5`) | — | PASS |
+| `presentation-batch` | 7 pasan, 2 fallan (`23b522f`) | Los mismos 7 y 2 | Fallo previo, idéntico (descarga del lote en este entorno) |
+| `presentation-contact` | 2 pasan, 3 cortadas por tiempo (`23b522f`) | 3 pasan, cortes por tiempo | **SIN RESULTADO**: los cortes de tiempo sin GPU no permiten comparar; no se cuenta como PASS |
+
+**CI:** no ejecutada.
+
+**Auditoría «después»** de los recorridos afectados: [matriz](artifacts/journey/after/matrix.md) y [hojas de contactos](artifacts/journey/after/). Primer estado relevante en 1440×900; el mismo resultado en los tres tamaños:
+
+| Recorrido | Momento | Antes (`e796e3d`) | Después | Completo en los 3 tamaños |
+| --- | --- | --- | --- | --- |
+| B | Tras la primera estancia | «✓ Objetivo completado» → «Ver resultado y exportar» | «Añade puertas y ventanas» → «Añadir puertas y ventanas» | sí |
+| C | Ejemplo en 3D | «✓ Objetivo completado» → «Ver resultado y exportar» | «Estás viendo un ejemplo» → «Crear mi vivienda desde el ejemplo» | sí |
+| D | Tras subir la imagen | «Crea o revisa las estancias» → «Resolver requisito» | «Ajusta y comprueba la escala» → «Empezar a ajustar» | sí |
+| I | Dúplex con conflictos | «Revisa la distribución en 3D» → «Abrir 3D» | «Resuelve los conflictos del edificio» → «Ver conflictos» | sí |
+| L | Al volver de presentar el ejemplo | «Revisa la distribución en 3D» → «Abrir 3D» | «Estás viendo un ejemplo» → «Crear mi vivienda desde el ejemplo» | sí |
+| N | «← Paso anterior» hasta la primera tarea | «Prepara tu proyecto» → «Volver al inicio» (y la bienvenida al pulsar otra vez) | «Ya hecho: Prepara tu proyecto» → «Seguir con: Añade puertas y ventanas»; el botón queda desactivado en la primera tarea | El arnés registra como bloqueo el botón desactivado, que es el comportamiento nuevo (O5) |
+| P | Tras entregar el dúplex (lote ZIP con las 4 vistas, `editable-building.zip` y `presentation.json`) | «Revisa la distribución en 3D» → «Abrir 3D» | «Guarda tu proyecto» → «Confirmar guardado» | sí |
+
+**Pendiente:** M1 (barra de selección más ancha que 390 px), M4 (altura de la guía en el teléfono), el corte B (cromático), las capturas de los prototipos, la GPU real, el teléfono físico y la prueba D-01.
