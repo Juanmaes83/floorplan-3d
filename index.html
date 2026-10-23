@@ -256,6 +256,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .app.hide-lib{grid-template-columns:0 minmax(0,1fr) 300px}
   .app.hide-panel{grid-template-columns:256px minmax(0,1fr) 0}
   .app.hide-lib.hide-panel{grid-template-columns:0 minmax(0,1fr) 0}
+  body.presenting .app:is(.app,.hide-lib,.hide-panel){grid-template-columns:0 minmax(0,1fr) 0;transition:none}
   .app.hide-lib aside.lib,.app.hide-panel aside.right{overflow:hidden;border:0}
   aside{overflow-x:hidden}
   aside.lib>div{min-width:220px} #panel{min-width:284px}   /* 收起动画中内容不被挤压变形 */
@@ -395,7 +396,9 @@ body.presenting .guide-bar{display:none}
 body.presenting .app{grid-template-rows:0 minmax(0,1fr) 0}
 body.presenting main,body.presenting aside{grid-row:2}
 body.presenting header,body.presenting footer{display:none}
-body.presenting aside,body.presenting #fab{pointer-events:none;opacity:.45}
+/* The client sees the home, not the editor: the edit columns and drawers leave the screen while presenting. */
+body.presenting aside{visibility:hidden;pointer-events:none}
+body.presenting #fab{pointer-events:none}
 body.presenting #fab{visibility:hidden}
 body.presenting #hint3d{display:none}
 body.presenting #toast{top:8px;bottom:auto}

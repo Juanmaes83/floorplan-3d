@@ -31,6 +31,19 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const restored=await snapshot(page);assert.equal(restored.project,editor.project);assert.equal(restored.entry,editor.entry);assert.equal(restored.cut,editor.cut);assert.equal(restored.decor.outline,null);assert.equal(restored.decor.ceilingFixtures,editor.decor.ceilingFixtures);
  assert.deepEqual(errors,[]);
 });
+// The client sees the home, not the editor: with the edit columns open, presenting hides them and gives the scene the
+// full width; ending the presentation brings them back as they were.
+test('R10 presentation hides the edit columns 1440x900',{timeout:240000},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900});
+ const layout=()=>page.evaluate(()=>{const seen=sel=>{const e=document.querySelector(sel),r=e.getBoundingClientRect();return r.width>2&&getComputedStyle(e).visibility==='visible';};return {lib:seen('aside.lib'),panel:seen('aside.right'),main:Math.round(document.querySelector('main').getBoundingClientRect().width)};});
+ const editor=await layout();assert.deepEqual([editor.lib,editor.panel],[true,true],'columns open in the editor');
+ await present(page,['rom_mbath','rom_master']);
+ const shown=await layout();assert.deepEqual([shown.lib,shown.panel],[false,false],'no edit columns in the presentation');assert.equal(shown.main,1440,'the scene takes the full width');
+ await page.screenshot({path:path.join(QA,'1440x900-presentation-no-columns.png')});
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(600);
+ assert.deepEqual(await layout(),editor,'the editor comes back as it was');
+ assert.deepEqual(errors,[]);
+});
 test('R10 framing is repeatable, respects reduced motion and an editor wall cut',{timeout:240000},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900},{reducedMotion:'reduce'});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);
