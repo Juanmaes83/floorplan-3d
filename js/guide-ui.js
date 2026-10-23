@@ -223,7 +223,10 @@
   if(a.id==='presentation')return window.FloorPlanPresentation?.open();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
   if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&project.rooms.find(r=>G.normalize(nm(r.name)).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina'));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}
-  const block=requirement(a);if(block){if(block==='start')afterCopy=a;state().current=block;state().closed=false;store();render();return openDetails(block);}
+  const block=requirement(a);if(block){if(block==='start')afterCopy=a;state().current=block;state().closed=false;store();render();
+   // In the example the copy is one step away: the card asks for it in place, without opening the task list.
+   if(block==='start'){focusReturns.set(actionDialog,currentAction);currentAction.focus();return;}
+   return openDetails(block);}
   switch(a.id){
    case 'scale':return runTask(progress().tasks.find(t=>t.id==='scale')||{id:'scale',action:'scale',blockers:[]});
    case 'furniture':await setView('2d');if(!ui.sel||ui.sel.kind!=='room'){const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];if(room)select({kind:'room',id:room.id});}libSearch.query=a.filter||'';libSearch.room='';libSearch.family='';$('#furnitureSearch').value=libSearch.query;$('#searchRoom').value=$('#searchFamily').value='';renderLibResults();window.FloorPlanBuildPalette?.select('furnish');drawer('lib',true);$('#furnitureSearch').focus();state().current='furniture';break;
@@ -267,7 +270,8 @@
   if(state().journeySkipped?.length)btn('guideRestoreSuggestions',tx('Recuperar sugerencias aplazadas','Bring back put-off suggestions','恢复暂缓的建议'),()=>{state().journeySkipped=[];store();render();renderDetails();},row);btn('guideCopyNow',tx('Exportar copia JSON / ZIP','Export JSON / ZIP copy','导出 JSON / ZIP'),()=>safe(exportCopy),row);
   if(storageError)el('p',storageError,details).setAttribute('role','alert');details.scrollTop=scroll;
  }
- const statusLabel=t=>t.skipped?tx('Saltada por ahora','Skipped for now','暂时跳过'):label(({pending:['○ Pendiente','○ Pending','○ 待完成'],active:['◉ En curso','◉ In progress','◉ 进行中'],completed:['✓ Completada','✓ Complete','✓ 已完成'],review:['! Necesita revisión','! Needs review','! 需要检查']})[t.status]);
+ // A task waiting on an earlier one says so; «Necesita revisión» is for a result that has changed since it was done.
+ const statusLabel=t=>t.skipped?tx('Saltada por ahora','Skipped for now','暂时跳过'):t.status!=='completed'&&t.blockers.length?tx('○ Después de: ','○ After: ','○ 之后：')+label(G.definitions[t.blockers[0]].title):t.id==='start'&&t.status==='review'&&state().kind==='example'?tx('◉ Ahora: crea tu copia','◉ Now: create your copy','◉ 当前：创建副本'):label(({pending:['○ Pendiente','○ Pending','○ 待完成'],active:['◉ En curso','◉ In progress','◉ 进行中'],completed:['✓ Completada','✓ Complete','✓ 已完成'],review:['! Necesita revisión','! Needs review','! 需要检查']})[t.status]);
  function summary(p){return tx(`${p.percent} % completado · ${p.done} de ${p.required} tareas necesarias listas`,`${p.percent}% complete · ${p.done} of ${p.required} required tasks ready`,`${p.percent}% 已完成 · ${p.done}/${p.required} 必要任务完成`);}
  function record(kind,rev=G.revision(project)){state().evidence[kind]=rev;store();render();}
 
@@ -312,7 +316,13 @@
   const d=decideNext(s,p),link=(b,action,fn)=>{b.hidden=!action;if(action){b.textContent=label(action.label);b.onclick=()=>safe(fn);}};
   laterAction.hidden=secondaryAction.hidden=true;goalDone.hidden=true;presentAction.hidden=true;currentAction.hidden=false;
   document.body.classList.toggle('next-present',false);
-  if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(()=>runTask(t));presentAction.hidden=t.stage!==4;}
+  if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(()=>runTask(t));presentAction.hidden=t.stage!==4;
+   // A goal other than reviewing, chosen in the example, needs the person's copy: say why and what the copy keeps,
+   // and let them go on exploring instead.
+   if(t.id==='start'&&s.kind==='example'&&s.goal!=='review'){const goal=label(G.goals[s.goal]);currentTitle.textContent=tx('Crea tu copia para seguir','Create your copy to go on','创建副本以继续');
+    currentInstruction.textContent=tx(`El ejemplo es para explorar. Para «${goal}», tu copia conserva lo que ves y sigue desde aquí.`,`The example is for exploring. To “${goal}”, your copy keeps what you see and goes on from here.`,`示例仅供浏览。要“${goal}”，副本会保留当前内容并从这里继续。`);
+    currentAction.textContent=tx('Crear mi copia y seguir','Create my copy and go on','创建副本并继续');
+    link(secondaryAction,{label:['Seguir explorando el ejemplo','Keep exploring the example','继续浏览示例']},()=>{afterCopy=null;setGoal('review');});}}
   else if(d.mode==='done-task'){const next=d.next;currentTitle.textContent=tx('Ya hecho: ','Done: ','已完成：')+label(d.task.title);
    currentInstruction.textContent=next?tx('Puedes repasarlo o seguir con lo pendiente.','You can review it or go on with what is left.','可以复查，或继续未完成的任务。'):tx('Tu objetivo está completo. Puedes seguir con la vivienda.','Your goal is complete. You can go on with the home.','目标已完成。可以继续完善住宅。');
    if(next){currentAction.textContent=tx('Seguir con: ','Go on with: ','继续：')+label(next.title);currentAction.onclick=()=>safe(()=>{state().manualTask=false;runTask(next);});}
@@ -322,7 +332,7 @@
    link(secondaryAction,r.secondary,()=>runJourney(r.secondary.id,r));link(laterAction,r.later,()=>runJourney('later',r));
    if(p.finished){goalDone.hidden=false;goalDone.textContent=tx(`✓ Objetivo «${label(G.goals[p.goal])}» completado · resultados en «Tareas y ayuda»`,`✓ Goal “${label(G.goals[p.goal])}” complete · results in “Tasks & help”`,`✓ 目标“${label(G.goals[p.goal])}”已完成 · 结果见“任务及帮助”`);}}
   // The example line offers the copy; when the copy is the guide's own button, the line would only repeat it.
-  exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy';// The example can be edited; once it differs from the original, the line says so and the copy keeps those changes.
+  exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy'||d.mode==='goal'&&d.task.id==='start';// The example can be edited; once it differs from the original, the line says so and the copy keeps those changes.
   const changed=s.kind==='example'&&!isReference(project),copyButton=$('#guideCopyExample');copyButton.classList.toggle('primary',changed);
   exampleNote.textContent=changed?tx('Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.','You have changed the example. Create your copy to keep these changes.','你已修改示例。创建副本以保留这些修改。'):tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');copyButton.textContent=changed?tx('Crear mi copia con estos cambios','Create my copy with these changes','用这些修改创建副本'):tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
   presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');

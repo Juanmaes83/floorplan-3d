@@ -55,3 +55,20 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`a c
  assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),count,'the copy keeps the change');
  assert.deepEqual(errors,[]);
 });
+
+// In the example, an action that needs the person's copy (furnishing) asks for it on the guide card, with one copy
+// button and the way back to exploring; the task list no longer opens at 0 % with «Necesita revisión» on rooms that exist.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`the example asks for the copy in place ${viewport.width}x${viewport.height}`,async t=>{
+ const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');
+ const search=async q=>{await click(page,'#actionSearchBtn');await page.fill('#editorActionInput',q);await page.locator('#editorActionInput').press('ArrowDown');await page.locator('#editorActionInput').press('Enter');await page.waitForTimeout(300);};
+ const card=()=>page.evaluate(()=>{const shown=e=>!!e&&!e.closest('[hidden]')&&e.getClientRects().length>0;return {dialog:document.querySelector('#guideDialog').open,title:document.querySelector('#guideBar h2').textContent.trim(),primary:document.querySelector('#guidePrimary').textContent.trim(),focused:document.activeElement?.id,secondary:shown(document.querySelector('#guideSecondary'))?document.querySelector('#guideSecondary').textContent.trim():null,copyButtons:[...document.querySelectorAll('#guideBar button')].filter(b=>shown(b)&&/copia/i.test(b.textContent)).length,kind:FloorPlanGuideUI.state().kind,goal:FloorPlanGuideUI.state().goal};});
+ await search('muebles');
+ const asked=await card();assert.equal(asked.dialog,false,'no task list');assert.equal(asked.title,'Crea tu copia para seguir');assert.equal(asked.primary,'Crear mi copia y seguir');assert.equal(asked.focused,'guidePrimary');
+ assert.equal(asked.secondary,'Seguir explorando el ejemplo');assert.equal(asked.copyButtons,1,'one copy button');
+ await click(page,'#guideDetails');const labels=await page.evaluate(()=>[...document.querySelectorAll('#guideDialog .guide-task')].map(b=>b.querySelector('.task-meta b').textContent));
+ assert.equal(labels.some(l=>/Necesita revisión/.test(l)),false,`${labels}`);assert.ok(labels.includes('○ Después de: Prepara tu proyecto'),`${labels}`);assert.equal(labels[0],'◉ Ahora: crea tu copia');await click(page,'#guideDialogClose');
+ await click(page,'#guideSecondary');const back=await card();assert.equal(back.goal,'review');assert.equal(back.kind,'example');assert.notEqual(back.title,'Crea tu copia para seguir');
+ await search('muebles');await click(page,'#guidePrimary');await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
+ assert.equal((await card()).goal,'furnish','the copy goes on with furnishing');
+ assert.deepEqual(errors,[]);
+});
