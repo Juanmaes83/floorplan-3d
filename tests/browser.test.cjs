@@ -97,8 +97,8 @@ test('hostile names and material names stay text; ID/color payloads cannot creat
   await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);
   await page.locator('#gFurn [data-fid="obj_bed-01"]').dispatchEvent('pointerdown',{button:0,pointerId:1,clientX:400,clientY:400});
   assert.equal(await page.locator('#fName').inputValue(),payload);
-  // Images the app draws itself (sheet preview, the real 3D capture of the welcome) are not injected markup.
-  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-shot)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
+  // Images the app draws itself (sheet preview, the welcome's real 3D captures) are not injected markup.
+  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-shot):not(.welcome-walk-shot)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
   assert.deepEqual(JSON.parse((await readDownload(page,'#exportJson')).toString()),p);assert.deepEqual(errors,[]);
 });
 test('browser legacy migration is repeatable and keeps the original key',async t=>{
