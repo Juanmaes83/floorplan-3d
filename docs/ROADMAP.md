@@ -5,6 +5,13 @@
 Juanma pidió una bienvenida que reconozca arquitectura, inmobiliaria, promotora, reformas e interiorismo, y cinco resultados de experiencia y entrega. [Programa, auditoría de #70 y estado de las cinco líneas](product/professional-client-experience-2026-10-21.md). Estado al 22-10-2026 (sin merge ni despliegue; CI no ejecutada): orientación #71 Draft; entrada profesional #73 Draft (incluye #70) y «Soluciones» #76 Draft; del plano a la vivienda #74 Draft; revisión del cliente por archivo #75 Draft (enlace alojado pendiente de decisión D-06/D-08/D-09); lámina a escala #72 Draft (DXF candidato, no aprobado); ayuda con IA pendiente de decisión, prototipo sin IA no iniciado. Prueba D-01 pendiente.
 
 
+## Programa de creación y entrega profesional — encargado el 22-10-2026 (en estudio)
+
+Encargo, matriz de capacidades, orden de cortes y evidencia exigida: [`docs/product/delivery-programme-2026-10-22.md`](product/delivery-programme-2026-10-22.md).
+Prioridades: imagen de entrega profesional (apilada sobre #78) y primer corte de «Puntos de interés». Los candidatos que
+recoge (exterior, modelos 3D propios, visita inmersiva, identidad y ubicación, vídeo, presupuesto, instalaciones, sol)
+**no están aprobados ni implementados**.
+
 ## Decisión D-01 — público inicial confirmado el 17-10-2026
 
 Juanma confirmó como público inicial a **inmobiliarias, promotoras y estudios de arquitectura**; como segundo público, **profesionales de reformas e interiorismo**. El problema prioritario es preparar y presentar viviendas completas mediante un plano editable, mobiliario y vistas coherentes, incluidas viviendas de varias plantas cuando proceda. La participación de estudios de arquitectura no convierte Rubik en herramienta de documentación técnica ni acredita precisión profesional. El uso inicial se apoya en proyectos locales e intercambio explícito; no se ha decidido precio, cuentas, SaaS, CRM o política de compartir planos. [Registro de decisión](product/F0-decisions.md). La evaluación inicial desembocó en la aprobación del contrato de edificio (opción D, #50) y su primer corte (#51); eso no aprueba D-16, un contrato 2.0 ni las demás funciones de LoRA LAB. El estudio comparativo sigue en [#48](https://github.com/Juanmaes83/floorplan-3d/pull/48), con límites de evidencia.
