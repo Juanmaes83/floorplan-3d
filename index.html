@@ -4000,12 +4000,12 @@ function presentationCapture(){
     walkCtl.unlock();stopTouchWalk();$('#walkOverlay').style.display='none';$('#cross').style.display='none';
     opt.mode='orbit';syncModeBtns();syncHint3d();orbit.enabled=true;
   }
-  showLabels(false);presentationBaseCut=opt.cut;frameInfo=null;presentationLamps=true;
+  showLabels(false);presentationBaseCut=opt.cut;frameInfo=null;overviewInfo=null;presentationLamps=true;
   return state;
 }
 // Room stops are framed from the room polygon, its furniture and the visible screen region (outside the card).
 // A wall section is a declared, presentation-only state; the editor's cut returns with presentationRestore.
-let presentationBaseCut=null,frameInfo=null;const frameCache=new WeakMap();
+let presentationBaseCut=null,frameInfo=null,overviewInfo=null;const frameCache=new WeakMap();
 // Presentation-only floor outline of the framed room: a 70 mm inner band per polygon edge.
 let roomOutline=null;
 function clearRoomOutline(){if(roomOutline){scene.remove(roomOutline);roomOutline.geometry.dispose();roomOutline.material.dispose();roomOutline=null;}}
@@ -4027,13 +4027,30 @@ function presentationFrame(roomId,aspect,region){
   if(!cache.has(key))cache.set(key,window.FloorPlanPresentationCore.roomFrame(geometry,project.objects,roomId,{aspect,fovDeg:camera.fov,region,wallTop:fullTop,sectionTops:presentationBaseCut===2.8?[1.2]:[]}));
   return cache.get(key);
 }
+/* Overview pose: the usual direction and radius, moved back (and sideways, towards the free region left by the card)
+   until the whole level box — floor corners and wall tops — fits the free region with a margin. The fixed radius only
+   considered the plan: a small home seen from above left the foot of its outer walls out of the frame and its walls
+   read as a shaft (finding 13, 23-10-2026). A view that already fits keeps the usual radius. */
+function overviewPose(b,target,direction,radius,aspect,region){
+  const H=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
+  const r0=region&&region[2]-region[0]>.25&&region[3]-region[1]>.25?region:[0,0,1,1],m=.06,tV=Math.tan(camera.fov*Math.PI/360),tH=tV*aspect;
+  const nx0=2*r0[0]-1+m,nx1=2*r0[2]-1-m,ny0=1-2*r0[3]+m,ny1=1-2*r0[1]-m,cx=(nx0+nx1)/2,cy=(ny0+ny1)/2,hx=(nx1-nx0)/2,hy=(ny1-ny0)/2;
+  const f=direction.clone().negate(),right=new THREE.Vector3().crossVectors(f,new THREE.Vector3(0,1,0)).normalize(),up=new THREE.Vector3().crossVectors(right,f).normalize();
+  const corners=[];for(const [x,y] of [[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]])for(const h of [0,H])corners.push(new THREE.Vector3(wx(x),h,wz(y)));
+  const at=d=>{const eye=target.clone().addScaledVector(direction,d).addScaledVector(right,-cx*tH*d).addScaledVector(up,-cy*tV*d);
+    const fits=corners.every(p=>{const v=p.clone().sub(eye),z=v.dot(f);if(z<=0)return false;const sx=v.dot(right)/z/tH,sy=v.dot(up)/z/tV;return Math.abs(sx-cx)<=hx&&Math.abs(sy-cy)<=hy;});
+    return {eye,look:eye.clone().addScaledVector(f,d),fits};};
+  let d=radius,p=at(d);for(let i=0;i<60&&!p.fits;i++){d*=1.05;p=at(d);}
+  overviewInfo={radius:+radius.toFixed(3),distance:+d.toFixed(3),moved:d>radius+1e-6,fits:p.fits,wallTop:H,region:r0};
+  return pose(p.look,p.eye);
+}
 function presentationGo(stop,reduced=false,view={}){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
   clearPresentationRoute();
   if(presentationBaseCut==null)presentationBaseCut=opt.cut;
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const framed=stop.kind==='room'&&stop.roomId?presentationFrame(stop.roomId,aspect,view.region):null;
-  frameInfo=framed?{...framed,region:view.region||null}:null;
+  frameInfo=framed?{...framed,region:view.region||null}:null;if(framed)overviewInfo=null;
   if(framed)showRoomOutline(stop.roomId);else clearRoomOutline();
   if(framed){
     setPresentationCut(framed.section?framed.wallTop:presentationBaseCut);
@@ -4049,7 +4066,7 @@ function presentationGo(stop,reduced=false,view={}){
   const frame=aspect<.7?1.65:aspect>2 ? 1.45 : 1.25;
   const radius=Math.max(6,(span/2+1)/Math.tan(camera.fov*Math.PI/360)*frame)*(stop.kind==='room'?1.2:1);
   const target=new THREE.Vector3(tx,0,tz),direction=new THREE.Vector3(.42,.84,.34).normalize();
-  const next=pose(target,target.clone().addScaledVector(direction,radius));
+  const next=overviewPose(b,target,direction,radius,aspect,view.region);
   if(fly?.res)fly.res(false);fly=null;
   if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}
   return flyTo(next,650);
@@ -4152,7 +4169,7 @@ function presentationRoute(roomId,reduced=false,view={}){
 function presentationRestore(state){
   clearPresentationReveal();
   clearPresentationRoute();
-  presentationBaseCut=null;frameInfo=null;presentationLamps=false;clearRoomOutline();
+  presentationBaseCut=null;frameInfo=null;overviewInfo=null;presentationLamps=false;clearRoomOutline();
   setPresentationContactShadows(false);
   stopPresentationLighting();
   if(!state||!active)return;
@@ -4221,6 +4238,7 @@ window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
 Object.defineProperty(window.View3D,'presentationDecor',{get:()=>{const lamps=lampG?.children.filter(o=>o.isMesh)||[];return {outline:roomOutline?.userData.presentationOutline||null,ceilingFixtures:!lamps.length?'none':lamps.every(o=>o.visible)?'visible':lamps.some(o=>o.visible)?'mixed':'hidden'};}});
 Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&{...frameInfo,eye:[...frameInfo.eye],look:[...frameInfo.look]}});
+Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
