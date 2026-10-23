@@ -201,7 +201,8 @@
  function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();
   const examples=library.all().filter(e=>e.kind!=='building'&&e.project&&data.entries[e.id]?.kind==='example'),pristine=examples.find(e=>isReference(e.project));
   entryOrigin='example';
-  if(pristine){delete data.entries[pristine.id];store();switchProject(library.open(pristine.id));setView('2d');return;}
+  // An unchanged entry is the example under any name (the starting «Proyecto inicial» is one): it opens named as such.
+  if(pristine){const title=tx('Proyecto de ejemplo','Example project','示例项目');if(pristine.name!==title)library.rename(pristine.id,title);delete data.entries[pristine.id];store();switchProject(library.open(pristine.id));setView('2d');return;}
   const changed=examples.length>0;pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);
   const p=Core.initial();p.id=Core.id('prj');p.name=changed?tx('Proyecto de ejemplo (original)','Example project (original)','示例项目（原始）'):tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');
   if(changed)announce(tx('Abierto el ejemplo original. El ejemplo que cambiaste sigue en «Proyectos».','The original example is open. The example you changed is still in “Projects”.','已打开原始示例。你修改过的示例仍在“项目”中。'));}
