@@ -47,15 +47,25 @@ Vertical 1080×1350 (B, elegida): 66,5 % de la zona de imagen, 49,3 % del archiv
 | Dos plantas, con marca | 46,2 % del archivo | horizontal 52,1 %, vertical 57,2 %; «Planta baja · Vista general» |
 | Vista previa = descarga | sí | sí en los 12 casos (bytes idénticos) |
 
-Pruebas (SHA del commit de esta actualización): `delivery-image.test.cjs` 4/4; `delivery-image.browser.test.cjs` 4/4;
-`share-image` 3/3; `brand` 3/3; unitarias 258/258. Suite `presentation` **no ejecutada** sobre esta rama.
+## Pruebas por SHA (sin mezclar ramas)
+El código actual de esta rama es el de `17e286a`. `2dff3d2` y los commits posteriores solo cambian docs y evidencia.
+
+| SHA de código | Prueba | Resultado |
+|---|---|---|
+| `3cc4c4e` (anterior) | `delivery-image` unitarias 4/4 · navegador 4/4 · `share-image` 3/3 · `brand` 3/3 · unitarias 258/258 | histórico; este SHA ya no es el HEAD |
+| `17e286a` (= `2dff3d2`) | unitarias 258/258 · `delivery-image` navegador 4/4 · `share-image` 3/3 | PASS (23-10, 02:06 UTC, en serie) |
+| `17e286a` (= `2dff3d2`) | `brand` 390×844 | **FAIL intermitente**: 3.ª descarga de la lámina sin llegar. 5 de 6 ejecuciones a las 02:19–02:24 y 0 de 17 entre 03:40 y 04:20. **No reproducido hoy y sin causa demostrada.** Hay un defecto relacionado en `master` (lámina reabierta antes del evento `close`), corregido en #79 `acabb54`; la relación es plausible y no está demostrada (`docs/qa/sheet-reopen-2026-10-23.md` en #79) |
+| `17e286a` en GitHub Actions | `Guided experience` ✅ · `Multiformat guided import` ❌ (7 FAIL: F1b ×3 y F2 ×4) | los mismos 7 fallos que en `master`; los corrige #79, que esta rama no contiene |
+
+La suite `presentation` completa **no** se ha ejecutado sobre esta rama. Las ejecuciones posteriores sobre este SHA y sobre la integración temporal están en la descripción de la PR, para no cambiar el SHA de la evidencia.
 
 ## Abierto
 1. Horizontal: 44,9 % del archivo frente al 51 % previo (explicado arriba); decisión de Juanma si prefiere menos datos.
-2. ~~A 844×390 la vista previa es pequeña y hay que desplazar~~ → **resuelto (`17e286a`)**: en pantallas bajas el diálogo usa dos columnas (vista previa 422×264); sin desplazamiento vertical ni horizontal y todos los botones visibles con 44 px, medido a 844×390, 1440×900 y 390×844 (`dialog-844-two-columns.webp`).
-3. ~~Sin marca, hueco bajo los datos~~ → **resuelto**: sin marca el bloque de datos se centra en la columna (`after-1level-nobrand-centred-land.webp`).
+2. ~~A 844×390 la vista previa es pequeña y hay que desplazar~~ → **resuelto en `17e286a` (está en el HEAD)**: en pantallas bajas el diálogo usa dos columnas (vista previa 422×264); sin desplazamiento vertical ni horizontal y todos los botones visibles con 44 px, medido a 844×390, 1440×900 y 390×844 (`dialog-844-two-columns.webp`).
+3. ~~Sin marca, hueco bajo los datos~~ → **resuelto en `17e286a` (está en el HEAD)**: sin marca el bloque de datos se centra en la columna (`after-1level-nobrand-centred-land.webp`).
 4. «Compartir…» en teléfono físico: pendiente.
 5. Edificios: superficie de la planta visible, no total.
+6. Llevarla a `master` exige integrar antes #78, que no está en la autorización actual. Ver la secuencia propuesta en la descripción de la PR.
 
 ## Evidencia
 `artifacts/delivery-image/`: hoja de contacto antes/después, `layouts/` (B, C y D con nombres cortos, largos y sin marca), diálogo en 1440/390/844, PNG finales en WebP (antes y después), diálogo en
