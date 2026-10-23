@@ -23,15 +23,18 @@
  const sectionNote=el('p',undefined,card,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;
  const warning=el('p',undefined,card,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
  const controls=el('div',undefined,card,'presentation-controls');
- const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
- const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
- const materialButton=button('',controls,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
- const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
- const revealButton=button('',controls,()=>{revealCurrent();});revealButton.id='presentationReveal';
- const contactButton=button('',controls,()=>{changeContactShadows();});contactButton.id='presentationContactShadows';
- const routeButton=button('',controls,()=>{routeCurrent();});routeButton.id='presentationRoute';
- const batchButton=button('',controls,()=>startBatch());batchButton.id='presentationBatch';
- const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
+ // The client's navigation first; the professional's tools (image, light, batch…) in their own group. On a phone the
+ // group is one scrollable row, so each tool added later does not make the card cover more of the home.
+ const nav=el('div',undefined,controls,'presentation-nav'),tools=el('div',undefined,controls,'presentation-tools');tools.id='presentationTools';tools.setAttribute('role','group');
+ const previous=button('',nav,()=>go(index-1)),next=button('',nav,()=>go(index+1));
+ const captureButton=button('',tools,()=>capture());captureButton.id='presentationCapture';
+ const materialButton=button('',tools,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
+ const lightButton=button('',tools,()=>{changeLighting();});lightButton.id='presentationLightPreset';
+ const revealButton=button('',tools,()=>{revealCurrent();});revealButton.id='presentationReveal';
+ const contactButton=button('',tools,()=>{changeContactShadows();});contactButton.id='presentationContactShadows';
+ const routeButton=button('',tools,()=>{routeCurrent();});routeButton.id='presentationRoute';
+ const batchButton=button('',tools,()=>startBatch());batchButton.id='presentationBatch';
+ const cancelBatchButton=button('',tools,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
  const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
  const routeStatus=el('p',undefined,card,'presentation-status');routeStatus.id='presentationRouteStatus';routeStatus.setAttribute('role','status');routeStatus.setAttribute('aria-live','polite');routeStatus.hidden=true;
  const captureOptions={size:'1280',aspect:'view'};
@@ -349,7 +352,7 @@
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
-  previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
+  tools.setAttribute('aria-label',tx('Herramientas de la presentación','Presentation tools','演示工具'));previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
   materialButton.textContent=window.View3D?.surfaceQuality==='enhanced'?tx('Material: detalle','Material: detail','材质：细节'):tx('Material: básico','Material: basic','材质：基础');
   materialButton.setAttribute('aria-pressed',String(window.View3D?.surfaceQuality==='enhanced'));
   materialButton.disabled=batchActive||window.View3D?.presentationRouteInfo?.status==='running';
