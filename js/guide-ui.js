@@ -357,6 +357,7 @@
  sync();if(location.hash!=='#legal-y-uso'){
   const screen=location.hash==='#editor'?'editor':'welcome';setRoute(screen,true);if(screen==='welcome')openWelcome(false);
  }
- drawer('lib',false);drawer('panel',false);
+ // The columns are not forced here: drawer(null) in the editor restores the person's last choice, and with none
+ // they are open on desktop. On narrow screens they are drawers and start closed.
  addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(!dialogs.some(d=>d.open))openSearch();}});
 })();

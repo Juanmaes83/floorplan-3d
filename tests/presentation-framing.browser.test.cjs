@@ -76,3 +76,16 @@ test('R10 rotated irregular plan frames every counted room',{timeout:300000},asy
  for(const room of rooms){await goRoom(page,room);const frame=await page.evaluate(()=>View3D.presentationFrameInfo);assert.ok(frame.accepted,`${room} ${JSON.stringify(frame)}`);if(['rom_mbath','rom_master','rom_hall'].includes(room))await page.screenshot({path:path.join(QA,`irregular-1440x900-${room}.png`)});}
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);assert.equal((await snapshot(page)).project,before.project);assert.deepEqual(errors,[]);
 });
+// The client sees the home, not the editor: with the edit columns open, presenting hides them and gives the scene the
+// full width; ending the presentation brings them back as they were.
+test('R10 presentation hides the edit columns 1440x900',{timeout:240000},async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900});
+ const layout=()=>page.evaluate(()=>{const seen=sel=>{const e=document.querySelector(sel),r=e.getBoundingClientRect();return r.width>2&&getComputedStyle(e).visibility==='visible';};return {lib:seen('aside.lib'),panel:seen('aside.right'),main:Math.round(document.querySelector('main').getBoundingClientRect().width)};});
+ const editor=await layout();assert.deepEqual([editor.lib,editor.panel],[true,true],'columns open in the editor');
+ await present(page,['rom_mbath','rom_master']);
+ const shown=await layout();assert.deepEqual([shown.lib,shown.panel],[false,false],'no edit columns in the presentation');assert.equal(shown.main,1440,'the scene takes the full width');
+ await page.screenshot({path:path.join(QA,'1440x900-presentation-no-columns.png')});
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(600);
+ assert.deepEqual(await layout(),editor,'the editor comes back as it was');
+ assert.deepEqual(errors,[]);
+});
