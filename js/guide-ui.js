@@ -140,6 +140,44 @@
    btn('welcomeAudienceStart',tx('Empezar: subir un plano','Start: upload a plan','开始：上传平面图'),()=>document.getElementById('welcomeUpload').click(),row,true);
    btn('welcomeAudienceBlank',tx('¿Sin plano? Crear desde cero','No plan? Create from scratch','没有平面图？从零创建'),()=>document.getElementById('welcomeBlank').click(),row).classList.add('guide-link');}
   showPurpose();
+  // Line icons (24×24, stroke = currentColor) for the walk band, the phases and the field cards.
+  const ICON={upload:'<path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/>',ruler:'<path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/>',plan:'<path d="M3 4h18v16H3z"/><path d="M3 12h8v8M11 4v5m4 3h6"/>',sofa:'<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z"/><path d="M6 18v2m12-2v2"/>',cube:'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12 4 7.5M12 12l8-4.5M12 12v9"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="m9 21 3-7 3 3v4m-6-9 3-3 3 2 3 1M8 12l1-4"/>',compass:'<path d="M12 3 7 21m5-18 5 18M8 16h8"/><circle cx="12" cy="3" r="1"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9m-4 4 3 3m-6 0 2 2"/>',building:'<path d="M4 21V5l8-3v19M12 9h8v12M7 8h2m-2 4h2m-2 4h2m6-3h2m-2 4h2M2 21h20"/>',hammer:'<path d="m14 6 4 4M3 21l9-9M12 5l3-3 7 7-3 3z"/>',palette:'<path d="M12 3a9 9 0 1 0 0 18c1 0 2-1 1.5-2s.5-2 1.5-2h2a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/>'};
+  const icon=(name,parent,cls='icon')=>{const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('class',cls);SafeDOM.markup(svg,ICON[name]);parent.append(svg);return svg;};
+  // «Recórrela en 3D»: what makes Rubik different, shown with the real capture; the button opens the example in 3D walk.
+  const walkBand=el('section',undefined,shell,'welcome-walk');walkBand.id='welcomeWalk';
+  const walkText=el('div',undefined,walkBand,'welcome-walk-text');icon('walk',walkText,'icon welcome-walk-icon');
+  el('h2',tx('Crea tu vivienda o la de tu cliente, y recórrela en 3D','Create your home or your client’s, and walk through it in 3D','创建你或客户的住宅，并在 3D 中漫游'),walkText);
+  el('p',tx('La misma distribución que dibujas se convierte en una vivienda que puedes recorrer por dentro, estancia a estancia, en el ordenador o en el móvil.','The layout you draw becomes a home you can walk through, room by room, on a computer or a phone.','你绘制的布局会变成可以逐个房间漫游的住宅，电脑和手机均可。'),walkText);
+  btn('welcomeWalkExample',tx('Recorrer el ejemplo en 3D','Walk through the example in 3D','在 3D 中漫游示例'),()=>safe(walkExample),walkText,true);
+  const walkShot=el('img',undefined,walkBand,'welcome-walk-shot');walkShot.src='assets/welcome/example-3d.webp';walkShot.loading='lazy';walkShot.alt=tx('Captura real de Rubik del ejemplo en 3D','Real Rubik capture of the example in 3D','Rubik 示例 3D 实际截图');
+  // «Soluciones»: a reading path — phases first, then one compact card per field that opens on hover (mouse),
+  // tap or keyboard. Only features that exist today.
+  const sol=el('section',undefined,shell,'welcome-solutions');sol.id='welcomeSolutions';
+  el('h2',tx('Cómo trabajas con Rubik','How you work with Rubik','如何使用 Rubik'),sol);
+  const phases=el('ol',undefined,sol,'solutions-phases');phases.setAttribute('aria-label',tx('Fases del proyecto','Project phases','项目阶段'));
+  for(const [stage,ic,what] of [[G.stages[0],'upload',['Sube el plano o empieza desde cero','Upload the plan or start from scratch','上传平面图或从零开始']],[G.stages[1],'ruler',['Comprueba la escala con una medida conocida','Check the scale with a known length','用已知尺寸核对比例']],[G.stages[2],'plan',['Estancias, puertas y ventanas; una o dos plantas','Rooms, doors and windows; one or two levels','房间、门窗；一层或两层']],[G.stages[3],'sofa',['Muebles y acabados','Furniture and finishes','家具和饰面']],[G.stages[4],'cube',['Recorre en 3D, presenta y entrega','Walk in 3D, present and deliver','3D 漫游、展示并交付']]]){const li=el('li',undefined,phases);icon(ic,li,'icon phase-icon');el('strong',label(stage),li);el('span',label(what),li);}
+  const deliver={sheet:['Lámina de distribución con tu marca','Floor plan sheet with your brand','带品牌的平面图纸'],batch:['Lote ZIP con vistas 3D y el proyecto editable','ZIP with 3D views and the editable project','含 3D 视图和可编辑项目的 ZIP'],present:['Presentación 3D guiada por estancias','Guided 3D presentation by room','按房间引导的 3D 展示'],walk:['Recorrido 3D por dentro de la vivienda','3D walk-through inside the home','住宅内部 3D 漫游'],project:['Proyecto editable para seguir trabajando','Editable project to keep working','可继续编辑的项目']};
+  el('h3',tx('Soluciones según tu trabajo','Solutions for your work','按工作类型的解决方案'),sol,'solutions-title');
+  const cards=el('div',undefined,sol,'solutions-cards');
+  const fields=[
+   ['architecture','compass',['Del plano del estudio a una propuesta que el cliente entiende','From the studio plan to a proposal the client understands','从事务所平面图到客户能看懂的方案'],['sheet','present','project']],
+   ['real-estate','key',['Que el comprador recorra el inmueble antes de visitarlo','Let the buyer walk through the property before visiting','让买家在看房前先浏览房源'],['walk','present','batch']],
+   ['developer','building',['Cada tipología, también de dos plantas, con tu imagen de marca','Each unit type, two-storey ones included, with your brand','每种户型（含两层）统一品牌形象'],['batch','present','sheet']],
+   ['renovation','hammer',['La propuesta de reforma sobre el plano actual','The renovation proposal on the current plan','在现有平面图上的改造方案'],['walk','sheet','project']],
+   ['interior','palette',['Ambientes amueblados y sus acabados, para recorrer','Furnished rooms and finishes, to walk through','可漫游的带家具空间及饰面'],['walk','present','batch']]
+  ];
+  for(const [id,ic,problem,gives] of fields){const card=el('article',undefined,cards,'solutions-card');card.dataset.audience=id;
+   const head=el('button',undefined,card,'solutions-head');head.type='button';head.setAttribute('aria-expanded','false');const body=el('div',undefined,card,'solutions-body');body.id='solutionsBody-'+id;head.setAttribute('aria-controls',body.id);
+   icon(ic,head,'icon card-icon');const t=el('span',undefined,head,'solutions-head-text');el('strong',label(audiences.find(a=>a[0]===id)[1]),t);el('span',label(problem),t);
+   const inner=el('div',undefined,body,'solutions-inner');el('p',tx('Entregas a tu cliente','What your client receives','客户收到'),inner,'solutions-label');const ul=el('ul',undefined,inner);for(const g of gives)el('li',label(deliver[g]),ul);
+   // One state for what is seen and what is announced: open = pinned (click, tap, keyboard) or mouse over it.
+   let pinned=false,hovered=false;const sync=()=>{const open=pinned||hovered;head.setAttribute('aria-expanded',String(open));card.classList.toggle('open',open);};
+   card._pin=v=>{pinned=v;sync();};
+   head.onclick=()=>{pinned=!(pinned||hovered);hovered=false;sync();};
+   card.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=true;sync();}});card.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){hovered=false;sync();}});}
+  el('p',tx('Todo lo que aparece aquí ya funciona en Rubik. Medidas orientativas: no sustituye una medición profesional.','Everything listed here already works in Rubik. Dimensions are indicative, not a professional survey.','此处所列功能均已在 Rubik 中可用。尺寸仅供参考，不能替代专业测量。'),sol,'solutions-note');
+  const markSolution=()=>{for(const c of cards.children)c.classList.toggle('chosen',c.dataset.audience===audience);if(audience){const c=cards.querySelector(`[data-audience="${audience}"]`);cards.prepend(c);c._pin(true);}};markSolution();
+  audienceOptions.addEventListener('click',()=>queueMicrotask(markSolution));
   const other=el('section',undefined,shell,'welcome-search');search(other,'welcome',true);
   const foot=el('div',undefined,shell,'welcome-foot');el('p',tx('Tus proyectos se guardan en este navegador. Exporta una copia para usarlos en otro dispositivo. Imágenes: hasta 15 MiB y 8000 px por lado.','Projects are stored in this browser. Export a copy for another device. Images: up to 15 MiB and 8000 px per side.','项目保存在此浏览器中。请导出副本以在其他设备上使用。图片最大 15 MiB、每边 8000 像素。'),foot);
   if(ownRecoverable())btn('welcomeContinue',tx('Continuar mi proyecto →','Continue my project →','继续我的项目 →'),()=>{const own=library.all().find(e=>e.id===library.activeId()&&data.entries[e.id]?.kind==='own')||library.all().find(e=>data.entries[e.id]?.kind==='own'||!isReference(e.project));if(own)switchProject(library.open(own.id));closeWelcome();render();},foot);
@@ -153,6 +191,10 @@
  function captureImport(){return {epoch:navigationEpoch,fromWelcome:welcome.open};}
  function importRouteCurrent(context){return context.epoch===navigationEpoch;}
  function imported(context,origin){const id=library?.activeId()||project.id;data.entries[id]=G.initial(project,'own',project.sourceImages?.length?'image':origin);pendingEntry=null;entryOrigin=null;pendingIds=[];lastResult=null;lastSnapshot='';store();if(context?.fromWelcome&&importRouteCurrent(context)&&welcome.open)closeWelcome();}
+ // The example, straight into the 3D walk: the same entry as «Probar el ejemplo», then 3D view and «Recorrer».
+ function walkExample(){example();let tries=0,walked=false;addEventListener('floorplan-view-ready',()=>{if(walked)return;walked=true;document.querySelector('#modes3d [data-mode="walk"]')?.click();},{once:true});
+  // The example opens asynchronously (library switch); ask for 3D until the editor is on it.
+  const go=()=>{if(walked||window.FloorPlanApp?.viewMode==='3d'||++tries>60)return;if(!document.querySelector('#welcomeDialog[open]'))document.querySelector('[data-view="3d"]')?.click();setTimeout(go,400);};setTimeout(go,300);}
  function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);entryOrigin='example';const p=Core.initial();p.id=Core.id('prj');p.name=tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');}
  function copyExample(goal='save3d'){try{if(!save())return;const p=Core.clone(project);p.id=Core.id('prj');p.name=tx('Mi distribución','My layout','我的布局');pendingEntry={kind:'own',goal,targetType:state().targetType,targetRoomId:state().targetRoomId};pendingIds=library.list().map(e=>e.id);entryOrigin='example-copy';switchProject(library.add(p,p.name));announce(tx('Copia propia creada. El ejemplo se conserva.','Your copy was created. The example is preserved.','已创建自己的副本。示例已保留。'));if(afterCopy){const action=afterCopy;afterCopy=null;safe(()=>execute(action));}}catch(e){toast(e.message,6000);}}
  function announce(text){announcement.textContent=text;toast(text,4000);}
