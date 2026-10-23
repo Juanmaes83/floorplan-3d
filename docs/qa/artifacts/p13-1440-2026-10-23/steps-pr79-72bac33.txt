@@ -1,0 +1,28 @@
+TAP version 13
+# STEP setup 1.5
+# STEP entry 1.6
+# STEP start-click 8.1
+# STEP presenting 19.0
+# STEP overview-png 74.6
+# STEP overview-shot 90.3
+# STEP next-click 115.9
+# STEP motion-seen 119.9
+# STEP arrived 126.1
+# STEP room-png 160.8
+# STEP room-shot 175.0
+# STEP close-click 196.5
+# Subtest: R2 P13 presentation PNG is real and restores the view 1440x900
+ok 1 - R2 P13 presentation PNG is real and restores the view 1440x900
+  ---
+  duration_ms: 197363.966736
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 197823.7179

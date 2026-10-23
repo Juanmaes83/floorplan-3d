@@ -59,7 +59,11 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const stable=v=>JSON.parse(JSON.stringify(v,(_,x)=>typeof x==='number'?Math.round(x*1e8)/1e8:x));
  const general=await viewState(),generalPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(general));
  await screenshot(page,`${size}-p13-overview`);
- await page.getByRole('button',{name:'Siguiente →'}).click();assert.equal(await capture.isDisabled(),true,'capture serialized with camera motion');
+ // Every state of the flight is recorded in the page, so a slow software renderer cannot hide it behind a slow click.
+ await page.evaluate(()=>{const o=document.querySelector('#presentationOverlay'),c=document.querySelector('#presentationCapture');window.__motion=[];new MutationObserver(()=>window.__motion.push({moving:o.dataset.moving,captureDisabled:c.disabled})).observe(o,{attributes:true,attributeFilter:['data-moving']});});
+ await page.getByRole('button',{name:'Siguiente →'}).click();
+ await page.waitForFunction(()=>window.__motion.some(m=>m.moving==='true'),null,{timeout:30000});
+ assert.deepEqual(await page.evaluate(()=>window.__motion.filter(m=>m.moving==='true').map(m=>m.captureDisabled).filter(d=>!d)),[],'capture serialized with camera motion');
  await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'));
  const room=await viewState(),roomPng=await presentationPng(page);assert.deepEqual(stable(await viewState()),stable(room));
  assert.notDeepEqual(roomPng,generalPng,'room and overview render different images');
@@ -397,10 +401,13 @@ for(const {viewport,exit} of [
  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
  await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ // The exit is fired by the page itself the moment the flight starts, so it really happens during the flight whatever
+ // the renderer speed; the recorded state proves it.
+ await page.evaluate(exit=>{const o=document.querySelector('#presentationOverlay');window.__exitAt=null;const mo=new MutationObserver(()=>{if(o.dataset.moving!=='true'||window.__exitAt)return;window.__exitAt={moving:o.dataset.moving,active:FloorPlanPresentation.active};mo.disconnect();
+  if(exit==='Back')history.back();else if(exit==='Close')document.querySelector('#presentationClose').click();else document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));});mo.observe(o,{attributes:true,attributeFilter:['data-moving']});},exit);
  await page.locator('.presentation-stops button').nth(1).click();
- assert.equal(await page.locator('#presentationOverlay').getAttribute('data-moving'),'true');
- await screenshot(page,`${size}-p07-${exit.toLowerCase()}-moving`);
- if(exit==='Back')await page.goBack();else if(exit==='Close')await page.locator('#presentationClose').click();else await page.keyboard.press('Escape');
+ await page.waitForFunction(()=>window.__exitAt,null,{timeout:30000});
+ assert.deepEqual(await page.evaluate(()=>window.__exitAt),{moving:'true',active:true},'exit during the room flight');
  await page.waitForFunction(()=>!FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').hidden&&location.hash==='#editor');
  await page.waitForTimeout(750);
  assert.equal(await page.locator('#presentationOverlay').isVisible(),false,'late flight cannot reopen presentation');
