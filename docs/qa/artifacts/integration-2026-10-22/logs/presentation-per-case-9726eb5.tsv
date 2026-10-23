@@ -1,0 +1,58 @@
+PASS	R2 P01/P02 search and closed-guide entry preserve the project 1440x900	38s	
+PASS	R2 P01/P02 search and closed-guide entry preserve the project 390x844	20s	
+PASS	R2 P01/P02 search and closed-guide entry preserve the project 844x390	21s	
+PASS	R2 P01/P02 search and closed-guide entry preserve the project 360x800	29s	
+FAIL	R2 P13 presentation PNG is real and restores the view 1440x900	80s	|-
+PASS	R2 P13 presentation PNG is real and restores the view 390x844	88s	
+PASS	R2 P13 presentation PNG is real and restores the view 844x390	101s	
+PASS	R2 P13 presentation PNG is real and restores the view 360x800	109s	
+PASS	presentation starts from a real room and restores 2D 1440x900	76s	
+PASS	presentation starts from a real room and restores 2D 390x844	31s	
+PASS	presentation starts from a real room and restores 2D 844x390	33s	
+PASS	presentation starts from a real room and restores 2D 360x800	29s	
+PASS	R2 P06/P12 manual jumps and revisits count completed stops without guide evidence	56s	
+PASS	R2 P11 missing GLB keeps generic furniture and warns 1440x900	63s	
+PASS	R2 P11 missing GLB keeps generic furniture and warns 390x844	28s	
+PASS	R2 P11 missing GLB keeps generic furniture and warns 844x390	29s	
+PASS	R2 P11 missing GLB keeps generic furniture and warns 360x800	25s	
+PASS	R2 P11 corrupt GLB also keeps the generic and the project	17s	
+PASS	R2 P11 WebGL context loss returns intact 2D 1440x900	15s	
+PASS	R2 P11 WebGL context loss returns intact 2D 390x844	12s	
+PASS	R2 P11 WebGL context loss returns intact 2D 844x390	11s	
+PASS	R2 P11 WebGL context loss returns intact 2D 360x800	11s	
+PASS	R2 P11 context loss while 3D starts cannot reopen the presentation	6s	
+PASS	R2 P14 reduced motion and four resize aspects keep the active stop framed	68s	
+PASS	R2 P14 presentation entered from 3D restores camera and final viewport aspect	33s	
+TIMEOUT	R2 P15 ten presentation cycles release their loop and keep renderer memory stable	180s	'test timed out after 180000ms'
+PASS	R2 P16 long HTML-like room name stays text and controls fit 1440x900	67s	
+PASS	R2 P16 long HTML-like room name stays text and controls fit 390x844	27s	
+PASS	R2 P16 long HTML-like room name stays text and controls fit 844x390	30s	
+PASS	R2 P16 long HTML-like room name stays text and controls fit 360x800	25s	
+PASS	3D camera, focus and editor state return after Escape and browser Back	110s	
+TIMEOUT	R2 P08 walk pointer lock releases for presentation and needs a new gesture on return	120s	'test timed out after 120000ms'
+PASS	R2 P08 touch walk stops and resumes by gesture 390x844	53s	
+PASS	R2 P08 touch walk stops and resumes by gesture 844x390	64s	
+PASS	R2 P08 touch walk stops and resumes by gesture 360x800	61s	
+PASS	Escape during 3D loading cancels without a late presentation	9s	
+PASS	R2 P07 Back while 2D presentation is loading restores editor 1440x900	19s	
+PASS	R2 P07 Close while 2D presentation is loading restores editor 390x844	19s	
+PASS	R2 P07 Escape while 2D presentation is loading restores editor 844x390	13s	
+PASS	R2 P07 Back while 2D presentation is loading restores editor 360x800	14s	
+PASS	R2 P07 Close during room flight restores editor 1440x900	29s	
+PASS	R2 P07 Back during room flight restores editor 390x844	19s	
+PASS	R2 P07 Escape during room flight restores editor 844x390	18s	
+PASS	R2 P07 Close during room flight restores editor 360x800	18s	
+PASS	missing 3D runtime returns to the 2D document with an explanation	0s	
+PASS	R2 P03 empty project explains layout in both entry paths 1440x900	1s	
+PASS	R2 P03 empty project explains layout in both entry paths 390x844	1s	
+PASS	R2 P03 empty project explains layout in both entry paths 844x390	1s	
+PASS	R2 P03 empty project explains layout in both entry paths 360x800	1s	
+TIMEOUT	R2 P05 own and imported room data and poses follow active IDs 1440x900	180s	'test timed out after 180000ms'
+PASS	R2 P05 own and imported room data and poses follow active IDs 390x844	80s	
+PASS	R2 P05 own and imported room data and poses follow active IDs 844x390	87s	
+PASS	R2 P05 own and imported room data and poses follow active IDs 360x800	77s	
+PASS	R2 room selection and order persist outside project; stale room IDs reconcile on reload	24s	
+PASS	R2 changing active project invalidates the live plan and keeps sidecars isolated	38s	
+PASS	R2 geometry revision invalidates the tour and resize restores the current aspect	24s	
+PASS	R2 project switch during 3D loading cannot reopen a stale presentation	30s	
+PASS	R2 variant starts with independent presentation metadata	75s	

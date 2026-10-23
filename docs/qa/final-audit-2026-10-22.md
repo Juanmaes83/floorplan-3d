@@ -52,3 +52,13 @@ Todas las aserciones pasan en las 6 ejecuciones. La integración es **~7 s (≈6
 reproducible, no ruido, y no atribuible solo al entorno. Causa sin identificar (candidatos: más DOM y escuchas de las PR
 combinadas). Con el límite real de 120 s el caso sigue clasificado como **TIMEOUT sin resolver**; pendiente perfilar y
 ejecutar con GPU. Log: `artifacts/integration-2026-10-22/logs/escback-controlled.txt`.
+
+## Suite `presentation` en `9726eb5` (incluye #79 `d19f662`/`72bac33` y el test de #71 `d437ca6`)
+Ejecutada **caso a caso** (`logs/presentation-per-case-runner.sh`) porque el contenedor se recicla al quedar inactiva
+la sesión y la suite completa (~1 h) no llegaba a terminar. Cada caso corre aislado: condiciones algo más favorables
+que la suite completa. Resultado: **54 PASS / 1 FAIL / 3 TIMEOUT** de 58 (`logs/presentation-per-case-9726eb5.tsv`).
+- PASS nuevo: «Escape and browser Back» (110 s / 120 s).
+- FAIL: P13 1440×900 — el clic en «Guardar PNG» agota 30 s mientras se genera la captura (SwiftShader).
+- TIMEOUT: P15 (180 s), P08 pointer lock (120 s), P05 1440×900 (180 s; también expira en #79 y `fa76113` en este
+  entorno más lento).
+Ninguno se cuenta como PASS; todos pendientes de GPU real (protocolo `manual-gpu-phone-protocol-2026-10-22.md`).
