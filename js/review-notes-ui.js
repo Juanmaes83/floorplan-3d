@@ -103,7 +103,8 @@
  const menuEntry=document.createElement('button');menuEntry.type='button';menuEntry.className='btn';menuEntry.id='reviewNotesBtn';
  (document.querySelector('#openSheet')||document.querySelector('#exportPng'))?.after(menuEntry);
  menuEntry.onclick=()=>{menuEntry.closest('details')?.removeAttribute('open');open();};
- const controls=document.querySelector('.presentation-controls');let presEntry=null;
+ // A presentation tool: it joins the tools group of the card (one row on a phone), after the client's navigation.
+ const controls=document.querySelector('#presentationTools')||document.querySelector('.presentation-controls');let presEntry=null;
  if(controls){presEntry=document.createElement('button');presEntry.type='button';presEntry.className='btn';presEntry.id='presentationNote';controls.append(presEntry);
   presEntry.onclick=()=>{const stop=window.FloorPlanPresentation?.current;open(stop?.kind==='room'?stop.roomId:null);};}
  function relang(){menuEntry.textContent=tx('Observaciones del cliente…','Client observations…','客户意见…');if(presEntry)presEntry.textContent=tx('Añadir observación','Add observation','添加意见');}
