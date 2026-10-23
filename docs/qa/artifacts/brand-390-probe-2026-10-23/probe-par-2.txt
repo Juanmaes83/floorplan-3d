@@ -1,0 +1,30 @@
+TAP version 13
+# PROBE-OK 67
+# PROBE-OK 40
+# PROBE-OK 59
+# PROBE-OK 41
+# Subtest: professional brand 390x844
+ok 1 - professional brand 390x844
+  ---
+  duration_ms: 4165.893457
+  type: 'test'
+  ...
+# PROBE-OK 61
+# PROBE-OK 32
+# PROBE-OK 65
+# PROBE-OK 80
+# Subtest: professional brand 390x844
+ok 2 - professional brand 390x844
+  ---
+  duration_ms: 3568.763326
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8277.584377
