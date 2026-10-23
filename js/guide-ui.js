@@ -195,7 +195,16 @@
  function walkExample(){example();let tries=0,walked=false;addEventListener('floorplan-view-ready',()=>{if(walked)return;walked=true;document.querySelector('#modes3d [data-mode="walk"]')?.click();},{once:true});
   // The example opens asynchronously (library switch); ask for 3D until the editor is on it.
   const go=()=>{if(walked||window.FloorPlanApp?.viewMode==='3d'||++tries>60)return;if(!document.querySelector('#welcomeDialog[open]'))document.querySelector('[data-view="3d"]')?.click();setTimeout(go,400);};setTimeout(go,300);}
- function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);entryOrigin='example';const p=Core.initial();p.id=Core.id('prj');p.name=tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');}
+ // «Probar el ejemplo» reopens an unchanged example instead of adding another entry with the same name; its guide
+ // starts again from the beginning. A changed example is never overwritten: the original then opens as a separate,
+ // differently named entry and the person is told where the changed one is.
+ function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();
+  const examples=library.all().filter(e=>e.kind!=='building'&&e.project&&data.entries[e.id]?.kind==='example'),pristine=examples.find(e=>isReference(e.project));
+  entryOrigin='example';
+  if(pristine){delete data.entries[pristine.id];store();switchProject(library.open(pristine.id));setView('2d');return;}
+  const changed=examples.length>0;pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);
+  const p=Core.initial();p.id=Core.id('prj');p.name=changed?tx('Proyecto de ejemplo (original)','Example project (original)','示例项目（原始）'):tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');
+  if(changed)announce(tx('Abierto el ejemplo original. El ejemplo que cambiaste sigue en «Proyectos».','The original example is open. The example you changed is still in “Projects”.','已打开原始示例。你修改过的示例仍在“项目”中。'));}
  function copyExample(goal='save3d'){try{if(!save())return;const p=Core.clone(project);p.id=Core.id('prj');p.name=tx('Mi distribución','My layout','我的布局');pendingEntry={kind:'own',goal,targetType:state().targetType,targetRoomId:state().targetRoomId};pendingIds=library.list().map(e=>e.id);entryOrigin='example-copy';switchProject(library.add(p,p.name));announce(tx('Copia propia creada. El ejemplo se conserva.','Your copy was created. The example is preserved.','已创建自己的副本。示例已保留。'));if(afterCopy){const action=afterCopy;afterCopy=null;safe(()=>execute(action));}}catch(e){toast(e.message,6000);}}
  function announce(text){announcement.textContent=text;toast(text,4000);}
  function safe(fn){try{const promise=fn();promise?.catch(e=>announce(e.message));}catch(e){announce(e.message);}}
