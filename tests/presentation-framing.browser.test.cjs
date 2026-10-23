@@ -31,6 +31,29 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const restored=await snapshot(page);assert.equal(restored.project,editor.project);assert.equal(restored.entry,editor.entry);assert.equal(restored.cut,editor.cut);assert.equal(restored.decor.outline,null);assert.equal(restored.decor.ceilingFixtures,editor.decor.ceilingFixtures);
  assert.deepEqual(errors,[]);
 });
+// The client's navigation comes first; the professional's tools are one group. On a phone that group is a single row,
+// so a tool added to it does not make the card cover more of the home (#75 and #78 each add one).
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:360,height:800},{width:844,height:390}])test(`R10 card keeps client navigation first and tools in one row ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
+ const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`,phone=viewport.width<=600||viewport.height<=500;
+ await present(page,['rom_mbath','rom_master']);
+ const layout=()=>page.evaluate(()=>{const tools=document.querySelector('#presentationTools'),card=document.querySelector('.presentation-card');
+  const shown=[...tools.querySelectorAll('button')].filter(b=>b.getClientRects().length);
+  return {role:tools.getAttribute('role'),label:tools.getAttribute('aria-label'),navFirst:[...document.querySelectorAll('.presentation-nav button')].every(b=>b.compareDocumentPosition(tools)&Node.DOCUMENT_POSITION_FOLLOWING),
+   tops:[...new Set(shown.map(b=>Math.round(b.getBoundingClientRect().top)))],count:shown.length,height:Math.round(card.getBoundingClientRect().height)};});
+ const before=await layout();assert.equal(before.role,'group',size);assert.equal(before.label,'Herramientas de la presentación',size);assert.ok(before.navFirst,`${size} navigation before tools`);
+ assert.ok(before.count>=4,`${size} tools shown ${before.count}`);
+ if(phone){
+  assert.equal(before.tops.length,1,`${size} tools in one row ${JSON.stringify(before)}`);
+  await page.evaluate(()=>{const b=document.createElement('button');b.className='btn';b.id='r10ExtraTool';b.textContent='Herramienta añadida';document.querySelector('#presentationTools').append(b);});
+  const after=await layout();assert.equal(after.height,before.height,`${size} an added tool does not grow the card`);assert.equal(after.tops.length,1,`${size} still one row`);
+  // Every tool stays reachable: the row scrolls to it and it is inside the card.
+  for(const id of ['presentationCapture','presentationBatch','r10ExtraTool']){const b=page.locator('#'+id);await b.scrollIntoViewIfNeeded();
+   const inside=await b.evaluate(el=>{const r=el.getBoundingClientRect(),c=el.closest('.presentation-card').getBoundingClientRect();return r.left>=c.left-1&&r.right<=c.right+1&&r.top>=c.top-1&&r.bottom<=c.bottom+1;});assert.ok(inside,`${size} ${id} reachable`);}
+  await page.evaluate(()=>document.querySelector('#r10ExtraTool').remove());
+ }
+ await page.screenshot({path:path.join(QA,`${size}-card-groups.png`)});
+ assert.deepEqual(errors,[]);
+});
 test('R10 framing is repeatable, respects reduced motion and an editor wall cut',{timeout:240000},async t=>{
  const {page,errors}=await setup(t,{width:1440,height:900},{reducedMotion:'reduce'});
  await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating);
