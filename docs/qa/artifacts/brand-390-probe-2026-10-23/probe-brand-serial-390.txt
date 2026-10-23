@@ -1,0 +1,23 @@
+# recovered verbatim from the session transcript (tool output at 2026-10-23T03:42:39.214Z); command: REP=4 node --test --test-concurrency=1 tests/_probe-brand.browser.test.cjs (390x844 only) on feat/share-image 494f14d — output was filtered at the time with grep -E "PROBE|^not ok|^ok|# (pass|fail)|error:"
+# PROBE-OK 79
+# PROBE-OK 38
+# PROBE-OK 44
+# PROBE-OK 57
+ok 1 - professional brand 390x844
+# PROBE-OK 66
+# PROBE-OK 55
+# PROBE-OK 51
+# PROBE-OK 63
+ok 2 - professional brand 390x844
+# PROBE-OK 68
+# PROBE-OK 47
+# PROBE-OK 41
+# PROBE-OK 67
+ok 3 - professional brand 390x844
+# PROBE-OK 60
+# PROBE-OK 53
+# PROBE-OK 41
+# PROBE-OK 58
+ok 4 - professional brand 390x844
+# pass 4
+# fail 0
