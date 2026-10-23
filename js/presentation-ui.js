@@ -408,6 +408,16 @@
   }
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
+ // «Del plano a la vivienda»: what came from the plan, what was drawn in Rubik and what the client will see, read from
+ // the project (FloorPlanProvenance); one block per level in a building. Collapsed: one line stays visible.
+ function provenance(parent,levels){
+  const P=window.FloorPlanProvenance;if(!P)return;
+  const box=el('details',undefined,parent,'presentation-provenance');box.id='presentationProvenance';
+  const lang=typeof LANG==='string'?LANG:'es',summaries=levels.map(l=>({name:l.name,s:P.summarize(l.project,{levelName:l.name})}));
+  const first=P.lines(summaries[0].s,lang);el('summary',tx('Del plano a la vivienda','From plan to home','从平面图到住宅')+' · '+first[0]+(levels.length>1?tx(` · ${levels.length} plantas`,` · ${levels.length} levels`,` · ${levels.length} 层`):''),box);
+  for(const {name,s} of summaries){if(levels.length>1)el('h3',name,box);const ul=el('ul',undefined,box);for(const line of P.lines(s,lang))el('li',line,ul);}
+  el('p',P.T.experience[{es:0,en:1,zh:2}[lang]??0],box,'presentation-provenance-note');
+ }
  function open(){
   if(active||pendingStart){closeButton.focus();return;}
   // A building with a pending distribution is not presented as a finished proposal (see FloorPlanBuildingUI.gate).
@@ -425,6 +435,7 @@
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
   }else{
    el('p',tx('Vista general y estancias elegidas. La presentación no cambia el proyecto ni tu objetivo.','Overview and chosen rooms. The presentation does not change your project or goal.','总览和选定房间。展示不会更改项目或目标。'),config);
+   provenance(config,[{name:app.project.name,project:app.project}]);
    const valid=app.geometry.rooms.filter(r=>r.poly.length>=3&&Core.area(r.poly)>0);
    const storageKey=Core.key(app.entryId,app.project.id);
    let saved=null,corrupt=false;
@@ -460,6 +471,7 @@
   });
   if(!buildingConfig.some(level=>level.presentable)){buildingConfig=null;return false;}
   const note=el('p',tx(`Presentación del edificio «${sources.building.name}»: las estancias elegidas de sus ${levels.length} plantas, en una sola presentación y un solo lote. Cada planta empieza con su vista general; la escalera no se recorre.`,`Building presentation «${sources.building.name}»: the chosen rooms of its ${levels.length} levels in one presentation and one batch. Each level starts with its overview; the stair is not walked.`,`建筑展示：«${sources.building.name}»。`),config,'presentation-level-note');note.id='presentationLevelNote';
+  provenance(config,levels.map(l=>({name:l.name,project:l.project})));
   configMessage=el('p',undefined,config,'presentation-config-message');configMessage.setAttribute('role','status');
   configMessage.textContent=buildingConfig.some(l=>l.message==='invalid')?tx('La configuración guardada no se pudo leer. Elige de nuevo las estancias.','Saved configuration could not be read. Choose rooms again.','无法读取已保存配置。请重新选择房间。')
    :buildingConfig.some(l=>l.message==='changed')?tx('El plano cambió. Revisa la selección de cada planta.','The layout changed. Review the selection of each level.','布局已更改。请检查各楼层的选择。')
