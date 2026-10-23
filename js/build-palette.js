@@ -122,7 +122,9 @@
 
  async function addOpening(kind,label){
   const roomId=contextRoom();
-  if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');toPlan();return;}
+  if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');
+   // On a phone the palette is a drawer that closes to show the plan: the hint goes with the person, as a toast.
+   if(matchMedia('(max-width:1100px)').matches&&typeof toast==='function')toast(c.text,6000);toPlan();return;}
   // The room becomes the selection first, so the properties column shows the room the opening is added to (as in
   // «Añadir puerta» of the room panel) instead of the previous item.
   await in2D();if(ui.sel?.kind!=='room'||ui.sel.id!==roomId)select({kind:'room',id:roomId});toPlan();FloorPlanOpeningUI.startAdd(roomId,kind);

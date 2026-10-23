@@ -107,3 +107,22 @@ test(`columns open by default on desktop and keep the person's choice ${viewport
  }
  assert.deepEqual(errors,[],name);
 });
+
+// Choosing a door or window with no room selected explains what to tap first. On a phone the palette drawer closes to
+// show the plan, so the explanation must not stay inside it.
+for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440,height:900}])
+test(`an opening without a room explains what to tap first ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
+ const mobile=viewport.width<1000,narrow=viewport.width<=1100,name=`${viewport.width}x${viewport.height}`;
+ const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://cdn.jsdelivr.net/**',r=>r.abort());await page.goto(url);await page.waitForFunction(()=>window.FloorPlanApp&&document.querySelector('#welcomeDialog').open);
+ const press=async s=>{const l=page.locator(s);await l.scrollIntoViewIfNeeded();mobile?await l.tap():await l.click();};
+ await press('#welcomeExample');await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open);await page.waitForTimeout(400);
+ if(narrow||await page.locator('.app').evaluate(a=>a.classList.contains('hide-lib')))await press('#tgLib');await page.waitForTimeout(400);
+ await press('#paletteTabBuild');await page.evaluate(()=>{ui.sel=null;});await press('#paletteOpening-window');await page.waitForTimeout(300);
+ const seen=await page.evaluate(()=>{const vis=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.right>0&&r.left<innerWidth&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).opacity!=='0';};
+  const hint=document.querySelector('#paletteOpeningContext'),toast=document.querySelector('#toast');return {hint:vis(hint)&&hint.textContent,toast:toast.classList.contains('show')&&toast.textContent};});
+ const text=/toca antes en el plano la estancia donde va/;
+ assert.ok(text.test(seen.hint||'')||text.test(seen.toast||''),`${name} explanation visible ${JSON.stringify(seen)}`);
+ assert.deepEqual(errors,[],name);
+});
