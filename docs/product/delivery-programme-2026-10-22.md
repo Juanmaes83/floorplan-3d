@@ -84,6 +84,8 @@ documentación o propuesta sin función completa · **4** no existe o requiere c
 | 8 | Vídeo del recorrido descargable | Estudio técnico | master | — | Sí, si requiere alojamiento |
 | 9 | Modelos 3D propios | Estudio técnico | master | — | Sí: formatos, licencias |
 
+**Corte 2, composición horizontal (decisión de Juanma, 23-10-2026):** aprobada la composición **D, columna lateral**, sobre la comparación de imágenes reales (vivienda 818×878 px, mayor que en la imagen anterior de #78, y los datos comerciales no se superponen a la casa). La composición vertical ya validada se mantiene. Esta decisión **no** aprueba #78, de la que depende #81, ni autoriza un merge: #78 sigue pendiente de su propia decisión.
+
 Los candidatos de §6 del encargo (muros de carga, familias de estancias, superficies, presupuesto, instalaciones,
 fachada/cubierta/terreno, sol) quedan en el roadmap como **candidatos**; ninguno autoriza controles vacíos.
 
