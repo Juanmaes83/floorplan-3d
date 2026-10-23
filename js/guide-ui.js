@@ -312,7 +312,7 @@
   const d=decideNext(s,p),link=(b,action,fn)=>{b.hidden=!action;if(action){b.textContent=label(action.label);b.onclick=()=>safe(fn);}};
   laterAction.hidden=secondaryAction.hidden=true;goalDone.hidden=true;presentAction.hidden=true;currentAction.hidden=false;
   document.body.classList.toggle('next-present',false);
-  if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(()=>runTask(t));presentAction.hidden=p.stage!==4;}
+  if(d.mode==='goal'){const t=d.task;currentTitle.textContent=label(t.title);currentInstruction.textContent=label(t.instruction);currentAction.textContent=primaryLabel(t);currentAction.onclick=()=>safe(()=>runTask(t));presentAction.hidden=t.stage!==4;}
   else if(d.mode==='done-task'){const next=d.next;currentTitle.textContent=tx('Ya hecho: ','Done: ','已完成：')+label(d.task.title);
    currentInstruction.textContent=next?tx('Puedes repasarlo o seguir con lo pendiente.','You can review it or go on with what is left.','可以复查，或继续未完成的任务。'):tx('Tu objetivo está completo. Puedes seguir con la vivienda.','Your goal is complete. You can go on with the home.','目标已完成。可以继续完善住宅。');
    if(next){currentAction.textContent=tx('Seguir con: ','Go on with: ','继续：')+label(next.title);currentAction.onclick=()=>safe(()=>{state().manualTask=false;runTask(next);});}
@@ -327,6 +327,7 @@
   // One presentation entry at a time: while the guide row offers it, the guided header does not repeat it.
   document.body.classList.toggle('next-present',document.body.classList.contains('next-present')||!presentAction.hidden);
   const tasks=p.tasks.filter(t=>!t.skipped),first=tasks.findIndex(t=>t.id===p.current.id)<=0,prev=$('#guidePrevious');prev.disabled=first;prev.title=first?tx('Es la primera tarea de tu objetivo','This is the first task of your goal','这是目标的第一个任务'):'';
+  return d.task?d.task.stage:p.stage;
  }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
@@ -335,8 +336,9 @@
   $('#guidePrevious').textContent=tx('← Paso anterior','← Previous step','← 上一步');
   $('#guideGoalChange').textContent=tx('Cambiar objetivo','Change goal','更改目标');$('#guideDetails').textContent=tx('Tareas y ayuda','Tasks & help','任务及帮助');$('#guideClose').textContent='×';$('#guideClose').setAttribute('aria-label',tx('Cerrar guía','Close guide','关闭指南'));
   progressText.textContent=summary(p);meter.setAttribute('aria-valuenow',String(p.percent));meter.setAttribute('aria-label',summary(p));fill.style.width=p.percent+'%';optionalText.textContent=tx(`Opcionales ${p.optionalDone}/${p.optionalTotal}`,`Optional ${p.optionalDone}/${p.optionalTotal}`,`可选 ${p.optionalDone}/${p.optionalTotal}`);
-  for(const [i,b]of [...steps.querySelectorAll('button')].entries()){b.querySelector('.step-label').textContent=label(G.stages[i]);if(i===p.stage)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.title=label(G.stages[i]);}
-  renderNext(s,p);
+  // The highlighted stage is the one of the task the card shows, which can be ahead of a stored task already done.
+  const shownStage=renderNext(s,p);
+  for(const [i,b]of [...steps.querySelectorAll('button')].entries()){b.querySelector('.step-label').textContent=label(G.stages[i]);if(i===shownStage)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.title=label(G.stages[i]);}
   empty.hidden=G.geometryReady(project)||is3D()||!!project.sourceImages?.length;emptyTitle.textContent=tx('Aquí empieza tu distribución','Your layout starts here','从这里开始布局');emptyText.textContent=tx('Crea tu primera estancia con dimensiones interiores o utiliza el trazado manual.','Create your first room with interior dimensions or use manual drawing.','输入内部尺寸创建房间，或手动绘图。');$('#guideEmptyAction').textContent=tx('Crear primera estancia','Create first room','创建第一个房间');
   const completed=p.tasks.filter(t=>t.status==='completed').map(t=>t.id);s.completed=[...new Set([...s.completed,...completed])];
   if(lastResult&&lastResult.projectId===project.id){const done=p.tasks.filter(t=>t.status==='completed'&&!lastResult.done.includes(t.id));if(done.length)announcement.textContent=label(done[0].title)+tx(' · Resultado comprobado. ',' · Result verified. ',' · 结果已验证。')+(p.pending[0]?tx('Te queda: ','Next: ','下一步：')+label(p.pending[0].title):tx('Objetivo completado.','Goal complete.','目标已完成。'));}

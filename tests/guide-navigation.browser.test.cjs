@@ -23,3 +23,19 @@ test('cancel and Escape from first-room entry return home, browser Back dismisse
  await click(page,'#welcomeContinue');assert.equal(await welcome(page),false);assert.deepEqual(await project(page),empty);await click(page,'#welcomeBtn');await click(page,'#welcomeBlank');const second=await project(page);await page.locator('#roomDesignName').press('Escape');assert.equal(await welcome(page),true);assert.deepEqual(await project(page),second);
  await click(page,'#welcomeBlank');const third=await project(page);await page.goBack();assert.equal(await welcome(page),true);assert.equal(await page.locator('#roomDesignDialog').evaluate(d=>d.open),false);assert.deepEqual(await project(page),third);assert.deepEqual(errors,[]);
 });
+
+// The highlighted stage is always the stage of the task the guide card shows. Before, reopening a task already done in
+// the example («Coloca muebles») left «Amueblar» highlighted while the card asked to review in 3D (stage 5), and
+// «Presentar mi vivienda» left the guide for the header.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`guide stage follows the card ${viewport.width}x${viewport.height}`,async t=>{
+ const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');
+ const read=()=>page.evaluate(()=>{const cur=document.querySelector('#guideBar [aria-current="step"]'),steps=[...document.querySelectorAll('#guideBar [aria-current="step"]')];
+  const title=document.querySelector('#guideBar h2')?.textContent.trim()||'',def=Object.values(FloorPlanGuide.definitions).find(d=>title.endsWith(d.title[0]));
+  const shown=e=>!!e&&!e.closest('[hidden]')&&e.getClientRects().length>0;
+  return {current:steps.length,stage:cur?[...cur.closest('ol').querySelectorAll('button')].indexOf(cur):-1,title,taskStage:def?.stage??null,guidePresent:shown(document.querySelector('#guidePresent'))};});
+ const check=async where=>{const r=await read();assert.equal(r.current,1,`${where} one current stage`);if(r.taskStage!==null)assert.equal(r.stage,r.taskStage,`${where} ${JSON.stringify(r)}`);if(r.taskStage===4)assert.equal(r.guidePresent,true,`${where} «Presentar» stays in the guide at stage 5`);return r;};
+ await check('example entered');
+ await click(page,'#guideDetails');await click(page,'#guideTask-furniture');await page.waitForTimeout(300);
+ const after=await check('task already done reopened');assert.notEqual(after.title,'',`title shown`);
+ assert.deepEqual(errors,[]);
+});
