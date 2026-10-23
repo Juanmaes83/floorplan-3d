@@ -322,7 +322,9 @@
    link(secondaryAction,r.secondary,()=>runJourney(r.secondary.id,r));link(laterAction,r.later,()=>runJourney('later',r));
    if(p.finished){goalDone.hidden=false;goalDone.textContent=tx(`✓ Objetivo «${label(G.goals[p.goal])}» completado · resultados en «Tareas y ayuda»`,`✓ Goal “${label(G.goals[p.goal])}” complete · results in “Tasks & help”`,`✓ 目标“${label(G.goals[p.goal])}”已完成 · 结果见“任务及帮助”`);}}
   // The example line offers the copy; when the copy is the guide's own button, the line would only repeat it.
-  exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy';exampleNote.textContent=tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');$('#guideCopyExample').textContent=tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
+  exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy';// The example can be edited; once it differs from the original, the line says so and the copy keeps those changes.
+  const changed=s.kind==='example'&&!isReference(project),copyButton=$('#guideCopyExample');copyButton.classList.toggle('primary',changed);
+  exampleNote.textContent=changed?tx('Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.','You have changed the example. Create your copy to keep these changes.','你已修改示例。创建副本以保留这些修改。'):tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');copyButton.textContent=changed?tx('Crear mi copia con estos cambios','Create my copy with these changes','用这些修改创建副本'):tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
   presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   // One presentation entry at a time: while the guide row offers it, the guided header does not repeat it.
   document.body.classList.toggle('next-present',document.body.classList.contains('next-present')||!presentAction.hidden);

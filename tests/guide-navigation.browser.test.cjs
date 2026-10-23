@@ -39,3 +39,19 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`gui
  const after=await check('task already done reopened');assert.notEqual(after.title,'',`title shown`);
  assert.deepEqual(errors,[]);
 });
+
+// Changing the example is allowed; the guide then says it has changed and its copy keeps those changes.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`a changed example says so and its copy keeps the change ${viewport.width}x${viewport.height}`,async t=>{
+ const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');
+ const line=()=>page.evaluate(()=>({note:document.querySelector('.guide-example span').textContent,button:document.querySelector('#guideCopyExample').textContent,primary:document.querySelector('#guideCopyExample').classList.contains('primary'),shown:!document.querySelector('.guide-example').hidden}));
+ const before=await line();assert.equal(before.primary,false);assert.match(before.note,/Exploras el ejemplo/);
+ // A real edit: select a piece of furniture on the plan and delete it.
+ const total=await page.evaluate(()=>FloorPlanApp.project.objects.length);
+ const pt=await page.evaluate(()=>{const r=document.querySelector(`#gFurn [data-fid="${FloorPlanApp.project.objects[0].id}"]`).getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];});
+ if(viewport.width<1000)await page.touchscreen.tap(pt[0],pt[1]);else await page.mouse.click(pt[0],pt[1]);await page.waitForFunction(()=>ui.sel?.kind==='furn');
+ await page.keyboard.press('Delete');await page.waitForFunction(n=>FloorPlanApp.project.objects.length===n-1,total);const count=total-1;
+ const after=await line();assert.equal(after.shown,true,'example line shown');assert.equal(after.note,'Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.');assert.equal(after.button,'Crear mi copia con estos cambios');assert.equal(after.primary,true);
+ await click(page,'#guideCopyExample');await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),count,'the copy keeps the change');
+ assert.deepEqual(errors,[]);
+});
