@@ -1,0 +1,118 @@
+[
+ {
+  "tag": "after-1level-nobrand-1440-overview-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "after-1level-nobrand-1440-overview-port",
+  "name": "rubik-sota-vivienda-vertical.png",
+  "previewEqualsDownload": true,
+  "width": 1080,
+  "height": 1350,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "after-1level-nobrand-1440-room-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.998,
+  "fillY": 0.998,
+  "fillArea": 0.996
+ },
+ {
+  "tag": "after-1level-nobrand-1440",
+  "errors": []
+ },
+ {
+  "tag": "after-1level-nobrand-390-overview-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "after-1level-nobrand-390-overview-port",
+  "name": "rubik-sota-vivienda-vertical.png",
+  "previewEqualsDownload": true,
+  "width": 1080,
+  "height": 1350,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "after-1level-nobrand-390-room-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.722,
+  "fillY": 0.526,
+  "fillArea": 0.38
+ },
+ {
+  "tag": "after-1level-nobrand-390",
+  "errors": []
+ },
+ {
+  "tag": "after-1level-brand-overview-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "after-1level-brand-overview-port-contact",
+  "name": "rubik-sota-vivienda-vertical.png",
+  "previewEqualsDownload": true,
+  "width": 1080,
+  "height": 1350,
+  "fillX": 0.757,
+  "fillY": 0.878,
+  "fillArea": 0.665
+ },
+ {
+  "tag": "brand",
+  "errors": []
+ },
+ {
+  "tag": "after-2levels-brand-overview-land",
+  "name": "rubik-sota-vivienda-horizontal.png",
+  "previewEqualsDownload": true,
+  "width": 1600,
+  "height": 1000,
+  "fillX": 0.839,
+  "fillY": 0.92,
+  "fillArea": 0.772
+ },
+ {
+  "tag": "after-2levels-brand-overview-port",
+  "name": "rubik-sota-vivienda-vertical.png",
+  "previewEqualsDownload": true,
+  "width": 1080,
+  "height": 1350,
+  "fillX": 0.839,
+  "fillY": 0.92,
+  "fillArea": 0.772
+ },
+ {
+  "tag": "2levels",
+  "errors": []
+ }
+]

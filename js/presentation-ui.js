@@ -144,26 +144,51 @@
  // panel. «Compartir…» there opens the system share sheet (WhatsApp, Gmail, LinkedIn…) with the prepared file in its
  // own tap, so the user activation is still valid; without file sharing, download, WhatsApp and e-mail with a text —
  // the person attaches the image. It shares an IMAGE, never a link to the project: nothing is uploaded by Rubik.
- async function viewImage(){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');const shot=View3D.shot({...captureOptions,download:false});
-  const url=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,label):shot.dataUrl;const blob=await (await fetch(url)).blob();return {url,label,file:new File([blob],'rubik-sota-vivienda.png',{type:'image/png'})};}
+ // Delivery image (js/delivery-image.js): the whole home framed to fill the picture on the overview, the stop's own
+ // camera on a room; the project data and the brand go in their own band (never over the home). The preview IS the
+ // file that is downloaded or shared: same data URL, same bytes.
+ async function viewImage({format='landscape',contact=false}={}){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
+  // Landscape: image on the left and the data in a side column (a compact home keeps the whole height; measured in
+  // docs/qa/delivery-image-2026-10-22.md). Portrait: image above a data band.
+  const D=window.FloorPlanDeliveryImage,layout=format==='landscape'?'side':'band',A=D.imageArea(format,layout);
+  const shot=View3D.deliveryShot({width:A.w,height:A.h,frame:stop.kind!=='room'});
+  const room=stop.kind==='room'?app.geometry.rooms.find(r=>r.id===stop.roomId):null;
+  const p=brandSnap?.profile,data=D.content({title:brandSnap?.title||app.project.name,view:label,level:(plan.levels?.length||0)>1?stop.levelName:'',rooms:room?[room]:app.geometry.rooms,
+   brand:p&&p.name?{name:p.name,logo:p.logo,contact:contact?window.FloorPlanBrand?.contactLine?.(p)||'':''}:null});
+  const out=await D.compose({image:shot.dataUrl,format,layout,data});const blob=await (await fetch(out.dataUrl)).blob();
+  return {url:out.dataUrl,label,format,fill:shot.fill,data,file:new File([blob],`rubik-sota-vivienda-${format==='portrait'?'vertical':'horizontal'}.png`,{type:'image/png'})};}
  const shareDialog=el('dialog',undefined,document.body,'share-dialog');shareDialog.id='shareDialog';shareDialog.setAttribute('aria-labelledby','shareTitle');
  async function share(){
   if(!captureReady())return;const st=blocked();if(st){toast(blockedMessage(st),8000);return;}
   shareButton.disabled=true;
-  try{const img=await viewImage(),name=(brandSnap?.title||app.project.name||'').trim(),text=tx(`${name?name+' · ':''}${img.label}. Imagen creada con Rubik Sota; medidas orientativas.`,`${name?name+' · ':''}${img.label}. Image made with Rubik Sota; indicative dimensions.`,`${name?name+' · ':''}${img.label}。由 Rubik Sota 生成的图片；尺寸仅供参考。`);
+  try{const name=(brandSnap?.title||app.project.name||'').trim(),hasContact=!!(brandSnap?.profile&&window.FloorPlanBrand?.contactLine?.(brandSnap.profile));
+   const opts={format:'landscape',contact:false};let img=await viewImage(opts);
+   const text=()=>tx(`${name?name+' · ':''}${img.label}. Imagen creada con Rubik Sota; medidas orientativas.`,`${name?name+' · ':''}${img.label}. Image made with Rubik Sota; indicative dimensions.`,`${name?name+' · ':''}${img.label}。由 Rubik Sota 生成的图片；尺寸仅供参考。`);
    // The image is prepared first; the system share sheet is opened by its own tap in the panel, so the browser's
-   // user-activation window is not spent while the PNG and the brand strip are being generated.
+   // user-activation window is not spent while the PNG is being generated.
    shareDialog.replaceChildren();const h=el('h2',tx('Compartir imagen','Share image','分享图片'),shareDialog);h.id='shareTitle';h.tabIndex=-1;
-   const preview=el('img',undefined,shareDialog,'share-preview');preview.src=img.url;preview.alt=img.label;
+   // Format and contact: each change regenerates the image; the preview and the file are always the same bytes.
+   const choices=el('div',undefined,shareDialog,'share-choices');const fmt=el('div',undefined,choices,'share-format');fmt.setAttribute('role','group');fmt.setAttribute('aria-label',tx('Formato','Format','格式'));
+   const fmtButtons=[['landscape',tx('Horizontal','Landscape','横向')],['portrait',tx('Vertical','Portrait','纵向')]].map(([value,label])=>{const b=el('button',label,fmt,'btn');b.type='button';b.dataset.format=value;b.setAttribute('aria-pressed',String(value===opts.format));b.onclick=()=>update({format:value});return b;});
+   let contactBox=null;if(hasContact){const lab=el('label',undefined,choices,'share-contact');contactBox=el('input',undefined,lab);contactBox.type='checkbox';contactBox.id='shareContact';lab.append(' '+tx('Mostrar mi contacto en la imagen','Show my contact on the image','在图片上显示我的联系方式'));contactBox.onchange=()=>update({contact:contactBox.checked});}
+   const preview=el('img',undefined,shareDialog,'share-preview');
    el('p',tx('Se comparte una imagen de esta vista, no un enlace al proyecto. «Compartir…» abre el menú de tu dispositivo cuando lo permite; si no, descárgala y adjúntala tú en WhatsApp, Gmail, LinkedIn o el portal inmobiliario.','You share an image of this view, not a link to the project. Download it and attach it in WhatsApp, Gmail, LinkedIn or a property portal.','分享的是此视图的图片，而不是项目链接。下载后在 WhatsApp、Gmail、LinkedIn 或房产平台中附上。'),shareDialog,'share-note');
    const row=el('div',undefined,shareDialog,'share-actions');
-   if(navigator.canShare?.({files:[img.file]})){const native=el('button',tx('Compartir…','Share…','分享…'),row,'btn primary');native.type='button';native.id='shareNative';
-    native.onclick=()=>{navigator.share({files:[img.file],title:name||'Rubik Sota',text}).then(()=>shareDialog.close(),e=>{if(e?.name!=='AbortError')toast(tx('El sistema no pudo compartir la imagen. Descárgala y adjúntala.','The system could not share the image. Download it and attach it.','系统无法分享图片。请下载后附上。'),7000);});};}
-   const dl=el('a',tx('Descargar imagen','Download image','下载图片'),row,navigator.canShare?.({files:[img.file]})?'btn':'btn primary');dl.href=img.url;dl.download='rubik-sota-vivienda.png';dl.id='shareDownload';
-   const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.href='https://wa.me/?text='+encodeURIComponent(text);wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
-   const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text+'\n\n'+tx('(Adjunta la imagen descargada.)','(Attach the downloaded image.)','（请附上下载的图片。）'));mail.id='shareMail';
+   let native=null;if(navigator.canShare?.({files:[img.file]})){native=el('button',tx('Compartir…','Share…','分享…'),row,'btn primary');native.type='button';native.id='shareNative';
+    native.onclick=()=>{navigator.share({files:[img.file],title:name||'Rubik Sota',text:text()}).then(()=>shareDialog.close(),e=>{if(e?.name!=='AbortError')toast(tx('El sistema no pudo compartir la imagen. Descárgala y adjúntala.','The system could not share the image. Download it and attach it.','系统无法分享图片。请下载后附上。'),7000);});};}
+   const dl=el('a',tx('Descargar imagen','Download image','下载图片'),row,native?'btn':'btn primary');dl.id='shareDownload';
+   const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
+   const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.id='shareMail';
    const close=el('button',tx('Cerrar','Close','关闭'),row,'btn');close.type='button';close.onclick=()=>shareDialog.close();
-   shareDialog.showModal();h.focus();
+   const show=()=>{preview.src=img.url;preview.alt=tx(`Imagen que se compartirá: ${img.label}`,`Image to be shared: ${img.label}`,`将分享的图片：${img.label}`);preview.dataset.format=img.format;shareDialog.dataset.contact=img.data.brand?.contact?'shown':'hidden';
+    dl.href=img.url;dl.download=img.file.name;wa.href='https://wa.me/?text='+encodeURIComponent(text());
+    mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text()+'\n\n'+tx('(Adjunta la imagen descargada.)','(Attach the downloaded image.)','（请附上下载的图片。）'));
+    for(const b of fmtButtons)b.setAttribute('aria-pressed',String(b.dataset.format===img.format));};
+   const controls=()=>[...fmtButtons,contactBox,native,dl].filter(Boolean);
+   async function update(change){Object.assign(opts,change);shareDialog.setAttribute('aria-busy','true');for(const c of controls())c.toggleAttribute('disabled',true);
+    try{img=await viewImage(opts);show();}catch(error){toast(error.message||String(error),6000);}
+    finally{shareDialog.removeAttribute('aria-busy');for(const c of controls())c.toggleAttribute('disabled',false);}}
+   show();shareDialog.showModal();h.focus();
   }catch(error){toast(error.message||String(error),6000);}
   finally{shareButton.disabled=false;updateCapture();}
  }
