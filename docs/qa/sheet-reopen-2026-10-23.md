@@ -23,8 +23,8 @@ Caso nuevo en `tests/sheet.browser.test.cjs`, a 1440 y 390:
 
 | Código | Resultado del archivo `sheet.browser` |
 |---|---|
-| `b875157` (código `72bac33`), sin la corrección | 7 PASS existentes y **2 FAIL nuevos** («reopened sheet has no preview»), en `sheet-before-fix-b875157.log` |
-| `acabb54`, con la corrección | **9 PASS / 0 FAIL**, en `sheet-after-fix-acabb54-worktree.log` |
+| `b875157` (código `72bac33`), sin la corrección | 7 PASS existentes y **2 FAIL nuevos** («reopened sheet has no preview»), en `sheet-before-fix-b875157.txt` |
+| `acabb54`, con la corrección | **9 PASS / 0 FAIL**, en `sheet-after-fix-acabb54-worktree.txt` |
 
 Unitarias en `acabb54`: 254 PASS, 0 FAIL, 2 SKIP (necesitan Blender).
 
