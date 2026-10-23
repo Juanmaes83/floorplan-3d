@@ -365,6 +365,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-minimap .btn{border:1px solid var(--line);min-height:44px;width:100%}
 .presentation-minimap-panel{margin-top:6px}
 .presentation-minimap svg{display:block;width:100%;height:145px;background:#f2f0ea;border-radius:6px}
+.review-dialog{width:min(640px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:16px}.review-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.review-head h2{margin:0;font-size:20px}.review-identity,.review-note{color:var(--muted);font-size:13px}.review-section{border-top:1px solid var(--line);margin-top:12px;padding-top:8px}.review-section h3{font-size:15px;margin:4px 0 8px}.review-dialog label{display:block;margin:8px 0;font-size:13px}.review-dialog textarea{display:block;width:100%;font-size:16px;padding:8px;box-sizing:border-box}.review-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.review-dialog .btn{min-height:44px;border:1px solid var(--line-strong,#aeb5b9)}.review-list{padding-left:20px;margin:6px 0}.review-list li{margin:6px 0;line-height:1.4}.review-dialog .review-small{min-height:36px;padding:4px 10px;margin-left:6px}.review-decide{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.review-dialog .review-decide .review-small{margin-left:0}.review-status{display:block;font-size:12px;color:var(--muted);margin-top:2px}.review-status[data-status=implemented]{color:var(--success,#2f6e4a);font-weight:600}.review-copy{background:var(--warn-soft,#fff4dc);color:var(--ink,#1f2326)!important;padding:8px 10px;border-radius:8px}.review-answers{border-top:1px dashed var(--line);margin-top:10px;padding-top:6px}.review-answers h4{margin:4px 0 6px;font-size:14px}.review-dialog .review-list li{overflow-wrap:anywhere}.review-small[aria-pressed=true]{background:var(--select,#2b3034);color:#fff}.review-received{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}.review-from{font-weight:600;margin:0}.review-ok{color:var(--success,#2f6e4a);margin:4px 0}.review-warn{color:var(--warn,#7a5200);margin:4px 0}.review-counts{font-size:13px;color:var(--muted)}
 .presentation-minimap-room{fill:#dfded8;stroke:#605f5a;stroke-width:55;stroke-linejoin:round}
 .presentation-minimap-room.selectable{fill:#c8dedb;cursor:pointer}
 .presentation-minimap-room.active{fill:#57a9a2;stroke:#184e52;stroke-width:95}
@@ -2283,6 +2284,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/brand-core.js"></script>
 <script src="js/brand-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
+<script src="js/review-notes-core.js"></script>
+<script src="js/review-notes-ui.js"></script>
 <script src="js/building-ui.js"></script>
 <script src="js/build-palette.js"></script>
 <script src="js/app-shell.js"></script>
