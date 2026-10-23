@@ -90,3 +90,21 @@ test('diagnosis with many objects on every level stays fast', ()=>{
  const t=performance.now();for(let k=0;k<10;k++)B.buildingStatus(b);const ms=(performance.now()-t)/10;
  assert.ok(ms<50,`${ms.toFixed(1)} ms per full evaluation with ${b.levels.reduce((n,l)=>n+l.project.objects.length,0)} objects`);
 });
+
+// Finding 12: one level, no stair. Stacking by design (a hob set into a worktop) does not block, as in the layout review;
+// a bed is placed beside another one or refused when the room is full, never on top.
+test('one level: design stacking does not block, real overlaps do',()=>{
+ const C=require('../js/project-core.js'),L=require('../js/room-layout.js'),P=require('../js/furniture-placement.js');
+ let p=L.blank('Una planta');p=L.create(p,{name:'Dormitorio',width:6000,depth:4000,x:0,y:0}).project;
+ const obj=(id,type,x,y,w,d,rot=0)=>{const {cx,cy,w:_w,d:_d,rot:_r,...o}={...C.object(type,type,x,y,w,d,rot,'#888'),id};return o;};
+ p.objects.push(obj('obj_counter','counter',3000,600,2400,600));
+ assert.equal(P.problems(p,obj('obj_stove','stove',3000,600,600,600)).filter(x=>x.kind==='furniture').length,0,'hob in the worktop');
+ const bed=obj('obj_bed1','bed',3000,2400,1800,2000);p.objects.push(bed);
+ const second=P.find(p,obj('obj_bed2','bed',3000,2400,1800,2000));assert.equal(second.ok,true);assert.ok(second.distanceMm>0,'moved beside');
+ p.objects.push({...obj('obj_bed2','bed',0,0,1800,2000),position:second.position});
+ assert.deepEqual(P.problems(p,p.objects.find(o=>o.id==='obj_bed2')),[]);
+ const third=P.find(p,obj('obj_bed3','bed',3000,2400,1800,2000));if(third.ok){p.objects.push({...obj('obj_bed3','bed',0,0,1800,2000),position:third.position});}
+ const fourth=P.find(p,obj('obj_bed4','bed',3000,2400,1800,2000));assert.equal(fourth.ok,false);assert.equal(fourth.reason,'no-space');
+ // Rotated: a 90° bed fits along the other axis or is refused, never on top.
+ const rot=P.find(p,obj('obj_bed5','bed',3000,2400,1800,2000,90));if(rot.ok)assert.deepEqual(P.problems(p,{...obj('obj_bed5','bed',0,0,1800,2000,90),position:rot.position}).filter(x=>x.kind==='furniture'),[]);
+});

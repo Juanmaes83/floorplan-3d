@@ -34,7 +34,7 @@
    walls:g.walls.filter(w=>w.status!=='demolished').map(w=>({id:w.id,poly:pts(w.poly)})),
    doors:g.doors.map(d=>{const [hx,hy]=d.h,L=d.len;return {id:d.id,poly:[[0,0],[1,0],[1,1],[0,1]].map(([u,v])=>({x:hx+(d.o[0]*u+d.c[0]*v)*L,y:hy+(d.o[1]*u+d.c[1]*v)*L}))};}),
    zones:zones.map((z,i)=>({id:z.stairId||`zone-${i}`,kind:z.kind,poly:z.polygon||z})),
-   furniture:(project.objects||[]).filter(o=>finite(o)&&!ignoreIds.includes(o.id)&&!NON_BLOCKING.has(o.type)).map(o=>({id:o.id,name:o.name||o.type,poly:T.footprint(o)}))
+   furniture:(project.objects||[]).filter(o=>finite(o)&&!ignoreIds.includes(o.id)&&!NON_BLOCKING.has(o.type)).map(o=>({id:o.id,name:o.name||o.type,type:o.type,poly:T.footprint(o)}))
   };
   for(const k of ['walls','doors','zones','furniture'])for(const item of sc[k])item.box=box(item.poly);
   return sc;
@@ -51,7 +51,8 @@
   for(const w of sc.walls)if(hit(fp,fb,w,tol)&&add({kind:'wall',id:w.id,detail:'Atraviesa un muro.'}))return out;
   if(!NON_BLOCKING.has(object.type)){
    for(const d of sc.doors)if(hit(fp,fb,d,tol)&&add({kind:'door',id:d.id,detail:'Invade el barrido de una puerta.'}))return out;
-   for(const f of sc.furniture)if(f.id!==self&&hit(fp,fb,f,tol)&&add({kind:'furniture',id:f.id,detail:`Solapa «${f.name}».`}))return out;
+   // Stacking by design (a hob or sink set into a worktop) is not an overlap, exactly as in the layout review.
+   for(const f of sc.furniture)if(f.id!==self&&!R.exclusion(object,f)&&hit(fp,fb,f,tol)&&add({kind:'furniture',id:f.id,detail:`Solapa «${f.name}».`}))return out;
   }
   return out;
  }

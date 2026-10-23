@@ -3,7 +3,7 @@
 // 3D keeps the state and builds the same geometry → «Revisar» lists both levels → isolate in 3D and locate in 2D →
 // presentation outputs refused, backups allowed → new conflicts refused (add, duplicate, drag) → manual correction →
 // state clear in 2D and 3D → F5 → stair form preview and cancel. Captures (2D/3D, both levels, «Ver todas») go to
-// STAIR_SHOTS; a second test checks that duplicating in a single-level project behaves as before.
+// STAIR_SHOTS; a second test checks that a duplicate in a single-level project keeps its offset when free and never overlaps (finding 12).
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path'),{createServer}=require('node:http'),{execFile}=require('node:child_process'),{chromium}=require('playwright');
 const B=require('../js/building-core.js'),P=require('../js/project-package.js'),T=require('../js/tracing-core.js'),S=require('./fixtures/stair-conflict-building.cjs');
@@ -124,10 +124,14 @@ test(`BW5 furniture over a stair, import to correction ${viewport.width}x${viewp
  assert.deepEqual(errors,[]);
 });
 
-test('single-level project: duplicating and adding behave as before (no stair search)',{timeout:300000},async t=>{
+// Finding 12 (23-10-2026) changed the single-level rule: a copy is no longer put on top of other furniture. It keeps
+// the +200 mm offset when that place is free and otherwise goes to the nearest free place; no stair search is involved.
+test('single-level project: a duplicate keeps the 200 mm offset when free and never overlaps (no stair search)',{timeout:300000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());const {page,errors}=await open(context);
- const out=await page.evaluate(()=>{const p=FloorPlanApp.project,f=state.furniture[0];select({kind:'furn',id:f.id});const before={cx:f.cx,cy:f.cy,n:state.furniture.length};duplicateSel();const n=state.furniture.at(-1);return {before,after:{cx:n.cx,cy:n.cy,n:state.furniture.length},building:!!FloorPlanBuildingUI.context,zones:FloorPlanBuildingUI.stairZoneList().length,levels:p.levels};});
+ const out=await page.evaluate(()=>{const p=FloorPlanApp.project,f=state.furniture[0];select({kind:'furn',id:f.id});const before={cx:f.cx,cy:f.cy,n:state.furniture.length};const o=p.objects.find(x=>x.id===f.id),offsetFree=FloorPlanPlacement.problems(p,{...o,id:'obj_probe',position:{x:o.position.x+200,y:o.position.y+200}}).length===0;duplicateSel();const n=state.furniture.at(-1);return {before,after:{cx:n.cx,cy:n.cy,n:state.furniture.length},building:!!FloorPlanBuildingUI.context,zones:FloorPlanBuildingUI.stairZoneList().length,levels:p.levels,offsetFree};});
  assert.equal(out.building,false);assert.equal(out.zones,0);assert.equal(out.after.n,out.before.n+1);
- assert.deepEqual([out.after.cx,out.after.cy],[out.before.cx+200,out.before.cy+200],'copy offset by 200 mm exactly, as on master');
+ const free=await page.evaluate(()=>{const n=state.furniture.at(-1),o=FloorPlanApp.project.objects.find(x=>x.id===n.id);return FloorPlanPlacement.problems(FloorPlanApp.project,o).filter(p=>p.kind==='furniture');});
+ assert.deepEqual(free,[],'the copy does not overlap other furniture');
+ if(out.offsetFree)assert.deepEqual([out.after.cx,out.after.cy],[out.before.cx+200,out.before.cy+200],'free offset: kept exactly');
  assert.deepEqual(errors,[]);
 });

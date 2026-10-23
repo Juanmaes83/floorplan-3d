@@ -274,7 +274,13 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   .brand span,footer .only2d,.plan-meta{display:none!important}
 }
 #gLevelGhost .level-ghost-room{fill:none;stroke:#8c8579;stroke-width:28;stroke-dasharray:120 90;opacity:.55}#gLevelGhost .level-ghost-wall{fill:#9a9388;opacity:.28}
-.level-stair-outline{fill:#efe4d4;fill-opacity:.65;stroke:#5a4a3a;stroke-width:24}.level-stair-to .level-stair-outline{fill:none;stroke-dasharray:140 90}.level-stair-tread{stroke:#5a4a3a;stroke-width:14}.level-stair-arrow{stroke:#5a4a3a;stroke-width:22}.level-conflict-area{fill:url(#levelConflictHatch);stroke:none}.level-conflict-outline{fill:none;stroke:#a3261b;stroke-width:40;stroke-dasharray:160 90}.level-conflict-mark{fill:#a3261b;stroke:#fff;stroke-width:30}.level-conflict-mark-text{fill:#fff;font-size:220px;font-weight:700}.level-conflicts{position:absolute;right:14px;bottom:12px;z-index:5;max-width:min(520px,calc(100% - 150px));background:#fff7f5;color:#5c1710;border:2px dashed #a3261b;border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.08)}.level-conflicts .btn{margin-left:6px;padding:2px 8px}@media (max-height:500px),(max-width:600px){.level-conflicts{bottom:8px;right:8px;padding:3px 8px;font-size:12px;line-height:1.25}}.level-conflicts[data-state=insufficient]{border-style:dotted}#stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}@media (max-width:600px){#stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 60px + 8px)}}.level-proposal-outline{fill:#2f7d4f;fill-opacity:.18;stroke:#2f7d4f;stroke-width:40;stroke-dasharray:60 50}.level-proposal-arrow{stroke:#2f7d4f;stroke-width:30}.relocation-panel{position:absolute;left:14px;top:12px;z-index:6;max-width:min(460px,calc(100% - 28px));max-height:calc(100% - 90px);display:flex;flex-direction:column;overflow:hidden;background:var(--panel,#fff);border:2px solid #2f7d4f;border-radius:10px;padding:8px 10px;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.12)}.relocation-panel h3{margin:0 0 4px;font-size:14px;flex:none}.relocation-panel h3:focus{outline:2px solid #2f7d4f;outline-offset:2px}.relocation-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain}.relocation-panel .actions{flex:none;padding-top:6px}.relocation-panel ul{margin:4px 0;padding-left:18px}.relocation-note{color:#5b554c;margin:4px 0}@media (max-height:500px){.relocation-panel{top:6px;bottom:6px;left:8px;max-height:none;max-width:min(330px,42%);font-size:12px;padding:6px 8px}.relocation-panel h3{font-size:13px}}.level-conflicts-short{display:none}@media (max-height:500px){.level-conflicts-full{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.level-conflicts-short{display:inline;font-weight:600}#stage:has(#fab.show) .level-conflicts{bottom:16px}}.conflicts-dialog{width:min(560px,94vw);max-height:86vh;overflow:auto}.conflicts-dialog ul{padding-left:18px}.conflicts-dialog li{margin:8px 0}.conflicts-dialog li p{margin:0 0 4px}.conflicts-dialog .actions{display:flex;flex-wrap:wrap;gap:6px}.level-stair-label{fill:#3d3128;paint-order:stroke;stroke:#fff;stroke-width:30px}
+.level-stair-outline{fill:#efe4d4;fill-opacity:.65;stroke:#5a4a3a;stroke-width:24}.level-stair-to .level-stair-outline{fill:none;stroke-dasharray:140 90}.level-stair-tread{stroke:#5a4a3a;stroke-width:14}.level-stair-arrow{stroke:#5a4a3a;stroke-width:22}.level-conflict-area{fill:url(#levelConflictHatch);stroke:none}.level-conflict-outline{fill:none;stroke:#a3261b;stroke-width:40;stroke-dasharray:160 90}.level-conflict-mark{fill:#a3261b;stroke:#fff;stroke-width:30}.level-conflict-mark-text{fill:#fff;font-size:220px;font-weight:700}.level-conflicts{position:absolute;right:14px;bottom:12px;z-index:5;max-width:min(520px,calc(100% - 150px));background:#fff7f5;color:#5c1710;border:2px dashed #a3261b;border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+/* Furniture overlapping other furniture (furniture-overlaps-ui.js): a warning, not a block; above the building chip when both show. */
+.furniture-overlaps{position:absolute;right:14px;bottom:12px;z-index:5;max-width:min(520px,calc(100% - 150px));background:#fff8ec;color:#5a3a06;border:1px solid #b0741a;border-radius:10px;padding:6px 10px;font-size:13px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.furniture-overlaps .btn{margin-left:6px;padding:2px 8px}
+#stage:has(#levelConflicts:not([hidden])) .furniture-overlaps{bottom:60px}
+#stage:has(#fab.show) .furniture-overlaps{bottom:calc(16px + 60px + 8px)}
+body.presenting .furniture-overlaps{display:none}.level-conflicts .btn{margin-left:6px;padding:2px 8px}@media (max-height:500px),(max-width:600px){.level-conflicts{bottom:8px;right:8px;padding:3px 8px;font-size:12px;line-height:1.25}}.level-conflicts[data-state=insufficient]{border-style:dotted}#stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 56px + 8px)}@media (max-width:600px){#stage:has(#fab.show) .level-conflicts{bottom:calc(16px + 60px + 8px)}}.level-proposal-outline{fill:#2f7d4f;fill-opacity:.18;stroke:#2f7d4f;stroke-width:40;stroke-dasharray:60 50}.level-proposal-arrow{stroke:#2f7d4f;stroke-width:30}.relocation-panel{position:absolute;left:14px;top:12px;z-index:6;max-width:min(460px,calc(100% - 28px));max-height:calc(100% - 90px);display:flex;flex-direction:column;overflow:hidden;background:var(--panel,#fff);border:2px solid #2f7d4f;border-radius:10px;padding:8px 10px;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.12)}.relocation-panel h3{margin:0 0 4px;font-size:14px;flex:none}.relocation-panel h3:focus{outline:2px solid #2f7d4f;outline-offset:2px}.relocation-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain}.relocation-panel .actions{flex:none;padding-top:6px}.relocation-panel ul{margin:4px 0;padding-left:18px}.relocation-note{color:#5b554c;margin:4px 0}@media (max-height:500px){.relocation-panel{top:6px;bottom:6px;left:8px;max-height:none;max-width:min(330px,42%);font-size:12px;padding:6px 8px}.relocation-panel h3{font-size:13px}}.level-conflicts-short{display:none}@media (max-height:500px){.level-conflicts-full{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.level-conflicts-short{display:inline;font-weight:600}#stage:has(#fab.show) .level-conflicts{bottom:16px}}.conflicts-dialog{width:min(560px,94vw);max-height:86vh;overflow:auto}.conflicts-dialog ul{padding-left:18px}.conflicts-dialog li{margin:8px 0}.conflicts-dialog li p{margin:0 0 4px}.conflicts-dialog .actions{display:flex;flex-wrap:wrap;gap:6px}.level-stair-label{fill:#3d3128;paint-order:stroke;stroke:#fff;stroke-width:30px}
 #levelBar{flex-wrap:nowrap}#levelBar .btn[aria-pressed=true]{font-weight:600}#levelsDialog{width:min(640px,94vw)}.level-card{border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:6px 10px}.level-field{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.level-field input[type=number],.level-field input[type=text]{width:9em;max-width:100%}.level-field input[type=checkbox]{width:auto;margin:0}.level-check{display:flex;gap:8px;align-items:center;justify-content:flex-start;text-align:left;margin:6px 0}.level-field small{color:#6b6257}.level-warnings{margin:6px 0;padding-left:18px;font-size:13px}.level-derived,.level-alignment,.level-scale{font-size:13px;color:#4f463d}
 dialog{width:min(500px,92vw);max-height:90dvh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}#projectVariants{border-top:1px solid var(--line);margin-top:10px}#projectVariants h3{margin:10px 0 4px;font-size:15px}#variantsDialog{width:min(980px,96vw)}.variants-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0}.variant-card{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;min-width:0}.variant-card[data-active=true]{border-color:var(--accent,#b5653a);box-shadow:0 0 0 2px #b5653a33}.variant-card h3{margin:0 0 6px;font-size:15px;overflow-wrap:anywhere}.variant-card .role{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:6px;background:#efe8dc;margin-bottom:4px}.variant-card dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:6px 0;font-size:13px}.variant-card dt{color:var(--muted)}.variant-card dd{margin:0;text-align:right;overflow-wrap:anywhere}.variant-card .actions{display:flex;flex-wrap:wrap;gap:6px}
 .room-design{width:min(620px,94vw);padding:16px}.room-design input,.room-design select,.room-design .btn{min-height:44px}.room-design .btn{margin:4px 0}.room-design input[type=checkbox]{width:24px;height:24px;min-height:24px;display:inline-block;margin:8px;vertical-align:middle}.room-design form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px}.room-design form>p,.room-design form>.actions{grid-column:1/-1}#roomDesignError{color:#a32b1f;overflow-wrap:anywhere}#roomDesignPreview svg{width:100%;height:210px;background:#faf8f3;border:1px solid var(--line)}@media(max-height:500px){#roomDesignPreview svg{height:150px}.room-design{max-height:94dvh}}
@@ -1351,6 +1357,7 @@ function renderAll(){
   window.FloorPlanTraceUI?.render();
   window.FloorPlanGuideUI?.sync();
   window.FloorPlanBuildingUI?.render();
+  window.FloorPlanFurnitureOverlaps?.render();
 }
 
 const REFERENCE_ID=Core.initial().id;
@@ -1597,20 +1604,31 @@ function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel =
 function duplicateSel(){
   if (ui.sel?.kind !== 'furn') return;
   const f = getF(ui.sel.id), n = Core.decorate(Core.clone(f)); n.id=uid(); n.cx+=200; n.cy+=200;
-  const place = placeInBuilding(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
+  const place = placeFurniture(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
+  if (place.unchanged) pushOut(n);
   ui.sel = {kind:'furn', id:n.id}; mutate(() => state.furniture.push(n));
+  toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place), place.distanceMm > 0 ? 4000 : 1800);
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
-// In a building whose active level has stairs, a new or duplicated item goes to the nearest pose where its whole
-// footprint fits one room and touches no stair, wall, door swing or furniture (FloorPlanPlacement). When none is
-// demonstrated within the search budget it is NOT added: the person is told why. Elsewhere pushOut applies as before.
-function placeInBuilding(f, near){
+// A new or duplicated item goes to the nearest pose where its whole footprint fits one room and touches no wall, door
+// swing, other furniture or, in a building, stair (FloorPlanPlacement), with one or two levels. When none is
+// demonstrated within the search budget it is NOT added: the person is told why. Only a point outside every room
+// (an empty plan, a drop off the rooms) keeps the old pushOut, since there is no room to fit it into.
+function placeFurniture(f, near){
   const zones = window.FloorPlanBuildingUI?.stairZoneList() || [];
-  if (!zones.length) return {ok:true, unchanged:true};
-  const o = {id:f.id, type:f.type, name:f.name, position:{x:Math.round(near.x), y:Math.round(near.y)}, size:{widthMm:f.w, depthMm:f.d}, rotationDeg:f.rot};
+  // The explanation names the item and the room as the person sees them (not the stored internal names).
+  const o = {id:f.id, type:f.type, name:nm(f.name), position:{x:Math.round(near.x), y:Math.round(near.y)}, size:{widthMm:f.w, depthMm:f.d}, rotationDeg:f.rot};
   const r = FloorPlanPlacement.find(project, o, {zones, near:o.position});
-  if (r.ok){ f.cx = r.position.x; f.cy = r.position.y; }
+  if (r.roomName && r.message) r.message = r.message.replace(`«${r.roomName}»`, `«${nm(r.roomName)}»`);
+  if (r.ok){ f.cx = r.position.x; f.cy = r.position.y; return r; }
+  if (!zones.length && (r.reason === 'no-room' || r.reason === 'ambiguous-room')) return {ok:true, unchanged:true};
   return r;
+}
+// What the toast adds when the item did not go exactly where it was asked for.
+function placedNote(place){
+  if (!place.ok || place.unchanged || !(place.distanceMm > 0)) return '';
+  const d = place.distanceMm >= 1000 ? `${(place.distanceMm/1000).toFixed(1).replace('.', ',')} m` : `${Math.round(place.distanceMm/10)} cm`;
+  return LANG === 'es' ? ` · en el sitio libre más cercano de «${nm(place.roomName)}» (a ${d})` : tr(`，已放到「${place.roomName}」最近的空位`, ` · in the nearest free place in "${nm(place.roomName)}" (${d} away)`);
 }
 function pushOut(f){
   for (let n = 0; n < 4; n++){
@@ -1629,12 +1647,12 @@ function addItem(it, x, y){
   const [type,name,w,d,color,height] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
   f.size.heightMm=height;
   if(it[6])f.assetRef=FloorPlanAssets.associate(f,it[6]).assetRef;
-  const place = placeInBuilding(f, {x:f.cx, y:f.cy});
+  const place = placeFurniture(f, {x:f.cx, y:f.cy});
   if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, nm(name));
   if (place.unchanged) pushOut(f);
   ui.sel = {kind:'furn', id:f.id};
   mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
-  toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`));
+  toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`) + placedNote(place), place.distanceMm > 0 ? 4000 : 1800);
 }
 function toggleWall(id){
   const w = geometry.walls.find(w => w.id === id); if (!w) return;
@@ -2264,6 +2282,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/brand-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
 <script src="js/building-ui.js"></script>
+<script src="js/furniture-overlaps-ui.js"></script>
 <script src="js/build-palette.js"></script>
 <script src="js/app-shell.js"></script>
 <script type="module">
