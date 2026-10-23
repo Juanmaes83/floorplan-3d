@@ -21,6 +21,9 @@ Chromium 141 + SwiftShader (sin GPU), Playwright, Node 22. Sin merge ni desplieg
 - Sin datos inventados: un dato ausente se omite (sin marcadores); la superficie es siempre «aprox.»; no hay
   ubicación (Rubik no la guarda); textos acotados terminan siempre en «…».
 
+## Decisión (23-10-2026)
+Juanma **aprueba la composición horizontal D, con columna lateral**. Base: la comparación de imágenes reales de abajo. D deja la vivienda en 818×878 px, mayor que la imagen anterior de #78 (714×732), y no pone datos sobre la casa; el 44,9 % del archivo frente al 51 % anterior se explica porque la columna ocupa parte del lienzo, no porque la casa se vea más pequeña. La composición vertical ya validada se mantiene. La aprobación de D **no** aprueba #78, de la que depende esta PR.
+
 ## Comparación de composiciones (mismo proyecto, cámara, formato y marca)
 Medida: caja de los píxeles que difieren del fondo (umbral 30, paso 2 px; `scratchpad/measure.py`), como fracción de
 la zona de imagen y del PNG completo. La caja incluye la sombra de la vivienda. Sin recortar ni deformar: la cámara solo
@@ -60,7 +63,8 @@ El código actual de esta rama es el de `17e286a`. `2dff3d2` y los commits poste
 La suite `presentation` completa **no** se ha ejecutado sobre esta rama. Las ejecuciones posteriores sobre este SHA y sobre la integración temporal están en la descripción de la PR, para no cambiar el SHA de la evidencia.
 
 ## Abierto
-1. Horizontal: 44,9 % del archivo frente al 51 % previo (explicado arriba); decisión de Juanma si prefiere menos datos.
+1. ~~Horizontal: 44,9 % del archivo frente al 51 % previo; decisión de Juanma~~ → **decidido el 23-10-2026: Juanma aprueba la composición D (columna lateral)** sobre la comparación de imágenes reales (vivienda 818×878 px, mayor que en la imagen anterior, y los datos comerciales no se superponen a la casa). La vertical validada se mantiene. Código: `js/presentation-ui.js` usa `layout='side'` en horizontal y `'band'` en vertical. **No aprueba #78 ni autoriza un merge.**
+7. La vista general de la planta baja de un dúplex sale como un «pozo» de muros (`after-2levels-brand-overview-land.webp`): no es de la composición, es el encuadre de la presentación de dos plantas (hallazgo 13, `master`). Se corrige en su propia PR; tras ella hay que regenerar estas capturas de dos plantas.
 2. ~~A 844×390 la vista previa es pequeña y hay que desplazar~~ → **resuelto en `17e286a` (está en el HEAD)**: en pantallas bajas el diálogo usa dos columnas (vista previa 422×264); sin desplazamiento vertical ni horizontal y todos los botones visibles con 44 px, medido a 844×390, 1440×900 y 390×844 (`dialog-844-two-columns.webp`).
 3. ~~Sin marca, hueco bajo los datos~~ → **resuelto en `17e286a` (está en el HEAD)**: sin marca el bloque de datos se centra en la columna (`after-1level-nobrand-centred-land.webp`).
 4. «Compartir…» en teléfono físico: pendiente.
