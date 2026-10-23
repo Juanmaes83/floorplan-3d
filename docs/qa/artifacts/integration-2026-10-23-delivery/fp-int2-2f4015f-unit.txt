@@ -1,0 +1,1571 @@
+TAP version 13
+# Subtest: generic catalog has explicit validated three dimensions without rewriting old projects
+ok 1 - generic catalog has explicit validated three dimensions without rewriting old projects
+  ---
+  duration_ms: 30.513623
+  type: 'test'
+  ...
+# Subtest: manifest adapts one verified source and hashes real fixture and permission bytes
+ok 2 - manifest adapts one verified source and hashes real fixture and permission bytes
+  ---
+  duration_ms: 2.584106
+  type: 'test'
+  ...
+# Subtest: permission gates deny pending/missing/expired or incomplete usage and dimensions
+ok 3 - permission gates deny pending/missing/expired or incomplete usage and dimensions
+  ---
+  duration_ms: 2.094044
+  type: 'test'
+  ...
+# Subtest: untrusted transform, extension, paths, sizes and duplicate IDs are excluded
+ok 4 - untrusted transform, extension, paths, sizes and duplicate IDs are excluded
+  ---
+  duration_ms: 0.935591
+  type: 'test'
+  ...
+# Subtest: assetRef association/clear keeps room, identity, geometry and compatibility intact
+ok 5 - assetRef association/clear keeps room, identity, geometry and compatibility intact
+  ---
+  duration_ms: 23.668659
+  type: 'test'
+  ...
+# Subtest: curated external evidence records exact binaries and project authorization without inventing worldwide rights
+ok 6 - curated external evidence records exact binaries and project authorization without inventing worldwide rights
+  ---
+  duration_ms: 141.031799
+  type: 'test'
+  ...
+# Subtest: external references survive JSON, project duplication, reload and ZIP without binary embedding
+ok 7 - external references survive JSON, project duplication, reload and ZIP without binary embedding
+  ---
+  duration_ms: 41.74595
+  type: 'test'
+  ...
+# Subtest: validates and normalises a profile; rejects unsafe links, SVG/active logos and empty names
+ok 8 - validates and normalises a profile; rejects unsafe links, SVG/active logos and empty names
+  ---
+  duration_ms: 3.72702
+  type: 'test'
+  ...
+# Subtest: several profiles, per-project choice, frozen snapshot and removal
+ok 9 - several profiles, per-project choice, frozen snapshot and removal
+  ---
+  duration_ms: 2.329907
+  type: 'test'
+  ...
+# Subtest: old, damaged or foreign local data never breaks the editor
+ok 10 - old, damaged or foreign local data never breaks the editor
+  ---
+  duration_ms: 3.083618
+  type: 'test'
+  ...
+# Subtest: asymmetric fixture validates and emits exactly the expected orientative warnings
+ok 11 - asymmetric fixture validates and emits exactly the expected orientative warnings
+  ---
+  duration_ms: 44.20119
+  type: 'test'
+  ...
+# Subtest: derived geometry: slab opening equals stair footprint, areas per level sum to the total, rise from elevations
+ok 12 - derived geometry: slab opening equals stair footprint, areas per level sum to the total, rise from elevations
+  ---
+  duration_ms: 26.208352
+  type: 'test'
+  ...
+# Subtest: a 1.x reader and every consumer sharing the validator reject a building explicitly
+ok 13 - a 1.x reader and every consumer sharing the validator reject a building explicitly
+  ---
+  duration_ms: 76.912051
+  type: 'test'
+  ...
+# Subtest: strict level profile rejects hidden multi-level meaning a 1.x reader would ignore
+ok 14 - strict level profile rejects hidden multi-level meaning a 1.x reader would ignore
+  ---
+  duration_ms: 151.394925
+  type: 'test'
+  ...
+# Subtest: invalid building documents are rejected with a path and never mutated
+ok 15 - invalid building documents are rejected with a path and never mutated
+  ---
+  duration_ms: 393.694854
+  type: 'test'
+  ...
+# Subtest: JSON round trip keeps IDs, references and canonical content
+ok 16 - JSON round trip keeps IDs, references and canonical content
+  ---
+  duration_ms: 23.75287
+  type: 'test'
+  ...
+# Subtest: ZIP round trip resolves images per level exactly, with matching SHA-256 and IDs
+ok 17 - ZIP round trip resolves images per level exactly, with matching SHA-256 and IDs
+  ---
+  duration_ms: 36.139908
+  type: 'test'
+  ...
+# Subtest: tampered, incomplete or foreign building ZIPs are rejected before anything is applied
+ok 18 - tampered, incomplete or foreign building ZIPs are rejected before anything is applied
+  ---
+  duration_ms: 37.914807
+  type: 'test'
+  ...
+# Subtest: editing one level never changes the canonical hash of the other
+ok 19 - editing one level never changes the canonical hash of the other
+  ---
+  duration_ms: 22.795228
+  type: 'test'
+  ...
+# Subtest: reversible migration: wrapping, single-level export and level export keep the 1.x project lossless
+ok 20 - reversible migration: wrapping, single-level export and level export keep the 1.x project lossless
+  ---
+  duration_ms: 83.722141
+  type: 'test'
+  ...
+# Subtest: library stores, saves, duplicates, varies, reopens and removes a building as one unit
+ok 21 - library stores, saves, duplicates, varies, reopens and removes a building as one unit
+  ---
+  duration_ms: 82.469276
+  type: 'test'
+  ...
+# Subtest: fixture furniture never sits on a stair footprint or slab void of its level
+ok 22 - fixture furniture never sits on a stair footprint or slab void of its level
+  ---
+  duration_ms: 14.342265
+  type: 'test'
+  ...
+# Subtest: room labels keep clear of stair zones without changing labelAt; a real conflict is reported, not hidden
+ok 23 - room labels keep clear of stair zones without changing labelAt; a real conflict is reported, not hidden
+  ---
+  duration_ms: 33.99585
+  type: 'test'
+  ...
+# Subtest: stair label sits inside the stair footprint on both levels, upright and fitted
+ok 24 - stair label sits inside the stair footprint on both levels, upright and fitted
+  ---
+  duration_ms: 22.793514
+  type: 'test'
+  ...
+# Subtest: the image says only what the project has: rooms, approximate surface, view; never a location
+ok 25 - the image says only what the project has: rooms, approximate surface, view; never a location
+  ---
+  duration_ms: 21.315139
+  type: 'test'
+  ...
+# Subtest: missing data is omitted, not replaced by placeholders
+ok 26 - missing data is omitted, not replaced by placeholders
+  ---
+  duration_ms: 0.415236
+  type: 'test'
+  ...
+# Subtest: brand and contact only when given; long texts are bounded; level joins the view
+ok 27 - brand and contact only when given; long texts are bounded; level joins the view
+  ---
+  duration_ms: 0.633771
+  type: 'test'
+  ...
+# Subtest: control characters are cleaned and tiny areas are not reported
+ok 28 - control characters are cleaned and tiny areas are not reported
+  ---
+  duration_ms: 0.36867
+  type: 'test'
+  ...
+# Subtest: building status is global, derived and names every conflict with level, object, zone and scale confidence
+ok 29 - building status is global, derived and names every conflict with level, object, zone and scale confidence
+  ---
+  duration_ms: 44.463525
+  type: 'test'
+  ...
+# Subtest: search: nearest valid pose inside one room, clear of stair, walls, door swing and furniture; deterministic
+ok 30 - search: nearest valid pose inside one room, clear of stair, walls, door swing and furniture; deterministic
+  ---
+  duration_ms: 134.933365
+  type: 'test'
+  ...
+# Subtest: search refuses instead of guessing: no room, ambiguous room, no free place
+ok 31 - search refuses instead of guessing: no room, ambiguous room, no free place
+  ---
+  duration_ms: 65.405038
+  type: 'test'
+  ...
+# Subtest: a pose against a wall face is contact, through a wall is not; the door swing and other furniture block
+ok 32 - a pose against a wall face is contact, through a wall is not; the door swing and other furniture block
+  ---
+  duration_ms: 20.94917
+  type: 'test'
+  ...
+# Subtest: search budget: bounded candidates and time with many pieces of furniture
+ok 33 - search budget: bounded candidates and time with many pieces of furniture
+  ---
+  duration_ms: 85.900625
+  type: 'test'
+  ...
+# Subtest: BW5 geometry is the one the 3D builds: stair corners and furniture poses agree within 1 mm
+ok 34 - BW5 geometry is the one the 3D builds: stair corners and furniture poses agree within 1 mm
+  ---
+  duration_ms: 12.903412
+  type: 'test'
+  ...
+# Subtest: library: a conflicting building is stored, duplicated and varied as received; the state stays derived
+ok 35 - library: a conflicting building is stored, duplicated and varied as received; the state stays derived
+  ---
+  duration_ms: 28.597397
+  type: 'test'
+  ...
+# Subtest: diagnosis with many objects on every level stays fast
+ok 36 - diagnosis with many objects on every level stays fast
+  ---
+  duration_ms: 53.904668
+  type: 'test'
+  ...
+# Subtest: a proposal keeps id, size and rotation, resolves the conflict and does not touch the input
+ok 37 - a proposal keeps id, size and rotation, resolves the conflict and does not touch the input
+  ---
+  duration_ms: 76.26335
+  type: 'test'
+  ...
+# Subtest: no free place within the budget: reported, nothing proposed (the narrow «Paso»)
+ok 38 - no free place within the budget: reported, nothing proposed (the narrow «Paso»)
+  ---
+  duration_ms: 49.813357
+  type: 'test'
+  ...
+# Subtest: two pieces whose individual proposals would collide: the set is computed together and stays valid
+ok 39 - two pieces whose individual proposals would collide: the set is computed together and stays valid
+  ---
+  duration_ms: 68.756119
+  type: 'test'
+  ...
+# Subtest: proposals stay inside the unique room of the object; an ambiguous position is not guessed
+ok 40 - proposals stay inside the unique room of the object; an ambiguous position is not guessed
+  ---
+  duration_ms: 16.015953
+  type: 'test'
+  ...
+# Subtest: search derives unique entries and dimensions without duplicating catalog
+ok 41 - search derives unique entries and dimensions without duplicating catalog
+  ---
+  duration_ms: 3.191204
+  type: 'test'
+  ...
+# Subtest: exact partial accent case redundant spaces synonym and stored type search
+ok 42 - exact partial accent case redundant spaces synonym and stored type search
+  ---
+  duration_ms: 1.357859
+  type: 'test'
+  ...
+# Subtest: combined query room family reset and empty preserve separation
+ok 43 - combined query room family reset and empty preserve separation
+  ---
+  duration_ms: 0.614853
+  type: 'test'
+  ...
+# Subtest: import verbs with a file format select upload before the PNG export shortcut
+ok 44 - import verbs with a file format select upload before the PNG export shortcut
+  ---
+  duration_ms: 4.088903
+  type: 'test'
+  ...
+# Subtest: optional furniture, 3D, saving and PNG do not block a create goal
+ok 45 - optional furniture, 3D, saving and PNG do not block a create goal
+  ---
+  duration_ms: 19.678989
+  type: 'test'
+  ...
+# Subtest: blank dimensions do not require image calibration or pretend to verify measurements
+ok 46 - blank dimensions do not require image calibration or pretend to verify measurements
+  ---
+  duration_ms: 8.768664
+  type: 'test'
+  ...
+# Subtest: furnishing requires a matching item placed inside the target room
+ok 47 - furnishing requires a matching item placed inside the target room
+  ---
+  duration_ms: 8.861458
+  type: 'test'
+  ...
+# Subtest: example exploration is distinct from owning a project
+ok 48 - example exploration is distinct from owning a project
+  ---
+  duration_ms: 3.34854
+  type: 'test'
+  ...
+# Subtest: image metadata is not a successfully loaded image; unavailable blobs invalidate import
+ok 49 - image metadata is not a successfully loaded image; unavailable blobs invalidate import
+  ---
+  duration_ms: 5.392443
+  type: 'test'
+  ...
+# Subtest: estimated calibration and second dimension alone cannot complete reliable scale
+ok 50 - estimated calibration and second dimension alone cannot complete reliable scale
+  ---
+  duration_ms: 4.464773
+  type: 'test'
+  ...
+# Subtest: removing reference image retains the unmet import requirement for image-origin projects
+ok 51 - removing reference image retains the unmet import requirement for image-origin projects
+  ---
+  duration_ms: 4.289403
+  type: 'test'
+  ...
+# Subtest: 3D has to load the current revision and becomes needs-review after geometry changes
+ok 52 - 3D has to load the current revision and becomes needs-review after geometry changes
+  ---
+  duration_ms: 4.316992
+  type: 'test'
+  ...
+# Subtest: saving needs confirmed storage, not a button click
+ok 53 - saving needs confirmed storage, not a button click
+  ---
+  duration_ms: 4.88429
+  type: 'test'
+  ...
+# Subtest: PNG success is scoped to the current document revision
+ok 54 - PNG success is scoped to the current document revision
+  ---
+  duration_ms: 4.210774
+  type: 'test'
+  ...
+# Subtest: changing goals recomputes the denominator and optional skips never complete a required task
+ok 55 - changing goals recomputes the denominator and optional skips never complete a required task
+  ---
+  duration_ms: 4.229968
+  type: 'test'
+  ...
+# Subtest: tasks are derived without mutating the schema document or guide
+ok 56 - tasks are derived without mutating the schema document or guide
+  ---
+  duration_ms: 4.282003
+  type: 'test'
+  ...
+# Subtest: intent normalization, synonyms and supported actions
+ok 57 - intent normalization, synonyms and supported actions
+  ---
+  duration_ms: 2.599353
+  type: 'test'
+  ...
+# Subtest: partial queries provide suggestions and unsafe ambiguous input never executes an intent
+ok 58 - partial queries provide suggestions and unsafe ambiguous input never executes an intent
+  ---
+  duration_ms: 0.763365
+  type: 'test'
+  ...
+# Subtest: synthetic 1.4 fixture schema + semantics valid; independent real-plan calibration not claimed
+ok 59 - synthetic 1.4 fixture schema + semantics valid; independent real-plan calibration not claimed
+  ---
+  duration_ms: 4.844879
+  type: 'test'
+  ...
+# Subtest: repeat export binary and semantic equality; source frozen and never written
+ok 60 - repeat export binary and semantic equality; source frozen and never written
+  ---
+  duration_ms: 54.613887
+  type: 'test'
+  ...
+# Subtest: mm axes, asymmetric room area, source IDs, diagonal wall and yaw retained
+ok 61 - mm axes, asymmetric room area, source IDs, diagonal wall and yaw retained
+  ---
+  duration_ms: 16.014059
+  type: 'test'
+  ...
+# Subtest: real MIT catalog geometry, all material IDs, surface conversion and missing-reference fallback explicit
+ok 62 - real MIT catalog geometry, all material IDs, surface conversion and missing-reference fallback explicit
+  ---
+  duration_ms: 12.030808
+  type: 'test'
+  ...
+# Subtest: merged source buffer references decode correct POSITION and index values (regression)
+ok 63 - merged source buffer references decode correct POSITION and index values (regression)
+  ---
+  duration_ms: 14.072733
+  type: 'test'
+  ...
+# Subtest: opening volumes removed, overlapping openings union not double-subtracted
+ok 64 - opening volumes removed, overlapping openings union not double-subtracted
+  ---
+  duration_ms: 49.555913
+  type: 'test'
+  ...
+# Subtest: concave and reversed floor polygons triangulate without filling notch
+ok 65 - concave and reversed floor polygons triangulate without filling notch
+  ---
+  duration_ms: 0.583251
+  type: 'test'
+  ...
+# Subtest: package digests link geometry, source and semantic document
+ok 66 - package digests link geometry, source and semantic document
+  ---
+  duration_ms: 12.31053
+  type: 'test'
+  ...
+# Subtest: cancel/failure/invalid source preserve input and saved project; no storage calls
+ok 67 - cancel/failure/invalid source preserve input and saved project; no storage calls
+  ---
+  duration_ms: 3.787323
+  type: 'test'
+  ...
+# Subtest: no source or evidence overwrite; outside path rejected
+ok 68 - no source or evidence overwrite; outside path rejected
+  ---
+  duration_ms: 11.111112
+  type: 'test'
+  ...
+# Subtest: profile current MIT fixture measured; malformed/oversized/extension/geometry/URI rejected
+ok 69 - profile current MIT fixture measured; malformed/oversized/extension/geometry/URI rejected
+  ---
+  duration_ms: 1.792685
+  type: 'test'
+  ...
+# Subtest: project persistence imported/exported 1.4 snapshot unaffected by adapter
+ok 70 - project persistence imported/exported 1.4 snapshot unaffected by adapter
+  ---
+  duration_ms: 27.644867
+  type: 'test'
+  ...
+# Subtest: new offline surface batch has three actual hash-verified CC0 albedos; old fifty unchanged
+ok 71 - new offline surface batch has three actual hash-verified CC0 albedos; old fifty unchanged
+  ---
+  duration_ms: 3.218631
+  type: 'test'
+  ...
+# Subtest: new PNG albedos export through separate profile; no project or browser catalog mutation
+ok 72 - new PNG albedos export through separate profile; no project or browser catalog mutation
+  ---
+  duration_ms: 16.870742
+  type: 'test'
+  ...
+# Subtest: all fourteen existing curated models pass new core geometry guard; measured bounds not manufacturer precision
+ok 73 - all fourteen existing curated models pass new core geometry guard; measured bounds not manufacturer precision
+  ---
+  duration_ms: 735.917396
+  type: 'test'
+  ...
+# Subtest: offline PNG PBR preserves four channel slots while default browser-compatible profile rejects PNG
+ok 74 - offline PNG PBR preserves four channel slots while default browser-compatible profile rejects PNG
+  ---
+  duration_ms: 1.339209
+  type: 'test'
+  ...
+# Subtest: surface converter rejects unsupported, oversize and indecodable input without filesystem mutation
+ok 75 - surface converter rejects unsupported, oversize and indecodable input without filesystem mutation
+  ---
+  duration_ms: 0.231311
+  type: 'test'
+  ...
+# Subtest: Blender rejects corrupt package before scene import/save
+ok 76 - Blender rejects corrupt package before scene import/save # SKIP
+  ---
+  duration_ms: 0.282185
+  type: 'test'
+  ...
+# Subtest: footprint helper is the W3 oriented footprint (clockwise rotation, y down)
+ok 77 - footprint helper is the W3 oriented footprint (clockwise rotation, y down)
+  ---
+  duration_ms: 2.073741
+  type: 'test'
+  ...
+# Subtest: overlap uses the rotated footprint: no false positive where an axis-aligned box would overlap
+ok 78 - overlap uses the rotated footprint: no false positive where an axis-aligned box would overlap
+  ---
+  duration_ms: 17.522294
+  type: 'test'
+  ...
+# Subtest: touching footprints are not an overlap; positive penetration is measured in mm
+ok 79 - touching footprints are not an overlap; positive penetration is measured in mm
+  ---
+  duration_ms: 7.821052
+  type: 'test'
+  ...
+# Subtest: clearance needs an explicit threshold; without it the check is insufficient but overlaps still run
+ok 80 - clearance needs an explicit threshold; without it the check is insufficient but overlaps still run
+  ---
+  duration_ms: 7.638052
+  type: 'test'
+  ...
+# Subtest: clearance threshold boundary: equal is fine, just below is reported once per pair
+ok 81 - clearance threshold boundary: equal is fine, just below is reported once per pair
+  ---
+  duration_ms: 4.603111
+  type: 'test'
+  ...
+# Subtest: a wall between two pieces is not a free gap, but a doorway in that wall is
+ok 82 - a wall between two pieces is not a free gap, but a doorway in that wall is
+  ---
+  duration_ms: 4.549332
+  type: 'test'
+  ...
+# Subtest: door sweep follows the stored hinge and side; contact angle is reported
+ok 83 - door sweep follows the stored hinge and side; contact angle is reported
+  ---
+  duration_ms: 4.938423
+  type: 'test'
+  ...
+# Subtest: door without swing data is never declared blocked: partial or insufficient evidence
+ok 84 - door without swing data is never declared blocked: partial or insufficient evidence
+  ---
+  duration_ms: 4.682151
+  type: 'test'
+  ...
+# Subtest: stacking by design in Rubik 3D is excluded and listed, not reported or hidden
+ok 85 - stacking by design in Rubik 3D is excluded and listed, not reported or hidden
+  ---
+  duration_ms: 3.77192
+  type: 'test'
+  ...
+# Subtest: invalid or missing geometry is skipped and degrades the status
+ok 86 - invalid or missing geometry is skipped and degrades the status
+  ---
+  duration_ms: 3.863075
+  type: 'test'
+  ...
+# Subtest: review is read-only: frozen projects work and the serialized project is unchanged
+ok 87 - review is read-only: frozen projects work and the serialized project is unchanged
+  ---
+  duration_ms: 76.769068
+  type: 'test'
+  ...
+# Subtest: reference plan: intentional stacks excluded, swing interference measured, limits always stated
+ok 88 - reference plan: intentional stacks excluded, swing interference measured, limits always stated
+  ---
+  duration_ms: 50.01049
+  type: 'test'
+  ...
+# Subtest: omitted geometry with a threshold and an active door: every object check is partial, valid findings stay
+ok 89 - omitted geometry with a threshold and an active door: every object check is partial, valid findings stay
+  ---
+  duration_ms: 8.141228
+  type: 'test'
+  ...
+# Subtest: omitted geometry with a threshold and no active door: doors stay checked (nothing to check), the rest partial
+ok 90 - omitted geometry with a threshold and no active door: doors stay checked (nothing to check), the rest partial
+  ---
+  duration_ms: 11.769876
+  type: 'test'
+  ...
+# Subtest: omitted geometry without threshold: clearance stays insufficient and says so; global never checked
+ok 91 - omitted geometry without threshold: clearance stays insufficient and says so; global never checked
+  ---
+  duration_ms: 7.868076
+  type: 'test'
+  ...
+# Subtest: evidence geometry is exact: overlap polygon, closest-point segment and leaf at contact
+ok 92 - evidence geometry is exact: overlap polygon, closest-point segment and leaf at contact
+  ---
+  duration_ms: 9.769985
+  type: 'test'
+  ...
+# Subtest: create/open/rename/duplicate/delete persist independently after reload
+ok 93 - create/open/rename/duplicate/delete persist independently after reload
+  ---
+  duration_ms: 63.638574
+  type: 'test'
+  ...
+# Subtest: failed storage writes and invalid names preserve collection atomically
+ok 94 - failed storage writes and invalid names preserve collection atomically
+  ---
+  duration_ms: 16.474148
+  type: 'test'
+  ...
+# Subtest: collection rejects corruption without overwriting source
+ok 95 - collection rejects corruption without overwriting source
+  ---
+  duration_ms: 5.632907
+  type: 'test'
+  ...
+# Subtest: renaming a project updates its portable name without altering independent projects
+ok 96 - renaming a project updates its portable name without altering independent projects
+  ---
+  duration_ms: 42.2765
+  type: 'test'
+  ...
+# Subtest: file import preserves the visible original atomically, even when the incoming document has the same ID
+ok 97 - file import preserves the visible original atomically, even when the incoming document has the same ID
+  ---
+  duration_ms: 46.150894
+  type: 'test'
+  ...
+# Subtest: failed or invalid file imports leave every entry and the active project unchanged
+ok 98 - failed or invalid file imports leave every entry and the active project unchanged
+  ---
+  duration_ms: 35.130462
+  type: 'test'
+  ...
+# Subtest: example: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+ok 99 - example: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+  ---
+  duration_ms: 17334.879342
+  type: 'test'
+  ...
+# Subtest: example: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+ok 100 - example: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+  ---
+  duration_ms: 1.17705
+  type: 'test'
+  ...
+# Subtest: synthetic rotated 30°: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+ok 101 - synthetic rotated 30°: every shot stays clear of walls on the densely interpolated path, at eye height, looking slightly down
+  ---
+  duration_ms: 22845.281668
+  type: 'test'
+  ...
+# Subtest: synthetic rotated 30°: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+ok 102 - synthetic rotated 30°: the en-suite bath shot shows the bath and its three fixtures, not the bedroom
+  ---
+  duration_ms: 0.248943
+  type: 'test'
+  ...
+# Subtest: composition is deterministic and the Blender mapping matches the PR \#24 exporter frame
+ok 103 - composition is deterministic and the Blender mapping matches the PR \#24 exporter frame
+  ---
+  duration_ms: 5735.578317
+  type: 'test'
+  ...
+# Subtest: the synthetic second case is declared, valid and has no axis-aligned wall
+ok 104 - the synthetic second case is declared, valid and has no axis-aligned wall
+  ---
+  duration_ms: 15.827698
+  type: 'test'
+  ...
+# Subtest: offline pilot end to end in Blender (anchors only)
+ok 105 - offline pilot end to end in Blender (anchors only) # SKIP set BPY_PYTHON to a Python with bpy 5.2
+  ---
+  duration_ms: 0.265262
+  type: 'test'
+  ...
+# Subtest: sides of a shared wall follow the wall direction and match the leaf the 2D/3D draw
+ok 106 - sides of a shared wall follow the wall direction and match the leaf the 2D/3D draw
+  ---
+  duration_ms: 32.568602
+  type: 'test'
+  ...
+# Subtest: oblique walls: rotating the whole home keeps every label on the side the leaf really opens to
+ok 107 - oblique walls: rotating the whole home keeps every label on the side the leaf really opens to
+  ---
+  duration_ms: 17.37248
+  type: 'test'
+  ...
+# Subtest: exterior wall, overlapping rooms and repeated names fall back to «Lado 1/2»
+ok 108 - exterior wall, overlapping rooms and repeated names fall back to «Lado 1/2»
+  ---
+  duration_ms: 7.977214
+  type: 'test'
+  ...
+# Subtest: side attribution agrees with the MCP spatial relation (\#40) on the reference home
+ok 109 - side attribution agrees with the MCP spatial relation (\#40) on the reference home
+  ---
+  duration_ms: 10.440843
+  type: 'test'
+  ...
+# Subtest: interval guard: touching is fine; overlapping, outside the wall or worsening a legacy overlap is refused
+ok 110 - interval guard: touching is fine; overlapping, outside the wall or worsening a legacy overlap is refused
+  ---
+  duration_ms: 10.545466
+  type: 'test'
+  ...
+# Subtest: edit keeps the ID, removes or creates the swing with the type and never certifies a review
+ok 111 - edit keeps the ID, removes or creates the swing with the type and never certifies a review
+  ---
+  duration_ms: 19.832685
+  type: 'test'
+  ...
+# Subtest: the chosen side drives layout review of door leaves
+ok 112 - the chosen side drives layout review of door leaves
+  ---
+  duration_ms: 24.851764
+  type: 'test'
+  ...
+# Subtest: add from a room: only its walls, door opens into it, no overlap, input untouched
+ok 113 - add from a room: only its walls, door opens into it, no overlap, input untouched
+  ---
+  duration_ms: 16.693589
+  type: 'test'
+  ...
+# Subtest: a wall reversed in «Plano propio» keeps its openings in place with the same leaf
+ok 114 - a wall reversed in «Plano propio» keeps its openings in place with the same leaf
+  ---
+  duration_ms: 7.963486
+  type: 'test'
+  ...
+# Subtest: add creates every contract kind from a room; swing only for a hinged door
+ok 115 - add creates every contract kind from a room; swing only for a hinged door
+  ---
+  duration_ms: 18.106844
+  type: 'test'
+  ...
+# Subtest: format detection uses content, never the file extension
+ok 116 - format detection uses content, never the file extension
+  ---
+  duration_ms: 13.442609
+  type: 'test'
+  ...
+# Subtest: large scans are reduced uniformly within the side and pixel limits
+ok 117 - large scans are reduced uniformly within the side and pixel limits
+  ---
+  duration_ms: 1.670356
+  type: 'test'
+  ...
+# Subtest: DXF double-line walls become wall axes with measured thickness in mm
+ok 118 - DXF double-line walls become wall axes with measured thickness in mm
+  ---
+  duration_ms: 39.451132
+  type: 'test'
+  ...
+# Subtest: DXF doors and windows land on their wall and rooms take interior faces and text labels
+ok 119 - DXF doors and windows land on their wall and rooms take interior faces and text labels
+  ---
+  duration_ms: 30.391503
+  type: 'test'
+  ...
+# Subtest: DXF units scale to mm and unsupported or empty drawings are rejected with guidance
+ok 120 - DXF units scale to mm and unsupported or empty drawings are rejected with guidance
+  ---
+  duration_ms: 37.258954
+  type: 'test'
+  ...
+# Subtest: RoomPlan CapturedRoom JSON becomes walls and openings on the nearest wall
+ok 121 - RoomPlan CapturedRoom JSON becomes walls and openings on the nearest wall
+  ---
+  duration_ms: 16.202881
+  type: 'test'
+  ...
+# Subtest: IFC walls take the minimum-area footprint; openings come from IfcOpeningElement with real sill; rooms from IfcSpace
+ok 122 - IFC walls take the minimum-area footprint; openings come from IfcOpeningElement with real sill; rooms from IfcSpace
+  ---
+  duration_ms: 10.631389
+  type: 'test'
+  ...
+# Subtest: vector PDF: filled walls, swing arcs and glazing lines give walls, doors, windows and named rooms at the printed scale
+ok 123 - vector PDF: filled walls, swing arcs and glazing lines give walls, doors, windows and named rooms at the printed scale
+  ---
+  duration_ms: 14.722105
+  type: 'test'
+  ...
+# Subtest: RoomPlan: flat and nested transforms agree; parentIdentifier places openings; sections name rooms
+ok 124 - RoomPlan: flat and nested transforms agree; parentIdentifier places openings; sections name rooms
+  ---
+  duration_ms: 13.256296
+  type: 'test'
+  ...
+# Subtest: raster bands: thick dark strokes become walls, thin strokes crossing a gap are ignored
+ok 125 - raster bands: thick dark strokes become walls, thin strokes crossing a gap are ignored
+  ---
+  duration_ms: 44.77298
+  type: 'test'
+  ...
+# Subtest: DWG versions are named in the guidance
+ok 126 - DWG versions are named in the guidance
+  ---
+  duration_ms: 0.759059
+  type: 'test'
+  ...
+# Subtest: building plan: levels bottom-up, an overview per level, chosen order kept, stops keyed by level
+ok 127 - building plan: levels bottom-up, an overview per level, chosen order kept, stops keyed by level
+  ---
+  duration_ms: 78.915682
+  type: 'test'
+  ...
+# Subtest: building plan: a level without chosen rooms is left out; nothing chosen gives no plan; more than two levels refused
+ok 128 - building plan: a level without chosen rooms is left out; nothing chosen gives no plan; more than two levels refused
+  ---
+  duration_ms: 44.799645
+  type: 'test'
+  ...
+# Subtest: building plan: equal room IDs on both levels give distinct stops; currentBuilding follows every level
+ok 129 - building plan: equal room IDs on both levels give distinct stops; currentBuilding follows every level
+  ---
+  duration_ms: 32.113752
+  type: 'test'
+  ...
+# Subtest: capture reader: a building batch relates every view to one level and room; ambiguous batches are refused
+ok 130 - capture reader: a building batch relates every view to one level and room; ambiguous batches are refused
+  ---
+  duration_ms: 3.30258
+  type: 'test'
+  ...
+# Subtest: capture reader: existing single-level batches still read (committed r4-m09 batch and the current 1.x shape)
+ok 131 - capture reader: existing single-level batches still read (committed r4-m09 batch and the current 1.x shape)
+  ---
+  duration_ms: 3.478058
+  type: 'test'
+  ...
+# Subtest: presentation plan uses real room IDs, project center and revision without changing source
+ok 132 - presentation plan uses real room IDs, project center and revision without changing source
+  ---
+  duration_ms: 26.649136
+  type: 'test'
+  ...
+# Subtest: presentation rejects empty or demolished layouts
+ok 133 - presentation rejects empty or demolished layouts
+  ---
+  duration_ms: 13.296695
+  type: 'test'
+  ...
+# Subtest: ordered room selection and sidecar reconciliation keep project geometry authoritative
+ok 134 - ordered room selection and sidecar reconciliation keep project geometry authoritative
+  ---
+  duration_ms: 14.110915
+  type: 'test'
+  ...
+# Subtest: minimap preserves irregular rotated coordinates and maps camera direction to plan axes
+ok 135 - minimap preserves irregular rotated coordinates and maps camera direction to plan axes
+  ---
+  duration_ms: 0.870748
+  type: 'test'
+  ...
+# Subtest: R10 room stops make every counted room the protagonist: reference home
+ok 136 - R10 room stops make every counted room the protagonist: reference home
+  ---
+  duration_ms: 8818.478678
+  type: 'test'
+  ...
+# Subtest: R10 room stops make every counted room the protagonist: rotated home with concave bedroom
+ok 137 - R10 room stops make every counted room the protagonist: rotated home with concave bedroom
+  ---
+  duration_ms: 7045.073706
+  type: 'test'
+  ...
+# Subtest: R10 small en-suite bathroom is not dominated by the main bedroom
+ok 138 - R10 small en-suite bathroom is not dominated by the main bedroom
+  ---
+  duration_ms: 569.69486
+  type: 'test'
+  ...
+# Subtest: R10 framing is deterministic, declares sections and honours a cut editor view
+ok 139 - R10 framing is deterministic, declares sections and honours a cut editor view
+  ---
+  duration_ms: 880.352001
+  type: 'test'
+  ...
+# Subtest: R10 walkthrough choreography keeps eye height, gentle pitch, ramps and limited turning
+ok 140 - R10 walkthrough choreography keeps eye height, gentle pitch, ramps and limited turning
+  ---
+  duration_ms: 13881.074525
+  type: 'test'
+  ...
+# Subtest: R10 planner grid follows the dominant wall angle of a rotated plan without changing axis-aligned routes
+ok 141 - R10 planner grid follows the dominant wall angle of a rotated plan without changing axis-aligned routes
+  ---
+  duration_ms: 141.359557
+  type: 'test'
+  ...
+# Subtest: R10 smoothed route keeps clearance along its whole dense path
+ok 142 - R10 smoothed route keeps clearance along its whole dense path
+  ---
+  duration_ms: 129.544618
+  type: 'test'
+  ...
+# Subtest: M18 reference home finds an interior path to the main bedroom and declares unreachable rooms aerial
+ok 143 - M18 reference home finds an interior path to the main bedroom and declares unreachable rooms aerial
+  ---
+  duration_ms: 68.334112
+  type: 'test'
+  ...
+# Subtest: M18 interpolated path rounds a diagonal wall with clearance
+ok 144 - M18 interpolated path rounds a diagonal wall with clearance
+  ---
+  duration_ms: 8.773901
+  type: 'test'
+  ...
+# Subtest: M18 uses a door opening and reports the door visual to open
+ok 145 - M18 uses a door opening and reports the door visual to open
+  ---
+  duration_ms: 5.958635
+  type: 'test'
+  ...
+# Subtest: M18 concave room follows the floor polygon instead of its bounding box
+ok 146 - M18 concave room follows the floor polygon instead of its bounding box
+  ---
+  duration_ms: 5.201509
+  type: 'test'
+  ...
+# Subtest: M18 furniture barrier, missing entrance and search budget produce explicit alternatives
+ok 147 - M18 furniture barrier, missing entrance and search budget produce explicit alternatives
+  ---
+  duration_ms: 1.519133
+  type: 'test'
+  ...
+# Subtest: browser schema is an exact copy of the F0 authority
+ok 148 - browser schema is an exact copy of the F0 authority
+  ---
+  duration_ms: 5.043454
+  type: 'test'
+  ...
+# Subtest: reference home validates and projects rooms, 48 original wall segments and 22 openings
+ok 149 - reference home validates and projects rooms, 48 original wall segments and 22 openings
+  ---
+  duration_ms: 21.360371
+  type: 'test'
+  ...
+# Subtest: F0 valid example round-trips every field, image reference, asset pointer and extension
+ok 150 - F0 valid example round-trips every field, image reference, asset pointer and extension
+  ---
+  duration_ms: 10.226892
+  type: 'test'
+  ...
+# Subtest: newer minor retains unknown data; unknown major is rejected
+ok 151 - newer minor retains unknown data; unknown major is rejected
+  ---
+  duration_ms: 3.265402
+  type: 'test'
+  ...
+# Subtest: atomic rejection: malformed JSON
+ok 152 - atomic rejection: malformed JSON
+  ---
+  duration_ms: 4.01382
+  type: 'test'
+  ...
+# Subtest: atomic rejection: F0 invalid fixture
+ok 153 - atomic rejection: F0 invalid fixture
+  ---
+  duration_ms: 3.348225
+  type: 'test'
+  ...
+# Subtest: atomic rejection: unknown version
+ok 154 - atomic rejection: unknown version
+  ---
+  duration_ms: 2.537047
+  type: 'test'
+  ...
+# Subtest: atomic rejection: wrong units
+ok 155 - atomic rejection: wrong units
+  ---
+  duration_ms: 2.824782
+  type: 'test'
+  ...
+# Subtest: atomic rejection: duplicate ID
+ok 156 - atomic rejection: duplicate ID
+  ---
+  duration_ms: 4.062966
+  type: 'test'
+  ...
+# Subtest: atomic rejection: broken wall reference
+ok 157 - atomic rejection: broken wall reference
+  ---
+  duration_ms: 6.626672
+  type: 'test'
+  ...
+# Subtest: atomic rejection: broken material reference
+ok 158 - atomic rejection: broken material reference
+  ---
+  duration_ms: 5.443278
+  type: 'test'
+  ...
+# Subtest: atomic rejection: broken room reference
+ok 159 - atomic rejection: broken room reference
+  ---
+  duration_ms: 6.258389
+  type: 'test'
+  ...
+# Subtest: atomic rejection: out of range coordinate
+ok 160 - atomic rejection: out of range coordinate
+  ---
+  duration_ms: 5.48723
+  type: 'test'
+  ...
+# Subtest: atomic rejection: fractional coordinate
+ok 161 - atomic rejection: fractional coordinate
+  ---
+  duration_ms: 6.26124
+  type: 'test'
+  ...
+# Subtest: atomic rejection: negative dimension
+ok 162 - atomic rejection: negative dimension
+  ---
+  duration_ms: 3.948578
+  type: 'test'
+  ...
+# Subtest: atomic rejection: non-finite number
+ok 163 - atomic rejection: non-finite number
+  ---
+  duration_ms: 8.132726
+  type: 'test'
+  ...
+# Subtest: atomic rejection: wrong numeric type
+ok 164 - atomic rejection: wrong numeric type
+  ---
+  duration_ms: 5.530537
+  type: 'test'
+  ...
+# Subtest: atomic rejection: zero length wall
+ok 165 - atomic rejection: zero length wall
+  ---
+  duration_ms: 6.24619
+  type: 'test'
+  ...
+# Subtest: atomic rejection: opening outside wall
+ok 166 - atomic rejection: opening outside wall
+  ---
+  duration_ms: 7.709518
+  type: 'test'
+  ...
+# Subtest: atomic rejection: opening above wall
+ok 167 - atomic rejection: opening above wall
+  ---
+  duration_ms: 2.796023
+  type: 'test'
+  ...
+# Subtest: atomic rejection: self-intersecting polygon
+ok 168 - atomic rejection: self-intersecting polygon
+  ---
+  duration_ms: 3.382757
+  type: 'test'
+  ...
+# Subtest: atomic rejection: repeated closing vertex
+ok 169 - atomic rejection: repeated closing vertex
+  ---
+  duration_ms: 3.050669
+  type: 'test'
+  ...
+# Subtest: atomic rejection: bad calibration
+ok 170 - atomic rejection: bad calibration
+  ---
+  duration_ms: 3.9059
+  type: 'test'
+  ...
+# Subtest: atomic rejection: invalid timestamp
+ok 171 - atomic rejection: invalid timestamp
+  ---
+  duration_ms: 2.579634
+  type: 'test'
+  ...
+# Subtest: atomic rejection: timestamp order
+ok 172 - atomic rejection: timestamp order
+  ---
+  duration_ms: 5.78289
+  type: 'test'
+  ...
+# Subtest: atomic rejection: event injection in ID
+ok 173 - atomic rejection: event injection in ID
+  ---
+  duration_ms: 4.760645
+  type: 'test'
+  ...
+# Subtest: atomic rejection: CSS injection in color
+ok 174 - atomic rejection: CSS injection in color
+  ---
+  duration_ms: 5.495867
+  type: 'test'
+  ...
+# Subtest: atomic rejection: unknown 1.0 field
+ok 175 - atomic rejection: unknown 1.0 field
+  ---
+  duration_ms: 5.366287
+  type: 'test'
+  ...
+# Subtest: atomic rejection: future field cannot shadow numeric adapter
+ok 176 - atomic rejection: future field cannot shadow numeric adapter
+  ---
+  duration_ms: 4.536533
+  type: 'test'
+  ...
+# Subtest: storage failure does not apply an otherwise valid import
+ok 177 - storage failure does not apply an otherwise valid import
+  ---
+  duration_ms: 3.348386
+  type: 'test'
+  ...
+# Subtest: legacy migration preserves IDs, rounds mm, maps references and retains original storage
+ok 178 - legacy migration preserves IDs, rounds mm, maps references and retains original storage
+  ---
+  duration_ms: 9.136268
+  type: 'test'
+  ...
+# Subtest: corrupt old/new saved states degrade to reference without overwriting originals
+ok 179 - corrupt old/new saved states degrade to reference without overwriting originals
+  ---
+  duration_ms: 9.358095
+  type: 'test'
+  ...
+# Subtest: failed migration write keeps original and usable migrated in-memory project
+ok 180 - failed migration write keeps original and usable migrated in-memory project
+  ---
+  duration_ms: 5.874464
+  type: 'test'
+  ...
+# Subtest: editing adapters mutate canonical entities; history serialization has no aliases
+ok 181 - editing adapters mutate canonical entities; history serialization has no aliases
+  ---
+  duration_ms: 8.294306
+  type: 'test'
+  ...
+# Subtest: projection follows geometry edits and stable IDs despite wall reorder
+ok 182 - projection follows geometry edits and stable IDs despite wall reorder
+  ---
+  duration_ms: 1.460668
+  type: 'test'
+  ...
+# Subtest: diagonal wall projection retains finite geometry without changing array length
+ok 183 - diagonal wall projection retains finite geometry without changing array length
+  ---
+  duration_ms: 1.404691
+  type: 'test'
+  ...
+# Subtest: raw image axes convert before placement/rotation/rounding, diagonals preserved
+ok 184 - raw image axes convert before placement/rotation/rounding, diagonals preserved
+  ---
+  duration_ms: 4.379758
+  type: 'test'
+  ...
+# Subtest: snapshot is immutable, stable across exports and excludes private source fields
+ok 185 - snapshot is immutable, stable across exports and excludes private source fields
+  ---
+  duration_ms: 3.884228
+  type: 'test'
+  ...
+# Subtest: source version anchor is bound to the actual detector bytes
+ok 186 - source version anchor is bound to the actual detector bytes
+  ---
+  duration_ms: 1.508426
+  type: 'test'
+  ...
+# Subtest: unknown/missing unit, frame, SHA, source, scale and metadata block export
+ok 187 - unknown/missing unit, frame, SHA, source, scale and metadata block export
+  ---
+  duration_ms: 2.61772
+  type: 'test'
+  ...
+# Subtest: uncalibrated, wrong-image, mismatched or zero scales are not silently invented
+ok 188 - uncalibrated, wrong-image, mismatched or zero scales are not silently invented
+  ---
+  duration_ms: 0.587842
+  type: 'test'
+  ...
+# Subtest: out-of-bounds or collapsed coordinates reject entire export without clipping
+ok 189 - out-of-bounds or collapsed coordinates reject entire export without clipping
+  ---
+  duration_ms: 0.621907
+  type: 'test'
+  ...
+# Subtest: blank project uses unchanged 1.3 contract and independent empty geometry
+ok 190 - blank project uses unchanged 1.3 contract and independent empty geometry
+  ---
+  duration_ms: 28.407579
+  type: 'test'
+  ...
+# Subtest: multiple rooms share exactly one complete wall without changing the neighbor
+ok 191 - multiple rooms share exactly one complete wall without changing the neighbor
+  ---
+  duration_ms: 24.429301
+  type: 'test'
+  ...
+# Subtest: interior dimensions move three walls, preserve IDs, materials, scale and undo snapshot
+ok 192 - interior dimensions move three walls, preserve IDs, materials, scale and undo snapshot
+  ---
+  duration_ms: 15.575014
+  type: 'test'
+  ...
+# Subtest: right/bottom fixed sides and depth changes preserve the selected interior face
+ok 193 - right/bottom fixed sides and depth changes preserve the selected interior face
+  ---
+  duration_ms: 15.264955
+  type: 'test'
+  ...
+# Subtest: shared wall stays fixed, moving it or changing its length is rejected atomically
+ok 194 - shared wall stays fixed, moving it or changing its length is rejected atomically
+  ---
+  duration_ms: 12.394053
+  type: 'test'
+  ...
+# Subtest: door/window on a moving wall require explicit impact; IDs and offsets preserved
+ok 195 - door/window on a moving wall require explicit impact; IDs and offsets preserved
+  ---
+  duration_ms: 9.477312
+  type: 'test'
+  ...
+# Subtest: opening offset changes keep its physical position when the wall start moves
+ok 196 - opening offset changes keep its physical position when the wall start moves
+  ---
+  duration_ms: 7.960026
+  type: 'test'
+  ...
+# Subtest: openings beyond shortened wall prevent application
+ok 197 - openings beyond shortened wall prevent application
+  ---
+  duration_ms: 7.385347
+  type: 'test'
+  ...
+# Subtest: affected manual measurements block, unrelated measurements remain exact
+ok 198 - affected manual measurements block, unrelated measurements remain exact
+  ---
+  duration_ms: 8.276793
+  type: 'test'
+  ...
+# Subtest: furniture is never silently moved/scaled/reassigned; shrink or wall collision blocks
+ok 199 - furniture is never silently moved/scaled/reassigned; shrink or wall collision blocks
+  ---
+  duration_ms: 15.518283
+  type: 'test'
+  ...
+# Subtest: irregular rooms, missing/duplicate walls and junctions refuse safe numeric edit
+ok 200 - irregular rooms, missing/duplicate walls and junctions refuse safe numeric edit
+  ---
+  duration_ms: 27.067878
+  type: 'test'
+  ...
+# Subtest: creation refuses overlapping rooms, invalid dimensions and mismatched shared spans
+ok 201 - creation refuses overlapping rooms, invalid dimensions and mismatched shared spans
+  ---
+  duration_ms: 9.256711
+  type: 'test'
+  ...
+# Subtest: extension fields survive room design and JSON/ZIP round trip
+ok 202 - extension fields survive room design and JSON/ZIP round trip
+  ---
+  duration_ms: 9.997008
+  type: 'test'
+  ...
+# Subtest: separate projects persist after reload; failed collection write preserves prior data
+ok 203 - separate projects persist after reload; failed collection write preserves prior data
+  ---
+  duration_ms: 44.844503
+  type: 'test'
+  ...
+# Subtest: prolonged walls and partial/irregular neighbors cannot be silently displaced
+ok 204 - prolonged walls and partial/irregular neighbors cannot be silently displaced
+  ---
+  duration_ms: 9.876203
+  type: 'test'
+  ...
+# Subtest: measurements anchored at wall axes also refuse dimensional changes
+ok 205 - measurements anchored at wall axes also refuse dimensional changes
+  ---
+  duration_ms: 3.629093
+  type: 'test'
+  ...
+# Subtest: the corrected fixture has no BW5
+ok 206 - the corrected fixture has no BW5
+  ---
+  duration_ms: 65.669116
+  type: 'test'
+  ...
+# Subtest: bed over the slab void of the upper level: BW5 with level, object, stair, rule and evidence
+ok 207 - bed over the slab void of the upper level: BW5 with level, object, stair, rule and evidence
+  ---
+  duration_ms: 37.733417
+  type: 'test'
+  ...
+# Subtest: sofa over the stair of the lower level: BW5 on the leaving level
+ok 208 - sofa over the stair of the lower level: BW5 on the leaving level
+  ---
+  duration_ms: 25.624379
+  type: 'test'
+  ...
+# Subtest: rotated furniture: the oriented footprint decides, not its bounding box
+ok 209 - rotated furniture: the oriented footprint decides, not its bounding box
+  ---
+  duration_ms: 50.958858
+  type: 'test'
+  ...
+# Subtest: contact without penetration and sub-tolerance overlap are not conflicts; above the tolerance is
+ok 210 - contact without penetration and sub-tolerance overlap are not conflicts; above the tolerance is
+  ---
+  duration_ms: 96.185314
+  type: 'test'
+  ...
+# Subtest: another level with the same XY never warns: each level uses only its own stairs in its own frame
+ok 211 - another level with the same XY never warns: each level uses only its own stairs in its own frame
+  ---
+  duration_ms: 100.613539
+  type: 'test'
+  ...
+# Subtest: a stair added after the furniture is detected, and BW5 never blocks validation, JSON or ZIP
+ok 212 - a stair added after the furniture is detected, and BW5 never blocks validation, JSON or ZIP
+  ---
+  duration_ms: 54.927321
+  type: 'test'
+  ...
+# Subtest: layout review reports the same conflicts, without its own stair geometry
+ok 213 - layout review reports the same conflicts, without its own stair geometry
+  ---
+  duration_ms: 17.202446
+  type: 'test'
+  ...
+# Subtest: seeded generative check against a sampling oracle (complements the fixed cases)
+ok 214 - seeded generative check against a sampling oracle (complements the fixed cases)
+  ---
+  duration_ms: 160.129068
+  type: 'test'
+  ...
+# Subtest: inventory requires ten qualified maps per family and every map is local, unique and hash checked
+ok 215 - inventory requires ten qualified maps per family and every map is local, unique and hash checked
+  ---
+  duration_ms: 10.661795
+  type: 'test'
+  ...
+# Subtest: each library asset has pinned author and distributor CC0 evidence, not the website code license
+ok 216 - each library asset has pinned author and distributor CC0 evidence, not the website code license
+  ---
+  duration_ms: 2.13141
+  type: 'test'
+  ...
+# Subtest: catalog rejects duplicate graphics, missing rights, unsafe paths and impossible dimensions
+ok 217 - catalog rejects duplicate graphics, missing rights, unsafe paths and impossible dimensions
+  ---
+  duration_ms: 8.374844
+  type: 'test'
+  ...
+# Subtest: PBR pilot stays within two aligned, bounded and licensed candidates
+ok 218 - PBR pilot stays within two aligned, bounded and licensed candidates
+  ---
+  duration_ms: 4.872191
+  type: 'test'
+  ...
+# Subtest: five families, accent insensitive search and wall compatibility filters
+ok 219 - five families, accent insensitive search and wall compatibility filters
+  ---
+  duration_ms: 1.345399
+  type: 'test'
+  ...
+# Subtest: floor / shared whole-wall assignment changes only materials and target reference, preserving geometry and openings
+ok 220 - floor / shared whole-wall assignment changes only materials and target reference, preserving geometry and openings
+  ---
+  duration_ms: 26.714153
+  type: 'test'
+  ...
+# Subtest: changing repeat for one room preserves another assignment and survives local library + JSON import/export
+ok 221 - changing repeat for one room preserves another assignment and survives local library + JSON import/export
+  ---
+  duration_ms: 41.650933
+  type: 'test'
+  ...
+# Subtest: broken wall references and wrong assignment category are rejected; unknown preset round-trips as color fallback
+ok 222 - broken wall references and wrong assignment category are rejected; unknown preset round-trips as color fallback
+  ---
+  duration_ms: 35.906572
+  type: 'test'
+  ...
+# Subtest: image signatures/types/dimensions and strict application limits
+ok 223 - image signatures/types/dimensions and strict application limits
+  ---
+  duration_ms: 25.879448
+  type: 'test'
+  ...
+# Subtest: image/world transforms retain original pixels with rotation and translation
+ok 224 - image/world transforms retain original pixels with rotation and translation
+  ---
+  duration_ms: 53.30359
+  type: 'test'
+  ...
+# Subtest: calibration, independent verification, confirmation and recalibration are coherent
+ok 225 - calibration, independent verification, confirmation and recalibration are coherent
+  ---
+  duration_ms: 11.975565
+  type: 'test'
+  ...
+# Subtest: schema and semantic verification reject forged points, measurements/status and confirmation
+ok 226 - schema and semantic verification reject forged points, measurements/status and confirmation
+  ---
+  duration_ms: 60.346921
+  type: 'test'
+  ...
+# Subtest: stable manual walls/openings/rooms, snapping, deletion and invalid polygon rejection
+ok 227 - stable manual walls/openings/rooms, snapping, deletion and invalid polygon rejection
+  ---
+  duration_ms: 12.123985
+  type: 'test'
+  ...
+# Subtest: W1-W4 detect actual review, contour, furniture and scale without blocking
+ok 228 - W1-W4 detect actual review, contour, furniture and scale without blocking
+  ---
+  duration_ms: 18.095362
+  type: 'test'
+  ...
+# Subtest: W2 exactly covers segmented contours including tolerance around wall ends
+ok 229 - W2 exactly covers segmented contours including tolerance around wall ends
+  ---
+  duration_ms: 13.849814
+  type: 'test'
+  ...
+# Subtest: W3 ignores the solid removed by a real opening
+ok 230 - W3 ignores the solid removed by a real opening
+  ---
+  duration_ms: 8.974877
+  type: 'test'
+  ...
+# Subtest: ZIP round-trip keeps full geometry, original image bytes and private filenames out
+ok 231 - ZIP round-trip keeps full geometry, original image bytes and private filenames out
+  ---
+  duration_ms: 30.438545
+  type: 'test'
+  ...
+# Subtest: ZIP rejects corruption, CRC, duplicate names, escape paths, broken refs and limits
+ok 232 - ZIP rejects corruption, CRC, duplicate names, escape paths, broken refs and limits
+  ---
+  duration_ms: 13.247993
+  type: 'test'
+  ...
+# Subtest: ZIP DEFLATE input is bounded and valid (independent compressed fixture)
+ok 233 - ZIP DEFLATE input is bounded and valid (independent compressed fixture)
+  ---
+  duration_ms: 21.750288
+  type: 'test'
+  ...
+# Subtest: old V1 projects remain valid without new optional verification/opacity
+ok 234 - old V1 projects remain valid without new optional verification/opacity
+  ---
+  duration_ms: 5.056169
+  type: 'test'
+  ...
+# Subtest: new project collection writes are atomic on storage failure
+ok 235 - new project collection writes are atomic on storage failure
+  ---
+  duration_ms: 16.809383
+  type: 'test'
+  ...
+# Subtest: snap accepts DOMPoint-like inherited coordinates from the actual SVG conversion
+ok 236 - snap accepts DOMPoint-like inherited coordinates from the actual SVG conversion
+  ---
+  duration_ms: 0.204219
+  type: 'test'
+  ...
+# Subtest: JPEG and EXIF rotations retain original bytes/pixels, neutralizing display copy only
+ok 237 - JPEG and EXIF rotations retain original bytes/pixels, neutralizing display copy only
+  ---
+  duration_ms: 0.812647
+  type: 'test'
+  ...
+# Subtest: ZIP rejects duplicate entries and encrypted flags before touching a collection
+ok 238 - ZIP rejects duplicate entries and encrypted flags before touching a collection
+  ---
+  duration_ms: 1.120717
+  type: 'test'
+  ...
+# Subtest: ZIP inflation stops before accepting a payload larger than its declared bound
+ok 239 - ZIP inflation stops before accepting a payload larger than its declared bound
+  ---
+  duration_ms: 6.895213
+  type: 'test'
+  ...
+# Subtest: W3 catches a furniture footprint crossing a concave room even with all corners inside
+ok 240 - W3 catches a furniture footprint crossing a concave room even with all corners inside
+  ---
+  duration_ms: 4.836315
+  type: 'test'
+  ...
+# Subtest: static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes
+ok 241 - static WebP VP8 and VP8L preserve dimensions, calibration and original ZIP bytes
+  ---
+  duration_ms: 20.700195
+  type: 'test'
+  ...
+# Subtest: image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants
+ok 242 - image ingestion validates empty MIME, extensions, WebP bounds and unsupported variants
+  ---
+  duration_ms: 1.457593
+  type: 'test'
+  ...
+# Subtest: second dimension: coherent accepted, contradictory refused with numbers, scale and geometry kept
+ok 243 - second dimension: coherent accepted, contradictory refused with numbers, scale and geometry kept
+  ---
+  duration_ms: 3.884636
+  type: 'test'
+  ...
+# Subtest: variant copies the visible (possibly unsaved) project, gets unique ids and a local link
+ok 244 - variant copies the visible (possibly unsaved) project, gets unique ids and a local link
+  ---
+  duration_ms: 80.892767
+  type: 'test'
+  ...
+# Subtest: editing the variant never mutates the original; renames keep the relation
+ok 245 - editing the variant never mutates the original; renames keep the relation
+  ---
+  duration_ms: 44.030991
+  type: 'test'
+  ...
+# Subtest: names avoid collisions, respect 120 characters, nest under the root and cap at two variants
+ok 246 - names avoid collisions, respect 120 characters, nest under the root and cap at two variants
+  ---
+  duration_ms: 63.424779
+  type: 'test'
+  ...
+# Subtest: removing a variant keeps the original; removing the original keeps variants without a dangling link
+ok 247 - removing a variant keeps the original; removing the original keeps variants without a dangling link
+  ---
+  duration_ms: 43.820878
+  type: 'test'
+  ...
+# Subtest: full storage fails atomically: same bytes, same list, same active project, no partial metadata
+ok 248 - full storage fails atomically: same bytes, same list, same active project, no partial metadata
+  ---
+  duration_ms: 20.053545
+  type: 'test'
+  ...
+# Subtest: old collections without variant metadata load unchanged; stale links are ignored, not rewritten
+ok 249 - old collections without variant metadata load unchanged; stale links are ignored, not rewritten
+  ---
+  duration_ms: 31.589999
+  type: 'test'
+  ...
+# Subtest: exported variant is a normal FloorPlanProjectV1 project without local metadata
+ok 250 - exported variant is a normal FloorPlanProjectV1 project without local metadata
+  ---
+  duration_ms: 28.967509
+  type: 'test'
+  ...
+# Subtest: comparison metrics reuse geometry and the Phase A review states without inventing a threshold
+ok 251 - comparison metrics reuse geometry and the Phase A review states without inventing a threshold
+  ---
+  duration_ms: 91.387176
+  type: 'test'
+  ...
+# Subtest: M12 comparison frame shares scale, includes shifted geometry and rotates object footprints
+ok 252 - M12 comparison frame shares scale, includes shifted geometry and rotates object footprints
+  ---
+  duration_ms: 13.37554
+  type: 'test'
+  ...
+# Subtest: clear strokes yield centerline proposals and multiple independent candidates
+ok 253 - clear strokes yield centerline proposals and multiple independent candidates
+  ---
+  duration_ms: 28.326019
+  type: 'test'
+  ...
+# Subtest: short interruptions join but large gaps stay separate
+ok 254 - short interruptions join but large gaps stay separate
+  ---
+  duration_ms: 24.393709
+  type: 'test'
+  ...
+# Subtest: blank, uniform dark, low contrast and isolated noise abstain
+ok 255 - blank, uniform dark, low contrast and isolated noise abstain
+  ---
+  duration_ms: 22.118938
+  type: 'test'
+  ...
+# Subtest: transparent strokes do not fabricate lines and raster limits are enforced
+ok 256 - transparent strokes do not fabricate lines and raster limits are enforced
+  ---
+  duration_ms: 6.888933
+  type: 'test'
+  ...
+# Subtest: sampling maps through original pixels, rotation and displacement with F1b transform
+ok 257 - sampling maps through original pixels, rotation and displacement with F1b transform
+  ---
+  duration_ms: 0.922121
+  type: 'test'
+  ...
+# Subtest: explicit acceptance and correction reuse canonical IDs, source states and export validation
+ok 258 - explicit acceptance and correction reuse canonical IDs, source states and export validation
+  ---
+  duration_ms: 26.650959
+  type: 'test'
+  ...
+# Subtest: invalid corrected geometry fails validation on a clone without changing live project
+ok 259 - invalid corrected geometry fails validation on a clone without changing live project
+  ---
+  duration_ms: 11.046016
+  type: 'test'
+  ...
+# Subtest: synthetic detector timing is recorded without imposing product budgets
+ok 260 - synthetic detector timing is recorded without imposing product budgets
+  ---
+  duration_ms: 33.534476
+  type: 'test'
+  ...
+# {"synthetic":true,"method":"30 calls, clear 160x100 RGBA raster, detector only; no decode/UI","node":"v22.22.0","platform":"linux","arch":"x64","candidates":3,"medianMs":0.8392350000000022,"p90NearestRankMs":0.9352590000000021}
+1..260
+# tests 260
+# suites 0
+# pass 258
+# fail 0
+# cancelled 0
+# skipped 2
+# todo 0
+# duration_ms 86381.165691

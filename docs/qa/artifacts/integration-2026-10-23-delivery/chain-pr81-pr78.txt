@@ -1,0 +1,39 @@
+2ae9811 unit # pass 258 # fail 0 # skipped 2 
+2ae9811	brand.browser.test.cjs	PASS	professional brand 1440x900
+2ae9811	brand.browser.test.cjs	PASS	professional brand 390x844
+2ae9811	brand.browser.test.cjs	PASS	professional brand 844x390
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+2ae9811	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 1440x900
+2ae9811	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 390x844
+2ae9811	share-image.browser.test.cjs	PASS	with file sharing (phone): the panel opens with the prepared PNG; «Compartir…» calls the share sheet inside its own tap 390x844
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 390x844
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 844x390
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 360x800
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 imported irregular room and localized sheet text stay tied to current project
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 1440x900
+2ae9811	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 390x844
+# pass 7 # fail 0 # cancelled 0 # skipped 0 
+2ae9811	delivery-image.browser.test.cjs	PASS	delivery image: the home fills the picture, the preview is the file 1440x900
+2ae9811	delivery-image.browser.test.cjs	PASS	delivery image: the home fills the picture, the preview is the file 390x844
+2ae9811	delivery-image.browser.test.cjs	PASS	delivery image with a brand: name and data in their band, contact only when asked
+2ae9811	delivery-image.browser.test.cjs	PASS	delivery image of a two-level building names the level it shows
+# pass 4 # fail 0 # cancelled 0 # skipped 0 
+494f14d unit # pass 254 # fail 0 # skipped 2 
+494f14d	brand.browser.test.cjs	PASS	professional brand 1440x900
+494f14d	brand.browser.test.cjs	PASS	professional brand 390x844
+494f14d	brand.browser.test.cjs	PASS	professional brand 844x390
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+494f14d	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 1440x900
+494f14d	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 390x844
+494f14d	share-image.browser.test.cjs	PASS	with file sharing (phone): the panel opens with the prepared PNG; «Compartir…» calls the share sheet inside its own tap 390x844
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 390x844
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 844x390
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 360x800
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 imported irregular room and localized sheet text stay tied to current project
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 1440x900
+494f14d	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 390x844
+# pass 7 # fail 0 # cancelled 0 # skipped 0 

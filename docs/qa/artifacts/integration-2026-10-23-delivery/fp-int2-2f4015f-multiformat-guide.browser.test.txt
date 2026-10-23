@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 1440x900
+ok 1 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 1440x900
+  ---
+  duration_ms: 3269.218389
+  type: 'test'
+  ...
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 390x844
+ok 2 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 390x844
+  ---
+  duration_ms: 2505.876141
+  type: 'test'
+  ...
+# Subtest: guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 844x390
+ok 3 - guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 844x390
+  ---
+  duration_ms: 2421.364359
+  type: 'test'
+  ...
+# Subtest: raster import requires image readiness and calibration; ZIP retains the image and all existing projects
+ok 4 - raster import requires image readiness and calibration; ZIP retains the image and all existing projects
+  ---
+  duration_ms: 1838.903248
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after home; a retry is independent
+ok 5 - late import cannot replace the project after home; a retry is independent
+  ---
+  duration_ms: 1769.744689
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after back; a retry is independent
+ok 6 - late import cannot replace the project after back; a retry is independent
+  ---
+  duration_ms: 1598.703642
+  type: 'test'
+  ...
+# Subtest: late import cannot replace the project after cancel; a retry is independent
+ok 7 - late import cannot replace the project after cancel; a retry is independent
+  ---
+  duration_ms: 1588.727026
+  type: 'test'
+  ...
+# Subtest: PDF page and vector cancellation preserve project, guide and navigation
+ok 8 - PDF page and vector cancellation preserve project, guide and navigation
+  ---
+  duration_ms: 2091.485874
+  type: 'test'
+  ...
+# Subtest: delayed converter load is dismissed by Home and never reopens a PDF dialog
+ok 9 - delayed converter load is dismissed by Home and never reopens a PDF dialog
+  ---
+  duration_ms: 2129.227701
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19832.79206

@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: guided journey, search, goals, 3D and persistence 1440x900
+ok 1 - guided journey, search, goals, 3D and persistence 1440x900
+  ---
+  duration_ms: 65095.478312
+  type: 'test'
+  ...
+# Subtest: guided journey, search, goals, 3D and persistence 390x844
+ok 2 - guided journey, search, goals, 3D and persistence 390x844
+  ---
+  duration_ms: 33727.469528
+  type: 'test'
+  ...
+# Subtest: guided journey, search, goals, 3D and persistence 844x390
+ok 3 - guided journey, search, goals, 3D and persistence 844x390
+  ---
+  duration_ms: 26999.174504
+  type: 'test'
+  ...
+# Subtest: image import, calibration, review, project switching and rejected input
+ok 4 - image import, calibration, review, project switching and rejected input
+  ---
+  duration_ms: 5737.920425
+  type: 'test'
+  ...
+# Subtest: keyboard suggestions, unsupported requests, language, deletion confirmation and failed save
+ok 5 - keyboard suggestions, unsupported requests, language, deletion confirmation and failed save
+  ---
+  duration_ms: 3334.418392
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 135358.025697

@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: native Back, visible home, explicit reopening and task return 1440x900
+ok 1 - native Back, visible home, explicit reopening and task return 1440x900
+  ---
+  duration_ms: 4318.88924
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 390x844
+ok 2 - native Back, visible home, explicit reopening and task return 390x844
+  ---
+  duration_ms: 3819.071656
+  type: 'test'
+  ...
+# Subtest: native Back, visible home, explicit reopening and task return 844x390
+ok 3 - native Back, visible home, explicit reopening and task return 844x390
+  ---
+  duration_ms: 3924.76751
+  type: 'test'
+  ...
+# Subtest: cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+ok 4 - cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+  ---
+  duration_ms: 2310.608164
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14943.664703

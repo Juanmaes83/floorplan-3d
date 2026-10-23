@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: 2D reference drawing and actual edit/duplicate/history/persistence remain functional
+ok 1 - 2D reference drawing and actual edit/duplicate/history/persistence remain functional
+  ---
+  duration_ms: 3434.682347
+  type: 'test'
+  ...
+# Subtest: actual file import and export preserve full F0 contract including optional data
+ok 2 - actual file import and export preserve full F0 contract including optional data
+  ---
+  duration_ms: 2375.465738
+  type: 'test'
+  ...
+# Subtest: room finishes, measurements/history and wall demolition update the canonical project
+ok 3 - room finishes, measurements/history and wall demolition update the canonical project
+  ---
+  duration_ms: 2480.161036
+  type: 'test'
+  ...
+# Subtest: opening and exporting a project does not add absent optional fields
+ok 4 - opening and exporting a project does not add absent optional fields
+  ---
+  duration_ms: 1861.798996
+  type: 'test'
+  ...
+# Subtest: file handler rejects invalid inputs atomically with visible element-specific errors
+ok 5 - file handler rejects invalid inputs atomically with visible element-specific errors
+  ---
+  duration_ms: 2749.304574
+  type: 'test'
+  ...
+# Subtest: hostile names and material names stay text; ID/color payloads cannot create events
+ok 6 - hostile names and material names stay text; ID/color payloads cannot create events
+  ---
+  duration_ms: 1896.175987
+  type: 'test'
+  ...
+# Subtest: browser legacy migration is repeatable and keeps the original key
+ok 7 - browser legacy migration is repeatable and keeps the original key
+  ---
+  duration_ms: 2149.556411
+  type: 'test'
+  ...
+# Subtest: mobile touch placement and responsive 2D are usable in emulation
+ok 8 - mobile touch placement and responsive 2D are usable in emulation
+  ---
+  duration_ms: 2109.295715
+  type: 'test'
+  ...
+# Subtest: 3D renders the same project, follows imported geometry and returns to 2D
+ok 9 - 3D renders the same project, follows imported geometry and returns to 2D # SKIP 3D blocked by CDN access: [{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/PointerLockControls.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/RoundedBoxGeometry.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/RGBELoader.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"},{"url":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js","error":"net::ERR_TUNNEL_CONNECTION_FAILED"}]
+  ---
+  duration_ms: 6884.177696
+  type: 'test'
+  ...
+# Subtest: F1 completion: local project UI, reload, isolation, confirmation and full import/export
+ok 10 - F1 completion: local project UI, reload, isolation, confirmation and full import/export
+  ---
+  duration_ms: 4712.014386
+  type: 'test'
+  ...
+# Subtest: F1 completion: touch 2D/3D 390x844
+not ok 11 - F1 completion: touch 2D/3D 390x844
+  ---
+  duration_ms: 90037.76484
+  type: 'test'
+  location: '/home/user/fp-int2/tests/browser.test.cjs:178:71'
+  failureType: 'testTimeoutFailure'
+  error: 'test timed out after 90000ms'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"ratio":0.8317535545023697,"width":390,"overflow":false,"colors":178,"same":true}
+# Subtest: F1 completion: touch 2D/3D 844x390
+not ok 12 - F1 completion: touch 2D/3D 844x390
+  ---
+  duration_ms: 90055.547927
+  type: 'test'
+  location: '/home/user/fp-int2/tests/browser.test.cjs:178:71'
+  failureType: 'testTimeoutFailure'
+  error: 'test timed out after 90000ms'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"ratio":0.7897435897435897,"width":732,"overflow":false,"colors":186,"same":true}
+# Subtest: F1 completion: no WebGL gives readable message and keeps 2D editable
+ok 13 - F1 completion: no WebGL gives readable message and keeps 2D editable
+  ---
+  duration_ms: 2424.916026
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1 completion: collection adopts F1a migration and preserves both historical keys
+ok 14 - F1 completion: collection adopts F1a migration and preserves both historical keys
+  ---
+  duration_ms: 2587.538637
+  type: 'test'
+  ...
+# Subtest: F1b full workflow 390x844
+ok 15 - F1b full workflow 390x844
+  ---
+  duration_ms: 31330.911213
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b full workflow 844x390
+ok 16 - F1b full workflow 844x390
+  ---
+  duration_ms: 29829.321494
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b full workflow 1440x900
+ok 17 - F1b full workflow 1440x900
+  ---
+  duration_ms: 34896.15231
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# Subtest: F1b storage/image editing and shared-reference deletion stay local and recoverable
+ok 18 - F1b storage/image editing and shared-reference deletion stay local and recoverable
+  ---
+  duration_ms: 4000.433311
+  type: 'test'
+  ...
+# Subtest: F1b rejects signature-valid but corrupt image payload without changing projects
+ok 19 - F1b rejects signature-valid but corrupt image payload without changing projects
+  ---
+  duration_ms: 1826.885683
+  type: 'test'
+  ...
+# Subtest: F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+ok 20 - F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+  ---
+  duration_ms: 2532.046271
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 360x800
+ok 21 - image import clarity and complete WebP workflow 360x800
+  ---
+  duration_ms: 8454.190206
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 390x844
+ok 22 - image import clarity and complete WebP workflow 390x844
+  ---
+  duration_ms: 8745.544839
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 844x390
+ok 23 - image import clarity and complete WebP workflow 844x390
+  ---
+  duration_ms: 7574.018225
+  type: 'test'
+  ...
+# Subtest: image import clarity and complete WebP workflow 1440x900
+ok 24 - image import clarity and complete WebP workflow 1440x900
+  ---
+  duration_ms: 7396.312014
+  type: 'test'
+  ...
+# Subtest: image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+ok 25 - image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+  ---
+  duration_ms: 21193.912606
+  type: 'test'
+  ...
+# Subtest: image import failures preserve current project, collection and image keys atomically
+ok 26 - image import failures preserve current project, collection and image keys atomically
+  ---
+  duration_ms: 6705.395429
+  type: 'test'
+  ...
+# Subtest: upload control label and accessible help follow Spanish, English and Chinese
+ok 27 - upload control label and accessible help follow Spanish, English and Chinese
+  ---
+  duration_ms: 2338.311441
+  type: 'test'
+  ...
+# Subtest: F2 local wall assistance privacy/review 360x800
+ok 28 - F2 local wall assistance privacy/review 360x800
+  ---
+  duration_ms: 14246.532069
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":360,"height":800},"requests":116,"unexpected":0,"wallIds":["wal_d673bf6ef1be410a9d19d22837b953a6","wal_de9a305e0c7942a287882ac46dbb3380"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 390x844
+ok 29 - F2 local wall assistance privacy/review 390x844
+  ---
+  duration_ms: 14335.289838
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":390,"height":844},"requests":116,"unexpected":0,"wallIds":["wal_f477037d35a847858755e03beab39d99","wal_ff56d8e8200c4beab655be52ad54343e"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 844x390
+ok 30 - F2 local wall assistance privacy/review 844x390
+  ---
+  duration_ms: 13153.190791
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":844,"height":390},"requests":116,"unexpected":0,"wallIds":["wal_c9fbb2ade5dd4809942e720eb7fbfc3a","wal_429735d6d4244b3a8cff8382266b1d98"],"candidateCount":4}
+# Subtest: F2 local wall assistance privacy/review 1440x900
+ok 31 - F2 local wall assistance privacy/review 1440x900
+  ---
+  duration_ms: 15145.849417
+  type: 'test'
+  ...
+# 3D rendered by Chromium SwiftShader; official Three.js modules supplied via TLS-verified system curl. No physical mobile performance claim.
+# {"viewport":{"width":1440,"height":900},"requests":116,"unexpected":0,"wallIds":["wal_5bdd0d2760d84cbab95988612f6daedc","wal_d0aa0a694eed419fa0174846f408d662"],"candidateCount":4}
+# Subtest: F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+ok 32 - F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+  ---
+  duration_ms: 3818.783602
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 360x800
+ok 33 - F2 raw export private snapshot 360x800
+  ---
+  duration_ms: 5439.580805
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 390x844
+ok 34 - F2 raw export private snapshot 390x844
+  ---
+  duration_ms: 6195.455532
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 844x390
+ok 35 - F2 raw export private snapshot 844x390
+  ---
+  duration_ms: 5637.600246
+  type: 'test'
+  ...
+# Subtest: F2 raw export private snapshot 1440x900
+ok 36 - F2 raw export private snapshot 1440x900
+  ---
+  duration_ms: 5013.214034
+  type: 'test'
+  ...
+# Subtest: F2 raw export invalidates pending download on reference, scale, image, project and review changes
+ok 37 - F2 raw export invalidates pending download on reference, scale, image, project and review changes
+  ---
+  duration_ms: 4251.867871
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 34
+# fail 0
+# cancelled 2
+# skipped 1
+# todo 0
+# duration_ms 470494.340451

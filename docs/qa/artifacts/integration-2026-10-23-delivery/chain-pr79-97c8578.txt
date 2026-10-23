@@ -1,0 +1,10 @@
+97c8578	first-paint-language.browser.test.cjs	PASS	while scripts load, no untranslated label is painted; then the page is visible in Spanish
+# pass 1 # fail 0 # cancelled 0 # skipped 0 
+97c8578	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 390x844
+97c8578	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 844x390
+97c8578	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 1440x900
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+97c8578	brand.browser.test.cjs	PASS	professional brand 1440x900
+97c8578	brand.browser.test.cjs	PASS	professional brand 390x844
+97c8578	brand.browser.test.cjs	PASS	professional brand 844x390
+# pass 3 # fail 0 # cancelled 0 # skipped 0 

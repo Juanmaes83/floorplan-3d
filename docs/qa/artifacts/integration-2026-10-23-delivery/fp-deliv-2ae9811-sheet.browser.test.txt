@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+ok 1 - R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+  ---
+  duration_ms: 2586.898832
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 390x844
+ok 2 - R3 M07 sheet downloads standalone SVG and restores editor 390x844
+  ---
+  duration_ms: 2510.985468
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 844x390
+ok 3 - R3 M07 sheet downloads standalone SVG and restores editor 844x390
+  ---
+  duration_ms: 2597.495991
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 360x800
+ok 4 - R3 M07 sheet downloads standalone SVG and restores editor 360x800
+  ---
+  duration_ms: 2770.516149
+  type: 'test'
+  ...
+# Subtest: R3 M07 imported irregular room and localized sheet text stay tied to current project
+ok 5 - R3 M07 imported irregular room and localized sheet text stay tied to current project
+  ---
+  duration_ms: 4064.234444
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 1440x900
+ok 6 - R3 M07 own copy and DXF sheet use the active project 1440x900
+  ---
+  duration_ms: 3782.115948
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 390x844
+ok 7 - R3 M07 own copy and DXF sheet use the active project 390x844
+  ---
+  duration_ms: 3405.108024
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22195.092887

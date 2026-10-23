@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: while scripts load, no untranslated label is painted; then the page is visible in Spanish
+ok 1 - while scripts load, no untranslated label is painted; then the page is visible in Spanish
+  ---
+  duration_ms: 2907.643197
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3570.102261

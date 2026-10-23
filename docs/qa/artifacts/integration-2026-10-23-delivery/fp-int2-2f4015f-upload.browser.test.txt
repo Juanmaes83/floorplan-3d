@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access
+ok 1 - a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access
+  ---
+  duration_ms: 2700.974139
+  type: 'test'
+  ...
+# Subtest: raster, scan and document formats become a new calibratable project
+ok 2 - raster, scan and document formats become a new calibratable project
+  ---
+  duration_ms: 4045.970726
+  type: 'test'
+  ...
+# Subtest: multi-page PDF asks for the page and cancelling keeps the current project
+ok 3 - multi-page PDF asks for the page and cancelling keeps the current project
+  ---
+  duration_ms: 2629.916976
+  type: 'test'
+  ...
+# Subtest: DXF and RoomPlan produce measured walls; JSON projects still import; DWG and empty IFC get clear messages
+ok 4 - DXF and RoomPlan produce measured walls; JSON projects still import; DWG and empty IFC get clear messages
+  ---
+  duration_ms: 2516.407785
+  type: 'test'
+  ...
+# Subtest: drag and drop uploads the first file and keeps explicit JSON and ZIP exports
+ok 5 - drag and drop uploads the first file and keeps explicit JSON and ZIP exports
+  ---
+  duration_ms: 2616.822622
+  type: 'test'
+  ...
+# Subtest: DXF, IFC and RoomPlan produce doors, windows and named rooms on their walls
+ok 6 - DXF, IFC and RoomPlan produce doors, windows and named rooms on their walls
+  ---
+  duration_ms: 2765.35573
+  type: 'test'
+  ...
+# Subtest: vector PDF offers measured walls at the detected scale or a calibratable image
+ok 7 - vector PDF offers measured walls at the detected scale or a calibratable image
+  ---
+  duration_ms: 3562.173469
+  type: 'test'
+  ...
+# Subtest: raster plan detection needs calibration, then proposes walls, gaps and rooms that can be undone
+ok 8 - raster plan detection needs calibration, then proposes walls, gaps and rooms that can be undone
+  ---
+  duration_ms: 2454.545682
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23981.625966

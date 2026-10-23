@@ -1,0 +1,121 @@
+2f4015f unit # pass 258 # fail 0 # skipped 2 
+2f4015f	first-paint-language.browser.test.cjs	PASS	while scripts load, no untranslated label is painted; then the page is visible in Spanish
+# pass 1 # fail 0 # cancelled 0 # skipped 0 
+done tests/first-paint-language.browser.test.cjs
+2f4015f	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 390x844
+2f4015f	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 844x390
+2f4015f	selection-scale.browser.test.cjs	PASS	selection bar and plan scale do not overlap 1440x900
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+done tests/selection-scale.browser.test.cjs
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 390x844
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 844x390
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 sheet downloads standalone SVG and restores editor 360x800
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 imported irregular room and localized sheet text stay tied to current project
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 1440x900
+2f4015f	sheet.browser.test.cjs	PASS	R3 M07 own copy and DXF sheet use the active project 390x844
+2f4015f	sheet.browser.test.cjs	PASS	sheet reopened before the previous close event keeps its preview and downloads 1440x900
+2f4015f	sheet.browser.test.cjs	PASS	sheet reopened before the previous close event keeps its preview and downloads 390x844
+# pass 9 # fail 0 # cancelled 0 # skipped 0 
+done tests/sheet.browser.test.cjs
+2f4015f	brand.browser.test.cjs	PASS	professional brand 1440x900
+2f4015f	brand.browser.test.cjs	PASS	professional brand 390x844
+2f4015f	brand.browser.test.cjs	PASS	professional brand 844x390
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+done tests/brand.browser.test.cjs
+2f4015f	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 1440x900
+2f4015f	share-image.browser.test.cjs	PASS	without file sharing: panel with the image, download, WhatsApp and e-mail 390x844
+2f4015f	share-image.browser.test.cjs	PASS	with file sharing (phone): the panel opens with the prepared PNG; «Compartir…» calls the share sheet inside its own tap 390x844
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+done tests/share-image.browser.test.cjs
+2f4015f	delivery-image.browser.test.cjs	PASS	delivery image: the home fills the picture, the preview is the file 1440x900
+2f4015f	delivery-image.browser.test.cjs	PASS	delivery image: the home fills the picture, the preview is the file 390x844
+2f4015f	delivery-image.browser.test.cjs	PASS	delivery image with a brand: name and data in their band, contact only when asked
+2f4015f	delivery-image.browser.test.cjs	PASS	delivery image of a two-level building names the level it shows
+# pass 4 # fail 0 # cancelled 0 # skipped 0 
+done tests/delivery-image.browser.test.cjs
+2f4015f	browser.test.cjs	PASS	2D reference drawing and actual edit/duplicate/history/persistence remain functional
+2f4015f	browser.test.cjs	PASS	actual file import and export preserve full F0 contract including optional data
+2f4015f	browser.test.cjs	PASS	room finishes, measurements/history and wall demolition update the canonical project
+2f4015f	browser.test.cjs	PASS	opening and exporting a project does not add absent optional fields
+2f4015f	browser.test.cjs	PASS	file handler rejects invalid inputs atomically with visible element-specific errors
+2f4015f	browser.test.cjs	PASS	hostile names and material names stay text; ID/color payloads cannot create events
+2f4015f	browser.test.cjs	PASS	browser legacy migration is repeatable and keeps the original key
+2f4015f	browser.test.cjs	PASS	mobile touch placement and responsive 2D are usable in emulation
+2f4015f	browser.test.cjs	SKIP	3D renders the same project, follows imported geometry and returns to 2D
+2f4015f	browser.test.cjs	PASS	F1 completion: local project UI, reload, isolation, confirmation and full import/export
+2f4015f	browser.test.cjs	FAIL	F1 completion: touch 2D/3D 390x844
+2f4015f	browser.test.cjs	FAIL	F1 completion: touch 2D/3D 844x390
+2f4015f	browser.test.cjs	PASS	F1 completion: no WebGL gives readable message and keeps 2D editable
+2f4015f	browser.test.cjs	PASS	F1 completion: collection adopts F1a migration and preserves both historical keys
+2f4015f	browser.test.cjs	PASS	F1b full workflow 390x844
+2f4015f	browser.test.cjs	PASS	F1b full workflow 844x390
+2f4015f	browser.test.cjs	PASS	F1b full workflow 1440x900
+2f4015f	browser.test.cjs	PASS	F1b storage/image editing and shared-reference deletion stay local and recoverable
+2f4015f	browser.test.cjs	PASS	F1b rejects signature-valid but corrupt image payload without changing projects
+2f4015f	browser.test.cjs	PASS	F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history
+2f4015f	browser.test.cjs	PASS	image import clarity and complete WebP workflow 360x800
+2f4015f	browser.test.cjs	PASS	image import clarity and complete WebP workflow 390x844
+2f4015f	browser.test.cjs	PASS	image import clarity and complete WebP workflow 844x390
+2f4015f	browser.test.cjs	PASS	image import clarity and complete WebP workflow 1440x900
+2f4015f	browser.test.cjs	PASS	image import accepts PNG, JPEG and lossy/alpha WebP with real decoding and ZIP restoration
+2f4015f	browser.test.cjs	PASS	image import failures preserve current project, collection and image keys atomically
+2f4015f	browser.test.cjs	PASS	upload control label and accessible help follow Spanish, English and Chinese
+2f4015f	browser.test.cjs	PASS	F2 local wall assistance privacy/review 360x800
+2f4015f	browser.test.cjs	PASS	F2 local wall assistance privacy/review 390x844
+2f4015f	browser.test.cjs	PASS	F2 local wall assistance privacy/review 844x390
+2f4015f	browser.test.cjs	PASS	F2 local wall assistance privacy/review 1440x900
+2f4015f	browser.test.cjs	PASS	F2 temporary proposals cancel safely, invalidate on reference change and preserve suggested origin during edits
+2f4015f	browser.test.cjs	PASS	F2 raw export private snapshot 360x800
+2f4015f	browser.test.cjs	PASS	F2 raw export private snapshot 390x844
+2f4015f	browser.test.cjs	PASS	F2 raw export private snapshot 844x390
+2f4015f	browser.test.cjs	PASS	F2 raw export private snapshot 1440x900
+2f4015f	browser.test.cjs	PASS	F2 raw export invalidates pending download on reference, scale, image, project and review changes
+# pass 34 # fail 0 # cancelled 2 # skipped 1 
+done tests/browser.test.cjs
+2f4015f	multiformat-guide.browser.test.cjs	PASS	guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 1440x900
+2f4015f	multiformat-guide.browser.test.cjs	PASS	guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 390x844
+2f4015f	multiformat-guide.browser.test.cjs	PASS	guided DXF and same-ID JSON preserve projects, truthful progress and return navigation 844x390
+2f4015f	multiformat-guide.browser.test.cjs	PASS	raster import requires image readiness and calibration; ZIP retains the image and all existing projects
+2f4015f	multiformat-guide.browser.test.cjs	PASS	late import cannot replace the project after home; a retry is independent
+2f4015f	multiformat-guide.browser.test.cjs	PASS	late import cannot replace the project after back; a retry is independent
+2f4015f	multiformat-guide.browser.test.cjs	PASS	late import cannot replace the project after cancel; a retry is independent
+2f4015f	multiformat-guide.browser.test.cjs	PASS	PDF page and vector cancellation preserve project, guide and navigation
+2f4015f	multiformat-guide.browser.test.cjs	PASS	delayed converter load is dismissed by Home and never reopens a PDF dialog
+# pass 9 # fail 0 # cancelled 0 # skipped 0 
+done tests/multiformat-guide.browser.test.cjs
+2f4015f	upload.browser.test.cjs	PASS	a single visible "Subir plano" control shares the picker with File, retaining explicit JSON access
+2f4015f	upload.browser.test.cjs	PASS	raster, scan and document formats become a new calibratable project
+2f4015f	upload.browser.test.cjs	PASS	multi-page PDF asks for the page and cancelling keeps the current project
+2f4015f	upload.browser.test.cjs	PASS	DXF and RoomPlan produce measured walls; JSON projects still import; DWG and empty IFC get clear messages
+2f4015f	upload.browser.test.cjs	PASS	drag and drop uploads the first file and keeps explicit JSON and ZIP exports
+2f4015f	upload.browser.test.cjs	PASS	DXF, IFC and RoomPlan produce doors, windows and named rooms on their walls
+2f4015f	upload.browser.test.cjs	PASS	vector PDF offers measured walls at the detected scale or a calibratable image
+2f4015f	upload.browser.test.cjs	PASS	raster plan detection needs calibration, then proposes walls, gaps and rooms that can be undone
+# pass 8 # fail 0 # cancelled 0 # skipped 0 
+done tests/upload.browser.test.cjs
+2f4015f	guide-navigation.browser.test.cjs	PASS	native Back, visible home, explicit reopening and task return 1440x900
+2f4015f	guide-navigation.browser.test.cjs	PASS	native Back, visible home, explicit reopening and task return 390x844
+2f4015f	guide-navigation.browser.test.cjs	PASS	native Back, visible home, explicit reopening and task return 844x390
+2f4015f	guide-navigation.browser.test.cjs	PASS	cancel and Escape from first-room entry return home, browser Back dismisses the dialog without losing the project
+# pass 4 # fail 0 # cancelled 0 # skipped 0 
+done tests/guide-navigation.browser.test.cjs
+2f4015f	guide.browser.test.cjs	PASS	guided journey, search, goals, 3D and persistence 1440x900
+2f4015f	guide.browser.test.cjs	PASS	guided journey, search, goals, 3D and persistence 390x844
+2f4015f	guide.browser.test.cjs	PASS	guided journey, search, goals, 3D and persistence 844x390
+2f4015f	guide.browser.test.cjs	PASS	image import, calibration, review, project switching and rejected input
+2f4015f	guide.browser.test.cjs	PASS	keyboard suggestions, unsupported requests, language, deletion confirmation and failed save
+# pass 5 # fail 0 # cancelled 0 # skipped 0 
+done tests/guide.browser.test.cjs
+2f4015f	room-layout.browser.test.cjs	PASS	new home / room dimensions / history / software 3D 1440x900
+2f4015f	room-layout.browser.test.cjs	PASS	new home / room dimensions / history / software 3D 390x844
+2f4015f	room-layout.browser.test.cjs	PASS	new home / room dimensions / history / software 3D 844x390
+2f4015f	room-layout.browser.test.cjs	PASS	cancel project dialog, image rejection and persistence failure preserve prior project
+2f4015f	room-layout.browser.test.cjs	PASS	moving door/window consent is explicit, cancellation and one-step history preserve IDs
+# pass 5 # fail 0 # cancelled 0 # skipped 0 
+done tests/room-layout.browser.test.cjs
+2f4015f	capture-3d.browser.test.cjs	PASS	3D capture options download real PNGs without touching the working view 1440x900
+2f4015f	capture-3d.browser.test.cjs	PASS	3D capture options download real PNGs without touching the working view 390x844
+2f4015f	capture-3d.browser.test.cjs	PASS	capture size is bounded by the pixel budget and GPU limits, and 2D export is unchanged
+# pass 3 # fail 0 # cancelled 0 # skipped 0 
+done tests/capture-3d.browser.test.cjs

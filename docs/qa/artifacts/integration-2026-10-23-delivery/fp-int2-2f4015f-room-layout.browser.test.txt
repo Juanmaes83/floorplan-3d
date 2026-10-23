@@ -1,0 +1,43 @@
+TAP version 13
+# Subtest: new home / room dimensions / history / software 3D 1440x900
+ok 1 - new home / room dimensions / history / software 3D 1440x900
+  ---
+  duration_ms: 21210.453593
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: new home / room dimensions / history / software 3D 390x844
+ok 2 - new home / room dimensions / history / software 3D 390x844
+  ---
+  duration_ms: 15692.973905
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: new home / room dimensions / history / software 3D 844x390
+ok 3 - new home / room dimensions / history / software 3D 844x390
+  ---
+  duration_ms: 14339.625329
+  type: 'test'
+  ...
+# 3D: Chromium SwiftShader software; no physical mobile performance claim.
+# Subtest: cancel project dialog, image rejection and persistence failure preserve prior project
+ok 4 - cancel project dialog, image rejection and persistence failure preserve prior project
+  ---
+  duration_ms: 2781.565111
+  type: 'test'
+  ...
+# Subtest: moving door/window consent is explicit, cancellation and one-step history preserve IDs
+ok 5 - moving door/window consent is explicit, cancellation and one-step history preserve IDs
+  ---
+  duration_ms: 2309.620608
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 56996.204308
