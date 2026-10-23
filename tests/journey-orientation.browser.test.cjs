@@ -156,3 +156,13 @@ test('T12 guided header keeps every control on screen in 2D, 3D and with two lev
  assert.deepEqual(lv.off,[],`levels ${JSON.stringify(lv)}`);assert.ok(lv.overflow<=0,`levels header overflow ${lv.overflow}`);
  assert.deepEqual([...c.errors,...d.errors],[]);
 });
+
+// A duplex with conflicts: the card asks to resolve them and the highlighted stage is «Distribuir», where the layout is
+// fixed, not «Revisar y guardar».
+test('T13 building conflicts highlight «Distribuir» 1440x900',{timeout:180000},async t=>{
+ const c=await open(t,{width:1440,height:900}),{page,guide}=c;await c.upload('#welcomeUpload',duplex);
+ await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(500);
+ const g=await guide();assert.equal(g.primary,'Ver conflictos');
+ assert.equal(await page.evaluate(()=>document.querySelector('#guideBar [aria-current="step"] .step-label')?.textContent),'Distribuir');
+ assert.deepEqual(c.errors,[]);
+});

@@ -348,7 +348,8 @@
   // One presentation entry at a time: while the guide row offers it, the guided header does not repeat it.
   document.body.classList.toggle('next-present',document.body.classList.contains('next-present')||!presentAction.hidden);
   const tasks=p.tasks.filter(t=>!t.skipped),first=tasks.findIndex(t=>t.id===p.current.id)<=0,prev=$('#guidePrevious');prev.disabled=first;prev.title=first?tx('Es la primera tarea de tu objetivo','This is the first task of your goal','这是目标的第一个任务'):'';
-  return d.task?d.task.stage:p.stage;
+  // Building conflicts (furniture on a stair or its opening) are part of the layout: «Distribuir».
+  return d.task?d.task.stage:d.r?.primary?.id==='conflicts'?2:p.stage;
  }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;
