@@ -348,7 +348,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-level-group{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:4px 8px 8px;display:grid;gap:5px;min-width:0}
 .presentation-level-group legend{font-weight:600;padding:0 4px}
 .presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
-.presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:-20px;z-index:2;background:var(--panel,#fff);padding:10px 0 20px;border-top:1px solid var(--line)}
 .presentation-config-actions .btn{border:1px solid var(--line);min-height:44px}
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
 .presentation-overlay{position:absolute;inset:0;z-index:15;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding:12px}
@@ -422,6 +422,9 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <link rel="stylesheet" href="css/guided-experience.css">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/brand.css">
+<!-- The editor markup carries its original (Chinese) labels and is translated by script; until that has run, nothing
+     is painted, so the first frame is never in the wrong language. If a script fails, the page shows after 3 s anyway. -->
+<style>html:not(.lang-ready) body{visibility:hidden;animation:lang-ready-fallback 0s 3s forwards}@keyframes lang-ready-fallback{to{visibility:visible}}</style>
 </head>
 <body>
 <div class="app">
@@ -2144,7 +2147,7 @@ function openLegalHash(){ if(location.hash === '#legal-y-uso' && !legalDialog.op
 window.addEventListener('hashchange',openLegalHash);
 openLegalHash();
 
-applyStaticLang(); syncFullscreen();
+applyStaticLang(); syncFullscreen(); document.documentElement.classList.add('lang-ready');
 buildDefs(); buildLib(); renderOpenings(); renderDims();
 $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();

@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+ok 1 - R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+  ---
+  duration_ms: 2487.997076
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 390x844
+ok 2 - R3 M07 sheet downloads standalone SVG and restores editor 390x844
+  ---
+  duration_ms: 2397.741416
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 844x390
+ok 3 - R3 M07 sheet downloads standalone SVG and restores editor 844x390
+  ---
+  duration_ms: 2391.015748
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 360x800
+ok 4 - R3 M07 sheet downloads standalone SVG and restores editor 360x800
+  ---
+  duration_ms: 2281.617127
+  type: 'test'
+  ...
+# Subtest: R3 M07 imported irregular room and localized sheet text stay tied to current project
+ok 5 - R3 M07 imported irregular room and localized sheet text stay tied to current project
+  ---
+  duration_ms: 3633.511506
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 1440x900
+ok 6 - R3 M07 own copy and DXF sheet use the active project 1440x900
+  ---
+  duration_ms: 4055.730517
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 390x844
+ok 7 - R3 M07 own copy and DXF sheet use the active project 390x844
+  ---
+  duration_ms: 3126.867708
+  type: 'test'
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 1440x900
+not ok 8 - sheet reopened before the previous close event keeps its preview and downloads 1440x900
+  ---
+  duration_ms: 1928.134327
+  type: 'test'
+  location: '/home/user/fp-tmp79/tests/sheet.browser.test.cjs:50:72'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.evaluate: Error: reopened sheet has no preview
+        at eval (eval at evaluate (:290:30), <anonymous>:1:47)
+        at UtilityScript.evaluate (<anonymous>:292:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    eval (eval at evaluate (:290:30), <anonymous>:1:47)
+    UtilityScript.evaluate (<anonymous>:292:16)
+    UtilityScript.<anonymous> (<anonymous>:1:44)
+    TestContext.<anonymous> (/home/user/fp-tmp79/tests/sheet.browser.test.cjs:58:38)
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 390x844
+not ok 9 - sheet reopened before the previous close event keeps its preview and downloads 390x844
+  ---
+  duration_ms: 1912.641419
+  type: 'test'
+  location: '/home/user/fp-tmp79/tests/sheet.browser.test.cjs:50:72'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.evaluate: Error: reopened sheet has no preview
+        at eval (eval at evaluate (:290:30), <anonymous>:1:47)
+        at UtilityScript.evaluate (<anonymous>:292:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    eval (eval at evaluate (:290:30), <anonymous>:1:47)
+    UtilityScript.evaluate (<anonymous>:292:16)
+    UtilityScript.<anonymous> (<anonymous>:1:44)
+    TestContext.<anonymous> (/home/user/fp-tmp79/tests/sheet.browser.test.cjs:58:38)
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 7
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24680.864722

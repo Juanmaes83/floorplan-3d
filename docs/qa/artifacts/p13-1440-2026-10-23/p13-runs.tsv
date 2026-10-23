@@ -1,0 +1,6 @@
+master	e796e3d	FAIL	116s	  error: |-     capture serialized with camera motion          false !== true 
+pr79	72bac33	FAIL	150s	  error: 'test timed out after 150000ms'   code: 'ERR_TEST_FAILURE'   ... 1..1 
+int	f9d3c43	FAIL	150s	  error: 'test timed out after 150000ms'   code: 'ERR_TEST_FAILURE'   ... 1..1 
+int	f9d3c43	FAIL	150s	  error: 'test timed out after 150000ms'   code: 'ERR_TEST_FAILURE'   ... 1..1 
+pr79	72bac33	FAIL	150s	  error: 'test timed out after 150000ms'   code: 'ERR_TEST_FAILURE'   ... 1..1 
+master	e796e3d	FAIL	116s	  error: |-     capture serialized with camera motion          false !== true 
