@@ -113,7 +113,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  let g=await guide();assert.equal(g.primary,'Abrir 3D');
  // Opening 3D keeps SwiftShader busy: the press that starts it gets the long 3D timeout.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
- g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi vivienda desde el ejemplo');
+ g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi copia');
  assert.equal(await page.locator('#modes3d').isVisible(),true,'«Vista aérea / Recorrer» visible in the guided header in 3D');await c.shot('t2-example-3d');
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
@@ -137,4 +137,32 @@ test('T11 phone guide (M4): one row of controls, every control on screen, more p
  assert.ok(await d.page.evaluate(()=>document.querySelector('header').getBoundingClientRect().height)<=80,'guided header stays on one line');
  assert.equal(await d.page.locator('button:visible',{hasText:'Presentar mi vivienda'}).count(),1,'one presentation entry at a time');
  assert.deepEqual([...c.errors,...d.errors],[]);
+});
+
+// Every guided-header control stays on screen at 1440x900, also in 3D, where «Vista aérea / Recorrer» joins the header.
+// Before, «Propiedades», «Proyectos» and the language were left past the right edge (header 158 px too wide).
+test('T12 guided header keeps every control on screen in 2D, 3D and with two levels 1440x900',{timeout:300000},async t=>{
+ if(!process.env.THREE_LOCAL_DIR)return t.skip('THREE_LOCAL_DIR is required for 3D');
+ const c=await open(t,{width:1440,height:900},{three:true}),{page,press}=c;await press('#welcomeExample');await page.waitForTimeout(500);
+ const off=()=>page.evaluate(()=>{const h=document.querySelector('header');return {overflow:h.scrollWidth-h.clientWidth,height:Math.round(h.getBoundingClientRect().height),off:[...h.querySelectorAll('button,input,select')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+1||r.left<-1;}).map(e=>e.id||e.textContent.trim())};});
+ const flat=await off();assert.deepEqual(flat.off,[]);assert.ok(flat.height<=80,`2D header on one line (${flat.height} px)`);
+ await press('#viewSeg [data-view="3d"]',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
+ const three=await off();assert.deepEqual(three.off,[],`3D ${JSON.stringify(three)}`);assert.ok(three.overflow<=0,`3D header overflow ${three.overflow}`);
+ assert.equal(await page.locator('#modes3d').isVisible(),true);await c.shot('t12-header-3d');
+ // A building in 2D: the level switch joins the header.
+ const d=await open(t,{width:1440,height:900});await d.upload('#welcomeUpload',duplex);await d.page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await d.page.waitForTimeout(500);
+ assert.equal(await d.page.locator('#levelBar').isVisible(),true);
+ const lv=await d.page.evaluate(()=>{const h=document.querySelector('header');return {overflow:h.scrollWidth-h.clientWidth,off:[...h.querySelectorAll('button,input,select')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+1||r.left<-1;}).map(e=>e.id||e.textContent.trim())};});
+ assert.deepEqual(lv.off,[],`levels ${JSON.stringify(lv)}`);assert.ok(lv.overflow<=0,`levels header overflow ${lv.overflow}`);
+ assert.deepEqual([...c.errors,...d.errors],[]);
+});
+
+// A duplex with conflicts: the card asks to resolve them and the highlighted stage is «Distribuir», where the layout is
+// fixed, not «Revisar y guardar».
+test('T13 building conflicts highlight «Distribuir» 1440x900',{timeout:180000},async t=>{
+ const c=await open(t,{width:1440,height:900}),{page,guide}=c;await c.upload('#welcomeUpload',duplex);
+ await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(500);
+ const g=await guide();assert.equal(g.primary,'Ver conflictos');
+ assert.equal(await page.evaluate(()=>document.querySelector('#guideBar [aria-current="step"] .step-label')?.textContent),'Distribuir');
+ assert.deepEqual(c.errors,[]);
 });

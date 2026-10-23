@@ -45,6 +45,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`a c
  const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');
  const line=()=>page.evaluate(()=>({note:document.querySelector('.guide-example span').textContent,button:document.querySelector('#guideCopyExample').textContent,primary:document.querySelector('#guideCopyExample').classList.contains('primary'),shown:!document.querySelector('.guide-example').hidden}));
  const before=await line();assert.equal(before.primary,false);assert.match(before.note,/Exploras el ejemplo/);
+ // One name for the copy everywhere in the guide: «Crear mi copia» (plus what it keeps or does next).
+ assert.equal(before.button,'Crear mi copia');
  // A real edit: select a piece of furniture on the plan and delete it.
  const total=await page.evaluate(()=>FloorPlanApp.project.objects.length);
  const pt=await page.evaluate(()=>{const r=document.querySelector(`#gFurn [data-fid="${FloorPlanApp.project.objects[0].id}"]`).getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];});
@@ -70,5 +72,24 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`the
  await click(page,'#guideSecondary');const back=await card();assert.equal(back.goal,'review');assert.equal(back.kind,'example');assert.notEqual(back.title,'Crea tu copia para seguir');
  await search('muebles');await click(page,'#guidePrimary');await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
  assert.equal((await card()).goal,'furnish','the copy goes on with furnishing');
+ assert.deepEqual(errors,[]);
+});
+
+// «Probar el ejemplo» does not pile up entries with the same name: an unchanged example is reopened; with a changed
+// one, the original opens under a different name and the changed one is kept.
+test('trying the example again reuses it or keeps the changed one apart 1440x900',async t=>{
+ const {page,errors}=await setup(t,{width:1440,height:900});
+ const names=()=>page.evaluate(()=>library.list().map(e=>e.name));const count=n=>n.filter(x=>/^Proyecto de ejemplo/.test(x)).length;
+ const again=async()=>{await click(page,'#welcomeBtn');await page.waitForFunction(()=>document.querySelector('#welcomeDialog').open);await click(page,'#welcomeExample');await page.waitForFunction(()=>!document.querySelector('#welcomeDialog').open);await page.waitForTimeout(300);};
+ await click(page,'#welcomeExample');await page.waitForTimeout(300);const first=await names();
+ await again();assert.equal(count(await names()),count(first),`unchanged example reused ${await names()}`);
+ assert.equal(await page.evaluate(()=>FloorPlanGuideUI.state().kind),'example');
+ // Change it (delete one piece of furniture), then try the example again.
+ const total=await page.evaluate(()=>FloorPlanApp.project.objects.length);
+ const pt=await page.evaluate(()=>{const r=document.querySelector(`#gFurn [data-fid="${FloorPlanApp.project.objects[0].id}"]`).getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2];});
+ await page.mouse.click(pt[0],pt[1]);await page.waitForFunction(()=>ui.sel?.kind==='furn');await page.keyboard.press('Delete');await page.waitForFunction(n=>FloorPlanApp.project.objects.length===n-1,total);
+ await again();const after=await names();
+ assert.ok(after.includes('Proyecto de ejemplo (original)'),`${after}`);assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),total,'the original opens');
+ const changed=await page.evaluate(()=>library.all().filter(e=>e.project&&e.id!==library.activeId()).map(e=>e.project.objects.length));assert.ok(changed.includes(total-1),`the changed example is kept ${JSON.stringify(changed)} total ${total}`);
  assert.deepEqual(errors,[]);
 });

@@ -195,7 +195,16 @@
  function walkExample(){example();let tries=0,walked=false;addEventListener('floorplan-view-ready',()=>{if(walked)return;walked=true;document.querySelector('#modes3d [data-mode="walk"]')?.click();},{once:true});
   // The example opens asynchronously (library switch); ask for 3D until the editor is on it.
   const go=()=>{if(walked||window.FloorPlanApp?.viewMode==='3d'||++tries>60)return;if(!document.querySelector('#welcomeDialog[open]'))document.querySelector('[data-view="3d"]')?.click();setTimeout(go,400);};setTimeout(go,300);}
- function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);entryOrigin='example';const p=Core.initial();p.id=Core.id('prj');p.name=tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');}
+ // «Probar el ejemplo» reopens an unchanged example instead of adding another entry with the same name; its guide
+ // starts again from the beginning. A changed example is never overwritten: the original then opens as a separate,
+ // differently named entry and the person is told where the changed one is.
+ function example(){if(!library)throw Error('Colección local no disponible');closeWelcome();
+  const examples=library.all().filter(e=>e.kind!=='building'&&e.project&&data.entries[e.id]?.kind==='example'),pristine=examples.find(e=>isReference(e.project));
+  entryOrigin='example';
+  if(pristine){delete data.entries[pristine.id];store();switchProject(library.open(pristine.id));setView('2d');return;}
+  const changed=examples.length>0;pendingEntry={kind:'example',goal:'review'};pendingIds=library.list().map(e=>e.id);
+  const p=Core.initial();p.id=Core.id('prj');p.name=changed?tx('Proyecto de ejemplo (original)','Example project (original)','示例项目（原始）'):tx('Proyecto de ejemplo','Example project','示例项目');switchProject(library.add(p,p.name));setView('2d');
+  if(changed)announce(tx('Abierto el ejemplo original. El ejemplo que cambiaste sigue en «Proyectos».','The original example is open. The example you changed is still in “Projects”.','已打开原始示例。你修改过的示例仍在“项目”中。'));}
  function copyExample(goal='save3d'){try{if(!save())return;const p=Core.clone(project);p.id=Core.id('prj');p.name=tx('Mi distribución','My layout','我的布局');pendingEntry={kind:'own',goal,targetType:state().targetType,targetRoomId:state().targetRoomId};pendingIds=library.list().map(e=>e.id);entryOrigin='example-copy';switchProject(library.add(p,p.name));announce(tx('Copia propia creada. El ejemplo se conserva.','Your copy was created. The example is preserved.','已创建自己的副本。示例已保留。'));if(afterCopy){const action=afterCopy;afterCopy=null;safe(()=>execute(action));}}catch(e){toast(e.message,6000);}}
  function announce(text){announcement.textContent=text;toast(text,4000);}
  function safe(fn){try{const promise=fn();promise?.catch(e=>announce(e.message));}catch(e){announce(e.message);}}
@@ -334,12 +343,13 @@
   // The example line offers the copy; when the copy is the guide's own button, the line would only repeat it.
   exampleLine.hidden=s.kind!=='example'||d.mode==='journey'&&d.r?.primary?.id==='copy'||d.mode==='goal'&&d.task.id==='start';// The example can be edited; once it differs from the original, the line says so and the copy keeps those changes.
   const changed=s.kind==='example'&&!isReference(project),copyButton=$('#guideCopyExample');copyButton.classList.toggle('primary',changed);
-  exampleNote.textContent=changed?tx('Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.','You have changed the example. Create your copy to keep these changes.','你已修改示例。创建副本以保留这些修改。'):tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');copyButton.textContent=changed?tx('Crear mi copia con estos cambios','Create my copy with these changes','用这些修改创建副本'):tx('Crear a partir del ejemplo →','Create from example →','从示例创建 →');
+  exampleNote.textContent=changed?tx('Has cambiado el ejemplo. Crea tu copia para conservar estos cambios.','You have changed the example. Create your copy to keep these changes.','你已修改示例。创建副本以保留这些修改。'):tx('Exploras el ejemplo. Crea una copia para tu proyecto.','You are exploring the example. Create a copy for your project.','正在浏览示例。请创建自己的副本。');copyButton.textContent=changed?tx('Crear mi copia con estos cambios','Create my copy with these changes','用这些修改创建副本'):tx('Crear mi copia','Create my copy','创建副本');
   presentAction.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   // One presentation entry at a time: while the guide row offers it, the guided header does not repeat it.
   document.body.classList.toggle('next-present',document.body.classList.contains('next-present')||!presentAction.hidden);
   const tasks=p.tasks.filter(t=>!t.skipped),first=tasks.findIndex(t=>t.id===p.current.id)<=0,prev=$('#guidePrevious');prev.disabled=first;prev.title=first?tx('Es la primera tarea de tu objetivo','This is the first task of your goal','这是目标的第一个任务'):'';
-  return d.task?d.task.stage:p.stage;
+  // Building conflicts (furniture on a stair or its opening) are part of the layout: «Distribuir».
+  return d.task?d.task.stage:d.r?.primary?.id==='conflicts'?2:p.stage;
  }
  function render(){
   const s=state(),p=progress(),showOutcome=p.finished&&!s.manualTask;projectLabel.textContent=s.kind==='example'?tx('Proyecto de ejemplo','Example project','示例项目'):project.name;projectLabel.title=projectLabel.textContent;goalLabel.textContent=label(G.goals[s.goal]);goalLabel.title=goalLabel.textContent;

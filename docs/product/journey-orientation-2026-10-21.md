@@ -100,8 +100,8 @@ Por orden de prioridad, la primera regla que se cumple decide:
 
 | # | Estado | Título | Botón principal | Secundaria | Qué hace el botón |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Ejemplo, sin revisar en 3D | Estás viendo un ejemplo | Ver en 3D | Crear mi vivienda desde el ejemplo | Abre 3D / crea la copia propia (sin tocar el ejemplo) |
-| 2 | Ejemplo ya revisado en 3D | Estás viendo un ejemplo | Crear mi vivienda desde el ejemplo | — | Crea la copia propia |
+| 1 | Ejemplo, sin revisar en 3D | Estás viendo un ejemplo | Ver en 3D | Crear mi copia | Abre 3D / crea la copia propia (sin tocar el ejemplo) |
+| 2 | Ejemplo ya revisado en 3D | Estás viendo un ejemplo | Crear mi copia | — | Crea la copia propia |
 | 3 | Imagen sin calibrar | Ajusta la escala del plano | Empezar a calibrar | — | Entra en «Calibrar» (aviso sobre el plano) |
 | 4 | Calibrada, sin segunda cota | Comprueba la escala con otra medida | Medir segunda cota | — | Entra en «Segunda cota» |
 | 5 | Segunda cota que no concuerda | La segunda medida no coincide | Repetir segunda cota | Volver a calibrar | Entra en el modo elegido |
@@ -157,7 +157,7 @@ Por orden de prioridad, la primera regla que se cumple decide:
 | --- | --- | --- | --- |
 | example.title | Estás viendo un ejemplo | You are viewing an example | 正在查看示例 |
 | example.text | Recórrelo en 3D o crea tu propia vivienda a partir de él. Tus cambios en la copia son tuyos; el ejemplo no cambia. | Walk through it in 3D or create your own home from it. Your copy is yours; the example stays as it is. | 在 3D 中浏览，或以它为基础创建自己的住宅。副本归你所有；示例保持不变。 |
-| example.copy | Crear mi vivienda desde el ejemplo | Create my home from the example | 以示例创建我的住宅 |
+| example.copy | Crear mi copia | Create my copy | 创建副本 |
 | view3d | Ver en 3D | View in 3D | 在 3D 中查看 |
 | scale.title | Ajusta la escala del plano | Set the plan's scale | 设置平面图比例 |
 | scale.text | Marca dos puntos de una medida que conozcas y escribe su distancia en milímetros. | Mark two points of a known measurement and enter its distance in millimetres. | 标记已知尺寸的两个点并输入毫米距离。 |
