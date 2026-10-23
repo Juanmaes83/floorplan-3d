@@ -32,7 +32,7 @@ Unitarias en `acabb54`: 254 PASS, 0 FAIL, 2 SKIP (necesitan Blender).
 - El fallo intermitente ocurre **en este mismo paso**: tercera descarga, `brand.browser.test.cjs:64-65`, tras cerrar y
   reabrir. Allí la descarga **no llega**: de las 4 descargas de una ejecución instrumentada de las 02:24 con 120 s de
   margen, solo llegaron 2.
-- `order.cjs` repite ese paso tal cual lo hace la prueba: clic de Playwright en «Cerrar» y reapertura con `evaluate`.
+- `order.cjs` (salida en `order-results.jsonl`; fp-share = #78 `494f14d`, fp-fix = #79 `acabb54`) repite ese paso tal cual lo hace la prueba: clic de Playwright en «Cerrar» y reapertura con `evaluate`.
   En 120 repeticiones de hoy (#78 y #79, a 390 y 1440), el evento `close` llegó **siempre antes** de reabrir y las
   120 descargas llegaron. Hoy el orden invertido no se da, y tampoco el fallo (0 de 68 descargas en la revisión 6).
 - Por eso **no** se declara arreglado el fallo intermitente. Se ha corregido un defecto real que produce exactamente ese
