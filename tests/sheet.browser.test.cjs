@@ -44,3 +44,20 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`R3 
  await page.waitForFunction(id=>FloorPlanApp.project.id!==id&&!document.body.classList.contains('uploading'),ownId,{timeout:30000});if(await page.locator('#guideClose').isVisible())await page.locator('#guideClose').click();await check('dxf');
  assert.deepEqual(errors,[]);assert.deepEqual(consoleErrors,[]);
 });
+
+// Closing the sheet queues its «close» event; a reopen that runs before that event (a fast close and reopen, or a test
+// that does both at once) must keep the new preview and download it, not show an empty sheet that refuses to download.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`sheet reopened before the previous close event keeps its preview and downloads ${viewport.width}x${viewport.height}`,{timeout:90000},async t=>{
+ const {page,errors}=await setup(t,viewport);await page.locator('#guideClose').click();
+ const openSheet=()=>{const d=document.getElementById('openSheet').closest('details');if(d)d.open=true;document.getElementById('openSheet').click();};
+ await page.evaluate(openSheet);await page.locator('#sheetDialog[open]').waitFor();
+ // Close and reopen in the same task: the first close event is still queued when the sheet opens again.
+ await page.evaluate(()=>{document.querySelector('#sheetClose').click();const d=document.getElementById('openSheet').closest('details');if(d)d.open=true;document.getElementById('openSheet').click();});
+ await page.evaluate(()=>new Promise(resolve=>setTimeout(resolve,100)));
+ assert.equal(await page.locator('#sheetDialog').evaluate(el=>el.open),true,'the reopened sheet stays open');
+ await page.locator('#sheetPreview').evaluate(async img=>{if(!img.getAttribute('src'))throw Error('reopened sheet has no preview');if(!img.complete)await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});if(!img.naturalWidth)throw Error('Sheet image did not render');});
+ const pending=page.waitForEvent('download',{timeout:10000});await page.locator('#sheetDownload').click();const file=await pending;
+ assert.match((await fs.readFile(await file.path())).toString('utf8'),/<svg/);
+ assert.doesNotMatch(await page.locator('#toast').textContent(),/El proyecto cambió/);
+ await page.locator('#sheetClose').click();assert.deepEqual(errors,[]);
+});
