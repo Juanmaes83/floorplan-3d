@@ -61,6 +61,8 @@ body.guided #newRoomBtn{display:none}
 #welcomeDialogTitle:focus,#welcomeDialogTitle:focus-visible{outline:0}
 .welcome-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:22px;color:var(--ink-muted);font-size:12px}.welcome-foot p{margin:0}.welcome-foot .btn{border:1px solid var(--line);white-space:normal}
 .guide-dialog{width:min(680px,94vw);padding:22px;max-height:90dvh}.guide-dialog h2{font-size:24px;letter-spacing:-.6px;margin:0 0 12px}.guide-dialog .dialog-heading{display:flex;align-items:start;justify-content:space-between;gap:12px}.guide-dialog .dialog-heading .btn{min-height:40px}
+/* The heading and its «Cerrar» stay in view while a long dialog scrolls (phones, 844×390 has 365 px of dialog). */
+.guide-dialog .dialog-heading{position:sticky;top:-22px;z-index:2;background:inherit;margin:-22px -22px 0;padding:22px 22px 6px}
 .guide-dialog select{border:1px solid var(--line);border-radius:8px;background:white}.guide-dialog p{color:var(--ink-muted)}.guide-dialog .primary{border:0!important;background:var(--accent)!important;color:#fff!important}
 .guide-task-list{display:grid;gap:8px}.guide-task{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}.guide-task h3{margin:5px 0;font-size:15px}.guide-task p{margin:5px 0;font-size:13px}.guide-task .task-meta{display:flex;justify-content:space-between;gap:8px;font-size:11px}.guide-task .task-meta b{color:var(--teal)}.guide-task[data-state=review]{border-color:#bc8245}.guide-task details{font-size:12px;color:var(--ink-muted);margin-top:8px}.guide-task .actions{margin-top:8px}.guide-task .btn{white-space:normal;min-height:38px}
 .guide-outcome{padding:15px;border-radius:12px;background:#edf3f0;border:1px solid #b4ccc1;margin-bottom:14px}.guide-outcome strong{color:var(--teal)}.guide-outcome p{font-size:13px;margin:5px 0}.guide-outcome .btn{border:1px solid #b4ccc1;min-height:40px}
@@ -84,7 +86,7 @@ body.guided #newRoomBtn{display:none}
  .guide-progress-line{gap:8px;font-size:11px}.guide-progress{max-width:60px}.guide-steps{gap:2px;margin-bottom:5px}.guide-steps button{font-size:9px;white-space:normal;line-height:1.2;display:flex;align-items:center;gap:3px}.guide-steps .step-number{flex:none;width:18px;height:18px;margin:0;font-size:10px}
  .guide-current{padding:8px;gap:8px}.guide-current h2{font-size:12px}.guide-current p{display:none}.guide-current .btn{padding:6px 8px;min-height:38px;font-size:11px;max-width:130px;white-space:normal;line-height:1.2}
  #uploadPlanBtn{scroll-margin-inline-end:2px}
- .guide-example{font-size:10px;gap:5px;padding-top:5px}.guide-dialog{padding:16px}.guide-dialog h2{font-size:21px}.guide-task .actions{gap:4px}
+ .guide-example{font-size:10px;gap:5px;padding-top:5px}.guide-dialog{padding:16px}.guide-dialog .dialog-heading{top:-16px;margin:-16px -16px 0;padding:16px 16px 6px}.guide-dialog h2{font-size:21px}.guide-task .actions{gap:4px}
 }
 @media(max-height:500px){
  .welcome-brand{margin-bottom:16px}.welcome-intro{gap:22px}.welcome-visual{max-height:230px}.welcome-entries{margin-top:18px}.welcome-entry{padding:14px}.welcome-entry .entry-icon{margin-bottom:4px}
