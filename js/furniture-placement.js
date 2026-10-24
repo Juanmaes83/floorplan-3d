@@ -94,6 +94,25 @@
   return {ok:false,reason:'no-space',roomId:room.id,roomName:room.name,tried,blockers,
    message:`No hay sitio libre para «${object.name||object.type}» en «${room.name}» sin pisar ${main.length?main.slice(0,3).join(', '):'los límites de la estancia'}. Elige otra estancia o haz sitio antes de colocarlo.`};
  }
+ /* Same search when the person did NOT choose the place (a tap on a catalogue item, placed at the centre of the
+    view): if the room under `near` has no free place, the other rooms are tried from the nearest to `near` (distance
+    to the room's outline), each from a point inside it. The first valid pose wins and says so (otherRoom,
+    askedRoomName); distanceMm stays measured from the requested point. When no room has space, the refusal for the
+    requested room is returned unchanged. A point chosen by the person (a drop, a selected room) uses find(). */
+ function findAnyRoom(project,object,options={}){
+  const near=options.near||object.position,first=find(project,object,options);
+  if(first.ok||first.reason!=='no-space')return first;
+  const sc=scene(project,{zones:options.zones||[]}),dist=r=>inPoly(near,r.poly)?0:Math.min(...r.poly.map((a,i)=>segDist(near,a,r.poly[(i+1)%r.poly.length])));
+  const inside=r=>{const b=box(r.poly),c={x:(b[0]+b[2])/2,y:(b[1]+b[3])/2},m={x:r.poly.reduce((s,p)=>s+p.x,0)/r.poly.length,y:r.poly.reduce((s,p)=>s+p.y,0)/r.poly.length};
+   return [c,m].map(p=>({x:Math.round(p.x),y:Math.round(p.y)})).find(p=>roomsAt(sc,p).length===1&&inPoly(p,r.poly));};
+  let tried=first.tried;
+  for(const room of sc.rooms.filter(r=>r.id!==first.roomId).map(r=>({r,d:dist(r)})).sort((a,b)=>a.d-b.d||String(a.r.id).localeCompare(String(b.r.id))).map(x=>x.r)){
+   const seed=inside(room);if(!seed)continue;
+   const r=find(project,object,{...options,near:seed});tried+=r.tried||0;
+   if(r.ok)return {...r,tried,otherRoom:true,askedRoomId:first.roomId,askedRoomName:first.roomName};
+  }
+  return {...first,tried};
+ }
  /* «Buscar sitio libre» for EXISTING furniture (proposal only, never applied here). Objects are proposed in the order
     given, each one against the layout that already includes the previous proposals, so the set is compatible by
     construction; the whole set is then validated again. Size, rotation and id are kept. Returns {moves:[{id,name,
@@ -111,6 +130,6 @@
  }
  // What the search checks and what it does not, for the proposal panel.
  const CHECKED=['la estancia completa','la escalera y su hueco','los muros','el barrido de las puertas','otros muebles'],NOT_CHECKED=['altura libre','paso o recorrido','normativa','muebles en otras plantas'];
- const api={TOLERANCE_MM,STEP_MM,MAX_CANDIDATES,CHECKED,NOT_CHECKED,scene,roomsAt,problems,problemsIn,find,candidates,proposeSet};
+ const api={TOLERANCE_MM,STEP_MM,MAX_CANDIDATES,CHECKED,NOT_CHECKED,scene,roomsAt,problems,problemsIn,find,findAnyRoom,candidates,proposeSet};
  if(node)module.exports=api;else root.FloorPlanPlacement=api;
 })(globalThis);
