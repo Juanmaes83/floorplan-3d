@@ -3792,8 +3792,21 @@ function stepWalk(dt){
   if (mag < .05) return;
   mv.normalize().multiplyScalar(sp * mag);
   const p = camera.position;
+  const x0 = p.x, z0 = p.z;
   if (!blocked(p.x + mv.x, p.z)) p.x += mv.x;
   if (!blocked(p.x, p.z + mv.z)) p.z += mv.z;
+  // Doorway assist: a doorway leaves about 20 cm for the body; when a step is refused, look up to 16 cm to either
+  // side for a position that lets the step through and drift towards it (4 cm a sub-step), so the person is centred
+  // into the opening instead of stopping against the jamb. It never moves into a wall.
+  if (p.x === x0 && p.z === z0){
+    const L = Math.hypot(mv.x, mv.z), sx = -mv.z/L, sz = mv.x/L;
+    for (const o of [.04, -.04, .08, -.08, .12, -.12, .16, -.16]){
+      if (blocked(x0 + sx*o + mv.x, z0 + sz*o + mv.z)) continue;
+      const k = Math.sign(o)*Math.min(Math.abs(o), .04);
+      if (!blocked(x0 + sx*k, z0 + sz*k)){ p.x = x0 + sx*k; p.z = z0 + sz*k; }
+      break;
+    }
+  }
 }
 addEventListener('keydown', e => {
   if (!active || e.target.matches('input,select,textarea')) return;
@@ -3857,7 +3870,8 @@ function loop(){
   // The walk uses the real elapsed time (up to 0.25 s) in 50 ms sub-steps: on a slow device (a few frames per second)
   // the person still moves at walking speed, and each sub-step is checked against the walls.
   else for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05));
-  doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, dt*6); d.pivot.rotation.y = d.cur; });
+  // Doors swing in real time too (on a slow device a 50 ms cap kept a leaf across the doorway for seconds).
+  doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, Math.min(raw, .25)*6); d.pivot.rotation.y = d.cur; });
   updateSel();
   syncCeilingFixtures(camera);
   renderer.render(scene, camera);
@@ -4133,6 +4147,9 @@ window.View3D = {
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
   get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
+  // Whether the walk can stand at a plan point (mm), and what blocks it (read-only, for diagnosis and tests).
+  walkBlockedAt(x,y){if(!active)return null;const X=wx(x),Z=wz(y),r=.22;for(const w of colliders){const c=Math.cos(w.angle),s=Math.sin(w.angle),dx=X-w.x,dz=Z-w.z;if(Math.abs(dx*c+dz*s)<w.length/2+r&&Math.abs(-dx*s+dz*c)<w.thickness/2+r)return {by:'wall',x:Math.round(w.x*1000+OX),y:Math.round(w.z*1000+OY),length:Math.round(w.length*1000),thickness:Math.round(w.thickness*1000),angle:+w.angle.toFixed(3)};}
+    for(const d of doors){const a=d.pivot.rotation.y,px=d.pivot.position.x,pz=d.pivot.position.z,ex=px+Math.cos(a)*d.len,ez=pz-Math.sin(a)*d.len,t=clamp01(((X-px)*(ex-px)+(Z-pz)*(ez-pz))/((ex-px)**2+(ez-pz)**2));if(Math.hypot(X-(px+t*(ex-px)),Z-(pz+t*(ez-pz)))<r*.8)return {by:'door',id:d.id};}return {by:null};},
   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
