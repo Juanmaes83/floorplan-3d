@@ -93,11 +93,12 @@ test('desktop E: out of reach nothing changes; near, E closes the door (blocked)
  // Stand about 1.1 m in front of the open leaf, as a person would to reach it with E.
  const L0=await leaf(),near=[L0[0]-1100,L0[1]];for(let n=0;n<10&&dist((await where()).p,near)>150;n++){await turnTo(near);await hold(['KeyW'],500);}
  await turnTo(await leaf());const c0=await page.screenshot();await page.keyboard.press('KeyE');await page.waitForTimeout(1200);const c1=await page.screenshot();const closedShot=await shot('E-near-close');
- const b0=await where();await hold(['KeyW'],1500);const b1=await where();
+ // Blocked: from just in front of the doorway (west of where the leaf opens), walking straight in does not enter.
+ await go(front);await turnTo([4850,1700]);const b0=await where();await hold(['KeyW'],1500);const b1=await where();
  assert.ok(record(vp,'E cerca (cerrar)','cierra la puerta (la imagen cambia) y ya no se puede pasar',JSON.stringify({open:await state(),imageChanged:Buffer.compare(c0,c1)!==0,room:b1.room,at:b0.p.map(Math.round),leaf:(await leaf()).map(Math.round),aim:await page.evaluate(()=>View3D.walkAim),doors:await page.evaluate(()=>View3D.walkDoors)}),await state()===false&&Buffer.compare(c0,c1)!==0&&b1.room!=='Baño',closedShot));
  await turnTo(await leaf());const o0=await page.screenshot();await page.keyboard.press('KeyE');await page.waitForTimeout(1200);const o1=await page.screenshot();const openShot=await shot('E-near-open');
- // The open leaf stands in the room (x 5200, y 2250–2950): walk round its tip, then straight through the doorway.
- await go([(await where()).p[0],3300]);await go([4850,3300]);await go(front);const atFront=await where();await go([4850,1700]);const inBath=await where();inBath.front=atFront.p.map(Math.round);
+ // The leaf opens towards x 5200, east of the person: straight through the doorway.
+ await go(front);const atFront=await where();await go([4850,1700]);const inBath=await where();inBath.front=atFront.p.map(Math.round);
  assert.ok(record(vp,'E cerca (abrir)','abre la puerta (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),imageChanged:Buffer.compare(o0,o1)!==0,room:inBath.room,front:inBath.front,at:inBath.p.map(Math.round),aim:await page.evaluate(()=>View3D.walkAim)}),await state()===true&&Buffer.compare(o0,o1)!==0&&inBath.room==='Baño',openShot));
  assert.deepEqual(errors,[]);
 });
@@ -113,13 +114,13 @@ test('phone: joystick, drag to look, tap a door, «Salir del recorrido» 390x844
  assert.ok(record(vp,'Joystick hacia arriba','avanza',`${Math.round(along(a.p,b.p,a.fwd))} mm`,along(a.p,b.p,a.fwd)>150,await shot('joystick')));
  const y0=(await where()).fwd;await turnTo([1000,3500]);const y1=(await where()).fwd;
  const turned=Math.abs(Math.atan2(y0[0]*y1[1]-y0[1]*y1[0],y0[0]*y1[0]+y0[1]*y1[1]));assert.ok(record(vp,'Arrastrar para mirar','gira la vista',`${(turned*180/Math.PI).toFixed(0)}°`,turned>.3,await shot('drag-look')));
- for(let n=0;n<8&&dist((await where()).p,front)>250;n++){await turnTo(front);await push(0,-50,700);}
+ const nearW=[4100,2600];for(let n=0;n<8&&dist((await where()).p,nearW)>250;n++){await turnTo(nearW);await push(0,-50,700);}
  const state=()=>page.evaluate(()=>View3D.walkDoors.find(d=>d.id==='opn_bath-door').open);
  const leaf=()=>page.evaluate(()=>{const d=View3D.walkDoors.find(d=>d.id==='opn_bath-door');return [d.hinge[0]+Math.cos(d.angle)*d.len/2,d.hinge[1]-Math.sin(d.angle)*d.len/2];});
  const tapDoor=async()=>{await turnTo(await leaf());const c=await page.locator('canvas').first().boundingBox();const s0=await page.screenshot();await page.touchscreen.tap(c.x+c.width/2,c.y+c.height*.45);await page.waitForTimeout(1200);return Buffer.compare(s0,await page.screenshot())!==0;};
- const closedChanged=await tapDoor();const c0=await where();await push(0,-50,1200);const c1=await where();
+ const closedChanged=await tapDoor();for(let n=0;n<8&&dist((await where()).p,front)>200;n++){await turnTo(front);await push(0,-50,500);}await turnTo([4850,1700]);const c0=await where();await push(0,-50,1200);const c1=await where();
  assert.ok(record(vp,'Tocar la puerta (cerrar)','la cierra (la imagen cambia) y no se puede pasar',JSON.stringify({open:await state(),changed:closedChanged,room:c1.room}),await state()===false&&closedChanged&&c1.room!=='Baño',await shot('tap-door-close')));
- const openChanged=await tapDoor();const here=(await where()).p;for(const w of [[here[0],3300],[4850,3300],front,[4850,1700]])for(let n=0;n<8&&dist((await where()).p,w)>200;n++){await turnTo(w);await push(0,-50,600);}const inBath=await where();
+ const openChanged=await tapDoor();for(const w of [[4850,1700]])for(let n=0;n<8&&dist((await where()).p,w)>200;n++){await turnTo(w);await push(0,-50,600);}const inBath=await where();
  assert.ok(record(vp,'Tocar la puerta (abrir)','la abre (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),changed:openChanged,room:inBath.room}),await state()===true&&openChanged&&inBath.room==='Baño',await shot('tap-door-open')));
  await tap('#walkExit');await page.waitForTimeout(800);const out=await where();
  assert.ok(record(vp,'«Salir del recorrido»','vuelve a la vista aérea y oculta el joystick',JSON.stringify({mode:out.mode,joy:await page.locator('#joy').isVisible()}),out.mode==='orbit'&&!(await page.locator('#joy').isVisible()),await shot('exit')));
