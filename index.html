@@ -358,6 +358,7 @@ body.guided .presentation-entry{display:none!important}
 .presentation-minimap .btn{border:1px solid var(--line);min-height:44px;width:100%}
 .presentation-minimap-panel{margin-top:6px}
 .presentation-minimap svg{display:block;width:100%;height:145px;background:#f2f0ea;border-radius:6px}
+.review-dialog{width:min(640px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:16px}.review-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.review-head h2{margin:0;font-size:20px}.review-identity,.review-note{color:var(--muted);font-size:13px}.review-section{border-top:1px solid var(--line);margin-top:12px;padding-top:8px}.review-section h3{font-size:15px;margin:4px 0 8px}.review-dialog label{display:block;margin:8px 0;font-size:13px}.review-dialog textarea{display:block;width:100%;font-size:16px;padding:8px;box-sizing:border-box}.review-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.review-dialog .btn{min-height:44px;border:1px solid var(--line-strong,#aeb5b9)}.review-list{padding-left:20px;margin:6px 0}.review-list li{margin:6px 0;line-height:1.4}.review-dialog .review-small{min-height:36px;padding:4px 10px;margin-left:6px}.review-decide{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.review-dialog .review-decide .review-small{margin-left:0}.review-status{display:block;font-size:12px;color:var(--muted);margin-top:2px}.review-status[data-status=implemented]{color:var(--success,#2f6e4a);font-weight:600}.review-copy{background:var(--warn-soft,#fff4dc);color:var(--ink,#1f2326)!important;padding:8px 10px;border-radius:8px}.review-answers{border-top:1px dashed var(--line);margin-top:10px;padding-top:6px}.review-answers h4{margin:4px 0 6px;font-size:14px}.review-dialog .review-list li{overflow-wrap:anywhere}.review-small[aria-pressed=true]{background:var(--select,#2b3034);color:#fff}.review-received{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0}.review-from{font-weight:600;margin:0}.review-ok{color:var(--success,#2f6e4a);margin:4px 0}.review-warn{color:var(--warn,#7a5200);margin:4px 0}.review-counts{font-size:13px;color:var(--muted)}
 .presentation-minimap-room{fill:#dfded8;stroke:#605f5a;stroke-width:55;stroke-linejoin:round}
 .presentation-minimap-room.selectable{fill:#c8dedb;cursor:pointer}
 .presentation-minimap-room.active{fill:#57a9a2;stroke:#184e52;stroke-width:95}
@@ -365,7 +366,9 @@ body.guided .presentation-entry{display:none!important}
 .presentation-minimap-heading{fill:none;stroke:#d13932;stroke-width:130;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .presentation-minimap-route{fill:none;stroke:#196e89;stroke-width:125;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .presentation-card{pointer-events:auto;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 30px #2b282433;padding:12px 16px;max-width:min(650px,100%);width:100%;max-height:calc(100% - 20px);overflow:auto}
-.presentation-card-top,.presentation-controls,.presentation-stops{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.presentation-card-top,.presentation-nav,.presentation-tools,.presentation-stops{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.presentation-controls{display:flex;flex-direction:column;gap:8px}
+.presentation-tools{border-top:1px solid var(--line);padding-top:8px}.presentation-tools .btn{font-size:13px}
 .presentation-card-top{justify-content:space-between}
 .presentation-card h2{font-size:16px;margin:0;overflow-wrap:anywhere;min-width:0}
 .presentation-card .btn{border:1px solid var(--line);min-height:44px;white-space:normal}
@@ -404,9 +407,10 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 @media(max-width:600px){.presentation-stops{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-overlay{padding:8px}.presentation-card{padding:9px 10px}.presentation-card-top{align-items:flex-start}.presentation-card h2{max-width:55%}.presentation-card .btn{min-height:44px}.guide-current{flex-wrap:wrap}.guide-current .guide-task-copy{flex:1 1 100%}}
 @media(max-width:699px),(max-height:500px){.presentation-minimap{top:8px;left:8px;width:150px}.presentation-minimap svg{height:100px}}
 @media(max-width:600px) and (min-height:501px){.presentation-progress{display:none}.presentation-card .btn{font-size:13px;padding:6px 9px}.presentation-controls{gap:6px}.presentation-section{font-size:11px;padding:3px 6px;margin:2px 0}.presentation-status,.presentation-info{margin:2px 0}}
-@media(max-width:380px){.presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-controls .btn{width:100%;font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
+@media(max-width:380px){.presentation-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presentation-nav .btn{width:100%}.presentation-controls .btn{font-size:12px;padding:5px 6px}.presentation-status,.presentation-progress,.presentation-info{margin:2px 0}.presentation-stops{margin-top:4px}}
 @media(min-width:700px){.presentation-overlay{align-items:center;justify-content:flex-end}.presentation-card{width:min(310px,43%);max-height:100%}}
 @media(max-height:500px){.presentation-card{padding:6px 10px;max-height:100%}.presentation-card-top{position:sticky;top:-6px;z-index:1;margin-top:-6px;padding-top:6px;background:rgba(255,253,249,.97)}.presentation-card h2{max-height:1.3em;overflow:hidden}.presentation-info,#presentationBatchStatus{display:none}.presentation-status,.presentation-progress{margin:2px 0}.presentation-controls .btn{font-size:11px;padding:4px 6px}.presentation-stops{margin-top:3px;gap:3px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}.presentation-stops .btn{font-size:11px;line-height:1.1;padding:4px 6px}.presentation-config{padding:12px}.presentation-room-list{max-height:86px}.presentation-config-actions{margin-top:8px}}
+@media(max-width:600px),(max-height:500px){.presentation-tools{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding-bottom:2px}.presentation-tools .btn{flex:0 0 auto;white-space:nowrap}}
 .presentation-overlay[data-route="true"] :is(.presentation-progress,.presentation-info,.presentation-section,.presentation-controls,.presentation-stops){display:none}
 @media(max-height:500px){.presentation-overlay[data-route="true"] .presentation-progress,.presentation-overlay[data-route="true"] .presentation-stops{display:none}.presentation-overlay[data-route="true"] .presentation-card .btn{min-height:36px}}
 
@@ -2263,6 +2267,8 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/brand-core.js"></script>
 <script src="js/brand-ui.js"></script>
 <script src="js/sheet-ui.js"></script>
+<script src="js/review-notes-core.js"></script>
+<script src="js/review-notes-ui.js"></script>
 <script src="js/building-ui.js"></script>
 <script src="js/build-palette.js"></script>
 <script src="js/app-shell.js"></script>
