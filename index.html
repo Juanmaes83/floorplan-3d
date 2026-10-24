@@ -376,6 +376,9 @@ body.guided .presentation-entry{display:none!important}
 .presentation-section{margin:4px 0;padding:5px 8px;border-radius:6px;background:#e6f0ef;color:#184e52;font-size:12px;overflow-wrap:anywhere}
 .presentation-section[hidden]{display:none}
 .share-dialog{width:min(560px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:16px}.share-dialog h2{margin:0 0 10px;font-size:20px}.share-preview{display:block;width:100%;max-height:44dvh;object-fit:contain;border-radius:10px;background:#f3f4f4}.share-note{font-size:13px;color:var(--muted)}.share-actions{display:flex;flex-wrap:wrap;gap:8px}.share-actions .btn{min-height:44px;display:inline-flex;align-items:center;text-decoration:none;border:1px solid var(--line-strong,#aeb5b9);color:var(--ink,#1f2326);background:var(--surface-panel,#fff);padding:8px 14px;border-radius:10px}.share-actions .btn.primary{color:#fff}
+/* Short landscape screens (844×390): preview on the left, title, choices, note and actions on the right, so nothing needs scrolling. */
+@media(max-height:500px) and (min-width:600px){.share-dialog[open]{width:min(820px,calc(100vw - 16px));display:grid;grid-template-columns:minmax(0,1.25fr) minmax(250px,1fr);column-gap:16px;align-content:start}.share-dialog>.share-preview{grid-column:1;grid-row:1 / span 5;max-height:calc(100dvh - 48px);align-self:center}.share-dialog>:not(.share-preview){grid-column:2}.share-dialog .share-note,.share-dialog>p{font-size:12px;margin:6px 0}}
+.share-choices{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:0 0 10px}.share-format{display:flex;gap:6px}.share-format .btn[aria-pressed="true"]{background:var(--ink,#1f2326);color:#fff;border-color:var(--ink,#1f2326)}.share-contact{display:inline-flex;flex:1 1 240px;gap:8px;align-items:center;font-size:14px;min-height:44px;cursor:pointer}.share-contact input{margin:0;width:20px;height:20px;flex:none}.share-dialog[aria-busy="true"] .share-preview{opacity:.55}
 .presentation-level{flex:1 0 100%;order:3;margin:0;font-size:12px;font-weight:600;color:#184e52;overflow-wrap:anywhere}
 .presentation-level[hidden]{display:none}
 .presentation-level.changed{padding:5px 8px;border-radius:6px;background:#e6f0ef}
@@ -2263,6 +2266,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/asset-ui.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
+<script src="js/delivery-image.js"></script>
 <script src="js/presentation-ui.js"></script>
 <script src="js/brand-core.js"></script>
 <script src="js/brand-ui.js"></script>
@@ -3890,6 +3894,55 @@ function shot(opts = {}){
   return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced,...(opts.download===false?{dataUrl:url}:{})};
 }
 
+// Delivery image (client-facing): the WHOLE home framed to fill a w×h image in the current viewing direction. A cloned
+// camera only moves along that direction (and the fov is not changed), so the geometry is never stretched or cropped;
+// the working view, camera and canvas are restored before the browser paints, exactly as in shot().
+function deliveryShot({width, height, margin = .03, frame = true} = {}){
+  if (window.FloorPlanBuildingUI && !window.FloorPlanBuildingUI.gate('Captura 3D')) throw Error('Distribución pendiente: corrige los muebles sobre escaleras antes de generar imágenes.');
+  const w = Math.round(width), h = Math.round(height);
+  if (!(w > 0 && h > 0) || w*h > SHOT_MAX_PIXELS || Math.max(w, h) > shotLimit()) throw Error(tr('截图选项无效。', 'Invalid capture option.'));
+  const box = new THREE.Box3();
+  for (const g of [archFloor, archUp, furnG, levelsG]) if (g?.visible) box.expandByObject(g);
+  const cam = camera.clone();
+  if (!frame || box.isEmpty()){
+    // A room stop keeps its own camera: same «contain» rule as shot(), nothing visible in the view is cropped.
+    const work = camera.aspect; cam.aspect = w/h; if (cam.aspect < work) cam.fov = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*work/cam.aspect)*180/Math.PI; cam.updateProjectionMatrix();
+    return renderDelivery(cam, w, h, null);
+  }
+  const center = box.getCenter(new THREE.Vector3()), dir = camera.getWorldDirection(new THREE.Vector3());
+  cam.aspect = w/h; cam.updateProjectionMatrix();
+  const corners = []; for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) corners.push(new THREE.Vector3(x, y, z));
+  // Distance so the projected box fits inside [-1+margin, 1-margin] on both axes; each pass also recentres the look
+  // point on the projected box (offset in NDC × half the frustum at that distance, along the camera axes).
+  let dist = box.getSize(new THREE.Vector3()).length(), look = center.clone();
+  const proj = () => { let a = Infinity, b = -Infinity, c = Infinity, d = -Infinity; for (const k of corners){ const p = k.clone().project(cam); a = Math.min(a, p.x); b = Math.max(b, p.x); c = Math.min(c, p.y); d = Math.max(d, p.y); } return {minX:a, maxX:b, minY:c, maxY:d}; };
+  for (let i = 0; i < 8; i++){
+    cam.position.copy(look).addScaledVector(dir, -dist); cam.lookAt(look); cam.updateMatrixWorld();
+    const r = proj(), halfH = dist*Math.tan(cam.fov*Math.PI/360), halfW = halfH*cam.aspect;
+    const right = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0), up = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 1);
+    look.addScaledVector(right, (r.minX + r.maxX)/2*halfW).addScaledVector(up, (r.minY + r.maxY)/2*halfH);
+    dist *= Math.max((r.maxX - r.minX)/2, (r.maxY - r.minY)/2, .05)/(1 - margin);
+  }
+  cam.position.copy(look).addScaledVector(dir, -dist); cam.lookAt(look); cam.updateMatrixWorld();
+  return renderDelivery(cam, w, h, corners);
+}
+function renderDelivery(cam, w, h, corners){
+  const gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
+  let url, fill = null;
+  try {
+    renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
+    if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
+    renderer.render(scene, cam);
+    url = renderer.domElement.toDataURL('image/png');
+    if (corners){ let a = Infinity, b = -Infinity, c = Infinity, d = -Infinity; for (const k of corners){ const p = k.clone().project(cam); a = Math.min(a, p.x); b = Math.max(b, p.x); c = Math.min(c, p.y); d = Math.max(d, p.y); }
+      fill = {x:(Math.min(b, 1) - Math.max(a, -1))/2, y:(Math.min(d, 1) - Math.max(c, -1))/2}; }
+  } finally {
+    renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false); syncCeilingFixtures(camera);
+    renderer.render(scene, camera);
+  }
+  return {width:w, height:h, dataUrl:url, fill};
+}
+
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 
 // Product API for a reversible presentation. Diagnostic getters below remain read-only.
@@ -4113,7 +4166,7 @@ window.View3D = {
       return {id:g.userData.stairId,corners:[[0,-w/2],[0,w/2],[run,w/2],[run,-w/2]].map(([x,z])=>{const v=g.localToWorld(new THREE.Vector3(x,0,z));return {x:Math.round(v.x*1000+OX),y:Math.round(v.z*1000+OY)};})};}):[],
     furniturePlan:furnG?furnG.children.map(g=>({id:g.userData.fid,x:Math.round(g.position.x*1000+OX),y:Math.round(g.position.z*1000+OY),rotationDeg:Math.round(((-g.rotation.y*180/Math.PI)%360+360)%360)})):[],
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});

@@ -24,7 +24,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`wit
  assert.match(await page.locator('#shareWhatsApp').getAttribute('href'),/^https:\/\/wa\.me\/\?text=.+medidas%20orientativas/);
  assert.match(await page.locator('#shareMail').getAttribute('href'),/^mailto:\?subject=.+&body=.+Adjunta%20la%20imagen/);
  const p=page.waitForEvent('download');await page.locator('#shareDownload').click({timeout:120000});const d=await p,bytes=await fs.readFile(await d.path());
- assert.equal(d.suggestedFilename(),'rubik-sota-vivienda.png');assert.deepEqual([...bytes.subarray(0,4)],[0x89,0x50,0x4e,0x47],'a PNG');
+ assert.equal(d.suggestedFilename(),'rubik-sota-vivienda-horizontal.png');assert.deepEqual([...bytes.subarray(0,4)],[0x89,0x50,0x4e,0x47],'a PNG');
  await page.screenshot({path:path.join(process.env.SHARE_ARTIFACTS||os.tmpdir(),`share-panel-${viewport.width}.png`)});
  await page.locator('#shareDialog .btn:has-text("Cerrar")').click();
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'the presentation goes on');
@@ -45,6 +45,6 @@ test('with file sharing (phone): the panel opens with the prepared PNG; «Compar
  await page.locator('#shareNative').tap();await page.waitForFunction(()=>window.__shared);
  const shared=await page.evaluate(()=>window.__shared);
  assert.equal(shared.activation,true,'navigator.share runs while the tap still grants user activation');
- assert.equal(shared.type,'image/png');assert.equal(shared.name,'rubik-sota-vivienda.png');assert.ok(shared.size>5000);assert.equal(shared.url,null,'no link');assert.match(shared.text,/medidas orientativas/);
+ assert.equal(shared.type,'image/png');assert.equal(shared.name,'rubik-sota-vivienda-horizontal.png');assert.ok(shared.size>5000);assert.equal(shared.url,null,'no link');assert.match(shared.text,/medidas orientativas/);
  await page.waitForFunction(()=>!document.querySelector('#shareDialog').open);assert.deepEqual(errors,[]);
 });
