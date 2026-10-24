@@ -175,9 +175,13 @@ main.is3d .scalebar{opacity:0}
 main.is3d #view3d{opacity:1;visibility:visible;transition:opacity .45s ease}
 #view3d canvas{display:block;outline:none}
 #walkOverlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(30,28,25,.35);z-index:3;cursor:pointer}
-#walkOverlay>div{background:var(--panel);border-radius:14px;padding:22px 28px;text-align:center;max-width:360px}
-#walkOverlay h3{margin:0 0 6px}
-#walkOverlay p{margin:4px 0;color:var(--muted)}
+#walkOverlay>div{background:var(--panel);border-radius:14px;padding:22px 24px;text-align:left;max-width:400px;margin:0 16px;box-shadow:0 18px 48px rgba(0,0,0,.28)}
+#walkOverlay h3{margin:0 0 8px;font-size:21px;letter-spacing:-.3px;color:var(--ink,#1f1d1a)}
+#walkOverlay p{margin:6px 0;color:var(--muted);line-height:1.45}
+#walkOverlay .walk-what{color:var(--ink,#1f1d1a);font-size:15px}
+#walkOverlay .walk-keys kbd{display:inline-block;min-width:1.6em;padding:1px 6px;border:1px solid var(--line,#d8d2c8);border-bottom-width:2px;border-radius:6px;background:#fff;font:600 12px/1.5 inherit;text-align:center;color:var(--ink,#1f1d1a)}
+#walkOverlay #walkStart{display:block;width:100%;min-height:44px;margin:14px 0 6px;font-size:15px}
+#walkOverlay .walk-note{font-size:13px}
 #cross{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:2;display:none;pointer-events:none}
 #cross:before,#cross:after{content:"";position:absolute;background:#fff;box-shadow:0 0 2px #000}
 #cross:before{left:6px;top:0;width:2px;height:14px}#cross:after{top:6px;left:0;height:2px;width:14px}
@@ -555,10 +559,12 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <g id="gSel"></g>
     </svg>
     <div id="view3d">
-      <div id="walkOverlay"><div><h3 data-en="Walk mode">漫游模式</h3>
-        <p id="wo1"></p>
-        <p id="wo2"></p>
-        <p id="wo3"></p></div></div>
+      <div id="walkOverlay"><div class="walk-card" role="group" aria-labelledby="walkTitle"><h3 id="walkTitle" data-en="Walk mode">漫游模式</h3>
+        <p id="wo1" class="walk-what"></p>
+        <p id="wo2" class="walk-keys"></p>
+        <p id="wo3" class="walk-keys"></p>
+        <button class="btn primary" id="walkStart" type="button" data-en="Start the walk">开始漫游</button>
+        <p id="wo4" class="walk-note"></p></div></div>
       <div id="cross"></div>
       <div id="joy"><i></i></div>
       <button class="btn primary" id="walkExit" data-en="Exit walk">退出漫游</button>
@@ -759,7 +765,10 @@ const ES_TEXT = {
   "Choose a project JSON file. For PDF, images or DXF, use Upload plan.": "Selecciona un proyecto JSON. Para PDF, imágenes o DXF usa Subir plano.",
   "Reset to default": "Restablecer diseño inicial",
   "Rooms · click to fly there": "Estancias · pulsa para ir a ellas",
-  "Walk mode": "Modo recorrido",
+  "Walk mode": "Recorre la vivienda",
+  "Start the walk": "Empezar el recorrido",
+  "A free visit at eye level, from the entrance. Nothing in the project changes.": "Visita libre a la altura de los ojos, desde la entrada. No cambia nada del proyecto.",
+  "To show it to a client with stops, use «Present my home».": "Para enseñarla a un cliente con paradas, usa «Presentar mi vivienda».",
   "Exit walk": "Salir del recorrido",
   "Scale": "Escala",
   "Switch 2D / 3D (T)": "Cambiar entre 2D y 3D (T)",
@@ -3821,12 +3830,15 @@ addEventListener('keyup', e => keys[e.code] = false);
 function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b => b.classList.toggle('on', b.dataset.mode === opt.mode)); }
 function syncCutBtns(){ document.querySelectorAll('[data-cut]').forEach(b => b.classList.toggle('on', +b.dataset.cut === opt.cut)); }
 function syncWalkTexts(){
+  // What the walk is, how to move with this device, how to leave; one primary action. The guided tour with stops
+  // is the presentation: named, not duplicated here.
   const t = COARSE
-    ? [tr('点击开始，从入户门进入', 'Tap to start at the front door'), tr('左下摇杆移动 · 在画面上拖动转向', 'Joystick moves · drag on screen to look'),
+    ? [tr('自由漫游，视线高度，从入户门开始。不会改变项目。', 'A free visit at eye level, from the entrance. Nothing in the project changes.'), tr('左下摇杆移动 · 在画面上拖动转向', 'Joystick moves · drag on screen to look'),
        tr('点门开关 · 点「退出漫游」回到鸟瞰', 'Tap a door to open or close it · "Exit walk" returns to orbit')]
-    : [tr('点击开始，从入户门进入', 'Click to start at the front door'),
+    : [tr('自由漫游，视线高度，从入户门开始。不会改变项目。', 'A free visit at eye level, from the entrance. Nothing in the project changes.'),
        tr('<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> 移动 · 鼠标转向 · <kbd>Shift</kbd> 快走', '<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move · mouse looks · <kbd>Shift</kbd> runs'),
        tr('<kbd>E</kbd> 开关正前方的门 · <kbd>Esc</kbd> 暂停', '<kbd>E</kbd> opens or closes the door ahead · <kbd>Esc</kbd> pauses')];
+  t.push(tr('向客户分站展示，请用「展示我的住宅」。', 'To show it to a client with stops, use «Present my home».'));
   t.forEach((h, i) => SafeDOM.markup($('#wo' + (i + 1)), h));
   syncHint3d();
 }
@@ -3834,6 +3846,7 @@ function bindUI(){
   document.querySelectorAll('#modes3d .btn').forEach(b => b.onclick = () => setMode(b.dataset.mode));
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
   $('#walkOverlay').onclick = () => COARSE ? startTouchWalk() : walkCtl.lock();
+  $('#walkStart').onclick = e => { e.stopPropagation(); COARSE ? startTouchWalk() : walkCtl.lock(); };
   document.addEventListener('pointerlockerror', () => { if (active && opt.mode === 'walk') startTouchWalk(); });
   $('#walkExit').onclick = () => setMode('orbit');
   bindJoystick();

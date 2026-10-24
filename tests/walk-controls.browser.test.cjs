@@ -135,3 +135,30 @@ test('phone: joystick, drag to look, tap a door, «Salir del recorrido» 390x844
  assert.ok(record(vp,'«Salir del recorrido»','vuelve a la vista aérea y oculta el joystick',JSON.stringify({mode:out.mode,joy:await page.locator('#joy').isVisible()}),out.mode==='orbit'&&!(await page.locator('#joy').isVisible()),await shot('exit')));
  assert.deepEqual(errors,[]);
 });
+
+// The entry panel says what the walk is, how to move on this device and how it differs from the presentation; one
+// primary action; readable contrast. When the browser refuses the pointer (pointerlockerror), the walk falls back to
+// the stick and drag, which work with a mouse, and W still moves.
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`entry panel and pointer refusal ${viewport.width}x${viewport.height}`,{timeout:600000,skip},async t=>{
+ const vp=`${viewport.width}x${viewport.height}`,{page,errors,where,hold,tap,shot,mobile}=await open(t,viewport);
+ await tap('[data-mode="walk"]');await page.waitForTimeout(300);
+ const panel=await page.evaluate(()=>{const o=document.querySelector('#walkOverlay'),card=o.querySelector('.walk-card'),r=card.getBoundingClientRect();
+  const lum=c=>{const v=c.match(/\d+(\.\d+)?/g).slice(0,3).map(Number).map(x=>{x/=255;return x<=.03928?x/12.92:((x+.055)/1.055)**2.4;});return .2126*v[0]+.7152*v[1]+.0722*v[2];};
+  const ratio=(a,b)=>{const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return +((x+.05)/(y+.05)).toFixed(2);};const bg=getComputedStyle(card).backgroundColor;
+  return {title:o.querySelector('h3').textContent,what:o.querySelector('#wo1').textContent,keys:o.querySelector('#wo2').textContent+' | '+o.querySelector('#wo3').textContent,note:o.querySelector('#wo4').textContent,
+   primary:[...o.querySelectorAll('button')].filter(b=>b.offsetParent).map(b=>b.textContent),inView:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,
+   contrast:{title:ratio(getComputedStyle(o.querySelector('h3')).color,bg),body:ratio(getComputedStyle(o.querySelector('#wo2')).color,bg),note:ratio(getComputedStyle(o.querySelector('#wo4')).color,bg)}};});
+ const ok=panel.title==='Recorre la vivienda'&&/Visita libre/.test(panel.what)&&/Presentar mi vivienda/.test(panel.note)&&panel.primary.length===1&&panel.primary[0]==='Empezar el recorrido'&&panel.inView&&Math.min(...Object.values(panel.contrast))>=4.5;
+ assert.ok(record(vp,'Panel de entrada','dice qué es, cómo moverse aquí y cómo enseñarla con paradas; un botón; contraste ≥ 4,5:1; cabe en pantalla',JSON.stringify(panel),ok,await shot('entry-panel')),JSON.stringify(panel));
+ if(!mobile){
+  await page.locator('#walkStart').click();await page.waitForTimeout(300);
+  assert.ok(record(vp,'Botón «Empezar el recorrido»','captura el ratón',JSON.stringify({locked:(await where()).locked}),(await where()).locked));
+  await page.keyboard.press('Escape');await page.waitForTimeout(300);
+  // The browser refuses the pointer: the stick and drag appear, and W moves.
+  await page.evaluate(()=>{Element.prototype.requestPointerLock=function(){setTimeout(()=>document.dispatchEvent(new Event('pointerlockerror')),0);};});
+  await page.locator('#walkStart').click();await page.waitForTimeout(400);const a=await where();await hold(['KeyW'],900);const b=await where();
+  const joy=await page.locator('#joy').isVisible();
+  assert.ok(record(vp,'Captura del ratón rechazada','pasa a joystick y arrastrar; W sigue moviendo',JSON.stringify({joy,moved:Math.round(dist(a.p,b.p))}),joy&&dist(a.p,b.p)>80,await shot('lock-refused')));
+ }
+ assert.deepEqual(errors,[]);
+});
