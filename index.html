@@ -182,6 +182,8 @@ main.is3d #view3d{opacity:1;visibility:visible;transition:opacity .45s ease}
 #walkOverlay .walk-keys kbd{display:inline-block;min-width:1.6em;padding:1px 6px;border:1px solid var(--line,#d8d2c8);border-bottom-width:2px;border-radius:6px;background:#fff;font:600 12px/1.5 inherit;text-align:center;color:var(--ink,#1f1d1a)}
 #walkOverlay #walkStart{display:block;width:100%;min-height:44px;margin:14px 0 6px;font-size:15px}
 #walkOverlay .walk-note{font-size:13px}
+/* When the scene is shorter than the card, keep what is needed to act: title, controls of this device, the button. */
+#walkOverlay.tight .walk-what,#walkOverlay.tight .walk-note{display:none}
 @media (max-height:520px){#walkOverlay{align-items:safe center;overflow:auto;padding:8px 0}#walkOverlay>div{display:grid;grid-template-columns:1fr 170px;column-gap:16px;max-width:600px;padding:12px 16px;align-items:center}#walkOverlay>div>*{grid-column:1}#walkOverlay h3{font-size:17px;margin:0 0 2px}#walkOverlay p{margin:2px 0;font-size:13px;line-height:1.35}#walkOverlay .walk-what{font-size:13px}#walkOverlay #walkStart,#walkOverlay .walk-note{grid-column:2;grid-row:1/span 2}#walkOverlay .walk-note{grid-row:3/span 2;font-size:12px}#walkOverlay #walkStart{margin:0}}
 #cross{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:2;display:none;pointer-events:none}
 #cross:before,#cross:after{content:"";position:absolute;background:#fff;box-shadow:0 0 2px #000}
@@ -739,6 +741,8 @@ const ES_TEXT = {
   "Drop it on the floor": "Suéltalo sobre el suelo",
   "floor-plan-design": "rubik-sota-floor-plan",
   "Tap or drag from the library · 1 finger pans · pinch zooms · bottom bar rotates / duplicates / deletes": "Pulsa o arrastra desde la biblioteca · un dedo desplaza · pellizca para ampliar · la barra inferior permite girar, duplicar y eliminar",
+  "Free walk · \"Exit walk\" returns to the aerial view": "Recorrido libre · «Salir del recorrido» vuelve a la vista aérea",
+  "Free walk · \"Aerial view\" returns to the overview": "Recorrido libre · «Vista aérea» vuelve a la vista general",
   "1 finger orbits · 2 fingers zoom / pan · tap furniture or floor to edit · tap doors to open": "Un dedo gira la vista · dos dedos amplían o desplazan · pulsa un mueble o el suelo para editar · pulsa las puertas para abrirlas",
   "Drag furniture onto the plan · scroll to zoom · drag empty space to pan · T for 3D": "Arrastra muebles al plano · usa la rueda para ampliar · arrastra el espacio vacío para desplazar · T para ver en 3D",
   "3D stays in sync with the plan · panel edits apply instantly · T for 2D": "La vista 3D se sincroniza con el plano · los cambios del panel se aplican al instante · T para volver a 2D",
@@ -2083,7 +2087,10 @@ function toast(msg,duration=1800){ const t = $('#toast'); t.textContent = msg; t
 /* ======================= 2D / 3D 切换 ======================= */
 let viewMode = '2d', switching = false;
 const is3D = () => viewMode === '3d';
-const TIPS = () => COARSE
+// In the walk the footer says how to leave on this device; the controls are in the hint above the scene.
+const WALK_TIP = () => COARSE ? tr('自由漫游 · 「退出漫游」回到鸟瞰', 'Free walk · "Exit walk" returns to the aerial view') : tr('自由漫游 · 点「鸟瞰」回到总览', 'Free walk · "Aerial view" returns to the overview');
+const TIPS = () => window.View3D?.walking?.() ? {'2d':TIPS_BASE()['2d'],'3d':WALK_TIP()} : TIPS_BASE();
+const TIPS_BASE = () => COARSE
   ? {'2d':tr('点或拖动家具库添加 · 单指拖动平移 · 双指缩放 · 选中家具后底部工具条可旋转 / 复制 / 删除', 'Tap or drag from the library · 1 finger pans · pinch zooms · bottom bar rotates / duplicates / deletes'),
      '3d':tr('单指旋转 · 双指缩放 / 平移 · 点家具或地面编辑 · 点门开关', '1 finger orbits · 2 fingers zoom / pan · tap furniture or floor to edit · tap doors to open')}
   : {'2d':tr('拖动左侧家具到平面图 · 滚轮缩放 · 拖动空白处平移 · T 切换 3D', 'Drag furniture onto the plan · scroll to zoom · drag empty space to pan · T for 3D'),
@@ -3781,7 +3788,7 @@ const HINT_ORBIT = () => COARSE ? tr('单指旋转 · 双指缩放 / 平移 · �
   : tr('左键旋转 · 右键平移 · 滚轮缩放 · 选中家具后拖动可摆放 · 点击门开关', 'Left-drag orbits · right-drag pans · scroll zooms · select furniture to drag it · click doors to open');
 const HINT_TOUCHWALK = () => tr('左下摇杆移动 · 拖动画面转向 · 点门开关', 'Joystick moves · drag to look · tap a door to open or close it');
 const HINT_WALK = () => tr('WASD 移动 · 鼠标转向 · Shift 快走 · E 开关门 · Esc 暂停', 'WASD moves · mouse looks · Shift runs · E opens or closes a door · Esc pauses');
-function syncHint3d(){ $('#hint3d').textContent = opt.mode === 'orbit' ? HINT_ORBIT() : touchWalk || COARSE ? HINT_TOUCHWALK() : HINT_WALK(); }
+function syncHint3d(){ if (viewMode === '3d') $('#tip').textContent = TIPS()['3d']; $('#hint3d').textContent = opt.mode === 'orbit' ? HINT_ORBIT() : touchWalk || COARSE ? HINT_TOUCHWALK() : HINT_WALK(); }
 let touchWalk = false;
 const joy = {x:0, y:0, id:null}, eul = new THREE.Euler(0, 0, 0, 'YXZ');
 function lookBy(dx, dy){
@@ -3895,6 +3902,9 @@ addEventListener('keyup', e => keys[e.code] = false);
 /* ======================= 工具栏 ======================= */
 function syncModeBtns(){ document.querySelectorAll('#modes3d .btn').forEach(b => b.classList.toggle('on', b.dataset.mode === opt.mode)); }
 function syncCutBtns(){ document.querySelectorAll('[data-cut]').forEach(b => b.classList.toggle('on', +b.dataset.cut === opt.cut)); }
+// The entry card must fit the scene it covers (a short laptop window leaves little room under the toolbars).
+function fitWalkCard(){ const o = $('#walkOverlay'), card = o.querySelector('.walk-card'); if (!o.offsetHeight) return; o.classList.remove('tight'); if (card.offsetHeight > o.clientHeight - 8) o.classList.add('tight'); }
+new ResizeObserver(fitWalkCard).observe($('#walkOverlay'));
 function syncWalkTexts(){
   // What the walk is, how to move with this device, how to leave; one primary action. The guided tour with stops
   // is the presentation: named, not duplicated here.

@@ -14,8 +14,8 @@ const skip=!process.env.THREE_LOCAL_DIR&&'THREE_LOCAL_DIR not set: the walk need
 const contract=require('../docs/contracts/examples/floorplan-project-v1.example.json');
 const record=(vp,control,expected,observed,pass,shot)=>{matrix.push({viewport:vp,control,expected,observed,result:pass?'PASS':'FAIL',shot});return pass;};
 
-async function open(t,viewport,project){
- const mobile=viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
+async function open(t,viewport,project,input){
+ const mobile=input?input==='touch':viewport.width<1000,context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
  await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
@@ -41,7 +41,7 @@ async function open(t,viewport,project){
   if(Math.abs(e)>.08){await page.evaluate(px=>{for(let k=0;k<4;k++)document.dispatchEvent(new MouseEvent('mousemove',{movementX:px/4,movementY:0}));},e/0.002);await page.waitForTimeout(150);continue;}
   await hold(['KeyW'],Math.min(1200,d*1.2));}};
  const go=async target=>{for(let n=0;n<10&&dist((await where()).p,target)>200;n++){await turnTo(target);const a=await where();await hold(['KeyW'],Math.min(900,dist(a.p,target)*1.4));if(dist((await where()).p,a.p)<10)break;}};
- const shot=async name=>{const f=path.join(OUT,`${viewport.width}x${viewport.height}-${name}.png`);await page.screenshot({path:f});return path.basename(f);};
+ const shot=async name=>{const f=path.join(OUT,`${viewport.width}x${viewport.height}${input?'-'+input:''}-${name}.png`);await page.screenshot({path:f});return path.basename(f);};
  return {page,errors,mobile,tap,where,hold,turnTo,shot,go,route};
 }
 const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
@@ -160,5 +160,29 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   const joy=await page.locator('#joy').isVisible();
   assert.ok(record(vp,'Captura del ratón rechazada','pasa a joystick y arrastrar; W sigue moviendo',JSON.stringify({joy,moved:Math.round(dist(a.p,b.p))}),joy&&dist(a.p,b.p)>80,await shot('lock-refused')));
  }
+ assert.deepEqual(errors,[]);
+});
+
+// The same landscape phone-sized screen with two inputs: a mouse and keyboard (a small laptop window) and a touch
+// screen. Every walk text visible there (panel, hint above the scene, footer) must describe only what works with
+// that input, and the first instruction is then carried out.
+for(const input of ['mouse','touch'])test(`844x390 with ${input}: only instructions that work with that input`,{timeout:600000,skip},async t=>{
+ const vp=`844x390 ${input}`,{page,errors,where,hold,tap,shot}=await open(t,{width:844,height:390},null,input);
+ await tap('[data-mode="walk"]');await page.waitForTimeout(300);
+ const texts=await page.evaluate(()=>({panel:document.querySelector('#wo2').textContent+' | '+document.querySelector('#wo3').textContent,hint:document.querySelector('#hint3d').textContent,tip:document.querySelector('#tip').textContent}));
+ // Everything the card shows is inside the scene and on screen: no instruction is cut off.
+ const fit=await page.evaluate(()=>{const o=document.querySelector('#walkOverlay').getBoundingClientRect();return [...document.querySelectorAll('#walkOverlay .walk-card>*')].filter(e=>e.offsetParent).map(e=>{const r=e.getBoundingClientRect();return {id:e.id,inside:r.top>=o.top-1&&r.bottom<=o.bottom+1&&r.bottom<=innerHeight};});});
+ texts.cut=fit.filter(f=>!f.inside).map(f=>f.id);texts.shown=fit.map(f=>f.id);
+ const all=[texts.panel,texts.hint,texts.tip].join(' | '),keyboard=/WASD|W A S D|ratón|Mayús|Shift|\bE\b|Esc/,touch=/joystick|arrastra|Toca|toca|dedo|Salir del recorrido/,orbitOnly=/mueble|suelo para editar|dos dedos/;
+ const textsOk=!texts.cut.length&&texts.shown.includes('walkStart')&&texts.shown.includes('wo2')&&(input==='mouse'?keyboard.test(texts.panel)&&keyboard.test(texts.hint)&&!touch.test(all)&&!orbitOnly.test(all):touch.test(texts.panel)&&touch.test(texts.hint)&&!keyboard.test(all)&&!orbitOnly.test(all));
+ assert.ok(record(vp,'Textos del recorrido',input==='mouse'?'solo teclado y ratón (panel, ayuda superior y pie); nada recortado':'solo joystick, arrastre y toque (panel, ayuda superior y pie); nada recortado',JSON.stringify(texts),textsOk,await shot('texts')),JSON.stringify(texts));
+ const a=await where();
+ if(input==='mouse'){await page.locator('#walkOverlay').click();const locked=(await where()).locked;await hold(['KeyW'],900);const b=await where();
+  const moved=along(a.p,b.p,a.fwd);await page.keyboard.press('Escape');await page.waitForTimeout(400);const paused=await page.locator('#walkOverlay').isVisible();
+  assert.ok(record(vp,'Clic, W y Esc','captura el ratón, W avanza y Esc pausa',JSON.stringify({locked,moved:Math.round(moved),paused}),locked&&moved>80&&paused,await shot('works')));}
+ else{await tap('#walkOverlay');await page.waitForTimeout(300);const joy=await page.locator('#joy').boundingBox();const jx=joy.x+joy.width/2,jy=joy.y+joy.height/2;
+  await page.mouse.move(jx,jy);await page.mouse.down();await page.mouse.move(jx,jy-50,{steps:4});await page.waitForTimeout(900);await page.mouse.up();await page.waitForTimeout(150);
+  const b=await where(),moved=dist(a.p,b.p),exit=await page.locator('#walkExit').isVisible();
+  assert.ok(record(vp,'Tocar, joystick y «Salir del recorrido» visible','el joystick mueve y la salida está a la vista',JSON.stringify({moved:Math.round(moved),exit}),moved>80&&exit,await shot('works')));}
  assert.deepEqual(errors,[]);
 });
