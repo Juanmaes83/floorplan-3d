@@ -718,14 +718,14 @@ const ES_TEXT = {
   "Whole home": "Toda la vivienda",
   "1 finger orbits · 2 fingers zoom / pan · select furniture to drag it · tap doors to open": "Un dedo gira la vista · dos dedos amplían o desplazan · selecciona un mueble y arrástralo · pulsa las puertas para abrirlas",
   "Left-drag orbits · right-drag pans · scroll zooms · select furniture to drag it · click doors to open": "Arrastra con el botón izquierdo para girar y con el derecho para desplazar · la rueda amplía · selecciona y arrastra muebles · pulsa las puertas para abrirlas",
-  "Joystick moves · drag to look · tap doors to open": "El joystick permite moverse · arrastra para mirar alrededor · pulsa las puertas para abrirlas",
-  "WASD moves · mouse looks · Shift runs · E opens doors · Esc pauses": "WASD para moverse · ratón para mirar · Mayús para correr · E para abrir puertas · Esc para pausar",
+  "Joystick moves · drag to look · tap a door to open or close it": "El joystick permite moverse · arrastra para mirar alrededor · toca una puerta para abrirla o cerrarla",
+  "WASD moves · mouse looks · Shift runs · E opens or closes a door · Esc pauses": "WASD para moverse · ratón para mirar · Mayús para correr · E abre o cierra una puerta · Esc para pausar",
   "Tap to start at the front door": "Pulsa para empezar desde la puerta principal",
   "Joystick moves · drag on screen to look": "Usa el joystick para moverte y arrastra la pantalla para mirar",
-  "Tap doors to open · \"Exit walk\" returns to orbit": "Pulsa las puertas para abrirlas · «Salir del recorrido» vuelve a la vista aérea",
+  "Tap a door to open or close it · \"Exit walk\" returns to orbit": "Toca una puerta para abrirla o cerrarla · «Salir del recorrido» vuelve a la vista aérea",
   "Click to start at the front door": "Pulsa para empezar desde la puerta principal",
   "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move · mouse looks · <kbd>Shift</kbd> runs": "<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> moverse · ratón mirar · <kbd>Mayús</kbd> correr",
-  "<kbd>E</kbd> opens the door ahead · <kbd>Esc</kbd> pauses": "<kbd>E</kbd> abre la puerta de delante · <kbd>Esc</kbd> pausa",
+  "<kbd>E</kbd> opens or closes the door ahead · <kbd>Esc</kbd> pauses": "<kbd>E</kbd> abre o cierra la puerta de delante · <kbd>Esc</kbd> pausa",
   "◧ Library": "◧ Crear y amueblar",
   "Properties ◨": "Propiedades ◨",
   "3BR 2LR 2BA · Interior Design": "3 dormitorios · 2 salones · 2 baños",
@@ -3704,8 +3704,8 @@ function updateSel(){
 // 触屏漫游：左下虚拟摇杆移动，在画面上拖动转向（iPad 不支持鼠标指针锁定）
 const HINT_ORBIT = () => COARSE ? tr('单指旋转 · 双指缩放 / 平移 · 点选家具后可拖动摆放 · 点门开关', '1 finger orbits · 2 fingers zoom / pan · select furniture to drag it · tap doors to open')
   : tr('左键旋转 · 右键平移 · 滚轮缩放 · 选中家具后拖动可摆放 · 点击门开关', 'Left-drag orbits · right-drag pans · scroll zooms · select furniture to drag it · click doors to open');
-const HINT_TOUCHWALK = () => tr('左下摇杆移动 · 拖动画面转向 · 点门开关', 'Joystick moves · drag to look · tap doors to open');
-const HINT_WALK = () => tr('WASD 移动 · 鼠标转向 · Shift 快走 · E 开关门 · Esc 暂停', 'WASD moves · mouse looks · Shift runs · E opens doors · Esc pauses');
+const HINT_TOUCHWALK = () => tr('左下摇杆移动 · 拖动画面转向 · 点门开关', 'Joystick moves · drag to look · tap a door to open or close it');
+const HINT_WALK = () => tr('WASD 移动 · 鼠标转向 · Shift 快走 · E 开关门 · Esc 暂停', 'WASD moves · mouse looks · Shift runs · E opens or closes a door · Esc pauses');
 function syncHint3d(){ $('#hint3d').textContent = opt.mode === 'orbit' ? HINT_ORBIT() : touchWalk ? HINT_TOUCHWALK() : HINT_WALK(); }
 let touchWalk = false;
 const joy = {x:0, y:0, id:null}, eul = new THREE.Euler(0, 0, 0, 'YXZ');
@@ -3810,10 +3810,10 @@ function syncCutBtns(){ document.querySelectorAll('[data-cut]').forEach(b => b.c
 function syncWalkTexts(){
   const t = COARSE
     ? [tr('点击开始，从入户门进入', 'Tap to start at the front door'), tr('左下摇杆移动 · 在画面上拖动转向', 'Joystick moves · drag on screen to look'),
-       tr('点门开关 · 点「退出漫游」回到鸟瞰', 'Tap doors to open · "Exit walk" returns to orbit')]
+       tr('点门开关 · 点「退出漫游」回到鸟瞰', 'Tap a door to open or close it · "Exit walk" returns to orbit')]
     : [tr('点击开始，从入户门进入', 'Click to start at the front door'),
        tr('<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> 移动 · 鼠标转向 · <kbd>Shift</kbd> 快走', '<kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> move · mouse looks · <kbd>Shift</kbd> runs'),
-       tr('<kbd>E</kbd> 开关正前方的门 · <kbd>Esc</kbd> 暂停', '<kbd>E</kbd> opens the door ahead · <kbd>Esc</kbd> pauses')];
+       tr('<kbd>E</kbd> 开关正前方的门 · <kbd>Esc</kbd> 暂停', '<kbd>E</kbd> opens or closes the door ahead · <kbd>Esc</kbd> pauses')];
   t.forEach((h, i) => SafeDOM.markup($('#wo' + (i + 1)), h));
   syncHint3d();
 }

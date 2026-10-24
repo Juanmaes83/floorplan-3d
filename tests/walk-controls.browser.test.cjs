@@ -31,6 +31,8 @@ async function open(t,viewport,project){
  const hold=async(keys,ms)=>{for(const k of keys)await page.keyboard.down(k);await page.waitForTimeout(ms);for(const k of [...keys].reverse())await page.keyboard.up(k);await page.waitForTimeout(120);};
  // Turning (desktop): the event the mouse sends under Pointer Lock (see walk.browser.test.cjs for why it is dispatched).
  const turnTo=async target=>{for(let n=0;n<12;n++){const w=await where(),want=Math.atan2(target[1]-w.p[1],target[0]-w.p[0]),have=Math.atan2(w.fwd[1],w.fwd[0]);let e=want-have;while(e>Math.PI)e-=2*Math.PI;while(e<-Math.PI)e+=2*Math.PI;if(Math.abs(e)<.05)return;
+  // A drag of a few pixels is a tap (it would toggle a door under the finger): small corrections are left as they are.
+  if(mobile&&Math.abs(e/0.005)<20)return;
   if(mobile){const r=await page.locator('canvas').first().boundingBox();const x=r.x+r.width*.7,y=r.y+r.height*.4;await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x-e/0.005,y,{steps:6});await page.mouse.up();}
   else await page.evaluate(px=>document.dispatchEvent(new MouseEvent('mousemove',{movementX:px,movementY:0})),e/0.002);await page.waitForTimeout(150);}};
  const go=async target=>{for(let n=0;n<10&&dist((await where()).p,target)>200;n++){await turnTo(target);const a=await where();await hold(['KeyW'],Math.min(900,dist(a.p,target)*1.4));if(dist((await where()).p,a.p)<10)break;}};
@@ -120,8 +122,10 @@ test('phone: joystick, drag to look, tap a door, «Salir del recorrido» 390x844
  const tapDoor=async()=>{await turnTo(await leaf());const c=await page.locator('canvas').first().boundingBox();const s0=await page.screenshot();await page.touchscreen.tap(c.x+c.width/2,c.y+c.height*.45);await page.waitForTimeout(1200);return Buffer.compare(s0,await page.screenshot())!==0;};
  const closedChanged=await tapDoor();for(let n=0;n<8&&dist((await where()).p,front)>200;n++){await turnTo(front);await push(0,-50,500);}await turnTo([4850,1700]);const c0=await where();await push(0,-50,1200);const c1=await where();
  assert.ok(record(vp,'Tocar la puerta (cerrar)','la cierra (la imagen cambia) y no se puede pasar',JSON.stringify({open:await state(),changed:closedChanged,room:c1.room}),await state()===false&&closedChanged&&c1.room!=='Baño',await shot('tap-door-close')));
- const openChanged=await tapDoor();for(const w of [[4850,1700]])for(let n=0;n<8&&dist((await where()).p,w)>200;n++){await turnTo(w);await push(0,-50,600);}const inBath=await where();
- assert.ok(record(vp,'Tocar la puerta (abrir)','la abre (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),changed:openChanged,room:inBath.room}),await state()===true&&openChanged&&inBath.room==='Baño',await shot('tap-door-open')));
+ // Into the room: the stick is tilted towards the target relative to the view (forward = up, right = right).
+ const stickTo=async(w,ms)=>{const a=await where(),rel=Math.atan2(w[1]-a.p[1],w[0]-a.p[0])-Math.atan2(a.fwd[1],a.fwd[0]);await push(Math.sin(rel)*50,-Math.cos(rel)*50,ms);};
+ const openChanged=await tapDoor();for(let n=0;n<14&&dist((await where()).p,[4850,1600])>200;n++)await stickTo([4850,1600],500);const inBath=await where();
+ assert.ok(record(vp,'Tocar la puerta (abrir)','la abre (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),changed:openChanged,room:inBath.room,at:inBath.p.map(Math.round),aim:await page.evaluate(()=>View3D.walkAim)}),await state()===true&&openChanged&&inBath.room==='Baño',await shot('tap-door-open')));
  await tap('#walkExit');await page.waitForTimeout(800);const out=await where();
  assert.ok(record(vp,'«Salir del recorrido»','vuelve a la vista aérea y oculta el joystick',JSON.stringify({mode:out.mode,joy:await page.locator('#joy').isVisible()}),out.mode==='orbit'&&!(await page.locator('#joy').isVisible()),await shot('exit')));
  assert.deepEqual(errors,[]);
