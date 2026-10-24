@@ -3663,7 +3663,8 @@ function pick(e){
   const hits = ray.intersectObjects([...(opt.furn ? [furnG] : []), archUp, archFloor], true);
   for (const h of hits){
     let o = h.object;
-    if (o.material === glassMat) continue;
+    // Glass, and outlines (edges are lines: a ray «hits» a line within 1 m), never stop a pick: only surfaces do.
+    if (o.material === glassMat || o.isLine || o.isPoints) continue;
     if (o.userData.door) return {door:o.userData.door, dist:h.distance};
     if (o.userData.room) return {room:o.userData.room};
     while (o && !o.userData.fid && o !== scene) o = o.parent;
@@ -3742,7 +3743,7 @@ function setMode(m){
     window.select(null);
     if (topHeight() < H){ opt.cut = 2.8; syncCutBtns(); sync(); }
     orbit.enabled = false; fly = null;
-    const entrance=geometry.doors.find(d=>d.entry)||geometry.doors[0];const h=entrance?.h||[geometry.center.x,geometry.center.y];camera.position.set(wx(h[0]),1.6,wz(h[1]));camera.lookAt(0,1.5,0);   // 入户门外
+    const start=walkStart();camera.position.set(wx(start.at[0]),1.6,wz(start.at[1]));camera.lookAt(wx(start.look[0]),1.6,wz(start.look[1]));
     $('#walkOverlay').style.display = 'flex';
     syncHint3d();
   } else {
@@ -3753,6 +3754,21 @@ function setMode(m){
   }
   showLabels(opt.labels && m === 'orbit');
   archUp.traverse(o => { if (o.userData.walkOnly) o.visible = m === 'walk'; });
+}
+// Where the walk starts: just inside the entrance (or another door), on the free side of the threshold, looking into
+// the home. The hinge itself sits inside the next wall's collision box, so starting there froze every step. A point
+// is valid only when it lies inside a room and clear of walls and door leaves; otherwise the largest rooms are searched.
+function walkStart(){
+  const inside=(p,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if((a[1]>p[1])!==(b[1]>p[1])&&p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+  const free=p=>geometry.rooms.some(r=>inside(p,r.poly))&&!blocked(wx(p[0]),wz(p[1]),.3);
+  const doors=[...geometry.doors.filter(d=>d.entry),...geometry.doors.filter(d=>!d.entry)];
+  // A door: hinge h, closed leaf along the wall (c), open leaf across it (o). The threshold is the middle of the leaf.
+  for(const d of doors){const m=[d.h[0]+d.c[0]*d.len/2,d.h[1]+d.c[1]*d.len/2];
+    for(const k of [700,900,1200,500])for(const side of [1,-1]){const at=[m[0]+d.o[0]*k*side,m[1]+d.o[1]*k*side];if(free(at))return {at,look:[at[0]+d.o[0]*side*1000,at[1]+d.o[1]*side*1000]};}}
+  const area=P=>Math.abs(P.reduce((s,p,i)=>{const q=P[(i+1)%P.length];return s+p[0]*q[1]-q[0]*p[1];},0)/2);
+  for(const r of [...geometry.rooms].sort((a,b)=>area(b.poly)-area(a.poly))){const c=[r.poly.reduce((s,p)=>s+p[0],0)/r.poly.length,r.poly.reduce((s,p)=>s+p[1],0)/r.poly.length];
+    for(let k=0;k<=8;k++)for(let i=-k;i<=k;i++)for(const j of [-k,k]){for(const at of [[c[0]+i*250,c[1]+j*250],[c[0]+j*250,c[1]+i*250]])if(free(at))return {at,look:[geometry.center.x,geometry.center.y]};}}
+  return {at:[geometry.center.x,geometry.center.y],look:[geometry.center.x+1000,geometry.center.y]};
 }
 function blocked(x, z, r = .22){
   for(const w of colliders){const c=Math.cos(w.angle),s=Math.sin(w.angle),dx=x-w.x,dz=z-w.z;
@@ -3783,6 +3799,8 @@ addEventListener('keydown', e => {
   if (!active || e.target.matches('input,select,textarea')) return;
   keys[e.code] = true;
   if (opt.mode === 'walk' && e.code === 'KeyE'){ const h = pick(); if (h?.door && h.dist < 2.5) h.door.open = !h.door.open; }
+  // Esc pauses the walk. Browsers release the pointer on Esc themselves; if the key reaches the page, release it too.
+  if (opt.mode === 'walk' && e.code === 'Escape' && walkCtl.isLocked) walkCtl.unlock();
 });
 addEventListener('keyup', e => keys[e.code] = false);
 
@@ -3832,11 +3850,13 @@ function syncCeilingFixtures(cam){if(!presentationLamps||!lampG)return;const sho
 function loop(){
   raf = requestAnimationFrame(loop);
   if (glLost()) return;
-  const dt = Math.min(clock.getDelta(), .05), now = performance.now();
+  const raw = clock.getDelta(), dt = Math.min(raw, .05), now = performance.now();
   if (anim){ const t = clamp01((now - anim.t0)/anim.dur); anim.fn(t); if (t >= 1){ const r = anim.res; anim = null; r(); } }
   else if (fly){ const t = clamp01((now - fly.t0)/fly.dur); camTween(fly.A, fly.B, ease(t)); if (t >= 1){const done=fly.res;fly=null;done?.(true);} }
   else if (opt.mode === 'orbit') orbit.update();
-  else stepWalk(dt);
+  // The walk uses the real elapsed time (up to 0.25 s) in 50 ms sub-steps: on a slow device (a few frames per second)
+  // the person still moves at walking speed, and each sub-step is checked against the walls.
+  else for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05));
   doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, dt*6); d.pivot.rotation.y = d.cur; });
   updateSel();
   syncCeilingFixtures(camera);
@@ -4109,7 +4129,11 @@ window.View3D = {
       return {id:g.userData.stairId,corners:[[0,-w/2],[0,w/2],[run,w/2],[run,-w/2]].map(([x,z])=>{const v=g.localToWorld(new THREE.Vector3(x,0,z));return {x:Math.round(v.x*1000+OX),y:Math.round(v.z*1000+OY)};})};}):[],
     furniturePlan:furnG?furnG.children.map(g=>({id:g.userData.fid,x:Math.round(g.position.x*1000+OX),y:Math.round(g.position.z*1000+OY),rotationDeg:Math.round(((-g.rotation.y*180/Math.PI)%360+360)%360)})):[],
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk'};
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',
+  // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
+  // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
+  get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
+  get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
