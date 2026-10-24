@@ -95,12 +95,21 @@ test('trying the example again reuses it or keeps the changed one apart 1440x900
 });
 // Finding 17 (24-10-2026): in the guided mode «Archivo» is hidden; delivering (sheet, client observations, image) is
 // offered in «Tareas y ayuda» and opens there without leaving the guide.
-for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`delivery is reachable from the guide ${viewport.width}x${viewport.height}`,async t=>{
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test(`delivery is reachable from the guide ${viewport.width}x${viewport.height}`,async t=>{
  const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');await page.waitForTimeout(500);
  assert.equal(await page.evaluate(()=>document.body.classList.contains('guided')),true,'guided mode');
  assert.equal(await page.locator('details:has(#openSheet) > summary').isVisible(),false,'«Archivo» is hidden here (the finding)');
  await click(page,'#guideDetails');await page.locator('#guideDeliverSheet').waitFor({state:'visible'});
- assert.equal(await page.locator('#guideDeliverImage').isVisible(),true,'image export offered');
+ // One action, one button: the example lists the «Guarda tu proyecto» and «Exporta una imagen» tasks, so their
+ // general duplicates («Guardar ahora», «Exportar imagen») are not shown again.
+ const dup=await page.evaluate(()=>{const d=document.querySelector('#guideDialog[open], dialog[open]');const tasks=[...d.querySelectorAll('[data-task]')].map(e=>e.dataset.task);
+  return {tasks,saveNow:!!d.querySelector('#guideSaveNow'),image:!!d.querySelector('#guideDeliverImage'),labels:[...d.querySelectorAll('button')].map(b=>b.textContent.trim())};});
+ assert.ok(dup.tasks.includes('save')&&dup.tasks.includes('export'),JSON.stringify(dup.tasks));
+ assert.equal(dup.saveNow,false,'«Guardar ahora» not repeated');assert.equal(dup.image,false,'«Exportar imagen» not repeated');
+ assert.equal(dup.labels.filter(l=>/^Generar PNG$|^Exportar imagen$/.test(l)).length,1,JSON.stringify(dup.labels));
+ // The long dialog scrolls under a fixed heading: «Cerrar» stays reachable at the end of the list.
+ const end=await page.evaluate(()=>{const d=document.querySelector('#guideDialog');d.scrollTop=d.scrollHeight;const r=d.getBoundingClientRect(),c=document.querySelector('#guideDialogClose').getBoundingClientRect();return {scrolls:d.scrollHeight>d.clientHeight,closeInView:c.top>=r.top-1&&c.bottom<=r.bottom+1,hit:document.elementFromPoint(c.left+c.width/2,c.top+c.height/2)?.id};});
+ assert.ok(end.closeInView&&end.hit==='guideDialogClose',`«Cerrar» reachable after scrolling ${JSON.stringify(end)}`);
  await click(page,'#guideDeliverSheet');await page.locator('#sheetDialog[open]').waitFor();
  assert.equal(await page.evaluate(()=>document.body.classList.contains('guided')),true,'the guide stays');
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#sheetDialog').open);
