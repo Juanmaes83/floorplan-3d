@@ -35,9 +35,14 @@ async function open(t,viewport,project){
   if(mobile&&Math.abs(e/0.005)<20)return;
   if(mobile){const r=await page.locator('canvas').first().boundingBox();const x=r.x+r.width*.7,y=r.y+r.height*.4;await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x-e/0.005,y,{steps:6});await page.mouse.up();}
   else await page.evaluate(px=>document.dispatchEvent(new MouseEvent('mousemove',{movementX:px,movementY:0})),e/0.002);await page.waitForTimeout(150);}};
+ // Through a list of points, as in walk.browser.test.cjs: turn when off course, then short steps of W.
+ const route=async points=>{for(const w of points)for(let n=0;n<30;n++){const a=await where(),d=dist(a.p,w);if(d<200)break;
+  const want=Math.atan2(w[1]-a.p[1],w[0]-a.p[0]),have=Math.atan2(a.fwd[1],a.fwd[0]);let e=want-have;while(e>Math.PI)e-=2*Math.PI;while(e<-Math.PI)e+=2*Math.PI;
+  if(Math.abs(e)>.08){await page.evaluate(px=>{for(let k=0;k<4;k++)document.dispatchEvent(new MouseEvent('mousemove',{movementX:px/4,movementY:0}));},e/0.002);await page.waitForTimeout(150);continue;}
+  await hold(['KeyW'],Math.min(1200,d*1.2));}};
  const go=async target=>{for(let n=0;n<10&&dist((await where()).p,target)>200;n++){await turnTo(target);const a=await where();await hold(['KeyW'],Math.min(900,dist(a.p,target)*1.4));if(dist((await where()).p,a.p)<10)break;}};
  const shot=async name=>{const f=path.join(OUT,`${viewport.width}x${viewport.height}-${name}.png`);await page.screenshot({path:f});return path.basename(f);};
- return {page,errors,mobile,tap,where,hold,turnTo,shot,go};
+ return {page,errors,mobile,tap,where,hold,turnTo,shot,go,route};
 }
 const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 const along=(a,b,v)=>((b[0]-a[0])*v[0]+(b[1]-a[1])*v[1])/Math.hypot(v[0],v[1]);
@@ -81,7 +86,7 @@ test('desktop controls: keys, Shift, mouse, Esc, resume, focus, leave and return
 });
 
 test('desktop E: out of reach nothing changes; near, E closes the door (blocked) and opens it (pass) 1440x900',{timeout:900000,skip},async t=>{
- const vp='1440x900',{page,errors,where,hold,turnTo,shot,tap,go}=await open(t,{width:1440,height:900},contract);
+ const vp='1440x900',{page,errors,where,hold,turnTo,shot,tap,go,route}=await open(t,{width:1440,height:900},contract);
  await tap('[data-mode="walk"]');await page.locator('#walkOverlay').click();
  // Bath door of the contract example: hinge (5200, 2250), closed leaf along the wall towards −x, 700 mm. In the walk
  // every door starts open; E toggles the door the cross points at within 2.5 m.
@@ -100,7 +105,7 @@ test('desktop E: out of reach nothing changes; near, E closes the door (blocked)
  assert.ok(record(vp,'E cerca (cerrar)','cierra la puerta (la imagen cambia) y ya no se puede pasar',JSON.stringify({open:await state(),imageChanged:Buffer.compare(c0,c1)!==0,room:b1.room,at:b0.p.map(Math.round),leaf:(await leaf()).map(Math.round),aim:await page.evaluate(()=>View3D.walkAim),doors:await page.evaluate(()=>View3D.walkDoors)}),await state()===false&&Buffer.compare(c0,c1)!==0&&b1.room!=='Baño',closedShot));
  await turnTo(await leaf());const o0=await page.screenshot();await page.keyboard.press('KeyE');await page.waitForTimeout(1200);const o1=await page.screenshot();const openShot=await shot('E-near-open');
  // The leaf opens towards x 5200, east of the person: straight through the doorway.
- await go(front);const atFront=await where();await go([4850,1700]);const inBath=await where();inBath.front=atFront.p.map(Math.round);
+ await route([front,[4850,2250],[4850,1600]]);const inBath=await where();inBath.front=null;
  assert.ok(record(vp,'E cerca (abrir)','abre la puerta (la imagen cambia) y se puede pasar',JSON.stringify({open:await state(),imageChanged:Buffer.compare(o0,o1)!==0,room:inBath.room,front:inBath.front,at:inBath.p.map(Math.round),aim:await page.evaluate(()=>View3D.walkAim)}),await state()===true&&Buffer.compare(o0,o1)!==0&&inBath.room==='Baño',openShot));
  assert.deepEqual(errors,[]);
 });
