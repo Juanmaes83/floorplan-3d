@@ -254,7 +254,10 @@ function probe(BADS){
    await press('#welcomeBlank');await createRoom(c,'Salón');await page.waitForTimeout(500);
    await page.goto(url);await page.waitForFunction(()=>window.FloorPlanGuideUI);await snap('return','Volver a la herramienta otro día','Abrir la URL de entrada');
    await step('continue',async()=>{const id=await page.locator('#welcomeContinue').isVisible()?'#welcomeContinue':'#welcomeReturn';await press(id);await snap('continued','Continuar donde lo dejé','«Continuar mi proyecto»');});
-   await step('previous-steps',async()=>{for(let i=1;i<=4;i++){if(!(await page.locator('#guidePrevious').isVisible()))break;await press('#guidePrevious');await snap(`previous-${i}`,'«← Paso anterior»',`«← Paso anterior» (${i})`);if(await page.locator('#welcomeDialog').evaluate(d=>d.open))break;}});
+   // «← Paso anterior» is disabled on the first task (its title says so): the walk back ends there; that is the result.
+   await step('previous-steps',async()=>{for(let i=1;i<=4;i++){if(!(await page.locator('#guidePrevious').isVisible()))break;
+    if(await page.locator('#guidePrevious').isDisabled()){const title=await page.locator('#guidePrevious').getAttribute('title');if(!/primera tarea/.test(title||''))throw Error('«← Paso anterior» desactivado sin explicación');await snap(`previous-first`,'Primera tarea: «← Paso anterior» desactivado',`desactivado: ${title}`);break;}
+    await press('#guidePrevious');await snap(`previous-${i}`,'«← Paso anterior»',`«← Paso anterior» (${i})`);if(await page.locator('#welcomeDialog').evaluate(d=>d.open))break;}});
   });
 
   // O. Change of intention, close, back, cancel, undo/redo, browser back.
