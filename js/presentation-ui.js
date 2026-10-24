@@ -23,15 +23,19 @@
  const sectionNote=el('p',undefined,card,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;
  const warning=el('p',undefined,card,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
  const controls=el('div',undefined,card,'presentation-controls');
- const previous=button('',controls,()=>go(index-1)),next=button('',controls,()=>go(index+1));
- const captureButton=button('',controls,()=>capture());captureButton.id='presentationCapture';
- const materialButton=button('',controls,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
- const lightButton=button('',controls,()=>{changeLighting();});lightButton.id='presentationLightPreset';
- const revealButton=button('',controls,()=>{revealCurrent();});revealButton.id='presentationReveal';
- const contactButton=button('',controls,()=>{changeContactShadows();});contactButton.id='presentationContactShadows';
- const routeButton=button('',controls,()=>{routeCurrent();});routeButton.id='presentationRoute';
- const batchButton=button('',controls,()=>startBatch());batchButton.id='presentationBatch';
- const cancelBatchButton=button('',controls,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
+ // The client's navigation first; the professional's tools (image, light, batch…) in their own group. On a phone the
+ // group is one scrollable row, so each tool added later does not make the card cover more of the home.
+ const nav=el('div',undefined,controls,'presentation-nav'),tools=el('div',undefined,controls,'presentation-tools');tools.id='presentationTools';tools.setAttribute('role','group');
+ const previous=button('',nav,()=>go(index-1)),next=button('',nav,()=>go(index+1));
+ const captureButton=button('',tools,()=>capture());captureButton.id='presentationCapture';
+ const shareButton=button('',tools,()=>share());shareButton.id='presentationShare';
+ const materialButton=button('',tools,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
+ const lightButton=button('',tools,()=>{changeLighting();});lightButton.id='presentationLightPreset';
+ const revealButton=button('',tools,()=>{revealCurrent();});revealButton.id='presentationReveal';
+ const contactButton=button('',tools,()=>{changeContactShadows();});contactButton.id='presentationContactShadows';
+ const routeButton=button('',tools,()=>{routeCurrent();});routeButton.id='presentationRoute';
+ const batchButton=button('',tools,()=>startBatch());batchButton.id='presentationBatch';
+ const cancelBatchButton=button('',tools,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
  const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
  const routeStatus=el('p',undefined,card,'presentation-status');routeStatus.id='presentationRouteStatus';routeStatus.setAttribute('role','status');routeStatus.setAttribute('aria-live','polite');routeStatus.hidden=true;
  const captureOptions={size:'1280',aspect:'view'};
@@ -129,6 +133,7 @@
  }
  function updateCapture(){
   captureButton.disabled=!captureReady();
+  shareButton.disabled=!captureReady();shareButton.textContent=tx('Compartir imagen','Share image','分享图片');
   const busy=window.View3D?.lifecycleMetrics;
   batchButton.disabled=!captureReady()||!!busy?.pendingAssets||!!busy?.animating||!!busy?.flying;
   batchButton.textContent=tx('Vistas + proyecto ZIP','Views + project ZIP','视图 + 项目 ZIP');
@@ -137,6 +142,33 @@
   if(!active)return;
   try{const size=View3D.shotSize(captureOptions);captureButton.textContent=tx(`Guardar PNG ${size.width}×${size.height}` ,`Save PNG ${size.width}×${size.height}`,`保存 PNG ${size.width}×${size.height}`);}
   catch{captureButton.disabled=true;captureButton.textContent=tx('PNG no disponible','PNG unavailable','PNG 不可用');}
+ }
+ // «Compartir imagen»: prepares the image of the current view (with the brand strip when there is a brand) and opens a
+ // panel. «Compartir…» there opens the system share sheet (WhatsApp, Gmail, LinkedIn…) with the prepared file in its
+ // own tap, so the user activation is still valid; without file sharing, download, WhatsApp and e-mail with a text —
+ // the person attaches the image. It shares an IMAGE, never a link to the project: nothing is uploaded by Rubik.
+ async function viewImage(){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');const shot=View3D.shot({...captureOptions,download:false});
+  const url=brandSnap?await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,label):shot.dataUrl;const blob=await (await fetch(url)).blob();return {url,label,file:new File([blob],'rubik-sota-vivienda.png',{type:'image/png'})};}
+ const shareDialog=el('dialog',undefined,document.body,'share-dialog');shareDialog.id='shareDialog';shareDialog.setAttribute('aria-labelledby','shareTitle');
+ async function share(){
+  if(!captureReady())return;const st=blocked();if(st){toast(blockedMessage(st),8000);return;}
+  shareButton.disabled=true;
+  try{const img=await viewImage(),name=(brandSnap?.title||app.project.name||'').trim(),text=tx(`${name?name+' · ':''}${img.label}. Imagen creada con Rubik Sota; medidas orientativas.`,`${name?name+' · ':''}${img.label}. Image made with Rubik Sota; indicative dimensions.`,`${name?name+' · ':''}${img.label}。由 Rubik Sota 生成的图片；尺寸仅供参考。`);
+   // The image is prepared first; the system share sheet is opened by its own tap in the panel, so the browser's
+   // user-activation window is not spent while the PNG and the brand strip are being generated.
+   shareDialog.replaceChildren();const h=el('h2',tx('Compartir imagen','Share image','分享图片'),shareDialog);h.id='shareTitle';h.tabIndex=-1;
+   const preview=el('img',undefined,shareDialog,'share-preview');preview.src=img.url;preview.alt=img.label;
+   el('p',tx('Se comparte una imagen de esta vista, no un enlace al proyecto. «Compartir…» abre el menú de tu dispositivo cuando lo permite; si no, descárgala y adjúntala tú en WhatsApp, Gmail, LinkedIn o el portal inmobiliario.','You share an image of this view, not a link to the project. Download it and attach it in WhatsApp, Gmail, LinkedIn or a property portal.','分享的是此视图的图片，而不是项目链接。下载后在 WhatsApp、Gmail、LinkedIn 或房产平台中附上。'),shareDialog,'share-note');
+   const row=el('div',undefined,shareDialog,'share-actions');
+   if(navigator.canShare?.({files:[img.file]})){const native=el('button',tx('Compartir…','Share…','分享…'),row,'btn primary');native.type='button';native.id='shareNative';
+    native.onclick=()=>{navigator.share({files:[img.file],title:name||'Rubik Sota',text}).then(()=>shareDialog.close(),e=>{if(e?.name!=='AbortError')toast(tx('El sistema no pudo compartir la imagen. Descárgala y adjúntala.','The system could not share the image. Download it and attach it.','系统无法分享图片。请下载后附上。'),7000);});};}
+   const dl=el('a',tx('Descargar imagen','Download image','下载图片'),row,navigator.canShare?.({files:[img.file]})?'btn':'btn primary');dl.href=img.url;dl.download='rubik-sota-vivienda.png';dl.id='shareDownload';
+   const wa=el('a',tx('WhatsApp','WhatsApp','WhatsApp'),row,'btn');wa.href='https://wa.me/?text='+encodeURIComponent(text);wa.target='_blank';wa.rel='noopener';wa.id='shareWhatsApp';
+   const mail=el('a',tx('Correo','E-mail','电子邮件'),row,'btn');mail.href='mailto:?subject='+encodeURIComponent(name||'Rubik Sota')+'&body='+encodeURIComponent(text+'\n\n'+tx('(Adjunta la imagen descargada.)','(Attach the downloaded image.)','（请附上下载的图片。）'));mail.id='shareMail';
+   const close=el('button',tx('Cerrar','Close','关闭'),row,'btn');close.type='button';close.onclick=()=>shareDialog.close();
+   shareDialog.showModal();h.focus();
+  }catch(error){toast(error.message||String(error),6000);}
+  finally{shareButton.disabled=false;updateCapture();}
  }
  function capture(){
   if(!captureReady())return;
@@ -349,7 +381,7 @@
  function draw(){
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
-  previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
+  tools.setAttribute('aria-label',tx('Herramientas de la presentación','Presentation tools','演示工具'));previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
   materialButton.textContent=window.View3D?.surfaceQuality==='enhanced'?tx('Material: detalle','Material: detail','材质：细节'):tx('Material: básico','Material: basic','材质：基础');
   materialButton.setAttribute('aria-pressed',String(window.View3D?.surfaceQuality==='enhanced'));
   materialButton.disabled=batchActive||window.View3D?.presentationRouteInfo?.status==='running';
@@ -594,8 +626,12 @@
   if(level&&activeLevelId()!==level)building()?.presentLevel(level);
   if(saved)app.restorePresentationEntry(saved,null,{force2D:true}).catch(()=>{});
  }
+ const modalOpen=()=>{try{return !!document.querySelector('dialog:modal');}catch{return !!document.querySelector('dialog[open]');}};
  function onKey(e){
   if(!active&&!pendingStart)return;
+  // A dialog opened over the presentation («Añadir observación», «Compartir imagen») owns the keyboard: Escape closes
+  // that dialog only and the arrows stay in it. A second Escape then ends the presentation.
+  if(active&&modalOpen())return;
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;
@@ -605,6 +641,10 @@
   if(e.key!=='Tab')e.stopImmediatePropagation();
  }
  addEventListener('keydown',onKey,true);
+ // Closing a dialog opened from the presentation returns the focus to the control that opened it, not to the page.
+ let opener=null;addEventListener('focusin',e=>{if(active&&overlay.contains(e.target))opener=e.target;},true);
+ addEventListener('close',e=>{if(!active||e.target?.tagName!=='DIALOG')return;setTimeout(()=>{const a=document.activeElement;
+  if(active&&opener?.isConnected&&!opener.disabled&&(!a||a===document.body))opener.focus();},0);},true);
  addEventListener('popstate',()=>{if(entry&&(active||pendingStart))stop(true);});
  addEventListener('resize',()=>{
   if(!active||!sourceCurrent())return;
