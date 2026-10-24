@@ -96,3 +96,19 @@ test('keyboard: the dialog opens with focus on its title and closes with Escape'
  await page.evaluate(()=>FloorPlanReviewUI.open());assert.equal(await page.evaluate(()=>document.activeElement.id),'reviewTitle');
  await page.keyboard.press('Tab');await page.keyboard.press('Escape');assert.equal(await page.locator('#reviewDialog[open]').count(),0);assert.deepEqual(errors,[]);
 });
+
+// Finding 20 (24-10-2026): Escape in «Añadir observación» over a running presentation ended the presentation and
+// left the dialog open over the editor. Escape closes the top layer only: the dialog first, then the presentation.
+test('Escape over the presentation closes the observation dialog only; a second Escape ends the presentation',{timeout:300000,skip:!process.env.THREE_LOCAL_DIR&&'THREE_LOCAL_DIR not set: the presentation needs 3D'},async t=>{
+ const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));
+ await page.route('https://cdn.jsdelivr.net/**',async r=>{try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
+ await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForTimeout(500);
+ await page.locator('#guidePresent').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:200000});
+ await page.locator('#presentationNote').click();await page.locator('#reviewDialog[open]').waitFor();
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#reviewDialog').open);await page.waitForTimeout(300);
+ assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'the presentation goes on after closing the dialog');
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:120000});
+ assert.equal(await page.locator('dialog[open]').count(),0,'nothing is left open over the editor');assert.deepEqual(errors,[]);
+});
