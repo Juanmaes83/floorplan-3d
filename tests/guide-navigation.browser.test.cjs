@@ -93,3 +93,17 @@ test('trying the example again reuses it or keeps the changed one apart 1440x900
  const changed=await page.evaluate(()=>library.all().filter(e=>e.project&&e.id!==library.activeId()).map(e=>e.project.objects.length));assert.ok(changed.includes(total-1),`the changed example is kept ${JSON.stringify(changed)} total ${total}`);
  assert.deepEqual(errors,[]);
 });
+// Finding 17 (24-10-2026): in the guided mode «Archivo» is hidden; delivering (sheet, client observations, image) is
+// offered in «Tareas y ayuda» and opens there without leaving the guide.
+for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`delivery is reachable from the guide ${viewport.width}x${viewport.height}`,async t=>{
+ const {page,errors}=await setup(t,viewport);await click(page,'#welcomeExample');await page.waitForTimeout(500);
+ assert.equal(await page.evaluate(()=>document.body.classList.contains('guided')),true,'guided mode');
+ assert.equal(await page.locator('details:has(#openSheet) > summary').isVisible(),false,'«Archivo» is hidden here (the finding)');
+ await click(page,'#guideDetails');await page.locator('#guideDeliverSheet').waitFor({state:'visible'});
+ assert.equal(await page.locator('#guideDeliverImage').isVisible(),true,'image export offered');
+ await click(page,'#guideDeliverSheet');await page.locator('#sheetDialog[open]').waitFor();
+ assert.equal(await page.evaluate(()=>document.body.classList.contains('guided')),true,'the guide stays');
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#sheetDialog').open);
+ if(await page.locator('#reviewNotesBtn').count()){await click(page,'#guideDetails');await click(page,'#guideDeliverReview');await page.locator('#reviewDialog[open]').waitFor();}
+ assert.deepEqual(errors,[]);
+});

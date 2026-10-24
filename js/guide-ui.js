@@ -278,6 +278,11 @@
   }
   const row=el('div',undefined,details,'actions');btn('guideAllTools',tx('Ver todas las herramientas','See all tools','查看所有工具'),()=>{details.close();fullEditor=true;state().fullTools=true;store();render();drawer('lib',true);drawer('panel',true);searchBtn.focus();},row);btn('guideSaveNow',tx('Guardar ahora','Save now','立即保存'),()=>safe(()=>execute({id:'save'})),row);btn('guideGoalFromDetails',tx('Cambiar objetivo','Change goal','更改目标'),()=>{details.close();openGoal();},row);
   if(state().journeySkipped?.length)btn('guideRestoreSuggestions',tx('Recuperar sugerencias aplazadas','Bring back put-off suggestions','恢复暂缓的建议'),()=>{state().journeySkipped=[];store();render();renderDetails();},row);btn('guideCopyNow',tx('Exportar copia JSON / ZIP','Export JSON / ZIP copy','导出 JSON / ZIP'),()=>safe(exportCopy),row);
+  // Finding 17: in the guided mode the «Archivo» menu is hidden, so delivering (sheet, client observations, image)
+  // had no visible way in. The same items are offered here; they open as from the menu and the guide stays.
+  el('h3',tx('Entregar al cliente','Deliver to the client','交付给客户'),details,'guide-deliver-title');const deliver=el('div',undefined,details,'actions guide-deliver');deliver.setAttribute('role','group');deliver.setAttribute('aria-label',tx('Entregar','Deliver','交付'));
+  for(const [id,target,es,en,zh] of [['guideDeliverSheet','openSheet','Abrir lámina','Open sheet','打开图纸'],['guideDeliverReview','reviewNotesBtn','Observaciones del cliente…','Client observations…','客户意见…'],['guideDeliverImage','exportPng','Exportar imagen','Export image','导出图片']])
+   if($('#'+target))btn(id,tx(es,en,zh),()=>{details.close();$('#'+target).click();},deliver);
   if(storageError)el('p',storageError,details).setAttribute('role','alert');details.scrollTop=scroll;
  }
  // A task waiting on an earlier one says so; «Necesita revisión» is for a result that has changed since it was done.
