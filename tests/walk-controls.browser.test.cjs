@@ -170,9 +170,12 @@ for(const input of ['mouse','touch'])test(`844x390 with ${input}: only instructi
  const vp=`844x390 ${input}`,{page,errors,where,hold,tap,shot}=await open(t,{width:844,height:390},null,input);
  await tap('[data-mode="walk"]');await page.waitForTimeout(300);
  const texts=await page.evaluate(()=>({panel:document.querySelector('#wo2').textContent+' | '+document.querySelector('#wo3').textContent,hint:document.querySelector('#hint3d').textContent,tip:document.querySelector('#tip').textContent}));
- const all=Object.values(texts).join(' | '),keyboard=/WASD|W A S D|ratón|Mayús|Shift|\bE\b|Esc/,touch=/joystick|arrastra|Toca|toca|dedo|Salir del recorrido/,orbitOnly=/mueble|suelo para editar|dos dedos/;
- const textsOk=input==='mouse'?keyboard.test(texts.panel)&&keyboard.test(texts.hint)&&!touch.test(all)&&!orbitOnly.test(all):touch.test(texts.panel)&&touch.test(texts.hint)&&!keyboard.test(all)&&!orbitOnly.test(all);
- assert.ok(record(vp,'Textos del recorrido',input==='mouse'?'solo teclado y ratón (panel, ayuda superior y pie)':'solo joystick, arrastre y toque (panel, ayuda superior y pie)',JSON.stringify(texts),textsOk,await shot('texts')),JSON.stringify(texts));
+ // Everything the card shows is inside the scene and on screen: no instruction is cut off.
+ const fit=await page.evaluate(()=>{const o=document.querySelector('#walkOverlay').getBoundingClientRect();return [...document.querySelectorAll('#walkOverlay .walk-card>*')].filter(e=>e.offsetParent).map(e=>{const r=e.getBoundingClientRect();return {id:e.id,inside:r.top>=o.top-1&&r.bottom<=o.bottom+1&&r.bottom<=innerHeight};});});
+ texts.cut=fit.filter(f=>!f.inside).map(f=>f.id);texts.shown=fit.map(f=>f.id);
+ const all=[texts.panel,texts.hint,texts.tip].join(' | '),keyboard=/WASD|W A S D|ratón|Mayús|Shift|\bE\b|Esc/,touch=/joystick|arrastra|Toca|toca|dedo|Salir del recorrido/,orbitOnly=/mueble|suelo para editar|dos dedos/;
+ const textsOk=!texts.cut.length&&texts.shown.includes('walkStart')&&texts.shown.includes('wo2')&&(input==='mouse'?keyboard.test(texts.panel)&&keyboard.test(texts.hint)&&!touch.test(all)&&!orbitOnly.test(all):touch.test(texts.panel)&&touch.test(texts.hint)&&!keyboard.test(all)&&!orbitOnly.test(all));
+ assert.ok(record(vp,'Textos del recorrido',input==='mouse'?'solo teclado y ratón (panel, ayuda superior y pie); nada recortado':'solo joystick, arrastre y toque (panel, ayuda superior y pie); nada recortado',JSON.stringify(texts),textsOk,await shot('texts')),JSON.stringify(texts));
  const a=await where();
  if(input==='mouse'){await page.locator('#walkOverlay').click();const locked=(await where()).locked;await hold(['KeyW'],900);const b=await where();
   const moved=along(a.p,b.p,a.fwd);await page.keyboard.press('Escape');await page.waitForTimeout(400);const paused=await page.locator('#walkOverlay').isVisible();
