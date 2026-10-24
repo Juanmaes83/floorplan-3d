@@ -124,9 +124,10 @@ test(`BW5 furniture over a stair, import to correction ${viewport.width}x${viewp
  assert.deepEqual(errors,[]);
 });
 
-// Finding 12 (23-10-2026) changed the single-level rule: a copy is no longer put on top of other furniture. It keeps
-// the +200 mm offset when that place is free and otherwise goes to the nearest free place; no stair search is involved.
-test('single-level project: a duplicate keeps the 200 mm offset when free and never overlaps (no stair search)',{timeout:300000},async t=>{
+// Finding 12 (23-10-2026) changed the single-level rule: a copy is never put on top of other furniture silently. It
+// keeps the +200 mm offset when that place is free, otherwise goes to the nearest free place, and when the room has
+// none it is still added and the toast says so (no stair search, nothing refused: that is only for buildings).
+test('single-level project: a duplicate keeps the 200 mm offset when free and never overlaps silently (no stair search)',{timeout:300000},async t=>{
  const context=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>context.close());const {page,errors}=await open(context);
  const dup=pick=>page.evaluate(pick=>{const p=FloorPlanApp.project,f=pick==='first'?state.furniture[0]:[...state.furniture].filter(x=>x.type!=='rug').sort((a,b)=>a.w*a.d-b.w*b.d)[0];
   select({kind:'furn',id:f.id});const before={cx:f.cx,cy:f.cy,n:state.furniture.length},o=p.objects.find(x=>x.id===f.id);
@@ -134,11 +135,13 @@ test('single-level project: a duplicate keeps the 200 mm offset when free and ne
   const d=document.querySelector('#placementDialog'),refused=!!d?.open,reason=d?.querySelector('#placementReason')?.textContent||'';if(refused)d.close();
   const n=state.furniture.at(-1),copy=refused?null:FloorPlanApp.project.objects.find(x=>x.id===n.id);
   return {before,after:{cx:n.cx,cy:n.cy,n:state.furniture.length},refused,reason,offsetFree,overlaps:copy?FloorPlanPlacement.problems(FloorPlanApp.project,copy).filter(q=>q.kind==='furniture').length:0,
+   toast:document.querySelector('#toast').textContent,chip:FloorPlanFurnitureOverlaps.ids.includes(n.id),
    building:!!FloorPlanBuildingUI.context,zones:FloorPlanBuildingUI.stairZoneList().length};},pick);
- // The example's first item is a double bed in a furnished bedroom: no free place, so it is refused and explained.
+ // The example's first item is a double bed in a furnished bedroom: no free place, so the copy is added where asked
+ // and both the toast and the overlap chip say it overlaps.
  const bed=await dup('first');assert.equal(bed.building,false);assert.equal(bed.zones,0);
- if(bed.refused){assert.equal(bed.after.n,bed.before.n,'nothing added');assert.match(bed.reason,/No hay sitio libre para «Cama doble/);}
- else{assert.equal(bed.after.n,bed.before.n+1);assert.equal(bed.overlaps,0);}
+ assert.equal(bed.refused,false,'one level: not refused');assert.equal(bed.after.n,bed.before.n+1);
+ if(bed.overlaps){assert.match(bed.toast,/Duplicado «Cama doble.*no había sitio libre en «.+»: se solapa con otros muebles\. Muévelo a su sitio\./);assert.equal(bed.chip,true,'the overlap chip lists the copy');}
  // A small item has room: it is added, never on top of anything, at +200 mm when that place is free.
  const small=await dup('small');assert.equal(small.refused,false,small.reason);assert.equal(small.after.n,small.before.n+1);assert.equal(small.overlaps,0,'the copy does not overlap other furniture');
  if(small.offsetFree)assert.deepEqual([small.after.cx,small.after.cy],[small.before.cx+200,small.before.cy+200],'free offset: kept exactly');

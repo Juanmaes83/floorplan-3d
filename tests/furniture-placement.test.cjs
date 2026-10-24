@@ -108,3 +108,23 @@ test('one level: design stacking does not block, real overlaps do',()=>{
  // Rotated: a 90° bed fits along the other axis or is refused, never on top.
  const rot=P.find(p,obj('obj_bed5','bed',3000,2400,1800,2000,90));if(rot.ok)assert.deepEqual(P.problems(p,{...obj('obj_bed5','bed',0,0,1800,2000,90),position:rot.position}).filter(x=>x.kind==='furniture'),[]);
 });
+
+// A tap on a catalogue item places it at the centre of the view, a place the person did not choose: when that room is
+// full the nearest room with free space takes it, and the result says so; with no space anywhere, the refusal for
+// the requested room is returned unchanged (the app then adds it there on one level and says it overlaps).
+test('findAnyRoom: a full room sends the item to the nearest room with space, measured from the asked point',()=>{
+ const C=require('../js/project-core.js'),L=require('../js/room-layout.js'),P=require('../js/furniture-placement.js');
+ let p=L.blank('Dos estancias');p=L.create(p,{name:'Pasillo',width:1200,depth:4000,x:0,y:0}).project;
+ p=L.create(p,{name:'Dormitorio',width:4000,depth:4000,x:2400,y:0}).project;p=L.create(p,{name:'Lejos',width:4000,depth:4000,x:9000,y:0}).project;
+ const obj=(id,x,y)=>{const {cx,cy,w:_w,d:_d,rot:_r,...o}={...C.object('bed','Cama',x,y,1800,2000,0,'#888'),id};return o;};
+ const asked=obj('obj_new',600,2000);
+ assert.equal(P.find(p,asked).reason,'no-space','the corridor is too narrow');
+ const r=P.findAnyRoom(p,asked);assert.equal(r.ok,true);assert.equal(r.otherRoom,true);assert.equal(r.roomName,'Dormitorio','nearest room first, not «Lejos»');
+ assert.equal(r.askedRoomName,'Pasillo');assert.equal(r.distanceMm,Math.round(Math.hypot(r.position.x-600,r.position.y-2000)));
+ assert.deepEqual(P.problems(p,{...asked,position:r.position}),[]);
+ assert.deepEqual(P.findAnyRoom(p,asked),r,'deterministic');
+ const inRoom=P.findAnyRoom(p,obj('obj_in',4400,2000));assert.equal(inRoom.ok,true);assert.equal(inRoom.otherRoom,undefined,'free place in the asked room: same as find');
+ // Fill both rooms that can hold a bed: the asked room's refusal comes back.
+ const full=C.clone(p);for(const [i,x,y] of [[1,3400,1000],[2,3400,3000],[3,5400,1000],[4,5400,3000],[5,10000,1000],[6,10000,3000],[7,12000,1000],[8,12000,3000]])full.objects.push({...obj(`obj_f${i}`,x,y),size:{widthMm:1900,depthMm:1900}});
+ const none=P.findAnyRoom(full,asked);assert.equal(none.ok,false);assert.equal(none.reason,'no-space');assert.equal(none.roomName,'Pasillo');
+});

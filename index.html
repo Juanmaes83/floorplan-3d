@@ -1637,26 +1637,35 @@ function duplicateSel(){
   const place = placeFurniture(n, {x:n.cx, y:n.cy}); if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, n.name);
   if (place.unchanged) pushOut(n);
   ui.sel = {kind:'furn', id:n.id}; mutate(() => state.furniture.push(n));
-  toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place), place.distanceMm > 0 ? 4000 : 1800);
+  toast((LANG === 'es' ? `Duplicado «${nm(n.name)}»` : tr(`已复制「${n.name}」`, `Duplicated "${nm(n.name)}"`)) + placedNote(place, n.id), place.crowded ? 6000 : place.distanceMm > 0 ? 4000 : 1800);
 }
 // 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
 // A new or duplicated item goes to the nearest pose where its whole footprint fits one room and touches no wall, door
 // swing, other furniture or, in a building, stair (FloorPlanPlacement), with one or two levels. When none is
 // demonstrated within the search budget it is NOT added: the person is told why. Only a point outside every room
 // (an empty plan, a drop off the rooms) keeps the old pushOut, since there is no room to fit it into.
-function placeFurniture(f, near){
+function placeFurniture(f, near, {anyRoom=false}={}){
   const zones = window.FloorPlanBuildingUI?.stairZoneList() || [];
   // The explanation names the item and the room as the person sees them (not the stored internal names).
   const o = {id:f.id, type:f.type, name:nm(f.name), position:{x:Math.round(near.x), y:Math.round(near.y)}, size:{widthMm:f.w, depthMm:f.d}, rotationDeg:f.rot};
-  const r = FloorPlanPlacement.find(project, o, {zones, near:o.position});
+  const r = FloorPlanPlacement[anyRoom ? 'findAnyRoom' : 'find'](project, o, {zones, near:o.position});
   if (r.roomName && r.message) r.message = r.message.replace(`«${r.roomName}»`, `«${nm(r.roomName)}»`);
   if (r.ok){ f.cx = r.position.x; f.cy = r.position.y; return r; }
   if (!zones.length && (r.reason === 'no-room' || r.reason === 'ambiguous-room')) return {ok:true, unchanged:true};
+  // One level and no free place: the item is still added where it was asked for (off the walls, as before) so the
+  // person can move it; the toast says it and the overlap chip shows it. Refusing would block the most common action
+  // in a furnished plan. In a building the refusal stays: the stair and its void are a hard rule (#53).
+  if (!zones.length && r.reason === 'no-space') return {ok:true, unchanged:true, crowded:true, roomName:r.roomName};
   return r;
 }
-// What the toast adds when the item did not go exactly where it was asked for.
-function placedNote(place){
+// What the toast adds when the item did not go exactly where it was asked for (`id`: the item, once in the plan).
+function placedNote(place, id){
+  if (place.crowded){
+    const over = window.FloorPlanFurnitureOverlaps?.ids.includes(id);
+    return LANG === 'es' ? ` · no había sitio libre en «${nm(place.roomName)}»${over ? ': se solapa con otros muebles' : ''}. Muévelo a su sitio.` : ` · there was no free place in "${nm(place.roomName)}"${over ? ': it overlaps other furniture' : ''}. Move it into place.`;
+  }
   if (!place.ok || place.unchanged || !(place.distanceMm > 0)) return '';
+  if (place.otherRoom) return LANG === 'es' ? ` · en «${nm(place.roomName)}», la estancia con sitio libre más cercana (en «${nm(place.askedRoomName)}» no cabía)` : tr(`，已放到「${place.roomName}」`, ` · in "${nm(place.roomName)}", the nearest room with free space (it did not fit in "${nm(place.askedRoomName)}")`);
   const d = place.distanceMm >= 1000 ? `${(place.distanceMm/1000).toFixed(1).replace('.', ',')} m` : `${Math.round(place.distanceMm/10)} cm`;
   return LANG === 'es' ? ` · en el sitio libre más cercano de «${nm(place.roomName)}» (a ${d})` : tr(`，已放到「${place.roomName}」最近的空位`, ` · in the nearest free place in "${nm(place.roomName)}" (${d} away)`);
 }
@@ -1673,16 +1682,16 @@ function pushOut(f){
     if (!moved) return;
   }
 }
-function addItem(it, x, y){
+function addItem(it, x, y, options){
   const [type,name,w,d,color,height] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
   f.size.heightMm=height;
   if(it[6])f.assetRef=FloorPlanAssets.associate(f,it[6]).assetRef;
-  const place = placeFurniture(f, {x:f.cx, y:f.cy});
+  const place = placeFurniture(f, {x:f.cx, y:f.cy}, options);
   if (!place.ok) return window.FloorPlanBuildingUI.explainPlacement(place, nm(name));
   if (place.unchanged) pushOut(f);
   ui.sel = {kind:'furn', id:f.id};
   mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
-  toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`) + placedNote(place), place.distanceMm > 0 ? 4000 : 1800);
+  toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`) + placedNote(place, f.id), place.crowded ? 6000 : place.distanceMm > 0 ? 4000 : 1800);
 }
 function toggleWall(id){
   const w = geometry.walls.find(w => w.id === id); if (!w) return;
@@ -2011,10 +2020,13 @@ function endLibDrag(e, ok){
   if (!ok) return;
   // 轻点：放到选中房间中心，否则放到画面中心（3D 取屏幕中心对应的地面位置）
   let p = null;
-  if (ui.sel?.kind === 'room'){ const b = bbox(geometry.rooms.find(r => r.id===ui.sel.id).poly); p = {x:(b[0]+b[2])/2, y:(b[1]+b[3])/2}; }
+  // With a room selected the person chose where; at the centre of the view they did not, so a full room there
+  // sends the item to the nearest room with free space (FloorPlanPlacement.findAnyRoom) instead of refusing it.
+  const chosen = ui.sel?.kind === 'room';
+  if (chosen){ const b = bbox(geometry.rooms.find(r => r.id===ui.sel.id).poly); p = {x:(b[0]+b[2])/2, y:(b[1]+b[3])/2}; }
   else if (is3D()){ const r = $('#stage').getBoundingClientRect(); p = window.View3D.groundAt(r.left + r.width/2, r.top + r.height/2); }
   if (!p) p = {x:view.x0 + svg.clientWidth/2/view.s, y:view.y0 + svg.clientHeight/2/view.s};
-  addItem(d.it, p.x, p.y);
+  addItem(d.it, p.x, p.y, {anyRoom:!chosen});
   closeDrawers();
 }
 addEventListener('pointerup', e => endLibDrag(e, true));

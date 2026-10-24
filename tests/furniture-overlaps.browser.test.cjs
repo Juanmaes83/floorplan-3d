@@ -1,6 +1,7 @@
 /* Finding 12 (23-10-2026): furniture added or duplicated in a one-level home was stacked on other furniture while the
-   toast said «Añadido». Now adding and duplicating go to the nearest free place in the room (or are refused with the
-   reason), and overlaps that already exist — imported, or made by a manual drag — are shown, never moved. */
+   toast said «Añadido». Now adding and duplicating go to the nearest free place in the room; when the room has none
+   the item is still added and the toast says it overlaps (never silent, never refused on one level). Overlaps that
+   already exist — imported, or made by a manual drag — are shown, never moved. */
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
 const C=require('../js/project-core.js'),L=require('../js/room-layout.js');
@@ -26,7 +27,8 @@ const overlaps=page=>page.evaluate(()=>FloorPlanLayoutReview.review(FloorPlanApp
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
 test(`adding beds to a small room never stacks them silently ${viewport.width}x${viewport.height}`,{timeout:240000},async t=>{
  const {page,errors,press,library,mobile}=await setup(t,viewport),name=`${viewport.width}x${viewport.height}`;
- // 6000×4000: the first bed goes to the centre, two more fit beside it (moved there and said so), the next is refused.
+ // 6000×4000: the first bed goes to the centre, two more fit beside it (moved there and said so); once the room is
+ // full each new bed is added where asked and the toast and the chip say it overlaps.
  await press('#welcomeBlank');await page.fill('#roomDesignName','Dormitorio');await page.fill('#roomDesignWidth','6000');await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===1);
  const log=[];
  for(let i=0;i<6;i++){
@@ -35,25 +37,28 @@ test(`adding beds to a small room never stacks them silently ${viewport.width}x$
   if(viewport.width<1000)await page.waitForTimeout(200);
   const r=await page.evaluate(()=>({count:FloorPlanApp.project.objects.length,toast:document.querySelector('#toast').classList.contains('show')?document.querySelector('#toast').textContent:'',refused:!!document.querySelector('#placementDialog')?.open,reason:document.querySelector('#placementReason')?.textContent||''}));
   log.push(r);
-  if(r.refused){assert.equal(r.count,before,`${name} nothing added when refused`);assert.match(r.reason,/No hay sitio libre para «Cama doble 1,8 m» en «Dormitorio»/);await press('#placementClose');}
-  else{assert.equal(r.count,before+1);assert.match(r.toast,/Añadido/);}
-  assert.deepEqual(await overlaps(page),[],`${name} add ${i+1}: no overlap ${JSON.stringify(r)}`);
+  assert.equal(r.refused,false,`${name} one level: never refused`);assert.equal(r.count,before+1);assert.match(r.toast,/Añadido «Cama doble 1,8 m»/);
+  const last=await page.evaluate(()=>FloorPlanApp.project.objects.at(-1).id),stacked=(await overlaps(page)).some(pair=>pair.includes(last));r.stacked=stacked;
+  if(stacked){assert.match(r.toast,/no había sitio libre en «Dormitorio»: se solapa con otros muebles\. Muévelo a su sitio\./,`${name} add ${i+1}: an overlap is said`);
+   assert.equal(await page.locator('#furnitureOverlaps').isVisible(),true,`${name} add ${i+1}: chip shown`);}
+  else assert.doesNotMatch(r.toast,/se solapa/);
  }
- assert.ok(log.some(r=>r.refused),`${name} the room fills up and the next bed is refused ${JSON.stringify(log)}`);
- assert.ok(log.filter(r=>!r.refused).length>=1);
- assert.ok(log.some(r=>/sitio libre más cercano/.test(r.toast)),`${name} a bed moved to a free place says so ${JSON.stringify(log)}`);
+ assert.ok(log.some(r=>!r.stacked&&/sitio libre más cercano/.test(r.toast)),`${name} a bed moved to a free place says so ${JSON.stringify(log)}`);
+ assert.ok(log.some(r=>r.stacked),`${name} the room fills up and the next bed says it overlaps ${JSON.stringify(log)}`);
+ assert.equal(log.slice(0,3).every(r=>!r.stacked),true,`${name} the first three beds fit without overlap ${JSON.stringify(log)}`);
  await page.screenshot({path:path.join(ARTIFACTS,`${name}-beds.png`)});
- assert.equal(await page.locator('#furnitureOverlaps').isVisible(),false,'no overlap chip');
  assert.deepEqual(errors,[],name);
 });
-test('duplicating rotated furniture goes to a free place or is refused, never on top 1440x900',{timeout:240000},async t=>{
+test('duplicating rotated furniture goes to a free place or says it overlaps, never silently 1440x900',{timeout:240000},async t=>{
  const {page,errors,press,library}=await setup(t,{width:1440,height:900});
  await press('#welcomeBlank');await page.fill('#roomDesignName','Salón');await page.fill('#roomDesignWidth','5000').catch(()=>{});await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===1);
  await library();await page.fill('#furnitureSearch','sofá de 3');await press('#searchResults .item');await page.waitForTimeout(300);
  await page.keyboard.press('r').catch(()=>{});await page.evaluate(()=>{if(typeof rotateSel==='function')rotateSel(90);});
  for(let i=0;i<4;i++){const before=await page.evaluate(()=>FloorPlanApp.project.objects.length);await page.evaluate(()=>duplicateSel());await page.waitForTimeout(300);
-  const refused=await page.evaluate(()=>!!document.querySelector('#placementDialog')?.open);if(refused){await press('#placementClose');assert.equal(await page.evaluate(()=>FloorPlanApp.project.objects.length),before);}
-  assert.deepEqual(await overlaps(page),[],`duplicate ${i+1}`);}
+  const r=await page.evaluate(()=>({refused:!!document.querySelector('#placementDialog')?.open,n:FloorPlanApp.project.objects.length,id:FloorPlanApp.project.objects.at(-1).id,toast:document.querySelector('#toast').textContent}));
+  assert.equal(r.refused,false);assert.equal(r.n,before+1);
+  if((await overlaps(page)).some(pair=>pair.includes(r.id)))assert.match(r.toast,/se solapa con otros muebles/,`duplicate ${i+1}: an overlap is said`);
+  else assert.doesNotMatch(r.toast,/se solapa/,`duplicate ${i+1}`);}
  assert.deepEqual(errors,[]);
 });
 for(const viewport of [{width:1440,height:900},{width:390,height:844}])
