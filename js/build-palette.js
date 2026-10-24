@@ -85,7 +85,7 @@
   return {warn:!!label,text:label?`Para añadir «${label}», toca antes en el plano la estancia donde va y vuelve a pulsar «${label}».`:'Toca antes en el plano la estancia donde va el hueco.'};
  }
 
- let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null;
+ let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null,hintToast='';
  function construct(){
   build.replaceChildren();
   mode3d=el('div',{class:'palette-3d-note',id:'palette3dNote',hidden:''},build);
@@ -124,7 +124,9 @@
   const roomId=contextRoom();
   if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');
    // On a phone the palette is a drawer that closes to show the plan: the hint goes with the person, as a toast.
-   if(matchMedia('(max-width:1100px)').matches&&typeof toast==='function')toast(c.text,6000);toPlan();return;}
+   if(matchMedia('(max-width:1100px)').matches&&typeof toast==='function'){toast(c.text,6000);hintToast=c.text;}toPlan();return;}
+  // Once followed, the explanation goes away at once instead of covering the opening panel for the rest of its 6 s.
+  const t=document.getElementById('toast');if(hintToast&&t?.classList.contains('show')&&t.textContent===hintToast)t.classList.remove('show');hintToast='';
   // The room becomes the selection first, so the properties column shows the room the opening is added to (as in
   // «Añadir puerta» of the room panel) instead of the previous item.
   await in2D();if(ui.sel?.kind!=='room'||ui.sel.id!==roomId)select({kind:'room',id:roomId});toPlan();FloorPlanOpeningUI.startAdd(roomId,kind);
