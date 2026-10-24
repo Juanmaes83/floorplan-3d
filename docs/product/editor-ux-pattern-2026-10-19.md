@@ -37,7 +37,11 @@ El editor debe dejar claro dónde está la persona, qué puede hacer y cuál es 
 4. **Grupos plegables (`details`) por familia de propiedades.** Empiezan abiertos los que contienen la tarea habitual. Las ayudas largas, como los atajos de teclado o «Cómo moverlo en el plano», empiezan plegadas. Ninguna acción principal queda dentro de un grupo plegado.
 5. **Acciones al pie, fijas, cuando hay un formulario** (hueco, mueble y edición de «Plano propio»). En pantallas de 500 px de alto o menos dejan de ser fijas para no tapar el contenido, y siguen dentro del área desplazable.
 6. **Plano como contexto.**
-   - En escritorio, la columna de propiedades se abre al seleccionar una estancia, un mueble o un hueco, aunque estuviera plegada; el modo guiado empieza plegado. No tapa el plano.
+   - **Decisión de Juanma (confirmada el 23-10-2026): en el editor de escritorio (más de 1100 px de ancho) las dos columnas están abiertas por defecto**, también en el modo guiado y al entrar en el ejemplo. Sustituye a «el modo guiado empieza plegado», que describía el comportamiento de #62 y no era una decisión de producto.
+     - Cerrar una columna («Crear y amueblar» o «Propiedades») es una preferencia de la persona: se guarda en este navegador (`huxing-panes`) y se respeta al recargar y al volver. La guía no vuelve a cerrarlas.
+     - En escritorio, la columna de propiedades se abre al seleccionar una estancia, un mueble o un hueco, aunque estuviera plegada. No tapa el plano.
+     - La presentación al cliente no muestra controles de edición: las columnas y los cajones salen de la pantalla mientras se presenta y vuelven como estaban al terminar.
+     - Pruebas: `tests/panel-pattern.browser.test.cjs` («columns open by default on desktop and keep the person's choice», a 1440×900, 1280×800, 390×844 y 844×390) y `tests/presentation-framing.browser.test.cjs` («R10 presentation hides the edit columns 1440x900»). Las dos fallan en `master` `e796e3d`.
    - En teléfono, sólo los huecos abren el cajón automáticamente: es la decisión de producto de #60. Estancias y muebles ofrecen «Propiedades» en la barra inferior, porque el cajón taparía el plano en el que se arrastran.
 7. **Barra superior agrupada por tarea** (escritorio). Fila 1: identidad y proyecto. Fila 2: cómo editar (vista, herramienta, historial, zoom, «Mostrar ▾», «Plano propio», paneles). Fila 3: estado, archivo y ajustes. Las acciones destructivas («Vaciar», «Restablecer») quedan juntas en «Archivo».
 
