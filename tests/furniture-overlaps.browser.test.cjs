@@ -82,3 +82,19 @@ test('the example shows no overlap warning (a hob set into a worktop is by desig
  const {page,errors,press}=await setup(t,{width:1440,height:900});await press('#welcomeExample');await page.waitForTimeout(600);
  assert.equal(await page.locator('#furnitureOverlaps').isVisible(),false);assert.deepEqual(await overlaps(page),[]);assert.deepEqual(errors,[]);
 });
+// A tap on a catalogue item with no room chosen goes to the centre of the view. When that room is full (here a
+// corridor too narrow for a bed) the bed goes to the nearest room with space and the toast says where.
+test('a tap with no room chosen uses the nearest room with space 1440x900',{timeout:240000},async t=>{
+ const {page,errors,press,library}=await setup(t,{width:1440,height:900});
+ await press('#welcomeBlank');await page.fill('#roomDesignName','Pasillo');await page.fill('#roomDesignWidth','1200');await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===1);
+ await page.evaluate(()=>{const r=FloorPlanRoomLayout.create(structuredClone(FloorPlanApp.project),{name:'Dormitorio',width:4000,depth:4000,x:2400,y:0});FloorPlanApp.importProject(r.project);});
+ await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);await page.waitForTimeout(300);
+ // Centre the view on the corridor and choose no room, as after panning the plan.
+ await page.evaluate(()=>{const c=FloorPlanApp.project.rooms.find(r=>r.name==='Pasillo'),xs=c.polygon?c.polygon.map(p=>p.x):[0,1200];ui.sel=null;
+  const cx=(Math.min(...xs)+Math.max(...xs))/2;view.x0=cx-svg.clientWidth/2/view.s;view.y0=2000-svg.clientHeight/2/view.s;renderAll();});
+ await library();await page.fill('#furnitureSearch','cama doble 1,8');await press('#searchResults .item');await page.waitForTimeout(400);
+ const r=await page.evaluate(()=>{const o=FloorPlanApp.project.objects.at(-1),room=FloorPlanPlacement.roomsAt(FloorPlanPlacement.scene(FloorPlanApp.project),o.position)[0];return {n:FloorPlanApp.project.objects.length,room:room?.name,toast:document.querySelector('#toast').textContent,problems:FloorPlanPlacement.problems(FloorPlanApp.project,o).length};});
+ assert.equal(r.n,1);assert.equal(r.room,'Dormitorio',JSON.stringify(r));assert.equal(r.problems,0,'placed without problems');
+ assert.match(r.toast,/en «Dormitorio», la estancia con sitio libre más cercana \(en «Pasillo» no cabía\)/);
+ assert.deepEqual(errors,[]);
+});
