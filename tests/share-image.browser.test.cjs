@@ -28,6 +28,10 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`wit
  await page.screenshot({path:path.join(process.env.SHARE_ARTIFACTS||os.tmpdir(),`share-panel-${viewport.width}.png`)});
  await page.locator('#shareDialog .btn:has-text("Cerrar")').click();
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'the presentation goes on');
+ // Finding 20: Escape closes the panel only; the presentation goes on (a second Escape, below, ends it).
+ await page.locator('#presentationShare').click();await page.locator('#shareDialog[open]').waitFor();
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#shareDialog').open);await page.waitForTimeout(300);
+ assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'Escape in the panel keeps the presentation');
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:120000});
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before,'nothing changes in the project');assert.deepEqual(errors,[]);
 });
