@@ -138,3 +138,34 @@ body:not(.has-rooms) .palette-primary,body:not(.has-rooms) .btn.palette-primary:
 @media (max-width:1100px){.env3d select{font-size:16px;min-height:40px}}
 /* Presenting: the header (and the bar inside it) is hidden, so the work area takes the whole screen again. */
 body.presenting .app>main,body.presenting aside.lib,body.presenting aside.right{margin-bottom:0;margin-right:0}
+
+/* Journey orientation (docs/product/journey-orientation-2026-10-21.md §4): in the guided header the presentation entry
+   is secondary; the guide's own button is the single dominant action (it says «Presentar mi vivienda» when that is next).
+   Secondary actions of the guide row are plain links. */
+body.guided .presentation-entry,body.guided.has-rooms:not(.distribution-pending) .presentation-entry{background:var(--surface-panel);border-color:var(--line-strong);color:var(--ink)}
+body.guided.has-rooms:not(.distribution-pending) .presentation-entry:hover{background:var(--surface-hover)}
+body.guided.next-present:has(#guideBar:not([hidden])) #presentationBtn{display:none}
+/* 3D adds «Vista aérea / Recorrer» and a building adds its levels: the guided header then no longer fits on one line at
+   1440 px and its last controls («Propiedades», «Proyectos», language) fell off the screen. In those states it wraps to
+   a second row; the plain 2D editor keeps one line. */
+@media (min-width:1101px){body.guided.m3d header,body.guided:has(#levelBar:not([hidden])) header{flex-wrap:wrap;row-gap:6px}}
+/* The plan summary under the brand stays on one line (full text in its title) so the guided header keeps its height. */
+@media (min-width:1101px){header .brand{flex:0 1 auto;min-width:96px}header .brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.guide-current .guide-link{background:none;border:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-weight:500;padding:6px 4px;min-height:38px}
+.guide-current .guide-link:hover{background:none;color:var(--action)}
+.guide-goal-done{margin:4px 0 0;font-size:12px;color:var(--success)}
+.guide-current #guidePrevious:disabled,#guidePrevious:disabled{opacity:.55}
+@media (max-width:600px){
+  .guide-current{flex-wrap:wrap}
+  /* Phone guide height (M4): project and goal share one line, and the guide controls one row. «← Paso anterior»
+     keeps its full text as accessible name and shows the arrow only; every control stays. */
+  .guide-identity{display:flex;align-items:baseline;gap:6px;flex-basis:100%;min-width:0}
+  .guide-identity .guide-project{flex:0 1 auto;max-width:45%;margin:0}
+  .guide-identity .guide-goal{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .guide-top{gap:4px}.guide-controls{flex-wrap:nowrap;gap:4px}
+  #guidePrevious{font-size:0;min-width:44px}#guidePrevious::before{content:'←';font-size:15px}
+}
+@media (max-width:1100px){
+  /* A temporary message never covers the selection bar: it sits above it (--fab-top is measured by app-shell.js). */
+  body:has(#fab.show) #toast{bottom:calc(100vh - var(--fab-top,100vh) + 8px)}
+}
