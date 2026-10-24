@@ -124,5 +124,15 @@ test(`an opening without a room explains what to tap first ${viewport.width}x${v
   const hint=document.querySelector('#paletteOpeningContext'),toast=document.querySelector('#toast');return {hint:vis(hint)&&hint.textContent,toast:toast.classList.contains('show')&&toast.textContent};});
  const text=/toca antes en el plano la estancia donde va/;
  assert.ok(text.test(seen.hint||'')||text.test(seen.toast||''),`${name} explanation visible ${JSON.stringify(seen)}`);
+ // Finding 18: once the person does what it says (taps a room, then the window again), the explanation goes away at
+ // once; it must not stay over the opening panel and its «Aplicar» for the rest of its 6 s.
+ // (The room is selected as a tap on it would; which tap lands on a room and not on its furniture is not this test.)
+ await page.evaluate(()=>select({kind:'room',id:FloorPlanApp.project.rooms.find(r=>/Salón|客厅/.test(r.name)).id}));await page.waitForTimeout(300);
+ assert.equal(await page.evaluate(()=>ui.sel?.kind),'room',`${name} a room is selected`);
+ if(narrow||await page.locator('.app').evaluate(a=>a.classList.contains('hide-lib')))await press('#tgLib');await page.waitForTimeout(400);
+ await press('#paletteTabBuild');await press('#paletteOpening-window');await page.waitForTimeout(300);
+ const after=await page.evaluate(()=>{const t=document.querySelector('#toast');return {toast:t.classList.contains('show')?t.textContent:'',adding:!!window.FloorPlanOpeningUI?.picking?.()};});
+ assert.equal(after.adding,true,`${name} adding the window to the room ${JSON.stringify(after)}`);
+ assert.doesNotMatch(after.toast,text,`${name} the explanation is gone once followed ${JSON.stringify(after)}`);
  assert.deepEqual(errors,[],name);
 });
