@@ -109,6 +109,7 @@ test('Escape over the presentation closes the observation dialog only; a second 
  await page.locator('#presentationNote').click();await page.locator('#reviewDialog[open]').waitFor();
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#reviewDialog').open);await page.waitForTimeout(300);
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'the presentation goes on after closing the dialog');
+ assert.equal(await page.evaluate(()=>document.activeElement?.id),'presentationNote','the focus returns to «Añadir observación»');
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!FloorPlanPresentation.active,null,{timeout:120000});
  assert.equal(await page.locator('dialog[open]').count(),0,'nothing is left open over the editor');assert.deepEqual(errors,[]);
 });
