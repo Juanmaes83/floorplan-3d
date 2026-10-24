@@ -113,7 +113,7 @@ for(const viewport of [VIEWPORTS[0],VIEWPORTS[1]])test(`T2/T6 example: «Constru
  let g=await guide();assert.equal(g.primary,'Abrir 3D');
  // Opening 3D keeps SwiftShader busy: the press that starts it gets the long 3D timeout.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!document.body.classList.contains('busy'),null,{timeout:180000});await page.waitForTimeout(800);
- g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi vivienda desde el ejemplo');
+ g=await guide();assert.doesNotMatch(g.title,/Objetivo completado/);assert.notEqual(g.primary,'Abrir 3D');assert.notEqual(g.primary,'Ver en 3D');assert.equal(g.primary,'Crear mi copia');
  assert.equal(await page.locator('#modes3d').isVisible(),true,'«Vista aérea / Recorrer» visible in the guided header in 3D');await c.shot('t2-example-3d');
  // Own copy, back to 2D; presenting it reviews this version and marks it as presented.
  await press('#guidePrimary',{timeout:180000});await page.waitForFunction(()=>FloorPlanGuideUI.state().kind==='own');
@@ -155,4 +155,14 @@ test('T12 guided header keeps every control on screen in 2D, 3D and with two lev
  const lv=await d.page.evaluate(()=>{const h=document.querySelector('header');return {overflow:h.scrollWidth-h.clientWidth,off:[...h.querySelectorAll('button,input,select')].filter(e=>e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden').filter(e=>{const r=e.getBoundingClientRect();return r.right>innerWidth+1||r.left<-1;}).map(e=>e.id||e.textContent.trim())};});
  assert.deepEqual(lv.off,[],`levels ${JSON.stringify(lv)}`);assert.ok(lv.overflow<=0,`levels header overflow ${lv.overflow}`);
  assert.deepEqual([...c.errors,...d.errors],[]);
+});
+
+// A duplex with conflicts: the card asks to resolve them and the highlighted stage is «Distribuir», where the layout is
+// fixed, not «Revisar y guardar».
+test('T13 building conflicts highlight «Distribuir» 1440x900',{timeout:180000},async t=>{
+ const c=await open(t,{width:1440,height:900}),{page,guide}=c;await c.upload('#welcomeUpload',duplex);
+ await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(500);
+ const g=await guide();assert.equal(g.primary,'Ver conflictos');
+ assert.equal(await page.evaluate(()=>document.querySelector('#guideBar [aria-current="step"] .step-label')?.textContent),'Distribuir');
+ assert.deepEqual(c.errors,[]);
 });
