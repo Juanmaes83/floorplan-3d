@@ -641,6 +641,10 @@
   if(e.key!=='Tab')e.stopImmediatePropagation();
  }
  addEventListener('keydown',onKey,true);
+ // Closing a dialog opened from the presentation returns the focus to the control that opened it, not to the page.
+ let opener=null;addEventListener('focusin',e=>{if(active&&overlay.contains(e.target))opener=e.target;},true);
+ addEventListener('close',e=>{if(!active||e.target?.tagName!=='DIALOG')return;setTimeout(()=>{const a=document.activeElement;
+  if(active&&opener?.isConnected&&!opener.disabled&&(!a||a===document.body))opener.focus();},0);},true);
  addEventListener('popstate',()=>{if(entry&&(active||pendingStart))stop(true);});
  addEventListener('resize',()=>{
   if(!active||!sourceCurrent())return;
