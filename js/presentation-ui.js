@@ -597,8 +597,12 @@
   if(level&&activeLevelId()!==level)building()?.presentLevel(level);
   if(saved)app.restorePresentationEntry(saved,null,{force2D:true}).catch(()=>{});
  }
+ const modalOpen=()=>{try{return !!document.querySelector('dialog:modal');}catch{return !!document.querySelector('dialog[open]');}};
  function onKey(e){
   if(!active&&!pendingStart)return;
+  // A dialog opened over the presentation («Añadir observación», «Compartir imagen») owns the keyboard: Escape closes
+  // that dialog only and the arrows stay in it. A second Escape then ends the presentation.
+  if(active&&modalOpen())return;
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;
