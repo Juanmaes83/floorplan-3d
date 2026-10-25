@@ -397,7 +397,8 @@
   });
   // At the last (first) view «Siguiente» («Anterior») is disabled and the stop buttons are new: the focus goes to the
   // other arrow or to the active stop, never to the page, so the keyboard keeps its place in the presentation.
-  if((focused===next&&next.disabled)||(focused===previous&&previous.disabled)||(focusOnStop&&!stops.contains(document.activeElement))){
+  // During a batch every control is disabled on purpose and the batch owns the focus: nothing moves then.
+  if(!batchActive&&((focused===next&&next.disabled)||(focused===previous&&previous.disabled)||(focusOnStop&&!stops.contains(document.activeElement)))){
    const other=focused===next?previous:focused===previous?next:null,active=stops.querySelectorAll('button')[index];
    (other&&!other.disabled?other:active&&!active.disabled?active:closeButton).focus({preventScroll:true});
   }
