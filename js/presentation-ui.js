@@ -443,6 +443,8 @@
   info.textContent=stop.kind==='room'?tx(`Superficie aproximada ${stop.areaM2.toFixed(2)} m² · medidas orientativas`,`Approximate area ${stop.areaM2.toFixed(2)} m² · indicative dimensions`,`约 ${stop.areaM2.toFixed(2)} 平方米 · 仅供参考`):
    isBuildingPlan()?tx(`Vista general de «${stop.levelName}» · ${stop.areaM2.toFixed(2)} m² aproximados`,`Overview of «${stop.levelName}» · approx. ${stop.areaM2.toFixed(2)} m²`,`«${stop.levelName}» 总览`):tx('Vista general del proyecto actual','Overview of the current project','当前项目总览');
   sectionNote.hidden=!section;sectionNote.textContent=section?tx(`Vista seccionada: muros a ${framed.wallTop.toFixed(1).replace('.',',')} m para ver la estancia; el proyecto no cambia.`,`Section view: walls cut at ${framed.wallTop.toFixed(1)} m to show the room; the project is unchanged.`,`剖切视图：墙体在 ${framed.wallTop.toFixed(1)} 米处剖切以显示整个房间。项目不变。`):'';
+  // A control that gets disabled or rebuilt here may hold the focus: it is kept on the presentation (below).
+  const focused=document.activeElement,focusOnStop=stops.contains(focused);
   previous.disabled=index===0;next.disabled=index===plan.stops.length-1;
   previous.disabled ||=batchActive;next.disabled ||=batchActive;
   updateCapture();
@@ -454,6 +456,13 @@
    const b=button(text,stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');
    if(isBuildingPlan()){b.dataset.level=item.levelId;b.setAttribute('aria-label',`${text} · ${item.levelName}`);}
   });
+  // At the last (first) view «Siguiente» («Anterior») is disabled and the stop buttons are new: the focus goes to the
+  // other arrow or to the active stop, never to the page, so the keyboard keeps its place in the presentation.
+  // During a batch every control is disabled on purpose and the batch owns the focus: nothing moves then.
+  if(!batchActive&&((focused===next&&next.disabled)||(focused===previous&&previous.disabled)||(focusOnStop&&!stops.contains(document.activeElement)))){
+   const other=focused===next?previous:focused===previous?next:null,active=stops.querySelectorAll('button')[index];
+   (other&&!other.disabled?other:active&&!active.disabled?active:closeButton).focus({preventScroll:true});
+  }
   // Single-row stops scroll sideways to the active one; scrollIntoView would also scroll the card vertically
   // and push its close button out of the viewport.
   const current=stops.querySelectorAll('button')[index];
