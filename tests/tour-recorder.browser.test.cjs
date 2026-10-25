@@ -26,29 +26,49 @@ async function open(t){
 
 test('V1 records the presentation stops into one playable video of the 3D scene only',{timeout:600000,skip},async t=>{
  const {page,errors}=await open(t);
- const before=await page.evaluate(()=>FloorPlanPresentation.current?.kind);
- const result=await page.evaluate(async()=>{const r=await FloorPlanTourRecorder.record({holdMs:1200});window.__tour=r.blob;
+ const before=await page.evaluate(()=>FloorPlanPresentation.current?.kind);assert.ok(before,'the presentation reports its current view');
+ const result=await page.evaluate(async()=>{const pose0=View3D.cameraState.position,r=await FloorPlanTourRecorder.record({holdMs:1200});window.__tour=r.blob;const pose1=View3D.cameraState.position,poseBack=Math.hypot(...pose0.map((v,i)=>v-pose1[i]));
   const video=document.createElement('video');video.muted=true;video.src=URL.createObjectURL(r.blob);
   await new Promise((ok,ko)=>{video.onloadedmetadata=ok;video.onerror=()=>ko(Error('video does not load'));});
   // MediaRecorder WebM has no duration in its header: seeking far forces the real one.
   if(!Number.isFinite(video.duration)){video.currentTime=1e6;await new Promise(ok=>video.ontimeupdate=ok);}
   const duration=video.duration;
-  // One thumbnail in the middle of the hold of each stop: each has content, and two stops differ.
-  const thumb=async t=>{video.currentTime=t;await new Promise(ok=>video.onseeked=ok);const c=document.createElement('canvas');c.width=160;c.height=90;const x=c.getContext('2d');x.drawImage(video,0,0,160,90);return [...x.getImageData(0,0,160,90).data];};
-  const shots=[];for(const m of r.marks)shots.push(await thumb(Math.min(duration-.05,(m.atMs+m.holdMs/2)/1000)));
-  const stats=d=>{let sum=0,sum2=0;for(let i=0;i<d.length;i+=4){const l=(d[i]+d[i+1]+d[i+2])/3;sum+=l;sum2+=l*l;}const n=d.length/4,mean=sum/n;return {mean:+mean.toFixed(1),variance:+(sum2/n-mean*mean).toFixed(1)};};
+  // Each stop shown live (same crop as the recorder) is the reference. The whole video is sampled every 0.5 s and
+  // each sample is matched to its closest stop: every stop must appear, in the order of the presentation. (The
+  // recorder's own marks are not used to find stops: the first encoded frame can come seconds after start().)
   const diff=(a,b)=>{let t=0;for(let i=0;i<a.length;i+=4)t+=(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]))/3;return +(t/(a.length/4)).toFixed(1);};
+  const stats=d=>{let sum=0,sum2=0;for(let i=0;i<d.length;i+=4){const l=(d[i]+d[i+1]+d[i+2])/3;sum+=l;sum2+=l*l;}const n=d.length/4,mean=sum/n;return {mean:+mean.toFixed(1),variance:+(sum2/n-mean*mean).toFixed(1)};};
+  const live=document.querySelector('#view3d canvas'),refs=[];
+  for(const st of FloorPlanPresentation.plan.stops){await View3D.presentationGo(st,true);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+   const c=document.createElement('canvas');c.width=160;c.height=90;const x=c.getContext('2d'),sw=live.width,sh=live.height,k=Math.max(1280/sw,720/sh),w=1280/k,h=720/k;x.drawImage(live,(sw-w)/2,(sh-h)/2,w,h,0,0,160,90);refs.push([...x.getImageData(0,0,160,90).data]);}
+  const thumb=async t=>{video.currentTime=t;await new Promise(ok=>video.onseeked=ok);const c=document.createElement('canvas');c.width=160;c.height=90;const x=c.getContext('2d');x.drawImage(video,0,0,160,90);return [...x.getImageData(0,0,160,90).data];};
+  const samples=[];for(let at=0.25;at<duration;at+=.5){const d=await thumb(at),dist=refs.map(r=>diff(d,r)),best=dist.indexOf(Math.min(...dist));samples.push({at:+at.toFixed(2),best,dist:dist[best],stats:stats(d)});}
+  // The references moved the camera: the presentation goes back to the view it shows.
+  const idle=async()=>{for(let i=0;i<200&&(View3D.lifecycleMetrics.animating||View3D.lifecycleMetrics.flying);i++)await new Promise(r=>setTimeout(r,100));};
+  await idle();await View3D.presentationGo(FloorPlanPresentation.current,true);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const sequence=[];for(const s of samples)if(s.dist<15&&sequence[sequence.length-1]!==s.best)sequence.push(s.best);
+  const pictures=[];for(let i=0;i<refs.length;i++){const hits=samples.filter(s=>s.best===i).sort((a,b)=>a.dist-b.dist);if(!hits.length){pictures.push(null);continue;}
+   video.currentTime=hits[0].at;await new Promise(ok=>video.onseeked=ok);const c=document.createElement('canvas');c.width=640;c.height=360;c.getContext('2d').drawImage(video,0,0,640,360);pictures.push({at:hits[0].at,dist:hits[0].dist,variance:hits[0].stats.variance,url:c.toDataURL('image/png')});}
   return {type:r.type,extension:r.extension,bytes:r.blob.size,blobType:r.blob.type,width:video.videoWidth,height:video.videoHeight,duration,frames:r.frames,stops:r.stops,marks:r.marks,durationMs:r.durationMs,
-   shots:shots.map(stats),stopDifference:diff(shots[0],shots[1])};});
+   poseBack:+poseBack.toFixed(3),framesPerSecond:r.framesPerSecond,refDifferences:refs.slice(1).map((x,i)=>diff(refs[i],x)),sequence,samples:samples.map(({at,best,dist})=>({at,best,dist})),pictures};});
  // The same bytes, saved for inspection outside the browser.
- await fs.mkdir(OUT,{recursive:true});const bytes=Buffer.from(await page.evaluate(async()=>[...new Uint8Array(await window.__tour.arrayBuffer())]));
+ await fs.mkdir(OUT,{recursive:true});
+ // One picture per stop, taken from the decoded video, for human review.
+ for(const [i,p] of result.pictures.entries())if(p)await fs.writeFile(path.join(OUT,`stop-${i+1}-${p.at.toFixed(1)}s.png`),Buffer.from(p.url.split(',')[1],'base64'));
+ result.pictures=result.pictures.map(p=>p&&{at:p.at,dist:p.dist,variance:p.variance});
+ const bytes=Buffer.from(await page.evaluate(async()=>[...new Uint8Array(await window.__tour.arrayBuffer())]));
  const file=path.join(OUT,`tour-v1.${result.extension}`);await fs.writeFile(file,bytes);await fs.writeFile(path.join(OUT,'result.json'),JSON.stringify(result,null,1));
  assert.equal(bytes.length,result.bytes);assert.ok(result.bytes>20_000,JSON.stringify(result));
  assert.match(result.type,/^video\/(mp4|webm)/);assert.equal(result.blobType,result.type.split(';')[0]);assert.equal(result.extension,result.type.startsWith('video/mp4')?'mp4':'webm');
  assert.equal(result.width,1280);assert.equal(result.height,720);assert.ok(result.stops>=2);assert.equal(result.marks.length,result.stops);
  assert.ok(result.duration>2,`duration ${result.duration}`);
- for(const shot of result.shots)assert.ok(shot.variance>20,`a stop frame is a flat image: ${JSON.stringify(result.shots)}`);
- assert.ok(result.stopDifference>8,`the video does not change between the first two stops: ${result.stopDifference}`);
+ // Right after recording, the camera is back where the presentation had it.
+ assert.ok(result.poseBack<0.01,`camera not restored after recording: ${result.poseBack}`);
+ // Stops differ from each other, each appears in the video with real content, and in the presentation's order.
+ for(const [i,d] of result.refDifferences.entries())assert.ok(d>8,`stops ${i+1} and ${i+2} look alike: ${JSON.stringify(result.refDifferences)}`);
+ for(const [i,p] of result.pictures.entries()){assert.ok(p&&p.dist<15,`stop ${i+1} is not in the video: ${JSON.stringify(result.samples)}`);assert.ok(p.variance>20,`stop ${i+1} frame is flat`);}
+ assert.deepEqual(result.sequence,result.pictures.map((_,i)=>i),`stops out of order or repeated: ${JSON.stringify(result.sequence)}`);
+ t.diagnostic(`frames per second while recording: ${result.framesPerSecond} (software rendering)`);
  // Outside the browser: ffprobe reads the file. Its outcome is recorded as passed, missing or failed; failed fails.
  let ffprobe;try{const out=await run('ffprobe',['-v','error','-show_entries','stream=codec_name,width,height','-of','json',file]);ffprobe={status:'passed',streams:JSON.parse(out.stdout).streams};}
  catch(error){ffprobe=error.code==='ENOENT'?{status:'missing'}:{status:'failed',message:String(error.stderr||error.message).slice(0,300)};}
