@@ -23,30 +23,36 @@
   const type=pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
   const source=document.querySelector('#view3d canvas');if(!source)throw Error('Vista 3D no disponible.');
   if(signal?.aborted)throw new DOMException('Grabación cancelada','AbortError');
+  const plan=presentation.plan,back=presentation.current,chunks=[],marks=[];
+  let recorder=null,stream=null,raf=0,frames=0,failed=false,started=0;
   busy=true;
-  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');
-  const stream=canvas.captureStream(fps),recorder=new MediaRecorder(stream,{mimeType:type,videoBitsPerSecond:5_000_000}),chunks=[];
-  let frames=0,raf=0;const paint=()=>{ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);cover(ctx,source,width,height);frames++;raf=requestAnimationFrame(paint);};
-  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
-  const stopped=new Promise(r=>recorder.onstop=r);
-  const plan=presentation.plan,back=presentation.current,started=performance.now();
-  let cancelled=false;
   try{
-   paint();recorder.start(250);
+   // Everything that can throw (canvas stream, recorder, start) happens inside try: «busy» is always released.
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');
+   stream=canvas.captureStream(fps);recorder=new MediaRecorder(stream,{mimeType:type,videoBitsPerSecond:5_000_000});
+   recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+   const paint=()=>{ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);cover(ctx,source,width,height);frames++;raf=requestAnimationFrame(paint);};
+   paint();recorder.start(250);started=performance.now();
    for(const stop of plan.stops){
     if(signal?.aborted)throw new DOMException('Grabación cancelada','AbortError');
-    await window.View3D.presentationGo(stop,false);await wait(holdMs,signal);
+    await window.View3D.presentationGo(stop,false);
+    // When each stop is reached and held, in ms from the start of the video.
+    marks.push({kind:stop.kind,roomId:stop.roomId||null,atMs:Math.round(performance.now()-started),holdMs});
+    await wait(holdMs,signal);
    }
-  }catch(error){cancelled=true;throw error;}
+  }catch(error){failed=true;throw error;}
   finally{
-   if(recorder.state!=='inactive')recorder.stop();await stopped;cancelAnimationFrame(raf);stream.getTracks().forEach(t=>t.stop());
-   if(cancelled)chunks.length=0;
+   cancelAnimationFrame(raf);
+   // Only a recorder that really started sends «stop»; it is awaited with a limit so a lost event cannot hang.
+   if(recorder&&recorder.state!=='inactive'){const done=new Promise(r=>recorder.addEventListener('stop',r,{once:true}));try{recorder.stop();}catch{}await Promise.race([done,new Promise(r=>setTimeout(r,3000))]);}
+   stream?.getTracks().forEach(t=>t.stop());
+   if(failed)chunks.length=0;
    // The presentation returns to the view it showed before recording.
    if(back&&presentation.active)try{await window.View3D.presentationGo(back,true);}catch{}
    busy=false;
   }
   const blob=new Blob(chunks,{type:type.split(';')[0]});
-  return {blob,type,extension:extension(type),width,height,fps,frames,stops:plan.stops.length,durationMs:Math.round(performance.now()-started)};
+  return {blob,type,extension:extension(type),width,height,fps,frames,stops:plan.stops.length,marks,durationMs:Math.round(performance.now()-started)};
  }
  window.FloorPlanTourRecorder={record,pickType,get busy(){return busy;}};
 })();
