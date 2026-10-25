@@ -1299,11 +1299,22 @@ function renderLabels(){
   g.setAttribute('display', ui.layers.labels ? 'inline' : 'none');
   // Room labels keep clear of stair footprints and slab voids of the active level (display only; labelAt is kept).
   // When a label has to move it also prefers a place clear of the furniture.
-  const zones = window.FloorPlanBuildingUI?.stairZones() || [], furniture = zones.length ? state.furniture.map(f => { const a = f.rot*Math.PI/180, c = Math.cos(a), s = Math.sin(a);
-    return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([u,v]) => ({x:f.cx+u*f.w/2*c-v*f.d/2*s, y:f.cy+u*f.w/2*s+v*f.d/2*c})); }) : [];
+  // Without stairs the furniture itself is what a label must not cover. A selected piece also draws, at screen size,
+  // a rotation handle beyond its back and a size tag under it, so the first choice keeps clear of those too; then the
+  // label without its dimensions line; then clear of the pieces only; and where the room has no clear place at all
+  // the label stays where it was.
+  const zones = window.FloorPlanBuildingUI?.stairZones() || [], px = 1/view.s, back = ((COARSE ? 40 : 26) + 6*(COARSE ? 1.7 : 1) + 4)*px, tag = 34*px;
+  const outline = (f, extra) => { const a = f.rot*Math.PI/180, c = Math.cos(a), s = Math.sin(a);
+    return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([u,v]) => { const dv = extra && v < 0 ? f.d/2 + back : f.d/2, y = f.cy+u*f.w/2*s+v*dv*c; return {x:f.cx+u*f.w/2*c-v*dv*s, y:extra && y>f.cy && !sizeTagInside(f, px) ? y+tag : y}; }); };
+  const furniture = state.furniture.map(f => outline(f, false)), marked = state.furniture.map(f => outline(f, true));
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
-    const name = nm(state.rooms[r.id].name), dims = designDimensions(r.id), half = Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, dims.length*140*.6)/2;
-    const {x,y} = zones.length ? FloorPlanBuilding.labelAnchor(r.poly.map(([x,y])=>({x,y})), {x:r.at[0],y:r.at[1]}, {left:half,right:half,above:230,below:dims?500:310}, zones, {prefer:[furniture]}) : {x:r.at[0],y:r.at[1]};
+    const name = nm(state.rooms[r.id].name), allDims = designDimensions(r.id), width = d => Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, d.length*140*.6)/2;
+    const poly = r.poly.map(([x,y])=>({x,y})), at = {x:r.at[0],y:r.at[1]}, box = d => ({left:width(d),right:width(d),above:230,below:d?500:310});
+    let place = {x:at.x, y:at.y}, dims = allDims;
+    if (zones.length) place = FloorPlanBuilding.labelAnchor(poly, at, box(dims), zones, {prefer:[furniture]});
+    else if (furniture.length) for (const [d, around, margin] of [[allDims, marked, 40], ['', marked, 0], [allDims, furniture, 40]]) {
+      const p = FloorPlanBuilding.labelAnchor(poly, at, box(d), around, {margin}); if (!p.blocked){ place = p; dims = d; break; } }
+    const {x,y} = place, half = width(dims);
     if (ui.layers.labels) labelBoxes.push({room:r.id, x0:x-half, x1:x+half, y0:y-230, y1:y+(dims?500:310)});
     const halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
     return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(name)}</text>
@@ -1360,6 +1371,9 @@ function renderMeasure(){
   SafeDOM.markup($('#gMeasure'), s);
 }
 
+// The size tag of a selected piece goes inside its lower edge when the piece is tall enough on screen, so it never
+// lands on a room label drawn beside the piece.
+const sizeTagInside = (f, k) => aabb(f).hh*2 > 60*k;
 function renderSel(){
   const k = 1/view.s; let s = '';
   if (ui.sel?.kind === 'furn'){
@@ -1376,7 +1390,7 @@ function renderSel(){
         <circle data-handle="size" cx="${sx}" cy="${sy}" r="${hit}" fill="transparent"/>
         <rect data-handle="size" x="${sx-5*hs*k}" y="${sy-5*hs*k}" width="${10*hs*k}" height="${10*hs*k}" fill="#b5653a"><title>${tr('拖动调整尺寸','Drag to resize')}</title></rect></g>`;
       const {hh} = aabb(f);
-      s += `<text x="${f.cx}" y="${f.cy+hh+24*k}" font-size="${12*k}" text-anchor="middle" fill="#b5653a" font-weight="600" pointer-events="none"
+      s += `<text x="${f.cx}" y="${sizeTagInside(f, k) ? f.cy+hh-10*k : f.cy+hh+24*k}" font-size="${12*k}" text-anchor="middle" fill="#b5653a" font-weight="600" pointer-events="none"
         stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
     }
   } else if (ui.sel?.kind === 'room'){
