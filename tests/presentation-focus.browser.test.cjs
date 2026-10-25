@@ -21,16 +21,18 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`pre
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D,null,{timeout:120000});await page.locator('#welcomeExample').click();
  await page.locator('#guideClose').click();await page.locator('#presentationBtn').click();
  await page.locator('.presentation-room-row').nth(1).locator('input').check();await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);
- // «Siguiente» from the keyboard to the last view.
- const next=page.locator('#presentationOverlay button',{hasText:'Siguiente'});await next.focus();await page.keyboard.press('Enter');await settled(page);
+ // «Siguiente» from the keyboard, view after view, to the last one.
+ const total=await page.evaluate(()=>FloorPlanPresentation.plan.stops.length);assert.ok(total>=2);
+ const next=page.locator('#presentationOverlay button',{hasText:'Siguiente'});await next.focus();
+ for(let i=1;i<total;i++){await page.keyboard.press('Enter');await settled(page);}
  const atEnd=await focus(page);
- assert.equal(atEnd.status,'Vista 2 de 2');assert.ok(atEnd.inOverlay,`focus left the presentation at the last view: ${JSON.stringify(atEnd)}`);assert.match(atEnd.text,/Anterior/);
- // «Anterior» from the keyboard back to the first view.
- await page.keyboard.press('Enter');await settled(page);const atStart=await focus(page);
- assert.equal(atStart.status,'Vista 1 de 2');assert.ok(atStart.inOverlay,JSON.stringify(atStart));assert.match(atStart.text,/Siguiente/);
+ assert.equal(atEnd.status,`Vista ${total} de ${total}`);assert.ok(atEnd.inOverlay,`focus left the presentation at the last view: ${JSON.stringify(atEnd)}`);assert.match(atEnd.text,/Anterior/);
+ // «Anterior» from the keyboard back to the first view (the focus is on it after the last view).
+ for(let i=1;i<total;i++){await page.keyboard.press('Enter');await settled(page);}const atStart=await focus(page);
+ assert.equal(atStart.status,`Vista 1 de ${total}`);assert.ok(atStart.inOverlay,JSON.stringify(atStart));assert.match(atStart.text,/Siguiente/);
  // A stop button pressed from the keyboard: the row is rebuilt and the focus is on the active stop.
  const stop=page.locator('.presentation-stops button').nth(1);await stop.focus();await page.keyboard.press('Enter');await settled(page);const onStop=await focus(page);
- assert.equal(onStop.status,'Vista 2 de 2');assert.ok(onStop.inOverlay,JSON.stringify(onStop));assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('aria-current')),'step');
+ assert.equal(onStop.status,`Vista 2 de ${total}`);assert.ok(onStop.inOverlay,JSON.stringify(onStop));assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('aria-current')),'step');
  const dir=process.env.FOCUS_ARTIFACTS;if(dir){await fs.mkdir(dir,{recursive:true});await page.screenshot({path:path.join(dir,`${viewport.width}x${viewport.height}-stop-focus.png`)});}
  assert.deepEqual(errors,[]);
 });
