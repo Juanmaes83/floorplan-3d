@@ -1,0 +1,65 @@
+name: Integrated browser regressions
+on:
+  pull_request:
+    branches: [integration/2026-10-23-full, master]
+    paths:
+      - 'index.html'
+      - 'js/presentation-ui.js'
+      - 'js/tour-recorder.js'
+      - 'tests/tour-recorder.browser.test.cjs'
+      - 'tests/presentation-focus.browser.test.cjs'
+      - 'tests/room-label-clear.browser.test.cjs'
+      - '.github/workflows/integration-browser.yml'
+  push:
+    branches: [integration/2026-10-23-full, 'ci/integration-browser-*']
+    paths:
+      - 'index.html'
+      - 'js/presentation-ui.js'
+      - 'js/tour-recorder.js'
+      - 'tests/tour-recorder.browser.test.cjs'
+      - 'tests/presentation-focus.browser.test.cjs'
+      - 'tests/room-label-clear.browser.test.cjs'
+      - '.github/workflows/integration-browser.yml'
+permissions:
+  contents: read
+jobs:
+  recorder-focus-and-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      TOUR_VIDEO_ARTIFACTS: qa-results/tour-video-integration
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Check exact source and syntax
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check js/presentation-ui.js
+          node --check js/tour-recorder.js
+          node --check tests/tour-recorder.browser.test.cjs
+          node --check tests/presentation-focus.browser.test.cjs
+          node --check tests/room-label-clear.browser.test.cjs
+      - name: Install browser and Three 0.160.0
+        run: |
+          npm install --prefix "$RUNNER_TEMP/integration-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/integration-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/integration-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/integration-three"
+          test -f "$RUNNER_TEMP/integration-three/package/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/integration-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Recorder, keyboard focus, room labels
+        run: node --test --test-concurrency=1 tests/tour-recorder.browser.test.cjs tests/presentation-focus.browser.test.cjs tests/room-label-clear.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-browser-${{ env.TESTED_SHA }}
+          path: qa-results/tour-video-integration/
+          if-no-files-found: ignore
