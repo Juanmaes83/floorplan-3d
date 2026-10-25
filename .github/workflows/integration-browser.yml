@@ -11,7 +11,7 @@ on:
       - 'tests/room-label-clear.browser.test.cjs'
       - '.github/workflows/integration-browser.yml'
   push:
-    branches: [integration/2026-10-23-full]
+    branches: [integration/2026-10-23-full, 'ci/integration-browser-*']
     paths:
       - 'index.html'
       - 'js/presentation-ui.js'
