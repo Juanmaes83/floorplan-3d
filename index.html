@@ -1274,8 +1274,8 @@ function renderLabels(){
     const {x,y} = place, half = width(dims);
     if (ui.layers.labels) labelBoxes.push({room:r.id, x0:x-half, x1:x+half, y0:y-230, y1:y+(dims?500:310)});
     const halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
-    return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(name)}</text>
-      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${dims?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${dims}</text>`:''}`;
+    return `<g data-room-label="${esc(r.id)}"><text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(name)}</text>
+      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>${dims?`<text x="${x}" y="${y+450}" font-size="140" text-anchor="middle" fill="#7d7366" ${halo}>${dims}</text>`:''}</g>`;
   }).join(''));
 }
 
@@ -1331,8 +1331,18 @@ function renderMeasure(){
 // The size tag of a selected piece goes inside its lower edge when the piece is tall enough on screen, so it never
 // lands on a room label drawn beside the piece.
 const sizeTagInside = (f, k) => aabb(f).hh*2 > 60*k;
+// A room label that had no clear place may lie under the selected piece's handle or size tag: while the piece is
+// selected that label is dimmed, so the editing controls stay in front and readable.
+function dimLabelsUnder(f, k){
+  let x0 = -Infinity, x1 = -Infinity, y0 = 0, y1 = 0;
+  if (f){ const {hw, hh} = aabb(f), back = ((COARSE ? 40 : 26) + 6*(COARSE ? 1.7 : 1) + 4)*k, tag = sizeTagInside(f, k) ? 0 : 34*k;
+    x0 = f.cx-hw-back; x1 = f.cx+hw+back; y0 = f.cy-hh-back; y1 = f.cy+hh+tag; }
+  for (const l of labelBoxes){ const under = l.x0 < x1 && l.x1 > x0 && l.y0 < y1 && l.y1 > y0;
+    document.querySelector(`#gLabels [data-room-label="${CSS.escape(l.room)}"]`)?.setAttribute('opacity', under ? '.25' : '1'); }
+}
 function renderSel(){
   const k = 1/view.s; let s = '';
+  dimLabelsUnder(ui.sel?.kind === 'furn' ? getF(ui.sel.id) : null, k);
   if (ui.sel?.kind === 'furn'){
     const f = getF(ui.sel.id);
     if (f){

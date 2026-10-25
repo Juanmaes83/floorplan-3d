@@ -29,3 +29,30 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`roo
  const inside=await page.evaluate(([x0,y0,x1,y1])=>{const r=geometry.rooms[0].poly,xs=r.map(p=>p[0]),ys=r.map(p=>p[1]);return x0>=Math.min(...xs)&&x1<=Math.max(...xs)&&y0>=Math.min(...ys)&&y1<=Math.max(...ys);},rows[0].box);
  assert.ok(inside,JSON.stringify(rows[0]));assert.deepEqual(errors,[]);
 });
+
+// Journey G step 4 at phone size: a sofa, its duplicate and six beds leave no clear place for the label, so it can lie
+// under the selected piece's handle or size tag. Then the label is dimmed while the piece is selected, and comes back
+// when nothing is selected.
+test('a crowded room dims the label under the selected piece and restores it after 390x844',{timeout:180000},async t=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox']});t.after(()=>browser.close());
+ const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.route(/cdn\.jsdelivr\.net|unpkg\.com/,r=>r.abort());await page.goto(url);
+ const press=async s=>page.locator(s).first().tap();
+ await press('#welcomeBlank');await page.locator('#roomDesignName').fill('Salón');await press('#roomDesignReview');await press('#roomDesignConfirm');await page.waitForTimeout(400);
+ const add=async q=>{if(!(await page.locator('aside.lib.open').count()))await press('#tgLib');await press('#paletteTabFurnish');await page.locator('#furnitureSearch').fill(q);await page.waitForTimeout(400);await press('#searchResults .item');await page.waitForTimeout(300);};
+ await add('sofá');if(await page.locator('aside.lib.open').count())await press('#tgLib');await press('#fab [data-a=dup]');await page.waitForTimeout(300);
+ for(let i=0;i<6;i++)await add('cama');if(await page.locator('aside.lib.open').count())await press('#tgLib');await page.waitForTimeout(300);
+ // The integration places the duplicated sofa at (1700, 2900) (measured from journey G there); it is set here so the
+ // case does not depend on the branch's placement rules. The last bed stays selected.
+ await page.evaluate(()=>{const sofas=state.furniture.filter(f=>f.type==='sofa');Object.assign(sofas[1],{cx:1700,cy:2900});const last=state.furniture[state.furniture.length-1];renderAll();select({kind:'furn',id:last.id});});await page.waitForTimeout(300);
+ const look=()=>page.evaluate(()=>{const box=e=>e.getBoundingClientRect(),hit=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  const chrome=[...document.querySelectorAll('#gSel [data-handle], #gSel text')].map(box).filter(r=>r.width>0);
+  return [...document.querySelectorAll('#gLabels [data-room-label]')].map(g=>({opacity:+(g.getAttribute('opacity')??1),under:[...g.querySelectorAll('text')].some(t=>chrome.some(c=>hit(box(t),c)))}));});
+ const selected=await look();await fs.mkdir(OUT,{recursive:true});await page.screenshot({path:path.join(OUT,'390x844-crowded-selected.png')});
+ assert.ok(selected.length===1,JSON.stringify(selected));
+ for(const l of selected)if(l.under)assert.ok(l.opacity<=.3,`label under the selection is not dimmed: ${JSON.stringify(selected)}`);
+ await page.evaluate(()=>select(null));const free=await look();await page.screenshot({path:path.join(OUT,'390x844-crowded-none.png')});
+ assert.deepEqual(free.map(l=>l.opacity),[1]);assert.deepEqual(errors,[]);
+ // The case this test is about must really happen: with the journey's pieces the label lies under the selection.
+ assert.equal(selected[0].under,true,'the crowded case did not reproduce');
+});
