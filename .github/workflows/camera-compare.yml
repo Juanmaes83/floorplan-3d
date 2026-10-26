@@ -1,0 +1,44 @@
+name: Compare #93 camera restore
+on:
+  push:
+    branches: ['ci/compare-93-camera-20261026']
+permissions:
+  contents: read
+jobs:
+  camera-restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TESTED_SHA: ${{ github.sha }}
+      TOUR_VIDEO_ARTIFACTS: qa-results/tour-video-compare-93
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Check exact source and syntax
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check js/tour-recorder.js
+          node --check tests/tour-recorder-ci.browser.test.cjs
+      - name: Install browser and Three 0.160.0
+        run: |
+          npm install --prefix "$RUNNER_TEMP/integration-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/integration-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/integration-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/integration-three"
+          test -f "$RUNNER_TEMP/integration-three/package/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/integration-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Run #93 camera restore smoke
+        run: node --test --test-concurrency=1 tests/tour-recorder-ci.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compare-93-camera-${{ env.TESTED_SHA }}
+          path: qa-results/tour-video-compare-93/
+          if-no-files-found: ignore
