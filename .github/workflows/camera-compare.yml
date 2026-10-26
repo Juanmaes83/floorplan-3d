@@ -1,3 +1,4 @@
+# Trigger after workflow exists on branch.
 name: Compare #93 camera restore
 on:
   push:
