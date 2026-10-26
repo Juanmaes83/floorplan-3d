@@ -3,7 +3,7 @@
 (function(root){
  const C=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  const R=typeof module==='object'?require('./layout-review.js'):root.FloorPlanLayoutReview;
- const S=typeof module==='object'?require('./surface-core.js'):root.FloorPlanSurfaces;
+ const S=typeof module==='object'?require('./surface-core.js'):root.FloorPlanSurfaceMetrics;
  // Net floor area from the surface core (room → level → home): rooms counted toward area; 0 when none computes.
  function netAreaM2(project){return S.home(project).areaM2??0;}
  function metrics(project,options={}){
