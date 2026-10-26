@@ -33,6 +33,14 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`dec
  assert.equal(shown.visible,true);assert.deepEqual(shown.options.slice(0,4),['Sin especificar','Tabique','Muro portante','Otro']);
  assert.deepEqual(shown.sources,['No registrada','Declarado por profesional','Importado','Pendiente de revisar']);assert.equal(shown.origin,'No registrada');
  assert.equal(shown.note,'Dato declarado y orientativo para el proyecto. No es una verificación ni un cálculo estructural.');
+ // Phone regression from human QA: while the wall properties drawer is open, sticky «Inicio» must have an opaque
+ // separation from horizontally scrolled header controls and neither open nor closed state may create page overflow.
+ if(mobile){
+  const shell=()=>page.evaluate(()=>{const b=document.querySelector('#welcomeBtn'),s=getComputedStyle(b);return {overflow:document.documentElement.scrollWidth>window.innerWidth+1,marginRight:parseFloat(s.marginRight)||0,shadow:s.boxShadow,drawer:!!document.querySelector('aside.right.open')};});
+  let m=await shell();assert.equal(m.drawer,true);assert.equal(m.overflow,false);assert.ok(m.marginRight>=10,'Inicio keeps a gutter from scrolled controls');assert.notEqual(m.shadow,'none');
+  await page.evaluate(()=>closeDrawers());await page.waitForTimeout(150);m=await shell();assert.equal(m.drawer,false);assert.equal(m.overflow,false);
+  await press('#fab [data-a=prop]');await page.waitForTimeout(150);assert.equal((await shell()).drawer,true);
+ }
  // 4–7: partition, load-bearing, other, back to unspecified, each a professional's declaration.
  for(const value of ['partition','load-bearing','other','unknown']){await page.locator('#wallStructureType').selectOption(value);await page.waitForTimeout(250);
   const w=await wall(pick.grey);assert.equal(w.structure,value);assert.equal(w.source,'professional');assert.equal(w.version,'1.5.0');assert.equal(w.status,before.status);}
