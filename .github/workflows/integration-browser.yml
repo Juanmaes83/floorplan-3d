@@ -1,4 +1,4 @@
-# CI trigger refresh 2026-10-26 after Actions re-enabled: no product-code change.
+# CI integration gate. Product code is unchanged; the recorder smoke runs reduced resolution on hosted software rendering.
 name: Integrated browser regressions
 on:
   pull_request:
@@ -8,6 +8,7 @@ on:
       - 'js/presentation-ui.js'
       - 'js/tour-recorder.js'
       - 'tests/tour-recorder.browser.test.cjs'
+      - 'tests/tour-recorder-ci.browser.test.cjs'
       - 'tests/presentation-focus.browser.test.cjs'
       - 'tests/room-label-clear.browser.test.cjs'
       - '.github/workflows/integration-browser.yml'
@@ -18,6 +19,7 @@ on:
       - 'js/presentation-ui.js'
       - 'js/tour-recorder.js'
       - 'tests/tour-recorder.browser.test.cjs'
+      - 'tests/tour-recorder-ci.browser.test.cjs'
       - 'tests/presentation-focus.browser.test.cjs'
       - 'tests/room-label-clear.browser.test.cjs'
       - '.github/workflows/integration-browser.yml'
@@ -43,6 +45,7 @@ jobs:
           node --check js/presentation-ui.js
           node --check js/tour-recorder.js
           node --check tests/tour-recorder.browser.test.cjs
+          node --check tests/tour-recorder-ci.browser.test.cjs
           node --check tests/presentation-focus.browser.test.cjs
           node --check tests/room-label-clear.browser.test.cjs
       - name: Install browser and Three 0.160.0
@@ -56,8 +59,8 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$RUNNER_TEMP/integration-three/package" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: Recorder, keyboard focus, room labels
-        run: node --test --test-concurrency=1 tests/tour-recorder.browser.test.cjs tests/presentation-focus.browser.test.cjs tests/room-label-clear.browser.test.cjs
+      - name: Recorder smoke, keyboard focus, room labels
+        run: node --test --test-concurrency=1 tests/tour-recorder-ci.browser.test.cjs tests/presentation-focus.browser.test.cjs tests/room-label-clear.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
