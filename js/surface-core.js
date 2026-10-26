@@ -1,5 +1,6 @@
-/* Surfaces: room → level → home (roadmap point 3). One derivation over the data already persisted; nothing is
-   stored and no project is rewritten.
+/* Surface metrics: room → level → home (roadmap point 3). One derivation over the data already persisted; nothing is
+   stored and no project is rewritten. This module deliberately exports FloorPlanSurfaceMetrics in the browser so it
+   cannot collide with the existing FloorPlanSurfaces material catalog.
    - Room area: the area the app already shows, the room polygon (net inner faces) in m².
    - Exclusion: the existing rooms[].countsTowardArea. An excluded room keeps its own area but does not add up.
    - Status from the existing scale of each project/level: confidence 'real' (calibrated with a known dimension and
