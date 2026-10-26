@@ -243,6 +243,8 @@
    case '3d':state().current='view3d';await setView('3d');if(is3D())record('view3d');break;
    case 'save':state().current='save';if(save())announce(tx('Proyecto guardado en este navegador. Exporta una copia para otro dispositivo.','Project saved in this browser. Export a copy for another device.','项目已保存在此浏览器。请导出副本以在其他设备使用。'));break;
    case 'export':state().current='export';exportPNG();break;
+   case 'drawWall':await window.FloorPlanBuildPalette.drawWall();break;
+   case 'measure':case 'select':await window.FloorPlanBuildPalette.useTool(a.id);break;
    case 'walls':await setView('2d');$('#traceBtn').click();await FloorPlanTraceUI.start('edit');state().current='geometry';break;
    case 'floor':{const room=project.rooms.find(r=>r.id===state().targetRoomId)||project.rooms[0];select({kind:'room',id:room.id});drawer('panel',true);$('#surfaceFloor').click();break;}
    case 'undo':undo();break;case 'clear':clearLayout();break;
