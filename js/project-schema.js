@@ -198,7 +198,8 @@
         "thicknessMm": { "$ref": "#/$defs/thicknessMm" },
         "heightMm": { "$ref": "#/$defs/heightMm" },
         "surfaceMaterialId": { "$ref": "#/$defs/materialId", "description": "Opcional desde 1.4.0. Acabado de toda la pared, ambas caras; también afecta a estancias vecinas. Ausente conserva el acabado predeterminado." },
-        "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico." },
+        "structure": { "enum": ["load-bearing", "exterior", "partition", "low", "unknown", "other"], "description": "Etiqueta declarada por la persona o la plantilla; NO es un dictamen técnico. 'other' desde 1.5.0." },
+        "structureSource": { "enum": ["professional", "imported", "pending-review"], "description": "Opcional desde 1.5.0. Procedencia de la declaración de structure: la indicó una persona profesional, llegó en un archivo importado o queda pendiente de revisar. Ausente: no registrada. Nunca se deduce." },
         "status": { "enum": ["existing", "demolished", "new"] },
         "source": { "$ref": "#/$defs/geometrySource" }
       }

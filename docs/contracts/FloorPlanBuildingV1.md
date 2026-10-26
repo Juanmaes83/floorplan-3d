@@ -36,7 +36,7 @@ Cada planta tiene `id` (`lvl_`), `name` (1–80), `order`, `elevationMm`, `slabT
 
 Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 
-- `schemaVersion` debe ser **1.0.0–1.4.0**, las versiones que este lector conoce.
+- `schemaVersion` debe ser **1.0.0–1.5.0**, las versiones que este lector conoce.
 - Se valida con `FloorPlanCore.validate(project, {strict: true})`: cualquier campo no definido en el schema 1.x es un error. Por compatibilidad, un 1.x suelto de versión posterior a 1.0.0 conserva campos desconocidos; aquí no, para impedir que `levels[]`, `levelId` u otro dato multipiso viaje oculto dentro de una planta.
 - En `extensions` (`x-*`) se rechaza cualquier clave, a cualquier profundidad, que nombre plantas, niveles, escaleras o edificio.
 - Un edificio no puede incrustarse dentro de otro.

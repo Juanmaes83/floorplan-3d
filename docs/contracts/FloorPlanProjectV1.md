@@ -293,3 +293,14 @@ Regla semántica nueva: `surfaceMaterialId` debe existir en `materials` y ser mu
 La clasificación histórica de un material de suelo no se restringe retroactivamente.
 [Ejemplo portable](examples/floorplan-project-v1.surfaces.example.json) e
 [inventario y pruebas](../technical/surface-material-library.md).
+
+## Ampliación 1.5.0 — tipo declarado de muro — pendiente de revisión de esta entrega
+
+- `walls[].structure`: se añade `other`. La interfaz ofrece «Sin especificar» (`unknown`), «Tabique»
+  (`partition`), «Muro portante» (`load-bearing`) y «Otro» (`other`); `exterior` y `low` de proyectos
+  anteriores se conservan y se muestran como dato anterior hasta que la persona elija un tipo.
+- `walls[].structureSource` (opcional): `professional` (declarado por profesional), `imported` (llegó en un
+  archivo importado) o `pending-review` (pendiente de revisar). Ausente: no registrada.
+- Regla: el tipo es una **declaración**; Rubik no lo deduce ni lo presenta como verificación estructural.
+  Elegir un tipo en «Editar muro» lo registra como declarado por profesional; cambiar solo la procedencia
+  conserva el tipo. Declarar eleva a 1.5.0 únicamente versiones anteriores.
