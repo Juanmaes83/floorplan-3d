@@ -27,3 +27,10 @@
 .presentation-next{font-size:13px;margin:6px 0;padding:8px 10px;border-radius:8px;background:var(--action-soft);color:var(--ink)}
 @media (max-width:600px){.brand-form{grid-template-columns:1fr}.brand-dialog{padding:14px}}
 @media (max-height:500px){.presentation-brand img{max-height:24px}.presentation-intro{display:none}}
+
+/* Phone editor shell: «Inicio» is sticky inside the horizontally scrolling header. Keep an opaque gutter to its
+   right so scrolled controls never read as if they were underneath/overlapping it (390×844 wall-properties case). */
+@media (max-width:600px) and (pointer:coarse){
+  body.guided #welcomeBtn{z-index:12;margin-right:10px;background:var(--surface-panel);box-shadow:10px 0 0 var(--surface-panel),14px 0 12px -12px rgba(20,26,30,.32)}
+  body.guided header{scroll-padding-inline-start:94px}
+}
