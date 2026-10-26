@@ -46,7 +46,8 @@
   if(isBuild)render();
  }
  // When another project opens and it has no rooms, the palette shows «Construir»: there is nothing to furnish yet.
- // Otherwise the last tab chosen is kept (also for the next session).
+ // Otherwise the last tab chosen is kept (also for the next session). Without a stored choice it starts on «Construir»,
+ // even in the furnished example: furniture alone says nothing about what the person wants to do.
  let shownProject=null;
  tBuild.onclick=()=>selectTab('build');tFurnish.onclick=()=>selectTab('furnish');
  // Arrows move to the other tab; Home always goes to the first tab («Construir») and End to the last («Amueblar»).
@@ -85,7 +86,7 @@
   return {warn:!!label,text:label?`Para añadir «${label}», toca antes en el plano la estancia donde va y vuelve a pulsar «${label}».`:'Toca antes en el plano la estancia donde va el hueco.'};
  }
 
- let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null;
+ let toolButtons=[],openingButtons=[],openingContext=null,stairNote=null,mode3d=null,wallBanner=null,wallTimer=null,hintToast='';
  function construct(){
   build.replaceChildren();
   mode3d=el('div',{class:'palette-3d-note',id:'palette3dNote',hidden:''},build);
@@ -122,7 +123,11 @@
 
  async function addOpening(kind,label){
   const roomId=contextRoom();
-  if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');toPlan();return;}
+  if(!roomId){const c=contextText(label);openingContext.textContent=c.text;openingContext.classList.add('palette-warn');
+   // On a phone the palette is a drawer that closes to show the plan: the hint goes with the person, as a toast.
+   if(matchMedia('(max-width:1100px)').matches&&typeof toast==='function'){toast(c.text,6000);hintToast=c.text;}toPlan();return;}
+  // Once followed, the explanation goes away at once instead of covering the opening panel for the rest of its 6 s.
+  const t=document.getElementById('toast');if(hintToast&&t?.classList.contains('show')&&t.textContent===hintToast)t.classList.remove('show');hintToast='';
   // The room becomes the selection first, so the properties column shows the room the opening is added to (as in
   // «Añadir puerta» of the room panel) instead of the previous item.
   await in2D();if(ui.sel?.kind!=='room'||ui.sel.id!==roomId)select({kind:'room',id:roomId});toPlan();FloorPlanOpeningUI.startAdd(roomId,kind);
@@ -154,7 +159,10 @@
   const levels=window.FloorPlanBuildingUI?.context?.levels||1;
   stairNote.textContent=levels>1?'La escalera recta une las dos plantas del edificio.':'La escalera une dos plantas: añade la segunda en «Plantas…».';
  }
- let initial='build';try{initial=localStorage.getItem(KEY)||(project.rooms.length?'furnish':'build');}catch{}
+ let initial='build';try{initial=localStorage.getItem(KEY)||'build';}catch{}
  construct();selectTab(initial==='furnish'?'furnish':'build');
- window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,get tab(){return build.hidden?'furnish':'build';}};
+ // «Añadir puertas y ventanas» of the guide: the palette opens on «Construir» with the focus on the first opening type and
+ // the group's own instruction (which room it goes to, or what to tap first) in view.
+ async function focusOpenings(){await in2D();selectTab('build');if(typeof drawer==='function')drawer('lib',true);render();const first=openingButtons[0];first?.closest('.palette-group')?.scrollIntoView({block:'start'});first?.focus({preventScroll:true});}
+ window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,focusOpenings,get tab(){return build.hidden?'furnish':'build';}};
 })();

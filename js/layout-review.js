@@ -97,5 +97,5 @@
   const status=states.every(s=>s==='checked')?'checked':states.every(s=>s==='insufficient_evidence')?'insufficient_evidence':'partial';
   return {status,units:'mm',method:METHOD,scaleConfidence:project.scale?.confidence,checks,findings,excluded,skipped,unsupported:UNSUPPORTED.map(([check,reason])=>({check,reason}))};
  }
- const api={review,leafContact,separation,penetration,intersection};if(typeof module==='object')module.exports=api;else root.FloorPlanLayoutReview=api;
+ const api={review,exclusion,leafContact,separation,penetration,intersection};if(typeof module==='object')module.exports=api;else root.FloorPlanLayoutReview=api;
 })(globalThis);

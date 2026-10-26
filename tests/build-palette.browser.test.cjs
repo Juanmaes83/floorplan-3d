@@ -19,15 +19,16 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource/.test(m.text()))errors.push(m.text());});
  // three.js from THREE_LOCAL_DIR when set (the CDN is unreachable here), so the 3D note is really exercised.
  await page.route('https://cdn.jsdelivr.net/**',async r=>{if(!process.env.THREE_LOCAL_DIR)return r.abort();try{await r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await require('./helpers/three-module.cjs')(r.request().url(),()=>Promise.reject(Error('no cdn')))});}catch{await r.abort();}});
- await page.goto(url);await require('./editor-fixture.cjs')(page);
+ await page.goto(url);await require('./editor-fixture.cjs')(page,{keepPalette:true});
  const press=async sel=>{const l=page.locator(sel).first();await l.scrollIntoViewIfNeeded();if(mobile)await l.tap();else await l.click();await page.waitForTimeout(200);};
  const openPalette=async tab=>{await page.evaluate(()=>drawer('lib',true));await page.waitForTimeout(400);if(tab)await press(tab==='build'?'#paletteTabBuild':'#paletteTabFurnish');};
  const tapWorld=async q=>{const s=await page.evaluate(p=>{const m=new DOMPoint(p.x,p.y).matrixTransform(document.querySelector('#plan').getScreenCTM());return {x:m.x,y:m.y};},q);if(mobile)await page.touchscreen.tap(s.x,s.y);else await page.mouse.click(s.x,s.y);await page.waitForTimeout(300);};
  const shot=async id=>{if(shots)await page.screenshot({path:path.join(shots,`${name}-${id}.png`)});};
  const state=()=>page.evaluate(()=>({tool:ui.tool,trace:FloorPlanTraceUI.mode(),picking:FloorPlanOpeningUI.picking(),rooms:FloorPlanApp.project.rooms.length,openings:FloorPlanApp.project.openings.length,walls:FloorPlanApp.project.walls.length,undo:undoStack.length,hScroll:document.documentElement.scrollWidth>innerWidth+1,libOpen:document.querySelector('aside.lib').classList.contains('open')}));
 
- // The example (with rooms) opens on «Amueblar»; a new blank project (no rooms) switches to «Construir».
- await openPalette();assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'furnish','example with rooms: «Amueblar»');
+ // Without a stored choice the palette opens on «Construir», also in the furnished example: furniture alone does not
+ // say the person wants to furnish (review of #66, docs/product/journey-orientation-2026-10-21.md, O6).
+ await openPalette();assert.equal(await page.evaluate(()=>FloorPlanBuildPalette.tab),'build','example with rooms: «Construir» until the person chooses');
  // A selected piece of furniture gives the room that contains it (furniture has no room field), as its panel does.
  const furnCtx=await page.evaluate(()=>{const f=project.objects.find(o=>roomOf(getF(o.id).cx,getF(o.id).cy));const id=roomOf(getF(f.id).cx,getF(f.id).cy).id;select({kind:'furn',id:f.id});FloorPlanBuildPalette.render();return {expected:id,got:FloorPlanBuildPalette.contextRoom(),name:project.rooms.find(r=>r.id===id).name};});
  assert.equal(furnCtx.got,furnCtx.expected,'furniture selection resolves its room');

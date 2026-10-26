@@ -1,0 +1,25 @@
+{
+ "viewport": "1440x900",
+ "method": "SVG opened alone in Chromium, CSS 96 dpi; not a printed sheet",
+ "sheetWidthMm": 420,
+ "room": {
+  "id": "rom_master",
+  "modelMm": [
+   3670,
+   3370
+  ],
+  "expectedPaperMm": [
+   36.7,
+   33.7
+  ],
+  "measuredPaperMm": [
+   36.7,
+   33.7
+  ]
+ },
+ "scaleBar": {
+  "metres": 5,
+  "expectedMm": 50,
+  "measuredMm": 50
+ }
+}

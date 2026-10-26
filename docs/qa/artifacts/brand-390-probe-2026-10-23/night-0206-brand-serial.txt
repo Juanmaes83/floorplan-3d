@@ -1,0 +1,16 @@
+2dff3d2 docs(delivery): two-column dialog on short screens and centred no-brand column, measured at 844/1440/390
+ok 1 - professional brand 1440x900
+not ok 2 - professional brand 390x844
+  error: |-
+ok 3 - professional brand 844x390
+ok 4 - delivery image: the home fills the picture, the preview is the file 1440x900
+ok 5 - delivery image: the home fills the picture, the preview is the file 390x844
+ok 6 - delivery image with a brand: name and data in their band, contact only when asked
+ok 7 - delivery image of a two-level building names the level it shows
+ok 8 - without file sharing: panel with the image, download, WhatsApp and e-mail 1440x900
+ok 9 - without file sharing: panel with the image, download, WhatsApp and e-mail 390x844
+ok 10 - with file sharing (phone): the panel opens with the prepared PNG; «Compartir…» calls the share sheet inside its own tap 390x844
+# pass 9
+# fail 1
+
+[exited with code 0]

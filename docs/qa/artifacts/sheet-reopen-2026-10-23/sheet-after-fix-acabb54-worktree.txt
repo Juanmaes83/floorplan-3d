@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+ok 1 - R3 M07 sheet downloads standalone SVG and restores editor 1440x900
+  ---
+  duration_ms: 2731.059633
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 390x844
+ok 2 - R3 M07 sheet downloads standalone SVG and restores editor 390x844
+  ---
+  duration_ms: 2638.994308
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 844x390
+ok 3 - R3 M07 sheet downloads standalone SVG and restores editor 844x390
+  ---
+  duration_ms: 2562.470099
+  type: 'test'
+  ...
+# Subtest: R3 M07 sheet downloads standalone SVG and restores editor 360x800
+ok 4 - R3 M07 sheet downloads standalone SVG and restores editor 360x800
+  ---
+  duration_ms: 2380.669087
+  type: 'test'
+  ...
+# Subtest: R3 M07 imported irregular room and localized sheet text stay tied to current project
+ok 5 - R3 M07 imported irregular room and localized sheet text stay tied to current project
+  ---
+  duration_ms: 3604.211703
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 1440x900
+ok 6 - R3 M07 own copy and DXF sheet use the active project 1440x900
+  ---
+  duration_ms: 3501.623049
+  type: 'test'
+  ...
+# Subtest: R3 M07 own copy and DXF sheet use the active project 390x844
+ok 7 - R3 M07 own copy and DXF sheet use the active project 390x844
+  ---
+  duration_ms: 3326.783171
+  type: 'test'
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 1440x900
+ok 8 - sheet reopened before the previous close event keeps its preview and downloads 1440x900
+  ---
+  duration_ms: 2378.347178
+  type: 'test'
+  ...
+# Subtest: sheet reopened before the previous close event keeps its preview and downloads 390x844
+ok 9 - sheet reopened before the previous close event keeps its preview and downloads 390x844
+  ---
+  duration_ms: 2144.803265
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25819.780862
