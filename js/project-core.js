@@ -10,7 +10,9 @@
   const lists = ['walls', 'openings', 'rooms', 'materials', 'objects', 'measurements', 'sourceImages'];
   const roomFamilies = Object.freeze(['unspecified','living','dining','kitchen','bedroom','bathroom','toilet','office','hallway','storage','laundry','terrace','balcony','garage','utility','other']);
   const roomFamily = room => roomFamilies.includes(room?.family) ? room.family : 'unspecified';
-  const roomName = (room, labels = {}) => room?.name || labels[roomFamily(room)] || labels.unspecified || 'Estancia';
+  const roomName = (room, labels = {}, legacyName = name => name) => room?.name
+    ? (room.family === undefined ? legacyName(room.name) : room.name)
+    : labels[roomFamily(room)] || labels.unspecified || 'Estancia';
   function dateValid(value) {
     if (!/^\d{4}-\d\d-\d\d[Tt]\d\d:\d\d:\d\d(?:\.\d+)?(?:[Zz]|[+-]\d\d:\d\d)$/.test(value)) return false;
     const [y, m, d] = value.slice(0, 10).split('-').map(Number);

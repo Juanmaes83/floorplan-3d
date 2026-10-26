@@ -982,7 +982,7 @@ const NAMES_ES = {
 const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
 const ROOM_FAMILY_LABELS={unspecified:['Estancia','Room','房间'],living:['Salón','Living room','客厅'],dining:['Comedor','Dining room','餐厅'],kitchen:['Cocina','Kitchen','厨房'],bedroom:['Dormitorio','Bedroom','卧室'],bathroom:['Baño','Bathroom','浴室'],toilet:['Aseo','Toilet','卫生间'],office:['Despacho','Office','书房'],hallway:['Pasillo','Hallway','走廊'],storage:['Trastero','Storage','储藏室'],laundry:['Lavadero','Laundry','洗衣房'],terrace:['Terraza','Terrace','露台'],balcony:['Balcón','Balcony','阳台'],garage:['Garaje','Garage','车库'],utility:['Cuarto técnico','Utility room','设备间'],other:['Otra estancia','Other','其他']};
 const familyLabel=family=>(ROOM_FAMILY_LABELS[Core.roomFamilies.includes(family)?family:'unspecified']||ROOM_FAMILY_LABELS.unspecified)[{es:0,en:1,zh:2}[LANG]??0];
-const roomDisplay=room=>Core.roomName(room,Object.fromEntries(Core.roomFamilies.map(f=>[f,familyLabel(f)])));
+const roomDisplay=room=>Core.roomName(room,Object.fromEntries(Core.roomFamilies.map(f=>[f,familyLabel(f)])),nm);
 // Static labels use their English key; room and furniture names use NAMES_ES / NAMES_EN.
 function applyStaticLang(){
   document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : LANG;

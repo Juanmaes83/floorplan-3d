@@ -469,3 +469,25 @@ test('F2 raw export invalidates pending download on reference, scale, image, pro
  await page.locator('#traceBtn').click();await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await prepare();await page.evaluate(()=>FloorPlanApp.importProject(FloorPlanTracing.blank()));await stale();
  assert.deepEqual(errors,[]);
 });
+
+test('room labels and guide selection preserve legacy names and prefer explicit family',async t=>{
+ const {page,errors}=await pageFor(t);
+ const initial=await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.schemaVersion='1.6.0';p.rooms[0].name='主卧室';delete p.rooms[0].family;p.rooms[1].name='主卧室';p.rooms[1].family='bedroom';p.rooms[2].name='';p.rooms[2].family='bedroom';p.rooms[3].name='';p.rooms[3].family='unspecified';p.rooms[4].name='';p.rooms[4].family='future-family';p.schemaVersion='1.7.0';FloorPlanApp.importProject(p);return p.rooms.slice(0,5).map(r=>({id:r.id,name:r.name,family:r.family}));});
+ const shown=await page.evaluate(ids=>ids.map(({id})=>roomDisplay(FloorPlanApp.project.rooms.find(r=>r.id===id))),initial);
+ assert.deepEqual(shown,['Dormitorio principal','主卧室','Dormitorio','Estancia','Estancia']);
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.rooms.slice(0,5).map(r=>({id:r.id,name:r.name,family:r.family}))),initial);
+ await page.evaluate(()=>FloorPlanPresentation.open());
+ const configNames=await page.locator('#presentationConfig .presentation-room-row label span').allTextContents();
+ assert.deepEqual(configNames.slice(0,5),shown);
+ await page.locator('#presentationConfig button').last().click();
+ const action=await page.evaluate(()=>FloorPlanGuide.resolve('poner una cama en dormitorio')[0]);assert.equal(action.roomHint,'bedroom');
+ await page.evaluate(a=>FloorPlanGuideUI.execute(a),action);
+ assert.equal(await page.evaluate(()=>FloorPlanGuideUI.state().targetRoomId),initial[1].id);
+ await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);delete p.rooms[1].family;p.rooms[1].name='Sin coincidencia';p.rooms[2].family='unspecified';FloorPlanApp.importProject(p);});
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.evaluate(a=>FloorPlanGuideUI.execute(a),action);
+ assert.equal(await page.evaluate(()=>FloorPlanGuideUI.state().targetRoomId),initial[0].id);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ assert.equal(await page.evaluate(()=>Object.hasOwn(FloorPlanApp.project.rooms[0],'family')),false);
+ assert.deepEqual(errors,[]);
+});
