@@ -2,6 +2,7 @@
 // the home total; measured / estimated / unavailable and their aggregate; an excluded room keeps its area but does not
 // add up; older projects are read without being changed; the example keeps its net area.
 const test=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const C=require('../js/project-core.js'),S=require('../js/surface-core.js'),V=require('../js/project-variants.js');
 const F=require('./fixtures/building-fixture.cjs');
 
@@ -12,6 +13,13 @@ function project(rooms,confidence='real'){
  p.scale={...p.scale,confidence};return p;
 }
 const close=(a,b)=>assert.ok(a===b||Math.abs(a-b)<1e-9,`${a} ≈ ${b}`);
+
+test('browser export keeps the existing material surface catalog global intact',()=>{
+ const catalog={get(){return 'sentinel';},notify(){}},context={FloorPlanSurfaces:catalog};vm.createContext(context);
+ vm.runInContext(fs.readFileSync(path.join(__dirname,'../js/surface-core.js'),'utf8'),context);
+ assert.equal(context.FloorPlanSurfaces,catalog);assert.equal(context.FloorPlanSurfaces.get(),'sentinel');
+ assert.equal(typeof context.FloorPlanSurfaceMetrics.level,'function');assert.equal(typeof context.FloorPlanSurfaceMetrics.home,'function');
+});
 
 test('rooms of one level add up; the status follows the level scale',()=>{
  for(const [confidence,status]of [['real','measured'],['estimated','estimated'],['pending','estimated']]){
