@@ -94,7 +94,7 @@
   action(mode3d,{id:'palettePlan2d',icon:'room',label:'Ir al plano 2D',onclick:()=>setView('2d')});
 
   const tools=groupOf('Herramientas');const tg=el('div',{class:'palette-grid palette-tools',role:'group','aria-label':'Herramienta activa'},tools);
-  toolButtons=TOOLS.map(([t,label,key])=>{const b=action(tg,{id:'paletteTool-'+t,icon:t,label,hint:`${label} (${key})`,onclick:async()=>{await in2D();setTool(t);toPlan();}});b.dataset.tool=t;return b;});
+  toolButtons=TOOLS.map(([t,label,key])=>{const b=action(tg,{id:'paletteTool-'+t,icon:t,label,hint:`${label} (${key})`,onclick:()=>useTool(t)});b.dataset.tool=t;return b;});
 
   const rooms=groupOf('Estancias','Crea una estancia rectangular con sus muros. Los ejemplos sólo proponen el nombre; puedes cambiarlo.');
   action(rooms,{id:'paletteNewRoom',icon:'room',label:'Nueva estancia',cls:'palette-action palette-primary',onclick:async()=>{await in2D();FloorPlanRoomUI.createRoom();}});
@@ -132,6 +132,8 @@
   // «Añadir puerta» of the room panel) instead of the previous item.
   await in2D();if(ui.sel?.kind!=='room'||ui.sel.id!==roomId)select({kind:'room',id:roomId});toPlan();FloorPlanOpeningUI.startAdd(roomId,kind);
  }
+ // One entry per tool, shared by the palette buttons and the search («¿Qué quieres hacer?»): same mode, same state.
+ async function useTool(t){await in2D();setTool(t);toPlan();}
  async function drawWall(){await in2D();await FloorPlanTraceUI.start('wall');showWallBanner();}
  // Wall drawing stays visible: a banner with what to do and «Terminar», so no hidden mode keeps taking taps.
  function showWallBanner(){
@@ -164,5 +166,5 @@
  // «Añadir puertas y ventanas» of the guide: the palette opens on «Construir» with the focus on the first opening type and
  // the group's own instruction (which room it goes to, or what to tap first) in view.
  async function focusOpenings(){await in2D();selectTab('build');if(typeof drawer==='function')drawer('lib',true);render();const first=openingButtons[0];first?.closest('.palette-group')?.scrollIntoView({block:'start'});first?.focus({preventScroll:true});}
- window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,focusOpenings,get tab(){return build.hidden?'furnish':'build';}};
+ window.FloorPlanBuildPalette={render,select:selectTab,contextRoom,hideWallBanner,focusOpenings,useTool,drawWall,get tab(){return build.hidden?'furnish':'build';}};
 })();
