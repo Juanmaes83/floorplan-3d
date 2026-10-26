@@ -42,5 +42,5 @@
   return {levels,areaM2:total.areaM2,status:total.status,complete:total.complete,missing:total.missing,excluded:total.excluded};
  }
  const api={STATUS,statusOfScale,polygonAreaM2,level,home};
- if(typeof module==='object')module.exports=api;else root.FloorPlanSurfaces=api;
+ if(typeof module==='object')module.exports=api;else root.FloorPlanSurfaceMetrics=api;
 })(globalThis);
