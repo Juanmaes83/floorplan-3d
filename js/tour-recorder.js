@@ -23,7 +23,9 @@
   const type=pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
   const source=document.querySelector('#view3d canvas');if(!source)throw Error('Vista 3D no disponible.');
   if(signal?.aborted)throw new DOMException('Grabación cancelada','AbortError');
-  const plan=presentation.plan,back=presentation.current,chunks=[],marks=[];
+  // Save both the logical stop and the exact camera pose. Presentation stops can now be framed into the unobscured
+  // region beside the client card, so rebuilding a stop without that region is not guaranteed to restore the same view.
+  const plan=presentation.plan,back=presentation.current,backPose=window.View3D.presentationPose?.(),chunks=[],marks=[];
   let recorder=null,stream=null,raf=0,frames=0,failed=false,started=0,ended=0;
   busy=true;
   try{
@@ -58,8 +60,8 @@
    if(recorder&&recorder.state!=='inactive'){const done=new Promise(r=>recorder.addEventListener('stop',r,{once:true}));try{recorder.stop();}catch{}await Promise.race([done,new Promise(r=>setTimeout(r,3000))]);}
    stream?.getTracks().forEach(t=>t.stop());
    if(failed)chunks.length=0;
-   // The presentation returns to the view it showed before recording.
-   if(back&&presentation.active)try{await window.View3D.presentationGo(back,true);}catch{}
+   // Restore the exact view shown before recording. Fall back to the logical stop for older View3D implementations.
+   if(presentation.active)try{if(backPose&&window.View3D.presentationRestorePose)window.View3D.presentationRestorePose(backPose);else if(back)await window.View3D.presentationGo(back,true);}catch{}
    busy=false;
   }
   const blob=new Blob(chunks,{type:type.split(';')[0]});
