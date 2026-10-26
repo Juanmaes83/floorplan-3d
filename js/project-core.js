@@ -263,6 +263,18 @@
     const envelope=points.length?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:{x:0,y:0,w:6000,h:4000};
     return {source:p,walls,windows,doors,slides,voids,rooms,envelope,bounds:{x:envelope.x-1600,y:envelope.y-1500,w:Math.max(1000,envelope.w)+3200,h:Math.max(1000,envelope.h)+3000},center:{x:envelope.x+envelope.w/2,y:envelope.y+envelope.h/2}};
   }
-  const api={clone,id,point,validate,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect};
+  // Declared wall type (contract 1.5.0): what a person states about a wall and where that statement comes from. It is
+  // never deduced from thickness, position or drawing, and it is not a structural verification. Declaring raises only
+  // older versions to 1.5.0; the rest of the project is untouched.
+  const WALL_STRUCTURES=['unknown','partition','load-bearing','other'],STRUCTURE_SOURCES=['professional','imported','pending-review'];
+  function declareWallStructure(project,wallId,structure,source='professional'){
+    if(!WALL_STRUCTURES.includes(structure))throw Error('Tipo de muro no admitido.');
+    if(!STRUCTURE_SOURCES.includes(source))throw Error('Procedencia no admitida.');
+    const next=clone(project),wall=next.walls.find(w=>w.id===wallId);if(!wall)throw Error('Muro no encontrado.');
+    wall.structure=structure;wall.structureSource=source;
+    if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
+    validate(next);return next;
+  }
+  const api={clone,id,point,validate,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

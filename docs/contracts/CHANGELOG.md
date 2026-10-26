@@ -1,5 +1,13 @@
 # Cambios compatibles de FloorPlanProjectV1
 
+## 1.5.0 — tipo declarado de muro y su procedencia (punto 2 del roadmap, pendiente de revisión)
+
+- `walls[].structure` admite además `other` («Otro»). Los valores anteriores no cambian.
+- Nuevo `walls[].structureSource` **opcional**: `professional`, `imported` o `pending-review`. Ausente = procedencia no registrada.
+- Es un dato declarado y orientativo; nunca se deduce de grosor, posición, dibujo ni IA, y no es una verificación estructural.
+- Sin migración: los proyectos 1.0–1.4 se abren sin rellenar campos. Declarar un tipo eleva a 1.5.0 solo versiones anteriores.
+- Schema canónico y embebido mantienen igualdad estructural.
+
 ## 1.3.0 — catálogo local opcional F3 (integrada por PR #12, 30-09-2026)
 
 - Añade `rubik-sota-local` al enum de `assetRef.catalog`, ya opcional en V1.0.
