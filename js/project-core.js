@@ -228,7 +228,7 @@
     const a=[w.start.x+u[0]*offset,w.start.y+u[1]*offset],b=[a[0]+u[0]*length,a[1]+u[1]*length];
     const poly=[[a[0]+n[0]*t,a[1]+n[1]*t],[b[0]+n[0]*t,b[1]+n[1]*t],[b[0]-n[0]*t,b[1]-n[1]*t],[a[0]-n[0]*t,a[1]-n[1]*t]];
     const rect=[Math.min(...poly.map(p=>p[0])),Math.min(...poly.map(p=>p[1])),Math.max(...poly.map(p=>p[0])),Math.max(...poly.map(p=>p[1])),({ 'load-bearing':'b',exterior:'e',low:'low'})[w.structure]||'n'];
-    Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status});
+    Object.assign(rect,{id:w.id,poly,center:[(a[0]+b[0])/2,(a[1]+b[1])/2],angle:Math.atan2(u[1],u[0]),spanMm:length,thickness:w.thicknessMm,height:w.heightMm/1000,status:w.status,declared:!!w.structureSource});
     return rect;
   }
   function geometry(p) {

@@ -66,6 +66,8 @@ main{position:relative;overflow:hidden;background:var(--paper)}
 #plan.tool-demolish .wall{pointer-events:all;cursor:pointer}
 #plan.tool-demolish .wall:hover{fill:#d9894f}
 #plan.tool-select .room:hover{opacity:.82}
+/* With «Seleccionar» a wall is selectable too: its panel holds the declared wall type. */
+#plan.tool-select .wall{pointer-events:all;cursor:pointer}#plan.tool-select .wall:hover{opacity:.8}
 #plan:not(.tool-select) .opening-hit{pointer-events:none}#plan.tool-select .opening-hit{cursor:pointer}
 .opening-panel label{display:block;margin:6px 0}.opening-panel input[type=number],.opening-panel select{width:100%;min-height:40px;padding:6px 8px;font-size:15px}.opening-panel fieldset{border:1px solid var(--line,#ddd);border-radius:8px;margin:8px 0;padding:6px 10px}.opening-panel legend{font-weight:600;padding:0 4px}.opening-panel label.radio{display:flex;align-items:center;gap:8px;min-height:40px;margin:0}.opening-panel label.radio input{width:20px;height:20px}.opening-panel .opening-id{font-size:11px;word-break:break-all}.opening-error{color:#8f1d12;background:#fff1ef;border:1px solid #e3b2aa;border-radius:6px;padding:6px 8px}.opening-legacy{color:#5c1710;background:#fff7f5;border:2px dashed #a3261b;border-radius:8px;padding:6px 8px}.opening-panel #openingCentre{margin:2px 0 6px}.opening-panel .btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
 /* Shared panel pattern: «Volver» first and fixed at the top, context, groups, actions fixed at the bottom. */
@@ -736,7 +738,7 @@ const ES_TEXT = {
   "Wall restored": "Muro restaurado",
   "Hold and drag a line, or tap two points · snaps to walls · tap \"Select\" to exit": "Mantén pulsado y arrastra para trazar una línea, o marca dos puntos · se ajusta a los muros · pulsa «Seleccionar» para salir",
   "Click two points (or drag) to measure · snaps to walls · Shift locks horizontal/vertical · Esc cancels": "Marca dos puntos (o arrastra) para medir · se ajusta a los muros · Mayús fija horizontal/vertical · Esc cancela",
-  "Click a grey non-bearing wall to remove it, click again to restore · black bearing walls cannot be removed": "Pulsa un muro gris sin carga para retirarlo; vuelve a pulsarlo para restaurarlo · los muros negros de carga no se pueden retirar",
+  "Click a wall to remove it, click again to restore · black template walls stay · declared load-bearing walls (brown) can be removed with a notice · its declared type is under Select": "Pulsa un muro para retirarlo; vuelve a pulsarlo para restaurarlo · los muros negros de la plantilla se conservan · un muro declarado portante (marrón) se retira con aviso · su tipo declarado está en «Seleccionar»",
   "Click to add, or drag onto the plan": "Pulsa para añadir o arrastra al plano",
   "Drop it on the floor": "Suéltalo sobre el suelo",
   "floor-plan-design": "rubik-sota-floor-plan",
@@ -1061,7 +1063,7 @@ function commit(before){
 function mutate(fn){ const b=snap(); try{fn();commit(b);}catch(e){project=JSON.parse(b);toast(e.message);} renderAll(); }
 function undo(){ if(!undoStack.length) return toast(tr('没有可撤销的操作','Nothing to undo')); redoStack.push(snap()); project=JSON.parse(undoStack.pop()); refreshProject(); validateSel(); save(); renderAll(); }
 function redo(){ if(!redoStack.length)return;undoStack.push(snap());project=JSON.parse(redoStack.pop());refreshProject();validateSel();save();renderAll(); }
-function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
+function validateSel(){ if(ui.sel?.kind==='furn'&&!getF(ui.sel.id) || ui.sel?.kind==='room'&&!project.rooms.some(r=>r.id===ui.sel.id) || ui.sel?.kind==='opening'&&!project.openings.some(o=>o.id===ui.sel.id) || ui.sel?.kind==='wall'&&!project.walls.some(w=>w.id===ui.sel.id))ui.sel=null; window.FloorPlanOpeningUI?.cancel(); }
 const getF = id => state.furniture.find(f => f.id === id);
 
 /* ======================= 几何工具 ======================= */
@@ -1254,7 +1256,8 @@ function renderFurn(){
 function renderWalls(){
   SafeDOM.markup($('#gWalls'), geometry.walls.map((w,i) => {
     const [x0,y0,x1,y1,k] = w, id = w.id, dem = w.status === 'demolished';
-    let fill = k==='b' ? (ui.layers.bearing ? '#b8412c' : '#26241f') : k==='low' ? '#e9e3d8' : k==='e' ? '#8f897d' : '#a7a195';
+    // A declared load-bearing wall has its own tone: information, not the template's fixed wall (black).
+    let fill = k==='b' ? (ui.layers.bearing ? '#b8412c' : w.declared ? '#5b4a3a' : '#26241f') : k==='low' ? '#e9e3d8' : k==='e' ? '#8f897d' : '#a7a195';
     let ex = k==='low' ? 'stroke="#8f897d" stroke-width="1" vector-effect="non-scaling-stroke"' : '';
     const surfaceId=project.walls.find(x=>x.id===id)?.surfaceMaterialId;if(surfaceId&&!dem){ex+=' stroke="'+esc(project.materials.find(m=>m.id===surfaceId).appearance.color)+'" stroke-width="3" vector-effect="non-scaling-stroke"';}
     if (dem){ fill = 'rgba(198,91,58,.12)'; ex = 'stroke="#c65b3a" stroke-width="1.2" stroke-dasharray="5 3" vector-effect="non-scaling-stroke"'; }
@@ -1403,6 +1406,9 @@ function renderSel(){
       s += `<text x="${f.cx}" y="${sizeTagInside(f, k) ? f.cy+hh-10*k : f.cy+hh+24*k}" font-size="${12*k}" text-anchor="middle" fill="#b5653a" font-weight="600" pointer-events="none"
         stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
     }
+  } else if (ui.sel?.kind === 'wall'){
+    const w = geometry.walls.find(w => w.id === ui.sel.id);
+    if (w) s += `<polygon points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#b5653a" stroke-width="3" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
   } else if (ui.sel?.kind === 'room'){
     const r = geometry.rooms.find(r => r.id === ui.sel.id);
     s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
@@ -1444,6 +1450,7 @@ function renderPanel(){
   if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ SafeDOM.markup(p, furnPanel(f)); bindFurnPanel(f); return; } }
   if (ui.sel?.kind === 'room'){ SafeDOM.markup(p, roomPanel(geometry.rooms.find(r => r.id === ui.sel.id))); bindRoomPanel(); return; }
   if (ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.panel(p, ui.sel.id)) return;
+  if (ui.sel?.kind === 'wall'){ const w = project.walls.find(w => w.id === ui.sel.id); if (w){ SafeDOM.markup(p, wallPanel(w)); bindWallPanel(w.id); return; } }
   SafeDOM.markup(p, overviewPanel()); bindOverview();
 }
 
@@ -1526,6 +1533,11 @@ function renderFab(){
   const od = ui.sel?.kind === 'opening' && window.FloorPlanOpeningUI?.ready() && FloorPlanOpeningUI.draft(), on = od && od.project.openings.find(x => x.id === od.id);
   if (on){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[on.kind])} · vista previa</span><button class="btn primary" data-a="apply">Aplicar</button><button class="btn narrow-only" data-a="prop">Editar</button><button class="btn" data-a="discard">Descartar</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { try { ({apply:() => FloorPlanOpeningUI.applyDraft(), prop:() => drawer('panel', true), discard:() => FloorPlanOpeningUI.discard()})[b.dataset.a](); } catch(e){ toast(e.message, 6000); } }); return; }
+  const wl = ui.sel?.kind === 'wall' && project.walls.find(x => x.id === ui.sel.id);
+  // A selected wall: its declared type at a glance and the way to its properties on a phone.
+  if (wl){ const t = (WALL_TYPES.find(([v]) => v === wl.structure) || [0, WALL_LEGACY[wl.structure] || 'Sin especificar'])[1];
+    SafeDOM.markup(fab, `<span class="name">Muro · ${esc(t)}</span><button class="btn narrow-only" data-a="prop">Propiedades</button><button class="btn" data-a="done">Listo</button>`); fab.classList.add('show');
+    fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
   if (o){ SafeDOM.markup(fab, `<span class="name">${esc(FloorPlanOpenings.LABEL[o.kind])}</span><button class="btn narrow-only" data-a="prop">Propiedades</button><button class="btn" data-a="done">Listo</button>`); fab.classList.add('show');
     fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => b.dataset.a === 'prop' ? drawer('panel', true) : (select(null), closeDrawers())); return; }
   if (!f && !r){ fab.classList.remove('show'); return; }
@@ -1584,6 +1596,36 @@ function syncPaneBtns(){
 }
 function closeDrawers(){ if (narrow()) drawer(null); }
 
+// Declared wall type (contract 1.5.0): what the professional states about a wall and where that statement comes from.
+// One block, used by the wall panel (tap a wall with «Seleccionar») and by «Editar muro» of «Plano propio». It is
+// never inferred and it is not a structural verification. Legacy labels (exterior, low) are shown until a type is chosen.
+const WALL_TYPES = [['unknown','Sin especificar'],['partition','Tabique'],['load-bearing','Muro portante'],['other','Otro']];
+const WALL_SOURCES = [['professional','Declarado por profesional'],['imported','Importado'],['pending-review','Pendiente de revisar']];
+const WALL_LEGACY = {exterior:'Exterior (dato anterior)', low:'Murete (dato anterior)'};
+function wallStructureBlock(w){
+  const opt = (v, t, on, disabled) => `<option value="${esc(v)}"${on?' selected':''}${disabled?' disabled':''}>${esc(t)}</option>`;
+  const types = WALL_TYPES.map(([v,t]) => opt(v, t, w.structure===v)).join('') + (WALL_LEGACY[w.structure] ? opt(w.structure, WALL_LEGACY[w.structure], true, true) : '');
+  const sources = (w.structureSource ? '' : opt('', 'No registrada', true, true)) + WALL_SOURCES.map(([v,t]) => opt(v, t, w.structureSource===v)).join('');
+  return `<details class="panel-group" data-group="wall-structure" open id="wallStructure"><summary>Tipo declarado del muro</summary><div class="form">
+    <label class="full">Tipo<select id="wallStructureType">${types}</select></label>
+    <label class="full">Procedencia<select id="wallStructureSource"${WALL_LEGACY[w.structure]?' disabled':''}>${sources}</select></label></div>
+    <p class="muted" id="wallStructureNote">Dato declarado y orientativo para el proyecto. No es una verificación ni un cálculo estructural.</p></details>`;
+}
+// Choosing a type is a declaration by the professional; changing only the origin keeps the declared type.
+function bindWallStructure(root, declare){
+  const type = root.querySelector('#wallStructureType'), source = root.querySelector('#wallStructureSource');
+  type.onchange = () => declare(type.value, 'professional');
+  source.onchange = () => declare(type.value, source.value);
+}
+function declareWall(id, structure, source){ mutate(() => { const next = Core.declareWallStructure(project, id, structure, source); project.walls = next.walls; project.schemaVersion = next.schemaVersion; refreshProject(); }); toast('Tipo declarado del muro actualizado (dato orientativo).'); }
+function wallPanel(w){
+  const len = Math.round(Math.hypot(w.end.x-w.start.x, w.end.y-w.start.y));
+  const state = w.status==='demolished' ? ' · marcado para retirar' : '';
+  return `<div class="panel-view wall-panel">${panelHead({title:'Muro', context:`Muro · ${len} mm · grosor ${w.thicknessMm} mm${state}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
+    ${wallStructureBlock(w)}
+    <p class="muted">Para retirar o restaurar el muro usa «Modificar muros»; para cambiar su geometría, «Modificar paredes».</p></div></div>`;
+}
+function bindWallPanel(id){ bindPanelHead(); $('#back').onclick = () => select(null); bindWallStructure($('#panel'), (structure, source) => declareWall(id, structure, source)); }
 function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
@@ -1733,11 +1775,13 @@ function addItem(it, x, y, options){
 }
 function toggleWall(id){
   const w = geometry.walls.find(w => w.id === id); if (!w) return;
-  if (w[4]==='b') return toast(tr('承重墙（黑色）不可拆除', 'Load-bearing walls (black) cannot be removed'));
+  // Historical rule: a load-bearing label from the template or an older project (no recorded origin) keeps the wall
+  // in place. A professional's declaration (structureSource) is orientative: it does not block, it warns.
+  if (w[4]==='b' && !w.declared) return toast(tr('承重墙（黑色）不可拆除', 'Load-bearing walls (black) cannot be removed'));
   if (w[4]==='e') return toast(tr('外墙属于建筑外围护结构，不建议拆除', 'Exterior walls are part of the building envelope and should not be removed'));
   const on = state.demolished.includes(id);
   mutate(() => state.demolished = on ? state.demolished.filter(x => x!==id) : [...state.demolished, id]);
-  toast(on ? tr('已恢复墙体', 'Wall restored') : tr(`已标记拆除 ${Math.max(w[2]-w[0], w[3]-w[1])} mm 墙体`, `Marked ${Math.max(w[2]-w[0], w[3]-w[1])} mm of wall for removal`));
+  toast((on ? tr('已恢复墙体', 'Wall restored') : tr(`已标记拆除 ${Math.max(w[2]-w[0], w[3]-w[1])} mm 墙体`, `Marked ${Math.max(w[2]-w[0], w[3]-w[1])} mm of wall for removal`)) + (!on && w[4]==='b' ? ' · Estaba declarado como muro portante (dato orientativo): revísalo con un técnico.' : ''), !on && w[4]==='b' ? 6000 : 1800);
 }
 
 function setTool(t){
@@ -1753,7 +1797,7 @@ function syncModeHint(){
   const hints = {select:'',
     measure:COARSE ? tr('按住拖出测量线，或依次点两点 · 靠近墙面自动吸附 · 点「选择」退出', 'Hold and drag a line, or tap two points · snaps to walls · tap "Select" to exit')
       : tr('点击两点（或按住拖动）测量距离 · 靠近墙面自动吸附 · Shift 锁定水平/垂直 · Esc 取消', 'Click two points (or drag) to measure · snaps to walls · Shift locks horizontal/vertical · Esc cancels'),
-    demolish:tr('点击灰色非承重墙标记拆除，再次点击恢复 · 黑色承重墙不可拆', 'Click a grey non-bearing wall to remove it, click again to restore · black bearing walls cannot be removed')};
+    demolish:tr('点击灰色非承重墙标记拆除，再次点击恢复 · 黑色承重墙不可拆', 'Click a wall to remove it, click again to restore · black template walls stay · declared load-bearing walls (brown) can be removed with a notice · its declared type is under Select')};
   const h = $('#modehint'); h.textContent = hints[ui.tool]; h.classList.toggle('show', !!hints[ui.tool]);
 }
 
@@ -1832,7 +1876,7 @@ function endDrag(cancel){
   }
   if (d.kind === 'pan'){
     if (!cancel && !d.moved && ui.tool === 'select' && window.FloorPlanOpeningUI?.picking()) return FloorPlanOpeningUI.pickAt(d.at);
-    if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
+    if (!cancel && !d.moved && ui.tool === 'select'){ if (d.opening) openOpening(d.opening); else if (d.wall){ select({kind:'wall', id:d.wall}); showProperties(); } else { select(d.room ? {kind:'room', id:d.room} : null); if (d.room) showProperties(); } }
     return;
   }
   if (d.moved){ commit(d.before); renderAll(); }
@@ -1884,8 +1928,8 @@ svg.addEventListener('pointerdown', e => {
     if (ui.sel?.id !== f.id) select({kind:'furn', id:f.id});
     drag = {kind:'move', id:f.id, sx:e.clientX, sy:e.clientY, ox:p.x-f.cx, oy:p.y-f.cy, before:snap(), moved:false};
   } else {
-    const room = t.closest('[data-room]');
-    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, room:labelRoom || room && room.dataset.room, moved:false};
+    const room = t.closest('[data-room]'), wall = !labelRoom && t.closest('[data-wall]');
+    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, room:labelRoom || room && room.dataset.room, wall:wall && wall.dataset.wall, moved:false};
   }
   svg.setPointerCapture(e.pointerId);
 });
