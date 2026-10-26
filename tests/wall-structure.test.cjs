@@ -14,6 +14,13 @@ test('an older project opens unchanged: no origin is added and the version stays
  assert.deepEqual(loaded,p);
 });
 
+test('legacy partition without origin stays unregistered until the professional declares it',()=>{
+ const p=older(),id=p.walls[0].id;p.walls[0].structure='partition';
+ const loaded=roundTrip(p);assert.equal(loaded.walls[0].structure,'partition');assert.equal(loaded.walls[0].structureSource,undefined);assert.equal(loaded.schemaVersion,'1.0.0');
+ const declared=C.declareWallStructure(loaded,id,'partition');assert.equal(declared.walls[0].structure,'partition');assert.equal(declared.walls[0].structureSource,'professional');assert.equal(declared.schemaVersion,'1.5.0');
+ const reviewed=C.declareWallStructure(declared,id,'partition','pending-review');assert.equal(reviewed.walls[0].structure,'partition');assert.equal(reviewed.walls[0].structureSource,'pending-review');
+});
+
 test('declaring load-bearing, partition and back to unspecified, each time by a professional',()=>{
  const p=older(),id=p.walls[0].id;
  let q=C.declareWallStructure(p,id,'load-bearing');assert.equal(q.walls[0].structure,'load-bearing');assert.equal(q.walls[0].structureSource,'professional');assert.equal(q.schemaVersion,'1.5.0');
