@@ -97,7 +97,8 @@ test('hostile names and material names stay text; ID/color payloads cannot creat
   await page.waitForFunction(()=>FloorPlanApp.project.rooms.length===2);
   await page.locator('#gFurn [data-fid="obj_bed-01"]').dispatchEvent('pointerdown',{button:0,pointerId:1,clientX:400,clientY:400});
   assert.equal(await page.locator('#fName').inputValue(),payload);
-  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
+  // Images the app draws itself (sheet preview, the welcome's real 3D captures) are not injected markup.
+  const state=await page.evaluate(()=>({executed:window.auditExecuted||0,images:document.querySelectorAll('img:not(#sheetPreview):not(.welcome-shot):not(.welcome-walk-shot)').length,events:document.querySelectorAll('[onerror],[onload],[onmouseover]').length}));assert.deepEqual(state,{executed:0,images:0,events:0});
   assert.deepEqual(JSON.parse((await readDownload(page,'#exportJson')).toString()),p);assert.deepEqual(errors,[]);
 });
 test('browser legacy migration is repeatable and keeps the original key',async t=>{
@@ -242,7 +243,9 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  const geometryBefore=await page.evaluate(()=>({walls:FloorPlanApp.project.walls,rooms:FloorPlanApp.project.rooms}));
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.confidence),'estimated');assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.verification),undefined);
  await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();assert.deepEqual(await page.evaluate(()=>({walls:FloorPlanApp.project.walls,rooms:FloorPlanApp.project.rooms})),geometryBefore);
- await traceTool(page,'traceNavigate');if(viewport.width<1100)await page.locator('#tgLib').click();await page.locator('.item[data-key="0:0"]').click();
+ await traceTool(page,'traceNavigate');if(viewport.width<1100)await page.locator('#tgLib').click();
+ // Since the creation palette (#66) a project without rooms opens on «Construir»: the person chooses «Amueblar» first.
+ await page.locator('#paletteTabFurnish').click();await page.locator('.item[data-key="0:0"]').click();
  const before=await page.evaluate(()=>FloorPlanApp.project.objects[0].position);await page.locator('#tgPanel').click();
  await page.evaluate(()=>document.querySelectorAll('aside').forEach(e=>e.classList.remove('open')));await page.waitForTimeout(350);
  const center=await page.evaluate(()=>{const f=FloorPlanApp.project.objects[0],svg=document.querySelector('#plan'),p=new DOMPoint(f.position.x,f.position.y).matrixTransform(svg.getScreenCTM());return {x:p.x,y:p.y};});
@@ -362,7 +365,7 @@ test('upload control label and accessible help follow Spanish, English and Chine
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css','/css/design-system.css','/css/brand.css','/assets/welcome/example-3d.webp'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
