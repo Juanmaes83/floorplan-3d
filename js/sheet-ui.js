@@ -69,7 +69,7 @@
   const labels=drawing.querySelector('#gLabels');
   for(const room of geometry.rooms){
    if(room.poly.length<3||area(room.poly)<=0)continue;
-   const [x,y]=labelPoint(room),name=localized(room.name),xs=room.poly.map(p=>p[0]),width=Math.max(...xs)-Math.min(...xs),maxChars=Math.max(16,Math.min(26,Math.floor(width/125))),visible=name.length>maxChars?name.slice(0,maxChars-1)+'…':name;
+   const [x,y]=labelPoint(room),name=roomDisplay(project.rooms.find(r=>r.id===room.id)),xs=room.poly.map(p=>p[0]),width=Math.max(...xs)-Math.min(...xs),maxChars=Math.max(16,Math.min(26,Math.floor(width/125))),visible=name.length>maxChars?name.slice(0,maxChars-1)+'…':name;
    const size=Math.max(90,Math.min(220,width/(Math.max(5,visible.length)*.8)));
    const label=text(labels,visible,x,y,size,700);label.setAttribute('text-anchor','middle');label.setAttribute('paint-order','stroke');label.setAttribute('stroke','#fcfaf6');label.setAttribute('stroke-width','36');svgNode('title',{},label).textContent=name;
    const value=text(labels,`${area(room.poly).toFixed(2)} m²`,x,y+size*.95,Math.max(95,size*.72),400,'#625b53');value.setAttribute('text-anchor','middle');value.setAttribute('paint-order','stroke');value.setAttribute('stroke','#fcfaf6');value.setAttribute('stroke-width','28');

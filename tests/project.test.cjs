@@ -14,6 +14,32 @@ test('reference home validates and projects rooms, 48 original wall segments and
   assert.equal(g.walls.length,48);assert.equal(p.openings.length,22);assert.equal(g.source,p);
   assert.equal(g.windows.length,12);assert.equal(g.doors.length,6);assert.equal(g.slides.length,2);
 });
+test('room family and free name stay independent, survive save/load and preserve area',()=>{
+  const p=Core.initial(),before=Core.geometry(p),id=p.rooms[0].id,edit=Core.editing(()=>p);
+  assert.equal(Core.roomFamily(p.rooms[0]),'unspecified');
+  edit.rooms[id].family='bedroom';edit.rooms[id].name='Habitación de invitados';p.schemaVersion='1.6.0';
+  assert.equal(edit.rooms[id].family,'bedroom');assert.equal(p.rooms[0].name,'Habitación de invitados');
+  edit.rooms[id].family='other';assert.equal(p.rooms[0].name,'Habitación de invitados');
+  edit.rooms[id].family='unspecified';assert.notEqual('other',edit.rooms[id].family);
+  edit.rooms[id].name=p.rooms[1].name;assert.equal(p.rooms[0].name,p.rooms[1].name);
+  edit.rooms[id].name='';assert.equal(Core.roomName(p.rooms[0],{unspecified:'Estancia'}),'Estancia');assert.equal(p.rooms[0].name,'');
+  edit.rooms[id].name='Dormitorio principal';assert.equal(edit.rooms[id].family,'unspecified');
+  const s=storage();s.setItem('p',JSON.stringify(p));assert.deepEqual(Core.load(s,'p').project,p);
+  assert.deepEqual(Core.geometry(p).rooms[0].poly,before.rooms[0].poly);
+  assert.equal(Core.geometry(p).rooms[0].counted,before.rooms[0].counted);
+});
+test('legacy name is untouched, missing family is derived, future family survives unchanged',()=>{
+  const old=Core.initial(),room=old.rooms[0];room.name='Baño';
+  const s=storage();s.setItem('p',JSON.stringify(old));const loaded=Core.load(s,'p').project;
+  assert.equal(loaded.rooms[0].name,'Baño');assert.equal(loaded.rooms[0].family,undefined);
+  assert.equal(Core.roomFamily(loaded.rooms[0]),'unspecified');assert.equal(s.getItem('p'),JSON.stringify(old));
+  const unnamed=Core.clone(old);delete unnamed.rooms[0].name;
+  assert.equal(Core.roomName(Core.prepare(unnamed).project.rooms[0],{unspecified:'Estancia'}),'Estancia');
+  assert.equal(Object.hasOwn(unnamed.rooms[0],'name'),false);
+  old.schemaVersion='1.7.0';room.family='future-family';
+  assert.deepEqual(Core.prepare(old).project,old);assert.equal(Core.roomFamily(room),'unspecified');
+  assert.equal(room.family,'future-family');assert.throws(()=>Core.prepare({...old,schemaVersion:'1.6.0'}),/expected one of/);
+});
 test('F0 valid example round-trips every field, image reference, asset pointer and extension',()=>{
   const p=Core.clone(example);p.extensions={'x-test':{nested:{text:'<img onerror="attack()">'},list:[1,2,3]}};
   const store={project:Core.initial(),storage:storage(),key:'project'};

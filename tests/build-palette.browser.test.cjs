@@ -71,7 +71,7 @@ test(`creation palette ${viewport.width}x${viewport.height}`,{timeout:420000},as
  await press('[data-room-name="Cocina"]');await page.locator('#roomDesignForm').waitFor();assert.equal(await page.locator('#roomDesignName').inputValue(),'Cocina');
  await page.fill('#roomDesignWidth','4000');await page.fill('#roomDesignDepth','3000');await press('#roomDesignReview');await page.locator('#roomDesignConfirm:not([disabled])').waitFor();await press('#roomDesignConfirm');await page.waitForTimeout(300);
  const s1=await state();assert.equal(s1.rooms,1);assert.equal(await page.evaluate(()=>FloorPlanApp.project.rooms[0].name),'Cocina');
- assert.deepEqual(Object.keys(await page.evaluate(()=>FloorPlanApp.project.rooms[0])).sort(),['countsTowardArea','floorMaterialId','id','labelAt','name','polygon','source'].sort(),'no room type stored');
+ assert.deepEqual(Object.keys(await page.evaluate(()=>FloorPlanApp.project.rooms[0])).sort(),['countsTowardArea','family','floorMaterialId','id','labelAt','name','polygon','source'].sort(),'new room stores one structured family');
  await openPalette();await press('#paletteMoreNames summary');await press('[data-room-name="Cocina"]');assert.equal(await page.locator('#roomDesignName').inputValue(),'Cocina 2','a repeated example gets a number');await page.locator('#roomDesignCancel').first().click();
  const room=await page.evaluate(()=>FloorPlanApp.project.rooms[0]),xs=room.polygon.map(p=>p.x),ys=room.polygon.map(p=>p.y),box={x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)};
 

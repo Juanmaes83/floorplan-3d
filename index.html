@@ -980,6 +980,9 @@ const NAMES_ES = {
   "休闲椅": "Sillón de descanso"
 };
 const nm = s => LANG === 'en' ? (NAMES_EN[s] ?? s) : LANG === 'es' ? (NAMES_ES[s] ?? s) : s;
+const ROOM_FAMILY_LABELS={unspecified:['Estancia','Room','房间'],living:['Salón','Living room','客厅'],dining:['Comedor','Dining room','餐厅'],kitchen:['Cocina','Kitchen','厨房'],bedroom:['Dormitorio','Bedroom','卧室'],bathroom:['Baño','Bathroom','浴室'],toilet:['Aseo','Toilet','卫生间'],office:['Despacho','Office','书房'],hallway:['Pasillo','Hallway','走廊'],storage:['Trastero','Storage','储藏室'],laundry:['Lavadero','Laundry','洗衣房'],terrace:['Terraza','Terrace','露台'],balcony:['Balcón','Balcony','阳台'],garage:['Garaje','Garage','车库'],utility:['Cuarto técnico','Utility room','设备间'],other:['Otra estancia','Other','其他']};
+const familyLabel=family=>(ROOM_FAMILY_LABELS[Core.roomFamilies.includes(family)?family:'unspecified']||ROOM_FAMILY_LABELS.unspecified)[{es:0,en:1,zh:2}[LANG]??0];
+const roomDisplay=room=>Core.roomName(room,Object.fromEntries(Core.roomFamilies.map(f=>[f,familyLabel(f)])));
 // Static labels use their English key; room and furniture names use NAMES_ES / NAMES_EN.
 function applyStaticLang(){
   document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : LANG;
@@ -1312,7 +1315,7 @@ function renderLabels(){
     return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([u,v]) => { const dv = extra && v < 0 ? f.d/2 + back : f.d/2, y = f.cy+u*f.w/2*s+v*dv*c; return {x:f.cx+u*f.w/2*c-v*dv*s, y:extra && y>f.cy && !sizeTagInside(f, px) ? y+tag : y}; }); };
   const furniture = state.furniture.map(f => outline(f, false)), marked = state.furniture.map(f => outline(f, true));
   SafeDOM.markup(g, geometry.rooms.filter(r => r.at).map(r => {
-    const name = nm(state.rooms[r.id].name), allDims = designDimensions(r.id), width = d => Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, d.length*140*.6)/2;
+    const name = roomDisplay(project.rooms.find(q=>q.id===r.id)), allDims = designDimensions(r.id), width = d => Math.max([...name].length*250*.62, (fmt(area(r.poly))+' m²').length*175*.6, d.length*140*.6)/2;
     const poly = r.poly.map(([x,y])=>({x,y})), at = {x:r.at[0],y:r.at[1]}, box = d => ({left:width(d),right:width(d),above:230,below:d?500:310});
     let place = {x:at.x, y:at.y}, dims = allDims;
     if (zones.length) place = FloorPlanBuilding.labelAnchor(poly, at, box(dims), zones, {prefer:[furniture]});
@@ -1467,7 +1470,7 @@ function roomOf(x, y){ return geometry.rooms.find(r => { let inside = false; for
 function overviewPanel(){
   const rows = geometry.rooms.map(r => {
     const st = state.rooms[r.id];
-    return `<tr class="click" data-room="${esc(r.id)}"><td><span class="sw" style="background:${esc(MATS[st.mat].sw)}"></span>${esc(nm(st.name))}${r.counted===false?' <span class="muted">*</span>':''}</td>
+    return `<tr class="click" data-room="${esc(r.id)}"><td><span class="sw" style="background:${esc(MATS[st.mat].sw)}"></span>${esc(roomDisplay(project.rooms.find(q=>q.id===r.id)))}${r.counted===false?' <span class="muted">*</span>':''}</td>
       <td class="r">${fmt(area(r.poly))} m²</td></tr>`;
   }).join('');
   const tot = geometry.rooms.filter(r => r.counted !== false).reduce((a,r) => a + area(r.poly), 0);
@@ -1546,7 +1549,7 @@ function renderFab(){
     ? `<span class="name">${esc(nm(f.name))}</span><button class="btn fab-icon" data-a="rotL" aria-label="${tr('向左旋转','Rotate left')}" title="${tr('向左旋转','Rotate left')}">↺</button><button class="btn fab-icon" data-a="rotR" aria-label="${tr('旋转','Rotate')}" title="${tr('旋转','Rotate')}">↻<span class="fab-text"> ${tr('旋转','Rotate')}</span></button>
        <button class="btn fab-icon" data-a="dup" aria-label="${tr('复制','Duplicate')}" title="${tr('复制','Duplicate')}"><span class="fab-glyph" aria-hidden="true">⧉</span><span class="fab-text">${tr('复制','Duplicate')}</span></button><button class="btn danger fab-icon" data-a="del" aria-label="${tr('删除','Delete')}" title="${tr('删除','Delete')}"><span class="fab-glyph" aria-hidden="true">🗑</span><span class="fab-text">${tr('删除','Delete')}</span></button><span class="sep"></span>
        <button class="btn narrow-only" data-a="prop">${tr('属性','Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`
-    : `<span class="name">${esc(nm(state.rooms[r.id].name))}</span><button class="btn narrow-only" data-a="prop">${tr('地面 / 属性','Floor / Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`);
+    : `<span class="name">${esc(roomDisplay(project.rooms.find(q=>q.id===r.id)))}</span><button class="btn narrow-only" data-a="prop">${tr('地面 / 属性','Floor / Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`);
   fab.classList.add('show');
   fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => ({
     rotL:() => rotateSel(-90), rotR:() => rotateSel(90), dup:duplicateSel, del:deleteSel,
@@ -1631,9 +1634,11 @@ function roomPanel(r){
   const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
   const mats = Object.entries(MATS).filter(([,m])=>!m.preset?.startsWith('surface-')).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${esc(k)}"><i style="background:${esc(m.sw)}"></i><span>${esc(nm(m.name))}${LANG==='es'?'':`<small>¥${m.price}/m²</small>`}</span></button>`).join('');
   const lvl = window.FloorPlanBuildingUI?.context?.levels > 1 ? ' · planta activa' : '';
-  return `<div class="panel-view room-panel">${panelHead({title:nm(st.name), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
+  const source=project.rooms.find(q=>q.id===r.id),family=Core.roomFamily(source);
+  const familyOptions=Core.roomFamilies.map(value=>`<option value="${value}" ${family===value?'selected':''}>${esc(familyLabel(value))}</option>`).join('');
+  return `<div class="panel-view room-panel">${panelHead({title:roomDisplay(source), context:`Estancia · ${fmt(a)} m²${lvl}`, back:'← Vista general', backTitle:'Volver a la vista general del plano'})}<div class="panel-body">
   <details class="panel-group" data-group="room-data" open><summary>Datos de la estancia</summary>
-    <div class="form"><label class="full">${tr('名称','Name')}<input id="rName" value="${esc(nm(st.name))}"></label></div>
+    <div class="form"><label class="full" for="rFamily">${LANG==='en'?'Room type':LANG==='zh'?'房间类型':'Tipo de estancia'}</label><select id="rFamily">${familyOptions}</select><label class="full" for="rName">${LANG==='en'?'Name':LANG==='zh'?'名称':'Nombre'}</label><input id="rName" maxlength="100" value="${esc(st.name||'')}"></div>
     <div class="stats" style="margin-top:10px">
       <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
       <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
@@ -1655,14 +1660,15 @@ function bindRoomPanel(){
   $('#roomDimensions').onclick=()=>FloorPlanRoomUI.dimensions(id);
   document.querySelectorAll('#panel [data-room-opening]').forEach(b => b.onclick = () => openOpening(b.dataset.roomOpening));
   $('#roomAddDoor').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'door');};$('#roomAddWindow').onclick=()=>{closeDrawers();FloorPlanOpeningUI.startAdd(id,'window');};
-  $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
+  $('#rName').onchange = e => mutate(() => {state.rooms[id].name=e.target.value.trim();if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
+  $('#rFamily').onchange = e => mutate(() => {state.rooms[id].family=e.target.value;if(Number(project.schemaVersion.split('.')[1])<6)project.schemaVersion='1.6.0';});
   document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
   document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
   $('#back').onclick = () => select(null);
 }
 
 function furnPanel(f){
-  const room = roomOf(f.cx, f.cy), back = room ? `← Estancia «${nm(state.rooms[room.id]?.name || '')}»` : '← Vista general';
+  const room = roomOf(f.cx, f.cy), back = room ? `← Estancia «${roomDisplay(project.rooms.find(q=>q.id===room.id))}»` : '← Vista general';
   return `<div class="panel-view furn-panel">${panelHead({title:nm(f.name), context:`${tr('家具','Furniture')} · ${f.w} × ${f.d} mm`, back, backTitle: room ? 'Volver a la estancia' : 'Volver a la vista general del plano'})}<div class="panel-body">
   <details class="panel-group" data-group="furn-data" open><summary>Medidas, posición y modelo</summary>
     <div class="form">
@@ -1947,7 +1953,7 @@ svg.addEventListener('pointermove', e => {
   $('#cx').textContent = Math.round(p.x) + ' mm'; $('#cy').textContent = Math.round(p.y) + ' mm';
   if (!drag){
     const room = e.target.closest && e.target.closest('[data-room]');
-    SafeDOM.markup($('#hover'), room ? `<b>${esc(nm(state.rooms[room.dataset.room].name))}</b> ${fmt(area(geometry.rooms.find(r=>r.id===room.dataset.room).poly))} m²` : '');
+    SafeDOM.markup($('#hover'), room ? `<b>${esc(roomDisplay(project.rooms.find(r=>r.id===room.dataset.room)))}</b> ${fmt(area(geometry.rooms.find(r=>r.id===room.dataset.room).poly))} m²` : '');
     if (ui.tool === 'measure' && ui.mA){ ui.mCur = snapPoint(p, e.shiftKey); renderMeasure(); }
     return;
   }
@@ -3545,11 +3551,11 @@ function buildLabels(){
   labelG.children.slice().forEach(o => { o.element.remove(); labelG.remove(o); });
   geometry.rooms.filter(r => r.at).forEach(r => {
     const el = document.createElement('div'); el.className = 'rlabel';
-    SafeDOM.markup(el, `${esc(nm(state.rooms[r.id].name))}<small>${area(r.poly).toFixed(1)}m²</small>${designDimensions(r.id)?`<small>${designDimensions(r.id)}</small>`:''}`);
+    SafeDOM.markup(el, `${esc(roomDisplay(project.rooms.find(q=>q.id===r.id)))}<small>${area(r.poly).toFixed(1)}m²</small>${designDimensions(r.id)?`<small>${designDimensions(r.id)}</small>`:''}`);
     const o = new CSS2DObject(el); o.position.set(wx(r.at[0]), topHeight() + .15, wz(r.at[1])); o.visible = labelG.visible; labelG.add(o);
   });
   const counted = geometry.rooms.filter(r => r.counted !== false);
-  SafeDOM.markup($('#roomList'), counted.map(r => `<button data-room="${esc(r.id)}"><span>${esc(nm(state.rooms[r.id].name))}</span><small>${area(r.poly).toFixed(2)} m²</small></button>`).join('')
+  SafeDOM.markup($('#roomList'), counted.map(r => `<button data-room="${esc(r.id)}"><span>${esc(roomDisplay(project.rooms.find(q=>q.id===r.id)))}</span><small>${area(r.poly).toFixed(2)} m²</small></button>`).join('')
     + `<button data-room="__all"><span>${tr('全屋', 'Whole home')}</span><small>${counted.reduce((a, r) => a + area(r.poly), 0).toFixed(2)} m²</small></button>`);
   document.querySelectorAll('#roomList button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#roomList button').forEach(x => x.classList.toggle('on', x === b));

@@ -2,7 +2,7 @@
    implementation and its history: the editor tools (setTool), «+ Estancia» (createRoom, here with a suggested name),
    «Añadir puerta/ventana» from a room (FloorPlanOpeningUI.startAdd, the four contract kinds), wall drawing of
    «Plano propio» (shown with a visible banner and «Terminar» while it is active) and the «Plantas…» dialog for the
-   straight stair. Nothing is stored here: a room example only suggests the name; no room type is saved.
+   straight stair. The palette only suggests the initial name; room creation records family as unspecified.
    Classic script: shares the app's globals. */
 (function(){
  const $=s=>document.querySelector(s),aside=$('aside.lib');

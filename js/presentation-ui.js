@@ -2,7 +2,7 @@
 (function(){
  'use strict';
  const Core=FloorPlanPresentationCore,app=FloorPlanApp,tx=(es,en,zh)=>FloorPlanGuide.text([es,en,zh||es],LANG);
- const roomName=name=>typeof nm==='function'?nm(name):name;
+ const roomName=name=>name||({es:'Estancia',en:'Room',zh:'房间'}[LANG]||'Estancia');
  const el=(tag,text,parent,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;parent?.append(node);return node;};
  const button=(text,parent,fn)=>{const node=el('button',text,parent,'btn');node.type='button';node.onclick=fn;return node;};
  const headerButton=button('',document.querySelector('header'),()=>open());headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');

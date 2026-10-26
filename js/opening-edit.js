@@ -31,7 +31,7 @@
    for(const f of [.25,.5,.75]){const c=at(w,from+(to-from)*f);found.push(roomsAt(p,{x:c.x+n.x*d,y:c.y+n.y*d}));}
    const ids=new Set(found.map(list=>list.length===1?list[0].id:null));
    const room=ids.size===1&&!ids.has(null)?p.rooms.find(r=>r.id===[...ids][0]):null;
-   const unique=room&&p.rooms.filter(r=>r.name.trim().toLowerCase()===room.name.trim().toLowerCase()).length===1;
+   const unique=room&&!!room.name?.trim()&&p.rooms.filter(r=>(r.name||'').trim().toLowerCase()===room.name.trim().toLowerCase()).length===1;
    out[side]=room?{roomId:room.id,name:room.name,named:!!unique}:{roomId:null,reason:found.some(list=>list.length>1)?'overlapping-rooms':found.every(list=>!list.length)?'no-room':'mixed'};
   }
   return out;

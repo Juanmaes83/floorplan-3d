@@ -8,6 +8,9 @@
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
   const point = p => ({x: Math.round(p.x), y: Math.round(p.y)});
   const lists = ['walls', 'openings', 'rooms', 'materials', 'objects', 'measurements', 'sourceImages'];
+  const roomFamilies = Object.freeze(['unspecified','living','dining','kitchen','bedroom','bathroom','toilet','office','hallway','storage','laundry','terrace','balcony','garage','utility','other']);
+  const roomFamily = room => roomFamilies.includes(room?.family) ? room.family : 'unspecified';
+  const roomName = (room, labels = {}) => room?.name || labels[roomFamily(room)] || labels.unspecified || 'Estancia';
   function dateValid(value) {
     if (!/^\d{4}-\d\d-\d\d[Tt]\d\d:\d\d:\d\d(?:\.\d+)?(?:[Zz]|[+-]\d\d:\d\d)$/.test(value)) return false;
     const [y, m, d] = value.slice(0, 10).split('-').map(Number);
@@ -216,7 +219,7 @@
     return {
       get furniture(){const objects=getProject().objects;objects.forEach(decorate);return objects;},
       set furniture(value){getProject().objects=value;},
-      get rooms(){return Object.fromEntries(getProject().rooms.map(r=>[r.id,{get name(){return r.name;},set name(v){r.name=v;},get mat(){return r.floorMaterialId;},set mat(v){r.floorMaterialId=v;}}]));},
+      get rooms(){return Object.fromEntries(getProject().rooms.map(r=>[r.id,{get name(){return r.name;},set name(v){r.name=v;},get family(){return roomFamily(r);},set family(v){r.family=v;},get mat(){return r.floorMaterialId;},set mat(v){r.floorMaterialId=v;}}]));},
       get demolished(){return getProject().walls.filter(w=>w.status==='demolished').map(w=>w.id);},
       set demolished(value){for(const w of getProject().walls) w.status=value.includes(w.id)?'demolished':(w.status==='demolished'?'existing':w.status);},
       get measures(){return getProject().measurements||[];},
@@ -255,7 +258,7 @@
       }
       if(at<length) walls.push(wallRect(w,at,length-at));
     }
-    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
+    const rooms=p.rooms.map(r=>({id:r.id,name:r.name,family:roomFamily(r),poly:r.polygon.map(v=>[v.x,v.y]),mat:r.floorMaterialId,counted:r.countsTowardArea,at:r.labelAt?[r.labelAt.x,r.labelAt.y]:undefined}));
     const imagePoints=(p.sourceImages||[]).filter(i=>i.placement).flatMap(i=>{const a=i.placement.rotationDeg*Math.PI/180,s=i.placement.mmPerPixel,o=i.placement.originMm;return [[0,0],[i.widthPx,0],[i.widthPx,i.heightPx],[0,i.heightPx]].map(([x,y])=>({x:o.x+s*(x*Math.cos(a)-y*Math.sin(a)),y:o.y+s*(x*Math.sin(a)+y*Math.cos(a))}));});
     const points=[...imagePoints,...p.rooms.flatMap(r=>r.polygon),...p.walls.flatMap(w=>wallRect(w).poly.map(([x,y])=>({x,y})))];
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
@@ -275,6 +278,6 @@
     if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
     validate(next);return next;
   }
-  const api={clone,id,point,validate,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES};
+  const api={clone,id,point,validate,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

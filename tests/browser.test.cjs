@@ -58,6 +58,13 @@ test('actual file import and export preserve full F0 contract including optional
 test('room finishes, measurements/history and wall demolition update the canonical project',async t=>{
   const {page,errors}=await pageFor(t);
   await page.locator('#panel tr[data-room="rom_master"]').click();await page.fill('#rName','My room');await page.locator('#rName').press('Tab');
+  await page.locator('#rFamily').selectOption('bedroom');
+  assert.deepEqual(await page.evaluate(()=>{const r=FloorPlanApp.project.rooms.find(r=>r.id==='rom_master');return {name:r.name,family:r.family};}),{name:'My room',family:'bedroom'});
+  await page.fill('#rName','Guest room');await page.locator('#rName').press('Tab');
+  assert.equal(await page.locator('#rFamily').inputValue(),'bedroom');
+  await page.locator('#rFamily').selectOption('other');
+  assert.equal(await page.locator('#rName').inputValue(),'Guest room');
+  await page.fill('#rName','My room');await page.locator('#rName').press('Tab');
   await page.locator('#panel [data-mat="mat_carpet"]').click();
   assert.deepEqual(await page.evaluate(()=>{const r=FloorPlanApp.project.rooms.find(r=>r.id==='rom_master');return {name:r.name,material:r.floorMaterialId};}),{name:'My room',material:'mat_carpet'});
   await page.click('[data-tool="measure"]');const box=await page.locator('#plan').boundingBox();
