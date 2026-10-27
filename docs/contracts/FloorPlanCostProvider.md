@@ -257,3 +257,13 @@ This preserves existing 7B documents and avoids pretending that a reference quot
 - currency conversion;
 - unit conversion;
 - ERP/accounting/invoicing.
+
+## First conforming provider: Manual (Point 7C-B)
+
+`js/cost-provider-manual.js` exports `FloorPlanManualCostProvider`. It is loaded explicitly and is not registered automatically or added to the editor UI. Its stable ID is `manual`; its capabilities are `{search:false,getItem:false,getPrice:true,network:'none'}`. The core wrappers return `unsupported` for search and item lookup. Manual has no catalog, network access or storage.
+
+`getPrice(itemId, context)` accepts an explicit item ID and `{description, unit, unitPrice, label, asOf?, code?}` in context. The adapter uses this contract's `validateQuote()` for input and returns a normalized `available` quote or `invalid` with reason `invalid-manual-input`. A missing or blank item ID is rejected by the core before invoking the adapter. Price must be a finite number at least zero; `0` is an available known price. Units are preserved without conversion. The adapter fixes `currency:'EUR'` and `priceKind:'manual'`.
+
+The quote's `source.label` must be supplied by the professional; there is no silent default. `asOf` is an optional valid calendar date and remains `null` when unknown. `retrievedAt` remains `null`; Manual does not invent a retrieval time. Provider metadata has `kind:'manual'` and a `not-applicable` license. Quote source has `licenseStatus:'not-applicable'` and no fabricated URL, edition, region or attribution.
+
+The quote has no review status. Entering a price does not approve a budget item. Budget V1.0.0, provider selection/fallback orchestration and the CostQuote-to-Budget bridge are outside 7C-B; 7C-C will address the latter.

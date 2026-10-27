@@ -24,8 +24,8 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7A | Quantity Engine | **CERRADO** |
 | 7B | Budget Core | **CERRADO** |
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
-| 7C-B | `ManualCostProvider` | **SIGUIENTE** |
-| 7C-C | Budget provenance de providers | **PENDIENTE** |
+| 7C-B | `ManualCostProvider` | **CANDIDATO EN REVISIÓN** |
+| 7C-C | Budget provenance de providers | **SIGUIENTE** |
 | 7C-D | Parser FIEBDC-3/BC3 | **PENDIENTE** |
 | 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
 | 7D | Presentación/exportación | **PENDIENTE** |
@@ -128,12 +128,18 @@ Documentos:
 
 La estabilización de CI solar asociada a #112 divide el recorrido desktop en fases secuenciales conservando acciones y assertions, sin cambios de producto, Three.js, matemáticas solares, PNG ni CostProvider. CI final del HEAD `5fc2f78269bed82f829e32f7b17577b620c1f08a`: Solar, Guided, Multiformat y Vercel en verde.
 
+### 7C-B — ManualCostProvider — CANDIDATO EN REVISIÓN
+
+Primer provider concreto y opción offline permanente. `FloorPlanManualCostProvider` aporta un quote EUR normalizado con procedencia humana explícita, licencia `not-applicable` y precio cero válido. Usa el registry y los validadores de 7C-A; no tiene catálogo, red, storage, UI ni selección automática entre providers. Un quote manual no marca una partida como revisada. El corte termina en CostQuote: Budget V1.0.0 permanece intacto y el bridge CostQuote → Budget corresponde a 7C-C.
+
+Documento: `docs/product/point-7c-b-manual-cost-provider-2026-10-27.md`.
+
 ### Orden restante de 7C
 
-1. **7C-B** — `ManualCostProvider`, fallback/offline permanente.
-2. **7C-C** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-3. **7C-D** — parser FIEBDC-3/BC3.
-4. **7C-E** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+1. **7C-B** — `ManualCostProvider`, candidato en revisión.
+2. **7C-C — SIGUIENTE** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
+3. **7C-D — PENDIENTE** — parser FIEBDC-3/BC3.
+4. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
 5. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
 La compilación DDC CC BY-NC no se incorpora a producción.
@@ -151,7 +157,7 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
 2. No reabrir 1–6, 7A, 7B o 7C-A salvo regresión reproducible o decisión expresa.
 3. 7C-A no implementa ningún provider real.
-4. 7C-B es el siguiente corte: Manual y offline permanente.
+4. 7C-B es candidato en revisión: Manual y offline permanente. 7C-C es el siguiente corte.
 5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; providers externos requieren evolución compatible explícita en 7C-C.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
