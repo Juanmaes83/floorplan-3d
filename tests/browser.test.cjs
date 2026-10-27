@@ -193,16 +193,12 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 c
  const result=await page.evaluate(()=>{const canvas=document.querySelector('#view3d canvas'),r=canvas.getBoundingClientRect(),small=document.createElement('canvas');small.width=small.height=32;const c=small.getContext('2d');c.drawImage(canvas,0,0,32,32);return {ratio:r.height/innerHeight,width:r.width,overflow:document.documentElement.scrollWidth>innerWidth,colors:new Set(c.getImageData(0,0,32,32).data).size,same:View3D.renderedSource===FloorPlanApp.project};});
  t.diagnostic(JSON.stringify(result));assert.ok(result.ratio>=.6);assert.ok(result.width>300);assert.ok(result.colors>20);assert.equal(result.overflow,false);assert.equal(result.same,true);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-3d.png`});
- // The selected furniture can capture a drag at this viewport; clear that selection before testing camera orbit.
  await page.keyboard.press('Escape');
  const prior=await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL());
  const session=await context.newCDPSession(page),box=await page.locator('#view3d canvas').boundingBox(),x=box.x+box.width*.5,y=box.y+box.height*.3;
  assert.ok(box.x>=0&&box.x+box.width<=viewport.width,JSON.stringify({box,viewport}));
  await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
- for(let i=1;i<=8;i++){
-  await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});
-  await page.evaluate(()=>new Promise(requestAnimationFrame));
- }
+ for(let i=1;i<=8;i++){await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*10,y}]});await page.evaluate(()=>new Promise(requestAnimationFrame));}
  await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(400);
  assert.notEqual(await page.evaluate(()=>document.querySelector('#view3d canvas').toDataURL()),prior);
  await page.screenshot({path:`/tmp/f1-mobile-${viewport.width}-orbit.png`});
@@ -212,6 +208,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`F1 c
  await page.locator('#tgPanel').tap();assert.ok(await page.locator('#panel').isVisible());assert.ok(!(await page.locator('#panel').textContent()).includes('¥'));await page.locator('#tgPanel').tap();
  await page.locator('[data-view="2d"]').tap();await page.waitForFunction(()=>!document.querySelector('#stage').classList.contains('is3d')&&!document.body.classList.contains('busy'));assert.equal(await page.locator('#gFurn .furn').count(),47);assert.deepEqual(errors,[]);
 });
+
 test('F1 completion: no WebGL gives readable message and keeps 2D editable', {timeout:90000},async t=>{
  const context=await browser.newContext();t.after(()=>context.close());await context.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(type==='webgl'||type==='webgl2'||type==='experimental-webgl')return null;return get.call(this,type,...args);};});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);await page.click('[data-view="3d"]');
@@ -223,7 +220,6 @@ test('F1 completion: collection adopts F1a migration and preserves both historic
  const legacy={furniture:[{id:'fold-001',type:'bed',name:'old',cx:1000,cy:1000,w:1500,d:2000,rot:0,color:'#c9d6df'}],rooms:{},demolished:['w29'],measures:[]};
  const {page,errors}=await pageFor(t,{},legacy);const initial=await page.evaluate(()=>({p:FloorPlanApp.project,legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')}));
  await page.click('#projectsBtn');await page.fill('#projectName','Migrado');await page.click('#projectRename');await page.click('#projectClose');await page.reload();
- // Renaming now changes the portable project name; all migrated data remain identical.
  assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project),{...initial.p,name:'Migrado'});
  assert.deepEqual(await page.evaluate(()=>({legacy:localStorage.getItem('huxing-design-v1'),v1:localStorage.getItem('rubik-sota-floorplan-project-v1')})),{legacy:initial.legacy,v1:initial.v1});assert.deepEqual(errors,[]);
 });
@@ -251,7 +247,6 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.confidence),'estimated');assert.equal(await page.evaluate(()=>FloorPlanApp.project.scale.verification),undefined);
  await knownDistance(page,'traceVerify',{x:50,y:250},{x:450,y:250},4000);await page.locator('#traceConfirm').click();assert.deepEqual(await page.evaluate(()=>({walls:FloorPlanApp.project.walls,rooms:FloorPlanApp.project.rooms})),geometryBefore);
  await traceTool(page,'traceNavigate');if(viewport.width<1100)await page.locator('#tgLib').click();
- // Since the creation palette (#66) a project without rooms opens on «Construir»: the person chooses «Amueblar» first.
  await page.locator('#paletteTabFurnish').click();await page.locator('.item[data-key="0:0"]').click();
  const before=await page.evaluate(()=>FloorPlanApp.project.objects[0].position);await page.locator('#tgPanel').click();
  await page.evaluate(()=>document.querySelectorAll('aside').forEach(e=>e.classList.remove('open')));await page.waitForTimeout(350);
@@ -274,6 +269,7 @@ for(const viewport of [{width:390,height:844},{width:844,height:390},{width:1440
  await imported.locator('#projectsBtn').click();imported.once('dialog',d=>d.accept());await imported.locator('#projectDelete').click();await imported.waitForFunction(async()=> (await FloorPlanImages.keys()).length===0);assert.equal(await imported.evaluate(()=>FloorPlanApp.project.sourceImages?.length||0),0);
  assert.deepEqual(errors,[]);
 });
+
 test('F1b storage/image editing and shared-reference deletion stay local and recoverable',async t=>{
  const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();
  const before=await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),library:localStorage.getItem('rubik-sota-project-library-v1')}));
@@ -288,10 +284,12 @@ test('F1b storage/image editing and shared-reference deletion stay local and rec
  await page.locator('#projectsBtn').click();const originalEntry=await page.locator('#projectList').inputValue();await page.locator('#projectName').fill('Copy with image');await page.locator('#projectDuplicate').click();page.once('dialog',d=>d.accept());await page.locator('#projectDelete').click();await page.locator('#projectList').selectOption(originalEntry);await page.locator('#projectOpen').click();await page.waitForTimeout(100);assert.equal(await page.evaluate(async()=> (await FloorPlanImages.keys()).length),1);
  await page.locator('#traceBtn').click();page.once('dialog',d=>d.accept());await page.locator('#traceRemoveImage').click();await page.waitForFunction(async()=> (await FloorPlanImages.keys()).length===0);assert.equal(await page.evaluate(()=>FloorPlanApp.project.sourceImages.length),0);assert.deepEqual(errors,[]);
 });
+
 test('F1b rejects signature-valid but corrupt image payload without changing projects',async t=>{
  const {page,errors}=await pageFor(t);await page.locator('#traceBtn').click();await page.locator('#traceNew').click();const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));const bytes=await readFile(path.join(__dirname,'fixtures/manual-plan.png')),truncated=bytes.subarray(0,40);
  await page.locator('#traceImageFile').setInputFiles({name:'corrupt.png',mimeType:'image/png',buffer:truncated});await page.waitForFunction(()=>document.querySelector('#toast').textContent.length>0);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal(await page.evaluate(async()=> (await FloorPlanImages.keys()).length),0);assert.deepEqual(errors,[]);
 });
+
 test('F1b geometry editor rejects invalid polygons atomically and preserves IDs through edits/history',async t=>{
  const {page,errors}=await pageFor(t);const sample=require('../docs/contracts/examples/floorplan-project-v1.f1b.example.json');await page.evaluate(p=>FloorPlanApp.importProject(p),sample);await page.locator('#traceBtn').click();
  const wall=sample.walls[2],room=sample.rooms[0];await page.locator(`#traceWarnings button[data-target="${wall.id}"]`).first().click();await page.locator('#traceEdit-start-x').fill('4300');await page.locator('#traceEditSave').click();
@@ -318,11 +316,11 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  await page.locator('#traceBtn').tap();const zip=await imageZip(page);
  const {page:fresh}=await pageFor(t,{viewport,hasTouch:true});await fresh.locator('#traceZipFile').setInputFiles({name:'project.zip',mimeType:'application/zip',buffer:zip});await fresh.waitForFunction(()=>FloorPlanApp.project.sourceImages?.[0]?.mediaType==='image/webp');await fresh.waitForFunction(()=>document.querySelector('#gSource image'));
  assert.deepEqual(await fresh.evaluate(()=>FloorPlanApp.project.scale),project.scale);
- const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0];return Array.from(new Uint8Array(await (await FloorPlanImages.get(im.storage.ref)).arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
+ const restored=await fresh.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0],blob=await FloorPlanImages.get(im.storage.ref);return Array.from(new Uint8Array(await blob.arrayBuffer()));});assert.deepEqual(Buffer.from(restored),bytes);
  await fresh.reload();await fresh.waitForFunction(()=>document.querySelector('#gSource image'));assert.equal(await fresh.evaluate(()=>FloorPlanApp.project.scale.confidence),'real');
  assert.ok(await fresh.locator('#uploadPlanBtn').isVisible());await fresh.locator('#uploadPlanBtn').scrollIntoViewIfNeeded();
  assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const box=await fresh.locator('#uploadPlanBtn').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
+ const box=await fresh.locator('#uploadPlanBtn').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width&&box.y>=0&&box.y+box.height<=viewport.height,JSON.stringify({box,viewport}));
  await fresh.screenshot({path:`/tmp/image-import-${viewport.width}.png`});
  const beforeError=await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project));await fresh.locator('#traceImageFile').setInputFiles({name:'unsupported.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.7')});await fresh.waitForFunction(()=>document.querySelector('#toast').textContent.includes('PDF no admitido'));await fresh.waitForTimeout(300);
  const message=await fresh.locator('#toast').boundingBox();assert.ok(message.x>=0&&message.x+message.width<=viewport.width&&message.y>=0&&message.y+message.height<=viewport.height);assert.ok(await fresh.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.equal(await fresh.evaluate(()=>JSON.stringify(FloorPlanApp.project)),beforeError);await fresh.screenshot({path:`/tmp/image-import-error-${viewport.width}.png`});
@@ -372,7 +370,7 @@ test('upload control label and accessible help follow Spanish, English and Chine
 for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}])test(`F2 local wall assistance privacy/review ${viewport.width}x${viewport.height}`,{timeout:120000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:true,acceptDownloads:true,serviceWorkers:'block'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[],unexpected=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
- const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css','/css/design-system.css','/css/brand.css','/assets/welcome/example-3d.webp'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
+ const permitted=r=>{const u=new URL(r.url());return r.method()==='GET'&&!r.postDataBuffer()&&!u.search&&((u.origin===new URL(url).origin&&(/^\/js\/[a-z-]+\.m?js$/.test(u.pathname)||['/','/favicon.ico','/assets/f3/catalog.manifest.json','/assets/f3/external.manifest.json','/assets/materials/catalog.json','/css/surface-library.css','/css/guided-experience.css','/css/design-system.css','/css/brand.css','/css/surface-sheet.css','/assets/welcome/example-3d.webp'].includes(u.pathname)))||(u.origin==='https://cdn.jsdelivr.net'&&u.pathname.startsWith('/npm/three@0.160.0/')));};
  page.on('request',r=>{if(r.url().startsWith('blob:'))return;requests.push({url:r.url(),method:r.method(),bodyBytes:r.postDataBuffer()?.length||0});if(!permitted(r))unexpected.push(r.url());});page.on('websocket',ws=>unexpected.push(ws.url()));
  await page.route('**/*',r=>permitted(r.request())?r.continue():r.abort());await softwareModules(page,t);await page.goto(url);await require('./editor-fixture.cjs')(page);await page.waitForFunction(()=>!!window.View3D);
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>FloorPlanApp.project.sourceImages?.length===1);await page.waitForFunction(()=>document.querySelector('#gSource image'));
@@ -386,7 +384,6 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  await page.locator('[id^="assistCorrect-"]').first().click();await page.locator('#assist-startX').fill('123');await page.locator('#assistCorrectionCancel').click();assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
  assert.ok(await page.locator('[id^="assistAccept-"]').first().evaluate(b=>b.getBoundingClientRect().height>=44));
  const artifact=path.join(__dirname,`../docs/qa/artifacts/f2/${viewport.width}x${viewport.height}`);await page.screenshot({path:artifact+'-review.png'});
- // Keyboard activation on desktop, touch on mobile. Every acceptance is explicit.
  const accept=page.locator('[id^="assistAccept-"]').first();if(viewport.width===1440){await accept.focus();await accept.press('Enter');}else await accept.tap();
  const first=await page.evaluate(()=>FloorPlanApp.project.walls[0]);assert.deepEqual(first.source,{method:'suggested',review:'confirmed'});
  await page.locator('[id^="assistCorrect-"]').first().click();await page.locator('#assist-startX').fill('123');await page.locator('#assistCorrectionSave').click();await page.waitForFunction(()=>!document.querySelector('#assistCorrection').open);
@@ -410,21 +407,18 @@ test('F2 temporary proposals cancel safely, invalidate on reference change and p
  const initial=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#traceStatus').textContent.includes('Importa'));assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),initial);
  await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
  const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
- // A missing local blob must leave analysis retryable, without disabling manual work.
  await page.evaluate(()=>{window.originalGet=FloorPlanImages.get;FloorPlanImages.get=async()=>null;});
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#traceStatus').textContent.includes('Imagen local no disponible'));
  assert.equal(await page.locator('#assistAnalyze').isEnabled(),true);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);await page.evaluate(()=>FloorPlanImages.get=originalGet);
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);
  const Package=require('../js/project-package.js'),pendingZip=await Package.validateEntries(await Package.unzip(await imageZip(page)));assert.equal(pendingZip.project.walls.length,0);assert.ok(!JSON.stringify(pendingZip.project).includes('candidate_'));
  await page.locator('#assistCancel').click();assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);assert.equal(await page.locator('#gAssist line').count(),0);
- // Cancel a genuinely in-flight IDB read; a late completion must not resurrect proposals.
  await page.evaluate(()=>{window.originalGet=FloorPlanImages.get;FloorPlanImages.get=async key=>{await new Promise(resolve=>window.releaseAssistRead=resolve);return originalGet(key);};});
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>!!window.releaseAssistRead);await page.locator('#assistCancel').click();await page.evaluate(()=>{FloorPlanImages.get=originalGet;releaseAssistRead();});await page.waitForTimeout(150);assert.equal(await page.locator('#gAssist line').count(),0);assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);await page.locator('#traceImageX').fill('100');await page.locator('#traceImageX').press('Tab');assert.equal(await page.locator('#gAssist line').count(),0);
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);await page.locator('[id^="assistAccept-"]').first().click();const id=await page.evaluate(()=>FloorPlanApp.project.walls[0].id);
  await page.locator(`#traceWarnings button[data-target="${id}"]`).click();await page.locator('#traceEdit-start-x').fill('101');await page.locator('#traceEditSave').click();assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls[0].source),{method:'suggested',review:'unreviewed'});
  await page.locator('#traceReviewed').click();assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.walls[0].source),{method:'suggested',review:'confirmed'});assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls[0].id),id);assert.match(await page.locator('#traceWarnings').textContent(),/Origen experimental sugerido/);
- // Manual tool stays accessible while assistance candidates exist.
  await traceTool(page,'traceWall');await imageTap(page,{x:50,y:120});await imageTap(page,{x:450,y:120});assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls.length),2);assert.equal(await page.evaluate(()=>FloorPlanApp.project.walls[1].source.method),'manual');assert.deepEqual(errors,[]);
 });
 
@@ -434,7 +428,6 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  await page.locator('#traceBtn').click();await page.locator('#traceNew').click();await page.locator('#traceImageFile').setInputFiles(path.join(__dirname,'fixtures/manual-plan.png'));await page.waitForFunction(()=>document.querySelector('#gSource image'));
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelectorAll('#gAssist line').length>1);assert.equal(await page.locator('#assistRawExport').isEnabled(),false);assert.match(await page.locator('#rawExportUnavailable').textContent(),/Calibra/);
  await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);
- // World placement is demonstrably rotated/displaced; raw export must remain image-aligned.
  await page.locator('#traceImageX').fill('1000');await page.locator('#traceImageX').press('Tab');await page.locator('#traceImageRotation').fill('30');await page.locator('#traceImageRotation').press('Tab');
  const bitmapRaw=await page.evaluate(async()=>{const im=FloorPlanApp.project.sourceImages[0],blob=await FloorPlanImages.get(im.storage.ref),bitmap=await createImageBitmap(blob),canvas=document.createElement('canvas');canvas.width=im.widthPx;canvas.height=im.heightPx;const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0);bitmap.close();return FloorPlanWallAssist.detect(ctx.getImageData(0,0,canvas.width,canvas.height));});
  await page.locator('#assistAnalyze').click();await page.waitForFunction(()=>document.querySelector('#assistRawExport')&&!document.querySelector('#assistRawExport').disabled);
@@ -451,7 +444,6 @@ for(const viewport of [{width:360,height:800},{width:390,height:844},{width:844,
  const actualWorld=await page.locator('#gAssist line').first().evaluate(l=>({x:Number(l.getAttribute('x1')),y:Number(l.getAttribute('y1'))}));assert.notDeepEqual(actualWorld,expected[0].start);
  const serialized=JSON.stringify(raw),projectId=JSON.parse(before.project).id;assert.ok(!serialized.includes(projectId));for(const forbidden of ['blob:','originalFileName','sourceImages','storage','EXIF','originMm','rotationDeg','img_','prj_'])assert.ok(!serialized.includes(forbidden),forbidden);
  assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),stored:JSON.stringify({...localStorage})})),before);await page.waitForTimeout(1100);assert.deepEqual(await page.evaluate(()=>({storage:rawStorageWrites,images:rawImageWrites,urls:rawUrls.every(u=>rawRevoked.includes(u))})),{storage:0,images:0,urls:true});
- // Actual browser download -> local converter -> existing evaluator, no reference fabrication.
  const {mkdtemp,writeFile,rm}=require('node:fs/promises'),os=require('node:os'),directory=await mkdtemp(path.join(os.tmpdir(),'raw-export-'));t.after(()=>rm(directory,{recursive:true,force:true}));const file=path.join(directory,'private.json');await writeFile(file,serialized);
  const python=process.env.PYTHON||(process.platform==='win32'?'python':'python3');const converted=(await verifiedFetch(python,[path.join(__dirname,'../scripts/f2-raw-export-to-evaluation.py'),file])).stdout;await writeFile(file,converted);const report=JSON.parse((await verifiedFetch(python,[path.join(__dirname,'../scripts/f2-wall-evaluation.py'),file,'--tolerance-mm','5'])).stdout);assert.equal(report.cases[0].metrics,null);assert.deepEqual(report.cases[0].failures,['reference_missing']);assert.equal(report.f2_validated,false);
  await page.locator('[id^="assistReject-"]').first().click();assert.equal(await page.locator('#assistRawExport').isEnabled(),false);assert.deepEqual(await page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),stored:JSON.stringify({...localStorage})})),before);
