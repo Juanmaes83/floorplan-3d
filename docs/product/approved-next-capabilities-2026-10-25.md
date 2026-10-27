@@ -106,12 +106,26 @@ Incluye:
 La secuencia aprobada es:
 
 - **8A / V1**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón. **Corte funcional actual.**
-- **8B / V2**: cubierta sencilla, petos, retranqueos y volúmenes exteriores. Debe permanecer deliberadamente limitado; no resolver un generador universal de tejados.
+- **8B / V2**: cubierta sencilla, petos, retranqueos y volúmenes exteriores. Debe permanecer deliberadamente limitado; no resolver un generador universal de tejados. Documento obligatorio de alcance: [`point-8b-exterior-v2-roof-volumes-2026-10-27.md`](point-8b-exterior-v2-roof-volumes-2026-10-27.md).
 - **8C / V3**: parcela/terreno, desniveles y contexto exterior.
 
-`FloorPlanGeoProvider` puede alimentar especialmente 8C, pero no sustituye ni renumera el Punto 8. 8A y 8B deben funcionar sin proveedores territoriales.
+Para 8B, la ruta de menor riesgo queda fijada como:
 
-La documentación específica de límites de 8B está preparada en la PR documental #119 mientras no haya sido fusionada.
+```text
+8B-A
+huella + superficies superiores + cubierta plana + retranqueos
+
+8B-B
+petos + volúmenes exteriores simples
+
+8B-C
+sólo si está justificado:
+monopendiente / dos aguas simples con parámetros explícitos
+```
+
+No implementar un solver universal de cubiertas, ni inferir automáticamente cumbreras, limatesas, limahoyas o soluciones arquitectónicas complejas a partir de la huella. Los casos no soportados deben degradar de forma honesta o pedir parámetros explícitos.
+
+`FloorPlanGeoProvider` puede alimentar especialmente 8C, pero no sustituye ni renumera el Punto 8. 8A y 8B deben funcionar sin proveedores territoriales.
 
 ## Punto 9 — Instalaciones ligeras
 
