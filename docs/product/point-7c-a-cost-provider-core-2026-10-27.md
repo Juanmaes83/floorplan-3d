@@ -270,3 +270,8 @@ Fuera de 7C-A:
 - PR revisada y autorizada para merge.
 
 Tras su cierre, el siguiente paso es 7C-B — `ManualCostProvider`.
+
+
+## Incidente de CI solar
+
+7C-A sigue **CANDIDATO EN REVISIÓN**. Diagnóstico, corrección de test y resultados en [informe de CI solar](../qa/pr-112-solar-ci-timeout-2026-10-27.md). Sin cambios de CostProvider ni inicio de 7C-B.
