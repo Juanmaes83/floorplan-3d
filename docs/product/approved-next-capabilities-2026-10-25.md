@@ -91,11 +91,13 @@ Reglas:
 
 ## Punto 8 — Exterior (se conserva)
 
-- **V1**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón.
-- **V2**: cubierta sencilla, petos y volúmenes exteriores.
-- **V3**: parcela/terreno, desniveles y contexto exterior.
+- **V1 / 8A**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón.
+- **V2 / 8B**: cubierta sencilla, petos, retranqueos y volúmenes exteriores. Debe limitarse deliberadamente a geometría explícita y testeable; **no** implementar un generador universal de tejados ni inferir soluciones arquitectónicas complejas a partir de la huella. Documento de alcance obligatorio para agentes: [`point-8b-exterior-v2-roof-volumes-2026-10-27.md`](point-8b-exterior-v2-roof-volumes-2026-10-27.md).
+- **V3 / 8C**: parcela/terreno, desniveles y contexto exterior.
 
-`FloorPlanGeoProvider` puede alimentar especialmente V3, pero no sustituye ni renumera este Punto 8.
+Para 8B, la ruta de menor riesgo es: cubierta plana y superficies expuestas → petos/volúmenes simples → sólo después, si está justificado, monopendiente o dos aguas para casos geométricos cerrados y con parámetros explícitos. Los casos no soportados deben degradar de forma honesta; no se resuelven con heurísticas plausibles pero no demostrables.
+
+`FloorPlanGeoProvider` puede alimentar especialmente V3, pero no sustituye ni renumera este Punto 8. 8A/8B deben funcionar sin proveedores territoriales.
 
 ## Punto 9 — Instalaciones ligeras
 
