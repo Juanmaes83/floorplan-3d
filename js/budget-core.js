@@ -4,7 +4,8 @@
   'use strict';
 
   const SCHEMA = 'rubik-sota.floorplan-budget';
-  const VERSION = '1.0.0';
+  const VERSION = '1.1.0';
+  const SUPPORTED_VERSIONS = Object.freeze(['1.0.0', VERSION]);
   const CURRENCY = 'EUR';
   const UNITS = Object.freeze(['m2', 'm', 'unit']);
   const QUANTITY_STATUSES = Object.freeze(['measured', 'estimated', 'unavailable']);
@@ -113,7 +114,8 @@
     };
   }
 
-  function createItem({id, chapterId=null, description, quantity, wastePercent=0, unitPrice=null, priceSource=null, taxRatePercent, review}={}) {
+  function createItem({id, chapterId=null, description, quantity, wastePercent=0, unitPrice=null, priceSource=null, priceReference=null, taxRatePercent, review}={}, version=VERSION) {
+    if (!SUPPORTED_VERSIONS.includes(version)) fail('unsupported schemaVersion');
     if (!quantity || typeof quantity !== 'object') fail('item quantity is required');
     const q = validateQuantity(quantity);
     const item = {
@@ -123,11 +125,13 @@
       quantity: q,
       wastePercent: validatePercent(wastePercent, 'wastePercent'),
       unitPrice: validateMoney(unitPrice, 'unitPrice', {nullable:true}),
-      priceSource: priceSource === null ? null : validatePriceSource(priceSource),
+      priceSource: priceSource === null ? null : validatePriceSource(priceSource, version),
       review: validateReview(review ?? {status:'unreviewed', reviewedAt:null})
     };
+    if (version === VERSION) item.priceReference = priceReference === null ? null : validatePriceReference(priceReference);
+    else if (priceReference !== null) fail('priceReference requires budget 1.1.0');
     if (taxRatePercent !== undefined) item.taxRatePercent = validatePercent(taxRatePercent, 'item.taxRatePercent');
-    validatePriceAndReview(item);
+    validatePriceAndReview(item, version);
     return item;
   }
 
@@ -177,10 +181,59 @@
     return clone(quantity);
   }
 
-  function validatePriceSource(source) {
+  function validatePriceSource(source, version) {
     if (!source || typeof source !== 'object') fail('priceSource must be an object');
-    if (source.type !== 'manual') fail('7B only supports manual priceSource');
+    if (source.type === 'provider-reference' && version === VERSION) {
+      exactKeys(source, ['type','providerId','itemId'], 'priceSource');
+      return {
+        type:'provider-reference', providerId:requireString(source.providerId, 'priceSource.providerId'),
+        itemId:requireString(source.itemId, 'priceSource.itemId')
+      };
+    }
+    if (source.type !== 'manual') fail(version === '1.0.0' ? '7B only supports manual priceSource' : 'priceSource must be manual or provider-reference');
     return {type:'manual', label:requireString(source.label, 'priceSource.label'), asOf:validateDate(source.asOf ?? null, 'priceSource.asOf')};
+  }
+
+  const exactKeys = (value, keys, label) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) fail(`${label} must be an object`);
+    if (Object.keys(value).some(key => !keys.includes(key)) || keys.some(key => !hasOwn(value, key))) fail(`${label} must have exactly the normalized CostQuote fields`);
+  };
+  const nullableText = (value, label) => value === null ? null : requireString(value, label);
+  const nullableUrl = (value, label) => {
+    if (value === null) return null;
+    const clean = requireString(value, label);
+    let parsed; try { parsed = new URL(clean); } catch { fail(`${label} must be an http(s) URL or null`); }
+    if (!['http:', 'https:'].includes(parsed.protocol)) fail(`${label} must be an http(s) URL or null`);
+    return clean;
+  };
+  function validatePriceReference(reference) {
+    exactKeys(reference, ['providerId','itemId','code','description','unit','unitPrice','currency','priceKind','source'], 'priceReference');
+    const source = reference.source;
+    exactKeys(source, ['label','asOf','retrievedAt','edition','region','sourceUrl','attribution','licenseStatus','licenseName','licenseUrl'], 'priceReference.source');
+    if (reference.priceKind !== 'reference') fail('priceReference.priceKind must be reference');
+    if (reference.currency !== CURRENCY) fail('priceReference.currency must be EUR');
+    if (!UNITS.includes(reference.unit)) fail('priceReference.unit must be a Budget unit');
+    if (![null,'not-applicable','unknown','verified','restricted'].includes(source.licenseStatus)) fail('priceReference.source.licenseStatus is invalid');
+    return {
+      providerId:requireString(reference.providerId, 'priceReference.providerId'),
+      itemId:requireString(reference.itemId, 'priceReference.itemId'),
+      code:nullableText(reference.code, 'priceReference.code'),
+      description:requireString(reference.description, 'priceReference.description'),
+      unit:reference.unit, unitPrice:validateMoney(reference.unitPrice, 'priceReference.unitPrice'),
+      currency:CURRENCY, priceKind:'reference',
+      source:{
+        label:requireString(source.label, 'priceReference.source.label'),
+        asOf:validateDate(source.asOf, 'priceReference.source.asOf'),
+        retrievedAt:validateDateTime(source.retrievedAt, 'priceReference.source.retrievedAt'),
+        edition:nullableText(source.edition, 'priceReference.source.edition'),
+        region:nullableText(source.region, 'priceReference.source.region'),
+        sourceUrl:nullableUrl(source.sourceUrl, 'priceReference.source.sourceUrl'),
+        attribution:nullableText(source.attribution, 'priceReference.source.attribution'),
+        licenseStatus:source.licenseStatus,
+        licenseName:nullableText(source.licenseName, 'priceReference.source.licenseName'),
+        licenseUrl:nullableUrl(source.licenseUrl, 'priceReference.source.licenseUrl')
+      }
+    };
   }
 
   function validateReview(review) {
@@ -192,15 +245,28 @@
     return result;
   }
 
-  function validatePriceAndReview(item) {
+  function validatePriceAndReview(item, version) {
     if (item.unitPrice === null) {
       if (item.priceSource !== null) fail('item without unitPrice cannot have priceSource');
       if (item.review.status === 'reviewed') fail('item without unitPrice cannot be reviewed');
     } else if (item.priceSource === null) fail('priced item requires priceSource');
+    if (version === VERSION && item.priceReference !== null) {
+      if (item.priceReference.unit !== item.quantity.unit) fail('priceReference.unit must match quantity.unit');
+      if (item.priceReference.currency !== CURRENCY) fail('priceReference.currency must match budget.currency');
+    }
+    if (version === VERSION && item.priceSource?.type === 'provider-reference') {
+      if (item.priceReference === null) fail('provider-reference requires priceReference');
+      if (item.priceSource.providerId !== item.priceReference.providerId) fail('priceSource.providerId must match priceReference.providerId');
+      if (item.priceSource.itemId !== item.priceReference.itemId) fail('priceSource.itemId must match priceReference.itemId');
+      if (item.unitPrice !== item.priceReference.unitPrice) fail('active unitPrice must match priceReference.unitPrice');
+    }
   }
 
-  function validateItem(item) {
+  function validateItem(item, version=hasOwn(item ?? {}, 'priceReference') ? VERSION : '1.0.0') {
     if (!item || typeof item !== 'object') fail('item must be an object');
+    if (!SUPPORTED_VERSIONS.includes(version)) fail('unsupported schemaVersion');
+    if (version === VERSION && !hasOwn(item, 'priceReference')) fail('item 1.1.0 requires priceReference');
+    if (version === '1.0.0' && hasOwn(item, 'priceReference')) fail('priceReference requires budget 1.1.0');
     const normalized = createItem({
       id:item.id,
       chapterId:item.chapterId ?? null,
@@ -209,16 +275,17 @@
       wastePercent:item.wastePercent,
       unitPrice:item.unitPrice,
       priceSource:item.priceSource ?? null,
+      ...(version === VERSION ? {priceReference:item.priceReference} : {}),
       ...(hasOwn(item, 'taxRatePercent') ? {taxRatePercent:item.taxRatePercent} : {}),
       review:item.review
-    });
+    }, version);
     return normalized;
   }
 
   function validateBudget(budget) {
     if (!budget || typeof budget !== 'object') fail('budget must be an object');
     if (budget.schema !== SCHEMA) fail(`schema must be ${SCHEMA}`);
-    if (budget.schemaVersion !== VERSION) fail(`schemaVersion must be ${VERSION}`);
+    if (!SUPPORTED_VERSIONS.includes(budget.schemaVersion)) fail(`schemaVersion must be one of ${SUPPORTED_VERSIONS.join(', ')}`);
     const id = requireString(budget.id, 'budget id');
     if (!budget.subject || !['project','building'].includes(budget.subject.type)) fail('budget subject.type must be project or building');
     const subject = {type:budget.subject.type, id:requireString(budget.subject.id, 'budget subject.id')};
@@ -231,13 +298,19 @@
       if (chapterIds.has(chapter.id)) fail(`duplicate chapter id ${chapter.id}`);
       chapterIds.add(chapter.id);
     }
-    const items = budget.items.map(validateItem), itemIds = new Set();
+    const items = budget.items.map(item => validateItem(item, budget.schemaVersion)), itemIds = new Set();
     for (const item of items) {
       if (itemIds.has(item.id)) fail(`duplicate item id ${item.id}`);
       itemIds.add(item.id);
       if (item.chapterId !== null && !chapterIds.has(item.chapterId)) fail(`unknown chapter ${item.chapterId}`);
     }
-    return {schema:SCHEMA, schemaVersion:VERSION, id, subject, title, currency:CURRENCY, taxRatePercent, chapters, items};
+    return {schema:SCHEMA, schemaVersion:budget.schemaVersion, id, subject, title, currency:CURRENCY, taxRatePercent, chapters, items};
+  }
+
+  function upgradeBudget(budget) {
+    const clean = validateBudget(budget);
+    if (clean.schemaVersion === VERSION) return clone(clean);
+    return validateBudget({...clean, schemaVersion:VERSION, items:clean.items.map(item => ({...item, priceReference:null}))});
   }
 
   function serializeBudget(budget) {
@@ -321,10 +394,10 @@
   }
 
   const api = {
-    SCHEMA, VERSION, CURRENCY, UNITS, QUANTITY_STATUSES, REVIEW_STATUSES,
+    SCHEMA, VERSION, SUPPORTED_VERSIONS, CURRENCY, UNITS, QUANTITY_STATUSES, REVIEW_STATUSES,
     createBudget, createChapter, quantityFrom7A, manualQuantity, manualPrice,
     createItem, setManualPrice, clearPrice, markReviewed,
-    validateBudget, validateItem, serializeBudget, parseBudget, calculateItem, calculateBudget, roundMoney
+    validateBudget, validateItem, upgradeBudget, serializeBudget, parseBudget, calculateItem, calculateBudget, roundMoney
   };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.FloorPlanBudget = api;
