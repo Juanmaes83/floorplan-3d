@@ -26,8 +26,8 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7B | Budget Core | **CERRADO** |
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
 | 7C-B | `ManualCostProvider` | **CERRADO** |
-| 7C-C | Budget provenance de providers | **SIGUIENTE** |
-| 7C-D | Parser FIEBDC-3/BC3 | **PENDIENTE** |
+| 7C-C | Budget provenance de providers | **CANDIDATO EN REVISIÓN** |
+| 7C-D | Parser FIEBDC-3/BC3 | **SIGUIENTE** |
 | 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
 | 7D | Presentación/exportación | **PENDIENTE** |
 | 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
@@ -139,10 +139,18 @@ CI del HEAD `a79291e68569c142faeca9504fd0895b0e9e1128`: Guided, Solar, Multiform
 
 Documento: `docs/product/point-7c-b-manual-cost-provider-2026-10-27.md`.
 
+### 7C-C — Budget provenance y CostQuote bridge — CANDIDATO EN REVISIÓN
+
+`FloorPlanBudgetV1` evoluciona de forma compatible a 1.1.0. `createBudget()` crea 1.1.0; parse/serialize siguen aceptando y preservando 1.0.0 manual-only. `upgradeBudget()` migra explícitamente, sin alterar cálculos, review ni documentos de origen.
+
+En 1.1 cada partida distingue precio activo `unitPrice`, su `priceSource`, un `priceReference` externo opcional y la revisión profesional independiente. El bridge valida CostQuote, unidad exacta y EUR; permite adjuntar una referencia sin cambiar el precio activo, o aplicarla como precio activo aún no revisado. Un override manual conserva la referencia original y reinicia review. No hay conversión, selección automática ni gate legal BCCA en este corte.
+
+Documento: `docs/product/point-7c-c-budget-provider-provenance-2026-10-27.md`.
+
 ### Orden restante de 7C
 
-1. **7C-C — SIGUIENTE** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-2. **7C-D — PENDIENTE** — parser FIEBDC-3/BC3.
+1. **7C-C — CANDIDATO EN REVISIÓN** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
+2. **7C-D — SIGUIENTE** — parser FIEBDC-3/BC3.
 3. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
 4. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
@@ -161,8 +169,8 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
 2. No reabrir 1–6, 7A, 7B, 7C-A o 7C-B salvo regresión reproducible o decisión expresa.
 3. 7C-A fija el contrato/provider core; 7C-B aporta Manual offline permanente.
-4. 7C-C es el siguiente corte y debe conectar provenance/reference prices con Budget de forma compatible.
-5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only hasta la evolución explícita de 7C-C.
+4. 7C-C es candidato en revisión; no marcarlo cerrado antes de review y merge.
+5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; la versión 1.1.0 se crea nueva o mediante upgrade explícito.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
 8. No adelantar UI/exportación de 7D dentro de 7C.

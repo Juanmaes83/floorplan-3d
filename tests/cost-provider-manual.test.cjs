@@ -138,9 +138,9 @@ test('browser adapter works with network, DOM and storage globals forbidden',asy
   assert.equal(result.status,'available');
   assert.equal(result.quote.source.licenseStatus,'not-applicable');
 });
-test('quote contains no review or Budget bridge and Budget V1 stays at 1.0.0',async()=>{
+test('quote contains no review or Budget bridge and legacy Budget 1.0.0 stays supported',async()=>{
   const quote=await available();
   assert.equal(Object.hasOwn(quote,'review'),false);
   assert.equal(Object.hasOwn(quote,'priceSource'),false);
-  assert.equal(require('../js/budget-core.js').VERSION,'1.0.0');
+  assert.ok(require('../js/budget-core.js').SUPPORTED_VERSIONS.includes('1.0.0'));
 });
