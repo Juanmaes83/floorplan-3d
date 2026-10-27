@@ -1,4 +1,6 @@
-# Punto 7C-D — codec FIEBDC-3/BC3 — candidato en revisión
+# Punto 7C-D — codec FIEBDC-3/BC3 — cerrado por PR #117
+
+**Integración:** squash `cc929338b642a65b1f286c91e4b1c2bac72f6260` en `master`, verificado antes de iniciar 7C-E.
 
 ## Objetivo y base
 

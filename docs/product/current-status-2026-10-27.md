@@ -12,6 +12,7 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 - Punto 7C-A — `FloorPlanCostProvider` contrato/core: cerrado por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
 - Punto 7C-B — `ManualCostProvider`: cerrado por PR #114, squash `24584a3ff8ef1d8021d8518738650d18e353863f`.
 - Punto 7C-C — Budget provenance y CostQuote bridge: cerrado por PR #116, squash `59ca05e1c47aa2a7d020bbb3e44fa49fa2bbf94e`.
+- Punto 7C-D — codec FIEBDC-3/BC3: cerrado por PR #117, squash `cc929338b642a65b1f286c91e4b1c2bac72f6260`.
 
 ## Resumen
 
@@ -28,8 +29,8 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
 | 7C-B | `ManualCostProvider` | **CERRADO** |
 | 7C-C | Budget provenance de providers | **CERRADO** |
-| 7C-D | Codec FIEBDC-3/BC3 | **CANDIDATO EN REVISIÓN** |
-| 7C-E | `BCCA_ES` + gate legal/técnico | **SIGUIENTE / PENDIENTE** |
+| 7C-D | Codec FIEBDC-3/BC3 | **CERRADO** |
+| 7C-E | `BCCA_ES` + gate legal/técnico | **CANDIDATO EN IMPLEMENTACIÓN / REVISIÓN** |
 | 7D | Presentación/exportación | **PENDIENTE** |
 | 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
@@ -153,8 +154,8 @@ Documento: `docs/product/point-7c-c-budget-provider-provenance-2026-10-27.md`.
 ### Orden restante de 7C
 
 1. **7C-C — CERRADO** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-2. **7C-D — CANDIDATO EN REVISIÓN** — codec FIEBDC-3/BC3, lectura y escritura; ver `docs/product/point-7c-d-fiebdc3-bc3-codec-2026-10-27.md`.
-3. **7C-E — SIGUIENTE / PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+2. **7C-D — CERRADO** — codec FIEBDC-3/BC3, lectura y escritura; PR #117, squash `cc929338b642a65b1f286c91e4b1c2bac72f6260`.
+3. **7C-E — CANDIDATO EN IMPLEMENTACIÓN / REVISIÓN** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
 4. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
 La compilación DDC CC BY-NC no se incorpora a producción.
@@ -172,7 +173,7 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
 2. No reabrir 1–6, 7A, 7B, 7C-A o 7C-B salvo regresión reproducible o decisión expresa.
 3. 7C-A fija el contrato/provider core; 7C-B aporta Manual offline permanente.
-4. 7C-C está cerrado por PR #116; 7C-D es el corte técnico actual.
+4. 7C-C está cerrado por PR #116 y 7C-D por PR #117; 7C-E es el corte técnico actual. La familia 7C todavía no está cerrada.
 5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; la versión 1.1.0 se crea nueva o mediante upgrade explícito.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
