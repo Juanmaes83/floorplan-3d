@@ -9,20 +9,27 @@ async function setup(t,viewport){const context=await browser.newContext({viewpor
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanSolarUI&&window.View3D);await require('./editor-fixture.cjs')(page);return {page,errors};}
 async function configure(page){await page.locator(await page.locator('#solarNorth').isVisible()?'#solarNorth':'#solarOpen3d').click();for(const [id,v]of Object.entries({solarNorthInput:'25',solarLatitude:'40.4168',solarLongitude:'-3.7038',solarTimeZone:'Europe/Madrid',solarDate:'2026-06-21',solarTime:'09:00'}))await page.locator('#'+id).fill(v);}
 const inspect=page=>page.evaluate(()=>View3D.solarInspect);
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test('solar configuration, 3D direction, restoration and responsive '+viewport.width+'x'+viewport.height,{timeout:180000},async t=>{
- const {page,errors}=await setup(t,viewport),name=viewport.width+'x'+viewport.height;
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test('solar configuration, 3D direction, restoration and responsive '+viewport.width+'x'+viewport.height,async t=>{
+ // Reuse one context for this continuous UI journey, with a bound for each contract phase.
+ // Software WebGL took 178.4 s for the old combined desktop case in CI before 7C-A.
+ let page,errors,geometryBefore,morning;
+ const name=viewport.width+'x'+viewport.height;
+ await t.test('configuration, legacy geometry and morning direction',{timeout:120000},async()=>{
+ ({page,errors}=await setup(t,viewport));
  const legacy=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));assert.match(await page.locator('#solarNorth').innerText(),/sin configurar/);
  await page.locator('#solarNorth').click();await page.locator('#solarActivate').click();assert.match(await page.locator('#solarError').innerText(),/latitud|norte/i);await page.locator('#solarClose').click();
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),legacy);
  // A rejected activation does not mutate legacy; explicit valid settings preserve its geometry.
- const geometryBefore=JSON.parse(legacy).rooms;
+ geometryBefore=JSON.parse(legacy).rooms;
  if(viewport.width===1440){await page.locator('[data-view="3d"]').click();await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&View3D.presentationInspect());await page.locator('[data-t="night"]').click();}
  await configure(page);
  await page.screenshot({path:path.join(OUT,name+'-configuration.png')});
  assert.equal(await page.locator('#solarDialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true);
  await page.locator('#solarActivate').click();await page.waitForFunction(()=>FloorPlanApp.viewMode==='3d'&&!View3D.lifecycleMetrics.animating&&View3D.solarInspect.result);
- const morning=await inspect(page);assert.ok(morning.result.aboveHorizon);assert.ok(morning.direction[0]>0);assert.ok(morning.lampIntensities.every(v=>v===0));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.rooms),geometryBefore);
+ morning=await inspect(page);assert.ok(morning.result.aboveHorizon);assert.ok(morning.direction[0]>0);assert.ok(morning.lampIntensities.every(v=>v===0));assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.rooms),geometryBefore);
  await page.screenshot({path:path.join(OUT,name+'-morning.png')});
+ });
+ await t.test('live adjustments, PNG capture and artistic light restoration',{timeout:120000},async()=>{
  const prior=await page.evaluate(()=>{View3D.setSolar(null);const light=View3D.presentationLight;View3D.setSolar(FloorPlanSolarUI.result);return light;});
  await page.locator('#solarEdit').click();await page.locator('#solarTime').fill('19:00');const afternoon=await inspect(page);assert.ok(afternoon.direction[0]<0);assert.notDeepEqual(afternoon.direction,morning.direction);
  await page.locator('#solarDate').fill('2026-12-21');assert.notEqual((await inspect(page)).result.altitudeDeg,afternoon.result.altitudeDeg);
@@ -31,12 +38,16 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await page.screenshot({path:path.join(OUT,name+'-solar.png')});
  const capture=await page.evaluate(()=>View3D.shot({download:false}).dataUrl);assert.ok(capture.length>10000);
  await page.locator('#solarPresentation').click();assert.equal((await inspect(page)).result,null);assert.deepEqual(await page.evaluate(()=>View3D.presentationLight),prior);assert.equal((await inspect(page)).lights,morning.lights);
+ assert.deepEqual(errors,[]);
+ });
+ await t.test('reload, standalone JSON import and clearing north',{timeout:120000},async()=>{
  // UI persistence survives reload and standalone JSON import.
  const saved=await page.evaluate(()=>structuredClone(FloorPlanApp.project));assert.equal(saved.site.northOffsetDeg,115);
  await page.reload();await page.waitForFunction(()=>window.FloorPlanSolarUI&&window.View3D);assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.site),saved.site);
  await page.locator('#fileIn').setInputFiles({name:'solar-project.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(saved))});await page.waitForFunction(()=>FloorPlanApp.project.site?.northOffsetDeg===115);assert.equal(await page.evaluate(()=>FloorPlanSolarUI.mode),'presentation');
  await page.evaluate(()=>FloorPlanSolarUI.open());await page.locator('#solarNorthInput').fill('');await page.locator('#solarSave').click();assert.equal(await page.evaluate(()=>FloorPlanApp.project.site.northOffsetDeg),undefined);assert.equal(await page.evaluate(()=>FloorPlanSolarUI.result.reason),'north');await page.locator('#solarClose').click();
  assert.deepEqual(errors,[]);
+ });
 });
 
 test('shared building north/location, level switch, building JSON and presentation light isolation',{timeout:240000},async t=>{
