@@ -1,16 +1,17 @@
 # Punto 7B — Budget Core
 
 **Fecha:** 27-10-2026
-**Estado:** implementación candidata en `feat/point-7b-budget-core`; no cierra todavía el Punto 7 completo.
-**Base exacta:** `master@dd60f7adf3df146a4679661479dd0a3f17f5ba87`.
+**Estado:** **CERRADO** mediante PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
+**Base de implementación:** `master@dd60f7adf3df146a4679661479dd0a3f17f5ba87`.
+**HEAD validado antes del merge:** `215f857075ddba49420a3f8dd1df781992b13adc`.
 **Dependencia obligatoria:** Punto 7A / `FloorPlanQuantities`.
 **Siguiente corte:** 7C — `FloorPlanCostProvider`.
 
 ## 0. Objetivo
 
-Crear el núcleo monetario/profesional de presupuestos de FLOOR PLAN 3D sin introducir todavía proveedores externos de precios ni UI.
+7B crea el núcleo monetario/profesional de presupuestos de FLOOR PLAN 3D sin introducir todavía proveedores externos de precios ni UI.
 
-7B transforma cantidades justificables en partidas presupuestarias auditables y calculables:
+Transforma cantidades justificables en partidas presupuestarias auditables y calculables:
 
 - cantidad;
 - unidad;
@@ -60,14 +61,14 @@ Contrato:
 - completitud;
 - referencia de origen.
 
-Ejemplo conceptual:
+Flujo:
 
 ```text
-FloorPlanQuantities.room(...).floor.areaM2
-                  ↓
-FloorPlanBudget.quantityFrom7A(...)
-                  ↓
-partida de pavimento
+FloorPlanQuantities
+        ↓
+FloorPlanBudget.quantityFrom7A()
+        ↓
+partida presupuestaria
 ```
 
 La partida conserva la procedencia `engine: FloorPlanQuantities`.
@@ -111,9 +112,9 @@ La merma:
 
 El core conserva precisión de cantidad y no introduce una regla oculta de redondeo a 2/3 decimales.
 
-## 5. Precio manual — flujo inicial
+## 5. Precio manual — flujo cerrado en 7B
 
-7B admite únicamente:
+`FloorPlanBudgetV1` 1.0.0 admite únicamente:
 
 `priceSource.type = manual`
 
@@ -131,7 +132,7 @@ La procedencia conserva:
 
 No existe todavía `FloorPlanCostProvider`.
 
-BCCA, DDC, catálogos remotos y proveedores de red quedan para 7C.
+BCCA, DDC, catálogos remotos y proveedores de red pertenecen a 7C.
 
 ## 6. Revisión
 
@@ -231,7 +232,7 @@ Nunca se suma la desconocida como 0.
 
 ## 11. API
 
-Nuevo módulo:
+Módulo:
 
 `js/budget-core.js`
 
@@ -272,13 +273,13 @@ El contrato se puede serializar/restaurar como JSON independiente.
 
 La UI y la decisión de dónde almacenar/exportar presupuestos pertenecen a 7D.
 
-## 13. QA dirigido
+## 13. QA de cierre
 
-Nueva suite:
+Suite:
 
 `tests/budget-core.test.cjs`
 
-Cobertura local antes de publicar:
+Cobertura:
 
 - documento separado y EUR;
 - procedencia 7A;
@@ -289,7 +290,7 @@ Cobertura local antes de publicar:
 - redondeo monetario;
 - precio desconocido vs cero;
 - procedencia manual obligatoria;
-- rechazo de proveedores externos;
+- rechazo de proveedores externos en V1.0.0;
 - revisión;
 - cambio de precio invalida revisión;
 - borrado de precio;
@@ -307,13 +308,19 @@ Cobertura local antes de publicar:
 - global de navegador;
 - serialización/parseo;
 - fechas de procedencia;
-- integración real con 7A cuando la suite corre dentro del repositorio.
+- integración real con 7A.
 
 Resultado local previo a publicación:
 
 `33 PASS · 0 FAIL · 1 SKIP`
 
-El único SKIP local es la prueba que requiere el `quantity-core.js` real del repositorio; en CI debe ejecutarse y quedar verde.
+El único SKIP local requería el `quantity-core.js` real del repositorio. En GitHub CI la integración real 7A→7B se ejecutó dentro de `Unit regressions` y quedó verde.
+
+Antes del merge del HEAD `215f857075ddba49420a3f8dd1df781992b13adc` quedaron en SUCCESS:
+
+- `Guided experience`;
+- `Point 6 solar and compatibility`;
+- `Multiformat guided import`.
 
 ## 14. No objetivos
 
@@ -337,7 +344,7 @@ El único SKIP local es la prueba que requiere el `quantity-core.js` real del re
 
 ## 15. Compatibilidad
 
-No debe romper:
+No rompe:
 
 - Puntos 1–6;
 - 7A;
@@ -350,7 +357,7 @@ No debe romper:
 - PNG/vídeo;
 - proyectos legacy.
 
-Como el módulo no se carga aún en UI, el riesgo de runtime está deliberadamente limitado.
+Como el módulo no se carga aún en UI, el riesgo de runtime permanece deliberadamente limitado.
 
 ## 16. Handoff
 
@@ -358,9 +365,11 @@ Como el módulo no se carga aún en UI, el riesgo de runtime está deliberadamen
 
 Debe formalizar `FloorPlanCostProvider` sin cambiar las reglas de cálculo de 7B.
 
-Un proveedor futuro podrá proponer un precio y su provenance, pero el precio seguirá necesitando la semántica de revisión aprobada en 7B.
+Un proveedor futuro podrá proponer un precio y su provenance, pero la referencia externa no equivale a precio profesional aprobado.
 
-Primer candidato externo: `BCCA_ES`, solo después de verificar condiciones oficiales de reutilización.
+Primer candidato externo: `BCCA_ES`, solo después de verificar condiciones oficiales de reutilización/redistribución comercial.
+
+`FloorPlanBudgetV1` 1.0.0 sigue siendo válido y manual-only. Cualquier soporte de `provider-reference` debe introducirse mediante evolución compatible explícita, no reinterpretando documentos 1.0.0.
 
 ### 7D
 
@@ -368,14 +377,18 @@ Debe consumir `FloorPlanBudget.calculateBudget()`.
 
 No debe recrear fórmulas de merma, subtotal o IVA en la UI.
 
-## 17. Criterio de cierre
+## 17. Cierre
 
-7B podrá declararse cerrado cuando:
+7B está **CERRADO** porque:
 
-- `FloorPlanBudgetV1` esté documentado;
-- `budget-core.js` esté integrado;
-- la suite dirigida esté verde;
-- la integración 7A real esté verde en CI;
-- regresiones del repositorio estén verdes;
-- no exista BCCA/CostProvider/UI adelantados;
-- PR sea revisada y autorizada para merge.
+- `FloorPlanBudgetV1` está documentado;
+- `budget-core.js` está integrado;
+- la suite dirigida está verde;
+- la integración real con 7A quedó verde en CI;
+- las regresiones relevantes quedaron verdes;
+- no se adelantaron BCCA, CostProvider real ni UI;
+- PR #110 fue revisada/autorizada y fusionada por squash.
+
+Commit de cierre en `master`:
+
+`5de3af3f322e38f868e0214bea196b06fc3ae21a`
