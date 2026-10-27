@@ -2,9 +2,9 @@
 
 **Fecha:** 27-10-2026
 **Base:** `master@325897b7497359e742eec28577a1cda3056df213`
-**Estado de esta PR:** **CANDIDATO EN REVISIÓN**
+**Estado:** **CERRADO** por PR #114, squash `24584a3ff8ef1d8021d8518738650d18e353863f`.
 
-7A, 7B y 7C-A están **CERRADOS**. 7C-B aporta el primer provider concreto del contrato cerrado `FloorPlanCostProvider`:
+7A, 7B, 7C-A y 7C-B están **CERRADOS**. 7C-B aporta el primer provider concreto del contrato cerrado `FloorPlanCostProvider`:
 
 ```text
 Profesional → ManualCostProvider → FloorPlanCostProvider → CostQuote normalizado
@@ -42,12 +42,17 @@ El resultado no contiene `review` ni aprueba una partida. **Introducir un precio
 
 El módulo es stateless y solo transforma input en quote. No utiliza red, DOM, filesystem, storage, servidor, catálogo, histórico, favoritos, recomendaciones ni credenciales. No incorpora BCCA, BC3, DDC, parser, UI, exportación ni orquestación entre providers. No mide geometría, cantidades ni superficies; no calcula merma, subtotales, IVA o totales. No modifica proyecto, edificio, JSON/ZIP, Solar, 2D ni 3D.
 
-## QA
+## QA final
 
-- `tests/cost-provider-manual.test.cjs`: **35 PASS / 0 FAIL / 0 SKIP**. Incluye validación de precio/procedencia, fecha imposible, cero, unidades, no mutación, registry, export CommonJS/global y ejecución en VM donde `fetch`, `XMLHttpRequest`, `window`, `document`, `localStorage` e `indexedDB` lanzan error si se leen; no se inicia servidor.
+- `tests/cost-provider-manual.test.cjs`: **35 PASS / 0 FAIL / 0 SKIP**.
 - `tests/cost-provider.test.cjs` + tests Manual: **69 PASS / 0 FAIL / 0 SKIP**.
 - `tests/budget-core.test.cjs`: **34 PASS / 0 FAIL / 0 SKIP**.
-- Unitarios completos sin tests `*browser*`: **429 PASS / 0 FAIL / 2 SKIP** (integraciones Blender sin `BPY_PYTHON`). Sintaxis JS y `git diff --check`: PASS.
-- Checks de GitHub del HEAD publicado: registrar en la PR tras el push.
+- Unitarios completos sin tests `*browser*`: **429 PASS / 0 FAIL / 2 SKIP** (integraciones Blender sin `BPY_PYTHON`).
+- Sintaxis JS y `git diff --check`: PASS.
+- CI GitHub del HEAD `a79291e68569c142faeca9504fd0895b0e9e1128`: Guided experience, Point 6 solar and compatibility y Multiformat guided import en **SUCCESS**; Vercel en **SUCCESS**.
 
-7C-B permanece **CANDIDATO EN REVISIÓN** hasta CI verde, revisión y merge humano. **7C-C — SIGUIENTE**.
+## Cierre
+
+7C-B queda **CERRADO** tras CI verde, revisión de alcance y merge autorizado de PR #114.
+
+**7C-C — SIGUIENTE**: evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices y conexión explícita entre `CostQuote` y Budget sin romper documentos 1.0.0 existentes.
