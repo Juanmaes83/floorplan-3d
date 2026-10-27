@@ -1,10 +1,10 @@
-# Programa de capacidades — estado vigente tras el cierre del Punto 6
+# Programa de capacidades — estado vigente tras el cierre del Punto 7
 
 **Decisión original:** 25-10-2026  
-**Estado actualizado:** 27-10-2026  
-**Fuente canónica de estado:** [`current-status-2026-10-27.md`](current-status-2026-10-27.md)
+**Estado actualizado:** 28-10-2026  
+**Fuente canónica de estado:** [`current-status-2026-10-28.md`](current-status-2026-10-28.md)
 
-> Este archivo ya no debe leerse como un plan previo a implementación. Los Puntos **1–6 están CERRADOS en `master`**. Se conserva esta ruta porque fue la referencia del programa y muchos PR/agentes la enlazan, pero su función actual es indicar el estado vigente y el siguiente trabajo.
+> Este archivo ya no debe leerse como un plan previo a implementación. Los Puntos **1–7 están CERRADOS en `master`**. Se conserva esta ruta porque fue la referencia del programa y muchos PR/agentes la enlazan, pero su función actual es indicar el estado vigente y el siguiente trabajo.
 
 ## Estado del programa
 
@@ -16,13 +16,13 @@
 | 4 | Familia funcional + nombre libre de estancia | **CERRADO** — PR #103 |
 | 5 | Ficha profesional de superficies | **CERRADO** — PR #104 |
 | 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** — PR #106 |
-| 7 | Presupuesto de acabados/materiales | **SIGUIENTE** |
-| 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
+| 7 | Presupuesto de acabados/materiales | **CERRADO** — PR #120 |
+| 8 | Exterior V1 → V3 | **ACTUAL — 8A EN IMPLEMENTACIÓN** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
 ## Puntos 1–6
 
-No reabrirlos ni reconstruirlos desde documentos anteriores salvo regresión reproducible o nueva decisión expresa. El detalle de estado, contratos y evidencia está resumido en [`current-status-2026-10-27.md`](current-status-2026-10-27.md) y en los PR de cierre.
+No reabrirlos ni reconstruirlos desde documentos anteriores salvo regresión reproducible o nueva decisión expresa. El detalle de estado, contratos y evidencia está resumido en [`current-status-2026-10-28.md`](current-status-2026-10-28.md) y en los PR de cierre.
 
 ### Punto 6 — definición final
 
@@ -35,13 +35,13 @@ El Punto 6 cerrado es:
 
 PR de cierre: **#106**, squash `422d6a893325e343e6e045805c2ec034a27ae631`.
 
-## Punto 7 — siguiente capacidad
+## Punto 7 — CERRADO
 
-El presupuesto no parte de los antiguos precios en ¥. El primer corte se orienta a acabados/materiales y se divide en:
+El presupuesto no parte de los antiguos precios en ¥. El corte aprobado se orienta a acabados/materiales y queda cerrado en:
 
 ### 7A — Quantity Engine
 
-Convertir conocimiento ya existente y justificable en cantidades:
+Convierte conocimiento ya existente y justificable en cantidades:
 
 - suelo m²;
 - paredes m² cuando sean calculables;
@@ -65,37 +65,53 @@ Proveedor inicial obligatorio: **Manual**.
 
 ### 7C — `FloorPlanCostProvider`
 
-Crear una frontera estable para precios/costes.
+Frontera estable para precios/costes con:
 
-Primer candidato español: **BCCA_ES**, únicamente después de confirmar las condiciones oficiales de reutilización del producto/endpoint concreto.
+- provider core agnóstico;
+- Manual offline permanente;
+- provenance/reference prices en Budget 1.1;
+- codec FIEBDC-3/BC3;
+- adapter `BCCA_ES` con fixtures sintéticos y gate técnico/legal.
 
-Reglas:
+Reglas que siguen vigentes:
 
 - no depender en producción de la compilación DDC publicada bajo CC BY-NC;
 - el código Apache-2.0 de `OpenConstructionEstimate-DDC-CWICR` puede servir como acelerador técnico cuando sea aplicable y se conserven avisos/licencia;
 - `OpenConstructionERP` es referencia funcional/arquitectónica; no copiar código AGPL al core comercial de Rubik;
-- nunca inventar un precio ausente.
+- nunca inventar un precio ausente;
+- BCCA real gestionada por Rubik permanece deshabilitada hasta verificar condiciones oficiales de reutilización/redistribución comercial para el uso concreto.
 
-### 7D — Presentación/exportación
+### 7D — Presentación/exportación — CERRADO
 
-- resumen por estancia;
+PR #120, squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`.
+
+Incluye:
+
+- resumen por estancia cuando la procedencia lo demuestra;
 - por planta;
 - por vivienda;
 - capítulos/partidas;
-- CSV/Excel/PDF cuando proceda;
-- futura adaptación CRM mediante contrato propio, no acoplamiento directo.
+- reporte estructurado JSON;
+- CSV interoperable;
+- futura adaptación XLSX/PDF/CRM sobre el reporte estructurado, sin recalcular el presupuesto ni introducir dependencias sólo para marcar formatos.
+
+`FloorPlanBudget.calculateBudget()` sigue siendo la autoridad monetaria; 7D no recrea fórmulas de merma, subtotal o IVA.
 
 ### Etapa 2 posterior
 
 **Asset Lab** para mobiliario/equipamiento/catálogo comercial cuando exista demanda. Identidad de producto, SKU, cantidades y resumen comercial son reutilizables como patrón; precio desconocido debe seguir figurando como pendiente, nunca inventado.
 
-## Punto 8 — Exterior (se conserva)
+## Punto 8 — Exterior — ACTUAL
 
-- **V1**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón.
-- **V2**: cubierta sencilla, petos y volúmenes exteriores.
-- **V3**: parcela/terreno, desniveles y contexto exterior.
+La secuencia aprobada es:
 
-`FloorPlanGeoProvider` puede alimentar especialmente V3, pero no sustituye ni renumera este Punto 8.
+- **8A / V1**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón. **Corte funcional actual.**
+- **8B / V2**: cubierta sencilla, petos, retranqueos y volúmenes exteriores. Debe permanecer deliberadamente limitado; no resolver un generador universal de tejados.
+- **8C / V3**: parcela/terreno, desniveles y contexto exterior.
+
+`FloorPlanGeoProvider` puede alimentar especialmente 8C, pero no sustituye ni renumera el Punto 8. 8A y 8B deben funcionar sin proveedores territoriales.
+
+La documentación específica de límites de 8B está preparada en la PR documental #119 mientras no haya sido fusionada.
 
 ## Punto 9 — Instalaciones ligeras
 
@@ -108,6 +124,7 @@ Capa de símbolos/elementos editables (electricidad, iluminación, clima, agua, 
 - no presentar Rubik como certificador estructural, energético, catastral, MEP ni de mediciones oficiales;
 - guardar datos internos y publicarlos son decisiones separadas cuando exista privacidad relevante;
 - conservar procedencia/licencia/fecha cuando se use una fuente externa;
-- no adelantar Puntos 8/9 dentro del Punto 7.
+- no reabrir Puntos 1–7 salvo regresión reproducible o nueva decisión expresa;
+- no adelantar 8B/8C dentro de 8A.
 
-Para cualquier agente: **leer primero [`current-status-2026-10-27.md`](current-status-2026-10-27.md)** y verificar el HEAD actual de `master` antes de ejecutar trabajo.
+Para cualquier agente: **leer primero [`current-status-2026-10-28.md`](current-status-2026-10-28.md)** y verificar el HEAD actual de `master` antes de ejecutar trabajo.
