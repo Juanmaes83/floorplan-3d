@@ -31,6 +31,15 @@ test('a declared partition cannot become facade through incomplete room coverage
   const p=base();p.walls=[{...wall('partition',3000,100,3000,3900),structure:'partition'}];p.rooms=[p.rooms[0]];
   assert.equal(Exterior.derive(p).walls[0].status,'interior');
 });
+test('openings on a vetoed partition are never exposed as facade openings',()=>{
+  const p=base();
+  p.walls=[{...wall('partition',3000,100,3000,3900),structure:'partition'}];
+  p.rooms=[p.rooms[0]];
+  p.openings=[{id:'inner-window',wallId:'partition',kind:'window'}];
+  const x=Exterior.derive(p);
+  assert.equal(x.walls[0].status,'interior');
+  assert.deepEqual(x.openings,[]);
+});
 test('declared terrace is exterior surface without an inferred balcony from openings',()=>{
   const p=base();p.rooms.push(room('terrace',[[100,4100],[3000,4100],[3000,5400],[100,5400]],'terrace'));
   const x=Exterior.derive(p);assert.deepEqual(x.exteriorRooms,[{roomId:'terrace',kind:'terrace',materialId:'mat_floor'}]);

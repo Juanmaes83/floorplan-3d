@@ -32,7 +32,7 @@
       const veto = wall.structure === 'partition' || wall.structure === 'low';
       const result = {wallId:wall.id,status:both||veto?'interior':one?'facade':'unavailable',reason:both||veto||one?null:'insufficient-room-geometry',materialId:wall.surfaceMaterialId || null};
       walls.push(result);
-      if (one) for (const opening of project.openings || []) if (opening.wallId === wall.id) openings.push({openingId:opening.id,wallId:wall.id,kind:opening.kind});
+      if (result.status === 'facade') for (const opening of project.openings || []) if (opening.wallId === wall.id) openings.push({openingId:opening.id,wallId:wall.id,kind:opening.kind});
     }
     return {walls,openings,exteriorRooms:outdoor.map(r=>({roomId:r.id,kind:r.family,materialId:r.floorMaterialId})),status:walls.some(w=>w.status==='unavailable')?'partial':'available'};
   }
