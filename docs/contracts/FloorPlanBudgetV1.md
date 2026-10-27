@@ -1,8 +1,8 @@
 # FloorPlanBudgetV1
 
-**Estado:** contrato candidato de Punto 7B — Budget Core  
+**Estado:** 1.0.0 cerrado en Punto 7B; 1.1.0 candidato de Punto 7C-C
 **Schema:** `rubik-sota.floorplan-budget`  
-**schemaVersion:** `1.0.0`  
+**schemaVersion:** `1.0.0` legacy y `1.1.0` actual
 **Moneda V1:** `EUR`
 
 ## Propósito
@@ -20,7 +20,7 @@ El presupuesto puede serializarse como JSON independiente. Punto 7B no decide to
 3. La cantidad geométrica y la cantidad presupuestada son conceptos distintos.
 4. La merma es explícita y auditable.
 5. Un precio conocido exige procedencia.
-6. V1 solo acepta procedencia de precio `manual`.
+6. La versión 1.0.0 solo acepta procedencia de precio `manual`; 1.1.0 admite además `provider-reference`.
 7. Cambiar un precio manual invalida la revisión anterior y vuelve a `unreviewed`.
 8. IVA desconocido es `null`; no equivale a 0 %.
 9. Cero explícito (`0`) sigue siendo un valor conocido, distinto de `null`.
@@ -31,7 +31,7 @@ El presupuesto puede serializarse como JSON independiente. Punto 7B no decide to
 ```json
 {
   "schema": "rubik-sota.floorplan-budget",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "id": "bud_example",
   "subject": {"type": "project", "id": "prj_example"},
   "title": "Presupuesto reforma",
@@ -148,6 +148,7 @@ La fuente manual no debe presentarse como cálculo automático de Rubik.
     "label": "Precio profesional",
     "asOf": "2026-10-27"
   },
+  "priceReference": null,
   "review": {
     "status": "unreviewed",
     "reviewedAt": null
@@ -181,7 +182,7 @@ El core conserva esa precisión. No redondea a `13.74` antes de calcular el impo
 
 `unitPrice` es un número no negativo expresado en la moneda del presupuesto.
 
-En 7B la única procedencia válida es:
+La procedencia manual conserva exactamente la forma de 7B:
 
 ```json
 {
@@ -227,6 +228,8 @@ Un precio revisado exige `reviewedAt` con fecha/hora ISO y offset.
 ```
 
 Cambiar el precio mediante el flujo manual reinicia la revisión a `unreviewed`.
+
+`review` describe exclusivamente la revisión profesional del precio **activo**. Un CostQuote, aunque tenga procedencia completa, nunca establece `reviewed`. Añadir una mera referencia sin modificar el precio activo conserva la revisión existente.
 
 El contrato no guarda identidad personal del revisor en 7B.
 
@@ -299,9 +302,36 @@ FloorPlanBudget.calculateItem(...)
 FloorPlanBudget.calculateBudget(...)
 FloorPlanBudget.serializeBudget(...)
 FloorPlanBudget.parseBudget(...)
+FloorPlanBudget.upgradeBudget(...)
+FloorPlanBudgetCostBridge.setPriceReferenceFromQuote(...)
+FloorPlanBudgetCostBridge.setPriceFromQuote(...)
+FloorPlanBudgetCostBridge.clearPriceReference(...)
 ```
 
 Las operaciones de cálculo/revisión son no mutantes.
+
+## Versiones y evolución explícita de 7C-C
+
+`FloorPlanBudgetV1` conserva nombre, `schema: rubik-sota.floorplan-budget` y EUR. `VERSION` actual es `1.1.0`; `SUPPORTED_VERSIONS` incluye `1.0.0` y `1.1.0`. `createBudget()` y `createItem()` crean 1.1.0, con `priceReference: null` en cada partida. `parseBudget()` y `validateBudget()` aceptan 1.0.0 válido y conservan exactamente su versión. `serializeBudget()` tampoco migra por sí solo.
+
+Un documento 1.0.0 sigue siendo **manual-only**. No admite `priceReference`, ni siquiera `null`, ni `provider-reference`. `upgradeBudget(budget)` es la única migración explícita: clona el documento, conserva ID, sujeto, título, capítulos, cantidades, merma, precios manuales, IVA y review, y añade `priceReference: null` por partida. Para una entrada 1.1.0 devuelve un clon equivalente. Las fórmulas y resultados monetarios permanecen iguales.
+
+En 1.1.0, cada partida separa cuatro conceptos:
+
+| Campo | Significado |
+|---|---|
+| `unitPrice` | Precio activo; único valor usado por el cálculo monetario. `null` es desconocido; `0` es conocido. |
+| `priceSource` | Procedencia pequeña del precio activo: `manual` o `{type:'provider-reference', providerId, itemId}`. |
+| `priceReference` | `null` o snapshot completo y normalizado de un CostQuote externo con `priceKind:'reference'`. Puede existir con precio manual activo o sin precio activo. |
+| `review` | Revisión profesional independiente del precio activo: `unreviewed` o `reviewed`. |
+
+Un `priceReference` conserva `providerId`, `itemId`, `code`, descripción propia, unidad, precio, moneda y toda la procedencia normalizada: `label`, `asOf`, `retrievedAt`, `edition`, `region`, `sourceUrl`, `attribution`, `licenseStatus`, `licenseName`, `licenseUrl`. Los campos desconocidos siguen `null`; `unknown` y `restricted` se conservan sin inferir permiso comercial. El gate legal/técnico de BCCA pertenece a 7C-E.
+
+Si `priceSource.type` es `provider-reference`, `priceReference` debe existir y coincidir exactamente en `providerId`, `itemId` y `unitPrice`. Su `unit` debe coincidir exactamente con `quantity.unit` y su `currency` con el EUR del presupuesto. El core verifica estas relaciones además del JSON Schema; no convierte unidades ni moneda. La descripción del CostQuote no sustituye la descripción de la partida.
+
+El bridge recibe un CostQuote elegido explícitamente, validado por `FloorPlanCostProvider.validateQuote()`. No consulta providers. `setPriceReferenceFromQuote()` exige 1.1.0 y `priceKind:'reference'`; adjunta el snapshot sin cambiar precio activo, fuente ni review. `setPriceFromQuote()` aplica un quote manual como precio manual incluso en 1.0.0, sin migración silenciosa; aplica un quote reference solo en 1.1.0, establece el precio activo y `provider-reference`, guarda el snapshot y reinicia review. `clearPriceReference()` rechaza el borrado mientras una fuente `provider-reference` activa dependa de ella.
+
+`setManualPrice()` puede sustituir un precio externo por 31 € conservando, por ejemplo, la referencia original de 28,43 €, e invalida la revisión previa. `clearPrice()` borra el precio activo y review, pero conserva esa referencia en 1.1.0. La referencia sola no convierte una partida en priced ni reviewed. Todas estas operaciones devuelven clones; `priceReference` representa una sola referencia vigente/conservada y no un historial.
 
 ## Persistencia
 
