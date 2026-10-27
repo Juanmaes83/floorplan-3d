@@ -77,6 +77,17 @@ test('850, 437 and ANSI bytes decode according to V and re-encode exactly',()=>{
   assert.equal(Codec.decode(Codec.encode(minimal.replace('|850|','||'))).encoding,'850');
   assert.throws(()=>Codec.encode(minimal.replace('Obra','Obra 😀')),/unrepresentable-character/);
   assert.throws(()=>Codec.encode(minimal.replace('|850|','|UTF-8|')),/unsupported-encoding/);
+  const ansi=Codec.encode(minimal.replace('|850|','|ANSI|'));
+  const invalid=Uint8Array.from([...ansi]);invalid[invalid.indexOf(0x41)]=0x81;
+  assert.throws(()=>Codec.decode(invalid),/invalid-encoding/);
+});
+
+test('parse and serialize leave caller values untouched',()=>{
+  const bytes=Codec.encode(base),copy=Uint8Array.from(bytes);
+  const model=Codec.parse(bytes),snapshot=JSON.stringify(model);
+  Codec.encodeModel(model);
+  assert.deepEqual(bytes,copy);
+  assert.equal(JSON.stringify(model),snapshot);
 });
 
 test('malformed and truncated input has explicit errors',()=>{
