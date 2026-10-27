@@ -14,7 +14,7 @@ La vista 3D sigue creando los sólidos y los recortes desde `Core.geometry`. La 
 
 ## Pruebas y límites
 
-Tests sintéticos: planta asimétrica con habitaciones y muro compartido; huella en L; huecos, material y ausencia de material; veto de tabique; geometría insuficiente; terraza declarada; dos niveles con offsets, elevaciones y huellas distintas; no mutación. Suite no browser final: 471 PASS, 0 FAIL, 2 SKIP opcionales de Blender. Comprobación visual local en Chromium: ejemplo 3D abre y representa muros/huecos; consola final sin errores ni avisos.
+Tests sintéticos: planta asimétrica con habitaciones y muro compartido; huella en L; huecos, material y ausencia de material; veto de tabique; geometría insuficiente; terraza declarada; dos niveles con offsets, elevaciones y huellas distintas; proyecto de referencia 1.0; no mutación. Suite no browser final: 472 PASS, 0 FAIL, 2 SKIP opcionales de Blender. Comprobación visual local en Chromium: ejemplo 3D abre y representa muros/huecos; consola final sin errores ni avisos.
 
 La clasificación es conservadora y puede ser parcial en proyectos con habitaciones no dibujadas o ejes/polígonos poco coherentes. No reconoce plataformas independientes sin declaración geométrica soportada. El contrato actual permite estancia `terrace`/`balcony` y material de suelo, pero no define barandillas, petos, voladizos ni altura propia; no se inventan. El acabado mural existente se aplica a ambas caras y no representa capas constructivas.
 

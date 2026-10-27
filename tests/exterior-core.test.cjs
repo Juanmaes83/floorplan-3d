@@ -1,6 +1,7 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const Exterior = require('../js/exterior-core.js');
+const reference = require('../js/reference-project.js');
 
 const wall = (id,x1,y1,x2,y2,material) => ({id,start:{x:x1,y:y1},end:{x:x2,y:y2},thicknessMm:200,status:'existing',surfaceMaterialId:material});
 const room = (id,coords,family) => ({id,polygon:coords.map(([x,y])=>({x,y})),family,floorMaterialId:'mat_floor'});
@@ -41,4 +42,11 @@ test('two levels keep independent footprint and offset/elevation authority',()=>
   const before=JSON.stringify(levels),results=levels.map(l=>Exterior.derive(l.project));
   assert.equal(results[0].walls.length,4);assert.equal(results[1].walls.length,1);
   assert.equal(results[1].walls[0].status,'facade');assert.equal(JSON.stringify(levels),before);
+});
+test('existing 1.0 reference project derives without migration or mutation',()=>{
+  const before=JSON.stringify(reference),result=Exterior.derive(reference);
+  assert.equal(reference.schemaVersion,'1.0.0');
+  assert.ok(result.walls.some(w=>w.status==='facade'));
+  assert.ok(result.walls.some(w=>w.status==='interior'));
+  assert.equal(JSON.stringify(reference),before);
 });
