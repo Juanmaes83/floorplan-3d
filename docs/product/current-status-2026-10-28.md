@@ -22,7 +22,7 @@ Estado posterior al merge de **PR #120 — Punto 7D**, squash `69a9b20a0ceab6f37
 | 7C-E | `BCCA_ES` + gate legal/técnico | **CERRADO** — PR #118 |
 | 7D | Presentación/exportación de presupuesto | **CERRADO** — PR #120 |
 | 8A | Fachada y exterior básico | **ACTUAL / EN IMPLEMENTACIÓN** |
-| 8B | Cubierta y volúmenes | **APROBADO, POSTERIOR** |
+| 8B | Cubierta y volúmenes | **APROBADO, DOCUMENTADO, POSTERIOR** |
 | 8C | Parcela, terreno y contexto | **APROBADO, POSTERIOR** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
@@ -84,7 +84,9 @@ El trabajo funcional pasa a Punto 8:
 
 8A y 8B deben funcionar sin Catastro/IGN/CNIG/PNOA. `FloorPlanGeoProvider` sigue siendo infraestructura transversal y adquiere especial relevancia en 8C.
 
-La documentación específica de límites de 8B está preparada en la PR documental #119 mientras no haya sido fusionada.
+Documento obligatorio de alcance y control de complejidad para 8B: [`point-8b-exterior-v2-roof-volumes-2026-10-27.md`](point-8b-exterior-v2-roof-volumes-2026-10-27.md).
+
+Ese documento fija, entre otras reglas, cubierta plana como base, petos/volúmenes simples como siguiente capa, inclinadas sólo para casos explícitos, ausencia de solver universal y secuencia interna recomendada 8B-A → 8B-B → 8B-C.
 
 ## Regla para agentes
 
@@ -92,7 +94,8 @@ La documentación específica de límites de 8B está preparada en la PR documen
 2. Verificar `master`/SHA real.
 3. No reabrir 1–7 salvo regresión reproducible o decisión expresa.
 4. **8A es el corte funcional activo.**
-5. No adelantar 8B/8C dentro de 8A.
-6. Mantener `FloorPlanGeoProvider` como capacidad transversal; no renumerarlo como otro punto.
-7. Mantener separada la geometría fuente/oficial de cualquier representación editable derivada cuando lleguen fuentes territoriales.
-8. Mantener la regla de producto: **más contexto, no más falsa certeza**.
+5. Antes de implementar 8B, leer completo `point-8b-exterior-v2-roof-volumes-2026-10-27.md`.
+6. No adelantar 8B/8C dentro de 8A.
+7. Mantener `FloorPlanGeoProvider` como capacidad transversal; no renumerarlo como otro punto.
+8. Mantener separada la geometría fuente/oficial de cualquier representación editable derivada cuando lleguen fuentes territoriales.
+9. Mantener la regla de producto: **más contexto, no más falsa certeza**.
