@@ -28,8 +28,8 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
 | 7C-B | `ManualCostProvider` | **CERRADO** |
 | 7C-C | Budget provenance de providers | **CERRADO** |
-| 7C-D | Parser FIEBDC-3/BC3 | **SIGUIENTE** |
-| 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
+| 7C-D | Codec FIEBDC-3/BC3 | **CANDIDATO EN REVISIÓN** |
+| 7C-E | `BCCA_ES` + gate legal/técnico | **SIGUIENTE / PENDIENTE** |
 | 7D | Presentación/exportación | **PENDIENTE** |
 | 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
@@ -153,8 +153,8 @@ Documento: `docs/product/point-7c-c-budget-provider-provenance-2026-10-27.md`.
 ### Orden restante de 7C
 
 1. **7C-C — CERRADO** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-2. **7C-D — SIGUIENTE** — parser FIEBDC-3/BC3.
-3. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+2. **7C-D — CANDIDATO EN REVISIÓN** — codec FIEBDC-3/BC3, lectura y escritura; ver `docs/product/point-7c-d-fiebdc3-bc3-codec-2026-10-27.md`.
+3. **7C-E — SIGUIENTE / PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
 4. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
 La compilación DDC CC BY-NC no se incorpora a producción.
