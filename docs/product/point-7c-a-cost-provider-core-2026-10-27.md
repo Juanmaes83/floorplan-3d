@@ -1,8 +1,8 @@
 # Punto 7C-A — FloorPlanCostProvider core
 
 **Fecha:** 27-10-2026  
-**Estado:** implementación candidata en `feat/point-7c-a-cost-provider-core`; no cierra todavía 7C completo.  
-**Base exacta:** `master@bdfd1394e84df7adf856273ec9058516887f2697`.  
+**Estado:** CERRADO por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`; no cierra todavía 7C completo.  
+**Base exacta de implementación:** `master@bdfd1394e84df7adf856273ec9058516887f2697`.  
 **Dependencias:** 7A y 7B cerrados.  
 **Siguiente corte:** 7C-B — `ManualCostProvider`.
 
@@ -203,7 +203,7 @@ Suite nueva:
 
 `tests/cost-provider.test.cjs`
 
-Cobertura local previa a publicación: **34 PASS · 0 FAIL · 0 SKIP**.
+Cobertura dirigida: **34 PASS · 0 FAIL · 0 SKIP**.
 
 Incluye:
 
@@ -237,7 +237,7 @@ Incluye:
 - unregister;
 - global de navegador.
 
-CI debe ejecutar además la suite general y regresiones del repositorio.
+CI final del HEAD previo al merge `5fc2f78269bed82f829e32f7b17577b620c1f08a`: Solar, Guided, Multiformat y Vercel en verde.
 
 ## 10. No objetivos
 
@@ -259,19 +259,23 @@ Fuera de 7C-A:
 
 ## 11. Criterio de cierre
 
-7C-A puede cerrarse cuando:
+Criterio satisfecho:
 
-- `cost-provider.js` y contrato estén integrados;
-- suite dirigida esté verde;
-- regresiones necesarias estén verdes;
-- no exista ningún provider real adelantado;
-- no cambie Budget V1.0.0;
-- no haya red/UI/BCCA;
-- PR revisada y autorizada para merge.
+- `cost-provider.js` y contrato integrados;
+- suite dirigida verde;
+- regresiones necesarias verdes;
+- ningún provider real adelantado;
+- Budget V1.0.0 intacto;
+- sin red/UI/BCCA;
+- PR #112 revisada y autorizada para merge;
+- squash merge `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
 
 Tras su cierre, el siguiente paso es 7C-B — `ManualCostProvider`.
 
-
 ## Incidente de CI solar
 
-7C-A sigue **CANDIDATO EN REVISIÓN**. Diagnóstico, corrección de test y resultados en [informe de CI solar](../qa/pr-112-solar-ci-timeout-2026-10-27.md). Sin cambios de CostProvider ni inicio de 7C-B.
+El timeout desktop observado durante la revisión de #112 se documenta en [informe de CI solar](../qa/pr-112-solar-ci-timeout-2026-10-27.md).
+
+La corrección divide el recorrido solar desktop en tres fases secuenciales con límites propios, reutilizando contexto y conservando las acciones, capturas y 37 assertions originales. No cambia producto, Three.js, matemáticas solares, contrato PNG ni CostProvider.
+
+El HEAD final `5fc2f78269bed82f829e32f7b17577b620c1f08a` pasó Solar, Guided, Multiformat y Vercel antes del merge. 7C-A queda **CERRADO**; 7C-B no se inició dentro de #112.
