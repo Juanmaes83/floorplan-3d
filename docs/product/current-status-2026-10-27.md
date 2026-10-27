@@ -9,7 +9,7 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 - Puntos 1–6: cerrados; Punto 6 por PR #106, squash `422d6a893325e343e6e045805c2ec034a27ae631`.
 - Punto 7A — Quantity Engine: cerrado por PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
 - Punto 7B — Budget Core: cerrado por PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
-- Base de 7C-A: `master@bdfd1394e84df7adf856273ec9058516887f2697`.
+- Punto 7C-A — `FloorPlanCostProvider` contrato/core: cerrado por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
 
 ## Resumen
 
@@ -23,8 +23,8 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** |
 | 7A | Quantity Engine | **CERRADO** |
 | 7B | Budget Core | **CERRADO** |
-| 7C-A | `FloorPlanCostProvider` contrato/core | **CANDIDATO EN REVISIÓN** |
-| 7C-B | `ManualCostProvider` | **PENDIENTE** |
+| 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
+| 7C-B | `ManualCostProvider` | **SIGUIENTE** |
 | 7C-C | Budget provenance de providers | **PENDIENTE** |
 | 7C-D | Parser FIEBDC-3/BC3 | **PENDIENTE** |
 | 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
@@ -98,11 +98,11 @@ Documentos:
 - `docs/contracts/FloorPlanBudgetV1.md`;
 - `docs/contracts/FloorPlanBudgetV1.schema.json`.
 
-### 7C-A — FloorPlanCostProvider core — CANDIDATO EN REVISIÓN
+### 7C-A — FloorPlanCostProvider core — CERRADO
 
-Base: `master@bdfd1394e84df7adf856273ec9058516887f2697`.
+Cerrado por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
 
-Objetivo del candidato: fijar una frontera agnóstica de proveedor antes de implementar Manual o BCCA.
+Fija una frontera agnóstica de proveedor antes de implementar Manual o BCCA.
 
 Incluye:
 
@@ -120,12 +120,13 @@ Incluye:
 
 No cambia `FloorPlanBudgetV1` 1.0.0 y todavía no persiste quotes de providers en partidas.
 
-Documentos candidatos:
+Documentos:
 
 - `docs/contracts/FloorPlanCostProvider.md`;
-- `docs/product/point-7c-a-cost-provider-core-2026-10-27.md`.
+- `docs/product/point-7c-a-cost-provider-core-2026-10-27.md`;
+- `docs/qa/pr-112-solar-ci-timeout-2026-10-27.md`.
 
-No considerar 7C-A cerrado hasta CI verde y merge autorizado.
+La estabilización de CI solar asociada a #112 divide el recorrido desktop en fases secuenciales conservando acciones y assertions, sin cambios de producto, Three.js, matemáticas solares, PNG ni CostProvider. CI final del HEAD `5fc2f78269bed82f829e32f7b17577b620c1f08a`: Solar, Guided, Multiformat y Vercel en verde.
 
 ### Orden restante de 7C
 
@@ -148,9 +149,9 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 ## Regla para agentes
 
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
-2. No reabrir 1–6, 7A o 7B salvo regresión reproducible o decisión expresa.
+2. No reabrir 1–6, 7A, 7B o 7C-A salvo regresión reproducible o decisión expresa.
 3. 7C-A no implementa ningún provider real.
-4. 7C-B será Manual y debe funcionar offline.
+4. 7C-B es el siguiente corte: Manual y offline permanente.
 5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; providers externos requieren evolución compatible explícita en 7C-C.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
