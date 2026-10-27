@@ -46,7 +46,7 @@ for(const width of [1440,390])test('single-level area schedule is readable and p
  assert.doesNotMatch(content,/主卧室|unspecified|measured|estimated/);
  assert.equal(await page.locator('.surface-sheet-finish-row').count()>0,true);
  assert.equal(await page.locator('#surfaceSheetDocument').evaluate(node=>node.scrollWidth<=node.clientWidth),true);
- assert.equal(await page.locator('.surface-sheet-project').evaluate(node=>node.getBoundingClientRect().height>(innerWidth<680?30:15)),true);
+ assert.equal(await page.locator('.surface-sheet-project').evaluate(node=>node.scrollHeight<=node.clientHeight+1),true);
  await shot(page,width+'-single');
  const popupPromise=page.waitForEvent('popup');
  await page.locator('#surfaceSheetPrint').click();
