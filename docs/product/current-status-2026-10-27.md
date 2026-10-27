@@ -1,191 +1,145 @@
 # Estado canónico de producto — 27-10-2026
 
-**Esta es la fuente de verdad de estado para agentes y revisiones.**
+**Fuente de verdad de estado para agentes y revisiones.**
 
-Base de producto al registrar el cierre 1–6: `master@422d6a893325e343e6e045805c2ec034a27ae631`.
+No deducir el estado actual desde documentos fechados anteriores. Si existe contradicción sobre qué está implementado o cerrado, prevalecen este archivo y el estado real de `master`.
 
-Punto 7A cerrado mediante PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
+## Evidencia de cierres
 
-Punto 7B cerrado mediante PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
-
-No deducir el estado actual a partir de documentos fechados anteriores. Los documentos históricos explican decisiones y contexto, pero cuando exista contradicción sobre qué está implementado/cerrado, prevalece este archivo y el estado real de `master`.
+- Puntos 1–6: cerrados; Punto 6 por PR #106, squash `422d6a893325e343e6e045805c2ec034a27ae631`.
+- Punto 7A — Quantity Engine: cerrado por PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
+- Punto 7B — Budget Core: cerrado por PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
+- Base de 7C-A: `master@bdfd1394e84df7adf856273ec9058516887f2697`.
 
 ## Resumen
 
-| Punto | Capacidad | Estado | Evidencia principal |
-|---:|---|---|---|
-| 1 | Construir y medir — acceso/contexto | **CERRADO** | PR #99 + estado integrado posterior |
-| 2 | Tipo declarado de muro | **CERRADO** | PR #101 |
-| 3 | Superficies estancia → planta → vivienda | **CERRADO** | PR #102 |
-| 4 | Familia funcional + nombre libre de estancia | **CERRADO** | PR #103 |
-| 5 | Ficha profesional de superficies | **CERRADO** | PR #104, squash `2f6a7583a0f3d65238e1de2903f40fdd20cbe4a2` |
-| 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** | PR #106, squash `422d6a893325e343e6e045805c2ec034a27ae631` |
-| 7A | Quantity Engine | **CERRADO** | PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462` |
-| 7B | Budget Core | **CERRADO** | PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a` |
-| 7C | `FloorPlanCostProvider` | **SIGUIENTE** | 7C-A contrato/provider core; Manual primero; BCCA_ES condicionado a licencia oficial |
-| 7D | Presentación/exportación | **PENDIENTE** | Después de estabilizar 7C |
-| 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** | Mantiene alcance original |
-| 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** | Símbolos/elementos, no MEP |
+| Punto | Capacidad | Estado |
+|---:|---|---|
+| 1 | Construir y medir — acceso/contexto | **CERRADO** |
+| 2 | Tipo declarado de muro | **CERRADO** |
+| 3 | Superficies estancia → planta → vivienda | **CERRADO** |
+| 4 | Familia funcional + nombre libre de estancia | **CERRADO** |
+| 5 | Ficha profesional de superficies | **CERRADO** |
+| 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** |
+| 7A | Quantity Engine | **CERRADO** |
+| 7B | Budget Core | **CERRADO** |
+| 7C-A | `FloorPlanCostProvider` contrato/core | **CANDIDATO EN REVISIÓN** |
+| 7C-B | `ManualCostProvider` | **PENDIENTE** |
+| 7C-C | Budget provenance de providers | **PENDIENTE** |
+| 7C-D | Parser FIEBDC-3/BC3 | **PENDIENTE** |
+| 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
+| 7D | Presentación/exportación | **PENDIENTE** |
+| 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
+| 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
-## Puntos 1–6 — estado cerrado
+## Capacidades cerradas 1–6
 
-### 1 — Construir y medir
+Los Puntos 1–6 no deben reabrirse salvo regresión reproducible o decisión expresa.
 
-No existe un segundo sistema de dibujo/medición. Se mejoró el acceso y contexto de las herramientas existentes. Esta línea se considera cerrada dentro del programa 1–6.
+- Punto 1 reutiliza el sistema real de construcción/medición; no existe un segundo editor paralelo.
+- Punto 2 persiste el tipo declarado de muro y su procedencia sin inferir capacidad estructural.
+- Punto 3 dispone de `FloorPlanSurfaceMetrics` con estancia → planta → vivienda y estados `measured | estimated | unavailable`.
+- Punto 4 separa `room.family` de `room.name` libre.
+- Punto 5 reutiliza Punto 3 para la ficha profesional de superficies.
+- Punto 6 aporta norte declarado, ubicación privada, solar orientativo y frontera `FloorPlanGeoProvider`; no constituye estudio solar/regulatorio.
 
-### 2 — Tipo declarado de muro
-
-Persisten tipo y procedencia declarados por el profesional/importación/revisión. No se infiere capacidad estructural por geometría, grosor ni IA. No constituye verificación estructural.
-
-### 3 — Superficies
-
-Existe núcleo derivado de superficies con jerarquía estancia → planta → vivienda, estados medido/estimado/no disponible, exclusiones y compatibilidad multiplanta. No se inventa superficie cuando falta evidencia.
-
-### 4 — Familias de estancias
-
-`room.family` y `room.name` son conceptos separados. La familia sirve a automatismos/estadística; el nombre sigue siendo libre. Compatibilidad legacy preservada.
-
-### 5 — Ficha profesional de superficies
-
-La ficha reutiliza el núcleo del Punto 3 y presenta estancia/planta/vivienda, estado de medición, exclusiones y pavimentos con salida profesional/printable. No convierte estimaciones en mediciones certificadas.
-
-### 6 — Orientación, ubicación, solar y GeoProvider
-
-Cerrado mediante PR #106.
-
-#### 6A — Orientación básica
-- norte lógico declarado/configurable;
-- visible en 2D;
-- persistente;
-- borrable;
-- compartido coherentemente en edificio multiplanta;
-- no rota destructivamente la geometría;
-- no se infiere automáticamente.
-
-#### 6B — Ubicación
-- latitud;
-- longitud;
-- timezone IANA;
-- entrada manual/offline;
-- procedencia mínima;
-- privacidad: guardar ubicación interna y publicarla son decisiones separadas;
-- `site` opcional en contrato; proyectos antiguos siguen abriendo sin inferencias.
-
-#### 6C — Solar orientativo
-- SunCalc 2.1.1 vendorizado, licencia BSD preservada;
-- núcleo solar separado del renderer;
-- adaptación explícita de azimut/elevación al sistema de escena;
-- reutiliza la `DirectionalLight` existente;
-- Presentación y Solar orientativo son modos diferenciados y reversibles;
-- Three.js 0.160.0 vendorizado localmente;
-- no se promete estudio de soleamiento, energía, normativa ni precisión pericial.
-
-#### 6D — `FloorPlanGeoProvider`
-- frontera estable de proveedor geográfico;
-- proveedor manual/offline funcional y permanente;
-- solar no conoce Catastro/IGN/PNOA/Google Maps directamente;
-- España continúa como primer objetivo de proveedor territorial real;
-- Catastro/IGN/CNIG/PNOA quedan para cortes territoriales posteriores, especialmente Exterior V3;
-- no se implementó GIS general ni datos personales/protegidos.
-
-### QA final del Punto 6
-
-El HEAD candidato `6838636835fe3d1ea681c8f2ed756dc31c4564f4` terminó con los workflows relevantes en SUCCESS. El ajuste final de Multiformat fue exclusivamente del harness de test para bloquear también `/vendor/three/**` en el escenario `webgl=false`.
-
-## Punto 7 — estado por cortes
+## Punto 7
 
 El Punto 7 completo **NO está cerrado**.
 
 ### 7A — Quantity Engine — CERRADO
 
-Cerrado mediante PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
+`FloorPlanQuantities` es la autoridad de cantidades derivadas para presupuesto:
 
-`FloorPlanQuantities` convierte datos persistidos y superficies existentes en cantidades defendibles sin introducir dinero:
-
-- superficie de suelo reutilizando `FloorPlanSurfaceMetrics`;
+- suelo m²;
 - perímetro interior geométrico;
-- longitud/altura de muros cuando son válidas;
-- superficie bruta, huecos y neta de muros cuando puede justificarse;
-- caras de muro por estancia solo con asociación geométrica demostrable;
-- conteo de huecos;
-- agregados por estado de muro;
-- áreas por material de suelo;
-- proyecto individual y edificio multiplanta.
+- longitudes/alturas de muros válidas;
+- superficies brutas/huecos/netas cuando son justificables;
+- caras por estancia solo con asociación geométrica demostrable;
+- conteos de huecos;
+- multiplanta.
 
-Reglas de certeza:
+Reglas: desconocido no es cero; parcial no es completo; no persiste totales; no muta proyecto.
 
-- `measured | estimated | unavailable`;
-- desconocido nunca se convierte en cero;
-- subtotal parcial nunca se presenta como completo;
-- 7A es derivado, no persiste totales y no muta el proyecto;
-- no introduce precios, IVA, BCCA, CostProvider ni UI de presupuesto.
-
-Documento técnico/producto:
-
-`docs/product/point-7a-quantity-engine-2026-10-27.md`
+Documento: `docs/product/point-7a-quantity-engine-2026-10-27.md`.
 
 ### 7B — Budget Core — CERRADO
 
-Cerrado mediante PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
+`FloorPlanBudgetV1` 1.0.0 y `FloorPlanBudget` están cerrados.
 
-7B introduce el contrato separado `FloorPlanBudgetV1` y el núcleo `FloorPlanBudget` sin modificar `FloorPlanProjectV1` ni `FloorPlanBuildingV1`.
+Incluyen:
 
-Capacidades cerradas:
-
-- partidas y capítulos;
-- cantidades procedentes de 7A con trazabilidad `FloorPlanQuantities`;
-- cantidades manuales explícitamente diferenciadas;
+- partidas/capítulos;
+- cantidades 7A o manuales explícitas;
 - unidad `m2 | m | unit`;
-- merma explícita sin sobrescribir la cantidad geométrica;
+- merma explícita;
 - precio unitario manual;
-- moneda V1 `EUR`;
+- EUR;
 - subtotal neto;
-- IVA configurable global y override por partida;
-- IVA desconocido distinto de 0 %;
+- IVA configurable;
 - subtotal bruto;
-- procedencia manual y fecha opcional;
-- revisión `unreviewed | reviewed` con timestamp;
-- cambio de precio invalida la revisión previa;
-- precio desconocido `null` distinto de precio 0;
-- totales parciales marcados como incompletos;
-- serialización/parseo JSON independiente;
-- cálculo no mutante y sin DOM/red.
+- revisión y procedencia;
+- totales parciales honestos;
+- JSON independiente.
 
 Reglas:
 
-- 7B no vuelve a medir geometría;
-- no redondea prematuramente cantidades;
+- 7B no mide geometría;
+- `null` no equivale a 0;
+- precio desconocido no produce subtotal;
+- IVA desconocido no equivale a 0 %;
+- cantidades no se redondean prematuramente;
 - importes monetarios de línea se redondean a céntimos;
-- un desconocido nunca se suma como cero;
-- `FloorPlanBudgetV1` 1.0.0 admite `priceSource.type = manual`;
-- `FloorPlanCostProvider`, BCCA/DDC y UI/exportación permanecen fuera de 7B.
+- `FloorPlanBudgetV1` 1.0.0 solo admite `priceSource.type = manual`.
 
-QA de cierre: los workflows `Guided experience`, `Point 6 solar and compatibility` y `Multiformat guided import` terminaron en SUCCESS sobre el HEAD candidato `215f857075ddba49420a3f8dd1df781992b13adc` antes del merge.
-
-Documentación:
+Documentos:
 
 - `docs/product/point-7b-budget-core-2026-10-27.md`;
 - `docs/contracts/FloorPlanBudgetV1.md`;
 - `docs/contracts/FloorPlanBudgetV1.schema.json`.
 
-### 7C — `FloorPlanCostProvider` — SIGUIENTE
+### 7C-A — FloorPlanCostProvider core — CANDIDATO EN REVISIÓN
 
-El siguiente corte es **7C-A: contrato y núcleo de proveedor de costes**.
+Base: `master@bdfd1394e84df7adf856273ec9058516887f2697`.
 
-Orden previsto:
+Objetivo del candidato: fijar una frontera agnóstica de proveedor antes de implementar Manual o BCCA.
 
-1. 7C-A — `FloorPlanCostProvider` + contrato normalizado;
-2. 7C-B — `ManualCostProvider` como fallback/offline permanente;
-3. 7C-C — evolución compatible de `FloorPlanBudgetV1` para provenance de proveedor externo;
-4. 7C-D — parser FIEBDC-3/BC3;
-5. 7C-E — adapter `BCCA_ES` con fixtures y gate legal;
-6. activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
+Incluye:
 
-No incorporar en producción la compilación DDC CC BY-NC.
+- `js/cost-provider.js` / `FloorPlanCostProvider`;
+- capabilities `search/getItem/getPrice` + modo de red;
+- `getSourceMetadata()` con provenance/licencia explícita;
+- resultados `available | not-found | unavailable | invalid | cancelled | unsupported`;
+- item y quote normalizados;
+- EUR en quote V1;
+- `priceKind: manual | reference` sin implicar revisión profesional;
+- registry en memoria;
+- wrappers compatibles con providers sync/async;
+- aislamiento de errores operacionales del adapter;
+- rechazo de payloads que incumplen el contrato.
 
-### 7D — Presentación/exportación — PENDIENTE
+No cambia `FloorPlanBudgetV1` 1.0.0 y todavía no persiste quotes de providers en partidas.
 
-Resúmenes por estancia/planta/vivienda/capítulos y exportación cuando corresponda. Debe consumir `FloorPlanBudget.calculateBudget()` y no duplicar fórmulas monetarias.
+Documentos candidatos:
+
+- `docs/contracts/FloorPlanCostProvider.md`;
+- `docs/product/point-7c-a-cost-provider-core-2026-10-27.md`.
+
+No considerar 7C-A cerrado hasta CI verde y merge autorizado.
+
+### Orden restante de 7C
+
+1. **7C-B** — `ManualCostProvider`, fallback/offline permanente.
+2. **7C-C** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
+3. **7C-D** — parser FIEBDC-3/BC3.
+4. **7C-E** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+5. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
+
+La compilación DDC CC BY-NC no se incorpora a producción.
+
+### 7D — PENDIENTE
+
+Presentación y exportación deben consumir `FloorPlanBudget.calculateBudget()`; no deben recrear fórmulas de merma, subtotal o IVA.
 
 ### Etapa 2 posterior
 
@@ -193,14 +147,13 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 
 ## Regla para agentes
 
-1. Leer primero este archivo.
-2. Verificar `master` y SHA antes de trabajar.
-3. Los documentos con fecha anterior pueden ser historia o diseño previo, no estado actual.
-4. No reabrir Puntos 1–6, 7A ni 7B salvo regresión reproducible o decisión expresa.
-5. El siguiente corte es 7C-A — contrato/núcleo `FloorPlanCostProvider`.
-6. 7C debe respetar las fórmulas y semántica monetaria cerradas en 7B; no duplicarlas.
-7. `FloorPlanBudgetV1` 1.0.0 sigue siendo válido y manual-only; cualquier soporte de proveedor externo debe ser una evolución compatible explícita.
-8. No activar BCCA real sin gate legal/técnico verificado.
-9. No adelantar UI/exportación de 7D dentro de 7C-A.
-10. No adelantar Punto 8/9 dentro de Punto 7.
-11. No asumir que una fuente externa equivale a certificación o aprobación profesional de Rubik.
+1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
+2. No reabrir 1–6, 7A o 7B salvo regresión reproducible o decisión expresa.
+3. 7C-A no implementa ningún provider real.
+4. 7C-B será Manual y debe funcionar offline.
+5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; providers externos requieren evolución compatible explícita en 7C-C.
+6. No activar BCCA real sin gate legal/técnico verificado.
+7. No introducir DDC CC BY-NC en producción.
+8. No adelantar UI/exportación de 7D dentro de 7C.
+9. No adelantar Punto 8/9 dentro de Punto 7.
+10. Una fuente externa o quote de provider nunca equivale por sí sola a revisión/aprobación profesional.
