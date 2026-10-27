@@ -6,6 +6,8 @@ Base de producto al registrar el cierre 1–6: `master@422d6a893325e343e6e045805
 
 Punto 7A cerrado mediante PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
 
+Base de implementación del candidato 7B: `master@dd60f7adf3df146a4679661479dd0a3f17f5ba87`.
+
 No deducir el estado actual a partir de documentos fechados anteriores. Los documentos históricos explican decisiones y contexto, pero cuando exista contradicción sobre qué está implementado/cerrado, prevalece este archivo y el estado real de `master`.
 
 ## Resumen
@@ -19,7 +21,7 @@ No deducir el estado actual a partir de documentos fechados anteriores. Los docu
 | 5 | Ficha profesional de superficies | **CERRADO** | PR #104, squash `2f6a7583a0f3d65238e1de2903f40fdd20cbe4a2` |
 | 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** | PR #106, squash `422d6a893325e343e6e045805c2ec034a27ae631` |
 | 7A | Quantity Engine | **CERRADO** | PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462` |
-| 7B | Budget Core | **SIGUIENTE** | Pendiente de implementación |
+| 7B | Budget Core | **EN IMPLEMENTACIÓN — CANDIDATO** | `FloorPlanBudgetV1` + `FloorPlanBudget`; PR pendiente de revisión |
 | 7C | `FloorPlanCostProvider` | **PENDIENTE** | Manual primero; BCCA_ES condicionado a licencia oficial |
 | 7D | Presentación/exportación | **PENDIENTE** | Después de estabilizar 7B/7C |
 | 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** | Mantiene alcance original |
@@ -122,23 +124,50 @@ Documento técnico/producto:
 
 `docs/product/point-7a-quantity-engine-2026-10-27.md`
 
-### 7B — Budget Core — SIGUIENTE
+### 7B — Budget Core — CANDIDATO EN REVISIÓN
 
-Debe consumir 7A y añadir el modelo monetario/profesional:
+Base del candidato: `master@dd60f7adf3df146a4679661479dd0a3f17f5ba87`.
 
-- partidas;
-- cantidades;
-- unidad;
-- merma explícita;
-- precio unitario;
-- subtotal;
-- EUR;
-- IVA configurable;
-- revisión;
-- procedencia;
-- proveedor/precio manual como primer flujo.
+7B introduce un contrato separado `FloorPlanBudgetV1` y el núcleo `FloorPlanBudget` sin modificar `FloorPlanProjectV1` ni `FloorPlanBuildingV1`.
 
-7B no debe volver a medir geometría ni introducir BCCA todavía.
+Capacidades del candidato:
+
+- partidas y capítulos;
+- cantidades procedentes de 7A con trazabilidad `FloorPlanQuantities`;
+- cantidades manuales explícitamente diferenciadas;
+- unidad `m2 | m | unit`;
+- merma explícita sin sobrescribir la cantidad geométrica;
+- precio unitario manual;
+- moneda V1 `EUR`;
+- subtotal neto;
+- IVA configurable global y override por partida;
+- IVA desconocido distinto de 0 %;
+- subtotal bruto;
+- procedencia manual y fecha opcional;
+- revisión `unreviewed | reviewed` con timestamp;
+- cambio de precio invalida la revisión previa;
+- precio desconocido `null` distinto de precio 0;
+- totales parciales marcados como incompletos;
+- serialización/parseo JSON independiente;
+- cálculo no mutante y sin DOM/red.
+
+Reglas:
+
+- 7B no vuelve a medir geometría;
+- no redondea prematuramente cantidades;
+- importes monetarios de línea se redondean a céntimos;
+- un desconocido nunca se suma como cero;
+- 7B solo admite `priceSource.type = manual`;
+- no existe todavía `FloorPlanCostProvider` real;
+- BCCA/DDC/UI/exportación permanecen fuera de esta PR.
+
+Documentación candidata:
+
+- `docs/product/point-7b-budget-core-2026-10-27.md`;
+- `docs/contracts/FloorPlanBudgetV1.md`;
+- `docs/contracts/FloorPlanBudgetV1.schema.json`.
+
+No considerar 7B cerrado hasta que su PR candidata tenga CI verde y merge autorizado.
 
 ### 7C — `FloorPlanCostProvider` — PENDIENTE
 
@@ -146,7 +175,7 @@ Proveedor Manual obligatorio; `BCCA_ES` como primer candidato español solo desp
 
 ### 7D — Presentación/exportación — PENDIENTE
 
-Resúmenes por estancia/planta/vivienda/capítulos y exportación cuando corresponda.
+Resúmenes por estancia/planta/vivienda/capítulos y exportación cuando corresponda. Debe consumir `FloorPlanBudget.calculateBudget()` y no duplicar fórmulas monetarias.
 
 ### Etapa 2 posterior
 
@@ -158,8 +187,9 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 2. Verificar `master` y SHA antes de trabajar.
 3. Los documentos con fecha anterior pueden ser historia o diseño previo, no estado actual.
 4. No reabrir Puntos 1–6 ni 7A salvo regresión reproducible o decisión expresa.
-5. El siguiente corte es 7B — Budget Core.
+5. 7B está en candidato/revisión hasta merge; no marcarlo cerrado antes.
 6. 7B debe consumir `FloorPlanQuantities`; no volver a medir geometría.
-7. No adelantar BCCA/CostProvider real dentro de 7B.
-8. No adelantar Punto 8/9 dentro de Punto 7.
-9. No asumir que una fuente externa equivale a certificación de Rubik.
+7. No introducir BCCA ni `FloorPlanCostProvider` real dentro de 7B.
+8. No adelantar UI/exportación de 7D dentro de 7B.
+9. No adelantar Punto 8/9 dentro de Punto 7.
+10. No asumir que una fuente externa equivale a certificación de Rubik.
