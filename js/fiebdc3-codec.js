@@ -50,6 +50,11 @@
     if(typeof value!=='string'||!value||value.length>22||!/^[A-Za-z0-9ñÑ.\-$#%&_]+$/.test(value))fail('invalid-code',`invalid concept code ${JSON.stringify(value)}`);
     return value;
   };
+  // FIEBDC permits references to omit a terminal chapter/root marker; internal # stays significant.
+  const conceptIdentity=value=>{
+    const suffix=value.match(/^(.*?)(#{1,2})$/);
+    return suffix&&suffix[1]&&!suffix[1].endsWith('#')?suffix[1]:value;
+  };
   const number=(raw,label)=>{
     if(raw==='')return null;
     if(!/^[+-]?\d+(?:\.\d+)?$/.test(raw)||!Number.isFinite(Number(raw)))fail('invalid-number',`${label}: ${JSON.stringify(raw)}`);
@@ -60,7 +65,7 @@
     if(!/^\d{1,8}$/.test(raw))fail('invalid-date',`${label}: ${JSON.stringify(raw)}`);
     return raw; // BC3 permits partial DDMMYYYY dates; do not invent missing precision.
   };
-  const sub=(raw)=>{const parts=raw.split('\\');if(parts.at(-1)==='')parts.pop();return parts;};
+  const sub=(raw)=>{const parts=raw.split('\\').map(part=>part.replace(/[ \t\r\n]+$/,''));if(parts.at(-1)==='')parts.pop();return parts;};
   const field=(record,index)=>record.fields[index]??'';
   const group=(raw,width,label,parser)=>{
     if(raw==='')return [];
@@ -112,11 +117,11 @@
         model.coefficients.push({legacyGroups:legacy,percentages,currentGroups:current,count:number(f(3),where)});
       }else if(r.type==='C'){
         const aliases=sub(f(0)).map(code);if(!aliases.length)fail('malformed-record','~C needs a code');
-        for(const alias of aliases){if(codes.has(alias))fail('duplicate-code',alias);codes.add(alias);}
+        for(const alias of aliases){const identity=conceptIdentity(alias);if(codes.has(identity))fail('duplicate-code',alias);codes.add(identity);}
         const rawPrices=f(3)===''?[]:sub(f(3)).map((x,i)=>number(x,`${where} price ${i}`));
         const rawDates=f(4)===''?[]:sub(f(4)).map((x,i)=>date(x,`${where} date ${i}`));
         const type=f(5)===''?null:f(5);
-        const concept={code:aliases[0],aliases,unit:f(1)||null,summary:f(2)||null,type,
+        const concept={code:aliases[0],identity:conceptIdentity(aliases[0]),aliases,unit:f(1)||null,summary:f(2)||null,type,
           explicitPrices:rawPrices,explicitDates:rawDates,prices:[]};
         model.concepts.push(concept);
       }else if(r.type==='D'){
@@ -145,15 +150,15 @@
           inheritedPrice:i>=concept.explicitPrices.length,inheritedDate:concept.explicitDates.length>0&&i>=concept.explicitDates.length});
       }
     }
-    const known=new Set(model.concepts.flatMap(c=>c.aliases));
+    const known=new Set(model.concepts.flatMap(c=>c.aliases.map(conceptIdentity)));
     const update=model.version?.informationType==='4';
     for(const d of model.decompositions){
-      for(const target of [d.parent,...d.children.map(c=>c.child)])if(!known.has(target)){
+      for(const target of [d.parent,...d.children.map(c=>c.child)])if(!known.has(conceptIdentity(target))){
         if(update)model.warnings.push({code:'unresolved-concept',conceptCode:target});
         else fail('unresolved-concept',`~D references ${target}`);
       }
     }
-    for(const t of model.texts)if(!known.has(t.code)){
+    for(const t of model.texts)if(!known.has(conceptIdentity(t.code))){
       if(update)model.warnings.push({code:'unresolved-concept',conceptCode:t.code});
       else fail('unresolved-concept',`~T references ${t.code}`);
     }

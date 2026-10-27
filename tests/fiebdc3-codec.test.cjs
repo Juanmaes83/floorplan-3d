@@ -39,6 +39,70 @@ test('optional W scope name and raw percentage code survive projection',()=>{
   assert.equal(Codec.serialize(model),text);
 });
 
+test('terminal # and ## are optional in D/T references without rewriting source codes',()=>{
+  for(const [declared,reference] of [['CAP#','CAP'],['CAP#','CAP#'],['ROOT##','ROOT'],['ROOT##','ROOT##']]){
+    const text=file([
+      '~V|A|FIEBDC-3/2016|P|Precios|850||||||',
+      `~C|${declared}|ud|Concepto|0|27102026|0|`,
+      '~C|CHILD#|m2|Hijo|1|27102026|0|',
+      `~D|${reference}|CHILD\\1\\2\\||`,
+      `~T|${reference}|Texto descriptivo|`
+    ]);
+    const model=Codec.parse(text);
+    assert.equal(model.concepts[0].code,declared);
+    assert.equal(model.concepts[0].identity,declared.replace(/#{1,2}$/,''));
+    assert.equal(model.decompositions[0].parent,reference);
+    assert.equal(model.decompositions[0].children[0].child,'CHILD');
+    assert.equal(model.texts[0].code,reference);
+    assert.equal(model.records[1].fields[0],declared);
+    assert.equal(Codec.serialize(model),text);
+  }
+});
+
+test('terminal-marker identity applies to aliases and duplicate detection',()=>{
+  const alias=file([
+    '~V|A|FIEBDC-3/2016|P|Precios|850||||||',
+    '~C|CAP#\\OTHER#\\|ud|Capítulo|0|27102026|0|',
+    '~T|OTHER|Alias sin marcador|'
+  ]);
+  assert.equal(Codec.parse(alias).texts[0].code,'OTHER');
+  const duplicate=alias.replace('~T|OTHER|Alias sin marcador|','~C|CAP|ud|Duplicado|1|27102026|0|');
+  assert.throws(()=>Codec.parse(duplicate),/duplicate-code/);
+  assert.throws(()=>Codec.parse(alias.replace('CAP#\\OTHER#\\','CAP#\\CAP\\')),/duplicate-code/);
+});
+
+test('internal # remains significant and is not merged with another concept',()=>{
+  const core=[
+    '~V|A|FIEBDC-3/2016|P|Precios|850||||||',
+    '~C|A#B|ud|Interno|0|27102026|0|'
+  ];
+  assert.throws(()=>Codec.parse(file([...core,'~T|AB|Incorrecto|'])),/unresolved-concept/);
+  const distinct=Codec.parse(file([...core,'~C|AB|ud|Distinto|1|27102026|0|']));
+  assert.deepEqual(distinct.concepts.map(c=>c.identity),['A#B','AB']);
+  const marked=Codec.parse(file([...core,'~T|A#B#|Mismo concepto con sufijo final|']));
+  assert.equal(marked.texts[0].code,'A#B#');
+});
+
+test('only ASCII space, tab and CRLF directly before ~, | and backslash are ignored',()=>{
+  const canonical=file([
+    '~V|A|FIEBDC-3/2016|P|Precios|850||||||',
+    '~C|CAP#\\ALIAS#\\|ud|  Nombre con inicio significativo|1\\2\\|27102026\\|0|',
+    '~T|ALIAS|  Texto con inicio significativo|'
+  ]);
+  const spaced=canonical
+    .replace('CAP#\\ALIAS#\\','CAP# \\ALIAS#\t\\')
+    .replace('1\\2\\','1\t\\2\r\n\\')
+    .replace('ud|','ud \t|')
+    .replace('0|\r\n~T','0| \t\r\n~T');
+  const a=Codec.parse(canonical),b=Codec.parse(spaced);
+  for(const key of ['version','coefficients','concepts','decompositions','texts','scopes'])assert.deepEqual(b[key],a[key]);
+  assert.equal(b.concepts[0].summary,'  Nombre con inicio significativo');
+  assert.equal(b.texts[0].text,'  Texto con inicio significativo');
+  const written=Codec.serialize(b);
+  assert.equal(written,spaced.replace('ud \t|','ud|').replace('0| \t\r\n~T','0|\r\n~T'));
+  assert.deepEqual(Codec.parse(written).concepts,b.concepts);
+});
+
 test('byte and normalized-model round trips are deterministic',()=>{
   const bytes=Codec.encode(base),model=Codec.parse(bytes);
   assert.deepEqual(Codec.encodeModel(model),bytes);
