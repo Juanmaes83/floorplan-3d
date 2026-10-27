@@ -1,8 +1,9 @@
 # Punto 7D — Presentación y exportación de presupuesto
 
 **Fecha:** 28-10-2026  
-**Estado de este corte:** candidato en revisión.  
-**Base:** `master@561ca43145977a7003fd23b79f4af123db6ba445` (7C-E fusionado por PR #118).
+**Estado:** **CERRADO** por PR #120.  
+**Base de implementación:** `master@561ca43145977a7003fd23b79f4af123db6ba445` (7C-E fusionado por PR #118).  
+**Merge:** squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`.
 
 ## Objetivo
 
@@ -169,16 +170,24 @@ Cubre:
 - rechazo de presupuestos inválidos por la autoridad Budget;
 - export global en navegador sin DOM.
 
-Además, los workflows existentes ejecutan la suite general no-browser para cambios en `js/**` y `tests/**`, junto con las regresiones browser de compatibilidad existentes.
+## Evidencia de cierre
 
-## Criterio de cierre
+HEAD exacto validado antes del merge: `91fd89e8fbd26bd7f4ab79bdfd0b78e7742ad4d7`.
 
-7D puede cerrarse cuando:
+Resultados:
 
-1. la suite específica está verde;
-2. las regresiones generales están verdes;
-3. Vercel está verde;
-4. no existen hilos de revisión bloqueantes;
-5. el HEAD exacto de la PR es mergeable.
+- suite específica 7D incluida en la regresión general no-browser: **SUCCESS**;
+- Guided experience: **SUCCESS**;
+- Point 6 solar and compatibility: **SUCCESS**;
+- Multiformat guided import: **SUCCESS**;
+- Vercel: **SUCCESS**;
+- sin hilos de revisión pendientes;
+- PR mergeable antes del merge.
 
-Al fusionarse este corte, **Punto 7 queda cerrado** y el trabajo activo puede pasar a **Punto 8A / Exterior V1** sin deuda funcional obligatoria de presupuesto.
+PR #120 se fusionó con squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`.
+
+El squash incluye `[skip ci]` exclusivamente para evitar duplicar en el `push` a `master` las mismas GitHub Actions que ya habían finalizado con éxito sobre el HEAD exacto del candidato.
+
+## Cierre
+
+Con 7D fusionado, **Punto 7 queda CERRADO**. El trabajo funcional activo pasa a **Punto 8A / Exterior V1**.
