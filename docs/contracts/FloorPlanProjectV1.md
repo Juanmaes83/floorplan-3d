@@ -1,5 +1,13 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
+## Ampliación 1.7.0 — orientación y ubicación internas (Punto 6)
+
+`site` es opcional. `site.northOffsetDeg` declara dónde está el norte: grados horarios desde arriba del plano, `0 <= n < 360`. No gira geometría. Ausente significa sin configurar. `site.location` contiene `latitude` (-90..90), `longitude` (-180..180), `timeZone` IANA reconocida por `Intl`, y `source:{providerId,type}`. El proveedor manual usa `manual` / `user-entered`. Metadatos opcionales de fuente: `sourceName`, `sourceUrl`, `sourceId`, `retrievedAt`, `version`, `derivedFrom`; no contienen datos protegidos ni respuestas completas de proveedores.
+
+Solo una edición explícita de estos datos eleva versiones anteriores a 1.7.0; leer legacy no añade datos ni cambia versión. Las futuras versiones de proyecto V1 conservan sus campos desconocidos. La validación semántica rechaza `site` antes de 1.7 y zonas horarias no reconocidas. JSON/ZIP editables contienen estos datos internos: no son una entrega pública depurada. PNG, ficha, presentación y vídeo no publican coordenadas automáticamente.
+
+En edificio, la autoridad es `building.site` (contrato 1.1), compartida por todas las plantas. No se usa `level.project.site` como fallback. Exportar una planta incorpora en la copia la configuración compartida. Fecha/hora y modo solar son una selección de visualización, no se persisten como atributos físicos del inmueble. Ver [auditoría](../technical/point-6-audit-2026-10-27.md).
+
 **Estado:** contrato implementado. La base F1a/F1b está aprobada e integrada en `master` (PR #4/#5/#6). La ampliación 1.2.0 con WebP estático quedó integrada por PR #7 (`c28a170`). La ampliación compatible 1.3.0 de catálogo local F3 quedó integrada por PR #12 (merge `95fcf0d`). La ampliación opcional compatible 1.4.0 de superficies quedó integrada por PR #19. La 1.5.0 añadió tipo declarado de muro; esta rama añade la clasificación opcional de estancia 1.6.0. Las decisiones de producto F0 que sigan abiertas permanecen pendientes: la implementación del schema no implica su aprobación.
 **Estado vigente comprobado:** 02-10-2026 · `origin/master` @ `e62d17ee62576466f937700f6c445c33b09ec9c2`. **Base histórica de la redacción original:** `master` @ `d644665`. **Referencias históricas de la auditoría F0:** `master` @ `a03136c` y PR #1 @ `540b825`. Numeración y estados actuales: [roadmap canónico](../ROADMAP.md).
 **Artefactos:** [`FloorPlanProjectV1.schema.json`](FloorPlanProjectV1.schema.json) · [ejemplo válido](examples/floorplan-project-v1.example.json) · [ejemplo inválido](examples/floorplan-project-v1.invalid.example.json)

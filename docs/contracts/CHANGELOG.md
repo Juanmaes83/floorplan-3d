@@ -57,3 +57,6 @@ El ZIP materializa `storage.kind:sidecar-file` y `ref:images/<imageId>.png|jpg|w
 Al importar se restaura `local-browser` con nueva clave local. Las referencias a
 IDs, geometría, calibración, verificación y huellas se conservan; únicamente cambia
 la ubicación de almacenamiento. El proyecto JSON nunca incluye data:/blob: ni binarios.
+# Punto 6 — 1.7.0 project / 1.1.0 building
+
+Optional internal `site`: declared north, manual coordinates, IANA time zone and minimized provenance. Buildings use one shared root site; embedded known project versions extend through 1.7.0. Older documents remain unchanged on read; explicit edits upgrade only as needed. No geometry, room-family, area-calculation or public-delivery change. See the contract documents and Point 6 audit.

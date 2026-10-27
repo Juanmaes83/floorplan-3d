@@ -13,6 +13,8 @@ desktop.ini
 node_modules/
 dist/
 build/
+!vendor/three/build/
+!vendor/three/build/three.module.js
 
 # 日志与临时文件
 *.log

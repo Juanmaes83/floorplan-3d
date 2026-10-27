@@ -8,7 +8,8 @@
   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "levels", "stairs"],
   "properties": {
     "schema": { "const": "rubik-sota.floorplan-building" },
-    "schemaVersion": { "const": "1.0.0", "description": "Cualquier otra versión se rechaza." },
+    "schemaVersion": { "enum": ["1.0.0", "1.1.0"], "description": "1.1 adds optional shared site; other versions are rejected." },
+    "site": { "$ref": "FloorPlanProjectV1.schema.json#/$defs/site" },
     "id": { "type": "string", "pattern": "^bld_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "name": { "type": "string", "minLength": 1, "maxLength": 200 },
     "createdAt": { "type": "string", "format": "date-time" },
@@ -17,6 +18,7 @@
     "levels": { "type": "array", "minItems": 1, "maxItems": 2, "items": { "$ref": "#/$defs/level" } },
     "stairs": { "type": "array", "maxItems": 4, "items": { "$ref": "#/$defs/stair" } }
   },
+  "allOf": [{"if":{"properties":{"schemaVersion":{"const":"1.0.0"}}},"then":{"not":{"required":["site"]}}}],
   "$defs": {
     "levelId": { "type": "string", "pattern": "^lvl_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "pointMm": {
@@ -33,7 +35,7 @@
         "elevationMm": { "type": "integer", "minimum": 0, "maximum": 100000, "description": "Suelo terminado en el marco del edificio. 0 en la planta 0." },
         "slabThicknessMm": { "type": "integer", "minimum": 0, "maximum": 1000, "description": "Espesor visual del forjado bajo la planta; sin significado estructural. 0 en la planta 0." },
         "offsetMm": { "$ref": "#/$defs/pointMm", "description": "Traslación del marco del proyecto al marco del edificio. {0,0} en la planta 0." },
-        "project": { "$ref": "FloorPlanProjectV1.schema.json", "description": "Proyecto 1.x (1.0.0–1.4.0) completo, validado en modo estricto." }
+        "project": { "$ref": "FloorPlanProjectV1.schema.json", "description": "Proyecto 1.x (1.0.0–1.7.0) completo, validado en modo estricto." }
       }
     },
     "stair": {

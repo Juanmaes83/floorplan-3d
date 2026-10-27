@@ -447,8 +447,8 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 </style>
 <script type="importmap">
 {"imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  "three":"./vendor/three/build/three.module.js",
+  "three/addons/":"./vendor/three/examples/jsm/"
 }}
 </script>
 <link rel="stylesheet" href="css/surface-library.css">
@@ -653,6 +653,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
+<script src="js/geo-provider.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/surface-catalog.js"></script>
 <script src="js/generic-catalog.js"></script>
@@ -1430,6 +1431,7 @@ function renderAll(){
   window.FloorPlanTraceUI?.render();
   window.FloorPlanGuideUI?.sync();
   window.FloorPlanBuildingUI?.render();
+  window.FloorPlanSolarUI?.sync();
   window.FloorPlanFurnitureOverlaps?.render();
 }
 
@@ -2427,6 +2429,10 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/furniture-overlaps-ui.js"></script>
 <script src="js/build-palette.js"></script>
 <script src="js/app-shell.js"></script>
+<script src="vendor/suncalc/suncalc.js"></script>
+<script src="js/solar-core.js"></script>
+<script src="js/solar-renderer-adapter.js"></script>
+<script src="js/solar-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
@@ -2453,6 +2459,7 @@ const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...proj
 
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
+let solarResult=null;
 let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
@@ -3644,6 +3651,7 @@ function applyLight(){
   }
   const h = Math.floor(opt.hour), m = Math.round((opt.hour - h)*60);
   $('#sunT').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  if(solarResult)window.FloorPlanSolarRenderer.apply({sun,hemi,renderer,lamps:[lampG,...levelLamps],materials:matCache,ground,scene},solarResult);
 }
 
 /* ======================= 相机位姿 / 动画 ======================= */
@@ -4143,7 +4151,8 @@ function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 function presentationCapture(){
   if(!active||anim||!camera)throw Error('La escena 3D todavía no está lista.');
   const state={position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,
-    options:{...opt},doors:doors.map(d=>({open:d.open,cur:d.cur}))};
+    options:{...opt},solarResult:solarResult&&structuredClone(solarResult),doors:doors.map(d=>({open:d.open,cur:d.cur}))};
+  solarResult=null;applyLight();
   if(fly?.res)fly.res(false);fly=null;
   if(opt.mode==='walk'){
     walkCtl.unlock();stopTouchWalk();$('#walkOverlay').style.display='none';$('#cross').style.display='none';
@@ -4322,6 +4331,7 @@ function presentationRestore(state){
   setPresentationContactShadows(false);
   stopPresentationLighting();
   if(!state||!active)return;
+  solarResult=state.solarResult||null;
   if(fly?.res)fly.res(false);fly=null;
   Object.assign(opt,state.options);
   surfaceRenderer.setQuality(opt.surfaceQuality);
@@ -4363,6 +4373,8 @@ function presentationRestorePose(state){
 }
 
 window.View3D = {
+  setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
+  get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
   // Changing the active level moves the world origin (the active level stays at y = 0), so the camera is re-framed.
   // A context identical to the current one is a no-op: no rebuild, so in-flight asset loads are never aborted.

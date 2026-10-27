@@ -3,6 +3,7 @@
   'use strict';
   const schema = typeof module !== 'undefined' ? require('./project-schema.js') : root.FloorPlanSchema;
   const reference = typeof module !== 'undefined' ? require('./reference-project.js') : root.FloorPlanReference;
+  const Geo = typeof module !== 'undefined' ? require('./geo-provider.js') : root.FloorPlanGeoProvider;
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -34,6 +35,7 @@
       if (!Number.isFinite(value)) fail(path, 'number must be finite');
       if (rule.minimum !== undefined && value < rule.minimum) fail(path, `minimum ${rule.minimum}`);
       if (rule.maximum !== undefined && value > rule.maximum) fail(path, `maximum ${rule.maximum}`);
+      if (rule.exclusiveMaximum !== undefined && value >= rule.exclusiveMaximum) fail(path, `must be below ${rule.exclusiveMaximum}`);
       if (rule.exclusiveMinimum !== undefined && value <= rule.exclusiveMinimum) fail(path, `must exceed ${rule.exclusiveMinimum}`);
     }
     if (typeof value === 'string') {
@@ -80,6 +82,10 @@
     if (typeof version !== 'string' || !/^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/.test(version)) fail('/schemaVersion', 'unsupported version');
     const future = version !== '1.0.0' && !strict;
     check(project, schema, '/', future);
+    if(project.site!==undefined){
+      if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
+      try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
+    }
     const ids = new Map([[project.id, 'project']]);
     const warnings = [];
     if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
@@ -280,6 +286,8 @@
     if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
     validate(next);return next;
   }
-  const api={clone,id,point,validate,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);if(Number(next.schemaVersion.split('.')[1])<7)next.schemaVersion='1.7.0';validate(next);return next;}
+  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);};
+  const api={clone,id,point,validate,validateSite,setSite,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

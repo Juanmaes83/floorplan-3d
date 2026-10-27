@@ -147,7 +147,7 @@ test('English and Chinese labels follow the existing language control while lega
  await page.locator('#langBtn').click();
  await page.evaluate(()=>FloorPlanSurfaceSheet.open());
  assert.match(await text(page),/Area schedule|TOTAL NET AREA/);
- assert.match(await text(page),/Main bedroom/);
+ assert.match(await text(page),/Master Bedroom/);
  assert.doesNotMatch(await text(page),/主卧室|unspecified/);
  await page.locator('#surfaceSheetClose').click();
  await page.locator('#langBtn').click();

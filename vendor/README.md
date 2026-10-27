@@ -12,3 +12,11 @@ Se sirven desde el propio despliegue (sin CDN) y se cargan solo al subir un form
 | `web-ifc/` | `web-ifc` (build ESM + `web-ifc.wasm`) | 0.0.78 | MPL-2.0 (`web-ifc/LICENSE.md`); se distribuye sin modificar | Leer IFC (BIM) |
 
 Para actualizar: `npm pack <paquete>@<versión>`, copiar los mismos ficheros y repetir `tests/plan-intake.test.cjs` y `tests/upload.browser.test.cjs`.
+# SunCalc — Point 6
+
+Solar-position dependency closure from SunCalc **2.1.1**, commit `21449f34820c3c80a27a78cdc940747ff19ca1e3` of `Juanmaes83/suncalc-A-tiny-JavaScript-library-for-calculating-sun-moon-positions-and-phases.`. `vendor/suncalc/suncalc.js` retains the upstream prefix through `getPosition`; only the ES export keyword is removed and a UMD wrapper added. Astronomical calculations are unchanged; unused moon/time APIs are omitted. Original BSD-2-Clause copyright and license: `vendor/suncalc/LICENSE`. No runtime CDN or dependency. Upstream v2 output is degrees with azimuth clockwise from north.
+
+## Three.js — local startup
+
+`vendor/three/` is the unchanged runtime dependency closure of the **same 0.160.0** renderer previously loaded from jsDelivr: core, seven existing addons and their BufferGeometryUtils dependency, plus the MIT license. Total source/license size: 1,471,840 bytes. No renderer upgrade or algorithm change. `manifest.json` records each SHA-256 and the official npm tarball URL. Reproduce from an unpacked official package using `node scripts/vendor-three.cjs <package-directory>`. The import map resolves these files locally, so Point 6 can start 3D with external requests blocked. The narrow `.gitignore` exception includes only its required core module under `vendor/three/build/`.
+

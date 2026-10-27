@@ -58,13 +58,43 @@
         "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" }
       }
     },
+    "site": { "$ref": "#/$defs/site" },
     "extensions": { "$ref": "#/$defs/extensions" }
   },
   "allOf": [
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
   "$defs": {
+    "site": {
+      "type": "object", "additionalProperties": false,
+      "description": "Optional internal site data. North is clockwise from plan-up, without rotating geometry. Absence means not configured.",
+      "properties": {
+        "northOffsetDeg": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "location": {
+          "type": "object", "additionalProperties": false, "required": ["latitude", "longitude", "timeZone", "source"],
+          "properties": {
+            "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+            "longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+            "timeZone": { "type": "string", "minLength": 1, "maxLength": 100, "description": "IANA zone, checked by Intl in the reference validator." },
+            "source": {
+              "type": "object", "additionalProperties": false, "required": ["providerId", "type"],
+              "properties": {
+                "providerId": { "type": "string", "minLength": 1, "maxLength": 80 },
+                "type": { "enum": ["user-entered", "official-source", "derived", "unknown"] },
+                "sourceName": { "type": "string", "maxLength": 200 },
+                "sourceUrl": { "type": "string", "maxLength": 500 },
+                "sourceId": { "type": "string", "maxLength": 200 },
+                "retrievedAt": { "type": "string", "format": "date-time" },
+                "version": { "type": "string", "maxLength": 100 },
+                "derivedFrom": { "type": "string", "maxLength": 200 }
+              }
+            }
+          }
+        }
+      }
+    },
     "idSuffix": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "projectId": { "type": "string", "pattern": "^prj_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "wallId": { "type": "string", "pattern": "^wal_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },

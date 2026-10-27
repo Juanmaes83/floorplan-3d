@@ -1,0 +1,42 @@
+{
+  "archiveBytes": 871150,
+  "archiveSha256": "878a8eafa09dbe509175d160205656103f1167f09802bd97c6cd6e522e480d18",
+  "projectBytes": 56262,
+  "projectSha256": "606f964cfa2a2f6aea7420bc2563da278308b1bcd9dafb9fd56463038ec2704a",
+  "sourceRevisionSha256": "ef7cecb06dcc61e31c5c4924eafe259d619de59b0187cbccc1422ca9d02ba36d",
+  "editableRevisionSha256": "2e20d7c16d601fb393e5b351df80e04943f79891b94a8c3ccfb700e4f38001c6",
+  "reimportRevisionSha256": "63a489ecc8a7fb60d53c390cd361af9e82de3cc06fd618aee3268877ad89bfbf",
+  "views": [
+    {
+      "filename": "views/view-001.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 217914,
+      "sha256": "522a142fb947fd1a96e4526b2c5c64fd967781a6f2357ddf3fb507b680c4c9bf"
+    },
+    {
+      "filename": "views/view-002.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 313785,
+      "sha256": "1034efec26bbfbe3e5a012bbc64476e9b3b4ee9dfe8cc4ac95bf769388d4c9ff"
+    },
+    {
+      "filename": "views/view-003.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 232632,
+      "sha256": "25808f6e698fe3aa0f77f6a3e3fa19fd203b8338f35e3b746f24b707467c5b2c"
+    }
+  ],
+  "sourceImage": {
+    "bytes": 76,
+    "sha256": "8d4866009257a3229d957847edfe2fcb4dd4fa4816810ba4049c9fa4603aa99f"
+  },
+  "reimported": {
+    "projectId": "prj_reference-home",
+    "rooms": 13,
+    "objects": 46,
+    "revisionSha256": "63a489ecc8a7fb60d53c390cd361af9e82de3cc06fd618aee3268877ad89bfbf"
+  }
+}
