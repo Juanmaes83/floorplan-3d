@@ -9,6 +9,12 @@
   const nonempty=value=>typeof value==='string'&&value.trim()?value.trim():null;
   const result=(status,reason,extra={})=>({status,providerId:ID,reason,...extra});
   const clone=value=>JSON.parse(JSON.stringify(value));
+  const calendarDate=value=>{
+    if(typeof value!=='string'||!/^\d{4}-\d\d-\d\d$/.test(value))return false;
+    const [year,month,day]=value.split('-').map(Number);
+    if(month<1||month>12||day<1)return false;
+    return day<=new Date(Date.UTC(year,month,0)).getUTCDate();
+  };
 
   function legalStatus(mode,gate){
     if(mode==='synthetic')return 'VERIFIED'; // Fixture-only permission; never an official-data claim.
@@ -17,7 +23,7 @@
     if(status!=='VERIFIED')return status;
     // A URL alone is evidence of a location, not a verified commercial-use permission.
     if(gate.sourceOfficial!==true||gate.commercialUse!==true||gate.reuse!==true||
-      !Array.isArray(gate.evidenceUrls)||!gate.evidenceUrls.length||!/^\d{4}-\d\d-\d\d$/.test(gate.reviewDate||''))return 'UNKNOWN';
+      !Array.isArray(gate.evidenceUrls)||!gate.evidenceUrls.length||!calendarDate(gate.reviewDate))return 'UNKNOWN';
     return 'VERIFIED';
   }
 
