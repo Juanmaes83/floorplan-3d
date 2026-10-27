@@ -1,9 +1,9 @@
 # Punto 7A — Quantity Engine
 
-**Fecha:** 27-10-2026  
-**Estado:** implementación candidata en `feat/point-7a-quantity-engine`; no cierra todavía el Punto 7 completo.  
-**Base de implementación:** `master@c4f42b8a1c05496b88a993113c44cb23c6366c9d`.  
-**Dependencias funcionales:** Punto 3 (`FloorPlanSurfaceMetrics`), contratos `FloorPlanProjectV1` / `FloorPlanBuildingV1`.  
+**Fecha:** 27-10-2026
+**Estado:** implementación candidata en `feat/point-7a-quantity-engine`; no cierra todavía el Punto 7 completo.
+**Base de implementación:** `master@c4f42b8a1c05496b88a993113c44cb23c6366c9d`.
+**Dependencias funcionales:** Punto 3 (`FloorPlanSurfaceMetrics`), contratos `FloorPlanProjectV1` / `FloorPlanBuildingV1`.
 **Siguiente corte previsto:** 7B — Budget Core.
 
 ## 0. Propósito
