@@ -6,7 +6,7 @@ Verificar siempre el HEAD real de `master` antes de ejecutar trabajo. Los docume
 
 ## Base de este estado
 
-Base del corte 7D: `master@561ca43145977a7003fd23b79f4af123db6ba445`, resultado del merge de PR #118.
+Estado posterior al merge de **PR #120 — Punto 7D**, squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`.
 
 ## Estado resumido
 
@@ -20,68 +20,79 @@ Base del corte 7D: `master@561ca43145977a7003fd23b79f4af123db6ba445`, resultado 
 | 7C-C | Budget provenance / CostQuote bridge | **CERRADO** — PR #116 |
 | 7C-D | Codec FIEBDC-3/BC3 | **CERRADO** — PR #117 |
 | 7C-E | `BCCA_ES` + gate legal/técnico | **CERRADO** — PR #118 |
-| 7D | Presentación/exportación de presupuesto | **CANDIDATO EN REVISIÓN** — este corte |
-| 8A | Fachada y exterior básico | **SIGUIENTE / EN PREPARACIÓN** |
+| 7D | Presentación/exportación de presupuesto | **CERRADO** — PR #120 |
+| 8A | Fachada y exterior básico | **ACTUAL / EN IMPLEMENTACIÓN** |
 | 8B | Cubierta y volúmenes | **APROBADO, POSTERIOR** |
 | 8C | Parcela, terreno y contexto | **APROBADO, POSTERIOR** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
-## Punto 7C — CERRADO
+## Punto 7 — CERRADO
 
-La familia 7C está cerrada hasta el alcance aprobado:
+El Punto 7 queda cerrado hasta el alcance aprobado:
 
-- contrato provider agnóstico;
-- Manual offline permanente;
-- provenance/reference prices en Budget 1.1;
-- codec FIEBDC-3/BC3;
-- adapter `BCCA_ES` con fixtures sintéticos y gate técnico/legal.
+- **7A** — cantidades derivadas con certeza explícita;
+- **7B** — presupuesto EUR, merma, IVA, revisión y procedencia;
+- **7C** — providers, Manual, provenance/reference prices, FIEBDC-3/BC3 y adapter `BCCA_ES` con gate técnico/legal;
+- **7D** — presentación estructurada y exportación CSV/JSON derivadas de `FloorPlanBudget.calculateBudget()`.
 
-La activación de **datos BCCA reales gestionados por Rubik sigue deshabilitada** mientras no exista evidencia legal suficiente para el producto/endpoint y uso comercial concreto. Cerrar 7C-E no cambia ese gate.
+La activación de **datos BCCA reales gestionados por Rubik sigue deshabilitada** mientras no exista evidencia legal suficiente para el producto/endpoint y uso comercial concreto. Cerrar el Punto 7 no cambia ese gate.
 
-## Punto 7D — candidato actual
+## Punto 7D — CERRADO
 
 Documento: `docs/product/point-7d-budget-presentation-export-2026-10-28.md`.
 
-El corte añade `FloorPlanBudgetPresentation` como capa pura de presentación/exportación sobre `FloorPlanBudget.calculateBudget()`:
+`FloorPlanBudgetPresentation` aporta una capa pura de presentación/exportación sobre `FloorPlanBudget.calculateBudget()`:
 
 - reporte estructurado;
 - capítulos y partidas sin capítulo;
-- agrupación por `room | level | home` únicamente cuando el `quantity.source.ref` lo demuestra;
+- agrupación por `room | level | home` únicamente cuando `quantity.source.ref` lo demuestra;
 - advertencias de incompletitud;
-- procedencia/revisión;
+- procedencia y revisión;
 - CSV interoperable;
-- JSON de reporte.
+- JSON de reporte para futuros exportadores.
 
-Reglas:
+Reglas cerradas:
 
 - 7D no mide geometría;
 - 7D no recalcula merma, subtotal ni IVA desde inputs crudos;
 - `null` nunca se convierte en 0;
 - cero explícito se conserva;
 - provider/reference no equivale a revisión profesional;
-- no se añaden dependencias XLSX/PDF sólo para marcar formatos;
-- un futuro XLSX/PDF/CRM debe consumir el reporte estructurado.
+- no se añadieron dependencias XLSX/PDF sólo para marcar formatos;
+- futuros XLSX/PDF/CRM deben consumir el reporte estructurado.
 
-Si CI y revisión del HEAD exacto quedan verdes y este corte se fusiona, **Punto 7 queda cerrado**.
+### Evidencia de cierre
 
-## Punto 8
+- PR #120 fusionada con squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`;
+- HEAD validado de la PR: `91fd89e8fbd26bd7f4ab79bdfd0b78e7742ad4d7`;
+- Guided experience: **SUCCESS**;
+- Point 6 solar and compatibility: **SUCCESS**;
+- Multiformat guided import: **SUCCESS**;
+- Vercel: **SUCCESS**;
+- sin hilos de revisión pendientes;
+- mergeable antes del merge.
 
-Tras el cierre de 7D, el trabajo funcional pasa a Punto 8:
+El commit de squash incluye `[skip ci]` únicamente para evitar repetir en `push` a `master` la misma suite ya validada sobre el HEAD exacto de la PR. No sustituye ninguna comprobación previa al merge.
+
+## Punto 8 — ACTUAL
+
+El trabajo funcional pasa a Punto 8:
 
 - **8A / Exterior V1** — fachada, materiales, huecos exteriores y exterior básico;
 - **8B / Exterior V2** — cubierta, petos, retranqueos y volúmenes, con alcance deliberadamente limitado;
 - **8C / Exterior V3** — parcela, terreno y contexto territorial, donde `FloorPlanGeoProvider` puede alimentar fuentes normalizadas.
 
-8A y 8B no deben depender de Catastro/IGN/CNIG/PNOA.
+8A y 8B deben funcionar sin Catastro/IGN/CNIG/PNOA. `FloorPlanGeoProvider` sigue siendo infraestructura transversal y adquiere especial relevancia en 8C.
 
-La documentación específica de límites 8B vive en la PR documental #119 mientras no haya sido fusionada.
+La documentación específica de límites de 8B está preparada en la PR documental #119 mientras no haya sido fusionada.
 
 ## Regla para agentes
 
 1. Leer este archivo primero.
 2. Verificar `master`/SHA real.
-3. No reabrir 1–6 ni 7A–7C-E salvo regresión reproducible o decisión expresa.
-4. Mientras 7D no esté fusionado, no mezclar trabajo de 7D dentro de 8A.
-5. Tras el cierre de 7D, Punto 7 queda cerrado y 8A es el corte funcional activo.
+3. No reabrir 1–7 salvo regresión reproducible o decisión expresa.
+4. **8A es el corte funcional activo.**
+5. No adelantar 8B/8C dentro de 8A.
 6. Mantener `FloorPlanGeoProvider` como capacidad transversal; no renumerarlo como otro punto.
-7. Mantener la regla de producto: **más contexto, no más falsa certeza**.
+7. Mantener separada la geometría fuente/oficial de cualquier representación editable derivada cuando lleguen fuentes territoriales.
+8. Mantener la regla de producto: **más contexto, no más falsa certeza**.
