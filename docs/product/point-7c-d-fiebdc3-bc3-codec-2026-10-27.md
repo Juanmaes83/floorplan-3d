@@ -20,9 +20,11 @@ Las variantes de precio se conservan por índice y rótulo de `~V`, con fecha y 
 
 `tests/fixtures/fiebdc3/synthetic.cjs` construye archivos BC3 pequeños con terminador real mediante escapes visibles. Incluye archivo mínimo y uno con todos los registros soportados más un `~X` no interpretado. `tests/fiebdc3-codec.test.cjs` prueba esos fixtures, variantes, cero/ausencia, juegos de caracteres, sintaxis inválida, round-trip de bytes y semántico, estabilidad de escritura, discrepancias ledger/modelo y ausencia de dependencias de red/DOM/CostProvider/Budget.
 
+La revisión de PR #117 añadió la equivalencia de códigos con `#` / `##` terminales para resolver `~D` y `~T`, con detección de duplicados y alias por identidad, sin reescribir los códigos originales. También se ignoran los blancos especificados inmediatamente delante de separadores de subcampo `\`; se conservan los blancos significativos en otras posiciones. Los tests nuevos cubren referencias marcadas/no marcadas, `#` interno y espacios, tabuladores y CRLF delante de `~`, `|` y `\`.
+
 ## Verificación
 
-La suite dirigida con regresiones 7C-A/B/C suma **135 PASS, 0 FAIL, 0 SKIP**. La suite amplia sin browser suma **463 tests: 461 PASS, 0 FAIL, 2 SKIP**. Los dos SKIP corresponden a pruebas opcionales de Blender sin `BPY_PYTHON` y `BLENDER_EXE` configurados. `tests/browser.test.cjs` requiere `playwright` en este checkout y queda fuera de la suite no-browser. La primera selección amplia lo incluyó por su nombre y falló por `MODULE_NOT_FOUND: playwright`; se corrigió la selección y la suite no-browser completa terminó verde. Sintaxis de los tres JS nuevos y `git diff --check` pasan. CI/Vercel se informan por separado de los tests locales.
+Tras los cambios de revisión, la suite dirigida con regresiones 7C-A/B/C suma **139 PASS, 0 FAIL, 0 SKIP**. La suite amplia sin browser suma **467 tests: 465 PASS, 0 FAIL, 2 SKIP**. Los dos SKIP corresponden a pruebas opcionales de Blender sin `BPY_PYTHON` y `BLENDER_EXE` configurados. `tests/browser.test.cjs` requiere `playwright` en este checkout y queda fuera de la suite no-browser. La primera selección amplia del PR lo incluyó por su nombre y falló por `MODULE_NOT_FOUND: playwright`; se corrigió la selección y la suite no-browser completa terminó verde. Sintaxis de los tres JS nuevos y `git diff --check` pasan. CI/Vercel se informan por separado de los tests locales.
 
 ## Límites y siguiente paso
 
