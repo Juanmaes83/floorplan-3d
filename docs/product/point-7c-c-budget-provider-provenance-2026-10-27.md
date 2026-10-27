@@ -1,7 +1,7 @@
 # Punto 7C-C — Budget provider provenance y CostQuote bridge
 
 **Fecha:** 27-10-2026
-**Estado:** CANDIDATO EN REVISIÓN
+**Estado:** CERRADO por PR #116, squash `59ca05e1c47aa2a7d020bbb3e44fa49fa2bbf94e`
 **Base exacta:** `master@f1b49f667d5aa6f5c74158cb8a339a81812eabc0`
 **Siguiente corte:** 7C-D — parser FIEBDC-3/BC3.
 

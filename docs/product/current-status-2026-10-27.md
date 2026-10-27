@@ -11,6 +11,7 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 - Punto 7B — Budget Core: cerrado por PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
 - Punto 7C-A — `FloorPlanCostProvider` contrato/core: cerrado por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
 - Punto 7C-B — `ManualCostProvider`: cerrado por PR #114, squash `24584a3ff8ef1d8021d8518738650d18e353863f`.
+- Punto 7C-C — Budget provenance y CostQuote bridge: cerrado por PR #116, squash `59ca05e1c47aa2a7d020bbb3e44fa49fa2bbf94e`.
 
 ## Resumen
 
@@ -26,9 +27,9 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7B | Budget Core | **CERRADO** |
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
 | 7C-B | `ManualCostProvider` | **CERRADO** |
-| 7C-C | Budget provenance de providers | **CANDIDATO EN REVISIÓN** |
-| 7C-D | Parser FIEBDC-3/BC3 | **SIGUIENTE** |
-| 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
+| 7C-C | Budget provenance de providers | **CERRADO** |
+| 7C-D | Codec FIEBDC-3/BC3 | **CANDIDATO EN REVISIÓN** |
+| 7C-E | `BCCA_ES` + gate legal/técnico | **SIGUIENTE / PENDIENTE** |
 | 7D | Presentación/exportación | **PENDIENTE** |
 | 8 | Exterior V1 → V3 | **APROBADO, POSTERIOR** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
@@ -139,7 +140,9 @@ CI del HEAD `a79291e68569c142faeca9504fd0895b0e9e1128`: Guided, Solar, Multiform
 
 Documento: `docs/product/point-7c-b-manual-cost-provider-2026-10-27.md`.
 
-### 7C-C — Budget provenance y CostQuote bridge — CANDIDATO EN REVISIÓN
+### 7C-C — Budget provenance y CostQuote bridge — CERRADO
+
+Cerrado por PR #116, squash `59ca05e1c47aa2a7d020bbb3e44fa49fa2bbf94e`.
 
 `FloorPlanBudgetV1` evoluciona de forma compatible a 1.1.0. `createBudget()` crea 1.1.0; parse/serialize siguen aceptando y preservando 1.0.0 manual-only. `upgradeBudget()` migra explícitamente, sin alterar cálculos, review ni documentos de origen.
 
@@ -149,9 +152,9 @@ Documento: `docs/product/point-7c-c-budget-provider-provenance-2026-10-27.md`.
 
 ### Orden restante de 7C
 
-1. **7C-C — CANDIDATO EN REVISIÓN** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-2. **7C-D — SIGUIENTE** — parser FIEBDC-3/BC3.
-3. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+1. **7C-C — CERRADO** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
+2. **7C-D — CANDIDATO EN REVISIÓN** — codec FIEBDC-3/BC3, lectura y escritura; ver `docs/product/point-7c-d-fiebdc3-bc3-codec-2026-10-27.md`.
+3. **7C-E — SIGUIENTE / PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
 4. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
 La compilación DDC CC BY-NC no se incorpora a producción.
@@ -169,7 +172,7 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
 2. No reabrir 1–6, 7A, 7B, 7C-A o 7C-B salvo regresión reproducible o decisión expresa.
 3. 7C-A fija el contrato/provider core; 7C-B aporta Manual offline permanente.
-4. 7C-C es candidato en revisión; no marcarlo cerrado antes de review y merge.
+4. 7C-C está cerrado por PR #116; 7C-D es el corte técnico actual.
 5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; la versión 1.1.0 se crea nueva o mediante upgrade explícito.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
