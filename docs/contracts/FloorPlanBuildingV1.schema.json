@@ -35,7 +35,7 @@
         "elevationMm": { "type": "integer", "minimum": 0, "maximum": 100000, "description": "Suelo terminado en el marco del edificio. 0 en la planta 0." },
         "slabThicknessMm": { "type": "integer", "minimum": 0, "maximum": 1000, "description": "Espesor visual del forjado bajo la planta; sin significado estructural. 0 en la planta 0." },
         "offsetMm": { "$ref": "#/$defs/pointMm", "description": "Traslación del marco del proyecto al marco del edificio. {0,0} en la planta 0." },
-        "project": { "$ref": "FloorPlanProjectV1.schema.json", "description": "Proyecto 1.x (1.0.0–1.4.0) completo, validado en modo estricto." }
+        "project": { "$ref": "FloorPlanProjectV1.schema.json", "description": "Proyecto 1.x (1.0.0–1.7.0) completo, validado en modo estricto." }
       }
     },
     "stair": {

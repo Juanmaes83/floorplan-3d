@@ -44,8 +44,16 @@ test('site roundtrip, versioning, unknown future project fields and shared build
  assert.throws(()=>B.validate({...updated,schemaVersion:'1.0.0'}),/requires/);assert.throws(()=>Core.validate({...q,schemaVersion:'1.6.0'}),/requires/);
 });
 test('independent NREL SPA published example agrees within 0.5 degrees (product tolerance)',()=>{
+ // https://docs.nlr.gov/docs/fy08osti/34302.pdf, Appendix A reference output.
  // NREL/TP-560-34302 SPA example, 2003-10-17 12:30:30 MST: azimuth 194.34024°, zenith 50.11162°.
  // Minute-only UI uses 12:30:00, a 30s difference. SunCalc refraction differs slightly; no scientific claim.
  const p=Solar.position({latitude:39.742476,longitude:-105.1786,timeZone:'Etc/GMT+7',localDate:'2003-10-17',localTime:'12:30',northOffsetDeg:0});
  assert.ok(Math.abs(p.azimuthDeg-194.34024)<.5);assert.ok(Math.abs(p.altitudeDeg-(90-50.11162))<.5);
+});
+
+test('project and building ZIP roundtrip retain internal site without adding geographic media or network dependencies',async()=>{
+ const Package=require('../js/project-package.js'),T=require('../js/tracing-core.js');
+ const p=Core.initial();p.sourceImages=[];const site={northOffsetDeg:70,location:Geo.Manual.getCoordinates(madrid).location},q=Core.setSite(p,site);
+ const archive=await Package.encode(q,()=>{throw Error('unexpected image');});const entries=await Package.unzip(await archive.arrayBuffer());const parsed=await Package.validateEntries(entries,T.imageInfo);assert.deepEqual(parsed.project.site,site);assert.equal(entries.size,1);
+ const b=B.create(q),pack=await B.packageEntries(b,()=>{throw Error('unexpected image');});const decoded=await B.readEntries(pack.entries,T.imageInfo);assert.deepEqual(decoded.building.site,site);assert.equal(pack.entries.size,2);
 });

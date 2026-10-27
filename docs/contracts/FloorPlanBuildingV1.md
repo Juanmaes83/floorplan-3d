@@ -18,7 +18,7 @@ Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición e
 | Campo | Regla |
 | --- | --- |
 | `schema` | `"rubik-sota.floorplan-building"`. |
-| `schemaVersion` | Sólo `"1.0.0"`. **Cualquier otra versión se rechaza**, incluidos minors futuros: un lector no puede saber qué significado ignoraría. |
+| `schemaVersion` | `"1.0.0"` o `"1.1.0"` (esta última permite `site`). Otras versiones se rechazan, incluidos minors futuros. |
 | `id` | `bld_` más el sufijo del contrato 1.x. Estable: no se regenera al editar, guardar, exportar ni importar. Duplicar o crear una variante genera otro. |
 | `name`, `createdAt`, `updatedAt`, `units` | Nombre de 1–200 caracteres; fechas UTC; `updatedAt ≥ createdAt`; `units: "mm"`. |
 | `levels` | De 1 a **2** plantas en este corte. |
@@ -40,7 +40,7 @@ Cada planta tiene `id` (`lvl_`), `name` (1–80), `order`, `elevationMm`, `slabT
 
 Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 
-- `schemaVersion` debe ser **1.0.0–1.5.0**, las versiones que este lector conoce.
+- `schemaVersion` debe ser **1.0.0–1.7.0**, las versiones que este lector conoce.
 - Se valida con `FloorPlanCore.validate(project, {strict: true})`: cualquier campo no definido en el schema 1.x es un error. Por compatibilidad, un 1.x suelto de versión posterior a 1.0.0 conserva campos desconocidos; aquí no, para impedir que `levels[]`, `levelId` u otro dato multipiso viaje oculto dentro de una planta.
 - En `extensions` (`x-*`) se rechaza cualquier clave, a cualquier profundidad, que nombre plantas, niveles, escaleras o edificio.
 - Un edificio no puede incrustarse dentro de otro.
@@ -99,7 +99,7 @@ Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 ## 5. Migración y exportación de una planta
 
 - **1.x → edificio:** `create(project)` copia el proyecto sin cambios como planta 0. En la app se crea **una entrada nueva**, así que el proyecto 1.x original no se modifica.
-- **Edificio → 1.x («Exportar esta planta»):** devuelve el proyecto de esa planta sin cambios. Es estrictamente válido y lo aceptan el exportador Blender, el MCP y la app. Siempre se acompaña de un aviso de lo que omite: las otras plantas, la elevación, el desplazamiento y las escaleras. Con una sola planta la ida y vuelta no pierde nada.
+- **Edificio → 1.x («Exportar esta planta»):** devuelve el proyecto de esa planta con la configuración `site` compartida, si existe; su geometría no cambia. Es estrictamente válido y lo aceptan el exportador Blender, el MCP y la app. Siempre se acompaña de un aviso de lo que omite: las otras plantas, la elevación, el desplazamiento y las escaleras. Sin `site`, la ida y vuelta de una sola planta conserva el proyecto original sin modificaciones.
 - **Lector 1.x:** `FloorPlanCore.validate` rechaza un edificio con un mensaje explícito. Por tanto lo rechazan también el MCP, el exportador Blender, la importación de proyectos 1.x y el ZIP 1.x. Ninguno lo aplana.
 
 ## 6. JSON y ZIP

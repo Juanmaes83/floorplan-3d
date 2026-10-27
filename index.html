@@ -447,8 +447,8 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 </style>
 <script type="importmap">
 {"imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  "three":"./vendor/three/build/three.module.js",
+  "three/addons/":"./vendor/three/examples/jsm/"
 }}
 </script>
 <link rel="stylesheet" href="css/surface-library.css">
@@ -3651,7 +3651,7 @@ function applyLight(){
   }
   const h = Math.floor(opt.hour), m = Math.round((opt.hour - h)*60);
   $('#sunT').textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-  if(solarResult)window.FloorPlanSolarRenderer.apply({sun,hemi,renderer},solarResult);
+  if(solarResult)window.FloorPlanSolarRenderer.apply({sun,hemi,renderer,lamps:[lampG,...levelLamps],materials:matCache,ground,scene},solarResult);
 }
 
 /* ======================= 相机位姿 / 动画 ======================= */
@@ -4374,7 +4374,7 @@ function presentationRestorePose(state){
 
 window.View3D = {
   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
-  get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length};},
+  get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
   // Building levels: ctx = {activeLevelId, levels, stairs} or null; view = 'active' (up to the active level) | 'all'.
   // Changing the active level moves the world origin (the active level stays at y = 0), so the camera is re-framed.
   // A context identical to the current one is a no-op: no rebuild, so in-flight asset loads are never aborted.

@@ -15,6 +15,7 @@
  const barStatus=el('span','',bar);barStatus.id='solarPreviewStatus';
  const edit=el('button','',bar,'btn');edit.type='button';edit.id='solarEdit';
  const leave=el('button','',bar,'btn');leave.type='button';leave.id='solarPresentation';
+ const barNote=el('small','',bar,'solar-preview-note');
  const editor3d=el('button','',document.querySelector('#sun').closest('.grp'),'btn');editor3d.id='solarOpen3d';editor3d.type='button';
  const dialog=el('dialog',undefined,document.body,'solar-dialog');dialog.id='solarDialog';dialog.setAttribute('aria-labelledby','solarTitle');
  const form=el('form',undefined,dialog);form.noValidate=true;
@@ -45,7 +46,8 @@
  function calculation(){const data=site()||{};return Solar.position({...data.location,northOffsetDeg:data.northOffsetDeg,localDate,localTime});}
  function draftCalculation(){return Solar.position({latitude:lat.value===''?undefined:Number(lat.value),longitude:lon.value===''?undefined:Number(lon.value),timeZone:zone.value.trim(),northOffsetDeg:north.value===''?undefined:Number(north.value),localDate,localTime});}
  function reason(value){return ({north:t('Configura el norte para relacionar la vivienda con el sol.','Set north to relate the home to the sun.','请设置北向，以确定住宅与太阳的关系。'),coordinates:t('Configura latitud y longitud.','Set latitude and longitude.','请设置纬度和经度。'),timeZone:t('Introduce una zona horaria IANA válida.','Enter a valid IANA time zone.','请输入有效的 IANA 时区。'),'ambiguous-time':t('Esta hora se repite por el cambio de horario. Elige otra hora.','This time occurs twice at the clock change. Choose another time.','夏令时转换使该时间出现两次，请选择其他时间。'),'nonexistent-time':t('Esta hora no existe por el cambio de horario. Elige otra hora.','This time does not exist at the clock change. Choose another time.','夏令时转换使该时间不存在，请选择其他时间。')})[value]||t('Introduce una fecha y hora válidas (1900–2150).','Enter a valid date and time (1900–2150).','请输入有效日期和时间（1900–2150 年）。');}
- function resultText(p){return p.status!=='available-orientative'?reason(p.reason):(!p.aboveHorizon?t('Sol bajo el horizonte','Sun below the horizon','太阳在地平线以下'):t('Sol sobre el horizonte','Sun above the horizon','太阳在地平线以上'))+' · '+t('Azimut','Azimuth','方位角')+' '+p.azimuthDeg.toFixed(1)+'° · '+t('Elevación','Elevation','高度角')+' '+p.altitudeDeg.toFixed(1)+'°';}
+ function cardinal(azimuth){return t(['norte','noreste','este','sureste','sur','suroeste','oeste','noroeste'],['north','northeast','east','southeast','south','southwest','west','northwest'],['北','东北','东','东南','南','西南','西','西北'])[Math.round(azimuth/45)%8];}
+ function resultText(p){const format=n=>n.toLocaleString(({es:'es-ES',en:'en-GB',zh:'zh-CN'})[LANG],{minimumFractionDigits:1,maximumFractionDigits:1});return p.status!=='available-orientative'?reason(p.reason):(!p.aboveHorizon?t('Sol bajo el horizonte','Sun below the horizon','太阳在地平线以下'):t('Sol desde el ','Sun from the ','太阳来自')+cardinal(p.azimuthDeg))+' · '+t('Azimut','Azimuth','方位角')+' '+format(p.azimuthDeg)+'° · '+t('Elevación','Elevation','高度角')+' '+format(p.altitudeDeg)+'°';}
  function update(){
   const data=site()||{},p=calculation();
   arrow.style.transform='rotate('+(data.northOffsetDeg??0)+'deg)';arrow.hidden=data.northOffsetDeg===undefined;
@@ -55,9 +57,10 @@
   result.textContent=(dialog.open?t('Vista previa · ','Preview · ','预览 · '):'')+resultText(draft);
   bar.hidden=mode!=='solar';barStatus.textContent=t('Solar orientativo','Indicative solar','日照示意')+' · '+localDate+' · '+localTime+' · '+(p.aboveHorizon?t('Día','Day','白天'):t('Bajo horizonte','Below horizon','地平线以下'));
   document.querySelector('#sun').disabled=mode==='solar';document.querySelector('[data-t="night"]').disabled=mode==='solar';
+  document.querySelector('#sun').closest('label').classList.toggle('solar-artistic-hidden',mode==='solar');
   if(mode==='solar'){
    if(p.status==='available-orientative'){if(!window.FloorPlanPresentation?.active)window.View3D?.setSolar(p);}
-   else{mode='presentation';window.View3D?.setSolar(null);bar.hidden=true;document.querySelector('#sun').disabled=false;document.querySelector('[data-t="night"]').disabled=false;}
+   else{mode='presentation';window.View3D?.setSolar(null);bar.hidden=true;document.querySelector('#sun').disabled=false;document.querySelector('[data-t="night"]').disabled=false;document.querySelector('#sun').closest('label').classList.remove('solar-artistic-hidden');}
   }
  }
  function sync(){if(owner!==app.entryId){owner=app.entryId;mode='presentation';window.View3D?.setSolar(null);if(dialog.open)dialog.close();}update();}
@@ -69,6 +72,7 @@
   privacy.textContent=t('Datos internos, introducidos por el profesional. No aparecen en imágenes, fichas ni vídeo. Los archivos editables JSON/ZIP sí conservan la ubicación.','Internal data entered by the professional. Images, sheets and video do not show it. Editable JSON/ZIP files retain location.','专业人员输入的内部数据，不显示在图片、明细表或视频中。可编辑的 JSON/ZIP 文件会保留位置。');
   dateText.textContent=t('Fecha','Date','日期');timeText.textContent=t('Hora local del proyecto','Project local time','项目当地时间');
   warning.textContent=t('Visualización solar orientativa basada en los datos introducidos. No constituye un estudio de soleamiento, certificación energética ni verificación normativa.','Indicative solar visualization based on the entered data. It is not a sunlight study, energy certification or regulatory verification.','基于输入数据的日照示意，不构成日照研究、能源认证或法规验证。');
+  barNote.textContent=t('Orientativo: no es un estudio de soleamiento, certificación ni verificación normativa.','Indicative: not a sunlight study, certification or regulatory verification.','日照示意，不构成日照研究、认证或法规验证。');
   saveButton.textContent=t('Guardar configuración','Save settings','保存设置');activate.textContent=t('Guardar y ver solar 3D','Save and view solar 3D','保存并查看日照 3D');presentation.textContent=leave.textContent=t('Iluminación de presentación','Presentation lighting','展示照明');edit.textContent=t('Ajustar','Adjust','调整');update();
  }
  function open(){returnFocus=document.activeElement;const data=site()||{};north.value=data.northOffsetDeg??'';lat.value=data.location?.latitude??'';lon.value=data.location?.longitude??'';zone.value=data.location?.timeZone??'';error.textContent='';relang();dialog.showModal();north.focus();}
