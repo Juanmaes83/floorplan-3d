@@ -15,6 +15,7 @@
  const say=(text,ms=5000)=>{const s=$('#levelStatus');if(s)s.textContent=text;toast(text,ms);};
  function blank(name){return FloorPlanRoomLayout.blank(name);}
  function persist(b,opts={}){library.saveBuilding(b,{visible:project,...opts});}
+ function setSite(site){const b=current();if(!b)return false;persist(B.setSite(b,site));window.FloorPlanPresentation?.invalidate();renderAll();return true;}
  // Switches the editor to another level of the open building; one undo/redo history per level. A presentation of
  // the whole building switches levels itself ({presentation:true}): it is not invalidated and no notice is shown.
  function selectLevel(levelId,{presentation=false}={}){
@@ -373,6 +374,7 @@
  $('#levelImageIn').onchange=e=>{const file=e.target.files[0];e.target.value='';if(!file)return;$('#levelsDialog').close();addFromFile(file).catch(err=>toast(err.message,6000));};
  window.FloorPlanBuildingUI={presentationSources,presentLevel:levelId=>selectLevel(levelId,{presentation:true}),packageBuilding,render,propose,applyProposal,cancelProposal,get proposal(){return proposal&&structuredClone(proposal.set.moves);},stairZones,stairZoneList,status,guard,refused,preview,explainPlacement,openConflicts,gate,locate,conflicts(){const b=current();return b?B.stairConflicts(b,{levelId:activeLevel(b).id}):[];},open,takeAdoptedLevel(){const v=adoptedLevel;adoptedLevel=false;return v;},resend(){lastContext='';push3D(current());},selectLevel,entryChanged,adoptImported,importBuilding,importZip,exportBuildingJson,exportBuildingZip,exportLevel,createBuilding,
   get context(){const b=current();if(!b)return null;const A=activeLevel(b);return {buildingId:b.id,buildingName:b.name,levelId:A.id,levelName:A.name,order:A.order,levels:b.levels.length};},
+  get site(){return current()?.site;},setSite,
   get histories(){return histories;}};
  render();
 })();

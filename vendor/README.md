@@ -12,3 +12,7 @@ Se sirven desde el propio despliegue (sin CDN) y se cargan solo al subir un form
 | `web-ifc/` | `web-ifc` (build ESM + `web-ifc.wasm`) | 0.0.78 | MPL-2.0 (`web-ifc/LICENSE.md`); se distribuye sin modificar | Leer IFC (BIM) |
 
 Para actualizar: `npm pack <paquete>@<versión>`, copiar los mismos ficheros y repetir `tests/plan-intake.test.cjs` y `tests/upload.browser.test.cjs`.
+# SunCalc — Point 6
+
+Solar-position dependency closure from SunCalc **2.1.1**, commit `21449f34820c3c80a27a78cdc940747ff19ca1e3` of `Juanmaes83/suncalc-A-tiny-JavaScript-library-for-calculating-sun-moon-positions-and-phases.`. `vendor/suncalc/suncalc.js` retains the upstream prefix through `getPosition`; only the ES export keyword is removed and a UMD wrapper added. Astronomical calculations are unchanged; unused moon/time APIs are omitted. Original BSD-2-Clause copyright and license: `vendor/suncalc/LICENSE`. No runtime CDN or dependency. Upstream v2 output is degrees with azimuth clockwise from north.
+

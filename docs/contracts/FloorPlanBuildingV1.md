@@ -1,5 +1,9 @@
 # FloorPlanBuildingV1 — edificio de varias plantas (primer corte)
 
+## Ampliación 1.1.0 — orientación y ubicación compartidas
+
+Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición explícita de `site` eleva a 1.1.0. `site` es opcional y reutiliza exactamente la definición del proyecto 1.7.0: norte lógico, ubicación IANA y procedencia. La raíz es autoridad para todas las plantas, incluso cuando el campo está ausente. Se conservan sin reescribir los proyectos incrustados, que ahora admiten versiones conocidas 1.0.0–1.7.0. Crear un edificio desde una planta configurada copia `site` a la raíz. Exportar una planta escribe en la copia standalone el `site` compartido (1.7.0 si procede); al no existir configuración compartida, no reaparece una configuración divergente de la planta. JSON/ZIP, copias y variantes conservan estos datos internos. Abrir un edificio antiguo no lo migra ni inventa datos.
+
 **Estado:** contrato del primer corte multipiso, implementado en esta PR (apilada sobre #50) y **pendiente de aceptación**. Juanma eligió la opción D de [#50](../technical/multilevel-contract-gate0-2026-10-17.md) el 18-10-2026. No modifica [FloorPlanProjectV1](FloorPlanProjectV1.md) ni su schema: cada planta sigue siendo un proyecto 1.x válido. Rubik es una herramienta de **propuesta y comunicación**; nada de este documento acredita precisión profesional, documentación técnica, BIM ni cumplimiento normativo o estructural.
 
 **Artefactos:**

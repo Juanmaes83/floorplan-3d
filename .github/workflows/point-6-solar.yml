@@ -1,0 +1,39 @@
+name: Point 6 solar and compatibility
+on:
+  pull_request:
+    branches: [master]
+    paths: ['index.html', 'js/**', 'css/solar.css', 'vendor/suncalc/**', 'tests/**', 'docs/contracts/**', '.github/workflows/point-6-solar.yml']
+permissions:
+  contents: read
+jobs:
+  solar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SOLAR_ARTIFACTS: output/playwright/point-6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Unit regressions
+        run: |
+          git diff --check
+          node --test $(find tests -maxdepth 1 -name '*.test.cjs' ! -name '*browser*' | sort)
+      - name: Browser dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/solar-tools" --no-save playwright@1.62.1 three@0.160.0
+          node "$RUNNER_TEMP/solar-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/solar-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/solar-tools/node_modules/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/solar-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Solar browser and existing PNG contract
+        run: node --test --test-concurrency=1 tests/solar.browser.test.cjs tests/capture-3d.browser.test.cjs tests/surface-sheet.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: point-6-${{ github.event.pull_request.head.sha }}
+          path: output/playwright/point-6/
+          if-no-files-found: ignore
