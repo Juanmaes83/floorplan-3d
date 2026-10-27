@@ -10,6 +10,7 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 - Punto 7A — Quantity Engine: cerrado por PR #108, squash `57adfde7e10cdd7a6b7defcbe197d5e3d067e462`.
 - Punto 7B — Budget Core: cerrado por PR #110, squash `5de3af3f322e38f868e0214bea196b06fc3ae21a`.
 - Punto 7C-A — `FloorPlanCostProvider` contrato/core: cerrado por PR #112, squash `1f1b651c997bb7596ef3ed5b8d3e859ce6f196e3`.
+- Punto 7C-B — `ManualCostProvider`: cerrado por PR #114, squash `24584a3ff8ef1d8021d8518738650d18e353863f`.
 
 ## Resumen
 
@@ -24,7 +25,7 @@ No deducir el estado actual desde documentos fechados anteriores. Si existe cont
 | 7A | Quantity Engine | **CERRADO** |
 | 7B | Budget Core | **CERRADO** |
 | 7C-A | `FloorPlanCostProvider` contrato/core | **CERRADO** |
-| 7C-B | `ManualCostProvider` | **CANDIDATO EN REVISIÓN** |
+| 7C-B | `ManualCostProvider` | **CERRADO** |
 | 7C-C | Budget provenance de providers | **SIGUIENTE** |
 | 7C-D | Parser FIEBDC-3/BC3 | **PENDIENTE** |
 | 7C-E | `BCCA_ES` + gate legal/técnico | **PENDIENTE** |
@@ -128,19 +129,22 @@ Documentos:
 
 La estabilización de CI solar asociada a #112 divide el recorrido desktop en fases secuenciales conservando acciones y assertions, sin cambios de producto, Three.js, matemáticas solares, PNG ni CostProvider. CI final del HEAD `5fc2f78269bed82f829e32f7b17577b620c1f08a`: Solar, Guided, Multiformat y Vercel en verde.
 
-### 7C-B — ManualCostProvider — CANDIDATO EN REVISIÓN
+### 7C-B — ManualCostProvider — CERRADO
+
+Cerrado por PR #114, squash `24584a3ff8ef1d8021d8518738650d18e353863f`.
 
 Primer provider concreto y opción offline permanente. `FloorPlanManualCostProvider` aporta un quote EUR normalizado con procedencia humana explícita, licencia `not-applicable` y precio cero válido. Usa el registry y los validadores de 7C-A; no tiene catálogo, red, storage, UI ni selección automática entre providers. Un quote manual no marca una partida como revisada. El corte termina en CostQuote: Budget V1.0.0 permanece intacto y el bridge CostQuote → Budget corresponde a 7C-C.
+
+CI del HEAD `a79291e68569c142faeca9504fd0895b0e9e1128`: Guided, Solar, Multiformat y Vercel en verde.
 
 Documento: `docs/product/point-7c-b-manual-cost-provider-2026-10-27.md`.
 
 ### Orden restante de 7C
 
-1. **7C-B** — `ManualCostProvider`, candidato en revisión.
-2. **7C-C — SIGUIENTE** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
-3. **7C-D — PENDIENTE** — parser FIEBDC-3/BC3.
-4. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
-5. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
+1. **7C-C — SIGUIENTE** — evolución compatible de `FloorPlanBudgetV1` para provenance/reference prices.
+2. **7C-D — PENDIENTE** — parser FIEBDC-3/BC3.
+3. **7C-E — PENDIENTE** — adapter `BCCA_ES` con fixtures sintéticos y gate legal/técnico.
+4. Activar datos BCCA reales solo cuando las condiciones oficiales de reutilización/redistribución comercial estén verificadas.
 
 La compilación DDC CC BY-NC no se incorpora a producción.
 
@@ -155,10 +159,10 @@ Asset Lab para mobiliario/equipamiento/catálogo comercial cuando exista demanda
 ## Regla para agentes
 
 1. Leer primero este archivo y verificar `master`/SHA antes de trabajar.
-2. No reabrir 1–6, 7A, 7B o 7C-A salvo regresión reproducible o decisión expresa.
-3. 7C-A no implementa ningún provider real.
-4. 7C-B es candidato en revisión: Manual y offline permanente. 7C-C es el siguiente corte.
-5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only; providers externos requieren evolución compatible explícita en 7C-C.
+2. No reabrir 1–6, 7A, 7B, 7C-A o 7C-B salvo regresión reproducible o decisión expresa.
+3. 7C-A fija el contrato/provider core; 7C-B aporta Manual offline permanente.
+4. 7C-C es el siguiente corte y debe conectar provenance/reference prices con Budget de forma compatible.
+5. `FloorPlanBudgetV1` 1.0.0 permanece válido/manual-only hasta la evolución explícita de 7C-C.
 6. No activar BCCA real sin gate legal/técnico verificado.
 7. No introducir DDC CC BY-NC en producción.
 8. No adelantar UI/exportación de 7D dentro de 7C.
