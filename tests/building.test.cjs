@@ -47,7 +47,7 @@ test('strict level profile rejects hidden multi-level meaning a 1.x reader would
   'levelId on a wall':[b=>{b.levels[1].project.walls[0].levelId='lvl_fixture-ground';},/walls\/0\/levelId: unknown field/],
   'x-levels extension':[b=>{b.levels[1].project.extensions={'x-levels':{floors:2}};},/x-levels: multi-level data is not allowed/],
   'nested stair key in an extension':[b=>{b.levels[0].project.extensions={'x-meta':{stairs:[]}};},/x-meta\/stairs: multi-level data is not allowed/],
-  'unknown future 1.x version':[b=>{b.levels[0].project.schemaVersion='1.6.0';},/unsupported level project version 1.6.0/],
+  'unknown future 1.x version':[b=>{b.levels[0].project.schemaVersion='1.7.0';},/unsupported level project version 1.7.0/],
   'nested building':[b=>{b.levels[1].project={...F.build().building};},/a building cannot be nested/],
  };
  for(const [name,[mutate,message]] of Object.entries(cases)){const b=F.build().building;mutate(b);assert.throws(()=>B.validate(b),message,name);}
