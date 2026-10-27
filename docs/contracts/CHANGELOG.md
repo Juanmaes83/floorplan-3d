@@ -1,5 +1,13 @@
 # Cambios compatibles de FloorPlanProjectV1
 
+## 1.6.0 — familia de estancia y nombre libre (punto 4)
+
+- `rooms[].family` es opcional y persistente. Valores conocidos: `unspecified`, `living`, `dining`, `kitchen`, `bedroom`, `bathroom`, `toilet`, `office`, `hallway`, `storage`, `laundry`, `terrace`, `balcony`, `garage`, `utility`, `other`.
+- Ausencia de `family` equivale a `unspecified` solo para la UI. `other` es una decisión distinta. No se infiere desde `name`.
+- `rooms[].name` es texto libre opcional o vacío. La etiqueta de reserva se deriva para mostrarla sin escribirla en el proyecto; los nombres existentes se conservan y pueden repetirse.
+- Editar `name` o `family` eleva proyectos anteriores a 1.6.0; abrirlos no los migra. Valores `family` desconocidos de versiones V1 posteriores se conservan y se presentan como `unspecified`.
+- La geometría y los cálculos de superficie no cambian. Schema canónico y embebido son iguales.
+
 ## 1.5.0 — tipo declarado de muro y su procedencia (punto 2 del roadmap, pendiente de revisión)
 
 - `walls[].structure` admite además `other` («Otro»). Los valores anteriores no cambian.

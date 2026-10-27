@@ -2,7 +2,7 @@
 (function(){
  'use strict';
  const Core=FloorPlanPresentationCore,app=FloorPlanApp,tx=(es,en,zh)=>FloorPlanGuide.text([es,en,zh||es],LANG);
- const roomName=name=>typeof nm==='function'?nm(name):name;
+ const roomName=(roomId,levelId)=>roomDisplay((buildingConfig?.find(level=>level.levelId===levelId)?.project||app.project).rooms.find(room=>room.id===roomId));
  const el=(tag,text,parent,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;parent?.append(node);return node;};
  const button=(text,parent,fn)=>{const node=el('button',text,parent,'btn');node.type='button';node.onclick=fn;return node;};
  const headerButton=button('',document.querySelector('header'),()=>open());headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
@@ -70,7 +70,7 @@
   for(const room of data.rooms){
    const path=svgEl('polygon',mapSvg,{points:room.poly.map(point=>point.join(',')).join(' '),'data-room-id':room.id,class:`presentation-minimap-room${room.active?' active':''}${chosen.has(room.id)?' selectable':''}`});
    if(chosen.has(room.id)){
-    path.setAttribute('role','button');path.setAttribute('tabindex','0');path.setAttribute('aria-label',tx(`Ir a ${roomName(room.name)}`,`Go to ${roomName(room.name)}`,`前往 ${roomName(room.name)}`));
+    path.setAttribute('role','button');path.setAttribute('tabindex','0');path.setAttribute('aria-label',tx(`Ir a ${roomName(room.id,plan.stops[index].levelId)}`,`Go to ${roomName(room.id,plan.stops[index].levelId)}`,`前往 ${roomName(room.id,plan.stops[index].levelId)}`));
     path.setAttribute('aria-current',room.active?'location':'false');
     path.addEventListener('click',()=>{if(!batchActive)go(chosen.get(room.id));});
     path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(!batchActive)go(chosen.get(room.id));}});
@@ -154,7 +154,7 @@
  // Delivery image (js/delivery-image.js): the whole home framed to fill the picture on the overview, the stop's own
  // camera on a room; the project data and the brand go in their own band (never over the home). The preview IS the
  // file that is downloaded or shared: same data URL, same bytes.
- async function viewImage({format='landscape',contact=false}={}){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
+ async function viewImage({format='landscape',contact=false}={}){const stop=plan.stops[index],label=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');
   // Landscape: image on the left and the data in a side column (a compact home keeps the whole height; measured in
   // docs/qa/delivery-image-2026-10-22.md). Portrait: image above a data band.
   const D=window.FloorPlanDeliveryImage,layout=format==='landscape'?'side':'band',A=D.imageArea(format,layout);
@@ -204,7 +204,7 @@
   const st=blocked();if(st){toast(blockedMessage(st),8000);return;}
   captureButton.disabled=true;
   // With a brand, the PNG the client receives carries its strip (same size); without a brand, as before.
-  if(brandSnap){const stop=plan.stops[index];Promise.resolve().then(async()=>{const shot=View3D.shot({...captureOptions,download:false});const url=await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览'));const a=document.createElement('a');a.download='rubik-sota-presentacion.png';a.href=url;a.click();}).catch(error=>toast(error.message||String(error),6000)).finally(()=>updateCapture());return;}
+  if(brandSnap){const stop=plan.stops[index];Promise.resolve().then(async()=>{const shot=View3D.shot({...captureOptions,download:false});const url=await FloorPlanBrandUI.stamp(shot.dataUrl,brandSnap,stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览'));const a=document.createElement('a');a.download='rubik-sota-presentacion.png';a.href=url;a.click();}).catch(error=>toast(error.message||String(error),6000)).finally(()=>updateCapture());return;}
   try{View3D.shot(captureOptions);}
   catch(error){toast(error.message||String(error),6000);}
   finally{updateCapture();}
@@ -257,7 +257,7 @@
     await View3D.presentationGo(stop,true);await nextFrame();
     if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true')return;
     if(View3D.lifecycleMetrics.pendingAssets)throw Error(tx('Los modelos 3D siguen cargando; no se descargó ningún archivo. Vuelve a intentarlo.','3D models are still loading; nothing was downloaded. Try again.','3D 模型仍在加载；未下载任何文件。'));
-    const label=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');
+    const label=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');
     const camera=View3D.presentationPose(),{shot,bytes}=await pngShot(`${stop.levelName} · ${label}`);
     if(!batchCurrent(serial,sourceEpoch))return;
     const filename=`views/view-${String(i+1).padStart(3,'0')}.png`;
@@ -314,7 +314,7 @@
     batchStatus.textContent=tx(`Capturando ${i+1} de ${sourcePlan.stops.length}…`,`Capturing ${i+1} of ${sourcePlan.stops.length}…`,`正在截取 ${i+1} / ${sourcePlan.stops.length}…`);
     await View3D.presentationGo(sourcePlan.stops[i],true);await nextFrame();
     if(!batchCurrent(serial,sourceEpoch)||overlay.dataset.moving==='true'||View3D.lifecycleMetrics.pendingAssets)return;
-    const stopLabel=sourcePlan.stops[i].kind==='room'?roomName(sourcePlan.stops[i].label):tx('Vista general','Overview','总览');
+    const stopLabel=sourcePlan.stops[i].kind==='room'?roomName(sourcePlan.stops[i].roomId,sourcePlan.stops[i].levelId):tx('Vista general','Overview','总览');
     const camera=View3D.presentationPose(),{shot,bytes}=await pngShot(stopLabel);
     if(!batchCurrent(serial,sourceEpoch))return;
     const filename=`views/view-${String(i+1).padStart(3,'0')}.png`;
@@ -427,7 +427,7 @@
   routeButton.hidden=!plan||plan.stops[index]?.kind!=='room';
   routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
   if(!plan)return;
-  const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.label):tx('Vista general','Overview','总览');title.title=title.textContent;
+  const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');title.title=title.textContent;
   window.FloorPlanBrandUI?.decorate(card,brandSnap,{index,count:plan.stops.length,kind:stop.kind});
   // Building: the level of every view is named; the first view of a level says that the level changes.
   levelLine.hidden=!isBuildingPlan();
@@ -452,7 +452,7 @@
   plan.stops.forEach((item,i)=>{
    // Building: a level heading before the first view of each level; equal room names stay apart by level.
    if(isBuildingPlan()&&(i===0||plan.stops[i-1].levelId!==item.levelId)){const head=el('span',item.levelName,stops,'presentation-stops-level');head.dataset.level=item.levelId;}
-   const text=item.kind==='room'?roomName(item.label):tx('Vista general','Overview','总览');
+   const text=item.kind==='room'?roomName(item.roomId,item.levelId):tx('Vista general','Overview','总览');
    const b=button(text,stops,()=>go(i));b.classList.toggle('on',i===index);b.disabled=batchActive;b.setAttribute('aria-current',i===index?'step':'false');
    if(isBuildingPlan()){b.dataset.level=item.levelId;b.setAttribute('aria-label',`${text} · ${item.levelName}`);}
   });
@@ -533,7 +533,7 @@
    try{const raw=localStorage.getItem(Core.key(app.entryId,level.project.id));if(raw!==null){saved=JSON.parse(raw);if(saved===null)corrupt=true;}}catch{corrupt=true;}
    const result=presentable?Core.reconcile(saved,level.project,level.geometry,app.entryId,level.revision):{selected:[],changed:false,missing:0,invalid:false};
    return {levelId:level.levelId,name:level.name,presentable,selected:result.selected,roomOrder:[...result.selected,...valid.map(r=>r.id).filter(id=>!result.selected.includes(id))],
-    names:new Map(valid.map(r=>[r.id,roomName(r.name)])),message:corrupt||result.invalid?'invalid':result.changed?'changed':null};
+    project:level.project,names:new Map(valid.map(r=>[r.id,roomDisplay(level.project.rooms.find(room=>room.id===r.id))])),message:corrupt||result.invalid?'invalid':result.changed?'changed':null};
   });
   if(!buildingConfig.some(level=>level.presentable)){buildingConfig=null;return false;}
   const note=el('p',tx(`Presentación del edificio «${sources.building.name}»: las estancias elegidas de sus ${levels.length} plantas, en una sola presentación y un solo lote. Cada planta empieza con su vista general; la escalera no se recorre.`,`Building presentation «${sources.building.name}»: the chosen rooms of its ${levels.length} levels in one presentation and one batch. Each level starts with its overview; the stair is not walked.`,`建筑展示：«${sources.building.name}»。`),config,'presentation-level-note');note.id='presentationLevelNote';
@@ -571,7 +571,7 @@
   if(!roomList)return;
   if(buildingConfig){renderBuildingConfig();return;}
   roomList.replaceChildren();
-  const names=new Map(app.geometry.rooms.map(r=>[r.id,roomName(r.name)]));
+  const names=new Map(app.geometry.rooms.map(r=>[r.id,roomName(r.id)]));
   roomOrder.forEach((id,i)=>{
    const row=el('div',undefined,roomList,'presentation-room-row');
    const label=el('label',undefined,row);const input=el('input',undefined,label);input.type='checkbox';input.value=id;input.checked=selectedRooms.includes(id);

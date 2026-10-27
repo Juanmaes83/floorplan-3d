@@ -61,6 +61,10 @@
     },
     "extensions": { "$ref": "#/$defs/extensions" }
   },
+  "allOf": [
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
+  ],
   "$defs": {
     "idSuffix": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "projectId": { "type": "string", "pattern": "^prj_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
@@ -231,11 +235,12 @@
     "room": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "polygon", "floorMaterialId", "countsTowardArea"],
+      "required": ["id", "polygon", "floorMaterialId", "countsTowardArea"],
       "description": "Estancia como polígono simple explícito (caras interiores), independiente de los muros. La coherencia con los muros se comprueba como aviso, no como error.",
       "properties": {
         "id": { "$ref": "#/$defs/roomId" },
-        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "name": { "type": "string", "maxLength": 100, "description": "Nombre libre de presentación. Opcional o vacío desde 1.6.0; con family explícita no se traduce. Sin family se conserva la traducción visual legacy. No determina family." },
+        "family": { "type": "string", "description": "Clasificación opcional desde 1.6.0. Valores V1 conocidos: unspecified, living, dining, kitchen, bedroom, bathroom, toilet, office, hallway, storage, laundry, terrace, balcony, garage, utility, other. Un valor futuro desconocido se conserva en versiones V1 posteriores; la UI lo muestra como unspecified." },
         "polygon": { "type": "array", "minItems": 3, "maxItems": 200, "items": { "$ref": "#/$defs/point" }, "description": "Vértices en orden, sin repetir el primero al final." },
         "floorMaterialId": { "$ref": "#/$defs/materialId" },
         "countsTowardArea": { "type": "boolean", "description": "false para miradores, huecos técnicos, etc." },

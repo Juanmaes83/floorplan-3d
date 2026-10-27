@@ -58,6 +58,13 @@ test('actual file import and export preserve full F0 contract including optional
 test('room finishes, measurements/history and wall demolition update the canonical project',async t=>{
   const {page,errors}=await pageFor(t);
   await page.locator('#panel tr[data-room="rom_master"]').click();await page.fill('#rName','My room');await page.locator('#rName').press('Tab');
+  await page.locator('#rFamily').selectOption('bedroom');
+  assert.deepEqual(await page.evaluate(()=>{const r=FloorPlanApp.project.rooms.find(r=>r.id==='rom_master');return {name:r.name,family:r.family};}),{name:'My room',family:'bedroom'});
+  await page.fill('#rName','Guest room');await page.locator('#rName').press('Tab');
+  assert.equal(await page.locator('#rFamily').inputValue(),'bedroom');
+  await page.locator('#rFamily').selectOption('other');
+  assert.equal(await page.locator('#rName').inputValue(),'Guest room');
+  await page.fill('#rName','My room');await page.locator('#rName').press('Tab');
   await page.locator('#panel [data-mat="mat_carpet"]').click();
   assert.deepEqual(await page.evaluate(()=>{const r=FloorPlanApp.project.rooms.find(r=>r.id==='rom_master');return {name:r.name,material:r.floorMaterialId};}),{name:'My room',material:'mat_carpet'});
   await page.click('[data-tool="measure"]');const box=await page.locator('#plan').boundingBox();
@@ -460,5 +467,58 @@ test('F2 raw export invalidates pending download on reference, scale, image, pro
  await prepare();await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);FloorPlanTracing.calibrate(p,p.sourceImages[0].id,{x:50,y:50},{x:450,y:50},8000);FloorPlanApp.importProject(p);});await stale();
  await prepare();await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.sourceImages[0].id='img_different';p.scale={confidence:'pending',method:'none'};FloorPlanApp.importProject(p);});await stale();
  await page.locator('#traceBtn').click();await knownDistance(page,'traceCalibrate',{x:50,y:50},{x:450,y:50},4000);await prepare();await page.evaluate(()=>FloorPlanApp.importProject(FloorPlanTracing.blank()));await stale();
+ assert.deepEqual(errors,[]);
+});
+
+test('room labels and guide selection preserve legacy names and prefer explicit family',async t=>{
+ const {page,errors}=await pageFor(t);
+ const initial=await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.schemaVersion='1.6.0';p.rooms[0].name='主卧室';delete p.rooms[0].family;p.rooms[1].name='主卧室';p.rooms[1].family='bedroom';p.rooms[2].name='';p.rooms[2].family='bedroom';p.rooms[3].name='';p.rooms[3].family='unspecified';p.rooms[4].name='';p.rooms[4].family='future-family';p.schemaVersion='1.7.0';FloorPlanApp.importProject(p);return p.rooms.slice(0,5).map(r=>({id:r.id,name:r.name,family:r.family}));});
+ const shown=await page.evaluate(ids=>ids.map(({id})=>roomDisplay(FloorPlanApp.project.rooms.find(r=>r.id===id))),initial);
+ assert.deepEqual(shown,['Dormitorio principal','主卧室','Dormitorio','Estancia','Estancia']);
+ assert.deepEqual(await page.evaluate(()=>FloorPlanApp.project.rooms.slice(0,5).map(r=>({id:r.id,name:r.name,family:r.family}))),initial);
+ await page.evaluate(()=>FloorPlanPresentation.open());
+ const configNames=await page.locator('#presentationConfig .presentation-room-row label span').allTextContents();
+ assert.deepEqual(configNames.slice(0,5),shown);
+ await page.locator('#presentationConfig button').last().click();
+ const action=await page.evaluate(()=>FloorPlanGuide.resolve('poner una cama en dormitorio')[0]);assert.equal(action.roomHint,'bedroom');
+ await page.evaluate(a=>FloorPlanGuideUI.execute(a),action);
+ assert.equal(await page.evaluate(()=>FloorPlanGuideUI.state().targetRoomId),initial[1].id);
+ await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);delete p.rooms[1].family;p.rooms[1].name='Sin coincidencia';p.rooms[2].family='unspecified';FloorPlanApp.importProject(p);});
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.evaluate(a=>FloorPlanGuideUI.execute(a),action);
+ assert.equal(await page.evaluate(()=>FloorPlanGuideUI.state().targetRoomId),initial[0].id);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ assert.equal(await page.evaluate(()=>Object.hasOwn(FloorPlanApp.project.rooms[0],'family')),false);
+ assert.deepEqual(errors,[]);
+});
+
+test('room properties show localized legacy name without saving and distinguish unspecified type',async t=>{
+ const {page,errors}=await pageFor(t);
+ await page.evaluate(()=>setLang('es'));
+ const before=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
+ await page.evaluate(()=>select({kind:'room',id:'rom_master'}));
+ assert.equal(await page.locator('#rName').inputValue(),'Dormitorio principal');
+ assert.equal(await page.evaluate(()=>roomDisplay(FloorPlanApp.project.rooms.find(r=>r.id==='rom_master'))),'Dormitorio principal');
+ assert.equal(await page.locator('#rFamily option:checked').textContent(),'Sin especificar');
+ assert.deepEqual(await page.locator('#rFamily option[value="bedroom"], #rFamily option[value="office"], #rFamily option[value="other"]').allTextContents(),['Dormitorio','Despacho','Otra estancia']);
+ assert.equal((await page.locator('#panel .room-panel').textContent()).includes('主卧室'),false);
+ assert.equal((await page.locator('#gRooms').textContent()).includes('主卧室'),false);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ await page.evaluate(()=>setLang('en'));
+ assert.equal(await page.locator('#rName').inputValue(),'Master Bedroom');
+ assert.equal(await page.locator('#rFamily option:checked').textContent(),'Unspecified');
+ assert.equal((await page.locator('#panel .room-panel').textContent()).includes('主卧室'),false);
+ assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),before);
+ await page.evaluate(()=>setLang('es'));
+ await page.locator('#rName').fill('Habitación invitados');await page.locator('#rName').press('Tab');
+ assert.deepEqual(await page.evaluate(()=>{const r=FloorPlanApp.project.rooms.find(r=>r.id==='rom_master');return {name:r.name,family:r.family,display:roomDisplay(r)};}),{name:'Habitación invitados',family:undefined,display:'Habitación invitados'});
+ assert.equal(await page.locator('#rName').inputValue(),'Habitación invitados');
+ await page.evaluate(()=>{const p=FloorPlanCore.clone(FloorPlanApp.project);p.rooms[0].name='';p.rooms[0].family='unspecified';FloorPlanApp.importProject(p);select({kind:'room',id:'rom_master'});});
+ assert.equal(await page.locator('#rName').inputValue(),'');
+ assert.equal(await page.locator('#rFamily option:checked').textContent(),'Sin especificar');
+ assert.equal(await page.evaluate(()=>roomDisplay(FloorPlanApp.project.rooms[0])),'Estancia');
+ await page.evaluate(()=>setLang('en'));
+ assert.equal(await page.locator('#rFamily option:checked').textContent(),'Unspecified');
+ assert.equal(await page.evaluate(()=>roomDisplay(FloorPlanApp.project.rooms[0])),'Room');
  assert.deepEqual(errors,[]);
 });

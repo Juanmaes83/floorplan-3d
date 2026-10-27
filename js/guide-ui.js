@@ -232,7 +232,7 @@
   if(fromWelcome)closeWelcome();
   if(a.id==='presentation')return window.FloorPlanPresentation?.open();
   if(a.id==='missing'){state().closed=false;render();return openDetails();}
-  if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&project.rooms.find(r=>G.normalize(nm(r.name)).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina'));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}
+  if((a.goal&&state().goal!==a.goal)||a.targetType){const targetRoom=a.roomHint&&(project.rooms.find(r=>r.family===a.roomHint)||project.rooms.find(r=>G.normalize(nm(r.name||'')).includes(a.roomHint==='bedroom'?LANG==='en'?'bed':'dorm':LANG==='en'?'kitchen':'cocina')));setGoal(a.goal,{targetType:a.targetType,targetRoomId:targetRoom?.id});if(targetRoom)select({kind:'room',id:targetRoom.id});}
   const block=requirement(a);if(block){if(block==='start')afterCopy=a;state().current=block;state().closed=false;store();render();
    // In the example the copy is one step away: the card asks for it in place, without opening the task list.
    if(block==='start'){focusReturns.set(actionDialog,currentAction);currentAction.focus();return;}

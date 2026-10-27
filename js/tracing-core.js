@@ -94,7 +94,7 @@
   const height=kind==='window'?Math.min(1200,w.heightMm):Math.min(2100,w.heightMm),sill=kind==='window'?Math.min(900,w.heightMm-height):0;
   const o={id:C.id('opn'),wallId,kind,offsetMm:offset,widthMm:width,heightMm:height,sillHeightMm:sill,source:{method:'manual',review:'unreviewed'},...(kind==='door'?{swing:{hinge:'start',side:'left'}}:{})};p.openings.push(o);C.validate(p);return o;
  }
- function room(p,polygon,name='Estancia'){const labelAt=C.point({x:polygon.reduce((n,v)=>n+v.x,0)/polygon.length,y:polygon.reduce((n,v)=>n+v.y,0)/polygon.length});const r={id:C.id('rom'),name,polygon:polygon.map(C.point),labelAt,floorMaterialId:p.materials.find(m=>m.category==='floor').id,countsTowardArea:true,source:{method:'manual',review:'unreviewed'}};p.rooms.push(r);C.validate(p);return r;}
+ function room(p,polygon,name='Estancia'){const labelAt=C.point({x:polygon.reduce((n,v)=>n+v.x,0)/polygon.length,y:polygon.reduce((n,v)=>n+v.y,0)/polygon.length});const r={id:C.id('rom'),name,family:'unspecified',polygon:polygon.map(C.point),labelAt,floorMaterialId:p.materials.find(m=>m.category==='floor').id,countsTowardArea:true,source:{method:'manual',review:'unreviewed'}};p.rooms.push(r);if(Number(p.schemaVersion.split('.')[1])<6)p.schemaVersion='1.6.0';C.validate(p);return r;}
  function remove(p,kind,id){if(kind==='wall'){p.walls=p.walls.filter(w=>w.id!==id);p.openings=p.openings.filter(o=>o.wallId!==id);}else if(kind==='opening')p.openings=p.openings.filter(o=>o.id!==id);else if(kind==='room'){p.rooms=p.rooms.filter(r=>r.id!==id);for(const o of p.objects)if(o.roomId===id)delete o.roomId;}C.validate(p);}
  const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
  function crossing(a,b,c,d){return cross(a,b,c)*cross(a,b,d)<0&&cross(c,d,a)*cross(c,d,b)<0;}
