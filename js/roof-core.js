@@ -90,6 +90,11 @@
       shifted.push(corner);
     }
     const outer=canonical(shifted);if(outer.status!=='available')return fail('unavailable','invalid-exterior-offset');
+    // The cycle only proves a body if it encloses the indoor rooms 8A read (same filter): a closed shaft among rooms
+    // without perimeter walls, or a room drawn outside the walls, is not a proved footprint.
+    const indoor=(project.rooms||[]).filter(r=>Array.isArray(r.polygon)&&r.polygon.length>=3&&!['terrace','balcony'].includes(r.family));
+    const covered=v=>contains(outer.polygon,v.x,v.y)||outer.polygon.some((a,i)=>onSegment(v,a,outer.polygon[(i+1)%outer.polygon.length]));
+    if(!indoor.every(r=>r.polygon.every(covered)))return fail('unavailable','room-outside-facade-cycle');
     const heights=walls.map(w=>w.heightMm);
     if(heights.some(h=>!Number.isFinite(h)||h<=0))return fail('unavailable','invalid-facade-height');
     if(heights.some(h=>Math.abs(h-heights[0])>EPS.heightMm))return fail('unavailable','heterogeneous-top-elevation');

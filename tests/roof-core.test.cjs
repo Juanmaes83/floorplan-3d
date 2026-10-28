@@ -46,6 +46,25 @@ test('open/multiple facades and heterogeneous tops abstain',()=>{
   const missing=project(rectangle);delete missing.walls[1].heightMm;assert.deepEqual(Roof.footprint(missing,Exterior),{status:'unavailable',reason:'invalid-facade-height'});
   const r=project(rectangle);r.walls.push(...project(rect(8000,0,10000,2000)).walls.map((w,i)=>({...w,id:`extra_${i}`})));assert.equal(Roof.footprint(r,Exterior).status,'unavailable');
 });
+test('a facade cycle that does not enclose the indoor rooms abstains (audit regression)',()=>{
+  // Rooms without perimeter walls around a closed 1×1 m shaft: the shaft walls are the only facade cycle.
+  const shaft={walls:project(rect(4000,3000,5000,4000)).walls,openings:[],materials:[],rooms:[
+    {id:'rom_a',polygon:rect(0,0,4000,8000)},{id:'rom_b',polygon:rect(4000,0,10000,3000)},
+    {id:'rom_c',polygon:rect(5000,3000,10000,8000)},{id:'rom_d',polygon:rect(4000,4000,5000,8000)}]};
+  assert.equal(Exterior.derive(shaft).status,'available');
+  assert.deepEqual(Roof.footprint(shaft,Exterior),{status:'unavailable',reason:'room-outside-facade-cycle'});
+  // As an upper level it must not turn the lower roof under those rooms into exposed roof.
+  const b={levels:[{id:'lvl_0',elevationMm:0,offsetMm:{x:0,y:0},project:project(rect(0,0,10000,8000))},{id:'lvl_1',elevationMm:3200,offsetMm:{x:0,y:0},project:shaft}]};
+  assert.deepEqual(Roof.deriveBuilding(b,Exterior,Building),{status:'unavailable',reason:'room-outside-facade-cycle',levelId:'lvl_1'});
+  // A walled body plus an indoor room drawn outside its walls is not one proved footprint.
+  const annex=project(rectangle);annex.rooms.push({id:'rom_garage',family:'garage',polygon:rect(7000,0,10000,4000)});
+  assert.equal(Roof.footprint(annex,Exterior).reason,'room-outside-facade-cycle');
+  // Terrace/balcony stay outside the body as in 8A; a room drawn to the outer face is still enclosed.
+  const terrace=project(rectangle);terrace.rooms.push({id:'rom_terrace',family:'terrace',polygon:rect(7000,0,10000,4000)});
+  assert.equal(Roof.footprint(terrace,Exterior).status,'available');
+  const flush=project(rectangle);flush.rooms=[{id:'rom_flush',polygon:rect(-100,-100,6100,4100)}];
+  assert.equal(Roof.footprint(flush,{derive:()=>({status:'available',walls:flush.walls.map(w=>({wallId:w.id,status:'facade'}))})}).status,'available');
+});
 test('self-intersection and almost-zero edges are invalid',()=>{
   assert.equal(Roof.canonical([{x:0,y:0},{x:4000,y:4000},{x:0,y:4000},{x:4000,y:0}]).status,'invalid');
   assert.equal(Roof.canonical([{x:0,y:0},{x:0.00001,y:0},{x:1000,y:0}]).status,'invalid');
