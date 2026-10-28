@@ -655,6 +655,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/reference-project.js"></script>
 <script src="js/geo-provider.js"></script>
 <script src="js/project-core.js"></script>
+<script src="js/exterior-core.js"></script>
 <script src="js/surface-catalog.js"></script>
 <script src="js/generic-catalog.js"></script>
 <script src="js/furniture-search.js"></script>
@@ -1017,6 +1018,7 @@ let project = library ? library.project() : loadedProject.project;
 const originalStorage=storage;
 if(library)storage={getItem:key=>key===STORE?JSON.stringify(library.project()):originalStorage.getItem(key),setItem(key,value){if(key===STORE)library.save(JSON.parse(value));else originalStorage.setItem(key,value);}};
 let geometry = Core.geometry(project);
+let exterior = FloorPlanExterior.derive(project);
 let rendered2DSource;
 let BOUNDS = geometry.bounds;
 // Legacy price presentation is UI configuration, deliberately outside the contract.
@@ -1024,6 +1026,7 @@ const DISPLAY_PRICES = {"wood": 320, "walnut": 380, "tile800": 220, "tile600": 1
 let MATS;
 function refreshProject() {
   geometry = Core.geometry(project); BOUNDS = geometry.bounds;
+  exterior = FloorPlanExterior.derive(project);
   MATS = Object.fromEntries(project.materials.map(m => [m.id, {name:m.name, sw:m.appearance.color, preset:m.appearance.preset,
     price:m.appearance.preset?.startsWith('surface-')?null:(DISPLAY_PRICES[m.id.replace(/^mat_/, '')] ?? 0)}]));
 }
@@ -1261,6 +1264,7 @@ function renderFurn(){
 }
 
 function renderWalls(){
+  const exteriorStatus=new Map(exterior.walls.map(w=>[w.wallId,w.status]));
   SafeDOM.markup($('#gWalls'), geometry.walls.map((w,i) => {
     const [x0,y0,x1,y1,k] = w, id = w.id, dem = w.status === 'demolished';
     // A declared load-bearing wall has its own tone: information, not the template's fixed wall (black).
@@ -1268,7 +1272,8 @@ function renderWalls(){
     let ex = k==='low' ? 'stroke="#8f897d" stroke-width="1" vector-effect="non-scaling-stroke"' : '';
     const surfaceId=project.walls.find(x=>x.id===id)?.surfaceMaterialId;if(surfaceId&&!dem){ex+=' stroke="'+esc(project.materials.find(m=>m.id===surfaceId).appearance.color)+'" stroke-width="3" vector-effect="non-scaling-stroke"';}
     if (dem){ fill = 'rgba(198,91,58,.12)'; ex = 'stroke="#c65b3a" stroke-width="1.2" stroke-dasharray="5 3" vector-effect="non-scaling-stroke"'; }
-    return `<polygon class="wall" data-wall="${esc(id)}" points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="${fill}" ${ex}/>`;
+    const facade=exteriorStatus.get(id), label=facade==='facade'?'Fachada derivada':facade==='interior'?'Muro interior':'Exterior no disponible: geometría insuficiente';
+    return `<polygon class="wall" data-wall="${esc(id)}" points="${w.poly.map(p=>p.join(',')).join(' ')}" fill="${fill}" ${ex}><title>${label}</title></polygon>`;
   }).join(''));
 }
 
@@ -3242,11 +3247,13 @@ function clearGroup(g){ g.traverse(o => { if(o.userData.primitiveBatch){o.dispos
 function wallBox(rect, yb, yt, m){
   const assignment=project.walls.find(w=>w.id===rect.id)?.surfaceMaterialId;
   if(assignment){const finish=project.materials.find(m=>m.id===assignment);m=surfaceRenderer.get(finish)||mat(finish.appearance.color,{roughness:.9});}
+  else if(exteriorByWall.get(rect.id)==='facade')m=facadeMat;
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
   if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
+  o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';
   o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:yt-yb};
   o.position.set(wx(rect.center[0]), (yb+yt)/2, wz(rect.center[1])); o.rotation.y=-rect.angle; o.castShadow = o.receiveShadow = true; archUp.add(o);
   // 漫游辅助：墙体棱线 + 踢脚线，让相邻墙面、墙角一眼可分（仅漫游模式显示）
@@ -3257,6 +3264,8 @@ function wallBox(rect, yb, yt, m){
   }
 }
 const edgeMat = new THREE.LineBasicMaterial({color:0x6f675b}), skirtMat = new THREE.MeshStandardMaterial({color:'#8b7f6e', roughness:.6});
+const facadeMat = new THREE.MeshStandardMaterial({color:'#d9cbbb',roughness:.92});
+let exteriorByWall = new Map();
 function shapeOf(poly, flip){ const s = new THREE.Shape(); poly.forEach(([x, y], i) => s[i ? 'lineTo' : 'moveTo'](wx(x), flip ? wz(y) : -wz(y))); return s; }
 
 // A temporary drawing veil uses the actual room polygon and only the inward face of each wall.
@@ -3378,6 +3387,7 @@ function buildArch(other){
   doors.length = 0; colliders = [];
   if(!other)surfaceRenderer.begin();
   OX=geometry.center.x; OY=geometry.center.y; H=project.defaults.wallHeightMm/1000;
+  exteriorByWall=new Map(exterior.walls.map(w=>[w.wallId,w.status]));
   if(other){OX=other.ox;OY=other.oy;}
   else{const span=Math.hypot(geometry.envelope.w,geometry.envelope.h)/1000;camera.far=Math.max(300,span*10);camera.updateProjectionMatrix();orbit.maxDistance=Math.max(45,span*4);ground.scale.setScalar(Math.max(1,span/100));}
   const top = topHeight();
@@ -3388,9 +3398,11 @@ function buildArch(other){
     const fl = new THREE.Mesh(geo, bay ? [m, mat('#e9e4da')] : m);
     fl.receiveShadow = true; fl.userData.room = r.id;
     if (bay){ fl.castShadow = true; archUp.add(fl); } else archFloor.add(fl);
-    // 天花：法线朝下，只在室内仰视时可见
-    const cg = new THREE.ShapeGeometry(shapeOf(r.poly, true)); cg.rotateX(Math.PI/2);
-    const ceil = new THREE.Mesh(cg, mat('#fbfaf7', {roughness:1})); ceil.position.y = H; ceil.visible = top >= H; ceil.userData.ceilRoom = r.id; archUp.add(ceil);
+    // Una terraza o balcón declarado conserva su suelo, sin inventar cubierta.
+    if (!['terrace','balcony'].includes(r.family)) {
+      const cg = new THREE.ShapeGeometry(shapeOf(r.poly, true)); cg.rotateX(Math.PI/2);
+      const ceil = new THREE.Mesh(cg, mat('#fbfaf7', {roughness:1})); ceil.position.y = H; ceil.visible = top >= H; ceil.userData.ceilRoom = r.id; archUp.add(ceil);
+    }
     if (r.at){
       const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
       lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
