@@ -8,7 +8,7 @@
  const Core=typeof module==='object'?require('./project-core.js'):root.FloorPlanCore;
  const SCHEMA='rubik-sota.floorplan-building',VERSION='1.0.0';
  // Embedded projects must use a 1.x version this reader knows, validated strictly (no unknown fields).
- const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0','1.5.0','1.6.0','1.7.0','1.8.0'];
+ const PROJECT_VERSIONS=['1.0.0','1.1.0','1.2.0','1.3.0','1.4.0','1.5.0','1.6.0','1.7.0','1.8.0','1.9.0'];
  const LIMITS={levels:2,stairs:4,coordMm:1000000,elevationMm:100000,slabMm:1000,nameMax:200,levelNameMax:80};
  const ID={building:/^bld_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,level:/^lvl_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/,stair:/^str_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$/};
  const MULTI_LEVEL_HINT=/level|floor|storey|story|stair|planta|nivel|piso|escalera|building|edificio/i;
@@ -124,8 +124,9 @@
  function validate(building){
   exactKeys(building,'/',['schema','schemaVersion','id','name','createdAt','updatedAt','units','levels','stairs'],['site']);
   if(building.schema!==SCHEMA)fail('/schema',`expected ${SCHEMA}`);
-  if(!['1.0.0','1.1.0'].includes(building.schemaVersion))fail('/schemaVersion',`unsupported building version ${building.schemaVersion}; this reader supports 1.0.0, 1.1.0`);
-  if(building.site!==undefined){if(building.schemaVersion==='1.0.0')fail('/site','requires building 1.1.0');Core.validateSite(building.site);}
+  if(!['1.0.0','1.1.0','1.2.0'].includes(building.schemaVersion))fail('/schemaVersion',`unsupported building version ${building.schemaVersion}; this reader supports 1.0.0–1.2.0`);
+  if(building.site!==undefined){if(building.schemaVersion==='1.0.0')fail('/site','requires building 1.1.0');if(building.site.parcel!==undefined&&building.schemaVersion!=='1.2.0')fail('/site/parcel','requires building 1.2.0');Core.validateSite(building.site);}
+  if(Array.isArray(building.levels)&&building.levels.some(l=>l?.project?.site?.parcel!==undefined))fail('/levels','site.parcel belongs only to building.site');
   if(!ID.building.test(building.id))fail('/id','invalid building ID');
   text(building.name,'/name',LIMITS.nameMax);
   if(!dateValid(building.createdAt))fail('/createdAt','invalid UTC date-time');
@@ -213,7 +214,7 @@
  function create(project,{name=project.name,levelName='Planta baja'}={}){
   const t=new Date().toISOString(),b={schema:SCHEMA,schemaVersion:VERSION,id:Core.id('bld'),name:String(name).slice(0,LIMITS.nameMax),createdAt:t,updatedAt:t,units:'mm',
    levels:[{id:Core.id('lvl'),name:levelName,order:0,elevationMm:0,slabThicknessMm:0,offsetMm:{x:0,y:0},project:clone(project)}],stairs:[]};
-  if(project.site!==undefined){b.site=clone(project.site);b.schemaVersion='1.1.0';}
+  if(project.site!==undefined){b.site=clone(project.site);b.schemaVersion=project.site.parcel?'1.2.0':'1.1.0';if(b.levels[0].project.site)delete b.levels[0].project.site.parcel;}
   validate(b);return b;
  }
  // Default elevation of a new level: the tallest active wall below plus the default visual slab thickness.
@@ -223,6 +224,7 @@
   if(building.levels.length>=LIMITS.levels)throw Error(`Este corte admite ${LIMITS.levels} plantas como máximo.`);
   const b=clone(building),order=b.levels.length;
   const p=clone(project);if(b.levels.some(l=>l.project.id===p.id))p.id=Core.id('prj');
+  if(p.site)delete p.site.parcel;
   b.levels.push({id:Core.id('lvl'),name:name||(order===1?'Planta primera':`Planta ${order}`),order,elevationMm:elevationMm??nextElevation(building),slabThicknessMm,offsetMm:{x:Math.round(offsetMm.x),y:Math.round(offsetMm.y)},project:p});
   b.updatedAt=now(b);validate(b);return b;
  }
@@ -301,7 +303,7 @@
   if(used.size!==entries.size)throw Error('El ZIP de edificio contiene entradas ajenas.');
   return {building,images};
  }
- function setSite(building,site){const b=clone(building);if(site===undefined)delete b.site;else b.site=clone(site);b.schemaVersion='1.1.0';b.updatedAt=now(b);validate(b);return b;}
+ function setSite(building,site){const b=clone(building);if(site===undefined)delete b.site;else b.site=clone(site);if(site?.parcel!==undefined)b.schemaVersion='1.2.0';else if(b.schemaVersion==='1.0.0')b.schemaVersion='1.1.0';b.updatedAt=now(b);validate(b);return b;}
  const api={SCHEMA,VERSION,PROJECT_VERSIONS,LIMITS,DEFAULT_SLAB_MM,validate,warnings,alignment,slabVoids,stairFootprint,stairInfo,convexOverlap,labelAnchor,stairLabel,CONTACT_TOLERANCE_MM,zoneConflict,stairZonesOf,stairConflicts,conflictMessage,conflictSummary,buildingStatus,areas,canonical,sha256,create,setSite,addLevel,removeLevel,updateLevel,setProject,setStair,removeStair,duplicate,exportLevel,isBuilding,prepare,nextElevation,toLocal,toBuilding,packagePath,packageEntries,readEntries,MAX_ENTRIES};
  if(typeof module==='object')module.exports=api;else root.FloorPlanBuilding=api;
 })(typeof globalThis==='object'?globalThis:this);

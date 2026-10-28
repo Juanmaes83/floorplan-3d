@@ -5,13 +5,13 @@ const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).for
 const capabilities=()=>Object.fromEntries(Geo.CAPABILITIES.map(k=>[k,['coordinates','sourceMetadata'].includes(k)]));
 function fixture(id='fixture-offline',patch={}){
  const caps=patch.capabilities||capabilities();
- const metadata=patch.metadata||{providerId:id,label:'Fixture',kind:'other',network:'none',sourceName:'Synthetic fixture',license:{status:'unknown'}};
+ const metadata=patch.metadata||{providerId:id,label:'Fixture',kind:'other',network:'none',sourceName:'Synthetic fixture',license:{status:'unknown'},...(caps.parcel?{parcelInputModes:['document']}:null)};
  const source=patch.source||{providerId:id,type:'derived'};
  return {id,contractVersion:Geo.CONTRACT_VERSION,getCapabilities:()=>caps,getProviderMetadata:()=>metadata,
-  getSourceMetadata:()=>source,getCoordinates:patch.getCoordinates||(()=>({status:'available',location:{...input,source}}))};
+  getSourceMetadata:()=>source,getCoordinates:patch.getCoordinates||(()=>({status:'available',location:{...input,source}})),getParcel:patch.getParcel||(()=>({status:'not-found',reason:'parcel-not-found'}))};
 }
 test('v1 contract has exactly eight capabilities, finite modes and compatible offline Manual',async()=>{
- assert.equal(Geo.CONTRACT_VERSION,'1.0.0');
+ assert.equal(Geo.CONTRACT_VERSION,'1.1.0');
  assert.deepEqual(Geo.CAPABILITIES,['search','parcel','geometry','coordinates','sourceMetadata','orthophoto','elevation','terrain']);
  assert.deepEqual(Geo.NETWORK_MODES,['none','optional','required']);
  assert.deepEqual(Geo.RESULT_STATUSES,['available','not-found','unavailable','invalid','unsupported','cancelled']);
@@ -100,5 +100,5 @@ test('async providers receive a separate frozen query, retain result provenance 
  assert.equal(output.provenance.license,undefined);assert.equal(descriptor.license.status,'unknown');
  assert.deepEqual(query,{...input,privateToken:'never pass'});assert.deepEqual(context,{note:'private'});
  assert.equal(registry.list({capability:'orthophoto'}).length,0);
- assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['manual']);
+ assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['catastro-inspire-cp','manual']);
 });
