@@ -1,0 +1,52 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const Geo=require('../js/geo-provider.js'),Adapter=require('../js/geo-site-adapter.js');
+const Core=require('../js/project-core.js'),Building=require('../js/building-core.js');
+const Package=require('../js/project-package.js'),Tracing=require('../js/tracing-core.js');
+const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
+const input={latitude:40.4168,longitude:-3.7038,timeZone:'Europe/Madrid'};
+test('Manual available result becomes only the durable location fields, without invented metadata',async()=>{
+ const result=freeze(await Geo.createDefaultRegistry().getCoordinates('manual',input));
+ const location=Adapter.toSiteLocation(result);
+ assert.deepEqual(location,{...input,source:{providerId:'manual',type:'user-entered'}});
+ assert.equal(location.source.retrievedAt,undefined);assert.equal(location.capabilities,undefined);
+ assert.deepEqual(result.location,input);assert.deepEqual(result.provenance,{providerId:'manual',type:'user-entered'});
+ assert.throws(()=>Adapter.toSiteLocation({status:'unavailable',providerId:'manual',reason:'provider-error'}),/available/);
+ assert.throws(()=>Adapter.toSiteLocation({...result,provenance:{providerId:'other',type:'user-entered'}}),/providerId/);
+});
+test('Geo to Site preserves supported result provenance and strips runtime descriptor fields',()=>{
+ const provenance=freeze({providerId:'future-provider',type:'official-source',sourceName:'Synthetic source',sourceUrl:'https://example.test/source',sourceId:'item-7',retrievedAt:'2026-10-28T10:00:00Z',version:'edition-1',derivedFrom:'source'});
+ const result=freeze({status:'available',providerId:'future-provider',location:{...input},provenance,capabilities:{parcel:true},network:'required',license:{status:'unknown'},provider:{secret:'never persist'}});
+ const location=Adapter.toSiteLocation(result);
+ assert.deepEqual(location,{...input,source:provenance});
+ assert.equal(location.capabilities,undefined);assert.equal(location.network,undefined);assert.equal(location.license,undefined);assert.equal(location.provider,undefined);
+ assert.deepEqual(Adapter.fromSiteLocation(freeze(location)),{status:'available',providerId:'future-provider',location:input,provenance});
+ assert.throws(()=>Adapter.toSiteLocation({...result,provenance:{...provenance,parcel:{id:'x'}}}),/unsupported/);
+});
+test('unknown provider remains readable and survives project/building JSON and ZIP without registry resolution',async()=>{
+ const source={providerId:'future-provider',type:'derived',sourceName:'Synthetic fixture',sourceId:'loc-1'};
+ const durable=freeze({...input,source});
+ const normalized=Adapter.fromSiteLocation(durable);
+ assert.equal(Geo.createDefaultRegistry().has('future-provider'),false);
+ assert.equal(normalized.providerId,'future-provider');assert.deepEqual(Adapter.toSiteLocation(normalized),durable);
+ const project=Core.initial();project.sourceImages=[];
+ const next=Core.setSite(project,{northOffsetDeg:45,location:durable});
+ assert.equal(next.schemaVersion,'1.7.0');assert.equal(project.site,undefined);
+ assert.deepEqual(Core.prepare(JSON.stringify(next)).project.site.location,durable);
+ const archive=await Package.encode(next,()=>{throw Error('unexpected image');});
+ const entries=await Package.unzip(await archive.arrayBuffer());
+ const parsed=await Package.validateEntries(entries,Tracing.imageInfo);
+ assert.deepEqual(parsed.project.site.location,durable);assert.equal(entries.size,1);
+ const building=Building.create(next);assert.deepEqual(building.site.location,durable);
+ assert.deepEqual(Building.prepare(JSON.stringify(building)).site.location,durable);
+ const packed=await Building.packageEntries(building,()=>{throw Error('unexpected image');});
+ const read=await Building.readEntries(packed.entries,Tracing.imageInfo);
+ assert.deepEqual(read.building.site.location,durable);assert.equal(packed.entries.size,2);
+ assert.equal(Geo.createDefaultRegistry().has('future-provider'),false);
+});
+test('site adapter validates durable input without registering or contacting a provider',()=>{
+ const location=freeze({...input,source:{providerId:'absent-provider',type:'unknown'}});
+ assert.deepEqual(Adapter.fromSiteLocation(location).provenance,location.source);
+ assert.throws(()=>Adapter.fromSiteLocation({...location,latitude:91}),/coordinates/);
+ assert.throws(()=>Adapter.fromSiteLocation({...location,source:{providerId:'',type:'unknown'}}),/providerId/);
+ assert.throws(()=>Adapter.fromSiteLocation({...location,source:{providerId:'absent-provider',type:'unknown',networkResponse:{}}}),/unsupported/);
+});

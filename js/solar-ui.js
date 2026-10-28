@@ -1,7 +1,8 @@
 /* Project orientation and private location; explicit, reversible solar visualization. */
 (function(){
  'use strict';
- const app=window.FloorPlanApp,Geo=window.FloorPlanGeoProvider,Solar=window.FloorPlanSolar;
+ const app=window.FloorPlanApp,Geo=window.FloorPlanGeoProvider,GeoSite=window.FloorPlanGeoSiteAdapter,Solar=window.FloorPlanSolar;
+ const geoRegistry=Geo.createDefaultRegistry();
  const t=(es,en,zh)=>({es,en,zh})[LANG]||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const css=el('link',undefined,document.head);css.rel='stylesheet';css.href='css/solar.css';
@@ -76,14 +77,14 @@
   saveButton.textContent=t('Guardar configuración','Save settings','保存设置');activate.textContent=t('Guardar y ver solar 3D','Save and view solar 3D','保存并查看日照 3D');presentation.textContent=leave.textContent=t('Iluminación de presentación','Presentation lighting','展示照明');edit.textContent=t('Ajustar','Adjust','调整');update();
  }
  function open(){returnFocus=document.activeElement;const data=site()||{};north.value=data.northOffsetDeg??'';lat.value=data.location?.latitude??'';lon.value=data.location?.longitude??'';zone.value=data.location?.timeZone??'';error.textContent='';relang();dialog.showModal();north.focus();}
- function store(){
+ async function store(){
   if([north,lat,lon].some(input=>input.validity.badInput))throw Error(t('Introduce números válidos.','Enter valid numbers.','请输入有效数值。'));
   const value=structuredClone(site()||{}),n=north.value.trim();
   if(n==='')delete value.northOffsetDeg;else{if(!north.validity.valid||!Number.isFinite(Number(n)))throw Error(t('Norte: usa un valor desde 0 hasta menos de 360°.','North: enter a value from 0 to less than 360°.','北向：请输入 0 至小于 360° 的数值。'));value.northOffsetDeg=Number(n);}
   const parts=[lat.value.trim(),lon.value.trim(),zone.value.trim()];
   if(parts.every(v=>v===''))delete value.location;
-  else{if(parts.some(v=>v===''))throw Error(t('Completa latitud, longitud y zona horaria, o vacía los tres campos.','Complete latitude, longitude and time zone, or clear all three.','请填写纬度、经度和时区，或将三项全部清空。'));const normalized=Geo.Manual.getCoordinates({latitude:Number(parts[0]),longitude:Number(parts[1]),timeZone:parts[2]});if(normalized.status!=='available')throw Error(reason(normalized.reason));
-   const previous=value.location;if(!previous||previous.latitude!==normalized.location.latitude||previous.longitude!==normalized.location.longitude||previous.timeZone!==normalized.location.timeZone)value.location=normalized.location;}
+  else{if(parts.some(v=>v===''))throw Error(t('Completa latitud, longitud y zona horaria, o vacía los tres campos.','Complete latitude, longitude and time zone, or clear all three.','请填写纬度、经度和时区，或将三项全部清空。'));const normalized=await geoRegistry.getCoordinates('manual',{latitude:Number(parts[0]),longitude:Number(parts[1]),timeZone:parts[2]});if(normalized.status!=='available')throw Error(reason(normalized.reason));
+   const previous=value.location;if(!previous||previous.latitude!==normalized.location.latitude||previous.longitude!==normalized.location.longitude||previous.timeZone!==normalized.location.timeZone)value.location=GeoSite.toSiteLocation(normalized);}
   const next=Object.keys(value).length?value:undefined;
   if(JSON.stringify(site())===JSON.stringify(next)){localDate=date.value;localTime=time.value;update();return;}
   if(app.levelContext)window.FloorPlanBuildingUI.setSite(next);
@@ -91,8 +92,8 @@
   localDate=date.value;localTime=time.value;error.textContent='';update();
  }
  function restore(){mode='presentation';window.View3D?.setSolar(null);update();}
- async function start(){try{const preview=draftCalculation();if(preview.status!=='available-orientative')throw Error(reason(preview.reason));store();const p=calculation();await app.enterPresentation3D();mode='solar';window.View3D.setSolar(p);update();dialog.close();}catch(e){error.textContent=e.message;}}
- form.onsubmit=e=>{e.preventDefault();try{store();error.textContent=t('Configuración guardada.','Settings saved.','设置已保存。');}catch(e){error.textContent=e.message;}};
+ async function start(){try{const preview=draftCalculation();if(preview.status!=='available-orientative')throw Error(reason(preview.reason));await store();const p=calculation();await app.enterPresentation3D();mode='solar';window.View3D.setSolar(p);update();dialog.close();}catch(e){error.textContent=e.message;}}
+ form.onsubmit=async e=>{e.preventDefault();try{await store();error.textContent=t('Configuración guardada.','Settings saved.','设置已保存。');}catch(e){error.textContent=e.message;}};
  activate.onclick=start;presentation.onclick=leave.onclick=restore;
  entry.onclick=()=>{entry.closest('details')?.removeAttribute('open');open();};compass.onclick=editor3d.onclick=edit.onclick=open;
  close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
