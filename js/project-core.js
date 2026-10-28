@@ -6,6 +6,7 @@
   const Geo = typeof module !== 'undefined' ? require('./geo-provider.js') : root.FloorPlanGeoProvider;
   const ParcelSite = typeof module !== 'undefined' ? require('./parcel-site-adapter.js') : root.FloorPlanParcelSiteAdapter;
   const OrthophotoSite = typeof module !== 'undefined' ? require('./orthophoto-site-adapter.js') : root.FloorPlanOrthophotoSiteAdapter;
+  const TerrainSite = typeof module !== 'undefined' ? require('./terrain-site-adapter.js') : root.FloorPlanTerrainSiteAdapter;
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -96,6 +97,11 @@
         if(Number(version.split('.')[1])<10)fail('/site/orthophoto','requires project 1.10.0');
         check(project.site.orthophoto,schema.$defs.orthophoto,'/site/orthophoto',false);
         try{OrthophotoSite.fromSiteOrthophoto(project.site.orthophoto,project.site.parcel);}catch(error){fail('/site/orthophoto',error.message);}
+      }
+      if(project.site.terrain!==undefined){
+        if(Number(version.split('.')[1])<11)fail('/site/terrain','requires project 1.11.0');
+        check(project.site.terrain,schema.$defs.terrain,'/site/terrain',false);
+        try{TerrainSite.fromSiteTerrain(project.site.terrain,project.site.parcel);}catch(error){fail('/site/terrain',error.message);}
       }
     }
     if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
@@ -300,9 +306,9 @@
     if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
     validate(next);return next;
   }
-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
-  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);};
+  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

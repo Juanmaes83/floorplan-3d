@@ -11,7 +11,7 @@ function fixture(id='fixture-offline',patch={}){
   getSourceMetadata:()=>source,getCoordinates:patch.getCoordinates||(()=>({status:'available',location:{...input,source}})),getParcel:patch.getParcel||(()=>({status:'not-found',reason:'parcel-not-found'}))};
 }
 test('v1 contract has exactly eight capabilities, finite modes and compatible offline Manual',async()=>{
- assert.equal(Geo.CONTRACT_VERSION,'1.2.0');
+ assert.equal(Geo.CONTRACT_VERSION,'1.3.0');
  assert.deepEqual(Geo.CAPABILITIES,['search','parcel','geometry','coordinates','sourceMetadata','orthophoto','elevation','terrain']);
  assert.deepEqual(Geo.NETWORK_MODES,['none','optional','required']);
  assert.deepEqual(Geo.RESULT_STATUSES,['available','not-found','unavailable','invalid','unsupported','cancelled']);
@@ -100,5 +100,5 @@ test('async providers receive a separate frozen query, retain result provenance 
  assert.equal(output.provenance.license,undefined);assert.equal(descriptor.license.status,'unknown');
  assert.deepEqual(query,{...input,privateToken:'never pass'});assert.deepEqual(context,{note:'private'});
  assert.equal(registry.list({capability:'orthophoto'}).length,0);
- assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['catastro-inspire-cp','ign-pnoa-ma-wms','manual']);
+ assert.deepEqual(Geo.createDefaultRegistry().list().map(d=>d.providerId),['catastro-inspire-cp','ign-mdt05-terrain','ign-pnoa-ma-wms','manual']);
 });

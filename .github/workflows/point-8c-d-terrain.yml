@@ -1,0 +1,66 @@
+name: Point 8C-D terrain context
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'js/geo-provider.js'
+      - 'js/terrain-core.js'
+      - 'js/terrain-site-adapter.js'
+      - 'js/ign-mdt05-terrain-provider.js'
+      - 'js/project-core.js'
+      - 'js/project-schema.js'
+      - 'js/building-core.js'
+      - 'js/territory-ui.js'
+      - 'css/territory.css'
+      - 'docs/contracts/FloorPlanGeoProvider.md'
+      - 'docs/contracts/FloorPlanProjectV1.md'
+      - 'docs/contracts/FloorPlanProjectV1.schema.json'
+      - 'docs/contracts/FloorPlanBuildingV1.md'
+      - 'docs/contracts/FloorPlanBuildingV1.schema.json'
+      - 'tests/terrain-core.test.cjs'
+      - 'tests/terrain-provider.test.cjs'
+      - 'tests/terrain.browser.test.cjs'
+      - 'tests/terrain_schema.test.py'
+      - '.github/workflows/point-8c-d-terrain.yml'
+permissions:
+  contents: read
+jobs:
+  terrain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Contracts and unit tests
+        run: |
+          git diff --check
+          node --check js/terrain-core.js
+          node --check js/terrain-site-adapter.js
+          node --check js/ign-mdt05-terrain-provider.js
+          node --check js/geo-provider.js
+          node --check js/territory-ui.js
+          node --test tests/terrain-core.test.cjs tests/terrain-provider.test.cjs tests/geo-provider.test.cjs tests/parcel-core.test.cjs tests/orthophoto-core.test.cjs
+          python -m pip install jsonschema==4.26.0
+          python tests/terrain_schema.test.py
+      - name: Chromium dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/terrain-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/terrain-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/terrain-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/terrain-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Synthetic terrain and navigation regressions
+        run: node --test --test-concurrency=1 tests/terrain.browser.test.cjs tests/parcel.browser.test.cjs tests/orthophoto.browser.test.cjs tests/guide-navigation.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: point-8c-d-${{ github.event.pull_request.head.sha }}
+          path: output/playwright/point-8c-d/
+          if-no-files-found: ignore

@@ -137,6 +137,10 @@ Antes de aplicar nada se comprueba:
 
 Un archivo incompleto o manipulado se rechaza sin tocar el proyecto abierto. El ZIP de proyecto 1.x no cambia.
 
+## 1.4.0 — terreno en el site compartido (8C-D, candidato en revisión)
+
+`building.site.terrain` requiere la parcela compartida y conserva sólo metadatos de la última cobertura MDT recuperada. Building 1.3 lo rechaza; Building 1.4 lo admite. Ningún `levels[n].project.site.terrain` es autoridad. La exportación de una planta copia el site compartido a un ProjectV1 1.11 cuando hay terrain. JSON y ZIP conservan los metadatos, pero nunca el grid numérico, la respuesta WCS ni la malla derivada. Abrir el edificio no descarga terreno ni posiciona verticalmente las plantas.
+
 ## 7. Fuera de este corte
 
 Recorrido que sube escaleras, exterior, fachada y cubierta, más de dos plantas, escaleras en L, U o de caracol, rotación entre plantas, IFC multiplanta completo, GLB del edificio completo y herramientas MCP de edificio. Cada uno requiere su propio corte.
