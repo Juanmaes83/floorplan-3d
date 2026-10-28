@@ -4,7 +4,7 @@
 
 ## Base de este estado
 
-Estado posterior al cierre funcional de **Punto 8B** y al merge de **PR #126 — auditoría geométrica final de 8B**, squash `581da1a24d8600b89ed20c5558cfe6195cafdd49`.
+Estado posterior al cierre funcional de **8C-D** y al merge de **PR #131 — terreno / elevación territorial**, squash `9d5a9fe48198f3a90d931dd82f88f6a122d30157`.
 
 ## Estado resumido
 
@@ -18,7 +18,12 @@ Estado posterior al cierre funcional de **Punto 8B** y al merge de **PR #126 —
 | 8B auditoría | Contención conservadora de huella / falsa certeza geométrica | **CERRADO** — PR #126, squash `581da1a24d8600b89ed20c5558cfe6195cafdd49` |
 | 8B-C | Cubiertas inclinadas simples | **DIFERIDO POR ALCANCE** — no requerido para cerrar 8B |
 | 8B | Cubierta y volúmenes exteriores | **CERRADO** |
-| 8C | Parcela, terreno y contexto territorial | **ACTUAL / SIGUIENTE** |
+| 8C-A | GeoProvider / contratos territoriales | **CERRADO** — PR #128, squash `f944088c315140d67cfadfbcd8db6350fd559a48` |
+| 8C-B | Parcela, referencia y geometría territorial fuente | **CERRADO** — PR #129, squash `597014888fc80e7fafdfd011115e62113cafb0d0` |
+| 8C-C | Ortofoto PNOA contextual | **CERRADO** — PR #130, squash `0adf6fa0cd3ca7cfcb2dd654eaaa7cef4e6adac0` |
+| 8C-D | Terreno / elevación MDT05 contextual | **CERRADO** — PR #131, squash `9d5a9fe48198f3a90d931dd82f88f6a122d30157` |
+| 8C-E | Integración final edificio + parcela + ortofoto + terreno + orientación + presentación/exportación | **ACTUAL / SIGUIENTE** |
+| 8C | Parcela, terreno y contexto territorial | **ABIERTO — se cierra sólo tras 8C-E + auditoría final** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
 ## Punto 8A — CERRADO
@@ -46,22 +51,11 @@ El alcance cerrado incluye:
 
 Casos no demostrables degradan a `unavailable`/`invalid`; no se añadió CSG general, solver universal de cubiertas, inferencia estructural, normativa, drenaje ni construcción por capas.
 
-### Auditoría geométrica final
+### Auditoría geométrica final de 8B
 
 La auditoría de 8B-A + 8B-B detectó un BUG-BLOCKING: un ciclo cerrado de fachada podía representar un patinillo o un cuerpo que no encerraba realmente las estancias interiores. PR #126 añadió la abstención `room-outside-facade-cycle` y una segunda corrección para huellas cóncavas: no basta con que los vértices de la estancia estén dentro; sus aristas completas deben permanecer dentro o sobre la huella exterior.
 
 HEAD final auditado de PR #126: `d94206b18937c878ab2557ba7e282b975b2a42e8`.
-
-Evidencia final de esa PR:
-
-- suite Node no-browser local: **528 PASS, 0 FAIL, 2 SKIP** opcionales;
-- Chromium relevante: **24/24 PASS**;
-- Guided experience: **SUCCESS**;
-- Point 6 solar and compatibility: **SUCCESS**;
-- Multiformat guided import: **SUCCESS**;
-- Vercel: **SUCCESS**;
-- sin hilos de revisión pendientes;
-- `mergeable: true` antes del merge.
 
 El squash de #126 incluye `[skip ci]` para evitar repetir en `push` a `master` la misma validación ejecutada sobre el HEAD exacto de la PR.
 
@@ -71,19 +65,59 @@ Las cubiertas inclinadas simples (`mono-pitch` / `gable`) estaban permitidas com
 
 Esta decisión no impide retomarlas mediante una decisión de producto futura y explícita. **No bloquea el cierre de 8B.**
 
-## Punto 8C — ACTUAL / SIGUIENTE
+## Punto 8C — A–D CERRADOS; 8C-E ACTIVO
 
-8C trata un problema distinto: parcela, terreno y contexto territorial. `FloorPlanGeoProvider` ya existe como frontera offline con proveedor Manual y capacidades declaradas; 8C debe extender contratos/adapters sin acoplar la UI a proveedores concretos ni confundir dato fuente/oficial con geometría editable.
+8C extiende el contexto territorial sin convertir datos oficiales en geometría editable ni atribuirles una precisión que no demuestran.
 
-Catastro/IGN/CNIG/PNOA no deben activarse ni presentarse como fuentes disponibles hasta verificar técnicamente el servicio concreto, sus condiciones de uso/licencia, atribución, cobertura y procedencia. La existencia de `FloorPlanGeoProvider` no autoriza por sí sola ninguna integración real.
+### 8C-A — GeoProvider / contratos — CERRADO
+
+PR #128 estableció la frontera agnóstica `FloorPlanGeoProvider`, capacidades declaradas, provenance/licencia/atribución y adapters sin acoplar la UI a proveedores concretos. El registry no es autoridad persistida y un proyecto conserva validez aunque falte un provider runtime.
+
+Documento: `docs/product/point-8c-a-geo-provider-contracts-2026-10-28.md`.
+
+### 8C-B — parcela / geometría territorial fuente — CERRADO
+
+PR #129 añadió `site.parcel`, importación GML INSPIRE CP de Catastro en modo documento, CRS territorial demostrado, `sourceGeometry` separada de cualquier geometría editable y `parcel.frame` como marco local común. No se afirma lindero legal certificado ni posición del edificio.
+
+Documento: `docs/product/point-8c-b-parcel-source-geometry-2026-10-28.md`.
+
+### 8C-C — ortofoto / contexto — CERRADO
+
+PR #130 añadió ortofoto PNOA Máxima Actualidad mediante WMS 1.3.0, carga explícita, raster sólo runtime y `site.orthophoto` como snapshot durable de configuración/procedencia. El raster no se persiste ni se descarga al abrir; `retrievedAt` no se presenta como fecha de vuelo. No sitúa el edificio.
+
+Documento: `docs/product/point-8c-c-orthophoto-context-2026-10-28.md`.
+
+### 8C-D — terreno / elevación — CERRADO
+
+PR #131 añadió MDT05 primera cobertura mediante WCS 2.0.1, `GeoProvider.getTerrain`, TerrainGrid runtime, consulta contextual de cotas y superficie derivada determinista en el marco de la parcela. ProjectV1 1.11.0 y BuildingV1 1.4.0 persisten sólo `site.terrain` metadata; grid, respuesta cruda y mesh no se persisten. Las alturas se tratan como ortométricas según la fuente; 5 m es paso de malla, no precisión. No se infiere relación vertical entre edificio y terreno.
+
+Documento: `docs/product/point-8c-d-terrain-elevation-2026-10-28.md`.
+
+### 8C-E — integración final — ACTUAL / SIGUIENTE
+
+8C-E debe integrar, sin crear una segunda autoridad espacial:
+
+- edificio 8A/8B;
+- `site.parcel` y `parcel.frame`;
+- ortofoto 8C-C;
+- terreno/elevación 8C-D;
+- orientación/norte y Solar ya existentes;
+- escena exterior, Recorrer y Presentación;
+- matriz explícita de exportación y atribución.
+
+La integración debe demostrar una única cadena de transformaciones y evitar doble aplicación de offsets, norte o CRS. La relación edificio↔parcela/terreno no puede inferirse silenciosamente: si el contrato actual no contiene una colocación territorial demostrable del edificio, 8C-E debe introducir únicamente el mínimo dato/flujo explícito necesario, con provenance y sin inventar precisión.
+
+Punto 8 **no se cierra** hasta completar 8C-E y una auditoría final de todo 8A–8C: persistencia, offline/provider ausente, Recorrer, Presentación, Solar, exportaciones, atribuciones/licencias, móvil, consola y CI.
 
 ## Regla para agentes
 
 1. Leer este archivo primero y verificar el HEAD real de `master`.
-2. No reabrir 1–8B salvo regresión reproducible o decisión expresa.
-3. **8C es el corte funcional activo.**
+2. No reabrir 1–8C-D salvo regresión reproducible o decisión expresa.
+3. **8C-E es el único corte funcional activo dentro de Punto 8.**
 4. Mantener `FloorPlanGeoProvider` como frontera transversal y agnóstica de proveedor.
 5. Mantener separada la geometría territorial fuente de cualquier geometría editable derivada.
-6. No afirmar precisión catastral, topográfica, geotécnica o normativa que la fuente no demuestre.
-7. Conservar procedencia, licencia/condiciones aplicables y fecha/cobertura cuando exista fuente externa.
-8. Mantener la regla de producto: **más contexto, no más falsa certeza**.
+6. Mantener una sola cadena espacial: CRS fuente → `parcel.frame` → colocación explícita del edificio → BuildingV1/levels → renderer.
+7. No afirmar precisión catastral, topográfica, geotécnica o normativa que la fuente no demuestre.
+8. Conservar procedencia, licencia/condiciones aplicables y fecha/cobertura cuando exista fuente externa.
+9. `site.orthophoto` y `site.terrain` conservan metadata, no los bytes/grids runtime; no asumir reproducibilidad pixel/value-perfect.
+10. Mantener la regla de producto: **más contexto, no más falsa certeza**.
