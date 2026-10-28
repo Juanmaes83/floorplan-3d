@@ -497,6 +497,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn on" data-mode="orbit" data-en="Orbit">鸟瞰</button>
       <button class="btn" data-mode="walk" data-en="Walk">漫游</button>
     </div>
+    <div class="grp only3d" id="roofGroup"><button class="btn" id="roofToggle" type="button" aria-pressed="false" data-en="Exterior" title="Mostrar u ocultar cubierta plana derivada">Exterior</button></div>
     <div class="grp only3d">
       <button class="btn" id="vIso" data-en="Iso">斜视</button>
       <button class="btn" id="vTop" data-en="Top">俯视</button>
@@ -656,6 +657,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/geo-provider.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/exterior-core.js"></script>
+<script src="js/roof-core.js"></script>
 <script src="js/surface-catalog.js"></script>
 <script src="js/generic-catalog.js"></script>
 <script src="js/furniture-search.js"></script>
@@ -2459,13 +2461,13 @@ const stage = $('#stage'), host = $('#view3d');
 let OX = geometry.center.x, OY = geometry.center.y, H = project.defaults.wallHeightMm/1000; const FOV = 45;       // 户型中心放在世界原点，层高 2.8 m
 const wx = x => (x - OX) / 1000, wz = y => (y - OY) / 1000, M = v => v / 1000;
 const SW = () => stage.clientWidth, SH = () => stage.clientHeight;
-const opt = {cut:2.8, furn:true, labels:true, night:false, hour:10, mode:'orbit',surfaceQuality:'base'};
+const opt = {cut:2.8, furn:true, labels:true, night:false, hour:10, mode:'orbit',surfaceQuality:'base',roof:false};
 const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm))/1000:opt.cut;
 
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
 let solarResult=null;
-let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, colliders = [], selKey = null, selHelper = null;
+let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, roofG, roofResult, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0, proceduralDetails = false; let renderedSource, renderedGeometry;
@@ -2515,8 +2517,8 @@ function init(){
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
   archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
-  levelsG = new THREE.Group(); levelsG.name = 'building-levels';
-  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG);
+  levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof';
+  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -3373,6 +3375,40 @@ function setPresentationContactShadows(enabled){
   if(contactEnabled)buildPresentationContactShadows();else clearPresentationContactShadows();
   return {enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount};
 }
+function syncRoofVisibility(){
+  if(!roofG)return;
+  const visible=!!(opt.roof&&roofResult?.status==='available'&&opt.mode==='orbit'&&!window.FloorPlanPresentation?.active);
+  if(roofG.visible===visible)return;
+  roofG.visible=visible;
+  if(labelG)showLabels(opt.labels&&!visible&&opt.mode==='orbit'&&!anim);
+  const button=$('#roofToggle');if(button){button.classList.toggle('on',visible);button.setAttribute('aria-pressed',String(visible));}
+}
+function buildRoof(){
+  if(!roofG)return;
+  clearGroup(roofG);
+  const activeLevel=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);
+  if(levelContext&&!activeLevel){roofResult={status:'unavailable',reason:'active-level'};syncRoofVisibility();return;}
+  const visibleLevels=levelContext?.levels.filter(l=>levelView==='all'||l.order<=activeLevel.order);
+  roofResult=levelContext
+    ? FloorPlanRoof.deriveBuilding({levels:visibleLevels},FloorPlanExterior,FloorPlanBuilding)
+    : FloorPlanRoof.deriveProject(project,FloorPlanExterior);
+  if(roofResult.status!=='available'){syncRoofVisibility();return;}
+  const material=mat('#c9c1b3',{roughness:.95});
+  for(const surface of roofResult.surfaces){
+    const shape=new THREE.Shape(),dx=activeLevel?.offsetMm.x||0,dy=activeLevel?.offsetMm.y||0;
+    for(let i=0;i<surface.polygon.length;i++){
+      const p=surface.polygon[i],x=wx(p.x-dx),y=-wz(p.y-dy);
+      shape[i?'lineTo':'moveTo'](x,y);
+    }
+    const geo=new THREE.ShapeGeometry(shape);geo.rotateX(-Math.PI/2);
+    const mesh=new THREE.Mesh(geo,material);
+    mesh.position.y=(surface.elevationMm-(activeLevel?.elevationMm||0)+2)/1000;
+    mesh.castShadow=mesh.receiveShadow=true;
+    mesh.userData.roof={kind:surface.kind,levelId:surface.levelId,areaMm2:Math.abs(FloorPlanRoof.area(surface.polygon))};
+    roofG.add(mesh);
+  }
+  syncRoofVisibility();
+}
 
 // `other` = {ox, oy} builds another building level into the (temporarily swapped) archFloor/archUp/lampG groups,
 // without touching presentation state, camera limits or the shared surface material lifecycle.
@@ -3450,6 +3486,7 @@ function buildArch(other){
   });
   if(other)return;
   buildLevels();
+  buildRoof();
   applyLight(); applyGrow(); surfaceRenderer.end();
 }
 
@@ -3697,6 +3734,9 @@ function wholeFrame(){
 const frameScale=()=>{const f=wholeFrame(),e=f.env,portrait=f.stacked?Math.max(1,Math.sqrt(SH()/Math.max(1,SW()))):1;return Math.max(.25,Math.max(e.w,e.h)/12330)*portrait;};
 // Stacked levels use a lower, more oblique angle so the floors read as stacked rather than as one plan.
 const isoWhole = () => {const f=wholeFrame();return pose(f.target, f.target.clone().add((f.stacked?new THREE.Vector3(9,8.5,12.5):new THREE.Vector3(5.5,15.5,10)).multiplyScalar(frameScale())));};
+const roofWhole = () => {const f=wholeFrame(),A=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId),top=Math.max(0,...(roofResult?.surfaces||[]).map(s=>(s.elevationMm-(A?.elevationMm||0))/1000));
+  const target=f.target.clone();target.y=Math.max(target.y,top/2);const span=Math.max(f.env.w,f.env.h)/1000,d=Math.max(7,span*1.7)*Math.max(1,Math.sqrt(SH()/Math.max(1,SW())));
+  return pose(target,target.clone().add(new THREE.Vector3(.65,.85,1.1).multiplyScalar(d)));};
 const topWhole = () => {const t=wholeFrame().target;return pose(t, t.clone().add(new THREE.Vector3(0,19*frameScale(),1e-4)));};
 const curPose = () => pose(orbit.target.clone(), camera.position.clone());
 // 以目标点为中心做球坐标插值：镜头沿弧线倾斜环绕，而不是直线穿越
@@ -3801,7 +3841,7 @@ async function enter(){
     applyGrow();
   });
   if(contextLost)throw Error('WebGL context lost');
-  orbit.enabled = true; showLabels(opt.labels);
+  orbit.enabled = true; showLabels(opt.labels&&!roofG?.visible);
   stage.classList.remove('animating');
 }
 function abort3D(){
@@ -3933,7 +3973,8 @@ function setMode(m){
     syncHint3d();
     orbit.target.set(0, 0, 0); flyTo(isoWhole());
   }
-  showLabels(opt.labels && m === 'orbit');
+  showLabels(opt.labels && m === 'orbit' && !roofG?.visible);
+  syncRoofVisibility();
   archUp.traverse(o => { if (o.userData.walkOnly) o.visible = m === 'walk'; });
 }
 // Where the walk starts: just inside the entrance (or another door), on the free side of the threshold, looking into
@@ -4019,6 +4060,8 @@ function syncWalkTexts(){
 }
 function bindUI(){
   document.querySelectorAll('#modes3d .btn').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+  $('#roofToggle').onclick=()=>{if(!opt.roof&&roofResult?.status!=='available'){toast('Cubierta no disponible: '+(roofResult?.reason||'geometría insuficiente'));return;}opt.roof=!opt.roof;syncRoofVisibility();
+    const chosen=opt.roof;const frame=()=>{if(!active||opt.roof!==chosen||opt.mode!=='orbit')return;if(anim){requestAnimationFrame(frame);return;}flyTo(chosen?roofWhole():isoWhole());};frame();};
   // 触屏设备用摇杆漫游；桌面端锁定鼠标，锁定失败时也退回到摇杆
   $('#walkOverlay').onclick = () => COARSE ? startTouchWalk() : walkCtl.lock();
   $('#walkStart').onclick = e => { e.stopPropagation(); COARSE ? startTouchWalk() : walkCtl.lock(); };
@@ -4032,7 +4075,7 @@ function bindUI(){
   document.querySelectorAll('#toggles3d .btn').forEach(b => b.onclick = () => {
     const k = b.dataset.t; opt[k] = !opt[k]; b.classList.toggle('on', opt[k]);
     if (k === 'furn'){ furnG.visible = opt.furn; levelsG?.traverse(o=>{if(o.userData.levelFurniture)o.visible=opt.furn;}); if (!opt.furn && ui.sel?.kind === 'furn') window.select(null); }
-    if (k === 'labels') showLabels(opt.labels && opt.mode === 'orbit' && !anim);
+    if (k === 'labels') showLabels(opt.labels && opt.mode === 'orbit' && !anim && !roofG?.visible);
     if (k === 'night') applyLight();
   });
   $('#sun').oninput = e => { opt.hour = +e.target.value; applyLight(); };
@@ -4062,6 +4105,7 @@ function loop(){
   doors.forEach(d => { const tg = d.open ? d.a1 : d.a0; d.cur += (tg - d.cur) * Math.min(1, Math.min(raw, .25)*6); d.pivot.rotation.y = d.cur; });
   updateSel();
   syncCeilingFixtures(camera);
+  syncRoofVisibility();
   renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 }
@@ -4083,6 +4127,7 @@ function shotSize(opts = {}){
   return {width:Math.max(1, fit(w*scale)), height:Math.max(1, fit(h*scale)), mode:'custom', reduced:scale < 1};
 }
 function shot(opts = {}){
+  syncRoofVisibility();
   if (window.FloorPlanBuildingUI && !window.FloorPlanBuildingUI.gate('Captura 3D')) throw Error('Distribución pendiente: corrige los muebles sobre escaleras antes de generar imágenes.');
   const name = tr('户型装修方案', 'floor-plan-design') + '-3D.png', size = shotSize(opts);
   let url;
@@ -4112,11 +4157,12 @@ function shot(opts = {}){
 // camera only moves along that direction (and the fov is not changed), so the geometry is never stretched or cropped;
 // the working view, camera and canvas are restored before the browser paints, exactly as in shot().
 function deliveryShot({width, height, margin = .03, frame = true} = {}){
+  syncRoofVisibility();
   if (window.FloorPlanBuildingUI && !window.FloorPlanBuildingUI.gate('Captura 3D')) throw Error('Distribución pendiente: corrige los muebles sobre escaleras antes de generar imágenes.');
   const w = Math.round(width), h = Math.round(height);
   if (!(w > 0 && h > 0) || w*h > SHOT_MAX_PIXELS || Math.max(w, h) > shotLimit()) throw Error(tr('截图选项无效。', 'Invalid capture option.'));
   const box = new THREE.Box3();
-  for (const g of [archFloor, archUp, furnG, levelsG]) if (g?.visible) box.expandByObject(g);
+  for (const g of [archFloor, archUp, furnG, levelsG, roofG]) if (g?.visible) box.expandByObject(g);
   const cam = camera.clone();
   if (!frame || box.isEmpty()){
     // A room stop keeps its own camera: same «contain» rule as shot(), nothing visible in the view is cropped.
@@ -4164,6 +4210,7 @@ function presentationCapture(){
   if(!active||anim||!camera)throw Error('La escena 3D todavía no está lista.');
   const state={position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,
     options:{...opt},solarResult:solarResult&&structuredClone(solarResult),doors:doors.map(d=>({open:d.open,cur:d.cur}))};
+  opt.roof=false;syncRoofVisibility();
   solarResult=null;applyLight();
   if(fly?.res)fly.res(false);fly=null;
   if(opt.mode==='walk'){
@@ -4355,7 +4402,7 @@ function presentationRestore(state){
   }else{camera.lookAt(orbit.target);orbit.enabled=true;$('#walkOverlay').style.display='none';}
   syncCutBtns();syncModeBtns();syncHint3d();
   document.querySelectorAll('#toggles3d .btn').forEach(b=>b.classList.toggle('on',!!opt[b.dataset.t]));
-  $('#sun').value=String(opt.hour);applyLight();sync(true);showLabels(opt.labels);
+  $('#sun').value=String(opt.hour);applyLight();sync(true);showLabels(opt.labels&&!roofG?.visible);
   state.doors.forEach((saved,i)=>{if(doors[i]){doors[i].open=saved.open;doors[i].cur=saved.cur;doors[i].pivot.rotation.y=saved.cur;}});
   renderer.setSize(SW(),SH());labelRenderer.setSize(SW(),SH());
 }
@@ -4414,6 +4461,7 @@ window.View3D.presentationReveal=presentationReveal;
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
+Object.defineProperty(window.View3D,'roofInfo',{get:()=>({status:roofResult?.status||'unavailable',reason:roofResult?.reason||null,visible:!!roofG?.visible,surfaces:roofG?.children.map(m=>({...m.userData.roof,normal:m.geometry.attributes.normal.getY(0)}))||[]})});
 Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount,transferBytes:0,textureCount:0})});
 window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
