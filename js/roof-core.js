@@ -20,6 +20,33 @@
   function onSegment(p,a,b) {
     return Math.abs(cross(sub(b,a),sub(p,a)))<=EPS.crossMm2 && p.x>=Math.min(a.x,b.x)-EPS.pointMm && p.x<=Math.max(a.x,b.x)+EPS.pointMm && p.y>=Math.min(a.y,b.y)-EPS.pointMm && p.y<=Math.max(a.y,b.y)+EPS.pointMm;
   }
+  function segmentCovered(a,b,outer,covered) {
+    if(!covered(a)||!covered(b))return false;
+    const u=sub(b,a),length=Math.hypot(u.x,u.y);
+    if(length<=EPS.lengthMm)return true;
+    const length2=length*length,tolerance=EPS.lengthMm/length,parameters=[0,1];
+    for(let i=0;i<outer.length;i++){
+      const c=outer[i],d=outer[(i+1)%outer.length],v=sub(d,c),den=cross(u,v),w=sub(c,a);
+      if(Math.abs(den)>EPS.crossMm2){
+        const t=cross(w,v)/den,s=cross(w,u)/den,edgeLength=Math.hypot(v.x,v.y);
+        if(t>=-tolerance&&t<=1+tolerance&&s>=-EPS.lengthMm/edgeLength&&s<=1+EPS.lengthMm/edgeLength){
+          const p={x:a.x+t*u.x,y:a.y+t*u.y};
+          if(onSegment(p,a,b)&&onSegment(p,c,d))parameters.push(Math.max(0,Math.min(1,t)));
+        }
+      }else if(Math.abs(cross(u,w))<=EPS.crossMm2&&Math.abs(cross(u,sub(d,a)))<=EPS.crossMm2){
+        const t0=(w.x*u.x+w.y*u.y)/length2,q=sub(d,a),t1=(q.x*u.x+q.y*u.y)/length2;
+        const lo=Math.max(0,Math.min(t0,t1)),hi=Math.min(1,Math.max(t0,t1));
+        if(hi>=lo-tolerance)parameters.push(Math.max(0,Math.min(1,lo)),Math.max(0,Math.min(1,hi)));
+      }
+    }
+    parameters.sort((x,y)=>x-y);
+    const unique=[];for(const t of parameters)if(!unique.length||t-unique[unique.length-1]>tolerance)unique.push(t);
+    for(let i=0;i<unique.length-1;i++)if(unique[i+1]-unique[i]>tolerance){
+      const t=(unique[i]+unique[i+1])/2;
+      if(!covered({x:a.x+t*u.x,y:a.y+t*u.y}))return false;
+    }
+    return true;
+  }
   function segmentsIntersect(a,b,c,d) {
     const o1=cross(sub(b,a),sub(c,a)),o2=cross(sub(b,a),sub(d,a)),o3=cross(sub(d,c),sub(a,c)),o4=cross(sub(d,c),sub(b,c));
     if((o1>EPS.crossMm2&&o2< -EPS.crossMm2||o1< -EPS.crossMm2&&o2>EPS.crossMm2) && (o3>EPS.crossMm2&&o4< -EPS.crossMm2||o3< -EPS.crossMm2&&o4>EPS.crossMm2))return true;
@@ -90,6 +117,11 @@
       shifted.push(corner);
     }
     const outer=canonical(shifted);if(outer.status!=='available')return fail('unavailable','invalid-exterior-offset');
+    // The cycle only proves a body if it encloses the indoor rooms 8A read (same filter): a closed shaft among rooms
+    // without perimeter walls, or a room drawn outside the walls, is not a proved footprint.
+    const indoor=(project.rooms||[]).filter(r=>Array.isArray(r.polygon)&&r.polygon.length>=3&&!['terrace','balcony'].includes(r.family));
+    const covered=v=>contains(outer.polygon,v.x,v.y)||outer.polygon.some((a,i)=>onSegment(v,a,outer.polygon[(i+1)%outer.polygon.length]));
+    if(!indoor.every(r=>r.polygon.every((v,i)=>segmentCovered(v,r.polygon[(i+1)%r.polygon.length],outer.polygon,covered))))return fail('unavailable','room-outside-facade-cycle');
     const heights=walls.map(w=>w.heightMm);
     if(heights.some(h=>!Number.isFinite(h)||h<=0))return fail('unavailable','invalid-facade-height');
     if(heights.some(h=>Math.abs(h-heights[0])>EPS.heightMm))return fail('unavailable','heterogeneous-top-elevation');
