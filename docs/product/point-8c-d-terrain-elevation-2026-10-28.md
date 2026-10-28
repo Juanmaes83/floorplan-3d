@@ -1,6 +1,6 @@
 # Punto 8C-D — terreno / elevación territorial
 
-**Estado:** candidato en revisión. **Base:** `0adf6fa0cd3ca7cfcb2dd654eaaa7cef4e6adac0` (8C-C fusionado). **Gate comprobado:** 2026-10-28 en Chromium real, sobre HTTPS y origen local distinto.
+**Estado:** CERRADO e integrado en `master`. **Base de implementación:** `0adf6fa0cd3ca7cfcb2dd654eaaa7cef4e6adac0` (8C-C fusionado). **PR:** #131. **HEAD final revisado:** `16d50ac34cd164818f1979486ca9e987cf4d4e51`. **Squash merge:** `9d5a9fe48198f3a90d931dd82f88f6a122d30157`. **Gate comprobado:** 2026-10-28 en Chromium real, sobre HTTPS y origen local distinto.
 
 ## Producto y evidencia oficial
 
@@ -29,6 +29,21 @@ GeoProvider 1.3.0 añade `getTerrain` y conserva providers 1.0–1.2. El adapter
 
 La UI neutral `Archivo → Contexto territorial → Terreno / elevación` muestra fuente, producto, cobertura, CRS, resolución, referencia vertical, fecha de recuperación, atribución/licencia y mínimo/máximo sólo si existe grid de sesión. La previsualización SVG superpone una superficie contextual a la parcela en su mismo marco, sin recorte por polígono ni ortofoto drapeada. Reemplazar/eliminar parcela borra ortofoto y terrain; eliminar terrain deja parcela y ortofoto. `site.terrain` exige parcela y CRS consistente. Un provider ausente no invalida el archivo ni provoca petición de red.
 
-## Límites
+## Verificación final
 
-No se infiere relación vertical entre edificio y terreno, ni floor 0, ni pendiente, orientación, movimiento de tierras, capacidad portante, suelo, estratigrafía, nivel freático, cimentación, excavación, drenaje o estabilidad. No modifica Solar, 8A/8B, View3D principal, Walk, Presentation ni exportadores. **8C-E continúa pendiente.** El cierre canónico requiere revisión, CI y merge posteriores; no se realiza aquí.
+HEAD final de PR #131: `16d50ac34cd164818f1979486ca9e987cf4d4e51`.
+
+Evidencia local final:
+
+- suite no-browser: **556 PASS, 2 SKIP, 0 FAIL**;
+- Chromium relevante: **23/23 PASS**, incluidos 390×844 y 844×390;
+- schemas: **6/6 PASS**;
+- sintaxis y `git diff --check`: **PASS**.
+
+CI natural final sobre el HEAD exacto: **SUCCESS** en Guided experience, Rubik local MCP, Point 8C-C orthophoto context, Point 8C-D terrain context, Integrated browser regressions, Point 6 solar and compatibility y Multiformat guided import. No hubo reruns manuales. El primer run de Multiformat detectó únicamente que el allowlist F2 no admitía dígitos en nombres de scripts locales; el segundo commit amplió de forma mínima esa expresión a `[a-z0-9-]` manteniendo mismo origen, GET, sin query ni body, y el run final quedó verde.
+
+## Límites y siguiente corte
+
+No se infiere relación vertical entre edificio y terreno, ni floor 0, ni pendiente, orientación, movimiento de tierras, capacidad portante, suelo, estratigrafía, nivel freático, cimentación, excavación, drenaje o estabilidad. No modifica Solar, 8A/8B, View3D principal, Walk, Presentation ni exportadores.
+
+**8C-D está cerrado. 8C-E es el único corte pendiente de 8C.** 8C-E debe integrar edificio + parcela + ortofoto + terreno + orientación en una única cadena espacial y decidir explícitamente presentación/exportación/atribución. Punto 8 no se considera cerrado hasta completar 8C-E y su auditoría final.
