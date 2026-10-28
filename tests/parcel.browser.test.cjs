@@ -1,0 +1,87 @@
+const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs/promises'),path=require('node:path'),{createServer}=require('node:http'),{chromium}=require('playwright');
+const ROOT=path.resolve(__dirname,'..'),FIXTURE=path.join(__dirname,'fixtures','catastro-cp-synthetic.gml');
+let server,browser,url;
+before(async()=>{
+ server=createServer(async(req,res)=>{try{const pathname=new URL(req.url,'http://local').pathname,file=path.resolve(ROOT,'.'+(pathname==='/'?'/index.html':pathname));if(!file.startsWith(ROOT+path.sep))throw Error('path');res.setHeader('Content-Type',/\.m?js$/.test(file)?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.json')?'application/json':file.endsWith('.wasm')?'application/wasm':file.endsWith('.png')?'image/png':file.endsWith('.webp')?'image/webp':'text/html');res.end(await fs.readFile(file));}catch{res.writeHead(404);res.end();}});
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));url='http://127.0.0.1:'+server.address().port+'/';
+ browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+});
+after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+async function pageFor(t,viewport){
+ const context=await browser.newContext({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000});t.after(()=>context.close());
+ const page=await context.newPage(),errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ page.on('console',message=>{if(message.type()==='error'&&!/Failed to load resource/.test(message.text()))errors.push(message.text());});
+ await page.route('**/*',route=>route.request().url().startsWith(url)?route.continue():route.abort());
+ await page.goto(url);await page.waitForFunction(()=>window.FloorPlanTerritoryUI&&window.FloorPlanBuildingUI);
+ await require('./editor-fixture.cjs')(page);
+ return {page,errors};
+}
+const editable=page=>page.evaluate(()=>JSON.stringify(Object.fromEntries(['walls','openings','rooms','materials','objects','roofParapet'].map(k=>[k,FloorPlanApp.project[k]]))));
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}])test('8C-B document parcel UI '+viewport.width+'x'+viewport.height,{timeout:120000},async t=>{
+ const {page,errors}=await pageFor(t,viewport),beforeGeometry=await editable(page);
+ await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();await page.locator('#territoryDialog[open]').waitFor();
+ assert.match(await page.locator('.territory-provider').innerText(),/Catastro/);
+ assert.equal(await page.locator('#territoryProvider').isVisible(),false);
+ assert.equal(await page.locator('#territoryReference').isVisible(),false);
+ await page.locator('#territoryFile').setInputFiles(FIXTURE);
+ await page.locator('#territoryImport').click();
+ await page.locator('#territoryCard:not([hidden])').waitFor();
+ assert.match(await page.locator('#territoryCard').innerText(),/1907401VK4810H/);
+ assert.match(await page.locator('#territoryCard').innerText(),/EPSG:25830/);
+ assert.match(await page.locator('#territoryCard').innerText(),/Dirección General del Catastro/);
+ assert.equal(await page.locator('#territoryPreview path').count(),2);
+ assert.equal((await page.locator('#territoryPreview path').first().getAttribute('d')).match(/M /g).length,2);
+ assert.equal(await page.locator('#territoryDialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true);
+ await fs.mkdir(path.join(ROOT,'output','playwright','point-8c-b'),{recursive:true});
+ await page.screenshot({path:path.join(ROOT,'output','playwright','point-8c-b',viewport.width+'x'+viewport.height+'-parcel.png')});
+ await page.locator('#territorySave').click();
+ assert.deepEqual(await page.evaluate(()=>({version:FloorPlanApp.project.schemaVersion,reference:FloorPlanApp.project.site.parcel.reference})),{version:'1.9.0',reference:'1907401VK4810H'});
+ assert.equal(await editable(page),beforeGeometry);
+ await page.reload();await page.waitForFunction(()=>window.FloorPlanTerritoryUI);await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();
+ await page.locator('#territoryCard:not([hidden])').waitFor();
+ assert.equal(await page.locator('#territoryPreview path').count(),2);
+ assert.equal(await editable(page),beforeGeometry);
+ await page.locator('#territoryRemove').click();
+ assert.equal(await page.evaluate(()=>FloorPlanApp.project.site?.parcel),undefined);
+ assert.equal(await editable(page),beforeGeometry);
+ assert.equal(await page.evaluate(()=>{FloorPlanCore.validate(FloorPlanApp.project);return true;}),true);
+ assert.deepEqual(errors,[]);
+});
+test('8C-B parser rejects DTD, ambiguous selection and unsupported CRS',{timeout:60000},async t=>{
+ const {page,errors}=await pageFor(t,{width:1440,height:900}),xml=await fs.readFile(FIXTURE,'utf8');
+ const result=await page.evaluate(async text=>{
+  const registry=FloorPlanGeoProvider.createDefaultRegistry(),id='catastro-inspire-cp';
+  const base=await registry.getParcel(id,{mode:'document',text});
+  const dtd=await registry.getParcel(id,{mode:'document',text:'<!DOCTYPE foo>'+text});
+  const malformed=await registry.getParcel(id,{mode:'document',text:text.replace('</g:FeatureCollection>','')});
+  const unknown=await registry.getParcel(id,{mode:'document',text:text.replaceAll('25830','4326')});
+  const conflict=await registry.getParcel(id,{mode:'document',text:text.replace('<g:Surface srsName="http://www.opengis.net/def/crs/EPSG/0/25830"','<g:Surface srsName="http://www.opengis.net/def/crs/EPSG/0/25829"')});
+  const second=text.replaceAll('1907401VK4810H','1907401VK4810J').match(/<g:featureMember>[\s\S]*?<\/g:featureMember>/)[0];
+  const many=text.replace('</g:FeatureCollection>',second+'</g:FeatureCollection>');
+  const ambiguous=await registry.getParcel(id,{mode:'document',text:many});
+  const selected=await registry.getParcel(id,{mode:'document',text:many,reference:'1907401VK4810J'});
+  return {base,dtd,malformed,unknown,conflict,ambiguous,selected};
+ },xml);
+ assert.equal(result.base.status,'available');assert.equal(result.base.parcel.sourceGeometry.polygons.length,2);
+ assert.deepEqual([result.dtd.status,result.dtd.reason],['invalid','invalid-source-document']);
+ assert.deepEqual([result.malformed.status,result.malformed.reason],['invalid','invalid-source-document']);
+ assert.deepEqual([result.unknown.status,result.unknown.reason],['unsupported','unsupported-source-crs']);
+ assert.deepEqual([result.conflict.status,result.conflict.reason],['unavailable','inconsistent-source-crs']);
+ assert.deepEqual([result.ambiguous.status,result.ambiguous.reason],['invalid','multiple-parcels-require-selection']);
+ assert.equal(result.selected.parcel.reference,'1907401VK4810J');assert.deepEqual(errors,[]);
+});
+test('8C-B building stores parcel only at shared site',{timeout:60000},async t=>{
+ const {page,errors}=await pageFor(t,{width:1440,height:900});
+ await page.evaluate(()=>FloorPlanBuildingUI.createBuilding());
+ await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();
+ await page.locator('#territoryFile').setInputFiles(FIXTURE);await page.locator('#territoryImport').click();
+ await page.locator('#territoryCard:not([hidden])').waitFor();await page.locator('#territorySave').click();
+ const state=await page.evaluate(()=>({site:FloorPlanBuildingUI.site,level:FloorPlanApp.project.site,context:FloorPlanApp.levelContext}));
+ assert.equal(state.site.parcel.reference,'1907401VK4810H');assert.equal(state.level?.parcel,undefined);assert.ok(state.context);
+ await page.reload();await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context);
+ await page.locator('#territoryOpen').evaluate(n=>n.closest('details').open=true);await page.locator('#territoryOpen').click();
+ await page.locator('#territoryCard:not([hidden])').waitFor();
+ assert.equal(await page.locator('#territoryPreview path').count(),2);assert.deepEqual(errors,[]);
+});

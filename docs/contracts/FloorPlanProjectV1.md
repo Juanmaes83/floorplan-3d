@@ -1,5 +1,11 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
+## Ampliación 1.9.0 — parcela territorial fuente (Punto 8C-B)
+
+`site.parcel` es opcional y sólo se admite desde ProjectV1 1.9.0. Contiene `reference` de 14 caracteres, `inspireId` opcional, `sourceCrs`, `sourceGeometry` MultiPolygon (polígonos, anillo exterior y huecos), `frame` métrico persistente y `source` con procedencia y condiciones de licencia de esa parcela. La geometría conserva coordenadas de fuente sin simplificación; su representación local en milímetros es derivada y no se guarda. No se persisten XML bruto, respuesta WFS, caché de bbox ni geometría editable generada. `site.location` y `site.northOffsetDeg` conservan su significado. La parcela no determina dónde está el edificio ni cambia muros, estancias, objetos o materiales.
+
+1.0–1.6 prohíben `site`; 1.7–1.8 admiten `site` pero prohíben `site.parcel`; 1.9 lo permite. Abrir un proyecto antiguo no lo migra. Añadir una parcela eleva la versión a 1.9.0; eliminarla no la degrada. JSON/ZIP editables conservan la parcela, incluso si el provider ya no existe. No se incluye automáticamente en PNG, GLB, Blender, ficha o presentación. El usuario debe respetar las condiciones de la fuente al compartir archivos editables con coordenadas originales.
+
 ## Ampliación 1.8.0 — peto visual declarado (Punto 8B-B)
 
 `roofParapet` es opcional por proyecto/planta. `{enabled:false}` expresa una decisión explícita de no mostrar peto; la ausencia conserva documentos antiguos sin añadir nada. `{enabled:true,heightMm}` declara un peto visual en los bordes exteriores soportados de las superficies de cubierta que `FloorPlanRoof` demuestra para esa planta. `heightMm` es entero de 100 a 3000 mm, introducido por la persona, sin valor inicial automático ni significado normativo. `materialId` opcional referencia un material existente de categoría `wall`; ausente usa un acabado visual neutro. El parámetro no almacena polígonos, caras, mallas ni triangulación.

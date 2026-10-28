@@ -66,10 +66,26 @@
   "allOf": [
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-7]\\."}}},"then":{"not":{"required":["roofParapet"]}}},
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.(7|8)\\."}}},"then":{"properties":{"site":{"not":{"required":["parcel"]}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
   "$defs": {
+    "parcel": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reference", "sourceCrs", "sourceGeometry", "frame", "source"],
+      "properties": {
+        "reference": { "type": "string", "pattern": "^[A-Z0-9]{14}$" },
+        "inspireId": { "type": "object", "additionalProperties": false, "required": ["localId", "namespace"], "properties": { "localId": { "type": "string", "minLength": 1, "maxLength": 200 }, "namespace": { "type": "string", "minLength": 1, "maxLength": 200 } } },
+        "sourceCrs": { "enum": ["EPSG:25829", "EPSG:25830", "EPSG:25831", "EPSG:32628"] },
+        "sourceGeometry": { "$ref": "#/$defs/parcelGeometry" },
+        "frame": { "type": "object", "additionalProperties": false, "required": ["sourceCrs", "originX", "originY", "sourceUnits", "xAxis", "yAxis"], "properties": { "sourceCrs": { "enum": ["EPSG:25829", "EPSG:25830", "EPSG:25831", "EPSG:32628"] }, "originX": { "type": "number" }, "originY": { "type": "number" }, "sourceUnits": { "const": "m" }, "xAxis": { "const": "east" }, "yAxis": { "const": "north" } } },
+        "source": { "$ref": "#/$defs/parcelSource" }
+      }
+    },
+    "parcelGeometry": { "type": "object", "additionalProperties": false, "required": ["type", "polygons"], "properties": { "type": { "const": "MultiPolygon" }, "polygons": { "type": "array", "minItems": 1, "maxItems": 64, "items": { "type": "object", "additionalProperties": false, "required": ["rings"], "properties": { "rings": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "type": "array", "minItems": 3, "maxItems": 4000, "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } } } } } } } } },
+    "parcelSource": { "type": "object", "additionalProperties": false, "required": ["providerId", "type"], "properties": { "providerId": { "type": "string", "minLength": 1, "maxLength": 80 }, "type": { "enum": ["user-entered", "official-source", "derived", "unknown"] }, "sourceName": { "type": "string", "maxLength": 200 }, "sourceUrl": { "type": "string", "maxLength": 500 }, "sourceId": { "type": "string", "maxLength": 200 }, "retrievedAt": { "type": "string", "format": "date-time" }, "version": { "type": "string", "maxLength": 100 }, "derivedFrom": { "type": "string", "maxLength": 200 }, "edition": { "type": "string", "maxLength": 100 }, "attribution": { "type": "string", "maxLength": 500 }, "license": { "type": "object", "additionalProperties": false, "required": ["status"], "properties": { "status": { "enum": ["not-applicable", "unknown", "verified", "restricted"] }, "name": { "type": "string", "maxLength": 500 }, "url": { "type": "string", "maxLength": 500 }, "note": { "type": "string", "maxLength": 500 } } } } },
+
     "roofParapet": {
       "type": "object", "additionalProperties": false, "required": ["enabled"],
       "description": "Optional 1.8.0 user-declared visual parapet for this level's supported outer roof boundary; never a regulatory claim or derived mesh.",
@@ -85,6 +101,7 @@
       "description": "Optional internal site data. North is clockwise from plan-up, without rotating geometry. Absence means not configured.",
       "properties": {
         "northOffsetDeg": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "parcel": { "$ref": "#/$defs/parcel" },
         "location": {
           "type": "object", "additionalProperties": false, "required": ["latitude", "longitude", "timeZone", "source"],
           "properties": {

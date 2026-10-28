@@ -4,6 +4,7 @@
   const schema = typeof module !== 'undefined' ? require('./project-schema.js') : root.FloorPlanSchema;
   const reference = typeof module !== 'undefined' ? require('./reference-project.js') : root.FloorPlanReference;
   const Geo = typeof module !== 'undefined' ? require('./geo-provider.js') : root.FloorPlanGeoProvider;
+  const ParcelSite = typeof module !== 'undefined' ? require('./parcel-site-adapter.js') : root.FloorPlanParcelSiteAdapter;
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -85,6 +86,11 @@
     if(project.site!==undefined){
       if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
+      if(project.site.parcel!==undefined){
+        if(Number(version.split('.')[1])<9)fail('/site/parcel','requires project 1.9.0');
+        check(project.site.parcel,schema.$defs.parcel,'/site/parcel',false);
+        try{ParcelSite.fromSiteParcel(project.site.parcel);}catch(error){fail('/site/parcel',error.message);}
+      }
     }
     if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
     const ids = new Map([[project.id, 'project']]);
@@ -288,9 +294,9 @@
     if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
     validate(next);return next;
   }
-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);if(Number(next.schemaVersion.split('.')[1])<7)next.schemaVersion='1.7.0';validate(next);return next;}
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
-  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);};
+  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

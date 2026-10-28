@@ -1,0 +1,23 @@
+.territory-dialog{width:min(700px,calc(100vw - 20px));max-height:calc(100dvh - 20px);padding:0;border:1px solid #ccc3b6;border-radius:12px;color:#292723;background:#fffdf9;overflow:hidden;box-sizing:border-box}
+.territory-dialog::backdrop{background:#18232680}
+.territory-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid #ddd5c9}
+.territory-dialog h2{font-size:22px;margin:0}
+.territory-body{overflow:auto;max-height:calc(100dvh - 150px);padding:12px 18px}
+.territory-body>p{font-size:13px;line-height:1.45}
+.territory-provider{display:flex;align-items:center;gap:8px;margin:12px 0;font-weight:600}
+.territory-dialog section{margin:14px 0}
+.territory-dialog label{display:flex;flex-direction:column;gap:5px;margin:8px 0;font-size:13px;font-weight:600}
+.territory-dialog input,.territory-dialog select{box-sizing:border-box;width:100%;max-width:100%;min-height:40px;padding:7px;border:1px solid #ccc3b6;border-radius:5px;background:#fff;font:inherit}
+.territory-dialog button{min-height:38px}
+.territory-dialog [hidden]{display:none!important}
+#territoryStatus{min-height:1.3em;color:#36585b}
+#territoryCard{border:1px solid #ccc3b6;border-radius:8px;padding:12px;background:#f5f4ee}
+#territoryCard h3{margin:0 0 8px;font-size:17px}
+#territoryCard dl{display:grid;grid-template-columns:minmax(110px,1fr) 2fr;gap:5px 10px;margin:0;font-size:12px;overflow-wrap:anywhere}
+#territoryCard dt{font-weight:600}#territoryCard dd{margin:0}
+.territory-preview{height:240px;border:1px solid #d9d5c9;background:#fff;margin-top:12px;overflow:hidden}
+.territory-preview svg{width:100%;height:100%}
+.territory-shape{fill:#cfe4df;stroke:#245a62;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.territory-caution{font-size:11px;line-height:1.45;color:#625b51}
+.territory-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;border-top:1px solid #ddd5c9}
+@media(max-width:600px){.territory-body{max-height:calc(100dvh - 135px);padding:10px 14px}.territory-header,.territory-actions{padding:10px 14px}.territory-preview{height:180px}}

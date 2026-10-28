@@ -654,8 +654,11 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 
 <script src="js/project-schema.js"></script>
 <script src="js/reference-project.js"></script>
+<script src="js/parcel-core.js"></script>
 <script src="js/geo-provider.js"></script>
+<script src="js/catastro-parcel-provider.js"></script>
 <script src="js/geo-site-adapter.js"></script>
+<script src="js/parcel-site-adapter.js"></script>
 <script src="js/project-core.js"></script>
 <script src="js/exterior-core.js"></script>
 <script src="js/roof-core.js"></script>
@@ -2409,6 +2412,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get levelContext(){return window.FloorPlanBuildingUI?.context||null;},
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
+  setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
   async enterPresentation3D(){await setView('3d',{presentation:true});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
     viewMode,selection:ui.sel?structuredClone(ui.sel):null,tool:ui.tool,view:{...view},
@@ -2455,6 +2459,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/solar-core.js"></script>
 <script src="js/solar-renderer-adapter.js"></script>
 <script src="js/solar-ui.js"></script>
+<script src="js/territory-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：

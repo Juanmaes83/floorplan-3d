@@ -1,12 +1,16 @@
 # FloorPlanBuildingV1 — edificio de varias plantas (primer corte)
 
+## Ampliación 1.2.0 — parcela territorial compartida (Punto 8C-B)
+
+`building.site.parcel` es la única autoridad territorial de un edificio. BuildingV1 1.0 no admite `site`; 1.1 admite `site` sin parcela; 1.2 admite `site.parcel` y proyectos de planta hasta 1.9.0. Abrir versiones anteriores no las migra. Añadir una parcela eleva el edificio a 1.2.0; eliminarla no lo degrada. Ninguna planta incrustada puede tener `level.project.site.parcel` como autoridad alternativa. Crear un edificio desde un proyecto con parcela copia ésta a `building.site` y la retira de la copia de planta. Exportar una planta incorpora `building.site.parcel` a la copia ProjectV1 1.9.0 sin modificar el edificio original. JSON/ZIP conservan geometría fuente, frame y procedencia, nunca XML bruto ni preview local. La parcela no sitúa automáticamente el edificio.
+
 ## Compatibilidad de proyectos de planta 1.8.0
 
-El edificio sigue en versiones 1.0.0/1.1.0 y admite ahora proyectos de planta 1.8.0 en modo estricto. Cada `levels[].project.roofParapet` opcional expresa sólo la decisión de peto visual de esa planta; el edificio no duplica el campo. Abrir edificios anteriores no migra sus proyectos. JSON/ZIP conservan la declaración; huellas, segmentos y mallas permanecen derivados.
+La ampliación 1.1.0 admitía proyectos de planta 1.8.0 en modo estricto. Cada `levels[].project.roofParapet` opcional expresa sólo la decisión de peto visual de esa planta; el edificio no duplica el campo. Abrir edificios anteriores no migra sus proyectos. JSON/ZIP conservan la declaración; huellas, segmentos y mallas permanecen derivados.
 
 ## Ampliación 1.1.0 — orientación y ubicación compartidas
 
-Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición explícita de `site` eleva a 1.1.0. `site` es opcional y reutiliza exactamente la definición del proyecto 1.7.0: norte lógico, ubicación IANA y procedencia. La raíz es autoridad para todas las plantas, incluso cuando el campo está ausente. Se conservan sin reescribir los proyectos incrustados, que ahora admiten versiones conocidas 1.0.0–1.8.0. Crear un edificio desde una planta configurada copia `site` a la raíz. Exportar una planta incorpora en la copia la configuración compartida. JSON/ZIP, copias y variantes conservan estos datos internos. Abrir un edificio antiguo no lo migra ni inventa datos.
+La ampliación 1.1.0 aceptó `site` sin parcela: norte lógico, ubicación IANA y procedencia. La raíz es autoridad para todas las plantas, incluso cuando el campo está ausente. Se conservan sin reescribir los proyectos incrustados. Crear un edificio desde una planta configurada copia `site` a la raíz. Exportar una planta incorpora en la copia la configuración compartida. JSON/ZIP, copias y variantes conservan estos datos internos. Abrir un edificio antiguo no lo migra ni inventa datos.
 
 **Estado:** contrato del primer corte multipiso, implementado en esta PR (apilada sobre #50) y **pendiente de aceptación**. Juanma eligió la opción D de [#50](../technical/multilevel-contract-gate0-2026-10-17.md) el 18-10-2026. No modifica [FloorPlanProjectV1](FloorPlanProjectV1.md) ni su schema: cada planta sigue siendo un proyecto 1.x válido. Rubik es una herramienta de **propuesta y comunicación**; nada de este documento acredita precisión profesional, documentación técnica, BIM ni cumplimiento normativo o estructural.
 
@@ -22,7 +26,7 @@ Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición e
 | Campo | Regla |
 | --- | --- |
 | `schema` | `"rubik-sota.floorplan-building"`. |
-| `schemaVersion` | `"1.0.0"` o `"1.1.0"` (esta última permite `site`). Otras versiones se rechazan, incluidos minors futuros. |
+| `schemaVersion` | `"1.0.0"`, `"1.1.0"` o `"1.2.0"`; sólo 1.2.0 permite `site.parcel`. Otras versiones se rechazan, incluidos minors futuros. |
 | `id` | `bld_` más el sufijo del contrato 1.x. Estable: no se regenera al editar, guardar, exportar ni importar. Duplicar o crear una variante genera otro. |
 | `name`, `createdAt`, `updatedAt`, `units` | Nombre de 1–200 caracteres; fechas UTC; `updatedAt ≥ createdAt`; `units: "mm"`. |
 | `levels` | De 1 a **2** plantas en este corte. |
@@ -44,7 +48,7 @@ Cada planta tiene `id` (`lvl_`), `name` (1–80), `order`, `elevationMm`, `slabT
 
 Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 
-- `schemaVersion` debe ser **1.0.0–1.8.0**, las versiones que este lector conoce.
+- `schemaVersion` debe ser **1.0.0–1.9.0**, las versiones que este lector conoce; `site.parcel` no está permitido en una planta incrustada.
 - Se valida con `FloorPlanCore.validate(project, {strict: true})`: cualquier campo no definido en el schema 1.x es un error. Por compatibilidad, un 1.x suelto de versión posterior a 1.0.0 conserva campos desconocidos; aquí no, para impedir que `levels[]`, `levelId` u otro dato multipiso viaje oculto dentro de una planta.
 - En `extensions` (`x-*`) se rechaza cualquier clave, a cualquier profundidad, que nombre plantas, niveles, escaleras o edificio.
 - Un edificio no puede incrustarse dentro de otro.
