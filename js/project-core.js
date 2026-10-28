@@ -86,6 +86,7 @@
       if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
     }
+    if(project.roofParapet!==undefined&&Number(version.split('.')[1])<8)fail('/roofParapet','requires project 1.8.0');
     const ids = new Map([[project.id, 'project']]);
     const warnings = [];
     if (future) warnings.push('Newer V1 version: unknown fields are retained; unsupported values are rejected.');
@@ -97,6 +98,7 @@
     const ref = (value, kind, path) => { if (ids.get(value) !== kind) fail(path, `missing ${kind} reference ${value}`); };
     const walls = new Map(project.walls.map(w => [w.id, w]));
     for(const w of project.walls)if(w.surfaceMaterialId){ref(w.surfaceMaterialId,'materials',`/walls/${w.id}/surfaceMaterialId`);if(project.materials.find(m=>m.id===w.surfaceMaterialId).category!=='wall')fail(`/walls/${w.id}/surfaceMaterialId`,'wall material required');}
+    if(project.roofParapet?.materialId){ref(project.roofParapet.materialId,'materials','/roofParapet/materialId');if(project.materials.find(m=>m.id===project.roofParapet.materialId).category!=='wall')fail('/roofParapet/materialId','wall material required');}
     for (const w of project.walls) if (Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y) < 1) fail(`/walls/${w.id}`, 'zero-length wall');
     for (const o of project.openings) {
       ref(o.wallId, 'walls', `/openings/${o.id}/wallId`);
@@ -287,7 +289,8 @@
     validate(next);return next;
   }
   function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);if(Number(next.schemaVersion.split('.')[1])<7)next.schemaVersion='1.7.0';validate(next);return next;}
+  function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
   const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);};
-  const api={clone,id,point,validate,validateSite,setSite,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
+  const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

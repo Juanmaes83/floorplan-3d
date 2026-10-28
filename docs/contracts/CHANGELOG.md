@@ -1,5 +1,12 @@
 # Cambios compatibles de FloorPlanProjectV1
 
+## 1.8.0 — intención de peto visual (Punto 8B-B)
+
+- `roofParapet` opcional por proyecto/planta: `enabled`, `heightMm` explícito cuando está activo y `materialId` mural opcional.
+- Ausencia no crea peto ni migra documentos antiguos. `{enabled:false}` conserva la desactivación declarada.
+- Sólo se persiste la intención. Geometría, segmentos y mallas se derivan de `FloorPlanRoof` en cada reconstrucción del renderer.
+- La altura no se elige por normativa y el resultado no acredita protección ni solución constructiva.
+
 ## 1.6.0 — familia de estancia y nombre libre (punto 4)
 
 - `rooms[].family` es opcional y persistente. Valores conocidos: `unspecified`, `living`, `dining`, `kitchen`, `bedroom`, `bathroom`, `toilet`, `office`, `hallway`, `storage`, `laundry`, `terrace`, `balcony`, `garage`, `utility`, `other`.

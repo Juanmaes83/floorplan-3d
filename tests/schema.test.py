@@ -89,6 +89,21 @@ class ContractTests(unittest.TestCase):
             ['node', '-e', "console.log(JSON.stringify(require('./js/project-core.js').initial()))"], cwd=ROOT)
         self.validator.validate(json.loads(raw))
 
+    def test_roof_parapet_requires_project_1_8(self):
+        raw = subprocess.check_output(
+            ['node', '-e', "console.log(JSON.stringify(require('./js/project-core.js').initial()))"], cwd=ROOT)
+        old = json.loads(raw)
+        old['schemaVersion'] = '1.7.0'
+        self.validator.validate(old)
+
+        invalid = json.loads(json.dumps(old))
+        invalid['roofParapet'] = {'enabled': True, 'heightMm': 875}
+        self.assertTrue(list(self.validator.iter_errors(invalid)))
+
+        current = json.loads(json.dumps(invalid))
+        current['schemaVersion'] = '1.8.0'
+        self.validator.validate(current)
+
     def test_json_duplicate_key_guard_rejects_duplicates(self):
         with self.assertRaisesRegex(ValueError, 'Clave JSON duplicada'):
             json.loads('{"duplicate": 1, "duplicate": 2}',

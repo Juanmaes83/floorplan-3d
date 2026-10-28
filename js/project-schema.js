@@ -60,14 +60,26 @@
       }
     },
     "site": { "$ref": "#/$defs/site" },
+    "roofParapet": { "$ref": "#/$defs/roofParapet" },
     "extensions": { "$ref": "#/$defs/extensions" }
   },
   "allOf": [
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-7]\\."}}},"then":{"not":{"required":["roofParapet"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
   "$defs": {
+    "roofParapet": {
+      "type": "object", "additionalProperties": false, "required": ["enabled"],
+      "description": "Optional 1.8.0 user-declared visual parapet for this level's supported outer roof boundary; never a regulatory claim or derived mesh.",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "heightMm": { "type": "integer", "minimum": 100, "maximum": 3000 },
+        "materialId": { "$ref": "#/$defs/materialId" }
+      },
+      "allOf": [{"if":{"properties":{"enabled":{"const":true}}},"then":{"required":["heightMm"]}}]
+    },
     "site": {
       "type": "object", "additionalProperties": false,
       "description": "Optional internal site data. North is clockwise from plan-up, without rotating geometry. Absence means not configured.",
