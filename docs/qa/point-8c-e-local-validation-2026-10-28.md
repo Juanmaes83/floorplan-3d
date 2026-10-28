@@ -1,76 +1,122 @@
-# 8C-E — validación local y contraste de baseline
+# 8C-E — validación local, baseline y cierre
 
-Estado: candidato en revisión. Base `51a3a07b16da8876ab32189b8db9db18eb182c12`.
+Estado: **CERRADO**.
 
-## Entorno y comandos
+Base funcional inicial: `51a3a07b16da8876ab32189b8db9db18eb182c12`.
+PR: #132 `feat/point-8c-e-territorial-integration`.
+HEAD final revisado: `482a2b8a8bef15f33c16de5580713a45b9941a30`.
+Squash en `master`: `012fb1409f1e73f4ca3c088aea0bb8682bec3197`.
 
-Windows, Node test runner, Python3.12/jsonschema4.26, Playwright/Chrome con SwiftShader. `CHROME` apunta al Chrome instalado; `NODE_PATH` al runtime Playwright local; `THREE_LOCAL_DIR=vendor/three`. Schemas: `PYTHONUTF8=1`, `PYTHONIOENCODING=utf-8`. No se descargó contexto territorial real. No es una medición de rendimiento móvil físico.
+## Entorno y validación local
 
-| Grupo | Comando / archivos | Resultado |
-|---|---|---|
-| Integración + Project/Building | `node --test tests/territory-integration.test.cjs tests/building.test.cjs tests/project.test.cjs tests/building-project-1-6.test.cjs` | 66 PASS |
-| Dependencias core territoriales/exterior/Solar | `geo-provider`, `parcel-core`, `orthophoto-core`, `terrain-core`, `terrain-provider`, `exterior-core`, `roof-core`, `exterior-volumes`, `solar-core` `.test.cjs` | 66 PASS |
-| Amplia Node no-browser | Todos `tests/*.test.cjs` excepto `*.browser.*` y `browser.test.cjs`, concurrencia1 | 569 casos: 567 PASS, 0 FAIL, 2 SKIP |
-| Python schemas | Cada `tests/*schema.test.py`, incluido `schema.test.py` | 25 PASS |
-| Browser 8C-E final | `node --test tests/territory-integration.browser.test.cjs` | 3 PASS |
-| Terrain browser | `node --test tests/terrain.browser.test.cjs` | 2 PASS |
-| Walk/Journey/Building Presentation | `walk.browser`, `walk-controls.browser`, `journey-orientation.browser`, `building-presentation.browser` | 34 casos: 24 PASS, 10 FAIL Walk; contraste completo abajo |
-| Browser amplio afectado | `parcel.browser`, `orthophoto.browser`, `solar.browser`, `exterior-volumes.browser`, `presentation.browser`, `capture-3d.browser`, `delivery-image.browser`, `share-image.browser`, `guide-navigation.browser`, `tour-recorder-ci.browser` | 105 casos: 104 PASS, 1 FAIL previo de aspecto de cámara |
-| Privacidad F2 | `node --test --test-name-pattern='F2 local wall assistance privacy/review' tests/browser.test.cjs` | 4 PASS, 0 requests inesperados |
-| ZIP por lotes afectado | `node --test --test-name-pattern='batch ZIP contains ordered real views and restores 1440x900' tests/presentation-batch.browser.test.cjs` | 1 PASS |
-| Syntax | `node --check` de JS nuevos/modificados y parseo de scripts inline de index excluyendo importmap | PASS |
-| Diff | `git diff --check` | PASS |
+Windows, Node test runner, Python 3.12/jsonschema 4.26 y Playwright/Chrome con SwiftShader. No se descargó contexto territorial real durante las pruebas 8C-E; fixtures de ortofoto y terrain son sintéticas. No es una medición de rendimiento móvil físico.
 
-Estos grupos contienen solapamientos y no se suman como casos únicos. Los 2 SKIP amplios son verificaciones Blender que requieren `BLENDER_EXE`/`BPY_PYTHON` configurados; no se presenta ejecución real de Blender como probada. El vídeo sí se reprodujo y ffprobe confirmó H264 640×360. Los diez ciclos de Presentation mantuvieron memoria del renderer estable en el test existente.
+| Grupo | Resultado |
+|---|---|
+| Integración + Project/Building | 66 PASS |
+| Dependencias core territoriales/exterior/Solar | 66 PASS |
+| Node no-browser | 569 casos: 567 PASS, 0 FAIL, 2 SKIP |
+| Python schemas | 25 PASS |
+| Browser 8C-E final | 3 PASS |
+| Terrain browser | 2 PASS |
+| Privacidad F2 | 4 PASS, 0 requests inesperados |
+| ZIP por lotes afectado | 1 PASS |
+| Syntax / `node --check` | PASS |
+| `git diff --check` | PASS |
 
-La prueba 8C-E usa CTA real acotado al diálogo; prueba exterior, habitación, restauración de estado y retorno de vista exterior tras visitar otro stop. Compara framing con/sin contexto a **igual región visible**, para no confundir cambios de tamaño de tarjeta con efectos del contexto. Captura y delivery reales devuelven los dos créditos verificados sin duplicados; parcela restricted queda fuera. Reabrir conserva metadata, pierde runtime y no inicia red. Walk comparativo mantiene origen/altura/puertas y movimiento W real con norte37, placement no cero y terrain visible.
+Los 2 SKIP amplios son verificaciones Blender que requieren `BLENDER_EXE`/`BPY_PYTHON` configurados; no se presenta ejecución real de Blender como probada.
 
-## Baseline: diez casos Walk
+## Cobertura 8C-E específica
 
-El usuario autoriza publicar únicamente si los diez casos y causas coinciden con master limpio y no hay fallos nuevos. No se modifica Walk ni sus pruebas.
+La regresión integrada cubre:
 
-Contraste con pruebas originales, en ambos worktrees:
+- placement horizontal/vertical explícito;
+- norte 37° sin doble rotación;
+- building con offsets/elevaciones no cero;
+- ortofoto y terrain runtime sintéticos;
+- contexto 3D sin modificar muros editables;
+- Presentación exterior y stop de habitación;
+- restauración de cámara/target/quaternion/opciones/capas/reveal/Solar/luz;
+- reapertura offline sin auto-fetch;
+- provider ausente;
+- captura/delivery con atribución;
+- Walk comparativo con/sin contexto.
+
+Los viewports 390×844 y 844×390 pasan con CTA real de Presentación y controles accesibles.
+
+## Independencia final Ortofoto / Terreno
+
+Durante la revisión de PR #132 se detectó que la ortofoto drapeada usaba `['orthophoto','terrain']` como lista de visibilidad, por lo que apagar terrain ocultaba también la ortofoto.
+
+Se corrigió en el HEAD final:
+
+```text
+mesh terrain      → territoryLayers = ['terrain']
+mesh orthophoto   → territoryLayers = ['orthophoto']
+```
+
+Cuando la ortofoto está drapeada sobre la geometría terrain, sus `territoryPolicies` conservan **orthophoto + terrain**. Así la visibilidad es independiente, pero la atribución/licencia sigue reconociendo ambas fuentes cuando corresponde.
+
+La prueba browser final demuestra:
+
+- Ortofoto ON / Terreno OFF → ortofoto visible, terrain oculto, atribución ortofoto + terrain;
+- Ortofoto OFF / Terreno ON → ortofoto oculta, terrain visible, atribución terrain.
+
+El workflow que ejecuta esta regresión terminó en `success` sobre el HEAD exacto final.
+
+## Baseline: diez casos Walk preexistentes
+
+Se ejecutaron los tests originales sin modificar en master base limpio y en la rama:
 
 ```text
 node --test --test-concurrency=2 tests/walk-controls.browser.test.cjs tests/walk.browser.test.cjs
 ```
 
-Master: `C:/Users/temp123/repos/floorplan-3d`, SHA base exacto; `git status --porcelain` vacío antes de ejecutar. Rama: `feat/point-8c-e-territorial-integration`. Mismos ejecutable Chrome, runtime Playwright y Three vendorizado. Los archivos de test son byte a byte iguales:
+Resultado del contraste: **10/10 casos, nombres, mensajes completos y ubicaciones de fallo coinciden exactamente; 0 fallos nuevos**.
 
-```text
-walk.browser.test.cjs
-9bbb698a39e3832c95b3aad39cd2444fa2003b841a49f189a930d9db3ecf838c
-walk-controls.browser.test.cjs
-a54f6991a4ff00e58a1e66c372ae1712f14d2e44116081197efea6301a2f5054
-```
+No son diez timeouts: cinco son timeouts sobre `#walkOverlay` oculto y cinco son aserciones del panel oculto. No se modificó Walk ni sus pruebas para forzar verde.
 
-Resultado del contraste completo: **10/10 casos, mensajes de error y ubicaciones de aserción coinciden exactamente; 0 fallos nuevos**. Cada ejecución original termina con 10 casos, 0 PASS y 10 FAIL. Master conserva `git status --porcelain` vacío después de ejecutar, en el mismo SHA exacto. No son diez timeouts: cinco son timeouts y cinco aserciones del panel oculto, iguales en ambos worktrees.
-
-| Caso original | Master | Rama | Causa idéntica |
+| Caso original | Master base | Rama 8C-E | Causa |
 |---|---|---|---|
-| desktop controls 1440×900 | FAIL | FAIL | click de `#walkOverlay` oculto, timeout120000 |
-| desktop E 1440×900 | FAIL | FAIL | click de `#walkOverlay` oculto, timeout120000 |
-| phone joystick/drag/door/exit 390×844 | FAIL | FAIL | tap de `#walkOverlay` oculto, timeout120000 |
-| entry panel / pointer refusal 1440×900 | FAIL | FAIL | panel sin control primario visible (`primary:[]`) |
-| entry panel / pointer refusal 390×844 | FAIL | FAIL | panel sin control primario visible (`primary:[]`) |
-| entry panel / pointer refusal 844×390 | FAIL | FAIL | panel sin control primario visible (`primary:[]`) |
-| instructions with mouse 844×390 | FAIL | FAIL | instrucciones del panel no visibles (`shown:[]`) |
-| instructions with touch 844×390 | FAIL | FAIL | instrucciones del panel no visibles (`shown:[]`) |
-| walk example entrance → other room | FAIL | FAIL | click de `#walkOverlay` oculto, timeout120000 |
-| walk contract entrance → other room | FAIL | FAIL | click de `#walkOverlay` oculto, timeout120000 |
+| desktop controls 1440×900 | FAIL | FAIL | `#walkOverlay` oculto / timeout |
+| desktop E 1440×900 | FAIL | FAIL | `#walkOverlay` oculto / timeout |
+| phone joystick/drag/door/exit 390×844 | FAIL | FAIL | `#walkOverlay` oculto / timeout |
+| entry panel 1440×900 | FAIL | FAIL | sin control primario visible |
+| entry panel 390×844 | FAIL | FAIL | sin control primario visible |
+| entry panel 844×390 | FAIL | FAIL | sin control primario visible |
+| instructions mouse 844×390 | FAIL | FAIL | instrucciones no visibles |
+| instructions touch 844×390 | FAIL | FAIL | instrucciones no visibles |
+| walk example entrance → other room | FAIL | FAIL | `#walkOverlay` oculto / timeout |
+| walk contract entrance → other room | FAIL | FAIL | `#walkOverlay` oculto / timeout |
 
-El cotejo automático verifica nombres, mensajes completos (incluido el JSON diagnóstico de las cinco aserciones), archivo/línea de fallo y causas, no sólo el número total. Registros locales: `output/master-walk-8c-e.log` y `output/branch-walk-8c-e.log` (no se añaden como temporales al commit). El usuario autorizó expresamente publicar con estos fallos previos únicamente tras este contraste y sin modificar Walk. Las regresiones afectadas que pasan en master permanecen verdes; el fallo adicional de aspecto descrito debajo también se reproduce en master y se declara separado.
+Estos fallos permanecen como deuda técnica histórica y no son regresiones de 8C-E.
 
-## Otro fallo previo de Presentation
+## Otro baseline preexistente de Presentación
 
-`3D camera, focus and editor state return after Escape and browser Back` falla en `tests/presentation.browser.test.cjs:303`, comparando el aspect ratio posterior contra el previo. Se reprodujo aislado tanto en rama como en master limpio con:
+`3D camera, focus and editor state return after Escape and browser Back` mantiene una aserción de aspect ratio que también falla en master base limpio. Es la misma aserción de aspecto, no un fallo de posición/target ni de la transformación territorial.
 
-```text
-node --test --test-name-pattern='3D camera, focus' tests/presentation.browser.test.cjs
-```
+La regresión nueva 8C-E verifica por separado cámara, target, quaternion, sección/reveal, capas, Solar y luz.
 
-Ambos esperan `1.556338028169014`. El valor posterior cambia con el ancho real del stage al cerrar paneles (master observado `2.007042253521127`; rama observada `2.2693661971830985`, y `2.1338028169014085` en la suite). Es la misma aserción de aspecto, no un fallo de posición/target ni de la transformación territorial. No se altera el test ni se afirma PASS. La prueba nueva 8C-E verifica cámara/target/quaternion/sección/capas/Solar/luz por separado.
+## CI final
 
-## Alcance de entrega
+Sobre HEAD `482a2b8a8bef15f33c16de5580713a45b9941a30`, todos los workflows naturales finalizaron en `success`, sin reruns manuales:
 
-Ocho capturas sintéticas deliberadas, revisadas visualmente, en `output/playwright/point-8c-e/`. Scripts diagnósticos, caches y capturas históricas regeneradas se excluyen. Sin cierre canónico, merge, rebase ni force push. La PR sólo se abre tras verificar la condición de publicación; después no se espera CI/Vercel ni se ejecutan reruns.
+- Guided experience;
+- Rubik local MCP;
+- Point 8C-C orthophoto context;
+- Point 8C-D terrain context / integración territorial;
+- Integrated browser regressions;
+- Point 6 solar and compatibility;
+- Multiformat guided import.
+
+Vercel preview quedó `Ready` para la PR. No se utilizó polling continuo para forzar el cierre.
+
+## Merge y cierre
+
+PR #132 se fusionó mediante squash con `expected_head_sha` fijado al HEAD final. Squash: `012fb1409f1e73f4ca3c088aea0bb8682bec3197`.
+
+El merge usa `[skip ci]` para no repetir en `push` a `master` la misma validación ya completada en el HEAD exacto de la PR.
+
+La auditoría final canónica de Punto 8 está en:
+
+`docs/product/point-8-final-audit-2026-10-28.md`
