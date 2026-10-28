@@ -8,6 +8,8 @@ Estado posterior al cierre funcional de **8C-E** y al merge de **PR #132 — int
 
 La auditoría final canónica de Punto 8 está en `docs/product/point-8-final-audit-2026-10-28.md`.
 
+El siguiente corte aprobado se redefine como **Punto 9 — UX profesional y descubribilidad de capacidades 5–8**. Su especificación canónica está en `docs/product/point-9-ux-professional-discoverability-2026-10-28.md`. El antiguo siguiente corte, **Instalaciones ligeras**, pasa a **Punto 10**.
+
 ## Estado resumido
 
 | Punto | Capacidad | Estado |
@@ -27,7 +29,8 @@ La auditoría final canónica de Punto 8 está en `docs/product/point-8-final-au
 | 8C-E | Integración edificio + parcela + ortofoto + terrain + orientación + Presentación/exportación | **CERRADO** — PR #132, squash `012fb1409f1e73f4ca3c088aea0bb8682bec3197` |
 | 8C | Parcela, terreno y contexto territorial | **CERRADO** |
 | 8 | Exterior + cubierta + contexto territorial | **CERRADO** — auditoría final `point-8-final-audit-2026-10-28.md` |
-| 9 | Instalaciones ligeras | **APROBADO, SIGUIENTE** |
+| 9 | UX profesional y descubribilidad 5–8 | **APROBADO, SIGUIENTE** — frontend/usabilidad, sin cambiar motores ni contratos |
+| 10 | Instalaciones ligeras | **APROBADO, DESPUÉS DE 9** |
 
 ## Punto 8A — CERRADO
 
@@ -101,15 +104,57 @@ El cierre mantiene documentados dos baselines anteriores a 8C-E que **no se conv
 
 Detalles: `docs/qa/point-8c-e-local-validation-2026-10-28.md`.
 
+## Punto 9 — APROBADO / SIGUIENTE
+
+Punto 9 es un corte exclusivamente de **frontend, arquitectura de información y usabilidad**. Debe reorganizar las capacidades ya existentes bajo las casas conceptuales:
+
+```text
+DISEÑAR
+ANALIZAR
+PRESUPUESTAR
+ENTREGAR
+MI ESTUDIO
+```
+
+Pregunta rectora:
+
+> **¿Qué debe entender y hacer aquí el usuario?**
+
+Principios obligatorios:
+
+- no eliminar ninguna función existente;
+- no cambiar contenido funcional, motores, contratos, schemas, cálculos ni providers;
+- una acción dominante por estado;
+- el texto debe decir qué ocurrirá;
+- lo esencial debe ser descubrible;
+- consolidar es reubicar/agrupar, no quitar;
+- distinguir cantidad automática, precio de referencia, precio propio y precio revisado;
+- convertir `Entregar al cliente` en un centro claro de ficha, lámina, presentación, presupuesto, imágenes, observaciones y exportaciones;
+- agrupar superficies/orientación/emplazamiento/exterior en `Analizar`;
+- agrupar cantidades/precios/fuentes/reportes en `Presupuestar`;
+- concentrar identidad profesional en `Mi estudio` y hacerla visible al preparar entregas;
+- mantener rutas rápidas válidas como atajos hacia una casa conceptual única.
+
+Documento canónico de especificación:
+
+`docs/product/point-9-ux-professional-discoverability-2026-10-28.md`.
+
+## Punto 10 — DESPUÉS DE 9
+
+**Instalaciones ligeras** conserva su aprobación funcional, pero no debe iniciarse antes de completar/revisar Punto 9 salvo decisión expresa posterior.
+
 ## Regla para agentes
 
 1. Leer este archivo primero y verificar el HEAD real de `master`.
 2. **No reabrir 1–8 salvo regresión reproducible o decisión expresa.**
-3. Punto 8 está cerrado; el siguiente corte funcional aprobado es **Punto 9 — instalaciones ligeras**.
-4. Mantener `FloorPlanGeoProvider` como frontera transversal y agnóstica de proveedor.
-5. Mantener separada la geometría territorial fuente de cualquier geometría editable.
-6. Mantener una sola cadena espacial; no duplicar norte, offsets ni CRS.
-7. No afirmar precisión catastral, topográfica, geotécnica o normativa que la fuente no demuestre.
-8. Conservar procedencia, licencia/atribución y cobertura/fecha cuando exista fuente externa.
-9. `site.orthophoto` y `site.terrain` conservan metadata, no raster/grid runtime.
-10. Mantener la regla de producto: **más contexto, no más falsa certeza**.
+3. Punto 8 está cerrado; el siguiente corte aprobado es **Punto 9 — UX profesional y descubribilidad 5–8**.
+4. Punto 9 es frontend/usabilidad: **no elimina funciones y no cambia motores, contratos, schemas, datos ni semántica funcional**.
+5. Para Punto 9, leer `docs/product/point-9-ux-professional-discoverability-2026-10-28.md` antes de proponer o implementar cambios.
+6. **Punto 10 — Instalaciones ligeras** queda después de Punto 9.
+7. Mantener `FloorPlanGeoProvider` como frontera transversal y agnóstica de proveedor.
+8. Mantener separada la geometría territorial fuente de cualquier geometría editable.
+9. Mantener una sola cadena espacial; no duplicar norte, offsets ni CRS.
+10. No afirmar precisión catastral, topográfica, geotécnica o normativa que la fuente no demuestre.
+11. Conservar procedencia, licencia/atribución y cobertura/fecha cuando exista fuente externa.
+12. `site.orthophoto` y `site.terrain` conservan metadata, no raster/grid runtime.
+13. Mantener la regla de producto: **más contexto, no más falsa certeza**.
