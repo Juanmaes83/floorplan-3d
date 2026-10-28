@@ -62,8 +62,41 @@ test('a facade cycle that does not enclose the indoor rooms abstains (audit regr
   // Terrace/balcony stay outside the body as in 8A; a room drawn to the outer face is still enclosed.
   const terrace=project(rectangle);terrace.rooms.push({id:'rom_terrace',family:'terrace',polygon:rect(7000,0,10000,4000)});
   assert.equal(Roof.footprint(terrace,Exterior).status,'available');
+  const balcony=project(rectangle);balcony.rooms.push({id:'rom_balcony',family:'balcony',polygon:rect(7000,0,10000,4000)});
+  assert.equal(Roof.footprint(balcony,Exterior).status,'available');
   const flush=project(rectangle);flush.rooms=[{id:'rom_flush',polygon:rect(-100,-100,6100,4100)}];
   assert.equal(Roof.footprint(flush,{derive:()=>({status:'available',walls:flush.walls.map(w=>({wallId:w.id,status:'facade'}))})}).status,'available');
+});
+test('room edges may touch a corner or follow part of a split collinear facade',()=>{
+  const p=project(rectangle);
+  p.walls.splice(0,1,
+    {...p.walls[0],id:'wal_bottom_a',end:{x:3000,y:0}},
+    {...p.walls[0],id:'wal_bottom_b',start:{x:3000,y:0}});
+  p.rooms.push({id:'rom_boundary',polygon:rect(500,-100,5500,500)});
+  p.rooms.push({id:'rom_corner',polygon:[{x:4000,y:1000},{x:6100,y:4100},{x:5000,y:1000}]});
+  assert.equal(Exterior.derive(p).status,'available');
+  assert.equal(Roof.footprint(p,Exterior).status,'available');
+});
+test('concave U rejects an indoor room whose edge bridges the exterior notch',()=>{
+  const p=project(U),outer=Roof.footprint(p,Exterior);
+  assert.equal(outer.status,'available',outer.reason);
+  const bridge=rect(1700,2250,5300,2350);
+  const insideOrOn=v=>{
+    let inside=false;
+    for(let i=0,j=outer.polygon.length-1;i<outer.polygon.length;j=i++){
+      const a=outer.polygon[j],b=outer.polygon[i],u={x:b.x-a.x,y:b.y-a.y},w={x:v.x-a.x,y:v.y-a.y};
+      if(Math.abs(u.x*w.y-u.y*w.x)<=Roof.EPS.crossMm2&&v.x>=Math.min(a.x,b.x)-Roof.EPS.pointMm&&v.x<=Math.max(a.x,b.x)+Roof.EPS.pointMm&&v.y>=Math.min(a.y,b.y)-Roof.EPS.pointMm&&v.y<=Math.max(a.y,b.y)+Roof.EPS.pointMm)return true;
+      if((a.y>v.y)!==(b.y>v.y)&&v.x<(b.x-a.x)*(v.y-a.y)/(b.y-a.y)+a.x)inside=!inside;
+    }
+    return inside;
+  };
+  assert.ok(bridge.every(insideOrOn),'all room vertices pass the existing point test');
+  assert.equal(insideOrOn({x:3500,y:2250}),false,'the upper room edge leaves the U footprint');
+  p.rooms.push({id:'rom_bridge',polygon:bridge});
+  const exterior=Exterior.derive(p);
+  assert.equal(exterior.status,'available');
+  assert.ok(p.walls.every(w=>exterior.walls.find(c=>c.wallId===w.id)?.status==='facade'));
+  assert.deepEqual(Roof.footprint(p,Exterior),{status:'unavailable',reason:'room-outside-facade-cycle'});
 });
 test('self-intersection and almost-zero edges are invalid',()=>{
   assert.equal(Roof.canonical([{x:0,y:0},{x:4000,y:4000},{x:0,y:4000},{x:4000,y:0}]).status,'invalid');
