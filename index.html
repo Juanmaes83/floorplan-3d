@@ -358,7 +358,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-entry{order:-1;border:1px solid var(--teal,#2f5d62);color:var(--teal,#2f5d62);font-weight:650}
 /* The presentation entry stays in the guided header (secondary; design-system.css): presenting is the professional's
    next step from any stage, not only from the guide's last one (docs/product/journey-orientation-2026-10-21.md §4.3). */
-.presentation-config{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
+/* Explicit viewport inset keeps the start CTA scrollable after a mobile 3D scene has extended its layout viewport. */
+.presentation-config{position:fixed;inset:8px auto auto max(12px,calc((100vw - 480px)/2));margin:0;width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 16px);overflow:auto;padding:20px}
 .presentation-config h2{margin:0 0 10px;font-size:20px}
 .presentation-config p{line-height:1.5}
 .presentation-config-message{font-size:13px}
@@ -657,6 +658,10 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/parcel-core.js"></script>
 <script src="js/orthophoto-core.js"></script>
 <script src="js/terrain-core.js"></script>
+<script src="js/territory-integration-core.js"></script>
+<script src="js/territory-export-policy.js"></script>
+<script src="js/territory-runtime.js"></script>
+<script src="js/territory-renderer.js"></script>
 <script src="js/geo-provider.js"></script>
 <script src="js/catastro-parcel-provider.js"></script>
 <script src="js/pnoa-orthophoto-provider.js"></script>
@@ -1442,7 +1447,7 @@ function renderSel(){
   SafeDOM.markup($('#gSel'), s);
 }
 
-function renderAll(){
+function renderAll(){window.FloorPlanTerritorySession?.sync(library?.activeId()||project.id,window.FloorPlanBuildingUI?.site||project.site);
   refreshProject(); buildDefs(); renderOpenings(); renderDims();
   renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
   window.View3D?.sync();
@@ -2337,7 +2342,7 @@ $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 if(libraryError)toast('No se pudo abrir la colección local: '+libraryError,6000);
 if(loadedProject.message)toast(loadedProject.message,6000);
-function switchProject(next){window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();}
+function switchProject(next){window.FloorPlanTerritorySession?.clear();window.FloorPlanPresentation?.invalidate();project=next;++importSequence;ui.sel=null;ui.mA=ui.mCur=null;undoStack.length=redoStack.length=0;window.FloorPlanBuildingUI?.entryChanged();refreshProject();renderAll();fitView();}
 function confirmRemoveProject(id){const e=library.list().find(x=>x.id===id),variants=e.variantOf?0:library.group(id).length-1;
   return confirm(variants?`¿Eliminar el proyecto local «${e.name}»? Sus ${variants} variante(s) se conservarán como proyectos independientes. Esta acción no se puede deshacer.`:'¿Eliminar este proyecto local? Esta acción no se puede deshacer.');}
 function storageMessage(e,what){return e?.name==='QuotaExceededError'||/quota/i.test(e?.message||'')?`No hay espacio local suficiente para ${what}. No se ha cambiado nada: exporta o elimina proyectos que no necesites y vuelve a intentarlo.`:(e?.message||String(e));}
@@ -2466,6 +2471,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/solar-renderer-adapter.js"></script>
 <script src="js/solar-ui.js"></script>
 <script src="js/territory-ui.js"></script>
+<script src="js/territory-placement-ui.js"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
@@ -2492,6 +2498,7 @@ const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...proj
 
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
+let territoryRenderer=null,territorialViewLimits=null,territorialPresentation=false,territorialBaseLevelView=null;
 let solarResult=null;
 let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, roofG, exteriorG, roofResult, exteriorResult, exteriorLineMat, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
@@ -2546,6 +2553,7 @@ function init(){
   levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof'; exteriorG = new THREE.Group(); exteriorG.name = 'derived-exterior-volumes';
   exteriorLineMat=new THREE.LineBasicMaterial({color:0x766e62,transparent:true,opacity:.55});
   scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG, exteriorG);
+  territoryRenderer=FloorPlanTerritoryRenderer.create(THREE);scene.add(territoryRenderer.group);FloorPlanTerritorySession.subscribe(()=>{if(active)syncTerritory();else territoryRenderer.dispose();});
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -3404,7 +3412,7 @@ function setPresentationContactShadows(enabled){
 }
 function syncRoofVisibility(){
   if(!roofG)return;
-  const visible=!!(opt.roof&&roofResult?.status==='available'&&opt.mode==='orbit'&&!window.FloorPlanPresentation?.active);
+  const visible=!!(opt.roof&&roofResult?.status==='available'&&opt.mode==='orbit'&&(!window.FloorPlanPresentation?.active||territorialPresentation));
   if(exteriorG)exteriorG.visible=visible&&exteriorResult?.status==='available';
   if(roofG.visible===visible)return;
   roofG.visible=visible;
@@ -3678,6 +3686,9 @@ function buildLabels(){
 }
 
 // 只重建变化的部分
+function territorySite(){return levelContext?window.FloorPlanBuildingUI?.site:project.site;}
+function syncTerritory(){if(!territoryRenderer)return;const site=territorySite(),level=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);territoryRenderer.update({site,session:FloorPlanTerritorySession,owner:FloorPlanApp.entryId,origin:{x:OX,y:OY},level});const show=territoryRenderer.layers.building;ground.visible=!(site?.buildingPlacement?.vertical&&FloorPlanTerritorySession.get('terrain')&&territoryRenderer.layers.terrain);for(const g of [archFloor,archUp,furnG,levelsG,roofG,exteriorG,labelG,lampG]){if(g.userData.territoryHidden&&show){g.visible=g.userData.territoryBefore;delete g.userData.territoryHidden;}if(!show&&!g.userData.territoryHidden){g.userData.territoryBefore=g.visible;g.userData.territoryHidden=true;g.visible=false;}}window.dispatchEvent(new Event('territory-scene-change'));}
+function territoryFooter(url,credits){if(!credits.length)return url;const canvas=document.createElement('canvas'),image=renderer.domElement;canvas.width=image.width;const font=Math.max(11,Math.min(20,Math.round(canvas.width/70))),ctx=canvas.getContext('2d');ctx.font=font+'px sans-serif';const lines=[];for(const credit of credits){let line='';for(const word of credit.split(/\s+/)){if(ctx.measureText(line+' '+word).width>canvas.width-24&&line){lines.push(line);line=word;}else line+=(line?' ':'')+word;}if(line)lines.push(line);}const footer=lines.length*(font+5)+16;canvas.height=image.height;ctx.fillStyle='#fffdf9';ctx.fillRect(0,0,canvas.width,canvas.height);const scale=Math.min(canvas.width/image.width,(canvas.height-footer)/image.height),w=image.width*scale,h=image.height*scale;ctx.drawImage(image,(canvas.width-w)/2,0,w,h);ctx.font=font+'px sans-serif';ctx.fillStyle='#2b2824';lines.forEach((line,i)=>ctx.fillText(line,12,canvas.height-footer+font+8+i*(font+5)));return canvas.toDataURL('image/png');}
 function sync(force){
   if (!inited || (!active && !force)) return;
   const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.roofParapet,project.defaults,opt.cut,levelContext&&{id:levelContext.activeLevelId,view:levelView,levels:levelContext.levels.map(l=>l.id===levelContext.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l),stairs:levelContext.stairs},opt.furn]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
@@ -3686,6 +3697,7 @@ function sync(force){
   if (force || f !== sigFurn){ sigFurn = f; buildFurn(); }
   if(contactEnabled&&contactChanged)buildPresentationContactShadows();
   if (force || l !== sigLabels){ sigLabels = l; buildLabels(); }
+  syncTerritory();
 }
 
 // CSS2DRenderer 只看标签自身的 visible，不继承父级，所以逐个设置
@@ -3899,6 +3911,7 @@ async function enter(){
   stage.classList.remove('animating');
 }
 function abort3D(){
+  territoryRenderer?.dispose();
   clearPresentationReveal();
   clearPresentationRoute();
   setPresentationContactShadows(false);
@@ -4184,8 +4197,10 @@ function shot(opts = {}){
   syncRoofVisibility();
   if (window.FloorPlanBuildingUI && !window.FloorPlanBuildingUI.gate('Captura 3D')) throw Error('Distribución pendiente: corrige los muebles sobre escaleras antes de generar imágenes.');
   const name = tr('户型装修方案', 'floor-plan-design') + '-3D.png', size = shotSize(opts);
+  const territoryCapture=territoryRenderer?.capture();renderer.render(scene,camera);
   let url;
-  if (size.mode === 'view') url = renderer.domElement.toDataURL('image/png');
+  try{
+  if (size.mode === 'view') url = territoryFooter(renderer.domElement.toDataURL('image/png'),territoryRenderer?FloorPlanTerritoryExportPolicy.attributions(territoryRenderer.group.children.filter(o=>o.visible).flatMap(o=>o.userData.territoryPolicies||[])):[]);
   else {
     const {width:w, height:h} = size, gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
     // "Contain" framing: everything visible in the working view stays visible; the other axis gains margin, never stretched.
@@ -4197,14 +4212,15 @@ function shot(opts = {}){
       renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
       if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
       renderer.render(scene, cam);
-      url = renderer.domElement.toDataURL('image/png');
+      url = territoryFooter(renderer.domElement.toDataURL('image/png'),territoryRenderer?FloorPlanTerritoryExportPolicy.attributions(territoryRenderer.group.children.filter(o=>o.visible).flatMap(o=>o.userData.territoryPolicies||[])):[]);
     } finally {
       renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false);
       renderer.render(scene, camera);
     }
   }
+  }finally{territoryCapture?.restore();renderer.render(scene,camera);}
   if(opts.download!==false){const a = document.createElement('a'); a.download = name; a.href = url; a.click();}
-  return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced,...(opts.download===false?{dataUrl:url}:{})};
+  return {width:size.width, height:size.height, mode:size.mode, reduced:!!size.reduced,attribution:territoryCapture?.attribution||[],...(opts.download===false?{dataUrl:url}:{})};
 }
 
 // Delivery image (client-facing): the WHOLE home framed to fill a w×h image in the current viewing direction. A cloned
@@ -4217,6 +4233,7 @@ function deliveryShot({width, height, margin = .03, frame = true} = {}){
   if (!(w > 0 && h > 0) || w*h > SHOT_MAX_PIXELS || Math.max(w, h) > shotLimit()) throw Error(tr('截图选项无效。', 'Invalid capture option.'));
   const box = new THREE.Box3();
   for (const g of [archFloor, archUp, furnG, levelsG, roofG, exteriorG]) if (g?.visible) box.expandByObject(g);
+  const contextBox=territoryRenderer?.group;if(contextBox)for(const o of contextBox.children)if(o.visible&&(o.userData.territoryPolicies||[]).every(p=>p.canExport))box.expandByObject(o);
   const cam = camera.clone();
   if (!frame || box.isEmpty()){
     // A room stop keeps its own camera: same «contain» rule as shot(), nothing visible in the view is cropped.
@@ -4242,19 +4259,19 @@ function deliveryShot({width, height, margin = .03, frame = true} = {}){
 }
 function renderDelivery(cam, w, h, corners){
   const gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
-  let url, fill = null;
+  let url, fill = null;const territoryCapture=territoryRenderer?.capture();
   try {
     renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
     if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
     renderer.render(scene, cam);
-    url = renderer.domElement.toDataURL('image/png');
+    url = territoryFooter(renderer.domElement.toDataURL('image/png'),territoryRenderer?FloorPlanTerritoryExportPolicy.attributions(territoryRenderer.group.children.filter(o=>o.visible).flatMap(o=>o.userData.territoryPolicies||[])):[]);
     if (corners){ let a = Infinity, b = -Infinity, c = Infinity, d = -Infinity; for (const k of corners){ const p = k.clone().project(cam); a = Math.min(a, p.x); b = Math.max(b, p.x); c = Math.min(c, p.y); d = Math.max(d, p.y); }
       fill = {x:(Math.min(b, 1) - Math.max(a, -1))/2, y:(Math.min(d, 1) - Math.max(c, -1))/2}; }
   } finally {
-    renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false); syncCeilingFixtures(camera);
+    renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false); syncCeilingFixtures(camera);territoryCapture?.restore();
     renderer.render(scene, camera);
   }
-  return {width:w, height:h, dataUrl:url, fill};
+  return {width:w, height:h, dataUrl:url, fill,attribution:territoryCapture?.attribution||[]};
 }
 
 function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
@@ -4263,7 +4280,7 @@ function relang(){ syncWalkTexts(); if (inited) buildLabels(); }
 function presentationCapture(){
   if(!active||anim||!camera)throw Error('La escena 3D todavía no está lista.');
   const state={position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,
-    options:{...opt},solarResult:solarResult&&structuredClone(solarResult),doors:doors.map(d=>({open:d.open,cur:d.cur}))};
+    options:{...opt},levelView,territoryLayers:territoryRenderer?.layers,solarResult:solarResult&&structuredClone(solarResult),doors:doors.map(d=>({open:d.open,cur:d.cur}))};
   opt.roof=false;syncRoofVisibility();
   solarResult=null;applyLight();
   if(fly?.res)fly.res(false);fly=null;
@@ -4315,9 +4332,15 @@ function overviewPose(b,target,direction,radius,aspect,region){
   overviewInfo={radius:+radius.toFixed(3),distance:+d.toFixed(3),moved:d>radius+1e-6,fits:p.fits,wallTop:H,region:r0};
   return pose(p.look,p.eye);
 }
+function restoreTerritorialViewLimits(){if(territorialViewLimits){orbit.maxDistance=territorialViewLimits.maxDistance;camera.far=territorialViewLimits.far;camera.updateProjectionMatrix();territorialViewLimits=null;}}
 function presentationGo(stop,reduced=false,view={}){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
   clearPresentationRoute();
+  if(stop.kind==='territorial-context'&&territorialBaseLevelView===null)territorialBaseLevelView=levelView;
+  if(stop.kind!=='territorial-context'&&territorialBaseLevelView!==null){levelView=territorialBaseLevelView;territorialBaseLevelView=null;sigArch='';sync();}
+  if(stop.kind!=='territorial-context')restoreTerritorialViewLimits();
+  territorialPresentation=stop.kind==='territorial-context';
+  if(stop.kind==='territorial-context'){if(!territorialViewLimits)territorialViewLimits={maxDistance:orbit.maxDistance,far:camera.far};if(levelContext&&levelView!=='all'){levelView='all';sigArch='';sync();}setPresentationCut(2.8);opt.roof=true;syncRoofVisibility();syncTerritory();const box=new THREE.Box3();for(const g of [archFloor,archUp,furnG,levelsG,roofG,exteriorG])if(g.visible)box.expandByObject(g);for(const o of territoryRenderer.group.children)if(o.visible)box.expandByObject(o);if(!box.isEmpty()){const b={x:box.min.x*1000+OX,y:box.min.z*1000+OY,w:(box.max.x-box.min.x)*1000,h:(box.max.z-box.min.z)*1000},center=box.getCenter(new THREE.Vector3()),radius=Math.max(6,box.getSize(new THREE.Vector3()).length()*1.5),next=overviewPose(b,center,new THREE.Vector3(.42,.84,.34).normalize(),radius,camera.aspect,view.region);orbit.maxDistance=Math.max(orbit.maxDistance,next.p.distanceTo(next.t)*1.1);camera.far=Math.max(camera.far,orbit.maxDistance+box.getSize(new THREE.Vector3()).length()*2);camera.updateProjectionMatrix();if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}return flyTo(next,650);}}else if(window.FloorPlanPresentation?.active){opt.roof=false;syncRoofVisibility();}
   if(presentationBaseCut==null)presentationBaseCut=opt.cut;
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const framed=stop.kind==='room'&&stop.roomId?presentationFrame(stop.roomId,aspect,view.region):null;
@@ -4438,6 +4461,8 @@ function presentationRoute(roomId,reduced=false,view={}){
   });
 }
 function presentationRestore(state){
+  restoreTerritorialViewLimits();
+  territorialPresentation=false;territorialBaseLevelView=null;if(state?.levelView)levelView=state.levelView;
   clearPresentationReveal();
   clearPresentationRoute();
   presentationBaseCut=null;frameInfo=null;overviewInfo=null;presentationLamps=false;clearRoomOutline();
@@ -4446,7 +4471,7 @@ function presentationRestore(state){
   if(!state||!active)return;
   solarResult=state.solarResult||null;
   if(fly?.res)fly.res(false);fly=null;
-  Object.assign(opt,state.options);
+  Object.assign(opt,state.options);if(state.territoryLayers)territoryRenderer?.setLayers(state.territoryLayers);
   surfaceRenderer.setQuality(opt.surfaceQuality);
   camera.position.fromArray(state.position);orbit.target.fromArray(state.target);
   camera.fov=state.fov;camera.aspect=SW()/Math.max(1,SH());camera.updateProjectionMatrix();
@@ -4470,10 +4495,11 @@ function presentationPose(){
   return {position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),fov:camera.fov,aspect:camera.aspect};
 }
 // Full presentation view (pose, wall cut, framed stop and outline) for flows that visit other stops, e.g. the ZIP batch.
-function presentationViewState(){return {pose:presentationPose(),cut:opt.cut,frame:frameInfo&&{...frameInfo}};}
+function presentationViewState(){return {pose:presentationPose(),cut:opt.cut,frame:frameInfo&&{...frameInfo},territoryLayers:territoryRenderer?.layers,territorialPresentation,levelView,roof:opt.roof,viewLimits:territorialViewLimits&&{...territorialViewLimits},orbitMaxDistance:orbit.maxDistance,far:camera.far};}
 function presentationRestoreView(view){
   if(!active||!view)return;
-  setPresentationCut(view.cut);frameInfo=view.frame?{...view.frame}:null;
+  restoreTerritorialViewLimits();opt.roof=view.roof??opt.roof;territorialPresentation=!!view.territorialPresentation;if(view.levelView){levelView=view.levelView;sigArch='';sync();}if(view.territoryLayers)territoryRenderer?.setLayers(view.territoryLayers);
+  setPresentationCut(view.cut);territorialViewLimits=view.viewLimits&&{...view.viewLimits};if(view.orbitMaxDistance)orbit.maxDistance=view.orbitMaxDistance;if(view.far){camera.far=view.far;camera.updateProjectionMatrix();}syncRoofVisibility();frameInfo=view.frame?{...view.frame}:null;
   if(frameInfo)showRoomOutline(frameInfo.roomId);else clearRoomOutline();
   presentationRestorePose(view.pose);
 }
@@ -4502,6 +4528,7 @@ window.View3D = {
       return {id:g.userData.stairId,corners:[[0,-w/2],[0,w/2],[run,w/2],[run,-w/2]].map(([x,z])=>{const v=g.localToWorld(new THREE.Vector3(x,0,z));return {x:Math.round(v.x*1000+OX),y:Math.round(v.z*1000+OY)};})};}):[],
     furniturePlan:furnG?furnG.children.map(g=>({id:g.userData.fid,x:Math.round(g.position.x*1000+OX),y:Math.round(g.position.z*1000+OY),rotationDeg:Math.round(((-g.rotation.y*180/Math.PI)%360+360)%360)})):[],
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
+  get territoryLayers(){return territoryRenderer?.layers;},setTerritoryLayers(patch){territoryRenderer?.setLayers(patch);syncTerritory();},get territoryInfo(){return territoryRenderer?{children:territoryRenderer.group.children.map(o=>({layers:o.userData.territoryLayers,visible:o.visible,vertices:o.geometry?.attributes.position?.count})),attribution:territoryRenderer.attribution,disposals:territoryRenderer.disposals,layers:territoryRenderer.layers}:null;},
   shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.

@@ -12,6 +12,13 @@ on:
       - 'js/project-schema.js'
       - 'js/building-core.js'
       - 'js/territory-ui.js'
+      - 'js/territory-integration-core.js'
+      - 'js/territory-runtime.js'
+      - 'js/territory-export-policy.js'
+      - 'js/territory-renderer.js'
+      - 'js/territory-placement-ui.js'
+      - 'js/presentation-ui.js'
+      - 'js/tour-recorder.js'
       - 'css/territory.css'
       - 'docs/contracts/FloorPlanGeoProvider.md'
       - 'docs/contracts/FloorPlanProjectV1.md'
@@ -22,6 +29,10 @@ on:
       - 'tests/terrain-provider.test.cjs'
       - 'tests/terrain.browser.test.cjs'
       - 'tests/terrain_schema.test.py'
+      - 'tests/territory-integration.test.cjs'
+      - 'tests/territory-integration.browser.test.cjs'
+      - 'tests/territory_integration_schema.test.py'
+      - 'tests/fixtures/territorial-integration.cjs'
       - '.github/workflows/point-8c-d-terrain.yml'
 permissions:
   contents: read
@@ -47,9 +58,16 @@ jobs:
           node --check js/ign-mdt05-terrain-provider.js
           node --check js/geo-provider.js
           node --check js/territory-ui.js
+          node --check js/territory-integration-core.js
+          node --check js/territory-runtime.js
+          node --check js/territory-export-policy.js
+          node --check js/territory-renderer.js
+          node --check js/territory-placement-ui.js
           node --test tests/terrain-core.test.cjs tests/terrain-provider.test.cjs tests/geo-provider.test.cjs tests/parcel-core.test.cjs tests/orthophoto-core.test.cjs
+          node --test tests/territory-integration.test.cjs
           python -m pip install jsonschema==4.26.0
           python tests/terrain_schema.test.py
+          python tests/territory_integration_schema.test.py
       - name: Chromium dependencies
         run: |
           npm install --prefix "$RUNNER_TEMP/terrain-playwright" --no-save playwright@1.62.1
@@ -57,10 +75,12 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/terrain-playwright/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/terrain-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Synthetic terrain and navigation regressions
-        run: node --test --test-concurrency=1 tests/terrain.browser.test.cjs tests/parcel.browser.test.cjs tests/orthophoto.browser.test.cjs tests/guide-navigation.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/territory-integration.browser.test.cjs tests/terrain.browser.test.cjs tests/parcel.browser.test.cjs tests/orthophoto.browser.test.cjs tests/guide-navigation.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: point-8c-d-${{ github.event.pull_request.head.sha }}
-          path: output/playwright/point-8c-d/
+          path: |
+            output/playwright/point-8c-d/
+            output/playwright/point-8c-e/
           if-no-files-found: ignore

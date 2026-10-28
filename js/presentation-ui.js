@@ -29,6 +29,7 @@
  const previous=button('',nav,()=>go(index-1)),next=button('',nav,()=>go(index+1));
  const captureButton=button('',tools,()=>capture());captureButton.id='presentationCapture';
  const shareButton=button('',tools,()=>share());shareButton.id='presentationShare';
+ const territoryButton=button('Contexto exterior',tools,async()=>{try{await View3D.presentationGo({kind:'territorial-context',bounds:{...app.geometry.envelope}},true,{region:viewRegion()});title.textContent='Contexto exterior';status.textContent='Colocación contextual del edificio';}catch(error){toast(error.message,6000);}});territoryButton.id='presentationTerritory';
  const materialButton=button('',tools,()=>{View3D.setSurfaceQuality(View3D.surfaceQuality==='enhanced'?'base':'enhanced');draw();});materialButton.id='presentationMaterialQuality';
  const lightButton=button('',tools,()=>{changeLighting();});lightButton.id='presentationLightPreset';
  const revealButton=button('',tools,()=>{revealCurrent();});revealButton.id='presentationReveal';
@@ -408,6 +409,7 @@
   finally{if(active&&token===epoch){delete overlay.dataset.route;draw();updateCapture();}}
  }
  function draw(){
+  territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
   tools.setAttribute('aria-label',tx('Herramientas de la presentación','Presentation tools','演示工具'));previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');

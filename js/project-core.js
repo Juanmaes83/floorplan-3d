@@ -7,6 +7,7 @@
   const ParcelSite = typeof module !== 'undefined' ? require('./parcel-site-adapter.js') : root.FloorPlanParcelSiteAdapter;
   const OrthophotoSite = typeof module !== 'undefined' ? require('./orthophoto-site-adapter.js') : root.FloorPlanOrthophotoSiteAdapter;
   const TerrainSite = typeof module !== 'undefined' ? require('./terrain-site-adapter.js') : root.FloorPlanTerrainSiteAdapter;
+  const Territory = typeof module !== 'undefined' ? require('./territory-integration-core.js') : root.FloorPlanTerritoryIntegration;
   const clone = value => JSON.parse(JSON.stringify(value));
   const fail = (path, message) => { throw new Error(`${path}: ${message}`); };
   const id = prefix => `${prefix}_${globalThis.crypto.randomUUID().replaceAll('-', '')}`;
@@ -87,6 +88,8 @@
     check(project, schema, '/', future);
     if(project.site!==undefined){
       if(Number(version.split('.')[1])<7)fail('/site','requires project 1.7.0');
+      if(project.site.buildingPlacement!==undefined&&Number(version.split('.')[1])<12)fail('/site/buildingPlacement','requires project 1.12.0');
+      try{Territory.validate(project.site);}catch(error){fail('/site/buildingPlacement',error.message);}
       try{Geo.validateSite(project.site);}catch(error){fail('/site',error.message);}
       if(project.site.parcel!==undefined){
         if(Number(version.split('.')[1])<9)fail('/site/parcel','requires project 1.9.0');
@@ -306,9 +309,9 @@
     if(Number(next.schemaVersion.split('.')[1])<5)next.schemaVersion='1.5.0';
     validate(next);return next;
   }
-  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
+  function setSite(project,site){const next=clone(project);if(site===undefined)delete next.site;else next.site=clone(site);const minor=Number(next.schemaVersion.split('.')[1]);if(site?.buildingPlacement!==undefined&&minor<12)next.schemaVersion='1.12.0';else if(site?.terrain!==undefined&&minor<11)next.schemaVersion='1.11.0';else if(site?.orthophoto!==undefined&&minor<10)next.schemaVersion='1.10.0';else if(site?.parcel!==undefined&&minor<9)next.schemaVersion='1.9.0';else if(minor<7)next.schemaVersion='1.7.0';validate(next);return next;}
   function setRoofParapet(project,parapet){const next=clone(project);if(parapet===undefined)delete next.roofParapet;else next.roofParapet=clone(parapet);if(parapet!==undefined&&Number(next.schemaVersion.split('.')[1])<8)next.schemaVersion='1.8.0';validate(next);return next;}
-  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
+  const validateSite=site=>{check(site,schema.$defs.site,'/site');Geo.validateSite(site);Territory.validate(site);if(site.parcel!==undefined)ParcelSite.fromSiteParcel(site.parcel);if(site.orthophoto!==undefined)OrthophotoSite.fromSiteOrthophoto(site.orthophoto,site.parcel);if(site.terrain!==undefined)TerrainSite.fromSiteTerrain(site.terrain,site.parcel);};
   const api={clone,id,point,validate,validateSite,setSite,setRoofParapet,initial,migrate,prepare,load,importInto,decorate,object,editing,geometry,wallRect,declareWallStructure,WALL_STRUCTURES,STRUCTURE_SOURCES,roomFamilies,roomFamily,roomName};
   if (typeof module!=='undefined') module.exports=api; else root.FloorPlanCore=api;
 })(globalThis);

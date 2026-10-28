@@ -141,6 +141,12 @@ Un archivo incompleto o manipulado se rechaza sin tocar el proyecto abierto. El 
 
 `building.site.terrain` requiere la parcela compartida y conserva sólo metadatos de la última cobertura MDT recuperada. Building 1.3 lo rechaza; Building 1.4 lo admite. Ningún `levels[n].project.site.terrain` es autoridad. La exportación de una planta copia el site compartido a un ProjectV1 1.11 cuando hay terrain. JSON y ZIP conservan los metadatos, pero nunca el grid numérico, la respuesta WCS ni la malla derivada. Abrir el edificio no descarga terreno ni posiciona verticalmente las plantas.
 
+## 1.5.0 — colocación territorial del marco raíz (8C-E candidato)
+
+La única autoridad es `building.site.buildingPlacement`; está prohibida en los proyectos incrustados de nivel. Building ≤1.4 no admite placement. Se acepta ProjectV1 hasta 1.12 y se mantiene la lectura sin migración.
+
+El punto de edificio es `levelPoint + level.offsetMm`. Por tanto `exportLevel` resta el offset de la planta a `horizontal.modelAnchorMm`. La cota de su suelo es `buildingZeroM + level.elevationMm/1000`, que pasa a ser el `modelZeroElevationM` del Project standalone. El ancla de parcela y el norte se conservan. Esta operación rebasa metadatos para preservar posición física; no reproyecta ni cambia geometría de la planta. El Project resultante usa 1.12. El Building original permanece intacto.
+
 ## 7. Fuera de este corte
 
 Recorrido que sube escaleras, exterior, fachada y cubierta, más de dos plantas, escaleras en L, U o de caracol, rotación entre plantas, IFC multiplanta completo, GLB del edificio completo y herramientas MCP de edificio. Cada uno requiere su propio corte.

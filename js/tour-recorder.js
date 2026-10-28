@@ -27,6 +27,9 @@
   // region beside the client card, so rebuilding a stop without that region is not guaranteed to restore the same view.
   const plan=presentation.plan,back=presentation.current,backPose=window.View3D.presentationPose?.(),chunks=[],marks=[];
   let recorder=null,stream=null,raf=0,frames=0,failed=false,started=0,ended=0;
+  // Video has no territorial attribution contract: omit context for this output and restore the session layers.
+  const territoryLayers=window.View3D.territoryLayers;
+  if(territoryLayers)window.View3D.setTerritoryLayers({parcel:false,orthophoto:false,terrain:false,north:false});
   busy=true;
   try{
    // Everything that can throw (canvas stream, recorder, start) happens inside try: «busy» is always released.
@@ -62,6 +65,7 @@
    if(failed)chunks.length=0;
    // Restore the exact view shown before recording. Fall back to the logical stop for older View3D implementations.
    if(presentation.active)try{if(backPose&&window.View3D.presentationRestorePose)window.View3D.presentationRestorePose(backPose);else if(back)await window.View3D.presentationGo(back,true);}catch{}
+   if(territoryLayers)window.View3D.setTerritoryLayers(territoryLayers);
    busy=false;
   }
   const blob=new Blob(chunks,{type:type.split(';')[0]});

@@ -28,3 +28,4 @@
 .territory-caution{font-size:11px;line-height:1.45;color:#625b51}
 .territory-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;border-top:1px solid #ddd5c9}
 @media(max-width:600px){.territory-body{max-height:calc(100dvh - 135px);padding:10px 14px}.territory-header,.territory-actions{padding:10px 14px}.territory-preview{height:180px}}
+@media(max-width:1100px){.territory-dialog input,.territory-dialog select{font-size:16px;min-height:44px}.territory-dialog button{min-height:44px}}
