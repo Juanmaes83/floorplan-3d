@@ -8,7 +8,7 @@
  const link=el('link',document.head);link.rel='stylesheet';link.href='css/territory.css';
  const entry=el('button');entry.id='territoryOpen';entry.type='button';entry.className='btn';document.querySelector('#solarOpen').before(entry);
  const dialog=el('dialog',document.body);dialog.id='territoryDialog';dialog.className='territory-dialog';dialog.setAttribute('aria-labelledby','territoryTitle');
- const header=el('header',dialog),title=el('h2',header),close=el('button',header);title.id='territoryTitle';close.type='button';close.className='btn';close.id='territoryClose';
+ const header=el('div',dialog),title=el('h2',header),close=el('button',header);header.className='territory-header';title.id='territoryTitle';close.type='button';close.className='btn';close.id='territoryClose';
  const body=el('div',dialog);body.className='territory-body';
  const intro=el('p',body),providerRow=el('div',body),providerLabel=el('span',providerRow),providerChoice=el('select',providerRow);
  providerRow.className='territory-provider';providerChoice.id='territoryProvider';
