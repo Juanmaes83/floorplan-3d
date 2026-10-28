@@ -1,7 +1,7 @@
 # Punto 9 — UX profesional y descubribilidad de capacidades 5–8
 
 **Fecha:** 28-10-2026  
-**Estado:** **APROBADO / SIGUIENTE**  
+**Estado:** **Punto 9 — candidato en revisión**
 **Naturaleza:** frontend, arquitectura de información y usabilidad.  
 **Alcance estricto:** reorganizar, jerarquizar y hacer descubribles capacidades existentes sin cambiar su contenido funcional.
 
@@ -646,8 +646,105 @@ Una ruta puede reubicarse, agruparse o dejar de ser principal, pero la capacidad
 
 ## Cierre de especificación
 
-Punto 9 queda **APROBADO COMO SIGUIENTE CORTE** y debe implementarse como reorganización frontend/UX sobre las capacidades ya cerradas de Puntos 1–8.
+Punto 9 queda **CANDIDATO EN REVISIÓN**, implementado como reorganización frontend/UX sobre las capacidades ya cerradas de Puntos 1–8. No se declara cerrado antes de review, CI y merge.
 
 El siguiente punto funcional después de este corte será:
 
 > **Punto 10 — Instalaciones ligeras**.
+
+## Implementación candidata — 28-10-2026
+
+Base real comprobada con fetch: `origin/master@414a07772495e7e0caa77c0be33b0ad2e2838d1b`. Rama `feat/point-9-ux-professional-discoverability`. Se usó un worktree independiente; no se descartó el trabajo previo de Casa Serra. No se modifica el cierre canónico de Punto8 ni se activa Punto10.
+
+### Arquitectura implementada y pregunta humana
+
+La barra `Áreas de trabajo` añade cuatro intenciones de proyecto y una configuración transversal. Las cinco están a la vista sin scroll horizontal en 1440×900, 1280×800, 390×844 y 844×390. Es una navegación sobria de texto, no cinco acciones primarias. La selección usa grafito; sólo la siguiente acción recomendada usa petróleo.
+
+Analizar, Presupuestar, Entregar y Mi estudio tienen un workspace desplazable bajo la navegación. El editor conserva sus columnas, selección y controles; queda inerte mientras el workspace ocupa su lugar. «Volver al plano» o Escape regresan y devuelven el foco. Los diálogos siguen siendo los existentes y al cerrar regresan a su tarjeta de origen. Presentación oculta/suspende el workspace y la navegación de edición; al salir se recupera el área anterior. No se altera su motor.
+
+| Área | Qué debe entender | Qué puede hacer / acción dominante | Estado antes y después | Cómo vuelve / atajo conservado |
+|---|---|---|---|---|
+| Diseñar | Aquí se modifica la vivienda y la selección manda | Construir/amueblar/propiedades existentes; la acción de guía sigue siendo dominante | Modelo, selección, guía y paneles existentes | Botón Diseñar o Volver al plano; paleta y barra móvil intactas |
+| Analizar | Aquí se leen medidas y contexto antes de decidir | Revisar superficies es la acción inicial; orientación, emplazamiento y exterior son secundarias | Área y certeza, escala, norte/ubicación, metadata frente a runtime y cubierta demostrable | Cierre del diálogo → tarjeta; Norte, Solar y Contexto territorial siguen abriendo sus herramientas |
+| Presupuestar | Cantidad, referencia, precio propio y revisión tienen significados distintos | Consultar superficies; información de disponibilidad de las operaciones financieras | Sin presupuesto abierto en esta interfaz; sin totales inventados | Volver al plano o Entregar; no se añade persistencia financiera |
+| Entregar | Ahora se prepara lo que recibirá el cliente | Ver ficha es la acción inicial; lámina, presentación, imágenes, observaciones y presupuesto son secundarias | Superficie/certeza/inclusión, número de estancias, identidad, observaciones y disponibilidad real | Cerrar herramienta → tarjeta; antiguos botones de guía/Archivo/Presentar siguen operativos |
+| Mi estudio | La identidad se reutiliza en este navegador | Configurar Mi estudio abre el gestor existente | Nombre/logo/contacto existentes; perfiles reutilizables y selección por proyecto | Cerrar gestor → área; Tu marca y Firmar con conservados |
+
+### Inventario final de rutas
+
+| Capacidad | Ruta principal nueva | Control/implementación existente conservado |
+|---|---|---|
+| Ficha de superficies | Entregar → Ver ficha; Analizar → Revisar superficies | `openSurfaceSheet`, `FloorPlanSurfaceSheet.open`, atajo Tareas y ayuda |
+| Superficie útil / exclusiones / pavimentos | Analizar → Medidas y superficies → Estancias y pavimentos | Vista general de Propiedades, grupo `areas`, selección contextual de estancia |
+| Escala / calibración | Analizar → Abrir herramientas de calibración | `traceBtn`, panel/herramientas de plano propio |
+| Lámina | Entregar → Abrir lámina | `openSheet`, `sheetScale`, `FloorPlanSheet.open` |
+| Marca / contacto / logo | Mi estudio → Configurar; identidad visible al entrar en Entregar | `brandManage`, `FloorPlanBrandUI.open`, `profileSelect`, sidecars actuales |
+| Identidad para esta entrega | Entregar → Cambiar identidad de esta entrega | Desplaza y enfoca el selector Firmar con existente; no nueva autoridad |
+| Observaciones | Entregar → Gestionar observaciones | `reviewNotesBtn`, `FloorPlanReviewUI.open`, respuestas/decisiones actuales |
+| Presentación | Entregar → Preparar presentación | `presentationBtn`, `guidePresent`, `FloorPlanPresentation.open` |
+| PNG 2D / 3D / exterior | Entregar → Generar imágenes | `exportPng`; vista 3D/Exterior y Captura3D en Archivo; delivery/share internos intactos |
+| Norte / ubicación / zona / Solar | Analizar → Orientación y sol | `solarNorth`, `solarOpen`, `solarOpen3d`, `FloorPlanSolarUI.open` |
+| Parcela / placement / ortofoto / terreno | Analizar → Emplazamiento | `territoryOpen`, `FloorPlanTerritoryUI.open`; las cuatro secciones originales |
+| Capas / exterior contextual | Emplazamiento y Exterior → vista existente | `territoryLayers`, control Exterior y herramienta exterior de Presentation |
+| Fachadas / cubierta | Analizar → Exterior → Revisar exterior3D | `roofToggle`; disponibilidad del derivado ya existente |
+| Petos / volúmenes / acabados | Analizar → Revisar petos y propiedades; Diseñar | `roof-parapet`, propiedades y estancias declaradas; sin inferir nueva geometría |
+| Presupuesto / cantidades / tipos de precio | Presupuestar; resumen enlazado desde Entregar | Estado de disponibilidad honesto, sin nuevo editor ni presupuesto implícito |
+| Tarifa propia / BC3 / fuentes / reporte / CSV | Presupuestar → Fuentes y exportación | Módulos de integración existentes; sin accesos operativos ficticios en el navegador |
+| JSON / ZIP editable | Archivo y Entregar → Proyecto editable | `exportJson`, exportadores actuales; no nuevos formatos |
+| Plantas / escaleras / objetos / huecos | Diseñar | Paleta, Plantas, Propiedades y barra móvil existentes |
+
+Los atajos no se interceptan ni se retrasan: abren la función original. Los diálogos de ficha, lámina, presentación, observaciones, Solar, territorio y marca añaden una vía visible «Ir a [área]» para volver a su casa conceptual. Archivo conserva las operaciones existentes como atajos, pero deja de ser la vía necesaria de descubrimiento.
+
+### Recorrido de guía
+
+La presentación visual evoluciona a **Preparar → Diseñar → Amueblar → Revisar → Entregar**. Los dos estados previos de preparación se agrupan visualmente. Tareas, evidencia, guardado y lógica de progreso siguen siendo los existentes. Entregar abre el workspace y no añade una obligación de presupuesto. Tareas y ayuda añade «Preparar entrega» manteniendo todos sus atajos anteriores.
+
+El test de guía conserva la comprobación de una única fase activa, su correspondencia con la tarea mostrada y el atajo Presentar. Su índice esperado se adapta al agrupamiento visual aprobado y añade comprobación del label; no se eliminan asserts para ocultar fallos.
+
+### Estados y certeza
+
+- Superficies usan únicamente `FloorPlanSurfaceMetrics.home`, también para Building; las excluidas no se suman y los cómputos parciales lo dicen.
+- Norte y ubicación leen la autoridad actual `site`; no hay otra orientación ni otra persistencia.
+- Ortofoto/terreno distinguen **fuente guardada** de **cargada en esta sesión** leyendo el runtime actual, sin fetch.
+- Exterior muestra fachadas derivadas y disponibilidad de la cubierta. Una cubierta no demostrable mantiene su aviso existente, sin repararla.
+- Observaciones resumen el sidecar actual: pendientes importadas y borradores redactados son estados distintos.
+- La identidad se muestra arriba de Entregar; el selector y gestor actuales controlan la selección por proyecto. No se añaden preferencias globales ni datos de marca al proyecto.
+- Precio referencia ≠ definitivo; propio = entrada profesional; revisado = decisión profesional, no certificación. No hay BCCA conectada/gestionada ni precios desconocidos convertidos a cero.
+
+### Límite demostrado de Presupuestar / desviación respecto al concepto
+
+En esta base, 7A–7D están cerrados como módulos puros: cantidades, Budget, fuentes manuales/BC3 y presentación/reporte/CSV. `index.html` no carga un editor, importador BC3 ni un presupuesto de proyecto. El documento de cierre de7D excluye expresamente una UI completa de edición.
+
+Por ello esta implementación ofrece **casa conceptual, semántica y disponibilidad**, pero no inventa contadores de partidas, totales, precios, importador BC3, gestor de tarifa ni botones de exportación sin datos. Presupuesto en Entregar conduce a esa misma área. No se guarda un presupuesto en Project/Building ni se construye un nuevo editor financiero. La limitación está visible y se registra para revisión; no se afirma que el recorrido permita editar precios desde el navegador.
+
+Mi estudio expone sólo campos soportados: nombre comercial, responsable, logo, email, teléfono, web y lema. No crea una cuenta, sincronización, tarifa editable o preferencias nuevas. La firma por proyecto no se presenta como una identidad global aplicada automáticamente a todos los proyectos.
+
+### Validación Playwright / Chromium y revisión visual
+
+Inventario local previo: `output/playwright/point-9/inventory.md`. Baseline antes de cambiar la UI: **30 PNG** en `before/`, con bienvenida, editor guiado/completo, tareas, ficha, Archivo, Solar, contexto, 3D y configuración de presentación, a 1440×900,390×844,844×390. Presupuesto no tenía UI que capturar; se registra en el reporte.
+
+AFTER: capturas equivalentes y las nuevas áreas en `output/playwright/point-9/after/`, incluyendo1280×800. Evidencias locales deliberadas, **no versionadas automáticamente**. Script reproducible `scripts/qa/ux/point-9.cjs before|after`; tests `tests/professional-workspace.browser.test.cjs`. Navegación con click/tap/teclado y scroll; sin forceclick, sin cerrar diálogos por evaluate ni mutar proyectos por evaluate para saltarse acciones. Lecturas técnicas sólo para verificar identidad, estado y no mutación.
+
+Pruebas humanas **simuladas**, no investigación con participantes: A entrega, B orientación, C presupuesto/disponibilidad/semántica, D emplazamiento y E identidad pasan en los cuatro viewports. Una prueba adicional crea identidad con campos reales, selecciona firma, añade observación, abre exterior y Presentation, vuelve, recarga y verifica identidad reutilizable y modelo intacto. El límite financiero de C queda explícito, sin afirmar edición de precios.
+
+Hallazgos visuales:
+
+- Mejora: Ficha y Entregar son localizables sin Archivo ni conocer roadmap; las áreas principales caben sin scroll horizontal crítico.
+- Mejora: estado de certeza, ausencia de norte, disponibilidad de contexto y marca se entienden antes de actuar.
+- Mejora: acción inicial en petróleo frente a selección grafito; vuelta y foco consistentes.
+- Se consolidó la navegación, no los motores ni los datos. Permanecen paleta, propiedades, atajos de guía/Archivo, 2D/3D y exportadores.
+- Se corrigieron durante validación la superposición de barra sobre Archivo, el dock apaisado bajo la nueva barra y la suspensión del workspace durante Presentation.
+- Imperfecto: en móvil hay scroll vertical en Entregar; las herramientas antiguas conservan sus propias composiciones y la cabecera secundaria aún permite scroll. Ningún área principal depende de ese scroll horizontal. Presupuestar explica una limitación operativa real. No hay resultados con personas ni medición de rendimiento en hardware móvil físico.
+
+### Resultados locales finales
+
+- Tests específicos nuevos: **5/5 PASS**, cuatro viewports + persistencia/atajos/Presentation.
+- Regresiones UI guía/paneles/ficha/lámina/marca/observaciones: **58 casos**;55PASS en ejecución inicial y3casos afectados corregidos/verificados dirigidamente (dos correspondencias de fase y dock apaisado).
+- Solar/parcela/ortofoto/terreno/integración/exterior: **27 casos**;24PASS inicialmente y3casos de menú escritorio corregidos/verificados dirigidamente.
+- Presentación/framing/Building/capture/delivery/share y tests nuevos: **33 casos**;32PASS inicialmente, el test nuevo de observaciones esperaba antes del evento nativo de cierre; corregido para esperar el resumen y PASS en suite específica final. No se cambió el motor de observaciones.
+- Core de guía/marca/observaciones:21PASS. SurfaceCore:6PASS. No se repiten suites matemáticas cerradas.
+- Syntax JS nuevos/modificados y scripts inline index: PASS; `git diff --check`: PASS.
+
+Los grupos contienen solapamientos; no se suman como casos únicos. Los fallos detectados durante implementación se explican arriba y sus casos finales están verdes, sin debilitar tests. No se afirma una ejecución de toda la suite histórica del repositorio ni se reabre su baseline Walk.
+
+Sin cambios en schemas, contratos, motores, geometría, precios canónicos, persistencia, fuentes, políticas de licencia/exportación, CRS, Solar o lógica Walk/Presentation. Sin retirada de funcionalidades. Un commit funcional y un push tras validar localmente; después de abrir PR sólo confirmación y como máximo una observación inicial de CI. Sin merge, reruns ni polling de CI/Vercel.
