@@ -5,7 +5,11 @@
  const registry=Geo.createDefaultRegistry();
  const t=(es,en,zh)=>({es,en,zh})[LANG]||es;
  const el=(tag,parent,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;parent?.append(node);return node;};
- const link=el('link',document.head);link.rel='stylesheet';link.href='css/territory.css';
+ let territoryStylesLoaded=false;
+ function ensureTerritoryStyles(){
+  if(territoryStylesLoaded||document.querySelector('link[data-territory-styles]')){territoryStylesLoaded=true;return;}
+  const link=el('link',document.head);link.rel='stylesheet';link.href='css/territory.css';link.dataset.territoryStyles='';territoryStylesLoaded=true;
+ }
  const entry=el('button');entry.id='territoryOpen';entry.type='button';entry.className='btn';document.querySelector('#solarOpen').before(entry);
  const dialog=el('dialog',document.body);dialog.id='territoryDialog';dialog.className='territory-dialog';dialog.setAttribute('aria-labelledby','territoryTitle');
  const header=el('div',dialog),title=el('h2',header),close=el('button',header);header.className='territory-header';title.id='territoryTitle';close.type='button';close.className='btn';close.id='territoryClose';
@@ -85,7 +89,7 @@
  save.onclick=()=>{if(!pending)return;try{app.setSite({...site(),parcel:pending});pending=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();}catch(error){status.textContent=error.message;}};
  remove.onclick=()=>{try{const next={...site()};delete next.parcel;app.setSite(Object.keys(next).length?next:undefined);pending=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
  providerChoice.onchange=()=>{pending=null;render();};
- function open(){owner=app.entryId;pending=null;status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
+ function open(){ensureTerritoryStyles();owner=app.entryId;pending=null;status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
  entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
  window.FloorPlanTerritoryUI={open,registry};
  render();
