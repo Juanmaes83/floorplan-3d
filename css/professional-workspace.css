@@ -18,3 +18,34 @@ body.presentation-active .professional-nav,body.presentation-exiting .profession
 @media(max-width:600px){.professional-grid{grid-template-columns:1fr}.professional-nav .btn{padding:7px 5px;font-size:11.5px}.professional-head h1{font-size:22px}.professional-intro{font-size:13px;margin-bottom:14px}}
 @media(max-width:1100px) and (max-height:500px){#mobileDock{top:calc(var(--professional-nav-bottom,var(--shell-header-bottom,58px)) + 6px)}}
 @media(max-width:1100px){.professional-nav .btn{min-height:44px}}
+/* Human review: contextual controls remain secondary to product areas. */
+.professional-control-label{font-size:11px;color:var(--ink-muted);padding:0 6px;white-space:nowrap}
+#viewSeg .pill{display:none}#viewSeg .btn{width:auto;min-width:82px;transition:none}#viewSeg .btn[data-view="2d"],body.m3d #viewSeg .btn[data-view="3d"]{background:var(--select,#2b3034);color:var(--select-ink,#fff)}body.m3d #viewSeg .btn[data-view="2d"]{background:transparent;color:var(--ink)}
+.professional-nav{border-bottom:2px solid var(--line);font-weight:600}
+#workArea-studio::before{content:'⚙';margin-right:5px;font-size:14px}
+header #presentationBtn{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:500}
+header #presentationBtn:hover{background:var(--surface-hover)}
+body.m3d #tracePanel,body.m3d #traceBtn,body.m3d #newRoomBtn,body.m3d #panel:has(#traceEditSave),body.m3d #paletteBuild .palette-group,body.m3d #paletteWallBanner{display:none!important}
+body.m3d #palette3dNote{display:block!important}
+body.m3d #modes3d{border-right:0;border-radius:8px 0 0 8px;margin-right:-10px}
+body.m3d #roofGroup{border-left:0;border-radius:0 8px 8px 0}
+aside.right,#panel,#tracePanel,.panel-body,.panel-group,.panel-group-body{min-width:0;max-width:100%}
+aside.right{overflow-x:hidden}
+#panel .btn,#tracePanel .btn,#panel summary,#tracePanel summary{white-space:normal;overflow-wrap:anywhere;max-width:100%;height:auto;text-overflow:clip}
+#panel .actions,#tracePanel .actions{flex-wrap:wrap;min-width:0}
+#panel p,#tracePanel p,.panel-context,#traceWarnings{overflow-wrap:anywhere}
+.professional-workspace{padding-left:max(20px,calc((100vw - 1100px)/2));padding-right:max(20px,calc((100vw - 1100px)/2))}
+.professional-legend{grid-column:1/-1;order:1;border-top:1px solid var(--line);padding:12px 0;font-size:13px;color:var(--ink-muted)}
+.professional-legend summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px}
+.professional-legend summary::before{content:'▸'}.professional-legend[open] summary::before{content:'▾'}
+.professional-legend dl{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:8px 18px;max-width:75ch;margin:8px 0}
+.professional-legend dt{font-weight:600}.professional-legend dd{margin:0}
+.professional-grid:has(.professional-legend){grid-template-columns:minmax(0,1fr)}
+.professional-budget-note{border-top:1px solid var(--line);margin-top:16px;padding-top:4px}.professional-budget-note h4{font-size:13px;margin:12px 0 6px}
+.professional-more{border-top:1px solid var(--line);padding:16px 0 24px}.professional-more h2{font-size:15px;font-weight:600;color:var(--ink-muted);margin:0 0 14px}.professional-more .professional-card{background:transparent;max-width:540px}
+.professional-card>.btn{border:1px solid var(--line)}
+#territoryLayers label{display:grid!important;grid-template-columns:18px minmax(0,1fr) auto}#territoryLayers label input{grid-column:1;grid-row:1}#territoryLayers label>span:not(.territory-layer-state){grid-column:2;grid-row:1}#territoryLayers .territory-layer-state{grid-column:3;grid-row:1}
+.guide-journey-label{font-size:11px;color:var(--ink-muted);margin:6px 0;font-weight:600}.guide-steps{max-width:850px}.guide-steps .step-number{width:18px;height:18px;font-size:10px}.guide-steps button{font-size:11px}
+@media(max-width:1100px){.professional-workspace{padding:14px 12px}#mobileDock .professional-control-label{display:none}body.m3d #modes3d{margin-right:-10px}}
+@media(max-width:600px){#workArea-studio::before{margin-right:3px;font-size:12px}.professional-legend dl{display:block}.professional-legend dt{margin-top:12px}.professional-legend dd{margin:4px 0}.guide-journey-label{font-size:10px}}
+@media(max-height:500px){.palette-tabs{position:static}}

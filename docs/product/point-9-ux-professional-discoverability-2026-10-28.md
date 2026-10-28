@@ -748,3 +748,54 @@ Hallazgos visuales:
 Los grupos contienen solapamientos; no se suman como casos únicos. Los fallos detectados durante implementación se explican arriba y sus casos finales están verdes, sin debilitar tests. No se afirma una ejecución de toda la suite histórica del repositorio ni se reabre su baseline Walk.
 
 Sin cambios en schemas, contratos, motores, geometría, precios canónicos, persistencia, fuentes, políticas de licencia/exportación, CRS, Solar o lógica Walk/Presentation. Sin retirada de funcionalidades. Un commit funcional y un push tras validar localmente; después de abrir PR sólo confirmación y como máximo una observación inicial de CI. Sin merge, reruns ni polling de CI/Vercel.
+
+## Segunda revisión visual humana
+
+### Revisión humana escritorio — segunda pasada
+
+**Punto 9 — CANDIDATO EN REVISIÓN. Punto 10 sin activar.** Refinamiento de la arquitectura aprobada en PR #133; esta sección sustituye las decisiones visuales afectadas de la primera pasada. Base de PR: `414a07772495e7e0caa77c0be33b0ad2e2838d1b`. HEAD previo local y remoto comprobado: `264480d6cc52df49678b849fd9f6ca292eab21d2`. La rama remota no había avanzado al comenzar esta pasada. Se conservaron las evidencias locales previas; no había código local sin publicar.
+
+Se resuelven **16 hallazgos** exclusivamente mediante presentación, microcopy y lectura del estado existente. No se añade una nueva autoridad de disponibilidad territorial: los controles leen los objetos que el renderer ya expone, mientras sus preferencias de visibilidad y transformaciones permanecen intactas.
+
+| Hallazgo / problema | Cambio | Criterio de aceptación | Resultado |
+|---|---|---|---|
+| H1. Cabecera 3D compite con las áreas del producto | Etiquetas Vista y Explorar; controles originales conservados; Presentar pasa a acceso secundario; selección de vista independiente de las áreas | Distinguir área, vista, exploración y acceso rápido; seguir pudiendo usar 2D, 3D, Vista aérea, Recorrer y Exterior | PASS |
+| H2. Trazado 2D expuesto en 3D | CSS oculta herramientas de trazado, creación de estancia y formulario de geometría 2D en 3D. La paleta ofrece su entrada existente al plano 2D | No ofrecer Muro/Puerta/Ventana/Estancia en 3D; restaurar herramientas y formulario al volver a 2D sin cambiar su estado | PASS |
+| H3. Capas marcadas sin contexto disponible | Estado por capa: Visible / Oculto si existe representación; Sin configurar / No cargado / Sin colocación en otro caso. Checkbox no disponible oculto, desmarcado y deshabilitado | Ninguna capa inexistente parece activa; las disponibles conservan su control real de visibilidad | PASS |
+| H4. Revisar superficies domina Analizar arbitrariamente | Las cuatro tarjetas usan acciones secundarias consistentes | Orientación sin configurar no queda visualmente subordinada a una CTA dominante de superficies; no se inventa algoritmo de prioridad | PASS |
+| H5. Presupuestar parece un error de desarrollo | «Edición de presupuesto todavía no disponible» y explicación de esta versión de Rubik | Entender que la edición operativa aún no está disponible y que se pueden consultar superficies/preparar otras salidas | PASS |
+| H6. Ayuda financiera domina la pantalla | Las cuatro semánticas se conservan en una leyenda desplegable, cerrada inicialmente | Disponibilidad y acciones existentes antes que documentación; automática/referencia/propio/revisado siguen consultables | PASS |
+| H7. Ficha domina los entregables sin justificación | Mismo nivel de CTA en las tarjetas de Entregar; no se añade flujo global ficticio | Ficha, lámina, presentación, imágenes, presupuesto/estado y observaciones se reconocen como opciones equivalentes | PASS |
+| H8. Identidad duplicada | Se retira el resumen y su acción duplicada; la tarjeta conserva selector y gestor existentes | Un único lugar en Entregar para ver y configurar la identidad | PASS |
+| H9. Copia editable mezclada con entregables | Proyecto editable pasa a «Más opciones · Guardar y exportar» fuera de la cuadrícula cliente | Distinguir resultados para el cliente de la copia de trabajo del profesional; exportador intacto | PASS |
+| H10. Mi estudio pasa desapercibido | Indicador sobrio de configuración y título «Logo, datos e identidad profesional»; nombre accesible estable | Encontrar configuración profesional sin convertirla en acción principal | PASS |
+| H11. Lenguaje exterior interno | Fachadas detectadas a partir del plano; cubierta «no disponible con la geometría actual» | Comprender resultado y limitación sin presentar certeza adicional | PASS |
+| H12. Texto truncado y scroll horizontal en propiedades | Wrap en botones, resúmenes, avisos y contexto; hijos flex/grid encogibles; anchura limitada al panel | Cero desbordamientos horizontales críticos, incluidos botones de revisión de muros, en 1440×900 y 1280×800 | PASS |
+| H13. Anchura útil de áreas profesionales | Contenido centrado con anchura útil de 1100 px en escritorio | Tarjetas legibles dentro del rango 1050–1150 px; sin dashboard denso ni desbordamiento móvil | PASS |
+| H14. Retorno no usa la arquitectura aprobada | «← Volver a Diseñar» | Volver al editor conservando la vista y el comportamiento de foco anterior | PASS |
+| H15. Recorrido parece otra navegación de producto | «Recorrido del proyecto · Paso N de 5 · etapa», stepper de menor énfasis; progreso y tareas conservados | Distinguir el área Diseñar de la etapa Revisar. En pantallas bajas las pestañas de paleta dejan de ser fijas para no tapar acciones | PASS |
+| H16. Preservar recorrido validado | Navegación y diálogos originales, foco y retorno comprobados | Diseñar → 3D → Analizar → Entregar → Ficha → Entregar → Diseñar, sin perder la vista ni alterar el proyecto | PASS |
+
+### Capturas before/after y revisión
+
+Evidencia local reproducible: `node scripts/qa/ux/point-9-review.cjs before|after`. Para repetir el baseline debe usarse el HEAD previo indicado, sin sobrescribirlo con el resultado de esta pasada.
+
+- **BEFORE: 40 PNG** en `output/playwright/point-9/review-2/before/`, capturados antes de modificar la interfaz del producto.
+- **AFTER: 56 PNG** en `output/playwright/point-9/review-2/after/`: las diez escenas equivalentes por viewport más revisión de muros con wrap, leyenda desplegada, identidad y copia interna.
+- Viewports: **1440×900, 1280×800, 390×844 y 844×390**.
+- Escenas: Diseñar guiado 2D, trazado y panel derecho 2D, Diseñar 3D, panel derecho 3D, capas, Analizar, Presupuestar, Entregar, Mi estudio y ficha. Reportes de captura sin errores de página.
+- Revisión visual de capturas reales de escritorio y móvil, con atención a los dieciséis hallazgos y a la convivencia de cabecera, áreas y recorrido. Evidencias deliberadamente locales, no versionadas automáticamente.
+
+### Validación local de esta pasada
+
+- `tests/professional-workspace.browser.test.cjs`: **9/9 PASS**. Conserva las cinco pruebas originales y añade cuatro recorridos de revisión contextual, uno por viewport. Verifica herramientas 2D ocultas/restauradas, estados territoriales, Visible/Oculto real del edificio, panel sin overflow ni texto recortado, jerarquía, copia separada, leyenda, Mi estudio, conservación del proyecto y retorno de ficha. Se mantiene la prueba real de Presentación, observaciones, marca, lámina e imagen descargada.
+- Regresiones existentes de guía/navegación, paneles, ficha, lámina, marca, observaciones, Solar, parcela, ortofoto y terreno: **72 casos, 71 PASS iniciales**; el único caso afectado de paleta apaisada se corrigió con pestañas no fijas en pantallas bajas y pasó dirigido **1/1**. No se modificaron sus asserts. No quedan fallos pendientes en estos casos.
+- Exterior y contexto configurado, capas, Presentación, exportación y offline: **3/3 PASS** mediante los casos existentes `Exterior remains reversible…` y `8C-E explicit building placement…` en ambos tamaños móviles. No se reabre la suite histórica Walk ni su baseline.
+- Fallos transitorios de desarrollo documentados: el indicador visual de Mi estudio alteraba su nombre accesible; corregido con nombre explícito sin debilitar los selectores. La nueva prueba de Walk asumía que Escape abandonaba el modo; se corrigió para usar el retorno existente Vista aérea, sin modificar Walk.
+- `node --check` de JS/CJS nuevos o modificados, parseo de scripts inline de `index.html` y `git diff --check`: **PASS**.
+
+### Límites y publicación
+
+La revisión automatizada simula interacciones humanas; no es una nueva sesión con participantes. Continúan el scroll vertical móvil y los controles secundarios de cabecera desplazables. No se crea editor financiero, importador BC3 ni conexión BCCA; la leyenda no afirma disponibilidad operativa. Ningún cambio de schema, contrato, motor, geometría, cálculo, persistencia, precio, provider, CRS, Solar, política de exportación o licencia. Ninguna función retirada: los controles contextuales se conservan para la vista apropiada.
+
+Entrega de esta pasada: un único commit adicional y un único push a la misma rama de PR #133 tras validar localmente. Sin nueva PR, sin merge ni cierre de Punto 9; Punto 10 no se activa. Tras publicar, una sola confirmación de PR y, como máximo, una lectura inicial de checks; sin esperar CI/Vercel, polling ni reruns manuales.
