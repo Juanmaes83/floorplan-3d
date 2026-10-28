@@ -1,5 +1,9 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
+## Ampliación 1.10.0 — ortofoto contextual (Punto 8C-C)
+
+`site.orthophoto` es opcional desde ProjectV1 1.10.0 y requiere `site.parcel`. Guarda únicamente CRS fuente, extensión exacta de la parcela, dimensiones y resolución de la solicitud, política `latest-available`, tipo JPEG y procedencia (`providerId`, fuente, hora de recuperación, atribución y licencia). La validación semántica exige que CRS y extensión coincidan con `site.parcel`. La imagen, su `Blob`, `blob:` URL y píxeles no entran en JSON/ZIP ni se recargan automáticamente al abrirlos. Una nueva carga explícita puede obtener un mosaico distinto porque PNOA Máxima Actualidad es dinámico; `retrievedAt` no equivale a fecha de vuelo. La superposición del contorno se deriva en memoria del mismo marco fuente; no se usa para situar el edificio. Añadir ortofoto eleva el proyecto a 1.10.0; eliminarla no degrada la versión. Proyectos 1.9.0 y anteriores no admiten este campo.
+
 ## Ampliación 1.9.0 — parcela territorial fuente (Punto 8C-B)
 
 `site.parcel` es opcional y sólo se admite desde ProjectV1 1.9.0. Contiene `reference` de 14 caracteres, `inspireId` opcional, `sourceCrs`, `sourceGeometry` MultiPolygon (polígonos, anillo exterior y huecos), `frame` métrico persistente y `source` con procedencia y condiciones de licencia de esa parcela. La geometría conserva coordenadas de fuente sin simplificación; su representación local en milímetros es derivada y no se guarda. No se persisten XML bruto, respuesta WFS, caché de bbox ni geometría editable generada. `site.location` y `site.northOffsetDeg` conservan su significado. La parcela no determina dónde está el edificio ni cambia muros, estancias, objetos o materiales.

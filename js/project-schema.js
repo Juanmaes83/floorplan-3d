@@ -67,10 +67,12 @@
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-7]\\."}}},"then":{"not":{"required":["roofParapet"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.(7|8)\\."}}},"then":{"properties":{"site":{"not":{"required":["parcel"]}}}}},
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.(7|8|9)\\."}}},"then":{"properties":{"site":{"not":{"required":["orthophoto"]}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
   "$defs": {
+    "orthophoto": { "type": "object", "additionalProperties": false, "required": ["sourceCrs", "extent", "widthPx", "heightPx", "requestedResolutionM", "resolutionXMPerPx", "resolutionYMPerPx", "mediaType", "sourcePolicy", "source"], "properties": { "sourceCrs": { "enum": ["EPSG:25829", "EPSG:25830", "EPSG:25831", "EPSG:32628"] }, "extent": { "type": "object", "additionalProperties": false, "required": ["minX", "minY", "maxX", "maxY"], "properties": { "minX": { "type": "number" }, "minY": { "type": "number" }, "maxX": { "type": "number" }, "maxY": { "type": "number" } } }, "widthPx": { "type": "integer", "minimum": 1, "maximum": 2048 }, "heightPx": { "type": "integer", "minimum": 1, "maximum": 2048 }, "requestedResolutionM": { "type": "number", "minimum": 0.05, "maximum": 1 }, "resolutionXMPerPx": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }, "resolutionYMPerPx": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }, "mediaType": { "const": "image/jpeg" }, "sourcePolicy": { "const": "latest-available" }, "source": { "$ref": "#/$defs/parcelSource", "required": ["retrievedAt", "attribution", "license"] } } },
     "parcel": {
       "type": "object", "additionalProperties": false,
       "required": ["reference", "sourceCrs", "sourceGeometry", "frame", "source"],
@@ -98,10 +100,12 @@
     },
     "site": {
       "type": "object", "additionalProperties": false,
+      "dependentRequired": { "orthophoto": ["parcel"] },
       "description": "Optional internal site data. North is clockwise from plan-up, without rotating geometry. Absence means not configured.",
       "properties": {
         "northOffsetDeg": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
         "parcel": { "$ref": "#/$defs/parcel" },
+        "orthophoto": { "$ref": "#/$defs/orthophoto" },
         "location": {
           "type": "object", "additionalProperties": false, "required": ["latitude", "longitude", "timeZone", "source"],
           "properties": {

@@ -4,7 +4,7 @@
 .territory-dialog h2{font-size:22px;margin:0}
 .territory-body{overflow:auto;max-height:calc(100dvh - 150px);padding:12px 18px}
 .territory-body>p{font-size:13px;line-height:1.45}
-.territory-provider{display:flex;align-items:center;gap:8px;margin:12px 0;font-weight:600}
+.territory-provider,.territory-orthophoto-provider{display:flex;align-items:center;gap:8px;margin:12px 0;font-weight:600}
 .territory-dialog section{margin:14px 0}
 .territory-dialog label{display:flex;flex-direction:column;gap:5px;margin:8px 0;font-size:13px;font-weight:600}
 .territory-dialog input,.territory-dialog select{box-sizing:border-box;width:100%;max-width:100%;min-height:40px;padding:7px;border:1px solid #ccc3b6;border-radius:5px;background:#fff;font:inherit}
@@ -18,6 +18,13 @@
 .territory-preview{height:240px;border:1px solid #d9d5c9;background:#fff;margin-top:12px;overflow:hidden}
 .territory-preview svg{width:100%;height:100%}
 .territory-shape{fill:#cfe4df;stroke:#245a62;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.territory-shape-overlay{fill:#fff3;stroke:#fff;stroke-width:2;paint-order:stroke fill;filter:drop-shadow(0 0 2px #172b37)}
+.territory-orthophoto{border:1px solid #ccc3b6;border-radius:8px;padding:12px;background:#f5f4ee}
+.territory-orthophoto h3{margin:0 0 8px;font-size:17px}
+.territory-orthophoto p{font-size:12px;line-height:1.45}
+.territory-orthophoto dl{display:grid;grid-template-columns:minmax(110px,1fr) 2fr;gap:5px 10px;margin:8px 0;font-size:12px;overflow-wrap:anywhere}
+.territory-orthophoto dt{font-weight:600}.territory-orthophoto dd{margin:0}
+.territory-orthophoto-actions{display:flex;flex-wrap:wrap;gap:8px}
 .territory-caution{font-size:11px;line-height:1.45;color:#625b51}
 .territory-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;border-top:1px solid #ddd5c9}
 @media(max-width:600px){.territory-body{max-height:calc(100dvh - 135px);padding:10px 14px}.territory-header,.territory-actions{padding:10px 14px}.territory-preview{height:180px}}
