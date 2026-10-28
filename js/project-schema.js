@@ -65,6 +65,7 @@
   },
   "allOf": [
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-7]\\."}}},"then":{"not":{"required":["roofParapet"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-5]\\."}}},"then":{"properties":{"rooms":{"items":{"required":["name"],"properties":{"name":{"minLength":1}}}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
