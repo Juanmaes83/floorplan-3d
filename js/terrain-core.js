@@ -1,0 +1,31 @@
+/* 8C-D: pure, parcel-aligned elevation grid and derived surface. */
+(function(root){
+ 'use strict';
+ const Parcel=typeof module==='object'&&module.exports?require('./parcel-core.js'):root.FloorPlanParcelCore;
+ const LIMITS=Object.freeze({maxSideM:2000,maxSamples:160000,maxResponseBytes:3000000});
+ const fail=reason=>{const error=new TypeError(reason);error.reason=reason;throw error;};
+ const finite=n=>typeof n==='number'&&Number.isFinite(n);
+ const bounds=e=>e&&['minX','minY','maxX','maxY'].every(k=>finite(e[k]))&&e.minX<e.maxX&&e.minY<e.maxY;
+ const copy=e=>({minX:e.minX,minY:e.minY,maxX:e.maxX,maxY:e.maxY});
+ const same=(a,b)=>['minX','minY','maxX','maxY'].every(k=>a?.[k]===b?.[k]);
+ function extentFromParcel(parcel){const p=Parcel.normalizeParcel(parcel),points=p.sourceGeometry.polygons.flatMap(poly=>poly.rings.flat());return {minX:Math.min(...points.map(v=>v[0])),minY:Math.min(...points.map(v=>v[1])),maxX:Math.max(...points.map(v=>v[0])),maxY:Math.max(...points.map(v=>v[1]))};}
+ function normalizeRequest(input){let sourceCrs;try{sourceCrs=Parcel.normalizeCrs(input?.sourceCrs);}catch{fail('terrain-source-crs-unsupported');}const e=input?.extent;if(!bounds(e))fail('terrain-extent-invalid');if(e.maxX-e.minX>LIMITS.maxSideM||e.maxY-e.minY>LIMITS.maxSideM)fail('terrain-extent-too-large');return {sourceCrs,extent:copy(e)};}
+ function requestFromParcel(parcel){const p=Parcel.normalizeParcel(parcel);return normalizeRequest({sourceCrs:p.sourceCrs,extent:extentFromParcel(p)});}
+ function normalizeGrid(value,request){const q=normalizeRequest(request);if(!value||typeof value!=='object'||value.sourceCrs!==q.sourceCrs||!same(value.requestedExtent,q.extent)||!bounds(value.coverageExtent)||!bounds(value.sampleDomain))fail('terrain-grid-invalid');
+  const {cols,rows,cellSizeX,cellSizeY,values,noData}=value;if(!Number.isInteger(cols)||!Number.isInteger(rows)||cols<2||rows<2||cols*rows>LIMITS.maxSamples||!finite(cellSizeX)||!finite(cellSizeY)||cellSizeX<=0||cellSizeY<=0||!Array.isArray(values)||values.length!==cols*rows||!values.every(v=>v===null||finite(v))||!(noData===null||finite(noData)))fail('terrain-grid-invalid');
+  const d=value.sampleDomain,c=value.coverageExtent,near=(a,b)=>Math.abs(a-b)<1e-6;
+  if(!near(d.maxX-d.minX,(cols-1)*cellSizeX)||!near(d.maxY-d.minY,(rows-1)*cellSizeY)||!near(d.minX,c.minX+cellSizeX/2)||!near(d.maxX,c.maxX-cellSizeX/2)||!near(d.minY,c.minY+cellSizeY/2)||!near(d.maxY,c.maxY-cellSizeY/2)||value.verticalReference!=='orthometric'||value.sampleModel!=='cell-center')fail('terrain-grid-invalid');
+  return {sourceCrs:q.sourceCrs,requestedExtent:copy(q.extent),coverageExtent:copy(c),sampleDomain:copy(d),cols,rows,cellSizeX,cellSizeY,noData,values:[...values],verticalReference:'orthometric',sampleModel:'cell-center'};
+ }
+ function valid(grid,v){return v!==null&&Number.isFinite(v)&&v!==grid.noData;}
+ function sampleElevation(grid,x,y){if(!finite(x)||!finite(y))fail('terrain-coordinate-invalid');const g=grid,d=g.sampleDomain;if(x<d.minX||x>d.maxX||y<d.minY||y>d.maxY)return {status:'outside'};const fx=(x-d.minX)/g.cellSizeX,fy=(d.maxY-y)/g.cellSizeY,c=Math.floor(fx),r=Math.floor(fy),tx=fx-c,ty=fy-r;
+  if(c>=g.cols-1||r>=g.rows-1){if(Number.isInteger(fx)&&Number.isInteger(fy)){const v=g.values[r*g.cols+c];return valid(g,v)?{status:'available',elevationM:v}:{status:'no-data'};}return {status:'outside'};}
+  const a=g.values[r*g.cols+c],b=g.values[r*g.cols+c+1],c0=g.values[(r+1)*g.cols+c],d0=g.values[(r+1)*g.cols+c+1];if(![a,b,c0,d0].every(v=>valid(g,v)))return {status:'no-data'};return {status:'available',elevationM:a*(1-tx)*(1-ty)+b*tx*(1-ty)+c0*(1-tx)*ty+d0*tx*ty};
+ }
+ function deriveSurface(grid,frame){if(!frame||!finite(frame.originX)||!finite(frame.originY))fail('terrain-frame-invalid');const g=grid,vertices=[],triangles=[];for(let row=0;row<g.rows;row++)for(let col=0;col<g.cols;col++){const sourceX=g.sampleDomain.minX+col*g.cellSizeX,sourceY=g.sampleDomain.maxY-row*g.cellSizeY,elevationM=g.values[row*g.cols+col];vertices.push({sourceX,sourceY,xMm:(sourceX-frame.originX)*1000,yMm:(frame.originY-sourceY)*1000,elevationM:valid(g,elevationM)?elevationM:null});}
+  for(let row=0;row<g.rows-1;row++)for(let col=0;col<g.cols-1;col++){const i=row*g.cols+col;for(const tri of [[i,i+g.cols,i+1],[i+1,i+g.cols,i+g.cols+1]])if(tri.every(index=>vertices[index].elevationM!==null))triangles.push(tri);}
+  const elevations=vertices.map(v=>v.elevationM).filter(v=>v!==null);return {vertices,triangles,surfaceBaseElevationM:elevations.length?Math.min(...elevations):null};
+ }
+ function normalizeMetadata(value,parcel){if(!parcel)fail('terrain-requires-parcel');const q=requestFromParcel(parcel);if(!value||value.sourceCrs!==q.sourceCrs||!same(value.requestedExtent,q.extent)||!bounds(value.coverageExtent)||!bounds(value.sampleDomain)||!Number.isInteger(value.cols)||!Number.isInteger(value.rows)||value.cols<2||value.rows<2||value.cols*value.rows>LIMITS.maxSamples||!finite(value.cellSizeX)||!finite(value.cellSizeY)||value.cellSizeX<=0||value.cellSizeY<=0||value.verticalReference!=='orthometric'||value.sampleModel!=='cell-center'||value.resolutionM!==5||typeof value.productName!=='string'||!value.productName.trim()||typeof value.coverageId!=='string'||!value.coverageId.trim())fail('terrain-metadata-invalid');const c=value.coverageExtent,d=value.sampleDomain,near=(a,b)=>Math.abs(a-b)<1e-6;if(!near(d.minX,c.minX+value.cellSizeX/2)||!near(d.maxX,c.maxX-value.cellSizeX/2)||!near(d.minY,c.minY+value.cellSizeY/2)||!near(d.maxY,c.maxY-value.cellSizeY/2)||!near(d.maxX-d.minX,(value.cols-1)*value.cellSizeX)||!near(d.maxY-d.minY,(value.rows-1)*value.cellSizeY))fail('terrain-metadata-invalid');return {sourceCrs:q.sourceCrs,requestedExtent:copy(q.extent),coverageExtent:copy(c),sampleDomain:copy(d),cols:value.cols,rows:value.rows,cellSizeX:value.cellSizeX,cellSizeY:value.cellSizeY,verticalReference:'orthometric',sampleModel:'cell-center',resolutionM:5,productName:value.productName,coverageId:value.coverageId};}
+ const api={LIMITS,extentFromParcel,normalizeRequest,requestFromParcel,normalizeGrid,sampleElevation,deriveSurface,normalizeMetadata};if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanTerrainCore=api;
+})(globalThis);

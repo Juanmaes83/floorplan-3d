@@ -1,6 +1,6 @@
 # FloorPlanGeoProvider — Point 6 boundary
 
-Runtime: `js/geo-provider.js`, pure UMD registry without network/storage/renderer. The default registry includes the permanent offline `FloorPlanGeoProvider.Manual`, the local Catastro INSPIRE CP document parser, and the explicit PNOA WMS orthophoto adapter.
+Runtime: `js/geo-provider.js`, pure UMD registry without network/storage/renderer. The default registry includes the permanent offline `FloorPlanGeoProvider.Manual`, the local Catastro INSPIRE CP document parser, the explicit PNOA WMS orthophoto adapter and the explicit IGN/IDEE MDT05 terrain adapter.
 
 `Manual.capabilities` declares `coordinates` and `sourceMetadata` true; search, parcel, geometry, orthophoto, elevation and terrain false. No UI action is offered for unsupported operations.
 
@@ -12,7 +12,13 @@ Runtime: `js/geo-provider.js`, pure UMD registry without network/storage/rendere
 
 The solar core accepts only normalized coordinates/time zone/north/date/time. It has no provider identity branch or network call. A future territorial adapter can implement search/getParcel/getGeometry/getCoordinates/getSourceMetadata according to honest capabilities and return the same normalized location with minimized provenance. Unsupported operations remain absent, not fake successful empty responses. External adapters must add normalized not-found/unavailable/invalid/cancelled results, timeout and cancellation, preserve an existing valid project on error, and pass shared provider contract tests before activation.
 
-Spain is the first territorial context: Catastro INSPIRE CP document import for parcel geometry and IGN/CNIG PNOA WMS for an explicitly requested orthophoto. Search/reference lookup, elevation and terrain remain future work. No owner identity, NIF/CIF or cadastral value is retained.
+Spain is the first territorial context: Catastro INSPIRE CP document import for parcel geometry, IGN/CNIG PNOA WMS for an explicitly requested orthophoto, and IGN/IDEE WCS for an explicitly requested MDT05 terrain grid. Independent remote point elevation remains future work. No owner identity, NIF/CIF or cadastral value is retained.
+
+## 1.3.0 terrain operation (8C-D candidate in review)
+
+`getTerrain(providerId, {sourceCrs, extent}, {signal})` requires the explicit `terrain` capability. It has no fallback, receives a frozen parcel-derived request and returns `available` only for a validated numeric grid and complete provenance. Older 1.0/1.1/1.2 providers remain compatible when `terrain:false`. The MDT adapter declares `terrain:true`, `elevation:false` and `sourceMetadata:true`: `elevation` is reserved for a future independent remote point query. Local contextual elevations come from `TerrainCore.sampleElevation` on the loaded grid. Invalid, unsupported, unavailable and cancelled outcomes never imply data availability.
+
+The adapter uses one fixed HTTPS WCS endpoint and the service's 5 m first-coverage IDs. It sends `SUBSETTINGCRS` and `OUTPUTCRS` for the parcel CRS, verifies the response `.prj` against that exact CRS, and parses the numeric `application/asc` part of the bounded multipart response. A persisted project never controls the request host. The runtime grid distinguishes requested extent, cell-edge coverage extent and interpolable sample-center domain. NoData remains absent, never zero; no interpolation crosses it. `resolutionM:5` means grid step, not accuracy. No grid, response bytes or derived mesh are durable.
 
 Source geometry retains source ID, provider, CRS, retrieval time, endpoint/version/license where applicable. An editable working geometry is a separate derived representation referencing the source, never a rewrite of official source data. This orthophoto adapter does not add terrain or Exterior geometry. Point 8 V1/V2/V3 keeps its approved scope.
 

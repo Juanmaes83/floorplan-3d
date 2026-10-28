@@ -1,12 +1,14 @@
 /* Point 8C-A: offline runtime GeoProvider contract. Site remains the durable authority. */
 (function(root){
  'use strict';
- const CONTRACT_VERSION='1.2.0';
+ const CONTRACT_VERSION='1.3.0';
  const Parcel=typeof module==='object'&&module.exports?require('./parcel-core.js'):root.FloorPlanParcelCore;
  const Ortho=typeof module==='object'&&module.exports?require('./orthophoto-core.js'):root.FloorPlanOrthophotoCore;
+ const Terrain=typeof module==='object'&&module.exports?require('./terrain-core.js'):root.FloorPlanTerrainCore;
  const PARCEL_INPUT_MODES=Object.freeze(['document','reference']);
  const PARCEL_REASONS=Object.freeze(['invalid-parcel-input','invalid-parcel-reference','invalid-source-document','multiple-parcels-require-selection','parcel-not-found','invalid-source-geometry','inconsistent-source-crs','unsupported-source-crs','network-unavailable','cancelled']);
  const ORTHOPHOTO_REASONS=Object.freeze(['orthophoto-requires-parcel','orthophoto-source-crs-unsupported','orthophoto-extent-invalid','orthophoto-extent-too-large','network-unavailable','service-error','invalid-raster-response','response-too-large','provider-error','cancelled']);
+ const TERRAIN_REASONS=Object.freeze(['terrain-requires-parcel','terrain-source-crs-unsupported','terrain-extent-invalid','terrain-extent-too-large','network-unavailable','service-error','invalid-terrain-response','terrain-crs-mismatch','response-too-large','provider-error','cancelled']);
  const CAPABILITIES=Object.freeze(['search','parcel','geometry','coordinates','sourceMetadata','orthophoto','elevation','terrain']);
  const NETWORK_MODES=Object.freeze(['none','optional','required']);
  const PROVIDER_KINDS=Object.freeze(['manual','official','commercial','other']);
@@ -91,7 +93,7 @@
   object(provider,'provider');
   const id=text(provider.id,'provider.id',80);
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id))fail('provider.id has invalid characters');
-  if(provider.contractVersion!==undefined&&!['1.0.0','1.1.0',CONTRACT_VERSION].includes(provider.contractVersion))fail('provider.contractVersion is unsupported');
+  if(provider.contractVersion!==undefined&&!['1.0.0','1.1.0','1.2.0',CONTRACT_VERSION].includes(provider.contractVersion))fail('provider.contractVersion is unsupported');
   if(typeof provider.getCapabilities!=='function')fail('provider.getCapabilities() is required');
   if(typeof provider.getProviderMetadata!=='function')fail('provider.getProviderMetadata() is required');
   const declared=provider.getCapabilities();object(declared,'capabilities');
@@ -104,6 +106,7 @@
    if(!metadata.parcelInputModes)fail('provider metadata.parcelInputModes is required');
   }else if(metadata.parcelInputModes!==undefined)fail('provider metadata.parcelInputModes requires parcel capability');
   if(capabilities.orthophoto&&typeof provider.getOrthophoto!=='function')fail('provider.getOrthophoto() is required');
+  if(capabilities.terrain&&typeof provider.getTerrain!=='function')fail('provider.getTerrain() is required');
   if(capabilities.sourceMetadata){
    if(typeof provider.getSourceMetadata!=='function')fail('provider.getSourceMetadata() is required');
    normalizeSource(provider.getSourceMetadata(),id);
@@ -148,6 +151,17 @@
   const provenance=normalizeParcelSource(raw.provenance,id);
   if(!provenance.retrievedAt||!provenance.attribution||!provenance.license)fail('orthophoto provenance is incomplete');
   return {status:'available',providerId:id,orthophoto:{sourceCrs:value.sourceCrs,extent:{...query.extent},widthPx:value.widthPx,heightPx:value.heightPx,requestedResolutionM:value.requestedResolutionM,resolutionXMPerPx:value.resolutionXMPerPx,resolutionYMPerPx:value.resolutionYMPerPx,mediaType:value.mediaType,sourcePolicy:value.sourcePolicy,imageBlob:value.imageBlob},provenance};
+ }
+ function normalizeTerrainResult(raw,id,query){
+  object(raw,'terrain result');
+  if(raw.status!=='available'){
+   if(!RESULT_STATUSES.includes(raw.status)||!TERRAIN_REASONS.includes(raw.reason))return result('unavailable',id,'provider-error');
+   return result(raw.status,id,raw.reason);
+  }
+  if(raw.providerId!==undefined&&raw.providerId!==id)fail('terrain result.providerId must match provider.id');
+  const terrain=Terrain.normalizeGrid(raw.terrain,query),provenance=normalizeParcelSource(raw.provenance,id);
+  if(!provenance.retrievedAt||!provenance.attribution||!provenance.license||!provenance.sourceId)fail('terrain provenance is incomplete');
+  return {status:'available',providerId:id,terrain,provenance};
  }
  function createRegistry(initialProviders=[]){
   if(!Array.isArray(initialProviders))fail('initialProviders must be an array');
@@ -204,8 +218,17 @@
     return normalizeOrthophotoResult(raw,providerId,query);
    }catch{return result('unavailable',providerId,'provider-error');}
   }
+  async function getTerrain(providerId,input,context={}){
+   if(typeof providerId!=='string'||!providerId.trim())return result('invalid',providerId??null,'invalid-provider-id');
+   const entry=entries.get(providerId);if(!entry)return result('not-found',providerId,'provider-not-registered');
+   if(!entry.descriptor.capabilities.terrain)return result('unsupported',providerId,'capability-disabled');
+   if(context?.signal?.aborted)return result('cancelled',providerId,'cancelled');
+   let query;try{query=Terrain.normalizeRequest(input);}catch(error){return result(error.reason==='terrain-source-crs-unsupported'||error.reason==='terrain-extent-too-large'?'unsupported':'invalid',providerId,error.reason||'terrain-extent-invalid');}
+   Object.freeze(query.extent);Object.freeze(query);
+   try{const raw=await entry.provider.getTerrain(query,Object.freeze(context?.signal?{signal:context.signal}:{}));if(context?.signal?.aborted)return result('cancelled',providerId,'cancelled');return normalizeTerrainResult(raw,providerId,query);}catch{return result('unavailable',providerId,'provider-error');}
+  }
   for(const provider of initialProviders)register(provider);
-  return Object.freeze({register,unregister,has,get,inspect,list,getCoordinates,getParcel,getOrthophoto});
+  return Object.freeze({register,unregister,has,get,inspect,list,getCoordinates,getParcel,getOrthophoto,getTerrain});
  }
  const MANUAL_CAPABILITIES=Object.freeze({search:false,parcel:false,geometry:false,coordinates:true,sourceMetadata:true,orthophoto:false,elevation:false,terrain:false});
  const Manual=Object.freeze({id:'manual',contractVersion:CONTRACT_VERSION,capabilities:MANUAL_CAPABILITIES,
@@ -220,8 +243,9 @@
  const createDefaultRegistry=()=>{
   const catastro=typeof module==='object'&&module.exports?require('./catastro-parcel-provider.js').provider:root.FloorPlanCatastroParcel?.provider;
   const pnoa=typeof module==='object'&&module.exports?require('./pnoa-orthophoto-provider.js').provider:root.FloorPlanPnoaOrthophoto?.provider;
-  return createRegistry([Manual,...(catastro?[catastro]:[]),...(pnoa?[pnoa]:[])]);
+  const terrain=typeof module==='object'&&module.exports?require('./ign-mdt05-terrain-provider.js').provider:root.FloorPlanIgnMdt05Terrain?.provider;
+  return createRegistry([Manual,...(catastro?[catastro]:[]),...(pnoa?[pnoa]:[]),...(terrain?[terrain]:[])]);
  };
- const api={CONTRACT_VERSION,CAPABILITIES,PARCEL_INPUT_MODES,ORTHOPHOTO_REASONS,NETWORK_MODES,PROVIDER_KINDS,LICENSE_STATUSES,RESULT_STATUSES,Manual,zoneValid,validateLocation,validateSite,normalizeSource,normalizeParcelSource,inspectProvider,createRegistry,createDefaultRegistry};
+ const api={CONTRACT_VERSION,CAPABILITIES,PARCEL_INPUT_MODES,ORTHOPHOTO_REASONS,TERRAIN_REASONS,NETWORK_MODES,PROVIDER_KINDS,LICENSE_STATUSES,RESULT_STATUSES,Manual,zoneValid,validateLocation,validateSite,normalizeSource,normalizeParcelSource,inspectProvider,createRegistry,createDefaultRegistry};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanGeoProvider=api;
 })(globalThis);

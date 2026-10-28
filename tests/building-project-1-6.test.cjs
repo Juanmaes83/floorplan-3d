@@ -11,6 +11,6 @@ test('building accepts current FloorPlanProjectV1 1.6.0 levels and still rejects
  assert.doesNotThrow(()=>B.validate(current));
 
  const future=clone(current);
- future.levels[0].project.schemaVersion='1.11.0';
- assert.throws(()=>B.validate(future),/unsupported level project version 1\.11\.0/);
+ future.levels[0].project.schemaVersion='1.12.0';
+ assert.throws(()=>B.validate(future),/unsupported level project version 1\.12\.0/);
 });

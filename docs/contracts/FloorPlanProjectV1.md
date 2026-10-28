@@ -328,3 +328,9 @@ La clasificación histórica de un material de suelo no se restringe retroactiva
 - Regla: el tipo es una **declaración**; Rubik no lo deduce ni lo presenta como verificación estructural.
   Elegir un tipo en «Editar muro» lo registra como declarado por profesional; cambiar solo la procedencia
   conserva el tipo. Declarar eleva a 1.5.0 únicamente versiones anteriores.
+
+## Ampliación 1.11.0 — metadatos de terreno territorial (8C-D, candidato en revisión)
+
+`site.terrain` requiere `site.parcel` y el mismo `sourceCrs`. Guarda sólo la descripción de la última cobertura recuperada: `requestedExtent`, `coverageExtent`, `sampleDomain`, filas/columnas, paso de malla, `verticalReference:orthometric`, `sampleModel:cell-center`, producto, coverage ID y procedencia con fecha de recuperación, atribución y licencia. El grid numérico, NoData, respuesta WCS y superficie derivada viven sólo en la sesión. Al abrir JSON o ZIP no se hace ninguna petición de red. Una recuperación futura puede devolver valores diferentes. La cota del terreno no establece la elevación de la planta 0 ni la posición vertical del edificio.
+
+Un proyecto 1.10 rechaza `site.terrain`; 1.11 lo admite. La validación exige coherencia con la parcela y nunca repara silenciosamente un CRS o una extensión discrepantes. Quitar terrain conserva parcela y ortofoto; reemplazar o quitar parcela invalida ambas coberturas dependientes desde la UI. Este corte no incorpora el terreno a PNG, GLB, Blender ni entrega.
