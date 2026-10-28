@@ -1,37 +1,88 @@
-# Punto 8B-B — petos declarados y volúmenes exteriores simples (candidato)
+# Punto 8B-B — petos declarados y volúmenes exteriores simples — CERRADO
 
-**Base:** `master` `7dc8b41aa21a37ebbb59ccf4855a2f4cbaf5ba4d`, que fusionó 8B-A por PR #124; 8A ya estaba integrado por PR #121. El estado canónico anterior describe la situación histórica previa a esos merges. **Alcance:** sólo 8B-B; 8B completo no se cierra.
+**Implementación:** PR #125  
+**Base funcional:** 8B-A fusionado en PR #124  
+**HEAD final de #125:** `e89a7af163ccb8cdcfb75c7d2b1f7bbcdcd85d8d`  
+**Squash de #125:** `be8374f85512f19fdec0c5b6660095201594fd01`  
+**Auditoría geométrica final de 8B:** PR #126, squash `581da1a24d8600b89ed20c5558cfe6195cafdd49`
 
 ## Autoridad y persistencia
 
-`FloorPlanExteriorVolumes` consume el resultado de `FloorPlanRoof` de 8B-A. No vuelve a recorrer muros, normalizar huellas, calcular offsets ni diferencias entre plantas. La autoridad durable sigue siendo `FloorPlanProjectV1` y, cuando hay dos plantas, `FloorPlanBuildingV1` (`elevationMm`, `offsetMm`, `order`). El resultado conceptual puro contiene `volumes` y `parapets`, sin objetos Three.js. No se persiste geometría derivada: **derived geometry not persisted**.
+`FloorPlanExteriorVolumes` consume el resultado de `FloorPlanRoof` de 8B-A. No vuelve a recorrer muros, normalizar huellas, calcular offsets ni diferencias entre plantas. La autoridad durable sigue siendo `FloorPlanProjectV1` y, cuando hay edificio, `FloorPlanBuildingV1` (`elevationMm`, `offsetMm`, `order`).
 
-El único campo nuevo es `levels[].project.roofParapet` o `project.roofParapet` en un proyecto suelto, opcional desde versión 1.8.0: `{enabled:boolean,heightMm?:integer,materialId?:materialId}`. La presencia es una decisión explícita; `enabled:false` expresa rechazo explícito. Con `enabled:true` se exige `heightMm` entre 100 y 3000 mm. La UI no introduce altura predeterminada: la persona la escribe en Propiedades → «Peto visual declarado». `materialId` opcional apunta a material mural existente. No hay parámetros nuevos en la raíz del edificio. Abrir 1.0–1.7 no crea el campo ni eleva versión; editarlo sí eleva a 1.8.0. JSON y ZIP editables conservan la declaración, no las caras.
+El resultado puro contiene `volumes` y `parapets`, sin objetos Three.js. **Derived geometry not persisted.**
 
-Ningún peto se infiere de cubierta, retranqueo, terraza o balcón. No hay afirmación de seguridad, cumplimiento normativo, resistencia ni solución constructiva.
+El único campo durable añadido es `project.roofParapet` o `levels[].project.roofParapet`, opcional desde ProjectV1 1.8.0:
 
-## Geometría derivada y visualización
+`{enabled:boolean,heightMm?:integer,materialId?:materialId}`
 
-Cada volumen simple reutiliza la huella canónica de 8B-A en **coordenadas del edificio**. `zBottom` es la elevación de suelo del nivel (0 en proyecto suelto); `zTop` es la cota superior uniforme que 8B-A demostró. Si faltan cotas, la altura no es positiva o dos cuerpos se solapan verticalmente, el resultado es `unavailable`. Un voladizo se representa como relación geométrica, sin añadir apoyos.
+La auditoría de schema previa al merge dejó alineados JSON Schema y `Core.validate()`: ProjectV1 1.0–1.7 no puede declarar `roofParapet`; 1.8.0 sí. Abrir documentos antiguos no crea el campo ni eleva versión automáticamente.
 
-Para la cubierta superior, el peto declarado sigue todo su perímetro demostrado. Para celdas inferiores expuestas por un retranqueo, sólo se usan porciones que coinciden con el **borde exterior de la huella inferior**; se excluyen costuras entre celdas y el borde interior contra el cuerpo superior. No se usan CSG ni reparaciones topológicas. Una diferencia no ortogonal que 8B-A declara no disponible sigue no disponible. El peto se dibuja como cara vertical de altura exacta, sin inventar grosor o albardilla; el volumen se visualiza mediante aristas de un prisma `ExtrudeGeometry`, evitando duplicar superficies opacas de las fachadas de 8A.
+## Petos
 
-«Exterior» sigue siendo el único control. En órbita muestra cubierta, petos declarados y aristas de cuerpos demostrables; al apagarlo, los oculta. Recorrer y Presentación los ocultan para mantener el interior accesible; al salir se restaura el estado previo. PNG y captura de entrega reflejan la visibilidad del renderer. El material mural declarado aporta color al peto; sin él se usa un **fallback visual neutro**, sin presumir composición constructiva. La escena se reconstruye con la arquitectura, no en cada frame.
+Ningún peto se infiere de cubierta, retranqueo, terraza o balcón.
+
+Con `enabled:true` se exige altura entera declarada de 100–3000 mm. `materialId` opcional debe referir a material mural existente. Sin material se usa un fallback visual neutro. La altura no representa cumplimiento normativo ni requisito de seguridad.
+
+Para cubierta superior, el peto sigue el perímetro demostrado. En superficies inferiores expuestas por retranqueo, sólo se admiten bordes exteriores demostrables; se excluyen costuras entre celdas y el borde interior contra el cuerpo superior.
+
+## Volúmenes exteriores simples
+
+Cada volumen reutiliza la huella canónica ya demostrada por 8B-A en coordenadas del edificio.
+
+- `zBottom`: elevación del nivel;
+- `zTop`: cota superior uniforme demostrada por 8B-A;
+- `offsetMm`: autoridad de `FloorPlanBuildingV1`;
+- `zTop > zBottom` obligatorio;
+- falta de huella/cotas demostrables → `unavailable`.
+
+Un voladizo es sólo una relación geométrica. No genera pilares, vigas ni apoyos inferidos.
+
+La auditoría #126 no cambió `FloorPlanExteriorVolumes`; reforzó su entrada: una huella de `FloorPlanRoof` ya no puede quedar `available` si el ciclo de fachada no encierra completamente las estancias interiores soportadas, incluidas sus aristas en concavidades.
+
+## Visualización
+
+«Exterior» sigue siendo el único control para cubierta, petos y lectura de cuerpos exteriores. Recorrer y Presentación los ocultan para mantener accesible el interior y restauran el estado al salir.
+
+PNG y captura de entrega reflejan la visibilidad real del renderer. La escena se reconstruye con la arquitectura, no en cada frame.
 
 ## Cobertura de exportación
 
 | Exportador | Incluye 8B-B | Límite |
 |---|---|---|
 | PNG 3D y captura de entrega | Sí, si «Exterior» está visible | Imagen del renderer, sin geometría editable |
-| JSON/ZIP editables de proyecto y edificio | Sólo la intención `roofParapet` | Huellas, caras y mallas se derivan al abrir |
-| GLB/paquete Blender offline (`scripts/interop/export.cjs`) | No | Consume `FloorPlanProjectV1` independiente y genera su propia escena; no es exportación exterior completa ni edificio multipiso |
-| Exportación de una planta desde edificio | Sólo la declaración de esa planta | Omite relación, offsets y otras plantas según el contrato existente |
-| Exportación de predicciones crudas de muros | No | Formato de análisis de trazos, ajeno a la escena |
+| JSON/ZIP editables | Sólo intención `roofParapet` | Huellas, caras y mallas se derivan al abrir |
+| GLB/paquete Blender offline | No | No es exportación exterior completa ni edificio multipiso |
+| Exportación de una planta desde edificio | Sólo declaración de esa planta | Omite relación, offsets y otras plantas según contrato existente |
+| Predicciones crudas de muros | No | Formato ajeno a la escena derivada |
+
+La omisión de geometría 8B en exportadores independientes se considera un límite explícito, no soporte implícito.
 
 ## Casos y límites
 
-Se admiten cubiertas rectangulares, L/U y concavidades simples aceptadas por 8B-A; una planta; dos plantas con huellas iguales, retranqueo ortogonal, offsets y solape parcial/voladizo geométrico. Cada nivel conserva su propia cota demostrada y su decisión de peto. Altura inválida o material no mural se rechazan. Fachada abierta, múltiples cuerpos o huecos internos no soportados siguen `unavailable` desde 8B-A. No hay volumen freeform, elemento curvo, pilar, viga, barandilla calculada, editor de masas, solver de cubiertas inclinadas ni CSG. La línea de prisma es una lectura visual, no una prueba de apoyo estructural.
+Se admiten las huellas que 8B-A declara disponibles, una o dos plantas, huellas iguales, retranqueos ortogonales, offsets y solape parcial/voladizo geométrico. Cada nivel conserva su propia cota demostrada y su propia decisión de peto.
 
-Tests puros: `tests/exterior-volumes.test.cjs`; regresión permanente Chromium: `tests/exterior-volumes.browser.test.cjs`, incorporada al workflow de browser existente. Capturas locales: [una planta con peto](../qa/point-8b-b-one.png) y [dos plantas con retranqueo](../qa/point-8b-b-two.png). Verificación local: 10/10 casos puros 8B-B; suite no-browser 525 PASS, 0 FAIL, 2 SKIP opcionales (527 total); esquemas Python 13/13; batería Chromium de captura, Solar, ficha de superficies y 8B-B 24/24; `node --check` y `git diff --check` sin errores. CI y preview del SHA publicado se consignan en la PR.
+Quedan fuera:
 
-8B-C conserva únicamente la evaluación posterior de cubiertas inclinadas simples con parámetros explícitos. 8C conserva parcela, terreno y contexto territorial.
+- petos inferidos;
+- barandillas calculadas;
+- masas freeform;
+- elementos curvos;
+- pilares/vigas/apoyos derivados;
+- CSG general;
+- solver de cubiertas inclinadas;
+- estructura, cargas, normativa o solución constructiva.
+
+## Evidencia de cierre
+
+Antes del merge de #125:
+
+- 10/10 tests puros específicos de 8B-B;
+- suite no-browser: **525 PASS, 0 FAIL, 2 SKIP** opcionales;
+- schemas Python: **13/13 PASS**;
+- Chromium: **24/24 PASS**;
+- cinco workflows de la PR y Vercel: **SUCCESS**.
+
+La auditoría posterior #126 validó 8B-A + 8B-B de forma adversarial y corrigió la falsa certeza de huella. Su HEAD final `d94206b18937c878ab2557ba7e282b975b2a42e8` terminó con **528 PASS, 0 FAIL, 2 SKIP** en Node, **24/24** Chromium y Guided/Solar/Multiformat/Vercel verdes.
+
+8B-B queda cerrado dentro del Punto 8B cerrado. 8B-C queda diferido por alcance; 8C pasa a ser el siguiente trabajo funcional.
