@@ -114,8 +114,8 @@
  }
  importButton.onclick=async()=>{const selected=file.files[0];if(!selected){status.textContent=t('Selecciona un GML/XML.','Select a GML/XML file.','请选择 GML/XML 文件。');return;}if(selected.size>Parcel.LIMITS.documentBytes){status.textContent=t('El documento supera el límite local de 2 MB.','Document exceeds the local 2 MB limit.','文件超过本地 2 MB 限制。');return;}await run({mode:'document',text:await selected.text(),...(selectRef.value.trim()?{reference:selectRef.value}:null)});};
  lookupButton.onclick=()=>run({mode:'reference',reference:lookup.value});
- save.onclick=()=>{if(!pending)return;try{const next={...site(),parcel:pending};delete next.orthophoto;delete next.terrain;app.setSite(next);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();}catch(error){status.textContent=error.message;}};
- remove.onclick=()=>{try{const next={...site()};delete next.parcel;delete next.orthophoto;delete next.terrain;app.setSite(Object.keys(next).length?next:undefined);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
+ save.onclick=()=>{if(!pending)return;try{const next={...site(),parcel:pending};delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(next);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();}catch(error){status.textContent=error.message;}};
+ remove.onclick=()=>{try{const next={...site()};delete next.parcel;delete next.orthophoto;delete next.terrain;delete next.buildingPlacement;app.setSite(Object.keys(next).length?next:undefined);pending=null;releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
  async function runOrtho(){
   const parcel=site()?.parcel,d=orthoDescriptor();if(!parcel||!d)return;
   const controller=new AbortController();orthoController=controller;orthoBusy=true;orthoError='';render();
@@ -129,16 +129,16 @@
   finally{if(orthoController===controller){orthoController=null;orthoBusy=false;render();}}
  }
  orthoLoad.onclick=runOrtho;
- orthoSave.onclick=()=>{if(!pendingOrtho)return;try{app.setSite({...site(),orthophoto:pendingOrtho});pendingOrtho=null;orthoError='';render();}catch(error){orthoError=error.message;render();}};
+ orthoSave.onclick=()=>{if(!pendingOrtho)return;try{app.setSite({...site(),orthophoto:pendingOrtho});window.FloorPlanTerritorySession.sync(app.entryId,site());window.FloorPlanTerritorySession.set('orthophoto',site().orthophoto,{blob:loaded.orthophoto.imageBlob});pendingOrtho=null;orthoError='';render();}catch(error){orthoError=error.message;render();}};
  orthoRemove.onclick=()=>{try{const next={...site()};delete next.orthophoto;app.setSite(next);releaseRaster();pendingOrtho=null;orthoError='';render();}catch(error){orthoError=error.message;render();}};
  orthoProviderChoice.onchange=()=>{releaseRaster();pendingOrtho=null;orthoError='';render();};
  terrainLoad.onclick=async()=>{const parcel=site()?.parcel,d=terrainDescriptor();if(!parcel||!d)return;const controller=new AbortController();terrainController=controller;terrainBusy=true;terrainError='';render();try{const result=await registry.getTerrain(d.providerId,Terrain.requestFromParcel(parcel),{signal:controller.signal});if(controller.signal.aborted||owner!==app.entryId||!dialog.open)return;if(result.status!=='available')throw Error(result.reason);pendingTerrain=TerrainAdapter.toSiteTerrain(result,parcel);loadedTerrain=result;}catch(error){if(!controller.signal.aborted)terrainError=error.message||'network-unavailable';}finally{if(terrainController===controller){terrainController=null;terrainBusy=false;render();}}};
- terrainSave.onclick=()=>{if(!pendingTerrain)return;try{app.setSite({...site(),terrain:pendingTerrain});pendingTerrain=null;terrainError='';render();}catch(error){terrainError=error.message;render();}};
+ terrainSave.onclick=()=>{if(!pendingTerrain)return;try{app.setSite({...site(),terrain:pendingTerrain});window.FloorPlanTerritorySession.sync(app.entryId,site());window.FloorPlanTerritorySession.set('terrain',site().terrain,{grid:loadedTerrain.terrain});pendingTerrain=null;terrainError='';render();}catch(error){terrainError=error.message;render();}};
  terrainRemove.onclick=()=>{try{const next={...site()};delete next.terrain;app.setSite(next);loadedTerrain=null;pendingTerrain=null;terrainError='';render();}catch(error){terrainError=error.message;render();}};
  terrainProviderChoice.onchange=()=>{loadedTerrain=null;pendingTerrain=null;terrainError='';render();};
  providerChoice.onchange=()=>{pending=null;render();};
  function open(){ensureTerritoryStyles();owner=app.entryId;pending=null;releaseRaster();pendingOrtho=null;orthoError='';loadedTerrain=null;pendingTerrain=null;terrainError='';status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
  entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{orthoController?.abort();terrainController?.abort();releaseRaster();pendingOrtho=null;loadedTerrain=null;pendingTerrain=null;returnFocus?.focus?.({preventScroll:true});});
- window.FloorPlanTerritoryUI={open,registry};
+ window.FloorPlanTerritoryUI={open,registry,render};
  render();
 })();

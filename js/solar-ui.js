@@ -80,7 +80,7 @@
  async function store(){
   if([north,lat,lon].some(input=>input.validity.badInput))throw Error(t('Introduce números válidos.','Enter valid numbers.','请输入有效数值。'));
   const value=structuredClone(site()||{}),n=north.value.trim();
-  if(n==='')delete value.northOffsetDeg;else{if(!north.validity.valid||!Number.isFinite(Number(n)))throw Error(t('Norte: usa un valor desde 0 hasta menos de 360°.','North: enter a value from 0 to less than 360°.','北向：请输入 0 至小于 360° 的数值。'));value.northOffsetDeg=Number(n);}
+  if(n===''){if(value.buildingPlacement)throw Error(t('Elimina primero la colocación del edificio para quitar el norte.','Remove building placement before clearing north.','请先移除建筑定位。'));delete value.northOffsetDeg;}else{if(!north.validity.valid||!Number.isFinite(Number(n)))throw Error(t('Norte: usa un valor desde 0 hasta menos de 360°.','North: enter a value from 0 to less than 360°.','北向：请输入 0 至小于 360° 的数值。'));value.northOffsetDeg=Number(n);}
   const parts=[lat.value.trim(),lon.value.trim(),zone.value.trim()];
   if(parts.every(v=>v===''))delete value.location;
   else{if(parts.some(v=>v===''))throw Error(t('Completa latitud, longitud y zona horaria, o vacía los tres campos.','Complete latitude, longitude and time zone, or clear all three.','请填写纬度、经度和时区，或将三项全部清空。'));const normalized=await geoRegistry.getCoordinates('manual',{latitude:Number(parts[0]),longitude:Number(parts[1]),timeZone:parts[2]});if(normalized.status!=='available')throw Error(reason(normalized.reason));

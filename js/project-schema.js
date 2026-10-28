@@ -64,6 +64,7 @@
     "extensions": { "$ref": "#/$defs/extensions" }
   },
   "allOf": [
+    {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.(0|[1-9]|10|11)\\."}}},"then":{"properties":{"site":{"not":{"required":["buildingPlacement"]}}}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"not":{"required":["site"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-7]\\."}}},"then":{"not":{"required":["roofParapet"]}}},
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.(7|8)\\."}}},"then":{"properties":{"site":{"not":{"required":["parcel"]}}}}},
@@ -73,6 +74,7 @@
     {"if":{"properties":{"schemaVersion":{"pattern":"^1\\.[0-6]\\."}}},"then":{"properties":{"rooms":{"items":{"properties":{"family":{"enum":["unspecified","living","dining","kitchen","bedroom","bathroom","toilet","office","hallway","storage","laundry","terrace","balcony","garage","utility","other"]}}}}}}}
   ],
   "$defs": {
+    "buildingPlacement": {"type":"object","additionalProperties":false,"required":["horizontal"],"properties":{"horizontal":{"type":"object","additionalProperties":false,"required":["modelAnchorMm","parcelLocalAnchorMm","source"],"properties":{"modelAnchorMm":{"type":"object","additionalProperties":false,"required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}}},"parcelLocalAnchorMm":{"type":"object","additionalProperties":false,"required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}}},"source":{"type":"object","additionalProperties":false,"required":["type"],"properties":{"type":{"const":"user-entered"}}}}},"vertical":{"type":"object","additionalProperties":false,"required":["modelZeroElevationM","verticalReference","source"],"properties":{"modelZeroElevationM":{"type":"number"},"verticalReference":{"const":"orthometric"},"source":{"type":"object","additionalProperties":false,"required":["type"],"properties":{"type":{"enum":["user-entered","derived"]},"derivedFrom":{"const":"site.terrain"},"retrievedAt":{"type":"string","format":"date-time"},"sourceId":{"type":"string","minLength":1,"maxLength":200}}}}}}},
     "terrain": { "type":"object", "additionalProperties":false, "required":["sourceCrs","requestedExtent","coverageExtent","sampleDomain","cols","rows","cellSizeX","cellSizeY","verticalReference","sampleModel","resolutionM","productName","coverageId","source"], "properties": {"sourceCrs":{"enum":["EPSG:25829","EPSG:25830","EPSG:25831","EPSG:32628"]},"requestedExtent":{"$ref":"#/$defs/terrainExtent"},"coverageExtent":{"$ref":"#/$defs/terrainExtent"},"sampleDomain":{"$ref":"#/$defs/terrainExtent"},"cols":{"type":"integer","minimum":2,"maximum":160000},"rows":{"type":"integer","minimum":2,"maximum":160000},"cellSizeX":{"type":"number","exclusiveMinimum":0},"cellSizeY":{"type":"number","exclusiveMinimum":0},"verticalReference":{"const":"orthometric"},"sampleModel":{"const":"cell-center"},"resolutionM":{"const":5},"productName":{"type":"string","minLength":1,"maxLength":200},"coverageId":{"type":"string","minLength":1,"maxLength":200},"source":{"$ref":"#/$defs/parcelSource","required":["retrievedAt","attribution","license","sourceId"]}} },
     "terrainExtent": {"type":"object","additionalProperties":false,"required":["minX","minY","maxX","maxY"],"properties":{"minX":{"type":"number"},"minY":{"type":"number"},"maxX":{"type":"number"},"maxY":{"type":"number"}}},
     "orthophoto": { "type": "object", "additionalProperties": false, "required": ["sourceCrs", "extent", "widthPx", "heightPx", "requestedResolutionM", "resolutionXMPerPx", "resolutionYMPerPx", "mediaType", "sourcePolicy", "source"], "properties": { "sourceCrs": { "enum": ["EPSG:25829", "EPSG:25830", "EPSG:25831", "EPSG:32628"] }, "extent": { "type": "object", "additionalProperties": false, "required": ["minX", "minY", "maxX", "maxY"], "properties": { "minX": { "type": "number" }, "minY": { "type": "number" }, "maxX": { "type": "number" }, "maxY": { "type": "number" } } }, "widthPx": { "type": "integer", "minimum": 1, "maximum": 2048 }, "heightPx": { "type": "integer", "minimum": 1, "maximum": 2048 }, "requestedResolutionM": { "type": "number", "minimum": 0.05, "maximum": 1 }, "resolutionXMPerPx": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }, "resolutionYMPerPx": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }, "mediaType": { "const": "image/jpeg" }, "sourcePolicy": { "const": "latest-available" }, "source": { "$ref": "#/$defs/parcelSource", "required": ["retrievedAt", "attribution", "license"] } } },
@@ -99,17 +101,19 @@
         "heightMm": { "type": "integer", "minimum": 100, "maximum": 3000 },
         "materialId": { "$ref": "#/$defs/materialId" }
       },
-      "allOf": [{"if":{"properties":{"enabled":{"const":true}}},"then":{"required":["heightMm"]}}]
+      "allOf": [
+    {"if":{"properties":{"enabled":{"const":true}}},"then":{"required":["heightMm"]}}]
     },
     "site": {
       "type": "object", "additionalProperties": false,
-      "dependentRequired": { "orthophoto": ["parcel"], "terrain": ["parcel"] },
+      "dependentRequired": { "orthophoto": ["parcel"], "terrain": ["parcel"], "buildingPlacement": ["parcel", "northOffsetDeg"] },
       "description": "Optional internal site data. North is clockwise from plan-up, without rotating geometry. Absence means not configured.",
       "properties": {
         "northOffsetDeg": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
         "parcel": { "$ref": "#/$defs/parcel" },
         "orthophoto": { "$ref": "#/$defs/orthophoto" },
         "terrain": { "$ref": "#/$defs/terrain" },
+        "buildingPlacement": { "$ref": "#/$defs/buildingPlacement" },
         "location": {
           "type": "object", "additionalProperties": false, "required": ["latitude", "longitude", "timeZone", "source"],
           "properties": {
@@ -184,6 +188,7 @@
         "verification": { "$ref": "#/$defs/verification" }
       },
       "allOf": [
+
         { "if": { "properties": { "method": { "const": "known-dimension" } } }, "then": { "required": ["calibration"] } },
         { "if": { "properties": { "confidence": { "const": "pending" } } }, "then": { "properties": { "method": { "const": "none" } } } },
         { "if": { "properties": { "method": { "const": "none" } } }, "then": { "properties": { "confidence": { "const": "pending" } } } },

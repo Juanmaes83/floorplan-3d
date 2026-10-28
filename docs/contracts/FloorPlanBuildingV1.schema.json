@@ -8,7 +8,7 @@
   "required": ["schema", "schemaVersion", "id", "name", "createdAt", "updatedAt", "units", "levels", "stairs"],
   "properties": {
     "schema": { "const": "rubik-sota.floorplan-building" },
-    "schemaVersion": { "enum": ["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0"], "description": "1.1 adds shared site; 1.2 parcel; 1.3 orthophoto metadata; 1.4 terrain metadata." },
+    "schemaVersion": { "enum": ["1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0"], "description": "1.1 adds shared site; 1.2 parcel; 1.3 orthophoto metadata; 1.4 terrain metadata." },
     "site": { "$ref": "FloorPlanProjectV1.schema.json#/$defs/site" },
     "id": { "type": "string", "pattern": "^bld_[A-Za-z0-9][A-Za-z0-9_-]{2,63}$" },
     "name": { "type": "string", "minLength": 1, "maxLength": 200 },
@@ -19,6 +19,7 @@
     "stairs": { "type": "array", "maxItems": 4, "items": { "$ref": "#/$defs/stair" } }
   },
   "allOf": [
+    {"if":{"properties":{"schemaVersion":{"enum":["1.0.0","1.1.0","1.2.0","1.3.0","1.4.0"]}}},"then":{"properties":{"site":{"not":{"required":["buildingPlacement"]}}}}},
     {"if":{"properties":{"schemaVersion":{"const":"1.0.0"}}},"then":{"not":{"required":["site"]}}},
     {"if":{"properties":{"schemaVersion":{"const":"1.1.0"}}},"then":{"properties":{"site":{"not":{"anyOf":[{"required":["parcel"]},{"required":["orthophoto"]},{"required":["terrain"]}]}}}}},
     {"if":{"properties":{"schemaVersion":{"const":"1.2.0"}}},"then":{"properties":{"site":{"not":{"anyOf":[{"required":["orthophoto"]},{"required":["terrain"]}]}}}}},
@@ -40,7 +41,7 @@
         "elevationMm": { "type": "integer", "minimum": 0, "maximum": 100000, "description": "Suelo terminado en el marco del edificio. 0 en la planta 0." },
         "slabThicknessMm": { "type": "integer", "minimum": 0, "maximum": 1000, "description": "Espesor visual del forjado bajo la planta; sin significado estructural. 0 en la planta 0." },
         "offsetMm": { "$ref": "#/$defs/pointMm", "description": "Traslación del marco del proyecto al marco del edificio. {0,0} en la planta 0." },
-        "project": { "$ref": "FloorPlanProjectV1.schema.json", "not": { "required": ["site"], "properties": { "site": { "anyOf": [{ "required": ["parcel"] }, { "required": ["orthophoto"] }, { "required": ["terrain"] }] } } }, "description": "Proyecto 1.x (1.0.0–1.11.0) completo, validado en modo estricto; contexto territorial pertenece sólo a building.site." }
+        "project": { "$ref": "FloorPlanProjectV1.schema.json", "not": { "required": ["site"], "properties": { "site": { "anyOf": [{ "required": ["parcel"] }, { "required": ["orthophoto"] }, { "required": ["terrain"] }, { "required": ["buildingPlacement"] }] } } }, "description": "Proyecto 1.x (1.0.0–1.12.0) completo, validado en modo estricto; contexto territorial pertenece sólo a building.site." }
       }
     },
     "stair": {
