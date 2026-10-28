@@ -1,21 +1,51 @@
-# Punto 8A — Exterior V1 (candidato)
+# Punto 8A — Exterior V1 — CERRADO
 
-Base: `master` `cc929338b642a65b1f286c91e4b1c2bac72f6260`. El Punto 7 completo sigue abierto en esta base; 8A no incorpora ni reimplementa 7C-E/7D.
+**Implementación:** PR #121  
+**HEAD validado de la PR:** `264d4ac399591e80bf8aa05a9296d306468dc2bf`  
+**Squash en `master`:** `10872796080a5b731290d45f1a3d6770dd00f7bf`
 
 ## Objetivo y autoridad
 
-Mostrar una primera lectura exterior sin crear otro modelo del edificio. La autoridad es `FloorPlanProjectV1`: ejes/grosor/altura de `walls`, huecos ligados por `wallId`, polígonos y `family` de `rooms`, materiales ya asignados. En edificio, cada `FloorPlanBuildingV1.levels[].project` se deriva por separado; el renderer ya aplica `elevationMm`, `offsetMm` y el marco de la planta activa. No se infiere soporte estructural ni continuidad de cargas entre huellas diferentes.
+8A aporta una primera lectura exterior sin crear otro modelo del edificio. La autoridad sigue siendo `FloorPlanProjectV1`: ejes/grosor/altura de `walls`, huecos ligados por `wallId`, polígonos y `family` de `rooms`, y materiales ya asignados. En edificio, cada `FloorPlanBuildingV1.levels[].project` se deriva por separado y el renderer aplica `elevationMm`, `offsetMm` y el marco de la planta activa.
 
-## Derivación y presentación
+No se infiere soporte estructural ni continuidad de cargas entre huellas diferentes.
 
-`FloorPlanExterior.derive(project)` es pura y no persiste superficies. Para cada muro activo examina tres puntos del eje y la ocupación de estancias interiores a ambos lados, más allá de la mitad del grosor. Una cara ocupada y la otra libre en los tres puntos permite etiquetar fachada; ambas ocupadas indican interior. Sin evidencia consistente devuelve `unavailable`. Una declaración `partition` o `low` impide promover a fachada un muro por una estancia dibujada de forma incompleta; `structure: exterior` por sí solo no prueba el perímetro. Los huecos de fachadas son referencias a los `openings` originales, nunca copias geométricas.
+## Derivación
 
-La vista 3D sigue creando los sólidos y los recortes desde `Core.geometry`. La derivación sólo decide el acabado por defecto y la identificación. Un `surfaceMaterialId` existente tiene prioridad y sigue siendo editable con el flujo actual de acabados murales; sin asignación, la fachada recibe un tono neutro. El plano 2D da una etiqueta accesible al muro. `terrace` y `balcony` explícitos mantienen su suelo/material existente y no generan techo; no se inventan desde puertas o ventanas. No se añaden campos al schema, migraciones ni cambios de JSON/ZIP.
+`FloorPlanExterior.derive(project)` es pura y no persiste superficies. Para cada muro activo examina tres puntos del eje y la ocupación de estancias interiores a ambos lados, más allá de la mitad del grosor. Una cara ocupada y la otra libre en los tres puntos permite etiquetar fachada; ambas ocupadas indican interior. Sin evidencia consistente devuelve `unavailable`/estado parcial.
 
-## Pruebas y límites
+Una declaración `partition` o `low` impide promover a fachada un muro por una estancia dibujada de forma incompleta. El fix final de #121 también impide exponer openings de esos muros vetados como huecos de fachada.
 
-Tests sintéticos: planta asimétrica con habitaciones y muro compartido; huella en L; huecos, material y ausencia de material; veto de tabique; geometría insuficiente; terraza declarada; dos niveles con offsets, elevaciones y huellas distintas; proyecto de referencia 1.0; no mutación. Suite no browser final: 472 PASS, 0 FAIL, 2 SKIP opcionales de Blender. Comprobación visual local en Chromium: ejemplo 3D abre y representa muros/huecos; consola final sin errores ni avisos.
+Los huecos de fachadas son referencias a los `openings` originales, nunca copias geométricas.
 
-La clasificación es conservadora y puede ser parcial en proyectos con habitaciones no dibujadas o ejes/polígonos poco coherentes. No reconoce plataformas independientes sin declaración geométrica soportada. El contrato actual permite estancia `terrace`/`balcony` y material de suelo, pero no define barandillas, petos, voladizos ni altura propia; no se inventan. El acabado mural existente se aplica a ambas caras y no representa capas constructivas.
+## Materiales, terrazas y presentación
 
-8B conserva cubierta, petos y volúmenes. 8C conserva parcela, terreno y fuentes territoriales. 8A funciona offline y no usa `FloorPlanGeoProvider`. No se marca como cerrado hasta aceptación y merge según el proceso del repositorio.
+La vista 3D sigue creando sólidos y recortes desde la geometría existente. Un `surfaceMaterialId` existente tiene prioridad; sin asignación, la fachada recibe un acabado visual neutro. `terrace` y `balcony` explícitos mantienen su suelo/material existente y no generan techo, peto ni barandilla inferidos.
+
+No se añadieron campos al schema, migraciones ni cambios de JSON/ZIP.
+
+## Pruebas y cierre
+
+La PR finalizó con:
+
+- 8 tests específicos de 8A;
+- suite no-browser: **472 PASS, 0 FAIL, 2 SKIP** opcionales de Blender;
+- Chromium sin errores/avisos en la comprobación del exterior;
+- Guided, Integrated browser, Multiformat, Solar y Vercel verdes sobre el HEAD final antes del merge.
+
+La clasificación es deliberadamente conservadora y puede quedar parcial cuando los polígonos de estancia no permiten demostrar la cara exterior.
+
+## Límites cerrados
+
+8A no define:
+
+- cubierta;
+- petos;
+- plataformas independientes no declaradas;
+- estructura;
+- parcela/terreno;
+- proveedores territoriales reales.
+
+8B consume esta clasificación como evidencia, pero añade sus propias comprobaciones de huella antes de afirmar una cubierta. La auditoría final de 8B (#126) reforzó precisamente esa frontera para evitar que un ciclo cerrado de fachada insuficiente se convierta en falsa certeza volumétrica.
+
+8A funciona offline y no depende de Catastro/IGN/CNIG/PNOA.

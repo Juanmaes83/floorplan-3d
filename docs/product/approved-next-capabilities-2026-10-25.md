@@ -1,131 +1,102 @@
-# Programa de capacidades — estado vigente tras el cierre del Punto 7
+# Programa de capacidades — estado vigente tras el cierre de 8B
 
 **Decisión original:** 25-10-2026  
 **Estado actualizado:** 28-10-2026  
 **Fuente canónica de estado:** [`current-status-2026-10-28.md`](current-status-2026-10-28.md)
 
-> Este archivo ya no debe leerse como un plan previo a implementación. Los Puntos **1–7 están CERRADOS en `master`**. Se conserva esta ruta porque fue la referencia del programa y muchos PR/agentes la enlazan, pero su función actual es indicar el estado vigente y el siguiente trabajo.
+Este archivo conserva la ruta del programa, pero el estado operativo debe leerse siempre desde el estado canónico y el HEAD real de `master`.
 
 ## Estado del programa
 
 | Nº | Capacidad | Estado actual |
 |---:|---|---|
-| 1 | Construir/medir: acceso y contexto | **CERRADO** |
-| 2 | Tipo declarado de muro | **CERRADO** — PR #101 |
-| 3 | Superficie estancia → planta → vivienda | **CERRADO** — PR #102 |
-| 4 | Familia funcional + nombre libre de estancia | **CERRADO** — PR #103 |
-| 5 | Ficha profesional de superficies | **CERRADO** — PR #104 |
-| 6 | Orientación + ubicación + solar orientativo + GeoProvider | **CERRADO** — PR #106 |
-| 7 | Presupuesto de acabados/materiales | **CERRADO** — PR #120 |
-| 8 | Exterior V1 → V3 | **ACTUAL — 8A EN IMPLEMENTACIÓN** |
+| 1–6 | Construcción, medición, superficies, clasificación, ficha profesional, orientación/ubicación/solar/GeoProvider | **CERRADO** |
+| 7 | Presupuesto de acabados/materiales | **CERRADO** |
+| 8A | Exterior V1 — fachada y exterior básico | **CERRADO** — PR #121 |
+| 8B | Exterior V2 — cubierta y volúmenes | **CERRADO** — PR #124 + #125 + auditoría #126 |
+| 8C | Exterior V3 — parcela, terreno y contexto territorial | **ACTUAL / SIGUIENTE** |
 | 9 | Instalaciones ligeras | **APROBADO, POSTERIOR** |
 
-## Puntos 1–6
+## Punto 8 — Exterior
 
-No reabrirlos ni reconstruirlos desde documentos anteriores salvo regresión reproducible o nueva decisión expresa. El detalle de estado, contratos y evidencia está resumido en [`current-status-2026-10-28.md`](current-status-2026-10-28.md) y en los PR de cierre.
+### 8A — CERRADO
 
-### Punto 6 — definición final
+Fachadas derivadas de geometría existente, huecos exteriores, materiales y terrazas/balcones únicamente cuando están declarados. No crea un segundo edificio ni depende de proveedores territoriales.
 
-El Punto 6 cerrado es:
+### 8B — CERRADO
 
-- **6A Orientación básica**: norte declarado/configurable, visible, persistente y multiplanta.
-- **6B Ubicación**: latitud, longitud y timezone IANA, manual/offline y privada por defecto.
-- **6C Solar orientativo**: SunCalc 2.1.1, cambio mínimo del renderer, separación Presentación/Solar, sin pretensión científica/normativa.
-- **6D `FloorPlanGeoProvider`**: frontera estable; proveedor manual activo; Catastro/IGN/CNIG/PNOA quedan para fases territoriales posteriores.
+El corte V2 cerrado comprende:
 
-PR de cierre: **#106**, squash `422d6a893325e343e6e045805c2ec034a27ae631`.
+- cubierta plana sobre huellas demostrables;
+- retranqueos ortogonales soportados y superficies `exposed-roof`;
+- niveles/elevaciones/offsets desde `FloorPlanBuildingV1`;
+- petos sólo mediante intención explícita `roofParapet`;
+- volúmenes exteriores simples derivados;
+- persistencia de intención, nunca de mallas derivadas;
+- integración con renderer, Presentación, Recorrer, Solar y capturas;
+- exportación documentada con omisiones honestas;
+- abstención explícita en topología o evidencia insuficiente.
 
-## Punto 7 — CERRADO
+La auditoría final #126 reforzó la huella para que un ciclo de fachada no se considere cuerpo válido si no encierra completamente las estancias interiores soportadas. Incluye el caso de aristas de habitación que salen por una concavidad aunque todos sus vértices estén dentro.
 
-El presupuesto no parte de los antiguos precios en ¥. El corte aprobado se orienta a acabados/materiales y queda cerrado en:
+Documento de cierre: [`point-8b-closure-2026-10-28.md`](point-8b-closure-2026-10-28.md).
 
-### 7A — Quantity Engine
+### 8B-C — DIFERIDO
 
-Convierte conocimiento ya existente y justificable en cantidades:
+Las cubiertas inclinadas simples eran una ampliación opcional, no el mínimo obligatorio del Punto 8B. `mono-pitch` / `gable`, pendientes, direcciones y cumbreras quedan diferidos hasta una decisión futura explícita.
 
-- suelo m²;
-- paredes m² cuando sean calculables;
-- perímetros/ml;
-- otras cantidades solo cuando exista evidencia suficiente.
+No implementar un solver universal de cubiertas ni inferir automáticamente cumbreras, limatesas, limahoyas o soluciones arquitectónicas complejas.
 
-### 7B — Budget Core
+## 8C — Parcela, terreno y contexto territorial — ACTUAL
 
-- partidas;
-- cantidad;
-- unidad;
-- merma/exclusiones visibles;
-- precio unitario introducido o revisado por profesional;
-- subtotal;
-- moneda EUR;
-- IVA configurable;
-- estado de revisión;
-- procedencia y fecha del precio.
+8C es un problema distinto de 8B. Debe aportar contexto territorial sin elevar artificialmente la certeza del proyecto.
 
-Proveedor inicial obligatorio: **Manual**.
-
-### 7C — `FloorPlanCostProvider`
-
-Frontera estable para precios/costes con:
-
-- provider core agnóstico;
-- Manual offline permanente;
-- provenance/reference prices en Budget 1.1;
-- codec FIEBDC-3/BC3;
-- adapter `BCCA_ES` con fixtures sintéticos y gate técnico/legal.
-
-Reglas que siguen vigentes:
-
-- no depender en producción de la compilación DDC publicada bajo CC BY-NC;
-- el código Apache-2.0 de `OpenConstructionEstimate-DDC-CWICR` puede servir como acelerador técnico cuando sea aplicable y se conserven avisos/licencia;
-- `OpenConstructionERP` es referencia funcional/arquitectónica; no copiar código AGPL al core comercial de Rubik;
-- nunca inventar un precio ausente;
-- BCCA real gestionada por Rubik permanece deshabilitada hasta verificar condiciones oficiales de reutilización/redistribución comercial para el uso concreto.
-
-### 7D — Presentación/exportación — CERRADO
-
-PR #120, squash `69a9b20a0ceab6f379150e2c7fb0b64f7136b4f5`.
-
-Incluye:
-
-- resumen por estancia cuando la procedencia lo demuestra;
-- por planta;
-- por vivienda;
-- capítulos/partidas;
-- reporte estructurado JSON;
-- CSV interoperable;
-- futura adaptación XLSX/PDF/CRM sobre el reporte estructurado, sin recalcular el presupuesto ni introducir dependencias sólo para marcar formatos.
-
-`FloorPlanBudget.calculateBudget()` sigue siendo la autoridad monetaria; 7D no recrea fórmulas de merma, subtotal o IVA.
-
-### Etapa 2 posterior
-
-**Asset Lab** para mobiliario/equipamiento/catálogo comercial cuando exista demanda. Identidad de producto, SKU, cantidades y resumen comercial son reutilizables como patrón; precio desconocido debe seguir figurando como pendiente, nunca inventado.
-
-## Punto 8 — Exterior — ACTUAL
-
-La secuencia aprobada es:
-
-- **8A / V1**: paredes/fachada/materiales, puertas/ventanas visibles exteriormente, suelo/terraza/balcón. **Corte funcional actual.**
-- **8B / V2**: cubierta sencilla, petos, retranqueos y volúmenes exteriores. Debe permanecer deliberadamente limitado; no resolver un generador universal de tejados. Documento obligatorio de alcance: [`point-8b-exterior-v2-roof-volumes-2026-10-27.md`](point-8b-exterior-v2-roof-volumes-2026-10-27.md).
-- **8C / V3**: parcela/terreno, desniveles y contexto exterior.
-
-Para 8B, la ruta de menor riesgo queda fijada como:
+La secuencia interna recomendada es:
 
 ```text
-8B-A
-huella + superficies superiores + cubierta plana + retranqueos
+8C-A
+GeoProvider / contratos territoriales
+→ capacidades normalizadas
+→ procedencia / fecha / condiciones de uso
+→ UI agnóstica de proveedor
 
-8B-B
-petos + volúmenes exteriores simples
+8C-B
+parcela / referencia / geometría territorial
+→ separar geometría fuente de geometría editable
+→ proveedor real sólo cuando esté técnica y legalmente verificado
 
-8B-C
-sólo si está justificado:
-monopendiente / dos aguas simples con parámetros explícitos
+8C-C
+ortofoto / contexto
+→ cobertura y atribución explícitas
+→ no asumir disponibilidad de IGN/CNIG/PNOA
+
+8C-D
+elevación / terreno
+→ superficie de contexto
+→ no cálculo geotécnico
+→ no precisión topográfica certificada
+
+8C-E
+integración exterior final
+→ edificio + parcela + terreno + orientación + contexto
+→ presentación
+→ exportación sólo cuando el contrato lo permita
 ```
 
-No implementar un solver universal de cubiertas, ni inferir automáticamente cumbreras, limatesas, limahoyas o soluciones arquitectónicas complejas a partir de la huella. Los casos no soportados deben degradar de forma honesta o pedir parámetros explícitos.
+Esta secuencia es un plan de implementación, no una afirmación de que proveedores concretos estén disponibles.
 
-`FloorPlanGeoProvider` puede alimentar especialmente 8C, pero no sustituye ni renumera el Punto 8. 8A y 8B deben funcionar sin proveedores territoriales.
+## `FloorPlanGeoProvider`
+
+La frontera ya existe y el proveedor Manual es la capacidad segura/offline actual. 8C debe extender la frontera mediante capacidades normalizadas y adapters, no incrustar lógica de Catastro/IGN/CNIG/PNOA directamente en UI, renderer o contratos de proyecto.
+
+Reglas permanentes:
+
+- una fuente externa debe conservar procedencia y fecha/cobertura;
+- licencia/condiciones de uso y atribución deben verificarse para el servicio concreto antes de activarlo;
+- geometría fuente/oficial y geometría editable deben mantenerse separadas;
+- un dato territorial de contexto no es una certificación catastral, topográfica, geotécnica o normativa;
+- proveedor no disponible debe degradar a `unavailable`, no inventarse ni simularse como real;
+- 8C no debe romper Manual/offline.
 
 ## Punto 9 — Instalaciones ligeras
 
@@ -134,11 +105,7 @@ Capa de símbolos/elementos editables (electricidad, iluminación, clima, agua, 
 ## Reglas permanentes
 
 - mostrar más información sin fingir más certeza de la disponible;
-- distinguir dato conocido/fuente, estimación, visualización y no disponible;
-- no presentar Rubik como certificador estructural, energético, catastral, MEP ni de mediciones oficiales;
-- guardar datos internos y publicarlos son decisiones separadas cuando exista privacidad relevante;
-- conservar procedencia/licencia/fecha cuando se use una fuente externa;
-- no reabrir Puntos 1–7 salvo regresión reproducible o nueva decisión expresa;
-- no adelantar 8B/8C dentro de 8A.
-
-Para cualquier agente: **leer primero [`current-status-2026-10-28.md`](current-status-2026-10-28.md)** y verificar el HEAD actual de `master` antes de ejecutar trabajo.
+- distinguir dato fuente, dato editable, derivación, estimación, visualización y no disponible;
+- no presentar Rubik como certificador estructural, energético, catastral, topográfico, geotécnico o MEP;
+- no reabrir 1–8B salvo regresión reproducible o nueva decisión expresa;
+- para cualquier agente: leer primero [`current-status-2026-10-28.md`](current-status-2026-10-28.md) y verificar `master` antes de trabajar.
