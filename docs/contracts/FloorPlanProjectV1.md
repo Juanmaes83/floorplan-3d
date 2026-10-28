@@ -1,5 +1,11 @@
 # FloorPlanProjectV1 — contrato de proyecto de plano
 
+## Ampliación 1.8.0 — peto visual declarado (Punto 8B-B)
+
+`roofParapet` es opcional por proyecto/planta. `{enabled:false}` expresa una decisión explícita de no mostrar peto; la ausencia conserva documentos antiguos sin añadir nada. `{enabled:true,heightMm}` declara un peto visual en los bordes exteriores soportados de las superficies de cubierta que `FloorPlanRoof` demuestra para esa planta. `heightMm` es entero de 100 a 3000 mm, introducido por la persona, sin valor inicial automático ni significado normativo. `materialId` opcional referencia un material existente de categoría `wall`; ausente usa un acabado visual neutro. El parámetro no almacena polígonos, caras, mallas ni triangulación.
+
+Sólo una edición explícita eleva versiones anteriores a 1.8.0. Abrir un proyecto 1.0–1.7 no lo migra. El JSON y ZIP editables conservan únicamente la intención; la geometría se vuelve a derivar desde muros, estancias y el contrato de edificio. `terrace`/`balcony` no activan un peto. La presencia de cubierta tampoco. El peto visual no acredita seguridad ni cumplimiento normativo.
+
 ## Ampliación 1.7.0 — orientación y ubicación internas (Punto 6)
 
 `site` es opcional. `site.northOffsetDeg` declara dónde está el norte: grados horarios desde arriba del plano, `0 <= n < 360`. No gira geometría. Ausente significa sin configurar. `site.location` contiene `latitude` (-90..90), `longitude` (-180..180), `timeZone` IANA reconocida por `Intl`, y `source:{providerId,type}`. El proveedor manual usa `manual` / `user-entered`. Metadatos opcionales de fuente: `sourceName`, `sourceUrl`, `sourceId`, `retrievedAt`, `version`, `derivedFrom`; no contienen datos protegidos ni respuestas completas de proveedores.

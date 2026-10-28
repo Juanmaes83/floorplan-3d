@@ -21,6 +21,8 @@ jobs:
       - name: Unit regressions
         run: |
           git diff --check
+          node --check js/exterior-volumes.js
+          node --check tests/exterior-volumes.browser.test.cjs
           node --test $(find tests -maxdepth 1 -name '*.test.cjs' ! -name '*browser*' | sort)
       - name: Browser dependencies
         run: |
@@ -29,8 +31,8 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/solar-tools/node_modules" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$RUNNER_TEMP/solar-tools/node_modules/three" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/solar-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: Solar browser and existing PNG contract
-        run: node --test --test-concurrency=1 tests/solar.browser.test.cjs tests/capture-3d.browser.test.cjs tests/surface-sheet.browser.test.cjs
+      - name: Solar browser, exterior volumes and existing PNG contract
+        run: node --test --test-concurrency=1 tests/solar.browser.test.cjs tests/capture-3d.browser.test.cjs tests/surface-sheet.browser.test.cjs tests/exterior-volumes.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

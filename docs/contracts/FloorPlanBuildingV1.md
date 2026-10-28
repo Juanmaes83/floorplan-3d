@@ -1,8 +1,12 @@
 # FloorPlanBuildingV1 — edificio de varias plantas (primer corte)
 
+## Compatibilidad de proyectos de planta 1.8.0
+
+El edificio sigue en versiones 1.0.0/1.1.0 y admite ahora proyectos de planta 1.8.0 en modo estricto. Cada `levels[].project.roofParapet` opcional expresa sólo la decisión de peto visual de esa planta; el edificio no duplica el campo. Abrir edificios anteriores no migra sus proyectos. JSON/ZIP conservan la declaración; huellas, segmentos y mallas permanecen derivados.
+
 ## Ampliación 1.1.0 — orientación y ubicación compartidas
 
-Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición explícita de `site` eleva a 1.1.0. `site` es opcional y reutiliza exactamente la definición del proyecto 1.7.0: norte lógico, ubicación IANA y procedencia. La raíz es autoridad para todas las plantas, incluso cuando el campo está ausente. Se conservan sin reescribir los proyectos incrustados, que ahora admiten versiones conocidas 1.0.0–1.7.0. Crear un edificio desde una planta configurada copia `site` a la raíz. Exportar una planta escribe en la copia standalone el `site` compartido (1.7.0 si procede); al no existir configuración compartida, no reaparece una configuración divergente de la planta. JSON/ZIP, copias y variantes conservan estos datos internos. Abrir un edificio antiguo no lo migra ni inventa datos.
+Se aceptan 1.0.0 y 1.1.0; otras versiones de edificio se rechazan. La edición explícita de `site` eleva a 1.1.0. `site` es opcional y reutiliza exactamente la definición del proyecto 1.7.0: norte lógico, ubicación IANA y procedencia. La raíz es autoridad para todas las plantas, incluso cuando el campo está ausente. Se conservan sin reescribir los proyectos incrustados, que ahora admiten versiones conocidas 1.0.0–1.8.0. Crear un edificio desde una planta configurada copia `site` a la raíz. Exportar una planta incorpora en la copia la configuración compartida. JSON/ZIP, copias y variantes conservan estos datos internos. Abrir un edificio antiguo no lo migra ni inventa datos.
 
 **Estado:** contrato del primer corte multipiso, implementado en esta PR (apilada sobre #50) y **pendiente de aceptación**. Juanma eligió la opción D de [#50](../technical/multilevel-contract-gate0-2026-10-17.md) el 18-10-2026. No modifica [FloorPlanProjectV1](FloorPlanProjectV1.md) ni su schema: cada planta sigue siendo un proyecto 1.x válido. Rubik es una herramienta de **propuesta y comunicación**; nada de este documento acredita precisión profesional, documentación técnica, BIM ni cumplimiento normativo o estructural.
 
@@ -40,7 +44,7 @@ Cada planta tiene `id` (`lvl_`), `name` (1–80), `order`, `elevationMm`, `slabT
 
 Los proyectos incrustados se validan con más rigor que un archivo 1.x suelto:
 
-- `schemaVersion` debe ser **1.0.0–1.7.0**, las versiones que este lector conoce.
+- `schemaVersion` debe ser **1.0.0–1.8.0**, las versiones que este lector conoce.
 - Se valida con `FloorPlanCore.validate(project, {strict: true})`: cualquier campo no definido en el schema 1.x es un error. Por compatibilidad, un 1.x suelto de versión posterior a 1.0.0 conserva campos desconocidos; aquí no, para impedir que `levels[]`, `levelId` u otro dato multipiso viaje oculto dentro de una planta.
 - En `extensions` (`x-*`) se rechaza cualquier clave, a cualquier profundidad, que nombre plantas, niveles, escaleras o edificio.
 - Un edificio no puede incrustarse dentro de otro.

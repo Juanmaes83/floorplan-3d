@@ -497,7 +497,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
       <button class="btn on" data-mode="orbit" data-en="Orbit">鸟瞰</button>
       <button class="btn" data-mode="walk" data-en="Walk">漫游</button>
     </div>
-    <div class="grp only3d" id="roofGroup"><button class="btn" id="roofToggle" type="button" aria-pressed="false" data-en="Exterior" title="Mostrar u ocultar cubierta plana derivada">Exterior</button></div>
+    <div class="grp only3d" id="roofGroup"><button class="btn" id="roofToggle" type="button" aria-pressed="false" data-en="Exterior" title="Mostrar u ocultar la lectura exterior derivada">Exterior</button></div>
     <div class="grp only3d">
       <button class="btn" id="vIso" data-en="Iso">斜视</button>
       <button class="btn" id="vTop" data-en="Top">俯视</button>
@@ -658,6 +658,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 <script src="js/project-core.js"></script>
 <script src="js/exterior-core.js"></script>
 <script src="js/roof-core.js"></script>
+<script src="js/exterior-volumes.js"></script>
 <script src="js/surface-catalog.js"></script>
 <script src="js/generic-catalog.js"></script>
 <script src="js/furniture-search.js"></script>
@@ -1494,6 +1495,8 @@ function overviewPanel(){
   const dem = geometry.walls.filter(w => w.status === 'demolished');
   const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
   const overlaps = FloorPlanOpenings.conflicts(project);
+  const parapet=project.roofParapet||{enabled:false};
+  const wallMaterials=project.materials.filter(m=>m.category==='wall').map(m=>`<option value="${esc(m.id)}"${m.id===parapet.materialId?' selected':''}>${esc(m.name)}</option>`).join('');
   const legacy = overlaps.length ? `<section class="opening-legacy" id="openingConflicts" role="note"><b>Huecos solapados en los datos</b><p>${overlaps.length === 1 ? 'Un par de huecos se solapa' : overlaps.length + ' pares de huecos se solapan'} en el mismo muro. Se conservan tal como están; pulsa uno para corregir su posición o su ancho.</p><div class="actions">${[...new Set(overlaps.flatMap(c => [c.a, c.b]))].slice(0, 6).map(id => { const o = project.openings.find(x => x.id === id); return `<button class="btn" data-opening-fix="${esc(id)}" title="${esc(id)}">${o ? esc(FloorPlanOpenings.LABEL[o.kind] + ' · ' + o.offsetMm + '–' + (o.offsetMm + o.widthMm) + ' mm') : esc(id)}</button>`; }).join('')}</div></section>` : '';
   return `<div class="panel-view overview-panel">${panelHead({title:'Vista general del plano', context:`${nm(project.name)} · ${fmt(tot)} m² útiles`})}<div class="panel-body">${legacy}
   <details class="panel-group" data-group="areas" open><summary>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></summary>
@@ -1503,6 +1506,12 @@ function overviewPanel(){
   <details class="panel-group" data-group="estimate" open><summary>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></summary>
     <table>${matRows}</table>
     ${!showPrices?'':`<div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>¥${Math.round(cost).toLocaleString()}</b></div>`}</details>
+  <details class="panel-group" data-group="roof-parapet"><summary>Peto visual declarado</summary><div class="form">
+    <label class="full"><input id="roofParapetEnabled" type="checkbox"${parapet.enabled?' checked':''}> Mostrar peto en el borde exterior de la cubierta soportada</label>
+    <label>Altura declarada (mm)<input id="roofParapetHeight" type="number" min="100" max="3000" step="1" value="${parapet.heightMm??''}" placeholder="Introduce altura"></label>
+    <label>Acabado mural<select id="roofParapetMaterial"><option value="">Visual neutro</option>${wallMaterials}</select></label>
+    <button class="btn" id="roofParapetSave" type="button">Guardar decisión</button></div>
+    <p class="muted">Sólo se muestra con «Exterior». La altura es introducida por la persona; no acredita seguridad ni cumplimiento normativo.</p></details>
   <details class="panel-group" data-group="stats" open><summary>${tr('方案统计','Plan Stats')}</summary>
     <div class="stats"><div><small>${tr('家具数量','Furniture')}</small><span class="big">${state.furniture.length}</span></div>
       <div><small>${tr('拆除墙体','Walls removed')}</small><span class="big">${fmt(demLen,1)}</span> m</div></div>
@@ -1539,6 +1548,11 @@ function bindOverview(){
   $('#clearMeasure').onclick = () => state.measures.length && mutate(() => state.measures = []);
   document.querySelectorAll('#panel [data-opening-fix]').forEach(b => b.onclick = () => openOpening(b.dataset.openingFix));
   $('#clearFurn').onclick = clearLayout;
+  $('#roofParapetSave').onclick=()=>{
+    const enabled=$('#roofParapetEnabled').checked,height=Number($('#roofParapetHeight').value),materialId=$('#roofParapetMaterial').value;
+    if(enabled&&(!Number.isSafeInteger(height)||height<100||height>3000)){toast('Introduce una altura entera entre 100 y 3000 mm.');return;}
+    mutate(()=>{const declaration=enabled?{enabled:true,heightMm:height,...(materialId?{materialId}:{})}:{enabled:false};const next=Core.setRoofParapet(project,declaration);project.roofParapet=next.roofParapet;project.schemaVersion=next.schemaVersion;});
+  };
 }
 
 // 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
@@ -2467,7 +2481,7 @@ const topHeight=()=>opt.cut===2.8?Math.max(project.defaults.wallHeightMm,...proj
 let inited = false, active = false, raf = 0, anim = null, fly = null, contextLost = false;
 let renderer, labelRenderer, scene, camera, orbit, walkCtl, hemi, sun, ground, glassMat, wallMat, capMat, frameMat;
 let solarResult=null;
-let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, roofG, roofResult, colliders = [], selKey = null, selHelper = null;
+let archFloor, archUp, furnG, labelG, lampG, revealG, contactG, roofG, exteriorG, roofResult, exteriorResult, exteriorLineMat, colliders = [], selKey = null, selHelper = null;
 let contactEnabled = false, contactCount = 0;
 let routeRun = null, routeInfo = {status:'off',kind:null,reason:'',points:[],clearanceMm:0,doorIds:[]};
 let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiveBatching = true, primitiveBatchDisposals = 0, primitiveBatchFallbacks = 0, proceduralDetails = false; let renderedSource, renderedGeometry;
@@ -2517,8 +2531,9 @@ function init(){
   wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
 
   archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
-  levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof';
-  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG);
+  levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof'; exteriorG = new THREE.Group(); exteriorG.name = 'derived-exterior-volumes';
+  exteriorLineMat=new THREE.LineBasicMaterial({color:0x766e62,transparent:true,opacity:.55});
+  scene.add(archFloor, archUp, furnG, labelG, lampG, revealG, contactG, levelsG, roofG, exteriorG);
 
   const cv = renderer.domElement; let downAt = null, look = null;
   cv.addEventListener('pointerdown', e => {
@@ -3378,6 +3393,7 @@ function setPresentationContactShadows(enabled){
 function syncRoofVisibility(){
   if(!roofG)return;
   const visible=!!(opt.roof&&roofResult?.status==='available'&&opt.mode==='orbit'&&!window.FloorPlanPresentation?.active);
+  if(exteriorG)exteriorG.visible=visible&&exteriorResult?.status==='available';
   if(roofG.visible===visible)return;
   roofG.visible=visible;
   if(labelG)showLabels(opt.labels&&!visible&&opt.mode==='orbit'&&!anim);
@@ -3385,13 +3401,16 @@ function syncRoofVisibility(){
 }
 function buildRoof(){
   if(!roofG)return;
-  clearGroup(roofG);
+  clearGroup(roofG);clearGroup(exteriorG);
   const activeLevel=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);
-  if(levelContext&&!activeLevel){roofResult={status:'unavailable',reason:'active-level'};syncRoofVisibility();return;}
+  if(levelContext&&!activeLevel){roofResult={status:'unavailable',reason:'active-level'};exteriorResult=roofResult;syncRoofVisibility();return;}
   const visibleLevels=levelContext?.levels.filter(l=>levelView==='all'||l.order<=activeLevel.order);
   roofResult=levelContext
     ? FloorPlanRoof.deriveBuilding({levels:visibleLevels},FloorPlanExterior,FloorPlanBuilding)
     : FloorPlanRoof.deriveProject(project,FloorPlanExterior);
+  exteriorResult=levelContext
+    ? FloorPlanExteriorVolumes.fromBuildingRoof(roofResult,{levels:visibleLevels},FloorPlanRoof.EPS)
+    : FloorPlanExteriorVolumes.fromProjectRoof(roofResult,project,FloorPlanRoof.EPS);
   if(roofResult.status!=='available'){syncRoofVisibility();return;}
   const material=mat('#c9c1b3',{roughness:.95});
   for(const surface of roofResult.surfaces){
@@ -3406,6 +3425,29 @@ function buildRoof(){
     mesh.castShadow=mesh.receiveShadow=true;
     mesh.userData.roof={kind:surface.kind,levelId:surface.levelId,areaMm2:Math.abs(FloorPlanRoof.area(surface.polygon))};
     roofG.add(mesh);
+  }
+  if(exteriorResult.status==='available'){
+    const dx=activeLevel?.offsetMm.x||0,dy=activeLevel?.offsetMm.y||0,base=activeLevel?.elevationMm||0;
+    for(const volume of exteriorResult.volumes){
+      const shape=new THREE.Shape();volume.footprint.forEach((p,i)=>shape[i?'lineTo':'moveTo'](wx(p.x-dx),-wz(p.y-dy)));
+      const prism=new THREE.ExtrudeGeometry(shape,{depth:(volume.zTopMm-volume.zBottomMm)/1000,bevelEnabled:false});
+      prism.rotateX(-Math.PI/2);
+      const edges=new THREE.EdgesGeometry(prism);
+      const outline=new THREE.LineSegments(edges,exteriorLineMat);outline.position.y=(volume.zBottomMm-base)/1000;
+      outline.userData.exteriorVolume={levelId:volume.levelId,zBottomMm:volume.zBottomMm,zTopMm:volume.zTopMm};
+      exteriorG.add(outline);prism.dispose();
+    }
+    for(const parapet of exteriorResult.parapets){
+      const x0=wx(parapet.start.x-dx),z0=wz(parapet.start.y-dy),x1=wx(parapet.end.x-dx),z1=wz(parapet.end.y-dy);
+      const length=Math.hypot(x1-x0,z1-z0);
+      const declared=visibleLevels?.find(l=>l.id===parapet.levelId)?.project||project;
+      const assigned=declared.materials.find(m=>m.id===parapet.materialId);
+      const mesh=new THREE.Mesh(new THREE.PlaneGeometry(length,parapet.heightMm/1000),mat(assigned?.appearance?.color||'#b8afa1',{roughness:.95,side:THREE.DoubleSide}));
+      mesh.position.set((x0+x1)/2,(parapet.zBottomMm-base+parapet.heightMm/2)/1000,(z0+z1)/2);
+      mesh.rotation.y=-Math.atan2(z1-z0,x1-x0);mesh.castShadow=mesh.receiveShadow=true;
+      mesh.userData.exteriorParapet={levelId:parapet.levelId,heightMm:parapet.heightMm,materialId:parapet.materialId,visualFallback:!assigned};
+      exteriorG.add(mesh);
+    }
   }
   syncRoofVisibility();
 }
@@ -3626,7 +3668,7 @@ function buildLabels(){
 // 只重建变化的部分
 function sync(force){
   if (!inited || (!active && !force)) return;
-  const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.defaults,opt.cut,levelContext&&{id:levelContext.activeLevelId,view:levelView,levels:levelContext.levels.map(l=>l.id===levelContext.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l),stairs:levelContext.stairs},opt.furn]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
+  const a = JSON.stringify([project.walls,project.openings,project.rooms,project.materials,project.roofParapet,project.defaults,opt.cut,levelContext&&{id:levelContext.activeLevelId,view:levelView,levels:levelContext.levels.map(l=>l.id===levelContext.activeLevelId?[l.id,l.order,l.elevationMm,l.slabThicknessMm,l.offsetMm]:l),stairs:levelContext.stairs},opt.furn]), f = JSON.stringify(project.objects), l = JSON.stringify([project.rooms,opt.cut]);
   const contactChanged=force||a!==sigArch||f!==sigFurn;
   if (force || a !== sigArch){ sigArch = a; buildArch(); }
   if (force || f !== sigFurn){ sigFurn = f; buildFurn(); }
@@ -4162,7 +4204,7 @@ function deliveryShot({width, height, margin = .03, frame = true} = {}){
   const w = Math.round(width), h = Math.round(height);
   if (!(w > 0 && h > 0) || w*h > SHOT_MAX_PIXELS || Math.max(w, h) > shotLimit()) throw Error(tr('截图选项无效。', 'Invalid capture option.'));
   const box = new THREE.Box3();
-  for (const g of [archFloor, archUp, furnG, levelsG, roofG]) if (g?.visible) box.expandByObject(g);
+  for (const g of [archFloor, archUp, furnG, levelsG, roofG, exteriorG]) if (g?.visible) box.expandByObject(g);
   const cam = camera.clone();
   if (!frame || box.isEmpty()){
     // A room stop keeps its own camera: same «contain» rule as shot(), nothing visible in the view is cropped.
@@ -4462,6 +4504,7 @@ window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
 Object.defineProperty(window.View3D,'roofInfo',{get:()=>({status:roofResult?.status||'unavailable',reason:roofResult?.reason||null,visible:!!roofG?.visible,surfaces:roofG?.children.map(m=>({...m.userData.roof,normal:m.geometry.attributes.normal.getY(0)}))||[]})});
+Object.defineProperty(window.View3D,'exteriorVolumeInfo',{get:()=>({status:exteriorResult?.status||'unavailable',reason:exteriorResult?.reason||null,visible:!!exteriorG?.visible,volumes:exteriorResult?.volumes?.map(v=>({levelId:v.levelId,zBottomMm:v.zBottomMm,zTopMm:v.zTopMm}))||[],parapets:exteriorResult?.parapets?.map(p=>({levelId:p.levelId,heightMm:p.heightMm,materialId:p.materialId}))||[]})});
 Object.defineProperty(window.View3D,'presentationContactShadows',{get:()=>({enabled:contactEnabled,rooms:contactG?.children.length||0,spots:contactCount,transferBytes:0,textureCount:0})});
 window.View3D.presentationRoute=presentationRoute;
 window.View3D.clearPresentationRoute=clearPresentationRoute;
