@@ -1,16 +1,20 @@
 # FloorPlanGeoProvider — Point 6 boundary
 
-Runtime: `js/geo-provider.js`, pure UMD, no network/storage/renderer. The implemented provider is `FloorPlanGeoProvider.Manual`. It is permanent and works offline in every country.
+Runtime: `js/geo-provider.js`, pure UMD registry without network/storage/renderer. The default registry includes the permanent offline `FloorPlanGeoProvider.Manual`, the local Catastro INSPIRE CP document parser, and the explicit PNOA WMS orthophoto adapter.
 
 `Manual.capabilities` declares `coordinates` and `sourceMetadata` true; search, parcel, geometry, orthophoto, elevation and terrain false. No UI action is offered for unsupported operations.
+
+## 1.2.0 orthophoto operation (8C-C)
+
+`getOrthophoto(providerId, {sourceCrs, extent, targetResolutionM}, {signal})` is an explicit, capability-gated operation. The registry validates the requested parcel-aligned metre frame, bounded output size, JPEG `Blob`, exact requested dimensions and provenance. Stable outcomes include `orthophoto-extent-too-large`, `orthophoto-source-crs-unsupported`, `invalid-raster-response`, `response-too-large`, `network-unavailable` and `cancelled`. No fallback provider is selected. The default registry includes `ign-pnoa-ma-wms`, which requests the official PNOA Máxima Actualidad WMS 1.3.0 `OI.OrthoimageCoverage` layer over HTTPS; no proxy, tile cache or embedded raster is used. Older 1.0.0/1.1.0 providers remain accepted when they do not advertise orthophoto. This operation does not add terrain or elevation.
 
 `Manual.getCoordinates({latitude,longitude,timeZone})` accepts finite numeric WGS84 degrees and an IANA zone recognized by Intl. It returns `{status:'available',location:{latitude,longitude,timeZone,source:{providerId:'manual',type:'user-entered'}}}` or `{status:'unavailable',reason:'coordinates'|'timeZone'}`. It does not convert empty text into 0, accept raw API responses, or retain unrelated input fields. Explicit 0/0 is valid input, never a fallback. `Manual.getSourceMetadata()` returns that same minimal provenance.
 
 The solar core accepts only normalized coordinates/time zone/north/date/time. It has no provider identity branch or network call. A future territorial adapter can implement search/getParcel/getGeometry/getCoordinates/getSourceMetadata according to honest capabilities and return the same normalized location with minimized provenance. Unsupported operations remain absent, not fake successful empty responses. External adapters must add normalized not-found/unavailable/invalid/cancelled results, timeout and cancellation, preserve an existing valid project on error, and pass shared provider contract tests before activation.
 
-Spain is the first future territorial provider: Catastro for parcel/reference/geometry, IGN/CNIG/PNOA for context/orthophoto/elevation when Exterior V3 requires them. There is no active territorial endpoint in this cut. Endpoint conditions, attribution, coverage, CRS, license and redistributability must be reviewed before adding an adapter. No owner identity, NIF/CIF or cadastral value.
+Spain is the first territorial context: Catastro INSPIRE CP document import for parcel geometry and IGN/CNIG PNOA WMS for an explicitly requested orthophoto. Search/reference lookup, elevation and terrain remain future work. No owner identity, NIF/CIF or cadastral value is retained.
 
-Future source geometry retains source ID, provider, CRS, retrieval time, endpoint/version/license where applicable. An editable working geometry is a separate derived representation referencing the source, never a rewrite of official source data. This does not add terrain, parcel geometry or any Exterior feature now. Point 8 V1/V2/V3 keeps its approved scope.
+Source geometry retains source ID, provider, CRS, retrieval time, endpoint/version/license where applicable. An editable working geometry is a separate derived representation referencing the source, never a rewrite of official source data. This orthophoto adapter does not add terrain or Exterior geometry. Point 8 V1/V2/V3 keeps its approved scope.
 
 `site.location.source` can retain `providerId`, `type` (`user-entered`, `official-source`, `derived`, `unknown`), `sourceName`, `sourceUrl`, `sourceId`, `retrievedAt`, `version`, `derivedFrom`. Manual input stores only the first two. Publication remains independent: geographic data is internal and is not automatically added to client images/sheets/video. Editable project/building JSON and ZIP retain it.
 

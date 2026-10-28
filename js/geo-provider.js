@@ -1,10 +1,12 @@
 /* Point 8C-A: offline runtime GeoProvider contract. Site remains the durable authority. */
 (function(root){
  'use strict';
- const CONTRACT_VERSION='1.1.0';
+ const CONTRACT_VERSION='1.2.0';
  const Parcel=typeof module==='object'&&module.exports?require('./parcel-core.js'):root.FloorPlanParcelCore;
+ const Ortho=typeof module==='object'&&module.exports?require('./orthophoto-core.js'):root.FloorPlanOrthophotoCore;
  const PARCEL_INPUT_MODES=Object.freeze(['document','reference']);
  const PARCEL_REASONS=Object.freeze(['invalid-parcel-input','invalid-parcel-reference','invalid-source-document','multiple-parcels-require-selection','parcel-not-found','invalid-source-geometry','inconsistent-source-crs','unsupported-source-crs','network-unavailable','cancelled']);
+ const ORTHOPHOTO_REASONS=Object.freeze(['orthophoto-requires-parcel','orthophoto-source-crs-unsupported','orthophoto-extent-invalid','orthophoto-extent-too-large','network-unavailable','service-error','invalid-raster-response','response-too-large','provider-error','cancelled']);
  const CAPABILITIES=Object.freeze(['search','parcel','geometry','coordinates','sourceMetadata','orthophoto','elevation','terrain']);
  const NETWORK_MODES=Object.freeze(['none','optional','required']);
  const PROVIDER_KINDS=Object.freeze(['manual','official','commercial','other']);
@@ -89,7 +91,7 @@
   object(provider,'provider');
   const id=text(provider.id,'provider.id',80);
   if(!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id))fail('provider.id has invalid characters');
-  if(provider.contractVersion!==undefined&&!['1.0.0',CONTRACT_VERSION].includes(provider.contractVersion))fail('provider.contractVersion is unsupported');
+  if(provider.contractVersion!==undefined&&!['1.0.0','1.1.0',CONTRACT_VERSION].includes(provider.contractVersion))fail('provider.contractVersion is unsupported');
   if(typeof provider.getCapabilities!=='function')fail('provider.getCapabilities() is required');
   if(typeof provider.getProviderMetadata!=='function')fail('provider.getProviderMetadata() is required');
   const declared=provider.getCapabilities();object(declared,'capabilities');
@@ -101,6 +103,7 @@
    if(typeof provider.getParcel!=='function')fail('provider.getParcel() is required');
    if(!metadata.parcelInputModes)fail('provider metadata.parcelInputModes is required');
   }else if(metadata.parcelInputModes!==undefined)fail('provider metadata.parcelInputModes requires parcel capability');
+  if(capabilities.orthophoto&&typeof provider.getOrthophoto!=='function')fail('provider.getOrthophoto() is required');
   if(capabilities.sourceMetadata){
    if(typeof provider.getSourceMetadata!=='function')fail('provider.getSourceMetadata() is required');
    normalizeSource(provider.getSourceMetadata(),id);
@@ -130,6 +133,21 @@
   if(raw.providerId!==undefined&&raw.providerId!==id)fail('parcel result.providerId must match provider.id');
   const parcel=Parcel.normalizeParcel(raw.parcel),provenance=normalizeParcelSource(raw.provenance,id);
   return {status:'available',providerId:id,parcel,provenance};
+ }
+ function normalizeOrthophotoResult(raw,id,query){
+  object(raw,'orthophoto result');
+  if(raw.status!=='available'){
+   if(!RESULT_STATUSES.includes(raw.status)||!ORTHOPHOTO_REASONS.includes(raw.reason))return result('unavailable',id,'provider-error');
+   return result(raw.status,id,raw.reason);
+  }
+  if(raw.providerId!==undefined&&raw.providerId!==id)fail('orthophoto result.providerId must match provider.id');
+  const value=raw.orthophoto;
+  object(value,'orthophoto result.orthophoto');
+  const fields=['sourceCrs','widthPx','heightPx','requestedResolutionM','resolutionXMPerPx','resolutionYMPerPx'];
+  if(fields.some(k=>value[k]!==query[k==='requestedResolutionM'?'targetResolutionM':k])||!['minX','minY','maxX','maxY'].every(k=>value.extent?.[k]===query.extent[k])||value.mediaType!=='image/jpeg'||value.sourcePolicy!=='latest-available'||!(value.imageBlob instanceof Blob)||value.imageBlob.type!=='image/jpeg'||!value.imageBlob.size||value.imageBlob.size>Ortho.LIMITS.maxResponseBytes)fail('orthophoto result is invalid');
+  const provenance=normalizeParcelSource(raw.provenance,id);
+  if(!provenance.retrievedAt||!provenance.attribution||!provenance.license)fail('orthophoto provenance is incomplete');
+  return {status:'available',providerId:id,orthophoto:{sourceCrs:value.sourceCrs,extent:{...query.extent},widthPx:value.widthPx,heightPx:value.heightPx,requestedResolutionM:value.requestedResolutionM,resolutionXMPerPx:value.resolutionXMPerPx,resolutionYMPerPx:value.resolutionYMPerPx,mediaType:value.mediaType,sourcePolicy:value.sourcePolicy,imageBlob:value.imageBlob},provenance};
  }
  function createRegistry(initialProviders=[]){
   if(!Array.isArray(initialProviders))fail('initialProviders must be an array');
@@ -173,8 +191,21 @@
     return normalizeParcelResult(raw,providerId);
    }catch{return result('unavailable',providerId,'provider-error');}
   }
+  async function getOrthophoto(providerId,input,context={}){
+   if(typeof providerId!=='string'||!providerId.trim())return result('invalid',providerId??null,'invalid-provider-id');
+   const entry=entries.get(providerId);if(!entry)return result('not-found',providerId,'provider-not-registered');
+   if(!entry.descriptor.capabilities.orthophoto)return result('unsupported',providerId,'capability-disabled');
+   if(context?.signal?.aborted)return result('cancelled',providerId,'cancelled');
+   let query;try{query=Ortho.normalizeRequest(input);}catch(error){const reason=error?.reason||'orthophoto-extent-invalid';return result(reason==='orthophoto-source-crs-unsupported'||reason==='orthophoto-extent-too-large'?'unsupported':'invalid',providerId,reason);}
+   Object.freeze(query.extent);Object.freeze(query);
+   try{
+    const raw=await entry.provider.getOrthophoto(query,Object.freeze(context?.signal?{signal:context.signal}:{}));
+    if(context?.signal?.aborted)return result('cancelled',providerId,'cancelled');
+    return normalizeOrthophotoResult(raw,providerId,query);
+   }catch{return result('unavailable',providerId,'provider-error');}
+  }
   for(const provider of initialProviders)register(provider);
-  return Object.freeze({register,unregister,has,get,inspect,list,getCoordinates,getParcel});
+  return Object.freeze({register,unregister,has,get,inspect,list,getCoordinates,getParcel,getOrthophoto});
  }
  const MANUAL_CAPABILITIES=Object.freeze({search:false,parcel:false,geometry:false,coordinates:true,sourceMetadata:true,orthophoto:false,elevation:false,terrain:false});
  const Manual=Object.freeze({id:'manual',contractVersion:CONTRACT_VERSION,capabilities:MANUAL_CAPABILITIES,
@@ -188,8 +219,9 @@
  });
  const createDefaultRegistry=()=>{
   const catastro=typeof module==='object'&&module.exports?require('./catastro-parcel-provider.js').provider:root.FloorPlanCatastroParcel?.provider;
-  return createRegistry(catastro?[Manual,catastro]:[Manual]);
+  const pnoa=typeof module==='object'&&module.exports?require('./pnoa-orthophoto-provider.js').provider:root.FloorPlanPnoaOrthophoto?.provider;
+  return createRegistry([Manual,...(catastro?[catastro]:[]),...(pnoa?[pnoa]:[])]);
  };
- const api={CONTRACT_VERSION,CAPABILITIES,PARCEL_INPUT_MODES,NETWORK_MODES,PROVIDER_KINDS,LICENSE_STATUSES,RESULT_STATUSES,Manual,zoneValid,validateLocation,validateSite,normalizeSource,normalizeParcelSource,inspectProvider,createRegistry,createDefaultRegistry};
+ const api={CONTRACT_VERSION,CAPABILITIES,PARCEL_INPUT_MODES,ORTHOPHOTO_REASONS,NETWORK_MODES,PROVIDER_KINDS,LICENSE_STATUSES,RESULT_STATUSES,Manual,zoneValid,validateLocation,validateSite,normalizeSource,normalizeParcelSource,inspectProvider,createRegistry,createDefaultRegistry};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanGeoProvider=api;
 })(globalThis);

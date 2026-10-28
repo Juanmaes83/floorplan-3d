@@ -1,5 +1,9 @@
 # FloorPlanBuildingV1 — edificio de varias plantas (primer corte)
 
+## Ampliación 1.3.0 — ortofoto contextual compartida (Punto 8C-C)
+
+`building.site.orthophoto` pertenece sólo a la raíz junto con `building.site.parcel`; ninguna planta incrustada puede poseerlo. BuildingV1 1.3.0 admite los metadatos de ortofoto y proyectos de planta hasta 1.10.0. Abrir versiones anteriores no las migra. Crear un edificio desde un proyecto 1.10.0 copia el contexto territorial a la raíz; exportar una planta incorpora una copia de los metadatos compartidos. JSON/ZIP guardan sólo metadatos y procedencia, nunca el raster. Añadir ortofoto eleva el edificio a 1.3.0; quitarla no lo degrada.
+
 ## Ampliación 1.2.0 — parcela territorial compartida (Punto 8C-B)
 
 `building.site.parcel` es la única autoridad territorial de un edificio. BuildingV1 1.0 no admite `site`; 1.1 admite `site` sin parcela; 1.2 admite `site.parcel` y proyectos de planta hasta 1.9.0. Abrir versiones anteriores no las migra. Añadir una parcela eleva el edificio a 1.2.0; eliminarla no lo degrada. Ninguna planta incrustada puede tener `level.project.site.parcel` como autoridad alternativa. Crear un edificio desde un proyecto con parcela copia ésta a `building.site` y la retira de la copia de planta. Exportar una planta incorpora `building.site.parcel` a la copia ProjectV1 1.9.0 sin modificar el edificio original. JSON/ZIP conservan geometría fuente, frame y procedencia, nunca XML bruto ni preview local. La parcela no sitúa automáticamente el edificio.

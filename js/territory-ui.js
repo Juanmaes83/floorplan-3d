@@ -1,7 +1,7 @@
 /* 8C-B: neutral, read-only parcel context. File input never leaves this browser. */
 (function(){
  'use strict';
- const app=window.FloorPlanApp,Geo=window.FloorPlanGeoProvider,Parcel=window.FloorPlanParcelCore,Adapter=window.FloorPlanParcelSiteAdapter;
+ const app=window.FloorPlanApp,Geo=window.FloorPlanGeoProvider,Parcel=window.FloorPlanParcelCore,Adapter=window.FloorPlanParcelSiteAdapter,Ortho=window.FloorPlanOrthophotoCore,OrthoAdapter=window.FloorPlanOrthophotoSiteAdapter;
  const registry=Geo.createDefaultRegistry();
  const t=(es,en,zh)=>({es,en,zh})[LANG]||es;
  const el=(tag,parent,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;parent?.append(node);return node;};
@@ -23,31 +23,40 @@
  const status=el('p',body);status.id='territoryStatus';status.setAttribute('role','status');
  const card=el('section',body),cardTitle=el('h3',card),metadata=el('dl',card),preview=el('div',card),caution=el('p',card);
  card.id='territoryCard';preview.id='territoryPreview';preview.className='territory-preview';caution.className='territory-caution';
+ const orthoSection=el('section',body),orthoTitle=el('h3',orthoSection),orthoIntro=el('p',orthoSection),orthoProviderRow=el('div',orthoSection),orthoProviderLabel=el('span',orthoProviderRow),orthoProviderChoice=el('select',orthoProviderRow),orthoStatus=el('p',orthoSection),orthoMetadata=el('dl',orthoSection),orthoControls=el('div',orthoSection),orthoLoad=el('button',orthoControls),orthoSave=el('button',orthoControls),orthoRemove=el('button',orthoControls);
+ orthoSection.id='territoryOrthophoto';orthoSection.className='territory-orthophoto';orthoProviderRow.className='territory-orthophoto-provider';orthoProviderChoice.id='territoryOrthophotoProvider';orthoStatus.id='territoryOrthophotoStatus';orthoStatus.setAttribute('role','status');orthoMetadata.id='territoryOrthophotoMetadata';orthoControls.className='territory-orthophoto-actions';orthoLoad.id='territoryOrthophotoLoad';orthoSave.id='territoryOrthophotoSave';orthoRemove.id='territoryOrthophotoRemove';for(const button of [orthoLoad,orthoSave,orthoRemove]){button.type='button';button.className='btn';}
  const actions=el('div',dialog),save=el('button',actions),remove=el('button',actions);actions.className='territory-actions';save.id='territorySave';remove.id='territoryRemove';save.type=remove.type='button';save.className='btn primary';remove.className='btn';
- let pending=null,owner=null,busy=false,returnFocus=null;
+ let pending=null,owner=null,busy=false,returnFocus=null,loaded=null,pendingOrtho=null,orthoBusy=false,orthoError='',orthoController=null;
  const providers=()=>registry.list({capability:'parcel'});
+ const orthoProviders=()=>registry.list({capability:'orthophoto'});
  const site=()=>app.levelContext?window.FloorPlanBuildingUI.site:app.project.site;
+ function releaseRaster(){if(loaded?.url)URL.revokeObjectURL(loaded.url);loaded=null;}
+ function orthoDescriptor(){const current=site()?.orthophoto;const list=orthoProviders();const id=current?.source?.providerId||(list.length===1?list[0].providerId:orthoProviderChoice.value);return registry.inspect(id);}
  function descriptor(){
   const list=providers();
   const id=list.length===1?list[0].providerId:providerChoice.value;
   return registry.inspect(id);
  }
  function line(label,value){const dt=el('dt',metadata,label),dd=el('dd',metadata,String(value));return [dt,dd];}
+ function orthoLine(label,value){el('dt',orthoMetadata,label);el('dd',orthoMetadata,String(value));}
  function renderPreview(parcel){
   preview.replaceChildren();
-  const local=Parcel.toLocalGeometry(parcel),points=local.polygons.flatMap(p=>p.rings.flat());
+  if(loaded&&(loaded.orthophoto.sourceCrs!==parcel.sourceCrs||!['minX','minY','maxX','maxY'].every(key=>loaded.orthophoto.extent[key]===Ortho.extentFromParcel(parcel)[key])))releaseRaster();
+  const raster=loaded?.orthophoto,local=raster?null:Parcel.toLocalGeometry(parcel),polygons=raster?parcel.sourceGeometry.polygons:local.polygons,points=polygons.flatMap(p=>p.rings.flat());
   const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-  const pad=Math.max(maxX-minX,maxY-minY)*.07||1000,svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.setAttribute('viewBox',`${minX-pad} ${minY-pad} ${maxX-minX+2*pad} ${maxY-minY+2*pad}`);
+  const pad=raster?0:Math.max(maxX-minX,maxY-minY)*.07||1000,svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox',raster?`0 0 ${raster.widthPx} ${raster.heightPx}`:`${minX-pad} ${minY-pad} ${maxX-minX+2*pad} ${maxY-minY+2*pad}`);
   svg.setAttribute('role','img');svg.setAttribute('aria-label',t('Geometría fuente de la parcela, norte arriba','Source parcel geometry, north up','地块源几何，北朝上'));
-  for(const polygon of local.polygons){
+  if(raster){const image=document.createElementNS('http://www.w3.org/2000/svg','image');image.setAttribute('href',loaded.url);image.setAttribute('x','0');image.setAttribute('y','0');image.setAttribute('width',String(raster.widthPx));image.setAttribute('height',String(raster.heightPx));image.setAttribute('preserveAspectRatio','none');image.id='territoryOrthophotoRaster';svg.append(image);}
+  for(const polygon of polygons){
    const shape=document.createElementNS('http://www.w3.org/2000/svg','path');
-   shape.setAttribute('d',polygon.rings.map(r=>'M '+r.map(([x,y])=>x+' '+y).join(' L ')+' Z').join(' '));
-   shape.setAttribute('fill-rule','evenodd');shape.setAttribute('class','territory-shape');svg.append(shape);
+   shape.setAttribute('d',polygon.rings.map(r=>'M '+r.map(point=>{const [x,y]=raster?Ortho.sourceToPixel(point,raster):point;return x+' '+y;}).join(' L ')+' Z').join(' '));
+   shape.setAttribute('fill-rule','evenodd');shape.setAttribute('class',raster?'territory-shape territory-shape-overlay':'territory-shape');svg.append(shape);
   }
   preview.append(svg);
  }
  function render(){
+  if(owner&&owner!==app.entryId){releaseRaster();pendingOrtho=null;orthoError='';owner=app.entryId;}
   const current=pending||site()?.parcel,selected=descriptor(),list=providers();
   entry.textContent=t('Contexto territorial','Territorial context','地理背景');title.textContent=entry.textContent;close.textContent=t('Cerrar','Close','关闭');
   intro.textContent=t('Parcela fuente para contexto. No posiciona ni modifica la vivienda.','Source parcel for context. It does not position or change the home.','地块仅作背景，不定位或修改住宅。');
@@ -73,6 +82,16 @@
    renderPreview(current);
   }
   caution.textContent=t('Geometría catastral orientativa; no es lindero legal certificado ni posición del edificio. No difundas información original sin revisar la licencia de la fuente.','Indicative cadastral geometry; not a certified legal boundary or building position. Check source terms before sharing original data.','地籍几何仅供参考，不代表法定边界或建筑位置。分享原始数据前请核对来源条款。');
+  const orthoCurrent=pendingOrtho||site()?.orthophoto,orthoList=orthoProviders(),orthoSelected=orthoDescriptor();
+  orthoTitle.textContent=t('Ortofoto','Orthophoto','正射影像');orthoIntro.textContent=t('Contexto PNOA en el marco de la parcela. La imagen no se guarda en el proyecto ni sitúa la vivienda. Fecha de vuelo no disponible para esta solicitud.','PNOA context in the parcel frame. Image pixels are not saved or used to position the home. Flight date is unavailable for this request.','正射影像使用地块坐标系；图像像素不保存，也不定位住宅。此请求无航拍日期。');
+  orthoProviderLabel.textContent=t('Fuente','Source','来源');orthoProviderChoice.replaceChildren();
+  if(orthoList.length>1){for(const d of orthoList){const option=el('option',orthoProviderChoice,d.label);option.value=d.providerId;}if(orthoSelected)orthoProviderChoice.value=orthoSelected.providerId;}
+  else orthoProviderLabel.textContent+=' · '+(orthoList[0]?.label||t('No disponible','Unavailable','不可用'));
+  orthoProviderChoice.hidden=orthoList.length<=1;
+  orthoStatus.textContent=!site()?.parcel?t('Añade primero una parcela territorial.','Add a territorial parcel first.','请先添加地块。'):orthoBusy?t('Cargando ortofoto…','Loading orthophoto…','正在加载正射影像…'):orthoError||(!orthoSelected&&orthoCurrent)?orthoError||t('La fuente guardada no está disponible en esta sesión.','The saved source is unavailable in this session.','保存的来源在本次会话不可用。'):loaded?t('Disponible en esta sesión; guarda los metadatos si deseas conservar la configuración.','Available in this session; save metadata to retain the configuration.','本次会话可用；保存元数据以保留配置。'):orthoCurrent?t('Ortofoto configurada; imagen no cargada en esta sesión.','Orthophoto configured; image not loaded in this session.','已配置正射影像；本次会话未加载图像。'):t('Ortofoto no configurada.','Orthophoto not configured.','未配置正射影像。');
+  orthoMetadata.replaceChildren();if(orthoCurrent){orthoLine('CRS',orthoCurrent.sourceCrs);orthoLine(t('Fuente','Source','来源'),orthoCurrent.source.sourceName||orthoCurrent.source.providerId);orthoLine(t('Recuperada','Retrieved','获取时间'),orthoCurrent.source.retrievedAt);orthoLine(t('Atribución','Attribution','署名'),orthoCurrent.source.attribution);orthoLine(t('Licencia','License','许可'),[orthoCurrent.source.license?.name,orthoCurrent.source.license?.status].filter(Boolean).join(' · '));if(orthoCurrent.source.license?.url){el('dt',orthoMetadata,t('Condiciones','Terms','条款'));const dd=el('dd',orthoMetadata),a=el('a',dd,t('Ver licencia','View license','查看许可'));a.href=orthoCurrent.source.license.url;a.target='_blank';a.rel='noopener noreferrer';}}
+  orthoLoad.textContent=orthoCurrent?t('Cargar / actualizar ortofoto','Load / update orthophoto','加载／更新正射影像'):t('Cargar ortofoto','Load orthophoto','加载正射影像');orthoSave.textContent=t('Guardar configuración','Save configuration','保存配置');orthoRemove.textContent=t('Eliminar ortofoto','Remove orthophoto','删除正射影像');
+  orthoLoad.disabled=!site()?.parcel||!orthoSelected||orthoBusy;orthoSave.disabled=!pendingOrtho||orthoBusy;orthoRemove.disabled=!site()?.orthophoto||orthoBusy;
   save.textContent=t('Guardar parcela','Save parcel','保存地块');remove.textContent=t('Eliminar parcela','Remove parcel','删除地块');
   save.disabled=!pending||busy;remove.disabled=!site()?.parcel||busy;importButton.disabled=lookupButton.disabled=busy;
  }
@@ -80,17 +99,33 @@
  async function run(input){
   const d=descriptor();if(!d){status.textContent=t('No hay fuente de parcela disponible.','No parcel source available.','没有可用的地块来源。');return;}
   busy=true;status.textContent=t('Procesando documento…','Processing document…','正在处理文件…');render();
-  try{const result=await registry.getParcel(d.providerId,input);if(result.status!=='available')throw Error(message(result));pending=Adapter.toSiteParcel(result);status.textContent=t('Parcela preparada; guarda para incorporarla al proyecto.','Parcel ready; save to add it to the project.','地块已准备，保存后加入项目。');}
+  try{const result=await registry.getParcel(d.providerId,input);if(result.status!=='available')throw Error(message(result));releaseRaster();pendingOrtho=null;pending=Adapter.toSiteParcel(result);status.textContent=t('Parcela preparada; guarda para incorporarla al proyecto.','Parcel ready; save to add it to the project.','地块已准备，保存后加入项目。');}
   catch(error){status.textContent=error.message;pending=null;}
   finally{busy=false;render();}
  }
  importButton.onclick=async()=>{const selected=file.files[0];if(!selected){status.textContent=t('Selecciona un GML/XML.','Select a GML/XML file.','请选择 GML/XML 文件。');return;}if(selected.size>Parcel.LIMITS.documentBytes){status.textContent=t('El documento supera el límite local de 2 MB.','Document exceeds the local 2 MB limit.','文件超过本地 2 MB 限制。');return;}await run({mode:'document',text:await selected.text(),...(selectRef.value.trim()?{reference:selectRef.value}:null)});};
  lookupButton.onclick=()=>run({mode:'reference',reference:lookup.value});
- save.onclick=()=>{if(!pending)return;try{app.setSite({...site(),parcel:pending});pending=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();}catch(error){status.textContent=error.message;}};
- remove.onclick=()=>{try{const next={...site()};delete next.parcel;app.setSite(Object.keys(next).length?next:undefined);pending=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
+ save.onclick=()=>{if(!pending)return;try{const next={...site(),parcel:pending};delete next.orthophoto;app.setSite(next);pending=null;releaseRaster();pendingOrtho=null;status.textContent=t('Parcela guardada.','Parcel saved.','地块已保存。');render();}catch(error){status.textContent=error.message;}};
+ remove.onclick=()=>{try{const next={...site()};delete next.parcel;delete next.orthophoto;app.setSite(Object.keys(next).length?next:undefined);pending=null;releaseRaster();pendingOrtho=null;status.textContent=t('Parcela eliminada.','Parcel removed.','地块已删除。');render();}catch(error){status.textContent=error.message;}};
+ async function runOrtho(){
+  const parcel=site()?.parcel,d=orthoDescriptor();if(!parcel||!d)return;
+  const controller=new AbortController();orthoController=controller;orthoBusy=true;orthoError='';render();
+  try{
+   const result=await registry.getOrthophoto(d.providerId,Ortho.requestFromParcel(parcel),{signal:controller.signal});
+   if(controller.signal.aborted||owner!==app.entryId||!dialog.open)return;
+   if(result.status!=='available')throw Error(result.reason);
+   const metadata=OrthoAdapter.toSiteOrthophoto(result,parcel),url=URL.createObjectURL(result.orthophoto.imageBlob);
+   releaseRaster();loaded={orthophoto:result.orthophoto,url};pendingOrtho=metadata;
+  }catch(error){if(!controller.signal.aborted)orthoError=error.message||'network-unavailable';}
+  finally{if(orthoController===controller){orthoController=null;orthoBusy=false;render();}}
+ }
+ orthoLoad.onclick=runOrtho;
+ orthoSave.onclick=()=>{if(!pendingOrtho)return;try{app.setSite({...site(),orthophoto:pendingOrtho});pendingOrtho=null;orthoError='';render();}catch(error){orthoError=error.message;render();}};
+ orthoRemove.onclick=()=>{try{const next={...site()};delete next.orthophoto;app.setSite(next);releaseRaster();pendingOrtho=null;orthoError='';render();}catch(error){orthoError=error.message;render();}};
+ orthoProviderChoice.onchange=()=>{releaseRaster();pendingOrtho=null;orthoError='';render();};
  providerChoice.onchange=()=>{pending=null;render();};
- function open(){ensureTerritoryStyles();owner=app.entryId;pending=null;status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
- entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>returnFocus?.focus?.({preventScroll:true}));
+ function open(){ensureTerritoryStyles();owner=app.entryId;pending=null;releaseRaster();pendingOrtho=null;orthoError='';status.textContent='';returnFocus=document.activeElement;render();dialog.showModal();close.focus();}
+ entry.onclick=open;close.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{orthoController?.abort();releaseRaster();pendingOrtho=null;returnFocus?.focus?.({preventScroll:true});});
  window.FloorPlanTerritoryUI={open,registry};
  render();
 })();

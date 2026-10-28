@@ -1,0 +1,54 @@
+name: Point 8C-C orthophoto context
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'js/**'
+      - 'css/territory.css'
+      - 'tests/orthophoto*'
+      - 'tests/parcel*'
+      - 'docs/contracts/**'
+      - '.github/workflows/point-8c-c-orthophoto.yml'
+permissions:
+  contents: read
+jobs:
+  orthophoto:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Contracts and unit tests
+        run: |
+          git diff --check
+          node --check js/orthophoto-core.js
+          node --check js/orthophoto-site-adapter.js
+          node --check js/pnoa-orthophoto-provider.js
+          node --check js/geo-provider.js
+          node --check js/territory-ui.js
+          node --test tests/orthophoto-core.test.cjs tests/geo-provider.test.cjs tests/parcel-core.test.cjs
+          python -m pip install jsonschema==4.26.0
+          python tests/orthophoto_schema.test.py
+          python tests/parcel_schema.test.py
+      - name: Chromium dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/orthophoto-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/orthophoto-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/orthophoto-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/orthophoto-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Synthetic orthophoto and parcel browser regressions
+        run: node --test --test-concurrency=1 tests/orthophoto.browser.test.cjs tests/parcel.browser.test.cjs tests/guide-navigation.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: point-8c-c-${{ github.event.pull_request.head.sha }}
+          path: output/playwright/point-8c-c/
+          if-no-files-found: ignore
