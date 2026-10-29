@@ -1,0 +1,39 @@
+# Project-First and Phase B browser and unit tests. Each cut of the stacked chain adds its own test files below.
+name: Project-First regressions
+on:
+  pull_request:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  project-first:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      UNIT_TESTS: >-
+        tests/project-visual.test.cjs
+        tests/site-visual.test.cjs
+      BROWSER_TESTS: >-
+        tests/project-first.browser.test.cjs
+        tests/project-views.browser.test.cjs
+        tests/site-analyze.browser.test.cjs
+        tests/project-dossier.browser.test.cjs
+        tests/client-share.browser.test.cjs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Unit tests
+        run: node --test --test-concurrency=1 $UNIT_TESTS
+      - name: Install browser
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pf-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/pf-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pf-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/pf-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Browser tests
+        run: node --test --test-concurrency=1 $BROWSER_TESTS
