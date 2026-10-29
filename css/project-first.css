@@ -1,0 +1,56 @@
+/* Project-First A1: the project is the protagonist of Analyze, Deliver and My studio. Uses the «Cuaderno de
+   proyecto» tokens of professional-workspace.css; no new palette or typography. */
+.project-context{display:grid;grid-template-columns:minmax(220px,360px) minmax(0,1fr);gap:28px;align-items:center;border-top:1px solid var(--rubik-rule);border-bottom:1px solid var(--rubik-rule);padding:18px 0;margin:0 0 28px}
+.project-context-drawing{background:var(--rubik-sheet);border:1px solid var(--rubik-rule);padding:12px;min-width:0}
+.project-context .project-plan.professional-plan-preview{display:block;width:100%;height:220px;border:0;background:transparent;overflow:visible}
+.project-context-copy{display:grid;gap:6px;min-width:0;overflow-wrap:anywhere}
+.project-context .project-context-copy>small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--rubik-muted)}
+.project-context .project-context-name{font:400 26px/1.15 var(--rubik-serif);letter-spacing:-.02em}
+.project-context-facts{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin:4px 0 0}
+.project-context .project-context-area{font:400 30px/1 var(--rubik-serif);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.project-context .project-context-meta,.project-context .project-context-ready{font-size:13px;line-height:1.55;color:var(--rubik-muted);margin:0}
+.project-context .project-context-ready{color:var(--rubik-ink);font-weight:600;border-top:1px solid var(--rubik-rule);padding-top:8px;margin-top:4px}
+.project-context-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--rubik-muted);margin:2px 0 0}
+.project-context-legend span::before{content:'';display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px;border:1px solid #a89c87}
+.project-context-legend .legend-counted::before{background:#e2d8c4}.project-context-legend .legend-excluded::before{background:#f3eee4;border-style:dashed}
+.project-context-empty{display:block;padding:40px 8px;text-align:center;font-size:13px;color:var(--rubik-muted)}
+.project-context-compact{grid-template-columns:150px minmax(0,1fr);gap:18px;padding:12px 0;margin-bottom:24px}
+.project-context-compact .project-plan.professional-plan-preview{height:96px}.project-context-compact .project-context-drawing{padding:6px}
+.project-context.project-context-compact .project-context-name{font-size:20px}.project-context.project-context-compact .project-context-area{font-size:22px}
+/* Plan and axonometric drawings: model millimetres scaled by the viewBox; strokes stay at screen pixels. */
+.project-plan .preview-room{fill:#e2d8c4;stroke:#a89c87;stroke-width:1;vector-effect:non-scaling-stroke}
+.project-plan .preview-room.preview-excluded{fill:#f3eee4;stroke-dasharray:3 2}
+.project-plan .preview-wall{fill:#2d332f;stroke:none}.project-plan .preview-wall.preview-demolished{fill:none;stroke:#a7543f;stroke-width:1;stroke-dasharray:3 2;vector-effect:non-scaling-stroke}
+.project-axo{display:block;width:100%;height:210px;overflow:visible}
+.project-axo .axo-floor{fill:#ebe4d6;stroke:#b8ad9a;stroke-width:.6;vector-effect:non-scaling-stroke}.project-axo .axo-floor.axo-excluded{fill:#f5f1ea}
+.project-axo .axo-wall-side{fill:#cfc6b6;stroke:#7d7466;stroke-width:.5;vector-effect:non-scaling-stroke}
+.project-axo .axo-wall-top{fill:#3a403b;stroke:#3a403b;stroke-width:.5;vector-effect:non-scaling-stroke}
+.project-axo.is-exterior .axo-floor{fill:#d9d2c3}.project-axo.is-exterior .axo-wall-side{fill:#e8e0d0;stroke:#5f584d}
+/* Delivery previews: real outputs (sheet, schedule rows, signature) or a model scheme that says it is one. */
+.delivery-preview{margin:14px 0 16px;min-width:0}
+.delivery-preview figcaption{font-size:12.5px;line-height:1.55;color:var(--rubik-muted);margin-top:10px;max-width:62ch}
+.delivery-paper{background:#e6dfd2;padding:10px;border:1px solid var(--rubik-rule)}
+.project-sheet-image{display:block;width:100%;aspect-ratio:1600/1100;height:auto;background:#fcfaf6;box-shadow:0 1px 0 #cbc2b3,0 6px 14px -8px rgba(45,51,47,.45)}
+.delivery-page{display:grid;gap:3px;background:#fffdf8;border:1px solid var(--rubik-rule);box-shadow:0 6px 14px -9px rgba(45,51,47,.45);padding:14px 16px;font-size:12px;color:var(--rubik-ink)}
+.delivery-page>b{font:400 16px/1.2 var(--rubik-serif)}.delivery-page-sub{color:var(--rubik-muted);font-size:11px;margin-bottom:6px}
+.delivery-page ol{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.delivery-page li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted #cbc2b3;padding:2px 0}.delivery-page li span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.delivery-page li span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}.delivery-page-more{color:var(--rubik-muted);font-size:11px;margin-top:3px}
+.delivery-axo{background:var(--rubik-sheet);border:1px solid var(--rubik-rule);padding:12px 12px 2px}
+.delivery-axo figcaption{margin-bottom:10px}
+.delivery-image-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.delivery-image-tile{display:grid;gap:2px;font-size:12px;color:var(--rubik-muted);min-width:0}.delivery-image-tile b{color:var(--rubik-ink);font-size:13px}
+.delivery-image-box{height:96px;background:var(--rubik-sheet);border:1px solid var(--rubik-rule);padding:8px;margin-bottom:6px;display:grid;place-items:center}
+.delivery-image-box svg{display:block;width:100%;height:78px;overflow:visible}
+.project-signature{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;row-gap:3px;align-items:center;background:var(--rubik-sheet);border:1px solid var(--rubik-rule);border-left:3px solid var(--rubik-clay);padding:14px 18px;overflow-wrap:anywhere}
+.project-signature>small{grid-column:1/-1;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--rubik-muted);margin-bottom:4px}
+.project-signature-logo{grid-row:span 2;max-height:52px;max-width:96px;object-fit:contain}
+.project-signature>strong{font:400 22px/1.2 var(--rubik-serif)}.project-signature>span{font-size:13px;color:var(--rubik-muted)}
+.project-signature:not(:has(.project-signature-logo))>strong,.project-signature:not(:has(.project-signature-logo))>span{grid-column:1/-1}
+.project-signature.is-empty{border-left-color:var(--rubik-rule)}
+.studio-sheet{margin-top:20px;padding-top:16px;border-top:1px solid var(--rubik-rule)}
+/* Deliver: documentation side by side keeps its paper look; the 3D scheme and images read as one visual band. */
+.professional-workspace[data-area=deliver] .professional-delivery-group[data-group=experience] .professional-group-items{align-items:start}
+@media(max-width:1100px){.project-context{grid-template-columns:minmax(180px,280px) minmax(0,1fr);gap:20px}.project-context .project-plan.professional-plan-preview{height:180px}.project-context-name{font-size:23px}}
+@media(max-width:600px){.project-context,.project-context-compact{grid-template-columns:minmax(0,1fr);gap:12px;padding:12px 0;margin-bottom:20px}.project-context .project-plan.professional-plan-preview{height:170px}.project-context-compact .project-plan.professional-plan-preview{height:120px}.project-context-name{font-size:22px}.project-context-area{font-size:26px}.project-axo{height:180px}.delivery-image-box{height:84px}.delivery-image-box svg{height:66px}}
+@media(max-height:500px){.project-context{grid-template-columns:200px minmax(0,1fr);padding:10px 0;margin-bottom:16px}.project-context .project-plan.professional-plan-preview{height:130px}.project-context-name{font-size:20px}.project-context-area{font-size:22px}.project-context-compact{grid-template-columns:130px minmax(0,1fr)}.project-context-compact .project-plan.professional-plan-preview{height:80px}}
