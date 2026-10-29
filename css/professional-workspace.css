@@ -49,3 +49,11 @@ aside.right{overflow-x:hidden}
 @media(max-width:1100px){.professional-workspace{padding:14px 12px}#mobileDock .professional-control-label{display:none}body.m3d #modes3d{margin-right:-10px}}
 @media(max-width:600px){#workArea-studio::before{margin-right:3px;font-size:12px}.professional-legend dl{display:block}.professional-legend dt{margin-top:12px}.professional-legend dd{margin:4px 0}.guide-journey-label{font-size:10px}}
 @media(max-height:500px){.palette-tabs{position:static}}
+/* Professional areas keep global navigation live and temporarily hide editor context. */
+body.professional-area .app>header>:not(.professional-global-control):not(.brand){display:none!important}
+body.professional-area .app>header>.professional-global-control{display:inline-flex!important;align-items:center}
+body.professional-area .app>header{flex-wrap:wrap!important;height:auto!important;min-height:56px;overflow:visible;gap:6px 10px}
+body.professional-area .app>header::after{display:none}
+body.professional-area:not(.presenting) .app>aside,body.professional-area:not(.presenting) #stage,body.professional-area:not(.presenting) #guideBar{visibility:hidden}
+.professional-source-details{margin-top:12px;font-size:13px;color:var(--ink-muted)}
+.professional-source-details>summary{cursor:pointer;min-height:44px;padding:10px 0}
