@@ -14,7 +14,8 @@
  const resize=new ResizeObserver(position);resize.observe(nav);resize.observe(document.querySelector('header'));addEventListener('resize',position);
  // Global header controls keep their original handlers. Only the editor behind the workspace is inert.
  const globalControls=['welcomeBtn','projectsBtn','langBtn','fullscreen'];for(const id of globalControls)document.getElementById(id)?.classList.add('professional-global-control');
- function setInert(value){for(const n of document.querySelectorAll('.app>aside,#stage,#guideBar,.mobile-bar,#fab'))n.inert=value;}
+ // The editor behind a work area is inert and its 3D view stops drawing until the area closes.
+ function setInert(value){for(const n of document.querySelectorAll('.app>aside,#stage,#guideBar,.mobile-bar,#fab'))n.inert=value;window.View3D?.setSuspended?.(value);}
  function finish(){section.hidden=true;setInert(false);document.body.classList.remove('professional-area');area='design';for(const[k,b]of Object.entries(buttons))b.setAttribute('aria-current',k==='design'?'page':'false');}
  function close(){if(window.FloorPlanProjectViews?.status()==='busy'){toast(tx('Espera a que terminen de prepararse las vistas: se está usando la vista 3D.','Wait until the views are prepared: the 3D view is in use.','请等待视图准备完成：三维视图正在使用中。'),4000);return;}finish();(returnTo?.isConnected?returnTo:buttons.design).focus();}
  async function run(fn){try{await fn();}catch(e){toast(e.message,6000);}}
