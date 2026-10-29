@@ -816,3 +816,67 @@ Entrega de esta pasada: un único commit adicional y un único push a la misma r
 La semántica territorial aprobada H3 y la ocultación de herramientas 2D en 3D se verifican con los tests existentes; no se modifica su implementación. Esta pasada cambia exclusivamente `professional-workspace-ui.js`, `professional-workspace.css`, sus tests y esta documentación. Sin cambios de schemas, motores, contratos, persistencia, proveedores, políticas, precios o cantidades. Ninguna capacidad retirada.
 
 Publicación: **un commit adicional y un push** a la misma PR #133 tras validar localmente. Punto 9 permanece candidato hasta revisión humana final. Después de actualizar la PR: una confirmación y como máximo una lectura inicial de checks; sin esperar, polling, reruns ni merge. **STOP**.
+
+## Dirección visual y capa emocional — cuaderno de proyecto
+
+**Estado: CANDIDATO EN REVISIÓN.** Continuación posterior a la tercera pasada publicada, sobre la misma rama de #133. HEAD previo local y remoto comprobado: `f9f82827035bf97b47484baa7ddc939901a0d40f`. Punto 10 no se activa.
+
+### Auditoría y dirección
+
+El baseline confirmó una sucesión de tarjetas blancas casi idénticas, cifras con el mismo peso que sus explicaciones y ausencia visual de la vivienda al salir de Diseñar. La ficha existente ya ofrece una referencia útil: documento, papel, dato y precisión. La nueva dirección extiende esa continuidad al workspace, sin convertir la herramienta en una web comercial.
+
+**Cuaderno de proyecto:** una mesa de trabajo de arquitectura, cálida y sobria. La personalidad procede de la composición, la vivienda real, la firma y la jerarquía; no de una ilustración de stock ni de efectos decorativos. Principios:
+
+- El proyecto y sus datos verificables son el contenido protagonista.
+- La cifra, su unidad y su certeza tienen pesos visuales distintos, conservando todo el significado original.
+- Divisores y secciones sustituyen a cajas repetidas; se reserva la superficie de papel para documentación y firma.
+- Acción petróleo y selección grafito continúan separadas. Todos los símbolos acompañan texto.
+- No se reduce la capacidad del editor ni se añaden salidas, fuentes o preferencias.
+
+### Sistema visual
+
+| Elemento | Decisión y razón |
+|---|---|
+| Paleta/tokens | Papel `#f6f2e9`, hoja `#fffcf6`, piedra `#e9e2d5`, tinta `#2d332f`, texto secundario `#626457`, reglas `#cbc2b3`, arcilla `#875936`, petróleo `#205b60`. Tokens `--rubik-*` centralizados; los roles del cromo se mapean dentro de `.app` y del workspace |
+| Tipografía | Sans del sistema para controles y lectura. Georgia local para títulos de área, cifra protagonista y firma; sin descarga de fuentes. Escala aproximada 10–14 px metadata/texto, 19 px módulos, 28–36 px títulos y 44–56 px cifra. Números tabulares |
+| Materialidad | Papel mate y tonos piedra; reglas finas, radios de 2–4 px y ausencia de sombras en los módulos. El papel documental tiene un canto petróleo; la firma, un canto arcilla. No textura raster, gradiente ni efecto de cristal |
+| Iconografía | Once símbolos SVG lineales originales de 24 unidades, trazo uniforme, sin paquetes externos. Medición, sol, emplazamiento, exterior, documento, lámina, presentación, presupuesto, imagen, observaciones e identidad. `aria-hidden` cuando acompañan un título; el texto conserva la función |
+| Estados | La certeza conserva literalmente estimado/medido/no disponible y cómputo incompleto. La etiqueta de certeza se separa de la cifra. Pendiente, no cargado y no configurado siguen expresados en palabras. No se convierte ninguna ausencia de datos en cero ni en un estado favorable |
+| Botones/links/foco | Mismos controles y handlers; CTA de entregables al mismo nivel. Contorno legible, altura táctil mínima conservada y foco de 3 px. Los cambios de selección son inmediatos para evitar contraste bajo durante una mezcla de colores |
+| Microinteracciones | 160 ms sólo en hover/contorno de controles y superficies. Sin desplazamiento de tarjetas ni movimiento teatral. `prefers-reduced-motion: reduce` elimina animaciones/transiciones de esta capa |
+| Contraste | Texto secundario/papel ≈5,40:1; arcilla/papel ≈5,35:1; blanco/petróleo ≈7,70:1; blanco/grafito >11:1; borde de control/hoja ≈3,26:1. Test WCAG AA sobre colores y fondos efectivamente renderizados en los módulos nuevos |
+
+### Composición por área
+
+**Analizar.** Lectura de proyecto en lugar de dashboard: cifra útil protagonista con certeza, cuatro módulos separados por reglas y símbolos de reconocimiento. Un plano esquemático y el nombre mantienen presente la vivienda; orientación, emplazamiento y exterior conservan los mismos estados y acciones.
+
+**Entregar.** Secuencia editorial: Documentación → La vivienda, para tu cliente → Seguimiento del proyecto → La firma del profesional. Ficha y lámina se presentan como documentos sobre papel; presentación e imágenes forman una familia visual. Presupuesto y observaciones mantienen su disponibilidad real. La identidad sigue en un solo lugar y la copia editable permanece en Más opciones. Se conserva el orden lógico de lectura y teclado dentro de cada grupo.
+
+**Mi estudio.** Firma profesional con nombre, responsable, lema, contacto y logo del snapshot ya seleccionado. Sin perfil aparece una invitación explícita, nunca una empresa ficticia. «Para este proyecto» conserva el selector y una miniatura de la planta; «Perfiles profesionales» conserva el gestor reutilizable. El logo sólo se muestra si es el PNG local ya validado por el sistema existente.
+
+**Presupuestar.** Módulo sobrio con regla y símbolo, sin rellenarlo con importes o partidas inexistentes. Se conservan la indisponibilidad operativa, el acceso a superficies y las dos explicaciones desplegables. BC3/BCCA continúan en el detalle secundario.
+
+**Diseñar 2D/3D y ficha.** Sólo se armonizan los tonos del cromo, contornos y navegación; no se añaden paneles ni se cambia la escena. El plano conserva su espacio y protagonismo. La ficha documental y sus salidas permanecen intactas; es una referencia de continuidad, no una nueva plantilla de exportación.
+
+### Contexto del proyecto y límites técnicos
+
+La miniatura SVG dibuja los polígonos de estancias y muros y usa los bounds que `FloorPlanApp.geometry` ya expone. Es una representación esquemática de la **planta activa**, no una nueva fuente geométrica ni una axonometría inventada. Nombre y número de espacios leen el proyecto activo; las superficies siguen procediendo de `FloorPlanSurfaceMetrics`. No hay cálculo canónico nuevo, escritura del modelo, exportación de la miniatura, persistencia ni peticiones de red. No se incluyen imágenes de origen ni datos externos. La firma lee `FloorPlanBrandUI.snapshot`, sin crear otra autoridad de identidad.
+
+### Responsive, accesibilidad y validación
+
+- **1440×900, 1280×800, 390×844 y 844×390:** revisados. Dos columnas en escritorio y una en teléfono; contexto compacto en apaisado, nombres largos con wrap, controles globales accesibles y scroll vertical cuando hace falta. Sin overflow horizontal crítico.
+- Navegación global, áreas, teclado, foco de retorno y diálogos se conservan. Los SVG de contexto tienen nombre accesible y no añaden paradas de Tab. Estado no dependiente del color.
+- Suite final `professional-workspace.browser.test.cjs`: **17/17 PASS**, incluidos los trece casos previos y cuatro casos visuales nuevos. Los nuevos verifican geometría de miniatura contra los datos existentes, no mutación, ausencia de requests remotos, contraste real, foco por Tab/Shift+Tab, movimiento reducido, agrupación de entregables, disponibilidad honesta y firma con datos sintéticos introducidos mediante la UI existente.
+- Regresiones dirigidas de guía/navegación, ficha, lámina, marca, observaciones, Solar y parcela: **56/56 PASS**, 0 FAIL/SKIP. Se conservan 2D/3D, Vista aérea/Recorrer/Exterior, capas y Presentación mediante los recorridos existentes. No se ejecuta Walk histórico ni toda la suite del repositorio.
+- Durante desarrollo se ajustó el encuadre de la comparación de cámara para esperar dos frames de resize antes de leerla; no se eliminó ningún assert ni se cambió el renderer. El test de foco visual usa Tab real para activar `focus-visible`. La captura de firma espera el evento nativo `close` y su frame de render antes de seleccionar y desplazar el perfil; evita leer un nodo reemplazado por el retorno del diálogo. La ejecución completa final está verde.
+- `node --check` de JS/CJS modificados/nuevos y `git diff --check`: **PASS**.
+
+### BEFORE/AFTER y revisión visual propia
+
+Baseline **28 PNG** antes de modificar el producto, más **30 PNG AFTER** (las siete pantallas por cuatro viewports y dos firmas con perfil sintético). Capturas y reportes sin errores en `output/playwright/point-9/visual/{before,after}`. Helper versionado: `scripts/qa/ux/point-9-visual.cjs before|after`; para reproducir BEFORE usar el HEAD previo. Siete galerías locales en `visual/review` comparan lado a lado todas las pantallas y tamaños; se abrieron todas y se revisaron además vistas de escritorio, móvil y firma a mayor tamaño. Sin basar el juicio únicamente en pixel diff.
+
+Conclusión de diseño propia: menos monotonía de cajas, mayor jerarquía del dato, continuidad visible con documentación arquitectónica y presencia real del proyecto. Entregar se lee por familias de resultados y Mi estudio permite imaginar la firma del profesional. Se corrigieron localmente la posición inicial de identidad y la transición de selección antes de cerrar la revisión. No se añadieron fotografías, recursos remotos, paquetes, mega cabeceras ni decoración sin función.
+
+**Limitaciones:** juicio visual propio, no una sesión con participantes ni aprobación estética final. La miniatura es esquemática y sólo de la planta activa; no sustituye a la vista principal. La firma muestra el perfil seleccionado, no una nueva preferencia global. Continúan el scroll vertical móvil, la cabecera contextual desplazable de Diseñar y la edición de presupuesto no operativa. No se hacen afirmaciones de rendimiento en hardware móvil físico. Evidencias locales preservadas, sin versionar automáticamente imágenes o logs.
+
+Publicación de este corte visual: un commit funcional y un push a #133 tras completar revisión visual y validación local. Sin nueva rama/PR, merge, cierre canónico de Punto 9 ni activación de Punto 10. Una confirmación posterior de PR y, como máximo, una lectura inicial de checks; sin esperar CI, polling ni reruns. **STOP tras informe**.
