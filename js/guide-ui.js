@@ -125,6 +125,8 @@
    ['welcomeBlank','+',['Crear desde cero','Create from scratch','从零创建'],['Proyecto vacío: añade estancias indicando ancho y fondo, o dibújalas sobre el plano.','An empty project: add rooms by width and depth, or draw them on the plan.','空项目：输入宽度和进深添加房间，或在平面图上绘制。'],()=>createOwn('create')],
    ['welcomeExample','◇',['Probar el ejemplo','Try the example','试用示例'],['Explora en 2D y 3D una vivienda ya preparada. Para guardar cambios como tuyos, crea una copia.','Explore a prepared home in 2D and 3D. To keep changes as yours, create a copy.','在 2D 和 3D 中浏览准备好的住宅。要保存为自己的修改，请创建副本。'],()=>example()]
   ]){const b=btn(id,'',()=>safe(fn),entries);b.className='welcome-entry';el('span',icon,b,'entry-icon').setAttribute('aria-hidden','true');el('strong',label(title),b);el('span',label(description),b);}
+  // B5: the human-assisted service, for whoever prefers not to convert the plan themselves.
+  const service=el('p',undefined,shell,'welcome-service');el('span',tx('¿Prefieres que lo preparemos nosotros? ','Prefer us to prepare it? ','希望由我们来准备？'),service);btn('welcomeService',tx('Envíanos tu plano','Send us your plan','发送平面图'),()=>window.FloorPlanPlanService?.open(),service).classList.add('guide-link');
   const audienceSection=el('section',undefined,shell,'welcome-audience');
   const audienceTitle=el('h2',tx('¿En qué trabajas?','What is your field?','你的工作领域是什么？'),audienceSection);audienceTitle.id='welcomeAudienceTitle';
   el('p',tx('Opcional. Te mostramos para qué te sirve Rubik. Las herramientas son las mismas para todos y tu proyecto no cambia.','Optional. We show what Rubik does for you. Everyone has the same tools and your project does not change.','可选。我们会说明 Rubik 对你的用途。所有人使用相同的工具，你的项目不会改变。'),audienceSection);
