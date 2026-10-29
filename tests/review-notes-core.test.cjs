@@ -8,8 +8,8 @@ test('a review is tied to one project version and never contains the project',()
  assert.equal(d.notes.length,2);assert.equal(d.notes[0].text,'¿Se puede ampliar la ventana?');assert.equal(d.versionCode,R.versionCode('rev-1'));
  assert.ok(!JSON.stringify(d).includes('rooms'),'no project data inside');
  const back=R.read(JSON.stringify(d));assert.deepEqual(back,d);
- assert.deepEqual(R.match(back,project,'rev-1'),{sameProject:true,sameVersion:true,missingRooms:[]});
- assert.deepEqual(R.match(back,project,'rev-2'),{sameProject:true,sameVersion:false,missingRooms:[]});
+ assert.deepEqual(R.match(back,project,'rev-1'),{sameProject:true,sameVersion:true,missingRooms:[],missing:[]});
+ assert.deepEqual(R.match(back,project,'rev-2'),{sameProject:true,sameVersion:false,missingRooms:[],missing:[]});
  assert.equal(R.match(back,{...project,id:'prj_b'},'rev-1').sameProject,false);
  assert.deepEqual(R.match(back,{...project,rooms:[]},'rev-1').missingRooms,[d.notes[0].id]);
  assert.equal(R.remove(d,d.notes[0].id).notes.length,1);

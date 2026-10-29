@@ -104,3 +104,8 @@
 .plan-service-form textarea{padding:8px 10px;border:1px solid #978b79;border-radius:4px;font:inherit;font-weight:400}.plan-service-form .is-wide{grid-column:1/-1}.plan-service-done{font-size:14px;line-height:1.55}.plan-service-hint{color:#4f5249;font-size:13px}
 .welcome-service{margin:4px 0 0;font-size:14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
 .plan-service-needs input[type=checkbox]{width:20px;height:20px;min-height:0;padding:0;margin:0;flex:none}
+/* B6: points marked by the client over the plan, in «Observaciones del cliente». */
+.review-points{margin:8px 0}.review-points-plan{display:block;width:100%;max-height:260px;background:#f6f2e9;border:1px solid #d8d0c2;border-radius:4px}
+.review-points-plan .preview-room{fill:#e9dfcd;stroke:#b8ab94;stroke-width:20}.review-points-plan .preview-wall{fill:#2d332f}
+.review-point circle{fill:#b0442c;stroke:#fff;stroke-width:30}.review-point text{fill:#fff;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:system-ui,sans-serif}
+.review-points figcaption{font-size:12px;color:#4f5249}
