@@ -1327,3 +1327,88 @@ Respuesta a la pregunta de éxito:
   - el proyecto no cambia;
   - cero peticiones remotas.
 - Comprobación manual adicional: la ventana de impresión carga el documento con sus 4 secciones y su hoja de estilo, y el PDF se genera.
+
+---
+
+## Implementación — Project-First A4: dossier profesional automático y estilos
+
+**Estado:** candidato en revisión. Rama `feat/project-first-dossier-a4`, apilada sobre A3 (PR #136). Entrega §7.3 (dossier automático) y §7.7 (estilos profesionales) aplicados al dossier.
+
+### Qué hace
+
+- **Entregar → Documentación** tiene una tarjeta «Dossier del proyecto» que, antes de pulsar, muestra:
+  - una miniatura de portada con la firma, el nombre, la vista general real (o el plano) y la superficie;
+  - cuántas secciones tienen contenido real;
+  - qué falta en cada sección y por qué (prepara las vistas, sin parcela, sin observaciones…).
+- **«Preparar dossier»** compone un documento con:
+  - portada con firma y datos;
+  - la lámina real firmada;
+  - la tabla de superficies de la métrica canónica;
+  - orientación, rosa de huecos y carta solar;
+  - emplazamiento y exterior;
+  - las vistas 3D reales de A2;
+  - observaciones, cuando existan;
+  - fuentes y alcance.
+
+  Se imprime o se guarda en PDF por página, en A4.
+- **Estilos:** técnico (todas las secciones y fuentes), cliente (imágenes primero, sin fuentes), inmobiliario (imagen y superficies primero, cifras grandes) y estudio (marca destacada). Cambian el orden, las secciones y el tono; el contenido y el proyecto son los mismos.
+
+### Decisiones
+
+- Solo compone salidas existentes:
+  - `FloorPlanSheet.preview` (con copia propia de la imagen para no depender del ciclo de previews del área);
+  - `FloorPlanSurfaceMetrics`;
+  - `FloorPlanSitePreview`;
+  - `FloorPlanProjectViews`;
+  - `FloorPlanBrandUI.snapshot`.
+- Las secciones sin datos se omiten o lo dicen. Nunca muestra imágenes falsas; sin vistas preparadas, la sección indica cómo prepararlas.
+- El presupuesto no se incluye y se declara «no disponible todavía en esta versión».
+- La ventana de impresión recibe copias `data:` de todas las imágenes; ninguna depende de una URL `blob:` de la ventana de origen.
+- El estilo elegido no se persiste en este corte. No hay schema ni persistencia nuevos.
+- Texto de alcance: «Documento orientativo; no es un proyecto técnico visado».
+
+### Componentes
+
+- `js/project-dossier-ui.js` (`FloorPlanDossier`): `open`, `contents` y `STYLES`.
+- `css/project-dossier.css`: el documento, los estilos y la impresión A4 por página.
+
+### Limitaciones
+
+- La lámina incluida es la variante «Ajustar a la hoja»; las escalas de impresión siguen en su herramienta.
+- En edificios, el plano y las vistas son de la planta activa; las superficies son de toda la vivienda.
+- Las vistas 3D solo entran si se prepararon en esta sesión.
+
+### Tests
+
+`tests/project-dossier.browser.test.cjs` (2/2, 1440×900 y 390×844) comprueba:
+- el estado de la tarjeta y las secciones que faltan, con su motivo;
+- la portada con la firma;
+- el orden de secciones del estilo técnico;
+- la lámina real firmada;
+- las filas de superficie de la métrica;
+- la rosa y la carta solar;
+- que no hay imágenes falsas;
+- las fuentes;
+- el orden de cada estilo;
+- la ventana de impresión con copias `data:`;
+- el retorno del foco;
+- que el proyecto no cambia;
+- cero peticiones remotas.
+
+Comprobación manual: PDF A4 generado con portada, lámina y superficies en páginas propias.
+
+---
+
+## Estado de la Fase A tras A1–A4
+
+| Mejora | Estado | Corte |
+|---|---|---|
+| 7.1 Entregar con previews reales | implementado | A1 + A2 |
+| 7.2 Analizar visual | implementado (orientación, sol, emplazamiento y superficies sobre el plano) | A1 + A3 |
+| 7.3 Dossier profesional automático | implementado | A4 |
+| 7.4 Contexto visual permanente | implementado | A1 |
+| 7.5 Galería de vistas | implementado con vistas automáticas; las vistas guardadas a mano quedan para más adelante | A2 |
+| 7.6 Informe de emplazamiento + solar | implementado como análisis contextual orientativo | A3 |
+| 7.7 Estilos profesionales | implementado en el dossier; lámina y presentación conservan su estilo actual | A4 |
+
+Siguen fuera de la Fase A y **no iniciados**: share link, Render IA, comentarios anclados, moodboard, cantidades y presupuesto operativo.
