@@ -22,6 +22,7 @@ jobs:
         tests/project-dossier.browser.test.cjs
         tests/client-share.browser.test.cjs
         tests/ai-render.browser.test.cjs
+        tests/tour-video.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:
