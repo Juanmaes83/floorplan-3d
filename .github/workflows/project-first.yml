@@ -14,12 +14,14 @@ jobs:
       UNIT_TESTS: >-
         tests/project-visual.test.cjs
         tests/site-visual.test.cjs
+        tests/ai-render-api.test.cjs
       BROWSER_TESTS: >-
         tests/project-first.browser.test.cjs
         tests/project-views.browser.test.cjs
         tests/site-analyze.browser.test.cjs
         tests/project-dossier.browser.test.cjs
         tests/client-share.browser.test.cjs
+        tests/ai-render.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:
