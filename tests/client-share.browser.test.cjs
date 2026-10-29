@@ -29,7 +29,7 @@ test('Phase B1: client file opens offline, shows the project and returns importa
  const c=await client.newPage(),clientErrors=[];c.on('pageerror',e=>clientErrors.push(e.message));await c.goto('file://'+file);
  assert.match(await c.title(),/^Proyecto de ejemplo · Propuesta · Estudio Ejemplo$/);
  const text=await c.locator('body').innerText();for(const s of ['Proyecto de ejemplo','87,18 m²','SUPERFICIES','PLANO DE DISTRIBUCIÓN','TUS OBSERVACIONES','Estudio Ejemplo'])assert.ok(text.toUpperCase().includes(s.toUpperCase()),s);
- assert.match(text,/Sin vistas preparadas/);assert.equal(await c.locator('img:not([src^="data:"])').count(),0);
+ assert.doesNotMatch(text,/Sin vistas preparadas|Prepáralas en Entregar/,'no professional instructions for the client');assert.equal(await c.locator('img:not([src^="data:"])').count(),0);
  const sheet=await c.locator('img.dossier-sheet-image').evaluate(async i=>{await i.decode();return i.naturalWidth;});assert.ok(sheet>0,'real sheet renders offline');
  assert.equal(await c.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+1),false);
  assert.equal(await c.locator('#shareSave').isDisabled(),true);
