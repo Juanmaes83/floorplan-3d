@@ -92,3 +92,7 @@
 .ai-render-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:8px 0 12px}.ai-render-compare figure{margin:0}.ai-render-compare img{display:block;width:100%;height:auto;border:1px solid #cbc2b3}
 .ai-render-compare figcaption{font-size:12px;font-weight:600;margin-top:4px}.ai-render-compare .is-ai figcaption::before{content:'IA · ';color:#875936}
 @media(max-width:600px){.ai-render-form{grid-template-columns:minmax(0,1fr)}}
+/* B3: tour video dialog. */
+.tour-video-format{font-size:13px;line-height:1.5;margin:0 0 8px}.tour-video-format.is-warning{background:#fbf1dc;border-left:3px solid #a8701d;padding:8px 10px}
+.tour-video-preview{display:block;width:100%;max-height:min(56vh,520px);background:#111;border:1px solid #cbc2b3;margin:4px 0}
+.tour-video-meta{font-size:12px;color:#4f5249;margin:4px 0 10px}.tour-video-actions{display:flex;flex-wrap:wrap;gap:10px}
