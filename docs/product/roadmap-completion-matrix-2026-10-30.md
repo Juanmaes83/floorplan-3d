@@ -1,90 +1,71 @@
 # Matriz de cierre del roadmap — 30-10-2026
 
 **Base observada:** `master@de75f3019a4becfeeb8cb01e2d0118d79e8ba615`  
-**Propósito:** responder de forma operativa qué partes de A/B/C y del programa Flat-to-3D están integradas, cuáles están implementadas pero pendientes de validación/cierre y qué cortes faltan realmente.
+**Propósito:** responder qué partes de A/B/C y del programa Flat-to-3D están integradas, cuáles están implementadas pero pendientes de validación/cierre y qué cortes faltan realmente.
 
-Este documento no sustituye la estrategia de `rubik-competitive-benchmark-roadmap-2026-10-29.md`; la traduce a una matriz de ejecución y cierre.
+Este documento no sustituye la estrategia de `rubik-competitive-benchmark-roadmap-2026-10-29.md`; la traduce a una matriz operativa.
 
 ## Convenciones
 
-- **INTEGRADO:** el contenido está en `master`.
-- **VALIDACIÓN PENDIENTE:** está en `master`, pero falta una prueba externa/humana necesaria para cerrar el alcance.
-- **IMPLEMENTADO, NO INTEGRADO:** existe código en rama/PR/backup, pero no está en `master`.
-- **PENDIENTE:** todavía no existe un corte funcional integrado.
-- **DIFERIDO:** queda fuera del cierre actual por decisión de alcance.
+- **INTEGRADO:** contenido en `master`.
+- **VALIDACIÓN PENDIENTE:** integrado o reconciliado, pero falta un gate técnico/externo/humano necesario.
+- **IMPLEMENTADO, NO INTEGRADO:** existe en rama/PR/backup, pero no está en `master`.
+- **PENDIENTE:** todavía no existe el corte funcional.
+- **DIFERIDO:** fuera del cierre actual por alcance.
 
 ---
 
-# Fase A — estado de cierre
+# Resumen ejecutivo
 
-La Fase A estratégica está cubierta por A1–A4.
-
-| Objetivo | Estado | Nota de cierre |
+| Bloque | Estado | Qué falta para cierre |
 |---|---|---|
-| Entregar con previews reales | **INTEGRADO** | A1+A2; vistas reales automáticas incluidas |
+| Fase A | **IMPLEMENTACIÓN COMPLETA E INTEGRADA** | revisión humana final + documentación/limpieza |
+| Fase B | **B1–B8 INTEGRADOS; CIERRE PENDIENTE** | OpenAI real B2/B8, Vercel Blob B4, decisión 360/presentación avanzada |
+| Fase C | **3/4 OBJETIVOS INTEGRADOS** | C4 dossier económico |
+| FT3D-1a | **RECONCILIADO, NO INTEGRADO** | PR #153 CI + revisión visual/humana + integración |
+| FT3D-1b | **IMPLEMENTADO, NO INTEGRADO** | reconciliar después de 1a |
+| FT3D-2a | **IMPLEMENTADO, PROTEGIDO, NO INTEGRADO** | reconciliar después de 1a+1b |
+| FT3D-3..7 | **PENDIENTE** | implementar por fases |
+| FT3D-8 | **DIFERIDO / FAMILIA FUTURA** | no bloquea el cierre del núcleo Presentation Story |
+
+---
+
+# Fase A — cierre
+
+| Objetivo | Estado | Corte |
+|---|---|---|
+| Entregar con previews reales | **INTEGRADO** | A1+A2 |
 | Analizar visual | **INTEGRADO** | A1+A3 |
 | Contexto visual permanente | **INTEGRADO** | A1 |
 | Dossier automático | **INTEGRADO** | A4 |
-| Galería de vistas | **INTEGRADO EN ALCANCE AUTOMÁTICO** | vistas manuales guardadas no forman parte del mínimo cerrado |
-| Informe solar/emplazamiento | **INTEGRADO** | A3, orientativo y con fuentes/límites |
-| Estilos profesionales | **INTEGRADO** | A4, aplicados al dossier |
+| Galería de vistas | **INTEGRADO EN ALCANCE AUTOMÁTICO** | A2 |
+| Informe solar/emplazamiento | **INTEGRADO** | A3 |
+| Estilos profesionales | **INTEGRADO** | A4 |
 
-## ¿Está A terminada?
-
-**Sí en implementación.**
-
-Para marcarla **CERRADA CANÓNICAMENTE** faltan únicamente:
-
-1. revisión humana final sobre el `master` consolidado;
-2. documentación de cierre con SHA final;
-3. limpieza/reconciliación administrativa de PR/ramas A1–A4.
-
-No hace falta otro corte funcional obligatorio para completar A.
+**Conclusión:** A no necesita otro corte funcional obligatorio. Para marcarla **CERRADA CANÓNICAMENTE** faltan revisión humana del master consolidado, documento de cierre y limpieza administrativa de A1–A4.
 
 ---
 
-# Fase B — estado de cierre
+# Fase B — cierre
 
-La cadena B1–B8 está integrada, pero el roadmap estratégico agrupa las capacidades de otra manera.
-
-| Objetivo estratégico | Estado | Implementación relacionada | Qué falta |
+| Objetivo | Estado | Corte(s) | Pendiente |
 |---|---|---|---|
-| Servicio «Envíanos tu plano» | **INTEGRADO** | B5 | validación operativa real, no nuevo motor |
-| Share cliente offline | **INTEGRADO** | B1 | cierre humano/documental |
-| Share link alojado | **INTEGRADO / VALIDACIÓN PENDIENTE** | B4 | prueba real de Vercel Blob |
-| Render IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | B2 | prueba real con OpenAI configurado |
-| Vídeo de recorrido | **INTEGRADO** | B3 | revisión final en entorno representativo si se exige |
-| Comentarios anclados | **INTEGRADO** | B6 | cierre documental/humano |
-| Moodboard / material board | **INTEGRADO** | B7 | cierre documental/humano |
-| Alternativas IA de materiales/estilo | **INTEGRADO / VALIDACIÓN PENDIENTE** | B8 | calidad real con proveedor configurado |
-| Presentación avanzada | **EN CURSO** | FT3D | 1a/1b/2a y fases posteriores |
-| 360 | **PENDIENTE O A DIFERIR EXPLÍCITAMENTE** | ninguno | decisión de alcance |
+| Archivo cliente offline | **INTEGRADO** | B1 | cierre humano/documental |
+| Render IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | B2 | prueba real OpenAI |
+| Vídeo de recorrido | **INTEGRADO** | B3 | revisión final representativa si se exige |
+| Share link alojado | **INTEGRADO / VALIDACIÓN PENDIENTE** | B4 | prueba real Vercel Blob |
+| «Envíanos tu plano» | **INTEGRADO** | B5 | validación operativa real |
+| Comentarios anclados | **INTEGRADO** | B6 | cierre humano/documental |
+| Moodboard/material board | **INTEGRADO** | B7 | cierre humano/documental |
+| Alternativas IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | B8 | calidad real con proveedor |
+| Presentación avanzada | **EN CURSO** | FT3D | cerrar núcleo Presentation Story |
+| 360 | **PENDIENTE O A DIFERIR** | — | decisión explícita |
 
-## ¿Está B terminada?
-
-**No todavía como fase estratégica cerrada.**
-
-La implementación B1–B8 sí está incorporada, pero para cerrar B hay que resolver dos grupos:
-
-### Validaciones externas
-
-- B2/B8 con OpenAI real;
-- B4 con Vercel Blob real.
-
-### Alcance «presentación avanzada / 360»
-
-El roadmap estratégico incluyó `360/presentación avanzada`. FT3D está cubriendo la parte de **presentación avanzada** con una dirección mucho más potente que un simple 360. Para cerrar B hay que decidir una de estas dos opciones:
-
-- **Opción recomendada:** declarar FT3D como cumplimiento/evolución de «presentación avanzada» y **diferir 360** explícitamente;
-- implementar además un corte 360 específico.
-
-No recomiendo bloquear todo B por 360 si FT3D cumple mejor el objetivo de producto.
+**Conclusión:** B1–B8 están incorporados, pero B no está cerrada estratégicamente. La recomendación es que FT3D satisfaga/evolucione «presentación avanzada» y que 360 se implemente sólo si aporta valor suficiente; si no, diferirlo expresamente.
 
 ---
 
-# Fase C — estado de cierre
-
-El roadmap estratégico define cuatro resultados económicos.
+# Fase C — cierre
 
 | Objetivo | Estado | Corte |
 |---|---|---|
@@ -93,98 +74,111 @@ El roadmap estratégico define cuatro resultados económicos.
 | BC3 / tarifas / fuentes | **INTEGRADO** | C3 |
 | Dossier económico | **PENDIENTE** | C4 recomendado |
 
-## ¿Cuántos cortes de C tenemos realmente?
+**Estado real:** **3 de 4 objetivos estratégicos implementados e integrados.**
 
-Tenemos **C1 + C2 + C3 integrados**.
+### C4 recomendado — Dossier económico
 
-Por tanto, el estado real de C es:
+Debe reutilizar cantidades, presupuesto y trazabilidad ya existentes para una salida en `ENTREGAR`/Dossier sin crear otra autoridad financiera. Debe distinguir total demostrable, partidas sin precio, referencia/propio/revisado, IVA y fuentes.
 
-> **3 de 4 objetivos estratégicos implementados.**
-
-## Corte que falta para cerrar C
-
-### C4 — Dossier económico
-
-Objetivo recomendado:
-
-- incorporar resumen económico al flujo `ENTREGAR` / dossier;
-- reutilizar `FloorPlanQuantities`, presupuesto C2 y procedencia/precios C3;
-- mostrar total sólo cuando sea demostrable;
-- distinguir sin precio / sin revisar / referencia / propio / revisado;
-- incluir IVA sólo cuando esté definido;
-- mostrar fuentes/trazabilidad;
-- exportar una salida cliente/profesional coherente sin duplicar el presupuesto como nueva autoridad.
-
-**C4 debería ser el último corte funcional obligatorio de Fase C.**
-
-Después: QA + revisión humana + cierre documental.
+Después de C4: QA + revisión humana + cierre documental de C.
 
 ---
 
-# Flat-to-3D / Presentation Story — estado de cierre
+# Flat-to-3D / Presentation Story
 
-El programa FT3D es más amplio que los cortes actualmente implementados.
+| Fase | Estado | Situación actual |
+|---|---|---|
+| FT3D-0 | **CASI CUBIERTO** | investigación + prueba real 1a; cierre formal pendiente |
+| FT3D-1 | **EN PROCESO** | 1a reconciliado; 1b implementado |
+| FT3D-2 | **PRIMER CORTE IMPLEMENTADO** | 2a protegido en `d300db8...` |
+| FT3D-3 | **PENDIENTE** | sección dinámica |
+| FT3D-4 | **PENDIENTE** | alzado/fachada narrativa |
+| FT3D-5 | **PENDIENTE** | axonometría/edificio explotado |
+| FT3D-6 | **PENDIENTE** | plantillas por perfil |
+| FT3D-7 | **PENDIENTE COMO FASE** | salidas/share Story; reutilizar B1/B3/B4 |
+| FT3D-8 | **DIFERIDO** | timeline de obra requiere contrato temporal nuevo |
 
-| Fase | Estado | Qué existe hoy | Qué falta para cerrar |
-|---|---|---|---|
-| FT3D-0 | **CASI CUBIERTO** | investigación, auditoría de renderer/cámaras, dolly zoom y prueba 1a | registrar cierre formal y presupuesto final de rendimiento |
-| FT3D-1 | **IMPLEMENTACIÓN PARCIAL / EN INTEGRACIÓN** | 1a implementado; 1b implementado | integrar 1a; integrar 1b; QA consolidado; revisión humana |
-| FT3D-2 | **PRIMER CORTE IMPLEMENTADO, NO INTEGRADO** | 2a `d300db8...` | reconciliar tras 1a+1b y comprobar mínimos restantes |
-| FT3D-3 | **PENDIENTE** | — | sección dinámica |
-| FT3D-4 | **PENDIENTE** | — | alzado/fachada narrativa |
-| FT3D-5 | **PENDIENTE** | — | axonometría/edificio explotado |
-| FT3D-6 | **PENDIENTE** | — | plantillas por perfil |
-| FT3D-7 | **PENDIENTE COMO FASE** | existen B1/B3/B4 reutilizables | integrar Story con capturas, paquete, share/vídeo según política |
-| FT3D-8 | **DIFERIDO / FAMILIA FUTURA** | — | requiere modelo temporal explícito y nueva aprobación |
+## FT3D-1a — gate actual
 
-## Qué tenemos implementado ya de FT3D
+Rama reconciliada:
 
-### 1a — Plano → vivienda
+`integration/ft3d-1a-on-consolidated-master@9a21b2587139e4ef3ea377f7b71cca0bd541147e`
 
-Implementado en #150 y actualmente en reconciliación sobre `master` consolidado.
+PR de integración:
 
-### 1b — Vista general → primera estancia
+`#153` → `master@de75f301...`
 
-Implementado en #151. No está integrado todavía.
+Auditoría de estructura:
 
-### 2a — motor/reproductor de historias
+- 2 commits ahead / 0 behind;
+- mismo alcance de 8 archivos de #150;
+- base consolidada preservada;
+- sin conflictos de cherry-pick;
+- sin adaptación funcional adicional;
+- `renderSuspended` y `storyRun` coexisten;
+- workflow de master preservado + job `presentation-story` añadido.
 
-Implementado y protegido en:
+QA local reportado:
+
+| Suite | Resultado |
+|---|---:|
+| Unitarias repo | **611/611** |
+| FT3D-1a browser | **4/4** |
+| Vista general | **4/4** |
+| Foco | **2/2** |
+| Captura 3D | **3/3** |
+| Building presentation | **7/7** |
+| Tour video | **2/2** |
+| Professional workspace | **17/17** |
+| Encuadre | **10/11**; R10 reproducido también en master bajo carga |
+
+Para integrar 1a faltan únicamente:
+
+1. CI de #153, especialmente `presentation-story`;
+2. revisión humana/visual del preview;
+3. promoción final a `master` tras auditoría del resultado.
+
+## FT3D-1b
+
+PR #151, implementado y probado sobre la base anterior. Debe reconciliarse **después** de integrar 1a; no se debe reimplementar.
+
+## FT3D-2a
+
+Protegido en:
 
 `backup/ft3d-2a-pre-integration@d300db8c7756235409cc3a3386d45574a848ed2d`
 
-No debe integrarse hasta que 1a+1b estén consolidados.
+Debe reconciliarse después de 1a+1b. Entonces se comparará contra el mínimo FT3D-2 para decidir si basta 2a o hace falta un corte 2b.
 
-## Qué falta para poder decir «FT3D completo»
+## Qué falta para declarar «FT3D Presentation Story completo»
 
-Si por «completo» entendemos el **programa de presentación arquitectónica** y no la futura planificación temporal de obra, faltan estos hitos:
+1. integrar/aprobar 1a;
+2. integrar/aprobar 1b y cerrar FT3D-1;
+3. reconciliar 2a y completar FT3D-2 si faltan mínimos;
+4. FT3D-3 sección dinámica;
+5. FT3D-4 alzado/fachada;
+6. FT3D-5 axonometría/exploded;
+7. FT3D-6 plantillas por perfil;
+8. FT3D-7 salidas/compartición;
+9. auditoría global de rendimiento, accesibilidad, móvil, multipiso, reversibilidad y no-regresión;
+10. cierre documental.
 
-1. integrar y aprobar FT3D-1a;
-2. integrar y aprobar FT3D-1b;
-3. reconciliar FT3D-2a;
-4. completar cualquier requisito mínimo de FT3D-2 que 2a aún no cubra;
-5. FT3D-3 — sección dinámica;
-6. FT3D-4 — alzado/fachada narrativa;
-7. FT3D-5 — axonometría / edificio explotado;
-8. FT3D-6 — plantillas por perfil;
-9. FT3D-7 — salidas/compartición del Story;
-10. auditoría global de rendimiento, accesibilidad, reversibilidad, móvil, multipiso y no-regresión;
-11. cierre documental final.
-
-**FT3D-8 no bloquea ese cierre**, porque el programa lo separa como futura familia temporal de obra.
+**FT3D-8 no bloquea este cierre.**
 
 ---
 
-# Orden recomendado desde hoy
+# Orden operativo vigente
 
 ```text
-MASTER CONSOLIDADO
+master de75f301
         ↓
-FT3D-1a
+FT3D-1a · PR #153 · CI + revisión
         ↓
-FT3D-1b
+integrar 1a
         ↓
-FT3D-2a
+reconciliar/integrar 1b
+        ↓
+reconciliar/integrar 2a
         ↓
 C4 dossier económico
         ↓
@@ -205,19 +199,19 @@ FT3D-7
 auditoría y cierres A/B/C/FT3D
 ```
 
-C4 puede adelantarse o retrasarse respecto a FT3D-2a si se trabaja en una rama completamente independiente, pero no debe interferir con Presentación mientras siga la reconciliación FT3D.
+C4 puede moverse en el calendario si se mantiene totalmente aislado de la reconciliación de Presentación.
 
 ---
 
 # Definición de «todo terminado» para el bloque actual
 
-El bloque A/B/C/FT3D puede declararse cerrado cuando:
+A/B/C/FT3D queda cerrado cuando:
 
 - A esté documentada como cerrada tras revisión del master consolidado;
-- B tenga sus validaciones externas resueltas y 360 implementado o diferido explícitamente;
+- B tenga validaciones externas resueltas y 360 implementado o diferido explícitamente;
 - C tenga C4 dossier económico;
 - FT3D-1..7 estén integrados y validados;
-- no haya regresiones nuevas respecto a las capacidades previas;
+- no haya regresiones nuevas;
 - la integración siga siendo aditiva;
-- roadmap y current-status reflejen el HEAD real;
-- PR y ramas antiguas estén reconciliadas/limpiadas sin perder trabajo.
+- roadmap/current-status reflejen el HEAD real;
+- PR/ramas antiguas estén reconciliadas o limpiadas sin pérdida de trabajo.
