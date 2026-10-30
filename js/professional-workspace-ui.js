@@ -119,10 +119,19 @@
    const of=state=>Object.keys(names).filter(k=>states[k]===state).map(k=>names[k]).join(', ');
    if(projectContext)el('p',[[tx('Listo para revisar','Ready to review','可审阅'),of('ready')],[tx('Con avisos','With warnings','有提醒'),of('review')],[tx('Se genera al pulsar','Generated on demand','按需生成'),of('generate')],[tx('Falta','Missing','缺少'),of('missing')],[tx('Presupuesto','Budget','预算'),tx('no disponible todavía','not yet available','暂不可用')]].filter(([,v])=>v).map(([k,v])=>k+': '+v).join(' · '),projectContext.querySelector('.project-context-copy'),'project-context-ready');
   }
+  if(area==='analyze'&&window.FloorPlanSitePreview){
+   // A3: orientation, sun and site drawn on the project itself; each figure keeps its facts as text.
+   const SP=FloorPlanSitePreview,d=SP.data(),at=id=>grid.querySelector('.professional-card[data-module="'+id+'"]');
+   const o=at('orientation');if(o){const f=figure(o,'site-figure');SP.orientedPlan(f,d.site.northOffsetDeg);if(d.facades.sectors)SP.rose(f,d.facades);el('figcaption',SP.facadeLine(d.facades),f);
+    if(d.sun.status==='available-orientative'){const g=figure(o,'site-figure is-sun');f.after(g);SP.sunChart(g,d.sun);const t=el('div',undefined,g);SP.sunTable(t,d.sun);el('figcaption',tx('Recorrido orientativo del sol en la ubicación del proyecto (SunCalc). No considera relieve ni edificios vecinos.','Orientative sun path at the project location (SunCalc). Terrain and neighbouring buildings are not considered.','项目位置的参考太阳轨迹（SunCalc），不考虑地形及邻近建筑。'),g);}}
+   const e=at('territory');if(e&&d.siteView.status!=='unavailable'){const f=figure(e,'site-figure');SP.siteDiagram(f,d.siteView);el('figcaption',tx(`Parcela de ${d.siteView.parcelAreaM2.toLocaleString('es-ES',{maximumFractionDigits:1})} m²`,`${d.siteView.parcelAreaM2.toLocaleString('en-GB',{maximumFractionDigits:1})} m² parcel`,`地块 ${d.siteView.parcelAreaM2} m²`)+(d.siteView.building?tx(` con la huella colocada (${d.siteView.footprintAreaM2.toLocaleString('es-ES',{maximumFractionDigits:1})} m²).`,` with the placed footprint (${d.siteView.footprintAreaM2} m²).`,`，已定位轮廓 ${d.siteView.footprintAreaM2} m²。`):d.siteView.reason==='footprint'?tx('; sin huella demostrable para colocar.','; no provable footprint to place.','；无可证明轮廓。'):tx('; el edificio aún no está colocado.','; the building is not placed yet.','；建筑尚未定位。')),f);}
+   if(projectContext){const b=route(projectContext.querySelector('.project-context-copy'),tx('Ver informe de orientación y emplazamiento','View orientation and site report','查看朝向与场地报告'),'site-report',()=>SP.openReport());b.classList.add('project-context-action');}
+  }
   if(area==='analyze'&&projectContext){
    // The surface figure read on the plan: rooms in the total vs. outside it (also stated as text above).
    const legend=el('p',undefined,projectContext.querySelector('.project-context-copy'),'project-context-legend');legend.setAttribute('aria-hidden','true');
    el('span',tx('En el cómputo','In the total','计入'),legend,'legend-counted');if(summary.roomsExcluded)el('span',tx('Fuera del cómputo','Outside the total','不计入'),legend,'legend-excluded');
+   const report=projectContext.querySelector('[data-route="site-report"]');if(report)legend.after(report);
   }
   if(area==='studio'){
    const frame=document.createDocumentFragment();Preview.context(frame,summary,{variant:'compact',caption:tx('Tu firma se aplica a','Your signature applies to','您的签名适用于')});grid.before(frame);
