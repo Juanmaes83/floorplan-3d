@@ -139,3 +139,18 @@ test('from the 2D editor view: p = 0 keeps its centre and framed height; the vie
  // An invalid start is ignored (derived framing), never trusted.
  assert.equal(Story.create('plan-reveal',{...input,start:{target:[NaN,0,0],frameHeight:3}}).info.fromEditorView,false);
 });
+
+// FT3D-2: a story is one progress over a sequence of narratives.
+test('sequence: P ↔ (scene, local p) are pure and inverse; boundaries go to the next scene; shares follow the weights',()=>{
+ const seq=Story.sequence([6000,3500,6000,3500]);
+ assert.equal(seq.count,4);assert.deepEqual(seq.locate(0),{i:0,p:0});assert.deepEqual(seq.locate(1),{i:3,p:1});
+ assert.ok(close(seq.starts[1],6000/19000,1e-12));assert.deepEqual(seq.locate(seq.starts[1]),{i:1,p:0});
+ for(let k=0;k<=1000;k++){const P=k/1000,{i,p}=seq.locate(P);assert.ok(close(seq.at(i,p),P,1e-12),`P=${P}`);assert.ok(p>=0&&p<=1);}
+ for(let i=0;i<4;i++)for(const p of [0,.3,.999]){const P=seq.at(i,p),l=seq.locate(P);assert.equal(l.i,i);assert.ok(close(l.p,p,1e-9));}
+ // Monotonic: scene index never decreases as P grows.
+ let last=0;for(let k=0;k<=1000;k++){const {i}=seq.locate(k/1000);assert.ok(i>=last);last=i;}
+ assert.deepEqual(seq.locate(-2),{i:0,p:0});assert.deepEqual(seq.locate(9),{i:3,p:1});
+ assert.equal(Story.sequence([1]).locate(.4).p,.4);
+ assert.throws(()=>Story.sequence([]),/escenas/);
+ assert.ok(Story.SCENE_MS['plan-reveal']>0&&Story.SCENE_MS['room-descent']>0);
+});

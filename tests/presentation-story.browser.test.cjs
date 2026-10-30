@@ -79,7 +79,7 @@ test('FT3D off: the presentation is unchanged; FT3D on: checkpoints, p = 1 = ove
  await page.locator('#presentationStoryPlay').click();await settledOverview(page);await page.waitForTimeout(300);
  const continued=await pose(page);assert.ok(near(continued,overview,1e-4),'continues from the overview without a jump');
  assert.equal(continued.story.active,false);assert.equal(continued.story.fov,overview.fov);
- assert.deepEqual(await tools(page),[...offTools,'presentationStoryReplay','presentationStoryEnter'],'only the chapter tools are added, after the existing tools');
+ assert.deepEqual(await tools(page),[...offTools,'presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'only the chapter tools are added, after the existing tools');
  assert.equal(await page.locator('.presentation-card h2').textContent(),'Vista general');
  await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled,null,{timeout:60000});
  // Replay: back to the plan (1 → 0), then 3D again.
@@ -118,7 +118,7 @@ test('phone 390x844: the chapter fits the screen and ends on the overview',{time
  const at0=await scrub(page,0);await page.screenshot({path:path.join(QA,'390x844-p000.png')});await scrub(page,50);await page.screenshot({path:path.join(QA,'390x844-p050.png')});
  assert.ok(at0.story.wallScale<.02);
  const layout=await page.evaluate(()=>{const r=document.querySelector('#presentationStory').getBoundingClientRect();return {left:r.left,right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight,scroll:document.documentElement.scrollWidth,
-  targets:[...document.querySelectorAll('#presentationStory button,#presentationStory input')].map(e=>e.getBoundingClientRect().height)};});
+  targets:[...document.querySelectorAll('#presentationStory button,#presentationStory input')].filter(e=>!e.hidden).map(e=>e.getBoundingClientRect().height)};});
  assert.ok(layout.left>=0&&layout.right<=layout.width+1&&layout.scroll<=layout.width,JSON.stringify(layout));assert.ok(layout.targets.every(h=>h>=40),`touch targets ${layout.targets}`);
  assert.ok(near(await scrub(page,100),overview,1e-4),'phone p=1 = overview');
  await page.locator('#presentationStoryPlay').click();await settledOverview(page);assert.ok(near(await pose(page),overview,1e-4));
@@ -221,4 +221,73 @@ test('room descent with reduced motion on a two-level building: direct, each lev
  }
  assert.ok(seen.every(p=>p===0||p===1),`reduced motion: only overview and room (${[...new Set(seen)]})`);
  await exitAndCheck(page,editor,'duplex descent',off);assert.equal(await page.evaluate(()=>FloorPlanBuildingUI.context.levelId),level);assert.deepEqual(errors,[]);
+});
+
+// ── FT3D-2 «Ver la historia completa»: one player, scenes from the presentation plan ──
+async function holdFull(page){await page.evaluate(async()=>{document.querySelector('#presentationStoryFull').click();
+ for(let i=0;i<4000&&!(FloorPlanPresentation.story?.scenes>1&&FloorPlanPresentation.story.scene>=0&&!FloorPlanPresentation.story.busy);i++)await new Promise(r=>setTimeout(r,0));
+ const s=document.querySelector('#presentationStorySlider');s.value='0';s.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy&&FloorPlanPresentation.story.P===0,null,{timeout:60000});}
+// Global progress through the slider (0–1000); waits for a scene change (a level change takes a while) to settle.
+async function scrubP(page,P){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(v*1000));s.dispatchEvent(new Event('input',{bubbles:true}));},P);
+ await page.waitForFunction(v=>{const s=FloorPlanPresentation.story;return s&&!s.busy&&Math.abs(s.P-Math.round(v*1000)/1000)<1e-9;},P,{timeout:120000});
+ await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));return page.evaluate(()=>({...View3D.cameraState,story:View3D.presentationStoryInfo,player:FloorPlanPresentation.story,level:window.FloorPlanBuildingUI?.context?.order??null,caption:document.querySelector('#presentationStoryCaption').textContent,counter:document.querySelector('#presentationStoryCounter').textContent}));}
+
+test('whole story: plan → overview → first room as one progress; scenes match the single chapters; reversible; ends on the room stop (1440x900)',{timeout:900000},async t=>{
+ const {page,errors}=await open(t,{width:1440,height:900});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);
+ const editor=await snapshot(page);
+ // References without the chapter: the overview and the first room stop.
+ await configure(page,false);await settledOverview(page);await page.waitForTimeout(300);const overview=await pose(page);
+ assert.equal(await page.locator('#presentationStoryFull').count(),0,'no story tool without the chapter');
+ await page.locator('.presentation-stops button').nth(1).click();await settledRoom(page);await page.waitForTimeout(300);const room=await pose(page);
+ const off=await exitAndCheck(page,editor,'story off');
+ await configure(page,true);await page.waitForFunction(()=>FloorPlanPresentation.story,null,{timeout:180000});await settledOverview(page);await page.waitForTimeout(300);
+ const full=page.locator('#presentationStoryFull');assert.equal(await full.isVisible(),true);assert.equal(await full.textContent(),'Ver la historia completa');
+ assert.deepEqual(await tools(page),[...(await tools(page)).filter(id=>!/^presentationStory/.test(id)),'presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'story tools only after the existing ones');
+ await holdFull(page);
+ const info=await page.evaluate(()=>FloorPlanPresentation.story);assert.equal(info.scenes,2);
+ const starts=await page.evaluate(()=>{const S=FloorPlanPresentationStory.sequence([FloorPlanPresentationStory.SCENE_MS['plan-reveal'],FloorPlanPresentationStory.SCENE_MS['room-descent']]);return S.starts;});
+ const b=Math.round(starts[1]*1000)/1000,states={};
+ for(const P of [0,.25,b-.01,b,.8,1]){states[P]=await scrubP(page,P);await page.screenshot({path:path.join(QA,`1440x900-story-P${String(Math.round(P*1000)).padStart(4,'0')}.png`)});}
+ assert.equal(states[0].story.kind,'plan-reveal');assert.ok(states[0].story.wallScale<.02,'P=0 is the plan');assert.match(states[0].counter,/escena 1 de 2/);
+ assert.equal(states[b].story.kind,'room-descent');assert.match(states[b].counter,/escena 2 de 2/);
+ // The boundary is seamless: end of the plan reveal (the overview) = start of the descent, both = the overview stop.
+ assert.ok(near(states[b],overview,1e-4),'scene boundary = overview pose');// Continuity: one step (1/1000 of P per slider unit, here 10) before the boundary the camera is already within a few % of
+ // the overview distance and lens of it.
+ const gap=Math.hypot(...[0,1,2].map(k=>states[b-.01].position[k]-overview.position[k])),fovGap=Math.abs(states[b-.01].fov-overview.fov);
+ const reach=await page.evaluate(()=>View3D.presentationStoryInfo.info.travel);
+ assert.ok(gap<.05*reach&&fovGap<3,`just before the boundary: ${gap.toFixed(3)} m of ${reach.toFixed(1)} m, fov ${fovGap.toFixed(2)}°`);
+ assert.ok(near(states[1],room,1e-4),'P=1 = first room stop');
+ // Reversible across the boundary.
+ for(const P of [.8,.25,0,1,b,.25])assert.ok(near(await scrubP(page,P),states[P],1e-6),`P=${P} reproduces`);
+ // Previous / next scene.
+ await scrubP(page,.8);await page.locator('#presentationStoryPlan').click();await page.waitForFunction(v=>FloorPlanPresentation.story&&!FloorPlanPresentation.story.playing&&Math.abs(FloorPlanPresentation.story.P-v)<1e-6,starts[1],{timeout:60000});
+ await page.locator('#presentationStoryPlan').click();await page.waitForFunction(()=>FloorPlanPresentation.story&&!FloorPlanPresentation.story.playing&&FloorPlanPresentation.story.P===0,null,{timeout:60000});
+ await page.locator('#presentationStoryNext').click();await page.waitForFunction(v=>FloorPlanPresentation.story&&!FloorPlanPresentation.story.playing&&Math.abs(FloorPlanPresentation.story.P-v)<1e-6,starts[1],{timeout:60000});
+ assert.equal(await page.locator('#presentationCapture').isDisabled(),true,'no capture during the story');
+ // At the end the presentation continues on the room stop.
+ await scrubP(page,1);await page.locator('#presentationStoryPlay').click();await settledRoom(page);await page.waitForTimeout(300);
+ assert.ok(near(await pose(page),room,1e-4),'continues on the room stop without a jump');
+ assert.equal(await page.locator('#presentationStory').isHidden(),true);
+ await exitAndCheck(page,editor,'story on',off);assert.deepEqual(errors,[]);
+});
+
+test('whole story on a two-level building with reduced motion: 4 scenes, level changes, last room of the upper level',{timeout:700000},async t=>{
+ const {page,errors}=await open(t,{width:1440,height:900},{reduced:true});
+ const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(zip);
+ await page.waitForFunction(()=>window.FloorPlanBuildingUI?.context?.levels===2,null,{timeout:60000});await page.waitForTimeout(500);
+ const editor=await snapshot(page),level=await page.evaluate(()=>FloorPlanBuildingUI.context.levelId);
+ await configure(page,false);await settledOverview(page);const off=await exitAndCheck(page,editor,'duplex story off');
+ await configure(page,true);await page.waitForFunction(()=>FloorPlanPresentation.story,null,{timeout:180000});
+ await page.locator('#presentationStoryPlay').click();await settledOverview(page);
+ await holdFull(page);assert.equal((await page.evaluate(()=>FloorPlanPresentation.story)).scenes,4);
+ const starts=await page.evaluate(()=>FloorPlanPresentationStory.sequence(['plan-reveal','room-descent','plan-reveal','room-descent'].map(k=>FloorPlanPresentationStory.SCENE_MS[k])).starts);
+ const s2=await scrubP(page,Math.ceil(starts[2]*1000)/1000+.001);assert.equal(s2.level,1,'scene 3 is on the upper level');assert.equal(s2.story.kind,'plan-reveal');assert.match(s2.counter,/escena 3 de 4/);
+ await page.screenshot({path:path.join(QA,'1440x900-story-duplex-scene3.png')});
+ const s0=await scrubP(page,0);assert.equal(s0.level,0,'back on the ground level');
+ // Reduced motion: «Reproducir historia» goes straight to the end and the presentation continues on the upper room.
+ const want=await page.evaluate(()=>{const s=FloorPlanPresentation.plan.stops,o=s.map(x=>x.kind).lastIndexOf('overview');return s[o+1]?.roomId;});
+ await page.locator('#presentationStoryPlay').click();await settledRoom(page);
+ assert.equal(await page.evaluate(()=>FloorPlanBuildingUI.context.order),1);assert.equal(await page.evaluate(()=>FloorPlanPresentation.current.roomId),want);
+ await exitAndCheck(page,editor,'duplex story',off);assert.equal(await page.evaluate(()=>FloorPlanBuildingUI.context.levelId),level);assert.deepEqual(errors,[]);
 });
