@@ -1,0 +1,36 @@
+/* Project-First A3: orientation, sun and site diagrams (Analyze) and the printable report. Standalone: the print
+   window loads only this sheet, so the plan drawing styles are repeated here. «Cuaderno de proyecto» colours. */
+.site-plan{position:relative;background:#fffcf6;border:1px solid #cbc2b3;padding:10px;min-width:0}
+.site-plan .project-plan{display:block;width:100%;height:200px;overflow:visible}
+.site-plan .preview-room{fill:#e2d8c4;stroke:#a89c87;stroke-width:1;vector-effect:non-scaling-stroke}.site-plan .preview-room.preview-excluded{fill:#f3eee4;stroke-dasharray:3 2}
+.site-plan .preview-wall{fill:#2d332f}.site-plan .preview-wall.preview-demolished{fill:none;stroke:#a7543f;stroke-dasharray:3 2;vector-effect:non-scaling-stroke}
+.site-north{position:absolute;top:8px;right:8px;width:44px;height:44px;overflow:visible}
+.site-north-arrow{fill:#875936;stroke:#fffcf6;stroke-width:1.2}.site-north-label{font:700 9px/1 system-ui,sans-serif;fill:#2d332f}
+.site-rose,.site-sun{display:block;width:100%;max-width:260px;height:auto;margin:0 auto;overflow:visible}
+.site-rose-ring,.site-sun-ring{fill:none;stroke:#cbc2b3;stroke-width:.8}.site-sun-ring.is-horizon{stroke:#7d7466;stroke-width:1.2;fill:#fffcf6}
+.site-rose-wall{fill:#e9e2d5;stroke:#cbc2b3;stroke-width:.6}.site-rose-window{fill:#205b60;fill-opacity:.82}
+.site-rose-label,.site-sun-cardinal{font:600 11px/1 system-ui,sans-serif;fill:#626457}.site-rose-label.is-north,.site-sun-cardinal.is-north{fill:#875936;font-weight:800}
+.site-sun-ring-label,.site-sun-hour-label{font:500 8px/1 system-ui,sans-serif;fill:#626457}
+.site-sun-home{fill:#d7cdb9;stroke:#7d7466;stroke-width:.4}
+.site-sun-path{fill:none;stroke-width:2.2;stroke-linecap:round}.site-sun-path.is-summer{stroke:#b3541e}.site-sun-path.is-equinox{stroke:#c09036}.site-sun-path.is-winter{stroke:#205b60}
+.site-sun-hour.is-summer{fill:#b3541e}.site-sun-hour.is-equinox{fill:#c09036}.site-sun-hour.is-winter{fill:#205b60}
+.site-parcel{display:block;width:100%;height:220px;background:#fffcf6;border:1px solid #cbc2b3}
+.site-parcel-shape{fill:#eef0e3;stroke:#6c7a45;stroke-width:1.4;vector-effect:non-scaling-stroke}.site-parcel-building{fill:#b5653a;fill-opacity:.55;stroke:#8b431c;stroke-width:1.6;vector-effect:non-scaling-stroke}
+.site-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}.site-table th,.site-table td{text-align:left;padding:5px 6px;border-bottom:1px solid #e2dccf}.site-table th{font-size:11px;color:#626457;font-weight:650;letter-spacing:.02em}
+.site-day::before{content:'';display:inline-block;width:10px;height:3px;margin-right:6px;vertical-align:3px;border-radius:2px;background:currentColor}.site-day.is-summer{color:#8f4319}.site-day.is-equinox{color:#7d5b19}.site-day.is-winter{color:#205b60}
+.site-facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:6px 0;font-size:13px}.site-facts dt{color:#626457}.site-facts dd{margin:0;font-weight:600}
+.site-figure{margin:12px 0 14px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-items:center}.site-figure figcaption{grid-column:1/-1;font-size:12.5px;line-height:1.55;color:#626457;margin:0}
+/* Report dialog and paper (also the print window). */
+.site-report-dialog{width:min(980px,calc(100vw - 24px));max-height:calc(100vh - 24px);padding:0;border:1px solid #cbc2b3;border-radius:6px;background:#f6f2e9;color:#2d332f}
+.site-report-dialog::backdrop{background:rgba(31,35,38,.45)}
+.site-report-tools{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fffcf6;border-bottom:1px solid #cbc2b3}.site-report-tools h2{font:400 20px/1.2 Georgia,'Times New Roman',serif;margin:0 auto 0 0}
+.site-report-paper{background:#fffdf8;margin:16px;padding:28px 32px;box-shadow:0 8px 24px -16px rgba(45,51,47,.6);font:14px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;color:#2d332f}
+.site-report-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:2px solid #2d332f;padding-bottom:14px;margin-bottom:8px}
+.site-report-head small{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#875936}.site-report-head h1{font:400 30px/1.15 Georgia,'Times New Roman',serif;margin:4px 0}.site-report-date{margin:0;color:#626457;font-size:12px}
+.site-report-brand{display:grid;justify-items:end;gap:2px;text-align:right;font-size:12px;color:#626457;overflow-wrap:anywhere}.site-report-brand img{max-height:48px;max-width:120px;object-fit:contain}.site-report-brand strong{font:400 18px/1.2 Georgia,serif;color:#2d332f}
+.site-report-section{padding:16px 0;border-bottom:1px solid #e2dccf;break-inside:avoid}.site-report-section>h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#875936;margin:0 0 10px}
+.site-report-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.site-report-note{font-size:12.5px;color:#626457;margin:8px 0}.site-report-foot{font-size:11px;color:#626457;padding-top:14px}
+@media(max-width:700px){.site-report-paper{margin:8px;padding:16px}.site-report-grid{grid-template-columns:minmax(0,1fr)}.site-report-head{flex-direction:column}.site-report-brand{justify-items:start;text-align:left}}
+.site-report-print{margin:0;background:#fff}.site-report-print .site-report-paper{margin:0 auto;max-width:900px;box-shadow:none}.site-report-print-button{position:fixed;top:10px;right:10px;font:600 14px system-ui,sans-serif;padding:8px 14px}
+@media print{.site-report-print-button{display:none}.site-report-print .site-report-paper{padding:0}@page{size:A4;margin:14mm}}

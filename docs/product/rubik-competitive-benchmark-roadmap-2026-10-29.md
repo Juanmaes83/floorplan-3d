@@ -1263,3 +1263,67 @@ Respuesta a la pregunta de éxito:
   - la pose de cámara 3D se restaura idéntica;
   - el área no se cierra durante la captura;
   - la presentación sigue abriéndose después.
+
+---
+
+## Implementación — Project-First A3: Analizar visual e informe de orientación y emplazamiento
+
+**Estado:** candidato en revisión. Rama `feat/project-first-analyze-a3`, apilada sobre A2 (PR #135). Completa §7.2 (Analizar visual) y entrega §7.6 (informe de emplazamiento + solar) como análisis contextual orientativo.
+
+### Qué muestra Analizar antes de pulsar
+
+- **Orientación y sol:**
+  - el plano de la planta activa con el norte declarado;
+  - una rosa de fachadas y ventanas por orientación real (8 sectores);
+  - la frase «Más ventana hacia…»;
+  - con ubicación, la carta solar del 21 de junio, el 20 de marzo y el 21 de diciembre sobre la vivienda orientada, con salida y puesta del sol, horas de sol y altura máxima.
+- **Emplazamiento:** la parcela con su superficie y, si hay colocación explícita y huella demostrable, la huella del edificio en su posición.
+- **Informe:** «Ver informe de orientación y emplazamiento» reúne orientación, fachadas, sol, emplazamiento y exterior, con fuentes y límites. Se puede imprimir o guardar en PDF con el mismo patrón de ventana de impresión que la ficha.
+
+### Fuentes de datos y decisiones
+
+- **Fachadas:** las clasifica 8A (`FloorPlanExterior.derive`). El lado exterior es el que no tiene estancia interior a mitad del muro. Las ventanas son los `openings` de tipo `window` de esas fachadas; las puertas no cuentan.
+- **Orientación:** `site.northOffsetDeg`, con la misma convención que Solar (azimut del plano = azimut real + norte). Sin norte, las cifras se muestran sin orientar y se pide configurarlo.
+- **Sol:** `FloorPlanSolar` (SunCalc 2.1.1) con `site.location`, muestreado cada 5 minutos en hora local. Sin ubicación o sin norte no se dibuja. No considera relieve, edificios vecinos ni sombras.
+- **Emplazamiento:**
+  - la parcela llega de `FloorPlanParcelCore.toLocalGeometry`;
+  - la huella, de `FloorPlanRoof` (8B-A), la misma que usa el editor de colocación;
+  - la posición, de `FloorPlanTerritoryIntegration.modelToParcel`.
+  - Sin colocación o sin huella demostrable, la parcela aparece sola, con el motivo.
+- No se añade schema, provider ni persistencia. Analizar y el informe no modifican el proyecto.
+- Texto de límites: «No es un informe urbanístico, catastral ni topográfico certificado» y «No sustituye un estudio de soleamiento, eficiencia energética, urbanismo ni topografía».
+
+### Componentes
+
+- `js/site-visual-core.js` (`FloorPlanSiteVisual`, puro): `facades`, `sunPath` y `siteView`.
+- `js/site-preview-ui.js` (`FloorPlanSitePreview`): plano con norte, rosa, carta solar, tabla solar, diagrama de parcela e informe.
+- `css/site-report.css`: diagramas e informe, también en la ventana de impresión.
+
+### Limitaciones
+
+- Las fachadas solo cuentan las que 8A identifica. En el ejemplo, la clasificación es parcial y el informe lo dice.
+- Las ventanas se miden por anchura; no hay superficie acristalada ni orientación de lucernarios.
+- En edificios, el plano y las fachadas son de la planta activa.
+- La carta solar usa días de referencia del año actual; no hay selector de fecha en este corte. El estudio solar 3D existente sigue disponible.
+
+### Tests
+
+- `tests/site-visual.test.cjs` (4/4):
+  - lado exterior y norte, incluido el cambio a 90°;
+  - las puertas no cuentan como ventanas;
+  - la inversión de muros no cambia el resultado;
+  - astronomía de Madrid: ≈73° en el solsticio de verano, ≈26° en el de invierno y ≈50° en el equinoccio;
+  - parcela sola o huella colocada en el ancla;
+  - entradas congeladas sin mutación.
+- `tests/site-analyze.browser.test.cjs` (2/2, 1440×900 y 390×844):
+  - estados vacíos honestos;
+  - rosa con texto equivalente;
+  - norte rotado;
+  - tres recorridos solares;
+  - parcela de 750 m²;
+  - sin colocación inventada;
+  - informe con sus cuatro secciones y fuentes;
+  - el foco vuelve a la acción;
+  - el proyecto no cambia;
+  - cero peticiones remotas.
+- Comprobación manual adicional: la ventana de impresión carga el documento con sus 4 secciones y su hoja de estilo, y el PDF se genera.

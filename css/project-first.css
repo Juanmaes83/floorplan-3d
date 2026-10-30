@@ -65,3 +65,8 @@
 .professional-card>.btn[data-route=prepare-views]{margin-top:4px}
 .project-views-card{grid-column:1/-1}.project-views-card .project-view-gallery{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:12px 0}
 @media(max-width:600px){.project-view-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.project-views-card .project-view-gallery{grid-template-columns:minmax(0,1fr)}}
+/* A3 visual Analyze: diagrams sit inside the existing cards, under their state line. */
+.professional-workspace[data-area=analyze] .site-figure{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.professional-workspace[data-area=analyze] .site-figure.is-sun{grid-template-columns:minmax(0,1fr)}.professional-workspace[data-area=analyze] .site-figure.is-sun .site-sun{max-width:240px}
+.project-context-copy .project-context-action{justify-self:start;margin-top:6px;border:1px solid #978b79;border-radius:var(--rubik-radius);background:var(--rubik-sheet);min-height:40px}
+@media(max-width:600px){.professional-workspace[data-area=analyze] .site-figure,.professional-workspace[data-area=analyze] .site-figure.is-sun{grid-template-columns:minmax(0,1fr)}}
