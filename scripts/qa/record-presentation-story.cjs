@@ -2,6 +2,7 @@
    Usage: node scripts/qa/record-presentation-story.cjs <repo root> <output dir> <cut> <WxH>
    Cuts: 1a — «Empezar desde el plano»: 2D editor → plan → 3D overview by itself, «Volver al plano» and back to 3D.
          1b — «Entrar en la estancia»: the chapter, then overview → first room, back to the overview and in again.
+         2  — «Ver la historia completa»: the chapter, then the whole story by itself until the presentation continues.
    Needs three@0.160.0 from the CDN or THREE_LOCAL_DIR (tests/helpers/three-module.cjs). Prints the .webm path and the
    page errors seen (expected: none). The video is QA evidence, never committed. */
 const path=require('node:path'),fs=require('node:fs/promises'),{createServer}=require('node:http'),{chromium}=require('playwright');
@@ -31,6 +32,8 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   if(await page.locator('#presentationStoryPlan').isVisible())await page.evaluate(()=>document.querySelector('#presentationStoryPlan').click());
   await idle().catch(()=>{});await page.waitForTimeout(1200);
   if(await page.locator('#presentationStoryEnter').isVisible()){await page.locator('#presentationStoryEnter').click();await inRoom();await page.waitForTimeout(2000);}}
+ if(cut==='2'){await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1,null,{timeout:120000});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story&&FloorPlanPresentation.current?.kind==='room'&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:900000});await page.waitForTimeout(2500);}
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(2500);
  const video=page.video();await ctx.close();const file=await video.path();await browser.close();server.close();
  console.log(JSON.stringify({file,errors}));

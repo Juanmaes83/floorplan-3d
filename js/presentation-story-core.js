@@ -106,8 +106,22 @@
   return {kind:'room-descent',stateAt,checkpoints:[0,.25,.5,.75,1],info:{travel,wallScaleEnd:wallEnd,playMs:ms,options:o}};
  }
  const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent};
+ /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
+    proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
+    the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
+    (p = 0), except P = 1, which is the end of the last one. */
+ function sequence(weights){
+  const w=(weights||[]).map(x=>Math.max(1e-6,Number(x)||0));if(!w.length)throw Error('La historia no tiene escenas.');
+  const total=w.reduce((n,x)=>n+x,0),starts=[];let acc=0;for(const x of w){starts.push(acc/total);acc+=x;}
+  const share=i=>w[i]/total;
+  function locate(raw){const P=clamp01(Number(raw)||0);if(P>=1)return {i:w.length-1,p:1};let i=w.length-1;while(i>0&&P<starts[i]-1e-12)i--;return {i,p:clamp01((P-starts[i])/share(i))};}
+  const at=(i,p)=>{const k=Math.min(w.length-1,Math.max(0,i|0));return clamp01(starts[k]+clamp01(p)*share(k));};
+  return {count:w.length,starts:[...starts],total,locate,at};
+ }
+ // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,roomDescent,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),PLAN_REVEAL,ROOM_DESCENT};
+ return {create,planReveal,roomDescent,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT};
 });

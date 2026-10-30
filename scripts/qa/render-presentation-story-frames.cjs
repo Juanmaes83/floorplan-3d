@@ -2,6 +2,7 @@
    state of the real app; capturing every step after it is rendered shows the motion as a normal GPU plays it, also on
    machines where software rendering gives one frame per second (CI, cloud sessions).
    Usage: node scripts/qa/render-presentation-story-frames.cjs <repo root> <output dir> <WxH> [steps=100] [parts=1a,1b]
+   Parts: 1a (plan → overview), 1b (overview → first room), 2 (the whole story, stepping its global progress).
    Writes <output dir>/frames/NNNNN.png and prints them as JSON; assemble with
    ffmpeg -framerate 24 -i <output dir>/frames/%05d.png -c:v libx264 -pix_fmt yuv420p video.mp4
    Needs three@0.160.0 from the CDN or THREE_LOCAL_DIR (tests/helpers/three-module.cjs). Evidence only, never committed. */
@@ -22,7 +23,9 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  // Holds a narrative at p as soon as it exists (it would otherwise play by itself), then steps it.
  const hold=kind=>page.evaluate(async kind=>{for(let i=0;i<5000&&FloorPlanPresentation.story?.kind!==kind;i++)await new Promise(r=>setTimeout(r,0));
   const s=document.querySelector('#presentationStorySlider');s.value='0';s.dispatchEvent(new Event('input',{bubbles:true}));},kind);
- const step=async()=>{for(let i=0;i<=steps;i++){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},Math.round(i*100/steps));await shot();}};
+ // Steps the slider over its whole range (0–100 for one scene, 0–1000 for a story); waits for scene changes to settle.
+ const step=async()=>{for(let i=0;i<=steps;i++){await page.evaluate(k=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(k*Number(s.max)));s.dispatchEvent(new Event('input',{bubbles:true}));},i/steps);
+  await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:120000});await shot();}};
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:30000});
  await page.locator('#welcomeExample').click();await page.waitForTimeout(1500);await shot(24);
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
@@ -32,6 +35,11 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  await page.locator('#presentationStoryPlay').click();await idle();await shot(24);
  if(parts.includes('1b')&&await page.locator('#presentationStoryEnter').count()){
   await page.evaluate(()=>document.querySelector('#presentationStoryEnter').click());await hold('room-descent');await shot(12);await step();await shot(12);
+  await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.current?.kind==='room'&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:120000});await shot(36);}
+ if(parts.includes('2')){if(!await page.locator('#presentationStoryFull').isVisible()){await page.locator('.presentation-stops button').nth(0).click();await idle();}
+  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());
+  await page.evaluate(async()=>{for(let i=0;i<5000&&!(FloorPlanPresentation.story?.scenes>1&&FloorPlanPresentation.story.scene>=0&&!FloorPlanPresentation.story.busy);i++)await new Promise(r=>setTimeout(r,0));const s=document.querySelector('#presentationStorySlider');s.value='0';s.dispatchEvent(new Event('input',{bubbles:true}));});
+  await page.waitForFunction(()=>FloorPlanPresentation.story?.P===0&&!FloorPlanPresentation.story.busy,null,{timeout:120000});await shot(12);await step();await shot(12);
   await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.current?.kind==='room'&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:120000});await shot(36);}
  await browser.close();server.close();console.log(JSON.stringify({frames:frames.length,dir,errors}));
 })().catch(e=>{console.error(e);process.exit(1);});
