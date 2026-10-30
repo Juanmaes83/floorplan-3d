@@ -49,6 +49,9 @@
  let roomOrder=[],selectedRooms=[],configMessage=null,roomList=null,startButton=null;
  let batchActive=false,batchSerial=0,batchPromise=null,batchCancelled=false,batchResized=false;
  let mapOpen=false;
+ // FT3D-1a «Empezar desde el plano» (js/presentation-story-core.js): chosen per presentation in the dialog, off by
+ // default and never saved. Its controls exist only while it is chosen, so a presentation without it is unchanged.
+ let storyChosen=false,storyEnabled=false,story=null,storyUi=null;
  // Brand snapshot taken when the presentation starts (FloorPlanBrandUI): what the client sees and receives.
  let brandSnap=null;
  // Building presentation (two levels): the configuration per level, the level that was active when it started (it
@@ -128,6 +131,7 @@
   if(!active||stopping||batchActive||!sourceCurrent()||overlay.dataset.moving==='true'||!window.View3D?.contextAvailable)return false;
   if(View3D.presentationRevealInfo?.status==='running')return false;
   if(View3D.presentationRouteInfo?.status==='running')return false;
+  if(story)return false;
   if(View3D.presentationLight.status==='loading')return false;
   if(View3D.surfaceMetrics.some(m=>m.detailState==='loading'||m.detailState==='waiting'))return false;
   const stage=document.querySelector('#stage'),canvas=View3D.canvasState,camera=View3D.cameraState;
@@ -138,6 +142,7 @@
  }
  function updateCapture(){
   captureButton.disabled=!captureReady();
+  drawStory();
   shareButton.disabled=!captureReady();shareButton.textContent=tx('Compartir imagen','Share image','分享图片');
   const busy=window.View3D?.lifecycleMetrics;
   batchButton.disabled=!captureReady()||!!busy?.pendingAssets||!!busy?.animating||!!busy?.flying;
@@ -408,6 +413,87 @@
   }catch(error){if(active&&token===epoch){routeStatus.hidden=false;routeStatus.textContent=error.message||String(error);}}
   finally{if(active&&token===epoch){delete overlay.dataset.route;draw();updateCapture();}}
  }
+
+ // ── FT3D-1a «Empezar desde el plano» ─────────────────────────────────────────────────────────────────────────────
+ // Plan → walls rising → lens opening → the existing overview → the presentation as it was. The narrative state is
+ // f(p) (FloorPlanPresentationStory); the slider and the buttons only choose p, so going back is the same path.
+ const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function storyOption(parent){
+  storyChosen=false;
+  const box=el('div',undefined,parent,'presentation-story-option');
+  const label=el('label',undefined,box);const input=el('input',undefined,label);input.type='checkbox';input.id='presentationStoryOption';input.checked=false;
+  el('span',tx('Empezar desde el plano','Start from the plan','从平面图开始'),label);
+  const hint=el('p',tx('Opcional: la presentación abre con el plano y los muros se levantan hasta la vista general 3D. No cambia el proyecto.','Optional: the presentation opens on the plan and the walls rise to the 3D overview. The project does not change.','可选：展示从平面图开始，墙体升起到 3D 总览。项目不变。'),box,'presentation-story-hint');hint.id='presentationStoryHint';
+  input.setAttribute('aria-describedby',hint.id);
+  input.onchange=()=>{storyChosen=input.checked;};
+ }
+ function storyControls(){
+  if(storyUi)return storyUi;
+  const panel=el('div',undefined,null,'presentation-story');panel.id='presentationStory';panel.setAttribute('role','group');panel.hidden=true;card.insertBefore(panel,controls);
+  const caption=el('p',undefined,panel,'presentation-story-caption');caption.id='presentationStoryCaption';caption.setAttribute('aria-live','polite');
+  const slider=el('input',undefined,panel,'presentation-story-slider');slider.type='range';slider.min='0';slider.max='100';slider.step='1';slider.id='presentationStorySlider';
+  slider.oninput=()=>{if(!story)return;const p=Number(slider.value)/100;pauseStory();setStory(p);};
+  const row=el('div',undefined,panel,'presentation-story-actions');
+  const planButton=button('',row,()=>{playStory(0);});planButton.id='presentationStoryPlan';
+  const play=button('',row,()=>{if(story?.playing)pauseStory();else if(story?.p>=1)finishStory();else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
+  const replay=button('',tools,()=>{openStory(epoch,{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
+  storyUi={panel,caption,slider,planButton,play,replay};return storyUi;
+ }
+ function drawStory(){
+  if(!storyUi)return;
+  const u=storyUi,on=!!story;
+  u.replay.textContent=tx('Volver al plano','Back to the plan','回到平面图');
+  u.replay.hidden=!storyEnabled||on||!plan||plan.stops[index]?.kind!=='overview';
+  u.replay.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';
+  u.panel.hidden=!on;if(!on)return;
+  const p=story.p,phase=p<=0?'plan':p>=1?'3d':View3D.presentationStoryInfo?.phase;
+  u.panel.setAttribute('aria-label',tx('Desde el plano','From the plan','从平面图'));
+  u.caption.textContent=phase==='plan'?tx('Plano de la vivienda','Plan of the home','住宅平面图'):phase==='3d'?tx('Vista general 3D','3D overview','3D 总览'):phase==='walls'?tx('Los muros se levantan desde el plano','Walls rise from the plan','墙体从平面图升起'):tx('La vista se abre en 3D','The view opens in 3D','视图展开为 3D');
+  u.slider.value=String(Math.round(p*100));u.slider.setAttribute('aria-label',tx('Del plano (0) a la vista 3D (100)','From plan (0) to 3D view (100)','从平面图 (0) 到 3D 视图 (100)'));
+  u.slider.setAttribute('aria-valuetext',`${Math.round(p*100)} % · ${u.caption.textContent}`);
+  u.planButton.textContent=tx('Ver el plano','Show the plan','查看平面图');u.planButton.disabled=story.playing||p<=0;
+  u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver en 3D','See in 3D','查看 3D');
+ }
+ function setStory(p){if(!story)return;story.p=Math.min(1,Math.max(0,p));View3D.presentationStoryApply(story.p);drawStory();}
+ function pauseStory(){if(!story?.playing)return;cancelAnimationFrame(story.raf);story.playing=false;const done=story.resolve;story.resolve=null;done?.(false);drawStory();}
+ // Plays p linearly in time (the easing is in the narrative); reduced motion goes straight to the end state.
+ function playStory(target){
+  if(!story)return Promise.resolve(false);
+  pauseStory();
+  const run=story,from=run.p,ms=FloorPlanPresentationStory.playMs(from,target,{reduced:reducedMotion()});
+  if(!ms){setStory(target);return Promise.resolve(true);}
+  run.playing=true;drawStory();
+  return new Promise(resolve=>{const began=performance.now();run.resolve=resolve;
+   const tick=now=>{if(story!==run||!run.playing)return;const t=Math.min(1,(now-began)/ms);setStory(from+(target-from)*t);
+    if(t<1){run.raf=requestAnimationFrame(tick);return;}
+    run.playing=false;run.resolve=null;drawStory();resolve(true);};
+   run.raf=requestAnimationFrame(tick);});
+ }
+ async function openStory(token,{from=0,to=null}={}){
+  if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview')return;
+  closeStory();
+  View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
+  ++movement;
+  try{await showLevel(plan.stops[index].levelId);}catch(error){status.textContent=error.message;return;}
+  if(!active||token!==epoch)return;
+  // Two free screen regions: the card as the presentation will show it (the end pose, as go() frames it) and the card
+  // with the narrative's controls (frames the plan beside them).
+  const u=storyControls();overlay.dataset.moving='false';draw();const region=viewRegion();
+  story={p:from,playing:false,raf:0,resolve:null};draw();
+  try{View3D.presentationStoryBegin(plan.stops[index],{region,startRegion:viewRegion()});setStory(from);}
+  catch(error){story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
+  draw();updateCapture();
+  if(to!==null){const done=await playStory(to);if(done&&to>=1&&story)await finishStory();}
+ }
+ // Resize: the same p on a narrative rebuilt for the new screen.
+ function restartStory(){if(!story)return;const p=story.p;pauseStory();requestAnimationFrame(()=>{if(!story||!active)return;
+  const saved=story;story=null;draw();const region=viewRegion();story=saved;draw();
+  try{View3D.presentationStoryBegin(plan.stops[index],{region,startRegion:viewRegion()});setStory(p);}catch{closeStory();go(index);}});}
+ // p = 1 is the overview pose: the narrative ends there and the presentation continues from the same view.
+ async function finishStory(){if(!story)return;setStory(1);closeStory();await go(index);}
+ // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
+ function disposeStory(){storyEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi=null;}}
+ function closeStory(){if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
@@ -428,6 +514,7 @@
   routeButton.textContent=tx('Recorrer desde entrada','Tour from entrance','从入口游览');
   routeButton.hidden=!plan||plan.stops[index]?.kind!=='room';
   routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
+  drawStory();
   if(!plan)return;
   const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');title.title=title.textContent;
   window.FloorPlanBrandUI?.decorate(card,brandSnap,{index,count:plan.stops.length,kind:stop.kind});
@@ -516,6 +603,7 @@
    else if(result.changed)configMessage.textContent=tx(result.missing?`El plano cambió: ${result.missing} estancia(s) ya no existen. Revisa la selección.`:'El plano cambió. Las vistas se calcularán de nuevo.','The layout changed. Review the room selection; views will be recalculated.','布局已更改。请检查房间选择；视图将重新计算。');
    else configMessage.textContent=tx('Selecciona y ordena las estancias. La vista general va primero.','Select and order rooms. Overview comes first.','选择并排序房间。总览始终在前。');
    roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias','Rooms','房间'));
+   storyOption(config);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -545,6 +633,7 @@
    :buildingConfig.some(l=>l.message==='changed')?tx('El plano cambió. Revisa la selección de cada planta.','The layout changed. Review the selection of each level.','布局已更改。请检查各楼层的选择。')
    :tx('Selecciona y ordena las estancias de cada planta. Las plantas se presentan en orden, de abajo arriba.','Select and order the rooms of each level. Levels are presented from the bottom up.','选择并排序各楼层的房间。');
   roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias por planta','Rooms by level','按楼层的房间'));
+  storyOption(config);
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -613,7 +702,9 @@
   info.textContent='';controls.hidden=true;stops.hidden=true;
   history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
   try{
-   if(!window.View3D||!await app.enterPresentation3D())throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
+   // With the chapter the 3D view opens on the plan as the 2D view shows it and the chapter continues from there.
+   storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!window.View3D?.presentationStoryBegin;
+   if(!window.View3D||!await app.enterPresentation3D(storyEnabled?{hold:true}:undefined))throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
    sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;updateAssetWarning();
@@ -623,7 +714,7 @@
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
    updateAssetWarning();
-   await go(0,token);closeButton.focus();
+   if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
     toast(error.message,6000);
@@ -636,6 +727,7 @@
  async function go(target,token=epoch){
   if(!active||batchActive||target<0||target>=plan.stops.length)return;
   if(!sourceCurrent()){await stop();return;}
+  closeStory();
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   const move=++movement;index=target;overlay.dataset.moving='true';draw();
   try{await showLevel(plan.stops[index].levelId);if(!active||token!==epoch||move!==movement)return;
@@ -644,7 +736,7 @@
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
-  cancelBatch();
+  cancelBatch();closeStory();disposeStory();
   stopping=true;++epoch;
   captureButton.disabled=true;
   // A building presentation leaves the editor on the level it started from, before the camera and the entry return.
@@ -666,7 +758,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart)return;
-  cancelBatch();
+  cancelBatch();closeStory();disposeStory();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
@@ -702,6 +794,7 @@
  addEventListener('resize',()=>{
   if(!active||!sourceCurrent())return;
   if(batchActive){batchResized=true;cancelBatch();}
+  if(story){restartStory();return;}
   const token=epoch,move=++movement;overlay.dataset.moving='true';updateCapture();
   requestAnimationFrame(()=>{
    if(!active||token!==epoch)return;
@@ -711,5 +804,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.p,playing:story.playing}:null;},get storyEnabled(){return storyEnabled;}};
 })();
