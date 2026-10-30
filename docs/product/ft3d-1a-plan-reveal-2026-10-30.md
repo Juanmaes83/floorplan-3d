@@ -20,7 +20,9 @@ Hacer visible que la vivienda en 3D sale del plano. La presentación puede empez
   - nombre: **«Empezar desde el plano»**, desactivada por defecto;
   - texto de ayuda: «Opcional: … No cambia el proyecto.»;
   - no se guarda: cada vez que se abre el diálogo vuelve a aparecer desmarcada.
-- **Con la casilla marcada**, la presentación abre en el plano y se reproduce sola hacia el 3D (unos 6 s).
+- **Con la casilla marcada**, la vista 3D se abre sobre **el mismo plano que se veía en el editor 2D**: mismo centro, mismo encuadre y el norte arriba, con muros y muebles aplanados. Desde ahí el capítulo se reproduce solo hacia el 3D (unos 6 s), sin corte ni doble transición.
+  - La vista 3D ya tenía una entrada animada propia (el plano 2D se levanta y vuela a una vista isométrica). Con el capítulo, esa entrada se queda en el plano (`View3D.enter({hold:true})`) y el capítulo continúa desde ese mismo fotograma.
+  - Sin el capítulo, la entrada al 3D es exactamente la de siempre.
   - La tarjeta muestra un bloque «Desde el plano»:
     - una frase de estado: «Plano de la vivienda», «Los muros se levantan desde el plano», «La vista se abre en 3D» o «Vista general 3D»;
     - un deslizador de 0 (plano) a 100 (3D);
@@ -74,16 +76,19 @@ Todo sale del proyecto abierto. No se copian FOV, distancias ni tiempos de FT3D.
 
 **Inicio (p = 0)**
 
-- La dirección tiene el mismo acimut que `dir₁` y una elevación de 89,9° (casi cenital). Así la transición es una inclinación pura, sin giro.
-- El encuadre `F₀` es la menor altura con la que todas las esquinas del plano caben en la región libre, más un 8 % de margen.
+- La dirección es casi cenital (elevación de 89,9°) con el **norte arriba**, como el editor 2D.
+- **Encuadre y centro.** Si la presentación entra desde la vista 2D (entrada retenida), `F₀` y el centro son exactamente los de esa vista 2D (`start`), y p = 0 es la imagen que la persona estaba viendo. «Volver al plano» vuelve a ese mismo plano durante toda la presentación.
+- **Sin vista 2D de partida** (por ejemplo, si ya se estaba en 3D), `F₀` es la menor altura con la que todas las esquinas del plano caben en la región libre, más un 8 % de margen.
 - La lente es estrecha y derivada: el FOV más amplio que cumple `distancia ≥ 100 × altura de muro`. Con eso, la diferencia de perspectiva entre el pie y la coronación de un muro es ≤ 1 %, lo que se lee como plano. El FOV se acota entre 1,5° y 8°.
-- El centro del plano se coloca en el centro de la región libre, con la misma compensación que `overviewPose`.
+- En el caso derivado, el centro del plano se coloca en el centro de la región libre, con la misma compensación que `overviewPose`.
+- Con muros y muebles aplanados, cualquier lente da la misma imagen del plano; por eso la lente estrecha de p = 0 no cambia lo que se ve respecto de la vista 2D.
 
 **Transición**, con `s = smoothstep((p − 0,12)/0,88)`:
 
 - `tan(fov/2) = tan₀ · (tan₁/tan₀)^s` y `F = F₀ · (F₁/F₀)^s`, ambas interpolaciones geométricas, para que el cambio de tamaño por paso sea uniforme;
 - `d = F / (2·tan(fov/2))`: es el dolly zoom, con el encuadre conservado;
-- la elevación se interpola linealmente en ángulo; el objetivo, linealmente.
+- la elevación se interpola linealmente en ángulo; el objetivo, linealmente;
+- el acimut gira, por el camino más corto y a la vez que se abre la lente, desde el norte arriba hasta la orientación de la vista general (una sola vez y en un solo sentido; comprobado en pruebas).
 
 **Valores de la vivienda de ejemplo** (10 × 7 m, 16:10). Son medidos, no fijados en el código:
 
@@ -124,7 +129,7 @@ En móvil esto es necesario: la tarjeta está abajo y crece con el bloque. Lo de
 
 - `archUp.scale.y` va de 0,012 a 1 entre p = 0,08 y p = 0,6, con suavizado.
 - Las luminarias de techo esperan a que los muros estén a altura completa.
-- El mobiliario (`furnG`) no se escala: el plano se lee amueblado, como en el editor.
+- El mobiliario (`furnG.scale.y`) sube de 0,001 a 1 entre p = 0,2 y p = 0,7, un poco después de los muros, como en la entrada 3D existente.
 - Al terminar se llama a `applyGrow()`, la función existente, que devuelve los muros a su estado normal.
 
 ## 8. Reversibilidad
@@ -147,7 +152,8 @@ En móvil esto es necesario: la tarjeta está abajo y crece con el bloque. Lo de
 **Unitarias**: `tests/presentation-story.test.cjs`, 7 pruebas.
 
 - p = 1 coincide exactamente con la pose final.
-- p = 0 es el plano: lente derivada, vista cenital, mismo acimut y esquinas dentro de pantalla y de near/far.
+- p = 0 es el plano: lente derivada, vista cenital con el norte arriba, muebles aplanados y esquinas dentro de pantalla y de near/far.
+- Desde la vista 2D: mismo centro y encuadre, giro en un único sentido y sin saltos; muebles que suben de forma monótona.
 - Puntos de control monótonos, con el encuadre conservado.
 - Reversibilidad y determinismo.
 - Funciona con otros tamaños, otro aspecto y la región de la tarjeta en móvil.
@@ -183,9 +189,13 @@ Se generan con la prueba de navegador en `STORY_ARTIFACTS`; en CI se suben como 
 
 No se suben al repositorio.
 
+**Vídeo de validación.** Se graba con `scripts/qa/record-presentation-story.cjs <repo> <salida> 1a 1440x900` (Playwright + Chromium sobre la app real). Recorre: editor 2D → «Presentar mi vivienda» con el capítulo → plano → 3D → «Volver al plano» → 3D → salida. Lo usamos como prueba visual de continuidad, igual que las capturas.
+
+Gracias al vídeo se encontró y corrigió la doble transición de la primera versión (ver «Límites conocidos»). El vídeo no se sube al repositorio; se adjunta a la revisión.
+
 ## 12. Límites conocidos
 
-- **Orientación del plano.** El plano inicial se orienta como la vista 3D final (mismo acimut), no con el norte arriba como el editor 2D. Es intencionado, para evitar que la imagen gire mientras se inclina. Mostrarlo «como en el editor» exigiría un giro durante la transición y queda como posible variante.
+- **Orientación del plano.** Corregido tras revisar el vídeo: la primera versión abría el capítulo con un plano propio, girado como la vista final, después de la animación de entrada 3D existente. Se veía una doble transición y un corte. Ahora p = 0 es la vista 2D y la vista gira hacia la orientación final mientras se abre la lente.
 - **Altura de muro.** Los muros suben como un único volumen, con una sola escala para el grupo. No hay orden por tramos ni por estado (existente, nuevo o a demoler). Un sombreado del plano «a lo CAD» queda para un corte siguiente.
 - **Capturas a mitad de narrativa.** No se permiten capturas ni el lote ZIP mientras la narrativa está abierta: «Guardar PNG», «Compartir imagen» y «Vistas + proyecto ZIP» están desactivados. Al terminar se activan como antes.
 - **Grabación de vídeo.** El vídeo del recorrido no incluye el capítulo.
@@ -214,7 +224,8 @@ No se suben al repositorio.
 
 ## 16. Siguiente corte (propuesta, sin implementar)
 
-- **FT3D-1b.** Plano con apariencia de plano: sombreado de muros de corte, etiquetas de estancias y cotas principales a p = 0, que se desvanecen al abrir la lente. Opcionalmente, el giro hacia norte arriba como variante.
+- **FT3D-1b.** «Entrar en la estancia»: descenso continuo y reversible desde la vista general hasta la primera estancia elegida (la parte que falta de la fase FT3D-1 del programa).
+- **Después.** Plano con apariencia de plano: sombreado de muros de corte, etiquetas de estancias y cotas principales a p = 0, que se desvanecen al abrir la lente.
 - **Narrativas aditivas** sobre el mismo registro `NARRATIVES`:
   - Section Sweep;
   - Open Section;

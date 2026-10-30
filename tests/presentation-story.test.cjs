@@ -31,8 +31,8 @@ test('p = 0 is the plan: seen from above with a narrow, derived lens and flatten
  // Derived flatness: the camera is at least 100 × the wall top away (≤ 1 % perspective between wall foot and top).
  assert.ok(s.distance>=100*2.8-1e-6||s.fov===1.5,`distance ${s.distance}`);
  const off=[0,1,2].map(i=>s.position[i]-s.target[i]),elev=Math.asin(off[1]/Math.hypot(...off))*180/Math.PI;assert.ok(elev>89.5,`from above (${elev}°)`);
- // Same azimuth as the end view: the transition tilts, it never spins.
- assert.ok(close(Math.atan2(off[2],off[0]),Math.atan2(dir[2],dir[0]),1e-6));
+ // North up, as the 2D editor: the camera sits on +z of the target (top of the screen = top of the plan).
+ assert.ok(close(Math.atan2(off[2],off[0]),Math.PI/2,1e-6));assert.ok(s.furnitureScale<.01,'furniture flattened as in the plan');
  // Every plan corner fits the screen with a margin.
  for(const [x,z] of corners){const q=project(s,[x,0,z],16/9);assert.ok(Math.abs(q.x)<.95&&Math.abs(q.y)<.95,`corner ${x},${z} → ${q.x.toFixed(3)},${q.y.toFixed(3)}`);}
  // near/far keep the whole home inside the depth range.
@@ -86,4 +86,19 @@ test('rejects missing facts with a readable error and keeps the input untouched;
 test('play time is proportional to the distance in p; reduced motion is immediate',()=>{
  assert.equal(Story.playMs(0,1),6000);assert.equal(Story.playMs(1,0),6000);assert.equal(Story.playMs(.5,1),3000);
  assert.equal(Story.playMs(0,1,{reduced:true}),0);assert.equal(Story.playMs(.3,.3),0);
+});
+
+test('from the 2D editor view: p = 0 keeps its centre and framed height; the view turns once, smoothly, to the overview',()=>{
+ const start={target:[1.3,0,-.7],frameHeight:12.4},n=Story.create('plan-reveal',{...input,start}),a=n.stateAt(0);
+ assert.deepEqual(a.target,[1.3,0,-.7]);assert.ok(close(a.frameHeight,12.4,1e-9));assert.equal(n.info.fromEditorView,true);
+ // The same image as the editor: a flattened plan framed with the same height around the same centre.
+ const t=Math.tan(a.fov*Math.PI/360);assert.ok(close(2*a.distance*t,12.4,1e-9));
+ const az=st=>{const o=[0,1,2].map(i=>st.position[i]-st.target[i]);return Math.atan2(o[2],o[0]);};
+ const steps=Array.from({length:101},(_,i)=>i/100).map(p=>n.stateAt(p)),turn=n.info.turnDeg*Math.PI/180;
+ assert.ok(Math.abs(n.info.turnDeg)<=180);
+ for(let i=1;i<steps.length;i++){const d=Math.atan2(Math.sin(az(steps[i])-az(steps[i-1])),Math.cos(az(steps[i])-az(steps[i-1])));assert.ok(d*Math.sign(turn)>=-1e-9,'turns one way only');assert.ok(Math.abs(d)<.12,'no sudden turn');}
+ assert.deepEqual(n.stateAt(1).position,end.position);assert.equal(n.stateAt(1).furnitureScale,1);
+ for(let i=1;i<steps.length;i++)assert.ok(steps[i].furnitureScale>=steps[i-1].furnitureScale);
+ // An invalid start is ignored (derived framing), never trusted.
+ assert.equal(Story.create('plan-reveal',{...input,start:{target:[NaN,0,0],frameHeight:3}}).info.fromEditorView,false);
 });

@@ -702,7 +702,9 @@
   info.textContent='';controls.hidden=true;stops.hidden=true;
   history.pushState({...history.state,rubikPresentation:true},'','#presentacion');
   try{
-   if(!window.View3D||!await app.enterPresentation3D())throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
+   // With the chapter the 3D view opens on the plan as the 2D view shows it and the chapter continues from there.
+   storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!window.View3D?.presentationStoryBegin;
+   if(!window.View3D||!await app.enterPresentation3D(storyEnabled?{hold:true}:undefined))throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
    sceneState=View3D.presentationCapture();active=true;index=0;visited=new Set();controls.hidden=false;stops.hidden=false;updateAssetWarning();
@@ -712,7 +714,6 @@
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
    updateAssetWarning();
-   storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!View3D.presentationStoryBegin;
    if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
