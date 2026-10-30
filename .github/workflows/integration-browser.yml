@@ -6,6 +6,10 @@ on:
     paths:
       - 'index.html'
       - 'js/presentation-ui.js'
+      - 'js/professional-workspace-ui.js'
+      - 'js/guide-ui.js'
+      - 'css/professional-workspace.css'
+      - 'tests/professional-workspace.browser.test.cjs'
       - 'js/tour-recorder.js'
       - 'tests/tour-recorder.browser.test.cjs'
       - 'tests/tour-recorder-ci.browser.test.cjs'
@@ -17,6 +21,10 @@ on:
     paths:
       - 'index.html'
       - 'js/presentation-ui.js'
+      - 'js/professional-workspace-ui.js'
+      - 'js/guide-ui.js'
+      - 'css/professional-workspace.css'
+      - 'tests/professional-workspace.browser.test.cjs'
       - 'js/tour-recorder.js'
       - 'tests/tour-recorder.browser.test.cjs'
       - 'tests/tour-recorder-ci.browser.test.cjs'
@@ -43,6 +51,8 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "$TESTED_SHA"
           node --check js/presentation-ui.js
+          node --check js/professional-workspace-ui.js
+          node --check tests/professional-workspace.browser.test.cjs
           node --check js/tour-recorder.js
           node --check tests/tour-recorder.browser.test.cjs
           node --check tests/tour-recorder-ci.browser.test.cjs
@@ -60,10 +70,12 @@ jobs:
           echo "THREE_LOCAL_DIR=$RUNNER_TEMP/integration-three/package" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/integration-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Recorder smoke, keyboard focus, room labels
-        run: node --test --test-concurrency=1 tests/tour-recorder-ci.browser.test.cjs tests/presentation-focus.browser.test.cjs tests/room-label-clear.browser.test.cjs
+        run: node --test --test-concurrency=1 tests/professional-workspace.browser.test.cjs tests/tour-recorder-ci.browser.test.cjs tests/presentation-focus.browser.test.cjs tests/room-label-clear.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: integration-browser-${{ env.TESTED_SHA }}
-          path: qa-results/tour-video-integration/
+          path: |
+            qa-results/tour-video-integration/
+            output/playwright/point-9/after/
           if-no-files-found: ignore

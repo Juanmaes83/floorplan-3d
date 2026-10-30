@@ -32,8 +32,10 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test(`gui
  const read=()=>page.evaluate(()=>{const cur=document.querySelector('#guideBar [aria-current="step"]'),steps=[...document.querySelectorAll('#guideBar [aria-current="step"]')];
   const title=document.querySelector('#guideBar h2')?.textContent.trim()||'',def=Object.values(FloorPlanGuide.definitions).find(d=>title.endsWith(d.title[0]));
   const shown=e=>!!e&&!e.closest('[hidden]')&&e.getClientRects().length>0;
-  return {current:steps.length,stage:cur?[...cur.closest('ol').querySelectorAll('button')].indexOf(cur):-1,title,taskStage:def?.stage??null,guidePresent:shown(document.querySelector('#guidePresent'))};});
- const check=async where=>{const r=await read();assert.equal(r.current,1,`${where} one current stage`);if(r.taskStage!==null)assert.equal(r.stage,r.taskStage,`${where} ${JSON.stringify(r)}`);if(r.taskStage===4)assert.equal(r.guidePresent,true,`${where} «Presentar» stays in the guide at stage 5`);return r;};
+  return {current:steps.length,stage:cur?[...cur.closest('ol').querySelectorAll('button')].indexOf(cur):-1,stepLabel:cur?.querySelector('.step-label')?.textContent,title,taskStage:def?.stage??null,guidePresent:shown(document.querySelector('#guidePresent'))};});
+ // Point9 groups the two preparation stages, then design/furnish/review, and adds the delivery workspace.
+ // Keep checking the real task/card relationship and the presentation shortcut; also assert the visible phase label.
+ const check=async where=>{const r=await read();assert.equal(r.current,1,`${where} one current stage`);if(r.taskStage!==null){assert.equal(r.stage,[0,0,1,2,3][r.taskStage],`${where} ${JSON.stringify(r)}`);assert.equal(r.stepLabel,['Preparar','Diseñar','Amueblar','Revisar','Entregar'][r.stage]);}if(r.taskStage===4)assert.equal(r.guidePresent,true,`${where} «Presentar» stays in the guide during review`);return r;};
  await check('example entered');
  await click(page,'#guideDetails');await click(page,'#guideTask-furniture');await page.waitForTimeout(300);
  const after=await check('task already done reopened');assert.notEqual(after.title,'',`title shown`);
