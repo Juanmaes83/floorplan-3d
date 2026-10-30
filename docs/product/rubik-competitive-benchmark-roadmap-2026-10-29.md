@@ -1094,3 +1094,112 @@ Rubik debe ganar porque **entiende el proyecto completo**, no porque tenga el ed
 ---
 
 **Documento estratégico. No activa automáticamente ningún punto del roadmap. La implementación debe comenzar por una fase acotada, validada visualmente y sin alterar autoridades canónicas del modelo.**
+
+---
+
+## Implementación — Project-First Experience A1
+
+**Estado:** candidato en revisión. Rama `feat/project-first-experience-a1`, apilada sobre Punto 9 (PR #133, todavía abierto). Este apartado sólo registra implementación; la estrategia anterior no cambia.
+
+### Alcance
+
+Ataca §7.1 (Entregar con previews reales) y §7.4 (contexto visual permanente). Prepara, sin activarlos, §7.2, §7.3, §7.5 y §7.6.
+
+| Mejora | Estado |
+|---|---|
+| 7.1 Entregar con previews reales | **implementado (parcial)**: ficha, lámina real, esquema 3D, estado de imágenes, observaciones e identidad visibles antes de pulsar. Sin frame renderizado de la vista 3D ni thumbnails de imágenes guardadas (no existen todavía). |
+| 7.4 Contexto visual permanente | **implementado** en Analizar, Entregar y Mi estudio. |
+| 7.2 Analizar visual | **parcial**: plano con estancias dentro/fuera del cómputo y cifra con certeza. Orientación, solar, emplazamiento y exterior siguen como texto. |
+| 7.3 Dossier automático | **base preparada** (resumen, plano, lámina y firma reutilizables). No iniciado como producto. |
+| 7.5 Galería de vistas | **no iniciado**. |
+| 7.6 Informe solar/emplazamiento | **no iniciado**. |
+| Presupuesto, AI Render, share link | **no iniciado**; Presupuesto sigue «no disponible todavía». |
+
+### Decisiones
+
+- **Read model → present result.** No hay schema, formato persistido, provider ni cálculo canónico nuevo. Las previews se reconstruyen en cada render del área y no se guardan.
+- **Lámina real, no un dibujo de una lámina.** `FloorPlanSheet.preview()` expone el mismo `build(0)` que «Ajustar a la hoja» usa al abrir y al descargar. Se muestra como imagen local (`blob:`), con la firma seleccionada. Si la planta 2D no está lista, la tarjeta dice «No preparada» con el motivo del propio módulo.
+- **Presentación 3D sin render inventado.** Capturar un frame del renderer exigiría inicializar la vista 3D desde Entregar (acoplamiento y coste). Se muestra un esquema axonométrico lineal de los mismos muros a su altura declarada, rotulado «No es un render».
+- **Imágenes sin miniaturas falsas.** Hoy no hay imágenes guardadas: se enseña qué mostrará cada una (plano 2D, vista 3D, exterior con el estado real de la cubierta) y el texto «Todavía no hay imágenes guardadas».
+- **Jerarquía en lugar de cuadrícula uniforme.** El proyecto encabeza la pantalla con plano, nombre, superficie y certeza, más una línea honesta de qué está listo y qué falta. Documentación conserva su aspecto de papel; Visualización, Seguimiento e Identidad conservan los grupos de Punto 9.
+- Ninguna función, ruta, encabezado ni acción se elimina. Las tarjetas conservan sus botones y su orden de teclado. La miniatura propia de Punto 9 se sustituye por el componente común.
+
+### Componentes reutilizables
+
+- `js/project-visual-core.js` (`FloorPlanProjectVisual`, puro, también en Node):
+  - `plan(geometry)`: polígonos de estancias (dentro/fuera del cómputo) y muros, incluidos los demolidos marcados.
+  - `axonometric(geometry)`: caras del esquema con la altura de cada muro.
+  - `summary(...)`: nombre, superficie, certeza, estancias, planta activa, escala y marca.
+  - `deliveryStates(...)`: `ready` / `generate` / `review` / `missing` / `unavailable`, sin inventar salidas.
+- `js/project-preview-ui.js` (`FloorPlanProjectPreview`): `context`, `plan`, `axonometric`, `sheet` y `signature`, en SVG/DOM local con texto equivalente. No hace picking ni toca el renderer.
+- `css/project-first.css`: tokens «Cuaderno de proyecto» existentes; sin paleta ni tipografía nueva.
+
+### Fuentes de datos
+
+| Dato | Autoridad existente |
+|---|---|
+| Geometría | `Core.geometry` (`FloorPlanApp.geometry`, planta activa) |
+| Superficies | `FloorPlanSurfaceMetrics.home` (la misma cifra de la ficha) |
+| Identidad | `FloorPlanBrandUI.snapshot()` |
+| Observaciones | estado local existente de revisión (`rubik-review-v1`) |
+| Lámina | `FloorPlanSheet` (`build` existente) |
+| Presentación / avisos | `FloorPlanBuildingUI.status()`; cubierta por `FloorPlanRoof` |
+| Planta | `FloorPlanApp.levelContext` |
+
+### Limitaciones
+
+- El plano y el esquema son de la planta activa; la superficie es la de la vivienda completa, como en la ficha.
+- El esquema axonométrico no muestra huecos, mobiliario ni materiales, y no sustituye a la vista 3D.
+- La vista previa de la lámina es la variante sin escala; las escalas de impresión se eligen al abrirla.
+- Las observaciones dependen del estado local del navegador, igual que su gestor.
+- La evaluación estética es propia y queda pendiente de revisión humana.
+
+### Tests
+
+Pruebas puras en `tests/project-visual.test.cjs` (6/6):
+- el preview deriva de la geometría actual;
+- el esquema usa las alturas declaradas;
+- la superficie refleja la métrica real y su certeza;
+- Entregar no inventa salidas no disponibles;
+- la marca refleja sólo el perfil seleccionado;
+- no hay mutación con entradas congeladas.
+
+`tests/project-first.browser.test.cjs` (5/5), con Chromium real en 1440×900, 1280×800, 390×844 y 844×390, recorre tres casos:
+- **Caso A, Entregar:** muestra proyecto, documentación, salidas visuales, qué está listo, qué falta e identidad, todo antes de pulsar.
+- **Caso B, Analizar:** la vivienda sigue presente y la superficie se lee sobre el plano.
+- **Caso C, Mi estudio:** la firma se ve aplicada a la lámina real.
+
+En los tres casos comprueba además:
+- el proyecto no cambia;
+- no hay peticiones remotas ni scroll horizontal;
+- Entregar sigue un cambio del proyecto hecho con la mutación propia de la aplicación.
+
+Regresiones relacionadas:
+- **Suite Node no-browser:** 573 PASS, 0 FAIL, 2 SKIP opcionales.
+- **Navegador, sin fallos:** sheet, surface-sheet, brand, client-review y guide-navigation (36 PASS, 1 SKIP preexistente por THREE_LOCAL_DIR). Solar + parcel: 19/19 PASS.
+- **`professional-workspace` de Punto 9:** pasan los recorridos A–E y las cuatro capas visuales.
+  - Los casos que dependen de la vista 3D en marcha («human review 2», «global controls» y la ruta de presentación de «saved studio identity») agotan el tiempo en este entorno.
+  - Ejecutados aislados sobre el HEAD base `9a09064`, sin estos cambios, fallan igual: es una limitación del entorno, no una regresión de A1.
+- `node --check` y `git diff --check`: sin errores.
+
+### Before / after
+
+Capturas generadas con `scripts/qa/ux/project-first-a1-visual.cjs before|after <dir>`:
+- **Pantallas:** Entregar, Analizar y Mi estudio, sin marca y con un perfil sintético local.
+- **Contenido completo:** cada área completa en una sola imagen.
+- **Salidas:** Ficha, Lámina y Presentación.
+- **Viewports:** 1440×900, 1280×800, 390×844 y 844×390.
+- **Captura AFTER:** 0 errores de página y sin scroll horizontal.
+- **Comparación:** se revisó lado a lado.
+
+Las imágenes se conservan localmente y no se añaden al repositorio.
+
+Respuesta a la pregunta de éxito:
+- **Antes:** Entregar enumeraba siete tarjetas de texto con una miniatura de 88 px.
+- **Después:** antes de pulsar se ven el plano de la vivienda, su superficie y certeza, la lámina real firmada, las filas de la ficha, el esquema del modelo, qué imágenes se generarán, la firma aplicada y una línea que dice qué está listo y qué falta.
+
+### Siguientes pasos
+
+1. **Analizar visual completo (§7.2):** orientación con norte sobre el mismo plano, sol y emplazamiento reutilizando `FloorPlanProjectPreview`.
+2. **Galería de vistas (§7.5):** puntos de cámara guardados que sustituyan el esquema por frames reales en Entregar e Imágenes.
+3. **Dossier automático (§7.3):** portada, lámina, ficha y firma ya existen como componentes; falta la composición y su exportación.
