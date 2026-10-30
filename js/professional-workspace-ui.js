@@ -20,7 +20,7 @@
  function close(){if(window.FloorPlanProjectViews?.status()==='busy'){toast(tx('Espera a que terminen de prepararse las vistas: se está usando la vista 3D.','Wait until the views are prepared: the 3D view is in use.','请等待视图准备完成：三维视图正在使用中。'),4000);return;}finish();(returnTo?.isConnected?returnTo:buttons.design).focus();}
  async function run(fn){try{await fn();}catch(e){toast(e.message,6000);}}
  // Existing dialogs stay the only implementation. Their native close returns to this area and its initiating card.
- async function launch(fn){const focus=document.activeElement;const wasOpen=new Set(document.querySelectorAll('dialog[open]'));await run(fn);const dialog=[...document.querySelectorAll('dialog[open]')].find(d=>!wasOpen.has(d));if(dialog)dialog.addEventListener('close',()=>{if(!section.hidden){render(false);const next=section.querySelector('[data-route="'+focus.dataset.route+'"]');(next||document.querySelector('#professionalTitle')).focus();}},{once:true});}
+ async function launch(fn){const focus=document.activeElement;const wasOpen=new Set(document.querySelectorAll('dialog[open]'));await run(fn);const dialog=[...document.querySelectorAll('dialog[open]')].find(d=>!wasOpen.has(d));if(dialog)dialog.addEventListener('close',()=>{if(!section.hidden){if(imagesScreen)renderImages(false);else render(false);const next=section.querySelector('[data-route="'+focus.dataset.route+'"]');(next||document.querySelector('#professionalTitle')).focus();}},{once:true});}
  const route=(parent,label,id,fn,primary=false)=>{const b=button(label,parent,()=>launch(fn),primary);b.dataset.route=id;return b;};
  const site=()=>window.FloorPlanBuildingUI?.site||app.project.site||{};
  const sources=()=>window.FloorPlanBuildingUI?.presentationSources?.();
@@ -69,7 +69,9 @@
  function viewsGallery(parent,items,{caption,downloads=false}={}){
   const grid=el('div',undefined,parent,'project-view-gallery');grid.setAttribute('role','list');
   for(const v of items){const item=el('figure',undefined,grid,'project-view');item.setAttribute('role','listitem');const img=el('img',undefined,item,'project-view-image');img.src=v.dataUrl;img.alt=tx('Vista 3D real: ','Real 3D view: ','真实三维视图：')+v.label;el('figcaption',v.label,item);
-   if(downloads){const b=route(item,tx('Descargar imagen','Download image','下载图片'),'view-'+v.id,()=>FloorPlanProjectViews.download(v.id));b.setAttribute('aria-label',tx('Descargar imagen: ','Download image: ','下载图片：')+v.label);}}
+   if(downloads){const b=route(item,tx('Descargar imagen','Download image','下载图片'),'view-'+v.id,()=>FloorPlanProjectViews.download(v.id));b.setAttribute('aria-label',tx('Descargar imagen: ','Download image: ','下载图片：')+v.label);
+    // B2: an orientative AI render of this real view (only the image is sent; see FloorPlanAIRender).
+    if(window.FloorPlanAIRender){const ai=route(item,tx('Render IA','AI render','AI 渲染'),'ai-'+v.id,()=>FloorPlanAIRender.open(v));ai.setAttribute('aria-label',tx('Render IA de: ','AI render of: ','AI 渲染：')+v.label);}}}
   if(caption)el('p',caption,parent,'project-view-caption');
   return grid;}
  function viewsAction(parent){const V=window.FloorPlanProjectViews;if(!V)return;const st=V.status(),n=V.plan()?.stops.length||0;

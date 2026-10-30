@@ -1459,3 +1459,59 @@ Siguen fuera de la Fase A y **no iniciados**: share link, Render IA, comentarios
 - que el JSON pasa `FloorPlanReviewNotes.read`;
 - que la importación en «Observaciones del cliente» muestra el nombre y los textos del cliente;
 - que la inyección mediante nombres no es posible.
+
+---
+
+## Implementación — Fase B · B2: Render IA desde vistas reales
+
+**Estado:** candidato en revisión. Rama `feat/ai-render-b2`, apilada sobre B1 (PR #138). Entrega §8.3 según lo decidido por el propietario el 29-10-2026: función serverless en Vercel con su clave de OpenAI (gpt-image).
+
+### Qué hace
+
+- En **Entregar → Generar imágenes**, cada vista real preparada (A2) tiene «Render IA».
+- **El diálogo, antes de enviar nada:**
+  - dice exactamente qué se envía y adónde: solo la imagen de esa vista, a OpenAI, a través del servidor de Rubik; no se envían el proyecto, la ubicación ni los datos del profesional;
+  - avisa de que el coste va a la cuenta de OpenAI configurada;
+  - pide confirmación explícita y el código de acceso;
+  - deja elegir el estilo: luz natural, cálido, escandinavo o premium inmobiliario.
+- **El resultado** se muestra junto a la vista real, rotulado «Render IA (orientativo)». Se descarga como imagen de entrega de 1600×1000 con la nota «Imagen generada por IA a partir de la vista real del proyecto · orientativa, puede alterar detalles».
+- **Autoridad:** la geometría de Rubik sigue siendo la autoridad; la IA solo cambia la presentación de una imagen y nunca modifica el proyecto (§8.3).
+
+### Servidor: `api/render.js`
+
+- Es una función Node de Vercel (`POST /api/render`).
+- `OPENAI_API_KEY` es un secreto de Vercel y nunca llega al navegador.
+- **`RUBIK_RENDER_TOKEN` es obligatorio.** Sin él, la URL pública permitiría a cualquiera gastar el crédito de OpenAI. El profesional lo introduce una vez y queda solo en su navegador; si es incorrecto, se olvida. La comparación se hace en tiempo constante.
+- **Entrada:** acepta solo un estilo conocido y una imagen PNG/JPEG de hasta 3,5 MB. El prompt es fijo y vive en el servidor: exige conservar cámara, muros, huecos, distribución, proporciones y mobiliario, y prohíbe añadir texto, logos o personas. El navegador no puede enviar instrucciones libres.
+- **Errores:** se reducen a códigos cortos (configuración, código, límite de peticiones, rechazo, proveedor) y nunca se devuelven detalles del proveedor ni la clave. No se guarda nada en el servidor.
+- `RUBIK_RENDER_MODEL` permite cambiar el modelo sin tocar el código; por defecto, `gpt-image-1`.
+
+### Configuración necesaria (la hace el propietario)
+
+1. Vercel → proyecto `floorplan-3d` → Settings → Environment Variables: `OPENAI_API_KEY` y `RUBIK_RENDER_TOKEN` (un valor largo y aleatorio).
+2. Volver a desplegar. Sin estas variables, Rubik dice «El Render IA no está configurado en este servidor».
+
+### Limitaciones
+
+- Es una edición imagen → imagen: el modelo puede alterar detalles, y por eso el resultado se rotula y se compara con la vista real.
+- Los renders viven en memoria de la sesión; no entran todavía en el dossier ni en el archivo para el cliente.
+- La protección es un código compartido, no cuentas de usuario. Tampoco hay límite de gasto en Rubik: el límite debe fijarse en la cuenta de OpenAI.
+- Sin la clave en este entorno, la integración se valida con un proveedor simulado. La primera prueba real requiere las variables en Vercel.
+
+### Tests
+
+- `tests/ai-render-api.test.cjs` (4/4, Node, proveedor simulado) comprueba:
+  - rechazo sin configuración, con otro método o con código ausente, erróneo o demasiado largo;
+  - solo estilos conocidos e imágenes PNG/JPEG acotadas (ni SVG, ni URL, ni más de 3,5 MB);
+  - el prompt fijo y que al proveedor solo llegan la imagen, el prompt, el modelo, `n` y el tamaño;
+  - que la clave nunca sale en la respuesta;
+  - la traducción de los errores del proveedor.
+- `tests/ai-render.browser.test.cjs` (1/1, Chromium con `/api/render` interceptado) comprueba:
+  - que sin consentimiento y código no sale ninguna petición;
+  - que la petición lleva solo `image` (JPEG) y `style`, sin datos del proyecto, y el código en su cabecera;
+  - la comparación real frente a IA con sus rótulos;
+  - la descarga de 1600×1000;
+  - la caché por vista y estilo;
+  - los errores 401 (se olvida el código) y 503 (configuración), dichos con claridad;
+  - el retorno del foco a la vista en «Generar imágenes»;
+  - que el proyecto no cambia.
