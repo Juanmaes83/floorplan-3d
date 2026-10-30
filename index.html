@@ -2222,7 +2222,7 @@ async function setView(m,options={}){
       const probe=document.createElement('canvas');
       if(!probe.getContext('webgl2')&&!probe.getContext('webgl'))throw Error('WebGL unavailable');
       if(ui.tool!=='select')setTool('select');ui.mA=null;closeDrawers();
-      document.body.classList.add('m3d');await window.View3D.enter();
+      document.body.classList.add('m3d');await window.View3D.enter(options.hold?{hold:true}:undefined);
       if(!window.View3D.contextAvailable)throw Error('WebGL context lost');
     }else{document.body.classList.remove('m3d');await window.View3D.exit();applyView();}
     viewMode=m;$('#tip').textContent=TIPS()[m];
@@ -2426,7 +2426,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
   get project(){return project;},get geometry(){return geometry;},get source2D(){return rendered2DSource;},
   get entryId(){return library?.activeId()||project.id;},get viewMode(){return viewMode;},
   setSite(site){if(window.FloorPlanBuildingUI?.context)return window.FloorPlanBuildingUI.setSite(site);const before=snap();project=Core.setSite(project,site);if(!commit(before))throw Error('No se pudo guardar el contexto.');renderAll();return true;},
-  async enterPresentation3D(){await setView('3d',{presentation:true});return is3D();},
+  async enterPresentation3D(options={}){await setView('3d',{presentation:true,hold:!!options.hold});return is3D();},
   capturePresentationEntry(){return {projectId:project.id,entryId:library?.activeId()||project.id,revision:FloorPlanGuide.revision(project),
     viewMode,selection:ui.sel?structuredClone(ui.sel):null,tool:ui.tool,view:{...view},
     libOpen:$('aside.lib').classList.contains('open'),panelOpen:$('aside.right').classList.contains('open'),
@@ -3889,8 +3889,13 @@ function flyToRoom(id){
 }
 
 /* ======================= 进入 / 退出 3D ======================= */
-async function enter(){
+// options.hold (FT3D-1a, only when the presentation chapter «Empezar desde el plano» is chosen): enter on the flattened
+// plan that coincides with the 2D view and stay there, without the usual rise; the chapter continues from that frame.
+// Every other entry is unchanged.
+let heldEntry=null;
+async function enter(options={}){
   if(contextLost)throw Error('WebGL context lost; reload to retry');
+  heldEntry=null;
   init(); active = true;
   window.FloorPlanBuildingUI?.resend();
   renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH()); camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
@@ -3903,6 +3908,7 @@ async function enter(){
   stage.classList.add('is3d');                       // 交叉淡入：此刻 3D 画面与 2D 平面完全重合
   await wait(420);
   if(contextLost)throw Error('WebGL context lost');
+  if(options.hold){heldEntry={target:A.t.toArray(),frameHeight:2*A.p.distanceTo(A.t)*Math.tan(camera.fov*Math.PI/360)};stage.classList.remove('animating');return;}
   await animate(1700, t => {
     camTween(A, B, ease(clamp01(t/.85)));
     grow = ease(clamp01((t - .1)/.55));
@@ -3914,6 +3920,7 @@ async function enter(){
   stage.classList.remove('animating');
 }
 function abort3D(){
+  if(heldEntry){heldEntry=null;grow=furnGrow=1;}
   territoryRenderer?.dispose();
   clearPresentationReveal();
   clearPresentationRoute();
@@ -3927,7 +3934,10 @@ function abort3D(){
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
   active=false;stage.classList.remove('is3d','animating');
 }
+// A held entry that no narrative took over (the chapter could not start, another stop was chosen…) rises at once.
+function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;}
 async function exit(){
+  heldEntry=null;
   if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
     const dir = new THREE.Vector3(); camera.getWorldDirection(dir); orbit.target.copy(camera.position).addScaledVector(dir, 3).setY(0); opt.mode = 'orbit'; syncModeBtns(); }
   if(fly?.res)fly.res(false);fly = null; orbit.enabled = false; showLabels(false); stage.classList.add('animating');
@@ -4348,7 +4358,7 @@ function presentationStopPose(stop,aspect,region){
 function restoreTerritorialViewLimits(){if(territorialViewLimits){orbit.maxDistance=territorialViewLimits.maxDistance;camera.far=territorialViewLimits.far;camera.updateProjectionMatrix();territorialViewLimits=null;}}
 function presentationGo(stop,reduced=false,view={}){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
-  endPresentationStory();
+  endPresentationStory();releaseHeldEntry();
   clearPresentationRoute();
   if(stop.kind==='territorial-context'&&territorialBaseLevelView===null)territorialBaseLevelView=levelView;
   if(stop.kind!=='territorial-context'&&territorialBaseLevelView!==null){levelView=territorialBaseLevelView;territorialBaseLevelView=null;sigArch='';sync();}
@@ -4470,7 +4480,7 @@ function presentationRoute(roomId,reduced=false,view={}){
   });
 }
 function presentationRestore(state){
-  endPresentationStory();
+  endPresentationStory();releaseHeldEntry();storyPlanStart=null;
   restoreTerritorialViewLimits();
   territorialPresentation=false;territorialBaseLevelView=null;if(state?.levelView)levelView=state.levelView;
   clearPresentationReveal();
@@ -4525,9 +4535,15 @@ function presentationRestorePose(state){
    Begin saves everything a state touches (camera pose, lens, near/far, orbit limits and input, wall growth) and end
    restores it; nothing here edits the project, rebuilds geometry or adds a second model. The narrative ends exactly on
    the pose presentationGo computes for the same stop, so continuing to the presentation has no jump. */
-let storyRun=null;
+let storyRun=null,storyPlanStart=null;
 function presentationStoryBegin(stop,view={}){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
+  // It starts from the 2D view the 3D view entered on (held entry), when there is one; walls and furniture are then
+  // driven by the narrative and return to full height when it ends.
+  const held=heldEntry;heldEntry=null;grow=furnGrow=1;if(held)orbit.enabled=true;
+  // «Volver al plano» returns to that same plan for the stop it was taken for, for the whole presentation.
+  if(held)storyPlanStart={stopId:stop.id,start:held};
+  const planStart=held||(storyPlanStart?.stopId===stop.id?storyPlanStart.start:null);
   endPresentationStory();
   clearPresentationReveal();clearPresentationRoute();
   if(fly?.res)fly.res(false);fly=null;
@@ -4537,7 +4553,7 @@ function presentationStoryBegin(stop,view={}){
   const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  const narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
+  const narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   storyRun={kind:'plan-reveal',stopId:stop.id,saved,narrative,state:null,arch:null};
   orbit.enabled=false;
   return {...narrative.info};
@@ -4550,6 +4566,7 @@ function presentationStoryApply(p){
   camera.position.fromArray(st.position);orbit.target.fromArray(st.target);camera.lookAt(orbit.target);
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
   if(lampG)lampG.visible=grow>.99&&st.wallScale>.99;
   return {...st,position:[...st.position],target:[...st.target]};
 }
@@ -4558,7 +4575,7 @@ function presentationStoryApply(p){
 function endPresentationStory({keepPose=true}={}){
   if(!storyRun)return null;
   const run=storyRun;storyRun=null;
-  if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;
+  if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
   orbit.maxDistance=run.saved.maxDistance;orbit.enabled=run.saved.orbitEnabled;

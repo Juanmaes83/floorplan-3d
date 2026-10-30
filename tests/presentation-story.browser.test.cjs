@@ -64,6 +64,8 @@ test('FT3D off: the presentation is unchanged; FT3D on: checkpoints, p = 1 = ove
  await configure(page,true);
  await page.waitForFunction(()=>FloorPlanPresentation.story&&document.querySelector('#presentationStory')&&!document.querySelector('#presentationStory').hidden,null,{timeout:180000});
  assert.equal(await page.locator('#presentationCapture').isDisabled(),true,'no capture of a half-built narrative');
+ // p = 0 continues the 2D view the presentation was started from (same centre and framed height, north up).
+ assert.equal(await page.evaluate(()=>View3D.presentationStoryInfo.info.fromEditorView),true,'starts from the 2D editor view');
  const states={};
  for(const v of [0,25,50,75,100]){states[v]=await scrub(page,v);await page.screenshot({path:path.join(QA,`1440x900-p${String(v).padStart(3,'0')}.png`)});}
  assert.ok(states[0].story.wallScale<.02,'p=0 walls flattened');assert.ok(states[0].fov<=8,'p=0 narrow lens');assert.equal(states[0].story.phase,'plan');
