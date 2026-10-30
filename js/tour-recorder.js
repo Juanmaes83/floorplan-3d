@@ -1,7 +1,6 @@
 /* Tour video, cut V1 (internal): records the stops of the active presentation into one video Blob, from a
    composition canvas fed by the 3D view only (no panels, cursor or editor), so the preview and a later download are
-   the same bytes. Nothing in the interface calls it: «Grabar» is not offered until a checked preview and a
-   downloadable file exist (cuts V2/V3). The container is the first type the browser really supports, H.264 MP4
+   the same bytes. The interface (tour-video-ui.js, cut V2) previews this same Blob and downloads it. The container is the first type the browser really supports, H.264 MP4
    first; a WebM file is never renamed .mp4. Cancelling leaves no Blob. */
 (()=>{'use strict';
  const TYPES=['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
