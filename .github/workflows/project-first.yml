@@ -16,6 +16,7 @@ jobs:
         tests/site-visual.test.cjs
         tests/ai-render-api.test.cjs
         tests/share-api.test.cjs
+        tests/plan-service.test.cjs
       BROWSER_TESTS: >-
         tests/project-first.browser.test.cjs
         tests/project-views.browser.test.cjs
@@ -25,6 +26,7 @@ jobs:
         tests/ai-render.browser.test.cjs
         tests/tour-video.browser.test.cjs
         tests/share-link.browser.test.cjs
+        tests/plan-service.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:
