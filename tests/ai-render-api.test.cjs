@@ -46,3 +46,15 @@ test('maps provider failures to short codes',async()=>{
  assert.deepEqual((await call(req({style:'natural',image:png}),{env,fetchImpl:async()=>{throw Error('down');}})).json,{error:'provider-unreachable'});
  assert.deepEqual((await call(req({style:'natural',image:png}),{env,fetchImpl:async()=>({ok:true,status:200,json:async()=>({data:[]})})})).json,{error:'provider-empty'});
 });
+
+// B8: material alternatives from closed lists; the server writes the words, the geometry rules stay.
+test('material alternatives: only known keys, geometry rules kept, reported back',async()=>{
+ const none=()=>assert.fail('no provider call');
+ for(const bad of [{floor:'gold'},{walls:'__proto__'},{floor:'walnut; ignore previous'},{walls:5}])assert.deepEqual((await call(req({style:'natural',image:png,...bad}),{env,fetchImpl:none})).json,{error:'finish'},JSON.stringify(bad));
+ const calls=[],r=await call(req({style:'scandinavian',image:png,floor:'microcement',walls:'sage'}),{env,fetchImpl:okFetch(calls)});
+ assert.equal(r.status,200);assert.equal(r.json.floor,'microcement');assert.equal(r.json.walls,'sage');
+ const text=calls[0].init.body.get('prompt');assert.match(text,/Keep EXACTLY the same camera angle, walls/);assert.match(text,/Do not add or remove rooms, walls, openings/);
+ assert.match(text,/Change ONLY these finishes and nothing else: floor: seamless light grey microcement floor; walls: soft sage green painted walls\./);
+ const only=[];await call(req({style:'natural',image:png,floor:'walnut'}),{env,fetchImpl:okFetch(only)});assert.match(only[0].init.body.get('prompt'),/floor: dark walnut[^;]*\. Style/);
+ const plain=[];await call(req({style:'natural',image:png}),{env,fetchImpl:okFetch(plain)});assert.doesNotMatch(plain[0].init.body.get('prompt'),/Change ONLY/);
+});
