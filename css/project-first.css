@@ -109,3 +109,4 @@
 .review-points-plan .preview-room{fill:#e9dfcd;stroke:#b8ab94;stroke-width:20}.review-points-plan .preview-wall{fill:#2d332f}
 .review-point circle{fill:#b0442c;stroke:#fff;stroke-width:30}.review-point text{fill:#fff;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:system-ui,sans-serif}
 .review-points figcaption{font-size:12px;color:#4f5249}
+.moodboard-dialog{width:min(1100px,calc(100vw - 24px))}.moodboard-preview{display:block;width:100%;height:auto;border:1px solid #cbc2b3;margin:8px 0 12px}
