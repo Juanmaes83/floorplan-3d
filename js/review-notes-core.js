@@ -13,12 +13,23 @@
   if(!project?.id)throw Error('Proyecto no válido');
   return {format:FORMAT,version:VERSION,projectId:project.id,projectName:clean(project.name,120),versionCode:versionCode(revision),reviewer:clean(reviewer,MAX_NAME),createdAt:now,notes:[]};
  }
- // anchor: {kind:'project'} or {kind:'room', roomId, label}. The label is copied so the file reads on its own.
+ // Anchors (B6, anchored comments; same file version: an older Rubik reads unknown kinds as the whole home):
+ //  {kind:'project'} · {kind:'room',roomId,label} · {kind:'element',elementId,elementType:'object'|'door'|'window',roomId?,label}
+ //  · {kind:'view',viewId,label} (a project image or an AI render) · {kind:'point',x,y,roomId?,label} (mm on the plan).
+ // The label is copied so the file reads on its own.
+ const ID=v=>typeof v==='string'&&v?clean(v,80):'';
+ function anchorOf(a){
+  const label=clean(a?.label,100);
+  if(a?.kind==='room'&&ID(a.roomId))return {kind:'room',roomId:ID(a.roomId),label};
+  if(a?.kind==='element'&&ID(a.elementId)&&['object','door','window'].includes(a.elementType))return {kind:'element',elementId:ID(a.elementId),elementType:a.elementType,...(ID(a.roomId)?{roomId:ID(a.roomId)}:{}),label};
+  if(a?.kind==='view'&&ID(a.viewId))return {kind:'view',viewId:ID(a.viewId),label};
+  if(a?.kind==='point'&&[a.x,a.y].every(n=>Number.isFinite(n)&&Math.abs(n)<=1e7))return {kind:'point',x:Math.round(a.x),y:Math.round(a.y),...(ID(a.roomId)?{roomId:ID(a.roomId)}:{}),label};
+  return {kind:'project'};
+ }
  function add(doc,{anchor,text},now=new Date().toISOString()){
   const body=clean(text,MAX_TEXT);if(!body)throw Error('Escribe la observación.');
   if(doc.notes.length>=MAX_NOTES)throw Error(`Como máximo ${MAX_NOTES} observaciones por archivo.`);
-  const a=anchor?.kind==='room'&&anchor.roomId?{kind:'room',roomId:clean(anchor.roomId,80),label:clean(anchor.label,100)}:{kind:'project'};
-  const note={id:id(),anchor:a,text:body,createdAt:now};return {...doc,notes:[...doc.notes,note]};
+  const note={id:id(),anchor:anchorOf(anchor),text:body,createdAt:now};return {...doc,notes:[...doc.notes,note]};
  }
  function remove(doc,noteId){return {...doc,notes:doc.notes.filter(n=>n.id!==noteId)};}
  // Strict reading of a received file: unknown fields are dropped, every text is bounded; throws a readable error.
@@ -29,8 +40,7 @@
   if(typeof d.projectId!=='string'||!d.projectId||typeof d.versionCode!=='string'||!/^[0-9a-f]{8}$/.test(d.versionCode))throw Error('Al archivo le falta la identidad del proyecto.');
   if(!Array.isArray(d.notes)||d.notes.length>MAX_NOTES)throw Error('Lista de observaciones no válida.');
   const notes=d.notes.map(n=>{const text=clean(n?.text,MAX_TEXT);if(!text||typeof n.id!=='string')throw Error('Hay una observación vacía o sin identificador.');
-   const a=n.anchor?.kind==='room'&&typeof n.anchor.roomId==='string'?{kind:'room',roomId:clean(n.anchor.roomId,80),label:clean(n.anchor.label,100)}:{kind:'project'};
-   return {id:clean(n.id,40),anchor:a,text,createdAt:clean(n.createdAt,40)};});
+   return {id:clean(n.id,40),anchor:anchorOf(n.anchor),text,createdAt:clean(n.createdAt,40)};});
   if(new Set(notes.map(n=>n.id)).size!==notes.length)throw Error('Hay observaciones repetidas.');
   return {format:FORMAT,version:VERSION,projectId:clean(d.projectId,80),projectName:clean(d.projectName,120),versionCode:d.versionCode,reviewer:clean(d.reviewer,MAX_NAME),createdAt:clean(d.createdAt,40),notes};
  }
@@ -38,7 +48,10 @@
  function match(doc,project,revision){
   const sameProject=doc.projectId===project?.id,sameVersion=sameProject&&doc.versionCode===versionCode(revision);
   const rooms=new Set((project?.rooms||[]).map(r=>r.id));
-  return {sameProject,sameVersion,missingRooms:doc.notes.filter(n=>n.anchor.kind==='room'&&!rooms.has(n.anchor.roomId)).map(n=>n.id)};
+  const elements=new Set([...(project?.objects||[]),...(project?.openings||[])].map(e=>e.id));
+  // An anchor is missing when the room or element it names is no longer in the project (points and images stay).
+  const missing=n=>n.anchor.kind==='room'?!rooms.has(n.anchor.roomId):n.anchor.kind==='element'?!elements.has(n.anchor.elementId):false;
+  return {sameProject,sameVersion,missingRooms:doc.notes.filter(n=>n.anchor.kind==='room'&&missing(n)).map(n=>n.id),missing:doc.notes.filter(missing).map(n=>n.id)};
  }
  const DECISIONS=['pending','incorporate','discard'];
  // The professional's answer (format rubik-sota.review-response v1): per observation, received / planned («se
@@ -58,9 +71,8 @@
   if(!Array.isArray(d.items)||d.items.length>MAX_NOTES)throw Error('Lista de respuestas no válida.');
   const items=d.items.map(i=>{const status=['received','planned','discarded','implemented'].includes(i?.status)?i.status:null;if(!status||typeof i.id!=='string')throw Error('Respuesta con un estado no válido.');
    if(status==='implemented'&&!/^[0-9a-f]{8}$/.test(i.implementedIn||''))throw Error('Una observación implementada debe indicar su versión.');
-   const a=i.anchor?.kind==='room'?{kind:'room',roomId:clean(i.anchor.roomId,80),label:clean(i.anchor.label,100)}:{kind:'project'};
-   return {id:clean(i.id,40),anchor:a,text:clean(i.text,MAX_TEXT),status,...(status==='implemented'?{implementedIn:i.implementedIn}:{})};});
+   return {id:clean(i.id,40),anchor:anchorOf(i.anchor),text:clean(i.text,MAX_TEXT),status,...(status==='implemented'?{implementedIn:i.implementedIn}:{})};});
   return {format:RESPONSE,version:1,projectId:clean(d.projectId,80),projectName:clean(d.projectName,120),versionCode:d.versionCode,answeredAt:clean(d.answeredAt,40),notesCreatedAt:clean(d.notesCreatedAt,40),reviewer:clean(d.reviewer,MAX_NAME),items};
  }
- return {FORMAT,VERSION,MAX_TEXT,versionCode,create,add,remove,read,match,DECISIONS,RESPONSE,respond,readResponse};
+ return {FORMAT,VERSION,MAX_TEXT,anchorOf,versionCode,create,add,remove,read,match,DECISIONS,RESPONSE,respond,readResponse};
 });
