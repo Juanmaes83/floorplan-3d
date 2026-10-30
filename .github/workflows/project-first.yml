@@ -19,6 +19,7 @@ jobs:
         tests/project-views.browser.test.cjs
         tests/site-analyze.browser.test.cjs
         tests/project-dossier.browser.test.cjs
+        tests/client-share.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:

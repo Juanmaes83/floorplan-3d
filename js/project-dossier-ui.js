@@ -30,13 +30,14 @@
  }
  function release(){for(const u of urls)URL.revokeObjectURL(u);urls=[];}
  // Own copy of the real sheet image: the workspace releases its previews on every render.
- function sheetImage(parent){let svg;try{svg=FloorPlanSheet.preview();}catch{return false;}const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'}));urls.push(url);
+ function sheetImage(parent,bag=urls){let svg;try{svg=FloorPlanSheet.preview();}catch{return false;}const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'}));bag.push(url);
   const img=el('img',undefined,parent,'dossier-sheet-image');img.src=url;img.alt=tx('Lámina de distribución del proyecto','Project floor plan sheet','项目平面图纸');return true;}
- function render(paper){
-  release();paper.replaceChildren();paper.dataset.style=style;paper.lang=typeof LANG==='string'?LANG:'es';
+ // bag: where the blob URLs of this composition are kept (the dialog's own list unless a host composes its copy).
+ function render(paper,st=style,bag=null){
+  if(!bag){release();bag=urls;}paper.replaceChildren();paper.dataset.style=st;paper.lang=typeof LANG==='string'?LANG:'es';
   const c=contents(),s=c.summary,b=s.brand,area=Preview.areaNumber(s),status=Preview.statusText(s);
   const page=(cls,title)=>{const p=el('section',undefined,paper,'dossier-page '+cls);if(title)el('h2',title,p);return p;};
-  for(const key of STYLES[style].sections){
+  for(const key of STYLES[st].sections){
    if(key==='cover'){const p=page('dossier-cover');const head=el('header',undefined,p,'dossier-cover-head');
      if(b){const brand=el('div',undefined,head,'dossier-brand');if(b.logo){const i=el('img',undefined,brand);i.src=b.logo;i.alt=tx('Logo de ','Logo of ','标志：')+b.name;}el('strong',b.name,brand);if(b.person)el('span',b.person,brand);}
      el('small',tx('Dossier del proyecto','Project dossier','项目资料'),head,'dossier-kicker');
@@ -49,7 +50,7 @@
      fact(tx('Estancias','Rooms','房间'),String(s.roomsCounted));fact(tx('Planta','Level','楼层'),s.level?`${s.level.name}`:tx('Planta única','Single level','单层'));
      fact(tx('Fecha','Date','日期'),new Date().toLocaleDateString(locale(),{day:'numeric',month:'long',year:'numeric'}));
      if(b&&(b.email||b.phone||b.web))fact(tx('Contacto','Contact','联系方式'),[b.email,b.phone,b.web].filter(Boolean).join(' · '),'is-wide');continue;}
-   if(key==='sheet'){const p=page('dossier-sheet',tx('Plano de distribución','Floor plan','平面布置图'));if(!(c.sections.sheet&&sheetImage(el('div',undefined,p,'dossier-sheet-frame'))))el('p',tx('El plano no está preparado: abre la planta 2D para generarlo.','The plan is not ready: open the 2D floor to generate it.','平面图未就绪：请打开二维楼层生成。'),p,'dossier-note');continue;}
+   if(key==='sheet'){const p=page('dossier-sheet',tx('Plano de distribución','Floor plan','平面布置图'));if(!(c.sections.sheet&&sheetImage(el('div',undefined,p,'dossier-sheet-frame'),bag)))el('p',tx('El plano no está preparado: abre la planta 2D para generarlo.','The plan is not ready: open the 2D floor to generate it.','平面图未就绪：请打开二维楼层生成。'),p,'dossier-note');continue;}
    if(key==='surfaces'){const p=page('dossier-surfaces',tx('Superficies','Areas','面积'));
      if(!c.sections.surfaces){el('p',tx('Superficie no disponible con la geometría actual.','Area not available with the current geometry.','当前几何无法计算面积。'),p,'dossier-note');continue;}
      el('p',area+' · '+status,p,'dossier-total');const t=el('table',undefined,p,'dossier-table'),hr=el('tr',undefined,el('thead',undefined,t));
@@ -92,5 +93,6 @@
   const copy=paper.cloneNode(true);for(const img of copy.querySelectorAll('img[src^="blob:"]')){try{const blob=await (await fetch(img.src)).blob();img.src=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(blob);});}catch{}}
   win.document.body.append(b,copy);const links=[...win.document.querySelectorAll('link')];await Promise.race([Promise.all(links.map(l=>new Promise(r=>{if(l.sheet)return r();l.onload=r;l.onerror=r;}))),new Promise(r=>setTimeout(r,2000))]);win.focus();win.print();}
  printButton.onclick=print;closeButton.onclick=()=>dialog.close();dialog.addEventListener('close',()=>{release();returnFocus?.focus?.({preventScroll:true});});
- window.FloorPlanDossier={open,contents,STYLES,get style(){return style;},get active(){return dialog.open;}};
+ // compose: the same document for another host (the client file); the caller owns and revokes `bag`.
+ window.FloorPlanDossier={open,contents,STYLES,compose:(paper,st='client',bag=[])=>{render(paper,STYLES[st]?st:'client',bag);return bag;},get style(){return style;},get active(){return dialog.open;}};
 })();
