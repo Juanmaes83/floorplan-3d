@@ -11,6 +11,11 @@
    - p = 1: exactly the end pose (the presentation overview), field of view and walls at full height.
    Lens and timings are derived for Rubik: the narrow lens is the widest one at which the tallest wall stays within
    1 % of perspective difference between its foot and its top (distance ≥ 100 × wall top), never copied values.
+   «Entrar en la estancia» (roomDescent, FT3D-1b): from the overview down to the presentation's own pose of the first
+   chosen room. The camera follows the arc of the editor's flights (spherical interpolation around a moving target,
+   as View3D's camTween), so it reads as Rubik's usual motion, now driven by p; when that room is framed with a lower
+   wall section, the walls go down continuously to that height and, once there (p ≥ wallsEnd), the real section
+   takes over (state.section): the swap happens while the camera still moves and p = 1 is exactly the room stop.
    Further narratives (section sweep, open section, exploded axonometric…) are added as new builders in NARRATIVES. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPresentationStory=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
@@ -74,11 +79,35 @@
    const near=Math.max(base.near,(d-reach)*.5),far=Math.max(base.far,d+reach*2);
    return {p,phase:p<o.hold?'plan':s<=0?'walls':'lens',wallScale:wallsAt(p),furnitureScale:furnitureAt(p),lens:s,fov,position,target,near,far,distance:d,frameHeight:frame};
   }
-  return {kind:'plan-reveal',stateAt,checkpoints:[0,.25,.5,.75,1],info:{fromEditorView:!!start,turnDeg:deg(turn),fovStart:fov0,fovEnd:fov1,distanceStart:d0,distanceEnd:d1,frameStart:frame0,frameEnd:frame1,wallTop,options:o}};
+  return {kind:'plan-reveal',stateAt,checkpoints:[0,.25,.5,.75,1],info:{fromEditorView:!!start,turnDeg:deg(turn),fovStart:fov0,fovEnd:fov1,distanceStart:d0,distanceEnd:d1,frameStart:frame0,frameEnd:frame1,wallTop,playMs:6000,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal};
+ const ROOM_DESCENT={wallsStart:.15,wallsEnd:.75,speed:3,minMs:1800,maxMs:4200};
+ // Spherical offset of a camera around its target (radius, polar angle from +y, azimuth), as THREE.Spherical.
+ function spherical(v){const r=len(v);return {r,phi:r>0?Math.acos(Math.max(-1,Math.min(1,v[1]/r))):0,theta:Math.atan2(v[0],v[2])};}
+ const fromSpherical=({r,phi,theta})=>[r*Math.sin(phi)*Math.sin(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.cos(theta)];
+ /* input: start/end: {position, target, fov} (start = the overview pose, end = the room stop pose);
+    wallScaleEnd: wall height of the room framing over the height the walls are built at (1 = no section);
+    base: {near, far}. */
+ function roomDescent(input){
+  const o={...ROOM_DESCENT,...(input.options||{})},A=input.start,B=input.end;
+  for(const pose of [A,B])if(!pose||![...pose.position,...pose.target,pose.fov].every(Number.isFinite))throw Error('Faltan las vistas de inicio o de la estancia.');
+  const wallEnd=Math.min(1,Math.max(.05,Number(input.wallScaleEnd)||1)),base={near:input.base?.near??.05,far:input.base?.far??300};
+  const sa=spherical(sub(A.position,A.target)),sb=spherical(sub(B.position,B.target));let dth=sb.theta-sa.theta;dth=Math.atan2(Math.sin(dth),Math.cos(dth));
+  const travel=Math.hypot(...sub(B.position,A.position));
+  const ms=Math.round(Math.min(o.maxMs,Math.max(o.minMs,travel/o.speed*1000)));
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   const section=wallEnd<1&&p>=o.wallsEnd;
+   if(p>=1)return {p:1,phase:'room',wallScale:1,section,fov:B.fov,position:[...B.position],target:[...B.target],near:base.near,far:base.far,distance:sb.r};
+   if(p<=0)return {p:0,phase:'overview',wallScale:1,section:false,fov:A.fov,position:[...A.position],target:[...A.target],near:base.near,far:base.far,distance:sa.r};
+   const e=smooth(p),r=lerp(sa.r,sb.r,e),target=lerp3(A.target,B.target,e),off=fromSpherical({r,phi:lerp(sa.phi,sb.phi,e),theta:sa.theta+dth*e});
+   return {p,phase:'descent',wallScale:section?1:lerp(1,wallEnd,smooth((p-o.wallsStart)/(o.wallsEnd-o.wallsStart))),section,fov:lerp(A.fov,B.fov,e),position:add(target,off),target,near:base.near,far:base.far,distance:r};
+  }
+  return {kind:'room-descent',stateAt,checkpoints:[0,.25,.5,.75,1],info:{travel,wallScaleEnd:wallEnd,playMs:ms,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),PLAN_REVEAL};
+ return {create,planReveal,roomDescent,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),PLAN_REVEAL,ROOM_DESCENT};
 });
