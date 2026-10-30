@@ -25,6 +25,10 @@ jobs:
         tests/budget-draft.test.cjs
         tests/budget-core.test.cjs
         tests/budget-presentation.test.cjs
+        tests/bc3-budget.test.cjs
+        tests/fiebdc3-codec.test.cjs
+        tests/budget-cost-bridge.test.cjs
+        tests/cost-provider.test.cjs
       BROWSER_TESTS: >-
         tests/project-first.browser.test.cjs
         tests/project-views.browser.test.cjs
