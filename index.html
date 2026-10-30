@@ -4543,11 +4543,14 @@ function presentationRestorePose(state){
    restores it; nothing here edits the project, rebuilds geometry or adds a second model. The narrative ends exactly on
    the pose presentationGo computes for the same stop, so continuing to the presentation has no jump. */
 let storyRun=null,storyPlanStart=null;
-function presentationStoryBegin(stop,view={}){
+function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
-  // It starts from the 2D view the 3D view entered on (held entry), when there is one; walls and furniture are then
-  // driven by the narrative and return to full height when it ends.
-  const held=heldEntry;heldEntry=null;grow=furnGrow=1;if(held)orbit.enabled=true;
+  if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
+  // The descent starts where the camera is (the overview it arrives from); read it before anything moves.
+  const startPose={position:camera.position.toArray(),target:orbit.target.toArray(),fov:camera.fov};
+  // The plan reveal starts from the 2D view the 3D view entered on (held entry), when there is one; walls and
+  // furniture are then driven by the narrative and return to full height when it ends.
+  const held=kind==='plan-reveal'?heldEntry:null;if(held)orbit.enabled=true;releaseHeldEntry();grow=furnGrow=1;
   // «Volver al plano» returns to that same plan for the stop it was taken for, for the whole presentation.
   if(held)storyPlanStart={stopId:stop.id,start:held};
   const planStart=held||(storyPlanStart?.stopId===stop.id?storyPlanStart.start:null);
@@ -4556,12 +4559,24 @@ function presentationStoryBegin(stop,view={}){
   if(fly?.res)fly.res(false);fly=null;
   if(presentationBaseCut==null)presentationBaseCut=opt.cut;
   setPresentationCut(presentationBaseCut);clearRoomOutline();frameInfo=null;
-  const aspect=Math.max(.2,SW()/Math.max(1,SH())),end=presentationStopPose(stop,aspect,view.region),b=stop.bounds;
-  const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
+  const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  const narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
-  storyRun={kind:'plan-reveal',stopId:stop.id,saved,narrative,state:null,arch:null};
+  let narrative,sectionCut=null;
+  if(kind==='room-descent'){
+    // The room stop exactly as presentationGo frames it; a lower wall section is reached by lowering the walls built at
+    // the overview's cut, and presentationGo then applies the real section when the presentation continues.
+    const framed=presentationFrame(stop.roomId,aspect,view.region);if(!framed)throw Error('Narrativa no disponible.');
+    const builtTop=presentationBaseCut===2.8?wallTop:Math.min(wallTop,presentationBaseCut);
+    sectionCut={base:presentationBaseCut,section:framed.section?framed.wallTop:presentationBaseCut};
+    narrative=window.FloorPlanPresentationStory.create('room-descent',{start:startPose,end:{position:[wx(framed.eye[0]),framed.eye[1],wz(framed.eye[2])],target:[wx(framed.look[0]),framed.look[1],wz(framed.look[2])],fov:camera.fov},
+      wallScaleEnd:framed.section?framed.wallTop/builtTop:1,base:{near:camera.near,far:camera.far}});
+  }else{
+    const end=presentationStopPose(stop,aspect,view.region),b=stop.bounds;
+    const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
+    narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
+  }
+  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4571,10 +4586,15 @@ function presentationStoryApply(p){
   camera.fov=st.fov;camera.near=st.near;camera.far=st.far;camera.updateProjectionMatrix();
   orbit.maxDistance=Math.max(storyRun.saved.maxDistance,st.distance*1.05);
   camera.position.fromArray(st.position);orbit.target.fromArray(st.target);camera.lookAt(orbit.target);
+  // The room's real wall section replaces the lowered walls once they reach its height: one rebuild at the threshold,
+  // never per frame, and undone the same way when p goes back below it.
+  if(storyRun.sectionCut){const cut=st.section?storyRun.sectionCut.section:storyRun.sectionCut.base;if(opt.cut!==cut)setPresentationCut(cut);}
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
-  if(lampG)lampG.visible=grow>.99&&st.wallScale>.99;
+  if(lampG)lampG.visible=grow>.99&&(st.wallScale>.99||st.phase==='room');
+  // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
+  if(storyRun.kind==='room-descent'){const roomId=storyRun.stopId.replace(/^room:/,'');if(st.phase==='room'){if(!roomOutline)showRoomOutline(roomId);}else clearRoomOutline();}
   return {...st,position:[...st.position],target:[...st.target]};
 }
 // keepPose: stay on the current camera pose (used at p = 1, which is the overview pose); otherwise go back to the pose
@@ -4593,7 +4613,7 @@ function endPresentationStory({keepPose=true}={}){
 function presentationStoryInfo(){
   if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
   const st=storyRun.state;
-  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
     fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
     saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
 }

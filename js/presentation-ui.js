@@ -434,10 +434,12 @@
   const slider=el('input',undefined,panel,'presentation-story-slider');slider.type='range';slider.min='0';slider.max='100';slider.step='1';slider.id='presentationStorySlider';
   slider.oninput=()=>{if(!story)return;const p=Number(slider.value)/100;pauseStory();setStory(p);};
   const row=el('div',undefined,panel,'presentation-story-actions');
-  const planButton=button('',row,()=>{playStory(0);});planButton.id='presentationStoryPlan';
+  // The descent (FT3D-1b) has two ends that are both presentation stops: going back to 0 returns to the overview.
+  const planButton=button('',row,()=>{const run=story;playStory(0).then(done=>{if(done&&run===story&&run.kind==='room-descent')finishStory(0);});});planButton.id='presentationStoryPlan';
   const play=button('',row,()=>{if(story?.playing)pauseStory();else if(story?.p>=1)finishStory();else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
   const replay=button('',tools,()=>{openStory(epoch,{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
-  storyUi={panel,caption,slider,planButton,play,replay};return storyUi;
+  const enter=button('',tools,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,{from:0,to:1,kind:'room-descent',target:to});});enter.id='presentationStoryEnter';enter.hidden=true;
+  storyUi={panel,caption,slider,planButton,play,replay,enter};return storyUi;
  }
  function drawStory(){
   if(!storyUi)return;
@@ -445,7 +447,11 @@
   u.replay.textContent=tx('Volver al plano','Back to the plan','回到平面图');
   u.replay.hidden=!storyEnabled||on||!plan||plan.stops[index]?.kind!=='overview';
   u.replay.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';
+  const nextRoom=nextRoomIndex();
+  u.enter.hidden=u.replay.hidden||nextRoom===null;u.enter.disabled=u.replay.disabled;
+  if(nextRoom!==null)u.enter.textContent=tx(`Entrar en ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`Enter ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`进入 ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`);
   u.panel.hidden=!on;if(!on)return;
+  if(story.kind==='room-descent'){drawDescent(u);return;}
   const p=story.p,phase=p<=0?'plan':p>=1?'3d':View3D.presentationStoryInfo?.phase;
   u.panel.setAttribute('aria-label',tx('Desde el plano','From the plan','从平面图'));
   u.caption.textContent=phase==='plan'?tx('Plano de la vivienda','Plan of the home','住宅平面图'):phase==='3d'?tx('Vista general 3D','3D overview','3D 总览'):phase==='walls'?tx('Los muros se levantan desde el plano','Walls rise from the plan','墙体从平面图升起'):tx('La vista se abre en 3D','The view opens in 3D','视图展开为 3D');
@@ -454,13 +460,24 @@
   u.planButton.textContent=tx('Ver el plano','Show the plan','查看平面图');u.planButton.disabled=story.playing||p<=0;
   u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver en 3D','See in 3D','查看 3D');
  }
+ // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
+ function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
+ function drawDescent(u){
+  const p=story.p,target=plan.stops[story.target],name=roomName(target.roomId,target.levelId);
+  u.panel.setAttribute('aria-label',tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`));
+  u.caption.textContent=p<=0?tx('Vista general 3D','3D overview','3D 总览'):p>=1?name:tx(`Bajando a ${name}`,`Going down to ${name}`,`下降到 ${name}`);
+  u.slider.value=String(Math.round(p*100));u.slider.setAttribute('aria-label',tx(`De la vista general (0) a ${name} (100)`,`From the overview (0) to ${name} (100)`,`从总览 (0) 到 ${name} (100)`));
+  u.slider.setAttribute('aria-valuetext',`${Math.round(p*100)} % · ${u.caption.textContent}`);
+  u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing;
+  u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`);
+ }
  function setStory(p){if(!story)return;story.p=Math.min(1,Math.max(0,p));View3D.presentationStoryApply(story.p);drawStory();}
  function pauseStory(){if(!story?.playing)return;cancelAnimationFrame(story.raf);story.playing=false;const done=story.resolve;story.resolve=null;done?.(false);drawStory();}
  // Plays p linearly in time (the easing is in the narrative); reduced motion goes straight to the end state.
  function playStory(target){
   if(!story)return Promise.resolve(false);
   pauseStory();
-  const run=story,from=run.p,ms=FloorPlanPresentationStory.playMs(from,target,{reduced:reducedMotion()});
+  const run=story,from=run.p,ms=FloorPlanPresentationStory.playMs(from,target,{reduced:reducedMotion(),fullMs:run.ms||6000});
   if(!ms){setStory(target);return Promise.resolve(true);}
   run.playing=true;drawStory();
   return new Promise(resolve=>{const began=performance.now();run.resolve=resolve;
@@ -469,8 +486,9 @@
     run.playing=false;run.resolve=null;drawStory();resolve(true);};
    run.raf=requestAnimationFrame(tick);});
  }
- async function openStory(token,{from=0,to=null}={}){
+ async function openStory(token,{from=0,to=null,kind='plan-reveal',target=null}={}){
   if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview')return;
+  if(kind==='room-descent'&&(target===null||plan.stops[target]?.kind!=='room'))return;
   closeStory();
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   ++movement;
@@ -478,21 +496,25 @@
   if(!active||token!==epoch)return;
   // Two free screen regions: the card as the presentation will show it (the end pose, as go() frames it) and the card
   // with the narrative's controls (frames the plan beside them).
-  const u=storyControls();overlay.dataset.moving='false';draw();const region=viewRegion();
-  story={p:from,playing:false,raf:0,resolve:null};draw();
-  try{View3D.presentationStoryBegin(plan.stops[index],{region,startRegion:viewRegion()});setStory(from);}
+  // The descent ends on the room stop as go() will frame it: the card is measured as that stop shows it.
+  const u=storyControls();overlay.dataset.moving='false';
+  const home=index;if(kind==='room-descent')index=target;draw();const region=viewRegion();index=home;
+  story={p:from,playing:false,raf:0,resolve:null,kind,from:home,target};draw();
+  try{View3D.presentationStoryBegin(kind==='room-descent'?plan.stops[target]:plan.stops[index],{region,startRegion:viewRegion()},kind);story.ms=View3D.presentationStoryInfo?.info?.playMs;setStory(from);}
   catch(error){story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
   draw();updateCapture();
   if(to!==null){const done=await playStory(to);if(done&&to>=1&&story)await finishStory();}
  }
  // Resize: the same p on a narrative rebuilt for the new screen.
- function restartStory(){if(!story)return;const p=story.p;pauseStory();requestAnimationFrame(()=>{if(!story||!active)return;
+ function restartStory(){if(!story)return;const p=story.p;pauseStory();
+  // The descent started from the camera of the moment: after a resize it settles on the nearer of its two stops.
+  if(story.kind==='room-descent'){const to=p>=.5?story.target:story.from;closeStory();go(to);return;}requestAnimationFrame(()=>{if(!story||!active)return;
   const saved=story;story=null;draw();const region=viewRegion();story=saved;draw();
   try{View3D.presentationStoryBegin(plan.stops[index],{region,startRegion:viewRegion()});setStory(p);}catch{closeStory();go(index);}});}
  // p = 1 is the overview pose: the narrative ends there and the presentation continues from the same view.
- async function finishStory(){if(!story)return;setStory(1);closeStory();await go(index);}
+ async function finishStory(at=1){if(!story)return;const to=story.kind==='room-descent'?(at>=1?story.target:story.from):index;setStory(at);closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi=null;}}
+ function disposeStory(){storyEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi=null;}}
  function closeStory(){if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -804,5 +826,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.p,playing:story.playing}:null;},get storyEnabled(){return storyEnabled;}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.p,playing:story.playing,kind:story.kind}:null;},get storyEnabled(){return storyEnabled;}};
 })();

@@ -1,6 +1,7 @@
 /* FT3D validation video: drives the real app with Playwright + Chromium and records what a person sees.
    Usage: node scripts/qa/record-presentation-story.cjs <repo root> <output dir> <cut> <WxH>
    Cuts: 1a — «Empezar desde el plano»: 2D editor → plan → 3D overview by itself, «Volver al plano» and back to 3D.
+         1b — «Entrar en la estancia»: the chapter, then overview → first room, back to the overview and in again.
    Needs three@0.160.0 from the CDN or THREE_LOCAL_DIR (tests/helpers/three-module.cjs). Prints the .webm path and the
    page errors seen (expected: none). The video is QA evidence, never committed. */
 const path=require('node:path'),fs=require('node:fs/promises'),{createServer}=require('node:http'),{chromium}=require('playwright');
@@ -22,6 +23,14 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  await idle();await page.waitForTimeout(1500);
  if(cut==='1a'){await page.locator('#presentationStoryReplay').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.p===0&&!FloorPlanPresentation.story.playing,null,{timeout:120000});await page.waitForTimeout(1500);
   await page.locator('#presentationStoryPlay').click();await idle();await page.waitForTimeout(1500);}
+ // 1b: enter the first room from the overview, then back to the overview half-way and in again.
+ if(cut==='1b'){const inRoom=()=>page.waitForFunction(()=>FloorPlanPresentation.current?.kind==='room'&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:120000});
+  await page.locator('#presentationStoryEnter').click();await inRoom();await page.waitForTimeout(2000);
+  await page.locator('.presentation-stops button').nth(0).click();await idle();await page.waitForTimeout(1000);
+  await page.evaluate(()=>{document.querySelector('#presentationStoryEnter').click();});await page.waitForTimeout(1600);
+  if(await page.locator('#presentationStoryPlan').isVisible())await page.evaluate(()=>document.querySelector('#presentationStoryPlan').click());
+  await idle().catch(()=>{});await page.waitForTimeout(1200);
+  if(await page.locator('#presentationStoryEnter').isVisible()){await page.locator('#presentationStoryEnter').click();await inRoom();await page.waitForTimeout(2000);}}
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(2500);
  const video=page.video();await ctx.close();const file=await video.path();await browser.close();server.close();
  console.log(JSON.stringify({file,errors}));

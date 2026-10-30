@@ -80,7 +80,7 @@ test('rejects missing facts with a readable error and keeps the input untouched;
  assert.throws(()=>Story.create('plan-reveal',{...input,end:{position:[0,1,0],target:[0,0,NaN],fov:45}}),/vista general/);
  assert.throws(()=>Story.create('section-sweep',input),/desconocida/);
  const copy=structuredClone(input);Story.create('plan-reveal',input).stateAt(.5);assert.deepEqual(input,copy);
- assert.deepEqual(Story.NARRATIVES,['plan-reveal']);
+ assert.ok(Story.NARRATIVES.includes('plan-reveal'));
 });
 
 test('play time is proportional to the distance in p; reduced motion is immediate',()=>{
@@ -88,6 +88,43 @@ test('play time is proportional to the distance in p; reduced motion is immediat
  assert.equal(Story.playMs(0,1,{reduced:true}),0);assert.equal(Story.playMs(.3,.3),0);
 });
 
+// FT3D-1b «Entrar en la estancia»: overview → the presentation's own room pose, walls down to its section.
+const overviewPose={position:dir.map(v=>v*18),target:[0,0,0],fov:45},roomPose={position:[3.2,4.1,2.6],target:[1.6,.4,1.1],fov:45};
+const descent={start:overviewPose,end:roomPose,wallScaleEnd:1.2/2.8,base:{near:.05,far:300}};
+test('room descent: p = 0 is the overview, p = 1 is exactly the room stop pose with the walls at its section',()=>{
+ const n=Story.create('room-descent',descent),a=n.stateAt(0),b=n.stateAt(1);
+ assert.deepEqual(a.position,overviewPose.position);assert.deepEqual(a.target,overviewPose.target);assert.equal(a.wallScale,1);assert.equal(a.phase,'overview');
+ assert.deepEqual(b.position,roomPose.position);assert.deepEqual(b.target,roomPose.target);assert.equal(b.fov,45);assert.equal(b.phase,'room');
+ // At p = 1 the real section is on (the lowered walls handed over to it) and the walls are not scaled.
+ assert.equal(b.section,true);assert.equal(b.wallScale,1);assert.equal(a.section,false);
+ assert.equal(b.near,.05);assert.equal(b.far,300);
+ // Every state carries its camera distance (View3D keeps the orbit limit above it).
+ for(const p of [0,.3,.7,1]){const st=n.stateAt(p);assert.ok(close(st.distance,Math.hypot(...[0,1,2].map(k=>st.position[k]-st.target[k])),1e-9));}
+ // A room framed at full wall height keeps the walls.
+ const full=Story.create('room-descent',{...descent,wallScaleEnd:1});assert.equal(full.stateAt(.6).wallScale,1);assert.equal(full.stateAt(1).section,false);
+ // The hand-over to the section happens once, at the height of the section, and goes back below it.
+ const n2=Story.create('room-descent',descent);assert.ok(close(n2.stateAt(.7499).wallScale,1.2/2.8,1e-3));assert.equal(n2.stateAt(.7499).section,false);assert.equal(n2.stateAt(.75).section,true);
+});
+test('room descent: the camera descends along one arc (as the editor flights), walls go down monotonically, reversible',()=>{
+ const n=Story.create('room-descent',descent),steps=Array.from({length:101},(_,i)=>i/100),states=steps.map(p=>n.stateAt(p));
+ for(let i=1;i<states.length;i++){
+  assert.ok(states[i].position[1]<=states[i-1].position[1]+1e-9,'never climbs');
+  const h=st=>st.section?1.2/2.8:st.wallScale;assert.ok(h(states[i])<=h(states[i-1])+1e-12,'walls never rise while entering');
+  // Continuity: no step longer than 6 % of the whole travel.
+  assert.ok(Math.hypot(...[0,1,2].map(k=>states[i].position[k]-states[i-1].position[k]))<=.06*n.info.travel+1e-9);
+ }
+ const back=[...steps].reverse().map(p=>n.stateAt(p)).reverse();
+ states.forEach((s,i)=>assert.ok(sameState({...s,lens:0,distance:0},{...back[i],lens:0,distance:0})));
+ // Same distance to the target as the editor's spherical tween at the middle.
+ const mid=n.stateAt(.5),r=Math.hypot(...[0,1,2].map(k=>mid.position[k]-mid.target[k])),r0=18,r1=Math.hypot(1.6,3.7,1.5);
+ assert.ok(close(r,(r0+r1)/2,1e-9));
+});
+test('room descent: play time follows the travel within bounds; missing poses fail readably',()=>{
+ const near=Story.create('room-descent',{...descent,start:{...roomPose,position:[3.3,4.2,2.7]}}),far=Story.create('room-descent',{...descent,start:{...overviewPose,position:dir.map(v=>v*60)}});
+ assert.equal(near.info.playMs,1800);assert.equal(far.info.playMs,4200);
+ assert.throws(()=>Story.create('room-descent',{...descent,end:{position:[0,0,0],target:[0,NaN,0],fov:45}}),/estancia/);
+ assert.deepEqual(Story.NARRATIVES,['plan-reveal','room-descent']);
+});
 test('from the 2D editor view: p = 0 keeps its centre and framed height; the view turns once, smoothly, to the overview',()=>{
  const start={target:[1.3,0,-.7],frameHeight:12.4},n=Story.create('plan-reveal',{...input,start}),a=n.stateAt(0);
  assert.deepEqual(a.target,[1.3,0,-.7]);assert.ok(close(a.frameHeight,12.4,1e-9));assert.equal(n.info.fromEditorView,true);
