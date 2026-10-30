@@ -31,9 +31,43 @@ No está todavía integrado en `master` ningún corte funcional FT3D.
 
 Trabajo FT3D actual:
 
-- `integration/ft3d-1a-on-consolidated-master`: reconciliación de FT3D-1a sobre el `master` consolidado;
+- **FT3D-1a reconciliado** sobre `master` consolidado en `integration/ft3d-1a-on-consolidated-master@9a21b2587139e4ef3ea377f7b71cca0bd541147e`;
+- PR de integración **#153** abierta en draft contra `master` para ejecutar CI y revisión antes de integrar;
 - PR #151: FT3D-1b implementado pero todavía apilado sobre 1a;
 - `backup/ft3d-2a-pre-integration@d300db8c7756235409cc3a3386d45574a848ed2d`: FT3D-2a protegido, no integrado.
+
+### FT3D-1a — resultado de reconciliación
+
+Claude reaplicó mediante cherry-pick los dos commits funcionales originales de #150 sobre `master@de75f301...`.
+
+Resultado auditado:
+
+- rama remota: `integration/ft3d-1a-on-consolidated-master`;
+- HEAD: `9a21b2587139e4ef3ea377f7b71cca0bd541147e`;
+- comparación con `master`: **2 commits ahead / 0 behind**;
+- base de merge exacta: `de75f301...`;
+- mismos 8 archivos funcionales de #150;
+- sin pérdida de código del master consolidado;
+- `renderSuspended` de Punto 9 y la guarda de cámara `storyRun` conviven;
+- workflow existente preservado y job `presentation-story` añadido.
+
+QA local reportado sobre la rama reconciliada:
+
+- unitarias: **611/611**;
+- FT3D-1a browser: **4/4**;
+- vista general: **4/4**;
+- foco: **2/2**;
+- captura 3D: **3/3**;
+- presentación de edificio: **7/7**;
+- vídeo del recorrido: **2/2**;
+- workspace profesional: **17/17**;
+- encuadre: **10/11**, con R10 confirmado intermitente también en `master` bajo carga y por tanto tratado como baseline preexistente, no regresión de FT3D.
+
+Pendiente antes de integrar FT3D-1a:
+
+1. CI de PR #153, especialmente `presentation-story`;
+2. revisión humana/visual del preview;
+3. revisión final de integración antes de mover `master`.
 
 ---
 
@@ -98,8 +132,8 @@ Referencia: `flat-to-3d-presentation-knowledge-programme-2026-10-30.md`.
 
 | Fase | Objetivo | Estado actual |
 |---|---|---|
-| FT3D-0 | investigación, cámaras, dolly zoom, progreso reversible | **CUBIERTO EN GRAN PARTE** por el documento, auditoría técnica de Claude y la prueba real de 1a; cierre formal pendiente |
-| FT3D-1 | plano vivo → 3D → primera estancia | **EN PROCESO**: 1a implementado y en reconciliación; 1b implementado en #151 pero no integrado |
+| FT3D-0 | investigación, cámaras, dolly zoom, progreso reversible | **CUBIERTO EN GRAN PARTE** por el documento, auditoría técnica y prueba real de 1a; cierre formal pendiente |
+| FT3D-1 | plano vivo → 3D → primera estancia | **EN PROCESO**: 1a reconciliado y en gate CI/revisión; 1b implementado en #151 pero no integrado |
 | FT3D-2 | motor reusable Presentation Story | **PRIMER CORTE IMPLEMENTADO, NO INTEGRADO**: FT3D-2a en backup `d300db8...` |
 | FT3D-3 | sección dinámica | **NO IMPLEMENTADO** |
 | FT3D-4 | alzado / fachada narrativa | **NO IMPLEMENTADO** |
@@ -110,7 +144,7 @@ Referencia: `flat-to-3d-presentation-knowledge-programme-2026-10-30.md`.
 
 ### FT3D-1 — cortes actuales
 
-- **FT3D-1a «Empezar desde el plano»**: código ya implementado en #150. Actualmente se está transportando al `master` consolidado sobre `integration/ft3d-1a-on-consolidated-master`. No está aún en `master`.
+- **FT3D-1a «Empezar desde el plano»**: reconciliado sobre el `master` consolidado en PR #153. Código local auditado; pendiente CI y revisión humana/visual antes de integrar.
 - **FT3D-1b «Entrar en la estancia»**: implementado en #151 y validado sobre su base anterior; debe reconciliarse después de integrar 1a.
 - **Cierre de FT3D-1**: requiere 1a + 1b en `master`, QA sobre la base consolidada y revisión humana de la continuidad visual completa.
 
@@ -124,7 +158,7 @@ Tras integrar 2a hay que comparar sus capacidades con el mínimo de FT3D-2 (secu
 
 Para el **núcleo de presentación Flat-to-3D**, el objetivo razonable de cierre es FT3D-0 a FT3D-7:
 
-1. cerrar/reconciliar FT3D-1a;
+1. aprobar e integrar FT3D-1a;
 2. integrar FT3D-1b y cerrar FT3D-1 con revisión humana;
 3. reconciliar FT3D-2a y completar cualquier mínimo faltante de FT3D-2;
 4. implementar FT3D-3 — sección dinámica;
@@ -134,7 +168,7 @@ Para el **núcleo de presentación Flat-to-3D**, el objetivo razonable de cierre
 8. implementar FT3D-7 — salidas/compartición de Story reutilizando las capacidades existentes de Entregar;
 9. auditoría global, rendimiento, accesibilidad, regresión y cierre documental.
 
-**FT3D-8 no debe bloquear el cierre del núcleo de presentación.** El propio programa lo define como una familia futura separada que exige nuevas semánticas temporales. Sólo será requisito de «todo el documento implementado literalmente» si Juanma decide ampliar el alcance a planificación temporal de obra.
+**FT3D-8 no debe bloquear el cierre del núcleo de presentación.** El propio programa lo define como una familia futura separada que exige nuevas semánticas temporales.
 
 ---
 
@@ -142,14 +176,14 @@ Para el **núcleo de presentación Flat-to-3D**, el objetivo razonable de cierre
 
 Orden operativo vigente:
 
-1. **FT3D-1a** — Claude está reconciliándolo contra `master@de75f301...`; ChatGPT auditará el resultado antes de mover `master`.
+1. **FT3D-1a** — PR #153 reconciliada; pendiente CI + revisión humana/visual + promoción a `master`.
 2. **FT3D-1b** — reconciliar sobre el nuevo `master` con 1a.
 3. **FT3D-2a** — recuperar desde el backup y reconciliar después de 1a+1b.
 4. **C4 dossier económico** — último objetivo no implementado de Fase C.
 5. **Fase B: cierre del hueco 360/presentación avanzada** — decidir si FT3D satisface la parte «presentación avanzada» y si 360 se implementa o se difiere explícitamente.
 6. **Validaciones externas de B2/B4/B8** — OpenAI real y Vercel Blob real cuando estén configurados.
 7. **FT3D-3 a FT3D-7** — programa de presentación pendiente.
-8. **Cierre documental y limpieza GitHub** — reconciliar PR abiertas #133–#151 con el `master` real, actualizar roadmap/estado y limpiar ramas sólo cuando sea seguro.
+8. **Cierre documental y limpieza GitHub** — reconciliar PR abiertas #133–#153 con el `master` real, actualizar roadmap/estado y limpiar ramas sólo cuando sea seguro.
 
 ---
 
@@ -169,10 +203,10 @@ Antes de trabajar:
 1. leer este estado y verificar el HEAD real de `master`;
 2. distinguir «implementado», «integrado», «validado» y «cerrado»;
 3. no eliminar capacidades existentes: toda integración FT3D y Project-First es aditiva;
-4. no continuar una fase dependiente mientras su padre se esté reconciliando;
+4. no continuar una fase dependiente mientras su padre se esté reconciliando o validando;
 5. no usar PR abiertas como autoridad si su contenido ya fue consolidado en `master`;
 6. mantener la regla de producto: **más contexto, no más falsa certeza**.
 
-### Estado durante la reconciliación actual
+### Estado durante el gate actual
 
-Claude Code está autorizado únicamente a reconciliar FT3D-1a en la rama de integración. `master` debe permanecer en `de75f301...` hasta que ChatGPT audite el handoff y Juanma autorice/promueva el siguiente paso según el flujo acordado.
+Claude Code vuelve a estar pausado. `master` debe permanecer en `de75f301...` mientras PR #153 ejecuta CI y se realiza la revisión humana/visual de FT3D-1a. No iniciar FT3D-1b ni FT3D-2a hasta aprobar e integrar 1a.
