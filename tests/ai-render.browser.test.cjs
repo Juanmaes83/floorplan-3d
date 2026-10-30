@@ -36,9 +36,19 @@ test('Phase B2: AI render of a real view with consent, access code and honest la
  // The download is a delivery image that says it is AI.
  const download=page.waitForEvent('download');await dialog.locator('#aiRenderDownload').click();const d=await download;assert.equal(d.suggestedFilename(),'rubik-sota-render-ia-vista-general.png');
  const bytes=await fs.readFile(await d.path());assert.equal(bytes.readUInt32BE(16),1600);assert.equal(bytes.readUInt32BE(20),1000);
- const note=await page.evaluate(async()=>{const r=FloorPlanAIRender.results[0];const data=FloorPlanDeliveryImage.content({title:'x',view:'y'});return {count:FloorPlanAIRender.results.length,style:r.style};});assert.deepEqual(note,{count:1,style:'warm'});
+ const note=await page.evaluate(async()=>{const r=FloorPlanAIRender.results[0];return {count:FloorPlanAIRender.results.length,style:r.style,floor:r.floor};});assert.deepEqual(note,{count:1,style:'warm',floor:null});
  // The same view and style are not sent twice in the session.
  await dialog.locator('#aiRenderGo').click();await page.waitForTimeout(300);assert.equal(sent.length,1);
+ // B8: an alternative of finishes for the same view: only the keys travel, the result says it, and both can be compared.
+ reply={status:200,body:{image:PNG,model:'gpt-image-1',style:'warm',floor:'microcement',walls:'sage',generatedAt:'2026-10-30T12:00:00Z'}};
+ await dialog.locator('#aiRenderFloor').selectOption('microcement');await dialog.locator('#aiRenderWalls').selectOption('sage');await dialog.locator('#aiRenderGo').click();
+ await page.waitForFunction(()=>/Suelo: Microcemento · Paredes: Verde salvia/.test(document.querySelector('#aiRenderDialog figure.is-ai figcaption')?.textContent||''));
+ assert.equal(sent.length,2);assert.deepEqual(Object.keys(sent[1].body).sort(),['floor','image','style','walls']);assert.deepEqual([sent[1].body.floor,sent[1].body.walls],['microcement','sage']);
+ const alts=dialog.locator('#aiRenderAlternatives .ai-render-alt');assert.equal(await alts.count(),2);assert.deepEqual(await alts.locator('span').allInnerTexts(),['Cálido','Cálido · Suelo: Microcemento · Paredes: Verde salvia']);
+ assert.match(await dialog.locator('#aiRenderAlternatives').innerText(),/no cambian el proyecto; para usar un acabado, elígelo en Superficies/);
+ if(process.env.QA_SHOTS){await fs.mkdir(process.env.QA_SHOTS,{recursive:true});await page.screenshot({path:path.join(process.env.QA_SHOTS,'b8-1440-alternatives.png')});}
+ await alts.first().click();assert.deepEqual(await dialog.locator('figure figcaption').allInnerTexts(),['Vista real del proyecto','Render IA (orientativo)']);assert.equal(await dialog.locator('#aiRenderFloor').inputValue(),'');
+ assert.equal(await page.evaluate(()=>FloorPlanAIRender.results.length),2);await alts.first().focus();
  // Server answers are said plainly; a wrong access code is forgotten.
  reply={status:401,body:{error:'token'}};await dialog.locator('#aiRenderStyle').selectOption('natural');await dialog.locator('#aiRenderGo').click();
  await page.waitForFunction(()=>/El código de acceso no es correcto/.test(document.querySelector('#aiRenderStatus').textContent));assert.equal(await page.evaluate(()=>localStorage.getItem('rubik-render-token')),null);

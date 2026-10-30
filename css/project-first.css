@@ -110,3 +110,4 @@
 .review-point circle{fill:#b0442c;stroke:#fff;stroke-width:30}.review-point text{fill:#fff;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:system-ui,sans-serif}
 .review-points figcaption{font-size:12px;color:#4f5249}
 .moodboard-dialog{width:min(1100px,calc(100vw - 24px))}.moodboard-preview{display:block;width:100%;height:auto;border:1px solid #cbc2b3;margin:8px 0 12px}
+.ai-render-alternatives{margin:0 0 12px}.ai-render-alternatives p{font-size:13px;color:#4f5249;margin:0 0 6px}.ai-render-alt{display:inline-grid;gap:4px;width:150px;margin:0 8px 8px 0;padding:4px;border:1px solid #cbc2b3;border-radius:4px;background:#fff;font:inherit;font-size:12px;text-align:left;vertical-align:top;cursor:pointer}.ai-render-alt img{width:100%;height:auto}.ai-render-alt.is-current{border-color:#205b60;box-shadow:0 0 0 2px #205b60}
