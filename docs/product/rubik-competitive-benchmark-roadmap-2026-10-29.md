@@ -1412,3 +1412,50 @@ Comprobación manual: PDF A4 generado con portada, lámina y superficies en pág
 | 7.7 Estilos profesionales | implementado en el dossier; lámina y presentación conservan su estilo actual | A4 |
 
 Siguen fuera de la Fase A y **no iniciados**: share link, Render IA, comentarios anclados, moodboard, cantidades y presupuesto operativo.
+
+---
+
+## Implementación — Fase B · B1: archivo para el cliente
+
+**Estado:** candidato en revisión. Rama `feat/client-share-b1`, apilada sobre A4 (PR #137). Es la primera versión de §8.2 («Share link cliente»), en la forma elegida por el propietario el 29-10-2026: **archivo autocontenido, sin servidor**. El enlace en la nube con caducidad no se inicia.
+
+### Qué hace
+
+- **Entregar → La vivienda, para tu cliente → «Archivo para tu cliente».** La tarjeta muestra qué incluirá: vistas 3D reales, plano firmado, superficies, orientación y sol, y formulario de observaciones. Lo que falta aparece con su motivo.
+- **«Descargar archivo para el cliente»** genera un único `rubik-sota-<proyecto>-para-el-cliente.html`.
+  - Contiene el dossier en estilo «cliente» (`FloorPlanDossier.compose`), con la firma del profesional.
+  - Se abre en cualquier navegador sin conexión ni instalación.
+  - El profesional lo envía por el canal que quiera; Rubik no sube nada.
+- **El cliente escribe sus observaciones**, sobre toda la vivienda o sobre una estancia, y guarda `observaciones-<versión>.json`.
+  - El formulario ejecuta el mismo `js/review-notes-core.js` de Rubik, incrustado en el archivo, así que el formato es exactamente `rubik-sota.review-notes` v1.
+  - El borrador se conserva en el navegador del cliente para esa versión.
+- **El profesional importa ese archivo** en «Observaciones del cliente» con el flujo existente y decide qué incorporar.
+
+### Privacidad y seguridad
+
+- **Contenido autorizado por el propietario:** imágenes y plano, superficies y estancias, orientación y emplazamiento, y datos de contacto de la firma. El archivo no contiene el proyecto editable.
+- **Content-Security-Policy:** `default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'`. El archivo no puede hacer peticiones de red. Todas las imágenes van incrustadas:
+  - la lámina como SVG;
+  - las vistas como JPEG recomprimido, para que el archivo sea fácil de enviar.
+- **Nombres:** los de proyecto y estancias se insertan como texto. Un nombre con `</script>` o HTML no inyecta código; hay un test adversarial.
+- **Revocación:** no es un enlace revocable. Si el profesional necesita retirarlo, debe enviar una versión nueva. Esa limitación es la razón de que el enlace en la nube siga como opción posterior.
+
+### Componentes
+
+- `js/client-share-ui.js` (`FloorPlanClientShare`): `build` y `download`.
+- `FloorPlanDossier.compose(paper, estilo, bag)`: el mismo dossier, compuesto para otro destino.
+
+### Tests
+
+`tests/client-share.browser.test.cjs` (2/2) comprueba:
+- la tarjeta, con lo que falta y su motivo;
+- el nombre del archivo y la CSP;
+- que no hay recursos externos, `blob:` ni proyecto editable dentro;
+- que el proyecto no cambia;
+- que el archivo se abre desde disco en un perfil de cliente móvil con 0 peticiones de red y 0 errores;
+- el contenido y la lámina real;
+- que no hay scroll horizontal;
+- 2 observaciones (estancia y vivienda) que sobreviven a recargar la página;
+- que el JSON pasa `FloorPlanReviewNotes.read`;
+- que la importación en «Observaciones del cliente» muestra el nombre y los textos del cliente;
+- que la inyección mediante nombres no es posible.
