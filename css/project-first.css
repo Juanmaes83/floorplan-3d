@@ -70,3 +70,12 @@
 .professional-workspace[data-area=analyze] .site-figure.is-sun{grid-template-columns:minmax(0,1fr)}.professional-workspace[data-area=analyze] .site-figure.is-sun .site-sun{max-width:240px}
 .project-context-copy .project-context-action{justify-self:start;margin-top:6px;border:1px solid #978b79;border-radius:var(--rubik-radius);background:var(--rubik-sheet);min-height:40px}
 @media(max-width:600px){.professional-workspace[data-area=analyze] .site-figure,.professional-workspace[data-area=analyze] .site-figure.is-sun{grid-template-columns:minmax(0,1fr)}}
+/* A4 dossier card: cover miniature next to what the document will contain. */
+.professional-delivery-group[data-group=documentation] .professional-card.dossier-card{grid-column:1/-1}
+.delivery-dossier{display:grid;grid-template-columns:minmax(160px,220px) minmax(0,1fr);gap:20px;align-items:start}.delivery-dossier figcaption{grid-column:1/-1}
+.dossier-mini{display:grid;gap:4px;padding:12px;background:#fffdf8;border:1px solid var(--rubik-rule);box-shadow:0 6px 14px -9px rgba(45,51,47,.45);aspect-ratio:210/297;align-content:start;overflow:hidden}
+.dossier-mini small{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--rubik-clay)}.dossier-mini b{font:400 15px/1.2 var(--rubik-serif)}.dossier-mini span{font-size:11px;color:var(--rubik-muted)}
+.dossier-mini img,.dossier-mini svg{display:block;width:100%;height:auto;max-height:150px;margin:6px 0;object-fit:cover}
+.dossier-mini .preview-room{fill:#e2d8c4;stroke:#a89c87;stroke-width:1;vector-effect:non-scaling-stroke}.dossier-mini .preview-room.preview-excluded{fill:#f3eee4}.dossier-mini .preview-wall{fill:#2d332f}.dossier-mini .preview-demolished{fill:none}
+.dossier-checklist{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px}.dossier-checklist .is-ready{color:var(--rubik-ink);font-weight:600}.dossier-checklist .is-missing{color:var(--rubik-muted)}.dossier-checklist small{font-weight:400}
+@media(max-width:600px){.delivery-dossier{grid-template-columns:minmax(0,1fr)}.dossier-mini{max-width:220px}}

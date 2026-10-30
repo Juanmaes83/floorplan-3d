@@ -1,0 +1,35 @@
+/* Project-First A4: the professional dossier and its four styles. Standalone (the print window loads it with
+   site-report.css). Styles change composition and tone only; the content is the same project. */
+.dossier-dialog{width:min(1000px,calc(100vw - 24px));max-height:calc(100vh - 24px);padding:0;border:1px solid #cbc2b3;border-radius:6px;background:#efeae0;color:#2d332f}
+.dossier-dialog::backdrop{background:rgba(31,35,38,.45)}
+.dossier-tools{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#fffcf6;border-bottom:1px solid #cbc2b3}
+.dossier-tools h2{font:400 20px/1.2 Georgia,'Times New Roman',serif;margin:0 auto 0 0}
+.dossier-style{display:flex;align-items:center;gap:8px;font-size:13px}.dossier-style select{min-height:40px;border:1px solid #978b79;border-radius:4px;background:#fffcf6;padding:0 8px}
+.dossier-paper{--d-accent:#875936;--d-ink:#2d332f;--d-muted:#626457;--d-rule:#cbc2b3;--d-paper:#fffdf8;--d-serif:Georgia,'Times New Roman',serif;margin:16px;display:grid;gap:16px;font:14px/1.55 system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--d-ink)}
+.dossier-page{background:var(--d-paper);padding:30px 34px;box-shadow:0 8px 24px -16px rgba(45,51,47,.6);break-inside:avoid;min-width:0}
+.dossier-page>h2{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--d-accent);margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--d-rule)}
+.dossier-cover{display:grid;gap:16px}.dossier-cover-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap-reverse}
+.dossier-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--d-accent)}
+.dossier-brand{display:grid;gap:2px;font-size:12px;color:var(--d-muted);overflow-wrap:anywhere}.dossier-brand img{max-height:56px;max-width:140px;object-fit:contain}.dossier-brand strong{font:400 19px/1.2 var(--d-serif);color:var(--d-ink)}
+.dossier-title{font:400 40px/1.1 var(--d-serif);letter-spacing:-.02em;margin:0;overflow-wrap:anywhere}
+.dossier-cover-visual{margin:0;background:#f3eee4;border:1px solid var(--d-rule)}.dossier-cover-visual img{display:block;width:100%;height:auto}
+.dossier-cover-visual .dossier-plan{display:block;width:100%;height:340px;padding:14px;box-sizing:border-box}
+.dossier-plan .preview-room,.dossier-cover-visual .preview-room{fill:#e2d8c4;stroke:#a89c87;stroke-width:1;vector-effect:non-scaling-stroke}.dossier-cover-visual .preview-room.preview-excluded{fill:#f3eee4;stroke-dasharray:3 2}.dossier-cover-visual .preview-wall{fill:#2d332f}.dossier-cover-visual .preview-demolished{fill:none;stroke:#a7543f;stroke-dasharray:3 2;vector-effect:non-scaling-stroke}
+.dossier-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 20px;margin:0}.dossier-facts dt{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--d-muted)}.dossier-facts>div{min-width:0}.dossier-facts>.is-wide{grid-column:1/-1}.dossier-facts dd{margin:2px 0 0;font:400 18px/1.3 var(--d-serif);overflow-wrap:break-word}
+.dossier-sheet-frame{background:#e6dfd2;padding:10px;border:1px solid var(--d-rule)}.dossier-sheet-image{display:block;width:100%;height:auto;aspect-ratio:1600/1100;background:#fcfaf6}
+.dossier-total{font:400 30px/1.2 var(--d-serif);margin:0 0 10px}
+.dossier-table{width:100%;border-collapse:collapse;font-size:13px}.dossier-table th,.dossier-table td{padding:6px 8px;border-bottom:1px solid #e2dccf;text-align:left}.dossier-table td:last-child,.dossier-table th:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dossier-table th{font-size:11px;color:var(--d-muted);letter-spacing:.03em}.dossier-table .is-excluded td{color:var(--d-muted)}.dossier-table .dossier-level td{font-weight:700;padding-top:12px}
+.dossier-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start;margin-bottom:12px}
+.dossier-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.dossier-gallery figure{margin:0}.dossier-gallery img{display:block;width:100%;height:auto;border:1px solid var(--d-rule)}.dossier-gallery figcaption{font-size:12px;font-weight:600;margin-top:4px}
+.dossier-gallery figure:first-child{grid-column:1/-1}
+.dossier-note{font-size:12.5px;color:var(--d-muted);margin:8px 0}.dossier-sources ul{margin:0;padding-left:18px;font-size:13px;color:var(--d-muted)}
+.dossier-foot{font-size:11px;color:var(--d-muted);margin:0 4px 8px}
+/* Styles. Technical: rules and tables first. Client: warmer, images large. Real estate: big figures, clean. Studio: brand-forward. */
+.dossier-paper[data-style=technical]{--d-accent:#205b60}.dossier-paper[data-style=technical] .dossier-title{font:650 32px/1.15 system-ui,sans-serif;letter-spacing:-.01em}
+.dossier-paper[data-style=client]{--d-accent:#875936;--d-paper:#fffaf2}.dossier-paper[data-style=client] .dossier-gallery{grid-template-columns:minmax(0,1fr)}
+.dossier-paper[data-style=realestate]{--d-accent:#2d332f;--d-paper:#ffffff}.dossier-paper[data-style=realestate] .dossier-facts dd{font-size:24px}.dossier-paper[data-style=realestate] .dossier-title{font:700 38px/1.1 system-ui,sans-serif;letter-spacing:-.02em}
+.dossier-paper[data-style=studio]{--d-accent:#875936}.dossier-paper[data-style=studio] .dossier-cover-head{flex-direction:row-reverse;justify-content:space-between}.dossier-paper[data-style=studio] .dossier-brand strong{font-size:26px}.dossier-paper[data-style=studio] .dossier-cover{border-top:6px solid var(--d-accent)}
+@media(max-width:700px){.dossier-paper{margin:8px}.dossier-page{padding:18px}.dossier-grid{grid-template-columns:minmax(0,1fr)}.dossier-title{font-size:30px}.dossier-gallery{grid-template-columns:minmax(0,1fr)}}
+.dossier-print{margin:0;background:#fff}.dossier-print .dossier-paper{margin:0 auto;max-width:900px}.dossier-print .dossier-page{box-shadow:none;border-bottom:1px solid #e2dccf}.dossier-print-button{position:fixed;top:10px;right:10px;font:600 14px system-ui,sans-serif;padding:8px 14px;z-index:2}
+@media print{.dossier-print-button{display:none}.dossier-print .dossier-page{break-after:page;padding:0;border:0}.dossier-print .dossier-page:last-of-type{break-after:auto}@page{size:A4;margin:14mm}}
