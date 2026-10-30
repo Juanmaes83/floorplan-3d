@@ -35,7 +35,10 @@
     // A review holds only for the quantity it was made on.
     if(before.review?.status==='reviewed'&&sameQuantity(before.quantity,l.quantity))review=before.review;else if(before.review?.status==='reviewed')changed.push(l.key);}
    else if(tariff[l.tariffKey]&&Number.isFinite(tariff[l.tariffKey].unitPrice))price={unitPrice:tariff[l.tariffKey].unitPrice,priceSource:{type:'manual',label:labels.tariff,asOf:tariff[l.tariffKey].asOf||null}};
-   b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:price?.unitPrice??null,priceSource:price?.priceSource??null,review:review??{status:'unreviewed',reviewedAt:null}}));
+   // A reference price (BC3) stays attached while its unit still matches the item.
+   const reference=before?.priceReference&&before.priceReference.unit===l.quantity.unit?before.priceReference:null;
+   const active=price?.priceSource?.type==='provider-reference'&&!reference?null:price;
+   b.items.push(B.createItem({id:l.key,chapterId:l.chapter,description:l.description,quantity:l.quantity,wastePercent:before?before.wastePercent:l.waste,unitPrice:active?.unitPrice??null,priceSource:active?.priceSource??null,priceReference:reference,review:active?review??{status:'unreviewed',reviewedAt:null}:{status:'unreviewed',reviewedAt:null}}));
   }
   b.chapters=b.chapters.filter(c=>b.items.some(i=>i.chapterId===c.id));
   return {budget:B.validateBudget(b),reviewInvalidated:changed,tariffKeys:Object.fromEntries(lines(project,{name,labels}).map(l=>[l.key,l.tariffKey]))};
