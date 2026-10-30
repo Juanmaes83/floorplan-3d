@@ -20,7 +20,9 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),original,'navigation and summaries never mutate model');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+1),false);assert.deepEqual(errors,[]);
 });
 
-for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:390,height:844},{width:844,height:390}])test('Point9 human review 2: context, layers, hierarchy and preserved flow '+viewport.width+'x'+viewport.height,{timeout:120000},async t=>{
+// The 3D steps of this review draw on CI software rendering (SwiftShader): measured 76–110 s per viewport there,
+// over 120 s on a slower runner. The limit covers that cost; nothing waits for time inside the test.
+for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:390,height:844},{width:844,height:390}])test('Point9 human review 2: context, layers, hierarchy and preserved flow '+viewport.width+'x'+viewport.height,{timeout:300000},async t=>{
  const context=await browser.newContext({viewport,isMobile:viewport.width<1100,hasTouch:viewport.width<1100});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));await page.goto(url);await page.locator('#welcomeExample').click();await page.waitForFunction(()=>window.FloorPlanProfessionalUI);const original=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),workspace=page.locator('#professionalWorkspace');
  assert.match(await page.locator('#guideJourneyLabel').innerText(),/Recorrido del proyecto · Paso [1-5] de 5/);
  await page.locator('#guideDetails').click();await page.locator('#guideAllTools').click();await page.locator('#traceBtn').scrollIntoViewIfNeeded();await page.locator('#traceBtn').click();await page.locator('#tracePanel:not([hidden])').waitFor();
