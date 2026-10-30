@@ -32,7 +32,7 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
  assert.match(await sheet.innerText(),/Lista para revisar · ajustada a la hoja/);assert.match(await sheet.innerText(),/Sin firma profesional/);
  // 3D: a labelled model scheme, explicitly not a render; images: none shown as ready.
  const presentation=workspace.locator('[data-module="presentation"]');assert.equal(await presentation.locator('svg[role=img]').getAttribute('aria-label'),'Esquema axonométrico del modelo de la planta activa');assert.match(await presentation.innerText(),/No es un render/);
- const images=await workspace.locator('[data-module="images"]').innerText();assert.match(images,/Todavía no hay imágenes guardadas/);assert.match(images,/Se genera al pulsar/);assert.equal(await workspace.locator('[data-module="images"] img').count(),0,'no fake thumbnails');
+ const images=await workspace.locator('[data-module="images"]').innerText();assert.match(images,/Todavía no hay vistas preparadas/);assert.match(images,/Se genera al pulsar/);assert.equal(await workspace.locator('[data-module="images"] img').count(),0,'no fake thumbnails');
  assert.match(await workspace.locator('[data-module="budget"]').innerText(),/todavía no disponible/);assert.match(await workspace.locator('[data-module="review"]').innerText(),/Sin observaciones pendientes/);
  assert.match(await workspace.locator('[data-module="studio"] .project-signature').innerText(),/Sin firma profesional/);
  // Existing routes are intact.

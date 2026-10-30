@@ -65,3 +65,18 @@ test('preview components do not mutate the project',()=>{
  Visual.plan(g);Visual.axonometric(g);Visual.deliveryStates({summary:Visual.summary({project:p,geometry:g,metrics:m})});
  assert.equal(JSON.stringify([p,g,m]),before);
 });
+
+test('automatic views use the saved presentation rooms, then main rooms by family and area',()=>{
+ const p=Core.initial(),g=Core.geometry(p),area=poly=>Math.abs(poly.reduce((s,a,i)=>{const b=poly[(i+1)%poly.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+ // No family declared: the largest counted rooms.
+ const auto=Visual.automaticRoomIds({geometry:g,project:p});
+ assert.equal(auto.source,'automatic');assert.equal(auto.roomIds.length,4);
+ const expected=g.rooms.filter(r=>r.counted!==false).sort((a,b)=>area(b.poly)-area(a.poly)).slice(0,4).map(r=>r.id);assert.deepEqual(auto.roomIds,expected);
+ // A saved presentation selection wins, keeps its order, drops unknown ids.
+ assert.deepEqual(Visual.automaticRoomIds({geometry:g,project:p,saved:['rom_kitchen','nope','rom_living']}),{source:'presentation',roomIds:['rom_kitchen','rom_living']});
+ // Declared families: living, kitchen, dining, bedroom first; service rooms only if nothing else.
+ const q=Core.clone(p);const set=(id,f)=>{q.rooms.find(r=>r.id===id).family=f;};set('rom_hall','hallway');set('rom_kitchen','kitchen');set('rom_living','living');set('rom_dining','dining');set('rom_master','bedroom');
+ const fam=Visual.automaticRoomIds({geometry:Core.geometry(q),project:q});assert.deepEqual(fam.roomIds,['rom_living','rom_kitchen','rom_dining','rom_master']);
+ assert.ok(!Visual.automaticRoomIds({geometry:Core.geometry(q),project:q,max:20}).roomIds.includes('rom_hall'),'service rooms are not chosen while main rooms exist');
+ assert.deepEqual(Visual.automaticRoomIds({geometry:{rooms:[]},project:q}),{source:'automatic',roomIds:[]});
+});

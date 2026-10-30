@@ -75,5 +75,22 @@
   const counts={ready:0,generate:0,review:0,missing:0,unavailable:0};for(const v of Object.values(states))counts[v]++;
   return {states,counts};
  }
- return {plan,axonometric,summary,deliveryStates};
+ // Automatic views (A2): the rooms the presentation already shows. A professional's saved presentation selection wins;
+ // otherwise the main living rooms by declared family, then the largest counted rooms. Service rooms (hall, storage,
+ // laundry…) are only used when nothing else exists. Returns room ids; the camera framing stays in the presentation.
+ const FAMILY_ORDER=['living','kitchen','dining','bedroom','office','bathroom','terrace','balcony','garage'];
+ const SERVICE=new Set(['hallway','storage','laundry','toilet','utility']);
+ function automaticRoomIds({geometry,project,saved=null,max=4}={}){
+  const area=poly=>Math.abs(poly.reduce((s,a,i)=>{const b=poly[(i+1)%poly.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+  const rooms=(geometry?.rooms||[]).filter(r=>usable(r.poly)&&area(r.poly)>0);
+  const valid=new Set(rooms.map(r=>r.id));
+  const chosen=(saved||[]).filter(id=>valid.has(id));
+  if(chosen.length)return {source:'presentation',roomIds:[...new Set(chosen)].slice(0,max)};
+  const family=id=>project?.rooms?.find(r=>r.id===id)?.family||'unspecified';
+  const rank=r=>{const f=family(r.id),i=FAMILY_ORDER.indexOf(f);return [r.counted===false?1:0,SERVICE.has(f)?1:0,i<0?FAMILY_ORDER.length:i,-area(r.poly)];};
+  const sorted=[...rooms].sort((a,b)=>{const x=rank(a),y=rank(b);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]-y[i];return a.id<b.id?-1:1;});
+  const main=sorted.filter(r=>r.counted!==false&&!SERVICE.has(family(r.id)));
+  return {source:'automatic',roomIds:(main.length?main:sorted).slice(0,max).map(r=>r.id)};
+ }
+ return {plan,axonometric,summary,deliveryStates,automaticRoomIds};
 });

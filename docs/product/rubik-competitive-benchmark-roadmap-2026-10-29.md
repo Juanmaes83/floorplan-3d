@@ -1203,3 +1203,63 @@ Respuesta a la pregunta de éxito:
 1. **Analizar visual completo (§7.2):** orientación con norte sobre el mismo plano, sol y emplazamiento reutilizando `FloorPlanProjectPreview`.
 2. **Galería de vistas (§7.5):** puntos de cámara guardados que sustituyan el esquema por frames reales en Entregar e Imágenes.
 3. **Dossier automático (§7.3):** portada, lámina, ficha y firma ya existen como componentes; falta la composición y su exportación.
+
+---
+
+## Implementación — Project-First A2: galería de vistas automáticas
+
+**Estado:** candidato en revisión. Rama `feat/project-first-views-a2`, apilada sobre A1 (PR #134). Ataca §7.5 y completa la parte visual de §7.1.
+
+### Alcance y decisiones
+
+- **Vistas automáticas, sin cambio de contrato** (decisión del propietario, 29-10-2026). Son las mismas «paradas» que ya usa la presentación (`FloorPlanPresentationCore.create`): la vista general y hasta cuatro estancias.
+  - Manda la selección que el profesional guardó para la presentación.
+  - Sin ella, se eligen las estancias principales por familia declarada (salón, cocina, comedor, dormitorio…) y, si no hay familias, las mayores del cómputo.
+  - Las estancias de servicio sólo entran si no hay otras.
+- **Frames reales.** `View3D.presentationGo` encuadra cada parada como en la presentación y `View3D.deliveryShot` renderiza 1600×820 con el renderer real, incluidos muebles y materiales.
+  - Después se restauran la cámara, la vista (2D o 3D) y el estado de la escena.
+  - El proyecto no cambia.
+  - Mientras se capturan, el área no se cierra para no exponer el 3D en movimiento.
+- **En memoria y ligadas a la revisión.** Las vistas viven en esta sesión. Si el proyecto cambia, quedan «desactualizadas» y no se muestran como la vivienda actual.
+  - No se persisten frames ni cámaras.
+  - Las vistas guardadas manualmente quedan para un corte posterior.
+- **Entregar:**
+  - la Presentación 3D muestra la vista general real (el esquema A1 queda como alternativa mientras no hay vistas);
+  - Imágenes muestra la galería real;
+  - la línea de estado pasa «imágenes» a listo.
+- **«Generar imágenes»:** cada vista se descarga como imagen de entrega de 1600×1000 con los datos del proyecto y la firma seleccionada. Usa `FloorPlanDeliveryImage`, el mismo formato que la presentación.
+- **Honestidad:** antes de preparar, ninguna imagen aparenta existir. Los avisos de distribución pendientes impiden preparar, igual que en la captura 3D.
+
+### Componentes y fuentes
+
+- `FloorPlanProjectVisual.automaticRoomIds`: función pura.
+- `js/project-views-ui.js` (`FloorPlanProjectViews`): `plan`, `status`, `current`, `prepare`, `image` y `download`.
+- Fuentes reutilizadas:
+  - `FloorPlanPresentationCore` (paradas y selección guardada);
+  - `View3D.presentationCapture`, `presentationGo`, `deliveryShot` y `presentationRestore`;
+  - `FloorPlanDeliveryImage`;
+  - `FloorPlanBrandUI.snapshot`.
+
+### Limitaciones
+
+- En un edificio, las vistas son de la planta activa.
+- No hay vista exterior dedicada en la galería; «Preparar exterior» sigue disponible.
+- Las vistas de estancia conservan el contorno de la estancia que marca la presentación.
+- El tiempo de preparación depende de la GPU: unos 20 s para cinco vistas con el render por software del entorno de pruebas.
+
+### Tests
+
+- `tests/project-visual.test.cjs`: 7/7, incluida la selección automática.
+- `tests/project-views.browser.test.cjs`: 2/2, en 1440×900 y 390×844. Comprueba:
+  - sin imágenes falsas antes de preparar;
+  - frames PNG reales de 1600×820, tantos como paradas;
+  - vista general en la presentación;
+  - estado listo;
+  - proyecto, vista y foco restaurados;
+  - descarga de la imagen de entrega de 1600×1000;
+  - vistas desactualizadas tras un cambio;
+  - cero peticiones remotas.
+- Comprobación manual adicional:
+  - la pose de cámara 3D se restaura idéntica;
+  - el área no se cierra durante la captura;
+  - la presentación sigue abriéndose después.
