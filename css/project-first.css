@@ -54,3 +54,14 @@
 @media(max-width:1100px){.project-context{grid-template-columns:minmax(180px,280px) minmax(0,1fr);gap:20px}.project-context .project-plan.professional-plan-preview{height:180px}.project-context-name{font-size:23px}}
 @media(max-width:600px){.project-context,.project-context-compact{grid-template-columns:minmax(0,1fr);gap:12px;padding:12px 0;margin-bottom:20px}.project-context .project-plan.professional-plan-preview{height:170px}.project-context-compact .project-plan.professional-plan-preview{height:120px}.project-context-name{font-size:22px}.project-context-area{font-size:26px}.project-axo{height:180px}.delivery-image-box{height:84px}.delivery-image-box svg{height:66px}}
 @media(max-height:500px){.project-context{grid-template-columns:200px minmax(0,1fr);padding:10px 0;margin-bottom:16px}.project-context .project-plan.professional-plan-preview{height:130px}.project-context-name{font-size:20px}.project-context-area{font-size:22px}.project-context-compact{grid-template-columns:130px minmax(0,1fr)}.project-context-compact .project-plan.professional-plan-preview{height:80px}}
+/* A2 automatic views: real 3D frames of the presentation stops. */
+.delivery-frame{margin:14px 0 16px}.delivery-frame .project-view-image{box-shadow:0 6px 14px -9px rgba(45,51,47,.45)}
+.project-view-image{display:block;width:100%;height:auto;aspect-ratio:1600/820;object-fit:cover;background:#ece6da;border:1px solid var(--rubik-rule)}
+.project-view-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0}
+.project-view{margin:0;display:grid;gap:4px;min-width:0}.project-view figcaption{font-size:12px;color:var(--rubik-ink);font-weight:600;margin:0;overflow-wrap:anywhere}
+.project-view .btn{justify-self:start;font-size:12px;min-height:40px;border:1px solid #978b79;border-radius:var(--rubik-radius);background:var(--rubik-sheet)}.project-view .btn:hover{background:var(--surface-hover);border-color:var(--rubik-ink)}
+.project-view-caption{font-size:12.5px;line-height:1.55;color:var(--rubik-muted);margin:10px 0 0}
+.project-view-status{font-size:12.5px;color:var(--rubik-ink);font-weight:600;margin:6px 0}.project-view-status:empty{display:none}
+.professional-card>.btn[data-route=prepare-views]{margin-top:4px}
+.project-views-card{grid-column:1/-1}.project-views-card .project-view-gallery{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin:12px 0}
+@media(max-width:600px){.project-view-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.project-views-card .project-view-gallery{grid-template-columns:minmax(0,1fr)}}
