@@ -22,6 +22,9 @@ jobs:
         tests/moodboard.test.cjs
         tests/quantity-schedule.test.cjs
         tests/quantity-core.test.cjs
+        tests/budget-draft.test.cjs
+        tests/budget-core.test.cjs
+        tests/budget-presentation.test.cjs
       BROWSER_TESTS: >-
         tests/project-first.browser.test.cjs
         tests/project-views.browser.test.cjs
@@ -35,6 +38,7 @@ jobs:
         tests/anchored-comments.browser.test.cjs
         tests/moodboard.browser.test.cjs
         tests/quantity-schedule.browser.test.cjs
+        tests/budget-ui.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:
