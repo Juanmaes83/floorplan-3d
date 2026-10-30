@@ -372,6 +372,8 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-level-group{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:4px 8px 8px;display:grid;gap:5px;min-width:0}
 .presentation-level-group legend{font-weight:600;padding:0 4px}
 .presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
+.presentation-story-option{margin:10px 0;padding:6px 10px;border:1px solid var(--line);border-radius:10px}.presentation-story-option label{display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px;cursor:pointer}.presentation-story-option input{width:20px;height:20px;flex:none}.presentation-story-option .presentation-story-hint{margin:0 0 4px;font-size:13px;color:var(--muted)}
+.presentation-story{margin:8px 0;display:grid;gap:6px}.presentation-story[hidden]{display:none}.presentation-story-caption{margin:0;font-weight:600;font-size:14px}.presentation-story-slider{width:100%;min-height:44px;margin:0;accent-color:var(--accent)}.presentation-story-actions{display:flex;gap:8px;flex-wrap:wrap}.presentation-story-actions .btn{min-height:44px;flex:1 1 auto}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:-20px;z-index:2;background:var(--panel,#fff);padding:10px 0 20px;border-top:1px solid var(--line)}
 .presentation-config-actions .btn{border:1px solid var(--line);min-height:44px}
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
@@ -2455,6 +2457,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/journey-core.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
+<script src="js/presentation-story-core.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-ui.js"></script>
 <script src="js/tour-recorder.js"></script>
@@ -4171,7 +4174,7 @@ function loop(){
   const raw = clock.getDelta(), dt = Math.min(raw, .05), now = performance.now();
   if (anim){ const t = clamp01((now - anim.t0)/anim.dur); anim.fn(t); if (t >= 1){ const r = anim.res; anim = null; r(); } }
   else if (fly){ const t = clamp01((now - fly.t0)/fly.dur); camTween(fly.A, fly.B, ease(t)); if (t >= 1){const done=fly.res;fly=null;done?.(true);} }
-  else if (opt.mode === 'orbit') orbit.update();
+  else if (opt.mode === 'orbit'){ if (!storyRun) orbit.update(); }
   // The walk uses the real elapsed time (up to 0.25 s) in 50 ms sub-steps: on a slow device (a few frames per second)
   // the person still moves at walking speed, and each sub-step is checked against the walls.
   else for (let left = Math.min(raw, .25); left > 1e-4; left -= .05) stepWalk(Math.min(left, .05));
@@ -4339,9 +4342,20 @@ function overviewPose(b,target,direction,radius,aspect,region){
   overviewInfo={radius:+radius.toFixed(3),distance:+d.toFixed(3),moved:d>radius+1e-6,fits:p.fits,wallTop:H,region:r0};
   return pose(p.look,p.eye);
 }
+// Pose of an overview (or unframed) stop; shared by presentationGo and the plan reveal, which must end exactly here.
+function presentationStopPose(stop,aspect,region){
+  const b=stop.bounds;
+  const tx=wx(b.x+b.w/2),tz=wz(b.y+b.h/2);
+  const span=Math.max(b.h/1000,b.w/1000/aspect);
+  const frame=aspect<.7?1.65:aspect>2 ? 1.45 : 1.25;
+  const radius=Math.max(6,(span/2+1)/Math.tan(camera.fov*Math.PI/360)*frame)*(stop.kind==='room'?1.2:1);
+  const target=new THREE.Vector3(tx,0,tz),direction=new THREE.Vector3(.42,.84,.34).normalize();
+  return overviewPose(b,target,direction,radius,aspect,region);
+}
 function restoreTerritorialViewLimits(){if(territorialViewLimits){orbit.maxDistance=territorialViewLimits.maxDistance;camera.far=territorialViewLimits.far;camera.updateProjectionMatrix();territorialViewLimits=null;}}
 function presentationGo(stop,reduced=false,view={}){
   if(!active||anim||!stop?.bounds)throw Error('Presentación no disponible.');
+  endPresentationStory();
   clearPresentationRoute();
   if(stop.kind==='territorial-context'&&territorialBaseLevelView===null)territorialBaseLevelView=levelView;
   if(stop.kind!=='territorial-context'&&territorialBaseLevelView!==null){levelView=territorialBaseLevelView;territorialBaseLevelView=null;sigArch='';sync();}
@@ -4361,13 +4375,7 @@ function presentationGo(stop,reduced=false,view={}){
     return flyTo(next,650);
   }
   setPresentationCut(presentationBaseCut);
-  const b=stop.bounds;
-  const tx=wx(b.x+b.w/2),tz=wz(b.y+b.h/2);
-  const span=Math.max(b.h/1000,b.w/1000/aspect);
-  const frame=aspect<.7?1.65:aspect>2 ? 1.45 : 1.25;
-  const radius=Math.max(6,(span/2+1)/Math.tan(camera.fov*Math.PI/360)*frame)*(stop.kind==='room'?1.2:1);
-  const target=new THREE.Vector3(tx,0,tz),direction=new THREE.Vector3(.42,.84,.34).normalize();
-  const next=overviewPose(b,target,direction,radius,aspect,view.region);
+  const next=presentationStopPose(stop,aspect,view.region);
   if(fly?.res)fly.res(false);fly=null;
   if(reduced){setPose(next);orbit.update();return Promise.resolve(true);}
   return flyTo(next,650);
@@ -4389,6 +4397,7 @@ function clearPresentationRoute(){
 // hold the arrival view, rise above the walls and return to the stop. Orientation is yaw/pitch without roll.
 function presentationRoute(roomId,reduced=false,view={}){
   if(!active||contextLost||anim||fly)throw Error('La escena 3D todavía no está lista.');
+  endPresentationStory();
   clearPresentationRoute();
   const Route=window.FloorPlanPresentationRoute;
   const routeAspect=SW()/Math.max(1,SH()),routeVfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/routeAspect)*180/Math.PI));
@@ -4468,6 +4477,7 @@ function presentationRoute(roomId,reduced=false,view={}){
   });
 }
 function presentationRestore(state){
+  endPresentationStory();
   restoreTerritorialViewLimits();
   territorialPresentation=false;territorialBaseLevelView=null;if(state?.levelView)levelView=state.levelView;
   clearPresentationReveal();
@@ -4518,6 +4528,59 @@ function presentationRestorePose(state){
   camera.quaternion.fromArray(state.quaternion);renderer.render(scene,camera);
 }
 
+/* Presentation Story (FT3D-1a, js/presentation-story-core.js): a narrative state f(p) applied to the one real scene.
+   Begin saves everything a state touches (camera pose, lens, near/far, orbit limits and input, wall growth) and end
+   restores it; nothing here edits the project, rebuilds geometry or adds a second model. The narrative ends exactly on
+   the pose presentationGo computes for the same stop, so continuing to the presentation has no jump. */
+let storyRun=null;
+function presentationStoryBegin(stop,view={}){
+  if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
+  endPresentationStory();
+  clearPresentationReveal();clearPresentationRoute();
+  if(fly?.res)fly.res(false);fly=null;
+  if(presentationBaseCut==null)presentationBaseCut=opt.cut;
+  setPresentationCut(presentationBaseCut);clearRoomOutline();frameInfo=null;
+  const aspect=Math.max(.2,SW()/Math.max(1,SH())),end=presentationStopPose(stop,aspect,view.region),b=stop.bounds;
+  const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
+  const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
+  const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
+  const narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
+  storyRun={kind:'plan-reveal',stopId:stop.id,saved,narrative,state:null,arch:null};
+  orbit.enabled=false;
+  return {...narrative.info};
+}
+function presentationStoryApply(p){
+  if(!storyRun||!active)throw Error('Narrativa no iniciada.');
+  const st=storyRun.narrative.stateAt(p);storyRun.state=st;
+  camera.fov=st.fov;camera.near=st.near;camera.far=st.far;camera.updateProjectionMatrix();
+  orbit.maxDistance=Math.max(storyRun.saved.maxDistance,st.distance*1.05);
+  camera.position.fromArray(st.position);orbit.target.fromArray(st.target);camera.lookAt(orbit.target);
+  // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
+  if(archUp){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(lampG)lampG.visible=grow>.99&&st.wallScale>.99;
+  return {...st,position:[...st.position],target:[...st.target]};
+}
+// keepPose: stay on the current camera pose (used at p = 1, which is the overview pose); otherwise go back to the pose
+// the narrative started from. Lens, near/far, orbit limits and walls always return to their saved values.
+function endPresentationStory({keepPose=true}={}){
+  if(!storyRun)return null;
+  const run=storyRun;storyRun=null;
+  if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;
+  applyGrow();
+  camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
+  orbit.maxDistance=run.saved.maxDistance;orbit.enabled=run.saved.orbitEnabled;
+  if(!keepPose){camera.position.copy(run.saved.position);orbit.target.copy(run.saved.target);camera.quaternion.copy(run.saved.quaternion);}
+  else camera.lookAt(orbit.target);
+  return {kind:run.kind,p:run.state?.p??null};
+}
+function presentationStoryInfo(){
+  if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
+  const st=storyRun.state;
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+    fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
+    saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
+}
+
 window.View3D = {
   setSolar(result){solarResult=result&&structuredClone(result);if(inited)applyLight();},
   get solarInspect(){return {result:solarResult&&structuredClone(solarResult),direction:sun?.position.toArray(),intensity:sun?.intensity,lights:scene?.children.filter(x=>x.isLight).length,lampIntensities:[lampG,...levelLamps].flatMap(g=>g?.children.filter(o=>o.isPointLight).map(o=>o.intensity)||[])};},
@@ -4547,6 +4610,8 @@ window.View3D = {
   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 
 window.View3D.presentationReveal=presentationReveal;
+Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory});
+Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
