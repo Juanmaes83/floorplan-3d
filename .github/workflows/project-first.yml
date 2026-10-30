@@ -19,6 +19,7 @@ jobs:
         tests/plan-service.test.cjs
         tests/review-anchors.test.cjs
         tests/review-notes-core.test.cjs
+        tests/moodboard.test.cjs
       BROWSER_TESTS: >-
         tests/project-first.browser.test.cjs
         tests/project-views.browser.test.cjs
@@ -30,6 +31,7 @@ jobs:
         tests/share-link.browser.test.cjs
         tests/plan-service.browser.test.cjs
         tests/anchored-comments.browser.test.cjs
+        tests/moodboard.browser.test.cjs
     steps:
       - uses: actions/checkout@v4
         with:
