@@ -18,6 +18,7 @@
    takes over (state.section): the swap happens while the camera still moves and p = 1 is exactly the room stop.
    «Sección visual» (sectionOpen, FT3D-3): the overview, a vertical cut entering the same model, the frontal section,
    a dolly zoom that opens the perspective and the overview again with the cut still on (see below).
+   elevation-open (FT3D-4) reads one façade candidate frontally and opens to an exterior perspective.
    Further narratives (exploded axonometric…) are added as new builders in NARRATIVES. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPresentationStory=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
@@ -168,7 +169,84 @@
   }
   return {kind:'section-open',stateAt,checkpoints:[0,.25,.5,.75,1],info:{fovFront:fov0,fovEnd:fov1,distanceFront:d0,distanceEnd:d1,frameFront:frame0,frameEnd:frame1,width,depth,wallTop,turnDeg:deg(turn),playMs:o.playMs,reducedHold:o.reducedHold,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen};
+ /* «Fachada visual» (elevationOpen, FT3D-4): one façade candidate (FloorPlanPresentationElevation) read on the same model
+    with the same PerspectiveCamera — the elevation look comes from frontality and a long lens, never from a drawing.
+    - p = 0: the overview pose, exactly;
+    - 0 → alignEnd: the camera turns to face the façade (horizontal, along its outward normal, world up vertical) while
+      the lens narrows to frontFovDeg and the framed size moves to the façade's;
+    - alignEnd → frontEnd: frontal hold — the façade fits the free region with a stable margin;
+    - frontEnd → lightEnd: same framing; the runtime enhancements chosen (a solar snapshot) are switched on;
+    - lightEnd → perspEnd: the view opens to a deterministic oblique exterior perspective (outward + clockwise tangent ×
+      0.35 + up × 0.18), the lens back to the overview's, distance fitted to the building box;
+    - perspEnd → holdEnd: exterior hold;
+    - holdEnd → 1: back to the overview, continuously; p = 1 is exactly the overview pose (the room descent starts there).
+    Exterior context (terrain, orthophoto…) is hidden from the frontal hold until the perspective opens, so it never
+    covers the façade; levels above the active one (shown for the whole building) rise from their floor while the camera
+    aligns and fold back while it returns, so p = 0 and p = 1 show the overview exactly as it was.
+    input: facade {normal:[x,0,z] world outward unit, tangent:[x,0,z] world clockwise unit, center:[x,y,z] frame centre,
+    width, height (m)}; corners: [[x,y,z]…] the building box (world, architecture only); end {position, target, fov}
+    (the overview pose); aspect; region; base {near, far}; solar: a solar snapshot will be applied (bool). */
+ const ELEVATION_OPEN={alignEnd:.28,frontEnd:.42,lightEnd:.58,perspEnd:.82,holdEnd:.9,frontFovDeg:4,margin:.12,oblique:[1,.35,.18],reducedFront:.35,reducedLight:.5,reducedPersp:.86,playMs:8000};
+ function elevationOpen(input){
+  const o={...ELEVATION_OPEN,...(input.options||{})},end=input.end,fa=input.facade;
+  if(!end||![...end.position,...end.target,end.fov].every(Number.isFinite))throw Error('Falta la vista general de destino.');
+  if(!fa||![...fa.normal,...fa.tangent,...fa.center,fa.width,fa.height].every(Number.isFinite))throw Error('La fachada no tiene geometría.');
+  const corners=(input.corners||[]).filter(c=>Array.isArray(c)&&c.length===3&&c.every(Number.isFinite));if(corners.length<2)throw Error('La fachada no tiene volumen.');
+  const aspect=Math.max(.2,Number(input.aspect)||1),base={near:input.base?.near??.05,far:input.base?.far??300};
+  const r=region(input.region),m=.06,nx0=2*r[0]-1+m,nx1=2*r[2]-1-m,ny0=1-2*r[3]+m,ny1=1-2*r[1]-m,cx=(nx0+nx1)/2,cy=(ny0+ny1)/2,hx=(nx1-nx0)/2,hy=(ny1-ny0)/2;
+  const offset1=sub(end.position,end.target),d1=len(offset1),dir1=norm(offset1),fov1=end.fov,tan1=Math.tan(rad(fov1)/2),frame1=2*d1*tan1;
+  const n=norm([fa.normal[0],0,fa.normal[2]]),t=norm([fa.tangent[0],0,fa.tangent[2]]),f0=mul(n,-1),ax=axes(f0);
+  const width=Math.max(.5,fa.width),height=Math.max(.5,fa.height);
+  // Frontal framing: façade width × building height in the free region, with a margin; the centre sits at the centre of
+  // the free region (shift by the framed size only, so it is stable through the hold).
+  const half=Math.max(height/2/hy,width/2/(hx*aspect))*(1+o.margin),frame0=2*half;
+  const fov0=Math.min(fov1,o.frontFovDeg),tan0=Math.tan(rad(fov0)/2),d0=frame0/2/tan0;
+  const target0=add(add(fa.center,mul(ax.right,-cx*frame0/2*aspect)),mul(ax.up,-cy*frame0/2));
+  // Exterior perspective: a direction derived from the candidate only; the building box fits the free region.
+  const dirP=norm(add(add(mul(n,o.oblique[0]),mul(t,o.oblique[1])),[0,o.oblique[2],0]));
+  const box=corners.reduce((b,c)=>({min:c.map((v,i)=>Math.min(b.min[i],v)),max:c.map((v,i)=>Math.max(b.max[i],v))}),{min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity]});
+  const centreP=mul(add(box.min,box.max),.5);
+  function fit(dir,tan,target){
+   const f=mul(dir,-1),a=axes(f),tH=tan*aspect;
+   const ok=d=>{const eye=add(add(add(target,mul(dir,d)),mul(a.right,-cx*tH*d)),mul(a.up,-cy*tan*d));
+    return corners.every(p=>{const v=sub(p,eye),zz=dot(v,f);if(zz<=0)return false;const sx=dot(v,a.right)/zz/tH,sy=dot(v,a.up)/zz/tan;return Math.abs(sx-cx)<=hx&&Math.abs(sy-cy)<=hy;});};
+   let lo=.1,hi=10;while(!ok(hi)&&hi<1e5)hi*=2;for(let i=0;i<48;i++){const mid=(lo+hi)/2;if(ok(mid))hi=mid;else lo=mid;}
+   return {d:hi*(1+o.margin/2),eye:d=>add(add(add(target,mul(dir,d)),mul(a.right,-cx*tH*d)),mul(a.up,-cy*tan*d))};
+  }
+  const fp=fit(dirP,tan1,centreP),dP=fp.d,eyeP=fp.eye(dP),targetP=add(eyeP,mul(dirP,-dP)),frameP=2*dP*tan1;
+  const az=v=>Math.atan2(v[2],v[0]),el=v=>Math.asin(Math.max(-1,Math.min(1,v[1])));
+  const turnTo=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
+  const az1=az(dir1),el1=el(dir1),az0=az(n),azP=az(dirP),elP=el(dirP);
+  const dirAt=(e,a)=>[Math.cos(e)*Math.cos(a),Math.sin(e),Math.cos(e)*Math.sin(a)];
+  const reach=len(sub(box.max,box.min));
+  const nearFar=d=>({near:Math.max(base.near,(d-reach)*.5),far:Math.max(base.far,d+reach*2)});
+  const span=(p,a,b)=>smooth((p-a)/(b-a));
+  function pose(dir,tan,frame,target){const d=frame/2/tan;return {position:add(target,mul(dir,d)),target,fov:deg(2*Math.atan(tan)),distance:d,frameHeight:frame,...nearFar(d)};}
+  // Enhancements as pure functions of p: solar only between the lighting phase and the return; context hidden from the
+  // frontal hold until the perspective opens; upper levels rise while aligning and fold back while returning.
+  const extras=p=>({solar:!!input.solar&&p>=o.frontEnd&&p<o.holdEnd,contextVisible:!(p>=o.alignEnd&&p<o.lightEnd),levelScale:p<=0||p>=1?0:p<o.alignEnd?smooth(p/o.alignEnd):p<o.holdEnd?1:1-smooth((p-o.holdEnd)/(1-o.holdEnd))});
+  const overview=(p,phase)=>({p,phase,position:[...end.position],target:[...end.target],fov:fov1,near:base.near,far:base.far,distance:d1,frameHeight:frame1,...extras(p)});
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   if(p<=0)return overview(0,'overview');
+   if(p>=1)return overview(1,'overview');
+   if(p<o.alignEnd){
+    const s=smooth(p/o.alignEnd),tan=tan1*Math.pow(tan0/tan1,s),frame=frame1*Math.pow(frame0/frame1,s);
+    return {p,phase:'align',...pose(dirAt(lerp(el1,0,s),az1+turnTo(az1,az0)*s),tan,frame,lerp3(end.target,target0,s)),...extras(p)};
+   }
+   if(p<o.lightEnd)return {p,phase:p<o.frontEnd?'front':'light',...pose(n,tan0,frame0,target0),...extras(p)};
+   if(p<o.perspEnd){
+    const s=span(p,o.lightEnd,o.perspEnd),tan=tan0*Math.pow(tan1/tan0,s),frame=frame0*Math.pow(frameP/frame0,s);
+    return {p,phase:'perspective',...pose(dirAt(lerp(0,elP,s),az0+turnTo(az0,azP)*s),tan,frame,lerp3(target0,targetP,s)),...extras(p)};
+   }
+   if(p<o.holdEnd)return {p,phase:'exterior',...pose(dirP,tan1,frameP,targetP),...extras(p)};
+   const s=span(p,o.holdEnd,1),st=pose(dirAt(lerp(elP,el1,s),azP+turnTo(azP,az1)*s),tan1,frameP*Math.pow(frame1/frameP,s),lerp3(targetP,end.target,s));
+   return {p,phase:'return',...st,near:lerp(st.near,base.near,s),far:lerp(st.far,base.far,s),...extras(p)};
+  }
+  return {kind:'elevation-open',stateAt,checkpoints:[0,.25,.35,.5,.72,.86,1],info:{fovFront:fov0,fovEnd:fov1,distanceFront:d0,distanceEnd:d1,distancePerspective:dP,frameFront:frame0,frameEnd:frame1,width,height,
+   normal:[...n],tangent:[...t],perspectiveDirection:dirP,turnDeg:deg(turnTo(az1,az0)),playMs:o.playMs,reducedFront:o.reducedFront,reducedLight:o.reducedLight,reducedPersp:o.reducedPersp,solar:!!input.solar,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen};
  /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
     proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
     the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
@@ -182,9 +260,9 @@
   return {count:w.length,starts:[...starts],total,locate,at};
  }
  // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
- const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000};
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,roomDescent,sectionOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN};
+ return {create,planReveal,roomDescent,sectionOpen,elevationOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN};
 });

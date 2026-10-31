@@ -123,7 +123,7 @@ test('room descent: play time follows the travel within bounds; missing poses fa
  const near=Story.create('room-descent',{...descent,start:{...roomPose,position:[3.3,4.2,2.7]}}),far=Story.create('room-descent',{...descent,start:{...overviewPose,position:dir.map(v=>v*60)}});
  assert.equal(near.info.playMs,1800);assert.equal(far.info.playMs,4200);
  assert.throws(()=>Story.create('room-descent',{...descent,end:{position:[0,0,0],target:[0,NaN,0],fov:45}}),/estancia/);
- assert.deepEqual(Story.NARRATIVES,['plan-reveal','room-descent','section-open']);
+ assert.deepEqual(Story.NARRATIVES,['plan-reveal','room-descent','section-open','elevation-open']);
 });
 test('from the 2D editor view: p = 0 keeps its centre and framed height; the view turns once, smoothly, to the overview',()=>{
  const start={target:[1.3,0,-.7],frameHeight:12.4},n=Story.create('plan-reveal',{...input,start}),a=n.stateAt(0);
@@ -153,4 +153,71 @@ test('sequence: P ↔ (scene, local p) are pure and inverse; boundaries go to th
  assert.equal(Story.sequence([1]).locate(.4).p,.4);
  assert.throws(()=>Story.sequence([]),/escenas/);
  assert.ok(Story.SCENE_MS['plan-reveal']>0&&Story.SCENE_MS['room-descent']>0);
+});
+
+// FT3D-4 «elevation-open»: the façade candidate facing plan-down (world +z) of the 10 × 7 m home.
+const facade={normal:[0,0,1],tangent:[-1,0,0],center:[0,1.4,3.5],width:10.2,height:2.8};
+const box=[[-5.1,0,-3.6],[5.1,0,-3.6],[5.1,0,3.6],[-5.1,0,3.6],[-5.1,2.8,-3.6],[5.1,2.8,-3.6],[5.1,2.8,3.6],[-5.1,2.8,3.6]];
+const elevationInput={facade,corners:box,end,aspect:16/9,region:[.3,0,1,1],base:{near:.05,far:300}};
+const elev=(extra={})=>Story.create('elevation-open',{...elevationInput,...extra});
+const samePose=(a,b,eps=1e-9)=>['fov','near','far','distance'].every(k=>close(a[k],b[k],eps))&&a.position.every((v,i)=>close(v,b.position[i],eps))&&a.target.every((v,i)=>close(v,b.target[i],eps));
+const sameElev=(a,b,eps=1e-9)=>samePose(a,b,eps)&&close(a.p,b.p,eps)&&a.phase===b.phase&&a.solar===b.solar&&a.contextVisible===b.contextVisible&&close(a.levelScale,b.levelScale,eps);
+test('elevation-open: registered narrative with its duration',()=>{
+ assert.ok(Story.NARRATIVES.includes('elevation-open'));assert.equal(Story.SCENE_MS['elevation-open'],8000);
+ const n=elev();assert.equal(n.kind,'elevation-open');assert.equal(n.info.playMs,8000);
+ assert.deepEqual(n.checkpoints,[0,.25,.35,.5,.72,.86,1]);
+});
+test('elevation-open: p = 0 and p = 1 are exactly the overview pose, lens and near/far, nothing enhanced',()=>{
+ for(const p of [0,1]){const s=elev({solar:true}).stateAt(p);
+  assert.deepEqual(s.position,end.position);assert.deepEqual(s.target,end.target);assert.equal(s.fov,45);assert.equal(s.near,.05);assert.equal(s.far,300);
+  assert.equal(s.phase,'overview');assert.equal(s.solar,false);assert.equal(s.contextVisible,true);assert.equal(s.levelScale,0);}
+ assert.deepEqual(elev().stateAt(-1),elev().stateAt(0));assert.deepEqual(elev().stateAt(2),elev().stateAt(1));
+});
+test('elevation-open: frontal hold looks along −normal, horizontal, with the narrow 4° lens, and holds still',()=>{
+ const n=elev(),a=n.stateAt(.3),b=n.stateAt(.4),c=n.stateAt(.55);
+ assert.equal(a.phase,'front');assert.equal(c.phase,'light');
+ for(const s of [a,b,c]){assert.ok(close(s.fov,4,1e-9));const v=[s.target[0]-s.position[0],s.target[1]-s.position[1],s.target[2]-s.position[2]],l=Math.hypot(...v);
+  assert.ok(close(v[1]/l,0,1e-9),'horizontal: verticals stay vertical');assert.ok(close(v[0]/l,0,1e-9)&&close(v[2]/l,-1,1e-9),'perpendicular to the façade');}
+ assert.ok(samePose(a,b)&&samePose(b,c),'one still frontal pose through the hold and the lighting phase');
+ assert.ok(close(n.info.fovFront,4));assert.ok(a.distance>50,'long lens: the camera stands far');
+});
+test('elevation-open: the façade fits the free region in the frontal hold',()=>{
+ const s=elev().stateAt(.35),aspect=16/9,region=[.3,0,1,1];
+ const fov=s.fov*Math.PI/180,f=[s.target[0]-s.position[0],s.target[1]-s.position[1],s.target[2]-s.position[2]].map(v=>v/s.distance);
+ const right=[-f[2],0,f[0]].map(v=>v/Math.hypot(f[0],f[2])),up=[0,1,0];
+ for(const p of [[-5.1,0,3.5],[5.1,0,3.5],[-5.1,2.8,3.5],[5.1,2.8,3.5]]){const v=p.map((x,i)=>x-s.position[i]),z=v[0]*f[0]+v[1]*f[1]+v[2]*f[2];
+  const sx=(v[0]*right[0]+v[2]*right[2])/z/Math.tan(fov/2)/aspect,sy=v[1]/z/Math.tan(fov/2),x=(sx+1)/2,y=(1-sy)/2;
+  assert.ok(x>=region[0]&&x<=region[2]&&y>=region[1]&&y<=region[3],`corner ${p} at ${x.toFixed(3)},${y.toFixed(3)}`);}
+});
+test('elevation-open: oblique exterior perspective from outward + clockwise tangent × .35 + up × .18',()=>{
+ const n=elev(),s=n.stateAt(.86),d=n.info.perspectiveDirection,raw=[0-.35,.18,1],l=Math.hypot(...raw);
+ assert.equal(s.phase,'exterior');assert.ok(d.every((v,i)=>close(v,raw[i]/l,1e-12)));
+ const v=[s.position[0]-s.target[0],s.position[1]-s.target[1],s.position[2]-s.target[2]],lv=Math.hypot(...v);
+ assert.ok(v.every((x,i)=>close(x/lv,d[i],1e-9)));assert.ok(close(s.fov,45,1e-9),'the lens is the overview one again');
+ assert.equal(n.stateAt(.72).phase,'perspective');
+});
+test('elevation-open: continuous, reversible and deterministic (no jump, 0→1 and 1→0 visit identical states)',()=>{
+ const a=elev({solar:true}),b=elev({solar:true}),N=400;let prev=a.stateAt(0);
+ for(let i=1;i<=N;i++){const p=i/N,s=a.stateAt(p);assert.ok(sameElev(s,b.stateAt(p)),`p ${p}`);
+  const jump=Math.hypot(...s.position.map((v,k)=>v-prev.position[k]))/Math.max(1,s.distance);assert.ok(jump<.2,`position jump at ${p}: ${jump}`);
+  assert.ok(Math.abs(s.fov-prev.fov)<3.5,`fov jump at ${p}`);prev=s;}
+ const back=[];for(let i=N;i>=0;i--)back.push(a.stateAt(i/N));back.reverse().forEach((s,i)=>assert.ok(sameElev(s,a.stateAt(i/N))));
+});
+test('elevation-open: enhancements are pure functions of p (solar only when chosen, context off in the frontal phase, levels rise and fold)',()=>{
+ const n=elev({solar:true}),off=elev();
+ assert.deepEqual([.2,.3,.45,.6,.85,.95].map(p=>n.stateAt(p).solar),[false,false,true,true,true,false]);
+ assert.ok([0,.2,.45,.6,.85,1].every(p=>off.stateAt(p).solar===false),'no solar unless chosen');
+ assert.deepEqual([.1,.3,.5,.6,.86].map(p=>n.stateAt(p).contextVisible),[true,false,false,true,true]);
+ assert.ok(n.stateAt(.14).levelScale>0&&n.stateAt(.14).levelScale<1);assert.equal(n.stateAt(.5).levelScale,1);assert.ok(n.stateAt(.95).levelScale<1);
+});
+test('elevation-open: reduced motion holds front, light and exterior; the sequence places the scene after the section',()=>{
+ const n=elev();assert.equal(n.stateAt(n.info.reducedFront).phase,'front');assert.equal(n.stateAt(n.info.reducedLight).phase,'light');assert.equal(n.stateAt(n.info.reducedPersp).phase,'exterior');
+ const kinds=['plan-reveal','section-open','elevation-open','room-descent'],seq=Story.sequence(kinds.map(k=>Story.SCENE_MS[k]));
+ assert.equal(seq.count,4);const at=seq.at(2,.5),loc=seq.locate(at);assert.equal(loc.i,2);assert.ok(close(loc.p,.5,1e-9));
+ assert.equal(seq.locate(seq.at(3,0)).i,3,'the boundary goes to the room descent');
+});
+test('elevation-open: missing facts fail readably',()=>{
+ assert.throws(()=>Story.create('elevation-open',{...elevationInput,facade:null}),/fachada/);
+ assert.throws(()=>Story.create('elevation-open',{...elevationInput,corners:[]}),/volumen/);
+ assert.throws(()=>Story.create('elevation-open',{...elevationInput,end:null}),/vista general/);
 });
