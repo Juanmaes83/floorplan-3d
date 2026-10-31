@@ -1,6 +1,6 @@
-# Matriz de cierre del roadmap — 30-10-2026
+# Matriz de cierre del roadmap — actualizado 31-10-2026
 
-**Base observada:** `master@f10b3a0d261b73bbb46e3de98d7111dad45f1a09`  
+**Base funcional observada antes de esta actualización documental:** `master@579189df39513aca44e0a86b44ef4392f38173d2`  
 **Propósito:** responder qué partes de A/B/C y Flat-to-3D están integradas, cuáles requieren validación y qué cortes faltan para declarar el bloque terminado.
 
 ## Convenciones
@@ -51,7 +51,7 @@ No hace falta otro corte funcional obligatorio.
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | proveedor real / calidad |
-| Presentación avanzada | **EN PROGRESO** | FT3D-1..7 |
+| Presentación avanzada | **PARCIALMENTE CUBIERTA** | FT3D-1 integrado; FT3D-2..7 pendientes |
 | 360 | **PENDIENTE O DIFERIBLE** | decisión de alcance |
 
 ## ¿Está B terminada?
@@ -107,9 +107,9 @@ Después de C4: QA + revisión humana + cierre documental.
 
 | Fase | Estado | Qué existe | Qué falta |
 |---|---|---|---|
-| FT3D-0 | **CASI CUBIERTO** | investigación + pruebas técnicas de 1a | cierre formal/presupuesto rendimiento |
-| FT3D-1 | **PARCIALMENTE INTEGRADO** | **1a integrado**; 1b implementado | integrar 1b + QA consolidado + revisión humana |
-| FT3D-2 | **2a IMPLEMENTADO, NO INTEGRADO** | backup `d300db8...` | reconciliar tras 1b + comprobar mínimos restantes |
+| FT3D-0 | **CASI CUBIERTO** | investigación + pruebas técnicas de 1a/1b | cierre formal/presupuesto rendimiento |
+| FT3D-1 | **INTEGRADO Y VALIDADO TÉCNICAMENTE** | 1a + 1b en master | aceptación humana final / cierre documental |
+| FT3D-2 | **2a IMPLEMENTADO, NO INTEGRADO** | backup `d300db8...` | auditar y reconciliar + comprobar mínimos restantes |
 | FT3D-3 | **PENDIENTE** | — | sección dinámica |
 | FT3D-4 | **PENDIENTE** | — | alzado/fachada narrativa |
 | FT3D-5 | **PENDIENTE** | — | axonometría / edificio explotado |
@@ -117,42 +117,51 @@ Después de C4: QA + revisión humana + cierre documental.
 | FT3D-7 | **PENDIENTE COMO FASE** | B1/B3/B4 reutilizables | Story + outputs/share/vídeo |
 | FT3D-8 | **DIFERIDO / FUTURO** | — | contrato temporal explícito |
 
-## FT3D-1a — estado
+## FT3D-1 — estado
 
 **INTEGRADO y validado técnicamente.**
 
-PR de integración #153.  
-SHA actual de `master`: `f10b3a0d261b73bbb46e3de98d7111dad45f1a09`.
-
-CI remoto:
-
-- `presentation-story`: **success**;
-- `recorder-focus-and-labels`: **success** después de adaptar un assert antiguo al botón legítimo de vídeo B3;
-- demás workflows relevantes: **success**.
-
-No se cierra FT3D-1 hasta integrar 1b y revisar la continuidad completa.
-
-## FT3D-1b — siguiente corte
-
-Ya implementado en #151. Debe **reconciliarse**, no reescribirse.
-
-Objetivo:
+Secuencia consolidada:
 
 ```text
-vista general
+plano 2D
+→ volumen 3D
+→ vista general
 → descenso continuo
 → primera estancia
+→ Presentación existente
 ```
 
-La base canónica a utilizar ahora es `master@f10b3a0d...`.
+QA local de 1b sobre el master consolidado:
 
-## FT3D-2a
+- 614/614 unitarias;
+- 6/6 FT3D browser;
+- overview 4/4;
+- foco 2/2;
+- captura 3D 3/3;
+- building presentation 7/7;
+- vídeo 2/2;
+- professional workspace 17/17.
+
+CI remoto de integración #154:
+
+- `presentation-story`: **success**;
+- `recorder-focus-and-labels`: **success**;
+- Guided, Project-First, Solar, Multiformat, 8C-C y 8C-D: **success**.
+
+R10 de framing sigue siendo baseline intermitente reproducible también en el master base y no bloquea FT3D-1.
+
+Para cierre canónico de FT3D-1 falta únicamente aceptación humana final de la experiencia completa y registro de cierre; no falta otro corte funcional dentro de esta fase.
+
+## FT3D-2a — siguiente candidato
 
 Protegido en:
 
 `backup/ft3d-2a-pre-integration@d300db8c7756235409cc3a3386d45574a848ed2d`
 
-No debe integrarse hasta consolidar 1b.
+No debe integrarse por cherry-pick ciego. 2a fue construido antes de la consolidación final de 1a+1b y reestructura esas narrativas como escenas de un reproductor común.
+
+**Gate actual:** ChatGPT debe auditar primero el diff de 2a y definir el transporte mínimo sobre el master actual. Hasta terminar esa auditoría, Claude no está autorizado a tocar 2a.
 
 ---
 
@@ -160,17 +169,15 @@ No debe integrarse hasta consolidar 1b.
 
 Si «completo» significa el programa de **presentación arquitectónica** y no la futura planificación temporal de obra:
 
-1. integrar FT3D-1b;
-2. cerrar FT3D-1 con revisión humana;
-3. reconciliar FT3D-2a;
-4. completar cualquier mínimo faltante de FT3D-2;
-5. FT3D-3 — sección dinámica;
-6. FT3D-4 — alzado/fachada;
-7. FT3D-5 — axonometría/exploded;
-8. FT3D-6 — plantillas por perfil;
-9. FT3D-7 — salidas/compartición;
-10. auditoría global de rendimiento, accesibilidad, reversibilidad, móvil, multipiso y no-regresión;
-11. cierre documental final.
+1. auditar/reconciliar FT3D-2a;
+2. completar cualquier mínimo faltante de FT3D-2;
+3. FT3D-3 — sección dinámica;
+4. FT3D-4 — alzado/fachada;
+5. FT3D-5 — axonometría/exploded;
+6. FT3D-6 — plantillas por perfil;
+7. FT3D-7 — salidas/compartición;
+8. auditoría global de rendimiento, accesibilidad, reversibilidad, móvil, multipiso y no-regresión;
+9. cierre documental final.
 
 **FT3D-8 no bloquea ese cierre.**
 
@@ -179,11 +186,13 @@ Si «completo» significa el programa de **presentación arquitectónica** y no 
 # Orden recomendado desde el estado actual
 
 ```text
-master con FT3D-1a
+master con FT3D-1 completo técnicamente
         ↓
-FT3D-1b
+auditoría FT3D-2a
         ↓
-FT3D-2a
+reconciliación FT3D-2a
+        ↓
+¿hace falta FT3D-2b?
         ↓
 C4 dossier económico
         ↓
@@ -203,6 +212,16 @@ FT3D-7
         ↓
 auditoría y cierres A/B/C/FT3D
 ```
+
+---
+
+# Deuda conocida que no debe confundirse con cortes funcionales
+
+- R10 framing: inestabilidad de temporización CSS bajo carga; deuda de test/transition.
+- Branch protection de `master`: pendiente valorar al final de la consolidación.
+- PR históricas #133–#149: limpieza administrativa pendiente tras estabilización.
+- 8B-C cubiertas inclinadas: diferido.
+- Punto 10 y Fase D: posteriores al cierre actual.
 
 ---
 
