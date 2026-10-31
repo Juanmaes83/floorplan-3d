@@ -100,6 +100,7 @@
  date.oninput=time.oninput=()=>{localDate=date.value;localTime=time.value;update();};
  north.oninput=lat.oninput=lon.oninput=zone.oninput=update;
  document.querySelector('#langBtn').addEventListener('click',()=>queueMicrotask(relang));
- window.FloorPlanSolarUI={open,sync,restore,get mode(){return mode;},get result(){return calculation();}};
+ // FT3D-4 reads a runtime snapshot (result, local date and time) once when a presentation starts; read-only, nothing saved.
+ window.FloorPlanSolarUI={open,sync,restore,get mode(){return mode;},get result(){return calculation();},get localDate(){return localDate;},get localTime(){return localTime;}};
  relang();
 })();

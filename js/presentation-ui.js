@@ -56,6 +56,11 @@
  // descriptor of each level (FloorPlanPresentationSection.derive), computed when the dialog opens; sectionAxis: the one
  // axis of a building (envelope of its levels in the building frame), so every level is cut the same way.
  let sectionChosen=false,sectionEnabled=false,sectionLevels=new Map(),sectionAxis=null;
+ // FT3D-4 «Incluir alzado/fachada narrativa»: chosen per presentation, off by default, never saved. elevationDescriptor:
+ // the façade candidates of the home or building (FloorPlanPresentationElevation.derive), computed when the dialog
+ // opens; elevationCandidateId: the façade chosen in its selector (the automatic one by default); the solar snapshot is
+ // taken once when the presentation starts and only when the person chose it.
+ let elevationChosen=false,elevationEnabled=false,elevationDescriptor=null,elevationCandidateId=null,elevationSolarChosen=false,elevationSolar=null;
  const OVERVIEW_DIRECTION=[.42,.84,.34];
  // Brand snapshot taken when the presentation starts (FloorPlanBrandUI): what the client sees and receives.
  let brandSnap=null;
@@ -93,6 +98,14 @@
    svgEl('line',mapSvg,{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:'presentation-minimap-section','data-section-line':'true'});
    svgEl('path',mapSvg,{d:`M ${mx-cut.look[0]*len} ${my-cut.look[1]*len} L ${mx} ${my} M ${mx} ${my} L ${mx-cut.look[0]*len*.35-cut.look[1]*len*.3} ${my-cut.look[1]*len*.35+cut.look[0]*len*.3} M ${mx} ${my} L ${mx-cut.look[0]*len*.35+cut.look[1]*len*.3} ${my-cut.look[1]*len*.35-cut.look[0]*len*.3}`,class:'presentation-minimap-section-look','data-look-x':cut.look[0],'data-look-y':cut.look[1]});
    mapSvg.setAttribute('aria-label',tx('Plano de orientación con la línea de la sección visual','Orientation map with the visual section line','带剖面线的方向平面图'));}
+  // FT3D-4: while the façade scene runs, the walls of the chosen façade on this level and the frontal look at them.
+  const fac=story&&story.scenes[story.i]?.kind==='elevation-open'&&story.p>0&&story.p<1?View3D.presentationStoryInfo?.elevation:null;
+  if(fac){const levelId=plan.stops[index]?.levelId??null,project=levelProject(levelId),ids=new Set(fac.walls?elevationCandidate()?.wallRefs.filter(r=>(r.levelId??null)===(levelId??null)).map(r=>r.wallId):[]);
+   const walls=(project?.walls||[]).filter(w=>ids.has(w.id)),len=Math.max(data.viewBox[2],data.viewBox[3])*.09,[nx,ny]=fac.normalPlan;
+   for(const w of walls)svgEl('line',mapSvg,{x1:w.start.x,y1:w.start.y,x2:w.end.x,y2:w.end.y,class:'presentation-minimap-facade','data-facade-wall':w.id});
+   if(walls.length){const mx=walls.reduce((v,w)=>v+(w.start.x+w.end.x)/2,0)/walls.length,my=walls.reduce((v,w)=>v+(w.start.y+w.end.y)/2,0)/walls.length,ax=mx+nx*len*1.6,ay=my+ny*len*1.6,lx=-nx,ly=-ny;
+    svgEl('path',mapSvg,{d:`M ${ax+nx*len} ${ay+ny*len} L ${ax} ${ay} M ${ax} ${ay} L ${ax-lx*len*.35-ly*len*.3} ${ay-ly*len*.35+lx*len*.3} M ${ax} ${ay} L ${ax-lx*len*.35+ly*len*.3} ${ay-ly*len*.35-lx*len*.3}`,class:'presentation-minimap-facade-look','data-look-x':lx,'data-look-y':ly});}
+   mapSvg.setAttribute('aria-label',tx('Plano de orientación con la fachada visual seleccionada','Orientation map with the selected visual façade','带所选可视立面的方向平面图'));}
   if(data.heading){
    const {x,y,dx,dy}=data.heading,length=Math.max(data.viewBox[2],data.viewBox[3])*.10,half=length*.30;
    svgEl('path',mapSvg,{d:`M ${x-dx*length/2} ${y-dy*length/2} L ${x+dx*length/2} ${y+dy*length/2} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half-dy*half} ${y+dy*length/2-dy*half+dx*half} M ${x+dx*length/2} ${y+dy*length/2} L ${x+dx*length/2-dx*half+dy*half} ${y+dy*length/2-dy*half-dx*half}`,class:'presentation-minimap-heading','data-heading-x':dx,'data-heading-y':dy});
@@ -455,6 +468,41 @@
   input.onchange=()=>{sectionChosen=input.checked&&!!supported;};
  }
  const sectionAt=stop=>!!stop&&stop.kind==='overview'&&!!sectionLevels.get(stop.levelId??null)?.supported;
+ // FT3D-4: the option, enabled only when the model gives at least one façade with a demonstrable outside; when it does
+ // not, the concrete reason. Its selector and the solar choice appear only while the option is on.
+ function elevationOption(parent,levels){
+  elevationChosen=false;elevationDescriptor=null;elevationCandidateId=null;elevationSolarChosen=false;
+  const E=window.FloorPlanPresentationElevation;if(!E||!window.FloorPlanPresentationStory)return;
+  const site=app.levelContext?building()?.site:app.project.site;
+  elevationDescriptor=E.derive({levels:levels.map(l=>({levelId:l.levelId??null,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm||{x:0,y:0},elevationMm:l.elevationMm||0})),northOffsetDeg:site?.northOffsetDeg});
+  const d=elevationDescriptor,supported=!!d.supported;elevationCandidateId=d.defaultId;
+  const box=el('div',undefined,parent,'presentation-story-option presentation-elevation-option');box.id='presentationElevationOptionBox';
+  const label=el('label',undefined,box);const input=el('input',undefined,label);input.type='checkbox';input.id='presentationElevationOption';input.checked=false;input.disabled=!supported;
+  el('span',tx('Incluir alzado/fachada narrativa','Include narrative elevation/façade','包含叙事立面'),label);
+  const text=!supported?tx(`No disponible: ${d.message}`,`Unavailable: ${d.reason}`,`不可用：${d.reason}`)
+   :tx('Opcional: tras la vista general, la cámara se alinea con una fachada del mismo modelo y abre una perspectiva exterior. Fachada visual · derivada del modelo · no es alzado de ejecución.','Optional: after the overview, the camera faces one façade of the same model and opens an exterior perspective. Visual façade · derived from the model · not a construction elevation.','可选：总览后，相机对准同一模型的一个立面并展开外部透视。可视立面 · 源自模型 · 非施工立面图。')
+    +(d.partial?' '+tx('Se usan sólo las fachadas derivables del modelo.','Only façades derivable from the model are used.','仅使用可从模型推导的立面。'):'');
+  const hint=el('p',text,box,'presentation-story-hint');hint.id='presentationElevationHint';input.setAttribute('aria-describedby',hint.id);
+  if(!supported){input.onchange=null;return;}
+  const details=el('div',undefined,box,'presentation-elevation-details');details.id='presentationElevationDetails';details.hidden=true;
+  const pickLabel=el('label',undefined,details,'presentation-elevation-pick');el('span',tx('Fachada','Façade','立面'),pickLabel);
+  const pick=el('select',undefined,pickLabel);pick.id='presentationElevationFacade';
+  for(const c of d.candidates){const op=el('option',c.label+(c.id===d.defaultId?' · '+tx('selección automática','automatic selection','自动选择'):''),pick);op.value=c.id;op.selected=c.id===d.defaultId;}
+  pick.onchange=()=>{elevationCandidateId=d.candidates.some(c=>c.id===pick.value)?pick.value:d.defaultId;};
+  const solarUi=window.FloorPlanSolarUI,solarNow=solarUi?.result,solarOk=solarNow?.status==='available-orientative';
+  const solarLabel=el('label',undefined,details);const solar=el('input',undefined,solarLabel);solar.type='checkbox';solar.id='presentationElevationSolar';solar.checked=false;solar.disabled=!solarOk;
+  el('span',tx('Usar solar orientativo actual','Use the current indicative solar','使用当前日照示意'),solarLabel);
+  const solarHint=el('p',solarOk?tx(`${solarUi.localDate} · ${solarUi.localTime}. Solar orientativo · no es estudio de soleamiento, certificación ni verificación normativa.`,`${solarUi.localDate} · ${solarUi.localTime}. Indicative solar · not a sunlight study, certification or regulatory verification.`,`${solarUi.localDate} · ${solarUi.localTime}。日照示意 · 不构成日照研究、认证或法规验证。`)
+   :tx('No disponible: configura el norte, la ubicación y la hora en «Orientación y solar». La fachada no lo necesita.','Unavailable: set north, location and time in «Orientation and solar». The façade does not need it.','不可用：请在“朝向与日照”中设置北向、位置和时间。立面不依赖它。'),details,'presentation-story-hint');
+  solarHint.id='presentationElevationSolarHint';solar.setAttribute('aria-describedby',solarHint.id);
+  solar.onchange=()=>{elevationSolarChosen=solar.checked&&solarOk;};
+  input.onchange=()=>{elevationChosen=input.checked;details.hidden=!input.checked;};
+ }
+ const elevationCandidate=()=>elevationDescriptor?.candidates.find(c=>c.id===elevationCandidateId)||elevationDescriptor?.candidates.find(c=>c.id===elevationDescriptor.defaultId)||null;
+ const elevationAt=stop=>!!stop&&stop.kind==='overview'&&!!elevationDescriptor?.supported&&!!elevationCandidate();
+ // The project of a level shown in the presentation (the minimap draws the chosen façade walls of that level).
+ function levelProject(levelId){if(!isBuildingPlan())return app.project;return building()?.presentationSources()?.levels.find(l=>l.levelId===levelId)?.project||null;}
+ const elevationView=()=>({candidate:elevationCandidate(),envelope:elevationDescriptor.envelope,solar:elevationSolar?.result||null});
  // ── FT3D-2 story player ──────────────────────────────────────────────────────────────────────────────────────────
  // One player for every narrative: a story is a list of scenes (narratives of FloorPlanPresentationStory) played as a
  // single progress P (FloorPlanPresentationStory.sequence). The chapter of 1a («Empezar desde el plano») and the descent
@@ -472,10 +520,11 @@
   // Single scene: back to its start (the plan, or the overview for a descent, which then hands over to that stop).
   // Several scenes: the start of this scene, or of the previous one when already there.
   const planButton=button('',row,()=>{const run=story;if(!run)return;const target=run.scenes.length>1?previousStart(run):0;
-   playStory(target).then(done=>{if(done&&run===story&&target<=0&&(run.scenes[0].kind==='room-descent'||(run.scenes.length===1&&run.scenes[0].kind==='section-open')))finishStory(0);});});planButton.id='presentationStoryPlan';
+   playStory(target).then(done=>{if(done&&run===story&&target<=0&&(run.scenes[0].kind==='room-descent'||(run.scenes.length===1&&['section-open','elevation-open'].includes(run.scenes[0].kind))))finishStory(0);});});planButton.id='presentationStoryPlan';
   const play=button('',row,()=>{if(story?.playing)pauseStory();else if(story?.P>=1)finishStory();
-   // Reduced motion with a section: one explicit step at a time, so the open section is seen before going on.
-   else if(reducedMotion()&&hasSection(story)){const run=story,single=run.scenes.length===1;if(single&&run.p>=sectionHold())finishStory();else playStory(single?run.seq.at(0,sectionHold()):nextStart(run));}
+   // Reduced motion with a section or a façade: one explicit step at a time (the open section; the frontal façade, then
+   // its exterior perspective), so each state is seen before going on.
+   else if(reducedMotion()&&hasSection(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
    else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
   const replay=button('',tools,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
@@ -484,19 +533,28 @@
   const full=button('',tools,()=>{const scenes=fullStory();if(scenes.length>1)openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
   // FT3D-3: only when the section was chosen, so a presentation without it keeps exactly its tools.
   let section=null;if(sectionEnabled){section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
-  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section};return storyUi;
+  // FT3D-4: likewise only when the façade was chosen; it plays the façade scene on the same player.
+  let elevation=null;if(elevationEnabled){elevation=button('',tools,()=>{if(elevationAt(plan?.stops[index]))openStory(epoch,[{kind:'elevation-open',stop:index}],{from:0,to:reducedMotion()?null:1});});elevation.id='presentationElevationPlay';elevation.hidden=true;}
+  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
  // FT3D-2: the whole presentation as one story — for each level, its plan rising to its overview, then the descent into
  // its first chosen room. Derived from the presentation plan, so the dialog's order and selection edit it.
- function fullStory(){const scenes=[];plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});const r=plan.stops[i+1];if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
+ function fullStory(){const scenes=[];let facade=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
+  // FT3D-4: the façade belongs to the whole building, so it is read once, at the first overview that can show it.
+  if(elevationEnabled&&!facade&&elevationAt(s)){scenes.push({kind:'elevation-open',stop:i});facade=true;}const r=plan.stops[i+1];if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
  const sceneEnd=sc=>sc.stop,sceneHome=sc=>sc.kind==='room-descent'?sc.from:sc.stop;
  function previousStart(run){const here=run.seq.at(run.i,0);return run.P-here>.004?here:run.seq.at(Math.max(0,run.i-1),0);}
  // Reduced motion lands on the open section (its held state) instead of its untouched start (FT3D-3 §10).
  const sectionHold=()=>FloorPlanPresentationStory.SECTION_OPEN.reducedHold;
- function nextStart(run){if(run.i+1>=run.scenes.length)return 1;return run.seq.at(run.i+1,reducedMotion()&&run.scenes[run.i+1].kind==='section-open'?sectionHold():0);}
- const hasSection=run=>run.scenes.some(sc=>sc.kind==='section-open');
+ // FT3D-4: reduced motion shows the façade in discrete states: frontal, then exterior perspective, then the overview.
+ const elevationHolds=()=>{const o=FloorPlanPresentationStory.ELEVATION_OPEN;return [o.reducedFront,o.reducedPersp];};
+ const holdsOf=kind=>kind==='section-open'?[sectionHold()]:kind==='elevation-open'?elevationHolds():[];
+ function nextStart(run){if(run.i+1>=run.scenes.length)return 1;const k=run.scenes[run.i+1].kind;return run.seq.at(run.i+1,reducedMotion()&&holdsOf(k).length?holdsOf(k)[0]:0);}
+ // The next held state of the current scene after its local p (null when none is left).
+ function nextHold(run){const h=holdsOf(run.scenes[run.i]?.kind).find(v=>v>run.p+1e-6);return h===undefined?null:h;}
+ const hasSection=run=>run.scenes.some(sc=>sc.kind==='section-open'||sc.kind==='elevation-open');
  function drawStory(){
   if(!storyUi)return;
   const u=storyUi,on=!!story;
@@ -508,6 +566,7 @@
   if(nextRoom!==null)u.enter.textContent=tx(`Entrar en ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`Enter ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`进入 ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`);
   u.full.textContent=tx('Ver la historia completa','Play the whole story','播放完整故事');u.full.hidden=u.replay.hidden||fullStory().length<2;u.full.disabled=u.replay.disabled;
   if(u.section){u.section.textContent=tx('Ver sección dinámica','See dynamic section','查看动态剖面');u.section.hidden=!sectionEnabled||on||!plan||!sectionAt(plan.stops[index]);u.section.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
+  if(u.elevation){u.elevation.textContent=tx('Ver fachada','See the façade','查看立面');u.elevation.hidden=!elevationEnabled||on||!plan||!elevationAt(plan.stops[index]);u.elevation.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   u.panel.hidden=!on;if(!on)return;
   const multi=story.scenes.length>1,sc=story.scenes[story.i],p=story.p;
   u.counter.hidden=!multi;u.nextButton.hidden=!multi;
@@ -518,6 +577,15 @@
    if(!multi){u.panel.setAttribute('aria-label',tx('Sección dinámica','Dynamic section','动态剖面'));u.slider.setAttribute('aria-label',tx('De la vista general (0) a la sección abierta (100)','From the overview (0) to the open section (100)','从总览 (0) 到剖面 (100)'));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&p>=sectionHold())?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver sección','See the section','查看剖面');}}
+  else if(sc.kind==='elevation-open'){const info=View3D.presentationStoryInfo,phase=p<=0||p>=1?'overview':info?.phase,c=elevationCandidate();
+   const base=tx('Fachada visual · derivada del modelo · no es alzado de ejecución','Visual façade · derived from the model · not a construction elevation','可视立面 · 源自模型 · 非施工立面图');
+   const name=c?(c.cardinal?tx(`${c.label} · orientación derivada del proyecto`,`${c.label.replace('Fachada','Façade')} · orientation derived from the project`,`${c.label} · 朝向源自项目`):tx(c.label,c.label.replace('Fachada','Façade'),c.label)):'';
+   const solarOn=!!info?.solar&&!!elevationSolar;
+   const text=phase==='align'?tx('Nos alineamos con la fachada','Facing the façade','对准立面'):phase==='front'?tx('Fachada frontal','Frontal façade','正立面'):phase==='light'?(solarOn?tx('Luz solar orientativa sobre la fachada','Indicative sunlight on the façade','立面上的日照示意'):tx('Materiales y huecos de la fachada','Façade materials and openings','立面材质与洞口')):phase==='perspective'?tx('Abrimos la perspectiva exterior','Opening the exterior perspective','展开外部透视'):phase==='exterior'?tx('Perspectiva exterior','Exterior perspective','外部透视'):phase==='return'?tx('Volvemos a la vista general','Back to the overview','回到总览'):tx('Vista general 3D','3D overview','3D 总览');
+   caption=`${text} — ${name} — ${base}`+(solarOn?' — '+tx(`Solar orientativo ${elevationSolar.localDate} ${elevationSolar.localTime} · no es estudio de soleamiento, certificación ni verificación normativa.`,`Indicative solar ${elevationSolar.localDate} ${elevationSolar.localTime} · not a sunlight study, certification or regulatory verification.`,`日照示意 ${elevationSolar.localDate} ${elevationSolar.localTime} · 不构成日照研究、认证或法规验证。`):'');
+   if(!multi){u.panel.setAttribute('aria-label',tx('Fachada visual','Visual façade','可视立面'));u.slider.setAttribute('aria-label',tx('De la vista general (0) a la fachada y de vuelta (100)','From the overview (0) to the façade and back (100)','从总览 (0) 到立面再返回 (100)'));
+    u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
+    u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&nextHold(story)===null&&p>0)?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver fachada','See the façade','查看立面');}}
   else if(sc.kind==='room-descent'){const t=plan.stops[sc.stop],name=roomName(t.roomId,t.levelId);caption=p<=0?tx('Vista general 3D','3D overview','3D 总览'):p>=1?name:tx(`Bajando a ${name}`,`Going down to ${name}`,`下降到 ${name}`);
    if(!multi){u.panel.setAttribute('aria-label',tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`));u.slider.setAttribute('aria-label',tx(`De la vista general (0) a ${name} (100)`,`From the overview (0) to ${name} (100)`,`从总览 (0) 到 ${name} (100)`));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing;
@@ -536,7 +604,7 @@
   else{u.slider.max='100';u.slider.value=String(Math.round(p*100));}
   u.slider.setAttribute('aria-valuetext',`${Math.round(story.P*100)} % · ${caption}`);
   u.panel.dataset.scene=sc.kind;
-  if(sc.kind==='section-open'||u.panel.dataset.sectionMap)renderMinimap();
+  if(sc.kind==='section-open'||sc.kind==='elevation-open'||u.panel.dataset.sectionMap)renderMinimap();
  }
  // Builds a scene on the scene graph: the card is measured as its stops show it (so its ends are the poses go() frames),
  // the previous narrative ends, the level of the scene is shown, and the narrative begins at local p.
@@ -548,7 +616,7 @@
   index=sceneEnd(sc);draw();const region=viewRegion();
   let fromRegion=null;if(sc.kind==='room-descent'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
-  View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{})},sc.kind);
+  View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{})},sc.kind);
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
   return true;
  }
@@ -578,7 +646,7 @@
  }
  async function openStory(token,scenes,{from=0,to=null}={}){
   if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview'||!scenes?.length)return;
-  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))))return;
+  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))))return;
   closeStory();
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   ++movement;
@@ -603,10 +671,10 @@
  // stop: the story stays on the plan.
  async function finishStory(at=1){const run=story;if(!run)return;
   // A story that starts with a descent or a section starts on an overview stop: going back to 0 hands over there.
-  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:run.scenes[0].kind==='section-open'?run.scenes[0].stop:null;if(to===null)return;
+  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open'].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi=null;}}
+ function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi=null;}}
  function closeStory(){if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -719,6 +787,7 @@
    roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias','Rooms','房间'));
    storyOption(config);
    sectionOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
+   elevationOption(config,[{levelId:activeLevelId(),project:app.project,geometry:app.geometry}]);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -750,6 +819,7 @@
   roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias por planta','Rooms by level','按楼层的房间'));
   storyOption(config);
   sectionOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm})));
+  elevationOption(config,levels.map(l=>({levelId:l.levelId,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -821,6 +891,10 @@
    // With the chapter the 3D view opens on the plan as the 2D view shows it and the chapter continues from there.
    storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!window.View3D?.presentationStoryBegin;
    sectionEnabled=sectionChosen&&!!window.FloorPlanPresentationSection&&!!window.View3D?.presentationStoryBegin;
+   elevationEnabled=elevationChosen&&!!elevationDescriptor?.supported&&!!window.View3D?.presentationStoryBegin;
+   // The solar snapshot, once: if solar is no longer available the façade goes on without it.
+   const sun=elevationEnabled&&elevationSolarChosen?window.FloorPlanSolarUI:null,sunResult=sun?.result;
+   elevationSolar=sunResult?.status==='available-orientative'?{result:structuredClone(sunResult),localDate:sun.localDate,localTime:sun.localTime}:null;
    if(!window.View3D||!await app.enterPresentation3D(storyEnabled?{hold:true}:undefined))throw Error(tx('3D no disponible. Puedes seguir editando en 2D.','3D unavailable. You can keep editing in 2D.','3D 不可用。可继续在 2D 编辑。'));
    if(token!==epoch)return;
    if(!sourceCurrent())throw Error(tx('El proyecto cambió. Vuelve a configurar la presentación.','The project changed. Configure the presentation again.','项目已更改。请重新配置展示。'));
@@ -831,7 +905,7 @@
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
    updateAssetWarning();
-   if(sectionEnabled)storyControls();
+   if(sectionEnabled||elevationEnabled)storyControls();
    if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,[{kind:'plan-reveal',stop:0}],{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
@@ -922,5 +996,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();

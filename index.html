@@ -372,7 +372,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-level-group{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:4px 8px 8px;display:grid;gap:5px;min-width:0}
 .presentation-level-group legend{font-weight:600;padding:0 4px}
 .presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
-.presentation-minimap-section{stroke:#9a3a2a;stroke-width:110;stroke-dasharray:280 140;pointer-events:none}.presentation-minimap-section-look{fill:none;stroke:#9a3a2a;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-story-option input:disabled+span{color:var(--muted)}
+.presentation-minimap-section{stroke:#9a3a2a;stroke-width:110;stroke-dasharray:280 140;pointer-events:none}.presentation-minimap-facade{stroke:#1f6f8b;stroke-width:160;stroke-linecap:round;pointer-events:none}.presentation-minimap-facade-look{fill:none;stroke:#1f6f8b;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-elevation-details{display:grid;gap:6px;margin:6px 0 0 26px}.presentation-elevation-pick{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.presentation-elevation-pick select{min-height:32px;max-width:100%}.presentation-minimap-section-look{fill:none;stroke:#9a3a2a;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-story-option input:disabled+span{color:var(--muted)}
 .presentation-story-option{margin:10px 0;padding:6px 10px;border:1px solid var(--line);border-radius:10px}.presentation-story-option label{display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px;cursor:pointer}.presentation-story-option input{width:20px;height:20px;flex:none}.presentation-story-option .presentation-story-hint{margin:0 0 4px;font-size:13px;color:var(--muted)}
 .presentation-story{margin:8px 0;display:grid;gap:6px}.presentation-story[hidden]{display:none}.presentation-story-counter{margin:0;font-size:12px;color:var(--muted)}.presentation-story-counter[hidden]{display:none}.presentation-story-caption{margin:0;font-weight:600;font-size:14px}.presentation-story-slider{width:100%;min-height:44px;margin:0;accent-color:var(--accent)}.presentation-story-actions{display:flex;gap:8px;flex-wrap:wrap}.presentation-story-actions .btn{min-height:44px;flex:1 1 auto}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:-20px;z-index:2;background:var(--panel,#fff);padding:10px 0 20px;border-top:1px solid var(--line)}
@@ -2459,6 +2459,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-section-core.js"></script>
+<script src="js/presentation-elevation-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-ui.js"></script>
@@ -4551,6 +4552,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
   if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
   if(kind==='section-open'&&(stop.kind!=='overview'||!window.FloorPlanPresentationSection))throw Error('Narrativa no disponible.');
+  if(kind==='elevation-open'&&(stop.kind!=='overview'||!view.elevation?.candidate||!view.elevation?.envelope))throw Error('Narrativa no disponible.');
   // The descent starts where the camera is (the overview it arrives from); read it before anything moves.
   const startPose={position:camera.position.toArray(),target:orbit.target.toArray(),fov:camera.fov};
   // The plan reveal starts from the 2D view the 3D view entered on (held entry), when there is one; walls and
@@ -4567,8 +4569,14 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null,section=null;
-  if(kind==='section-open'){
+  let narrative,sectionCut=null,section=null,elevation=null;
+  if(kind==='elevation-open'){
+    // FT3D-4: the façade candidate chosen in the dialog (FloorPlanPresentationElevation, building frame), the building
+    // box from the same descriptor (walls of every level, never furniture), the overview it starts and ends on.
+    elevation=beginElevation(view.elevation);
+    const end=presentationStopPose(stop,aspect,view.region);
+    narrative=window.FloorPlanPresentationStory.create('elevation-open',{facade:elevation.facade,corners:elevation.corners,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far},solar:!!elevation.solar});
+  }else if(kind==='section-open'){
     // FT3D-3: the vertical cut derived from this level's own walls and rooms (descriptor computed once, here).
     const d=window.FloorPlanPresentationSection.derive({project,geometry},{overviewDirection:OVERVIEW_DIRECTION,axis:view.sectionAxis,levelId:levelContext?.activeLevelId??null});
     if(!d.supported)throw Error(d.message||'Sección no disponible.');
@@ -4595,7 +4603,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut,section};
+  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut,section,elevation};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4611,6 +4619,7 @@ function presentationStoryApply(p){
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
   if(storyRun.section)applySection(storyRun.section,st);
+  if(storyRun.elevation)applyElevation(storyRun.elevation,st);
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
   if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
@@ -4623,6 +4632,7 @@ function endPresentationStory({keepPose=true}={}){
   if(!storyRun)return null;
   const run=storyRun;storyRun=null;
   if(run.section)endSection(run.section);
+  if(run.elevation)endElevation(run.elevation);
   if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
@@ -4675,6 +4685,51 @@ function endSection(sec){
 }
 function sectionInfo(sec){const d=sec.descriptor;return {levelId:d.levelId,axis:d.axis,normalAxis:d.normalAxis,frontSign:d.frontSign,fraction:d.fraction,targetOffset:d.targetOffset,startOffset:d.startOffset,line:d.line.map(p=>[...p]),look:[...d.look],
   walls:d.intersections.walls.length,rooms:d.intersections.rooms.map(r=>r.id),offset:sec.offset,planeTarget:sec.plane.target,planeStart:sec.plane.start,caps:sec.caps,capsVisible:sec.group.visible,pieces:sec.pieces,clippedMaterials:sec.materials.size,localClipping:renderer.localClippingEnabled};}
+/* FT3D-4 narrative elevation on the one scene (js/presentation-elevation-core.js gives the façade, the narrative moves
+   the camera). Runtime only, set when the scene begins and undone when it ends: the whole building is shown
+   (levelView 'all') when it has levels above the active one — those rise from their own floor (scale) while the camera
+   aligns and fold back while it returns, so p = 0 and p = 1 show the overview as it was; the exterior context
+   (territory group) is hidden while the façade is read frontally; a solar snapshot taken when the presentation started
+   is applied through the same setSolar path (FloorPlanSolarRenderer) only while the narrative asks for it, never
+   recalculated. Nothing is drawn: no line, hatch, dimension or second model. */
+function beginElevation(spec){
+  const A=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId),off=A?.offsetMm||{x:0,y:0},base=A?.elevationMm||0;
+  const c=spec.candidate,f=c.frame,e=spec.envelope;
+  // Building frame (mm) → this level's world (m): the active level is at y = 0.
+  const W=(x,y,h)=>[wx(x-off.x),(h-base)/1000,wz(y-off.y)];
+  const corners=[];for(const [x,y] of [[e.minX,e.minY],[e.maxX,e.minY],[e.maxX,e.maxY],[e.minX,e.maxY]])for(const h of [e.bottomMm,e.topMm])corners.push(W(x,y,h));
+  const facade={normal:[c.normalPlan[0],0,c.normalPlan[1]],tangent:[c.tangentPlan[0],0,c.tangentPlan[1]],center:W(f.centerMm.x,f.centerMm.y,f.baseMm+f.heightMm/2),width:f.widthMm/1000,height:f.heightMm/1000};
+  const el={candidate:{id:c.id,label:c.label,cardinal:c.cardinal??null,normalPlan:[...c.normalPlan],wallRefs:c.wallRefs.map(r=>({...r}))},facade,corners,
+    solar:spec.solar?.status==='available-orientative'?structuredClone(spec.solar):null,savedSolar:solarResult&&structuredClone(solarResult),solarOn:false,
+    levelViewBefore:levelView,extra:[],levelScale:0,contextGroup:territoryRenderer?.group||null,contextBefore:territoryRenderer?territoryRenderer.group.visible:null,contextVisible:true};
+  // Levels above the active one exist only in the building: shown for the façade, one rebuild here and one at the end.
+  const above=levelContext?levelContext.levels.filter(l=>A&&l.order>A.order).map(l=>l.id):[];
+  if(above.length&&levelView!=='all'){levelView='all';sigArch='';sync();}
+  if(above.length&&levelsG)el.extra=levelsG.children.filter(g=>above.includes(g.userData.levelId));
+  for(const g of el.extra){g.scale.y=.001;g.visible=false;}
+  el.above=above;
+  return el;
+}
+function applyElevation(el,st){
+  // A rebuilt level group (an asset that loaded) is found again; nothing is recomputed per frame.
+  if(el.above.length&&levelsG&&el.extra.some(g=>g.parent!==levelsG))el.extra=levelsG.children.filter(g=>el.above.includes(g.userData.levelId));
+  el.levelScale=st.levelScale??1;for(const g of el.extra){g.scale.y=Math.max(el.levelScale,.001);g.visible=el.levelScale>.001;}
+  if(el.contextGroup){el.contextVisible=!!st.contextVisible;el.contextGroup.visible=el.contextBefore&&el.contextVisible;}
+  const solar=!!(st.solar&&el.solar);if(solar!==el.solarOn){el.solarOn=solar;solarResult=solar?structuredClone(el.solar):(el.savedSolar&&structuredClone(el.savedSolar));applyLight();}
+}
+function endElevation(el){
+  if(el.solarOn||JSON.stringify(solarResult)!==JSON.stringify(el.savedSolar)){solarResult=el.savedSolar&&structuredClone(el.savedSolar);applyLight();}el.solarOn=false;
+  if(el.contextGroup)el.contextGroup.visible=el.contextBefore;
+  for(const g of el.extra){g.scale.y=1;g.visible=true;}el.extra=[];
+  if(levelView!==el.levelViewBefore){levelView=el.levelViewBefore;sigArch='';sync();}
+}
+function elevationInfo(el){return {candidateId:el.candidate.id,label:el.candidate.label,cardinal:el.candidate.cardinal,normalPlan:[...el.candidate.normalPlan],walls:el.candidate.wallRefs.length,facade:{normal:[...el.facade.normal],center:[...el.facade.center],width:el.facade.width,height:el.facade.height},
+  solarChosen:!!el.solar,solarOn:el.solarOn,solarSnapshot:el.solar?{instant:el.solar.instant,azimuthDeg:el.solar.azimuthDeg,altitudeDeg:el.solar.altitudeDeg}:null,
+  levelView,levelViewBefore:el.levelViewBefore,extraLevels:el.extra.length,levelScale:el.levelScale,extraVisible:el.extra.filter(g=>g.visible).length,
+  context:!!el.contextGroup&&el.contextBefore&&el.contextGroup.children.some(o=>o.visible),contextVisible:el.contextGroup?el.contextGroup.visible:null};}
+// Read-only state the façade scene touches, for tests: what must be back once it ends.
+function presentationElevationResidue(){return {levelView,territoryVisible:territoryRenderer?territoryRenderer.group.visible:null,solar:solarResult&&{instant:solarResult.instant,status:solarResult.status},
+  extraScaled:levelsG?levelsG.children.filter(g=>g.scale.y!==1).length:0,elevationActive:!!storyRun?.elevation};}
 // Read-only checks for tests: which materials of the scene carry clipping planes now, and the renderer flag.
 function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)withPlanes.add(m);});
   const territory=new Set();territoryRenderer?.group.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)territory.add(m);});
@@ -4683,7 +4738,7 @@ function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{f
 function presentationStoryInfo(){
   if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
   const st=storyRun.state;
-  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,elevation:storyRun.elevation?elevationInfo(storyRun.elevation):null,solar:st?.solar??null,contextVisible:st?.contextVisible??null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
     fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
     saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
 }
@@ -4720,6 +4775,7 @@ window.View3D.presentationReveal=presentationReveal;
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
+Object.defineProperty(window.View3D,'presentationElevationResidue',{get:presentationElevationResidue});
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
