@@ -74,15 +74,42 @@ B1–B8 están integrados.
 | Capacidad | Estado | Pendiente de cierre |
 |---|---|---|
 | Archivo cliente offline | **INTEGRADO** | cierre humano/documental |
-| Render IA | **INTEGRADO EN CÓDIGO** | prueba real con OpenAI |
+| Render IA | **INTEGRADO EN CÓDIGO / VALIDACIÓN EXTERNA PENDIENTE** | OpenAI real cuando haya créditos + `OPENAI_API_KEY`; no hay defecto de código demostrado |
 | Vídeo de recorrido | **INTEGRADO** | revisión final representativa si se exige |
-| Share link alojado | **INTEGRADO EN CÓDIGO** | prueba real con Vercel Blob |
+| Share link alojado | **INTEGRADO Y VALIDADO REAL** | cierre documental/humano |
 | «Envíanos tu plano» | **INTEGRADO** | validar proceso humano real |
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
-| Alternativas IA | **INTEGRADO EN CÓDIGO** | prueba/calidad con proveedor real |
+| Alternativas IA | **INTEGRADO EN CÓDIGO / VALIDACIÓN EXTERNA PENDIENTE** | proveedor OpenAI real + revisión de calidad cuando haya créditos + `OPENAI_API_KEY`; no hay defecto de código demostrado |
 | Presentación avanzada | **EN PROGRESO** | FT3D-1 y FT3D-2 integrados; FT3D-3..7 pendientes |
 | 360 | **DIFERIDO POR ALCANCE** | no bloquea el cierre de B |
+
+### Validación real B4 — Vercel Blob
+
+**31-10-2026 — VALIDADO REAL en producción.**
+
+Configuración/QA realizado:
+
+- almacén Vercel Blob `floorplan-3d-share` creado y conectado al proyecto `floorplan-3d`;
+- región Blob `fra1`, acceso público según contrato B4;
+- `BLOB_READ_WRITE_TOKEN` inyectado por Vercel como variable protegida de entorno;
+- `RUBIK_RENDER_TOKEN` configurado como secreto del servidor;
+- redeploy de producción del `master` canónico en estado `READY`;
+- `POST /api/share` real → **200**;
+- Blob publicado real → **200** con `text/html` correcto;
+- `GET /api/view?f=...` → **200** y contenido esperado;
+- código de acceso incorrecto → **401 / token**;
+- no fue necesario modificar código B4.
+
+**Conclusión:** B4 está integrado y validado externamente. Ya no es gate pendiente.
+
+### Bloqueo externo temporal B2 / B8
+
+B2 y B8 comparten `api/render.js` y requieren `OPENAI_API_KEY` + saldo/créditos de API de OpenAI para una validación real.
+
+**Estado 31-10-2026:** la cuenta de proveedor todavía no puede financiarse/configurarse de forma operativa; esta dependencia externa se retomará cuando haya créditos disponibles. No se ha identificado ningún defecto funcional nuevo en el código de B2/B8.
+
+**Decisión operativa:** B2/B8 permanecen abiertos como validación externa pendiente, pero **no bloquean avanzar con FT3D-3..7 mientras se resuelve la dependencia del proveedor**. Cuando OpenAI esté disponible, la validación B2/B8 se reanuda sin reimplementar código salvo defecto demostrado.
 
 ### Decisión formal de producto — 360
 
@@ -135,7 +162,7 @@ Contrato canónico conservado:
 | FT3D-0 — investigación/contrato | **CASI CUBIERTO**, cierre formal pendiente |
 | FT3D-1 — plano → 3D → primera estancia | **INTEGRADO Y VALIDADO TÉCNICAMENTE**; aceptación humana final pendiente |
 | FT3D-2 — motor reusable Story | **INTEGRADO, VALIDADO Y COMPLETO CON 2a** |
-| FT3D-3 — sección dinámica | **PENDIENTE** |
+| FT3D-3 — sección dinámica | **SIGUIENTE CORTE AUTORIZADO** |
 | FT3D-4 — alzado/fachada narrativa | **PENDIENTE** |
 | FT3D-5 — axonometría/exploded | **PENDIENTE** |
 | FT3D-6 — plantillas por perfil | **PENDIENTE** |
@@ -148,26 +175,41 @@ No se autoriza FT3D-2b: no existe gap demostrado que lo necesite.
 
 ## 4. Orden operativo autorizado
 
-1. **Validaciones reales B2 / B4 / B8**.
-2. FT3D-3 — sección dinámica.
-3. FT3D-4 — alzado/fachada.
-4. FT3D-5 — axonometría/exploded.
-5. FT3D-6 — plantillas.
-6. FT3D-7 — salidas/compartición.
+1. **FT3D-3 — sección dinámica**.
+2. FT3D-4 — alzado/fachada.
+3. FT3D-5 — axonometría/exploded.
+4. FT3D-6 — plantillas.
+5. FT3D-7 — salidas/compartición.
+6. **En paralelo / cuando se desbloquee OpenAI:** validaciones reales B2 / B8.
 7. Auditoría global.
 8. Cierres canónicos A / B / C / FT3D.
 9. Limpieza GitHub y reconciliación administrativa de PR/ramas históricas.
 10. Protección de `master`.
 
+**B4 ya está validado real.**  
+**B2/B8 siguen siendo gates de cierre de B, pero quedan temporalmente aparcados por dependencia externa y no bloquean FT3D.**  
 **360 no forma parte de esta secuencia:** está formalmente diferido y no bloquea ningún cierre actual.
 
 ---
 
 ## 5. Vercel / validaciones externas
 
-El conector Vercel está accesible para el proyecto `floorplan-3d` (`prj_x19F1PyprdHvDRbAv3lJW5GXlL0k`).
+Proyecto Vercel conectado: `floorplan-3d` (`prj_x19F1PyprdHvDRbAv3lJW5GXlL0k`).
 
-Se utilizará en las validaciones B para comprobar B4 / Vercel Blob y el entorno real correspondiente.
+### B4
+
+**VALIDADO REAL** en producción el 31-10-2026 mediante Vercel Blob y endpoints `/api/share` + `/api/view`.
+
+### B2 / B8
+
+Pendientes de validación real por dependencia externa de OpenAI:
+
+- falta disponibilidad operativa de créditos/saldo API;
+- después se configurará `OPENAI_API_KEY` como secreto Vercel;
+- `RUBIK_RENDER_TOKEN` ya está preparado;
+- la prueba deberá cubrir B2 render real y B8 cambios controlados de acabados/calidad.
+
+No pegar claves ni secretos en documentación, GitHub o conversaciones.
 
 ---
 
@@ -202,4 +244,6 @@ Se utilizará en las validaciones B para comprobar B4 / Vercel Blob y el entorno
 
 ### Próximo trabajo autorizado
 
-**Validaciones reales B2 / B4 / B8.** No iniciar FT3D-3 hasta cerrar la ronda de validación y decidir si B2/B4/B8 necesitan correcciones de código o sólo configuración/QA externo.
+**FT3D-3 — sección dinámica.**
+
+B2/B8 permanecen pendientes de validación real con OpenAI y se retomarán cuando la dependencia externa de créditos/credencial esté disponible. No reimplementar B2/B8 mientras no exista un defecto demostrado por la validación real.
