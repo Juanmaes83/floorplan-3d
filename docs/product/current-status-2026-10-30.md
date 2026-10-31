@@ -1,7 +1,7 @@
 # Estado operativo de producto e integración — actualizado 31-10-2026
 
 **Fuente operativa de verdad para el trabajo actual.**  
-**HEAD funcional de FT3D-2 integrado:** `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.  
+**HEAD funcional con C4 integrado:** `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.  
 Verificar siempre el HEAD real de `master` antes de ejecutar trabajo.
 
 Estados usados:
@@ -22,7 +22,7 @@ Están integrados:
 - Punto 9 — UX profesional y descubribilidad;
 - Project-First Fase A, cortes A1–A4;
 - Fase B, cortes B1–B8;
-- Fase C, cortes C1–C3;
+- Fase C, cortes **C1–C4**;
 - programa de conocimiento Flat-to-3D;
 - FT3D-1a — «Empezar desde el plano»;
 - FT3D-1b — «Entrar en la estancia»;
@@ -48,29 +48,13 @@ plano 2D
 PR de integración: **#155**.  
 Commit integrado: `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.
 
-2a aporta:
+2a aporta secuencia reusable de escenas, progreso global, anterior/siguiente, reproducción/pausa, captions, cámaras deterministas, historia completa, orden/selección desde el plan y restauración/salida al flujo existente.
 
-- secuencia reusable de escenas;
-- progreso global;
-- anterior/siguiente;
-- reproducción/pausa;
-- captions y contador;
-- cámaras deterministas incl. `fromStop/fromRegion`;
-- historia completa;
-- orden/selección a partir del plan de Presentación;
-- restauración y salida al flujo de Presentación existente.
+La auditoría del ciclo de vida considera cubierto el mínimo de entrada/salida reusable mediante `enterScene()` + `finishStory()`/`closeStory()`.
 
-La auditoría del ciclo de vida considera cubierto el mínimo de entrada/salida reusable mediante `enterScene()` + `finishStory()`/`closeStory()`. No existe un gap funcional que justifique construir una API adicional sólo para cumplir nominalmente “callbacks”.
-
-CI remoto de #155: **success** en Guided experience, Project-First regressions, Point 6 solar, Multiformat guided import, Point 8C-C, Point 8C-D e Integrated browser regressions; dentro de este último pasaron `presentation-story` y `recorder-focus-and-labels`.
-
-El timeout local observado en `professional-workspace` se reprodujo también sobre master base y se clasifica como baseline/entorno, no regresión de 2a.
+CI remoto de #155: **success** en todos los workflows requeridos.
 
 **FT3D-2 está INTEGRADO, VALIDADO TÉCNICAMENTE y FUNCIONALMENTE COMPLETO CON 2a. No se requiere FT3D-2b.**
-
-Checkpoint anterior a C4:
-
-`checkpoint/post-ft3d-2-pre-c4-2026-10-31`
 
 ---
 
@@ -104,7 +88,7 @@ B1–B8 están integrados.
 
 **Decisión de Juanma, 31-10-2026:** no desarrollar ahora un tour 360 específico.
 
-Presentation Story/FT3D tiene prioridad y aporta una experiencia más rica. 360 queda conservado como posibilidad futura sólo si aparece un caso de uso independiente que justifique su coste.
+Presentation Story/FT3D tiene prioridad. 360 sólo se reabrirá si aparece un caso de uso independiente que justifique su coste.
 
 **Consecuencia:** 360 no bloquea Fase B.
 
@@ -112,27 +96,35 @@ Presentation Story/FT3D tiene prioridad y aporta una experiencia más rica. 360 
 
 | Objetivo | Estado | Corte |
 |---|---|---|
-| Cantidades / schedules | **INTEGRADO** | C1 |
-| Presupuesto operativo | **INTEGRADO** | C2 |
-| BC3 / tarifas / fuentes | **INTEGRADO** | C3 |
-| Dossier económico | **ESPECIFICADO / AUTORIZADO PARA IMPLEMENTACIÓN** | C4 |
+| Cantidades / schedules | **INTEGRADO Y VALIDADO** | C1 |
+| Presupuesto operativo | **INTEGRADO Y VALIDADO** | C2 |
+| BC3 / tarifas / fuentes | **INTEGRADO Y VALIDADO** | C3 |
+| Dossier económico | **INTEGRADO Y VALIDADO** | C4 |
 
-**Fase C está en 3/4 integrada.** C4 ya no está indefinido: su contrato canónico es:
+**Fase C está funcionalmente COMPLETA: 4/4.**
+
+C4 quedó integrado mediante PR **#156** en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.
+
+C4 implementa:
+
+- `Dossier económico` en `ENTREGAR`;
+- variantes Profesional y Cliente;
+- autoridad de presentación = `FloorPlanBudgetPresentation.buildReport()`;
+- sin recálculo ni persistencia económica duplicada;
+- origen de precio `Sin precio / Referencia / Propio` separado de `Pendiente / Revisado`;
+- IVA `null` distinto de 0 % y total bruto sólo definitivo cuando el report lo permite;
+- capítulos, partidas, subtotales, totales y warnings desde el report canónico;
+- integración A4 y B1;
+- print/PDF, CSV, JSON y BC3 reutilizando autoridades existentes;
+- estado real del presupuesto en `ENTREGAR`, eliminando las frases históricas falsas de “no disponible”.
+
+QA remoto de PR #156: **success** en Guided experience, Project-First regressions, Point 6 solar, Multiformat guided import, Point 8C-C, Point 8C-D e Integrated browser regressions.
+
+QA local reportado por Claude: C4 19/19 unitarias, C4 browser 2/2, A4 2/2, B1 2/2, client-review 5/5, Project-First 5/5, budget-ui 4/4. Los únicos problemas observados se reprodujeron también en master base y permanecen como deuda conocida, no como regresión C4.
+
+Contrato canónico conservado:
 
 `docs/product/c4-economic-dossier-contract-2026-10-31.md`
-
-Principios C4 fijados:
-
-- `PRESUPUESTAR` sigue siendo la zona de edición/revisión económica;
-- `ENTREGAR` recibe un `Dossier económico` de sólo lectura/exportación;
-- C4 usa `FloorPlanBudgetPresentation.buildReport()` como autoridad de presentación;
-- no recalcula cantidades, merma, subtotales, IVA ni totales;
-- `Sin precio / Referencia / Propio` son estados de origen y `Pendiente / Revisado` una dimensión separada;
-- IVA `null` nunca equivale a 0 %;
-- total incompleto nunca se presenta como definitivo;
-- variante profesional y cliente comparten cifras y difieren sólo en profundidad;
-- reutiliza PDF/print del patrón dossier, CSV/JSON de BudgetPresentation y BC3 de C3;
-- no añade schema ni persistencia económica nueva.
 
 ---
 
@@ -156,16 +148,16 @@ No se autoriza FT3D-2b: no existe gap demostrado que lo necesite.
 
 ## 4. Orden operativo autorizado
 
-1. **C4 — dossier económico**: implementar exactamente el contrato aprobado.
-2. Claude ejecuta código + tests + capturas/vídeo + push y pausa.
-3. ChatGPT audita C4, CI, integración, documentación y cierre Fase C si procede.
-4. Validaciones reales B2/B4/B8.
-5. FT3D-3 — sección dinámica.
-6. FT3D-4 — alzado/fachada.
-7. FT3D-5 — axonometría/exploded.
-8. FT3D-6 — plantillas.
-9. FT3D-7 — salidas/compartición.
-10. Auditoría global y cierres A/B/C/FT3D.
+1. **Validaciones reales B2 / B4 / B8**.
+2. FT3D-3 — sección dinámica.
+3. FT3D-4 — alzado/fachada.
+4. FT3D-5 — axonometría/exploded.
+5. FT3D-6 — plantillas.
+6. FT3D-7 — salidas/compartición.
+7. Auditoría global.
+8. Cierres canónicos A / B / C / FT3D.
+9. Limpieza GitHub y reconciliación administrativa de PR/ramas históricas.
+10. Protección de `master`.
 
 **360 no forma parte de esta secuencia:** está formalmente diferido y no bloquea ningún cierre actual.
 
@@ -175,7 +167,7 @@ No se autoriza FT3D-2b: no existe gap demostrado que lo necesite.
 
 El conector Vercel está accesible para el proyecto `floorplan-3d` (`prj_x19F1PyprdHvDRbAv3lJW5GXlL0k`).
 
-Se utilizará en la fase de validaciones B para comprobar B4 / Vercel Blob y el entorno real correspondiente. No es un requisito previo para implementar C4.
+Se utilizará en las validaciones B para comprobar B4 / Vercel Blob y el entorno real correspondiente.
 
 ---
 
@@ -192,7 +184,8 @@ Se utilizará en la fase de validaciones B para comprobar B4 / Vercel Blob y el 
 ## 7. Deuda e incidencias conocidas
 
 - **R10 framing:** intermitencia de temporización CSS bajo carga; no es regresión FT3D.
-- **professional-workspace bajo carga:** timeout aislado observado/reproducido en baseline; vigilar pero no atribuir automáticamente a FT3D.
+- **professional-workspace bajo carga:** timeout aislado observado/reproducido en baseline; vigilar pero no atribuir automáticamente a trabajo nuevo.
+- **render-budget bajo carga:** cancelación/timeout observada también en master base durante QA C4; no atribuida a C4.
 - **Branch protection:** `master` sigue sin protección; valorar al final de la consolidación.
 - **PR históricas #133–#149:** limpieza administrativa pendiente.
 
@@ -204,9 +197,9 @@ Se utilizará en la fase de validaciones B para comprobar B4 / Vercel Blob y el 
 2. Reconciliar trabajo existente; no reimplementarlo.
 3. Toda integración es aditiva.
 4. Separar implementado / integrado / validado / cerrado / diferido.
-5. Tras cada misión de Claude: auditar → CI → integrar → actualizar documentación → recalcular pendientes → autorizar el siguiente corte.
+5. Tras cada misión: auditar → CI → integrar → actualizar documentación → recalcular pendientes → autorizar siguiente corte.
 6. Mantener: **más contexto, no más falsa certeza**.
 
-### Próximo trabajo autorizado de Claude
+### Próximo trabajo autorizado
 
-**Únicamente C4 — Dossier económico**, siguiendo literalmente `docs/product/c4-economic-dossier-contract-2026-10-31.md`. No iniciar B2/B4/B8, FT3D-3 ni ningún corte posterior durante esta misión.
+**Validaciones reales B2 / B4 / B8.** No iniciar FT3D-3 hasta cerrar la ronda de validación y decidir si B2/B4/B8 necesitan correcciones de código o sólo configuración/QA externo.
