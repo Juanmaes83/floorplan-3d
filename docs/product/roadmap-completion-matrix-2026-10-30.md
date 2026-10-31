@@ -1,7 +1,7 @@
 # Matriz de cierre del roadmap — actualizado 31-10-2026
 
-**Base funcional consolidada:** C4 integrado en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.  
-**Estado de control actual:** Fase C completa 4/4; FT3D-2 cerrado funcionalmente con 2a; B4 validado real; B2/B8 pendientes por dependencia externa de OpenAI; siguiente corte autorizado = FT3D-3.  
+**Base funcional consolidada:** FT3D-3 integrado en `18295e620ba0c19fff4e005449d763bf90342e92`.  
+**Estado de control actual:** Fase C completa 4/4; FT3D-1/2/3 integrados; B4 validado real; B2/B8 pendientes por dependencia externa de OpenAI; siguiente corte autorizado = **FT3D-4**.  
 **Decisión de producto:** 360 diferido formalmente; no bloquea Fase B.
 
 ## Convenciones
@@ -42,48 +42,24 @@
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO / VALIDACIÓN EXTERNA PENDIENTE** | OpenAI real + revisión de calidad cuando haya créditos + `OPENAI_API_KEY` |
-| Presentación avanzada | **EN PROGRESO** | FT3D-1 y FT3D-2 integrados; FT3D-3..7 pendientes |
+| Presentación avanzada | **EN PROGRESO** | FT3D-1, 2 y 3 integrados; FT3D-4..7 pendientes |
 | 360 | **DIFERIDO POR ALCANCE** | no bloquea Fase B |
 
 ## B4 — validación real cerrada
 
-**31-10-2026 — VALIDADO REAL en producción con Vercel.**
-
-Se comprobó:
-
-- almacén Blob real conectado al proyecto;
-- despliegue de producción `READY` sobre el `master` canónico;
-- `POST /api/share` → **200**;
-- Blob publicado → **200** y contenido correcto;
-- `/api/view?f=...` → **200** y contenido correcto;
-- código incorrecto → **401 / token**;
-- no fue necesario cambiar el código B4.
-
-B4 deja de ser gate pendiente.
+**31-10-2026 — VALIDADO REAL en producción con Vercel.** Se comprobó almacenamiento Blob real, deploy READY, `/api/share` y `/api/view` operativos y rechazo correcto de credencial inválida.
 
 ## B2 / B8 — dependencia externa aparcada
 
-B2 y B8 comparten la validación real con OpenAI mediante `api/render.js`.
-
-**31-10-2026:** la cuenta de proveedor no dispone todavía de créditos/saldo operativo y `OPENAI_API_KEY` no está configurada. Esta situación es una **dependencia externa temporal**, no un defecto demostrado del producto.
-
-Decisión operativa:
-
-- mantener B2/B8 como **VALIDACIÓN EXTERNA PENDIENTE**;
-- no reimplementar código mientras la validación real no demuestre un defecto;
-- reanudar las pruebas cuando haya créditos y se configure `OPENAI_API_KEY` como secreto Vercel;
-- **no bloquear FT3D-3..7 por esta dependencia externa**;
-- B2/B8 siguen siendo requisitos para el cierre final de Fase B.
+B2 y B8 siguen en **VALIDACIÓN EXTERNA PENDIENTE** hasta disponer de créditos OpenAI y `OPENAI_API_KEY` configurada como secreto Vercel. No reimplementar mientras no exista un defecto demostrado. Esta dependencia no bloquea FT3D-4..7.
 
 ## Decisión formal 360
 
-**31-10-2026 — decisión de Juanma:** no desarrollar ahora un tour 360 específico.
-
-Presentation Story/FT3D tiene prioridad. 360 sólo se reabrirá si aparece un caso de uso propio que justifique su coste.
+**31-10-2026 — decisión de Juanma:** no desarrollar ahora un tour 360 específico. Sólo se reabrirá si aparece un caso de uso propio que justifique su coste.
 
 Para cerrar Fase B quedan como gates reales:
 
-- validación real B2/B8 con OpenAI/proveedor cuando se desbloquee la dependencia externa;
+- validación real B2/B8 con OpenAI cuando se desbloquee;
 - completar presentación avanzada mediante FT3D;
 - cierres humanos/documentales aplicables.
 
@@ -100,24 +76,7 @@ Para cerrar Fase B quedan como gates reales:
 
 **C está funcionalmente completa: 4/4.**
 
-C4 quedó integrado mediante PR **#156** en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0` y pasó CI remoto completo.
-
-C4 cubre:
-
-- `Dossier económico` en `ENTREGAR`;
-- variantes Profesional / Cliente;
-- autoridad de presentación en `FloorPlanBudgetPresentation.buildReport()`;
-- no recálculo ni persistencia duplicada;
-- origen de precio separado del estado de revisión;
-- IVA `null` distinto de 0 % y totales no definitivos cuando corresponde;
-- capítulos/partidas/subtotales/totales/warnings desde la autoridad canónica;
-- integración A4/B1;
-- print/PDF + CSV + JSON + BC3 existentes;
-- corrección de los textos históricos falsos de presupuesto en `ENTREGAR`.
-
-Contrato canónico:
-
-`docs/product/c4-economic-dossier-contract-2026-10-31.md`
+C4 quedó integrado mediante PR **#156** y mantiene `FloorPlanBudgetPresentation.buildReport()` como autoridad de presentación económica, sin recálculo ni persistencia duplicada.
 
 ---
 
@@ -128,14 +87,28 @@ Contrato canónico:
 | FT3D-0 | **CASI CUBIERTO** | investigación + pruebas técnicas | cierre formal / presupuesto de rendimiento |
 | FT3D-1 | **INTEGRADO Y VALIDADO TÉCNICAMENTE** | 1a + 1b en master | aceptación humana final / cierre documental |
 | FT3D-2 | **INTEGRADO, VALIDADO Y COMPLETO** | 2a en `042c256b...`; PR #155 verde | nada funcional; no se requiere 2b |
-| FT3D-3 | **SIGUIENTE CORTE AUTORIZADO** | — | sección dinámica |
-| FT3D-4 | **PENDIENTE** | — | alzado/fachada narrativa |
+| FT3D-3 | **INTEGRADO Y VALIDADO** | PR #157; `section-open`, clipping real, caps, minimapa, multipiso, reduced motion, QA final | nada funcional; sólo riesgo visual no bloqueante multipiso sin caps en plantas no narradas |
+| FT3D-4 | **SIGUIENTE CORTE AUTORIZADO PARA ESPECIFICACIÓN** | reutiliza Story engine + contexto/orientación ya existentes | alzado/fachada narrativa |
 | FT3D-5 | **PENDIENTE** | — | axonometría / edificio explotado |
 | FT3D-6 | **PENDIENTE** | — | plantillas por perfil |
 | FT3D-7 | **PENDIENTE COMO FASE** | B1/B3/B4 reutilizables | Story + outputs/share/vídeo |
 | FT3D-8 | **DIFERIDO / FUTURO** | — | contrato temporal explícito |
 
-**Decisión FT3D-2:** no crear 2b. No existe un gap funcional demostrado.
+### Cierre FT3D-3
+
+- Base: `d476d20c00f5be96f715d37fdf32b12d7a85be34`.
+- HEAD integrado: `18295e620ba0c19fff4e005449d763bf90342e92`.
+- PR: **#157**.
+- Integración: fast-forward seguro de `master`, sin force.
+- CI remoto: **7/7 workflows success**.
+- Unitarias: **657 bien, 0 fallos, 2 omitidos**.
+- Browser: `presentation-section` **7/7**, `presentation-story` **8/8**.
+- Regresiones principales: professional-workspace, project-first, building-presentation, capture-3d, tour-video, overview y focus en verde.
+- `presentation`: 54 comprobaciones válidas, 0 fallos de aserción; cancelaciones bajo carga reproducidas también en baseline.
+- Baseline confirmado para R10 framing, minimapa M13 1440, P13, P15, caso 31 y P05.
+- Evidencia final: checkpoints, móvil, multipiso, unsupported y vídeos forward/reverse sobre el HEAD final.
+
+**Decisión:** FT3D-3 queda **INTEGRADO Y VALIDADO**. No reabrir salvo regresión demostrada.
 
 ---
 
@@ -148,9 +121,9 @@ B4 validado real
         ↓
 B2 / B8 aparcados temporalmente por dependencia externa OpenAI
         ↓
-FT3D-3 sección   ← AHORA
+FT3D-1 / 2 / 3 integrados y validados
         ↓
-FT3D-4 fachada
+FT3D-4 fachada   ← AHORA: primero especificación/contrato
         ↓
 FT3D-5 axonometría
         ↓
@@ -158,7 +131,7 @@ FT3D-6 plantillas
         ↓
 FT3D-7 outputs/share
         ↓
-reanudar B2 / B8 cuando OpenAI esté disponible (si aún siguen pendientes)
+reanudar B2 / B8 cuando OpenAI esté disponible
         ↓
 auditoría global
         ↓
@@ -175,9 +148,10 @@ protección de master
 
 # Deuda conocida que no debe confundirse con cortes funcionales
 
-- R10 framing: inestabilidad de temporización CSS bajo carga.
-- professional-workspace: timeout aislado reproducido en baseline bajo carga.
-- render-budget: cancelación/timeout observada también en master base durante QA C4.
+- R10 framing: inestabilidad de temporización bajo carga, reproducida en baseline.
+- Minimapa M13 1440, P13, P15, caso 31 y P05: cancelaciones/timeouts reproducidos en `master@d476d20` durante QA FT3D-3.
+- professional-workspace: timeout aislado histórico reproducido en baseline bajo carga.
+- render-budget: cancelación/timeout histórico reproducido en master base durante QA C4.
 - Branch protection de `master`: pendiente al final de la consolidación.
 - PR históricas #133–#149: limpieza administrativa pendiente.
 - 8B-C cubiertas inclinadas: diferido.
