@@ -36,7 +36,7 @@ async function configure(page,{elevation=false,section=false,chapter=false,facad
  if(section)await page.locator('#presentationSectionOption').check();if(chapter)await page.locator('#presentationStoryOption').check();
  const start=page.getByRole('button',{name:'Iniciar presentación'});await start.scrollIntoViewIfNeeded();await start.click();}
 const snapshot=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),undo:undoStack.length,storage:Object.keys(localStorage).filter(k=>/elevation|facade|fachada|ft3d|story|section/i.test(k))}));
-const state=page=>page.evaluate(()=>({cam:View3D.cameraState,info:View3D.presentationStoryInfo,residue:View3D.presentationElevationResidue,story:FloorPlanPresentation.story,caption:document.querySelector('#presentationStoryCaption')?.textContent||'',
+const state=page=>page.evaluate(()=>({cam:(()=>{try{return View3D.presentationPose();}catch{const c=View3D.cameraState;return {...c,target:View3D.presentationInspect()?.target};}})(),info:View3D.presentationStoryInfo,residue:View3D.presentationElevationResidue,story:FloorPlanPresentation.story,caption:document.querySelector('#presentationStoryCaption')?.textContent||'',
  aspect:View3D.presentationInspect()?.aspect,card:(()=>{const s=document.querySelector('#stage').getBoundingClientRect(),c=document.querySelector('.presentation-card').getBoundingClientRect();return {l:(c.left-s.left)/s.width,r:(c.right-s.left)/s.width,t:(c.top-s.top)/s.height,b:(c.bottom-s.top)/s.height};})()}));
 async function scrub(page,value){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},value);await frames(page);return state(page);}
 const samePose=(a,b,eps=1e-6)=>a.position.every((v,i)=>Math.abs(v-b.position[i])<=eps)&&a.target.every((v,i)=>Math.abs(v-b.target[i])<=eps)&&Math.abs(a.fov-b.fov)<=1e-6;
@@ -58,12 +58,12 @@ async function exit(page,before,name,how='close'){
  assert.equal(await page.locator('#presentationElevationPlay').count(),0,`${name}: controls leave with the presentation`);
  const r=await page.evaluate(()=>View3D.presentationElevationResidue);assert.equal(r.elevationActive,false);assert.equal(r.extraScaled,0);}
 async function example(page){await page.locator('#welcomeExample').click();await page.waitForTimeout(800);}
-const OVERVIEW_TOOLS=page=>page.evaluate(()=>[...document.querySelectorAll('#presentationTools button')].map(b=>b.id||b.textContent.trim()));
+const OVERVIEW_TOOLS=(page,visible=false)=>page.evaluate(v=>[...document.querySelectorAll('#presentationTools button')].filter(b=>!v||!b.hidden).map(b=>b.id||b.textContent.trim()),visible);
 
 test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in the free region, oblique perspective, reverse, scrub, cancel (1440x900)',{timeout:900000},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await example(page);const editor=await snapshot(page);
  // §19.1 OFF: no FT3D-4 node, the same tools and overview.
- await configure(page);await settled(page);await page.waitForTimeout(300);const off=await state(page),offTools=await OVERVIEW_TOOLS(page);
+ await configure(page);await settled(page);await page.waitForTimeout(300);const off=await state(page),offTools=await OVERVIEW_TOOLS(page),offVisible=await OVERVIEW_TOOLS(page,true);
  assert.equal(await page.locator('#presentationElevationPlay').count(),0);assert.equal(off.info.active,false);assert.ok(!offTools.includes('presentationElevationPlay'));
  const offResidue=off.residue;await exit(page,editor,'off');
  // ON.
@@ -79,7 +79,7 @@ test('OFF parity; ON: selector, default, checkpoints, perpendicular 4° front in
  await page.locator('#presentationConfig').screenshot({path:path.join(QA,'config-on.png')});
  await page.getByRole('button',{name:'Iniciar presentación'}).click();await settled(page);await page.waitForTimeout(300);
  const overview=await state(page);assert.ok(samePose(overview.cam,off.cam,1e-6),'the overview is the same with the option on');
- const onTools=await OVERVIEW_TOOLS(page);assert.deepEqual(onTools.filter(x=>x!=='presentationElevationPlay'),offTools,'only the façade button is added');
+ const onTools=await OVERVIEW_TOOLS(page,true);assert.deepEqual(onTools.filter(x=>x!=='presentationElevationPlay'),await (async()=>offVisible)(),'only the façade button is added to the visible tools');
  const play=page.locator('#presentationElevationPlay');assert.equal(await play.isVisible(),true);assert.equal(await play.innerText(),'Ver fachada');
  assert.equal(await page.locator('#presentationCapture').isDisabled(),false,'capture ready on the overview');
  await shot(page,'desktop-auto-p000-before');await play.click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open');
@@ -141,7 +141,7 @@ test('whole story: plan → section → façade → room and plan → façade �
  const {page,errors}=await open(t,{width:1440,height:900});await example(page);const editor=await snapshot(page);
  for(const section of [true,false]){
   await configure(page,{elevation:true,section,chapter:true});await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal',null,{timeout:180000});
-  await page.locator('#presentationStoryPlay').click();await settled(page);await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
+  await page.locator('#presentationStoryPlay').click();await settled(page);const overviewPose=(await state(page)).cam;await page.locator('#presentationStoryFull').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1);
   const kinds=section?['plan-reveal','section-open','elevation-open','room-descent']:['plan-reveal','elevation-open','room-descent'];
   assert.equal((await state(page)).story.scenes,kinds.length,`${kinds.join(' → ')}`);
   // Step to the façade scene (reduced motion lands on its frontal hold), then its exterior hold, then on.
@@ -154,7 +154,11 @@ test('whole story: plan → section → façade → room and plan → façade �
   const seq=await page.evaluate(k=>FloorPlanPresentationStory.sequence(k.map(x=>FloorPlanPresentationStory.SCENE_MS[x])).at(k.indexOf('room-descent'),0),kinds);
   const atEnd=await scrub(page,Math.floor(1000*seq)-1);assert.equal(atEnd.story.kind,'elevation-open');
   await page.locator('#presentationStoryNext').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='room-descent'&&!FloorPlanPresentation.story.busy&&!FloorPlanPresentation.story.playing);await frames(page);
-  const descent=await state(page);assert.ok(samePose(descent.cam,atEnd.cam,3e-3),'no camera jump from the façade to the descent');assert.equal(descent.residue.elevationActive,false);
+  // The façade ends exactly on the overview (p = 1, checked in the first test) and the descent starts there; the last
+  // slider step of the façade (p ≈ .997, still returning) is only a small move from it: no jump.
+  const descent=await state(page);assert.ok(samePose(descent.cam,overviewPose,1e-4),'the descent starts on the overview the façade ends on');
+  const gap=Math.hypot(...descent.cam.position.map((v,k)=>v-atEnd.cam.position[k]))/Math.hypot(...descent.cam.position.map((v,k)=>v-descent.cam.target[k]));
+  assert.ok(gap<.03,`no camera jump from the façade to the descent (${gap.toFixed(4)})`);assert.ok(Math.abs(descent.cam.fov-atEnd.cam.fov)<1e-6);assert.equal(descent.residue.elevationActive,false);
   await scrub(page,1000);await page.waitForTimeout(300);if(section)await shot(page,'story-room');
   await exit(page,editor,`story section ${section}`);
  }

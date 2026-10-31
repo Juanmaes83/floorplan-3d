@@ -71,8 +71,10 @@
  const isBuildingPlan=()=>plan?.scope==='building';
  const activeLevelId=()=>app.levelContext?.levelId||null;
  const svgEl=(tag,parent,attributes={})=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,String(value));parent.append(node);return node;};
+ // FT3D-4 marks never outlive their scene, even when the map is hidden or the presentation ends mid-scene.
+ const clearFacadeMarks=()=>mapSvg.querySelectorAll('.presentation-minimap-facade,.presentation-minimap-facade-look').forEach(n=>n.remove());
  function renderMinimap(){
-  map.hidden=!active||!sourceCurrent();if(map.hidden)return;
+  map.hidden=!active||!sourceCurrent();if(map.hidden){clearFacadeMarks();return;}
   mapToggle.textContent=tx(mapOpen?'Ocultar plano':'Mostrar plano',mapOpen?'Hide map':'Show map',mapOpen?'隐藏平面图':'显示平面图');
   mapToggle.setAttribute('aria-expanded',String(mapOpen));mapPanel.hidden=!mapOpen;
   if(!mapOpen)return;
@@ -675,7 +677,7 @@
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
  function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi=null;}}
- function closeStory(){if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
+ function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
