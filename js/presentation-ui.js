@@ -482,7 +482,8 @@
   const enter=button('',tools,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,[{kind:'room-descent',stop:to,from:index}],{from:0,to:1});});enter.id='presentationStoryEnter';enter.hidden=true;
   // With reduced motion the story waits at its start, as the 1a chapter: scene buttons and «Reproducir historia» jump.
   const full=button('',tools,()=>{const scenes=fullStory();if(scenes.length>1)openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
-  const section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;
+  // FT3D-3: only when the section was chosen, so a presentation without it keeps exactly its tools.
+  let section=null;if(sectionEnabled){section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
   storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
@@ -605,7 +606,7 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:run.scenes[0].kind==='section-open'?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section.remove();storyUi=null;}}
+ function disposeStory(){storyEnabled=false;sectionEnabled=false;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi=null;}}
  function closeStory(){if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
