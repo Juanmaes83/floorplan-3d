@@ -1,8 +1,7 @@
 # Estado operativo de producto e integración — actualizado 31-10-2026
 
 **Fuente operativa de verdad para el trabajo actual.**  
-**HEAD funcional consolidado de FT3D-1:** `579189df39513aca44e0a86b44ef4392f38173d2`.  
-**HEAD documental vigente al autorizar FT3D-2a:** `master@986ca5e012127419ddcd023dd3cdf75cc56a8dda`.  
+**HEAD funcional de FT3D-2 integrado:** `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.  
 Verificar siempre el HEAD real de `master` antes de ejecutar trabajo.
 
 Estados usados:
@@ -24,11 +23,12 @@ Están integrados:
 - Project-First Fase A, cortes A1–A4;
 - Fase B, cortes B1–B8;
 - Fase C, cortes C1–C3;
-- programa de conocimiento Flat-to-3D de PR #144;
+- programa de conocimiento Flat-to-3D;
 - FT3D-1a — «Empezar desde el plano»;
-- FT3D-1b — «Entrar en la estancia».
+- FT3D-1b — «Entrar en la estancia»;
+- FT3D-2a — motor reusable de Presentation Story y «Ver la historia completa».
 
-### FT3D-1 — estado consolidado
+### FT3D-1
 
 Secuencia integrada:
 
@@ -41,32 +41,36 @@ plano 2D
 → Presentación existente
 ```
 
-Garantías:
+**Estado:** INTEGRADO y VALIDADO TÉCNICAMENTE. Falta aceptación humana final/cierre documental, no otro corte funcional.
 
-- FT3D es opcional y aditivo;
-- sin schema ni persistencia nueva;
-- con FT3D desactivado, la Presentación conserva su comportamiento previo;
-- misma geometría/proyecto durante las narrativas;
-- progreso determinista y reversible;
-- reduced motion, móvil y dos plantas cubiertos;
-- B3 «Grabar vídeo» convive con Story;
-- building presentation, capturas, workspace profesional y navegación existente siguen disponibles.
+### FT3D-2
 
-QA local de 1b sobre master consolidado:
+PR de integración: **#155**.  
+Commit integrado: `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.
 
-- unitarias 614/614;
-- FT3D browser 6/6;
-- overview 4/4;
-- foco 2/2;
-- captura 3D 3/3;
-- building presentation 7/7;
-- tour video 2/2;
-- professional workspace 17/17;
-- framing 10/11; R10 reproducido también en master base y clasificado como baseline intermitente de transición CSS.
+2a aporta:
 
-CI remoto de PR #154: **success** en `presentation-story`, `recorder-focus-and-labels`, Guided experience, Project-First regressions, Point 6 solar, Multiformat guided import, Point 8C-C y Point 8C-D.
+- secuencia reusable de escenas;
+- progreso global;
+- anterior/siguiente;
+- reproducción/pausa;
+- captions y contador;
+- cámaras deterministas incl. `fromStop/fromRegion`;
+- historia completa;
+- orden/selección a partir del plan de Presentación;
+- restauración y salida al flujo de Presentación existente.
 
-**FT3D-1 está INTEGRADO y VALIDADO TÉCNICAMENTE.** Falta únicamente aceptación humana final de la experiencia completa y registro formal de cierre; no falta otro corte funcional obligatorio dentro de FT3D-1.
+La auditoría del ciclo de vida considera cubierto el mínimo de entrada/salida reusable mediante `enterScene()` + `finishStory()`/`closeStory()`. No existe un gap funcional que justifique construir una API adicional sólo para cumplir nominalmente “callbacks”.
+
+CI remoto de #155: **success** en Guided experience, Project-First regressions, Point 6 solar, Multiformat guided import, Point 8C-C, Point 8C-D e Integrated browser regressions; dentro de este último pasaron `presentation-story` y `recorder-focus-and-labels`.
+
+El timeout local observado en `professional-workspace` se reprodujo también sobre master base y se clasifica como baseline/entorno, no regresión de 2a.
+
+**FT3D-2 está INTEGRADO, VALIDADO TÉCNICAMENTE y FUNCIONALMENTE COMPLETO CON 2a. No se requiere FT3D-2b.**
+
+Checkpoint anterior a C4:
+
+`checkpoint/post-ft3d-2-pre-c4-2026-10-31`
 
 ---
 
@@ -93,20 +97,16 @@ B1–B8 están integrados.
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO EN CÓDIGO** | prueba/calidad con proveedor real |
-| Presentación avanzada | **PARCIALMENTE CUBIERTA** | FT3D-1 integrado; FT3D-2..7 pendientes |
+| Presentación avanzada | **EN PROGRESO** | FT3D-1 y FT3D-2 integrados; FT3D-3..7 pendientes |
 | 360 | **DIFERIDO POR ALCANCE** | no bloquea el cierre de B |
 
 ### Decisión formal de producto — 360
 
 **Decisión de Juanma, 31-10-2026:** no desarrollar ahora un tour 360 específico.
 
-Motivo de producto:
+Presentation Story/FT3D tiene prioridad y aporta una experiencia más rica. 360 queda conservado como posibilidad futura sólo si aparece un caso de uso independiente que justifique su coste.
 
-- Rubik ya está construyendo una experiencia de presentación más rica mediante FT3D / Presentation Story;
-- terminar el motor narrativo, secciones, fachadas, axonometrías, plantillas y salidas aporta más valor inmediato que añadir una salida 360 aislada;
-- no se elimina 360 del conocimiento estratégico: queda **diferido** y puede reevaluarse en el futuro si aporta un caso de uso independiente.
-
-**Consecuencia:** 360 deja de ser una decisión pendiente y **no bloquea el cierre de Fase B**. Para cerrar B quedan las validaciones reales de B2/B4/B8, los cierres humanos/documentales aplicables y completar la parte de «presentación avanzada» mediante el programa FT3D aprobado.
+**Consecuencia:** 360 no bloquea Fase B.
 
 ### Fase C
 
@@ -115,9 +115,24 @@ Motivo de producto:
 | Cantidades / schedules | **INTEGRADO** | C1 |
 | Presupuesto operativo | **INTEGRADO** | C2 |
 | BC3 / tarifas / fuentes | **INTEGRADO** | C3 |
-| Dossier económico | **PENDIENTE** | C4 |
+| Dossier económico | **ESPECIFICADO / AUTORIZADO PARA IMPLEMENTACIÓN** | C4 |
 
-**Fase C está en 3/4.** Falta C4 — dossier económico, reutilizando cantidades, presupuesto, procedencia/precios y `ENTREGAR`, sin crear una segunda autoridad económica.
+**Fase C está en 3/4 integrada.** C4 ya no está indefinido: su contrato canónico es:
+
+`docs/product/c4-economic-dossier-contract-2026-10-31.md`
+
+Principios C4 fijados:
+
+- `PRESUPUESTAR` sigue siendo la zona de edición/revisión económica;
+- `ENTREGAR` recibe un `Dossier económico` de sólo lectura/exportación;
+- C4 usa `FloorPlanBudgetPresentation.buildReport()` como autoridad de presentación;
+- no recalcula cantidades, merma, subtotales, IVA ni totales;
+- `Sin precio / Referencia / Propio` son estados de origen y `Pendiente / Revisado` una dimensión separada;
+- IVA `null` nunca equivale a 0 %;
+- total incompleto nunca se presenta como definitivo;
+- variante profesional y cliente comparten cifras y difieren sólo en profundidad;
+- reutiliza PDF/print del patrón dossier, CSV/JSON de BudgetPresentation y BC3 de C3;
+- no añade schema ni persistencia económica nueva.
 
 ---
 
@@ -127,7 +142,7 @@ Motivo de producto:
 |---|---|
 | FT3D-0 — investigación/contrato | **CASI CUBIERTO**, cierre formal pendiente |
 | FT3D-1 — plano → 3D → primera estancia | **INTEGRADO Y VALIDADO TÉCNICAMENTE**; aceptación humana final pendiente |
-| FT3D-2 — motor reusable Story | **2a IMPLEMENTADO Y AUTORIZADO PARA RECONCILIACIÓN** |
+| FT3D-2 — motor reusable Story | **INTEGRADO, VALIDADO Y COMPLETO CON 2a** |
 | FT3D-3 — sección dinámica | **PENDIENTE** |
 | FT3D-4 — alzado/fachada narrativa | **PENDIENTE** |
 | FT3D-5 — axonometría/exploded | **PENDIENTE** |
@@ -135,67 +150,38 @@ Motivo de producto:
 | FT3D-7 — salidas/compartición Story | **PENDIENTE COMO FASE** |
 | FT3D-8 — timeline construcción | **FUTURO / FAMILIA SEPARADA** |
 
-### FT3D-2a — auditoría previa completada
-
-Backup fuente:
-
-`backup/ft3d-2a-pre-integration@d300db8c7756235409cc3a3386d45574a848ed2d`
-
-Parent histórico exacto: `964026362ec939982f69081dc2dfbb522230ba3f` (FT3D-1b original).
-
-2a añade 347 líneas y elimina 63 en 8 archivos. Su función es convertir 1a y 1b en escenas de un reproductor reusable y añadir «Ver la historia completa».
-
-Capacidades verificadas contra el mínimo de FT3D-2:
-
-- secuencia de escenas: **sí** (`sequence(weights)`);
-- control por progreso global: **sí**;
-- siguiente/anterior: **sí**;
-- reproducción automática / pausa: **sí**;
-- captions y contador: **sí**;
-- restauración de estado: **heredada y probada en 1a/1b; debe revalidarse tras transporte**;
-- cámaras deterministas: **sí**, incluido `fromStop/fromRegion`;
-- orden/selección manual sin tocar geometría: **sí, derivado del plan configurado de Presentación**;
-- callbacks/entrada-salida reutilizables: **debe verificarse explícitamente tras integración** para decidir si el motor cumple completamente este mínimo o necesita un 2b pequeño.
-
-**PASS técnico esperado:** 2a ya demuestra una segunda narrativa sin duplicar el motor de transición. No se autoriza ningún desarrollo 2b durante la reconciliación de 2a.
-
-### Protección y rama de trabajo
-
-Checkpoint:
-
-`checkpoint/post-ft3d-1-pre-ft3d-2-2026-10-31`
-
-Rama autorizada:
-
-`integration/ft3d-2a-on-consolidated-master`
-
-La rama debe partir del HEAD documental vigente y transportar únicamente el commit `d300db8...` como primer intento. No reimplementar 1a/1b y no reemplazar archivos completos por versiones históricas.
+No se autoriza FT3D-2b: no existe gap demostrado que lo necesite.
 
 ---
 
 ## 4. Orden operativo autorizado
 
-1. **FT3D-2a** — reconciliar en `integration/ft3d-2a-on-consolidated-master`.
-2. QA local + vídeo determinista + comparación del diff con `9640263..d300db8`.
-3. Claude pausa.
-4. ChatGPT audita, abre gate CI, integra si procede y verifica el mínimo de FT3D-2.
-5. Decidir si FT3D-2 queda cerrado con 2a o requiere un **2b mínimo**; no asumirlo antes de la auditoría.
-6. **C4 — dossier económico**.
-7. Validaciones reales B2/B4/B8.
-8. FT3D-3 — sección dinámica.
-9. FT3D-4 — alzado/fachada.
-10. FT3D-5 — axonometría/exploded.
-11. FT3D-6 — plantillas.
-12. FT3D-7 — salidas/compartición.
-13. Auditoría global y cierres A/B/C/FT3D.
+1. **C4 — dossier económico**: implementar exactamente el contrato aprobado.
+2. Claude ejecuta código + tests + capturas/vídeo + push y pausa.
+3. ChatGPT audita C4, CI, integración, documentación y cierre Fase C si procede.
+4. Validaciones reales B2/B4/B8.
+5. FT3D-3 — sección dinámica.
+6. FT3D-4 — alzado/fachada.
+7. FT3D-5 — axonometría/exploded.
+8. FT3D-6 — plantillas.
+9. FT3D-7 — salidas/compartición.
+10. Auditoría global y cierres A/B/C/FT3D.
 
 **360 no forma parte de esta secuencia:** está formalmente diferido y no bloquea ningún cierre actual.
 
 ---
 
-## 5. Fuera del cierre actual
+## 5. Vercel / validaciones externas
 
-- **Tour 360 específico:** diferido por decisión formal de producto del 31-10-2026; reevaluable si aparece un caso de uso independiente que justifique su coste.
+El conector Vercel está accesible para el proyecto `floorplan-3d` (`prj_x19F1PyprdHvDRbAv3lJW5GXlL0k`).
+
+Se utilizará en la fase de validaciones B para comprobar B4 / Vercel Blob y el entorno real correspondiente. No es un requisito previo para implementar C4.
+
+---
+
+## 6. Fuera del cierre actual
+
+- Tour 360 específico: diferido por decisión formal de producto del 31-10-2026.
 - Punto 10 — instalaciones ligeras: posterior.
 - Fase D — reconocimiento automático, LiDAR, CAD/BIM/API, equipos, portal avanzado, white-label: posterior.
 - 8B-C cubiertas inclinadas: diferido.
@@ -203,24 +189,24 @@ La rama debe partir del HEAD documental vigente y transportar únicamente el com
 
 ---
 
-## 6. Deuda e incidencias conocidas
+## 7. Deuda e incidencias conocidas
 
 - **R10 framing:** intermitencia de temporización CSS bajo carga; no es regresión FT3D.
+- **professional-workspace bajo carga:** timeout aislado observado/reproducido en baseline; vigilar pero no atribuir automáticamente a FT3D.
 - **Branch protection:** `master` sigue sin protección; valorar al final de la consolidación.
 - **PR históricas #133–#149:** limpieza administrativa pendiente.
 
 ---
 
-## 7. Regla de control para agentes
+## 8. Regla de control para agentes
 
 1. Verificar HEAD de `master` antes de actuar.
 2. Reconciliar trabajo existente; no reimplementarlo.
 3. Toda integración es aditiva.
-4. No avanzar un hijo FT3D hasta consolidar su padre.
-5. Separar implementado / integrado / validado / cerrado / diferido.
-6. Tras cada misión de Claude: auditar → CI → integrar → actualizar documentación → recalcular pendientes → autorizar el siguiente corte.
-7. Mantener: **más contexto, no más falsa certeza**.
+4. Separar implementado / integrado / validado / cerrado / diferido.
+5. Tras cada misión de Claude: auditar → CI → integrar → actualizar documentación → recalcular pendientes → autorizar el siguiente corte.
+6. Mantener: **más contexto, no más falsa certeza**.
 
 ### Próximo trabajo autorizado de Claude
 
-**Únicamente FT3D-2a**, sobre `integration/ft3d-2a-on-consolidated-master`, siguiendo el transporte controlado del commit `d300db8...`. No iniciar FT3D-2b, FT3D-3 ni C4 durante esta misión.
+**Únicamente C4 — Dossier económico**, siguiendo literalmente `docs/product/c4-economic-dossier-contract-2026-10-31.md`. No iniciar B2/B4/B8, FT3D-3 ni ningún corte posterior durante esta misión.
