@@ -34,7 +34,7 @@ La plantilla no asigna profesión al proyecto. Un proyecto puede presentarse con
 
 Sin otro Story engine, player, renderer/canvas, escenas duplicadas por profesión, modelo geométrico, sistema de cámaras o persistencia paralela. Sin condiciones de perfil dispersas por el renderer. No modificar topología, Solar, exterior, contratos, schema, datos persistidos, providers, licencias ni políticas de exportación.
 
-No implementar FT3D-4/5/6/7/8 ni Phase D. No offsets exploded, cámaras axon, corte nuevo, before/after inferido, timeline constructivo o certificaciones. No editor libre de timeline ni sexta plantilla «Personalizada»: las cinco tienen personalización limitada. No actualizar estados canónicos como si el diseño documental fuera implementación/cierre.
+No implementar FT3D-4/5/6/7/8 ni Phase D. No offsets exploded, cámaras axon, corte nuevo, before/after inferido, timeline constructivo o certificaciones. Fuera de FT3D-6 V1: editor libre de timeline y plantilla «Personalizada». V1 sólo implementará las cinco plantillas definidas, con personalización limitada. Una plantilla personalizada/editor avanzado podrá estudiarse después como alcance separado; no se diseña aquí ni queda prohibida para siempre. No actualizar estados canónicos como si el diseño documental fuera implementación/cierre.
 
 ## 3. Fuentes y arquitectura observada
 
@@ -56,7 +56,7 @@ Inspección de sólo lectura de [Story core](../../js/presentation-story-core.js
 | `plan-reveal`, `room-descent`, `section-open` existentes | Nombres de implementación conocidos; no autoridad conceptual del preset. `elevation-open` es recomendado por contrato FT3D-4 |
 | `fullStory()` encadena por nivel plano, sección si elegida y descenso a la PRIMERA estancia | No afirmar que ya reproduce todas las rooms/capabilities: habrá un gap de composición que reconciliar |
 | Plan con overview y todas las rooms seleccionadas, UI con orden por planta | Reutilizar paradas/selección/navegación; no otro itinerario |
-| Plan/UI requieren estancia válida y muros no demolidos | Sin rooms no se habilita una presentación nueva de geometría sola |
+| Plan/UI actuales requieren estancia válida y muros no demolidos | Limitación del builder/player de esta base, no mínimo semántico permanente. Ejecutar una Story válida sin rooms queda PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5 |
 | Sidecar local por entrada/proyecto para rooms; Story/sección runtime | No ampliar sidecar ni confundir ausencia de persistencia nueva con ausencia de storage existente |
 | B3 graba paradas del plan | No acredita exportación de una Story arbitraria |
 | B7 deriva asignaciones/muestras reales, no geometría | Existencia de moodboard no implica builder narrativo de materiales |
@@ -66,7 +66,7 @@ Inspección de sólo lectura de [Story core](../../js/presentation-story-core.js
 
 IDs estables en kebab-case; labels traducibles separados. Prioridad comercial: Inmobiliaria, Promotora, Arquitectura; secundarias Reformas, Interiorismo. No deducir profesión desde nombre/marca/proyecto.
 
-Duración relativa: breve < media < explicativa; describe concisión/densidad, no segundos ni constantes de animación. Cambiar velocidad global no altera composición. No eliminar rooms elegidas para cumplir un tiempo; la estimación real la aporta el builder.
+Duración relativa: breve < media < explicativa; describe concisión/densidad, no segundos ni constantes de animación. Cambiar velocidad global no altera composición. No eliminar rooms elegidas para cumplir un tiempo; la estimación real la aporta el builder. Los órdenes incluyen sólo elementos resueltos y no exigen rooms en todos los perfiles. Required expresa intención fuerte; el mínimo narrativo vinculante de cada perfil está en §7.
 
 | Criterio | Inmobiliaria | Promotora | Arquitectura | Reformas | Interiorismo |
 |---|---|---|---|---|---|
@@ -76,13 +76,13 @@ Duración relativa: breve < media < explicativa; describe concisión/densidad, n
 | 4. Audiencia | Comprador/arrendatario no técnico | Comprador, propiedad, interlocutor comercial | Cliente/promotor, interlocutor técnico sin sustituir planos | Cliente/profesional de intervención | Cliente/prescriptor de interiores |
 | 5. Duración | Breve | Media | Explicativa | Media | Media |
 | 6. Orden | plan → overview → elevation → room-tour → exterior → closing | overview edificio → axon/exploded → plan por nivel → elevation → room-tour → exterior/site → closing | plan → section → elevation → axon → room-tour → site → closing | plan → section → room-tour → materials → closing | overview → room-tour → materials → closing |
-| 7. Required | room-tour, closing | room-tour, closing | plan, room-tour, closing | plan, room-tour, closing | room-tour, closing |
-| 8. Preferred | plan, overview, elevation, exterior | overview, exploded/axon, plan, elevation, exterior, site | overview, section, elevation, axon, site | overview, section, materials | overview, materials |
+| 7. Required (intención fuerte) | room-tour, closing | overview global, closing | plan, closing | plan, closing | room-tour, closing |
+| 8. Preferred | plan, overview, elevation, exterior | exploded/axon, plan, elevation, room-tour, exterior, site | overview, section, elevation, axon, room-tour, site | overview, section, room-tour, materials | overview, materials |
 | 9. Optional | site | section, materials, solar, budget-summary | exploded-levels, exterior, materials, solar, budget-summary | elevation, exterior, site, budget-summary | plan, section, exterior, site |
 | 10. Excluded por defecto | section, axon, exploded, materials, solar, budget-summary | Ninguna adicional del catálogo | Ninguna adicional del catálogo | axon, exploded, solar | elevation, axon, exploded, solar, budget-summary |
-| 11. Unsupported | Omitir, seguir por rooms; avisar required ausente | Omitir scope no demostrado; sin vivienda tipo inferida | Sin section/axon seguir con plano/fachada/rooms y aviso | Sin intervención/before-after inventados | Sin moodboard seguir con rooms y aviso |
-| 12. Una planta | Vivienda y rooms | Variante vivienda; omitir exploded | Sección/axon compacta si soportadas | Rooms del único nivel | Rooms del único nivel |
-| 13. Dos plantas | Una vivienda, rooms por nivel; no repetir arco completo | Edificio → relación de niveles → bloque por nivel/rooms elegidas | Plano/sección por nivel; fachada/axon global una vez | Niveles elegidos; materiales global una vez | Interiores por nivel y rótulos de continuidad |
+| 11. Unsupported | Evaluar mínimo general + interior; sin él unavailable | Lectura de edificio suficiente sin rooms; required ausente sólo degraded si mínimo pasa | Plan + sección/fachada/axon puede bastar sin rooms; comprobar mínimo | Plan + rooms o sección; sin mínimo unavailable, sin before/after | Mantener lectura general + interior; moodboard solo no sustituye rooms |
+| 12. Una planta | Vivienda y rooms | Variante vivienda; omitir exploded; lectura espacial sin rooms posible | Plano/lectura arquitectónica; rooms no obligatorias | Plano + rooms y/o sección del nivel | Lectura interior del único nivel |
+| 13. Dos plantas | Una vivienda, rooms por nivel; no repetir arco completo | Edificio → niveles/fachada/contexto; rooms si existen y se eligen | Planos/secciones por nivel; fachada/axon global; rooms si existen | Base espacial por nivel elegido; materiales global una vez | Interiores por nivel y rótulos de continuidad |
 | 14. Inicio | living → kitchen → bedroom si family explícita | Elección en nivel representativo; fallback primera válida abajo arriba | Elección; después living o primera válida | Elección profesional; sin ella no decir afectada | Elección; después living o primera válida |
 | 15. Sección | Excluida salvo elección deliberada | Opcional por nivel soportado | Preferida, corte automático FT3D-3 | Preferida sin inferir afectación | Opcional |
 | 16. Fachada | Preferida automática/seleccionable | Preferida global, no principal | Preferida global | Opcional | Excluida por defecto |
@@ -100,29 +100,36 @@ Duración relativa: breve < media < explicativa; describe concisión/densidad, n
 
 Salón/cocina/dormitorios son recomendaciones condicionadas a family explícita, no capítulos a inventar. «Representativa» es elección narrativa; no demuestra que una planta sea unidad independiente o vivienda tipo.
 
-## 5. Capability taxonomy
+## 5. Capability taxonomy: scene / enhancement / resource / structure
 
-Separar existencia en el producto, integración con Story y disponibilidad en este proyecto/ámbito. Un botón existente no prueba un builder narrativo.
+Separar existencia en el producto, integración con Story y disponibilidad en este proyecto/ámbito. Un botón existente no prueba un builder narrativo. Las cuatro familias NO pasan por el mismo gate ni crean capítulos de la misma manera.
 
-| Capability | Intención y scope | Evidencia / frontera |
+| Familia | Elementos | Tratamiento del resolver |
 |---|---|---|
-| `plan` | Lectura de distribución por nivel | FT3D-1/2; reveal puede compartir transición con overview |
-| `overview` | Vista general por nivel o edificio si acreditado | Paradas existentes; una vista de planta no es overview global |
-| `section` | Corte visual por nivel soportado | FT3D-3 integrado; no corte horizontal de muros como reemplazo |
-| `elevation` | Fachada visual global/candidata | Contrato FT3D-4, implementación no acreditada aquí |
-| `axon` | Lectura axonométrica compacta | FT3D-5 futura; nunca órbita arbitraria |
-| `exploded-levels` | Relación espacial de dos niveles | FT3D-5 futura; no secuencia constructiva |
-| `room-tour` | Visitas ordenadas a rooms `(levelId,roomId)` | No implica caminar entre rooms/escaleras; primera llegada Story existente, resto requiere composición común |
-| `materials` | Acabados/asignaciones reales, apoyo documental | B7 existe, escena Story no acreditada; sin adapter, acceso separado |
-| `solar` | Enhancement orientativo en escena compatible | Snapshot válido, anfitriona FT3D-4; no capítulo orbital nuevo |
-| `exterior` | Lectura exterior de scope validado | Derivación existente no garantiza capítulo Story |
-| `site` | Contexto/implantación ya cargados con provenance | Sin descargas ni estudio urbanístico inventado |
-| `budget-summary` | Resumen autorizado desde C4 | No nuevo cálculo ni escena acreditada por existir dossier |
-| `closing` | Fin legible con proyecto/identidad existente | Estado terminal común, no necesita cámara/escena geométrica nueva |
+| `scene` | plan, overview, section, elevation, axon, exploded-levels, room-tour, exterior, site | Lecturas narrativas espaciales con soporte y scope ejecutables; candidatas a capítulos y a satisfacer minimumStory |
+| `enhancement` | solar | Resolver contra una escena anfitriona compatible; enriquecerla, nunca crear capítulo ni satisfacer por sí solo un grupo espacial |
+| `resource` | materials, budget-summary; moodboard y dossier relacionados como recursos de apoyo | Alimentar captions/paneles/anexos; sólo capítulo si existe adapter Story aprobado y ejecutable. La existencia del recurso no prueba escena ni mínimo espacial |
+| `structure` | closing | Estructura narrativa común del builder/player, no capacidad geométrica del proyecto ni prueba de contenido espacial mínimo |
 
-Building/level son scopes; rooms miembros de room-tour; walk acción existente explícita; moodboard/dossier recursos relacionados. No motores adicionales. Añadir capability exige decisión revisada, no schema nuevo.
+| Elemento | Familia | Intención y scope | Evidencia / frontera |
+|---|---|---|---|
+| `plan` | scene | Lectura de distribución por nivel | FT3D-1/2; reveal puede compartir transición con overview |
+| `overview` | scene | Vista general por nivel o edificio si acreditado | Paradas existentes; una vista de planta no es overview global |
+| `section` | scene | Corte visual por nivel soportado | FT3D-3 integrado; no corte horizontal de muros como reemplazo |
+| `elevation` | scene | Fachada visual global/candidata | Contrato FT3D-4, implementación no acreditada aquí |
+| `axon` | scene | Lectura axonométrica compacta | FT3D-5 futura; nunca órbita arbitraria |
+| `exploded-levels` | scene | Relación espacial de dos niveles | FT3D-5 futura; no secuencia constructiva |
+| `room-tour` | scene | Visitas ordenadas a rooms `(levelId,roomId)` | No implica caminar entre rooms/escaleras; primera llegada Story existente, resto requiere composición común |
+| `materials` | resource | Acabados/asignaciones reales, apoyo documental | B7 existe, escena Story no acreditada; sin adapter, acceso separado |
+| `solar` | enhancement | Enriquecimiento orientativo de escena compatible | Snapshot válido, anfitriona FT3D-4; no capítulo solar nuevo |
+| `exterior` | scene | Lectura exterior de scope validado | Derivación existente no garantiza capítulo Story |
+| `site` | scene | Contexto/implantación ya cargados con provenance | Sin descargas ni estudio urbanístico inventado |
+| `budget-summary` | resource | Resumen autorizado desde C4 | No nuevo cálculo ni escena acreditada por existir dossier |
+| `closing` | structure | Fin legible con proyecto/identidad existente | Estado terminal común; no depende de disponibilidad geométrica |
 
-Disponibilidad conceptual: capability, scope/refs válidas, razones, cobertura parcial, recursos presentes y compatibilidad Story. Estados conceptuales supported/partial/unsupported/unknown; unknown no se activa como supported. Son runtime, no estados legales ni datos del proyecto. Para FT3D-4/5: **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**.
+Building/level son scopes; rooms miembros de room-tour; walk acción existente explícita. Moodboard/dossier no añaden IDs de escena a V1: son recursos relacionados con materials/budget-summary y salidas existentes. Sin motores adicionales. Añadir elemento exige decisión revisada, no schema nuevo.
+
+Disponibilidad conceptual de escenas: scope/refs válidas, razones, cobertura parcial y compatibilidad Story. Enhancements añaden vínculo a anfitriona; recursos separan existencia, relación/provenance y adapter aprobado; estructura se valida en el relato común, no contra geometría. Supported/partial/unsupported/unknown son estados runtime conceptuales; unknown no se activa como supported, ni son estados legales/datos de proyecto. Para FT3D-4/5 y ejecución sin rooms: **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**.
 
 ## 6. Modelo declarativo conceptual
 
@@ -132,43 +139,47 @@ Ilustración, NO API pública ni schema persistente; nombres/campos ajustables a
 {
   id: 'architecture', labelKey: 'presentation.template.architecture',
   intent: 'explain-spatial-organisation', durationIntent: 'explanatory',
+  minimumStory: [
+    { oneOf: ['plan'] },
+    { oneOf: ['section', 'elevation', 'axon'] }
+  ],
   entries: [
     { capability: 'plan', policy: 'required', scope: 'selected-levels' },
     { capability: 'overview', policy: 'preferred', scope: 'selected-levels' },
     { capability: 'section', policy: 'preferred', scope: 'supported-levels' },
     { capability: 'elevation', policy: 'preferred', scope: 'building-once' },
     { capability: 'axon', policy: 'preferred', scope: 'model-once' },
-    { capability: 'room-tour', policy: 'required', scope: 'selected-rooms' },
+    { capability: 'room-tour', policy: 'preferred', scope: 'selected-rooms' },
     { capability: 'site', policy: 'preferred', scope: 'model-once' },
     { capability: 'closing', policy: 'required', scope: 'once' }
   ]
 }
 ```
 
-El registro completo declara también optional/excluded, slots de inserción, composición por nivel, captions y selección de rooms. No funciones de render dentro de los datos. Los cinco comparten una forma y algoritmos, sin `if (profile === 'architect')` disperso.
+El registro completo declara también familia según §5, minimumStory con scopes según §7, optional/excluded, slots de inserción, composición por nivel, captions y selección de rooms. El ejemplo mantiene capability como clave conceptual compartida, sin equiparar escenas, enhancements, recursos y estructura. Closing es estructura común; Solar requiere anfitriona; los recursos requieren adapter aprobado para crear capítulo. No funciones de render dentro de los datos. Los cinco comparten una forma y algoritmos, sin `if (profile === 'architect')` disperso.
 
 ## 7. Required / preferred / optional / excluded
 
 | Policy | Default | Decisión profesional | Unsupported |
 |---|---|---|---|
-| required | Incluida | No OFF en preset; elegir otro o aceptar resultado parcial sobrevenido | Omitir con motivo, integridad degraded si queda contenido útil |
+| required | Intención fuerte incluida | No OFF en preset completo; elegir otro o aceptar parcial | Omitir con motivo; degraded sólo si minimumStory se cumple y el builder lo ejecuta |
 | preferred | ON si soportada | Puede omitir explícitamente | Omitir con resumen previo, no bloquear |
 | optional | OFF | ON/OFF | Deshabilitar con razón, informar si se solicitó |
 | excluded-by-default | OFF, fuera del selector básico | Activación deliberada en Más opciones | OFF, explicar si se intenta |
 
-Precedencia: gates/soporte real > opción válida explícita > policy > concisión/duración. Ningún toggle crea soporte. Required expresa pérdida del propósito pleno, no excepción que tumbe todo. No permitir apagar required y mostrar la plantilla como completa.
+Precedencia: gates/soporte real > opción válida explícita > policy > concisión/duración. Ningún toggle crea soporte. Required expresa intención fuerte/pérdida del propósito pleno; minimumStory es el gate obligatorio de validez narrativa. No permitir apagar required y mostrar la plantilla como completa. Required ausente sólo admite degraded si minimumStory se cumple; si éste falla, unavailable, aunque se acepte una omisión. El consentimiento no crea mínimos ni soporte.
 
 R=required, P=preferred, O=optional, X=excluded-by-default:
 
 | Capability | real-estate | developer | architecture | renovation | interior-design |
 |---|---|---|---|---|---|
 | plan | P | P | R | R | O |
-| overview | P | P | P | P | P |
+| overview | P | R | P | P | P |
 | section | X | O | P | P | O |
 | elevation | P | P | P | O | X |
 | axon | X | P* | P | X | X |
 | exploded-levels | X | P* | O | X | X |
-| room-tour | R | R | R | R | R |
+| room-tour | R | P | P | P | R |
 | materials | X | O | O | P | P |
 | solar | X | O | O | X | X |
 | exterior | P | P | O | O | O |
@@ -176,30 +187,51 @@ R=required, P=preferred, O=optional, X=excluded-by-default:
 | budget-summary | X | O | O | O | X |
 | closing | R | R | R | R | R |
 
-P*: grupo alternativo. Promotora prefiere exploded con dos niveles, axon compacta con uno; no ambas por defecto. Sin exploded, compacta real es alternativa declarada, rotulada axon y con aviso «sin separación de plantas». Sin ninguna, omitir grupo.
+La matriz es de intención por elemento: R/P/O/X no elimina la distinción de familias ni convierte recursos/enhancements/closing en escenas. Overview R de Promotora se refiere a lectura global; una vista aislada de planta no la cumple como si fuera edificio completo. P*: grupo alternativo. Promotora prefiere exploded con dos niveles, axon compacta con uno; no ambas por defecto. Sin exploded, compacta real es alternativa declarada, rotulada axon y con aviso «sin separación de plantas». Sin ninguna, omitir grupo.
+
+### Minimum viable story / grupos de requisitos
+
+MinimumStory expresa grupos semánticos mínimos: todos los grupos deben cumplirse (AND); dentro de cada oneOf basta una alternativa válida (OR), con el scope y contenido exigidos. Se evalúa sobre lo incluido realmente después de policies/opciones/soporte, no sobre catálogo ideal. No activa por sí mismo optional/excluded ni reintroduce escenas omitidas. Si un cambio de opción rompe el mínimo, indicarlo antes de iniciar y pedir revisar opciones; no sustituir silenciosamente.
+
+| Perfil | Minimum story conceptual | Relación con required / rooms |
+|---|---|---|
+| Inmobiliaria | Lectura general de vivienda: oneOf(plan, overview, axon) AND lectura interior: room-tour | Room-tour sigue siendo central por decisión explícita V1. Una fachada/contexto no sustituye interiores; required ausente no salva un mínimo incumplido |
+| Promotora | Lectura de edificio: oneOf(overview global, axon del edificio, exploded-levels, plan por niveles, elevation con scope de edificio) | Sin obligación de rooms. Overview global es intención fuerte; axon/planos/fachada pueden sostener mínimo y permitir degraded si falta overview |
+| Arquitectura | plan AND oneOf(section, elevation, axon), con alcance coherente del proyecto/niveles presentados | Sin obligación de room-tour. Overview/site añaden contexto preferido, no son necesarios para validar plan → section/elevation/axon → closing |
+| Reformas | plan AND oneOf(room-tour, section) del alcance presentado | Base espacial demostrable; materials puede enriquecer si adapter real, nunca sustituir esta base. Sin before/after inferido |
+| Interiorismo | Lectura general: oneOf(overview, plan, axon) AND lectura interior demostrable: room-tour en V1 | Room-tour central. Puede estudiarse alternativa futura mediante lectura interior/materiales suficientemente rica con adapter Story aprobado, vínculo espacial y criterio de aceptación explícito; un moodboard/recurso solo NO satisface ese grupo |
+
+Los scopes son vinculantes: en dos plantas, «plan por niveles» cubre los niveles declarados, no sólo una planta rotulada como edificio entero. Con una planta Promotora admite su lectura global real de vivienda. Coverage parcial exige valorar el alcance narrado y avisar; no dar por cumplido un mínimo de alcance completo con datos parciales.
+
+Closing debe estar presente como estructura común, pero no cuenta como grupo espacial ni depende de rooms/geometría. Si el builder no puede producir un cierre común válido, registrar fallo de composición/estructura, no unsupported geométrico; no iniciar una composición estructuralmente inválida. Solar nunca satisface un grupo por sí solo. Recursos sin adapter Story aprobado no cuentan como escenas; materiales con adapter tampoco satisfacen automáticamente mínimos espaciales: la alternativa interior futura necesita decisión de contrato separada. No se inventa ese adapter aquí.
+
+Validez semántica y ejecución se registran por separado. Ejemplos válidos conceptualmente sin rooms: Promotora overview edificio → axon/exploded → planos por nivel → fachada → contexto → closing; Arquitectura plan → section → elevation → axon → closing. Si la base actual no puede materializarlos por su builder dependiente de rooms, registrar bloqueo de ejecución actual **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**, no cambiar minimumStory a «debe haber rooms».
 
 ## 8. Resolver puro
 
-`template + capabilities normalizadas + userOptions → resolved story semántica + motivos + integridad`. Sin DOM, red, storage, acceso global ni ejecución de motores.
+`template + snapshot tipado + userOptions → descripción semántica + minimumStory + integridad + ejecutabilidad`. Sin DOM, red, storage, acceso global ni ejecución de motores. Separar lo que el perfil quiere, su validez mínima y lo que el builder actual puede ejecutar.
 
-1. Validar ID/policies/opciones/refs. ID desconocido pide elección válida o flujo histórico, nunca otro perfil silencioso.
-2. Validar gates y revisión del snapshot aportado por adaptador; no derivar geometría dentro del resolver.
-3. Aplicar priorities/overrides, expandir scopes y alternativas. Partial se resuelve por destino, no booleano global.
-4. Componer bloques de nivel/rooms (§10/14); orden estable de autoridad, desempate por ID si corresponde, no reloj/orden accidental.
-5. Deduplicar `(capability,scope,target)`. Coalescer plan/overview sólo si el builder acredita ambas lecturas; conservar evidencia semántica de lo cubierto.
-6. Aplicar sólo alternativas de §9; registrar lo pedido y lo mostrado separadamente.
-7. Devolver intenciones ordenadas, targets/refs, policies, opciones efectivas, cobertura, omisiones/razones y estado. Sin cámara, clipping, matrices ni meshes.
-8. Revalidar revisión/recursos/gates antes de iniciar. Si cambian, resolver de nuevo y presentar diferencias; no reproducir refs stale.
+1. Validar ID/policies/familias/minimumStory/opciones/refs. ID desconocido pide elección válida o flujo histórico, nunca otro perfil silencioso.
+2. Validar gates y revisión del snapshot aportado por adaptador. Separar requisitos semánticos del perfil de limitaciones actuales del builder/player; no derivar geometría aquí.
+3. Aplicar prioridades/overrides y scopes. Escenas: candidatos espaciales con soporte real y scope demostrado; la materialización de la secuencia global se verifica después, sin filtrar todo por el gate actual de rooms. Enhancements: adjuntar sólo a anfitriona compatible real. Recursos: captions/paneles/anexos; capítulo sólo mediante adapter Story aprobado. Estructura: closing del relato común, no disponibilidad geométrica. Partial se resuelve por destino/alcance.
+4. Componer bloques de nivel/rooms (§10/14); orden estable de autoridad/ID, no reloj. No exigir room-tour a perfiles cuyo mínimo admite otras lecturas.
+5. Deduplicar por familia/intención/scope/target; coalescer plan/overview sólo si builder acredita ambas lecturas. No contar Solar/recurso/closing como escena espacial para satisfacer mínimos.
+6. Aplicar sólo alternativas §9; registrar pedido/mostrado por separado. Evaluar AND/OR de minimumStory con scopes sobre resultado efectivo. Si falla, unavailable; no rescatarlo sólo porque queda algo útil o un required cubierto.
+7. Evaluar required como intención fuerte: si falta pero mínimo pasa, degraded con aviso/aceptación. Preferred omitida informa adaptación; optional OFF no es fallo. Verificar además que el builder puede materializar esa Story válida, sin convertir sus límites actuales en reglas permanentes.
+8. Devolver intenciones tipadas ordenadas, refs, policies, opciones efectivas, omisiones, cobertura, grupos mínimos satisfechos/incumplidos y razones separadas de validez/ejecución/integridad. Sin cámara, clipping, matrices ni meshes.
+9. Revalidar revisión/recursos/gates antes de iniciar; cambios obligan a resolver de nuevo y presentar diferencias, no reproducir refs stale.
 
 Estados runtime conceptuales:
 
-- **ready:** required cubiertas. Las preferred/optional omitidas se explican en preparación como adaptación, sin bloqueo.
-- **degraded:** required ausente o alcance elegido incompleto. Si queda contenido espacial útil ejecutable, aviso prominente y aceptación «Ver presentación parcial» antes de reproducir.
-- **unavailable:** gate de producto, ausencia de plan ejecutable por el motor actual/rooms válidas, o sólo quedan cierre/documentos. No presentación vacía ni sólo marca. Otras herramientas/entregas siguen disponibles.
+- **ready:** minimumStory satisfecho, required cubiertas, estructura válida y builder capaz de ejecutar. Preferred/optional omitidas se explican sin bloqueo.
+- **degraded:** minimumStory satisfecho y ejecutable, pero falta required o cobertura del alcance elegido. Aviso prominente y aceptación «Ver presentación parcial». El mínimo del alcance realmente declarado debe seguir cumpliéndose; aceptar no autoriza fingir cobertura.
+- **unavailable:** minimumStory incumplido, gate real de producto o resultado no ejecutable por builder/player. Identificar cuál es la causa. No relato vacío/sólo marca. Otras herramientas/entregas siguen disponibles.
 
-Arquitectura sin section/axon conserva plano/fachada si hay/rooms/cierre: ambas son preferred, se informa omisión. Plan required ausente con rooms ejecutables permitiría degraded consentido; si el builder real no puede ejecutar ese subconjunto, unavailable por límite real, no por profesión.
+Una Story puede ser semánticamente válida sin rooms. En la base inspeccionada el builder/player necesita rooms válidas para crear su plan: es limitación actual de ejecución, **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**, no unavailable conceptual permanente del perfil. Si persiste al implementar, la UI no ofrece iniciar ese resultado aunque el mínimo pase: informa validez semántica y bloqueo actual por separado, sin inventar soporte.
 
-Resolver una vez al preparar/iniciar, nunca por frame. Congelar resultado runtime; cambios posteriores invalidan/restauran por lifecycle actual. Mismos datos+catálogo+opciones producen deepEqual; idioma/viewport/motion no cambian IDs/orden/targets.
+Arquitectura sin section/axon pasa si quedan plan + elevation soportada; sin las tres lecturas alternativas falla su mínimo, aunque queden rooms/closing. Promotora sin rooms puede cumplir con axon/planos/fachada globales. Inmobiliaria sin lectura interior falla el mínimo V1. Required ausente sólo permite degraded con mínimo satisfecho, nunca excepción al gate.
+
+Resolver una vez, no por frame; congelar resultado runtime. Invalidación restaura por lifecycle actual. Mismos datos+catálogo+opciones producen deepEqual; idioma/viewport/motion no cambian IDs/orden/targets ni grupos mínimos.
 
 ## 9. Fallbacks y avisos
 
@@ -214,16 +246,16 @@ Resolver una vez al preparar/iniciar, nunca por frame. Congelar resultado runtim
 | Exterior parcial | Scope validado y aviso; no completar envolvente/contexto |
 | Solar unavailable | Desactivar enhancement, fachada sigue con iluminación normal |
 | Sin materiales/moodboard | Omitir capítulo, estado honesto en preparación |
-| Sin informe económico vigente/autorizado | Omitir resumen, dossier separado con sus gates; nunca ausencia → cero |
+| Sin informe económico vigente/autorizado | Omitir recurso/resumen, dossier separado con sus gates; nunca ausencia → cero |
 | Sin identidad | Closing neutral con nombre de proyecto |
 
-Resumen previo enumera omisiones solicitadas y razones/scopes. Required ausente requiere aceptación de parcial. Preferred omitida no genera alertas repetidas durante playback. Optional OFF deliberada no es fallo. No capítulos vacíos «No disponible» para conservar longitud.
+Tras omitir/sustituir, reevaluar minimumStory antes de reproducir: si falla, unavailable; si pasa pero falta required, degraded con aceptación. No sustituir room-tour por fachada para Inmobiliaria V1; Promotora/Arquitectura no requieren ese reemplazo porque rooms no son obligatorias. Resumen previo enumera omisiones solicitadas y razones/scopes. Required ausente sólo admite parcial si el mínimo sigue satisfecho y ejecutable. Preferred omitida no genera alertas repetidas durante playback. Optional OFF deliberada no es fallo. No capítulos vacíos «No disponible» para conservar longitud.
 
 ## 10. Una y dos plantas
 
-Una planta: globales una vez; bloque plano/overview, sección si procede y rooms. Sin exploded por niveles. Promotora rotula variante de vivienda, sin inventar edificio complejo.
+Una planta: globales una vez; bloque plano/overview, sección si procede y rooms si resueltas; sin rooms evaluar minimumStory independientemente. Sin exploded por niveles. Promotora rotula variante de vivienda, sin inventar edificio complejo.
 
-Dos plantas (máximo actual): autoridad/orden abajo arriba; offsets reales sólo vía capacidades. No duplicar el arco completo por nivel. Globales: fachada una vez, axon/exploded una vez, contexto una vez, materiales/económico si soportados una vez y cierre una vez. Por nivel: plano/overview, sección soportada y rooms elegidas; caption de nivel y refs compuestas. No alternar pisos ni recorrer escalera para fingir continuidad.
+Dos plantas (máximo actual): autoridad/orden abajo arriba; offsets reales sólo vía capacidades. No duplicar el arco completo por nivel. Globales: fachada una vez, axon/exploded una vez, contexto una vez, materiales/económico si soportados una vez y cierre una vez. Por nivel: plano/overview, sección soportada y rooms elegidas si existen; caption de nivel y refs compuestas. No alternar pisos ni recorrer escalera para fingir continuidad.
 
 Órdenes semánticos:
 
@@ -233,9 +265,9 @@ Dos plantas (máximo actual): autoridad/orden abajo arriba; offsets reales sólo
 - Reformas: plano/overview/sección/rooms de cada nivel elegido → materiales → fachada/exterior/site elegidos → económico elegido → cierre.
 - Interiorismo: overview/rooms por nivel; plano/sección elegidos antes de rooms de ese nivel → materiales → exterior/site elegidos → cierre.
 
-Slots comunes: section tras plano/overview; axon/exploded global tras fachada o vista global según registro; solar dentro de fachada compatible; materials antes de económico/cierre; budget-summary antes del cierre. Anclajes internos de retorno a overview no son capítulos duplicados.
+Los órdenes anteriores son ideales condicionados al soporte y al mínimo, no listas de pasos obligatorios: sin rooms se suprime room-tour sin eliminar otras lecturas por nivel. Promotora y Arquitectura admiten las historias sin rooms de §7; ejecución concreta PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5. Slots comunes: section tras plano/overview; axon/exploded global tras fachada o vista global según registro; solar dentro de fachada compatible; materials antes de económico/cierre; budget-summary antes del cierre. Anclajes internos de retorno a overview no son capítulos duplicados.
 
-Una planta sin rooms válidas omite su bloque sin bloquear otra válida. Su geometría sólo aparece en lectura global si la capability acredita ese scope, con aviso de cobertura. Sin ninguna planta presentable: unavailable. Sin tres niveles ni repetición de narrativa. Composición exacta con nuevos anclajes FT3D-5: **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**.
+Una planta sin rooms válidas omite únicamente room-tour. Plano/sección/fachada/axon u otras lecturas pueden seguir siendo semánticamente válidas si la capability acredita su scope; no borrar todo el bloque por falta de rooms. Evaluar minimumStory del perfil y alcance: sin rooms puede bastar para Promotora/Arquitectura, o para Reformas con plan + section. El builder actual puede impedir ejecutar incluso esa Story válida: límite actual PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5, no prohibición futura de producto. Unavailable narrativo sólo si el mínimo falla; un bloqueo de ejecución se informa por separado como §8. Sin tres niveles ni repetición de narrativa. Composición exacta con nuevos anclajes FT3D-5: **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**.
 
 ## 11. Sección: consumir FT3D-3
 
@@ -255,9 +287,10 @@ Exploded explica organización espacial, nunca orden de construcción/fases/esta
 
 ## 14. Rooms
 
+- Room-tour no es condición universal de existencia: sólo componente central explícito de Inmobiliaria e Interiorismo V1; Promotora/Arquitectura y Reformas con sección evalúan sus mínimos sin obligar a tour. Si no hay rooms, no ejecutar defaults de selección vacíos ni inventar habitaciones; las otras lecturas conservan su elegibilidad semántica, con límite actual de builder PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5.
 - Conservar selección explícita válida del profesional, incluida la reconciliada por el flujo actual. No sobrescribirla por recomendaciones de plantilla.
 - Sin selección explícita usar family conocida como clasificación, name como texto. No inferir función/principal/reformado desde palabras o traducciones. Family ausente, unspecified o futura desconocida: label y orden estable, sin reclasificar.
-- Defaults recomendados revisables: Inmobiliaria hasta tres rooms living → kitchen → bedroom; Arquitectura/Reformas/Interiorismo hasta cuatro; Promotora hasta tres del nivel representativo elegido y al menos una válida del otro si se incluye. No límites de motor ni requisitos de existencia. No recortar selección explícita para cumplir duración.
+- Defaults recomendados revisables: Inmobiliaria hasta tres rooms living → kitchen → bedroom; Arquitectura/Reformas/Interiorismo hasta cuatro; Promotora hasta tres del nivel representativo elegido y una válida del otro si se incluye room-tour y existe; no obligación de generar rooms para presentar edificio. No límites de motor ni requisitos de existencia. No recortar selección explícita para cumplir duración.
 - Arquitectura/Interiorismo: inicio explícito, después living si clasificada, después primera válida. Reformas pide elegir espacios si se quiere decir «afectados»; sin indicación dice «Espacios del proyecto». Promotora no detecta viviendas tipo/unidades.
 - Desempate por orden canónico de la fuente e ID. Sin family: primera válida sin adivinar. Una estancia se visita una vez, sin simular más habitaciones.
 - Validez y encuadre son de autoridades actuales. Room-tour no promete ruta interior viable entre paradas.
@@ -274,19 +307,19 @@ Enhancement orientativo opt-in, inicialmente OFF incluso en perfiles que lo admi
 
 ## 17. Materiales / moodboard
 
-Usar asignaciones reales y B7 como apoyo documental; no convertir muestra/color en acabado 3D aplicado ni moodboard en geometría. No asignar materiales, inventar calidad constructiva ni usar imagen IA como evidencia. Sin adapter Story, omitir capítulo y mantener acceso existente fuera del player. Tener B7 no acredita capítulo narrativo. Un recurso sin vínculo demostrable a una room no se atribuye a ella.
+Usar asignaciones reales y B7 como apoyo documental; no convertir muestra/color en acabado 3D aplicado ni moodboard en geometría. No asignar materiales, inventar calidad constructiva ni usar imagen IA como evidencia. Sin adapter Story, omitir capítulo y mantener acceso existente fuera del player. Tener B7 no acredita capítulo narrativo ni satisfacción de minimumStory. Materials/budget-summary son recursos: el resolver sólo crea capítulo con adapter Story aprobado y scope/contenido válidos; no los trata como escenas por existir. Un recurso sin vínculo demostrable a una room no se atribuye a ella.
 
 Reformas/Interiorismo comparten policies y renderer, sin un motor especializado. Si tras FT3D-5 falta representación de apoyo documental dentro del player, decidir alcance separado o seguir con acceso externo; no introducirla como requisito oculto del preset.
 
 ## 18. Personalización y UI ligera
 
-Casa: **Entregar → Presentación → Preparar presentación**. Selector de cinco plantillas, objetivo en una frase y resumen «Qué se mostrará» basado en resultado real. Sin área nueva, perfil profesional persistente obligatorio ni editor de timeline.
+Casa: **Entregar → Presentación → Preparar presentación**. Selector de cinco plantillas, objetivo en una frase y resumen «Qué se mostrará» basado en resultado real. Sin área nueva ni perfil profesional persistente obligatorio; editor de timeline/plantilla Personalizada fuera de V1, ampliación futura separada sin diseñarla aquí.
 
 | Automático | Editable por profesional | Fuera de la plantilla |
 |---|---|---|
 | Soporte/scope, fallback autorizado, orden base, rooms demostrables sugeridas, cardinales derivados, coalescencia, avisos | Plantilla, preferred/optional/excluded soportadas, fachada elegida, room inicial/selección/orden por nivel, nivel representativo, Solar orientativo, ritmo global, branding/cierre existentes | Geometría, topología, clasificación exterior, cálculo Solar, schema, corte no autorizado, cámaras/offsets |
 
-Cambios sólo en preparación; durante playback salir/pausar y resolver tras restauración, no mutar Story activa. Required no es toggle; ausencia sobrevenida permite parcial consentido. Cambiar plantilla conserva opciones explícitas compatibles y avisa descartes, sin arrastrar Solar ON de forma accidental. «Restaurar recomendaciones» es acción runtime explícita, no borra proyecto, perfiles de marca o sidecars. Flujo histórico sin plantilla permanece disponible y equivalente.
+Cambios sólo en preparación; durante playback salir/pausar y resolver tras restauración, no mutar Story activa. Required es intención fuerte, no toggle del preset completo; ausencia sólo permite parcial consentido si minimumStory se mantiene y la Story es ejecutable. Si mínimo falla no se habilita iniciar ni se compensa con consentimiento. Cambiar plantilla conserva opciones explícitas compatibles y avisa descartes, sin arrastrar Solar ON de forma accidental. «Restaurar recomendaciones» es acción runtime explícita, no borra proyecto, perfiles de marca o sidecars. Flujo histórico sin plantilla permanece disponible y equivalente.
 
 ## 19. Persistencia
 
@@ -338,9 +371,9 @@ Sin nuevos paneles que tapen el modelo. Encadre adaptado por builder actual a re
 
 | Capa | Responsabilidad | Prohibición |
 |---|---|---|
-| Registro declarativo | Qué contar, policies/scopes/slots/copy | Consultar proyecto/DOM o renderizar |
-| Adaptador/snapshot común | Qué sabe hacer el modelo/revisión, refs/razones/partial | Inferir profesión o nueva geometría |
-| Resolver puro | Qué queda activado, orden/targets/motivos | Cámara, motor, I/O, storage |
+| Registro declarativo | Qué contar, familias, policies/scopes/slots/copy y minimumStory | Consultar proyecto/DOM o renderizar |
+| Adaptador/snapshot común | Disponibilidad tipada, refs/partial; separar soporte de capacidad de límite del builder actual | Inferir profesión o nueva geometría |
+| Resolver puro | Resultado por familia, minimumStory, integridad required y ejecución separados | Cámara, motor, I/O, storage |
 | Builder/player comunes | Cómo convertir en escenas/paradas y reproducir/restaurar | Lógica de negocio por profesión |
 
 Organización candidata: registro + resolver en core puro pequeño; adaptador junto a composición; ampliar ligeramente diálogo existente. Rutas/APIs finales se decidirán al implementar. Catálogo interno versionable para QA, sin formato persistente de proyecto/Story portable.
@@ -351,7 +384,7 @@ Organización candidata: registro + resolver en core puro pequeño; adaptador ju
 - **Alto si se incluye:** nuevas primitivas materiales/económico, exportar Story arbitraria, persistencia portable o cambios de cámara. Fuera salvo soporte previamente aprobado.
 - **Dependencia abierta:** bindings/scopes/anclajes FT3D-4/5, PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5.
 
-**Conclusión condicional: presets + resolver puro + UI ligera + tests es viable** tras FT3D-5 si el builder común acepta composición semántica. Story core numérico (`sequence/stateAt`) no debería conocer perfiles. Puede ser necesario modificar integración/composición en UI y captions/controles genéricos para capacidades soportadas; no duplicar escenas. Si hace falta tocar clipping, transformaciones, cámaras, geometría o pipeline de salida, separar gap y decisión de alcance. FT3D-6 no es otro gran corte geométrico.
+**Conclusión condicional: presets + resolver puro + UI ligera + tests es viable** tras FT3D-5 si el builder común acepta composición semántica. Story core numérico (`sequence/stateAt`) no debería conocer perfiles ni policies. El gate actual de rooms pertenece al builder/player: permitir materializar Stories semánticamente válidas sin rooms es gap por reconciliar tras FT3D-5, no requisito permanente del catálogo. Solar se adjunta a anfitriona, recursos usan adapters aprobados y closing es estructura común sin disponibilidad geométrica. Puede ser necesario modificar integración/composición en UI y captions/controles genéricos para capacidades soportadas; no duplicar escenas. Si hace falta tocar clipping, transformaciones, cámaras, geometría o pipeline de salida, separar gap y decisión de alcance. FT3D-6 no es otro gran corte geométrico.
 
 ## 25. Separación de FT3D-7 y salidas
 
@@ -373,25 +406,25 @@ Capturas sólo en checkpoints estables con gates actuales de movimiento/carga/li
 
 ### Unitarias
 
-1. Cinco IDs estables, labels separados, capabilities conocidas, policies completas y slots sin ciclos.
-2. Required no toggle; preferred ON soportada; optional/excluded OFF; overrides válidos y precedence.
+1. Cinco IDs estables, labels separados, familias scene/enhancement/resource/structure, policies completas, minimumStory por perfil y slots sin ciclos.
+2. Required como intención fuerte no toggle del preset completo; preferred ON soportada; optional/excluded OFF; overrides válidos y precedence. MinimumStory se evalúa después de opciones, sin reactivar elementos apagados.
 3. Determinismo deepEqual, inputs congelados/no mutación, sin Date/random/I/O, sin dependencia de idioma/viewport/motion.
 4. Supported/partial/unsupported/unknown por scope, razones y ningún fallback engañoso.
-5. Required ausente → degraded si útil; unavailable sólo §8; nunca cierre solo.
-6. Una/dos plantas, nivel vacío, máximo actual, IDs compuestos, globales una vez, sin duplicar arco.
+5. Required ausente + minimumStory satisfecho + ejecución válida → degraded consentido; minimumStory incumplido → unavailable aunque quede algún contenido útil. Closing/Solar/recursos sin adapter nunca satisfacen un grupo espacial. Reportar gate de ejecución distinto de invalidez semántica.
+6. Una/dos plantas, nivel sin rooms, máximo actual, IDs compuestos, globales una vez, sin duplicar arco. Fixtures sin rooms de Promotora/Arquitectura satisfacen semánticamente sus mínimos con lecturas soportadas; si builder no ejecuta, razón de bloqueo actual separada y PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5.
 7. Sin section/elevation/axon, grupo alternativo exploded/compacta, ausencia de ambas.
 8. Múltiples rooms, una room, selección explícita, family ausente/futura, empate, selección eliminada y snapshot stale.
 9. Todas optional OFF; preferred omitida no reaparece por duración; defaults no recortan selección.
-10. Mobile/reduced conservan semántica; materiales/económico sin adapter no crean escenas ficticias.
+10. Mobile/reduced conservan semántica/mínimos. Solar sólo enhancement con anfitriona, sin capítulo; materiales/económico sólo capítulo con adapter Story aprobado; closing estructural común, no capacidad geométrica. Inmobiliaria requiere general + interior; Reformas plan + rooms/section; Interiorismo V1 general + rooms, alternativa interior rica futura sólo tras aprobación explícita.
 
 ### Browser: ejecutar cada recorrido para cada uno de los cinco perfiles
 
 | Recorrido | Assert |
 |---|---|
 | Selector/objetivo | Elección real, label/foco/teclado y flujo sin plantilla intacto |
-| Story resuelta/orden | Igual al resolver, targets/scopes/cobertura y diferencias narrativas reales |
+| Story resuelta/orden | Igual al resolver, targets/scopes/cobertura; minimumStory efectivo y familias sin capítulos ficticios; diferencias narrativas reales |
 | Optional toggles | OFF/ON y excluded deliberada; required explicado; resumen actualizado |
-| Unsupported | Omisión local/motivo visible, sin escena falsa ni bloqueo injustificado |
+| Unsupported | Omisión local/motivo visible; required ausente sólo parcial si mínimo pasa, mínimo fallido bloquea iniciar; límite del builder sin rooms diferenciado |
 | Playback | Player único, anterior/siguiente/scrub/play/pausa/captions coherentes |
 | Restore | Salida/cancel/Atrás/Escape a varios puntos restaura cámara/nivel/clipping/Solar/contexto/selección/foco |
 | JSON unchanged | Proyecto/edificio/revisión iguales, sin storage/formato nuevo; observar sidecars existentes |
@@ -402,11 +435,11 @@ Capturas sólo en checkpoints estables con gates actuales de movimiento/carga/li
 
 Tras reconciliar: unitarias canónicas; presentation-story, section, elevation y futura axon; Presentation/framing/minimap/foco, building, Solar/territorio si mostrados, capture-3d, tour-video, workspace/Project-First, branding/sidecar afectados. Share/output existentes si cambia entrada; paridad portable Story cuando llegue FT3D-7. Tomar comandos/nombres de la base real, no inventar archivo axon hoy.
 
-Fallos históricos: mismo caso en base limpia exacta y rama, registrar causa/evidencia; no arreglar deuda ajena ni atribuir a SwiftShader sin comparación. No verde con cancelaciones. FAIL/SKIP/gates pendientes separados.
+No declarar una suite «completamente verde» si contiene cancelaciones. Para fallos/cancelaciones ejecutar el mismo caso en baseline limpio del SHA exacto y en rama con condiciones comparables: si se reproduce en baseline, puede clasificarse como deuda preexistente no bloqueante, documentando explícitamente caso, resultados y evidencia; si base pasa y rama falla/cancela, es regresión y bloquea DONE. No arreglar deuda ajena ni atribuir a SwiftShader sin evidencia comparativa. FAIL/SKIP/cancelaciones/gates pendientes separados.
 
 ### Evidencia mínima representativa
 
-- Fixture sintético de una planta con varias families/acabados y capability ausente; otro de dos niveles con soporte parcial. Sin datos privados.
+- Fixture sintético de una planta con varias families/acabados y capability ausente; otro de dos niveles con soporte parcial. Añadir datos semánticos sin rooms para verificar mínimos Promotora/Arquitectura y su bloqueo de ejecución separado si persiste; no inventar evidencia browser de soporte aún no implementado. Sin datos privados.
 - Cinco capturas selector/resumen y cinco listas resueltas locales, una por perfil: demuestra selección/orden distintos sin cinco vídeos enormes.
 - Contact sheet desktop: inicio, capítulo distintivo y cierre por perfil (15 checkpoints): rooms breve, niveles Promotora, sección/axon Arquitectura, distribución/acabados Reformas, interiores/moodboard Interiorismo sólo si soportado.
 - Dos vídeos cortos con pipeline QA común: Arquitectura una planta forward/reverse/cancel; Promotora dos plantas con degradación y cambio de nivel.
@@ -433,22 +466,22 @@ Fallos históricos: mismo caso en base limpia exacta y rama, registrar causa/evi
 
 | Caso | Resultado esperado / QA |
 |---|---|
-| Proyecto sin rooms | Unavailable por gate actual; otras entregas accesibles |
+| Proyecto sin rooms | Evaluar minimumStory independiente: Promotora/Arquitectura pueden ser válidas sin tour; Inmobiliaria/Interiorismo V1 fallan grupo interior. Builder de esta base puede bloquear materialización: limitación actual PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5, no regla permanente |
 | Una estancia | Una visita, no habitaciones/capítulos duplicados |
 | Dos plantas | Bloques por nivel/globales una vez, IDs compuestos/restore |
-| Planta sin rooms válidas | Omitir bloque; geometría global sólo si scope soportado, aviso |
+| Planta sin rooms válidas | Omitir sólo tour; conservar lecturas soportadas de su nivel/globales, evaluar mínimo y scope; ejecución sin rooms pendiente de reconciliación |
 | Segundo nivel sin fachada válida | Partial validado por FT3D-4 o escena omitida; sin edificio completo ficticio |
 | Sección unsupported | Omitir corte sólo donde falla, no bajar muros como sustituto |
 | Elevation unsupported | Omitir y motivo previo; rooms siguen |
 | Futura axon unsupported | Omitir, no órbita; conservar lectura existente de niveles |
-| Solar unavailable | OFF con razón, fachada normal sigue |
+| Solar unavailable | Enhancement OFF con razón, fachada normal sigue; no capítulo ni grupo mínimo solar |
 | Sin norte | Labels neutrales, no asumir 0 ni inventar cardinal |
 | Sin contexto | Omitir site; exterior real puede seguir |
-| Sin moodboard | Omitir materials sin contenido; no paleta inventada |
+| Sin moodboard | Omitir recurso sin contenido; aun presente no crea escena sin adapter Story aprobado ni satisface mínimo interior por sí solo |
 | Exterior parcial | Scope rotulado parcial, no cobertura completa |
 | Room inicial desaparece | Reconciliar/reconfirmar; si activa, invalidar/restaurar |
 | Todas optional OFF | Núcleo + preferred soportadas; nada vacío |
-| Arquitectura sin section/axon | Plano/fachada si hay/rooms/cierre; avisos, no falsa sección |
+| Arquitectura sin section/axon | Plan + elevation válida satisface mínimo; sin section/elevation/axon mínimo falla aunque haya rooms/cierre; nunca falsa sección |
 | Promotora una planta | Variante vivienda, sin exploded ni unidades inventadas |
 | Interiorismo sin moodboard | Overview/rooms/cierre, omisión honesta |
 | Reforma sin before/after | Sólo propuesta actual, sin comparativa |
@@ -465,8 +498,14 @@ Fallos históricos: mismo caso en base limpia exacta y rama, registrar causa/evi
 | Sin WebGL/context loss | Fallback/gate actual, sin renderer alternativo; restaurar/informar |
 | Gate edificio pendiente | Preset no lo salta, conservar motivo/acción |
 | Fachada seleccionada stale | Aviso/reconfirmación, no candidata distinta silenciosa |
-| Required ausente y útil restante | Degraded con aceptación, no excepción/fallback falso |
-| Sólo closing/documentos | Unavailable narrativa, herramientas documentales accesibles |
+| Required ausente y mínimo satisfecho | Degraded sólo si ejecutable y con aceptación; contenido útil genérico no reemplaza minimumStory |
+| Sólo closing/documentos | Mínimo espacial falla: unavailable narrativa; closing estructural y recursos no son geometría; herramientas documentales accesibles |
+| MinimumStory incumplido con required presente | Unavailable; intención fuerte cubierta no sustituye grupos mínimos |
+| Promotora sin rooms | Overview global/axon/exploded/planos por niveles/elevation de edificio pueden validar mínimo; no exigir tour; registrar bloqueo actual si no ejecuta |
+| Arquitectura sin rooms | Plan + section/elevation/axon puede validar mínimo y cierre; tour sólo preferido; ejecución pendiente tras FT3D-5 |
+| Reformas sin rooms | Plan + section del alcance puede validar mínimo; sin ambos no iniciar; materials no sustituye base |
+| Interiorismo sin tour con moodboard | En V1 mínimo interior no satisfecho; alternativa futura sólo con lectura interior rica y adapter/aprobación explícitos |
+| Personalizada/editor avanzado | Fuera de V1; posible estudio futuro separado, no prohibición permanente |
 | Precio 0/ausente, IVA null/0 | Semántica C4 conservada sin rellenos |
 | ID/opción desconocida | Rechazo explicable, elección válida, sin ejecución dinámica |
 
@@ -474,18 +513,18 @@ Fallos históricos: mismo caso en base limpia exacta y rama, registrar causa/evi
 
 **Documento publicado no es DONE funcional de FT3D-6.** Entrada: FT3D-4/5 cerrados/integrados, nueva base exacta comprobada, reconciliar scopes/slots/limitaciones, aprobar contrato y gaps de primitivas antes de autorizar implementación.
 
-DONE exige catálogo/resolver con policies completas, adaptadores a autoridades existentes, una/dos plantas y todas las rooms elegidas, UI ligera/omisiones/consentimiento parcial, cero nueva geometría/schema/persistencia, flujo histórico y gates intactos, restore/JSON comprobados, QA §26/28 y regresiones/baseline, evidencia visual en HEAD exacto y revisión humana, mobile/reduced equivalentes y salidas existentes no rotas con FT3D-7 explícito. Publicación/integración y actualización canónica según workflow; READY de rama no equivale a cerrado.
+DONE exige catálogo/resolver con familias y policies completas, minimumStory por perfil, required ausente sólo degraded si mínimo satisfecho, mínimo fallido unavailable y límites de ejecución actuales separados; adaptadores a autoridades existentes, una/dos plantas, todas las rooms elegidas cuando aplican y soporte/restricción sin rooms explícitamente reconciliado tras FT3D-5, UI ligera/omisiones/consentimiento parcial, cero nueva geometría/schema/persistencia, flujo histórico y gates intactos, restore/JSON comprobados, QA §26/28 y regresiones/baseline, evidencia visual en HEAD exacto y revisión humana, mobile/reduced equivalentes y salidas existentes no rotas con FT3D-7 explícito. Publicación/integración y actualización canónica según workflow; READY de rama no equivale a cerrado.
 
 ## 30. Preguntas tras FT3D-5
 
 Todas **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**, sin intervenir ahora en FT3D-4:
 
-1. ¿Qué disponibilidad/scopes/refs/revisiones y partial efectivos ofrecen elevation/axon/exploded?
+1. ¿Qué disponibilidad/scopes/refs/revisiones y partial efectivos ofrecen elevation/axon/exploded? ¿Qué lecturas permiten cumplir los mínimos de Promotora/Arquitectura sin rooms y cómo materializa el builder esa Story, sin perpetuar su gate actual?
 2. ¿Qué overview global/compacta y anclajes de entrada/salida aporta FT3D-5 en uno/dos niveles? No decidir cámara/offsets aquí.
 3. ¿Cómo acepta el builder lista semántica, globales/bloques y más de primera room conservando player/restore/progreso? ¿Cuál es el cambio mínimo de composición?
 4. ¿Qué holds reducidos de cada capacidad preservan estados útiles, reverse y navegación?
-5. ¿Existen adapters comunes materiales/C4 en Story? Si no, accesos documentales/omisión; cualquier primitiva nueva requiere alcance separado.
-6. ¿Closing cabe como estado terminal con branding existente o requiere pequeño adaptador UI común, sin geometría?
+5. ¿Existen adapters Story aprobados materiales/C4? Sin ellos son recursos/accesos documentales, no capítulos. ¿Puede una evolución separada ofrecer lectura interior/materiales suficientemente rica como alternativa al grupo interior de Interiorismo? No basta moodboard solo ni se diseña adapter aquí.
+6. ¿Cómo integra el builder closing como estructura terminal común y Solar como enhancement de anfitriona, sin tratarlos como capacidades geométricas ni grupos espaciales?
 7. ¿Cómo se invalidan/reconfirman IDs de fachada al cambiar proyecto según contrato efectivo FT3D-4?
 8. ¿Cómo se representa cobertura parcial de nivel sin afirmar lectura de edificio completo?
 9. ¿Qué comportamiento exacto de sidecar/selección debe conservarse sin persistir automáticamente defaults de preset?
@@ -494,6 +533,6 @@ Todas **PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**, sin intervenir ahora en FT3D
 
 ### Entrega documental
 
-Un único documento draft, base fija conservada, sin código ni tests de producto modificados/ejecutados. Sin cambios a Story/UI, View3D, building, Solar, exterior, schema o persistencia. Validación documental local: 30 secciones numeradas en orden, 27 criterios comparativos para los cinco perfiles, 13 filas de capabilities con cinco policies y enlaces locales resueltos; revisión de consistencia y diff limitado a este archivo. Sin suites de producto ni QA visual de una funcionalidad que aún no se implementa. Publicación: commit/push de rama documental y worktree limpio. No merge, PR nueva ni apertura de implementación en esta misión.
+Un único documento draft, base fija conservada, sin código ni tests de producto modificados/ejecutados. Sin cambios a Story/UI, View3D, building, Solar, exterior, schema o persistencia. Validación documental: 30 secciones numeradas en orden, 27 criterios comparativos, 13 elementos de cuatro familias con cinco policies y mínimo narrativo explícito de los cinco perfiles; enlaces locales resueltos y revisión de consistencia required/minimumStory/ejecución. Corrección dirigida sobre HEAD 85eb3d58191e31aef5ab69c7ecdda38851428930, sin reescribir el contrato ni historia; diff limitado a este archivo. Sin suites de producto ni QA visual de una funcionalidad que aún no se implementa. Publicación: commit/push de rama documental y worktree limpio. No merge, PR nueva ni apertura de implementación en esta misión.
 
-**ESTADO: FT3D-6 DISEÑADO — PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**
+**ESTADO: FT3D-6 DRAFT CORREGIDO — PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**
