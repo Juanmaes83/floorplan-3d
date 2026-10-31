@@ -2,7 +2,7 @@
 
 **Fuente operativa de verdad para el trabajo actual.**  
 **HEAD funcional consolidado de FT3D-1:** `579189df39513aca44e0a86b44ef4392f38173d2`.  
-**HEAD documental vigente al autorizar FT3D-2a:** `master@41539c03b6749fdb261d1b72a5b5cc89d3245e5f`.  
+**HEAD documental vigente al autorizar FT3D-2a:** `master@986ca5e012127419ddcd023dd3cdf75cc56a8dda`.  
 Verificar siempre el HEAD real de `master` antes de ejecutar trabajo.
 
 Estados usados:
@@ -10,7 +10,8 @@ Estados usados:
 - **implementado:** existe código probado en rama/PR/backup;
 - **integrado:** el contenido está en `master`;
 - **validado:** ha superado el QA requerido para el alcance;
-- **cerrado:** integración + validación + revisión humana/documentación final cuando corresponda.
+- **cerrado:** integración + validación + revisión humana/documentación final cuando corresponda;
+- **diferido:** capacidad conscientemente fuera del cierre actual; no bloquea el bloque al que pertenecía.
 
 ---
 
@@ -93,9 +94,19 @@ B1–B8 están integrados.
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO EN CÓDIGO** | prueba/calidad con proveedor real |
 | Presentación avanzada | **PARCIALMENTE CUBIERTA** | FT3D-1 integrado; FT3D-2..7 pendientes |
-| 360 | **NO IMPLEMENTADO / DECISIÓN PENDIENTE** | implementar o diferir explícitamente |
+| 360 | **DIFERIDO POR ALCANCE** | no bloquea el cierre de B |
 
-**Fase B no está cerrada.** Recomendación: FT3D satisface/evoluciona «presentación avanzada»; 360 sólo debe implementarse si aporta valor propio o diferirse expresamente.
+### Decisión formal de producto — 360
+
+**Decisión de Juanma, 31-10-2026:** no desarrollar ahora un tour 360 específico.
+
+Motivo de producto:
+
+- Rubik ya está construyendo una experiencia de presentación más rica mediante FT3D / Presentation Story;
+- terminar el motor narrativo, secciones, fachadas, axonometrías, plantillas y salidas aporta más valor inmediato que añadir una salida 360 aislada;
+- no se elimina 360 del conocimiento estratégico: queda **diferido** y puede reevaluarse en el futuro si aporta un caso de uso independiente.
+
+**Consecuencia:** 360 deja de ser una decisión pendiente y **no bloquea el cierre de Fase B**. Para cerrar B quedan las validaciones reales de B2/B4/B8, los cierres humanos/documentales aplicables y completar la parte de «presentación avanzada» mediante el programa FT3D aprobado.
 
 ### Fase C
 
@@ -171,18 +182,20 @@ La rama debe partir del HEAD documental vigente y transportar únicamente el com
 5. Decidir si FT3D-2 queda cerrado con 2a o requiere un **2b mínimo**; no asumirlo antes de la auditoría.
 6. **C4 — dossier económico**.
 7. Validaciones reales B2/B4/B8.
-8. Decisión explícita sobre 360.
-9. FT3D-3 — sección dinámica.
-10. FT3D-4 — alzado/fachada.
-11. FT3D-5 — axonometría/exploded.
-12. FT3D-6 — plantillas.
-13. FT3D-7 — salidas/compartición.
-14. Auditoría global y cierres A/B/C/FT3D.
+8. FT3D-3 — sección dinámica.
+9. FT3D-4 — alzado/fachada.
+10. FT3D-5 — axonometría/exploded.
+11. FT3D-6 — plantillas.
+12. FT3D-7 — salidas/compartición.
+13. Auditoría global y cierres A/B/C/FT3D.
+
+**360 no forma parte de esta secuencia:** está formalmente diferido y no bloquea ningún cierre actual.
 
 ---
 
 ## 5. Fuera del cierre actual
 
+- **Tour 360 específico:** diferido por decisión formal de producto del 31-10-2026; reevaluable si aparece un caso de uso independiente que justifique su coste.
 - Punto 10 — instalaciones ligeras: posterior.
 - Fase D — reconocimiento automático, LiDAR, CAD/BIM/API, equipos, portal avanzado, white-label: posterior.
 - 8B-C cubiertas inclinadas: diferido.
@@ -204,7 +217,7 @@ La rama debe partir del HEAD documental vigente y transportar únicamente el com
 2. Reconciliar trabajo existente; no reimplementarlo.
 3. Toda integración es aditiva.
 4. No avanzar un hijo FT3D hasta consolidar su padre.
-5. Separar implementado / integrado / validado / cerrado.
+5. Separar implementado / integrado / validado / cerrado / diferido.
 6. Tras cada misión de Claude: auditar → CI → integrar → actualizar documentación → recalcular pendientes → autorizar el siguiente corte.
 7. Mantener: **más contexto, no más falsa certeza**.
 
