@@ -123,7 +123,7 @@ test('room descent: play time follows the travel within bounds; missing poses fa
  const near=Story.create('room-descent',{...descent,start:{...roomPose,position:[3.3,4.2,2.7]}}),far=Story.create('room-descent',{...descent,start:{...overviewPose,position:dir.map(v=>v*60)}});
  assert.equal(near.info.playMs,1800);assert.equal(far.info.playMs,4200);
  assert.throws(()=>Story.create('room-descent',{...descent,end:{position:[0,0,0],target:[0,NaN,0],fov:45}}),/estancia/);
- assert.deepEqual(Story.NARRATIVES,['plan-reveal','room-descent']);
+ assert.deepEqual(Story.NARRATIVES,['plan-reveal','room-descent','section-open']);
 });
 test('from the 2D editor view: p = 0 keeps its centre and framed height; the view turns once, smoothly, to the overview',()=>{
  const start={target:[1.3,0,-.7],frameHeight:12.4},n=Story.create('plan-reveal',{...input,start}),a=n.stateAt(0);

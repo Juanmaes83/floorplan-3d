@@ -16,7 +16,9 @@
    as View3D's camTween), so it reads as Rubik's usual motion, now driven by p; when that room is framed with a lower
    wall section, the walls go down continuously to that height and, once there (p ≥ wallsEnd), the real section
    takes over (state.section): the swap happens while the camera still moves and p = 1 is exactly the room stop.
-   Further narratives (section sweep, open section, exploded axonometric…) are added as new builders in NARRATIVES. */
+   «Sección visual» (sectionOpen, FT3D-3): the overview, a vertical cut entering the same model, the frontal section,
+   a dolly zoom that opens the perspective and the overview again with the cut still on (see below).
+   Further narratives (exploded axonometric…) are added as new builders in NARRATIVES. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPresentationStory=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
  const clamp01=v=>Math.min(1,Math.max(0,v));
@@ -105,7 +107,68 @@
   }
   return {kind:'room-descent',stateAt,checkpoints:[0,.25,.5,.75,1],info:{travel,wallScaleEnd:wallEnd,playMs:ms,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent};
+ /* «Sección visual» (sectionOpen, FT3D-3): the plan's vertical cut (FloorPlanPresentationSection) on the same model.
+    - p = 0: the overview pose of the level, the plane outside the envelope (nothing cut);
+    - 0 → sweepEnd: the camera turns to face the cut (horizontal, along the plane normal) while the lens narrows to an
+      almost flat reading (same principle as planReveal: distance ≥ flatness × depth behind the cut) and the plane
+      enters from just in front of the envelope to its target;
+    - sweepEnd → holdEnd: frontal section, plane still, cut faces shown;
+    - holdEnd → dollyEnd: dolly zoom — the lens opens to the overview's while the camera approaches, the framed size at
+      the cut stays the same (apparent size preserved);
+    - dollyEnd → openEnd: the camera turns to the overview direction and distance, revealing the depth behind the cut;
+    - openEnd → 1: exactly the overview pose, the section still active. Ending the scene restores the model.
+    input: plane {normal:[x,0,z] world unit towards the camera, start, target} (offsets along the normal, metres);
+    line {from:[x,z], to:[x,z]} world; wallTop (built top, m); depth (envelope along the normal, m);
+    end {position, target, fov} (the overview pose); aspect; region; base {near, far}. */
+ const SECTION_OPEN={sweepEnd:.3,holdEnd:.45,dollyEnd:.68,openEnd:.92,reducedHold:.96,flatness:20,minFovDeg:1.5,maxFovDeg:8,margin:.1,playMs:7000};
+ function sectionOpen(input){
+  const o={...SECTION_OPEN,...(input.options||{})},end=input.end,plane=input.plane,line=input.line;
+  if(!end||![...end.position,...end.target,end.fov].every(Number.isFinite))throw Error('Falta la vista general de destino.');
+  if(!plane||![...plane.normal,plane.start,plane.target].every(Number.isFinite)||!line||![...line.from,...line.to].every(Number.isFinite))throw Error('La sección no tiene plano.');
+  const aspect=Math.max(.2,Number(input.aspect)||1),wallTop=Math.max(.5,Number(input.wallTop)||2.8),depth=Math.max(1,Number(input.depth)||1),base={near:input.base?.near??.05,far:input.base?.far??300};
+  const r=region(input.region),m=.06,nx0=2*r[0]-1+m,nx1=2*r[2]-1-m,ny0=1-2*r[3]+m,ny1=1-2*r[1]-m,cx=(nx0+nx1)/2,cy=(ny0+ny1)/2,hx=(nx1-nx0)/2,hy=(ny1-ny0)/2;
+  const offset1=sub(end.position,end.target),d1=len(offset1),dir1=norm(offset1),fov1=end.fov,tan1=Math.tan(rad(fov1)/2),frame1=2*d1*tan1;
+  const n=norm([plane.normal[0],0,plane.normal[2]]),f0=mul(n,-1),ax=axes(f0);
+  const width=Math.hypot(line.to[0]-line.from[0],line.to[1]-line.from[1]);
+  const centre=[(line.from[0]+line.to[0])/2,wallTop/2,(line.from[1]+line.to[1])/2];
+  // Frontal framing: the cut (width × built height) fits the free region with a margin.
+  const half=Math.max(wallTop/2/hy,width/2/(hx*aspect))*(1+o.margin),frame0=2*half;
+  const fov0=Math.min(fov1,Math.max(o.minFovDeg,Math.min(o.maxFovDeg,deg(2*Math.atan(frame0/2/(o.flatness*depth))))));
+  const tan0=Math.tan(rad(fov0)/2),d0=frame0/2/tan0;
+  // The cut centre sits at the centre of the free region; the shift only depends on the framed size, so it holds
+  // through the dolly zoom.
+  const target0=add(add(centre,mul(ax.right,-cx*frame0/2*aspect)),mul(ax.up,-cy*frame0/2));
+  const az=v=>Math.atan2(v[2],v[0]),el=v=>Math.asin(Math.max(-1,Math.min(1,v[1])));
+  const az1=az(dir1),el1=el(dir1),az0=az(n),el0=0,turn=Math.atan2(Math.sin(az0-az1),Math.cos(az0-az1));
+  const dirAt=(e,a)=>[Math.cos(e)*Math.cos(a),Math.sin(e),Math.cos(e)*Math.sin(a)];
+  const reach=width/2+depth+wallTop;
+  const nearFar=d=>({near:Math.max(base.near,(d-reach)*.5),far:Math.max(base.far,d+reach*2)});
+  const span=(p,a,b)=>smooth((p-a)/(b-a));
+  const overview=(p,phase,offset,caps)=>({p,phase,position:[...end.position],target:[...end.target],fov:fov1,near:base.near,far:base.far,distance:d1,frameHeight:frame1,offset,caps,sectionVisible:p>0});
+  function pose(dir,tan,frame,target){const d=frame/2/tan;return {position:add(target,mul(dir,d)),target,fov:deg(2*Math.atan(tan)),distance:d,frameHeight:frame,...nearFar(d)};}
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   if(p<=0)return overview(0,'overview',plane.start,false);
+   if(p>=o.openEnd)return overview(p,'overview-cut',plane.target,true);
+   if(p<o.sweepEnd){
+    // Overview → frontal: lens and framed size interpolated geometrically (as planReveal, reversed), azimuth by the
+    // shortest turn, elevation down to the horizontal; the plane enters at the same pace.
+    const s=smooth(p/o.sweepEnd),tan=tan1*Math.pow(tan0/tan1,s),frame=frame1*Math.pow(frame0/frame1,s);
+    return {p,phase:'cut',...pose(dirAt(lerp(el1,el0,s),az1+turn*s),tan,frame,lerp3(end.target,target0,s)),offset:plane.start+(plane.target-plane.start)*s,caps:false,sectionVisible:true};
+   }
+   if(p<o.holdEnd)return {p,phase:'front',...pose(n,tan0,frame0,target0),offset:plane.target,caps:true,sectionVisible:true};
+   if(p<o.dollyEnd){
+    // Dolly zoom: same framed size at the cut, the lens opens to the overview's.
+    const t=span(p,o.holdEnd,o.dollyEnd),tan=tan0*Math.pow(tan1/tan0,t);
+    return {p,phase:'open',...pose(n,tan,frame0,target0),offset:plane.target,caps:true,sectionVisible:true};
+   }
+   // Turn to the overview direction and distance; near/far reach the view's own values at the end.
+   const t=span(p,o.dollyEnd,o.openEnd),st=pose(dirAt(lerp(el0,el1,t),az0-turn*t),tan1,frame0*Math.pow(frame1/frame0,t),lerp3(target0,end.target,t));
+   return {p,phase:'open',...st,near:lerp(st.near,base.near,t),far:lerp(st.far,base.far,t),offset:plane.target,caps:true,sectionVisible:true};
+  }
+  return {kind:'section-open',stateAt,checkpoints:[0,.25,.5,.75,1],info:{fovFront:fov0,fovEnd:fov1,distanceFront:d0,distanceEnd:d1,frameFront:frame0,frameEnd:frame1,width,depth,wallTop,turnDeg:deg(turn),playMs:o.playMs,reducedHold:o.reducedHold,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen};
  /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
     proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
     the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
@@ -119,9 +182,9 @@
   return {count:w.length,starts:[...starts],total,locate,at};
  }
  // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
- const SCENE_MS={'plan-reveal':6000,'room-descent':3500};
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,roomDescent,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT};
+ return {create,planReveal,roomDescent,sectionOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN};
 });

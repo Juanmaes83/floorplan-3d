@@ -35,7 +35,7 @@
  // geometry and revision. Nothing is stored or changed.
  function presentationSources(){
   const b=current();if(!b)return null;
-  return {building:{id:b.id,name:b.name},activeLevelId:library.activeLevelId(),levels:b.levels.map(l=>({levelId:l.id,name:l.name,order:l.order,elevationMm:l.elevationMm,
+  return {building:{id:b.id,name:b.name},activeLevelId:library.activeLevelId(),levels:b.levels.map(l=>({levelId:l.id,name:l.name,order:l.order,elevationMm:l.elevationMm,offsetMm:l.offsetMm?{...l.offsetMm}:{x:0,y:0},
    project:Core.clone(l.project),geometry:Core.geometry(l.project),revision:FloorPlanGuide.revision(l.project)}))};
  }
  // Called whenever the open entry changes (open, import, create): histories belong to one entry.

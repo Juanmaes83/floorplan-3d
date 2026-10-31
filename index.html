@@ -372,6 +372,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-level-group{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:4px 8px 8px;display:grid;gap:5px;min-width:0}
 .presentation-level-group legend{font-weight:600;padding:0 4px}
 .presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
+.presentation-minimap-section{stroke:#9a3a2a;stroke-width:110;stroke-dasharray:280 140;pointer-events:none}.presentation-minimap-section-look{fill:none;stroke:#9a3a2a;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-story-option input:disabled+span{color:var(--muted)}
 .presentation-story-option{margin:10px 0;padding:6px 10px;border:1px solid var(--line);border-radius:10px}.presentation-story-option label{display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px;cursor:pointer}.presentation-story-option input{width:20px;height:20px;flex:none}.presentation-story-option .presentation-story-hint{margin:0 0 4px;font-size:13px;color:var(--muted)}
 .presentation-story{margin:8px 0;display:grid;gap:6px}.presentation-story[hidden]{display:none}.presentation-story-counter{margin:0;font-size:12px;color:var(--muted)}.presentation-story-counter[hidden]{display:none}.presentation-story-caption{margin:0;font-weight:600;font-size:14px}.presentation-story-slider{width:100%;min-height:44px;margin:0;accent-color:var(--accent)}.presentation-story-actions{display:flex;gap:8px;flex-wrap:wrap}.presentation-story-actions .btn{min-height:44px;flex:1 1 auto}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:-20px;z-index:2;background:var(--panel,#fff);padding:10px 0 20px;border-top:1px solid var(--line)}
@@ -2457,6 +2458,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/journey-core.js"></script>
 <script src="js/guide-ui.js"></script>
 <script src="js/presentation-route.js"></script>
+<script src="js/presentation-section-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-ui.js"></script>
@@ -4352,6 +4354,8 @@ function overviewPose(b,target,direction,radius,aspect,region){
   overviewInfo={radius:+radius.toFixed(3),distance:+d.toFixed(3),moved:d>radius+1e-6,fits:p.fits,wallTop:H,region:r0};
   return pose(p.look,p.eye);
 }
+// Direction of the overview camera (from its target); the dynamic section (FT3D-3) faces its cut to it.
+const OVERVIEW_DIRECTION=[.42,.84,.34];
 // Pose of an overview (or unframed) stop; shared by presentationGo and the plan reveal, which must end exactly here.
 function presentationStopPose(stop,aspect,region){
   const b=stop.bounds;
@@ -4359,7 +4363,7 @@ function presentationStopPose(stop,aspect,region){
   const span=Math.max(b.h/1000,b.w/1000/aspect);
   const frame=aspect<.7?1.65:aspect>2 ? 1.45 : 1.25;
   const radius=Math.max(6,(span/2+1)/Math.tan(camera.fov*Math.PI/360)*frame)*(stop.kind==='room'?1.2:1);
-  const target=new THREE.Vector3(tx,0,tz),direction=new THREE.Vector3(.42,.84,.34).normalize();
+  const target=new THREE.Vector3(tx,0,tz),direction=new THREE.Vector3(...OVERVIEW_DIRECTION).normalize();
   return overviewPose(b,target,direction,radius,aspect,region);
 }
 function restoreTerritorialViewLimits(){if(territorialViewLimits){orbit.maxDistance=territorialViewLimits.maxDistance;camera.far=territorialViewLimits.far;camera.updateProjectionMatrix();territorialViewLimits=null;}}
@@ -4546,6 +4550,7 @@ let storyRun=null,storyPlanStart=null;
 function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
   if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
+  if(kind==='section-open'&&(stop.kind!=='overview'||!window.FloorPlanPresentationSection))throw Error('Narrativa no disponible.');
   // The descent starts where the camera is (the overview it arrives from); read it before anything moves.
   const startPose={position:camera.position.toArray(),target:orbit.target.toArray(),fov:camera.fov};
   // The plan reveal starts from the 2D view the 3D view entered on (held entry), when there is one; walls and
@@ -4562,8 +4567,18 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null;
-  if(kind==='room-descent'){
+  let narrative,sectionCut=null,section=null;
+  if(kind==='section-open'){
+    // FT3D-3: the vertical cut derived from this level's own walls and rooms (descriptor computed once, here).
+    const d=window.FloorPlanPresentationSection.derive({project,geometry},{overviewDirection:OVERVIEW_DIRECTION,axis:view.sectionAxis,levelId:levelContext?.activeLevelId??null});
+    if(!d.supported)throw Error(d.message||'Sección no disponible.');
+    const end=presentationStopPose(stop,aspect,view.region),builtTop=presentationBaseCut===2.8?wallTop:Math.min(wallTop,presentationBaseCut);
+    const along=d.normalAxis==='y',toWorld=off=>along?wz(off):wx(off),s=d.frontSign;
+    const normal=along?[0,0,s]:[s,0,0],plane={normal,start:s*toWorld(d.startOffset),target:s*toWorld(d.targetOffset)};
+    const line={from:[wx(d.line[0][0]),wz(d.line[0][1])],to:[wx(d.line[1][0]),wz(d.line[1][1])]};
+    narrative=window.FloorPlanPresentationStory.create('section-open',{plane,line,wallTop:builtTop,depth:d.span/1000,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far}});
+    section=beginSection(d,{normal,plane,builtTop});
+  }else if(kind==='room-descent'){
     // The room stop exactly as presentationGo frames it; a lower wall section is reached by lowering the walls built at
     // the overview's cut, and presentationGo then applies the real section when the presentation continues.
     const framed=presentationFrame(stop.roomId,aspect,view.region);if(!framed)throw Error('Narrativa no disponible.');
@@ -4580,7 +4595,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut};
+  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut,section};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4594,9 +4609,10 @@ function presentationStoryApply(p){
   // never per frame, and undone the same way when p goes back below it.
   if(storyRun.sectionCut){const cut=st.section?storyRun.sectionCut.section:storyRun.sectionCut.base;if(opt.cut!==cut)setPresentationCut(cut);}
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
-  if(archUp){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(storyRun.section)applySection(storyRun.section,st);
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
-  if(lampG)lampG.visible=grow>.99&&(st.wallScale>.99||st.phase==='room');
+  if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
   if(storyRun.kind==='room-descent'){const roomId=storyRun.stopId.replace(/^room:/,'');if(st.phase==='room'){if(!roomOutline)showRoomOutline(roomId);}else clearRoomOutline();}
   return {...st,position:[...st.position],target:[...st.target]};
@@ -4606,6 +4622,7 @@ function presentationStoryApply(p){
 function endPresentationStory({keepPose=true}={}){
   if(!storyRun)return null;
   const run=storyRun;storyRun=null;
+  if(run.section)endSection(run.section);
   if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
@@ -4614,10 +4631,57 @@ function endPresentationStory({keepPose=true}={}){
   else camera.lookAt(orbit.target);
   return {kind:run.kind,p:run.state?.p??null};
 }
+
+/* FT3D-3 dynamic section on the one scene (js/presentation-section-core.js gives the plane, the narrative moves it).
+   A real vertical clipping plane on the materials of the active level's building (architecture, openings, furniture,
+   lamps, exterior volume); terrain, orthophoto, context, labels and UI are never given it. The cut faces are drawn from
+   the descriptor only (each crossed wall: its thickness across the line × its height, its openings left open; each
+   crossed room: its floor line), built once when the scene begins and destroyed when it ends. Every material keeps its
+   own clipping planes saved and gets them back, and the renderer's local clipping flag returns to its value. */
+const SECTION_CAP_COLOR=0x9a3a2a,SECTION_LINE_COLOR=0x2d332f;
+function sectionTargets(){return [archFloor,archUp,furnG,lampG,exteriorG,roofG].filter(Boolean);}
+function sectionKey(){return sectionTargets().map(g=>g.uuid+':'+g.children.length).join('|');}
+function clipSectionMaterials(sec){
+  for(const g of sectionTargets())g.traverse(o=>{if(!o.material||o.userData.sectionCap)return;for(const m of Array.isArray(o.material)?o.material:[o.material]){if(sec.materials.has(m))continue;sec.materials.set(m,m.clippingPlanes);m.clippingPlanes=[sec.clip];m.needsUpdate=true;}});
+  sec.key=sectionKey();
+}
+function beginSection(d,{normal,plane,builtTop}){
+  const sec={descriptor:d,normal,plane,builtTop,clip:new THREE.Plane(new THREE.Vector3(-normal[0],0,-normal[2]),plane.start),materials:new Map(),localClipping:renderer.localClippingEnabled,group:new THREE.Group(),offset:plane.start,caps:false,pieces:0};
+  renderer.localClippingEnabled=true;clipSectionMaterials(sec);
+  const along=d.normalAxis==='y',sgn=along?normal[2]:normal[0];
+  const faceMat=new THREE.MeshBasicMaterial({color:SECTION_CAP_COLOR,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1}),lineMat=new THREE.MeshBasicMaterial({color:SECTION_LINE_COLOR,side:THREE.DoubleSide});
+  // World point on the plane (u along the section line, plan mm), moved `back` metres to the kept side.
+  const at=(u,y,back)=>{const c=sgn*(plane.target-back);return along?[wx(u),y,c]:[c,y,wz(u)];};
+  const piece=(geo,mat,pos,rot)=>{const m=new THREE.Mesh(geo,mat);m.position.fromArray(pos);if(rot)m.rotation.set(...rot);m.userData.sectionCap=true;m.renderOrder=3;sec.group.add(m);sec.pieces++;};
+  for(const w of d.intersections.walls){const top=Math.min(builtTop,w.height/1000);let y=0;
+    const face=(y0,y1)=>piece(new THREE.PlaneGeometry(w.width/1000,y1-y0),faceMat,at(w.at,(y0+y1)/2,.002),along?null:[0,Math.PI/2,0]);
+    for(const g of w.gaps){const b=Math.min(top,g.bottom/1000);if(b-y>.005)face(y,b);y=Math.max(y,g.top/1000);}if(top-y>.005)face(y,top);}
+  for(const r of d.intersections.rooms)for(const [a,b] of r.segments)
+    piece(new THREE.PlaneGeometry(along?(b-a)/1000:.06,along?.06:(b-a)/1000),lineMat,at((a+b)/2,.012,.03),[-Math.PI/2,0,0]);
+  sec.group.visible=false;sec.group.userData.presentationSection=true;scene.add(sec.group);
+  return sec;
+}
+function applySection(sec,st){
+  // A rebuilt group (an asset that finished loading) gets the plane too; nothing topological is recomputed.
+  if(sec.key!==sectionKey())clipSectionMaterials(sec);
+  sec.offset=st.offset;sec.clip.constant=st.offset;sec.caps=!!st.caps;sec.group.visible=sec.caps;
+}
+function endSection(sec){
+  for(const [m,planes] of sec.materials){m.clippingPlanes=planes;m.needsUpdate=true;}sec.materials.clear();
+  renderer.localClippingEnabled=sec.localClipping;
+  scene.remove(sec.group);sec.group.traverse(o=>{o.geometry?.dispose();});new Set(sec.group.children.map(o=>o.material)).forEach(m=>m.dispose());sec.group.clear();
+}
+function sectionInfo(sec){const d=sec.descriptor;return {levelId:d.levelId,axis:d.axis,normalAxis:d.normalAxis,frontSign:d.frontSign,fraction:d.fraction,targetOffset:d.targetOffset,startOffset:d.startOffset,line:d.line.map(p=>[...p]),look:[...d.look],
+  walls:d.intersections.walls.length,rooms:d.intersections.rooms.map(r=>r.id),offset:sec.offset,planeTarget:sec.plane.target,planeStart:sec.plane.start,caps:sec.caps,capsVisible:sec.group.visible,pieces:sec.pieces,clippedMaterials:sec.materials.size,localClipping:renderer.localClippingEnabled};}
+// Read-only checks for tests: which materials of the scene carry clipping planes now, and the renderer flag.
+function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)withPlanes.add(m);});
+  const territory=new Set();territoryRenderer?.group.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)territory.add(m);});
+  const groundClipped=!!ground&&[ground.material].flat().some(m=>m?.clippingPlanes?.length);
+  return {materialsWithPlanes:withPlanes.size,territoryClipped:territory.size,groundClipped,localClipping:!!renderer?.localClippingEnabled,sectionGroups:scene?scene.children.filter(o=>o.userData.presentationSection).length:0};}
 function presentationStoryInfo(){
   if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
   const st=storyRun.state;
-  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
     fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
     saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
 }
@@ -4653,6 +4717,7 @@ window.View3D = {
 window.View3D.presentationReveal=presentationReveal;
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
+Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
