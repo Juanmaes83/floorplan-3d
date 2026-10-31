@@ -1,7 +1,7 @@
 # Matriz de cierre del roadmap — actualizado 31-10-2026
 
 **Base funcional consolidada:** C4 integrado en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.  
-**Estado de control actual:** Fase C completa 4/4; FT3D-2 cerrado funcionalmente con 2a; próximo bloque = validaciones reales B2/B4/B8.  
+**Estado de control actual:** Fase C completa 4/4; FT3D-2 cerrado funcionalmente con 2a; B4 validado real; B2/B8 pendientes por dependencia externa de OpenAI; siguiente corte autorizado = FT3D-3.  
 **Decisión de producto:** 360 diferido formalmente; no bloquea Fase B.
 
 ## Convenciones
@@ -35,15 +35,45 @@
 | Objetivo estratégico | Estado | Qué falta |
 |---|---|---|
 | Archivo cliente offline | **INTEGRADO** | cierre documental/humano |
-| Render IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | OpenAI real |
+| Render IA | **INTEGRADO / VALIDACIÓN EXTERNA PENDIENTE** | OpenAI real cuando haya créditos + `OPENAI_API_KEY` |
 | Vídeo de recorrido | **INTEGRADO** | revisión final representativa si se exige |
-| Share link alojado | **INTEGRADO / VALIDACIÓN PENDIENTE** | Vercel Blob real |
+| Share link alojado | **INTEGRADO Y VALIDADO REAL** | cierre documental/humano |
 | Servicio «Envíanos tu plano» | **INTEGRADO** | validar proceso humano |
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
-| Alternativas IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | proveedor real / calidad |
+| Alternativas IA | **INTEGRADO / VALIDACIÓN EXTERNA PENDIENTE** | OpenAI real + revisión de calidad cuando haya créditos + `OPENAI_API_KEY` |
 | Presentación avanzada | **EN PROGRESO** | FT3D-1 y FT3D-2 integrados; FT3D-3..7 pendientes |
 | 360 | **DIFERIDO POR ALCANCE** | no bloquea Fase B |
+
+## B4 — validación real cerrada
+
+**31-10-2026 — VALIDADO REAL en producción con Vercel.**
+
+Se comprobó:
+
+- almacén Blob real conectado al proyecto;
+- despliegue de producción `READY` sobre el `master` canónico;
+- `POST /api/share` → **200**;
+- Blob publicado → **200** y contenido correcto;
+- `/api/view?f=...` → **200** y contenido correcto;
+- código incorrecto → **401 / token**;
+- no fue necesario cambiar el código B4.
+
+B4 deja de ser gate pendiente.
+
+## B2 / B8 — dependencia externa aparcada
+
+B2 y B8 comparten la validación real con OpenAI mediante `api/render.js`.
+
+**31-10-2026:** la cuenta de proveedor no dispone todavía de créditos/saldo operativo y `OPENAI_API_KEY` no está configurada. Esta situación es una **dependencia externa temporal**, no un defecto demostrado del producto.
+
+Decisión operativa:
+
+- mantener B2/B8 como **VALIDACIÓN EXTERNA PENDIENTE**;
+- no reimplementar código mientras la validación real no demuestre un defecto;
+- reanudar las pruebas cuando haya créditos y se configure `OPENAI_API_KEY` como secreto Vercel;
+- **no bloquear FT3D-3..7 por esta dependencia externa**;
+- B2/B8 siguen siendo requisitos para el cierre final de Fase B.
 
 ## Decisión formal 360
 
@@ -53,8 +83,7 @@ Presentation Story/FT3D tiene prioridad. 360 sólo se reabrirá si aparece un ca
 
 Para cerrar Fase B quedan como gates reales:
 
-- validación real B2/B8 con OpenAI/proveedor;
-- validación real B4 con Vercel Blob;
+- validación real B2/B8 con OpenAI/proveedor cuando se desbloquee la dependencia externa;
 - completar presentación avanzada mediante FT3D;
 - cierres humanos/documentales aplicables.
 
@@ -99,7 +128,7 @@ Contrato canónico:
 | FT3D-0 | **CASI CUBIERTO** | investigación + pruebas técnicas | cierre formal / presupuesto de rendimiento |
 | FT3D-1 | **INTEGRADO Y VALIDADO TÉCNICAMENTE** | 1a + 1b en master | aceptación humana final / cierre documental |
 | FT3D-2 | **INTEGRADO, VALIDADO Y COMPLETO** | 2a en `042c256b...`; PR #155 verde | nada funcional; no se requiere 2b |
-| FT3D-3 | **PENDIENTE** | — | sección dinámica |
+| FT3D-3 | **SIGUIENTE CORTE AUTORIZADO** | — | sección dinámica |
 | FT3D-4 | **PENDIENTE** | — | alzado/fachada narrativa |
 | FT3D-5 | **PENDIENTE** | — | axonometría / edificio explotado |
 | FT3D-6 | **PENDIENTE** | — | plantillas por perfil |
@@ -115,11 +144,11 @@ Contrato canónico:
 ```text
 Fase C 4/4 integrada
         ↓
-validaciones reales B2 / B4 / B8   ← AHORA
+B4 validado real
         ↓
-correcciones sólo si la validación demuestra un defecto real
+B2 / B8 aparcados temporalmente por dependencia externa OpenAI
         ↓
-FT3D-3 sección
+FT3D-3 sección   ← AHORA
         ↓
 FT3D-4 fachada
         ↓
@@ -128,6 +157,8 @@ FT3D-5 axonometría
 FT3D-6 plantillas
         ↓
 FT3D-7 outputs/share
+        ↓
+reanudar B2 / B8 cuando OpenAI esté disponible (si aún siguen pendientes)
         ↓
 auditoría global
         ↓
@@ -161,7 +192,7 @@ protección de master
 El bloque A/B/C/FT3D puede declararse cerrado cuando:
 
 - A esté cerrada documentalmente tras revisión final;
-- B tenga B2/B4/B8 validados, presentación avanzada cubierta por FT3D y cierres humanos/documentales; 360 no es requisito;
+- B tenga B2/B8 validados, B4 ya validado real, presentación avanzada cubierta por FT3D y cierres humanos/documentales; 360 no es requisito;
 - C mantenga C1–C4 integrados y validados;
 - FT3D-1..7 estén integrados y validados;
 - no existan regresiones nuevas;
