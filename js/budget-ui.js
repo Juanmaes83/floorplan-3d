@@ -99,5 +99,7 @@
   q.oninput=show;show();}
  function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);}
  function summary(){try{const r=load();return B.calculateBudget(r.budget);}catch{return null;}}
- window.FloorPlanBudgetUI={open,summary,get budget(){return state?.budget||null;}};
+ // C4: read-only access to the same draft summary() uses, plus whether a budget was ever prepared. Never saves.
+ function current(){try{const r=load();return {budget:r.budget,saved:r.savedBefore};}catch{return null;}}
+ window.FloorPlanBudgetUI={open,summary,current,get budget(){return state?.budget||null;}};
 })();

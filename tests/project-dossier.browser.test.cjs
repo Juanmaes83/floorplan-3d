@@ -35,7 +35,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844}])test('Pro
  assert.equal(await doc.locator('.dossier-surfaces tbody tr').count(),await page.evaluate(()=>FloorPlanSurfaceMetrics.home(FloorPlanApp.project).levels[0].rooms.length));
  assert.equal(await doc.locator('.dossier-orientation svg.site-rose,.dossier-orientation svg.site-sun').count(),2);
  assert.match(await doc.locator('.dossier-views').innerText(),/Sin vistas preparadas/);assert.equal(await doc.locator('.dossier-views img').count(),0,'no fake images');
- assert.match(await doc.locator('.dossier-sources').innerText(),/No incluye presupuesto/);
+ assert.match(await doc.locator('.dossier-sources').innerText(),/No se ha preparado presupuesto para este proyecto/);assert.doesNotMatch(await doc.locator('.dossier-sources').innerText(),/no disponible todavía/,'C4: the budget exists as a feature');
  // Styles reorder and recompose the same content.
  const orders={};for(const style of ['client','realestate','studio']){await page.locator('#dossierStyle').selectOption(style);orders[style]=(await titles()).map(s=>s.toUpperCase());assert.equal(await doc.getAttribute('data-style'),style);}
  assert.equal(orders.client[0],'IMÁGENES DE LA VIVIENDA');assert.ok(!orders.client.includes('FUENTES Y ALCANCE'));

@@ -33,3 +33,9 @@
 @media(max-width:700px){.dossier-paper{margin:8px}.dossier-page{padding:18px}.dossier-grid{grid-template-columns:minmax(0,1fr)}.dossier-title{font-size:30px}.dossier-gallery{grid-template-columns:minmax(0,1fr)}}
 .dossier-print{margin:0;background:#fff}.dossier-print .dossier-paper{margin:0 auto;max-width:900px}.dossier-print .dossier-page{box-shadow:none;border-bottom:1px solid #e2dccf}.dossier-print-button{position:fixed;top:10px;right:10px;font:600 14px system-ui,sans-serif;padding:8px 14px;z-index:2}
 @media print{.dossier-print-button{display:none}.dossier-print .dossier-page{break-after:page;padding:0;border:0}.dossier-print .dossier-page:last-of-type{break-after:auto}@page{size:A4;margin:14mm}}
+/* C4: compact economic page of the dossier (A4 and the B1 client file, which inlines this stylesheet). */
+.dossier-economic .econ-totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 12px}
+.dossier-economic .econ-totals>div{border:1px solid var(--d-rule);border-radius:4px;padding:8px 10px}.dossier-economic dt{font-size:12px;color:var(--d-muted)}.dossier-economic dd{margin:2px 0 0;font-weight:600;font-variant-numeric:tabular-nums}
+.dossier-economic .econ-partial dd{color:#8a4b12}.dossier-economic .econ-warnings{margin:0 0 12px;padding:8px 10px 8px 26px;background:#fbf1e2;border-left:3px solid #b87a2a;font-size:13px}.dossier-economic .econ-warnings small{color:var(--d-muted)}
+.dossier-economic .econ-table{width:100%;border-collapse:collapse;font-size:13px}.dossier-economic .econ-table td{border-bottom:1px solid var(--d-rule);padding:6px 4px}.dossier-economic .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dossier-economic .econ-foot,.dossier-economic .econ-none{font-size:12px;color:var(--d-muted);margin:10px 0 0}
