@@ -1,7 +1,7 @@
 # Matriz de cierre del roadmap — actualizado 31-10-2026
 
-**Base funcional consolidada:** FT3D-2 integrado en `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.  
-**Estado de control actual:** FT3D-2 cerrado funcionalmente con 2a; C4 especificado y autorizado para implementación.  
+**Base funcional consolidada:** C4 integrado en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.  
+**Estado de control actual:** Fase C completa 4/4; FT3D-2 cerrado funcionalmente con 2a; próximo bloque = validaciones reales B2/B4/B8.  
 **Decisión de producto:** 360 diferido formalmente; no bloquea Fase B.
 
 ## Convenciones
@@ -9,7 +9,6 @@
 - **INTEGRADO:** contenido en `master`.
 - **VALIDADO:** ha superado el QA requerido para el alcance.
 - **VALIDACIÓN PENDIENTE:** integrado, pero falta prueba externa/humana necesaria para cierre.
-- **ESPECIFICADO / AUTORIZADO:** contrato cerrado, implementación aún no integrada.
 - **PENDIENTE:** todavía no existe el corte funcional.
 - **DIFERIDO:** fuera del cierre actual por decisión de alcance; no bloquea el bloque correspondiente.
 
@@ -65,29 +64,31 @@ Para cerrar Fase B quedan como gates reales:
 
 | Objetivo | Estado | Corte |
 |---|---|---|
-| Cantidades / schedules | **INTEGRADO** | C1 |
-| Presupuesto operativo | **INTEGRADO** | C2 |
-| BC3 / tarifas / fuentes | **INTEGRADO** | C3 |
-| Dossier económico | **ESPECIFICADO / AUTORIZADO** | C4 |
+| Cantidades / schedules | **INTEGRADO Y VALIDADO** | C1 |
+| Presupuesto operativo | **INTEGRADO Y VALIDADO** | C2 |
+| BC3 / tarifas / fuentes | **INTEGRADO Y VALIDADO** | C3 |
+| Dossier económico | **INTEGRADO Y VALIDADO** | C4 |
 
-**C está en 3/4 integrada.** C4 ya tiene contrato canónico:
+**C está funcionalmente completa: 4/4.**
+
+C4 quedó integrado mediante PR **#156** en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0` y pasó CI remoto completo.
+
+C4 cubre:
+
+- `Dossier económico` en `ENTREGAR`;
+- variantes Profesional / Cliente;
+- autoridad de presentación en `FloorPlanBudgetPresentation.buildReport()`;
+- no recálculo ni persistencia duplicada;
+- origen de precio separado del estado de revisión;
+- IVA `null` distinto de 0 % y totales no definitivos cuando corresponde;
+- capítulos/partidas/subtotales/totales/warnings desde la autoridad canónica;
+- integración A4/B1;
+- print/PDF + CSV + JSON + BC3 existentes;
+- corrección de los textos históricos falsos de presupuesto en `ENTREGAR`.
+
+Contrato canónico:
 
 `docs/product/c4-economic-dossier-contract-2026-10-31.md`
-
-El contrato fija:
-
-- edición en `PRESUPUESTAR`, entrega en `ENTREGAR`;
-- autoridad de presentación = `FloorPlanBudgetPresentation.buildReport()`;
-- sin recálculo ni persistencia duplicada;
-- origen de precio `Sin precio / Referencia / Propio` separado del estado `Pendiente / Revisado`;
-- IVA `null` distinto de 0 %;
-- capítulos, subtotales, totales y warnings exclusivamente desde el report canónico;
-- variante profesional y cliente;
-- integración aditiva con dossier A4 y B1;
-- reutilización de print/PDF, CSV, JSON y BC3 existentes;
-- criterios de aceptación, casos límite, QA y DONE explícitos.
-
-Cuando C4 se implemente, valide e integre, Fase C podrá pasar a **4/4**.
 
 ---
 
@@ -105,44 +106,18 @@ Cuando C4 se implemente, valide e integre, Fase C podrá pasar a **4/4**.
 | FT3D-7 | **PENDIENTE COMO FASE** | B1/B3/B4 reutilizables | Story + outputs/share/vídeo |
 | FT3D-8 | **DIFERIDO / FUTURO** | — | contrato temporal explícito |
 
-## FT3D-2 — cierre técnico
-
-PR #155 integró un solo commit, 8 archivos, +347/-63 y CI remoto completamente verde.
-
-Mínimos FT3D-2:
-
-| Mínimo | Estado |
-|---|---|
-| Secuencia de escenas | **CUBIERTO** |
-| Control por progreso | **CUBIERTO** |
-| Siguiente/anterior | **CUBIERTO** |
-| Reproducción automática / pausa | **CUBIERTO** |
-| Entrada/salida reusable | **CUBIERTO** por `enterScene()` + `finishStory()`/`closeStory()` |
-| Captions/contador | **CUBIERTO** |
-| Restauración de estado | **CUBIERTO Y VALIDADO** |
-| Cámaras deterministas | **CUBIERTO** (`fromStop/fromRegion`) |
-| Orden/selección sin editar geometría | **CUBIERTO** por plan de Presentación |
-
-**Decisión:** no crear FT3D-2b. No existe un gap funcional demostrado.
-
-Checkpoint de control:
-
-`checkpoint/post-ft3d-2-pre-c4-2026-10-31`
+**Decisión FT3D-2:** no crear 2b. No existe un gap funcional demostrado.
 
 ---
 
 # Orden operativo autorizado
 
 ```text
-FT3D-2 integrado y cerrado funcionalmente
+Fase C 4/4 integrada
         ↓
-C4 dossier económico   ← AHORA
+validaciones reales B2 / B4 / B8   ← AHORA
         ↓
-auditoría ChatGPT + CI + integración
-        ↓
-Fase C 4/4 si pasa gates
-        ↓
-validaciones B2/B4/B8
+correcciones sólo si la validación demuestra un defecto real
         ↓
 FT3D-3 sección
         ↓
@@ -154,7 +129,13 @@ FT3D-6 plantillas
         ↓
 FT3D-7 outputs/share
         ↓
-auditoría y cierres A/B/C/FT3D
+auditoría global
+        ↓
+cierres A / B / C / FT3D
+        ↓
+limpieza GitHub
+        ↓
+protección de master
 ```
 
 **360 queda fuera de esta secuencia por decisión formal.**
@@ -165,7 +146,8 @@ auditoría y cierres A/B/C/FT3D
 
 - R10 framing: inestabilidad de temporización CSS bajo carga.
 - professional-workspace: timeout aislado reproducido en baseline bajo carga.
-- Branch protection de `master`: valorar al final de la consolidación.
+- render-budget: cancelación/timeout observada también en master base durante QA C4.
+- Branch protection de `master`: pendiente al final de la consolidación.
 - PR históricas #133–#149: limpieza administrativa pendiente.
 - 8B-C cubiertas inclinadas: diferido.
 - 360: diferido por alcance.
@@ -180,7 +162,7 @@ El bloque A/B/C/FT3D puede declararse cerrado cuando:
 
 - A esté cerrada documentalmente tras revisión final;
 - B tenga B2/B4/B8 validados, presentación avanzada cubierta por FT3D y cierres humanos/documentales; 360 no es requisito;
-- C tenga C4 integrado y validado;
+- C mantenga C1–C4 integrados y validados;
 - FT3D-1..7 estén integrados y validados;
 - no existan regresiones nuevas;
 - la integración siga siendo aditiva;
