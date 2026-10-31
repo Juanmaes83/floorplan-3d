@@ -86,7 +86,7 @@ test('OFF unchanged; ON: checkpoints, real plane on the building only, reverse, 
  assert.equal(await page.locator('#presentationStoryPlay').innerText(),'Continuar presentación');await shot(page,'desktop-reduced-held');
  await page.locator('#presentationStoryPlay').click();await settled(page);const continued=await state(page);assert.ok(clean(continued.clip));assert.ok(samePose(continued.cam,overview.cam,1e-4),'continuing keeps the same view');
  // Next stop (the room) as before.
- await page.locator('#presentationNext').click();await settled(page);await page.waitForTimeout(300);await shot(page,'desktop-room-after');assert.ok(clean((await state(page)).clip));
+ await page.getByRole('button',{name:'Siguiente →',exact:true}).click();await settled(page);await page.waitForTimeout(300);await shot(page,'desktop-room-after');assert.ok(clean((await state(page)).clip));
  await exit(page,editor,'on');await shot(page,'desktop-after-exit');assert.deepEqual(errors,[]);
 });
 
@@ -153,7 +153,7 @@ test('unsupported plan: option disabled with a concrete reason; presentation una
   const wall=(id,x0,y0,x1,y1)=>({...structuredClone(w),id,start:{x:x0,y:y0},end:{x:x1,y:y1}});
   const box=(k,x0,y0,x1,y1)=>[wall('wal_'+k+'a',x0,y0,x1,y0),wall('wal_'+k+'b',x1,y0,x1,y1),wall('wal_'+k+'c',x1,y1,x0,y1),wall('wal_'+k+'d',x0,y1,x0,y0)];
   p.walls=[...box('wn',0,0,12000,1500),...box('ws',0,8500,12000,10000)];p.openings=[];p.objects=[];p.measurements=[];
-  p.rooms=[{...structuredClone(r),id:'rom_n',polygon:[{x:0,y:0},{x:12000,y:0},{x:12000,y:1500},{x:0,y:1500}],labelAt:{x:6000,y:750}},{...structuredClone(r),id:'rom_s',polygon:[{x:0,y:8500},{x:12000,y:8500},{x:12000,y:10000},{x:0,y:10000}],labelAt:{x:6000,y:9250}}];
+  p.rooms=[{...structuredClone(r),id:'rom_northband',polygon:[{x:0,y:0},{x:12000,y:0},{x:12000,y:1500},{x:0,y:1500}],labelAt:{x:6000,y:750}},{...structuredClone(r),id:'rom_southband',polygon:[{x:0,y:8500},{x:12000,y:8500},{x:12000,y:10000},{x:0,y:10000}],labelAt:{x:6000,y:9250}}];
   FloorPlanApp.importProject(p);});
  await page.waitForTimeout(800);const editor=await snapshot(page);
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
