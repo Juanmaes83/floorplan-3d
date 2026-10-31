@@ -1,7 +1,8 @@
 # Matriz de cierre del roadmap — actualizado 31-10-2026
 
 **Base funcional consolidada:** FT3D-1 integrado en `579189df39513aca44e0a86b44ef4392f38173d2`.  
-**Estado de control actual:** FT3D-2a auditado y autorizado para reconciliación controlada.
+**Estado de control actual:** FT3D-2a auditado y autorizado para reconciliación controlada.  
+**Decisión de producto:** 360 diferido formalmente; no bloquea Fase B.
 
 ## Convenciones
 
@@ -10,7 +11,7 @@
 - **IMPLEMENTADO, NO INTEGRADO:** existe código en rama/PR/backup.
 - **AUTORIZADO PARA RECONCILIACIÓN:** auditado y con rama de integración preparada, pero aún no integrado.
 - **PENDIENTE:** todavía no existe el corte funcional.
-- **DIFERIDO:** fuera del cierre actual por decisión de alcance.
+- **DIFERIDO:** fuera del cierre actual por decisión de alcance; no bloquea el bloque correspondiente.
 
 ---
 
@@ -43,9 +44,20 @@
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO / VALIDACIÓN PENDIENTE** | proveedor real / calidad |
 | Presentación avanzada | **PARCIALMENTE CUBIERTA** | FT3D-1 integrado; FT3D-2..7 pendientes |
-| 360 | **PENDIENTE O DIFERIBLE** | decisión de alcance |
+| 360 | **DIFERIDO POR ALCANCE** | no bloquea Fase B |
 
-**B no está cerrada.** B1–B8 están incorporados, pero faltan validaciones reales B2/B4/B8 y resolver `360 / presentación avanzada`.
+## Decisión formal 360
+
+**31-10-2026 — decisión de Juanma:** no desarrollar ahora un tour 360 específico.
+
+Motivo: Presentation Story/FT3D ofrece una evolución de presentación más potente y prioritaria. El 360 queda conservado como posibilidad futura, pero sólo se reabrirá si aparece un caso de uso propio que justifique su coste.
+
+**Consecuencia:** para cerrar Fase B ya no hace falta implementar 360. Quedan como gates reales:
+
+- validación real de B2/B8 con OpenAI/proveedor;
+- validación real de B4 con Vercel Blob;
+- completar la parte de presentación avanzada mediante FT3D;
+- cierres humanos/documentales aplicables.
 
 ---
 
@@ -144,8 +156,6 @@ C4 dossier económico
         ↓
 validaciones B2/B4/B8
         ↓
-decisión 360
-        ↓
 FT3D-3 sección
         ↓
 FT3D-4 fachada
@@ -159,6 +169,8 @@ FT3D-7 outputs/share
 auditoría y cierres A/B/C/FT3D
 ```
 
+**360 queda fuera de esta secuencia por decisión formal; no bloquea Fase B ni el cierre actual.**
+
 ---
 
 # Deuda conocida que no debe confundirse con cortes funcionales
@@ -167,6 +179,7 @@ auditoría y cierres A/B/C/FT3D
 - Branch protection de `master`: valorar al final de la consolidación.
 - PR históricas #133–#149: limpieza administrativa pendiente.
 - 8B-C cubiertas inclinadas: diferido.
+- **360:** diferido por alcance; reevaluable sólo si aporta valor independiente.
 - Punto 10 y Fase D: posteriores.
 - FT3D-8: familia futura separada.
 
@@ -177,7 +190,7 @@ auditoría y cierres A/B/C/FT3D
 El bloque A/B/C/FT3D puede declararse cerrado cuando:
 
 - A esté cerrada documentalmente tras revisión final;
-- B tenga validaciones externas resueltas y 360 implementado o diferido explícitamente;
+- B tenga validaciones externas B2/B4/B8 resueltas, presentación avanzada cubierta por FT3D y cierres humanos/documentales aplicables; **360 no es requisito**;
 - C tenga C4;
 - FT3D-1..7 estén integrados y validados;
 - no existan regresiones nuevas;
