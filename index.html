@@ -4639,7 +4639,9 @@ function endPresentationStory({keepPose=true}={}){
    crossed room: its floor line), built once when the scene begins and destroyed when it ends. Every material keeps its
    own clipping planes saved and gets them back, and the renderer's local clipping flag returns to its value. */
 const SECTION_CAP_COLOR=0x9a3a2a,SECTION_LINE_COLOR=0x2d332f;
-function sectionTargets(){return [archFloor,archUp,furnG,lampG,exteriorG,roofG].filter(Boolean);}
+// The other levels shown with the active one (levelsG: lower levels, stairs) are cut by the same plane, without cut
+// faces: the narrated level is the active one (a stacked section of both levels belongs to FT3D-5).
+function sectionTargets(){return [archFloor,archUp,furnG,lampG,exteriorG,roofG,levelsG].filter(Boolean);}
 function sectionKey(){return sectionTargets().map(g=>g.uuid+':'+g.children.length).join('|');}
 function clipSectionMaterials(sec){
   for(const g of sectionTargets())g.traverse(o=>{if(!o.material||o.userData.sectionCap)return;for(const m of Array.isArray(o.material)?o.material:[o.material]){if(sec.materials.has(m))continue;sec.materials.set(m,m.clippingPlanes);m.clippingPlanes=[sec.clip];m.needsUpdate=true;}});

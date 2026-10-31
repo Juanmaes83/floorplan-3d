@@ -37,7 +37,7 @@ const clean=c=>c.materialsWithPlanes===0&&!c.localClipping&&c.sectionGroups===0&
 const shot=(page,name)=>page.screenshot({path:path.join(QA,name+'.png')});
 const noOverflow=page=>page.evaluate(()=>document.scrollingElement.scrollWidth<=innerWidth+1);
 async function exit(page,before,name){await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);
- await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating,null,{timeout:30000});const after=await snapshot(page),c=await page.evaluate(()=>View3D.presentationClipInfo);
+ await page.waitForFunction(()=>!View3D.lifecycleMetrics.animating&&!document.querySelector('#stage')?.classList.contains('animating')&&!document.body.classList.contains('presentation-exiting'),null,{timeout:30000});await page.waitForTimeout(600);const after=await snapshot(page),c=await page.evaluate(()=>View3D.presentationClipInfo);
  assert.equal(after.project,before.project,`${name}: project JSON identical`);assert.equal(after.undo,before.undo,`${name}: same undo history`);assert.deepEqual(after.storage,[],`${name}: nothing stored`);
  assert.ok(clean(c),`${name}: no clipping left after exit ${JSON.stringify(c)}`);assert.equal(await page.locator('#presentationSectionPlay').count(),0,`${name}: controls leave with the presentation`);}
 
@@ -100,7 +100,7 @@ test('whole story: plan → section → room without a camera jump; restore on e
  const sectionEnd=await state(page);assert.equal(sectionEnd.info.dynamicSection.capsVisible,true,'reduced motion lands on the open section');await shot(page,'story-section-held');
  assert.match(await page.locator('#presentationStoryCounter').innerText(),/escena 2 de 3/);
  // Section p = 1 and the descent's p = 0 are the same pose; the section is gone in the descent.
- const P1=await page.evaluate(()=>{const s=FloorPlanPresentation.story;return s.P;});const atEnd=await scrub(page,Math.round(1000*await page.evaluate(()=>{const st=FloorPlanPresentationStory.sequence([6000,7000,3500]);return st.at(2,0)-1e-4;})));
+ const P1=await page.evaluate(()=>{const s=FloorPlanPresentation.story;return s.P;});const atEnd=await scrub(page,Math.floor(1000*await page.evaluate(()=>FloorPlanPresentationStory.sequence(['plan-reveal','section-open','room-descent'].map(k=>FloorPlanPresentationStory.SCENE_MS[k])).at(2,0)))-1);
  assert.equal(atEnd.story.kind,'section-open');assert.ok(P1>0);
  await page.locator('#presentationStoryNext').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='room-descent'&&!FloorPlanPresentation.story.busy&&!FloorPlanPresentation.story.playing);await frames(page);
  const descent=await state(page);assert.ok(clean(descent.clip),`the descent has no section ${JSON.stringify(descent.clip)}`);
@@ -112,7 +112,8 @@ test('whole story: plan → section → room without a camera jump; restore on e
 test('autoplay plays and pauses; finishing restores (1440x900, motion allowed)',{timeout:600000},async t=>{
  const {page,errors}=await open(t,{width:1440,height:900},{reduced:false});await page.locator('#welcomeExample').click();await page.waitForTimeout(800);const editor=await snapshot(page);
  await configure(page,{section:true});await settled(page);await page.locator('#presentationSectionPlay').click();
- await page.waitForFunction(()=>FloorPlanPresentation.story?.playing);await page.locator('#presentationStoryPlay').click();
+ // Pause from the page at the first played frame (the software renderer is too slow for a timed click).
+ await page.evaluate(()=>new Promise(r=>{const tick=()=>{if(FloorPlanPresentation.story?.playing&&FloorPlanPresentation.story.p>0){document.querySelector('#presentationStoryPlay').click();r();}else requestAnimationFrame(tick);};tick();}));
  const paused=await state(page);assert.equal(paused.story.playing,false,'pause');assert.ok(paused.story.p<1);
  await page.locator('#presentationStoryPlay').click();await settled(page);const done=await state(page);assert.ok(clean(done.clip),'finishing restores');
  await exit(page,editor,'autoplay');assert.deepEqual(errors,[]);
@@ -150,7 +151,7 @@ test('unsupported plan: option disabled with a concrete reason; presentation una
  // Two rooms at the far ends of the plan: no candidate (50 %, 40 %, 60 %) crosses a room or two walls.
  await page.evaluate(()=>{const p=structuredClone(FloorPlanApp.project),w=p.walls[0],r=p.rooms[0];
   const wall=(id,x0,y0,x1,y1)=>({...structuredClone(w),id,start:{x:x0,y:y0},end:{x:x1,y:y1}});
-  const box=(k,x0,y0,x1,y1)=>[wall(k+'a',x0,y0,x1,y0),wall(k+'b',x1,y0,x1,y1),wall(k+'c',x1,y1,x0,y1),wall(k+'d',x0,y1,x0,y0)];
+  const box=(k,x0,y0,x1,y1)=>[wall('wal_'+k+'a',x0,y0,x1,y0),wall('wal_'+k+'b',x1,y0,x1,y1),wall('wal_'+k+'c',x1,y1,x0,y1),wall('wal_'+k+'d',x0,y1,x0,y0)];
   p.walls=[...box('wn',0,0,12000,1500),...box('ws',0,8500,12000,10000)];p.openings=[];p.objects=[];p.measurements=[];
   p.rooms=[{...structuredClone(r),id:'rom_n',polygon:[{x:0,y:0},{x:12000,y:0},{x:12000,y:1500},{x:0,y:1500}],labelAt:{x:6000,y:750}},{...structuredClone(r),id:'rom_s',polygon:[{x:0,y:8500},{x:12000,y:8500},{x:12000,y:10000},{x:0,y:10000}],labelAt:{x:6000,y:9250}}];
   FloorPlanApp.importProject(p);});
