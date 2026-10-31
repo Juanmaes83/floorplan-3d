@@ -1,7 +1,7 @@
 # Estado operativo de producto e integración — actualizado 31-10-2026
 
 **Fuente operativa de verdad para el trabajo actual.**  
-**HEAD funcional con C4 integrado:** `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.  
+**HEAD funcional con FT3D-3 integrado:** `18295e620ba0c19fff4e005449d763bf90342e92`.  
 Verificar siempre el HEAD real de `master` antes de ejecutar trabajo.
 
 Estados usados:
@@ -26,7 +26,8 @@ Están integrados:
 - programa de conocimiento Flat-to-3D;
 - FT3D-1a — «Empezar desde el plano»;
 - FT3D-1b — «Entrar en la estancia»;
-- FT3D-2a — motor reusable de Presentation Story y «Ver la historia completa».
+- FT3D-2a — motor reusable de Presentation Story y «Ver la historia completa»;
+- **FT3D-3 — sección dinámica**.
 
 ### FT3D-1
 
@@ -50,11 +51,57 @@ Commit integrado: `042c256b5898b04b89749cdc1ab8b5ce9d29da10`.
 
 2a aporta secuencia reusable de escenas, progreso global, anterior/siguiente, reproducción/pausa, captions, cámaras deterministas, historia completa, orden/selección desde el plan y restauración/salida al flujo existente.
 
-La auditoría del ciclo de vida considera cubierto el mínimo de entrada/salida reusable mediante `enterScene()` + `finishStory()`/`closeStory()`.
-
-CI remoto de #155: **success** en todos los workflows requeridos.
-
 **FT3D-2 está INTEGRADO, VALIDADO TÉCNICAMENTE y FUNCIONALMENTE COMPLETO CON 2a. No se requiere FT3D-2b.**
+
+### FT3D-3 — sección dinámica
+
+PR de integración: **#157**.  
+Base: `d476d20c00f5be96f715d37fdf32b12d7a85be34`.  
+Commit integrado por fast-forward seguro: `18295e620ba0c19fff4e005449d763bf90342e92`.
+
+Aporta:
+
+- narrativa `section-open` integrada en el Story engine existente;
+- descriptor puro `presentation-section-core.js` sin DOM, Three.js ni persistencia;
+- selección determinista de sección por eje y candidatos 50/40/60;
+- clipping vertical real sobre el edificio, sin recortar terreno/contexto/UI;
+- caras de corte visuales derivadas del modelo, respetando huecos conocidos;
+- cámara reversible overview → corte → frontal → apertura → overview seccionado;
+- opt-in «Incluir sección dinámica», OFF por defecto y no persistido;
+- minimapa con línea y dirección del corte;
+- multipiso dentro del contrato actual de 2 niveles, sin inventar sección apilada;
+- reduced motion, cancelación/restauración y continuidad hacia room-descent;
+- QA unitario, navegador, móvil, multipiso, unsupported y vídeo ida/vuelta.
+
+QA final reportado sobre `18295e6`:
+
+- unitarias: **657 bien, 0 fallos, 2 omitidos**;
+- `presentation-section`: **7/7**;
+- `presentation-story`: **8/8**;
+- professional-workspace **17/17**;
+- project-first **5/5**;
+- building-presentation **7/7**;
+- capture-3d **3/3**;
+- tour-video **2/2**;
+- presentation-overview **4/4**;
+- presentation-focus **2/2**;
+- `presentation`: 54 comprobaciones válidas, 0 fallos de aserción, 4 cancelaciones por timeout bajo carga;
+- CI remoto del PR #157: **7/7 workflows success**.
+
+Comparación exacta contra `master@d476d20` confirmó que los seis casos problemáticos ya existían en baseline y no son regresiones FT3D-3:
+
+- R10 framing a 1440;
+- minimapa M13 a 1440;
+- P13 a 1440;
+- P15 diez ciclos/memoria;
+- caso 31 Escape/Atrás;
+- P05 a 1440.
+
+Evidencia visual final generada sobre `18295e6`: checkpoints p=0/.25/.35/.50/.65/.75/1, estancia posterior, salida/restauración, 390×844, 844×390, ambas plantas, unsupported, vídeo forward y reverse. No se observó clipping residual, terreno recortado, corte invertido ni salto nuevo de cámara/FOV atribuible a FT3D-3.
+
+Riesgo visual no bloqueante: en multipiso las otras plantas visibles se recortan con el mismo plano pero sólo la planta narrada recibe caras de corte. Una sección apilada conjunta pertenece a FT3D-5.
+
+**Estado FT3D-3: INTEGRADO Y VALIDADO.**
 
 ---
 
@@ -81,43 +128,22 @@ B1–B8 están integrados.
 | Comentarios anclados | **INTEGRADO** | cierre humano/documental |
 | Moodboard | **INTEGRADO** | cierre humano/documental |
 | Alternativas IA | **INTEGRADO EN CÓDIGO / VALIDACIÓN EXTERNA PENDIENTE** | proveedor OpenAI real + revisión de calidad cuando haya créditos + `OPENAI_API_KEY`; no hay defecto de código demostrado |
-| Presentación avanzada | **EN PROGRESO** | FT3D-1 y FT3D-2 integrados; FT3D-3..7 pendientes |
+| Presentación avanzada | **EN PROGRESO** | FT3D-1, 2 y 3 integrados; FT3D-4..7 pendientes |
 | 360 | **DIFERIDO POR ALCANCE** | no bloquea el cierre de B |
 
 ### Validación real B4 — Vercel Blob
 
 **31-10-2026 — VALIDADO REAL en producción.**
 
-Configuración/QA realizado:
-
-- almacén Vercel Blob `floorplan-3d-share` creado y conectado al proyecto `floorplan-3d`;
-- región Blob `fra1`, acceso público según contrato B4;
-- `BLOB_READ_WRITE_TOKEN` inyectado por Vercel como variable protegida de entorno;
-- `RUBIK_RENDER_TOKEN` configurado como secreto del servidor;
-- redeploy de producción del `master` canónico en estado `READY`;
-- `POST /api/share` real → **200**;
-- Blob publicado real → **200** con `text/html` correcto;
-- `GET /api/view?f=...` → **200** y contenido esperado;
-- código de acceso incorrecto → **401 / token**;
-- no fue necesario modificar código B4.
-
-**Conclusión:** B4 está integrado y validado externamente. Ya no es gate pendiente.
+Se validó almacén Vercel Blob público conectado al proyecto, variables protegidas, redeploy READY, `POST /api/share` → 200, Blob → 200, `/api/view` → 200 y código incorrecto → 401. No fue necesario modificar código B4.
 
 ### Bloqueo externo temporal B2 / B8
 
-B2 y B8 comparten `api/render.js` y requieren `OPENAI_API_KEY` + saldo/créditos de API de OpenAI para una validación real.
-
-**Estado 31-10-2026:** la cuenta de proveedor todavía no puede financiarse/configurarse de forma operativa; esta dependencia externa se retomará cuando haya créditos disponibles. No se ha identificado ningún defecto funcional nuevo en el código de B2/B8.
-
-**Decisión operativa:** B2/B8 permanecen abiertos como validación externa pendiente, pero **no bloquean avanzar con FT3D-3..7 mientras se resuelve la dependencia del proveedor**. Cuando OpenAI esté disponible, la validación B2/B8 se reanuda sin reimplementar código salvo defecto demostrado.
+B2 y B8 requieren `OPENAI_API_KEY` + créditos API para validación real. La dependencia externa queda aparcada hasta que pueda financiarse/configurarse el proveedor. No hay defecto funcional nuevo demostrado y no bloquea FT3D-4..7.
 
 ### Decisión formal de producto — 360
 
-**Decisión de Juanma, 31-10-2026:** no desarrollar ahora un tour 360 específico.
-
-Presentation Story/FT3D tiene prioridad. 360 sólo se reabrirá si aparece un caso de uso independiente que justifique su coste.
-
-**Consecuencia:** 360 no bloquea Fase B.
+**Decisión de Juanma, 31-10-2026:** no desarrollar ahora un tour 360 específico. Sólo se reabrirá si aparece un caso de uso independiente que justifique su coste.
 
 ### Fase C
 
@@ -130,28 +156,9 @@ Presentation Story/FT3D tiene prioridad. 360 sólo se reabrirá si aparece un ca
 
 **Fase C está funcionalmente COMPLETA: 4/4.**
 
-C4 quedó integrado mediante PR **#156** en `a6a44cd296b1c4c01a1ce272d19f51b4f188c9f0`.
+C4 quedó integrado mediante PR **#156** y usa `FloorPlanBudgetPresentation.buildReport()` como autoridad, sin recálculo/persistencia duplicada, con variantes Profesional/Cliente, origen de precio separado de revisión, IVA `null` distinto de 0 %, integración A4/B1 y salidas print/PDF/CSV/JSON/BC3.
 
-C4 implementa:
-
-- `Dossier económico` en `ENTREGAR`;
-- variantes Profesional y Cliente;
-- autoridad de presentación = `FloorPlanBudgetPresentation.buildReport()`;
-- sin recálculo ni persistencia económica duplicada;
-- origen de precio `Sin precio / Referencia / Propio` separado de `Pendiente / Revisado`;
-- IVA `null` distinto de 0 % y total bruto sólo definitivo cuando el report lo permite;
-- capítulos, partidas, subtotales, totales y warnings desde el report canónico;
-- integración A4 y B1;
-- print/PDF, CSV, JSON y BC3 reutilizando autoridades existentes;
-- estado real del presupuesto en `ENTREGAR`, eliminando las frases históricas falsas de “no disponible”.
-
-QA remoto de PR #156: **success** en Guided experience, Project-First regressions, Point 6 solar, Multiformat guided import, Point 8C-C, Point 8C-D e Integrated browser regressions.
-
-QA local reportado por Claude: C4 19/19 unitarias, C4 browser 2/2, A4 2/2, B1 2/2, client-review 5/5, Project-First 5/5, budget-ui 4/4. Los únicos problemas observados se reprodujeron también en master base y permanecen como deuda conocida, no como regresión C4.
-
-Contrato canónico conservado:
-
-`docs/product/c4-economic-dossier-contract-2026-10-31.md`
+Contrato canónico: `docs/product/c4-economic-dossier-contract-2026-10-31.md`.
 
 ---
 
@@ -162,8 +169,8 @@ Contrato canónico conservado:
 | FT3D-0 — investigación/contrato | **CASI CUBIERTO**, cierre formal pendiente |
 | FT3D-1 — plano → 3D → primera estancia | **INTEGRADO Y VALIDADO TÉCNICAMENTE**; aceptación humana final pendiente |
 | FT3D-2 — motor reusable Story | **INTEGRADO, VALIDADO Y COMPLETO CON 2a** |
-| FT3D-3 — sección dinámica | **SIGUIENTE CORTE AUTORIZADO** |
-| FT3D-4 — alzado/fachada narrativa | **PENDIENTE** |
+| FT3D-3 — sección dinámica | **INTEGRADO Y VALIDADO** |
+| FT3D-4 — alzado/fachada narrativa | **SIGUIENTE CORTE AUTORIZADO PARA ESPECIFICACIÓN** |
 | FT3D-5 — axonometría/exploded | **PENDIENTE** |
 | FT3D-6 — plantillas por perfil | **PENDIENTE** |
 | FT3D-7 — salidas/compartición Story | **PENDIENTE COMO FASE** |
@@ -175,47 +182,25 @@ No se autoriza FT3D-2b: no existe gap demostrado que lo necesite.
 
 ## 4. Orden operativo autorizado
 
-1. **FT3D-3 — sección dinámica**.
-2. FT3D-4 — alzado/fachada.
-3. FT3D-5 — axonometría/exploded.
-4. FT3D-6 — plantillas.
-5. FT3D-7 — salidas/compartición.
-6. **En paralelo / cuando se desbloquee OpenAI:** validaciones reales B2 / B8.
-7. Auditoría global.
-8. Cierres canónicos A / B / C / FT3D.
-9. Limpieza GitHub y reconciliación administrativa de PR/ramas históricas.
-10. Protección de `master`.
+1. **FT3D-4 — alzado/fachada narrativa: especificar contrato exacto antes de implementación.**
+2. FT3D-5 — axonometría/exploded.
+3. FT3D-6 — plantillas.
+4. FT3D-7 — salidas/compartición.
+5. **En paralelo / cuando se desbloquee OpenAI:** validaciones reales B2 / B8.
+6. Auditoría global.
+7. Cierres canónicos A / B / C / FT3D.
+8. Limpieza GitHub y reconciliación administrativa de PR/ramas históricas.
+9. Protección de `master`.
 
 **B4 ya está validado real.**  
-**B2/B8 siguen siendo gates de cierre de B, pero quedan temporalmente aparcados por dependencia externa y no bloquean FT3D.**  
-**360 no forma parte de esta secuencia:** está formalmente diferido y no bloquea ningún cierre actual.
+**B2/B8 siguen siendo gates de cierre de B, pero no bloquean FT3D.**  
+**360 está formalmente diferido y fuera de esta secuencia.**
 
 ---
 
-## 5. Vercel / validaciones externas
+## 5. Fuera del cierre actual
 
-Proyecto Vercel conectado: `floorplan-3d` (`prj_x19F1PyprdHvDRbAv3lJW5GXlL0k`).
-
-### B4
-
-**VALIDADO REAL** en producción el 31-10-2026 mediante Vercel Blob y endpoints `/api/share` + `/api/view`.
-
-### B2 / B8
-
-Pendientes de validación real por dependencia externa de OpenAI:
-
-- falta disponibilidad operativa de créditos/saldo API;
-- después se configurará `OPENAI_API_KEY` como secreto Vercel;
-- `RUBIK_RENDER_TOKEN` ya está preparado;
-- la prueba deberá cubrir B2 render real y B8 cambios controlados de acabados/calidad.
-
-No pegar claves ni secretos en documentación, GitHub o conversaciones.
-
----
-
-## 6. Fuera del cierre actual
-
-- Tour 360 específico: diferido por decisión formal de producto del 31-10-2026.
+- Tour 360 específico: diferido.
 - Punto 10 — instalaciones ligeras: posterior.
 - Fase D — reconocimiento automático, LiDAR, CAD/BIM/API, equipos, portal avanzado, white-label: posterior.
 - 8B-C cubiertas inclinadas: diferido.
@@ -223,17 +208,18 @@ No pegar claves ni secretos en documentación, GitHub o conversaciones.
 
 ---
 
-## 7. Deuda e incidencias conocidas
+## 6. Deuda e incidencias conocidas
 
-- **R10 framing:** intermitencia de temporización CSS bajo carga; no es regresión FT3D.
-- **professional-workspace bajo carga:** timeout aislado observado/reproducido en baseline; vigilar pero no atribuir automáticamente a trabajo nuevo.
-- **render-budget bajo carga:** cancelación/timeout observada también en master base durante QA C4; no atribuida a C4.
-- **Branch protection:** `master` sigue sin protección; valorar al final de la consolidación.
+- **R10 framing:** intermitencia/temporización bajo carga; reproducida en baseline y no regresión FT3D-3.
+- **timeouts 1440 / software rendering:** minimapa M13, P13, P15, caso 31 y P05 reproducidos en `master@d476d20`; vigilar como deuda de QA/rendimiento, no atribuir a FT3D-3.
+- **professional-workspace bajo carga:** timeout aislado histórico reproducido en baseline.
+- **render-budget bajo carga:** cancelación/timeout histórico reproducido en baseline.
+- **Branch protection:** `master` sigue sin protección; resolver al final de la consolidación.
 - **PR históricas #133–#149:** limpieza administrativa pendiente.
 
 ---
 
-## 8. Regla de control para agentes
+## 7. Regla de control para agentes
 
 1. Verificar HEAD de `master` antes de actuar.
 2. Reconciliar trabajo existente; no reimplementarlo.
@@ -244,6 +230,6 @@ No pegar claves ni secretos en documentación, GitHub o conversaciones.
 
 ### Próximo trabajo autorizado
 
-**FT3D-3 — sección dinámica.**
+**FT3D-4 — alzado/fachada narrativa: preparar primero contrato exacto de alcance, reutilización del Story engine, cámaras, interacción, accesibilidad, multipiso, fallbacks, QA y DONE; después pasarlo a Claude para implementación.**
 
-B2/B8 permanecen pendientes de validación real con OpenAI y se retomarán cuando la dependencia externa de créditos/credencial esté disponible. No reimplementar B2/B8 mientras no exista un defecto demostrado por la validación real.
+B2/B8 permanecen pendientes de validación real con OpenAI y se retomarán cuando la dependencia externa esté disponible. No reimplementarlos mientras no exista un defecto demostrado por la validación real.
