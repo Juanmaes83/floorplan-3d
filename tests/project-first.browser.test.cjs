@@ -19,11 +19,12 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
 
  // Case A — Deliver: which project, what documentation and visuals exist, what is ready, what is missing, which identity.
  await page.locator('#workArea-deliver').click();await workspace.getByRole('heading',{name:'Entregar al cliente',exact:true}).waitFor();
+ await page.waitForFunction(()=>document.querySelector('#professionalWorkspace .project-context-ready')?.textContent.includes('Presupuesto: sin preparar'));
  const hero=workspace.locator('.project-context');
  assert.equal(await hero.locator('svg[role=img]').getAttribute('aria-label'),'Vista esquemática de la planta activa');
  assert.equal(await hero.locator('.preview-room').count(),facts.rooms,'the house drawn from its own rooms');assert.equal(await hero.locator('.preview-wall').count(),facts.walls);
  const heroText=await hero.innerText();assert.match(heroText,/Proyecto de ejemplo/);assert.match(heroText,/87,18 m²/);assert.match(heroText,/Estimado/);assert.match(heroText,new RegExp(`${facts.counted} estancias en el cómputo`));
- assert.match(heroText,/Listo para revisar: ficha, lámina, presentación 3D, observaciones/);assert.match(heroText,/Se genera al pulsar: imágenes/);assert.match(heroText,/Falta: firma profesional/);assert.match(heroText,/Presupuesto: no disponible todavía/);
+ assert.match(heroText,/Listo para revisar: ficha, lámina, presentación 3D, observaciones/);assert.match(heroText,/Se genera al pulsar: imágenes/);assert.match(heroText,/Falta: firma profesional/);assert.match(heroText,/Presupuesto: sin preparar/);
  // Surface schedule preview: its largest rooms, as the schedule lists them.
  const rows=await workspace.locator('.delivery-document li span:first-child').allInnerTexts();assert.deepEqual(rows,facts.top);
  // Sheet: the real sheet document, loaded locally as an image, and its state says it is ready to review.
@@ -33,7 +34,7 @@ for(const viewport of [{width:1440,height:900},{width:1280,height:800},{width:39
  // 3D: a labelled model scheme, explicitly not a render; images: none shown as ready.
  const presentation=workspace.locator('[data-module="presentation"]');assert.equal(await presentation.locator('svg[role=img]').getAttribute('aria-label'),'Esquema axonométrico del modelo de la planta activa');assert.match(await presentation.innerText(),/No es un render/);
  const images=await workspace.locator('[data-module="images"]').innerText();assert.match(images,/Todavía no hay vistas preparadas/);assert.match(images,/Se genera al pulsar/);assert.equal(await workspace.locator('[data-module="images"] img').count(),0,'no fake thumbnails');
- assert.match(await workspace.locator('[data-module="budget"]').innerText(),/todavía no disponible/);assert.match(await workspace.locator('[data-module="review"]').innerText(),/Sin observaciones pendientes/);
+ assert.match(await workspace.locator('[data-module="budget"]').innerText(),/Sin presupuesto preparado/);assert.match(await workspace.locator('[data-module="review"]').innerText(),/Sin observaciones pendientes/);
  assert.match(await workspace.locator('[data-module="studio"] .project-signature').innerText(),/Sin firma profesional/);
  // Existing routes are intact.
  await workspace.getByRole('button',{name:'Abrir lámina',exact:true}).click();await page.locator('#sheetDialog[open]').waitFor();await page.locator('#sheetClose').click();

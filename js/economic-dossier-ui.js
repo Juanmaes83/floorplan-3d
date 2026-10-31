@@ -128,5 +128,17 @@
   win.document.title=heading.textContent+' · '+local(app.project.name);const b=win.document.createElement('button');b.textContent=printB.textContent;b.className='econ-print-button';b.onclick=()=>win.print();
   win.document.body.append(b,paper.cloneNode(true));win.focus();win.print();return win;}
  printB.onclick=print;
- window.FloorPlanEconomicDossierUI={open,close:()=>dialog.close(),section,current,cardState:()=>{const c=current();return c?E.cardState(c.report):{state:'none'};},get variant(){return variant;},get active(){return dialog.open;}};
+ // Keep Point 9's Deliver summary honest without duplicating economic calculations there: C4 owns the state text.
+ function cardState(){const c=current();return c?E.cardState(c.report):{state:'none'};}
+ function deliverStateText(cs,hero=false){
+  if(cs.state==='none')return hero?tx('sin preparar','not prepared','未准备'):tx('Sin presupuesto preparado','No budget prepared','尚未准备预算');
+  if(cs.state==='empty')return hero?tx('sin partidas','no items','无项目'):tx('Presupuesto sin partidas','Budget without items','预算无项目');
+  if(cs.state==='complete')return tx(`${cs.items} partidas · total con IVA ${eur(cs.gross)}`,`${cs.items} items · total incl. VAT ${eur(cs.gross)}`,`${cs.items} 项 · 含税总额 ${eur(cs.gross)}`);
+  return tx(`${cs.items} partidas · total no definitivo · ${cs.issues} aviso(s)`,`${cs.items} items · total not final · ${cs.issues} warning(s)`,`${cs.items} 项 · 总额非最终 · ${cs.issues} 个提示`);}
+ function syncDeliverBudgetState(){const workspace=document.getElementById('professionalWorkspace');if(!workspace||workspace.hidden||workspace.dataset.area!=='deliver')return;
+  const cs=cardState(),card=workspace.querySelector('.professional-card[data-module="budget"] .professional-state'),cardText=deliverStateText(cs,false);if(card&&card.textContent!==cardText)card.textContent=cardText;
+  const ready=workspace.querySelector('.project-context-ready');if(!ready)return;const prefix=tx('Presupuesto','Budget','预算')+': ',replacement=prefix+deliverStateText(cs,true),parts=ready.textContent.split(' · '),i=parts.findIndex(part=>part.startsWith(prefix));
+  if(i>=0&&parts[i]!==replacement){parts[i]=replacement;ready.textContent=parts.join(' · ');}}
+ addEventListener('DOMContentLoaded',()=>{const workspace=document.getElementById('professionalWorkspace');if(!workspace)return;let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;syncDeliverBudgetState();});};new MutationObserver(schedule).observe(workspace,{childList:true,subtree:true});schedule();});
+ window.FloorPlanEconomicDossierUI={open,close:()=>dialog.close(),section,current,cardState,get variant(){return variant;},get active(){return dialog.open;}};
 })();
