@@ -903,7 +903,7 @@ Si falta realmente el plano semántico requerido (sin muros activos o sin contor
 
 Decisión V1:
 - Toda Story ejecutada requiere un PresentationPlan válido. Esto no levanta el gate actual ni cambia `FloorPlanPresentation` ni el builder.
-- Una plantilla cuyo minimumStory se cumpliría sin rooms, pero sin plan, queda `unavailable`, con el código `presentation-plan-unavailable` (de tipo `blocking`, ejecución). Se distingue explícitamente de `minimum-unmet`, que es invalidez semántica.
+- Una plantilla cuyo minimumStory se cumpliría sin rooms, pero sin PresentationPlan ejecutable, queda `unavailable`, con el código `presentation-plan-unavailable` (de tipo `blocking`, ejecución). Se distingue explícitamente de `minimum-unmet`, que es invalidez semántica.
 - Rooms no pasan a ser un mínimo conceptual de todas las plantillas: Promotora y Arquitectura siguen pudiendo ser semánticamente válidas sin `room-tour`.
 - Levantar ese gate es un cambio separado del builder/plan, fuera de FT3D-6 V1, que requiere una decisión propia.
 - FT3D-5 sólo podría cambiar esto si su contrato aporta otro anchor ejecutable sin rooms. En ese caso se reconcilia en §50.
