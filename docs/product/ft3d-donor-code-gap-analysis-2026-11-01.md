@@ -1007,7 +1007,7 @@ Actualización explícita de la cola histórica al cerrar Cut 2: D09–D13 pasan
 
 # 21 CUT 2 — Status, Evidence Manifest & Delta
 
-**DONOR-CODE GAP ANALYSIS CUT 2 — COMPLETE.** Investigación D09–D13, **5/5**; acumulado D01–D13, **13/13**. Sólo documentación. Ningún adapter, nueva capacidad, contrato, test productivo, Atlas o Roadmap modificado. No aprobación visual/productiva. D14–D21 no iniciados. La frontera obligatoria es: **datos Rubik → representación temporal → orientación/selección → ruta validada por Rubik → coreografía → recomposición/restauración**.
+**DONOR-CODE GAP ANALYSIS CUT 2 — COMPLETE.** Investigación D09–D13, **5/5**; acumulado D01–D13, **13/13**. Sólo documentación. Ningún adapter, nueva capacidad, contrato, test productivo, Atlas o Roadmap modificado. No aprobación visual/productiva. D14–D21 no iniciados. La frontera obligatoria es: **datos Rubik → descomposición/representación temporal → recomposición → orientación/selección → room/entry válidos → ruta validada por Rubik → coreografía → hold/stop → reverse/exit → restore**.
 
 | Autoridad | SHA exacto / estado | Uso en Cut 2 |
 |---|---|---|
