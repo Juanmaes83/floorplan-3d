@@ -4576,7 +4576,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
     // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
     axon=beginAxon(view.axon,kind);
-    try{axon.narrative=axonNarrative(axon,stop,aspect,view.region);narrative=axon.narrative;}catch(error){endAxon(axon);throw error;}
+    try{axon.narrative=axonNarrative(axon,stop,aspect,view.region,undefined,view.startRegion);narrative=axon.narrative;}catch(error){endAxon(axon);throw error;}
   }else if(kind==='elevation-open'){
     // FT3D-4: the façade candidate chosen in the dialog (FloorPlanPresentationElevation, building frame), the building
     // box from the same descriptor (walls of every level, never furniture), the overview it starts and ends on.
@@ -4639,7 +4639,7 @@ function presentationStoryApply(p){
 function presentationStoryReframe(view={}){
   if(!storyRun?.axon||!active)throw Error('Narrativa no iniciada.');
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
-  storyRun.axon.narrative=axonNarrative(storyRun.axon,storyRun.stop,aspect,view.region,{near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance});storyRun.narrative=storyRun.axon.narrative;
+  storyRun.axon.narrative=axonNarrative(storyRun.axon,storyRun.stop,aspect,view.region,{near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance},view.startRegion);storyRun.narrative=storyRun.axon.narrative;
   return {...storyRun.narrative.info};
 }
 // keepPose: stay on the current camera pose (used at p = 1, which is the overview pose); otherwise go back to the pose
@@ -4797,12 +4797,14 @@ function beginAxon(spec,kind){
 }
 // The pure narrative for this stop, aspect and free region (Begin and resize): model mm → this level's world metres,
 // once, here (x → X, plan y → Z, vertical → Y, the active level's floor at y = 0).
-function axonNarrative(ax,stop,aspect,region,base){
+// FT3D-5: the overview ends (p0/p1) keep the stop's region; the compact/exploded hold is framed in the region the
+// story card leaves free (its slider and controls are drawn), so the building never sits under the card.
+function axonNarrative(ax,stop,aspect,region,base,holdRegion){
   const d=ax.descriptor,A=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId),off=A?.offsetMm||{x:0,y:0},e0=A?.elevationMm||0;
   const W=([x,y,h])=>[wx(x-off.x),(h-e0)/1000,wz(y-off.y)],C=window.FloorPlanPresentationAxon.cornersMm;
   const end=presentationStopPose(stop,aspect,region);
   return window.FloorPlanPresentationStory.create(ax.kind,{end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},
-    compact:C(d.envelope).map(W),exploded:C(d.explodedEnvelope).map(W),direction:levelContext?[9,8.5,12.5]:[5.5,15.5,10],aspect,region,
+    compact:C(d.envelope).map(W),exploded:C(d.explodedEnvelope).map(W),direction:levelContext?[9,8.5,12.5]:[5.5,15.5,10],aspect,region:holdRegion||region,
     base:base||{near:camera.near,far:camera.far,maxDistance:orbit.maxDistance},
     levels:d.levels.map(l=>({levelId:l.levelId,dyM:ax.kind==='exploded-levels-open'?l.explodedExtraYmm/1000:0})),
     includedLevelIds:d.levels.map(l=>l.levelId),baseVisibleLevelIds:[...ax.pre.visibleLevelIds]});

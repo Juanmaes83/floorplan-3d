@@ -721,7 +721,7 @@
  // moment (1b) settles on the nearer of its two stops, as before.
  function restartStory(){if(!story)return;const run=story,P=run.P;pauseStory();
   // FT3D-5: the same descriptor, overview and p; only the pure narrative is rebuilt for the new aspect and free region.
-  if(isAxonKind(run.scenes[run.i]?.kind)&&window.View3D?.presentationStoryReframe){requestAnimationFrame(()=>{if(story!==run||!active)return;try{draw();View3D.presentationStoryReframe({region:viewRegion()});setStory(P);}catch{closeStory();go(index);}});return;}
+  if(isAxonKind(run.scenes[run.i]?.kind)&&window.View3D?.presentationStoryReframe){requestAnimationFrame(()=>{if(story!==run||!active)return;try{draw();View3D.presentationStoryReframe({region:viewRegion(),startRegion:viewRegion()});setStory(P);}catch{closeStory();go(index);}});return;}
   if(run.scenes.length===1&&run.scenes[0].kind==='room-descent'){const sc=run.scenes[0],to=P>=.5?sc.stop:sc.from;closeStory();go(to);return;}
   requestAnimationFrame(async()=>{if(story!==run||!active)return;try{await enterScene(run,run.i);if(story===run)setStory(P);}catch{closeStory();go(index);}});}
  // The ends of a story are presentation stops (the last scene's stop; for a story that starts with a descent, its
