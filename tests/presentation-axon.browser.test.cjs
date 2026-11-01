@@ -57,7 +57,8 @@ async function canvasDiff(page,a,b){return page.evaluate(async([a,b])=>{const lo
  let s=0;for(let i=0;i<d1.length;i+=4)s+=Math.abs(d1[i]-d2[i])+Math.abs(d1[i+1]-d2[i+1])+Math.abs(d1[i+2]-d2[i+2]);return s/(d1.length/4*3);},[a,b]);}
 // The 3D canvas alone: the presentation overlay (card, story panel) is hidden for the capture and shown again.
 const canvasShot=async(page,save)=>{await page.evaluate(()=>{document.querySelector('#presentationOverlay').style.visibility='hidden';});await frames(page);
- const png=await page.locator('#stage canvas').first().screenshot(save?{path:path.join(QA,save+'.png')}:{});await page.evaluate(()=>{document.querySelector('#presentationOverlay').style.visibility='';});return 'data:image/png;base64,'+png.toString('base64');};
+ const box=await page.locator('#stage canvas').first().boundingBox(),clip={x:Math.max(0,box.x),y:Math.max(0,box.y),width:Math.min(box.width,page.viewportSize().width),height:Math.min(box.height,page.viewportSize().height)};
+ const png=await page.screenshot({clip,...(save?{path:path.join(QA,save+'.png')}:{})});await page.evaluate(()=>{document.querySelector('#presentationOverlay').style.visibility='';});return 'data:image/png;base64,'+png.toString('base64');};
 async function residueClean(page,name,{levelView='active'}={}){const r=await page.evaluate(()=>View3D.presentationAxonResidue);
  assert.equal(r.active,false,`${name}: no FT3D-5 scene left`);assert.equal(r.handles,0,`${name}: no handle left`);
  for(const d of r.levelDeltas)assert.ok(Math.abs(d.deltaY)<1e-9,`${name}: level ${d.levelId} back in place (${d.deltaY})`);
@@ -172,13 +173,18 @@ test('active upper level, offsets X/Z, different footprints, unusual heights: th
  const [lo,up]=d.levels;assert.deepEqual(up.offsetMm,{x:1500,y:-900},'offsets read from the building');
  assert.ok(up.boundsMm.bottomMm+up.explodedExtraYmm-(lo.boundsMm.topMm+lo.explodedExtraYmm)>=d.visualClearanceMm-1e-6,'no vertical overlap with 4.6 m walls under 3.1 m');
  assert.ok(up.explodedExtraYmm>d.baseVisualGapMm,'overlap-safe extra beyond the nominal gap');
- await configure(page,{mode:'exploded'});await settled(page);const overview=await info(page);
+ // The presentation shows each stop on its own level: the reading is opened from the upper level's overview, so the
+ // active level is the upper one.
+ await configure(page,{mode:'exploded'});await settled(page);
+ const upperStop=await page.evaluate(id=>FloorPlanPresentation.plan.stops.findIndex(s=>s.kind==='overview'&&s.levelId===id),upperId);assert.ok(upperStop>0,'upper level overview stop');
+ await page.locator('.presentation-stops button').nth(upperStop).click();await settled(page);
+ assert.equal(await page.evaluate(()=>FloorPlanBuildingUI.presentationSources().activeLevelId),upperId,'active upper level');const overview=await info(page);
  const s0=await standalone(page,'exploded-levels-open');assert.ok(samePose(s0.pose,overview.pose));
  for(const [p,name] of [[22,'active-upper-compact'],[64,'active-upper-hold']]){const s=await scrub(page,p);await shot(page,name);
   const live=s.info.axon.live,dy=s.info.axon.levelDeltas.find(x=>x.levelId===upperId).dyM;
   for(const o of live.active)assert.ok(Math.abs(o.y-dy)<1e-9,`${name}: ${o.name} carries the active (upper) level delta`);
   const names=live.active.map(o=>o.name);for(const n of ['archFloor','archUp','furnG','lampG','activeSlab'])assert.ok(names.includes(n),`${n} owned by the active level (${names.join(',')}; active ${await page.evaluate(()=>FloorPlanBuildingUI.presentationSources().activeLevelId)})`);
-  const lower=live.levels.find(l=>l.levelId===lo.levelId);assert.ok(Math.abs(lower.y-(-3.1))<1e-9,`${name}: the lower level stays at its real place`);
+  const lower=live.levels.find(l=>l.levelId===lo.levelId);assert.ok(Math.abs(lower.y-(-3.1)-(s.info.axon.levelDeltas.find(x=>x.levelId===lo.levelId).dyM))<1e-9&&s.info.axon.levelDeltas.find(x=>x.levelId===lo.levelId).dyM===0,`${name}: the lower level stays at its real place`);
   assert.ok(live.assets.every(a=>a.parentIsFurniture),'assets keep their furniture parent');}
  await scrub(page,30);await shot(page,'offset-separation');
  await page.locator('#presentationStoryPlan').click();await settled(page);await residueClean(page,'active upper');
