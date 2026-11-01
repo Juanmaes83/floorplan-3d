@@ -61,6 +61,12 @@
  // opens; elevationCandidateId: the façade chosen in its selector (the automatic one by default); the solar snapshot is
  // taken once when the presentation starts and only when the person chose it.
  let elevationChosen=false,elevationEnabled=false,elevationDescriptor=null,elevationCandidateId=null,elevationSolarChosen=false,elevationSolar=null;
+ // FT3D-5 «Lectura del edificio»: axonMode 'off' | 'compact' | 'exploded', chosen per presentation, 'off' by default,
+ // never saved. axonDescriptor: FloorPlanPresentationAxon.derive over every structural level of the building (or the
+ // project), computed once when the dialog opens; the 3D view receives it and never derives it again.
+ let axonMode='off',axonEnabled=false,axonDescriptor=null,axonLevelNames=new Map();
+ const AXON_KINDS=['axon-open','exploded-levels-open'];
+ const isAxonKind=kind=>AXON_KINDS.includes(kind);
  const OVERVIEW_DIRECTION=[.42,.84,.34];
  // Brand snapshot taken when the presentation starts (FloorPlanBrandUI): what the client sees and receives.
  let brandSnap=null;
@@ -502,6 +508,35 @@
  }
  const elevationCandidate=()=>elevationDescriptor?.candidates.find(c=>c.id===elevationCandidateId)||elevationDescriptor?.candidates.find(c=>c.id===elevationDescriptor.defaultId)||null;
  const elevationAt=stop=>!!stop&&stop.kind==='overview'&&!!elevationDescriptor?.supported&&!!elevationCandidate();
+ // FT3D-5: one choice of three. Compact is available whenever a level can be read; the spatial breakdown needs two valid
+ // levels and says so; a partial reading names the levels it leaves out.
+ function axonOption(parent,levels){
+  axonMode='off';axonDescriptor=null;axonLevelNames=new Map(levels.map(l=>[l.levelId??null,l.name||'']));
+  const A=window.FloorPlanPresentationAxon;if(!A||!window.FloorPlanPresentationStory)return;
+  axonDescriptor=A.derive({levels:levels.map((l,i)=>({levelId:l.levelId??null,order:Number.isFinite(l.order)?l.order:i,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm||{x:0,y:0},elevationMm:l.elevationMm||0}))});
+  const d=axonDescriptor,box=el('fieldset',undefined,parent,'presentation-story-option presentation-axon-option');box.id='presentationAxonOptionBox';
+  el('legend',tx('Lectura del edificio','Reading of the building','建筑解读'),box);
+  const name='presentationAxonMode',hintId='presentationAxonHint';
+  const choice=(value,id,es,en,zh,disabled)=>{const label=el('label',undefined,box,'presentation-axon-choice');const input=el('input',undefined,label);input.type='radio';input.name=name;input.value=value;input.id=id;input.checked=value==='off';input.disabled=!!disabled;
+   input.setAttribute('aria-describedby',hintId);el('span',tx(es,en,zh),label);input.onchange=()=>{if(input.checked)axonMode=value;};return input;};
+  choice('off','presentationAxonOff','Sin axonometría','No axonometric view','不使用轴测图',false);
+  choice('compact','presentationAxonCompact','Vista axonométrica','Axonometric view','轴测图',!d.supported);
+  choice('exploded','presentationAxonExploded','Despiece por plantas','Breakdown by levels','分层拆解',!d.supported||!d.variants.exploded.supported);
+  const omitted=d.excluded.map(x=>axonLevelNames.get(x.levelId)||String(x.levelId??'')).filter(Boolean);
+  const parts=[];
+  if(!d.supported)parts.push(tx(`No disponible: ${d.message||d.reason}`,`Unavailable: ${d.reason}`,`不可用：${d.reason}`));
+  else{
+   parts.push(tx('Opcional: tras la vista general, una lectura axonométrica del mismo modelo. Despiece espacial · separación visual: no es una secuencia constructiva ni una cota.','Optional: after the overview, an axonometric reading of the same model. Spatial breakdown · visual separation: not a construction sequence or a dimension.','可选：总览后，对同一模型进行轴测解读。空间拆解 · 视觉间距：不代表施工顺序或尺寸。'));
+   if(!d.variants.exploded.supported)parts.push(d.variants.exploded.reason==='single-level'?tx('El despiece necesita al menos dos plantas.','The breakdown needs at least two levels.','拆解至少需要两个楼层。'):tx('El despiece necesita al menos dos plantas con muros y contorno válidos.','The breakdown needs at least two levels with valid walls and outline.','拆解至少需要两个具有有效墙体和轮廓的楼层。'));
+   if(d.partial)parts.push(tx(`Lectura parcial: se omiten ${omitted.join(', ')||d.excluded.length+' planta(s)'} porque no tienen muros y contorno válidos.`,`Partial reading: ${omitted.join(', ')||d.excluded.length+' level(s)'} left out (no valid walls and outline).`,`部分解读：已省略 ${omitted.join('、')||d.excluded.length+' 个楼层'}（无有效墙体和轮廓）。`));
+  }
+  const hint=el('p',parts.join(' '),box,'presentation-story-hint');hint.id=hintId;
+  if(d.partial)hint.classList.add('presentation-axon-partial');
+ }
+ const axonKind=()=>axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
+ const axonAt=stop=>{if(!stop||stop.kind!=='overview'||!axonDescriptor?.supported)return false;if(axonMode==='exploded'&&!axonDescriptor.variants.exploded.supported)return false;
+  return !isBuildingPlan()||axonDescriptor.levels.some(l=>l.levelId===stop.levelId);};
+ const axonView=kind=>({descriptor:axonDescriptor,variant:kind==='exploded-levels-open'?'vertical-levels':'compact-building',activeLevelId:activeLevelId()??null});
  // The project of a level shown in the presentation (the minimap draws the chosen façade walls of that level).
  function levelProject(levelId){if(!isBuildingPlan())return app.project;return building()?.presentationSources()?.levels.find(l=>l.levelId===levelId)?.project||null;}
  const elevationView=()=>({candidate:elevationCandidate(),envelope:elevationDescriptor.envelope,solar:elevationSolar?.result||null});
@@ -522,11 +557,11 @@
   // Single scene: back to its start (the plan, or the overview for a descent, which then hands over to that stop).
   // Several scenes: the start of this scene, or of the previous one when already there.
   const planButton=button('',row,()=>{const run=story;if(!run)return;const target=run.scenes.length>1?previousStart(run):0;
-   playStory(target).then(done=>{if(done&&run===story&&target<=0&&(run.scenes[0].kind==='room-descent'||(run.scenes.length===1&&['section-open','elevation-open'].includes(run.scenes[0].kind))))finishStory(0);});});planButton.id='presentationStoryPlan';
+   playStory(target).then(done=>{if(done&&run===story&&target<=0&&(run.scenes[0].kind==='room-descent'||(run.scenes.length===1&&['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind))))finishStory(0);});});planButton.id='presentationStoryPlan';
   const play=button('',row,()=>{if(story?.playing)pauseStory();else if(story?.P>=1)finishStory();
    // Reduced motion with a section or a façade: one explicit step at a time (the open section; the frontal façade, then
    // its exterior perspective), so each state is seen before going on.
-   else if(reducedMotion()&&hasSection(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
+   else if(reducedMotion()&&hasHeldScene(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
    else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
   const replay=button('',tools,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
@@ -537,26 +572,33 @@
   let section=null;if(sectionEnabled){section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
   // FT3D-4: likewise only when the façade was chosen; it plays the façade scene on the same player.
   let elevation=null;if(elevationEnabled){elevation=button('',tools,()=>{if(elevationAt(plan?.stops[index]))openStory(epoch,[{kind:'elevation-open',stop:index}],{from:0,to:reducedMotion()?null:1});});elevation.id='presentationElevationPlay';elevation.hidden=true;}
-  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation};return storyUi;
+  // FT3D-5: likewise only when a reading of the building was chosen; the same scene the whole story inserts.
+  let axon=null;if(axonEnabled){axon=button('',tools,()=>{const kind=axonKind();if(kind&&axonAt(plan?.stops[index]))openStory(epoch,[{kind,stop:index}],{from:0,to:reducedMotion()?null:1});});axon.id='presentationAxonPlay';axon.hidden=true;}
+  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
  // FT3D-2: the whole presentation as one story — for each level, its plan rising to its overview, then the descent into
  // its first chosen room. Derived from the presentation plan, so the dialog's order and selection edit it.
- function fullStory(){const scenes=[];let facade=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
+ function fullStory(){const scenes=[];let facade=false,building=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
   // FT3D-4: the façade belongs to the whole building, so it is read once, at the first overview that can show it.
-  if(elevationEnabled&&!facade&&elevationAt(s)){scenes.push({kind:'elevation-open',stop:i});facade=true;}const r=plan.stops[i+1];if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
+  if(elevationEnabled&&!facade&&elevationAt(s)){scenes.push({kind:'elevation-open',stop:i});facade=true;}
+  // FT3D-5: the reading of the building is global too: once, at the first overview of a level it includes.
+  if(axonEnabled&&!building&&axonAt(s)){scenes.push({kind:axonKind(),stop:i});building=true;}const r=plan.stops[i+1];if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
  const sceneEnd=sc=>sc.stop,sceneHome=sc=>sc.kind==='room-descent'?sc.from:sc.stop;
  function previousStart(run){const here=run.seq.at(run.i,0);return run.P-here>.004?here:run.seq.at(Math.max(0,run.i-1),0);}
  // Reduced motion lands on the open section (its held state) instead of its untouched start (FT3D-3 §10).
  const sectionHold=()=>FloorPlanPresentationStory.SECTION_OPEN.reducedHold;
  // FT3D-4: reduced motion shows the façade in discrete states: frontal, then exterior perspective, then the overview.
  const elevationHolds=()=>{const o=FloorPlanPresentationStory.ELEVATION_OPEN;return [o.reducedFront,o.reducedPersp];};
- const holdsOf=kind=>kind==='section-open'?[sectionHold()]:kind==='elevation-open'?elevationHolds():[];
+ // FT3D-5: axon holds on the compact reading; the breakdown on the compact reading, then on the separated levels.
+ const axonHolds=kind=>{const S=FloorPlanPresentationStory;return kind==='axon-open'?[S.AXON_OPEN.reducedHold]:[S.EXPLODED_LEVELS_OPEN.reducedCompact,S.EXPLODED_LEVELS_OPEN.reducedExploded];};
+ const holdsOf=kind=>kind==='section-open'?[sectionHold()]:kind==='elevation-open'?elevationHolds():isAxonKind(kind)?axonHolds(kind):[];
  function nextStart(run){if(run.i+1>=run.scenes.length)return 1;const k=run.scenes[run.i+1].kind;return run.seq.at(run.i+1,reducedMotion()&&holdsOf(k).length?holdsOf(k)[0]:0);}
  // The next held state of the current scene after its local p (null when none is left).
  function nextHold(run){const h=holdsOf(run.scenes[run.i]?.kind).find(v=>v>run.p+1e-6);return h===undefined?null:h;}
- const hasSection=run=>run.scenes.some(sc=>sc.kind==='section-open'||sc.kind==='elevation-open');
+ // A story with a scene that has reduced-motion holds (section, façade, axonometric reading, breakdown).
+ const hasHeldScene=run=>run.scenes.some(sc=>holdsOf(sc.kind).length>0);
  function drawStory(){
   if(!storyUi)return;
   const u=storyUi,on=!!story;
@@ -569,6 +611,8 @@
   u.full.textContent=tx('Ver la historia completa','Play the whole story','播放完整故事');u.full.hidden=u.replay.hidden||fullStory().length<2;u.full.disabled=u.replay.disabled;
   if(u.section){u.section.textContent=tx('Ver sección dinámica','See dynamic section','查看动态剖面');u.section.hidden=!sectionEnabled||on||!plan||!sectionAt(plan.stops[index]);u.section.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   if(u.elevation){u.elevation.textContent=tx('Ver fachada','See the façade','查看立面');u.elevation.hidden=!elevationEnabled||on||!plan||!elevationAt(plan.stops[index]);u.elevation.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
+  if(u.axon){const kind=axonKind();u.axon.textContent=kind==='exploded-levels-open'?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');
+   u.axon.hidden=!axonEnabled||on||!plan||!axonAt(plan.stops[index]);u.axon.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   u.panel.hidden=!on;if(!on)return;
   const multi=story.scenes.length>1,sc=story.scenes[story.i],p=story.p;
   u.counter.hidden=!multi;u.nextButton.hidden=!multi;
@@ -588,6 +632,16 @@
    if(!multi){u.panel.setAttribute('aria-label',tx('Fachada visual','Visual façade','可视立面'));u.slider.setAttribute('aria-label',tx('De la vista general (0) a la fachada y de vuelta (100)','From the overview (0) to the façade and back (100)','从总览 (0) 到立面再返回 (100)'));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&nextHold(story)===null&&p>0)?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver fachada','See the façade','查看立面');}}
+  else if(isAxonKind(sc.kind)){const exploded=sc.kind==='exploded-levels-open',phase=p<=0||p>=1?'overview':View3D.presentationStoryInfo?.phase;
+   const base=exploded?tx('Despiece espacial · separación visual','Spatial breakdown · visual separation','空间拆解 · 视觉间距'):tx('Vista axonométrica · derivada del modelo','Axonometric view · derived from the model','轴测图 · 源自模型');
+   const text=phase==='entry'?(exploded?tx('Vista axonométrica','Axonometric view','轴测图'):tx('Abrimos una lectura axonométrica del edificio','Opening an axonometric reading of the building','展开建筑的轴测解读')):phase==='axon'?tx('Vista axonométrica','Axonometric view','轴测图')
+    :phase==='separate'?tx('Separamos las plantas para leer su relación espacial','Separating the levels to read how they relate in space','分开楼层以解读其空间关系'):phase==='exploded'?tx('Despiece espacial · separación visual','Spatial breakdown · visual separation','空间拆解 · 视觉间距')
+    :phase==='recompose'?tx('Recomponemos el edificio','Putting the building back together','重新组合建筑'):phase==='return'?tx('Volvemos a la vista general','Back to the overview','回到总览'):tx('Vista general 3D','3D overview','3D 总览');
+   caption=text===base?text:`${text} — ${base}`;
+   if(!multi){u.panel.setAttribute('aria-label',exploded?tx('Despiece por plantas','Breakdown by levels','分层拆解'):tx('Vista axonométrica','Axonometric view','轴测图'));
+    u.slider.setAttribute('aria-label',exploded?tx('De la vista general (0) al despiece y de vuelta (100)','From the overview (0) to the breakdown and back (100)','从总览 (0) 到拆解再返回 (100)'):tx('De la vista general (0) a la vista axonométrica y de vuelta (100)','From the overview (0) to the axonometric view and back (100)','从总览 (0) 到轴测图再返回 (100)'));
+    u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
+    u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&nextHold(story)===null&&p>0)?tx('Continuar presentación','Continue presentation','继续展示'):exploded?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');}}
   else if(sc.kind==='room-descent'){const t=plan.stops[sc.stop],name=roomName(t.roomId,t.levelId);caption=p<=0?tx('Vista general 3D','3D overview','3D 总览'):p>=1?name:tx(`Bajando a ${name}`,`Going down to ${name}`,`下降到 ${name}`);
    if(!multi){u.panel.setAttribute('aria-label',tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`));u.slider.setAttribute('aria-label',tx(`De la vista general (0) a ${name} (100)`,`From the overview (0) to ${name} (100)`,`从总览 (0) 到 ${name} (100)`));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing;
@@ -618,7 +672,7 @@
   index=sceneEnd(sc);draw();const region=viewRegion();
   let fromRegion=null;if(sc.kind==='room-descent'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
-  View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{})},sc.kind);
+  View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{})},sc.kind);
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
   return true;
  }
@@ -648,7 +702,7 @@
  }
  async function openStory(token,scenes,{from=0,to=null}={}){
   if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview'||!scenes?.length)return;
-  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))))return;
+  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))||(isAxonKind(sc.kind)&&(!axonEnabled||sc.kind!==axonKind()||!axonAt(plan.stops[sc.stop])))))return;
   closeStory();
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   ++movement;
@@ -666,6 +720,8 @@
  // Resize: the same P on the scene rebuilt for the new screen. A single descent that started from the camera of the
  // moment (1b) settles on the nearer of its two stops, as before.
  function restartStory(){if(!story)return;const run=story,P=run.P;pauseStory();
+  // FT3D-5: the same descriptor, overview and p; only the pure narrative is rebuilt for the new aspect and free region.
+  if(isAxonKind(run.scenes[run.i]?.kind)&&window.View3D?.presentationStoryReframe){requestAnimationFrame(()=>{if(story!==run||!active)return;try{draw();View3D.presentationStoryReframe({region:viewRegion()});setStory(P);}catch{closeStory();go(index);}});return;}
   if(run.scenes.length===1&&run.scenes[0].kind==='room-descent'){const sc=run.scenes[0],to=P>=.5?sc.stop:sc.from;closeStory();go(to);return;}
   requestAnimationFrame(async()=>{if(story!==run||!active)return;try{await enterScene(run,run.i);if(story===run)setStory(P);}catch{closeStory();go(index);}});}
  // The ends of a story are presentation stops (the last scene's stop; for a story that starts with a descent, its
@@ -673,10 +729,10 @@
  // stop: the story stays on the plan.
  async function finishStory(at=1){const run=story;if(!run)return;
   // A story that starts with a descent or a section starts on an overview stop: going back to 0 hands over there.
-  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open'].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
+  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi=null;}}
+ function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi=null;}}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -790,6 +846,7 @@
    storyOption(config);
    sectionOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
    elevationOption(config,[{levelId:activeLevelId(),project:app.project,geometry:app.geometry}]);
+   axonOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -822,6 +879,7 @@
   storyOption(config);
   sectionOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm})));
   elevationOption(config,levels.map(l=>({levelId:l.levelId,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
+  axonOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,order:l.order,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -894,6 +952,7 @@
    storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!window.View3D?.presentationStoryBegin;
    sectionEnabled=sectionChosen&&!!window.FloorPlanPresentationSection&&!!window.View3D?.presentationStoryBegin;
    elevationEnabled=elevationChosen&&!!elevationDescriptor?.supported&&!!window.View3D?.presentationStoryBegin;
+   axonEnabled=axonMode!=='off'&&!!axonDescriptor?.supported&&(axonMode!=='exploded'||!!axonDescriptor.variants.exploded.supported)&&!!window.View3D?.presentationStoryBegin;
    // The solar snapshot, once: if solar is no longer available the façade goes on without it.
    const sun=elevationEnabled&&elevationSolarChosen?window.FloorPlanSolarUI:null,sunResult=sun?.result;
    elevationSolar=sunResult?.status==='available-orientative'?{result:structuredClone(sunResult),localDate:sun.localDate,localTime:sun.localTime}:null;
@@ -907,7 +966,7 @@
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
    updateAssetWarning();
-   if(sectionEnabled||elevationEnabled)storyControls();
+   if(sectionEnabled||elevationEnabled||axonEnabled)storyControls();
    if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,[{kind:'plan-reveal',stop:0}],{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');

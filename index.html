@@ -2460,6 +2460,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-section-core.js"></script>
 <script src="js/presentation-elevation-core.js"></script>
+<script src="js/presentation-axon-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-ui.js"></script>
@@ -2516,7 +2517,7 @@ let sigArch = '', sigFurn = '', sigLabels = '', grow = 1, furnGrow = 1, primitiv
 const doors = [], keys = {};
 // Multi-level building context (js/building-ui.js). The active level keeps the editor's 3D at y = 0; the other
 // level, its slab opening and the stairs are rebuilt in levelsG, shifted by elevation and offset.
-let levelsG, levelLamps = [], levelContext = null, levelView = 'active', levelBuildInfo = {levels:[],stairs:0,voids:0};
+let levelsG, levelLamps = [], levelContext = null, levelView = 'active', levelBuildInfo = {levels:[],stairs:0,voids:0}, levelBuildCount = 0;
 
 /* ======================= 初始化 ======================= */
 function init(){
@@ -3593,14 +3594,14 @@ function levelSlab(L){
   return g;
 }
 function buildLevels(){
-  if(!levelsG)return;
+  if(!levelsG)return;levelBuildCount++;
   clearGroup(levelsG);levelLamps=[];ground.position.y=-.015;levelBuildInfo={levels:[],stairs:0,voids:0};
   if(!levelContext)return;
   const A=levelContext.levels.find(l=>l.id===levelContext.activeLevelId);if(!A)return;
   ground.position.y=-A.elevationMm/1000-.015;
   const limit=levelView==='all'?Infinity:A.order,OXa=OX,OYa=OY;
   levelBuildInfo.voids+=cutLevelOpenings(archFloor,archUp,A);
-  if(A.order>0){const slab=levelSlab(A);levelsG.add(slab);}
+  if(A.order>0){const slab=levelSlab(A);slab.userData.activeLevelSlab=A.id;levelsG.add(slab);}
   levelBuildInfo.levels.push({id:A.id,order:A.order,active:true,y:0,slabMeshes:A.order>0?geometry.rooms.length:0});
   for(const L of levelContext.levels){
     if(L.id===A.id||L.order>limit)continue;
@@ -4553,6 +4554,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
   if(kind==='section-open'&&(stop.kind!=='overview'||!window.FloorPlanPresentationSection))throw Error('Narrativa no disponible.');
   if(kind==='elevation-open'&&(stop.kind!=='overview'||!view.elevation?.candidate||!view.elevation?.envelope))throw Error('Narrativa no disponible.');
+  if((kind==='axon-open'||kind==='exploded-levels-open')&&(stop.kind!=='overview'||!view.axon?.descriptor?.supported||(kind==='exploded-levels-open'&&!view.axon.descriptor.variants?.exploded?.supported)))throw Error('Narrativa no disponible.');
   // The descent starts where the camera is (the overview it arrives from); read it before anything moves.
   const startPose={position:camera.position.toArray(),target:orbit.target.toArray(),fov:camera.fov};
   // The plan reveal starts from the 2D view the 3D view entered on (held entry), when there is one; walls and
@@ -4569,8 +4571,13 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null,section=null,elevation=null;
-  if(kind==='elevation-open'){
+  let narrative,sectionCut=null,section=null,elevation=null,axon=null;
+  if(kind==='axon-open'||kind==='exploded-levels-open'){
+    // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
+    // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
+    axon=beginAxon(view.axon,kind);
+    try{axon.narrative=axonNarrative(axon,stop,aspect,view.region);narrative=axon.narrative;}catch(error){endAxon(axon);throw error;}
+  }else if(kind==='elevation-open'){
     // FT3D-4: the façade candidate chosen in the dialog (FloorPlanPresentationElevation, building frame), the building
     // box from the same descriptor (walls of every level, never furniture), the overview it starts and ends on.
     elevation=beginElevation(view.elevation);
@@ -4603,7 +4610,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,saved,narrative,state:null,arch:null,sectionCut,section,elevation};
+  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4611,7 +4618,7 @@ function presentationStoryApply(p){
   if(!storyRun||!active)throw Error('Narrativa no iniciada.');
   const st=storyRun.narrative.stateAt(p);storyRun.state=st;
   camera.fov=st.fov;camera.near=st.near;camera.far=st.far;camera.updateProjectionMatrix();
-  orbit.maxDistance=Math.max(storyRun.saved.maxDistance,st.distance*1.05);
+  orbit.maxDistance=st.maxDistance!==undefined?st.maxDistance:Math.max(storyRun.saved.maxDistance,st.distance*1.05);
   camera.position.fromArray(st.position);orbit.target.fromArray(st.target);camera.lookAt(orbit.target);
   // The room's real wall section replaces the lowered walls once they reach its height: one rebuild at the threshold,
   // never per frame, and undone the same way when p goes back below it.
@@ -4620,11 +4627,20 @@ function presentationStoryApply(p){
   if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
   if(storyRun.section)applySection(storyRun.section,st);
   if(storyRun.elevation)applyElevation(storyRun.elevation,st);
+  if(storyRun.axon)applyAxon(storyRun.axon,st);
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
   if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
   if(storyRun.kind==='room-descent'){const roomId=storyRun.stopId.replace(/^room:/,'');if(st.phase==='room'){if(!roomOutline)showRoomOutline(roomId);}else clearRoomOutline();}
-  return {...st,position:[...st.position],target:[...st.target]};
+  return {...st,position:[...st.position],target:[...st.target],...(st.levelDeltas?{levelDeltas:st.levelDeltas.map(x=>({...x})),visibleLevelIds:[...st.visibleLevelIds]}:{})};
+}
+// FT3D-5 resize: the same descriptor, overview stop and p; only the pure narrative is recreated for the new aspect and
+// free region. No rebuild, no derive, no reset of the story.
+function presentationStoryReframe(view={}){
+  if(!storyRun?.axon||!active)throw Error('Narrativa no iniciada.');
+  const aspect=Math.max(.2,SW()/Math.max(1,SH()));
+  storyRun.axon.narrative=axonNarrative(storyRun.axon,storyRun.stop,aspect,view.region,{near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance});storyRun.narrative=storyRun.axon.narrative;
+  return {...storyRun.narrative.info};
 }
 // keepPose: stay on the current camera pose (used at p = 1, which is the overview pose); otherwise go back to the pose
 // the narrative started from. Lens, near/far, orbit limits and walls always return to their saved values.
@@ -4633,6 +4649,7 @@ function endPresentationStory({keepPose=true}={}){
   const run=storyRun;storyRun=null;
   if(run.section)endSection(run.section);
   if(run.elevation)endElevation(run.elevation);
+  if(run.axon)endAxon(run.axon);
   if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
@@ -4730,6 +4747,119 @@ function elevationInfo(el){return {candidateId:el.candidate.id,label:el.candidat
 // Read-only state the façade scene touches, for tests: what must be back once it ends.
 function presentationElevationResidue(){return {levelView,territoryVisible:territoryRenderer?territoryRenderer.group.visible:null,solar:solarResult&&{instant:solarResult.instant,status:solarResult.status},
   extraScaled:levelsG?levelsG.children.filter(g=>g.scale.y!==1).length:0,elevationActive:!!storyRun?.elevation};}
+/* FT3D-5 axonometric reading and spatial breakdown on the one scene (js/presentation-axon-core.js gives the descriptor,
+   in model mm; js/presentation-story-core.js gives the state f(p)). Runtime only, transactional, never persisted:
+   - Begin captures, semantically, what the overview shows (levelView, the levels visible, stairs, ground, context,
+     roof/exterior, contact shadows); when levels are missing from the view it switches levelView to 'all' and lets the
+     existing rebuild run once, then takes FRESH handles on the existing groups (the active level's archFloor, archUp,
+     furnG, lampG and its real slab; each level group in levelsG; each stair) and puts the overview's visibility back
+     before the first state, so p = 0 is the overview as it was. Nothing is reparented, no asset is moved on its own
+     (assets are children of the furniture groups), nothing is rebuilt per frame.
+   - Apply sets absolute values from the state: y = saved base y + the level's visual delta; level, stair, ground,
+     context, roof/exterior and contact visibility = what it was AND what the state allows. Never more than it was.
+   - End puts every value back on the current hierarchy, drops the handles, returns levelView (one rebuild back when it
+     changed) and the globals again after that rebuild. Idempotent. A failure inside Begin runs the same End first. */
+let axonLast=null;
+function axonActiveId(){return levelContext?.activeLevelId??null;}
+function axonCapture(){
+  const levels=levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined):[],stairs=levelsG?levelsG.children.filter(g=>g.userData.stairId!==undefined):[];
+  return {levelView,visibleLevelIds:[axonActiveId(),...levels.filter(g=>g.visible).map(g=>g.userData.levelId)],
+    levelVisible:new Map(levels.map(g=>[g.userData.levelId,g.visible])),stairs:new Map(stairs.map(g=>[g.userData.stairId,g.visible])),
+    ground:ground?ground.visible:null,context:territoryRenderer?territoryRenderer.group.visible:null,roof:roofG?roofG.visible:null,exterior:exteriorG?exteriorG.visible:null,contact:contactG?contactG.visible:null};
+}
+function axonHandles(pre){
+  const id=axonActiveId(),slab=levelsG?levelsG.children.find(g=>g.userData.activeLevelSlab!==undefined):null;
+  const active=[archFloor,archUp,furnG,lampG,slab].filter(Boolean).map(obj=>({obj,levelId:id,baseY:obj.position.y}));
+  const levels=levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined).map(obj=>({obj,levelId:obj.userData.levelId,baseY:obj.position.y,baseVisible:pre.visibleLevelIds.includes(obj.userData.levelId)})):[];
+  const stairs=levelsG?levelsG.children.filter(g=>g.userData.stairId!==undefined).map(obj=>({obj,baseVisible:pre.stairs.get(obj.userData.stairId)??false})):[];
+  return {active,levels,stairs};
+}
+function axonGlobals(pre,st){
+  const allow=k=>st?st[k]!==false:true;
+  if(ground&&pre.ground!==null)ground.visible=pre.ground&&allow('showGround');
+  if(territoryRenderer&&pre.context!==null)territoryRenderer.group.visible=pre.context&&allow('showContext');
+  if(roofG&&pre.roof!==null)roofG.visible=pre.roof&&allow('showRoofExterior');
+  if(exteriorG&&pre.exterior!==null)exteriorG.visible=pre.exterior&&allow('showRoofExterior');
+  if(contactG&&pre.contact!==null)contactG.visible=pre.contact&&allow('showContact');
+}
+function beginAxon(spec,kind){
+  const pre=axonCapture();
+  const ax={kind,descriptor:spec.descriptor,variant:kind==='exploded-levels-open'?'vertical-levels':'compact-building',pre,handles:null,rebuilt:false,ended:false,narrative:null,state:null};
+  try{
+    if(levelContext&&levelView!=='all'){levelView='all';sigArch='';sync();ax.rebuilt=true;}
+    if(spec.__testFailAfterAll)throw Error('FT3D-5: fallo de preparación inyectado por QA');
+    ax.handles=axonHandles(pre);
+    for(const h of ax.handles.levels)h.obj.visible=h.baseVisible;
+    for(const h of ax.handles.stairs)h.obj.visible=h.baseVisible;
+    axonGlobals(pre,null);
+    return ax;
+  }catch(error){endAxon(ax);throw error;}
+}
+// The pure narrative for this stop, aspect and free region (Begin and resize): model mm → this level's world metres,
+// once, here (x → X, plan y → Z, vertical → Y, the active level's floor at y = 0).
+function axonNarrative(ax,stop,aspect,region,base){
+  const d=ax.descriptor,A=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId),off=A?.offsetMm||{x:0,y:0},e0=A?.elevationMm||0;
+  const W=([x,y,h])=>[wx(x-off.x),(h-e0)/1000,wz(y-off.y)],C=window.FloorPlanPresentationAxon.cornersMm;
+  const end=presentationStopPose(stop,aspect,region);
+  return window.FloorPlanPresentationStory.create(ax.kind,{end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},
+    compact:C(d.envelope).map(W),exploded:C(d.explodedEnvelope).map(W),direction:levelContext?[9,8.5,12.5]:[5.5,15.5,10],aspect,region,
+    base:base||{near:camera.near,far:camera.far,maxDistance:orbit.maxDistance},
+    levels:d.levels.map(l=>({levelId:l.levelId,dyM:ax.kind==='exploded-levels-open'?l.explodedExtraYmm/1000:0})),
+    includedLevelIds:d.levels.map(l=>l.levelId),baseVisibleLevelIds:[...ax.pre.visibleLevelIds]});
+}
+function applyAxon(ax,st){
+  if(!ax.handles)return;ax.state=st;
+  const dy=new Map((st.levelDeltas||[]).map(x=>[x.levelId,x.dyM])),visible=new Set(st.visibleLevelIds||[]);
+  for(const h of [...ax.handles.active,...ax.handles.levels])h.obj.position.y=h.baseY+(dy.get(h.levelId)||0);
+  for(const h of ax.handles.levels)h.obj.visible=visible.has(h.levelId);
+  for(const h of ax.handles.stairs)h.obj.visible=h.baseVisible&&st.showStairs!==false;
+  axonGlobals(ax.pre,st);
+}
+function endAxon(ax){
+  if(!ax||ax.ended)return;ax.ended=true;
+  if(ax.handles){
+    for(const h of [...ax.handles.active,...ax.handles.levels])h.obj.position.y=h.baseY;
+    for(const h of ax.handles.levels)h.obj.visible=ax.pre.levelVisible.get(h.levelId)??true;
+    for(const h of ax.handles.stairs)h.obj.visible=h.baseVisible;
+  }
+  ax.handles=null;
+  axonGlobals(ax.pre,null);
+  if(levelView!==ax.pre.levelView){levelView=ax.pre.levelView;sigArch='';sync();}
+  axonGlobals(ax.pre,null);
+  axonLast=ax.pre;
+}
+function axonInfo(ax){const st=ax.state;return {kind:ax.kind,variant:ax.variant,levelView,baseLevelView:ax.pre.levelView,rebuilt:ax.rebuilt,phase:st?.phase??null,
+  levelDeltas:(st?.levelDeltas||[]).map(x=>({...x})),visibleLevelIds:[...(st?.visibleLevelIds||[])],baseVisibleLevelIds:[...ax.pre.visibleLevelIds],
+  handles:ax.handles?{active:ax.handles.active.length,levels:ax.handles.levels.length,stairs:ax.handles.stairs.length}:null,
+  showStairs:st?.showStairs??null,showGround:st?.showGround??null,showContext:st?.showContext??null,showRoofExterior:st?.showRoofExterior??null,showContact:st?.showContact??null,live:axonLive()};}
+// What the scene really shows now (plain numbers and flags, no Three refs): positions and visibility of the objects
+// the reading moves or hides, and where the authorized assets hang.
+function axonLive(){
+  const named=[['archFloor',archFloor],['archUp',archUp],['furnG',furnG],['lampG',lampG],['activeSlab',levelsG?levelsG.children.find(g=>g.userData.activeLevelSlab!==undefined):null]];
+  return {active:named.filter(([,o])=>o).map(([name,o])=>({name,y:o.position.y,visible:o.visible})),
+    levels:levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined).map(g=>({levelId:g.userData.levelId,y:g.position.y,visible:g.visible,furnitureVisible:g.children.find(c=>c.userData.levelFurniture)?.visible??null})):[],
+    stairs:levelsG?levelsG.children.filter(g=>g.userData.stairId!==undefined).map(g=>({stairId:g.userData.stairId,y:g.position.y,visible:g.visible})):[],
+    assets:furnG?furnG.children.filter(g=>g.userData.authorizedAsset).map(g=>({parentIsFurniture:g.parent===furnG,y:g.position.y})):[],
+    ground:ground?{visible:ground.visible,y:ground.position.y}:null,context:territoryRenderer?territoryRenderer.group.visible:null,roof:roofG?roofG.visible:null,exterior:exteriorG?exteriorG.visible:null,
+    contact:contactG?{visible:contactG.visible,y:contactG.position.y}:null,labels:labelG?labelG.visible:null,furniture:furnG?furnG.visible:null};
+}
+// Read-only state the FT3D-5 scenes touch, for tests: what must be back once they end (plain data, no Three refs).
+function presentationAxonResidue(){
+  const run=storyRun?.axon||null,last=axonLast,A=levelContext?.levels.find(l=>l.id===levelContext.activeLevelId);
+  const groups=levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined):[],stairs=levelsG?levelsG.children.filter(g=>g.userData.stairId!==undefined):[];
+  const slab=levelsG?levelsG.children.find(g=>g.userData.activeLevelSlab!==undefined):null;
+  const levelDeltas=[{levelId:axonActiveId(),deltaY:archFloor?archFloor.position.y:0},...[archUp,furnG,lampG,slab].filter(Boolean).map(o=>({levelId:axonActiveId(),deltaY:o.position.y})),
+    ...groups.map(g=>{const L=levelContext?.levels.find(l=>l.id===g.userData.levelId);return {levelId:g.userData.levelId,deltaY:L&&A?+(g.position.y-(L.elevationMm-A.elevationMm)/1000).toFixed(6):0};})];
+  const same=(a,b)=>a===null||b===null||a===b;
+  return {active:!!run,levelDeltas,
+    levelViewRestored:!last||levelView===last.levelView,
+    visibleLevelsRestored:!last||JSON.stringify(groups.filter(g=>g.visible).map(g=>g.userData.levelId).sort())===JSON.stringify(last.visibleLevelIds.filter(id=>id!==axonActiveId()).sort()),
+    stairsRestored:!last||stairs.every(g=>g.visible===(last.stairs.get(g.userData.stairId)??g.visible)),
+    groundRestored:!last||same(ground?ground.visible:null,last.ground),contextRestored:!last||same(territoryRenderer?territoryRenderer.group.visible:null,last.context),
+    roofExteriorRestored:!last||(same(roofG?roofG.visible:null,last.roof)&&same(exteriorG?exteriorG.visible:null,last.exterior)),contactRestored:!last||same(contactG?contactG.visible:null,last.contact),
+    handles:run?.handles?run.handles.active.length+run.handles.levels.length+run.handles.stairs.length:0,levelView,rebuilds:levelBuildCount,
+    sceneChildren:scene?scene.children.length:0,levelsChildren:levelsG?levelsG.children.length:0,memory:renderer?{geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures}:null,live:axonLive()};
+}
 // Read-only checks for tests: which materials of the scene carry clipping planes now, and the renderer flag.
 function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)withPlanes.add(m);});
   const territory=new Set();territoryRenderer?.group.traverse(o=>{for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])if(m.clippingPlanes?.length)territory.add(m);});
@@ -4738,7 +4868,7 @@ function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{f
 function presentationStoryInfo(){
   if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
   const st=storyRun.state;
-  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,elevation:storyRun.elevation?elevationInfo(storyRun.elevation):null,solar:st?.solar??null,contextVisible:st?.contextVisible??null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,elevation:storyRun.elevation?elevationInfo(storyRun.elevation):null,axon:storyRun.axon?axonInfo(storyRun.axon):null,solar:st?.solar??null,contextVisible:st?.contextVisible??null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
     fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
     saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
 }
@@ -4772,10 +4902,11 @@ window.View3D = {
   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 
 window.View3D.presentationReveal=presentationReveal;
-Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory});
+Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
 Object.defineProperty(window.View3D,'presentationElevationResidue',{get:presentationElevationResidue});
+Object.defineProperty(window.View3D,'presentationAxonResidue',{get:presentationAxonResidue});
 window.View3D.clearPresentationReveal=clearPresentationReveal;
 Object.defineProperty(window.View3D,'presentationRevealInfo',{get:()=>({...revealInfo,walls:revealInfo.walls.map(w=>({...w}))})});
 window.View3D.setPresentationContactShadows=setPresentationContactShadows;
