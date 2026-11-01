@@ -1,14 +1,14 @@
-# FT3D-6 — Plantillas de Presentation por perfil profesional — working contract reconciliado
+# FT3D-6 — Plantillas de Presentation por perfil profesional — contrato canónico de implementación V1
 
 **Fecha:** 01-11-2026.
 
 **Repositorio:** `Juanmaes83/floorplan-3d`.
 
-**Rama de trabajo:** `docs/ft3d-6-reconciliation-2026-11-01`.
+**Rama de reconciliación/promoción:** `docs/ft3d-6-reconciliation-2026-11-01`.
 
-**Base reconciliada:** `master@d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4`.
+**Base reconciliada previa a la promoción:** `master@d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4`.
 
-**Fuente histórica de este working contract:** `docs/ft3d-6-working-contract-after-ft3d4@5db3c1b48972128f2769598141cbe2268b792bfa`.
+**Fuente histórica de este contrato:** `docs/ft3d-6-working-contract-after-ft3d4@5db3c1b48972128f2769598141cbe2268b792bfa`.
 
 **Draft histórico:** `docs/ft3d-6-profile-templates-contract@388c03b67b98fccef85e310dd2e7665514111b3d`.
 
@@ -16,22 +16,21 @@
 
 **Global Donor Reconciliation:** aprobada e integrada en `master@d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4`.
 
+**Estado:** **CANONICAL IMPLEMENTATION CONTRACT V1 — AUDITED + USER-APPROVED FOR PROMOTION — IMPLEMENTATION NOT AUTHORIZED**.
+
+> El nombre histórico del archivo conserva `working-contract` para mantener continuidad y trazabilidad. El estado normativo lo determina este encabezado y la §1: este archivo ya no es un working draft.
+
 ## 1. Estado y jerarquía documental
 
 | Documento | Estado | Autoridad |
 |---|---|---|
 | Draft 31-10-2026 | **DRAFT HISTÓRICO APROBADO** | Intención de producto histórica. No se borra |
 | Working contract `5db3c1b…` | **HISTÓRICO RECONCILIADO** | Fuente de trazabilidad para las decisiones previas a FT3D-5 |
-| Este documento | **WORKING CONTRACT RECONCILIADO — P1–P11 CLOSED 11/11 — READY FOR HUMAN REVIEW** | Única fuente de trabajo actual de FT3D-6. Si discrepa con el draft o `5db3c1b…`, prevalece este documento |
+| Este documento | **CANONICAL IMPLEMENTATION CONTRACT V1 — P1–P11 CLOSED 11/11 — APPROVED** | Autoridad canónica de implementación de FT3D-6. Si discrepa con el draft o `5db3c1b…`, prevalece este documento |
 
-Este documento **no** es todavía el contrato canónico de implementación y **no autoriza implementar FT3D-6**.
+La auditoría contractual de esta revisión consolidada está **APROBADA** y la promoción a contrato canónico está **explícitamente autorizada por el usuario**.
 
-Para promoverlo a contrato canónico faltan:
-
-1. auditoría humana de esta revisión consolidada;
-2. aprobación explícita de la promoción.
-
-Después de esa promoción seguirá siendo necesaria una **autorización separada de implementación**.
+Este documento **no autoriza implementar FT3D-6**. La implementación requiere una autorización explícita y separada posterior a esta promoción.
 
 Las decisiones cerradas del working contract `5db3c1b…` que no se modifican explícitamente aquí se conservan. Esta revisión incorpora y sustituye todas sus marcas `PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5`, `ft3d5-pending` y los placeholders de `axon` / `exploded-levels`.
 
@@ -55,7 +54,7 @@ Las decisiones cerradas del working contract `5db3c1b…` que no se modifican ex
 
 | Autoridad | Revisión reconciliada | Uso |
 |---|---|---|
-| `master` | `d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4` | baseline documental/producto actual |
+| `master` | `d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4` | baseline documental/producto usado para esta reconciliación |
 | FT3D-5 contract V2 | `docs/product/ft3d-5-axon-exploded-building-contract-2026-11-01.md` en master | autoridad técnica de axon/exploded |
 | FT3D-5 core | `js/presentation-axon-core.js` en master | descriptor y reasons |
 | Story | `js/presentation-story-core.js` en master | narratives, holds y `SCENE_MS` |
@@ -64,7 +63,25 @@ Las decisiones cerradas del working contract `5db3c1b…` que no se modifican ex
 | Global Donor Reconciliation | `docs/product/ft3d-donor-global-reconciliation-2026-11-01.md` | taxonomía, límites, carry-forward y QA |
 | Working contract histórico | `5db3c1b48972128f2769598141cbe2268b792bfa` | trazabilidad de decisiones no reabiertas |
 
-Los **710 PASS / 0 FAIL / 2 SKIP** pertenecen exclusivamente a `bf3e5ca5c8df1f6bc2bd61925a0a1456b2d1353d`. No se atribuye ese run a `18848fbf…` ni a `d7f59f7e…`.
+Los **710 PASS / 0 FAIL / 2 SKIP** pertenecen exclusivamente a `bf3e5ca5c8df1f6bc2bd61925a0a1456b2d1353d`. No se atribuye ese run a `18848fbf…`, a `d7f59f7e…` ni a la promoción documental de este contrato.
+
+### 1.3 Resultado de auditoría de promoción
+
+La auditoría previa a la promoción verificó:
+
+- P1–P11 contra FT3D-5 integrado;
+- descriptor, variants y reasons de `FloorPlanPresentationAxon`;
+- adapters, holds y `SCENE_MS` reales;
+- slot único de lectura de edificio;
+- anchors `overview(level)` y P11 negativo;
+- separación semántica / ejecución / aceptación visual;
+- fronteras FT3D-7 y FT3D-8;
+- no canonización automática de mecanismos donor;
+- QA, restore, reduced motion, mobile, offline y no persistencia nueva.
+
+Se detectó y corrigió antes de canonizar una ambigüedad de sesión: `buildingReading` queda como **único selector de materialización** para `axon`/`exploded-levels`; no puede coexistir una segunda fuente de verdad independiente en `toggles`. También se hace explícito que Arquitectura puede satisfacer su alternativa volumétrica con `exploded-levels` cuando esa opción se selecciona y está soportada.
+
+> **FT3D-6 CANONICAL CONTRACT AUDIT: APPROVED.**
 
 ---
 
@@ -638,7 +655,7 @@ developer:
   ]
 
 architecture:
-  allOf[ plan, oneOf[section, elevation, axon] ]
+  allOf[ plan, oneOf[section, elevation, axon, exploded-levels] ]
 
 renovation:
   allOf[ plan, oneOf[room-tour, section] ]
@@ -647,7 +664,7 @@ interior-design:
   allOf[ oneOf[overview, plan, axon], room-tour ]
 ```
 
-Axon/exploded ya son capabilities semánticas reales. Su inclusión efectiva sigue dependiendo de policy/override.
+Axon/exploded ya son capabilities semánticas reales. Su inclusión efectiva sigue dependiendo de policy/override y de la normalización del slot `building-reading`.
 
 ### 20.2 Semántica vs ejecución
 
@@ -678,7 +695,8 @@ Además de las reglas históricas, debe verificar para FT3D-5:
 - reducedMotion `holds`;
 - variants válidas;
 - una sola materialización `building-reading`;
-- ningún `ft3d5-pending` para esos IDs.
+- ningún `ft3d5-pending` para esos IDs;
+- `buildingReading` es la única fuente de override de materialización de axon/exploded.
 
 `pending-implementation` puede existir para capabilities futuras, no para estas dos.
 
@@ -699,12 +717,23 @@ Además de las reglas históricas, debe verificar para FT3D-5:
 
 Todo vive en memoria de sesión.
 
+### 22.1 Una sola fuente de verdad para FT3D-5
+
+`buildingReading` es el **único override de sesión que decide la materialización** entre `axon` y `exploded-levels`.
+
+- `toggles` no contiene overrides independientes para `axon` ni `exploded-levels`; una implementación puede omitir esas keys o exponerlas sólo como estado derivado/read-only de `buildingReading`.
+- El resolver normaliza primero policies + `buildingReading` y obtiene una única selección efectiva del slot.
+- Esa selección efectiva es la que entra en minimumStory, dedup y adapter materialization.
+- Nunca puede existir una combinación contradictoria como `axon=false`, `exploded=true`, `buildingReading:'compact'`.
+
 `buildingReading`:
 
 - `automatic`: aplica §13.1;
-- `compact`: exige axon `supported|partial`;
-- `exploded`: exige exploded `supported|partial`;
-- `off`: permitido sólo si minimumStory sigue cumpliéndose.
+- `compact`: selecciona `axon` y exige `supported|partial`;
+- `exploded`: selecciona `exploded-levels` y exige `supported|partial`;
+- `off`: excluye ambas materializaciones y sólo se permite si minimumStory sigue cumpliéndose.
+
+Para Arquitectura, `exploded-levels` es una alternativa explícita válida del grupo volumétrico del §20.1; no se finge que sea `axon`, pero satisface el mismo grupo profesional cuando se selecciona y está soportada.
 
 No crea persistencia, localStorage, URL ni schema.
 
@@ -754,13 +783,14 @@ Orden obligatorio:
 ```text
 1. capability truth
 2. policies + overrides
-3. semantic resolution
-4. evaluate minimumStory
-5. if false → unavailable / minimum-unmet
-6. execution gate
-7. if no PresentationPlan → unavailable / presentation-plan-unavailable
-8. adapters + transitions
-9. sequence
+3. normalize buildingReading / effective semantic inclusion
+4. semantic resolution
+5. evaluate minimumStory
+6. if false → unavailable / minimum-unmet
+7. execution gate
+8. if no PresentationPlan → unavailable / presentation-plan-unavailable
+9. adapters + transitions
+10. sequence
 ```
 
 Garantías:
@@ -1094,7 +1124,7 @@ Default building-reading:
 compact axon si supported|partial
 ```
 
-Exploded es optional explícito.
+Exploded es optional explícito y puede satisfacer la alternativa volumétrica del minimumStory cuando se selecciona y está soportado.
 
 Los demás perfiles mantienen su policy histórica sin building-reading por defecto.
 
@@ -1277,44 +1307,46 @@ La implementación futura debe conservar todas las suites y gates históricos de
 20. developer automatic 2 niveles válidos → exploded;
 21. developer automatic 1 nivel → compact;
 22. architecture automatic → compact;
-23. architecture explicit exploded → exploded si supported;
+23. architecture explicit exploded → exploded si supported y puede satisfacer la alternativa volumétrica del minimumStory;
 24. exploded unsupported → override disabled/rejected;
-25. `off` sólo si minimumStory sigue válido.
+25. `off` sólo si minimumStory sigue válido;
+26. `toggles` no introduce una segunda fuente de verdad para axon/exploded.
 
 ### 48.4 Reduced
 
-26. axon hold .5;
-27. exploded holds .22/.645;
-28. misma semántica con reduced.
+27. axon hold .5;
+28. exploded holds .22/.645;
+29. misma semántica con reduced.
 
 ### 48.5 Building/context
 
-29. source usa niveles estructurales, no sólo rooms;
-30. active→all no altera snapshot;
-31. levelView restore exacto;
-32. site-context no adquiere host FT3D-5;
-33. preservar contexto runtime no equivale a enhancement activo.
+30. source usa niveles estructurales, no sólo rooms;
+31. active→all no altera snapshot;
+32. levelView restore exacto;
+33. site-context no adquiere host FT3D-5;
+34. preservar contexto runtime no equivale a enhancement activo.
 
 ### 48.6 Timing
 
-34. 7000/10000 desde SCENE_MS;
-35. exploded no suma axon;
-36. no confundir SCENE_MS con frames/wall-clock/performance.
+35. 7000/10000 desde SCENE_MS;
+36. exploded no suma axon;
+37. no confundir SCENE_MS con frames/wall-clock/performance.
 
 ### 48.7 P11
 
-37. developer sin rooms + axon supported → minimum true, execution unavailable;
-38. overview(building) sigue unsupported;
-39. FT3D-5 no se ejecuta sin overview real;
-40. equivalencia de un nivel no crea overview(building).
+38. developer sin rooms + axon supported → minimum true, execution unavailable;
+39. overview(building) sigue unsupported;
+40. FT3D-5 no se ejecuta sin overview real;
+41. equivalencia de un nivel no crea overview(building).
 
 ### 48.8 Evidencia visual
 
-41. developer multinivel;
-42. architecture compact;
-43. exploded reverse/recompose/restore;
-44. 390×844 y 844×390 en holds críticos;
-45. reduced compact/exploded.
+42. developer multinivel;
+43. architecture compact;
+44. architecture explicit exploded;
+45. exploded reverse/recompose/restore;
+46. 390×844 y 844×390 en holds críticos;
+47. reduced compact/exploded.
 
 Además siguen siendo obligatorios:
 
@@ -1347,8 +1379,9 @@ Automated green ≠ visual acceptance.
 | developer automatic, exploded available | sólo exploded-levels-open |
 | developer automatic, exploded no/axon sí | sólo axon-open |
 | architecture automatic | axon-open |
+| architecture explicit exploded supported | exploded-levels-open; alternativa volumétrica válida |
 | architecture explicit exploded unsupported | override rechazado |
-| axon+exploded incluidos | una sola building-reading |
+| axon+exploded disponibles | una sola building-reading según selector efectivo |
 | no PresentationPlan | semantic puede ser true; execution bloqueada |
 | PresentationPlan sin overview elegible | `adapter-anchor-unavailable` |
 | 2 niveles + sólo overview L0 | no overview(building); otras alternativas pueden cumplir |
@@ -1386,7 +1419,7 @@ Automated green ≠ visual acceptance.
 
 > **P1–P11 CLOSED: 11/11.**
 
-No queda ninguna dependencia documental FT3D-5 abierta para poder auditar/promover este working contract.
+No queda ninguna dependencia documental FT3D-5 abierta para implementar FT3D-6 cuando exista autorización separada.
 
 ---
 
@@ -1408,7 +1441,9 @@ Se mantienen todas las decisiones cerradas históricas y se añaden:
 12. no overview(building);
 13. FT3D-5 no levanta `presentation-plan-unavailable`;
 14. visual acceptance sigue gate QA/humano externo;
-15. donor reconciliation no canoniza nuevas capabilities V1.
+15. donor reconciliation no canoniza nuevas capabilities V1;
+16. `buildingReading` es la única fuente de override de materialización axon/exploded;
+17. Arquitectura admite `exploded-levels` como alternativa volumétrica explícita del minimumStory.
 
 ---
 
@@ -1417,6 +1452,7 @@ Se mantienen todas las decisiones cerradas históricas y se añaden:
 | Riesgo | Nivel | Mitigación |
 |---|---|---|
 | building alternatives producen narrativa redundante | Medio | slot único building-reading |
+| dos fuentes de verdad axon/exploded | Alto si ocurre | `buildingReading` único; toggles derivados/no independientes |
 | exploded se interpreta como fases de obra | Alto semántico | copy despiece espacial; FT3D-8 separado |
 | semantic supported sin plan ejecutable | Medio | minimumStory separado de execution gate |
 | contexto existente confundido con site-context | Medio | host V1 sólo elevation |
@@ -1435,9 +1471,9 @@ Antes de implementar FT3D-6:
 1. FT3D-5 integrado ✅
 2. Global Donor Reconciliation aprobada e integrada ✅
 3. P1–P11 reconciliados ✅ 11/11
-4. **Auditoría humana de este working contract** ⏳
-5. **Promoción explícita a contrato canónico** ⏳
-6. **Autorización separada de implementación** ⛔
+4. Auditoría contractual de esta revisión ✅ **APPROVED**
+5. Promoción explícita a contrato canónico ✅ **AUTHORIZED / PERFORMED**
+6. **Autorización separada de implementación** ⛔ **NO**
 
 DONE futuro exige:
 
@@ -1453,7 +1489,7 @@ DONE futuro exige:
 - sin persistencia/localStorage/red nuevos;
 - mobile/reduced equivalentes;
 - salidas existentes intactas;
-- revisión humana;
+- revisión humana del resultado de implementación;
 - integración sólo con autorización explícita.
 
 ---
@@ -1461,11 +1497,14 @@ DONE futuro exige:
 ## 54. Control result
 
 ```text
-Master baseline: d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4
+Master baseline used for reconciliation: d7f59f7e02bde8f8bbef94e353f0361dc40ac2c4
 Historical working contract: 5db3c1b48972128f2769598141cbe2268b792bfa
 FT3D-5 integrated: YES
 Global donor reconciliation integrated: YES
 P1–P11 resolved: YES — 11/11
+Contract audit: APPROVED
+Canonical promotion authorized by user: YES
+Canonical promotion performed: YES
 Product modified: NO
 Runtime modified: NO
 Schemas modified: NO
@@ -1473,10 +1512,9 @@ Original Atlas modified: NO
 Sculpture performed: NO
 Donor capabilities auto-added to V1: NO
 FT3D-6 implemented: NO
-Canonical promotion performed: NO
 Implementation authorized: NO
 ```
 
-> **FT3D-6 WORKING CONTRACT STATUS: RECONCILED — READY FOR HUMAN REVIEW**
+> **FT3D-6 CANONICAL IMPLEMENTATION CONTRACT V1: APPROVED AND PROMOTED — IMPLEMENTATION NOT AUTHORIZED**
 
-Un READY de rama no equivale a aprobación humana ni a autorización de implementación.
+La promoción del contrato no equivale a autorizar implementación.
