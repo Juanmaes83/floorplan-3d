@@ -218,10 +218,10 @@ Ninguna de las dos crea escena en V1. Un capítulo exterior o de contexto indepe
 
 **`overview` como capability-anchor (cerrado).** `overview` es una capability de familia anchor **derivada del PresentationPlan efectivo**. No es una escena independiente y no tiene adapter.
 1. `overview(level)` existe si el PresentationPlan efectivo tiene una parada `kind:'overview'` válida para ese nivel.
-2. En `master@f74c4ee` no existe `overview(building)`: su disponibilidad es siempre `unsupported` con el código `overview-building-unavailable`.
+2. En `master@f74c4ee` no existe `overview(building)` como capability real de scope `building`: `structural.overview.building` es siempre `unsupported` con el código `overview-building-unavailable`.
 3. No se genera ninguna escena `overview` ni ningún movimiento de cámara para ella.
 4. Sigue siendo el anchor compartido de `plan`, `section`, `elevation` y `room-tour` (§10).
-5. Puede satisfacer un átomo de minimumStory sólo si su cobertura cumple el scope o la cobertura que pide ese átomo (§17).
+5. Puede satisfacer un átomo de minimumStory sólo si su cobertura cumple el scope o la cobertura que pide ese átomo (§17). La **capability real** y el **evaluador de cobertura** son cosas distintas: con un único nivel presentado, un `overview(level)` válido acredita `coverage:'building'` por equivalencia (§9.1) sin que `overview.building` pase a existir; con dos o más niveles, un `overview(level)` aislado no la acredita.
 6. Un overview real de edificio que pudiera aportar FT3D-5 se reconcilia en P11; no se decide ahora.
 
 ## 8. Capability contract
@@ -233,7 +233,7 @@ Toda capability se describe con metadatos estables. Esta es la semántica cerrad
 | `id` | ID semántico estable (§7) |
 | `family` | Una de las seis familias |
 | `version` | Entero ≥ 1 del contrato de la capability |
-| `availability` | Estado de capability (§19.1) |
+| `availability` | Estado de capability (§19.1), único y normalizado. No coexiste con un booleano `partial` paralelo: la cobertura parcial se expresa como `availability:'partial'`, con datos descriptivos opcionales en `details` (§13.1) |
 | `reason` | Código estable o `null` si `supported`; nunca texto en español |
 | `scope` | Ámbito de la capability (§9) |
 | `coverages` | Coberturas que la capability puede acreditar para minimumStory (§9.1): subconjunto de `any`, `level`, `all-presented-levels`, `building` |
@@ -269,15 +269,27 @@ Reglas:
 |---|---|
 | `any` | tiene ≥ 1 target en la Story efectiva, sea cual sea su scope (valor por defecto del átomo) |
 | `level` | tiene ≥ 1 target de scope `level` |
-| `all-presented-levels` | tiene un target en **cada** nivel presentado del PresentationPlan efectivo |
-| `building` | tiene un target de scope `building`; o el edificio presentado tiene **un solo nivel** y la capability cubre ese nivel |
+| `all-presented-levels` | tiene un target en **cada** nivel presentado. Niveles presentados: los del PresentationPlan efectivo; si no hay PresentationPlan, los niveles candidatos de la fuente (proyecto o edificio abierto), para poder evaluar la validez semántica (§29.7) |
+| `building` | tiene un target **real** de scope `building`; **o**, por equivalencia de un solo nivel, el número de niveles presentados es exactamente 1 y la capability cubre ese nivel |
+
+Evaluador de `coverage:'building'` (cerrado):
+
+```text
+si niveles presentados === 1
+    un target de scope level sobre ese nivel acredita building (equivalencia; no crea capability building)
+si niveles presentados > 1
+    hace falta un target real de scope building (p. ej. elevation),
+    o una alternativa del minimumStory, o un futuro overview(building) vía P11
+```
+
+El evaluador nunca exige `structural.overview.building` cuando aplica la equivalencia de un nivel.
 
 Coberturas que admite cada capability en `master@f74c4ee`:
 
 | Capability | Coberturas admitidas |
 |---|---|
-| `plan` | `any`, `level`, `all-presented-levels`, `building` (este último sólo por la regla de un nivel) |
-| `overview` | `any`, `level`, `all-presented-levels`, `building` (sólo por la regla de un nivel, porque `overview(building)` no existe) |
+| `plan` | `any`, `level`, `all-presented-levels`, `building` (este último sólo por la equivalencia de un nivel) |
+| `overview` | `any`, `level`, `all-presented-levels`, `building` (por la equivalencia de un nivel; con varios niveles sólo con un `overview(building)` real, que hoy no existe: P11) |
 | `section` | `any`, `level`, `all-presented-levels` |
 | `elevation` | `any`, `building` |
 | `room-tour` | `any`, `level`, `all-presented-levels` |
@@ -303,7 +315,8 @@ Hay un overview **por nivel**. En `master@f74c4ee` no existe un overview de edif
 
 | Capability | `requires` | `compatibleHosts` / regla |
 |---|---|---|
-| `plan` | Un PresentationPlan válido que contenga el nivel | — |
+| `plan` (capability semántica) | Geometría del nivel apta para leer su distribución: contorno válido y ≥ 1 muro no demolido. **No** depende del PresentationPlan | — |
+| `plan-reveal` (adapter) | Un PresentationPlan ejecutable con una parada overview para ese nivel | Gate de ejecución, evaluado después de minimumStory (§29.7) |
 | `section` | `overview(level)` en la secuencia; `section.derive(level).supported` | — |
 | `elevation` | `overview` de algún nivel; `elevation.derive(building).supported` y una candidata | — |
 | `room-tour` | `overview(level)` de cada nivel con rooms; ≥ 1 room válida elegida | — |
@@ -341,16 +354,19 @@ Es un snapshot **estructural y puro**:
   key: { entryId, revisions: [{ levelId, projectId, revision }] },  // invalidation key (§14)
   levels: [{ levelId, name, order, hasPlan, roomCount }],          // colección, nunca level1/level2
   structural: {
-    plan:      { availability, reason, targets: [levelId] },
+    plan:      { availability, reason, targets: [levelId] },  // semántico: geometría del nivel, no PresentationPlan
     overview: {                                                    // anchor derivado del PresentationPlan efectivo
       byLevel:  [{ levelId, availability, reason }],              // supported si existe la parada overview de ese nivel
       building: { availability: 'unsupported', reason: 'overview-building-unavailable' }  // P11
     },
     section:   { byLevel: [{ levelId, availability, reason }] },  // de section.derive
-    elevation: { availability, reason, partial, candidates: [{ id, label, cardinal }], defaultId },
+    elevation: { availability, reason, candidates: [{ id, label, cardinal }], defaultId, details: { excluded, unoriented } },
     roomTour:  { rooms: [{ levelId, roomId, family, label, areaM2, order }] },
     axon:            { availability: 'pending-implementation', reason: 'ft3d5-pending' },
     explodedLevels:  { availability: 'pending-implementation', reason: 'ft3d5-pending' }
+  },
+  execution: {                                                     // capa ejecutiva separada de la verdad semántica
+    presentationPlan: { available, reason }                       // reason: 'presentation-plan-unavailable' si create/createBuilding devuelve null
   },
   resources: {
     siteData:      { available, reason },                          // sólo disponibilidad; nada se renderiza por esto
@@ -368,7 +384,21 @@ Se separan tres categorías que no se mezclan:
 2. **Runtime enhancement availability**, una entrada separada: `{ solar: { availability, reason, localDate, localTime } }`, desde `FloorPlanSolarUI.result`. La disponibilidad de `site-context` no se guarda: el resolver la deriva de `resources.siteData` más la presencia de anfitriona.
 3. **Session options**: elecciones del profesional (§22).
 
-### 13.1 Ownership (cerrado)
+### 13.1 Normalización de `partial` (cerrado)
+
+Las APIs reales no cambian. El snapshot traduce sus descriptores a una sola taxonomía:
+
+| Entrada real | `availability` normalizada |
+|---|---|
+| FT3D-4 `{supported:true, partial:true}` | `partial` |
+| FT3D-4 `{supported:true, partial:false}` | `supported` |
+| FT3D-4 `{supported:false, reason}` | `unsupported`, con `reason` |
+| FT3D-3 por nivel `{supported}` | `byLevel[].availability` = `supported` o `unsupported` + `reason` |
+| FT3D-3 agregado | `supported` si todos los niveles presentados lo están; `partial` si al menos uno sí y otro no; `unsupported` si ninguno |
+
+Dentro del snapshot nunca coexisten `availability:'supported'` y `partial:true`. El resolver decide el estado sólo con `availability`; `details` (`excluded`, `unoriented`, targets) es descriptivo.
+
+### 13.2 Ownership (cerrado)
 
 Responsable: un **core puro de Presentation Templates** (futuro `js/presentation-templates-core.js`, que no se crea ahora). Expone `snapshot(sources, deps)`, `resolve(...)` y `validateCatalog(...)`.
 
@@ -441,7 +471,7 @@ Añadir una sexta plantilla consiste en registrar datos, añadir copy y añadir 
 14. La capability del átomo admite esa cobertura (tabla §9.1). Combinaciones imposibles se rechazan; por ejemplo `{capability:'elevation', coverage:'level'}`.
 15. Un requisito `building` no puede declararse satisfacible sólo por una capability exclusivamente `level`, salvo la regla de un nivel, que el resolver aplica en ejecución.
 16. `all-presented-levels` sólo se usa con capabilities repetibles o materializables por nivel (`plan`, `overview`, `section`, `room-tour`).
-17. `overview` con cobertura `building` no se considera disponible en la base actual: el validator lo acepta como átomo, pero lo marca como dependiente de P11, y el resolver lo evalúa con `overview.building` (siempre `unsupported` hoy).
+17. `{ capability:'overview', coverage:'building' }` es un átomo sintácticamente válido. El validator no lo marca como inválido; el resolver lo evalúa con el evaluador de §9.1: con un nivel presentado lo acredita un `overview(level)` válido; con varios niveles sólo lo acreditaría un `overview(building)` real, que hoy no existe (`overview.building` = `unsupported`, P11).
 18. Ningún átomo referencia familias D, E o F (enhancements, resources o estructura): no satisfacen mínimos espaciales.
 
 ## 17. minimumStory: modelo formal (cerrado)
@@ -527,7 +557,7 @@ Promotora nunca exige room-tour.
 | Estado | Significado | Ejemplo |
 |---|---|---|
 | `supported` | El proyecto la permite y existe adapter | `section` con un plano que atraviesa |
-| `partial` | Se permite con cobertura reducida y declarada | FT3D-4 `partial:true`; section soportada sólo en algún nivel |
+| `partial` | Se permite con cobertura reducida y declarada | Normalizado desde FT3D-4 `partial:true`; section agregada soportada sólo en algún nivel (§13.1) |
 | `unsupported` | El proyecto no la permite | `no-crossing`, `no-facade-walls` |
 | `pending-implementation` | Rubik todavía no la implementa | `axon`, `exploded-levels` antes de FT3D-5 |
 | `temporarily-unavailable` | Hecho runtime ausente ahora | Solar sin norte, ubicación u hora |
@@ -606,7 +636,7 @@ La definición de la plantilla nunca se modifica.
   templateId,                            // o null = «Sin plantilla»
   toggles: { [capabilityId]: boolean },
   facade: 'automatic' | candidateId,
-  rooms: [{ levelId, roomId }] | null,   // null = default de la plantilla
+  rooms: [{ levelId, roomId }] | null,   // null = baseline: selección histórica del sidecar si es válida; si no, default de la plantilla
   solar: boolean
 }
 ```
@@ -621,6 +651,7 @@ Todo vive en memoria durante la sesión del diálogo y se descarta al cerrarlo.
   - FT3D-6 no lo amplía.
   - Una selección **por defecto de la plantilla** no se escribe en el sidecar.
   - Sólo la selección explícita que hoy ya se guarda al iniciar sigue guardándose como hoy.
+  - El sidecar es el **baseline histórico** de selección de rooms de Presentation, **no** un override de FT3D-6. FT3D-6 no lo borra ni lo reescribe sin una acción específica del flujo histórico.
   - El JSON del proyecto queda idéntico antes y después.
 
 ## 23. Cambio de plantilla y reset
@@ -635,7 +666,14 @@ Todo vive en memoria durante la sesión del diálogo y se descarta al cerrarlo.
 | Toggle de una capability | Se conserva si la nueva plantilla la incluye con policy ≠ `excluded`; si no, se descarta |
 | Overrides descartados | Se enumeran en un aviso `user-choice` |
 
-**Reset.** «Restaurar valores de la plantilla» vacía sólo los overrides de sesión de la plantilla activa. No toca el proyecto, el sidecar, la marca ni la audiencia.
+**Reset.** Copy V1: «Restaurar opciones de la plantilla» (no «Restaurar todos los valores»). La acción:
+- elimina los overrides de sesión de FT3D-6;
+- restaura los toggles de la plantilla, la fachada a `automatic` y Solar a su default;
+- descarta los cambios de selección u orden de rooms hechos sólo en la sesión FT3D-6 que aún no se hayan confirmado mediante el flujo histórico;
+- **no** borra ni reescribe el sidecar persistente actual: si existe una selección histórica válida, sigue siendo el baseline de rooms tras el reset;
+- no toca el proyecto, la marca ni la audiencia.
+
+Una acción «Usar selección automática de esta plantilla», que ignorase el baseline histórico, sería una acción distinta y explícita. No forma parte de V1.
 
 ## 24. Resolver
 
@@ -674,8 +712,9 @@ Pasos:
 5. Deduplicar (§26).
 6. Validar las transiciones (§27).
 7. Aplicar el presupuesto (§28).
-8. Evaluar minimumStory con coberturas (§17) y, por separado, la ejecutabilidad (§29.7): `minimum-unmet` y `presentation-plan-unavailable` son motivos distintos.
-9. Calcular el estado.
+8. Evaluar minimumStory con coberturas (§17) sobre la **verdad semántica** (capabilities semánticas del snapshot), sin depender del PresentationPlan. Si falla: `unavailable` / `minimum-unmet`.
+9. Sólo si minimumStory se cumple, evaluar el **gate ejecutivo**: ¿existe un PresentationPlan ejecutable para materializar la Story (`execution.presentationPlan`)? Si no: `unavailable` / `presentation-plan-unavailable`. Nunca `minimum-unmet` por este motivo.
+10. Calcular el estado.
 
 La Story se congela al iniciar. No se recalcula durante la reproducción (§46).
 
@@ -732,7 +771,7 @@ Duraciones reales de `SCENE_MS`:
 | `elevation-open` | 8000 |
 
 - **Escenas por Story:** como máximo `plan`, `section` y `room-descent` por nivel, más una `elevation`. Con 2 niveles son 7 escenas, unos 41 s animados. Este es el techo V1 actual; FT3D-5 lo amplía (**PENDIENTE DE RECONCILIACIÓN TRAS FT3D-5**: timing de axon y exploded).
-- **Rooms:** budget por plantilla (§18), con un máximo absoluto por defecto de 6 rooms en total. El room budget controla **la selección de rooms de la narrativa**, no el número de `room-descent`, que es como máximo uno por nivel. Las rooms adicionales son paradas manuales y no alargan la animación ni alteran `SCENE_MS`.
+- **Rooms:** budget **automático** por plantilla (§18), con un techo automático general recomendado de 6 rooms para la selección por defecto. **6 no es un máximo de producto**: una selección explícita del profesional puede superarlo, se conserva completa y emite `room-budget-exceeded` (`info`). El room budget controla **la selección de rooms de la narrativa**, no el número de `room-descent`, que es como máximo uno por nivel. Las rooms adicionales son paradas manuales y no alargan la animación ni alteran `SCENE_MS`.
 - **Orden de recorte de contenido repetitivo:**
   1. rooms del mismo `family` por encima de la primera;
   2. rooms `unspecified` por encima del budget;
@@ -765,7 +804,7 @@ Un descenso por cada estancia requeriría un cambio separado de composición y a
 
 ### 29.2 Selección por defecto determinista
 
-1. Si existe una selección explícita válida (sidecar actual reconciliado mediante `reconcile`), se usa y no se sobrescribe.
+1. Si existe una selección explícita válida (sidecar actual reconciliado mediante `reconcile`), es el baseline histórico: se usa y no se sobrescribe, tampoco tras «Restaurar opciones de la plantilla» (§23).
 2. Si no, se construyen candidatos con `rooms` válidas (polígono ≥ 3 puntos, área > 0) de cada nivel presentado, de abajo arriba.
 3. Prioridad por `family` estructurada, según el perfil:
 
@@ -819,8 +858,27 @@ El profesional elige rooms y su orden **dentro de cada nivel**, como hoy. Los ni
 
 `FloorPlanPresentation.create` devuelve `null` si no hay rooms válidas o muros no demolidos, y `createBuilding` omite los niveles sin rooms elegidas. Sin PresentationPlan no hay player.
 
+Tres capas separadas (cerrado):
+
+| Capa | Pregunta | Depende de PresentationPlan |
+|---|---|---|
+| A. Capability semántica `plan` | ¿Existe una lectura válida de la distribución de ese nivel? | No: se deriva de la geometría del nivel |
+| B. Adapter `plan-reveal` | ¿Puede el player actual materializarla? | Sí |
+| C. Gate ejecutivo | ¿Existe un PresentationPlan ejecutable para la Story completa? | Sí; se evalúa después de minimumStory |
+
+Ejemplo obligatorio: Arquitectura con plano válido, sección válida y cero rooms.
+
+```text
+plan = supported, section = supported            (semántico)
+minimumStory architecture = satisfecho
+execution.presentationPlan = no disponible       (create → null, sin rooms)
+resultado: unavailable / presentation-plan-unavailable    — NO minimum-unmet
+```
+
+Si falta realmente el plano semántico requerido (sin muros activos o sin contorno válido), sí es `minimum-unmet`.
+
 Decisión V1:
-- Toda Story requiere un PresentationPlan válido.
+- Toda Story ejecutada requiere un PresentationPlan válido. Esto no levanta el gate actual ni cambia `FloorPlanPresentation` ni el builder.
 - Una plantilla cuyo minimumStory se cumpliría sin rooms, pero sin plan, queda `unavailable`, con el código `presentation-plan-unavailable` (de tipo `blocking`, ejecución). Se distingue explícitamente de `minimum-unmet`, que es invalidez semántica.
 - Rooms no pasan a ser un mínimo conceptual de todas las plantillas: Promotora y Arquitectura siguen pudiendo ser semánticamente válidas sin `room-tour`.
 - Levantar ese gate es un cambio separado del builder/plan, fuera de FT3D-6 V1, que requiere una decisión propia.
@@ -828,7 +886,7 @@ Decisión V1:
 
 ## 30. Plan y overview semánticos
 
-- **`plan`:** intención «leer la distribución». Se materializa con `plan-reveal` por nivel: el estado 2D del editor sube hasta el overview de ese nivel. Su `startAnchor` es el plano y su `endAnchor` es `overview(level)`. Con «Sin plantilla» coincide con «Empezar desde el plano» (FT3D-1a). En la Story completa, `fullStory` ya lo incluye en cada nivel.
+- **`plan`:** intención «leer la distribución». Como capability semántica se deriva de la geometría del nivel, no del PresentationPlan (§29.7). Se materializa con `plan-reveal` por nivel: el estado 2D del editor sube hasta el overview de ese nivel. Su `startAnchor` es el plano y su `endAnchor` es `overview(level)`. Con «Sin plantilla» coincide con «Empezar desde el plano» (FT3D-1a). En la Story completa, `fullStory` ya lo incluye en cada nivel.
 - **`overview`:** **capability-anchor derivada del PresentationPlan efectivo**, no escena y sin adapter (§7). Es la parada `kind:'overview'` de cada nivel y figura en el snapshot (`structural.overview.byLevel`). Se alcanza como `endAnchor` de `plan-reveal` o como parada inicial del plan, y es el anchor compartido de `section`, `elevation` y `room-descent`.
 - No hay overview de edificio en esta base (`structural.overview.building` = `unsupported`, `overview-building-unavailable`). Si FT3D-5 aporta uno, se reconcilia en P11. Si una plantilla prefiere `plan` OFF, la Story empieza en `overview(level)`, la parada inicial actual, sin capítulo vacío.
 - El resolver comprende los anchors implícitos y no emite `overview → overview`.
@@ -842,7 +900,7 @@ Decisión V1:
 | Scope | `level`, con eje compartido de edificio (`buildingAxis`) en multinivel |
 | Anchors | `overview(level)` → `overview(level)` |
 | Repetición | 1 por nivel soportado |
-| Partial | Soportada en algunos niveles: los demás se omiten con su `reason`, como ya enumera el hint actual («Se omite en …») |
+| Partial | Soportada en algunos niveles: agregado `availability:'partial'` (§13.1); los niveles no soportados se omiten con su `reason`, como ya enumera el hint actual («Se omite en …») |
 | Opción actual | Checkbox `#presentationSectionOption`, desactivado por defecto y deshabilitado si ningún nivel la soporta |
 | Reduced | Hold `SECTION_OPEN.reducedHold` |
 | Duración | `SCENE_MS['section-open']=7000` |
@@ -858,7 +916,7 @@ FT3D-6 no recalcula el corte, ni el eje, ni los candidatos 50/40/60. No hay sust
 | Candidatas | `facade-A…`, por sector de 45°, con `label` y `cardinal` sólo si hay norte |
 | Default | Automática FT3D-4: mayor longitud, después más huecos, después sector más bajo |
 | Petición de la plantilla | `automatic` \| `user-selected` (candidateId) \| `omit`. Nunca «fachada principal» |
-| Partial | `partial:true` → warning `elevation-partial` (§40) |
+| Partial | `partial:true` del descriptor → `availability:'partial'` en el snapshot (§13.1) → warning `elevation-partial` (§40) |
 | Unsupported | `invalid-geometry`, `no-facade-walls`, `no-oriented-facade-walls`, `degenerate-facade` |
 | Scope | `building` (todos los niveles; `levelView='all'` sólo en runtime) |
 | Anchors | `overview(level de inserción)` → `overview(mismo level)` |
@@ -1113,6 +1171,24 @@ Casos contractuales de coberturas, rooms y site (unitarias salvo indicación):
 55. Ninguna añade red (`fetch`/`XMLHttpRequest` anulados).
 56. El validator rechaza coberturas imposibles (por ejemplo `elevation` con `level`).
 
+Casos de coherencia final:
+
+57. Un nivel + `overview(level)` válido satisface `coverage:'building'`.
+58. `structural.overview.building` sigue siendo `unsupported` (`overview-building-unavailable`).
+59. Dos niveles + sólo `overview(L0)` no satisface `building`.
+60. Dos niveles: un `overview(building)` sólo sería posible vía P11; hoy no existe.
+61. Plano válido + section válida + cero rooms en Arquitectura: minimumStory satisfecho semánticamente, Story no ejecutable, `presentation-plan-unavailable`, nunca `minimum-unmet`.
+62. Si falta realmente el plano semántico requerido: `minimum-unmet`.
+63. Selección automática por encima del budget: recorte permitido, `rooms-trimmed`.
+64. Selección explícita de más de 6 rooms: todas las válidas conservadas, `room-budget-exceeded`, nunca `rooms-trimmed`.
+65. «Restaurar opciones de la plantilla» elimina los overrides de sesión y no elimina el sidecar histórico.
+66. Tras el reset, la selección histórica puede seguir siendo el baseline; el copy no promete un reset completo de rooms persistidas (navegador).
+67. Ninguna clave de storage nueva tras el reset (navegador).
+68. Elevation `{supported:true, partial:true}` → `availability:'partial'`.
+69. Elevation `{supported:true, partial:false}` → `availability:'supported'`.
+70. Section soportada sólo en parte de los niveles → agregado `partial`.
+71. El resolver decide el estado sin leer ningún booleano `partial` paralelo.
+
 ### 47.2 Tests de contrato de adapters
 
 - Mapeo capability ↔ adapter.
@@ -1146,7 +1222,7 @@ Casos contractuales de coberturas, rooms y site (unitarias salvo indicación):
 18. Cambio de plantilla repetido.
 19. Overrides compatibles conservados.
 20. Overrides incompatibles descartados.
-21. Restaurar defaults.
+21. «Restaurar opciones de la plantilla» (sin borrar el sidecar histórico).
 22. Movimiento reducido.
 23. 390×844.
 24. 844×390.
@@ -1203,10 +1279,17 @@ Debe demostrarse que las plantillas cambian realmente la narrativa.
 | Tipos de room repetidos | Una por `family` salvo elección explícita |
 | Rooms sin clasificar | Área desc → orden de fuente → `roomId`; `rooms-unclassified`; sin inferir tipos |
 | Promotora multinivel | Un único overview de nivel no es lectura global; vale `plan` en todos los niveles o `elevation` |
+| Promotora, un nivel, overview | `overview(level)` acredita `coverage:'building'` por equivalencia de un nivel |
+| Promotora, dos niveles, sólo overview L0 | No cumple; `overview.building` no existe (P11) |
+| Arquitectura sin rooms con plan + section | minimumStory satisfecho; `presentation-plan-unavailable` (no `minimum-unmet`) |
+| Promotora sin rooms con lectura global semántica | minimumStory satisfecho (p. ej. `plan` en todos los niveles o `elevation`); `presentation-plan-unavailable` |
+| Selección explícita de 7+ rooms | Se conserva completa; `room-budget-exceeded`; nunca `rooms-trimmed` |
+| Reset con sidecar histórico | Se eliminan los overrides de sesión; la selección histórica sigue como baseline |
+| Section partial por niveles | Agregado `availability:'partial'`; niveles no soportados omitidos con su `reason` |
 | Room eliminada | `room-missing`; primera válida restante y reconfirmación |
 | Section unsupported | Omitida con `no-bounds`/`no-crossing`; nunca muros rebajados |
 | Elevation unsupported | Omitida con su `reason`; las rooms siguen |
-| Elevation partial | Warning `elevation-partial`; sin afirmar edificio completo |
+| Elevation partial | `availability:'partial'` normalizada; warning `elevation-partial`; sin afirmar edificio completo |
 | Sin norte | Labels neutrales; sin cardinal inventado |
 | Solar no disponible | Enhancement desactivado con razón; la fachada sigue |
 | Sin contexto o sin site | `site-data` no disponible (`site-data-unavailable`); `site-context` no se materializa; la fachada sigue sin contexto |
@@ -1269,7 +1352,7 @@ Debe demostrarse que las plantillas cambian realmente la narrativa.
 - **Rooms y presupuesto:**
   - mapeo de room-tour (primer descenso por nivel más paradas);
   - ejecución sin rooms → `presentation-plan-unavailable`;
-  - presupuesto narrativo derivado de `SCENE_MS`;
+  - presupuesto narrativo derivado de `SCENE_MS`, con 6 rooms como techo automático recomendado;
   - selección, diversidad y fallback de rooms.
 - **Fronteras de producto:**
   - Solar como enhancement de `elevation`;
@@ -1291,6 +1374,12 @@ Debe demostrarse que las plantillas cambian realmente la narrativa.
   8. Validez semántica (`minimum-unmet`) separada de ejecutabilidad (`presentation-plan-unavailable`).
   9. Sin persistencia nueva y sin red.
   10. P1–P11 como únicos pendientes antes de la promoción a contrato canónico.
+- **Coherencia final (revisión posterior a `bbb03ad`):**
+  1. Capability real `overview(building)` distinta de la equivalencia de cobertura de un solo nivel.
+  2. Capability semántica `plan` separada del adapter `plan-reveal` y del gate ejecutivo PresentationPlan.
+  3. 6 rooms como techo automático recomendado, no como máximo de producto.
+  4. «Restaurar opciones de la plantilla» separado del sidecar histórico de rooms.
+  5. `partial` normalizado como `availability:'partial'` en el snapshot.
 
 ## 50. Tabla de pendientes FT3D-5
 
