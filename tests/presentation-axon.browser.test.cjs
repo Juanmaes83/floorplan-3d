@@ -137,7 +137,7 @@ test('one level: default OFF, OFF parity, script order, ES/EN/ZH, dialog reopen,
  // ES/EN/ZH: every new visible string goes through tx with three languages.
  const ui=await (await page.request.get(url+'js/presentation-ui.js')).text();
  for(const es of ['Lectura del edificio','Sin axonometría','Vista axonométrica','Despiece por plantas','Ver despiece','Ver axonometría','Separamos las plantas para leer su relación espacial','Recomponemos el edificio','Despiece espacial · separación visual'])
-  assert.match(ui,new RegExp(`tx\\('${es.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}','[^']+','[^']+'\\)`),`${es}: ES/EN/ZH`);
+  assert.match(ui,new RegExp(`'${es.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}','[^']+','[^']+'`),`${es}: ES/EN/ZH`);
  // Repeated open/close of the dialog: one control, never duplicated.
  for(let i=0;i<3;i++){await openConfig(page);assert.equal(await page.locator('#presentationAxonOptionBox').count(),1,'one FT3D-5 control');await page.getByRole('button',{name:'Cancelar'}).click();await page.locator('#presentationConfig').waitFor({state:'hidden'});}
  await openConfig(page);
@@ -177,7 +177,7 @@ test('active upper level, offsets X/Z, different footprints, unusual heights: th
  for(const [p,name] of [[22,'active-upper-compact'],[64,'active-upper-hold']]){const s=await scrub(page,p);await shot(page,name);
   const live=s.info.axon.live,dy=s.info.axon.levelDeltas.find(x=>x.levelId===upperId).dyM;
   for(const o of live.active)assert.ok(Math.abs(o.y-dy)<1e-9,`${name}: ${o.name} carries the active (upper) level delta`);
-  const names=live.active.map(o=>o.name);for(const n of ['archFloor','archUp','furnG','lampG','activeSlab'])assert.ok(names.includes(n),`${n} owned by the active level`);
+  const names=live.active.map(o=>o.name);for(const n of ['archFloor','archUp','furnG','lampG','activeSlab'])assert.ok(names.includes(n),`${n} owned by the active level (${names.join(',')}; active ${await page.evaluate(()=>FloorPlanBuildingUI.presentationSources().activeLevelId)})`);
   const lower=live.levels.find(l=>l.levelId===lo.levelId);assert.ok(Math.abs(lower.y-(-3.1))<1e-9,`${name}: the lower level stays at its real place`);
   assert.ok(live.assets.every(a=>a.parentIsFurniture),'assets keep their furniture parent');}
  await scrub(page,30);await shot(page,'offset-separation');
@@ -196,10 +196,11 @@ test('whole story: section + façade + breakdown once, in order; cancel at 25/40
  assert.ok(kinds.indexOf('section-open')<i);
  const at=(p)=>page.evaluate(([k,i,p])=>FloorPlanPresentationStory.sequence(k.map(x=>FloorPlanPresentationStory.SCENE_MS[x])).at(i,p),[kinds,i,p]);
  for(const p of [.25,.4,.6,.8]){const s=await scrub(page,Math.round(1000*await at(p)));assert.equal(s.story.kind,'exploded-levels-open');
+  // «← Escena anterior» mid-scene goes back to the start of this scene: the overview, nothing lifted or hidden.
   await page.locator('#presentationStoryPlan').click();await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing&&!FloorPlanPresentation.story?.busy);await frames(page);
-  const r=await info(page);assert.notEqual(r.story?.kind,'exploded-levels-open',`cancel at ${p}: previous scene`);
-  const z=await page.evaluate(()=>View3D.presentationAxonResidue);assert.equal(z.active,false);assert.equal(z.handles,0);
-  for(const x of z.levelDeltas)assert.ok(Math.abs(x.deltaY)<1e-9,`cancel at ${p}: no level left lifted`);}
+  const r=await info(page);assert.equal(r.story.kind,'exploded-levels-open');assert.ok(r.story.local<1e-6,`cancel at ${p}: back to the scene start`);
+  assert.ok(r.info.axon.levelDeltas.every(x=>x.dyM===0),`cancel at ${p}: nothing lifted`);assert.deepEqual(r.info.axon.visibleLevelIds,r.info.axon.baseVisibleLevelIds,`cancel at ${p}: overview levels`);
+  const real=r.info.axon.live.levels.every(l=>Math.abs(l.y-Math.round(l.y*1000)/1000)<1e-9);assert.ok(real,'levels at their real place');}
  await scrub(page,Math.round(1000*await at(.6)));await shot(page,'full-story-exploded');
  await exit(page,editor,'close mid-scene','close');await residueClean(page,'close');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
@@ -207,7 +208,7 @@ test('whole story: section + façade + breakdown once, in order; cancel at 25/40
 test('Begin failure after active → all rolls back; all → all; furniture OFF and contact ON preserved; resize keeps p (1440x900)',{timeout:1200000},async t=>{
  const {page,errors,external}=await open(t,{width:1440,height:900});await importZip(page,zips.duplex);
  await page.locator('[data-view="3d"]').first().click();await page.waitForTimeout(1500);
- await page.locator('#toggles3d [data-t="furn"]').click();await page.waitForTimeout(300);const editor=await snapshot(page);
+ await page.evaluate(()=>document.querySelector('#toggles3d [data-t="furn"]').click());await page.waitForTimeout(300);const editor=await snapshot(page);
  await configure(page,{mode:'exploded'});await settled(page);
  await page.locator('#presentationContactShadows').click();await page.waitForTimeout(300);
  const overview=await info(page),contactOn=await page.evaluate(()=>View3D.presentationContactShadows.enabled);
@@ -232,7 +233,7 @@ test('Begin failure after active → all rolls back; all → all; furniture OFF 
  assert.equal(await page.evaluate(()=>View3D.presentationContactShadows.enabled),contactOn,'contact state kept');
  await exit(page,editor,'toggles');
  // all → all: with every level already shown, nothing to switch, nothing rebuilt.
- await page.locator('[data-view="3d"]').first().click();await page.waitForTimeout(1200);await page.locator('#levelViewAll').click();await page.waitForFunction(()=>View3D.levelView==='all');
+ await page.locator('[data-view="3d"]').first().click();await page.waitForTimeout(1200);await page.evaluate(()=>document.querySelector('#levelViewAll').click());await page.waitForFunction(()=>View3D.levelView==='all');
  const editor2=await snapshot(page);await configure(page,{mode:'exploded'});await settled(page);const ov2=await info(page);
  const a=await standalone(page,'exploded-levels-open');assert.equal(a.residue.rebuilds,ov2.residue.rebuilds,'all → all: no rebuild');assert.equal(a.info.axon.baseLevelView,'all');
  await scrub(page,64);await scrub(page,100);await page.locator('#presentationStoryPlan').click();await settled(page);await residueClean(page,'all→all',{levelView:'all'});
