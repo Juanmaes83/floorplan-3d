@@ -263,3 +263,16 @@ for(const viewport of [{width:390,height:844},{width:844,height:390}]){
   await page.locator('#presentationStoryPlan').click();await settled(page);await residueClean(page,'phone');await exit(page,editor,'phone');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
  });
 }
+
+test('reduced motion breakdown: compact hold, then exploded hold, then the presentation continues (1440x900)',{timeout:900000},async t=>{
+ const {page,errors,external}=await open(t,{width:1440,height:900},{reduced:true});await importZip(page,zips.duplex);const editor=await snapshot(page);
+ await configure(page,{mode:'exploded'});await settled(page);const overview=await info(page);await standalone(page,'exploded-levels-open');
+ const H=await page.evaluate(()=>FloorPlanPresentationStory.EXPLODED_LEVELS_OPEN);
+ await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedCompact,{timeout:120000});await frames(page);
+ const c=await info(page);assert.ok(c.info.axon.levelDeltas.every(x=>x.dyM===0),'first hold: compact');assert.ok(c.info.axon.live.stairs.every(s=>s.visible));await shot(page,'reduced-exploded-compact');
+ await page.locator('#presentationStoryPlay').click();await page.waitForFunction(h=>Math.abs((FloorPlanPresentation.story?.local??-1)-h)<1e-9,H.reducedExploded,{timeout:120000});await frames(page);
+ const e=await info(page);assert.equal(e.info.axon.phase,'exploded','second hold: levels apart');await shot(page,'reduced-exploded-hold');
+ assert.match(await page.locator('#presentationStoryPlay').textContent(),/Continuar presentación/);
+ await page.locator('#presentationStoryPlay').click();await settled(page);await residueClean(page,'reduced');assert.ok(samePose((await info(page)).pose,overview.pose),'ends on the overview');
+ await exit(page,editor,'reduced');assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+});
