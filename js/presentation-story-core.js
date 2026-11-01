@@ -246,7 +246,104 @@
   return {kind:'elevation-open',stateAt,checkpoints:[0,.25,.35,.5,.72,.86,1],info:{fovFront:fov0,fovEnd:fov1,distanceFront:d0,distanceEnd:d1,distancePerspective:dP,frameFront:frame0,frameEnd:frame1,width,height,
    normal:[...n],tangent:[...t],perspectiveDirection:dirP,turnDeg:deg(turnTo(az1,az0)),playMs:o.playMs,reducedFront:o.reducedFront,reducedLight:o.reducedLight,reducedPersp:o.reducedPersp,solar:!!input.solar,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen};
+ /* FT3D-5 — «Vista axonométrica» (axonOpen) and «Despiece por plantas» (explodedLevelsOpen) on the same model with the
+    same PerspectiveCamera (no orthographic camera): a spatial reading of the building, never a construction sequence.
+    Both start and end on the overview the presentation shows (p = 0 and p = 1 are exactly that pose, with the levels
+    visible as they were); in between the camera goes to an oblique whole-building view (direction of the 3D view's
+    whole-building pose), the levels needed for it are shown, and — exploded only — the levels are lifted by their
+    visual-only separation (absolute deltas, from the descriptor) and put back.
+    input: end {position, target, fov} (the overview pose); compact: 8 world corners of the building envelope; exploded:
+    8 world corners of the exploded envelope (exploded only); direction [x,y,z] (from target to eye); aspect; region;
+    base {near, far, maxDistance}; levels [{levelId, dyM}] (dyM: full visual separation, metres, exploded only);
+    includedLevelIds: levels the reading shows; baseVisibleLevelIds: the levels visible at the overview.
+    stateAt(p) → {p, phase, position, target, fov, near, far, maxDistance, distance, levelDeltas:[{levelId, dyM}],
+    visibleLevelIds, showStairs, showGround, showContext, showRoofExterior, showContact} — plain data, no history. */
+ const AXON_OPEN={entryEnd:.28,holdEnd:.72,revealAt:.35,hideAt:.65,margin:.1,reducedHold:.5,playMs:7000};
+ const EXPLODED_LEVELS_OPEN={entryEnd:.22,separateEnd:.55,holdEnd:.74,recomposeEnd:.9,revealAt:.35,hideAt:.65,margin:.1,reducedCompact:.22,reducedExploded:.645,playMs:10000};
+ function axonFrame(input,o){
+  const end=input.end;
+  if(!end||![...end.position,...end.target,end.fov].every(Number.isFinite))throw Error('Falta la vista general de destino.');
+  const valid=c=>(c||[]).filter(v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite));
+  const compact=valid(input.compact);if(compact.length<8)throw Error('El edificio no tiene volumen.');
+  const dirIn=input.direction&&input.direction.length===3&&input.direction.every(Number.isFinite)?input.direction:[9,8.5,12.5];
+  const aspect=Math.max(.2,Number(input.aspect)||1);
+  const base={near:input.base?.near??.05,far:input.base?.far??300,maxDistance:input.base?.maxDistance??Infinity};
+  const r=region(input.region),m=.06,nx0=2*r[0]-1+m,nx1=2*r[2]-1-m,ny0=1-2*r[3]+m,ny1=1-2*r[1]-m,cx=(nx0+nx1)/2,cy=(ny0+ny1)/2,hx=(nx1-nx0)/2,hy=(ny1-ny0)/2;
+  const offset1=sub(end.position,end.target),d1=len(offset1),dir1=norm(offset1),fov1=end.fov,tan1=Math.tan(rad(fov1)/2);
+  const dirA=norm(dirIn);
+  // Pure fit of a set of world corners in the free region (no Box3 over the scene, no per-frame search over objects).
+  function fit(corners){
+   const f=mul(dirA,-1),a=axes(f),tH=tan1*aspect;
+   const box=corners.reduce((b,c)=>({min:c.map((v,i)=>Math.min(b.min[i],v)),max:c.map((v,i)=>Math.max(b.max[i],v))}),{min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity]});
+   const target=mul(add(box.min,box.max),.5),reach=len(sub(box.max,box.min));
+   const eyeAt=d=>add(add(add(target,mul(dirA,d)),mul(a.right,-cx*tH*d)),mul(a.up,-cy*tan1*d));
+   const ok=d=>{const eye=eyeAt(d);return corners.every(p=>{const v=sub(p,eye),zz=dot(v,f);if(zz<=0)return false;const sx=dot(v,a.right)/zz/tH,sy=dot(v,a.up)/zz/tan1;return Math.abs(sx-cx)<=hx&&Math.abs(sy-cy)<=hy;});};
+   let lo=.1,hi=10;while(!ok(hi)&&hi<1e5)hi*=2;for(let i=0;i<48;i++){const mid=(lo+hi)/2;if(ok(mid))hi=mid;else lo=mid;}
+   const d=hi*(1+o.margin/2),eye=eyeAt(d);
+   return {d,eye,target:add(eye,mul(dirA,-d)),reach};
+  }
+  return {end,base,dir1,d1,fov1,dirA,fit,compact,valid};
+ }
+ function axonStates(fr,o){
+  const {end,base,dir1,d1,fov1,dirA}=fr;
+  const az=v=>Math.atan2(v[2],v[0]),el=v=>Math.asin(Math.max(-1,Math.min(1,v[1])));
+  const turnTo=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
+  const dirAt=(e,a)=>[Math.cos(e)*Math.cos(a),Math.sin(e),Math.cos(e)*Math.sin(a)];
+  const az1=az(dir1),el1=el(dir1),azA=az(dirA),elA=el(dirA);
+  const limits=(d,reach)=>({near:Math.max(base.near*.5,Math.min(base.near,Math.max(.01,(d-reach)*.5))),far:Math.max(base.far,d+reach*2),maxDistance:Math.max(base.maxDistance,d*1.05)});
+  // Overview ↔ a framed pose along dirA: the direction turns on the sphere, the distance and target move continuously.
+  function between(pose,s){
+   const d=d1*Math.pow(pose.d/d1,s),dir=dirAt(lerp(el1,elA,s),az1+turnTo(az1,azA)*s),target=lerp3(end.target,pose.target,s),lim=limits(d,pose.reach);
+   return {position:add(target,mul(dir,d)),target,fov:fov1,distance:d,near:lerp(base.near,lim.near,s),far:lerp(base.far,lim.far,s),maxDistance:s<=0?base.maxDistance:lim.maxDistance};
+  }
+  function at(pose){const lim=limits(pose.d,pose.reach);return {position:[...pose.eye],target:[...pose.target],fov:fov1,distance:pose.d,...lim};}
+  // Between two framed poses of the same direction (compact ↔ exploded).
+  function blend(a,b,s){const d=lerp(a.d,b.d,s),target=lerp3(a.target,b.target,s),lim=limits(d,Math.max(a.reach,b.reach));return {position:add(target,mul(dirA,d)),target,fov:fov1,distance:d,...lim};}
+  const overview={position:[...end.position],target:[...end.target],fov:fov1,distance:d1,near:base.near,far:base.far,maxDistance:base.maxDistance};
+  return {between,at,blend,overview};
+ }
+ function visibility(input,show){const base=[...(input.baseVisibleLevelIds||[])],all=[...new Set([...base,...(input.includedLevelIds||[])])];return show?all:base;}
+ function axonOpen(input){
+  const o={...AXON_OPEN,...(input.options||{})},fr=axonFrame(input,o),poseA=fr.fit(fr.compact),S=axonStates(fr,o);
+  const ids=(input.levels||[]).map(l=>l.levelId);
+  const zero=ids.map(levelId=>({levelId,dyM:0}));
+  const flags={showStairs:true,showGround:true,showContext:true,showRoofExterior:true};
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   if(p<=0||p>=1)return {p:p<=0?0:1,phase:'overview',...S.overview,levelDeltas:zero.map(x=>({...x})),visibleLevelIds:visibility(input,false),...flags,showContact:true};
+   let cam,phase,show;
+   if(p<o.entryEnd){const s=smooth(p/o.entryEnd);cam=S.between(poseA,s);phase='entry';show=s>=o.revealAt;}
+   else if(p<o.holdEnd){cam=S.at(poseA);phase='axon';show=true;}
+   else{const s=smooth((p-o.holdEnd)/(1-o.holdEnd));cam=S.between(poseA,1-s);phase='return';show=s<o.hideAt;}
+   return {p,phase,...cam,levelDeltas:zero.map(x=>({...x})),visibleLevelIds:visibility(input,show),...flags,showContact:false};
+  }
+  return {kind:'axon-open',stateAt,checkpoints:[0,.14,.28,.5,.72,.86,1],info:{distanceAxon:poseA.d,distanceEnd:fr.d1,direction:[...fr.dirA],fovEnd:fr.fov1,reach:poseA.reach,playMs:o.playMs,reducedHold:o.reducedHold,levels:ids.length,options:o}};
+ }
+ function explodedLevelsOpen(input){
+  const o={...EXPLODED_LEVELS_OPEN,...(input.options||{})},fr=axonFrame(input,o);
+  const exploded=fr.valid(input.exploded);if(exploded.length<8)throw Error('El despiece no tiene volumen.');
+  const levels=(input.levels||[]).map(l=>({levelId:l.levelId,dyM:Number.isFinite(l.dyM)?l.dyM:0}));
+  if(levels.length<2)throw Error('El despiece necesita al menos dos niveles.');
+  const poseA=fr.fit(fr.compact),poseE=fr.fit(exploded),S=axonStates(fr,o);
+  const deltas=k=>levels.map(l=>({levelId:l.levelId,dyM:l.dyM*k===0?0:l.dyM*k}));
+  // While the levels are apart, connectors (stairs), ground/context, global roof/exterior and contact shadows would
+  // misread the separation: hidden, and back as soon as the levels are recomposed.
+  const flags=apart=>({showStairs:!apart,showGround:!apart,showContext:!apart,showRoofExterior:!apart});
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   if(p<=0||p>=1)return {p:p<=0?0:1,phase:'overview',...S.overview,levelDeltas:deltas(0),visibleLevelIds:visibility(input,false),...flags(false),showContact:true};
+   let cam,phase,k=0,show=true;
+   if(p<o.entryEnd){const s=smooth(p/o.entryEnd);cam=S.between(poseA,s);phase='entry';show=s>=o.revealAt;}
+   else if(p<o.separateEnd){k=smooth((p-o.entryEnd)/(o.separateEnd-o.entryEnd));cam=S.blend(poseA,poseE,k);phase=k>0?'separate':'axon';}
+   else if(p<o.holdEnd){k=1;cam=S.at(poseE);phase='exploded';}
+   else if(p<o.recomposeEnd){k=1-smooth((p-o.holdEnd)/(o.recomposeEnd-o.holdEnd));cam=S.blend(poseA,poseE,k);phase='recompose';}
+   else{const s=smooth((p-o.recomposeEnd)/(1-o.recomposeEnd));cam=S.between(poseA,1-s);phase='return';show=s<o.hideAt;}
+   return {p,phase,...cam,levelDeltas:deltas(k),visibleLevelIds:visibility(input,show),...flags(k>0),showContact:false};
+  }
+  return {kind:'exploded-levels-open',stateAt,checkpoints:[0,.11,.22,.385,.55,.645,.82,.95,1],info:{distanceAxon:poseA.d,distanceExploded:poseE.d,distanceEnd:fr.d1,direction:[...fr.dirA],fovEnd:fr.fov1,reach:poseE.reach,playMs:o.playMs,
+   reducedCompact:o.reducedCompact,reducedExploded:o.reducedExploded,levels:levels.length,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen,'axon-open':axonOpen,'exploded-levels-open':explodedLevelsOpen};
  /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
     proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
     the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
@@ -260,9 +357,9 @@
   return {count:w.length,starts:[...starts],total,locate,at};
  }
  // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
- const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000};
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000,'axon-open':7000,'exploded-levels-open':10000};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,roomDescent,sectionOpen,elevationOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN};
+ return {create,planReveal,roomDescent,sectionOpen,elevationOpen,axonOpen,explodedLevelsOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN,AXON_OPEN,EXPLODED_LEVELS_OPEN};
 });
