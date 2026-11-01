@@ -197,9 +197,9 @@ Cualquier sugerencia más fuerte requiere una decisión futura aparte.
 
 | Familia | Definición | Capabilities V1 | Puede ser capítulo | Satisface minimumStory |
 |---|---|---|---|---|
-| **A. atomic-scene** | Unidad Story ejecutable con lifecycle propio (begin/apply/end, restauración) | `section`, `elevation`; futuras `axon`, `exploded-levels` | Sí, mediante adapter | Sí, si está resuelta |
-| **B. composite** | Produce N escenas o paradas | `room-tour` | Sí (N) | Sí, si resuelve ≥ 1 room |
-| **C. anchor** | Estado narrativo de entrada o salida; no es un capítulo independiente | `plan`, `overview` | Sólo se materializa (§30) | Sí, si se materializa |
+| **A. atomic-scene** | Unidad Story ejecutable con lifecycle propio (begin/apply/end, restauración) | `section`, `elevation`; futuras `axon`, `exploded-levels` | Sí, mediante adapter | Sí, si está semánticamente resuelta (§17) |
+| **B. composite** | Produce N escenas o paradas | `room-tour` | Sí (N) | Sí, si resuelve semánticamente ≥ 1 room (§17) |
+| **C. anchor** | Estado narrativo de entrada o salida; no es un capítulo independiente | `plan`, `overview` | Sólo se materializa (§30) | Sí, según su verdad semántica (§17): `plan` desde la geometría; `overview` desde su parada real |
 | **D. enhancement** | Enriquece una escena anfitriona compatible | `solar`, `site-context` | Nunca | Nunca |
 | **E. resource** | Dato o documento disponible, sin obligación de ser escena | `materials`, `moodboard`, `budget-summary`, `dossier`, `site-data` | Sólo con adapter aprobado (ninguno en V1) | Nunca en V1 |
 | **F. story-structure** | Estructura común del relato | `closing` | Estructura terminal, no capítulo geométrico | Nunca |
@@ -267,7 +267,7 @@ Reglas:
 
 | Cobertura | Se cumple cuando la capability resuelta… |
 |---|---|
-| `any` | tiene ≥ 1 target en la Story efectiva, sea cual sea su scope (valor por defecto del átomo) |
+| `any` | tiene ≥ 1 target en la resolución semántica, sea cual sea su scope (valor por defecto del átomo) |
 | `level` | tiene ≥ 1 target de scope `level` |
 | `all-presented-levels` | tiene un target en **cada** nivel presentado. Niveles presentados: los del PresentationPlan efectivo; si no hay PresentationPlan, los niveles candidatos de la fuente (proyecto o edificio abierto), para poder evaluar la validez semántica (§29.7) |
 | `building` | tiene un target **real** de scope `building`; **o**, por equivalencia de un solo nivel, el número de niveles presentados es exactamente 1 y la capability cubre ese nivel |
@@ -485,10 +485,22 @@ CapId    := id de familia A, B o C
 Coverage := 'any' | 'level' | 'all-presented-levels' | 'building'      (por defecto 'any')
 ```
 
-Semántica:
-- Un `Atom` se cumple sólo si la capability está **resuelta e incluida** en la secuencia efectiva (tras aplicar policies, overrides y la verdad de capabilities) **y** sus targets satisfacen la cobertura exigida por el átomo (§9.1).
+Semántica (cerrado):
+- minimumStory se evalúa sobre la **resolución semántica** del resolver, **antes** de materializar escenas mediante adapters. No se evalúa sobre escenas ya construidas ni sobre la `sequence` materializada.
+- Un `Atom` se cumple cuando:
+  1. la capability semántica está disponible en el capability snapshot (`supported` o `partial`, §13.1);
+  2. policies y overrides la mantienen incluida en la resolución semántica;
+  3. sus targets satisfacen la cobertura exigida por el átomo (§9.1).
 - La forma abreviada `CapId` equivale a `{ capability: CapId, coverage: 'any' }`.
-- Un anchor (`plan`, `overview`) cuenta si se materializa en la Story efectiva: `plan` mediante `plan-reveal`; `overview(level)` mediante la parada overview del nivel.
+- Verdad semántica por capability:
+  - `plan`: satisface el mínimo por su capability semántica, derivada de la geometría del nivel (§29.7). `plan-reveal` es sólo su mecanismo actual de materialización Story.
+  - `overview(level)`: conserva su autoridad actual, la parada overview real del PresentationPlan efectivo (§7). No pasa a ser una capability geométrica independiente.
+  - `section`: soporte del descriptor FT3D-3. `elevation`: soporte del descriptor FT3D-4, normalizado (`supported` o `partial`). No hace falta una escena construida.
+  - `room-tour`: ≥ 1 room válida seleccionada.
+  - `axon`, `exploded-levels`: `pending-implementation`; no satisfacen ningún átomo hasta FT3D-5 (P1–P11).
+- La disponibilidad de un adapter, su materialización o la del PresentationPlan **no cambian retroactivamente** el resultado semántico de minimumStory.
+- Si la semántica es válida pero la Story actual no puede ejecutarse, la plantilla es `unavailable` por una razón ejecutiva (`presentation-plan-unavailable`; en runtime, `adapter-runtime-failure` según §46), nunca por `minimum-unmet`.
+- `minimum-unmet` sólo significa que falta realmente una capability semántica necesaria para el mínimo profesional; se decide antes del gate ejecutivo.
 - `allOf` exige que se cumplan todos; `oneOf`, al menos uno; `atLeast` exige n ≤ |of|.
 - Profundidad máxima: 2. No hay negación, condiciones ni variables.
 - Se evalúa sobre el resultado, nunca sobre el catálogo ideal. No reactiva elementos desactivados.
@@ -704,17 +716,29 @@ Garantías del resolver:
 - mismas entradas producen un resultado deepEqual;
 - idioma, viewport y movimiento reducido no cambian el resultado.
 
-Pasos:
+Orden formal (cerrado):
+
+```text
+1. capability snapshot / verdad semántica
+2. policies de la plantilla + overrides
+3. capabilities semánticamente resueltas
+4. evaluar minimumStory
+5. si falla → unavailable / minimum-unmet
+6. evaluar gates ejecutivos y materialización por adapters
+7. si el PresentationPlan no puede ejecutar → unavailable / presentation-plan-unavailable
+8. materializar la Story (sequence)
+```
+
+`minimum` se calcula sobre la resolución semántica que el resolver mantiene internamente, antes de construir la `sequence`. `sequence` sólo representa la materialización final.
+
+Pasos detallados:
 1. Validar los IDs y las opciones; un ID desconocido produce un rechazo explicable.
-2. Calcular las opciones efectivas según §21.
-3. Expandir por nivel (§37) y por room (§29).
-4. Adjuntar los enhancements a su anfitriona.
-5. Deduplicar (§26).
-6. Validar las transiciones (§27).
-7. Aplicar el presupuesto (§28).
-8. Evaluar minimumStory con coberturas (§17) sobre la **verdad semántica** (capabilities semánticas del snapshot), sin depender del PresentationPlan. Si falla: `unavailable` / `minimum-unmet`.
-9. Sólo si minimumStory se cumple, evaluar el **gate ejecutivo**: ¿existe un PresentationPlan ejecutable para materializar la Story (`execution.presentationPlan`)? Si no: `unavailable` / `presentation-plan-unavailable`. Nunca `minimum-unmet` por este motivo.
-10. Calcular el estado.
+2. Calcular las opciones efectivas según §21 sobre la verdad del snapshot.
+3. Resolver semánticamente: expandir por nivel (§37) y por room (§29), adjuntar los enhancements a su anfitriona, deduplicar (§26) y aplicar el presupuesto (§28).
+4. Evaluar minimumStory con coberturas (§17) sobre esa resolución semántica, sin depender del PresentationPlan ni de los adapters. Si falla: `unavailable` / `minimum-unmet`.
+5. Sólo si minimumStory se cumple, evaluar el **gate ejecutivo**: ¿existe un PresentationPlan ejecutable para materializar la Story (`execution.presentationPlan`)? Si no: `unavailable` / `presentation-plan-unavailable`. Nunca `minimum-unmet` por este motivo.
+6. Materializar mediante adapters, validar las transiciones (§27) y construir la `sequence`.
+7. Calcular el estado.
 
 La Story se congela al iniciar. No se recalcula durante la reproducción (§46).
 
@@ -875,7 +899,7 @@ execution.presentationPlan = no disponible       (create → null, sin rooms)
 resultado: unavailable / presentation-plan-unavailable    — NO minimum-unmet
 ```
 
-Si falta realmente el plano semántico requerido (sin muros activos o sin contorno válido), sí es `minimum-unmet`.
+Si falta realmente el plano semántico requerido (sin muros activos o sin contorno válido), sí es `minimum-unmet`, y se decide antes del gate ejecutivo. Que `plan-reveal` no pueda ejecutarse no hace desaparecer la capability semántica `plan`.
 
 Decisión V1:
 - Toda Story ejecutada requiere un PresentationPlan válido. Esto no levanta el gate actual ni cambia `FloorPlanPresentation` ni el builder.
@@ -1189,6 +1213,14 @@ Casos de coherencia final:
 70. Section soportada sólo en parte de los niveles → agregado `partial`.
 71. El resolver decide el estado sin leer ningún booleano `partial` paralelo.
 
+Separación semántica / ejecución:
+
+72. Arquitectura sin rooms: `plan` semántico `supported`, `section` `supported`, rooms ninguna → minimumStory `true`; `execution.presentationPlan` no disponible → `unavailable` / `presentation-plan-unavailable`.
+73. Falta realmente el plan: `plan` semántico `unsupported`, `section` `supported` → minimumStory de Arquitectura `false` → `unavailable` / `minimum-unmet`.
+74. Capability semánticamente válida con materialización no disponible: el mínimo no pasa retroactivamente a `false`.
+75. Orden de evaluación: la evaluación semántica del mínimo ocurre antes del gate ejecutivo (traza del resolver).
+76. `overview(level)` sigue derivando de la parada real del PresentationPlan; esta separación no la convierte en capability independiente.
+
 ### 47.2 Tests de contrato de adapters
 
 - Mapeo capability ↔ adapter.
@@ -1283,6 +1315,11 @@ Debe demostrarse que las plantillas cambian realmente la narrativa.
 | Promotora, dos niveles, sólo overview L0 | No cumple; `overview.building` no existe (P11) |
 | Arquitectura sin rooms con plan + section | minimumStory satisfecho; `presentation-plan-unavailable` (no `minimum-unmet`) |
 | Promotora sin rooms con lectura global semántica | minimumStory satisfecho (p. ej. `plan` en todos los niveles o `elevation`); `presentation-plan-unavailable` |
+| Plan semántico inexistente | `minimum-unmet` en las plantillas que lo exigen, antes del gate ejecutivo |
+| PresentationPlan inexistente con mínimo semántico válido | `presentation-plan-unavailable`; `plan` semántico sigue `supported` |
+| Adapter no ejecutable | No altera el mínimo semántico; razón ejecutiva (§46) |
+| minimumStory incumplido | Se decide antes del gate; `minimum-unmet` |
+| Overview sin PresentationPlan | `overview(level)` no disponible (su autoridad es la parada real); no afecta a `plan` semántico |
 | Selección explícita de 7+ rooms | Se conserva completa; `room-budget-exceeded`; nunca `rooms-trimmed` |
 | Reset con sidecar histórico | Se eliminan los overrides de sesión; la selección histórica sigue como baseline |
 | Section partial por niveles | Agregado `availability:'partial'`; niveles no soportados omitidos con su `reason` |
