@@ -1,4 +1,4 @@
-# FT3D-5 — Axonometría y despiece espacial del edificio — contrato de implementación
+# FT3D-5 — Axonometría y despiece espacial del edificio — contrato de implementación V2
 
 **Fecha:** 01-11-2026.
 
@@ -8,9 +8,11 @@
 
 **Rama documental:** `docs/ft3d-5-axon-exploded-contract`.
 
-**Estado:** **CONTRATO TÉCNICO DE IMPLEMENTACIÓN — listo para revisión final antes de delegar la implementación pesada.**
+**Estado:** **CONTRATO TÉCNICO CONSOLIDADO V2 — listo para implementación pesada únicamente cuando exista un prompt explícito de autorización.**
 
-FT3D-5 amplía la Presentation Story existente con dos lecturas espaciales del mismo modelo: una vista axonométrica compacta y un despiece vertical por plantas. No crea otro renderer, no crea otro modelo, no modifica geometría ni proyecto y no representa una secuencia constructiva.
+Este documento consolida el contrato inicial y la auditoría posterior del renderer. Es la **autoridad técnica principal** de FT3D-5. La adenda `ft3d-5-axon-exploded-building-contract-audit-addendum-2026-11-01.md` queda como registro de auditoría y trazabilidad; no debe contradecir este texto. Si aparece una discrepancia, **prevalece este contrato V2**.
+
+El prompt de implementación puede autorizar la ejecución, fijar la rama y el workflow, pero **no puede redefinir arquitectura**. Ante discrepancia: **contrato V2 → adenda de auditoría → prompt de workflow**.
 
 Principios permanentes:
 
@@ -24,215 +26,196 @@ Principios permanentes:
 
 ## 1. Objetivo
 
-FT3D-5 debe permitir que una Presentation explique la organización volumétrica de una vivienda o edificio mediante:
+FT3D-5 añade dos lecturas espaciales temporales a la Presentation Story existente:
 
-1. **`axon`** — lectura axonométrica compacta del edificio manteniendo las cotas y offsets reales;
-2. **`exploded-levels`** — despiece espacial vertical de las plantas, añadiendo una separación **puramente visual** sobre las cotas reales.
+1. **`axon`** — vista axonométrica compacta del proyecto/edificio, manteniendo offsets y elevaciones reales;
+2. **`exploded-levels`** — despiece vertical de plantas, conservando las cotas reales y añadiendo separación **visual** reversible.
 
-Ambas son escenas narrativas temporales. Al terminar, cancelar, hacer scrub hacia atrás o salir de Presentation, el modelo y la vista deben volver exactamente al estado de entrada.
+Ambas escenas explican **relaciones espaciales**. No representan:
 
-FT3D-5 responde:
+- secuencia constructiva;
+- orden de obra;
+- estructura inferida;
+- forjados inventados;
+- fases temporales;
+- before/after.
 
-> **¿Cómo puedo explicar la relación espacial entre plantas sin alterar ni reinterpretar el edificio?**
-
-No responde:
-
-> **¿Cómo se construye el edificio?**
-
-El exploded es una **descomposición espacial explicativa**, no una cronología, fase de obra, orden de montaje ni simulación constructiva.
+FT3D-8 sigue siendo la familia temporal futura separada.
 
 ---
 
-## 2. Base técnica auditada
+## 2. No objetivos
 
-### 2.1 Presentation Story
+FT3D-5 V1 no crea:
 
-La autoridad narrativa vigente es `js/presentation-story-core.js`:
+- Story engine nuevo;
+- renderer 3D nuevo;
+- cámara ortográfica;
+- timeline editor;
+- schema nuevo;
+- persistencia nueva;
+- red nueva;
+- IA;
+- 360;
+- multi-edificio;
+- soporte de más de dos niveles como feature de producto;
+- exploded horizontal/radial;
+- fan-out X/Z;
+- cubierta inclinada nueva;
+- estructura, pilares, vigas o forjados no existentes;
+- capítulos FT3D-6;
+- packaging FT3D-7;
+- timeline FT3D-8.
 
-- Story pura y determinista;
-- `stateAt(p)` para `p ∈ [0,1]`;
-- scrub, reverse y replay;
-- `NARRATIVES` único;
-- `SCENE_MS` único;
-- escenas actuales: `plan-reveal`, `room-descent`, `section-open`, `elevation-open`.
+No reabre C4 ni deuda baseline previa.
 
-FT3D-5 debe integrarse en ese mismo registro con:
+---
+
+## 3. Autoridades existentes
+
+### 3.1 Story
+
+Autoridad: `js/presentation-story-core.js`.
+
+FT3D-5 debe reutilizar:
+
+- `NARRATIVES`;
+- `SCENE_MS`;
+- `sequence`;
+- `stateAt(p)`;
+- scrub/reverse/replay;
+- reduced holds.
+
+Nuevas kinds:
 
 - `axon-open`;
 - `exploded-levels-open`.
 
-No se crea un segundo Story engine.
+No hay segundo player.
 
-### 2.2 Player y lifecycle
+### 3.2 Presentation UI
 
-La autoridad de reproducción vigente es `js/presentation-ui.js` + `View3D.presentationStoryBegin/Apply/End`:
+Autoridad: `js/presentation-ui.js`.
+
+Pipeline vigente:
 
 ```text
 openStory
-  → enterScene
-    → View3D.presentationStoryBegin(...)
-    → View3D.presentationStoryApply(p)
-    → View3D.presentationStoryEnd(...)
-  → siguiente escena / finishStory / closeStory
+→ enterScene
+→ View3D.presentationStoryBegin(...)
+→ View3D.presentationStoryApply(p)
+→ View3D.presentationStoryEnd(...)
+→ finishStory / closeStory / siguiente escena
 ```
 
-FT3D-5 debe usar exactamente este pipeline.
+`presentationStoryBegin/Apply/End` **mantienen el contrato síncrono actual**. FT3D-5 no convierte Begin/End en APIs async.
 
-### 2.3 Building
+### 3.3 Building
 
-La autoridad de edificio es `FloorPlanBuilding` / `FloorPlanBuildingUI`:
+Autoridades: `FloorPlanBuilding` / `FloorPlanBuildingUI`.
 
-- niveles ordenados;
-- `offsetMm.x/y` reales;
-- `elevationMm` real;
-- contexto `current/all`;
-- `presentationSources()` como entrada canónica de Presentation;
-- `MAX_LEVELS=2` hoy, pero el contrato se diseña sobre colecciones, no sobre `level1/level2`.
+FT3D-5 consume:
 
-FT3D-5 **lee** estas transformaciones. Nunca las escribe.
+- `presentationSources()`;
+- `order`;
+- `offsetMm.x/y`;
+- `elevationMm`;
+- `activeLevelId`;
+- `levelView` runtime real: **`'active' | 'all'`**.
 
-### 2.4 Jerarquía 3D actual
+No usar `current` como valor técnico de `levelView`; puede aparecer sólo como copy humano.
 
-El renderer ya construye los niveles secundarios como `THREE.Group` completos con:
+`MAX_LEVELS=2` sigue igual. El core puede usar colecciones future-safe, pero no amplía el producto a N niveles.
 
-- arquitectura;
-- lámparas;
-- mobiliario;
-- losa real cuando corresponde.
+### 3.4 Renderer
 
-Su posición vertical se deriva de la diferencia real de `elevationMm` respecto al nivel activo.
+El renderer vigente contiene:
 
-El nivel activo, en cambio, no está encapsulado como un único grupo equivalente. Sus elementos viven en grupos actuales como `archFloor`, `archUp`, `furnG`, `lampG` y otros elementos de nivel.
+- nivel activo distribuido entre grupos como `archFloor`, `archUp`, `furnG`, `lampG`;
+- niveles secundarios agrupados dentro de `levelsG`;
+- grupos globales `roofG`, `exteriorG`, `ground`, `territoryRenderer.group`, `labelG`, `contactG`, `revealG`;
+- escaleras/conectores separados;
+- assets autorizados como hijos de grupos de mobiliario.
 
-Esta asimetría es una restricción central de FT3D-5: **no se autoriza reparentar permanentemente la escena sólo para facilitar el exploded**.
+Esta asimetría se respeta; FT3D-5 no reparenta el nivel activo, ni de forma permanente ni temporal.
 
-### 2.5 Cámara actual
+### 3.5 Cámara
 
-Rubik usa una sola `PerspectiveCamera`.
+Se mantiene la `PerspectiveCamera` actual.
 
-La vista `isoWhole()` existente ya utiliza una lectura oblicua estable:
+No se introduce `OrthographicCamera`.
 
-- edificio apilado: dirección basada en `(9, 8.5, 12.5)`;
-- proyecto simple: dirección basada en `(5.5, 15.5, 10)`.
-
-FT3D-5 debe conservar una cámara perspectiva y una lectura axonométrica visual coherente con esta autoridad.
-
-**No se introduce `OrthographicCamera`.**
-
-Por ello, el producto puede llamarlo “Vista axonométrica”, pero no debe presentarlo como una proyección ortográfica técnica, certificada o acotada.
+La vista puede llamarse “Vista axonométrica”, pero no “proyección ortográfica exacta”, “axonometría técnica” ni equivalente.
 
 ---
 
-## 3. Alcance V1
+## 4. Capabilities
 
-Incluido:
+### 4.1 `axon`
 
-- proyecto de un nivel → axonometría compacta;
-- edificio de dos niveles → axonometría compacta;
-- edificio de dos niveles → despiece vertical por plantas;
-- offsets X/Z reales;
-- elevaciones reales;
-- cámara y framing específicos de la Story;
-- transformaciones temporales de nivel;
-- mobiliario y luminarias acompañando a su nivel;
-- restauración exacta;
-- scrub/reverse/replay;
-- reduced motion;
-- móvil;
-- capture compatible;
-- QA visual y comparativa contra baseline.
+- family: `atomic-scene`;
+- adapter/story kind: `axon-open`;
+- scope: `building`;
+- coverages: `any`, `building`;
+- repeatable: `false`;
+- `maxOccurrences: 1` por Story/building;
+- válido con 1 o 2 niveles estructurales válidos.
 
-Fuera de alcance:
+### 4.2 `exploded-levels`
 
-- más de dos niveles como feature nueva;
-- multi-edificio;
-- fases de construcción;
-- orden de obra;
-- despiece de muros, puertas, ventanas, muebles o materiales por separado;
-- exploded horizontal o radial;
-- fan-out X/Z;
-- secciones estructurales inventadas;
-- nuevas losas;
-- nuevos forjados;
-- pilares/vigas inferidos;
-- cubiertas inclinadas nuevas;
-- ortografía/proyección técnica calibrada;
-- persistencia de la elección;
-- schema nuevo;
-- IA;
-- 360;
-- FT3D-8;
-- cambios de B1/B2/B3/B4/B8/C4.
+- family: `atomic-scene`;
+- adapter/story kind: `exploded-levels-open`;
+- scope: `building`;
+- coverages: `any`, `building`;
+- repeatable: `false`;
+- `maxOccurrences: 1`;
+- requiere al menos 2 niveles estructurales válidos.
+
+### 4.3 P11
+
+FT3D-5 V1:
+
+- **NO** crea `overview(building)`;
+- **NO** crea anchor ejecutable sin PresentationPlan;
+- **NO** levanta `presentation-plan-unavailable`.
+
+Ambas escenas empiezan y terminan en un `overview(level)` real del PresentationPlan.
 
 ---
 
-## 4. Semántica y capacidades
+## 5. Fuente de niveles y relación con PresentationPlan
 
-### 4.1 IDs
+El descriptor FT3D-5 se deriva de **todos los niveles estructurales que entregue `BuildingUI.presentationSources()`**, no sólo de los niveles que hayan sobrevivido a la selección de rooms del PresentationPlan.
 
-IDs semánticos ya reservados por FT3D-6:
+Motivo: FT3D-5 explica el edificio, no la selección de habitaciones.
 
-- `axon`;
-- `exploded-levels`.
+El PresentationPlan aporta:
 
-Adapters Story:
+- el anchor `overview(level)`;
+- la posición de inserción narrativa;
+- el player existente.
 
-- `axon-open`;
-- `exploded-levels-open`.
+No determina qué niveles existen estructuralmente para axon/exploded.
 
-### 4.2 Familia
+### 5.1 Anchor de inserción
 
-Ambas son `atomic-scene`.
+La escena global se inserta en el **primer overview del PresentationPlan cuyo `levelId` corresponda a un nivel incluido en el descriptor FT3D-5**.
 
-### 4.3 Scope
+Si no existe ningún overview elegible:
 
-Ambas tienen scope:
-
-`building`
-
-Un proyecto simple de una planta se trata como edificio de un nivel para `axon`.
-
-### 4.4 Coverage
-
-`axon` V1 admite:
-
-- `any`;
-- `building`.
-
-`exploded-levels` V1 admite:
-
-- `any`;
-- `building`.
-
-No satisfacen `level` ni `all-presented-levels` como capabilities separadas por planta: son una lectura global del conjunto presentado.
-
-### 4.5 Repetición
-
-- `repeatable: false`;
-- `maxOccurrences: 1` por Story;
-- `repeatScope: building`.
-
-### 4.6 P11 — decisión cerrada
-
-FT3D-5 **NO crea `overview(building)`**.
-
-FT3D-5 **NO crea un nuevo anchor ejecutable sin PresentationPlan**.
-
-El gate actual `presentation-plan-unavailable` permanece intacto.
-
-Por tanto, P11 de FT3D-6 se resuelve como:
-
-> **No en V1.** FT3D-5 añade escenas globales de edificio, pero siguen comenzando y terminando en un `overview(level)` existente del PresentationPlan.
+- no materializar FT3D-5;
+- reportar razón ejecutiva/omisión;
+- no inventar anchor.
 
 ---
 
-## 5. Disponibilidad y reasons
+## 6. Nuevo core puro
 
-Nuevo core puro:
+Crear:
 
 `js/presentation-axon-core.js`
 
-global/browser:
+Browser global:
 
 `FloorPlanPresentationAxon`
 
@@ -240,40 +223,87 @@ CommonJS:
 
 `require('./presentation-axon-core.js')`
 
-API principal:
+API:
 
 ```js
 FloorPlanPresentationAxon.derive({ levels })
 ```
 
-Input canónico:
+Sin:
+
+- DOM;
+- Three;
+- storage;
+- red;
+- Date/random;
+- side effects;
+- mutación del input.
+
+---
+
+## 7. Sistema de coordenadas contractual
+
+No usar `baseMm:{x,y,z}` ni `boundsMm.minY/maxY` con doble significado.
+
+### 7.1 Building/model space — mm
+
+Plano:
+
+```text
+offsetMm.x = eje X del edificio
+offsetMm.y = eje Y del plano del edificio
+```
+
+Vertical:
+
+```text
+elevationMm = cota vertical del nivel
+```
+
+Bounds por nivel:
 
 ```js
 {
-  levels: [{
-    levelId,
-    name,
-    order,
-    project,
-    geometry,
-    offsetMm: { x, y },
-    elevationMm
-  }]
+  minXmm,
+  maxXmm,
+  minPlanYmm,
+  maxPlanYmm,
+  bottomMm,
+  topMm
 }
 ```
 
-Debe aceptar el resultado conceptual de `BuildingUI.presentationSources()`; un proyecto simple entra como un único nivel con offset y elevación cero.
+`bottomMm` y `topMm` están en **building vertical space**, incluyendo `elevationMm`.
 
-### 5.1 Descriptor
+### 7.2 View3D world space — metros
 
-Forma contractual:
+Three usa:
+
+```text
+world X  ← building X
+world Z  ← building plan Y
+world Y  ← building elevation
+```
+
+El core FT3D-5 **no convierte a Three**.
+
+`presentationStoryBegin` convierte una sola vez el descriptor en world-space metros respecto al nivel activo/origen renderer actual. `presentation-story-core.js` recibe corners world-space ya preparados.
+
+No duplicar esta conversión en dos módulos.
+
+---
+
+## 8. Descriptor V2
+
+Semántica normativa:
 
 ```js
 {
-  version: 1,
-  supported: true | false,
-  reason: null | reasonCode,
-  partial: boolean,
+  version: 2,
+
+  supported,      // true si la derivación global/axon es utilizable
+  reason,         // null si supported
+  partial,        // axon cubre sólo parte de los niveles estructurales
 
   variants: {
     axon: {
@@ -291,1270 +321,1193 @@ Forma contractual:
   levels: [{
     levelId,
     order,
-    baseMm: { x, y, z },
+    sourceIndex,
+    offsetMm: { x, y },
+    elevationMm,
     boundsMm: {
-      minX, maxX,
-      minY, maxY,
-      bottom, top
+      minXmm, maxXmm,
+      minPlanYmm, maxPlanYmm,
+      bottomMm, topMm
     },
     explodedExtraYmm
   }],
 
-  gapMm,
+  nominalStoreyMm,
+  baseVisualGapMm,
+  visualClearanceMm,
   envelope,
   explodedEnvelope,
   excluded: [{ levelId, reason }]
 }
 ```
 
-Nombres menores pueden variar durante implementación si conservan exactamente la semántica.
+### 8.1 Top-level semantics
 
-### 5.2 Reasons mínimos
+- `supported=true` significa que `axon` puede derivarse para al menos un nivel válido;
+- `partial=true` significa que existen niveles estructurales presentados que han sido excluidos;
+- `variants.exploded.supported=false` en un solo nivel **no** vuelve `supported=false` al descriptor completo.
+
+### 8.2 Valores cuando exploded no está soportado
+
+Si exploded no está disponible:
+
+- `variants.exploded.supported=false`;
+- `variants.exploded.reason` estable;
+- `explodedEnvelope=null`;
+- `baseVisualGapMm=null` si no puede calcularse de forma significativa;
+- `visualClearanceMm=null`;
+- `explodedExtraYmm=0` en los niveles válidos.
+
+---
+
+## 9. Orden estable y reasons
+
+Niveles válidos se ordenan por:
+
+1. `order` ascendente;
+2. `sourceIndex` ascendente;
+3. `levelId` lexical como desempate final.
+
+No depender sólo del stable-sort del motor.
+
+Precedencia de reasons:
+
+1. `no-levels`;
+2. `invalid-level-geometry` / ningún nivel válido;
+3. `degenerate-building-envelope`;
+4. variant-specific:
+   - `single-level`;
+   - `insufficient-valid-levels`;
+5. `partial-levels` como warning/descripción cuando proceda.
+
+Reasons mínimos:
 
 - `no-levels`;
 - `invalid-level-geometry`;
 - `degenerate-building-envelope`;
-- `single-level` — sólo para `exploded-levels`;
-- `insufficient-valid-levels` — exploded sin al menos dos niveles válidos;
-- `partial-levels` como warning/estado descriptivo, no necesariamente reason bloqueante.
-
-No usar reasons de FT3D-3/4 para fingir equivalencia.
-
-### 5.3 Partial
-
-`axon`:
-
-- `supported` si existe al menos un nivel geométricamente válido;
-- `partial:true` si había niveles presentados que no pueden entrar en la lectura;
-- el copy debe decir que la lectura es parcial.
-
-`exploded-levels`:
-
-- necesita al menos dos niveles válidos;
-- con los dos niveles actuales, si uno no es válido → `unsupported / insufficient-valid-levels`;
-- el contrato queda future-safe para N niveles: podría ser partial si hay ≥2 válidos y algunos excluidos, pero no se implementa soporte >2 ahora.
-
-### 5.4 Geometría válida
-
-Un nivel entra en FT3D-5 si puede demostrar un envelope espacial real a partir del modelo:
-
-- geometry/envelope finito y no degenerado;
-- al menos un muro no demolido válido;
-- altura real derivada de los muros/defaults existentes.
-
-No usar furniture para decidir el envelope de edificio.
+- `single-level`;
+- `insufficient-valid-levels`.
 
 ---
 
-## 6. Autoridad de transforms
+## 10. Validez geométrica
 
-### 6.1 Base transform
+Un nivel es válido si puede demostrar un envelope espacial real desde el modelo:
 
-La base real de cada planta es propiedad de Building:
+- envelope finito y no degenerado;
+- ≥1 muro no demolido válido;
+- altura demostrable desde muros/defaults existentes.
 
-```text
-X = offsetMm.x
-Z = offsetMm.y
-Y = elevationMm
-```
+Furniture no determina el envelope arquitectónico.
 
-En el frame del nivel activo:
-
-```text
-baseRelativeY(level) = level.elevationMm - activeLevel.elevationMm
-```
-
-FT3D-5 no modifica:
-
-- `offsetMm`;
-- `elevationMm`;
-- orden del nivel;
-- `BuildingV1`;
-- `FloorPlanProjectV1`.
-
-### 6.2 Delta Presentation
-
-El despiece sólo añade un delta temporal:
-
-```text
-displayTransform = baseTransform + presentationDelta
-```
-
-En V1:
-
-```text
-presentationDelta.x = 0
-presentationDelta.z = 0
-presentationDelta.y = explodedExtraY
-```
-
-No existe fan-out horizontal.
-
-### 6.3 Regla absoluta, no acumulativa
-
-`presentationStoryApply(p)` debe aplicar un transform **absoluto derivado de `stateAt(p)`**.
-
-Prohibido:
-
-```text
-position.y += deltaPerFrame
-```
-
-Obligatorio conceptualmente:
-
-```text
-position.y = savedBaseY + state.levelDeltaY
-```
-
-Esto evita drift en:
-
-- scrub;
-- reverse;
-- resize;
-- replay;
-- ciclos repetidos.
+No inferir estructura.
 
 ---
 
-## 7. Separación visual de plantas
+## 11. Base transform y Presentation delta
 
-### 7.1 Regla
-
-El exploded conserva las elevaciones reales y añade una separación visual uniforme por rango vertical.
-
-Niveles válidos ordenados por `order` ascendente:
+Building es autoridad de transform real:
 
 ```text
-extraY(level[i]) = i * gapMm
+base X = offsetMm.x
+base plan Y = offsetMm.y
+base vertical = elevationMm
 ```
 
-El nivel inferior tiene `extraY = 0`.
-
-El siguiente conserva su elevación real y añade `gapMm`.
-
-Para N niveles futuros, el patrón sigue siendo lineal sin hardcodear dos plantas.
-
-### 7.2 `gapMm`
-
-Derivación determinista:
-
-1. tomar diferencias positivas de `elevationMm` entre niveles consecutivos válidos;
-2. `nominalStoreyMm` = mediana de esas diferencias;
-3. si no existe diferencia válida, usar la mayor altura de muro demostrable de los niveles;
-4. fallback final: `2800 mm`;
-5. calcular:
+En View3D:
 
 ```text
-gapMm = clamp(round(nominalStoreyMm * 0.45), 800, 1600)
+baseRelativeWorldY(level) = (level.elevationMm - activeLevel.elevationMm) / 1000
 ```
 
-La separación es una decisión de **legibilidad visual**, no una medida de proyecto.
+FT3D-5 sólo añade un delta temporal vertical.
 
-No mostrar `gapMm` al usuario como cota técnica.
+```text
+presentationDeltaX = 0
+presentationDeltaZ = 0
+presentationDeltaY = explodedExtraYmm
+```
 
-Copy recomendado:
+Aplicación obligatoriamente absoluta:
 
-> `Despiece espacial · separación visual`
+```text
+currentY = savedBaseY + stateDeltaY
+```
 
-No:
+Prohibido acumular:
 
-> `Separación entre forjados: 1,35 m`
-
-### 7.3 Envelope exploded
-
-`explodedEnvelope` conserva X/Z del envelope real y amplía Y sólo con los deltas visuales calculados.
-
-Debe ser derivado una vez, no recalculado por frame.
+```text
+currentY += deltaPerFrame
+```
 
 ---
 
-## 8. Ownership de objetos 3D
+## 12. Gap visual y prevención de solapes
 
-### 8.1 Abstracción obligatoria
+La fórmula nominal se conserva, pero ya no se permite que niveles altos/atípicos queden solapados.
 
-Crear internamente una abstracción de runtime equivalente a:
+### 12.1 Gap nominal
+
+1. diferencias positivas de `elevationMm` entre niveles válidos consecutivos;
+2. `nominalStoreyMm` = mediana;
+3. si no existe diferencia válida: mayor altura de muro demostrable;
+4. fallback: `2800`;
+5. `baseVisualGapMm = clamp(round(nominalStoreyMm * 0.45), 800, 1600)`.
+
+### 12.2 Clearance visual
+
+```text
+visualClearanceMm = clamp(round(baseVisualGapMm * 0.25), 200, 400)
+```
+
+Es una regla de legibilidad, no una cota real.
+
+### 12.3 Extra Y por nivel
+
+Niveles válidos ya ordenados.
+
+```text
+extra[0] = 0
+
+for i > 0:
+  nominalExtra = i * baseVisualGapMm
+  overlapSafeExtra =
+    (prev.topMm + extra[i-1] + visualClearanceMm) - current.bottomMm
+
+  extra[i] = max(nominalExtra, overlapSafeExtra, 0)
+```
+
+Así:
+
+- se conservan elevaciones reales;
+- el gap nominal sigue siendo estable;
+- si los bounds verticales se solapan, se añade sólo el extra necesario para que exista separación visible;
+- no se presenta ese extra como medida de proyecto.
+
+La cámara se adapta al `explodedEnvelope`; no se reduce dinámicamente la separación para hacerla caber.
+
+---
+
+## 13. Ownership matrix obligatoria
+
+La implementación debe documentar y probar la tabla real de ownership antes de escribir deltas.
+
+| Objeto/grupo | Clase | Axon | Exploded | Regla |
+|---|---|---|---|---|
+| grupo de nivel secundario en `levelsG` | level-owned | se mantiene | se desplaza con su nivel | handle por grupo existente |
+| `archFloor` | active-level-owned | base | desplaza | handle activo |
+| `archUp` | active-level-owned | base | desplaza | handle activo |
+| `furnG` | active-level-owned | base | desplaza | assets hijos heredan transform |
+| `lampG` | active-level-owned | base | desplaza | misma delta |
+| losa real del nivel activo aunque viva en `levelsG` | active-level-owned | base | desplaza | debe identificarse por ownership/tag real |
+| `contactG` | presentation-temporal | ocultar durante FT3D-5 | ocultar | guardar/restaurar visibilidad |
+| `revealG` / room outline / route aids | presentation-temporal | limpiar por lifecycle existente o guardar/restaurar | igual | nunca desplazar ciegamente |
+| escaleras/conectores | connector-global | conservar en compact | ocultar en fase separada | no deformar |
+| `ground` | global/context | conservar política actual | ocultar en fase separada si visible | restauración exacta |
+| `territoryRenderer.group` | global/context | política actual | ocultar en fase separada | no explotar |
+| `roofG` | global-derived | política actual | ocultar durante separación si estaba visible | nunca mover con nivel |
+| `exteriorG` | global-derived | política actual | ocultar durante separación si estaba visible | nunca mover con nivel |
+| `labelG` | UI/label | lifecycle actual | lifecycle actual | no labels nuevos |
+| minimapa | UI 2D | sin marcas nuevas | sin gap/flechas | geometría real solamente |
+
+No se autoriza **ningún reparenting del nivel activo**, ni temporal ni persistente.
+
+Si aparece otro grupo relevante durante implementación, debe clasificarse explícitamente antes de tocarlo.
+
+---
+
+## 14. Assets autorizados
+
+Assets GLB/autorizados ya cargados son hijos del mobiliario y acompañan al grupo padre.
+
+FT3D-5:
+
+- no espera descargas;
+- no inicia `refreshAssets`;
+- no llama `buildFurn` por la escena;
+- no dispara red;
+- no aplica delta individual al asset;
+- no muta `assetRef`, dimensiones, local position ni rotación.
+
+Una carga que termine durante la escena hereda el transform del padre actual.
+
+---
+
+## 15. `levelView active → all` sin romper p0/p1
+
+Este lifecycle es normativo.
+
+### 15.1 Captura de pre-state
+
+Antes de tocar `levelView`:
+
+capturar semánticamente:
+
+- `baseLevelView` (`active` o `all`);
+- `baseVisibleLevelIds` reales del renderer;
+- visibilidad de stairs;
+- context/territory/ground;
+- roof/exterior;
+- contact/reveal temporales relevantes;
+- camera/orbit/FOV/near/far/maxDistance.
+
+No guardar referencias Three de niveles que puedan ser destruidas por el rebuild.
+
+### 15.2 Preparación
+
+Orden obligatorio:
+
+```text
+1. capture semantic pre-state
+2. si baseLevelView !== 'all', set levelView = 'all'
+3. sync/rebuild existente
+4. resolver handles Three FRESCOS después del rebuild
+5. guardar base transforms de esos handles
+6. reaplicar una máscara de visibilidad equivalente a baseVisibleLevelIds
+7. aplicar stateAt(0)
+```
+
+No existe un momento visible donde Begin deje al usuario en un estado distinto del overview original antes de aplicar la narrativa.
+
+### 15.3 Visibilidad dentro de la escena
+
+El state puro incluye control explícito de niveles adicionales.
+
+- `p=0`: visibilidad exactamente equivalente al overview original;
+- durante entrada a axon: los niveles estructurales requeridos pasan a ser visibles como parte de la narrativa;
+- hold compact/exploded: niveles incluidos visibles;
+- retorno: niveles extra vuelven a ocultarse según `baseVisibleLevelIds`;
+- `p=1`: visibilidad exactamente equivalente al overview original, **antes de End**.
+
+No hace falta crear opacity/fade de materiales; la política mínima es determinista y reversible. Si se usa una transición visual adicional, no puede mutar materiales compartidos ni romper p0/p1.
+
+### 15.4 End
+
+Orden:
+
+```text
+1. restaurar transforms/visibilidades sobre la jerarquía vigente
+2. limpiar handles
+3. restaurar levelView previo
+4. permitir sync/rebuild de restauración si procede
+5. NO reutilizar handles antiguos después del rebuild
+6. restaurar camera/orbit/globales restantes mediante lifecycle existente
+```
+
+`presentationStoryEnd()` debe ser idempotente.
+
+---
+
+## 16. Begin transaccional
+
+Si `presentationStoryBegin()` falla después de haber tocado cualquier estado:
+
+- debe ejecutar rollback completo;
+- `levelView` vuelve al original;
+- visibilidades y camera vuelven al original;
+- no queda handle activo;
+- el error se propaga después del cleanup.
+
+QA debe simular un fallo después del `active → all` y antes de completar la preparación.
+
+---
+
+## 17. Contrato de `stateAt(p)`
+
+Las nuevas narrativas devuelven estado serializable equivalente a:
 
 ```js
-PresentationLevelHandle = {
-  levelId,
-  order,
-  baseY,
-  applyDeltaY(deltaM),
-  restore()
+{
+  phase,
+  position: [x,y,z],
+  target: [x,y,z],
+  fov,
+  near,
+  far,
+  maxDistance,
+  levelDeltas: [{ levelId, dyM }],
+  visibleLevelIds: [levelId],
+  showStairs,
+  showGround,
+  showContext,
+  showRoofExterior
 }
 ```
 
-No es API de proyecto ni se persiste.
+No objetos Three.
 
-### 8.2 Niveles secundarios
+No closures mutables.
 
-Para niveles ya encapsulados en `levelsG`:
+No referencias DOM.
 
-- envolver el `THREE.Group` existente;
-- guardar su `position.y` exacto;
-- aplicar el delta a ese grupo;
-- restaurar exactamente el valor guardado.
-
-### 8.3 Nivel activo
-
-No reparentar permanentemente el nivel activo.
-
-El handle del nivel activo debe aplicar el mismo delta temporal a todos los grupos/elementos que pertenecen visualmente a esa planta.
-
-Como mínimo auditar e incluir:
-
-- `archFloor`;
-- `archUp`;
-- `furnG`;
-- `lampG`;
-- losa activa real si existe fuera de esos grupos;
-- cualquier otro grupo de nivel que el renderer actual coloque en el frame activo.
-
-La implementación puede encapsular estos objetos detrás de un helper, pero el contrato exige:
-
-- mismo delta para todos;
-- estado base guardado una sola vez;
-- restauración exacta;
-- cero reparenting persistente;
-- cero escritura en el modelo.
-
-### 8.4 Losas
-
-Sólo se mueven las losas que ya existen en el renderer.
-
-FT3D-5 no crea losas nuevas para “hacer bonito” el exploded.
-
-Si una losa pertenece a un nivel, debe acompañar a ese nivel.
-
-### 8.5 Furniture y lamps
-
-Mobiliario y luminarias visibles acompañan al nivel al que pertenecen.
-
-No se quedan flotando en su posición original.
-
-No se reconstruyen por frame.
-
-### 8.6 Escaleras y conectores
-
-Las escaleras conectan niveles y no pertenecen limpiamente a una sola planta.
-
-V1:
-
-- en `axon-open` compacto: se conservan como hoy;
-- en `exploded-levels-open`: se ocultan durante la fase separada;
-- al recomponer/restaurar vuelven exactamente a su visibilidad previa.
-
-No estirar escaleras.
-
-No moverlas con una sola planta.
-
-No inventar tramos intermedios.
-
-Un exploded específico de conectores queda fuera de V1.
+La implementación puede separar campos si preserva esta semántica.
 
 ---
 
-## 9. Contexto, terreno y elementos no pertenecientes a plantas
+## 18. Cámara y framing
 
-El contexto territorial, terreno, ortofoto y elementos de parcela **no se separan con las plantas**.
+### 18.1 Dirección
 
-### 9.1 Axon compacto
+Coherente con `isoWhole()` actual:
 
-Puede conservar el contexto actual si no perjudica la lectura y coincide con el estado existente, pero FT3D-5 no lo usa como enhancement contractual.
+- proyecto simple: dirección proporcional a `(5.5, 15.5, 10)`;
+- edificio: dirección proporcional a `(9, 8.5, 12.5)`.
 
-### 9.2 Exploded
+No depende de:
 
-Durante la fase separada:
-
-- ocultar contexto/terrain/orthophoto que pueda hacer parecer que las plantas flotan a cotas reales del terreno;
-- guardar la visibilidad exacta;
-- restaurarla al recomponer y al salir.
-
-FT3D-5 V1 **no declara compatibilidad de `site-context` con `axon` ni con `exploded-levels`**.
-
-Por tanto, P8 de FT3D-6 se resuelve:
-
-> `site-context` mantiene como única anfitriona V1 a `elevation`; FT3D-5 no añade nuevas anfitrionas.
-
-Solar tampoco es enhancement de estas escenas.
-
----
-
-## 10. Cámara y framing
-
-### 10.1 Cámara única
-
-Usar la misma `PerspectiveCamera` y el mismo orbit/player actuales.
-
-No crear cámara ortográfica ni cámara secundaria.
-
-### 10.2 Dirección axonométrica
-
-La dirección debe ser determinista y coherente con `isoWhole()`:
-
-- un nivel: convención proporcional a `(5.5, 15.5, 10)`;
-- edificio apilado: convención proporcional a `(9, 8.5, 12.5)`.
-
-No depender de:
-
-- `northOffsetDeg`;
-- nombres de rooms;
+- northOffset;
+- room names;
 - idioma;
 - fachada elegida;
-- posición previa arbitraria del usuario.
+- pose arbitraria anterior.
 
-### 10.3 Framing
+### 18.2 Framing
 
-La pose axonométrica se calcula contra:
+Input world-space:
 
-- `envelope` para compact;
-- `explodedEnvelope` para exploded.
+- compact → 8 corners de `envelope`;
+- exploded → 8 corners de `explodedEnvelope`.
 
-Debe respetar `view.region`, igual que FT3D-3/4, para no quedar detrás de UI.
+Debe respetar `view.region`.
 
-Usar un fit geométrico puro equivalente al patrón de `elevationOpen`:
+Fit puro, equivalente al patrón FT3D-4:
 
-- construir las ocho esquinas del box 3D;
-- proyectarlas contra ejes right/up de la cámara;
-- buscar distancia mínima que mantenga todas dentro de la región útil;
-- margen estable;
-- sin `Box3.setFromObject` por frame.
+- ejes right/up;
+- corners;
+- distancia mínima;
+- margen estable.
 
-### 10.4 Lens
+No `Box3.setFromObject` por frame.
 
-Mantener la FOV de overview salvo que el Story core documente una transición determinista necesaria.
+### 18.3 Near/far/maxDistance
 
-No usar lens extremadamente larga para fingir ortografía.
+El fit debe derivar también valores temporales suficientes para no clippear el box completo.
 
-La lectura es axonométrica visual en perspectiva.
+Reglas:
 
-### 10.5 Endpoints
+- `near > 0` estable y seguro;
+- `far` debe contener todos los corners con margen;
+- `orbit.maxDistance` debe permitir la pose calculada;
+- valores originales se guardan/restauran exactamente;
+- `p=0` y `p=1` recuperan los valores de overview.
 
-`p=0`:
+### 18.4 Resize
 
-- cámara = overview exacto;
-- transforms de nivel = base exacta;
-- visibilidades = estado de entrada.
+Resize **no** recalcula geometría ni descriptor.
 
-`p=1`:
+Puede recrear únicamente la narrativa pura usando:
 
-- cámara = mismo overview exacto;
-- transforms = base exacta;
-- visibilidades = estado de entrada.
+- mismo descriptor;
+- mismo start/end overview;
+- nuevo `aspect`;
+- nuevo `view.region`;
+- mismo progreso local `p`.
 
-Esto es obligatorio para continuidad con otras scenes.
+Después aplica el nuevo `stateAt(p)`.
+
+No rebuild de edificio por resize salvo el que ya corresponda al viewport general existente.
 
 ---
 
-## 11. Story — `axon-open`
+## 19. `axon-open`
 
-Nuevo builder puro en `presentation-story-core.js`:
-
-```js
-axonOpen(input)
-```
-
-Input conceptual:
-
-```js
-{
-  start: overviewPose,
-  descriptor,
-  region,
-  aspect
-}
-```
-
-Salida:
-
-```js
-{
-  kind: 'axon-open',
-  stateAt(p),
-  checkpoints,
-  info
-}
-```
-
-### 11.1 Fases
-
-Contrato V1:
+Duración:
 
 ```text
-p = 0.00       overview exacto
-0.00 → 0.28    transición a axonometría compacta
-0.28 → 0.72    lectura/hold axonométrico
-0.72 → 1.00    retorno al overview exacto
-p = 1.00       overview exacto
-```
-
-Durante toda la escena:
-
-- `levelDeltaY = 0`;
-- cotas reales intactas;
-- todos los niveles válidos del edificio pueden mostrarse temporalmente.
-
-### 11.2 Timing
-
-Añadir:
-
-```js
 SCENE_MS['axon-open'] = 7000
 ```
 
-### 11.3 Reduced motion
+Fases:
 
-Definir un hold discreto en la lectura compacta.
+```text
+p=0.00       overview exacto
+0.00–0.28    entrada a lectura axonométrica + revelado de niveles necesarios
+0.28–0.72    hold axon compacto
+0.72–1.00    retorno + restauración de visibilidad base
+p=1.00       overview exacto
+```
 
-En reduced motion:
+Deltas de nivel = 0.
 
-- no animar órbita/dolly;
-- saltar al estado axonométrico estable;
-- permitir continuar desde el hold existente del player;
-- conservar exactamente los mismos datos y targets.
+La escena sólo cambia lectura/cámara/visibilidad temporal de niveles necesarios.
 
 ---
 
-## 12. Story — `exploded-levels-open`
+## 20. `exploded-levels-open`
 
-Nuevo builder puro:
-
-```js
-explodedLevelsOpen(input)
-```
-
-### 12.1 Una sola escena
-
-Cuando el usuario elige exploded, **no se ejecuta además `axon-open` como una escena separada**.
-
-`exploded-levels-open` contiene internamente una fase axonométrica compacta antes de separar niveles.
-
-Así se evita:
+Duración:
 
 ```text
-axon → exploded
-```
-
-como repetición artificial del mismo mensaje.
-
-### 12.2 Fases
-
-Contrato V1:
-
-```text
-p = 0.00       overview exacto; deltas 0
-0.00 → 0.22    transición a axonometría compacta; deltas 0
-0.22 → 0.55    separación vertical progresiva
-0.55 → 0.74    hold del exploded completo
-0.74 → 0.90    recomposición progresiva
-0.90 → 1.00    retorno de cámara al overview
-p = 1.00       overview exacto; deltas 0
-```
-
-Separación:
-
-```text
-separationFactor = smooth(...)
-levelDeltaY[i] = extraY[i] * separationFactor
-```
-
-La función debe ser absoluta y reversible.
-
-### 12.3 Timing
-
-Añadir:
-
-```js
 SCENE_MS['exploded-levels-open'] = 10000
 ```
 
-### 12.4 Reduced motion
+No se ejecuta además un `axon-open` separado.
 
-Holds contractuales:
+Fases:
 
-- compact axon;
-- exploded completo.
+```text
+p=0.00       overview exacto; deltas 0; visibilidad base
+0.00–0.22    entrada a axon compacto; niveles necesarios visibles
+0.22–0.55    separación vertical absoluta
+0.55–0.74    hold exploded
+0.74–0.90    recomposición
+0.90–1.00    retorno y restauración de visibilidad base
+p=1.00       overview exacto; deltas 0; visibilidad base
+```
 
-En reduced motion:
+Durante fase separada:
 
-- no interpolar físicamente las plantas;
-- aplicar directamente el estado del hold;
-- siguiente acción avanza al siguiente hold/estado;
-- recomposición/salida restaura sin animación.
-
-No eliminar la capability por reduced motion.
+- stairs ocultas;
+- contact shadows ocultos;
+- ground/context ocultos cuando puedan falsear la lectura;
+- roof/exterior globales ocultos si estaban visibles;
+- todo restaurado al recomponer.
 
 ---
 
-## 13. Anchors y posición en Story
+## 21. Reduced motion
 
-### 13.1 Anchors
+FT3D-5 no elimina capabilities.
 
-`axon`:
+### Axon
 
-```text
-startAnchor = overview(level de inserción)
-endAnchor   = overview(mismo level)
-```
+Hold discreto de axon compacto.
 
-`exploded-levels`:
+### Exploded
 
-```text
-startAnchor = overview(level de inserción)
-endAnchor   = overview(mismo level)
-```
+Holds discretos:
 
-No se crea `overview(building)`.
+1. compact axon;
+2. exploded completo.
 
-### 13.2 Inserción
+No animar cientos de frames si `prefers-reduced-motion: reduce`.
 
-En la Story actual, la escena global se inserta una sola vez, en el primer overview válido del edificio, antes del primer `room-descent`.
+El player actual debe generalizar `holdsOf(kind)` para reconocer las dos nuevas scenes.
 
-Orden canónico del primer bloque:
+No mantener helpers con nombres semánticamente falsos tipo `hasSection` si ya representan múltiples familias; renombrar mínimamente a algo equivalente a `hasHeldScene` si procede.
+
+---
+
+## 22. Auditoría obligatoria de dispatches existentes
+
+Antes de escribir implementación, buscar y clasificar **todas** las referencias relevantes a:
 
 ```text
 plan-reveal
-→ section-open        (si procede)
-→ elevation-open      (si procede; una vez)
-→ axon-open OR exploded-levels-open
-→ room-descent        (si procede)
+room-descent
+section-open
+elevation-open
+SCENE_MS
+NARRATIVES
+holdsOf
+hasSection
+finishStory
+openStory
+enterScene
+sceneEnd
+sceneHome
+fullStory
+storyControls
+drawStory
+disposeStory
+presentationStoryBegin
+presentationStoryApply
+presentationStoryEnd
 ```
 
-Los siguientes niveles siguen su bloque actual sin repetir axon/exploded.
+Para cada dispatch/lista/switch:
 
-No cambiar el orden histórico cuando FT3D-5 está OFF.
+- añadir `axon-open` / `exploded-levels-open` si corresponde;
+- dejarlo igual si no corresponde;
+- documentarlo en handoff.
 
-### 13.3 Compatibilidad con section/elevation
+Puntos contractuales mínimos:
 
-Cada scene termina exactamente en overview.
-
-Por tanto:
-
-```text
-section → elevation → axon/exploded → room
-```
-
-no necesita transición inventada.
+1. Story controls deben existir si FT3D-5 es la única feature narrativa elegida;
+2. `openStory()` debe validar disponibilidad FT3D-5;
+3. `enterScene()` debe pasar payload FT3D-5, no recalcular `derive()` en renderer;
+4. `finishStory(0)` debe entregar correctamente el overview en scenes standalone FT3D-5;
+5. `holdsOf()` debe reconocer reduced holds FT3D-5;
+6. `drawStory()` debe tener captions/ARIA de axon/exploded;
+7. `disposeStory()` debe limpiar todo runtime FT3D-5;
+8. `fullStory()` inserta una sola escena FT3D-5 global;
+9. no duplicar axon + exploded cuando el modo sea exploded.
 
 ---
 
-## 14. UI V1
+## 23. Payload renderer
 
-FT3D-5 se añade al flujo existente:
-
-**ENTREGAR → Presentación**
-
-No crea módulo, ruta o entrypoint nuevo.
-
-### 14.1 Opción runtime
-
-Modelo conceptual único:
+`enterScene()` pasa información derivada equivalente a:
 
 ```js
-axonMode: 'off' | 'compact' | 'exploded'
+{
+  axon: {
+    descriptor,
+    variant: 'compact-building' | 'vertical-levels',
+    activeLevelId
+  }
+}
 ```
 
-UI recomendada:
-
-**Lectura del edificio**
-
-- `Sin axonometría`
-- `Vista axonométrica`
-- `Despiece por plantas`
-
-### 14.2 Defaults
-
-Default:
-
-`off`
-
-Paridad histórica obligatoria.
-
-### 14.3 Una planta
-
-- `compact` disponible;
-- `exploded` deshabilitado;
-- explicación: `El despiece por plantas necesita al menos dos niveles.`
-
-### 14.4 Dos plantas
-
-- compact disponible si descriptor axon soportado;
-- exploded disponible si hay ≥2 niveles válidos.
-
-### 14.5 Persistencia
-
-No guardar `axonMode` en:
-
-- proyecto;
-- building;
-- localStorage nuevo;
-- URL/query;
-- sidecar.
-
-Sólo sesión actual del diálogo.
-
-FT3D-6 decidirá posteriormente defaults por template.
+El renderer no vuelve a ejecutar `FloorPlanPresentationAxon.derive()`.
 
 ---
 
-## 15. Lifecycle renderer
+## 24. Orden Story y anchors
 
-### 15.1 Begin
-
-`View3D.presentationStoryBegin(..., kind)` debe reconocer:
-
-- `axon-open`;
-- `exploded-levels-open`.
-
-Al comenzar:
-
-1. validar `stop.kind === 'overview'`;
-2. validar descriptor y variant;
-3. guardar cámara/orbit/FOV/near/far como hoy;
-4. guardar `levelView` previo;
-5. hacer visibles temporalmente los niveles requeridos, sin persistir;
-6. resolver handles de transform de nivel;
-7. guardar transforms base exactos;
-8. guardar visibilidad exacta de stairs/context/terrain que pueda tocar la scene;
-9. desactivar orbit durante Story;
-10. no modificar proyecto/building.
-
-### 15.2 Apply
-
-Por frame:
-
-- leer sólo `stateAt(p)`;
-- aplicar cámara;
-- aplicar deltas Y absolutos a handles;
-- aplicar visibilidades por fase;
-- no reconstruir geometría;
-- no recalcular descriptors;
-- no recalcular Box3 completo;
-- no tocar storage;
-- no disparar red.
-
-### 15.3 End
-
-En cualquier salida:
-
-- restaurar transforms exactos;
-- restaurar stairs exactas;
-- restaurar context/terrain exactos;
-- restaurar `levelView` exacto;
-- restaurar cámara/orbit según lifecycle actual;
-- limpiar runtime handles;
-- cero residuo.
-
-Debe funcionar en:
-
-- final normal;
-- reverse hasta 0;
-- scrub;
-- Escape;
-- Close;
-- browser Back;
-- cambio de scene;
-- error runtime;
-- resize/reseek.
-
----
-
-## 16. `levelView` temporal
-
-Axon/exploded necesitan leer el edificio completo, incluso si el usuario estaba en `current`.
-
-V1:
-
-1. guardar modo visible actual;
-2. activar temporalmente `all` sin persistir;
-3. ejecutar la scene;
-4. restaurar el modo previo exactamente.
-
-La preferencia del usuario en Building UI no cambia.
-
-En proyecto simple no hay cambio de `levelView`.
-
----
-
-## 17. Restauración y no mutación
-
-### 17.1 Invariante de proyecto
-
-Antes y después de cualquier scene:
+Ambas scenes:
 
 ```text
-JSON.stringify(projectBefore) === JSON.stringify(projectAfter)
+startAnchor = overview(level de inserción)
+endAnchor   = same overview(level)
 ```
 
-Y, cuando aplique:
+Orden del primer bloque elegible:
 
 ```text
-JSON.stringify(buildingBefore) === JSON.stringify(buildingAfter)
+plan-reveal
+→ section-open          si procede
+→ elevation-open        si procede
+→ axon-open OR exploded-levels-open
+→ room-descent          si procede
 ```
 
-FT3D-5 no incrementa revision.
+No repetir FT3D-5 por nivel.
 
-### 17.2 Invariante visual
+OFF mantiene el orden histórico exacto.
 
-Después de `End`:
+---
 
-- cada grupo vuelve al transform exacto guardado;
-- cada visibilidad vuelve al valor exacto guardado;
-- no queda level extra desplazado;
-- no queda escalera oculta;
-- no queda context oculto;
-- no cambia cut;
-- no cambia furniture toggle;
-- no cambia roof toggle;
-- no cambia levelView persistido.
+## 25. UI V1
 
-### 17.3 Debug read-only
+Dentro de **ENTREGAR → Presentación**.
 
-Añadir un getter de diagnóstico equivalente a:
+Estado runtime:
+
+```js
+axonMode = 'off' | 'compact' | 'exploded'
+```
+
+Default: `off`.
+
+Copy ES recomendado:
+
+- `Lectura del edificio`;
+- `Sin axonometría`;
+- `Vista axonométrica`;
+- `Despiece por plantas`;
+- `Despiece espacial · separación visual`.
+
+Todas las strings visibles y ARIA nuevas deben existir en **ES/EN/ZH** mediante el sistema actual `tx`.
+
+Reason codes permanecen language-independent.
+
+### 25.1 Un nivel
+
+- compact disponible;
+- exploded disabled con copy honesto: necesita al menos dos niveles.
+
+### 25.2 Partial
+
+Si axon es partial:
+
+- mostrar warning visible;
+- decir qué niveles se omiten;
+- no afirmar “edificio completo”.
+
+### 25.3 Acción standalone
+
+Cuando `axonMode !== 'off'`, añadir una única acción contextual en Story tools:
+
+- `Ver axonometría` para compact;
+- `Ver despiece` para exploded.
+
+Debe ejecutar la misma scene/adapter del full Story, no otra implementación.
+
+### 25.4 Lifecycle del diálogo
+
+Abrir/cerrar el diálogo repetidamente no puede duplicar controles, listeners ni estado.
+
+`disposeStory()`/reset de configuración limpian:
+
+- mode runtime;
+- descriptor de sesión;
+- botón standalone;
+- handles/snapshots temporales.
+
+No se persiste nada.
+
+---
+
+## 26. Preservación de toggles
+
+FT3D-5 no puede encender elementos que el usuario tenía apagados.
+
+QA explícita para:
+
+- furniture OFF;
+- roof/exterior OFF;
+- context/territory OFF;
+- labels según lifecycle actual;
+- contact shadows previos.
+
+Al acabar, todos recuperan su estado anterior exacto.
+
+---
+
+## 27. Restauración y reuse del lifecycle existente
+
+Preferir extender:
+
+- `presentationViewState()`;
+- `presentationRestoreView()`;
+- `presentationRestore()`;
+- `endPresentationStory()`;
+
+cuando encajen.
+
+No crear una segunda infraestructura paralela de restauración.
+
+`endPresentationStory()` sigue siendo la autoridad de cleanup de scene.
+
+---
+
+## 28. Residue inspector
+
+Añadir getter read-only equivalente a:
 
 ```js
 View3D.presentationAxonResidue
 ```
 
-Debe devolver datos clonados/read-only suficientes para QA, por ejemplo:
+Debe exponer al menos:
 
 ```js
 {
-  active: false,
+  active,
   levelDeltas: [{ levelId, deltaY }],
-  stairsChanged: false,
-  contextChanged: false,
-  levelViewRestored: true
+  levelViewRestored,
+  visibleLevelsRestored,
+  stairsRestored,
+  groundRestored,
+  contextRestored,
+  roofExteriorRestored,
+  contactRestored,
+  handles: 0
 }
 ```
 
-No devolver referencias mutables de Three.
+Sin referencias Three mutables.
 
-Precedente: `presentationElevationResidue`.
+Después de End/cancel/error: estado limpio.
 
 ---
 
-## 18. Performance
+## 29. Performance y rebuild accounting
 
-FT3D-5 debe ser barato por frame.
+Permitido:
+
+- un rebuild de entrada si `active → all`;
+- un rebuild de salida si `all → active` al restaurar.
 
 Prohibido por frame:
 
-- `Core.geometry(...)`;
-- `FloorPlanExterior.derive(...)`;
-- `new THREE.Box3().setFromObject(...)` sobre edificio completo;
-- rebuild de niveles;
-- rebuild de muebles;
-- rebuild de escaleras;
+- `sync()`;
+- `buildLevels()`;
+- `Core.geometry()`;
+- `FloorPlanExterior.derive()`;
+- `Box3.setFromObject()` sobre edificio completo;
+- build furniture/assets;
 - búsquedas DOM repetidas;
 - red.
 
-Permitido por frame:
+Añadir/instrumentar QA para demostrar que múltiples `presentationStoryApply(p)` no incrementan el contador de rebuilds.
 
-- asignación de camera pose/lens;
-- asignación de `position.y` en handles;
-- cambios puntuales de `visible`;
-- updates de matrix necesarios por Three.
-
-Descriptors, envelopes y handles se preparan en preflight/Begin.
+Puede ser un contador debug interno/read-only si ayuda; no API de producto.
 
 ---
 
-## 19. Copy y falsa precisión
+## 30. Memory/leak QA
 
-Copy permitido:
+Después de ≥5 ciclos:
 
-- `Vista axonométrica`;
-- `Despiece por plantas`;
-- `Despiece espacial · separación visual`;
-- `Lectura parcial` si se excluye un nivel no demostrable.
+- no crecimiento lineal de children/grupos temporales;
+- no handles acumulados;
+- no listeners duplicados;
+- `renderer.info.memory` no muestra crecimiento atribuible continuo a FT3D-5.
 
-No afirmar:
-
-- `proyección ortográfica`;
-- `axonometría técnica exacta`;
-- `distancia real entre las plantas separadas`;
-- `forjado` si el modelo no lo contiene;
-- `estructura`;
-- `secuencia constructiva`;
-- `orden de montaje`.
+No exigir igualdad byte-perfect si Three mantiene caches, pero cualquier crecimiento lineal por scene bloquea DONE.
 
 ---
 
-## 20. API pública y cambios esperados
+## 31. Offline, scripts y dependencias
 
-### 20.1 Archivo nuevo
-
-`js/presentation-axon-core.js`
-
-Responsabilidades:
-
-- derive puro;
-- reasons;
-- envelopes;
-- gap;
-- deltas por nivel;
-- cero DOM/Three/storage/network.
-
-### 20.2 Story core
-
-Modificar `js/presentation-story-core.js`:
-
-- `axonOpen`;
-- `explodedLevelsOpen`;
-- `NARRATIVES`;
-- `SCENE_MS`;
-- constantes de fases/reduced;
-- fit puro de box/región;
-- tests unitarios.
-
-### 20.3 Presentation UI
-
-Modificar `js/presentation-ui.js`:
-
-- descriptor FT3D-5 en configuración;
-- `axonMode` runtime;
-- inserción de una única escena;
-- captions/hints;
-- reduced holds;
-- no persistencia.
-
-### 20.4 Renderer
-
-Modificar el bloque View3D de `index.html` sólo en lo necesario para:
-
-- Begin/Apply/End de las nuevas kinds;
-- handles de nivel;
-- context/stairs visibility;
-- residue getter.
-
-No aprovechar FT3D-5 para refactors generales del renderer.
-
-### 20.5 HTML/UI
-
-Cambios aditivos mínimos para la opción de Presentation.
-
-No eliminar ni renombrar controles existentes.
-
----
-
-## 21. No cambios de schema/persistencia
+FT3D-5 no añade red.
 
 No modificar:
 
-- `FloorPlanProjectV1`;
-- `BuildingV1`;
-- schema version;
-- migration;
-- sidecar de Presentation;
-- keys de localStorage;
-- project revision.
+- `package.json`;
+- lockfiles;
+- versiones Playwright;
+- dependencias;
 
-FT3D-5 es runtime puro.
+salvo imposibilidad técnica demostrada y documentada antes de hacerlo.
 
----
+No ejecutar `playwright install` ni descargar otro navegador si el repo/entorno ya dispone de Chromium.
 
-## 22. Determinismo
+El nuevo `presentation-axon-core.js` debe cargarse en el orden correcto **antes** de `presentation-ui.js`.
 
-Mismo:
-
-- proyecto/building;
-- niveles;
-- offsets/elevaciones;
-- viewport/region;
-- mode;
-
-produce el mismo:
-
-- descriptor;
-- gap;
-- deltas;
-- envelopes;
-- camera target;
-- Story states;
-- checkpoints;
-- reasons.
-
-No usar:
-
-- `Date.now()`;
-- `Math.random()`;
-- orden de DOM;
-- labels traducidas;
-- heurística basada en nombre de estancia.
+Ejecutar también la validación offline/B1 pertinente para asegurar que el nuevo script entra en cualquier archivo/manifest estático que lo necesite.
 
 ---
 
-## 23. QA unitario — `tests/presentation-axon.test.cjs`
+## 32. Story captions y accesibilidad
 
-Como mínimo:
+`drawStory()` debe tener ramas específicas para:
 
-1. proyecto de un nivel → axon supported;
-2. un nivel → exploded `single-level`;
-3. dos niveles válidos → axon supported;
-4. dos niveles válidos → exploded supported;
-5. offsets X/Z reales conservados;
-6. elevaciones reales conservadas;
-7. extra Y añadido, nunca sustituye elevación real;
-8. nivel inferior extra 0;
-9. nivel superior extra `gapMm`;
-10. gap determinista;
-11. gap clamp mínimo 800;
-12. gap clamp máximo 1600;
-13. fallback de nominal storey;
-14. envelope compacto correcto;
-15. explodedEnvelope correcto;
-16. descriptor serializable;
-17. input no mutado;
-18. mismo input deepEqual;
-19. niveles desordenados se normalizan por `order` estable;
-20. IDs iguales no alteran determinismo;
-21. nivel inválido excluido;
-22. partial axon con exclusión;
-23. exploded con <2 válidos → unsupported;
-24. no-levels;
-25. degenerate-building-envelope;
-26. reasons estables;
-27. axon `stateAt(0)` = overview;
-28. axon `stateAt(1)` = overview;
-29. exploded `stateAt(0)` deltas 0;
-30. exploded hold usa deltas completos;
-31. exploded `stateAt(1)` deltas 0;
-32. reverse: `stateAt(p)` independiente de historia;
-33. sequence reconoce las dos nuevas scenes;
-34. SCENE_MS 7000/10000;
-35. reduced holds declarados;
-36. fit mantiene esquinas en región útil;
-37. no depende de north/cardinal;
-38. no depende de labels.
+### axon-open
+
+Fases orientativas:
+
+- Vista general 3D;
+- Abrimos una lectura axonométrica del edificio;
+- Vista axonométrica;
+- Volvemos a la vista general.
+
+### exploded-levels-open
+
+- Vista general 3D;
+- Vista axonométrica;
+- Separamos las plantas para leer su relación espacial;
+- Despiece espacial · separación visual;
+- Recomponemos el edificio;
+- Volvemos a la vista general.
+
+No copy de construcción.
+
+Controles:
+
+- label accesible;
+- disabled reason;
+- teclado;
+- focus correcto;
+- slider aria-valuetext;
+- reduced motion compatible.
 
 ---
 
-## 24. QA navegador — `tests/presentation-axon.browser.test.cjs`
+## 33. Minimap y labels
 
-Como mínimo:
+No añadir:
 
-1. control FT3D-5 visible en Presentación;
-2. default OFF;
-3. OFF parity con master;
-4. un nivel: compact disponible;
-5. un nivel: exploded deshabilitado con reason;
-6. dos niveles: compact;
-7. dos niveles: exploded;
-8. activeLevel inferior;
-9. activeLevel superior;
-10. offsets X/Z no cero;
-11. elevaciones no estándar;
-12. alturas de muro distintas;
-13. furniture acompaña nivel;
-14. lamps acompañan nivel;
-15. losas existentes acompañan nivel;
-16. stairs visibles en compact;
-17. stairs ocultas en exploded hold;
-18. stairs restauradas;
-19. contexto/terrain restaurado;
-20. `current` → temporal `all` → `current` exacto;
-21. `all` → sigue `all` tras finalizar;
-22. section + axon coexistencia;
-23. elevation + axon coexistencia;
-24. section + elevation + exploded coexistencia;
-25. no residue tras forward;
-26. no residue tras reverse;
-27. no residue tras scrub;
-28. cancelación a mitad de separación;
-29. Escape a mitad;
-30. Close a mitad;
-31. browser Back a mitad;
-32. cinco ciclos consecutivos sin drift;
-33. resize durante axon y reseek estable;
-34. resize durante exploded y reseek estable;
-35. capture durante compact;
-36. capture durante exploded;
-37. JSON project before/after idéntico;
-38. JSON building before/after idéntico;
-39. revision sin cambios;
-40. sin key localStorage nueva;
-41. 390×844;
-42. 844×390;
-43. reduced motion compact;
-44. reduced motion exploded;
-45. no horizontal overflow;
-46. controles Exit/Pause operables;
-47. `presentationAxonResidue` limpio al terminar.
+- gap al minimapa;
+- flechas exploded;
+- niveles separados en 2D;
+- etiquetas 3D con distancias visuales.
+
+El minimapa sigue mostrando geometría real.
+
+Labels actuales siguen lifecycle existente.
 
 ---
 
-## 25. QA visual obligatoria
+## 34. Project/building invariants
 
-La implementación no se considera validada sólo porque pasen asserts.
+Antes/después:
 
-Generar evidencia sobre HEAD final:
+```text
+project JSON deepEqual
+building JSON deepEqual
+revision unchanged
+```
 
-### 25.1 Screenshots
+No schema.
+
+No migration.
+
+No storage.
+
+No URL/query.
+
+No sidecar nuevo.
+
+---
+
+## 35. Unit QA obligatoria
+
+Crear `tests/presentation-axon.test.cjs`.
+
+Cubrir comportamientos, no inflar el número de asserts.
+
+Matriz mínima:
+
+1. 1 nivel axon supported;
+2. 1 nivel exploded → `single-level`;
+3. 2 niveles axon/exploded;
+4. descriptor top-level semantics;
+5. `explodedEnvelope=null` cuando no soportado;
+6. coordenadas model-space sin ambigüedad;
+7. offsets X/planY;
+8. elevation real;
+9. bounds bottom/top;
+10. sort order/sourceIndex/levelId;
+11. reasons precedence;
+12. partial axon;
+13. all structural levels from sources;
+14. invalid level excluded;
+15. gap nominal;
+16. visual clearance;
+17. no-overlap extraY;
+18. niveles muy altos/atípicos quedan separados;
+19. envelope compact;
+20. envelope exploded;
+21. serializable;
+22. no mutation;
+23. deterministic deepEqual;
+24. `axon-open` p0/p1 overview;
+25. `exploded` p0/p1 overview + deltas 0;
+26. exploded hold full deltas;
+27. stateAt reverse/history-independent;
+28. world-space fit corners;
+29. far/maxDistance suficiente;
+30. 7000/10000;
+31. reduced holds;
+32. independent of north/labels;
+33. N-level conceptual accumulation sin habilitar producto >2.
+
+---
+
+## 36. Browser QA obligatoria — Playwright + Chromium
+
+Crear `tests/presentation-axon.browser.test.cjs`.
+
+La corrida final crítica usa:
+
+- Chromium existente del entorno;
+- `retries=0`;
+- sin subir timeouts globales;
+- sin descargar browsers;
+- reportar versión/executable si está disponible.
+
+Casos mínimos:
+
+1. control visible, default OFF;
+2. OFF parity;
+3. script/core cargado antes de UI;
+4. 1 nivel compact;
+5. 1 nivel exploded disabled;
+6. partial warning visible;
+7. 2 niveles compact/exploded;
+8. active lower;
+9. active upper;
+10. offset X/Z;
+11. elevación no estándar;
+12. footprints distintos;
+13. alturas atípicas sin overlap exploded;
+14. furniture visible acompaña nivel;
+15. furniture OFF permanece OFF;
+16. lamps acompañan;
+17. losa activa acompaña;
+18. asset parent acompaña si fixture disponible;
+19. stairs compact;
+20. stairs hidden exploded;
+21. ground/context/roof/exterior restaurados;
+22. contact shadows restaurados;
+23. `active → all → active`;
+24. `all → all`;
+25. p0 pre-End visual parity;
+26. p1 pre-End visual parity;
+27. section + FT3D-5;
+28. elevation + FT3D-5;
+29. section + elevation + exploded;
+30. no duplicate scene;
+31. standalone button compact/exploded;
+32. full Story order;
+33. reduced axon;
+34. reduced exploded two holds;
+35. finishStory(0) standalone;
+36. reverse;
+37. scrub;
+38. cancel p25/p40/p60/p80;
+39. Escape/Close/Back;
+40. Begin failure after `active→all` rolls back;
+41. five cycles no drift;
+42. no linear memory/group growth;
+43. no rebuild per apply;
+44. resize recreates pure narrative and preserves p;
+45. capture axon/exploded;
+46. project/building/revision unchanged;
+47. no storage key;
+48. repeated config open/close no duplicates;
+49. ES/EN/ZH strings present;
+50. 390×844;
+51. 844×390;
+52. no horizontal overflow;
+53. Exit/Pause operable;
+54. residue inspector clean;
+55. offline/B1 smoke.
+
+Cantidad de asserts no es criterio de calidad; la matriz de comportamientos sí.
+
+---
+
+## 37. Pre-baseline y regresiones
+
+Antes de modificar producto, registrar una corrida baseline mínima del commit exacto `f74c4ee6...` para suites sensibles:
+
+- presentation-story;
+- building-presentation;
+- presentation-framing;
+- presentation-minimap;
+- presentation.
+
+Después ejecutar regresiones completas pertinentes:
+
+- unitarias canónicas;
+- presentation-story;
+- presentation-section;
+- presentation-elevation;
+- presentation-overview;
+- presentation-focus;
+- presentation-framing;
+- presentation-minimap;
+- presentation;
+- building-presentation;
+- solar;
+- capture-3d;
+- tour-video;
+- professional-workspace;
+- project-first;
+- territory-integration;
+- offline/B1 correspondiente.
+
+No aumentar timeouts/retries globales para obtener green.
+
+Clasificación:
+
+```text
+branch FAIL + base PASS = regresión FT3D-5
+branch FAIL + base mismo FAIL = deuda baseline
+cancelled != pass
+```
+
+Deuda conocida no se arregla dentro del corte salvo empeoramiento demostrado.
+
+---
+
+## 38. Visual QA reproducible
+
+Toda evidencia se genera por CLI con Playwright + Chromium real.
+
+No screenshots manuales.
+
+### 38.1 Screenshots
 
 Mínimo:
 
-- un nivel, overview `p=0`;
-- un nivel, axon hold;
-- un nivel, retorno;
-- dos niveles compactos;
-- dos niveles exploded hold;
-- dos niveles con offsets X/Z;
-- active upper level;
-- reduced motion;
+- one-level p0, axon hold, p1;
+- two-level compact;
+- exploded separation midpoint;
+- exploded hold;
+- recomposition;
+- active upper;
+- offsets X/Z;
+- footprints distintos;
+- alturas atípicas;
+- reduced compact/exploded;
 - 390×844;
 - 844×390.
 
-### 25.2 Vídeos
+Generar contact sheet si la metodología existente lo permite.
 
-Mínimo:
+### 38.2 Vídeos
 
-- `axon-open` forward;
-- `axon-open` reverse;
-- `exploded-levels-open` forward;
-- `exploded-levels-open` reverse;
+Chromium real:
 
-Representativo desktop 1440×900.
+- axon forward;
+- axon reverse real;
+- exploded forward;
+- exploded reverse real;
+- exploded móvil.
 
-Añadir al menos una evidencia móvil corta para exploded.
+Reverse debe ejecutar la Story en sentido inverso, no invertir el archivo con ffmpeg.
 
-### 25.3 Inspección humana
+### 38.3 Evidence manifest
 
-Revisar explícitamente:
+Generar localmente un manifest TXT/JSON no necesariamente tracked con:
 
-- que plantas no se deforman;
-- que no aparece estructura inventada;
-- que no hay mobiliario flotante;
-- que las escaleras no se estiran;
-- que la separación se entiende como visual;
-- que la cámara no corta el edificio;
-- que el retorno no salta;
-- que reverse no deja residuos.
+```text
+headSha
+Chromium version/executable
+scenario
+viewport
+progress/state
+output path
+```
 
----
+Si HEAD cambia después de generar evidencia crítica, regenerarla.
 
-## 26. Regresiones obligatorias
+### 38.4 Inspección humana
 
-Ejecutar y comparar con la base exacta `f74c4ee6bca58077a1135d4db2466e4332d0d5e7`:
+Abrir y revisar capturas/vídeos:
 
-- unitarias canónicas;
-- `presentation-story`;
-- `presentation-section`;
-- `presentation-elevation`;
-- `presentation-overview`;
-- `presentation-focus`;
-- `presentation-framing`;
-- `presentation-minimap`;
-- `presentation`;
-- `building-presentation`;
-- `solar`;
-- `capture-3d`;
-- `tour-video`;
-- `professional-workspace`;
-- `project-first`;
-- `territory-integration`.
-
-No llamar “green” a una suite con cancelaciones.
-
-Si branch falla y base pasa:
-
-**regresión FT3D-5 → bloquea integración.**
-
-Si branch y base reproducen exactamente el mismo fallo/cancelación:
-
-**deuda previa documentada → no atribuir a FT3D-5.**
+- clipping;
+- floating furniture/lights/slabs;
+- stairs;
+- context;
+- roof;
+- p0/p1;
+- jumps;
+- reverse;
+- mobile;
+- copy.
 
 ---
 
-## 27. Baseline conocido que NO pertenece a FT3D-5
+## 39. Artefactos y ffmpeg
 
-No arreglar dentro de este corte salvo que FT3D-5 lo empeore:
+No trackear PNG/WEBM/MP4 salvo política existente.
 
-- R10 framing instability;
-- M13 minimap 1440 timeout;
-- P13/P15/P05 presentation 1440/cycles timeout;
-- case31 Escape/Back timeout;
-- professional-workspace human-review timeout histórico bajo carga;
-- render-budget timeout/cancellation histórico;
-- 8B-C cubiertas inclinadas diferidas;
-- 360 diferido.
+Puede usarse ffmpeg CLI si ya está disponible para conversión/frames/contact sheet, sin añadir dependencia.
 
-Toda desviación nueva debe compararse con base antes de clasificarla.
+Conservar fuente de vídeo Playwright.
 
 ---
 
-## 28. Integración con FT3D-6 — resolución P1–P11
+## 40. Dependencies y branch discipline
 
-Tras implementar y validar FT3D-5, FT3D-6 debe reconciliar:
+No modificar:
 
-| P | FT3D-5 entrega contractual |
+- `package.json`;
+- lockfiles;
+- workflows CI no relacionados;
+- timeouts/retries globales;
+- C4;
+- FT3D-6;
+- FT3D-7;
+- FT3D-8;
+- 360;
+- 8B-C.
+
+No force push.
+
+No merge automático.
+
+No PR hasta auditoría posterior si el prompt de implementación así lo indica.
+
+---
+
+## 41. P1–P11 que FT3D-5 debe entregar
+
+| P | Decisión FT3D-5 V2 |
 |---|---|
-| P1 | `axon`: supported/partial/unsupported; `exploded-levels`: supported/unsupported con reasons de §5 |
-| P2 | `axon-open` y `exploded-levels-open` |
+| P1 | axon supported/partial/unsupported; exploded variant supported/unsupported + reasons |
+| P2 | `axon-open`, `exploded-levels-open` |
 | P3 | scope `building`; coverages `any`, `building` |
-| P4 | `compact-building` y `vertical-levels` |
-| P5 | `overview(level de inserción)` → mismo `overview(level)` |
-| P6 | no repetibles; máximo 1 por Story/building |
-| P7 | holds reduced de §§11–12 |
-| P8 | all levels temporal; `site-context` NO host V1; stairs policy de §8.6 |
-| P9 | reasons/partial de §5 |
-| P10 | 7000 ms axon; 10000 ms exploded |
-| P11 | NO `overview(building)` y NO nuevo anchor sin rooms |
+| P4 | `compact-building`, `vertical-levels` |
+| P5 | `overview(level elegible)` → mismo overview |
+| P6 | no repeat; max 1 |
+| P7 | axon hold; exploded compact + exploded holds |
+| P8 | temporal `all`; site-context no host; ownership matrix de §13 |
+| P9 | reasons/partial de §§8–10 |
+| P10 | 7000 / 10000 ms |
+| P11 | no `overview(building)`; no anchor sin rooms |
 
-Esta tabla es vinculante para la reconciliación posterior de FT3D-6 salvo que la implementación demuestre una imposibilidad técnica real y se documente antes de integrar.
-
----
-
-## 29. Criterios de aceptación funcional
-
-FT3D-5 está funcionalmente correcto cuando:
-
-1. axon funciona con un proyecto de un nivel;
-2. axon funciona con edificio de dos niveles;
-3. exploded sólo se habilita con ≥2 niveles válidos;
-4. exploded conserva offsets/elevaciones reales y sólo añade Y visual;
-5. plantas completas se desplazan como unidades visuales;
-6. furniture/lights acompañan a su planta;
-7. stairs no se deforman;
-8. no se inventa estructura;
-9. cámara encuadra compact y exploded en la región libre;
-10. p0 y p1 son overview exacto;
-11. reverse y scrub son deterministas;
-12. cancelación restaura exactamente;
-13. current/all se restaura;
-14. no hay persistencia;
-15. no hay schema;
-16. reduced motion conserva la misma información;
-17. móvil conserva el mismo relato;
-18. OFF es idéntico al comportamiento histórico.
+FT3D-6 se reconcilia **después** de implementar/validar FT3D-5.
 
 ---
 
-## 30. Criterios DONE
+## 42. Criterios blocking
 
-FT3D-5 **NO está DONE** por tener una rama READY.
+Bloquea READY:
 
-DONE exige:
+- schema/persistencia/red nueva;
+- project/building mutado;
+- drift;
+- p0/p1 no equivalentes al overview original;
+- active→all no restaurado;
+- Begin failure sin rollback;
+- references Three obsoletas;
+- active slab flotante;
+- furniture/lights flotantes;
+- roof/context/stairs/contact sin restaurar;
+- overlap de plantas en exploded representativo;
+- clipping grave;
+- reduced motion roto;
+- Story controls ausentes cuando FT3D-5 es única feature;
+- dispatch hard-codeado sin adaptar;
+- offline roto;
+- regression branch-only;
+- cancelled presentado como green;
+- timeouts/retries inflados para ocultar fallo;
+- evidencia visual de HEAD distinto al final.
 
-### Código
+---
 
-- `presentation-axon-core.js` puro;
-- Story builders integrados;
-- runtime transform handles correctos;
+## 43. DONE
+
+FT3D-5 está DONE sólo después de:
+
+### Implementación
+
+- pure core;
+- descriptor V2;
+- Story builders;
 - UI aditiva;
-- no schema/persistence.
+- standalone action;
+- ownership handles sin reparenting;
+- transactional lifecycle;
+- residue inspector;
+- no persistence/schema/network.
 
-### Tests
+### QA
 
-- unitarias FT3D-5 PASS;
-- navegador FT3D-5 PASS;
-- regresiones clasificadas contra base exacta;
-- ninguna regresión nueva atribuible a FT3D-5.
-
-### Restauración
-
-- zero transform residue;
-- project/building JSON unchanged;
-- current/all restored;
-- stairs/context restored;
-- repeated cycles without drift.
+- unit;
+- browser Chromium retries=0;
+- offline;
+- baseline comparison;
+- no new regression;
+- memory/rebuild checks;
+- p0/p1 pre-End;
+- active-upper;
+- overlap-safe exploded;
+- repeated config/cycles.
 
 ### Visual
 
-- screenshots finales revisadas;
-- vídeos forward/reverse revisados;
-- desktop y móvil representativos;
-- no clipping grave del edificio;
-- no floating content;
-- no false construction reading.
+- screenshots finales;
+- contact sheet si aplica;
+- videos forward/reverse reales;
+- mobile;
+- human inspection;
+- evidence manifest ligado a final HEAD.
 
-### Git/CI
+### Git
 
-- branch limpia;
-- commits claros;
+- clean tree;
+- diff scope correcto;
+- no package/lockfile unexpected;
 - push normal;
-- PR con alcance FT3D-5 únicamente;
-- required CI revisado una vez al terminar, sin polling repetitivo;
-- sólo integrar después de auditoría del asistente.
+- sin merge.
 
-### Documentación
+### Después de integración
 
-Después de integrar:
-
-- actualizar current-status;
-- actualizar roadmap completion matrix;
-- reconciliar P1–P11 de FT3D-6;
-- promover FT3D-6 sólo después de esa reconciliación.
+- current-status;
+- completion matrix;
+- reconciliar FT3D-6 P1–P11;
+- luego autorizar FT3D-6.
 
 ---
 
-## 31. Límites para Claude Code
+## 44. Estado de autorización
 
-Cuando se delegue la implementación pesada, Claude debe respetar:
+Este documento **no ejecuta código por sí solo**. Está técnicamente cerrado y listo para una única implementación pesada.
 
-- rama nueva desde el `master` exacto autorizado;
-- no tocar FT3D-6 salvo que el prompt lo autorice expresamente después de FT3D-5;
-- no arreglar baseline debt;
-- no reabrir C4;
-- no 360;
-- no FT3D-8;
-- no refactor general del renderer;
-- no schema/persistence;
-- no commit/merge fuera del alcance;
-- no force push;
-- evidencia visual sobre HEAD final;
-- handoff con tests exactos, fallos, baseline y archivos modificados.
+La implementación queda autorizada únicamente cuando el usuario/assistant emita un prompt explícito que:
 
----
+- verifique SHAs;
+- cree la rama de implementación;
+- declare este contrato V2 como autoridad;
+- prohíba cambiar arquitectura fuera de él.
 
-## 32. Decisiones cerradas por este contrato
-
-1. FT3D-5 usa el Story engine existente.
-2. Usa la PerspectiveCamera existente.
-3. `axon` y `exploded-levels` son atomic-scene de scope building.
-4. Adapters: `axon-open`, `exploded-levels-open`.
-5. Una sola scene global por Story.
-6. Exploded incluye su fase compacta; no ejecuta axon como scene adicional.
-7. Despiece exclusivamente vertical en V1.
-8. Offsets X/Z reales nunca cambian.
-9. Elevaciones reales nunca se sustituyen.
-10. Gap visual determinista 45 % del storey nominal, clamp 800–1600 mm.
-11. Base transform pertenece a Building; FT3D-5 sólo añade delta runtime.
-12. Active level usa transform handle, no reparenting persistente.
-13. Furniture/lights/losas reales acompañan a la planta.
-14. Stairs se ocultan durante exploded, no se deforman.
-15. Site-context no es host de FT3D-5 V1.
-16. No se crea `overview(building)`.
-17. No se levanta el gate PresentationPlan sin rooms.
-18. Start/end = overview del nivel de inserción.
-19. Orden: section → elevation → axon/exploded → room dentro del primer bloque aplicable.
-20. Runtime option: `off | compact | exploded`.
-21. Default OFF.
-22. Axon 7000 ms; exploded 10000 ms.
-23. Reduced motion usa holds, no elimina capability.
-24. No geometry rebuild por frame.
-25. No schema, storage, URL ni network.
-26. P1–P11 quedan contractualmente resueltos por la tabla §28 una vez FT3D-5 esté implementado y validado.
-
----
-
-## 33. Estado de autorización
-
-Este documento define el corte técnico.
-
-**Todavía no constituye autorización automática de merge.**
-
-La implementación pesada puede delegarse después de la revisión final de este contrato. La integración seguirá el flujo:
-
-```text
-CONTRATO
-→ CLAUDE CODE implementación pesada
-→ auditoría del asistente
-→ QA/baseline
-→ CI
-→ integración segura
-→ documentación
-→ reconciliación FT3D-6
-```
-
-**ESTADO: FT3D-5 CONTRATO TÉCNICO COMPLETO — PENDIENTE DE REVISIÓN FINAL Y AUTORIZACIÓN DE IMPLEMENTACIÓN**
+**ESTADO: FT3D-5 CONTRATO V2 CONSOLIDADO — TÉCNICAMENTE CERRADO Y LISTO PARA PROMPT DE IMPLEMENTACIÓN**
