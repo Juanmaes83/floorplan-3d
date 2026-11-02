@@ -1,5 +1,7 @@
 # FT3D-6 — Implementation and verification ledger
 
+Implementation is in progress. No final validation, preview approval or merge is claimed.
+
 ## Authority and control
 
 - Implementation authorized by the attached user mission (167 sections), 2026-11-01.
