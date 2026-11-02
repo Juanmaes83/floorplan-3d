@@ -66,6 +66,44 @@ The arrows express dependency and authority, not a required user journey. A prof
 
 The three indented `EXPERIENCE` lines are **experience principles / possible landing patterns**, not claims that all three are already implemented as Rubik capabilities. Their detailed constraints are documented in `docs/product/presentation-experience-principles-2026-11-02.md`.
 
+### 2.1 Specialized semantic authorities
+
+The project/building remains the geometric authority, but some professional experiences may require an additional **domain authority** that describes facts not contained in geometry alone.
+
+Current examples already exist in bounded form:
+
+```text
+PROJECT / BUILDING TRUTH
+        │
+        ├── solar/orientation semantics
+        ├── quantity semantics
+        ├── budget/pricing semantics
+        └── presentation routes/stops
+```
+
+A future construction/programme family would require its own explicitly approved semantic authority before Presentation could faithfully visualize it:
+
+```text
+PROJECT / BUILDING TRUTH
+        │
+        └── FUTURE CONSTRUCTION / PROGRAMME AUTHORITY
+                activity · phase · time/order · affected elements
+                temporary site state · evidence/provenance
+                         │
+             ┌───────────┼───────────┐
+             ▼           ▼           ▼
+         PROGRAMME     SHEET       3D / CAMERA
+             └───────────┼───────────┘
+                         ▼
+                 EXPERIENCE / STORY
+                         ▼
+                PRESENTATION / DELIVERY
+```
+
+This diagram is a boundary rule, **not a schema or implementation approval**. FT3D-8 was already defined in the 2026-10-30 Flat-to-3D programme as a separate future temporal family; Global Reconciliation D16–D18 remains the documentary authority for donor construction/time mechanisms.
+
+The corresponding supplemental domain reading is recorded in `docs/product/construction-programme-domain-addendum-2026-11-02.md`.
+
 ## 3. Current product zones
 
 ### 3.1 Input / intake
@@ -122,11 +160,14 @@ FT3D-6 lives **inside the existing Presentation system**. It resolves profession
 
 #### Experience principles carried into future reconciliation
 
-Supplemental donor visual evidence makes three distinctions important for future experience work. They are principles/hypotheses to test against the complete runtime audit, not current capability claims:
+Supplemental donor visual evidence makes several distinctions important for future experience work. They are principles/hypotheses to test against the complete runtime audit, not current capability claims:
 
 1. **Contextual professional information can be part of the spatial experience.** A presentation may explain the room/material/façade/phase being shown using real Rubik data, instead of being only camera choreography.
 2. **Technical and realistic/material representation may coexist in a registered intermediate state.** The useful property is continuity of the same project while representation changes, not merely a fade between unrelated endpoint images.
 3. **Timeline/construction experiences require semantic data.** Presentation may visualize time/programme/activity/affected elements, but must not invent a professional schedule because geometry can be animated.
+4. **One semantic state may have several representations.** Programme, technical sheet and camera/3D can be coordinated readings rather than separate durable truths.
+5. **A technical drawing can be an enriched endpoint.** A story may return to plan/section/elevation after spatial exploration instead of treating maximum realism as the only valid ending.
+6. **Temporary construction state is separate from final building truth.** Plant, scaffolding, excavation or other process-specific entities require explicit lifecycle/domain ownership if ever implemented.
 
 Detailed constraints, evidence limits and non-goals live in `docs/product/presentation-experience-principles-2026-11-02.md`.
 
@@ -179,6 +220,10 @@ Blender and later audiovisual AI may improve representation, but they must not s
 11. **Professional explanation can be synchronized with space.** Contextual UI must use real project/professional data and make its referent clear.
 12. **Representation continuity matters.** Technical/material/realistic states may coexist, but must remain registered to the same project authority and preserve continuity invariants.
 13. **Semantic timelines cannot be fabricated.** Programme/time/phase visualizations require real or explicitly authored domain semantics; presentation may consume those semantics, not invent them.
+14. **One semantic authority can have several representations.** Programme, sheet and camera/3D views should not become independent durable truths merely because they have separate UI modes.
+15. **Narrative end state is service-dependent.** A technical plan/section/elevation may be the final enriched professional reading; realism is not an automatic endpoint requirement.
+16. **Temporary process state needs explicit ownership.** Construction-only entities must not silently mutate final project/building truth.
+17. **Authored narrative and derived facts remain distinguishable.** Professional explanation may enrich project-derived information without rewriting its authority/provenance.
 
 ## 6. Evidence paths reviewed for this note
 
@@ -192,6 +237,14 @@ The 2026-11-02 review checked the current `master` implementations represented b
 - budget: `js/quantity-*`, `js/budget-*`, cost providers, BC3/FIEBDC-3 modules;
 - delivery/client: `js/professional-workspace-ui.js`, `js/surface-sheet-ui.js`, `js/sheet-ui.js`, `js/project-dossier-ui.js`, `js/economic-dossier-*`, `js/client-share-ui.js`, `js/review-notes-*`, `js/share-link-ui.js`, `js/project-package.js`, `js/brand-*`;
 - augmented output: `js/ai-render-ui.js`, `js/delivery-image.js`.
+
+The architecture review also reconciled these documentary authorities before extending the experience map:
+
+- `docs/product/flat-to-3d-presentation-knowledge-programme-2026-10-30.md` — Presentation Story and FT3D-8 separation;
+- `docs/product/ft3d-2a-story-engine-2026-10-30.md` — deterministic scene/progress/caption/reverse authority;
+- `docs/product/ft3d-3-dynamic-section-contract-2026-10-31.md` — section authority and restore/non-mutation rules;
+- `docs/product/point-9-ux-professional-discoverability-2026-10-28.md` — primary UX information architecture;
+- `docs/product/ft3d-donor-global-reconciliation-2026-11-01.md` — D16–D18 donor construction/time reconciliation.
 
 Supplemental visual observations from donor/reference screenshots are indexed separately in `docs/product/evidence/donor-visual-observations-2026-11-02/manifest.md`; their repository image paths/hashes remain pending until the screenshot assets are uploaded. Those observations inform experience principles but do not replace runtime/source evidence.
 
