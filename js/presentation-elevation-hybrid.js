@@ -32,7 +32,7 @@
    OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanElevationHybrid=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
- const HYBRID={version:1,paper:0xf2efe7,ink:0x1d1c19,accent:0x1f6f6a,minPeriodM:.11,maxPeriodM:.4,linesAcross:55,edgeAngleDeg:25,minTargets:1,minWallShare:.5,cacheKey:'rubik-hybrid-elevation-v1',
+ const HYBRID={version:1,paper:0xf2efe7,ink:0x1d1c19,accent:0x1f6f6a,minPeriodM:.11,maxPeriodM:.4,linesAcross:55,edgeAngleDeg:25,lineCssPx:1,minTargets:1,minWallShare:.5,cacheKey:'rubik-hybrid-elevation-v1',
   REASONS:{'no-candidate':'No hay fachada derivada.','no-targets':'No se encontraron los muros de la fachada en la escena.','insufficient-targets':'La escena no contiene suficientes muros de la fachada.',
    'unsupported-material':'Un material de la fachada no admite la representación híbrida.','shader-unavailable':'El navegador no admite el sombreado necesario.','shader-error':'El sombreado híbrido no compiló.'}};
  const keyOf=(levelId,id)=>JSON.stringify([levelId??null,id]);
@@ -150,6 +150,15 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   shader.vertexShader='varying vec3 vHybridWP;\n'+shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\n vHybridWP=(modelMatrix*vec4(transformed,1.0)).xyz;');
   shader.fragmentShader=LINE_FRAG_HEAD+shader.fragmentShader.replace('#include <opaque_fragment>','#include <opaque_fragment>\n gl_FragColor.a*=uHybridTech*(1.0-hybridReveal(hybridLocal(vHybridWP)));');
  }
+ // Screen-space-width ink (donor lineMat on LineSegments2/LineMaterial): the world position of each segment end is
+ // interpolated for the registered sweep; visible only in the technical part.
+ function patchFatLine(shader,U){
+  Object.assign(shader.uniforms,U);
+  shader.vertexShader='varying vec3 vHybridWP;\n'+shader.vertexShader.replace('void main() {',`void main() {
+   vec3 hwS=(modelMatrix*vec4(instanceStart,1.0)).xyz,hwE=(modelMatrix*vec4(instanceEnd,1.0)).xyz;
+   vHybridWP=position.y<0.5?hwS:hwE;`);
+  shader.fragmentShader=LINE_FRAG_HEAD+shader.fragmentShader.replace('#include <colorspace_fragment>','#include <colorspace_fragment>\n float hybridVis=uHybridTech*(1.0-hybridReveal(hybridLocal(vHybridWP)));\n if(hybridVis<0.01)discard;\n gl_FragColor.a*=hybridVis;');
+ }
  function patch(shader,U){
   Object.assign(shader.uniforms,U);
   shader.vertexShader=VERT_HEAD+shader.vertexShader.replace('#include <worldpos_vertex>',VERT_BODY);
@@ -174,14 +183,19 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
  /* Runtime controller. THREE: the module; targets: selectTargets result (validated); facade: the elevation descriptor in
     world metres (center, tangent, normal, width, height); sun: [x,y,z] direction towards Rubik's directional light;
     linePx: ink line width in device pixels (renderer pixel ratio). */
- function create(THREE,{targets,facade,sun,linePx=1}){
+ function create(THREE,{targets,facade,sun,linePx=1,fatLines=null,resolution=null}){
   const frame=frameOf(facade),hex=h=>new THREE.Vector3(((h>>16)&255)/255,((h>>8)&255)/255,(h&255)/255);
   const U={uHybridTech:{value:0},uHybridHatch:{value:0},uHybridSweep:{value:new THREE.Vector4(SWEEP_DIR[0],SWEEP_DIR[1],-1e4,sweepSoft(frame))},
    uHybridSun:{value:new THREE.Vector3(...(sun||[0,1,0])).normalize()},uHybridCenter:{value:new THREE.Vector3(...frame.center)},uHybridTangent:{value:new THREE.Vector3(...frame.tangent)},uHybridNormal:{value:new THREE.Vector3(...frame.normal)},
    uHybridPaper:{value:hex(HYBRID.paper)},uHybridInk:{value:hex(HYBRID.ink)},uHybridAccent:{value:hex(HYBRID.accent)},uHybridPeriod:{value:periodFor(frame.width)},uHybridLinePx:{value:1.05*Math.max(1,linePx)}};
   const clones=new Map(); // source material → presentation clone
-  const lineMat=new THREE.LineBasicMaterial({color:HYBRID.ink,transparent:true,depthWrite:false,toneMapped:false});lineMat.userData.hybridPresentation=true;
-  lineMat.onBeforeCompile=shader=>patchLine(shader,U);lineMat.customProgramCacheKey=()=>HYBRID.cacheKey+'-line';
+  // Ink contours: the donor's LineSegments2 + LineMaterial (width in CSS px × device pixel ratio, stable on any DPR) when
+  // the three r160 line addons are given; native 1-device-pixel LineSegments otherwise.
+  const fat=!!(fatLines&&fatLines.LineSegments2&&fatLines.LineSegmentsGeometry&&fatLines.LineMaterial);
+  const lineMat=fat?new fatLines.LineMaterial({color:HYBRID.ink,linewidth:HYBRID.lineCssPx*Math.max(1,linePx),transparent:true,depthWrite:false,toneMapped:false})
+   :new THREE.LineBasicMaterial({color:HYBRID.ink,transparent:true,depthWrite:false,toneMapped:false});
+  lineMat.userData.hybridPresentation=true;if(fat&&resolution)lineMat.resolution.set(resolution[0],resolution[1]);
+  lineMat.onBeforeCompile=shader=>(fat?patchFatLine:patchLine)(shader,U);lineMat.customProgramCacheKey=()=>HYBRID.cacheKey+(fat?'-fatline':'-line');
   const edges=new Map(); // geometry → EdgesGeometry (presentation-owned)
   const lines=[]; // {line, parent}
   const records=[]; // {mesh, kind, original, hybrid}
@@ -197,8 +211,9 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   function bind(list){
    records.length=0;unline();
    for(const t of list){const original=t.mesh.material;records.push({mesh:t.mesh,kind:t.kind,original,hybrid:Array.isArray(original)?original.map(cloneOf):cloneOf(original)});
-    if(!t.mesh.geometry)continue;let g=edges.get(t.mesh.geometry);if(!g){g=new THREE.EdgesGeometry(t.mesh.geometry,HYBRID.edgeAngleDeg);edges.set(t.mesh.geometry,g);ctl.edgesCreated=(ctl.edgesCreated||0)+1;}
-    const line=new THREE.LineSegments(g,lineMat);line.userData.hybridPresentation=true;line.visible=false;line.renderOrder=2;t.mesh.add(line);lines.push({line,parent:t.mesh});}
+    if(!t.mesh.geometry)continue;let g=edges.get(t.mesh.geometry);
+    if(!g){const eg=new THREE.EdgesGeometry(t.mesh.geometry,HYBRID.edgeAngleDeg);if(fat){g=new fatLines.LineSegmentsGeometry().fromEdgesGeometry(eg);eg.dispose();}else g=eg;edges.set(t.mesh.geometry,g);ctl.edgesCreated=(ctl.edgesCreated||0)+1;}
+    const line=fat?new fatLines.LineSegments2(g,lineMat):new THREE.LineSegments(g,lineMat);line.userData.hybridPresentation=true;line.visible=false;line.renderOrder=2;t.mesh.add(line);lines.push({line,parent:t.mesh});}
   }
   bind(targets.meshes);
   ctl.attached=isIn=>records.every(r=>isIn(r.mesh));
@@ -210,6 +225,8 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
    if(c.clippingPlanes!==src.clippingPlanes){c.clippingPlanes=src.clippingPlanes;changed=true;}
    if(changed){c.needsUpdate=true;ctl.syncs++;}}};
   // h: the Story's hybrid state at p (plain data); sunNow: Rubik's current light direction (solar snapshot included).
+  ctl.fatLines=fat;
+  ctl.setResolution=(w,h)=>{if(fat&&w>0&&h>0)lineMat.resolution.set(w,h);};
   ctl.apply=(h,sunNow)=>{
    ctl.state=h?{...h}:null;const on=!!h&&h.active;
    if(sunNow&&sunNow.every(Number.isFinite))U.uHybridSun.value.set(...sunNow).normalize();
@@ -218,7 +235,7 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   };
   ctl.end=()=>{ctl.swap(false);for(const r of records)r.mesh.material=r.original;records.length=0;unline();for(const c of clones.values()){c.dispose();ctl.disposed++;}clones.clear();
    for(const g of edges.values()){g.dispose();ctl.edgesDisposed++;}ctl.edgesCreated=ctl.edgesCreated||0;edges.clear();lineMat.dispose();ctl.lineMaterialDisposed=true;ctl.state=null;};
-  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
+  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,fatLines:fat,lineWidthPx:fat?lineMat.linewidth:1,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
    maps:[...clones].map(([src,c])=>({source:src.uuid,map:!!src.map,normalMap:!!src.normalMap,roughnessMap:!!src.roughnessMap,sameMap:c.map===src.map,sameNormal:c.normalMap===src.normalMap,sameRoughness:c.roughnessMap===src.roughnessMap})),
    state:ctl.state&&{...ctl.state},uniforms:{tech:U.uHybridTech.value,hatch:U.uHybridHatch.value,sweepZ:U.uHybridSweep.value.z,sweepSoft:U.uHybridSweep.value.w,period:U.uHybridPeriod.value,sun:U.uHybridSun.value.toArray()},
    frame:{...frame,center:[...frame.center],tangent:[...frame.tangent],normal:[...frame.normal]}});

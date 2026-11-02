@@ -36,11 +36,12 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   await p.locator('#presentationElevationOption').check();if(hybrid)await p.locator('#presentationElevationHybrid').check();
   const s=p.getByRole('button',{name:'Iniciar presentación'});await s.scrollIntoViewIfNeeded();await s.click();await settled(p);
   await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open'||View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:180000});
-  // normal motion autoplays the scene: let it finish, then every state is set from the slider (absolute p)
-  await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing,null,{timeout:180000});await at(p,0);}
+  // normal motion autoplays the scene (and closes it at the end): take the slider at once — every state is then set
+  // from it (absolute p) and the scene stays open
+  await at(p,0);await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing&&View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:30000});}
  const at=async(p,v)=>{await p.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},v);await frames(p);await frames(p);};
  const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo,e=i?.elevation;return {surfaceQuality:View3D.surfaceQuality,light:(({preset,environment,exposure,sunIntensity})=>({preset,environment,exposure,sunIntensity}))(View3D.presentationLight),p:i?.p??null,phase:i?.phase??null,facade:e?.candidateId??null,solar:e?.solarOn??null,hybrid:e?.hybrid??null,materials:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detail:m.detailState})),pendingAssets:View3D.lifecycleMetrics.pendingAssets,dpr:devicePixelRatio,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};});
- const record=async(p,file,extra)=>{await p.screenshot({path:file});manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,...extra,viewport:p.viewportSize(),state:await read(p),output:file});};
+ const record=async(p,file,extra)=>{const st0=await read(p);if(extra.scenario!=='reduced'&&!st0.phase)throw Error('story not active for '+file);await p.screenshot({path:file});manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,...extra,viewport:p.viewportSize(),state:await read(p),output:file});};
  if(scenario==='reduced'){
   // REDUCED MOTION QA only (separate from the normal visual QA): the player's own holds.
   const {p,ctx}=await page({width:1440,height:900},{reduced:true});await setup(p,{zip:null});

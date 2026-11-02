@@ -2499,6 +2499,9 @@ import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js'
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import {LineSegments2} from 'three/addons/lines/LineSegments2.js';
+import {LineSegmentsGeometry} from 'three/addons/lines/LineSegmentsGeometry.js';
+import {LineMaterial} from 'three/addons/lines/LineMaterial.js';
 import {SurfaceRenderer} from './js/surface-renderer.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 
@@ -4756,7 +4759,8 @@ function beginElevationHybrid(el,c){
   const refs={wallRefs:c.wallRefs,openingRefs:c.openingRefs||[]};el.hybridRefs=refs;
   const sel=H.selectTargets(elevationHybridRoots(),refs),v=H.validate(sel,{shader:!!renderer?.capabilities&&(renderer.capabilities.isWebGL2||!!renderer.extensions.get('OES_standard_derivatives'))});
   if(!v.supported)fail(v.reason);
-  const ctl=H.create(THREE,{targets:sel,facade:el.facade,sun:elevationHybridSun(),linePx:renderer.getPixelRatio()});ctl.glass=sel.glass;
+  const buf=renderer.getDrawingBufferSize(new THREE.Vector2());
+  const ctl=H.create(THREE,{targets:sel,facade:el.facade,sun:elevationHybridSun(),linePx:renderer.getPixelRatio(),fatLines:{LineSegments2,LineSegmentsGeometry,LineMaterial},resolution:[buf.x,buf.y]});ctl.glass=sel.glass;
   // Compile once with the presentation clones in place: a shader that does not compile ends the hybrid here.
   try{ctl.apply({active:true,technicalMix:1,materialReveal:0,hatchStrength:1},elevationHybridSun());renderer.compile(scene,camera);
     for(const m of ctl.clones.values()){const prog=renderer.properties.get(m).currentProgram;if(prog?.diagnostics&&prog.diagnostics.runnable===false)fail('shader-error');}}
@@ -4773,6 +4777,7 @@ function applyElevation(el,st){
   if(el.hybrid){
     // A rebuilt façade (levelView or an asset rebuild) is found again by identity; its originals are the new meshes'.
     if(!el.hybrid.attached(attachedToScene)){const sel=FloorPlanElevationHybrid.selectTargets(elevationHybridRoots(),el.hybridRefs);el.hybrid.rebind(sel.meshes);}
+    {const buf=renderer.getDrawingBufferSize(new THREE.Vector2());el.hybrid.setResolution(buf.x,buf.y);}
     el.hybrid.apply(st.hybrid||null,elevationHybridSun());
   }
 }
