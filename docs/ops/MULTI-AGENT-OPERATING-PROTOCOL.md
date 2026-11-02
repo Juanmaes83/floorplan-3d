@@ -12,11 +12,12 @@ No asigna una herramienta de forma permanente a una clase de tarea. La asignaci�
 
 ## 2. Autoridades
 
-1. `master` integrado y verificado es la autoridad de producto.
-2. Una rama remota con SHA registrado es la autoridad de un workstream en progreso.
-3. La documentación canónica/operativa del repo prevalece sobre recuerdos de un chat.
-4. Un artefacto local no subido es **trabajo no compartido** y no puede asumirse disponible para otro agente.
-5. `pushed` no significa `approved`, `review-ready` ni `mergeable`.
+1. `master` integrado y verificado es la autoridad de producto para lo que ya está integrado.
+2. Los contratos/documentos canónicos vigentes son autoridad de alcance, semántica y gates dentro de su ámbito; una rama WIP no los sustituye.
+3. Una rama remota con SHA registrado es el **checkpoint compartido autoritativo de ese workstream en progreso**, no una nueva autoridad de producto ni permiso de merge.
+4. La documentación canónica/operativa del repo prevalece sobre recuerdos de un chat.
+5. Un artefacto local no subido es **trabajo no compartido** y no puede asumirse disponible para otro agente.
+6. `pushed` no significa `approved`, `review-ready` ni `mergeable`.
 
 ## 3. Un workstream, una rama, un worktree
 
@@ -225,7 +226,7 @@ Cuando una sesión se interrumpe:
 5. Si hay cambios locales no pusheados del agente anterior, no sobrescribirlos; primero inventariarlos y crear checkpoint seguro si es posible.
 6. Reanudar desde el último checkpoint demostrado, no desde memoria de chat.
 
-Para misiones largas con estado machine-readable, el `run-state.json` específico del workstream prevalece sobre una descripción informal.
+Para misiones largas con estado machine-readable, el `run-state.json` específico del workstream prevalece sobre una descripción informal **sólo si identifica el branch/SHA o checkpoint al que pertenece y no existe un commit, handoff o evidencia posterior que lo haya superado**. Un run-state viejo no puede pisar un checkpoint remoto más reciente.
 
 ## 12. Reglas de integración y merge
 
