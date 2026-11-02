@@ -10,6 +10,8 @@ The new CI workflow publishes `ft3d-6-human-review-<exact SHA>`: frozen-baseline
 
 Temporal evidence QA caught overly fast automated scrubbing (180 ms holds). The evidence harness now waits at least 1 s at each scrubbed state, including reduced-motion/mobile and reverse checkpoints. This changes only capture pacing, not product timings. The earlier `a8ff068` campaign and interrupted broad run are retained as development/stale evidence; the final campaign and complete suite must use the subsequent clean checkpoint.
 
+End-frame review of `09db29b` found that one video closed before the compositor encoded the restored editor, although its restored PNG and state checks were correct. Capture now holds configuration/closing for 1 s and the restored editor for 2 s before closing the browser context. The product is unchanged. That campaign/interrupted broad run is also stale; final visual review must include actual raw end frames before the full final suite starts.
+
 Planned final commands (actual outputs/counts belong to the final review record):
 
 ```text
