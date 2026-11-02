@@ -2,6 +2,25 @@
 
 Implementation is in progress. No final validation, preview approval or merge is claimed.
 
+### Final review publication protocol
+
+The final PR description is the dated final implementation report, with the exact final source SHA, completed test/edge/QA1–47 matrices, visual findings, baseline comparison, CI and preview. This source-controlled ledger records the pre-freeze requirements and execution protocol; it must not silently claim future runs passed. Final test logs and the reviewed/hash-verified manifest remain under the external QA root. No code changes after that freeze can reuse affected evidence.
+
+The new CI workflow publishes `ft3d-6-human-review-<exact SHA>`: frozen-baseline/candidate screenshots, real videos and hashes. The candidate reuses the baseline's ZIP fixtures (identical bytes), blocks all nonlocal requests except locally fulfilled pinned Three, and records capture as `CAPTURED`, never as human-approved. The preview remains a project preview, not a production deployment. The final PR must include reviewer access/protection details and an artifact link; a local-only handoff is not complete.
+
+Planned final commands (actual outputs/counts belong to the final review record):
+
+```text
+node --test --test-reporter=tap --test-concurrency=1 [all tests/*.test.cjs sorted]
+python [each tests/*.test.py, with the isolated jsonschema/UTF-8 environment]
+node --check [each changed JS/CJS file]
+git diff --check
+node scripts/qa/render-presentation-templates.cjs <frozen base> <external baseline output> baseline
+QA_FIXTURE_DIR=<baseline output> node scripts/qa/render-presentation-templates.cjs <candidate> <external candidate output> candidate
+```
+
+Development additions: post-mutation Apply failure and historical explicit sidecar checks **2/2 PASS** (`logs/browser-extra.log`,12134.6042 ms); real overview endpoints/five cycles/zero per-Apply rebuilds for compact and exploded **2/2 PASS** (`logs/browser-cycles-fixed.log`,19629.4828 ms). A skipped scene stays skipped on subsequent seek; it must not recreate renderer state. All final-head cases are rerun after the final checkpoint.
+
 ## Implementation checkpoints (not final evidence)
 
 - Pure resolver checkpoint `25761d7`: 39/39 pure tests PASS after adding the detached/frozen runtime boundary and malformed-catalog diagnostics.
@@ -145,50 +164,50 @@ PENDING — implementation, final tests, reviewed evidence, exact HEAD, normal p
 
 | Gate | Contract requirement | Planned verification | Result |
 |---|---|---|---|
-| QA1 | axon supported con 1 nivel válido | Pure core / adapter contract tests | PLANNED |
-| QA2 | axon partial | Pure core / adapter contract tests | PLANNED |
-| QA3 | `no-levels` | Pure core / adapter contract tests | PLANNED |
-| QA4 | `invalid-level-geometry` | Pure core / adapter contract tests | PLANNED |
-| QA5 | `degenerate-building-envelope` | Pure core / adapter contract tests | PLANNED |
-| QA6 | exploded `single-level` | Pure core / adapter contract tests | PLANNED |
-| QA7 | exploded `insufficient-valid-levels` | Pure core / adapter contract tests | PLANNED |
-| QA8 | exploded partial | Pure core / adapter contract tests | PLANNED |
-| QA9 | scope building/coverages any+building | Pure core / adapter contract tests | PLANNED |
-| QA10 | sin `ft3d5-pending` | Pure core / adapter contract tests | PLANNED |
-| QA11 | axon→axon-open | Pure core / adapter contract tests | PLANNED |
-| QA12 | exploded→exploded-levels-open | Pure core / adapter contract tests | PLANNED |
-| QA13 | primer overview elegible | Pure core / adapter contract tests | PLANNED |
-| QA14 | sin overview → no anchor inventado | Pure core / adapter contract tests | PLANNED |
-| QA15 | p0/p1 = overview | Pure core / adapter contract tests | PLANNED |
-| QA16 | una sola building-reading | Pure core / adapter contract tests | PLANNED |
-| QA17 | exploded no añade axon separado | Pure core / adapter contract tests | PLANNED |
-| QA18 | reverse/seek/replay sin drift | Unit + browser lifecycle/restore | PLANNED |
-| QA19 | Close/Escape/Back restaura | Unit + browser lifecycle/restore | PLANNED |
-| QA20 | developer automatic 2 niveles válidos → exploded | Pure core / adapter contract tests | PLANNED |
-| QA21 | developer automatic 1 nivel → compact | Pure core / adapter contract tests | PLANNED |
-| QA22 | architecture automatic → compact | Pure core / adapter contract tests | PLANNED |
-| QA23 | architecture explicit exploded → exploded si supported y puede satisfacer la alternativa volumétrica del minimumStory | Pure core / adapter contract tests | PLANNED |
-| QA24 | exploded unsupported → override disabled/rejected | Pure core / adapter contract tests | PLANNED |
-| QA25 | `off` sólo si minimumStory sigue válido | Pure core / adapter contract tests | PLANNED |
-| QA26 | `toggles` no introduce una segunda fuente de verdad para axon/exploded | Pure core / adapter contract tests | PLANNED |
-| QA27 | axon hold .5 | Pure core / adapter contract tests | PLANNED |
-| QA28 | exploded holds .22/.645 | Pure core / adapter contract tests | PLANNED |
-| QA29 | misma semántica con reduced | Pure core / adapter contract tests | PLANNED |
-| QA30 | source usa niveles estructurales, no sólo rooms | Unit + browser lifecycle/restore | PLANNED |
-| QA31 | active→all no altera snapshot | Unit + browser lifecycle/restore | PLANNED |
-| QA32 | levelView restore exacto | Unit + browser lifecycle/restore | PLANNED |
-| QA33 | site-context no adquiere host FT3D-5 | Pure core / adapter contract tests | PLANNED |
-| QA34 | preservar contexto runtime no equivale a enhancement activo | Unit + browser lifecycle/restore | PLANNED |
-| QA35 | 7000/10000 desde SCENE_MS | Pure core / adapter contract tests | PLANNED |
-| QA36 | exploded no suma axon | Pure core / adapter contract tests | PLANNED |
-| QA37 | no confundir SCENE_MS con frames/wall-clock/performance | Pure core / adapter contract tests | PLANNED |
-| QA38 | developer sin rooms + axon supported → minimum true, execution unavailable | Pure core / adapter contract tests | PLANNED |
-| QA39 | overview(building) sigue unsupported | Pure core / adapter contract tests | PLANNED |
-| QA40 | FT3D-5 no se ejecuta sin overview real | Pure core / adapter contract tests | PLANNED |
-| QA41 | equivalencia de un nivel no crea overview(building) | Pure core / adapter contract tests | PLANNED |
-| QA42 | developer multinivel | Browser + reviewed screenshot/video | PLANNED |
-| QA43 | architecture compact | Browser + reviewed screenshot/video | PLANNED |
-| QA44 | architecture explicit exploded | Browser + reviewed screenshot/video | PLANNED |
-| QA45 | exploded reverse/recompose/restore | Browser + reviewed screenshot/video | PLANNED |
-| QA46 | 390×844 y 844×390 en holds críticos | Browser + reviewed screenshot/video | PLANNED |
-| QA47 | reduced compact/exploded | Browser + reviewed screenshot/video | PLANNED |
+| QA1 | axon supported con 1 nivel válido | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA2 | axon partial | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA3 | `no-levels` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA4 | `invalid-level-geometry` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA5 | `degenerate-building-envelope` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA6 | exploded `single-level` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA7 | exploded `insufficient-valid-levels` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA8 | exploded partial | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA9 | scope building/coverages any+building | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA10 | sin `ft3d5-pending` | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA11 | axon→axon-open | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA12 | exploded→exploded-levels-open | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA13 | primer overview elegible | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA14 | sin overview → no anchor inventado | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA15 | p0/p1 = overview | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA16 | una sola building-reading | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA17 | exploded no añade axon separado | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA18 | reverse/seek/replay sin drift | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA19 | Close/Escape/Back restaura | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA20 | developer automatic 2 niveles válidos → exploded | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA21 | developer automatic 1 nivel → compact | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA22 | architecture automatic → compact | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA23 | architecture explicit exploded → exploded si supported y puede satisfacer la alternativa volumétrica del minimumStory | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA24 | exploded unsupported → override disabled/rejected | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA25 | `off` sólo si minimumStory sigue válido | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA26 | `toggles` no introduce una segunda fuente de verdad para axon/exploded | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA27 | axon hold .5 | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA28 | exploded holds .22/.645 | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA29 | misma semántica con reduced | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA30 | source usa niveles estructurales, no sólo rooms | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA31 | active→all no altera snapshot | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA32 | levelView restore exacto | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA33 | site-context no adquiere host FT3D-5 | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA34 | preservar contexto runtime no equivale a enhancement activo | Unit + browser lifecycle/restore | IMPLEMENTED; final-head rerun pending |
+| QA35 | 7000/10000 desde SCENE_MS | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA36 | exploded no suma axon | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA37 | no confundir SCENE_MS con frames/wall-clock/performance | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA38 | developer sin rooms + axon supported → minimum true, execution unavailable | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA39 | overview(building) sigue unsupported | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA40 | FT3D-5 no se ejecuta sin overview real | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA41 | equivalencia de un nivel no crea overview(building) | Pure core / adapter contract tests | IMPLEMENTED; final-head rerun pending |
+| QA42 | developer multinivel | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
+| QA43 | architecture compact | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
+| QA44 | architecture explicit exploded | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
+| QA45 | exploded reverse/recompose/restore | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
+| QA46 | 390×844 y 844×390 en holds críticos | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
+| QA47 | reduced compact/exploded | Browser + reviewed screenshot/video | FINAL VISUAL REVIEW PENDING |
