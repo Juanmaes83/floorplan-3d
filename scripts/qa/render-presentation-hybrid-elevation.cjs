@@ -16,10 +16,10 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));B.validate(b);
  const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);const duplex=path.join(await fs.mkdtemp(path.join(os.tmpdir(),'hybrid-qa-')),'duplex.zip');await fs.writeFile(duplex,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));
  await fs.mkdir(out,{recursive:true});const errors=[],external=[];
- async function page(viewport){const mobile=viewport.width<1000,ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,reducedMotion:'reduce'});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
+ async function page(viewport,{reduced=true,video=null}={}){const mobile=viewport.width<1000,ctx=await browser.newContext({viewport,deviceScaleFactor:1,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference',...(video?{recordVideo:{dir:video,size:viewport}}:{})});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
   await p.route('**/*',async r=>{const t=r.request().url();if(t.startsWith('https://cdn.jsdelivr.net/npm/three@0.160.0/'))return r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await three(t,()=>{throw Error('no local three');})});
    if(t.startsWith(url)||t.startsWith('blob:')||t.startsWith('data:'))return r.continue();external.push(t);return r.abort();});
-  await p.goto(url);await p.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanElevationHybrid,null,{timeout:60000});p.setDefaultTimeout(120000);return {p,ctx};}
+  await p.goto(url);await p.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationElevation,null,{timeout:60000});p.setDefaultTimeout(120000);return {p,ctx};}
  const frames=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
  const settled=p=>p.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
  async function setup(p,{zip,hybrid=true}){
@@ -31,11 +31,24 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open'||View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:180000});
   await at(p,0);}
  const at=async(p,v)=>{await p.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},v);await frames(p);await frames(p);};
- const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo;return {p:i?.p??null,phase:i?.phase??null,hybrid:i?.elevation?.hybrid??null};});
+ const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo,e=i?.elevation;return {p:i?.p??null,phase:i?.phase??null,facade:e?.candidateId??null,solar:e?.solarOn??null,hybrid:e?.hybrid??null,materials:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detail:m.detailState})),pendingAssets:View3D.lifecycleMetrics.pendingAssets,dpr:devicePixelRatio,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};});
  const record=async(p,file,extra)=>{await p.screenshot({path:file});manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,...extra,viewport:p.viewportSize(),state:await read(p),output:file});};
- if(scenario==='shots'){
-  const desk=[['00-overview',0],['01-align',14],['02-frontal-technical',35],['03-reveal-25',45],['04-reveal-50',48],['05-reveal-75',51],['06-full-material',56],['07-perspective',70],['08-exterior',86],['09-return',95],['10-restored-overview',100]];
-  const small=[['02-frontal-technical',35],['04-reveal-50',48],['06-full-material',56],['10-restored-overview',100]];
+ if(scenario==='off'){
+  // Hybrid OFF on the same fixture/states: comparable pixel-for-pixel with the baseline (0f9c6ea) run of this script.
+  const {p,ctx}=await page({width:1440,height:900});await setup(p,{zip:null,hybrid:false});
+  for(const [n,v] of [['00-overview',0],['02-frontal',35],['04-frontal-light',48],['06-frontal-light',56],['08-exterior',86],['10-restored',100]]){await at(p,v);await p.waitForTimeout(300);await record(p,path.join(out,`off-1440x900-${n}.png`),{scenario:'off',shot:n,slider:v});}await ctx.close();
+ }else if(scenario.startsWith('real:')){
+  // Real playback (normal motion): forward to the end of the scene, then «Volver a la vista general» plays it back.
+  const [,size]=scenario.split(':'),[W,H]=size.split('x').map(Number),vdir=path.join(out,`real-${size}`);await fs.mkdir(vdir,{recursive:true});
+  const {p,ctx}=await page({width:W,height:H},{reduced:false,video:vdir});await setup(p,{zip:null});
+  await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing,null,{timeout:180000});await at(p,0);await p.waitForTimeout(500);
+  const t0=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await p.waitForFunction(()=>(View3D.presentationStoryInfo?.p??0)>=.999||!FloorPlanPresentation.story,null,{timeout:180000});const forwardMs=Date.now()-t0;
+  await at(p,52);await p.waitForTimeout(400);const t1=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlan').click());await p.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:180000});const reverseMs=Date.now()-t1;await p.waitForTimeout(800);
+  const video=p.video();await ctx.close();const file=await video.path();
+  manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,scenario,viewport:{width:W,height:H},forwardMs,reverseMs,output:file});
+ }else if(scenario==='shots'){
+  const desk=[['00-overview',0],['01-align',14],['02-frontal-technical',35],['03-reveal-25',45],['04-reveal-50',48],['05-reveal-75',51],['06-full-material',56],['07-perspective',70],['08-exterior',86],['09-return',95],['10-restored-overview',100],['11-reverse-mid-sweep',48],['12-reverse-technical',35],['13-reverse-overview',0]];
+  const small=[['02-frontal-technical',35],['03-reveal-25',45],['04-reveal-50',48],['06-full-material',56],['10-restored-overview',100]];
   const plan=[{name:'example-1440x900',zip:null,size:[1440,900],at:desk},{name:'example-off-1440x900',zip:null,size:[1440,900],hybrid:false,at:[['02-frontal',35],['06-frontal-light',56]]},
    {name:'duplex-1440x900',zip:duplex,size:[1440,900],at:desk},{name:'example-390x844',zip:null,size:[390,844],at:small},{name:'example-844x390',zip:null,size:[844,390],at:small}];
   const only=process.env.HYBRID_ONLY?new RegExp(process.env.HYBRID_ONLY):null;

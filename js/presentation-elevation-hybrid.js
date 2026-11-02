@@ -15,10 +15,24 @@
      reference (single or array) back otherwise and at end. Glass/transparent materials are left untouched.
    - clones share clipping plane arrays with their source, sync map/normalMap/roughnessMap/colour from the source when
      SurfaceRenderer finishes loading late, and are the only resources disposed here.
-   UMD: browser global FloorPlanElevationHybrid; CommonJS for the pure parts (tests). */
+   UMD: browser global FloorPlanElevationHybrid; CommonJS for the pure parts (tests).
+
+   The shader section below (lineAt/lineFade, shadow-mask hatch, sweep smoothstep, front band, paper composite) is
+   derived from Sam1983Aing/flat-to-3d @ d7b9b69753d3af679535ee56695a05c8d955c3c6, 07-sunlit-elevation/engine/elevation.js:
+   MIT License — Copyright (c) 2026 Samnang Aing
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+   documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+   rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+   persons to whom the Software is furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+   Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+   WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+   COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanElevationHybrid=api;})(typeof self!=='undefined'?self:this,function(){
  'use strict';
- const HYBRID={version:1,paper:0xf2efe7,ink:0x1d1c19,accent:0x1f6f6a,minPeriodM:.11,maxPeriodM:.4,linesAcross:55,minTargets:1,minWallShare:.5,cacheKey:'rubik-hybrid-elevation-v1',
+ const HYBRID={version:1,paper:0xf2efe7,ink:0x1d1c19,accent:0x1f6f6a,minPeriodM:.11,maxPeriodM:.4,linesAcross:55,edgeAngleDeg:25,minTargets:1,minWallShare:.5,cacheKey:'rubik-hybrid-elevation-v1',
   REASONS:{'no-candidate':'No hay fachada derivada.','no-targets':'No se encontraron los muros de la fachada en la escena.','insufficient-targets':'La escena no contiene suficientes muros de la fachada.',
    'unsupported-material':'Un material de la fachada no admite la representación híbrida.','shader-unavailable':'El navegador no admite el sombreado necesario.','shader-error':'El sombreado híbrido no compiló.'}};
  const keyOf=(levelId,id)=>JSON.stringify([levelId??null,id]);
@@ -64,8 +78,7 @@
  }
 
  /* ── Shader: sculpted from the donor stone (Sam1983Aing/flat-to-3d @ d7b9b69, 07-sunlit-elevation/engine/elevation.js,
-    MIT, Copyright (c) 2026 Samnang Aing — notice in the file header of docs/product/provenance/…-donor-provenance.md and
-    below). Kept from the donor: lineAt / lineFade (pixel-width ink lines with a density fade, no moiré), the sweep
+    MIT, Copyright (c) 2026 Samnang Aing — full notice in the file header). Kept from the donor: lineAt / lineFade (pixel-width ink lines with a density fade, no moiré), the sweep
     smoothstep of revealAt, the laser + halo of frontBand, the hatch read from the shadow map (shade = 1 − shadow mask ·
     smoothstep(N·sun)), the paper composite after dithering. Changed for Rubik: the sweep, hatch and band coordinates are
     façade-local (facade centre / tangent / normal of FloorPlanPresentationElevation) instead of donor world xy; the sun
@@ -97,7 +110,7 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
 float hybridLineAt(float c,float period,float px){float t=c/period,fw=max(fwidth(t),1e-5);float d=abs(fract(t)-0.5);float hw=0.5*px*fw;return 1.0-smoothstep(hw,hw+fw,0.5-d);}
 float hybridLineFade(float c,float period,float minPx){float px=period/max(fwidth(c),1e-5);return smoothstep(minPx,minPx*1.8,px);}
 float hybridFrontBand(vec3 l){float sd=hybridSweepS(l)-uHybridSweep.z;float w=max(uHybridSweep.w,0.45);
- return clamp(exp(-pow(sd/(w*0.11),2.0))+exp(-pow(sd/(w*0.55),2.0))*0.34,0.0,1.0);}
+ return clamp(exp(-pow(sd/(w*0.11),2.0))+exp(-pow(sd/(w*0.32),2.0))*0.26,0.0,1.0);}
 // façade-plane coordinates of a surface: the face's own plane (front faces: a/b, returns: c/b, horizontal: a/c)
 vec2 hybridPlaneUV(vec3 l,vec3 n){vec3 an=vec3(abs(dot(n,uHybridTangent)),abs(n.y),abs(dot(n,uHybridNormal)));if(an.y>0.7)return l.xz;return an.x>an.z?vec2(l.z,l.y):vec2(l.x,l.y);}
 `;
@@ -117,10 +130,26 @@ vec2 hybridPlaneUV(vec3 l,vec3 n){vec3 an=vec3(abs(dot(n,uHybridTangent)),abs(n.
   float rv=hybridReveal(hl3);
   vec3 hybridOut=mix(col,gl_FragColor.rgb,rv);
   float fb=uHybridSweep.z>-1e3&&uHybridSweep.z<1e3?hybridFrontBand(hl3):0.0;
-  hybridOut=mix(hybridOut,uHybridAccent,clamp(fb*0.7,0.0,0.85));
+  hybridOut=mix(hybridOut,uHybridAccent,clamp(fb*0.8,0.0,0.9));
   gl_FragColor.rgb=mix(gl_FragColor.rgb,hybridOut,uHybridTech);
  }
 `;
+ // Ink contours (the donor's drafted lines, here derived from the target meshes' own geometry — EdgesGeometry — so they
+ // are the same façade, never a second model): visible in the technical part only, cut by the same registered sweep.
+ const LINE_FRAG_HEAD=`varying vec3 vHybridWP;
+uniform float uHybridTech;
+uniform vec4 uHybridSweep;
+uniform vec3 uHybridCenter;
+uniform vec3 uHybridTangent;
+uniform vec3 uHybridNormal;
+vec3 hybridLocal(vec3 p){vec3 q=p-uHybridCenter;return vec3(dot(q,uHybridTangent),q.y,dot(q,uHybridNormal));}
+float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,uHybridSweep.z+uHybridSweep.w,dot(l.xy,uHybridSweep.xy));}
+`;
+ function patchLine(shader,U){
+  Object.assign(shader.uniforms,U);
+  shader.vertexShader='varying vec3 vHybridWP;\n'+shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\n vHybridWP=(modelMatrix*vec4(transformed,1.0)).xyz;');
+  shader.fragmentShader=LINE_FRAG_HEAD+shader.fragmentShader.replace('#include <opaque_fragment>','#include <opaque_fragment>\n gl_FragColor.a*=uHybridTech*(1.0-hybridReveal(hybridLocal(vHybridWP)));');
+ }
  function patch(shader,U){
   Object.assign(shader.uniforms,U);
   shader.vertexShader=VERT_HEAD+shader.vertexShader.replace('#include <worldpos_vertex>',VERT_BODY);
@@ -151,23 +180,30 @@ vec2 hybridPlaneUV(vec3 l,vec3 n){vec3 an=vec3(abs(dot(n,uHybridTangent)),abs(n.
    uHybridSun:{value:new THREE.Vector3(...(sun||[0,1,0])).normalize()},uHybridCenter:{value:new THREE.Vector3(...frame.center)},uHybridTangent:{value:new THREE.Vector3(...frame.tangent)},uHybridNormal:{value:new THREE.Vector3(...frame.normal)},
    uHybridPaper:{value:hex(HYBRID.paper)},uHybridInk:{value:hex(HYBRID.ink)},uHybridAccent:{value:hex(HYBRID.accent)},uHybridPeriod:{value:periodFor(frame.width)},uHybridLinePx:{value:1.05*Math.max(1,linePx)}};
   const clones=new Map(); // source material → presentation clone
+  const lineMat=new THREE.LineBasicMaterial({color:HYBRID.ink,transparent:true,depthWrite:false});lineMat.userData.hybridPresentation=true;
+  lineMat.onBeforeCompile=shader=>patchLine(shader,U);lineMat.customProgramCacheKey=()=>HYBRID.cacheKey+'-line';
+  const edges=new Map(); // geometry → EdgesGeometry (presentation-owned)
+  const lines=[]; // {line, parent}
   const records=[]; // {mesh, kind, original, hybrid}
-  const ctl={frame,uniforms:U,clones,records,swapped:false,state:null,created:0,disposed:0,syncs:0};
+  const ctl={frame,uniforms:U,clones,records,lines,edges,swapped:false,state:null,created:0,disposed:0,syncs:0,edgesDisposed:0,lineMaterialDisposed:false};
   function cloneOf(src){
    if(transparent(src))return src;
    let c=clones.get(src);if(c)return c;
-   c=src.clone();c.clippingPlanes=src.clippingPlanes;c.userData={...c.userData,hybridPresentation:true,hybridSource:src.uuid};
+   c=src.clone();c.clippingPlanes=src.clippingPlanes;c.polygonOffset=true;c.polygonOffsetFactor=1;c.polygonOffsetUnits=1;c.userData={...c.userData,hybridPresentation:true,hybridSource:src.uuid};
    c.extensions={...(c.extensions||{}),derivatives:true};c.onBeforeCompile=shader=>patch(shader,U);c.customProgramCacheKey=()=>HYBRID.cacheKey;
    clones.set(src,c);ctl.created++;return c;
   }
+  function unline(){for(const l of lines)l.parent.remove(l.line);lines.length=0;}
   function bind(list){
-   records.length=0;
-   for(const t of list){const original=t.mesh.material;records.push({mesh:t.mesh,kind:t.kind,original,hybrid:Array.isArray(original)?original.map(cloneOf):cloneOf(original)});}
+   records.length=0;unline();
+   for(const t of list){const original=t.mesh.material;records.push({mesh:t.mesh,kind:t.kind,original,hybrid:Array.isArray(original)?original.map(cloneOf):cloneOf(original)});
+    if(!t.mesh.geometry)continue;let g=edges.get(t.mesh.geometry);if(!g){g=new THREE.EdgesGeometry(t.mesh.geometry,HYBRID.edgeAngleDeg);edges.set(t.mesh.geometry,g);ctl.edgesCreated=(ctl.edgesCreated||0)+1;}
+    const line=new THREE.LineSegments(g,lineMat);line.userData.hybridPresentation=true;line.visible=false;line.renderOrder=2;t.mesh.add(line);lines.push({line,parent:t.mesh});}
   }
   bind(targets.meshes);
   ctl.attached=isIn=>records.every(r=>isIn(r.mesh));
   ctl.rebind=list=>{const was=ctl.swapped;if(was)ctl.swap(false);bind(list);if(was)ctl.swap(true);};
-  ctl.swap=on=>{if(ctl.swapped===on)return;for(const r of records)r.mesh.material=on?r.hybrid:r.original;ctl.swapped=on;};
+  ctl.swap=on=>{if(ctl.swapped===on)return;for(const r of records)r.mesh.material=on?r.hybrid:r.original;for(const l of lines)l.line.visible=on;ctl.swapped=on;};
   // A source material that SurfaceRenderer finished later (maps, colour) is mirrored into its clone, never the reverse.
   ctl.sync=()=>{for(const [src,c] of clones){let changed=false;for(const k of SYNC)if(c[k]!==src[k]){c[k]=src[k];changed=true;}
    if(!c.color.equals(src.color)){c.color.copy(src.color);changed=true;}if(c.roughness!==src.roughness||c.metalness!==src.metalness){c.roughness=src.roughness;c.metalness=src.metalness;changed=true;}
@@ -180,8 +216,9 @@ vec2 hybridPlaneUV(vec3 l,vec3 n){vec3 an=vec3(abs(dot(n,uHybridTangent)),abs(n.
    U.uHybridTech.value=on?h.technicalMix:0;U.uHybridHatch.value=on?h.hatchStrength:0;U.uHybridSweep.value.z=on?sweepZ(frame,h.materialReveal):1e4;
    if(on)ctl.sync();ctl.swap(on);
   };
-  ctl.end=()=>{ctl.swap(false);for(const r of records)r.mesh.material=r.original;records.length=0;for(const c of clones.values()){c.dispose();ctl.disposed++;}clones.clear();ctl.state=null;};
-  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
+  ctl.end=()=>{ctl.swap(false);for(const r of records)r.mesh.material=r.original;records.length=0;unline();for(const c of clones.values()){c.dispose();ctl.disposed++;}clones.clear();
+   for(const g of edges.values()){g.dispose();ctl.edgesDisposed++;}ctl.edgesCreated=ctl.edgesCreated||0;edges.clear();lineMat.dispose();ctl.lineMaterialDisposed=true;ctl.state=null;};
+  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
    state:ctl.state&&{...ctl.state},uniforms:{tech:U.uHybridTech.value,hatch:U.uHybridHatch.value,sweepZ:U.uHybridSweep.value.z,sweepSoft:U.uHybridSweep.value.w,period:U.uHybridPeriod.value,sun:U.uHybridSun.value.toArray()},
    frame:{...frame,center:[...frame.center],tangent:[...frame.tangent],normal:[...frame.normal]}});
   return ctl;
