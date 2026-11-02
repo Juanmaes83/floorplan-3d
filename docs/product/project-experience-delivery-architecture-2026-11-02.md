@@ -39,6 +39,10 @@ PDF · raster · vector · DXF · compatible project/building packages · tracin
  materials       layout review,       prices, VAT,      FT3D capabilities
  furniture       solar/context,       BC3, economic     deterministic narratives
  variants        professional facts   presentation      over the same model
+                                                          │
+                                                          ├─ contextual professional information
+                                                          ├─ registered representation transitions
+                                                          └─ semantic timelines only when real domain data exists
         │               │                  │                   │
         └───────────────┴──────────────────┴───────────────────┘
                                 │
@@ -59,6 +63,8 @@ Rubik truth → Blender / higher-end rendering → AI audiovisual (later premium
 ```
 
 The arrows express dependency and authority, not a required user journey. A professional may move between Design, Analyze, Budget, Presentation and Deliver as needed.
+
+The three indented `EXPERIENCE` lines are **experience principles / possible landing patterns**, not claims that all three are already implemented as Rubik capabilities. Their detailed constraints are documented in `docs/product/presentation-experience-principles-2026-11-02.md`.
 
 ## 3. Current product zones
 
@@ -114,11 +120,23 @@ The Story contract is especially important: narratives are deterministic functio
 
 FT3D-6 lives **inside the existing Presentation system**. It resolves professional templates against available capabilities; it is not a second story engine or renderer.
 
+#### Experience principles carried into future reconciliation
+
+Supplemental donor visual evidence makes three distinctions important for future experience work. They are principles/hypotheses to test against the complete runtime audit, not current capability claims:
+
+1. **Contextual professional information can be part of the spatial experience.** A presentation may explain the room/material/façade/phase being shown using real Rubik data, instead of being only camera choreography.
+2. **Technical and realistic/material representation may coexist in a registered intermediate state.** The useful property is continuity of the same project while representation changes, not merely a fade between unrelated endpoint images.
+3. **Timeline/construction experiences require semantic data.** Presentation may visualize time/programme/activity/affected elements, but must not invent a professional schedule because geometry can be animated.
+
+Detailed constraints, evidence limits and non-goals live in `docs/product/presentation-experience-principles-2026-11-02.md`.
+
 ### 3.7 Delivery
 
 `Entregar` is an existing product layer, not a future placeholder. Its detailed current capability inventory is documented separately so that implementation audits do not classify established delivery services as missing.
 
 At architecture level, Delivery consumes project facts plus generated professional representations and packages them for professional/client use. Delivery must not invent a second geometry authority.
+
+A future experience capability may flow downstream into existing prepared views, images, video, dossier or client delivery without becoming a new top-level Delivery service.
 
 ### 3.8 Client review and continuity
 
@@ -158,6 +176,9 @@ Blender and later audiovisual AI may improve representation, but they must not s
 8. **Service names matter more than file formats.** The product should expose professional outcomes; PDF/PNG/JSON/WebM/HTML are implementation/output formats underneath them.
 9. **Mobile-first remains a Rubik requirement.** Donor/reference limitations do not define Rubik's target UX.
 10. **This architecture is not a roadmap.** Reuse, grouping, prioritisation and implementation require separate evidence and human approval.
+11. **Professional explanation can be synchronized with space.** Contextual UI must use real project/professional data and make its referent clear.
+12. **Representation continuity matters.** Technical/material/realistic states may coexist, but must remain registered to the same project authority and preserve continuity invariants.
+13. **Semantic timelines cannot be fabricated.** Programme/time/phase visualizations require real or explicitly authored domain semantics; presentation may consume those semantics, not invent them.
 
 ## 6. Evidence paths reviewed for this note
 
@@ -171,5 +192,7 @@ The 2026-11-02 review checked the current `master` implementations represented b
 - budget: `js/quantity-*`, `js/budget-*`, cost providers, BC3/FIEBDC-3 modules;
 - delivery/client: `js/professional-workspace-ui.js`, `js/surface-sheet-ui.js`, `js/sheet-ui.js`, `js/project-dossier-ui.js`, `js/economic-dossier-*`, `js/client-share-ui.js`, `js/review-notes-*`, `js/share-link-ui.js`, `js/project-package.js`, `js/brand-*`;
 - augmented output: `js/ai-render-ui.js`, `js/delivery-image.js`.
+
+Supplemental visual observations from donor/reference screenshots are indexed separately in `docs/product/evidence/donor-visual-observations-2026-11-02/manifest.md`; their repository image paths/hashes remain pending until the screenshot assets are uploaded. Those observations inform experience principles but do not replace runtime/source evidence.
 
 This file should be revised when product authority or layer boundaries change materially; it should not be rewritten merely because an individual UI label moves.
