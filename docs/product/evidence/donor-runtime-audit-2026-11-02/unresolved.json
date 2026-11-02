@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.global-unresolved.v1",
+  "status": "KNOWN_UNKNOWNS_EXPLICIT",
+  "items": [
+    {
+      "id": "U-01-a-the-board-01",
+      "takeId": "01-a-the-board",
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal camera, material and geometry object state after donor B→A was not passively exposed; visual equivalence is observed, exact identity is not proven.",
+      "attempts": [
+        "Clean context A0/A1 screenshots at three viewports",
+        "Continuous reverse WebM",
+        "Passive scroll/HUD/route telemetry",
+        "Donor source absolute evaluator review"
+      ],
+      "evidenceNeeded": "Passive read-only object-state snapshot or narrowly scoped REA/probe if a future decision requires internal restore proof.",
+      "source": "takes/01-a-the-board/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-01-b-unfolded-room-01",
+      "takeId": "01-b-unfolded-room",
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal object identity and resource state after donor B→A were not passively exposed; visual equivalence, scroll and route return were observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "A0/A1 visual comparison",
+        "Reverse video and telemetry",
+        "Absolute update/source inspection"
+      ],
+      "evidenceNeeded": "Read-only scoped object/resource snapshot if a later technical decision requires identity-level restore proof.",
+      "source": "takes/01-b-unfolded-room/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-01-c-floor-by-floor-01",
+      "takeId": "01-c-floor-by-floor",
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal donor object/resource identity after B→A is not passively exposed; visual equivalence and route/scroll return are observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "Continuous reverse video and telemetry",
+        "Source absolute evaluator review"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource snapshot if a later technical question requires identity-level restore proof.",
+      "source": "takes/01-c-floor-by-floor/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-01-c-floor-by-floor-02",
+      "takeId": "01-c-floor-by-floor",
+      "severity": "NON_BLOCKING",
+      "question": "The donor roof group also lands at .80–.90 in source, but its motion is occluded by the interior camera; no distinct roof milestone is claimed from runtime.",
+      "attempts": [
+        "Full desktop/portrait/landscape videos",
+        "5% safety samples",
+        "Pinned source LAND intervals"
+      ],
+      "evidenceNeeded": "A separately justified view of the roof during the same progress interval if roof motion becomes essential to a future decision.",
+      "source": "takes/01-c-floor-by-floor/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-02-demo-section-sweep-01",
+      "takeId": "02-demo-section-sweep",
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor render-target, shader and shadow resource identity after natural B→A is not passively observable; visual, camera/chapter/scanX/front and scroll/route restore are observed.",
+      "attempts": [
+        "A0/A1 screenshots at all three viewports",
+        "continuous reverse video and corrected passive runtime telemetry",
+        "source story/update/real review"
+      ],
+      "evidenceNeeded": "A narrowly scoped read-only resource snapshot if identity-level lifecycle proof becomes necessary.",
+      "source": "takes/02-demo-section-sweep/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-02-demo-section-sweep-02",
+      "takeId": "02-demo-section-sweep",
+      "severity": "NON_BLOCKING",
+      "question": "The handoff from drawn sun angle to volumetric beam is source-confirmed but its precise optical timing cannot be isolated from the available frames without a targeted light pass.",
+      "attempts": [
+        "Full Discovery and semantic video",
+        "5-percent samples and room keyframes",
+        "README/main.js/draw.js/real.js review"
+      ],
+      "evidenceNeeded": "Targeted time-sensitive frames around scanX crossing south glazing and passive shaft-state telemetry if a light-specific decision depends on it.",
+      "source": "takes/02-demo-section-sweep/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-03-a-open-the-lens-01",
+      "takeId": "03-a-open-the-lens",
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor camera/material/cap/shadow object identities after B→A are not passively observable; visually equivalent A0/A1, route/hash and scroll are observed.",
+      "attempts": [
+        "stable-start corrected A0/A1 screenshots",
+        "continuous reverse video at all viewports",
+        "pinned page.js/engine.js state update and cap lifecycle review"
+      ],
+      "evidenceNeeded": "Narrow read-only donor object-state probe if identity-level restoration becomes essential.",
+      "source": "takes/03-a-open-the-lens/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-03-a-open-the-lens-02",
+      "takeId": "03-a-open-the-lens",
+      "severity": "NON_BLOCKING",
+      "question": "A section-facing room tour and editorial service copy have possible professional value, but Rubik product suitability is not decided by this audit.",
+      "attempts": [
+        "full runtime and source inspection",
+        "Cut/Atlas crosswalk",
+        "Rubik current capability inspection"
+      ],
+      "evidenceNeeded": "Later human product review using the complete 7-group audit.",
+      "source": "takes/03-a-open-the-lens/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-03-c-down-the-stair-01",
+      "takeId": "03-c-down-the-stair",
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor camera/material/cap/shadow object identity after reverse is not passively exposed, despite visual geometry return and observed DOM residue.",
+      "attempts": [
+        "clean A0/A1 screenshots in three viewports",
+        "passive body/HUD snapshots",
+        "continuous reverse video",
+        "pinned page.js and engine.js lifecycle inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource snapshot only if identity-level proof becomes necessary.",
+      "source": "takes/03-c-down-the-stair/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-03-c-down-the-stair-02",
+      "takeId": "03-c-down-the-stair",
+      "severity": "NON_BLOCKING",
+      "question": "Product suitability of the donor-authored vertical tour is undecided by this audit.",
+      "attempts": [
+        "three-viewport runtime review",
+        "pinned PLAN.c/source inspection",
+        "Cut/Atlas and current Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Later human product review after all 14 takes.",
+      "source": "takes/03-c-down-the-stair/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-04-demo-build-time-lapse-01",
+      "takeId": "04-demo-build-time-lapse",
+      "severity": "NON_BLOCKING",
+      "question": "The cause of the programme rect moving outside the desktop viewport after reverse, and hidden render-resource identity, are not established from passive captures.",
+      "attempts": [
+        "stable A0/A1 screenshots in three viewports",
+        "natural reverse videos",
+        "pinned programme.js/main.js inspection",
+        "separate desktop 2.5-second settled correction with passive programme rect and opacity"
+      ],
+      "evidenceNeeded": "A narrow read-only computed-style/transform trace only if root-cause attribution becomes necessary; do not infer hidden WebGL resource identity from screenshots.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-04-demo-build-time-lapse-02",
+      "takeId": "04-demo-build-time-lapse",
+      "severity": "NON_BLOCKING",
+      "question": "Whether Rubik should offer an illustrative sequence or a real planned/actual construction domain is a later product/contract decision.",
+      "attempts": [
+        "three-viewport runtime audit",
+        "pinned donor source",
+        "Cut4 D16/D17",
+        "frozen Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Human product decision after all 14 take audits; no implementation authorized here.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-05-a-the-programme-01",
+      "takeId": "05-a-the-programme",
+      "severity": "NON_BLOCKING",
+      "question": "Hidden WebGL resource identity and the few-millisecond interior camera smoothing tail after returning to week zero are not established by screenshots.",
+      "attempts": [
+        "three independent virtual-week Discovery reverses",
+        "passive SHOT/TOUR telemetry",
+        "A0/A1 visual comparison"
+      ],
+      "evidenceNeeded": "Narrow resource or camera inspection only if exact hidden lifecycle identity becomes necessary; current visible restoration is supported.",
+      "source": "takes/05-a-the-programme/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-05-a-the-programme-02",
+      "takeId": "05-a-the-programme",
+      "severity": "NON_BLOCKING",
+      "question": "Should Rubik support illustrative construction playback or a real editable planned/actual schedule?",
+      "attempts": [
+        "three-viewport donor runtime",
+        "pinned source",
+        "Cut4 D18",
+        "frozen Rubik C1-C4 crosswalk"
+      ],
+      "evidenceNeeded": "Product contract decision after the fourteen-take audit; no implementation authorized.",
+      "source": "takes/05-a-the-programme/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-05-b-1-1-site-sheet-01",
+      "takeId": "05-b-1-1-site-sheet",
+      "severity": "NON_BLOCKING",
+      "question": "Hidden WebGL resource identity and exact camera pose history after reverse are not passively observable.",
+      "attempts": [
+        "three natural Discovery reverses",
+        "SHOT/week telemetry",
+        "A0/A1 visual comparison"
+      ],
+      "evidenceNeeded": "Narrow camera/resource inspection only if exact internal lifecycle identity becomes necessary.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-05-b-1-1-site-sheet-02",
+      "takeId": "05-b-1-1-site-sheet",
+      "severity": "NON_BLOCKING",
+      "question": "Whether a spatial site sheet provides enough professional value in Rubik remains a product decision.",
+      "attempts": [
+        "three-viewport runtime",
+        "pinned source",
+        "Cut4 D18 and Global",
+        "frozen Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Human review after fourteen-take evidence set; no implementation authorized.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-05-c-site-camera-01",
+      "takeId": "05-c-site-camera",
+      "severity": "NON_BLOCKING",
+      "question": "Exact camera pose history and WebGL resource identity after reverse remain passively unobserved.",
+      "attempts": [
+        "three natural C reverses",
+        "week/shot/tour telemetry",
+        "A0/A1 visual comparison"
+      ],
+      "evidenceNeeded": "Narrow renderer/camera inspection only if exact hidden lifecycle identity becomes necessary.",
+      "source": "takes/05-c-site-camera/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-05-c-site-camera-02",
+      "takeId": "05-c-site-camera",
+      "severity": "NON_BLOCKING",
+      "question": "Professional value of a site-camera story versus a real site-progress service requires human product review.",
+      "attempts": [
+        "three-viewport runtime",
+        "pinned C source",
+        "Cut4 D18 and Global",
+        "frozen Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Review after the fourteen-reference audit; no implementation authorized.",
+      "source": "takes/05-c-site-camera/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-06-demo-card-model-01",
+      "takeId": "06-demo-card-model",
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor WebGL object, material, shadow and postprocess resource identities after reverse cannot be proven from passive runtime evidence.",
+      "attempts": [
+        "stable-start corrected A0/A1 screenshots in all viewports",
+        "continuous A→B→A video and NDJSON",
+        "pinned page.js/sweep.js lifecycle inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later acceptance criterion.",
+      "source": "takes/06-demo-card-model/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-06-demo-card-model-02",
+      "takeId": "06-demo-card-model",
+      "severity": "NON_BLOCKING",
+      "question": "Professional usefulness and appropriate product placement of the card-to-real presentation are not decided by donor runtime.",
+      "attempts": [
+        "three-viewport runtime sequence",
+        "donor README/source",
+        "Cut3 D14/D15 and Global dispositions",
+        "frozen Rubik capability crosswalk"
+      ],
+      "evidenceNeeded": "Human review of all 14 audited references and Rubik service needs; no bridge implementation authorized.",
+      "source": "takes/06-demo-card-model/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-07-a-one-door-01",
+      "takeId": "07-a-one-door",
+      "severity": "NON_BLOCKING",
+      "question": "Passive evidence does not prove donor GPU material/shadow-map/resource identity after reverse.",
+      "attempts": [
+        "A0/A1 screenshots, route/scroll/HUD equality in all viewports",
+        "continuous reverse WebM/telemetry",
+        "pinned page.js and engine/elevation.js absolute-state inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource identity probe if later acceptance requires internal identity.",
+      "source": "takes/07-a-one-door/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-07-a-one-door-02",
+      "takeId": "07-a-one-door",
+      "severity": "NON_BLOCKING",
+      "question": "Professional value and placement of this experience among 14 references remain a later product decision.",
+      "attempts": [
+        "three-viewport observed sequence",
+        "pinned README/source",
+        "Cut1 D07, Cut3 D19 and Global reconciliation"
+      ],
+      "evidenceNeeded": "Human review after full 14-reference audit; no bridge authorized here.",
+      "source": "takes/07-a-one-door/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-07-b-the-row-01",
+      "takeId": "07-b-the-row",
+      "severity": "NON_BLOCKING",
+      "question": "Passive reverse does not prove internal donor GPU/shadow-map resource identity.",
+      "attempts": [
+        "three A0/A1 screenshots and NDJSON",
+        "continuous reverse video",
+        "pinned frame/engine source"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if internal identity later matters.",
+      "source": "takes/07-b-the-row/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-07-b-the-row-02",
+      "takeId": "07-b-the-row",
+      "severity": "NON_BLOCKING",
+      "question": "Current Rubik data does not establish whether six independently marketable plots belong in one authoritative presentation service.",
+      "attempts": [
+        "frozen Building/project/library inspection",
+        "donor six-plot authored data",
+        "Cut/Global crosswalk"
+      ],
+      "evidenceNeeded": "Human product/data authority decision after all 14 references; no implementation in this audit.",
+      "source": "takes/07-b-the-row/manifest.json#unresolved/1"
+    },
+    {
+      "id": "U-07-c-the-face-01",
+      "takeId": "07-c-the-face",
+      "severity": "NON_BLOCKING",
+      "question": "Passive evidence does not prove internal donor GPU/shadow-map resource identity after reverse.",
+      "attempts": [
+        "three A0/A1 screenshots and reverse telemetry/video",
+        "pinned absolute-state source",
+        "corrected semantic videos"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later requirement.",
+      "source": "takes/07-c-the-face/manifest.json#unresolved/0"
+    },
+    {
+      "id": "U-07-c-the-face-02",
+      "takeId": "07-c-the-face",
+      "severity": "NON_BLOCKING",
+      "question": "Whether a verified Rubik facade material specification can support this professional sample-panel service remains a later product/data decision.",
+      "attempts": [
+        "donor authored brand/spec source",
+        "runtime relief/shadow sequence",
+        "Cut3/Global D19 and frozen Rubik inspection"
+      ],
+      "evidenceNeeded": "Human review after all references; no bridge implementation authorized.",
+      "source": "takes/07-c-the-face/manifest.json#unresolved/1"
+    }
+  ]
+}

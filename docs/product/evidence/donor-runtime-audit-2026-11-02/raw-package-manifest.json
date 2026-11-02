@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.raw-package.v1",
+  "status": "LOCAL_VERIFIED_NOT_UPLOADED",
+  "packagePath": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02.zip",
+  "format": "ZIP_STORED_ZIP64",
+  "bytes": 3435687200,
+  "sha256": "80b0cb67fe140d5ccf2a33b6d1e4a4a768581a1cb7cdc3309b305fc8e7a6c5ee",
+  "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
+  "rawFileCount": 2710,
+  "rawBytes": 3435107182,
+  "rawPackageContentSha256": "8a495d4623f819d0af961bf250681ec28653b73c622d2e09dec731d6f4e6660c",
+  "rawInventorySha256": "04430525c56e65c4ca1c3352f20932896b926242dc1567f93f23df427b00c39f",
+  "memberPathsAndCRCsVerified": true,
+  "originalRawPreserved": true,
+  "remoteBinaryBackup": "NOT_UPLOADED",
+  "note": "ZIP is outside Git and does not alter the original RAW folder. Git carries per-file hashes and nonvideo evidence."
+}

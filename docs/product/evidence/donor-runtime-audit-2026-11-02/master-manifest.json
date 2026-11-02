@@ -1,0 +1,473 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.master.v1",
+  "status": "READY_FOR_GLOBAL_VALIDATOR",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "rubikBaselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+  "expectedReferences": 14,
+  "validatedReferences": 14,
+  "individualHardGatesPassed": 294,
+  "individualHardGatesExpected": 294,
+  "blockingUnresolvedCount": 0,
+  "nonBlockingUnresolvedCount": 26,
+  "donorLimitationTakeCount": 12,
+  "rawPackage": {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02.zip",
+    "sha256": "80b0cb67fe140d5ccf2a33b6d1e4a4a768581a1cb7cdc3309b305fc8e7a6c5ee",
+    "bytes": 3435687200,
+    "contentSha256": "8a495d4623f819d0af961bf250681ec28653b73c622d2e09dec731d6f4e6660c"
+  },
+  "references": [
+    {
+      "id": "01-a-the-board",
+      "index": 1,
+      "group": "01 · EXPLODED HOUSE",
+      "take": "A · THE BOARD",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/01-a-the-board/manifest.json",
+      "manifestSha256": "a243887a5902a50d17dc6a20f5230aaed5b1ec40c82a94e5217ed5d521f54b88",
+      "validatedAt": "2026-11-02T12:41:51.325Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Helps a client or reviewer understand how an authored timber-house assembly relates to a walkable finished space.",
+      "serviceOutcome": "An annotated component assembly becomes one continuous interior visit through the east threshold, living area and loft.",
+      "decisionValue": "Supports discussion of assembly intent and spatial relationships in this study; it does not certify a construction sequence or structural specification.",
+      "technicalReuse": [
+        "ADAPT_EXISTING"
+      ],
+      "gaps": [
+        "PRODUCT_DECISION_REQUIRED",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 1
+    },
+    {
+      "id": "01-b-unfolded-room",
+      "index": 2,
+      "group": "01 · EXPLODED HOUSE",
+      "take": "B · UNFOLDED ROOM",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/01-b-unfolded-room/manifest.json",
+      "manifestSha256": "c04e65fe5e9def0f823549315cb1fa14385c1a0ae2d410e9493d6b7588379b14",
+      "validatedAt": "2026-11-02T12:54:43.967Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior.",
+      "serviceOutcome": "A developed room drawing folds around its real pictured floor, then a camera passes through the same door to inspect kitchen and window bench.",
+      "decisionValue": "Supports discussion of spatial relationships and design intent in this study; printed dimensions, north and finish codes are authored demo content, not certified project data.",
+      "technicalReuse": [
+        "REIMPLEMENT_MECHANISM"
+      ],
+      "gaps": [
+        "PRODUCT_DECISION_REQUIRED",
+        "REPRESENTATION_GAP",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 1
+    },
+    {
+      "id": "01-c-floor-by-floor",
+      "index": 3,
+      "group": "01 · EXPLODED HOUSE",
+      "take": "C · FLOOR BY FLOOR",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/01-c-floor-by-floor/manifest.json",
+      "manifestSha256": "b65996de63e3572800afaaf2d9946ff229df7f92b6ee1f471729d9d888cc6152",
+      "validatedAt": "2026-11-02T13:25:28.812Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer.",
+      "serviceOutcome": "An exploded building stacks from the ground upward, holds an upper-level gap to reveal the studio, then lowers the overhead plate as the camera traverses that same floor.",
+      "decisionValue": "Clarifies spatial relationship between levels and occupied studio in this study; the apparent weekly construction sequence, stretched core and roof garden are authored demo claims rather than Rubik project facts.",
+      "technicalReuse": [
+        "REUSE_EXISTING",
+        "UNRESOLVED"
+      ],
+      "gaps": [
+        "NO_GAP",
+        "INTEGRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "02-demo-section-sweep",
+      "index": 4,
+      "group": "02 · SECTION SWEEP",
+      "take": "DEMO",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/02-section-sweep/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/02-demo-section-sweep/manifest.json",
+      "manifestSha256": "393ab60d551b1273e90c1be69467270b780b7ba13a93c217d804a546b70a58e7",
+      "validatedAt": "2026-11-02T13:50:38.773Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Helps an architect explain how a section drawing relates to occupied rooms, vertical movement and the garden-facing exterior of the same house.",
+      "serviceOutcome": "A technical section gains depth and material, the viewer follows a continuous route through upper, entrance and garden levels, then returns to the original sheet.",
+      "decisionValue": "Supports discussion of spatial organization and the relationship between a drawing and lived rooms. The authored house, furniture, sun dates and CTA are donor-specific claims, not transferable Rubik project facts.",
+      "technicalReuse": [
+        "REIMPLEMENT_MECHANISM",
+        "ADAPT_EXISTING",
+        "CONNECT_EXISTING"
+      ],
+      "gaps": [
+        "REPRESENTATION_GAP",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "03-a-open-the-lens",
+      "index": 5,
+      "group": "03 · OPEN SECTION",
+      "take": "A · OPEN THE LENS",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/03-a-open-the-lens/manifest.json",
+      "manifestSha256": "947a27cbfdbcbd614e8f115766012ebce38c00dc8cb940d60670b750ad7f85f5",
+      "validatedAt": "2026-11-02T14:55:38.427Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Helps an architect explain what rooms and vertical movement lie behind one hillside section drawing while keeping the cut readable as perspective, material and light are introduced.",
+      "serviceOutcome": "One technical 1:100 section opens its lens without losing the cut, gains material and sunlight, visits stair/rooms/pool and returns to a material section before editorial service copy.",
+      "decisionValue": "Supports discussion of level relationships, circulation, daylight and the link between a technical cut and occupied space. The specific house, site and project facts are authored donor content.",
+      "technicalReuse": [
+        "CONNECT_EXISTING",
+        "ADAPT_EXISTING",
+        "CONNECT_EXISTING"
+      ],
+      "gaps": [
+        "INTEGRATION_GAP",
+        "TRANSITION_GAP",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "03-c-down-the-stair",
+      "index": 6,
+      "group": "03 · OPEN SECTION",
+      "take": "C · DOWN THE STAIR",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/03-c-down-the-stair/manifest.json",
+      "manifestSha256": "3aa1418177eb53d1b247f51b66385b43f6ba0c6e363946d241da1a4fa295db66",
+      "validatedAt": "2026-11-02T15:10:20.218Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Helps an architect explain how one hillside house connects its street, bedroom and garden levels through the stair while retaining the section as the common spatial reference.",
+      "serviceOutcome": "A measured section gains depth and material, the camera descends from street kitchen through bedroom and living levels to the pool, then returns to the whole material section.",
+      "decisionValue": "Supports discussion of circulation, level relationships, daylight and the route from street to garden. The house and level numbers are donor-authored examples.",
+      "technicalReuse": [
+        "CONNECT_EXISTING",
+        "ADAPT_EXISTING",
+        "REUSE_EXISTING"
+      ],
+      "gaps": [
+        "ORCHESTRATION_GAP",
+        "TRANSITION_GAP",
+        "DONOR_LIMITATION",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "04-demo-build-time-lapse",
+      "index": 7,
+      "group": "04 · BUILD TIME-LAPSE",
+      "take": "DEMO",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/04-build-time-lapse/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/04-demo-build-time-lapse/manifest.json",
+      "manifestSha256": "12f7e4a6cfd7cc59ff4b924285cc0cef941a431d2928a22f15fa9c00c5b50533",
+      "validatedAt": "2026-11-02T15:45:57.828Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Explains a proposed construction sequence for one hillside house through an aligned programme, staged 3D site and fixed-week drawings.",
+      "serviceOutcome": "The visitor sees excavation through structure, props, finishes and handover while a week indicator and programme move together, then the completed house returns to drawing 06 on the six-view sheet.",
+      "decisionValue": "Useful for discussing intended construction order and temporary works only as an illustration. The 38-week durations and stage assignments are authored demo content, not a calculated schedule or actual execution record.",
+      "technicalReuse": [
+        "ADAPT_EXISTING",
+        "ADAPT_EXISTING",
+        "REUSE_EXISTING"
+      ],
+      "gaps": [
+        "PRODUCT_DECISION_REQUIRED",
+        "REPRESENTATION_GAP",
+        "DONOR_LIMITATION",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "portrait",
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "05-a-the-programme",
+      "index": 8,
+      "group": "05 · SCHEDULE BUILD",
+      "take": "A · THE PROGRAMME",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/05-a-the-programme/manifest.json",
+      "manifestSha256": "d370a3912e03f3a527c129a35908402a7c3d2c0d813f5e8354d246079e46eb87",
+      "validatedAt": "2026-11-02T16:12:45.641Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Communicates an example 14-week timber-house construction sequence with an aligned programme and visual build.",
+      "serviceOutcome": "A viewer can scrub the same authored week across Gantt rows, staged house pieces and an automatic five-stop handover tour.",
+      "decisionValue": "Useful for discussing illustrative sequence and spatial consequences; its dates, durations, completion percentages and critical-path label are not verified planning or execution facts.",
+      "technicalReuse": [
+        "REUSE_EXISTING",
+        "ADAPT_EXISTING",
+        "DEFER"
+      ],
+      "gaps": [
+        "PRODUCT_DECISION_REQUIRED",
+        "INTEGRATION_GAP",
+        "DONOR_LIMITATION",
+        "MOBILE_GAP"
+      ],
+      "donorLimitations": [
+        "portrait",
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "05-b-1-1-site-sheet",
+      "index": 9,
+      "group": "05 · SCHEDULE BUILD",
+      "take": "B · 1:1 SITE SHEET",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/05-b-1-1-site-sheet/manifest.json",
+      "manifestSha256": "edcffdbcedf9c51353d47dea362cedb764da9f43ae2b509b42aaf260706edd86",
+      "validatedAt": "2026-11-02T18:01:59.438Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Explains how one planned building emerges from a foundation drawing and construction programme on its actual site footprint.",
+      "serviceOutcome": "A viewer follows the same authored week across printed plan, programme, staged geometry and camera, ending with the complete house over its drawing.",
+      "decisionValue": "Useful for spatial explanation of an illustrative build sequence; the printed dates, phase membership and completion percentages are fixed demo data, not verified project planning or execution.",
+      "technicalReuse": [
+        "REUSE_EXISTING",
+        "ADAPT_EXISTING",
+        "DEFER"
+      ],
+      "gaps": [
+        "INTEGRATION_GAP",
+        "ORCHESTRATION_GAP",
+        "PRODUCT_DECISION_REQUIRED",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "portrait",
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "05-c-site-camera",
+      "index": 10,
+      "group": "05 · SCHEDULE BUILD",
+      "take": "C · SITE CAMERA",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/05-c-site-camera/manifest.json",
+      "manifestSha256": "641f7bdf46b24a245f5bf7f9b42b3be8460a4941a26926591487dad2d0235a5e",
+      "validatedAt": "2026-11-02T18:25:19.662Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Shows an illustrative construction sequence from a site-camera viewpoint while connecting visible build stages to a programme, a changing daylight clock and a final interior walk-through.",
+      "serviceOutcome": "A viewer can see how the same timber house rises over 14 authored weeks, approach it after handover and inspect five interior locations.",
+      "decisionValue": "Useful for communicating spatial consequences and a possible site presentation; the dates, clock, phase progress and CRITICAL PATH are synthetic demo displays, not actual site telemetry or certified work.",
+      "technicalReuse": [
+        "REUSE_EXISTING",
+        "CONNECT_EXISTING",
+        "DEFER"
+      ],
+      "gaps": [
+        "INTEGRATION_GAP",
+        "ORCHESTRATION_GAP",
+        "PRODUCT_DECISION_REQUIRED",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "portrait",
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "06-demo-card-model",
+      "index": 11,
+      "group": "06 · CARD MODEL",
+      "take": "DEMO",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/06-demo-card-model/manifest.json",
+      "manifestSha256": "4528b20f38a50d716c3ae1a0b681fa4a162c8181edd1f2f336bbb1cc50de4b25",
+      "validatedAt": "2026-11-02T19:19:49.846Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Lets an architect explain to a client how one physical 1:100 study model relates to the spatial scale and lived rooms of the proposed house.",
+      "serviceOutcome": "The same house and contoured site move from card and desk into a materialized exterior/interior visit, reveal a nested model in the study, and return to the original card presentation.",
+      "decisionValue": "Can clarify proportion, site relation and room experience during design discussion. The donor studio CTA and authored house are not evidence of a Rubik project or a verified construction outcome.",
+      "technicalReuse": [
+        "ADAPT_EXISTING",
+        "REIMPLEMENT_MECHANISM",
+        "CONNECT_EXISTING"
+      ],
+      "gaps": [
+        "REPRESENTATION_GAP",
+        "TRANSITION_GAP",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION",
+        "PRODUCT_DECISION_REQUIRED"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "07-a-one-door",
+      "index": 12,
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "A · ONE DOOR",
+      "status": "AUDITED",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/07-a-one-door/manifest.json",
+      "manifestSha256": "2253b973f7f71976a0ae31208e8f0b8956b28b8ee21b85fa129bc5ed552eb915",
+      "validatedAt": "2026-11-02T19:39:27.567Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard.",
+      "serviceOutcome": "The same townhouse drawing gains depth, brick and physically related shadow; a reversible camera route tests entry, parlour, atrium and garden continuity.",
+      "decisionValue": "Can clarify facade depth, orientation, shadow and room sequence in project review. Donor address, area, status and booking call to action are authored copy, not verified Rubik project facts.",
+      "technicalReuse": [
+        "ADAPT_EXISTING",
+        "CONNECT_EXISTING"
+      ],
+      "gaps": [
+        "NO_GAP",
+        "REPRESENTATION_GAP",
+        "ORCHESTRATION_GAP"
+      ],
+      "donorLimitations": [],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "07-b-the-row",
+      "index": 13,
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "B · THE ROW",
+      "status": "AUDITED_WITH_DONOR_LIMITATION",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/07-b-the-row/manifest.json",
+      "manifestSha256": "0eccfdfd0001071cc0b834af474a2d5e684f82488d4340712849fd57ce21ba93",
+      "validatedAt": "2026-11-02T19:51:50.659Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Let a developer, architect or buyer compare six distinct townhouse plots in one street composition, identify the available plot 04 and inspect its entrance and key rooms.",
+      "serviceOutcome": "The same numbered row changes from drawing to materialized street while plot 04 stays identified; the route enters its show house and ends in the atrium facing its garden.",
+      "decisionValue": "Clarifies repeated-versus-varied facade relation and the spatial experience behind one selected plot. Donor sold/reserved/available states, bedroom count, area and reservation CTA are authored, not verified Rubik facts.",
+      "technicalReuse": [
+        "CONNECT_EXISTING",
+        "ADAPT_EXISTING",
+        "CONNECT_EXISTING"
+      ],
+      "gaps": [
+        "INTEGRATION_GAP",
+        "REPRESENTATION_GAP",
+        "ORCHESTRATION_GAP",
+        "DONOR_LIMITATION"
+      ],
+      "donorLimitations": [
+        "landscape"
+      ],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    },
+    {
+      "id": "07-c-the-face",
+      "index": 14,
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "C · THE FACE",
+      "status": "AUDITED",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "manifestPath": "takes/07-c-the-face/manifest.json",
+      "manifestSha256": "8bf4a4bb7120d5073d486e64d759dd47e63ed8394a5945ecd04b06cc8bc35aed",
+      "validatedAt": "2026-11-02T20:13:16.882Z",
+      "hardGatesPassed": 21,
+      "professionalService": "Let an architect, material supplier or client inspect how a proposed facade bond and physically projecting headers read at drawing scale, under normal/raking sun and at human approach scale.",
+      "serviceOutcome": "A 1:20 ink facade becomes a material wall; the same header lattice casts changing real shadows, is inspected close up and remains continuous through the porch into the hall.",
+      "decisionValue": "Can support material/relief discussion and sample-panel evaluation. Kiln & Course, KC-06, 60 mm headers, mortar and order CTA are invented donor specifications, not verified Rubik material/project facts.",
+      "technicalReuse": [
+        "CONNECT_EXISTING",
+        "ADAPT_EXISTING"
+      ],
+      "gaps": [
+        "INTEGRATION_GAP",
+        "REPRESENTATION_GAP",
+        "ORCHESTRATION_GAP"
+      ],
+      "donorLimitations": [],
+      "blockingUnresolved": 0,
+      "nonBlockingUnresolved": 2
+    }
+  ]
+}

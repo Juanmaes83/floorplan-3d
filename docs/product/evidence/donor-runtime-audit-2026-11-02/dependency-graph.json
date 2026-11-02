@@ -1,0 +1,2365 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.dependency-graph.v1",
+  "kind": "TECHNICAL_REUSE_NOT_ROADMAP",
+  "nodeTypes": [
+    "RUBIK_CAPABILITY",
+    "DONOR_MECHANISM",
+    "PROFESSIONAL_SERVICE",
+    "BRIDGE_CANDIDATE",
+    "OUTPUT"
+  ],
+  "edgeTypes": [
+    "CONSUMES",
+    "DEPENDS_ON",
+    "SHARES",
+    "EXTENDS",
+    "ORCHESTRATES",
+    "PRESENTS",
+    "PRODUCES",
+    "REQUIRES"
+  ],
+  "nodes": [
+    {
+      "id": "RC-semanticData",
+      "type": "RUBIK_CAPABILITY",
+      "label": "semanticData",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-geometry",
+      "type": "RUBIK_CAPABILITY",
+      "label": "geometry",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-representation",
+      "type": "RUBIK_CAPABILITY",
+      "label": "representation",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-materialsLight",
+      "type": "RUBIK_CAPABILITY",
+      "label": "materialsLight",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-camera",
+      "type": "RUBIK_CAPABILITY",
+      "label": "camera",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-transition",
+      "type": "RUBIK_CAPABILITY",
+      "label": "transition",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-scrollProgress",
+      "type": "RUBIK_CAPABILITY",
+      "label": "scrollProgress",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-ui",
+      "type": "RUBIK_CAPABILITY",
+      "label": "ui",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-mobile",
+      "type": "RUBIK_CAPABILITY",
+      "label": "mobile",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-lifecycleRestore",
+      "type": "RUBIK_CAPABILITY",
+      "label": "lifecycleRestore",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-outputs",
+      "type": "RUBIK_CAPABILITY",
+      "label": "outputs",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "RC-qa",
+      "type": "RUBIK_CAPABILITY",
+      "label": "qa",
+      "evidence": "capability-map.json"
+    },
+    {
+      "id": "PS-01-a-the-board",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Helps a client or reviewer understand how an authored timber-house assembly relates to a walkable finished space.",
+      "evidence": "takes/01-a-the-board/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-01-a-the-board",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 01-a-the-board",
+      "evidence": "takes/01-a-the-board/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-01-a-the-board",
+      "type": "OUTPUT",
+      "label": "An annotated component assembly becomes one continuous interior visit through the east threshold, living area and loft.",
+      "evidence": "takes/01-a-the-board/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-01-a-the-board-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "A future, explicitly authorized component reading could evaluate absolute transforms and matrix-following annotations for only demonstrable groups.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/01-a-the-board/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "PS-01-b-unfolded-room",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior.",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-01-b-unfolded-room",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 01-b-unfolded-room",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-01-b-unfolded-room",
+      "type": "OUTPUT",
+      "label": "A developed room drawing folds around its real pictured floor, then a camera passes through the same door to inspect kitchen and window bench.",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-01-b-unfolded-room-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "A bounded room-face reading could unfold only validated faces and openings while retaining the real room identity.",
+      "classification": "REIMPLEMENT_MECHANISM",
+      "implementationAuthorized": false,
+      "evidence": "takes/01-b-unfolded-room/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "PS-01-c-floor-by-floor",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer.",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-01-c-floor-by-floor",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 01-c-floor-by-floor",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-01-c-floor-by-floor",
+      "type": "OUTPUT",
+      "label": "An exploded building stacks from the ground upward, holds an upper-level gap to reveal the studio, then lowers the overhead plate as the camera traverses that same floor.",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-01-c-floor-by-floor-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Represent real project levels in compact/exploded form with existing Rubik authority and lifecycle.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-01-c-floor-by-floor-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If a future professional service requires continuing from level reading into a verified room visit, connect only a real selected level/entry/route.",
+      "classification": "UNRESOLVED",
+      "implementationAuthorized": false,
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "PS-02-demo-section-sweep",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Helps an architect explain how a section drawing relates to occupied rooms, vertical movement and the garden-facing exterior of the same house.",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-02-demo-section-sweep",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 02-demo-section-sweep",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-02-demo-section-sweep",
+      "type": "OUTPUT",
+      "label": "A technical section gains depth and material, the viewer follows a continuous route through upper, entrance and garden levels, then returns to the original sheet.",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-02-demo-section-sweep-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If technical ink is needed, render a section-readable technical view of current Rubik geometry.",
+      "classification": "REIMPLEMENT_MECHANISM",
+      "implementationAuthorized": false,
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-02-demo-section-sweep-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If a spatial materialization service is selected, coordinate technical and lit representation over one project.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-02-demo-section-sweep-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If a section-to-room visit is selected, continue from a real section to a validated room route.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-03-a-open-the-lens",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Helps an architect explain what rooms and vertical movement lie behind one hillside section drawing while keeping the cut readable as perspective, material and light are introduced.",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-03-a-open-the-lens",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 03-a-open-the-lens",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-03-a-open-the-lens",
+      "type": "OUTPUT",
+      "label": "One technical 1:100 section opens its lens without losing the cut, gains material and sunlight, visits stair/rooms/pool and returns to a material section before editorial service copy.",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-03-a-open-the-lens-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Keep a section’s real cut/frame readable while a Story lens opens.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-03-a-open-the-lens-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If useful, show the same authorized cut changing from technical ink to lit material without geometry replacement.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-03-a-open-the-lens-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If the service is selected, visit meaningful rooms along a real project section and return cleanly.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-03-c-down-the-stair",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Helps an architect explain how one hillside house connects its street, bedroom and garden levels through the stair while retaining the section as the common spatial reference.",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-03-c-down-the-stair",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 03-c-down-the-stair",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-03-c-down-the-stair",
+      "type": "OUTPUT",
+      "label": "A measured section gains depth and material, the camera descends from street kitchen through bedroom and living levels to the pool, then returns to the whole material section.",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-03-c-down-the-stair-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Explain street-to-garden circulation on a current Rubik project section.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-03-c-down-the-stair-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If useful, carry one real cut from technical ink to lit material during the descent.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-03-c-down-the-stair-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Return cleanly from a section story without stale captions or room labels.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-04-demo-build-time-lapse",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Explains a proposed construction sequence for one hillside house through an aligned programme, staged 3D site and fixed-week drawings.",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-04-demo-build-time-lapse",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 04-demo-build-time-lapse",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-04-demo-build-time-lapse",
+      "type": "OUTPUT",
+      "label": "The visitor sees excavation through structure, props, finishes and handover while a week indicator and programme move together, then the completed house returns to drawing 06 on the six-view sheet.",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-04-demo-build-time-lapse-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Present an authorized construction state for actual Rubik elements at a chosen time.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-04-demo-build-time-lapse-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Compare one real Building at several authorized time states.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-04-demo-build-time-lapse-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Keep presentation playback and reverse tied to current project state.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-05-a-the-programme",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Communicates an example 14-week timber-house construction sequence with an aligned programme and visual build.",
+      "evidence": "takes/05-a-the-programme/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-05-a-the-programme",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 05-a-the-programme",
+      "evidence": "takes/05-a-the-programme/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-05-a-the-programme",
+      "type": "OUTPUT",
+      "label": "A viewer can scrub the same authored week across Gantt rows, staged house pieces and an automatic five-stop handover tour.",
+      "evidence": "takes/05-a-the-programme/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-05-a-the-programme-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Seek and replay a presentation week deterministically.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-05-a-the-programme-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Show a visual phase of actual Rubik Building elements.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-05-a-the-programme-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Expose a real planned and actual construction Gantt if product scope calls for it.",
+      "classification": "DEFER",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-05-b-1-1-site-sheet",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Explains how one planned building emerges from a foundation drawing and construction programme on its actual site footprint.",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-05-b-1-1-site-sheet",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 05-b-1-1-site-sheet",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-05-b-1-1-site-sheet",
+      "type": "OUTPUT",
+      "label": "A viewer follows the same authored week across printed plan, programme, staged geometry and camera, ending with the complete house over its drawing.",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-05-b-1-1-site-sheet-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Seek a deterministic visual time state.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-05-b-1-1-site-sheet-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Present a project drawing and authorized schedule as one spatial site sheet.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-05-b-1-1-site-sheet-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Use factual planned and actual construction dates on a site sheet if product scope later requires it.",
+      "classification": "DEFER",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-05-c-site-camera",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Shows an illustrative construction sequence from a site-camera viewpoint while connecting visible build stages to a programme, a changing daylight clock and a final interior walk-through.",
+      "evidence": "takes/05-c-site-camera/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-05-c-site-camera",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 05-c-site-camera",
+      "evidence": "takes/05-c-site-camera/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-05-c-site-camera",
+      "type": "OUTPUT",
+      "label": "A viewer can see how the same timber house rises over 14 authored weeks, approach it after handover and inspect five interior locations.",
+      "evidence": "takes/05-c-site-camera/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-05-c-site-camera-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Seek and restore a presentation time state.",
+      "classification": "REUSE_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-05-c-site-camera-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Coordinate a site-facing camera and solar presentation with current Building geometry.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-05-c-site-camera-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "Show factual planned and actual site progress if product scope calls for it.",
+      "classification": "DEFER",
+      "implementationAuthorized": false,
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-06-demo-card-model",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Lets an architect explain to a client how one physical 1:100 study model relates to the spatial scale and lived rooms of the proposed house.",
+      "evidence": "takes/06-demo-card-model/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-06-demo-card-model",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 06-demo-card-model",
+      "evidence": "takes/06-demo-card-model/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-06-demo-card-model",
+      "type": "OUTPUT",
+      "label": "The same house and contoured site move from card and desk into a materialized exterior/interior visit, reveal a nested model in the study, and return to the original card presentation.",
+      "evidence": "takes/06-demo-card-model/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-06-demo-card-model-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If approved later, present a project-derived physical study model while preserving real project units and geometry.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-06-demo-card-model-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If useful, show the same authorized building changing representation through a spatially coherent front.",
+      "classification": "REIMPLEMENT_MECHANISM",
+      "implementationAuthorized": false,
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-06-demo-card-model-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If the professional service is selected, carry the scale explanation through valid project rooms and return to the starting model.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-07-a-one-door",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard.",
+      "evidence": "takes/07-a-one-door/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-07-a-one-door",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 07-a-one-door",
+      "evidence": "takes/07-a-one-door/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-07-a-one-door",
+      "type": "OUTPUT",
+      "label": "The same townhouse drawing gains depth, brick and physically related shadow; a reversible camera route tests entry, parlour, atrium and garden continuity.",
+      "evidence": "takes/07-a-one-door/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-07-a-one-door-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If selected later, preserve the same project facade while moving from technical shadow hatching to sourced material/light.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-a-one-door/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-07-a-one-door-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If selected later, relate one facade opening to valid room and garden stops while preserving reverse.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-a-one-door/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "PS-07-b-the-row",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Let a developer, architect or buyer compare six distinct townhouse plots in one street composition, identify the available plot 04 and inspect its entrance and key rooms.",
+      "evidence": "takes/07-b-the-row/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-07-b-the-row",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 07-b-the-row",
+      "evidence": "takes/07-b-the-row/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-07-b-the-row",
+      "type": "OUTPUT",
+      "label": "The same numbered row changes from drawing to materialized street while plot 04 stays identified; the route enters its show house and ends in the atrium facing its garden.",
+      "evidence": "takes/07-b-the-row/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-07-b-the-row-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If later selected, show source-backed multi-plot identities/statuses and select one valid project/building for a visit.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-07-b-the-row-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If later selected, carry one coherent shadow/ink/material front across an authorized street ensemble.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/1"
+    },
+    {
+      "id": "BC-07-b-the-row-3",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If later selected, follow the chosen plot from row to valid rooms and return to the original row.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/2"
+    },
+    {
+      "id": "PS-07-c-the-face",
+      "type": "PROFESSIONAL_SERVICE",
+      "label": "Let an architect, material supplier or client inspect how a proposed facade bond and physically projecting headers read at drawing scale, under normal/raking sun and at human approach scale.",
+      "evidence": "takes/07-c-the-face/manifest.json#professionalService"
+    },
+    {
+      "id": "DM-07-c-the-face",
+      "type": "DONOR_MECHANISM",
+      "label": "Observed mechanism sequence: 07-c-the-face",
+      "evidence": "takes/07-c-the-face/manifest.json#viewports"
+    },
+    {
+      "id": "OUT-07-c-the-face",
+      "type": "OUTPUT",
+      "label": "A 1:20 ink facade becomes a material wall; the same header lattice casts changing real shadows, is inspected close up and remains continuous through the porch into the hall.",
+      "evidence": "takes/07-c-the-face/manifest.json#professionalService"
+    },
+    {
+      "id": "BC-07-c-the-face-1",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If later selected, tie a material/relief demonstration to verified project/facade dimensions and material identity.",
+      "classification": "CONNECT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-c-the-face/manifest.json#candidateBridges/0"
+    },
+    {
+      "id": "BC-07-c-the-face-2",
+      "type": "BRIDGE_CANDIDATE",
+      "label": "If later selected, show that the same sourced relief produces both technical hatching and physical/raking shadows.",
+      "classification": "ADAPT_EXISTING",
+      "implementationAuthorized": false,
+      "evidence": "takes/07-c-the-face/manifest.json#candidateBridges/1"
+    }
+  ],
+  "edges": [
+    {
+      "from": "DM-01-a-the-board",
+      "to": "PS-01-a-the-board",
+      "type": "PRESENTS",
+      "evidence": "takes/01-a-the-board/manifest.json#viewports"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "OUT-01-a-the-board",
+      "type": "PRODUCES",
+      "evidence": "takes/01-a-the-board/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-01-a-the-board-1",
+      "to": "PS-01-a-the-board",
+      "type": "PRESENTS",
+      "evidence": "takes/01-a-the-board/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-01-a-the-board",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/01-a-the-board/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-01-b-unfolded-room",
+      "to": "PS-01-b-unfolded-room",
+      "type": "PRESENTS",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#viewports"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "OUT-01-b-unfolded-room",
+      "type": "PRODUCES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-01-b-unfolded-room-1",
+      "to": "PS-01-b-unfolded-room",
+      "type": "PRESENTS",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-01-b-unfolded-room",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/01-b-unfolded-room/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-01-c-floor-by-floor",
+      "to": "PS-01-c-floor-by-floor",
+      "type": "PRESENTS",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#viewports"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "OUT-01-c-floor-by-floor",
+      "type": "PRODUCES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-01-c-floor-by-floor-1",
+      "to": "PS-01-c-floor-by-floor",
+      "type": "PRESENTS",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-01-c-floor-by-floor-2",
+      "to": "PS-01-c-floor-by-floor",
+      "type": "PRESENTS",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-01-c-floor-by-floor",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/01-c-floor-by-floor/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-02-demo-section-sweep",
+      "to": "PS-02-demo-section-sweep",
+      "type": "PRESENTS",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#viewports"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "OUT-02-demo-section-sweep",
+      "type": "PRODUCES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-02-demo-section-sweep-1",
+      "to": "PS-02-demo-section-sweep",
+      "type": "PRESENTS",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-02-demo-section-sweep-2",
+      "to": "PS-02-demo-section-sweep",
+      "type": "PRESENTS",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-02-demo-section-sweep-3",
+      "to": "PS-02-demo-section-sweep",
+      "type": "PRESENTS",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-02-demo-section-sweep",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/02-demo-section-sweep/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-03-a-open-the-lens",
+      "to": "PS-03-a-open-the-lens",
+      "type": "PRESENTS",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#viewports"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "OUT-03-a-open-the-lens",
+      "type": "PRODUCES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-03-a-open-the-lens-1",
+      "to": "PS-03-a-open-the-lens",
+      "type": "PRESENTS",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-03-a-open-the-lens-2",
+      "to": "PS-03-a-open-the-lens",
+      "type": "PRESENTS",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-03-a-open-the-lens-3",
+      "to": "PS-03-a-open-the-lens",
+      "type": "PRESENTS",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-03-a-open-the-lens",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/03-a-open-the-lens/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-03-c-down-the-stair",
+      "to": "PS-03-c-down-the-stair",
+      "type": "PRESENTS",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#viewports"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "OUT-03-c-down-the-stair",
+      "type": "PRODUCES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-03-c-down-the-stair-1",
+      "to": "PS-03-c-down-the-stair",
+      "type": "PRESENTS",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-03-c-down-the-stair-2",
+      "to": "PS-03-c-down-the-stair",
+      "type": "PRESENTS",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-03-c-down-the-stair-3",
+      "to": "PS-03-c-down-the-stair",
+      "type": "PRESENTS",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-03-c-down-the-stair",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/03-c-down-the-stair/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-04-demo-build-time-lapse",
+      "to": "PS-04-demo-build-time-lapse",
+      "type": "PRESENTS",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#viewports"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "OUT-04-demo-build-time-lapse",
+      "type": "PRODUCES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-04-demo-build-time-lapse-1",
+      "to": "PS-04-demo-build-time-lapse",
+      "type": "PRESENTS",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-04-demo-build-time-lapse-2",
+      "to": "PS-04-demo-build-time-lapse",
+      "type": "PRESENTS",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-04-demo-build-time-lapse-3",
+      "to": "PS-04-demo-build-time-lapse",
+      "type": "PRESENTS",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-04-demo-build-time-lapse",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/04-demo-build-time-lapse/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-05-a-the-programme",
+      "to": "PS-05-a-the-programme",
+      "type": "PRESENTS",
+      "evidence": "takes/05-a-the-programme/manifest.json#viewports"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "OUT-05-a-the-programme",
+      "type": "PRODUCES",
+      "evidence": "takes/05-a-the-programme/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-05-a-the-programme-1",
+      "to": "PS-05-a-the-programme",
+      "type": "PRESENTS",
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-05-a-the-programme-2",
+      "to": "PS-05-a-the-programme",
+      "type": "PRESENTS",
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-05-a-the-programme-3",
+      "to": "PS-05-a-the-programme",
+      "type": "PRESENTS",
+      "evidence": "takes/05-a-the-programme/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-05-a-the-programme",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/05-a-the-programme/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-05-b-1-1-site-sheet",
+      "to": "PS-05-b-1-1-site-sheet",
+      "type": "PRESENTS",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#viewports"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "OUT-05-b-1-1-site-sheet",
+      "type": "PRODUCES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-05-b-1-1-site-sheet-1",
+      "to": "PS-05-b-1-1-site-sheet",
+      "type": "PRESENTS",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-05-b-1-1-site-sheet-2",
+      "to": "PS-05-b-1-1-site-sheet",
+      "type": "PRESENTS",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-05-b-1-1-site-sheet-3",
+      "to": "PS-05-b-1-1-site-sheet",
+      "type": "PRESENTS",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-05-b-1-1-site-sheet",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/05-b-1-1-site-sheet/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-05-c-site-camera",
+      "to": "PS-05-c-site-camera",
+      "type": "PRESENTS",
+      "evidence": "takes/05-c-site-camera/manifest.json#viewports"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "OUT-05-c-site-camera",
+      "type": "PRODUCES",
+      "evidence": "takes/05-c-site-camera/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-05-c-site-camera-1",
+      "to": "PS-05-c-site-camera",
+      "type": "PRESENTS",
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-05-c-site-camera-2",
+      "to": "PS-05-c-site-camera",
+      "type": "PRESENTS",
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-05-c-site-camera-3",
+      "to": "PS-05-c-site-camera",
+      "type": "PRESENTS",
+      "evidence": "takes/05-c-site-camera/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-05-c-site-camera",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/05-c-site-camera/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-06-demo-card-model",
+      "to": "PS-06-demo-card-model",
+      "type": "PRESENTS",
+      "evidence": "takes/06-demo-card-model/manifest.json#viewports"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "OUT-06-demo-card-model",
+      "type": "PRODUCES",
+      "evidence": "takes/06-demo-card-model/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-06-demo-card-model-1",
+      "to": "PS-06-demo-card-model",
+      "type": "PRESENTS",
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-06-demo-card-model-2",
+      "to": "PS-06-demo-card-model",
+      "type": "PRESENTS",
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-06-demo-card-model-3",
+      "to": "PS-06-demo-card-model",
+      "type": "PRESENTS",
+      "evidence": "takes/06-demo-card-model/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-06-demo-card-model",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/06-demo-card-model/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-07-a-one-door",
+      "to": "PS-07-a-one-door",
+      "type": "PRESENTS",
+      "evidence": "takes/07-a-one-door/manifest.json#viewports"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "OUT-07-a-one-door",
+      "type": "PRODUCES",
+      "evidence": "takes/07-a-one-door/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-07-a-one-door-1",
+      "to": "PS-07-a-one-door",
+      "type": "PRESENTS",
+      "evidence": "takes/07-a-one-door/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-07-a-one-door-2",
+      "to": "PS-07-a-one-door",
+      "type": "PRESENTS",
+      "evidence": "takes/07-a-one-door/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-07-a-one-door",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/07-a-one-door/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-07-b-the-row",
+      "to": "PS-07-b-the-row",
+      "type": "PRESENTS",
+      "evidence": "takes/07-b-the-row/manifest.json#viewports"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "OUT-07-b-the-row",
+      "type": "PRODUCES",
+      "evidence": "takes/07-b-the-row/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-07-b-the-row-1",
+      "to": "PS-07-b-the-row",
+      "type": "PRESENTS",
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-07-b-the-row-2",
+      "to": "PS-07-b-the-row",
+      "type": "PRESENTS",
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "BC-07-b-the-row-3",
+      "to": "PS-07-b-the-row",
+      "type": "PRESENTS",
+      "evidence": "takes/07-b-the-row/manifest.json#candidateBridges/2"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-07-b-the-row",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/07-b-the-row/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-07-c-the-face",
+      "to": "PS-07-c-the-face",
+      "type": "PRESENTS",
+      "evidence": "takes/07-c-the-face/manifest.json#viewports"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "OUT-07-c-the-face",
+      "type": "PRODUCES",
+      "evidence": "takes/07-c-the-face/manifest.json#professionalService"
+    },
+    {
+      "from": "BC-07-c-the-face-1",
+      "to": "PS-07-c-the-face",
+      "type": "PRESENTS",
+      "evidence": "takes/07-c-the-face/manifest.json#candidateBridges/0"
+    },
+    {
+      "from": "BC-07-c-the-face-2",
+      "to": "PS-07-c-the-face",
+      "type": "PRESENTS",
+      "evidence": "takes/07-c-the-face/manifest.json#candidateBridges/1"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-semanticData",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/semanticData"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-geometry",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/geometry"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-representation",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/representation"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-materialsLight",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/materialsLight"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-camera",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/camera"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-transition",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/transition"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-scrollProgress",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/scrollProgress"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-ui",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/ui"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-mobile",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/mobile"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-lifecycleRestore",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/lifecycleRestore"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-outputs",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/outputs"
+    },
+    {
+      "from": "PS-07-c-the-face",
+      "to": "RC-qa",
+      "type": "CONSUMES",
+      "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/qa"
+    },
+    {
+      "from": "DM-01-a-the-board",
+      "to": "DM-01-a-the-board",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-01-EXPLODED"
+    },
+    {
+      "from": "DM-01-b-unfolded-room",
+      "to": "DM-01-a-the-board",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-01-EXPLODED"
+    },
+    {
+      "from": "DM-01-c-floor-by-floor",
+      "to": "DM-01-a-the-board",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-01-EXPLODED"
+    },
+    {
+      "from": "DM-03-a-open-the-lens",
+      "to": "DM-03-a-open-the-lens",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-03-OPEN-SECTION"
+    },
+    {
+      "from": "DM-03-c-down-the-stair",
+      "to": "DM-03-a-open-the-lens",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-03-OPEN-SECTION"
+    },
+    {
+      "from": "DM-05-a-the-programme",
+      "to": "DM-05-a-the-programme",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-05-SCHEDULE"
+    },
+    {
+      "from": "DM-05-b-1-1-site-sheet",
+      "to": "DM-05-a-the-programme",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-05-SCHEDULE"
+    },
+    {
+      "from": "DM-05-c-site-camera",
+      "to": "DM-05-a-the-programme",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-05-SCHEDULE"
+    },
+    {
+      "from": "DM-07-a-one-door",
+      "to": "DM-07-a-one-door",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-07-ELEVATION"
+    },
+    {
+      "from": "DM-07-b-the-row",
+      "to": "DM-07-a-one-door",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-07-ELEVATION"
+    },
+    {
+      "from": "DM-07-c-the-face",
+      "to": "DM-07-a-one-door",
+      "type": "SHARES",
+      "evidence": "shared-mechanisms.json#SM-07-ELEVATION"
+    }
+  ],
+  "technicalPrerequisites": [
+    {
+      "takeId": "01-a-the-board",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: verified component ownership/membership before transform lease",
+      "source": "takes/01-a-the-board/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-a-the-board",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: actual navigable threshold/room stops before walk handoff",
+      "source": "takes/01-a-the-board/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-a-the-board",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "Technical reuse with FT3D-5 is not product fusion",
+      "source": "takes/01-a-the-board/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-b-unfolded-room",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: prove room-to-wall-face topology and opening side/owner before any temporary hinge evaluation.",
+      "source": "takes/01-b-unfolded-room/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-b-unfolded-room",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: represent shared, non-rectangular and ceiling-absent cases explicitly or exclude them with a reason.",
+      "source": "takes/01-b-unfolded-room/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-b-unfolded-room",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: obtain a real route/threshold before camera handoff; donor coordinates are not Rubik route authority.",
+      "source": "takes/01-b-unfolded-room/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-b-unfolded-room",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "Technical reuse of Story and geometry does not merge Unfolded Room with Board or FT3D-5 as a product service.",
+      "source": "takes/01-b-unfolded-room/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-c-floor-by-floor",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: actual Building level descriptor and current geometry for any level reading.",
+      "source": "takes/01-c-floor-by-floor/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-c-floor-by-floor",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: a valid selected room/entry/route and recomposed camera pose before any automatic visit handoff.",
+      "source": "takes/01-c-floor-by-floor/manifest.json#dependencies"
+    },
+    {
+      "takeId": "01-c-floor-by-floor",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "The stretched donor core, fixed six groups and invented construction schedule are reference-only demo content, not product dependencies.",
+      "source": "takes/01-c-floor-by-floor/manifest.json#dependencies"
+    },
+    {
+      "takeId": "02-demo-section-sweep",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: a supported real Section descriptor/caps and current Building geometry before technical or materialized section output.",
+      "source": "takes/02-demo-section-sweep/manifest.json#dependencies"
+    },
+    {
+      "takeId": "02-demo-section-sweep",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: a valid selected room, entry and route before any walkthrough handoff.",
+      "source": "takes/02-demo-section-sweep/manifest.json#dependencies"
+    },
+    {
+      "takeId": "02-demo-section-sweep",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: one reversible Story state and Rubik-owned camera/material/light snapshots across any composed transition.",
+      "source": "takes/02-demo-section-sweep/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-a-open-the-lens",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: real Section descriptor/caps and current Building geometry before any section lens or material-front presentation.",
+      "source": "takes/03-a-open-the-lens/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-a-open-the-lens",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: selected room IDs and valid route before section-facing room stops.",
+      "source": "takes/03-a-open-the-lens/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-a-open-the-lens",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned absolute state and restore before any reversible coupled camera/material sequence.",
+      "source": "takes/03-a-open-the-lens/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-c-down-the-stair",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: real Section descriptor/caps and current Building levels before section-facing stops.",
+      "source": "takes/03-c-down-the-stair/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-c-down-the-stair",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: project-derived room/level IDs and route validity before stair descent choreography.",
+      "source": "takes/03-c-down-the-stair/manifest.json#dependencies"
+    },
+    {
+      "takeId": "03-c-down-the-stair",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned absolute progress and restore before any coupled camera/material narrative.",
+      "source": "takes/03-c-down-the-stair/manifest.json#dependencies"
+    },
+    {
+      "takeId": "04-demo-build-time-lapse",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "PRODUCT_CONTRACT_DECISION: illustration versus real planned/actual construction progress must be explicit before durable schedule data.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#dependencies"
+    },
+    {
+      "takeId": "04-demo-build-time-lapse",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: preserve real Project/Building element IDs and their mapping to any authorized jobs before temporal visibility.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#dependencies"
+    },
+    {
+      "takeId": "04-demo-build-time-lapse",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned absolute seek and clean restore before multi-view or paper/site presentation.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#dependencies"
+    },
+    {
+      "takeId": "04-demo-build-time-lapse",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: isolate render passes and resources if the same Building is shown at several times.",
+      "source": "takes/04-demo-build-time-lapse/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-a-the-programme",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "PRODUCT_CONTRACT_DECISION: illustrative construction story versus real editable plan and actual execution.",
+      "source": "takes/05-a-the-programme/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-a-the-programme",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: explicit Rubik element-to-work membership and date provenance before temporal visibility is treated as factual.",
+      "source": "takes/05-a-the-programme/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-a-the-programme",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: retain Story-owned seek and lifecycle; do not use C1-C4 quantity tables as job schedules.",
+      "source": "takes/05-a-the-programme/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-a-the-programme",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: responsive chart and camera layout if a schedule presentation is later authorized.",
+      "source": "takes/05-a-the-programme/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-b-1-1-site-sheet",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: authorized plan projection and stable Building element identity for any project-specific on-site sheet.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-b-1-1-site-sheet",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: validated element-to-task mapping and date provenance before a week is factual.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-b-1-1-site-sheet",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "PRODUCT_CONTRACT_DECISION: illustrative construction story versus real planned/actual execution.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-b-1-1-site-sheet",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story owns presentation seek and restore; no duplicate timeline authority.",
+      "source": "takes/05-b-1-1-site-sheet/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-c-site-camera",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: stable Building IDs and authorized element-to-work membership for project-specific build stages.",
+      "source": "takes/05-c-site-camera/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-c-site-camera",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story owns camera/light presentation and lifecycle restoration.",
+      "source": "takes/05-c-site-camera/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-c-site-camera",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "PRODUCT_CONTRACT_DECISION: illustrative site story versus factual planned/actual execution.",
+      "source": "takes/05-c-site-camera/manifest.json#dependencies"
+    },
+    {
+      "takeId": "05-c-site-camera",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: date, time and sun labels need explicit provenance before use as professional telemetry.",
+      "source": "takes/05-c-site-camera/manifest.json#dependencies"
+    },
+    {
+      "takeId": "06-demo-card-model",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: current project geometry and authorized site/bounds before deriving any card support.",
+      "source": "takes/06-demo-card-model/manifest.json#dependencies"
+    },
+    {
+      "takeId": "06-demo-card-model",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: one Story-owned absolute state and restore before a reversible representation/light front.",
+      "source": "takes/06-demo-card-model/manifest.json#dependencies"
+    },
+    {
+      "takeId": "06-demo-card-model",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: valid room/entry/route data before a house-scale interior visit.",
+      "source": "takes/06-demo-card-model/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-a-one-door",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: authorized facade/opening and valid room/route data before any front-to-back visit.",
+      "source": "takes/07-a-one-door/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-a-one-door",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned absolute presentation state and restoration before reversible ink/material/sun/door coordination.",
+      "source": "takes/07-a-one-door/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-a-one-door",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: material and light authority remains Rubik-owned; any hatch adapter must follow its shadows, not invent project solar facts.",
+      "source": "takes/07-a-one-door/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-b-the-row",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: authoritative plot/building identities and status provenance before any multi-plot claim.",
+      "source": "takes/07-b-the-row/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-b-the-row",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: valid selected-plot opening/room route before a show-house visit.",
+      "source": "takes/07-b-the-row/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-b-the-row",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned reversible material/light/door/camera state before an ink-to-real row transition.",
+      "source": "takes/07-b-the-row/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-c-the-face",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: verified facade bond/projection dimensions and material source before a professional material claim.",
+      "source": "takes/07-c-the-face/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-c-the-face",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: same geometry/normals and Rubik-owned shadow/light authority before comparing technical hatch with raking shadow.",
+      "source": "takes/07-c-the-face/manifest.json#dependencies"
+    },
+    {
+      "takeId": "07-c-the-face",
+      "kind": "TECHNICAL_PREREQUISITE",
+      "statement": "TECHNICAL_PREREQUISITE: Story-owned reversible camera/light/door/material state before a detail-to-interior route.",
+      "source": "takes/07-c-the-face/manifest.json#dependencies"
+    }
+  ]
+}

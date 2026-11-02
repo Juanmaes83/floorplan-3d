@@ -1,0 +1,3673 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.capability-map.v1",
+  "rubikBaseline": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "meaning": "Observed technical crosswalk, not a feature list or roadmap. Each status belongs to a take-specific professional service.",
+  "dimensions": [
+    "semanticData",
+    "geometry",
+    "representation",
+    "materialsLight",
+    "camera",
+    "transition",
+    "scrollProgress",
+    "ui",
+    "mobile",
+    "lifecycleRestore",
+    "outputs",
+    "qa"
+  ],
+  "byTake": {
+    "01-a-the-board": {
+      "professionalServiceIdentity": "Helps a client or reviewer understand how an authored timber-house assembly relates to a walkable finished space.",
+      "technicalReuse": [
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "derived geometry and owners",
+            "Story stateAt and reversible player",
+            "existing room descent/route when valid"
+          ],
+          "missingConnector": "Verified component membership, disjoint ownership and normals for only actual project groups; professional labels and service identity still require a product decision.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Project/Building preserve semantic rooms, walls, openings and levels; no general authored structural-layer membership is established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project is sole durable authority; geometry derived.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1032-1052"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon descriptor consumes structural levels.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:79-98"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik builds real project geometry and a levels descriptor; donor six building-component layers are not a generic derived subdivision.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Building layers and roof/exterior groups are built from current project.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:2565-2568"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon derives bounds and level separation.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:58-98"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Compact axon and exploded levels exist; ink-layer callouts and component land/pull visualization are a distinct representation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon/exploded narrative states.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Runtime owns axon handles.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4828"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Authorized material appearances and scene lighting exist; no donor ink/plotter treatment is inferred as integrated.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface material is derived from assigned appearance and cached.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-16"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing surface lifecycle.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:45-74"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik fits a whole building to the free region and has room descent; the donor authored 1.5° axo-to-porch-to-loft camera path is not the same contract.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon fit and camera state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Room descent narrative.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Pure reversible Story transitions exist; no six component groups are currently orchestrated through them.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence and scene state evaluator.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Renderer begin/apply/end.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik has a reversible progress/seek player; donor native scroll is one input model, not a required matching UI.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence progress maps to scene/local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "UI seeks through Story progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has captions, minimap and template options; donor layer-specific annotation anchors are not established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation card, minimap and controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Accessible minimap navigation.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:117-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has mobile presentation layout and tests at both mobile sizes; this does not prove a hypothetical Board variant.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Mobile presentation CSS.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik captures and restores the state touched by its current axon/exploded scenes; a future component-group lease remains unproven.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Begin captures current state and obtains handles.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4761-4800"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Apply absolute deltas and End restores.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4814-4840"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "PARTIAL",
+          "claim": "Current image/share and ZIP outputs exist; a recorded Board sequence is not established as a Rubik output.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation image share.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Views and project ZIP batch.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Rubik has reproducible Story/FT3D-5/6 QA tools; no Board-specific continuity/restore suite exists.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon visual renderer.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Template evidence harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "A professional grouping of real Rubik components, its honest labels and its service identity need explicit product authority before any Board-like experience could exist.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Cut 2 D10 derives only a bounded subset and rejects invented structure.",
+              "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1230-1275"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon descriptor is level-based, not six authored component groups.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:79-98"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "Existing Story and geometry have no evidenced connection that sequences component-group transforms, callouts and a subsequent project-specific walk as one reversible service.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Donor sequence is continuous",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-a-the-board\\desktop\\desktop-forward-discovery.webm"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story narratives cover axon/exploded by levels and room descent separately.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-345"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "844×390 donor landscape retains the desktop composition and overlays collide; this is donor behavior, not evidence of a Rubik mobile defect.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "At 844×390 the desktop navigation, layer callouts, radar and caption overlap and crop each other while the story still progresses and reverses.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-a-the-board\\landscape\\landscape-start.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "01 phone layout is selected only when innerWidth < 700; 844px uses desktop positions. Source README recommends laptop.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356; README.md:1-31"
+            }
+          ]
+        }
+      ]
+    },
+    "01-b-unfolded-room": {
+      "professionalServiceIdentity": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior.",
+      "technicalReuse": [
+        {
+          "classification": "REIMPLEMENT_MECHANISM",
+          "existingCapabilitiesConsumed": [
+            "room polygon and wall/opening geometry",
+            "existing room descent and camera fit",
+            "Story reversible state evaluation",
+            "presentation image/ZIP if product chooses an output"
+          ],
+          "missingConnector": "Verified room-to-face association, side and shared ownership; temporary hinge representation/lease and matrix-following labels; valid camera handoff. No generic net or manual sheet copied.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Project preserves room polygons, walls and opening.wallId; room-to-face side and shared-wall ownership are not established for an unfold.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rooms, wall rectangles and openings are derived from Project IDs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current renderer has wallId and roomId/face metadata for a separate reveal, not a proven unfolding topology.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3304-3367"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik has room, wall and opening geometry, including real openings; an ordered net of hinged room faces and a valid ceiling lid are not established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Room polygons and wall opening geometries exist.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Wall and floor meshes are current View3D geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,4899"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has room views and an axon/exploded level presentation, but no evidenced six-face developed drawing for arbitrary rooms.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Room descent is a current Story narrative.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon/exploded level narrative is present.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has project surface appearances and lighting; authored sage/tile finish codes, plotter ink and donor sun movement are not project truth.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface material is derived from assigned appearance.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation light preset and status are exposed.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik already fits project views and has room descent, but donor camera coordinates and a hinge-to-threshold handoff do not identify a valid route for another room.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current room descent evaluator.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon camera fitting and state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Story has deterministic reversible state evaluation; no face-hinge descriptor with room topology and opening ownership is evidenced.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story stateAt derives scene state from progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:1-45"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "View3D presentation begin/apply/end exists.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "The existing Story player and seek controls provide controlled reversible progress without needing donor native scroll.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence maps global to local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "UI exposes seeking.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Presentation cards, captions and minimap exist; sheet-specific face annotations and model-sourced dimensions are not established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation card and minimap controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Minimap uses current geometry and IDs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik presentation has mobile CSS and FT3D-6 QA; no unfolded-room variant has been tested in Rubik.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current mobile presentation layout.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "PARTIAL",
+          "claim": "Current scenes capture/apply/restore their owned state; future face transforms, child overlays and resources need a separate proven lease.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon capture/apply/end restore current handles.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story runtime manages current presentation lifecycle.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik already offers image/share and ZIP of current project views; donor sheet is no authorized deliverable.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Image/share controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "View/project batch ZIP.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Existing QA covers presentation scenes and templates; face-topology, opening attachment and reverse for an unfold have no project-specific suite.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon visual QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Template QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "Which room face, ceiling and professional annotation can truthfully be shown for a real project requires a bounded service contract and topology evidence.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Cut 2 D11 limits arbitrary/shared/non-rectangular rooms and manual sheet data.",
+              "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik exposes polygons, walls and openings but no proven face-side graph.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+            }
+          ]
+        },
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "A temporary, reversible face-hinge representation linked to real wall/opening IDs is not evidenced in Rubik current.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Five face hinges observed on this authored rectangular study.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon presentation separates levels, not room faces.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "Hinge, matrix-following annotations and valid room entry are not connected as one reversible Rubik service.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous sheet-to-room-to-interior handoff.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has Story and room descent as current capabilities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,346-364"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "The donor 844×390 desktop composition overlaps the model, nav, HUD and text; this does not establish a Rubik mobile defect.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "At 844×390 the desktop navigation, introductory text, model labels and radar collide or crop during fold and walk.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Phone layout is selected by width <700, so 844px landscape retains desktop positions.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+            }
+          ]
+        }
+      ]
+    },
+    "01-c-floor-by-floor": {
+      "professionalServiceIdentity": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer.",
+      "technicalReuse": [
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "FT3D-5 axon descriptor and scene",
+            "current Story progress/restore"
+          ],
+          "missingConnector": "None for the already supported level reading; donor GAP/LAND and six fixed groups are not required.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "UNRESOLVED",
+          "existingCapabilitiesConsumed": [
+            "current level reading",
+            "room descent and route if valid"
+          ],
+          "missingConnector": "Validated selection/entry, recomposed handoff pose and route in the current project; no authored coordinate fallback.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "EXISTS",
+          "claim": "Project/Building preserve real level IDs, elevations, rooms and opening ownership; donor six authored floors are not imported.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project derives room/wall/opening geometry from source IDs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon descriptor derives levels from current Building.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:79-98"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "EXISTS",
+          "claim": "Rubik constructs current multilevel building geometry and bounds for level separation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Building geometry enters View3D sync.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,3808"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Level descriptor and separation bounds.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:58-98"
+            }
+          ]
+        },
+        "representation": {
+          "status": "EXISTS",
+          "claim": "FT3D-5 compact and exploded level reading already exists; the authored donor look and six-group stack are study-specific.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon/exploded narrative on actual levels.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon handles captured and applied.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4828"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has project appearances and lighting, but donor timber/CLT claims and lamp/sun treatment are not inferred as current project truth.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface appearances are assigned from current data.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current light preset/state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik fits a building axon and has room descent; a general automatic exploded-to-valid-level-route handoff is unverified.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current axon camera state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Room descent narrative is a separate current capability.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+            }
+          ]
+        },
+        "transition": {
+          "status": "EXISTS",
+          "claim": "Absolute reversible compact/exploded level state and scene progress already exist; donor GAP/LAND constants are not required.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon/exploded level transition.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence/local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Story player and seek map progress without donor native scrolling or a second scheduler.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Seek UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls, captions and minimap; donor floor-by-floor callouts are not assumed to be product labels.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation card/minimap/controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Minimap uses actual room/level data.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Current presentation has responsive layout and mobile QA; exact donor composition is not adopted.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation mobile CSS.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Current level presentation captures/applies/restores its own handles and state; donor itself has no editor rollback.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon begin/apply/end on current handles.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story runtime/scene lifecycle.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik can capture/share images and batch ZIP current project views; donor has no special output contract to port.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Image/share.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Batch ZIP.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "FT3D-5/6 reproducible QA exists; a hypothetical automatic handoff would need separate evidence.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Axon QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Template QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "NO_GAP",
+          "statement": "Real-level compact/exploded presentation, progress and reversible lifecycle already exist in Rubik; donor six-level constants add no required product capability.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Global D09-C1/C2 are KEEP EXISTING.",
+              "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current level narrative and lifecycle.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345; index.html:4750-4840"
+            }
+          ]
+        },
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "A general handoff from a level reading to an actual selected, navigable room/route is unverified even though Story, level geometry and room descent exist.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Donor camera enters its authored level-three studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Global D09-C4 remains UNRESOLVED.",
+              "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Room descent is separate from current axon states.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-345"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "844×390 donor desktop layout crops level labels/nav and overlays radar on the building; this does not establish a Rubik mobile defect.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "At 844×390 desktop nav, intro, level labels and radar crop or overlap the model, while progress and reverse still work.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Phone layout is width-gated at 700px; 844px landscape follows desktop positioning.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+            }
+          ]
+        }
+      ]
+    },
+    "02-demo-section-sweep": {
+      "professionalServiceIdentity": "Helps an architect explain how a section drawing relates to occupied rooms, vertical movement and the garden-facing exterior of the same house.",
+      "technicalReuse": [
+        {
+          "classification": "REIMPLEMENT_MECHANISM",
+          "existingCapabilitiesConsumed": [
+            "dynamic section and caps",
+            "current rendering scene"
+          ],
+          "missingConnector": "A Rubik-compatible technical representation/compositor with verified transparency, clipping and material behavior.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story section-open",
+            "existing lit View3D representation"
+          ],
+          "missingConnector": "A world-space, reversible blend over the same Rubik geometry and real region, without donor hardcoded scan curve.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "section-open Story",
+            "room route plan/choreography"
+          ],
+          "missingConnector": "A verified handoff pose and entry/route for the actual project; no borrowed donor Catmull-Rom control points.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "EXISTS",
+          "claim": "Project/Building own walls, rooms, openings, level IDs and real dimensions; donor labels and sun dates have no authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section derives from current project and geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik builds real geometry and a dynamic section on the active level; a whole authored three-level section is not established as a current general presentation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section target groups and active-level bound.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4694"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section descriptor derives supported intersections.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:1-105"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Dynamic clipping/caps exist, while donor normal/depth/ID technical ink and coordinated spatial blend are not proven for Rubik content.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current dynamic section clip and caps.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4673-4705"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D05-C1 remains unverified at Global reconciliation.",
+              "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:173-191"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has authorized surface and lighting state; donor per-pixel ink/material front and shaft handoff are not demonstrated.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section preserves material clipping state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4675-4703"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has section-open camera and planned room route choreography; this donor-specific long continuous path through three levels is not an existing generic route.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section-open deterministic camera.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Route planner and choreography are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik Story has absolute state, section movement and restore; the observed technical-to-lit spatial transition is unverified.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section-open stateAt(p).",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:125-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence/local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik has one Story progress/player and seek authority; donor long native-scroll mapping is not required to claim that capability.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story progress and sequences.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation seek UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls, minimap and captions; donor sheet title block, live lens and CAD radar are not assumed product contracts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation UI and minimap use project state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,129-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik presentation responds to small viewports; donor landscape overlap is a donor limitation, not evidence of a Rubik defect.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Responsive presentation card and controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik section and Story snapshot/restore camera, clipping/material planes and UI; donor passive A0/A1 proves visual equivalence only.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story end and section cleanup.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik already captures/shares images and batches views; the donor CTA is not a new output contract.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Image/share and batch ZIP.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation tests exist; any technical-material front and long route would need targeted visual, mobile and restore invariants.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing presentation QA harnesses.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "The donor technical ink uses a normal/depth/ID compositor; Rubik has a real section but no accredited equivalent for this exact technical rendering over arbitrary current project geometry.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "One ND pass and full-screen ink compositor.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:02-section-sweep/draw.js:21-220"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current dynamic section uses clipping/caps.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Global D05-C1 REIMPLEMENT is unverified, not a button-name comparison.",
+              "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:173-191"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "A coordinated section lens, material front and valid room route as one reversible service is not demonstrated by the current separate Rubik authorities.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Complete sheet-to-walk-to-sheet traversal.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\02-demo-section-sweep\\desktop\\desktop-forward-discovery.webm"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section-open and route are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "The 844×390 donor landscape title/HUD overlaps the section, while the interaction and reverse still work.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "At 844×390 the heading overlaps the section, level notes and title block; forward and reverse still operate.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\02-demo-section-sweep\\landscape\\landscape-start.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Only aspect ratio at or below 9:10 switches the layout to portrait; 844×390 retains desktop placement.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:02-section-sweep/index.html:163-190"
+            }
+          ]
+        }
+      ]
+    },
+    "03-a-open-the-lens": {
+      "professionalServiceIdentity": "Helps an architect explain what rooms and vertical movement lie behind one hillside section drawing while keeping the cut readable as perspective, material and light are introduced.",
+      "technicalReuse": [
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "sectionOpen",
+            "dynamic section/caps"
+          ],
+          "missingConnector": "A bounded frame/viewpoint adapter that derives from current Section bounds and available screen region.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "dynamic section/caps",
+            "surface renderer",
+            "Story absolute progress"
+          ],
+          "missingConnector": "A verified spatial style/material front over current geometry with coherent clipping and shadows.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story sectionOpen",
+            "presentation-route",
+            "semantic project data"
+          ],
+          "missingConnector": "Project-derived room-stop selection and section-facing camera orchestration.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "EXISTS",
+          "claim": "Current Project/Building data and derived section facts remain authoritative; the donor’s hillside address, dates, levels and copy are authored demo content.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section derives from current project and geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik derives a real section and caps for supported project geometry; the donor’s pre-authored whole three-level house and furnishings are not generic project geometry.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section target groups and active-level bound.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4694"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section descriptor derives supported intersections.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:1-105"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Dynamic section/caps exist, while this donor’s registered ink, colour vertex attributes and spatial material sweep over the same cut are not accredited as one current Rubik representation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Dynamic section clipping and caps over current geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section descriptor derives current project intersections.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns authorized surface and light state; an ink-to-lit-material front tied to a real section is not currently demonstrated.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section preserves material clipping state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4675-4703"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has section-open camera and route capabilities; the donor’s constant-size cut while the lens opens and its section-facing room-by-room framing are specific choreography not yet proven for arbitrary Rubik projects.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section-open camera evaluates absolute progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current route planner is distinct from donor authored room stops.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Story supports absolute state and reversible section movement; the observed coupled lens, technical notes, colour front, route and return are not one demonstrated current sequence.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section-open stateAt(p).",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:125-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence/local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik has one Story/player progress and seek authority. The donor’s 1600vh native-scroll calendar is a presentation choice, not a missing named control.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story progress and sequences.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation seek UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation UI and captions; the donor’s CAD radar, title block and marketing close are not automatically product contracts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation UI and minimap use project state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,129-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has small-screen presentation paths. The donor’s portrait left/right section framing and 844×390 overlap are donor observations, not proof of a Rubik defect.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Responsive presentation card and controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik has Story/section snapshot and restore. Donor A0/A1 is visually equivalent after a stable-start correction; exact donor internal resource identity is not observed.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story end and section cleanup.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has current image/share output paths. The donor’s selected-work and contact CTA are editorial, not a new required Rubik export.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Image/share and batch ZIP.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; any constant-size lens and material-front bridge would require targeted continuity, mobile and reverse evidence.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing presentation QA harnesses.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "Current section/camera authorities are separate; the observed constant-size-cut lens opening would need a bounded frame/viewpoint connector if considered useful.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "resolve/place separates frame and viewpoint.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/engine.js:561-592"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section and sectionOpen are distinct existing capabilities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105; js/presentation-story-core.js:111-170"
+            }
+          ]
+        },
+        {
+          "classification": "TRANSITION_GAP",
+          "statement": "The donor registers ink and lit material on one cut with a spatial colour front; an equivalent authorized Rubik transition is not accredited.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "withColour and colourAt drive the front.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/engine.js:109-230; page.js:107-110"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section and surface renderer exist without this demonstrated front.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "The room-by-room section-facing tour is an authored PLAN.a; current Rubik Story and route capacities would require project-derived stops and one lifecycle owner to produce a comparable service.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "PLAN.a supplies fixed room states.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:29-70"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story and route authorities are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "The donor 844×390 layout retains desktop overlay placement and obscures part of the cut; this is not a Rubik failure.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Overlapping landscape room card and radar.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\discovery-correction-2\\landscape-forward-discovery-p045.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Only widths up to 700px receive mobile layout.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:239-271"
+            }
+          ]
+        }
+      ]
+    },
+    "03-c-down-the-stair": {
+      "professionalServiceIdentity": "Helps an architect explain how one hillside house connects its street, bedroom and garden levels through the stair while retaining the section as the common spatial reference.",
+      "technicalReuse": [
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "sectionOpen",
+            "presentation-route",
+            "semantic Project/Building"
+          ],
+          "missingConnector": "Project-derived vertical section stops and section-facing camera orchestration.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "dynamic section/caps",
+            "surface renderer",
+            "Story absolute state"
+          ],
+          "missingConnector": "A verified spatial style/material front over current geometry with consistent clipping and light.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek/reverse",
+            "section snapshot/restore"
+          ],
+          "missingConnector": "None asserted; preserve existing lifecycle owner and test DOM cleanup.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "EXISTS",
+          "claim": "Current Project/Building levels, rooms and derived section facts own Rubik meaning; donor site, dimensions and copy are authored demo facts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section derives from current project and geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik derives a real section and caps for supported project geometry; the donor three-level furnished house is fixed authored geometry.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section target groups and active-level bound.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4694"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section descriptor derives supported intersections.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:1-105"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has dynamic section/caps; the donor ink-to-lit-material front on one registered cut is not demonstrated as a current Rubik representation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Dynamic section clipping and caps over current geometry.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section descriptor derives current project intersections.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has surface and light infrastructure; a spatial front coupling material and sunlight to a real section is not accredited.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section preserves material clipping state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4675-4703"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has section-open camera and route capabilities; a project-derived vertical stair descent with coherent cut framing is a specific choreography not currently demonstrated.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section-open camera evaluates absolute progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current route planner is distinct from donor authored room stops.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Story supports absolute reversible state, but this coupled vertical descent, material front, room cards and return is not one demonstrated current sequence.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Section-open stateAt(p).",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:125-170"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story sequence/local progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story/player progress and seek are current authorities; the donor 1250vh calendar is a presentation choice.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story progress and sequences.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation seek UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation captions and controls; donor radar, level HUD and authored marketing close do not become Rubik contracts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation UI and minimap use project state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,129-155"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has small-screen presentation paths; donor portrait section halves and 844×390 overlay collisions are donor-specific observations.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Responsive presentation card and controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "FT3D-6 mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik has Story/section snapshot and restore. Donor 03-c returns visually but retains hidden caption/room DOM content; Rubik must not copy that lifecycle defect.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story end and section cleanup.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has current image/share outputs. Donor selected-work and contact CTA are editorial, not an export capability requirement.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Image/share and batch ZIP.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; a stair-descent bridge would need vertical continuity, reverse, DOM cleanup and mobile evidence.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing presentation QA harnesses.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "A Rubik section-facing descent would need project-derived level/room stops across existing Section, Story and route authorities.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "PLAN.c supplies fixed stops and camera rects.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Section, Story and route are distinct capabilities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105; js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        {
+          "classification": "TRANSITION_GAP",
+          "statement": "A spatial ink-to-material front on a current Rubik section is not demonstrated, although section and material infrastructure exist.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "colourAt and withColour couple the spatial front to the donor geometry.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:107; engine.js:109-230"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current section and surface renderer exist.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "At 844×390 donor room cards and radar obscure the cut.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape overlap during bedroom chapter.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\landscape\\landscape-forward-m03-bedroom-patio.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "The donor mobile layout is width-only at 700px.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:239-271"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "The donor reverse leaves caption and room text in the DOM after the visible section returns.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "A0/A1 passive body text differs.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\reverse-state.json"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "words removes show classes without clearing text.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:121-129"
+            }
+          ]
+        }
+      ]
+    },
+    "04-demo-build-time-lapse": {
+      "professionalServiceIdentity": "Explains a proposed construction sequence for one hillside house through an aligned programme, staged 3D site and fixed-week drawings.",
+      "technicalReuse": [
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek/sequence",
+            "View3D geometry",
+            "current appearance renderer"
+          ],
+          "missingConnector": "Explicit source for work membership and element appearance/removal intervals, plus deterministic rendering of the derived state.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Building view source",
+            "View3D camera/rendering",
+            "Story progress"
+          ],
+          "missingConnector": "Time-state evaluator and bounded multi-pass view isolation; product choice for whether comparison is needed.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek/playback",
+            "presentation UI"
+          ],
+          "missingConnector": "None for transport; a real schedule remains a separate domain decision.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik Project/Building identities own actual geometry and rooms, but no general job/week/date/dependency authority is established for real construction progress. The donor PROG and 38 weeks are authored demo data.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current project and Building identities are distinct from presentation state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik builds real project geometry; the donor encodes appearance and disappearance times per merged vertex, including temporary work and finishes. No current element-to-work-package mapping is accredited.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current project geometry and level building path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has View3D and Story presentation; six synchronized fixed-week drawing rects from one scene are a separate bounded rendering mechanism.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current 3D presentation and sequence sources.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has current surface/light infrastructure; donor time-conditioned material replacement, stage props, sunlight and six paper/material passes are not demonstrated as one current feature.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has camera/route authorities, while the donor authored four-leg camera walk from pit through the upper and lower interiors is specific to this house.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story and route camera authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik absolute Story progress can drive reversible presentation, but a per-element construction time with paper-to-site and site-to-sheet transitions is not demonstrated.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current absolute Story state and sequence.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik already owns seek and playback; 29.4 viewport heights and donor WEEK_KEYS are authored transport for the demo, not construction authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story progress/seek.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik presentation controls exist. The donor programme block, WK indicator, paper notes and contact copy illustrate scheduling but are not a user-editable Gantt or verified actual progress.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation UI controls and captions.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has responsive presentation paths; donor portrait crops context and the 844×390 desktop breakpoint clips the programme and lets its HUD obscure the lower view.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing responsive presentation and mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story owns lifecycle restore. Donor 04 returns route, scroll and drawings but the docked programme visible at A0 is missing at A1 in observed desktop and portrait passes.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story end and cleanup authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has current image/share output; donor sheet A-901 is an authored multi-view presentation, not a verified project export.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current image/share and ZIP outputs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; any temporal bridge would require element/work authority, deterministic seek, multiple-pass isolation, reverse cleanup, responsive HUD and schedule honesty.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "A real construction timeline needs durable element-to-work membership, planned dates/dependencies and actual progress authority; donor PROG and WEEK_KEYS supply none.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "PROG is fixed 38-week data.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:04-build-time-lapse/js/programme.js:1-30"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Cut4 D16-C2 defers domain decisions.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:68-121"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story owns presentation time, not construction jobs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364"
+            }
+          ]
+        },
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "A bounded Rubik comparison could evaluate one current Building at multiple authorized states, but fixed six tile/paper passes and their GPU cost are donor presentation choices.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "P.draw uses one scene and tile-specific time.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:04-build-time-lapse/js/pipe.js:225-265"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Building sources/IDs are current Rubik authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "Portrait closing contact button overlays schedule rows; landscape programme/HUD is clipped or obscures the low viewport.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait closing overlap.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\04-demo-build-time-lapse\\portrait\\portrait-forward-m12-six-drawing-close.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape schedule off right at A0.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\04-demo-build-time-lapse\\landscape\\landscape-start.png"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "Natural reverse returns the six drawings and scroll origin but does not visually restore the initial programme dock.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Desktop stable A0.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\04-demo-build-time-lapse\\desktop\\discovery-correction-2\\desktop-start.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Desktop A1 lacks the dock.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\04-demo-build-time-lapse\\desktop\\discovery-correction-2\\desktop-restored-start.png"
+            }
+          ]
+        }
+      ]
+    },
+    "05-a-the-programme": {
+      "professionalServiceIdentity": "Communicates an example 14-week timber-house construction sequence with an aligned programme and visual build.",
+      "technicalReuse": [
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek and playback",
+            "presentation UI"
+          ],
+          "missingConnector": "None for transport; meaningful construction dates require separate authority.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Building geometry",
+            "Story sequence",
+            "View3D renderer"
+          ],
+          "missingConnector": "Authorized element-to-task mapping and deterministic time-state evaluator.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "DEFER",
+          "existingCapabilitiesConsumed": [
+            "Building quantities",
+            "existing economic records",
+            "Story seek"
+          ],
+          "missingConnector": "Separate planning and execution data contracts with calendars, dependencies, work membership and provenance.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik Project/Building and C1-C4 own geometry, quantities and economic records; no durable job, calendar, dependency, element-to-job or execution authority is established. Donor PHASES is a fixed illustration.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project/Building identity and Story state are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 distinguishes current C1-C4 from construction planning.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns real Building geometry; donor assigns authored phase and per-piece appearance to a single house. A mapping from Rubik element IDs to authorized work packages is missing.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building geometry and level path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Pieces are assigned phase and local timing in the donor.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik View3D/Story can represent a Building; the donor Gantt and 3D share one virtual week, but their fixed rows are not current project data.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building view and Story.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "One PHASES array drives Gantt and house update.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,1416-1470; view.js:334-430"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has current surface rendering; donor stage tints, ghosts, material arrival and construction props are specific to its authored house.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Week update sets piece material/visibility.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:1416-1470"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns presentation camera and route mechanisms; donor automatic five-stop interior spline is authored for this house.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story route and camera authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Five interior stops and spline keys.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik Story can seek absolute progress; donor phase-piece arrivals and exterior-to-interior handover are authored transitions rather than verified project execution.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Absolute Story sequence and seek.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Week controls appearance and interior transition.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:1416-1470; view.js:924-1007"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story already owns transport. Donor blocks native scrolling and maps wheel to a virtual week; the transport mechanism provides no planning authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story seek/playback UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Wheel input changes virtual week.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:914-937"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls, while donor Gantt, WBS and percent-complete labels are authored. Decorative CRITICAL PATH and TODAY labels cannot be read as computed planning or current date.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 documents the critical-path, today and percent limitations.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has responsive presentation paths; donor 390×844 omits the chart from the viewport and clips controls, while 844×390 chart labels collide and the programme covers the 3D.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Responsive presentation and mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait mid-build screenshot lacks chart.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape chart labels overlap.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\landscape\\landscape-forward-m07-roof.png"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has lifecycle restore. Donor 05-a returns virtual week, camera shot, route, native scroll and visible A0 presentation; hidden render-resource identity was not observed.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story cleanup authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Natural reverse and A1 screenshot.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has image/share and economic outputs; the donor schedule is an on-screen illustration, with no verified project schedule export.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current image/share outputs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 finds no persistent editable schedule or certified execution.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; a future schedule bridge would need source-of-truth tests for dates, dependencies, phase membership, deterministic seeking, mobile legibility and reverse cleanup.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 separates planning domain and Story transport.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "A real plan requires durable tasks, element membership, calendar, dependencies, date provenance and separate actual-execution observations. The donor provides only fixed illustration.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Static PHASES and derived dates.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-45"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 contract decision required.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story progress is presentation state.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364"
+            }
+          ]
+        },
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "Even an illustrative project-specific phase view needs explicit mapping from authorized Rubik element IDs to work states; donor piece assignments are house-specific.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Pieces receive manual phases.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building identity.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "CRITICAL PATH arrows and TODAY/date/complete labels imply planning precision absent from the fixed dataset.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Adjacent arrows and cursor date.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:382-430"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 planning semantics limits.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        {
+          "classification": "MOBILE_GAP",
+          "statement": "390×844 excludes the Gantt chart and clips controls; 844×390 overlaps week labels and obscures much of the 3D.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait phase screenshot.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape phase screenshot.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\landscape\\landscape-forward-m07-roof.png"
+            }
+          ]
+        }
+      ]
+    },
+    "05-b-1-1-site-sheet": {
+      "professionalServiceIdentity": "Explains how one planned building emerges from a foundation drawing and construction programme on its actual site footprint.",
+      "technicalReuse": [
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek and playback"
+          ],
+          "missingConnector": "None for transport; schedule truth remains separate.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Building geometry",
+            "Story sequence",
+            "existing plan/output paths"
+          ],
+          "missingConnector": "Project plan projection, validated task-to-element mapping and a responsive sheet descriptor.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "DEFER",
+          "existingCapabilitiesConsumed": [
+            "Building quantities",
+            "Story seek"
+          ],
+          "missingConnector": "Separate durable planning and execution contracts with provenance.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik Project/Building and C1-C4 own geometry, quantities and economic records; no durable job, calendar, dependency, element-to-job or execution authority is established. Donor PHASES is a fixed illustration.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project/Building identity and Story state are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 distinguishes current C1-C4 from construction planning.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns real Building geometry; donor assigns authored phase and per-piece appearance to a single house. A mapping from Rubik element IDs to authorized work packages is missing.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building geometry and level path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Pieces are assigned phase and local timing in the donor.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik View3D and Story can present current Building geometry. Donor B prints a fixed foundation plan and programme into one ground CanvasTexture while construction geometry rises above it; no current Rubik project plan/programme-to-ground-sheet binding is established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building and Story view.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Cached base and dynamic sheet texture.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:630-776"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik has current surface rendering; donor stage tints, ghosts, material arrival and construction props are specific to its authored house.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Surface renderer consumes current project appearances.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Week update sets piece material/visibility.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:1416-1470"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns Story camera/route mechanisms. Donor B authors top→b2→b3→top by week; the automatic five-stop interior tour is not the canonical B route.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story route and camera authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "B camera thresholds and auto shot.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik Story seeks absolute progress. Donor B couples staged pieces, a dynamic ground-sheet overlay and an authored camera trajectory to one virtual week.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story absolute sequence and seek.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Sheet update and camera mapping.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329,730-776,951-963"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story already owns transport. Donor blocks native scrolling and maps wheel to a virtual week; the transport mechanism provides no planning authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story seek/playback UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Wheel input changes virtual week.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:914-937"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls. Donor B uses an on-site drawing/programme plus authored phase HUD, weekday dates and percent labels; these are illustration, not professional schedule truth.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Sheet, HUD and fixed PHASES.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:491-500,630-776; house.js:9-24"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 distinguishes fixed programme from planning authority.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has responsive presentation paths. Donor B crops the top toolbar and on-site sheet at 390×844; at 844×390 the phase and date cards cover much of the sheet.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik responsive presentation and mobile QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait completed sheet crop.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\portrait\\semantic-correction-2\\portrait-forward-m12-overhead-completion-sheet.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape HUD overlay.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-m12-overhead-completion-sheet.png"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has lifecycle restore. Donor B natural reverse returns virtual week 0, SHOT top, same route, native scroll and a visually equivalent A0 site sheet; hidden render-resource identity is NOT_OBSERVED.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story cleanup authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "B natural reverse and A1.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-restored-start.png"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik image/share and economic outputs exist. Donor B shows a programme on the ground but no verified project plan, build schedule or site-sheet export.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation outputs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 has no verified schedule export or execution authority.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; a future schedule bridge would need source-of-truth tests for dates, dependencies, phase membership, deterministic seeking, mobile legibility and reverse cleanup.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 separates planning domain and Story transport.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "A Rubik-specific on-site sheet would need an authorized plan geometry and element-to-work mapping; donor B is fixed to one house and PHASES array.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Manual phase pieces and static sheet.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640; view.js:630-776"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Building is current geometry authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "The sheet cursor, staged visibility and camera would need one Story-owned time state, while retaining separate planning provenance.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Shared week updates sheet and scene.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:951-963; house.js:1416-1470"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story owns presentation seek.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364"
+            }
+          ]
+        },
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "A factual plan or execution sheet requires durable tasks, dates, dependencies, element membership and observed actual progress; donor data is illustrative.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 professional domain limit.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Fixed PHASES and week-driven HUD.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24; view.js:491-500"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "Near-complete weeks 13.5–14 display Site Mobilisation before exact week 14, and narrow/landscape layouts crop or obscure the site sheet.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Late-phase fallback.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\semantic-correction-1\\desktop-forward-m11-late-phase-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait crop.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\portrait\\semantic-correction-2\\portrait-forward-m12-overhead-completion-sheet.png"
+            }
+          ]
+        }
+      ]
+    },
+    "05-c-site-camera": {
+      "professionalServiceIdentity": "Shows an illustrative construction sequence from a site-camera viewpoint while connecting visible build stages to a programme, a changing daylight clock and a final interior walk-through.",
+      "technicalReuse": [
+        {
+          "classification": "REUSE_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story seek and playback"
+          ],
+          "missingConnector": "None for transport; factual schedule authority remains separate.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "Story camera",
+            "sun/hour control",
+            "View3D rendering"
+          ],
+          "missingConnector": "Story-owned presentation descriptor binding authorized project state to camera and light without treating synthetic week as current date.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "DEFER",
+          "existingCapabilitiesConsumed": [
+            "Building quantities",
+            "Story seek"
+          ],
+          "missingConnector": "Separate durable planning and execution data contracts with provenance.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik Project/Building and C1-C4 own geometry, quantities and economic records; no durable job, calendar, dependency, element-to-job or execution authority is established. Donor PHASES is a fixed illustration.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project/Building identity and Story state are separate.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 distinguishes current C1-C4 from construction planning.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns real Building geometry; donor assigns authored phase and per-piece appearance to a single house. A mapping from Rubik element IDs to authorized work packages is missing.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building geometry and level path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Pieces are assigned phase and local timing in the donor.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik View3D/Story can represent a Building; the donor Gantt and 3D share one virtual week, but their fixed rows are not current project data.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building view and Story.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "One PHASES array drives Gantt and house update.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,1416-1470; view.js:334-430"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik already has a sun/hour control, directional light, shadow map and Story solar snapshot. Donor C computes time of day 7.3→18.4 from the illustrative virtual week and moves a sun with that hour; no current Rubik construction-week-to-sun authority is established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current sun control and light application.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:534,2551-2558,3758-3779"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story solar snapshot phase.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:178-239"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "C time-of-day and sun placement.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:165-177,316-329"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik Story already owns camera routes and presentation camera. Donor C uses one site camera, then a path approach at week 13.2 and an automatic five-stop interior spline from week 13.48.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story camera/route authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "C camera poses, thresholds and tour keys.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik Story can seek absolute presentation progress. Donor C orchestrates fixed phase-piece arrivals, synthetic date/time/sun and camera shot cam→path→inside from the same virtual week.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story absolute sequence and seek.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Week drives C time, sun, camera and house.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329,914-1007; house.js:1416-1470"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story already owns transport. Donor blocks native scrolling and maps wheel to a virtual week; the transport mechanism provides no planning authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story seek/playback UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Wheel input changes virtual week.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:914-937"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls. Donor C displays an authored 14-week programme, synthetic date/time, percent and CRITICAL PATH label; none establish actual site telemetry, CPM or execution.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Presentation controls and Story UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "C clock and compact chart are drawn from virtual week.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:334-430,597-625"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 limits date, CPM and execution claims.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has responsive presentation paths. Donor C crops toolbar/date and programme in portrait, while landscape week labels collide and the bottom programme covers much of the 3D.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current responsive presentation and QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait final scene.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape final scene.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-end.png"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has lifecycle restore. Donor C natural reverse returns week 0, SHOT cam, route and native scroll to their A0 values with visual equivalence; exact camera pose/resource identity remains NOT_OBSERVED.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story cleanup.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "C A1 after reverse.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has image/share and economic outputs; the donor schedule is an on-screen illustration, with no verified project schedule export.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current image/share outputs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 finds no persistent editable schedule or certified execution.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Current presentation QA exists; a future schedule bridge would need source-of-truth tests for dates, dependencies, phase membership, deterministic seeking, mobile legibility and reverse cleanup.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation QA harness.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+            },
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 separates planning domain and Story transport.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "A Rubik project construction view would need authorized Building element-to-work membership; donor pieces and PHASES are fixed to one house.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Manual phase membership.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building IDs.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "Story could own one presentation cursor connecting current geometry, camera, programme and sunlight; donor maps all to an authored week without factual date provenance.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Shared C week mapping.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329,597-625"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story seek and Rubik sun control.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364; index.html:3758-3779"
+            }
+          ]
+        },
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "Actual site telemetry and construction planning need durable task, calendar, dependency, provenance and observed execution contracts; synthetic donor clock is insufficient.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "D18 professional limits.",
+              "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "C time is deterministic function of illustrative week.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:316-329"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "Portrait clips toolbar/date/programme and landscape lower band obscures much of the scene; compact week labels collide.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Portrait end.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape end.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-end.png"
+            }
+          ]
+        }
+      ]
+    },
+    "06-demo-card-model": {
+      "professionalServiceIdentity": "Lets an architect explain to a client how one physical 1:100 study model relates to the spatial scale and lived rooms of the proposed house.",
+      "technicalReuse": [
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "project geometry",
+            "framing/overviewPose",
+            "Story descent"
+          ],
+          "missingConnector": "A temporary card/contour display adapter derived from authorized bounds and site data, with explicit presentation-only provenance.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "REIMPLEMENT_MECHANISM",
+          "existingCapabilitiesConsumed": [
+            "presentationReveal",
+            "surface renderer",
+            "Story seek/reverse"
+          ],
+          "missingConnector": "A verified representation mask/band and matching depth/shadow cleanup; dual light filtering only if coexistence requires it.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "presentation-route",
+            "Story camera/seek",
+            "current semantic project"
+          ],
+          "missingConnector": "Project-derived room stops, bounded camera choreography and reversible model/room state handoff.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik Project/Building owns real dimensions and identities. Donor 1:100 display values and studio message are authored presentation, not project facts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Project geometry is derived from current project data.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik has real building walls/openings/levels; a temporary layered card support derived from real bounds and contour data is not established as current geometry.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current building geometry and 3D architecture path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik offers View3D and presentation surfaces; a physical card/acetate/edge representation and spatially co-registered materialized view are not accredited as a current mode.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story and presentation renderer authorities.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns materials, HDR/PMREM and presentation light. The donor-specific simultaneous card/real light filtering and depth-matched sweep are not shown in current Rubik.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current material and light paths.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74; index.html:3758-3865"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has perspective, framing, Story descent and route authorities; the donor scale-weighted dive and fixed-house walk/back are authored choreography.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current camera descent, overview and route.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:46-110; js/presentation-route.js:1-156; index.html:4348-4395"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik has absolute Story/reveal state; no current spherical card/real visibility and shadow front is established.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story state and presentationReveal.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364; index.html:3344-3385"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story already owns seek/playback and absolute progress. Donor 2030vh chapters and exponential smoothing are authored transport.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story seek and presentation player controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik already has presentation controls and sourced captions; donor studio CTA, scale chip and atmospheric HUD are presentation examples, not data authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current presentation UI and captions.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has mobile presentation paths, while any card-model variant would need its own framing and collision QA; donor 844×390 closing copy overlaps its header.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik responsive and presentation QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has an end/restore owner. Donor corrected A0/A1 are visually equivalent after natural reverse, but hidden object and GPU identities are NOT_OBSERVED.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story end and renderer restore path.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has image/share/package outputs. Donor end CTA is studio marketing copy, not a new export format.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current image/share and ZIP output controls.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation QA; a reversible card/real representation would additionally require scale honesty, shadow-front coherence, mobile captions and reverse resource cleanup.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing presentation QA harness and mobile cases.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "A derived, temporary physical card representation, contour support and edge/acetate cues are not accredited in current Rubik.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "cardHouse/contourLayers define representation-specific geometry.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/desk.js:290-390"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current project geometry and surface renderer do not establish a card-display layer.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        {
+          "classification": "TRANSITION_GAP",
+          "statement": "The exact radius-driven spatial card/real front with matching shadow/depth policy is absent from the audited current presentation scope.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "sweepMaterial/DEPTH implement card/real discard and shadow front.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/sweep.js:12-104"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Story and presentationReveal use different transition paths.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; index.html:3344-3385"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "Existing Story, framing and route authorities would need project-derived states and one lifecycle owner to connect model-scale explanation with a valid room visit.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "CH/dive/walk/back are authored for one donor house.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:180-307,420-526"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Story camera and route capabilities already exist.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:46-110,346-364; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "At 844×390 the donor close overlaps its brand/navigation because the mobile CSS branch does not apply; this is not a Rubik failure.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape closing collision.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\discovery-correction-1\\landscape-end.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Mobile layout rule excludes 844×390.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/css/page.css:208-239"
+            }
+          ]
+        },
+        {
+          "classification": "PRODUCT_DECISION_REQUIRED",
+          "statement": "Whether a card-to-real scale service merits Rubik product inclusion is outside this audit; Atlas/Cut dispositions remain bounded reference evidence.",
+          "evidence": [
+            {
+              "class": "CUT_ATLAS",
+              "statement": "Global D14/C2 and D15/C1 remain decision/reference bounded.",
+              "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:335-373"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Runtime shows one donor-authored marketing presentation.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+            }
+          ]
+        }
+      ]
+    },
+    "07-a-one-door": {
+      "professionalServiceIdentity": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard.",
+      "technicalReuse": [
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "elevation Story",
+            "View3D geometry/materials",
+            "Solar snapshot"
+          ],
+          "missingConnector": "Project-derived hatch/mask adapter registered to geometry and shadow, with independent source/data provenance.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "presentation-route",
+            "elevation Story camera",
+            "Story lifecycle"
+          ],
+          "missingConnector": "Validated project-derived entry/interior/garden route and door-state handoff; donor fixed camera keys and sales copy remain references only.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "EXISTS",
+          "claim": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "EXISTS",
+          "claim": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "NO_GAP",
+          "statement": "Rubik already owns project geometry, materials, light, presentation progress and restore infrastructure.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Existing project/Story/elevation infrastructure.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/presentation-elevation-core.js:171-247; js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "A project-derived shadow-coherent ink hatch and spatially registered ink-to-material facade front are not accredited in current Rubik.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Donor shader connects shadow, hatch and uSweep.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119,352-429"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current elevation Story composes camera/solar without this donor front.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "If selected later, one Story state would have to coordinate drawing, relief, sun, doors and front-to-back route without mutating project authority.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Donor frame coordinates those states from p.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-73"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story and elevation already have absolute progress.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-elevation-core.js:171-247"
+            }
+          ]
+        }
+      ]
+    },
+    "07-b-the-row": {
+      "professionalServiceIdentity": "Let a developer, architect or buyer compare six distinct townhouse plots in one street composition, identify the available plot 04 and inspect its entrance and key rooms.",
+      "technicalReuse": [
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "project library",
+            "Building data",
+            "presentation UI"
+          ],
+          "missingConnector": "Authorized plot inventory and selected-building reference; never infer live sale status from donor labels.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "elevation Story",
+            "surface renderer",
+            "Solar snapshot"
+          ],
+          "missingConnector": "Per-building registered hatch/front and shared lighting state, with explicit cleanup.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "presentation-route",
+            "Story camera",
+            "current semantic project"
+          ],
+          "missingConnector": "Selected plot-to-entry/room route and reversible door/camera handoff.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns project/building dimensions and IDs; an authoritative six-plot status inventory is not accredited by this frozen baseline. Donor sold/reserved/available, 142 m² and CTA are authored.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns project/building dimensions and IDs; an authoritative six-plot status inventory is not accredited by this frozen baseline. Donor sold/reserved/available, 142 m² and CTA are authored.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36; index.html:2408-2428"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik builds one project/building and levels from data; a single composed six-plot street with six independently identified homes is not accredited.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik builds one project/building and levels from data; a single composed six-plot street with six independently identified homes is not accredited.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36,317-377; index.html:3486-3640"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has elevation Story/View3D; cross-house shadow hatch and registered technical/material front are not established modes.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has elevation Story/View3D; cross-house shadow hatch and registered technical/material front are not established modes.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "EXISTS",
+          "claim": "Rubik owns material, shadow and optional Solar authority; donor one-light animation is an authored visual reference.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns material, shadow and optional Solar authority; donor one-light animation is an authored visual reference.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has facade Story framing and routes; isolate-one-plot row-to-interior choreography is donor authored.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has facade Story framing and routes; isolate-one-plot row-to-interior choreography is donor authored.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik has Story/reveal state; donor sweep across six houses is a particular co-registered representation transition.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has Story/reveal state; donor sweep across six houses is a particular co-registered representation transition.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has absolute seek/playback; donor Lenis 660vh transport need not be copied.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story has absolute seek/playback; donor Lenis 660vh transport need not be copied.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls; donor plot-status cards, radar and reserve CTA are authored UI and need project source truth.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation controls; donor plot-status cards, radar and reserve CTA are authored UI and need project source truth.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has mobile presentation paths; donor landscape A0 clips plot cards and overlays heading on row, so any adapted six-plot service needs independent framing.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has mobile presentation paths; donor landscape A0 clips plot cards and overlays heading on row, so any adapted six-plot service needs independent framing.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has restore owner; donor A0/A1 are visually equivalent after natural reverse but GPU identity is unobserved.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story has restore owner; donor A0/A1 are visually equivalent after natural reverse but GPU identity is unobserved.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has presentation/output paths; donor plot reservation CTA is not an output requirement.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation/output paths; donor plot reservation CTA is not an output requirement.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Rubik has FT3D-6 QA; six-plot status truth, highlight continuity, mobile and reverse would require dedicated checks.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has FT3D-6 QA; six-plot status truth, highlight continuity, mobile and reverse would require dedicated checks.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "A source-backed plot/status record would have to connect multiple authorized buildings to the six-plot presentation; donor statuses are static copy.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "STATUS is authored inline in page.js.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:22-31"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current Building UI is project/level centric.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36,317-377"
+            }
+          ]
+        },
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "Shadow-coherent ink/material front across multiple homes is not accredited in Rubik current.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Shared shader and uSweep drive row front.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119; b-the-row/page.js:87-90"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current elevation Story has facade/solar state but no proven six-house front.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "One selected plot would need continuity from row identity to valid entry/rooms, with reversible sun, door and camera state.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "plot4 alone has interior and animated doors.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-20,98-105"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has Story route/restore to consume.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156; js/presentation-story-core.js:346-364"
+            }
+          ]
+        },
+        {
+          "classification": "DONOR_LIMITATION",
+          "statement": "At 844×390 the initial heading overlays the row and plot cards are clipped, weakening the six-plot comparison.",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Landscape A0 overlap/clipping.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png"
+            },
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Phone camera override only applies at portrait ratio.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:89-103,1146-1187"
+            }
+          ]
+        }
+      ]
+    },
+    "07-c-the-face": {
+      "professionalServiceIdentity": "Let an architect, material supplier or client inspect how a proposed facade bond and physically projecting headers read at drawing scale, under normal/raking sun and at human approach scale.",
+      "technicalReuse": [
+        {
+          "classification": "CONNECT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "wall/opening geometry",
+            "material selection",
+            "presentation captions"
+          ],
+          "missingConnector": "Source-backed facade relief descriptor; no hard-coded universal 60 mm projection or invented brand as project truth.",
+          "implementationAuthorized": false
+        },
+        {
+          "classification": "ADAPT_EXISTING",
+          "existingCapabilitiesConsumed": [
+            "elevation Story",
+            "surface renderer",
+            "Solar/light/shadows"
+          ],
+          "missingConnector": "Shadow-registered drawing/material adapter and reversible light/camera coordination; avoid donor-specific AO/renderer rewrite.",
+          "implementationAuthorized": false
+        }
+      ],
+      "crosswalk": {
+        "semanticData": {
+          "status": "PARTIAL",
+          "claim": "Rubik owns project dimensions and identities; invented KC-06, 60 mm projection, mortar, sample pack and CTA are not current project facts.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns project dimensions and identities; invented KC-06, 60 mm projection, mortar, sample pack and CTA are not current project facts.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "geometry": {
+          "status": "PARTIAL",
+          "claim": "Rubik has authoritative walls/openings; a verified project-derived header relief/diaper pattern is not established. Donor 0.06 m is instance data only.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has authoritative walls/openings; a verified project-derived header relief/diaper pattern is not established. Donor 0.06 m is instance data only.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+            }
+          ]
+        },
+        "representation": {
+          "status": "PARTIAL",
+          "claim": "Rubik has elevation Story/View3D; shadow-derived drawn hatch linked to the same material wall is not an accredited current mode.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has elevation Story/View3D; shadow-derived drawn hatch linked to the same material wall is not an accredited current mode.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+            }
+          ]
+        },
+        "materialsLight": {
+          "status": "EXISTS",
+          "claim": "Rubik owns materials, shadows and optional Solar; donor rake response is a service-specific coordination of material, relief and light.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik owns materials, shadows and optional Solar; donor rake response is a service-specific coordination of material, relief and light.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+            }
+          ]
+        },
+        "camera": {
+          "status": "PARTIAL",
+          "claim": "Rubik has elevation camera and route authorities; the 1:20-to-header-to-porch inspection path is donor choreography.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has elevation camera and route authorities; the 1:20-to-header-to-porch inspection path is donor choreography.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+            }
+          ]
+        },
+        "transition": {
+          "status": "PARTIAL",
+          "claim": "Rubik has absolute Story/reveal; donor paper-to-brick facade sweep and sun rake are particular presentation transitions.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has absolute Story/reveal; donor paper-to-brick facade sweep and sun rake are particular presentation transitions.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+            }
+          ]
+        },
+        "scrollProgress": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has absolute seek/playback; donor Lenis 540vh is transport.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story has absolute seek/playback; donor Lenis 540vh is transport.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "ui": {
+          "status": "PARTIAL",
+          "claim": "Rubik has presentation controls/captions; invented product spec/order CTA is donor-authored UI.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation controls/captions; invented product spec/order CTA is donor-authored UI.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "mobile": {
+          "status": "PARTIAL",
+          "claim": "Rubik has mobile presentation paths; a detail-level bond and spec panel require independent portrait/landscape framing and legibility QA.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has mobile presentation paths; a detail-level bond and spec panel require independent portrait/landscape framing and legibility QA.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+            }
+          ]
+        },
+        "lifecycleRestore": {
+          "status": "EXISTS",
+          "claim": "Rubik Story has restore owner; donor natural reverse visually recovers ink, 2° optic and original sun, with internal GPU identity unobserved.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story has restore owner; donor natural reverse visually recovers ink, 2° optic and original sun, with internal GPU identity unobserved.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+            }
+          ]
+        },
+        "outputs": {
+          "status": "EXISTS",
+          "claim": "Rubik has presentation/export paths; sample panel ordering is not an authorized output from this audit.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has presentation/export paths; sample panel ordering is not an authorized output from this audit.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+            }
+          ]
+        },
+        "qa": {
+          "status": "PARTIAL",
+          "claim": "Rubik has FT3D-6 QA; verified relief dimensions/material provenance, lighting and reverse across viewports need service-specific tests.",
+          "evidence": [
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik has FT3D-6 QA; verified relief dimensions/material provenance, lighting and reverse across viewports need service-specific tests.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+            }
+          ]
+        }
+      },
+      "gaps": [
+        {
+          "classification": "INTEGRATION_GAP",
+          "statement": "A sourced facade material/relief specification would have to connect to authorized project data; invented KC-06 facts cannot fill that role.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Donor product attributes are inline authored copy and v.relief=0.06.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:1-16,81-86"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik project owns current geometry/material source.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053,3486-3640"
+            }
+          ]
+        },
+        {
+          "classification": "REPRESENTATION_GAP",
+          "statement": "A shadow-coherent technical hatch and spatial ink/material front for verified relief are not accredited in current Rubik.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "Shader derives hatch/front from shadow and uSweep.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119,352-429"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Current elevation Story does not establish this drawing/material front.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+            }
+          ]
+        },
+        {
+          "classification": "ORCHESTRATION_GAP",
+          "statement": "If selected later, sourced relief, raking light, close camera and door route would require one reversible Story-owned state.",
+          "evidence": [
+            {
+              "class": "DONOR_SOURCE",
+              "statement": "One frame maps sun, camera and door over same h0.",
+              "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-75"
+            },
+            {
+              "class": "RUBIK_CURRENT",
+              "statement": "Rubik Story seek/restore and Solar already exist.",
+              "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-elevation-core.js:225-247"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

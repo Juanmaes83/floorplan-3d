@@ -1,0 +1,5 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.conflicts.v1",
+  "reviewBasis": "14 milestone-first donor source/Cut/Atlas/Rubik take reconciliations. Historical Cut1 dispositions superseded by Global Reconciliation are documented evolution, not an observed runtime conflict. Known technical/product unknowns are in unresolved.json.",
+  "items": []
+}

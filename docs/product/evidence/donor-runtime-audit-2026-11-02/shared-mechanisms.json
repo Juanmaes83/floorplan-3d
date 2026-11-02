@@ -1,0 +1,447 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.shared-mechanisms.v1",
+  "note": "technicalReuse and professionalServiceIdentity are separate; shared code does not fuse product services.",
+  "items": [
+    {
+      "id": "SM-01-EXPLODED",
+      "takesUsedBy": [
+        "01-a-the-board",
+        "01-b-unfolded-room",
+        "01-c-floor-by-floor"
+      ],
+      "mechanism": "Shared exploded-house core/main scene; each directional take has its own authored choreography.",
+      "rubikEquivalent": "Rubik project geometry and Story-owned representation state",
+      "evidence": [
+        {
+          "takeId": "01-a-the-board",
+          "manifest": "takes/01-a-the-board/manifest.json",
+          "donorSource": [
+            {
+              "path": "01-exploded-house/main.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "120-184",
+              "claim": "Native scroll drives smoothed p; T also advances the time-dependent intro."
+            },
+            {
+              "path": "01-exploded-house/core.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "23;312-348;414-417",
+              "claim": "Camera switches phone keys under 700px; 844px landscape uses desktop layout."
+            }
+          ]
+        },
+        {
+          "takeId": "01-b-unfolded-room",
+          "manifest": "takes/01-b-unfolded-room/manifest.json",
+          "donorSource": [
+            {
+              "path": "01-exploded-house/main.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "120-184",
+              "claim": "Native scroll is smoothed into runtime progress; intro uses wall-clock time."
+            },
+            {
+              "path": "01-exploded-house/core.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "23;312-348;414-417",
+              "claim": "Camera interpolation and width-gated phone handling."
+            }
+          ]
+        },
+        {
+          "takeId": "01-c-floor-by-floor",
+          "manifest": "takes/01-c-floor-by-floor/manifest.json",
+          "donorSource": [
+            {
+              "path": "01-exploded-house/main.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "120-184",
+              "claim": "Native scroll drives smoothed p; intro shadows use separate wall-clock T."
+            },
+            {
+              "path": "01-exploded-house/core.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "23;312-348;414-417",
+              "claim": "Width-gated camera variants and projection."
+            }
+          ]
+        }
+      ],
+      "professionalServiceIdentity": [
+        {
+          "takeId": "01-a-the-board",
+          "problemSolved": "Helps a client or reviewer understand how an authored timber-house assembly relates to a walkable finished space."
+        },
+        {
+          "takeId": "01-b-unfolded-room",
+          "problemSolved": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior."
+        },
+        {
+          "takeId": "01-c-floor-by-floor",
+          "problemSolved": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer."
+        }
+      ],
+      "uncertainties": [
+        "Extent of a future product service reuse is deliberately undecided; no new production capability is declared."
+      ]
+    },
+    {
+      "id": "SM-03-OPEN-SECTION",
+      "takesUsedBy": [
+        "03-a-open-the-lens",
+        "03-c-down-the-stair"
+      ],
+      "mechanism": "Shared open-section page/engine and section geometry with distinct lens and stair services.",
+      "rubikEquivalent": "Rubik section descriptor, presentation elevation/section Story and camera route",
+      "evidence": [
+        {
+          "takeId": "03-a-open-the-lens",
+          "manifest": "takes/03-a-open-the-lens/manifest.json",
+          "donorSource": [
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "29-110",
+              "claim": "Authored 1600vh room and lens track, tangential lens interpolation and spatial colour front."
+            },
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "111-212",
+              "claim": "Native scroll maps to a smoothed internal vh; captions, room cards and editorial handoff follow that state."
+            },
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "215-268",
+              "claim": "Loader and drawing animation complete before __ready; explains why original desktop/landscape A0 was premature."
+            },
+            {
+              "path": "03-open-section/engine.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "109-230",
+              "claim": "One building shader mixes ink and lit material behind an X-position front."
+            },
+            {
+              "path": "03-open-section/engine.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "491-513",
+              "claim": "Cut lids are rebuilt when intersected pieces change and otherwise repositioned."
+            },
+            {
+              "path": "03-open-section/engine.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "561-690",
+              "claim": "Section frame and viewpoint are separated; lens determines distance, view offset preserves cut registration, and notes are drawn over the cut."
+            }
+          ]
+        },
+        {
+          "takeId": "03-c-down-the-stair",
+          "manifest": "takes/03-c-down-the-stair/manifest.json",
+          "donorSource": [
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "61-107",
+              "claim": "Distinct authored 1250vh descent, room cards, lens and colour front."
+            },
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "116-155",
+              "claim": "Chapter captions, level HUD and room cards follow internal vh; show classes are removed without clearing caption/room DOM text."
+            },
+            {
+              "path": "03-open-section/page.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "162-212,215-268",
+              "claim": "Native scroll maps to smoothed internal vh after loader readiness."
+            },
+            {
+              "path": "03-open-section/engine.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "109-230,491-513,561-592",
+              "claim": "Material front and caps stay attached to the section while lens-derived distance and view offset frame the descending camera."
+            }
+          ]
+        }
+      ],
+      "professionalServiceIdentity": [
+        {
+          "takeId": "03-a-open-the-lens",
+          "problemSolved": "Helps an architect explain what rooms and vertical movement lie behind one hillside section drawing while keeping the cut readable as perspective, material and light are introduced."
+        },
+        {
+          "takeId": "03-c-down-the-stair",
+          "problemSolved": "Helps an architect explain how one hillside house connects its street, bedroom and garden levels through the stair while retaining the section as the common spatial reference."
+        }
+      ],
+      "uncertainties": [
+        "Extent of a future product service reuse is deliberately undecided; no new production capability is declared."
+      ]
+    },
+    {
+      "id": "SM-05-SCHEDULE",
+      "takesUsedBy": [
+        "05-a-the-programme",
+        "05-b-1-1-site-sheet",
+        "05-c-site-camera"
+      ],
+      "mechanism": "Shared authored schedule house/view runtime with distinct programme, full-scale sheet and site camera presentation.",
+      "rubikEquivalent": "Rubik project/building authority, progress/Story and output provenance",
+      "evidence": [
+        {
+          "takeId": "05-a-the-programme",
+          "manifest": "takes/05-a-the-programme/manifest.json",
+          "donorSource": [
+            {
+              "path": "05-schedule-build/house.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "9-45",
+              "claim": "Ten fixed overlapping phase intervals, 14 weeks and a fixed weekday-only calendar drive the example."
+            },
+            {
+              "path": "05-schedule-build/house.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "618-640,1416-1470",
+              "claim": "Manually assigned piece phase and local timing control appearance, tints and site works at one week."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "334-430,515-625",
+              "claim": "The authored PHASES, cursor date, decorative adjacent arrows and 3D share a week."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "20-99,914-1007",
+              "claim": "Five-stop interior spline follows week 13.38, and natural wheel sets virtual week while native scroll stays zero."
+            }
+          ]
+        },
+        {
+          "takeId": "05-b-1-1-site-sheet",
+          "manifest": "takes/05-b-1-1-site-sheet/manifest.json",
+          "donorSource": [
+            {
+              "path": "05-schedule-build/house.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "9-24,618-640,1416-1470",
+              "claim": "Fixed phases and manual phase membership drive the same house piece states."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "630-776,951-963",
+              "claim": "B ground sheet is a cached plan plus dynamic programme overlay refreshed by virtual week."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "285-329",
+              "claim": "B camera follows top, b2, b3 and top thresholds; no automatic B interior tour."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "127-130,491-500",
+              "claim": "At weeks 13.5–14 phase selection falls back to Site Mobilisation until exact T>=14 completion branch."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "783-790,914-937,987-1007",
+              "claim": "Natural wheel advances virtual week and reverse can return to week zero."
+            }
+          ]
+        },
+        {
+          "takeId": "05-c-site-camera",
+          "manifest": "takes/05-c-site-camera/manifest.json",
+          "donorSource": [
+            {
+              "path": "05-schedule-build/house.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "9-24,618-640,1416-1470",
+              "claim": "Ten fixed authored phases govern one house and site piece appearances."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "165-177,316-329",
+              "claim": "C virtual week derives synthetic time of day 7.3→18.4 and positions sun/light."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "20-99,242-261,285-329",
+              "claim": "C site camera switches cam→path at week 13.2→inside at 13.48, then follows five interior stops."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "334-430,597-625",
+              "claim": "Compact authored Gantt and synthetic date/time HUD share the week."
+            },
+            {
+              "path": "05-schedule-build/view.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "783-790,914-1007",
+              "claim": "Natural wheel drives reversible virtual week while native scroll is blocked."
+            }
+          ]
+        }
+      ],
+      "professionalServiceIdentity": [
+        {
+          "takeId": "05-a-the-programme",
+          "problemSolved": "Communicates an example 14-week timber-house construction sequence with an aligned programme and visual build."
+        },
+        {
+          "takeId": "05-b-1-1-site-sheet",
+          "problemSolved": "Explains how one planned building emerges from a foundation drawing and construction programme on its actual site footprint."
+        },
+        {
+          "takeId": "05-c-site-camera",
+          "problemSolved": "Shows an illustrative construction sequence from a site-camera viewpoint while connecting visible build stages to a programme, a changing daylight clock and a final interior walk-through."
+        }
+      ],
+      "uncertainties": [
+        "Extent of a future product service reuse is deliberately undecided; no new production capability is declared."
+      ]
+    },
+    {
+      "id": "SM-07-ELEVATION",
+      "takesUsedBy": [
+        "07-a-one-door",
+        "07-b-the-row",
+        "07-c-the-face"
+      ],
+      "mechanism": "Shared elevation engine for shadow-derived hatch/material front, sun, camera and door state; each take serves a different professional decision.",
+      "rubikEquivalent": "Rubik elevation Story, geometry, material/light/Solar and restore",
+      "evidence": [
+        {
+          "takeId": "07-a-one-door",
+          "manifest": "takes/07-a-one-door/manifest.json",
+          "donorSource": [
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "31-119,352-429",
+              "claim": "Shadow-derived technical hatch and spatial uSweep determine ink/material appearance."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "143-161",
+              "claim": "Directional light and its shadow map move together."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "938-1096",
+              "claim": "One house has pivoting front and rear door groups."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "1146-1187",
+              "claim": "Perspective/orthographic look and phone framing interpolate authored camera keys."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "1205-1422",
+              "claim": "Lenis animatedScroll drives progress; self-drawn intro completes before stable A0."
+            }
+          ]
+        },
+        {
+          "takeId": "07-b-the-row",
+          "manifest": "takes/07-b-the-row/manifest.json",
+          "donorSource": [
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "31-119,352-429",
+              "claim": "One shader uses shadow-derived hatch and spatial sweep for technical/material appearance."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "143-161",
+              "claim": "Directional light and its shadow map move together."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "977-1003,1090-1096",
+              "claim": "Front and rear pivot geometry of one selected house."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "1146-1187,1205-1422",
+              "claim": "Camera keys, phone overrides, Lenis progress and stable intro marker."
+            }
+          ]
+        },
+        {
+          "takeId": "07-c-the-face",
+          "manifest": "takes/07-c-the-face/manifest.json",
+          "donorSource": [
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "938-1083",
+              "claim": "Protruding header boxes are merged into geometry with v.relief 0.06 m."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "31-119,166-429",
+              "claim": "Shadow-derived technical hatch and spatial paper/material front, with procedural brick response."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "143-161",
+              "claim": "Directional light/shadow map move under raking sun."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "1146-1187",
+              "claim": "Author camera keys including portrait overrides."
+            },
+            {
+              "path": "07-sunlit-elevation/engine/elevation.js",
+              "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+              "lines": "1090-1096,1205-1422",
+              "claim": "Front door pivot and Lenis-driven reversible absolute frame; intro stable marker."
+            }
+          ]
+        }
+      ],
+      "professionalServiceIdentity": [
+        {
+          "takeId": "07-a-one-door",
+          "problemSolved": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard."
+        },
+        {
+          "takeId": "07-b-the-row",
+          "problemSolved": "Let a developer, architect or buyer compare six distinct townhouse plots in one street composition, identify the available plot 04 and inspect its entrance and key rooms."
+        },
+        {
+          "takeId": "07-c-the-face",
+          "problemSolved": "Let an architect, material supplier or client inspect how a proposed facade bond and physically projecting headers read at drawing scale, under normal/raking sun and at human approach scale."
+        }
+      ],
+      "uncertainties": [
+        "Extent of a future product service reuse is deliberately undecided; no new production capability is declared."
+      ]
+    }
+  ]
+}
