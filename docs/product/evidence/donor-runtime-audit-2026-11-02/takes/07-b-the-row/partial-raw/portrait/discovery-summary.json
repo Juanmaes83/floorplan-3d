@@ -1,0 +1,223 @@
+{
+  "id": "07-b-the-row",
+  "viewport": "portrait",
+  "run": "original",
+  "fps": 10,
+  "stableStartReady": true,
+  "calibration": {
+    "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+    "before": {
+      "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 844,
+      "maxScroll": 5570,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "scrollHeight": 6414,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+    },
+    "after": {
+      "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 844,
+      "maxScroll": 5570,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "scrollHeight": 6414,
+      "scrollY": 377,
+      "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.4° ORTHO"
+    },
+    "model": "SCROLL_PLUS_TIME",
+    "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+  },
+  "start": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "end": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\nSCROLL\n06  ·  SOUTH GARDEN ATRIUM\n\nDOUBLE-HEIGHT KITCHEN AND DINING ROOM OPENING ONTO THE WALLED COURTYARD.\n\nPLOT\n04 OF 06\nGARDEN\nSOUTH-FACING\nSTATUS\nAVAILABLE\nRESERVE PLOT 04\nCAD PLAN // 1:100\nATRIUM · Z:+7.8M",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 5570,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+  },
+  "restored": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "forwardInputCount": 105,
+  "reverseInputCount": 105,
+  "forwardTelemetrySamples": 246,
+  "reverseTelemetrySamples": 192,
+  "files": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-start.png",
+      "bytes": 122733,
+      "sha256": "dc827c0a4adfd7482a46dd74794b7bb9ebab74adeb7133e2fe5b8675a3608b87"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-end.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm",
+      "bytes": 3368873,
+      "sha256": "ca643157854d2420805d5503769969d37aa9cf109af66d97c4f31525ce16ad9f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 227184,
+      "sha256": "623cb1b628444a8243299b1896f49ab62d62a62df115e80e78201756dd9132b6"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-restored-start.png",
+      "bytes": 122734,
+      "sha256": "6b6da93f282e39e208bdfc4fca01c486a6ff8e220b1c50018ee30c686fefcf44"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.webm",
+      "bytes": 2843651,
+      "sha256": "be38ea0d1612d0500cec80a174fafb3d23d73194168372b7c11ce8fc10de9b8a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 174341,
+      "sha256": "626b28017f5c752f149da0c7ef161c90daea34a0ebbe011dd6af51083f2a223d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p000.png",
+      "bytes": 122728,
+      "sha256": "4cbc9aabd313a49a439cb626ff456189894fdbea4437c0bf5a0b86966041b1d4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p005.png",
+      "bytes": 128512,
+      "sha256": "6786e467617a995c4b0a39980be7a627aef4c202e2e8d27ccf1d6ec60886b3b5"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p010.png",
+      "bytes": 161472,
+      "sha256": "50f22512367a67e0cfeb85484244a97a84890e96b0ef98df4a97c750f2fc8a67"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p015.png",
+      "bytes": 164958,
+      "sha256": "158d073b7dfc7235e1f92b89af6944a93c170b8faf91c8b2a20acdf7577cd819"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p020.png",
+      "bytes": 165529,
+      "sha256": "f90240113a986b39ee86ac473aa7805b689a60106fd47d4e8f893bc736c97f9c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p025.png",
+      "bytes": 185078,
+      "sha256": "bbc1a504064bf74cfb17f80f861b65f31455b88549914105853063fb417fa039"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p030.png",
+      "bytes": 200496,
+      "sha256": "802a29288cd388ba79977c741363052ae771a290e81195fecb6084aa27ff3fcb"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p035.png",
+      "bytes": 203860,
+      "sha256": "768e6b6cb955b04a1449fe32d6bc7dfdf7cc17272b514a22f7f75045496b9a7b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p040.png",
+      "bytes": 204983,
+      "sha256": "57a8611130297ab58e53969027b17470d278d76cdac007d2ed5a6fd729974253"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p045.png",
+      "bytes": 240410,
+      "sha256": "2e99dda4833574200aa9f5bd7a9e88195c7a63b1a98aad792beabb58262a05a9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p050.png",
+      "bytes": 296876,
+      "sha256": "dd19f3fbdddaa29d85fed659d69e2a8b500765bb665cd4ffe534ee657a469a70"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p055.png",
+      "bytes": 192282,
+      "sha256": "93e7d9ab6da4c2ea5a9628a2027dc7f9fdfcbf2683ef70e0ac0447bc017f7ae4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p060.png",
+      "bytes": 259949,
+      "sha256": "1037b4386f033c120dd9751466e6594c4fd87bebad481e81fd5aadd337d9a96c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p065.png",
+      "bytes": 361613,
+      "sha256": "39d667c0140ba0d3b1c0353fa812ce845035b34247434353cf97b280c7fd1d0e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p070.png",
+      "bytes": 349489,
+      "sha256": "59f740eb4e5225d68e54517d7476d59e0641c56207893613f1210bc8e24c17d7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p075.png",
+      "bytes": 338528,
+      "sha256": "ec90625be69af33f862da5ee8736800a90d355c759899ef342493e0bf4801e51"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p080.png",
+      "bytes": 341855,
+      "sha256": "ea1017fe8c08691956c2c139943fc8b34e9b02d7be94be63a27ca60edac5d4b5"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p085.png",
+      "bytes": 345716,
+      "sha256": "1a90aefd9c65eee312f53e3aee459b27fdb25251eaea3e9a2e45c3e2f75bd8f9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p090.png",
+      "bytes": 297763,
+      "sha256": "4f475971e316ed0947b9352d790b2c2c4fd2baad2e83f28033f6a738a1293a41"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p095.png",
+      "bytes": 232982,
+      "sha256": "ed9e4d9308408107eb4c75f01ab28ac162fc165fdf2242be39ee18d44f2ba440"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p100.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    }
+  ]
+}

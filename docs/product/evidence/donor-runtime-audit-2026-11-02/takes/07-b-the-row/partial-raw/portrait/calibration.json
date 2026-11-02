@@ -1,0 +1,31 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "after": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nSCROLL\nCAD PLAN // 1:100\nROW · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 377,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.4° ORTHO"
+  },
+  "model": "SCROLL_PLUS_TIME",
+  "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+}

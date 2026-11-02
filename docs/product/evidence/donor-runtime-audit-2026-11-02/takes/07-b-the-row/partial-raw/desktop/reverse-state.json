@@ -1,0 +1,19 @@
+{
+  "restored": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nSIX TOWNHOUSES · A-200\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\n01\nSOLD\n02\nSOLD\n03\nRESERVED\n04\nAVAILABLE\n05\nSOLD\n06\nAVAILABLE\nPROJECT\nALBION ROW\nDRAWING\nSTREET ELEVATION\nSCALE\n1 : 100\nSHEET\nA-200\nSCROLL\nCAD // ELV.02\nSUN ALT 35.3° · AZ 135°\nOPTIC 2.0° ORTHO\nCAD PLAN // 1:100\nROW · 2° LENS\nROW\nPLOT 04\nPARLOUR\nATRIUM\nGARDEN",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 5940,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6840,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "reverseInputCount": 105,
+  "consoleEnd": "",
+  "errorsEnd": "",
+  "observedAt": "2026-11-02T19:41:40.798Z"
+}

@@ -1,0 +1,19 @@
+{
+  "end": {
+    "bodyText": "DWG // A-200  ·  ALBION ROW\n\nPLOTTING STREET ELEVATION 1:100  100%\n\nALBION ROW\nRESERVE PLOT 04\n\nALBION ROW\n ·  STREET ELEVATION 1:100\n\nSIX FRONT DOORS.\nTWO STILL OPEN.\nSCROLL\n06  ·  SOUTH GARDEN ATRIUM\n\nDOUBLE-HEIGHT KITCHEN AND DINING ROOM OPENING ONTO THE WALLED COURTYARD.\n\nPLOT\n04 OF 06\nGARDEN\nSOUTH-FACING\nSTATUS\nAVAILABLE\nRESERVE PLOT 04\nCAD PLAN // 1:100\nATRIUM · Z:+7.8M",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 5570,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "scrollHeight": 6414,
+    "scrollY": 5570,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+  },
+  "additionalInputAfterMax": 2,
+  "forwardInputCount": 105,
+  "forwardSampleCount": 21,
+  "observedAt": "2026-11-02T19:42:32.159Z"
+}
