@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.partial-checkpoint.v1",
+  "status": "IN_PROGRESS",
+  "validation": "NOT_RUN",
+  "takeId": "03-a-open-the-lens",
+  "baselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+  "stages": {
+    "desktop": "DISCOVERY_COMPLETE",
+    "portrait": "DISCOVERY_COMPLETE",
+    "landscape": "DISCOVERY_COMPLETE",
+    "semantic": "NOT_STARTED",
+    "reconciliation": "NOT_STARTED",
+    "individualValidator": "NOT_RUN"
+  },
+  "attempts": [
+    {
+      "viewport": "desktop",
+      "stage": "DISCOVERY",
+      "startedAt": "2026-11-02T13:53:04.058Z",
+      "status": "COMPLETE",
+      "finishedAt": "2026-11-02T13:54:40.687Z"
+    },
+    {
+      "viewport": "portrait",
+      "stage": "DISCOVERY",
+      "startedAt": "2026-11-02T13:55:41.803Z",
+      "status": "COMPLETE",
+      "finishedAt": "2026-11-02T13:57:10.713Z"
+    },
+    {
+      "viewport": "landscape",
+      "stage": "DISCOVERY",
+      "startedAt": "2026-11-02T13:57:32.990Z",
+      "status": "COMPLETE",
+      "finishedAt": "2026-11-02T13:59:05.870Z"
+    }
+  ],
+  "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens",
+  "rawPackageContentSha256": "6d6eb78509afbbfba45f04a64927076571433a6b09454b216dd1c7cdb73f0c38",
+  "rawVideos": [
+    {
+      "path": "03-a-open-the-lens/desktop/desktop-forward-discovery.webm",
+      "bytes": 23580483,
+      "sha256": "1e1a8693cea7f78a026f0669b91f6b809ae049656554b25e4a608b7ee7676c4c",
+      "viewport": "desktop"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/desktop-reverse-discovery.webm",
+      "bytes": 23352184,
+      "sha256": "e85b1aca88c06ebfcdfe173c6fdb257b9476c2b937763d97399f82f781fa4a5d",
+      "viewport": "desktop"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/portrait-forward-discovery.webm",
+      "bytes": 8584565,
+      "sha256": "84b1f54d67ab03e7a89b5707c98e2c31538e72ff5922abb2c5cf73d841b643f4",
+      "viewport": "portrait"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/portrait-reverse-discovery.webm",
+      "bytes": 8055656,
+      "sha256": "5429b668fba6a1f0aadaa0f7f56f8a8e1a0f855677b65be40a0088c27b2843ce",
+      "viewport": "portrait"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/landscape-forward-discovery.webm",
+      "bytes": 7965441,
+      "sha256": "8759bf1482c0b7d5b45ed66061ce0f790fb8a69fa15abb0762c06455e42a08b3",
+      "viewport": "landscape"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/landscape-reverse-discovery.webm",
+      "bytes": 7308556,
+      "sha256": "6184d29a45bbfc2679737b9abc4646b39619bb064cca4e702fd98eeb88dd80b7",
+      "viewport": "landscape"
+    }
+  ],
+  "gitCopies": [
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-start.png",
+      "bytes": 781861,
+      "sha256": "976227cc88e4226ca5ee15867c259468ae204a6392b08ae58a4941de5c7c30ba",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-forward-discovery-p015.png",
+      "bytes": 942682,
+      "sha256": "b5eaea0c30dc3af9aa3622ce61ba2b1b3cebbfa12d40e57d110a3c082ec33af3",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-forward-discovery-p015.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-forward-discovery-p040.png",
+      "bytes": 1101915,
+      "sha256": "e402fab75a736ef7569099d949bbd6bd61f6a0540a9e98b8d6333cf6a823de6b",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-forward-discovery-p040.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-forward-discovery-p065.png",
+      "bytes": 1276782,
+      "sha256": "c57f16c0bba4ed1079b6d23857c472aa773be2c80e01aa9d02899e5da152b2bd",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-forward-discovery-p065.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-forward-discovery-p085.png",
+      "bytes": 734724,
+      "sha256": "1ba0fc24c23842c27c81eea811f3835c17ed5a833a41f882fffbc9b27af10861",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-forward-discovery-p085.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-end.png",
+      "bytes": 79834,
+      "sha256": "177a8eeac3294666a2677a1d173a2c24e7bc6e778a83203a29fe3d42c57d78c3",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-end.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/desktop/desktop-restored-start.png",
+      "bytes": 782224,
+      "sha256": "7a553ed2bb20f9d1f83477abc112d09f725e0e4a368c45937a2ab0fb0b75eb8e",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-restored-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/desktop/discovery-summary.json",
+      "bytes": 15807,
+      "sha256": "77662e6ea3deaa0f198e3842800378a9510e2989e431b764d8bccb4e7d2c775b",
+      "kind": "METADATA",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-summary.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/desktop/start-state.json",
+      "bytes": 8698,
+      "sha256": "bf03fd73d5aaec257e25cbc24c56d532385df8e59ad85117352a2502cccd8356",
+      "kind": "METADATA",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/start-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/desktop/end-state.json",
+      "bytes": 1700,
+      "sha256": "dc5ff46cd0cd0f909fba29fc696ad0163ee9e6176f023f21e0b4ac7f8910f0bc",
+      "kind": "METADATA",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/end-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/desktop/reverse-state.json",
+      "bytes": 2092,
+      "sha256": "2806fd03f5c61591a0a98bf66b54e9bedb995a6601364425f903d78f7810ef85",
+      "kind": "METADATA",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/reverse-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/desktop/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 372632,
+      "sha256": "46894d0c60c11085ed7be482f560650f0c58d93aae16ec713c82f2978db273e6",
+      "kind": "TELEMETRY",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-forward-discovery.telemetry.ndjson"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/desktop/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 354715,
+      "sha256": "f007318f8b54852aa070450c3aa73d0083cd9ed1986ece16b323a95a777b0208",
+      "kind": "TELEMETRY",
+      "viewport": "desktop",
+      "rawPath": "03-a-open-the-lens/desktop/desktop-reverse-discovery.telemetry.ndjson"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-start.png",
+      "bytes": 309961,
+      "sha256": "5cc8257404f03840db72256dcb33ea3bb338f921ca18fc036be9a0aa962f1cfe",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-forward-discovery-p015.png",
+      "bytes": 295360,
+      "sha256": "811f69021d4ef0781f3a1c004551edf950d30a3ec5b9e5751a376fdc728e3da6",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-forward-discovery-p015.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-forward-discovery-p050.png",
+      "bytes": 351785,
+      "sha256": "eff0b7d1c7469d27dbd78a8cf79d4d57d36039a48fb1081d070f0302338052c5",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-forward-discovery-p050.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-forward-discovery-p070.png",
+      "bytes": 287246,
+      "sha256": "d2ab840b330d278eefca83049a17dbc0a59d050a448d4ae9e538946708bc1bd2",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-forward-discovery-p070.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-end.png",
+      "bytes": 37934,
+      "sha256": "17f3223276b74241ab6b8f7168a004d2d47d1832d11ead25c288424f8ab745ac",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-end.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/portrait/portrait-restored-start.png",
+      "bytes": 309952,
+      "sha256": "0e9f2985f79618007614554806434f7978cbc70d842c4ff82f2ceb9a2f6667c5",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-restored-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/portrait/discovery-summary.json",
+      "bytes": 15012,
+      "sha256": "d285db25ef4ad7b7cbdd002f976d99e187ea9ce4628396b48ea9cd0cd463fa0d",
+      "kind": "METADATA",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-summary.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/portrait/start-state.json",
+      "bytes": 7233,
+      "sha256": "9e39eac1615b818b6d56dd78c4d0bc6e270cc6073521cc2100a66c49d4025dc1",
+      "kind": "METADATA",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/start-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/portrait/end-state.json",
+      "bytes": 1557,
+      "sha256": "fdf31b4b9c7988ed8fd94816fb2030dd035d8800afe1a95405f4b1c5a77c3e5d",
+      "kind": "METADATA",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/end-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/portrait/reverse-state.json",
+      "bytes": 2068,
+      "sha256": "ab92db10e9dfcd82ffdb9d09b82309229a3b73d5a7e0e4a4a2ff1cf4485f58e1",
+      "kind": "METADATA",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/reverse-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/portrait/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 338489,
+      "sha256": "d204cf83a5f1c514eb0b2673720cefe27c9e713dce531feee06da1b18d085d4d",
+      "kind": "TELEMETRY",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-forward-discovery.telemetry.ndjson"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/portrait/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 314451,
+      "sha256": "b99e2ebabc5092a3d62666c0567e35aabe9830d4cff20d8475ecda03f8fcf07e",
+      "kind": "TELEMETRY",
+      "viewport": "portrait",
+      "rawPath": "03-a-open-the-lens/portrait/portrait-reverse-discovery.telemetry.ndjson"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-start.png",
+      "bytes": 259897,
+      "sha256": "be70922a277ce8c16585479870301a6de807e0f80fe7a1972005a11f6c79fac4",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-forward-discovery-p015.png",
+      "bytes": 292795,
+      "sha256": "7a2846c7819cab76391dde3b664735e0ece44c7b893ae9510f3ddcc7ae283d3c",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-forward-discovery-p015.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-forward-discovery-p050.png",
+      "bytes": 359088,
+      "sha256": "dca46731f4e00e129f250a00770ad5cb0f6bd69ce8ce36dc2bbcd4aca91b99d6",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-forward-discovery-p050.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-forward-discovery-p070.png",
+      "bytes": 278908,
+      "sha256": "d9c2708c73aa9983a50f9d258ee68d360e3a3285c580cdf47655aea34edaeb51",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-forward-discovery-p070.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-end.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-end.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/keyframes/landscape/landscape-restored-start.png",
+      "bytes": 238514,
+      "sha256": "11f55d23e8292ee805846c861eae3fbe9725de81dfde470356bf9a401c5b2a78",
+      "kind": "DISCOVERY_SAMPLE_OR_ENDPOINT",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-restored-start.png"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/landscape/discovery-summary.json",
+      "bytes": 15894,
+      "sha256": "de6c495aa52cded3a21ee28c6fad010e18c30a8e771ddf3953d739fc33c9a7b6",
+      "kind": "METADATA",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/discovery-summary.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/landscape/start-state.json",
+      "bytes": 8691,
+      "sha256": "a1e90c41694af3be4f4923192ce25d207633a120cfe3bc3bf2dd8d10b7d39770",
+      "kind": "METADATA",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/start-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/landscape/end-state.json",
+      "bytes": 1697,
+      "sha256": "d99ad85d66304375c887fd4950af16dbd780698752eba762267c1927241f7a9a",
+      "kind": "METADATA",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/end-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/discovery-metadata/landscape/reverse-state.json",
+      "bytes": 2090,
+      "sha256": "10bb0f9b66f263aafc3201651387d0fe767645a649883de8a2188f1a6bf55548",
+      "kind": "METADATA",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/reverse-state.json"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/landscape/landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 360697,
+      "sha256": "f843306ca7c1a6f0dc7390e478a6dc0e23fab7f024a40ef858abc2a0fef2c2b6",
+      "kind": "TELEMETRY",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-forward-discovery.telemetry.ndjson"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/telemetry/landscape/landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 327810,
+      "sha256": "e3118e7459294a2163bbc8ca0baa584807d64f1572c94b7809b9cabe82704e0b",
+      "kind": "TELEMETRY",
+      "viewport": "landscape",
+      "rawPath": "03-a-open-the-lens/landscape/landscape-reverse-discovery.telemetry.ndjson"
+    }
+  ],
+  "warning": "Discovery samples are not semantic milestones. A second fresh semantic pass and reconciliation are required before a take manifest or validation."
+}

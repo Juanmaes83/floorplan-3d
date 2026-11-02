@@ -1,0 +1,215 @@
+{
+  "id": "03-a-open-the-lens",
+  "viewport": "landscape",
+  "calibration": {
+    "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+    "before": {
+      "bodyText": "POCHÉ · ARCHITECTS · PALMA\nBRING US\nA SLOPE.\n\nWE ARE FIVE ARCHITECTS IN PALMA. WE DESIGN HOUSES ON DIFFICULT GROUND, AND WE DRAW EVERY ONE OF THEM IN SECTION FIRST. ON A HILL, THE SECTION IS WHERE A HOUSE WORKS OR DOESN'T.\n\nCASA GRAÓ · DEIÀ, MALLORCA\nSITE\nDEIÀ, MALLORCA\nBUILT\n312 M²\nLEVELS\nTHREE, 6.60 M OF FALL\nSTAIR\n32 RISERS OF 206 MM\nSTRUCTURE\nCONCRETE, LOCAL STONE\nFINISHED\n2026\nSELECTED WORK\n+3.40\nCA'N POU\nSÓLLER · 2024 · A COURTYARD HOUSE ON TWO TERRACES\n+18.20\nTORRE BAIXA\nVALLDEMOSSA · 2023 · A STONE TOWER ON A STEEP PATH\n+4.10\nES RACÓ\nPOLLENÇA · 2022 · A HOUSE UNDER ITS GARDEN\n\nSTART WITH\nA SECTION.\n\nSTART A PROJECT\nSTUDIO@POCHE.EXAMPLE\n+34 971 000 000\nPALMA DE MALLORCA · 39.57° N, 2.65° E\nPOCHÉ ARCHITECTS · PALMA\nCASA GRAÓ · SECTION A–A · DRAWN LIVE IN THREE.JS\nWORK · STUDIO · JOURNAL\nPOCHÉ\nWORK\nSTUDIO\nJOURNAL\nSTART A PROJECT\nA · OPEN THE LENS\nC · DOWN THE STAIR\nSCROLL TO OPEN THE LENS\n0\n1\n5 M\nPROJECT\nCASA GRAÓ\nDRAWING\nSECTION A–A\nSCALE\n1:100\nSHEET\nA-301\nSEC A-A // CUT Z -4.60M\nLENS 64°\n01\nSTAIR\n02\nKITCHEN\n03\nPATIO\n04\nLIVING\n05\nPOOL\nCASA GRAÓ\nSECTION A–A\n+10.10\nLEVELS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 390,
+      "maxScroll": 7205,
+      "route": "/flat-to-3d/03-open-section/index.html",
+      "scrollHeight": 7595,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+      "visibleHud": ""
+    },
+    "after": {
+      "bodyText": "POCHÉ · ARCHITECTS · PALMA\nBRING US\nA SLOPE.\n\nWE ARE FIVE ARCHITECTS IN PALMA. WE DESIGN HOUSES ON DIFFICULT GROUND, AND WE DRAW EVERY ONE OF THEM IN SECTION FIRST. ON A HILL, THE SECTION IS WHERE A HOUSE WORKS OR DOESN'T.\n\nCASA GRAÓ · DEIÀ, MALLORCA\nSITE\nDEIÀ, MALLORCA\nBUILT\n312 M²\nLEVELS\nTHREE, 6.60 M OF FALL\nSTAIR\n32 RISERS OF 206 MM\nSTRUCTURE\nCONCRETE, LOCAL STONE\nFINISHED\n2026\nSELECTED WORK\n+3.40\nCA'N POU\nSÓLLER · 2024 · A COURTYARD HOUSE ON TWO TERRACES\n+18.20\nTORRE BAIXA\nVALLDEMOSSA · 2023 · A STONE TOWER ON A STEEP PATH\n+4.10\nES RACÓ\nPOLLENÇA · 2022 · A HOUSE UNDER ITS GARDEN\n\nSTART WITH\nA SECTION.\n\nSTART A PROJECT\nSTUDIO@POCHE.EXAMPLE\n+34 971 000 000\nPALMA DE MALLORCA · 39.57° N, 2.65° E\nPOCHÉ ARCHITECTS · PALMA\nCASA GRAÓ · SECTION A–A · DRAWN LIVE IN THREE.JS\nWORK · STUDIO · JOURNAL\nPOCHÉ\nWORK\nSTUDIO\nJOURNAL\nSTART A PROJECT\nA · OPEN THE LENS\nC · DOWN THE STAIR\nSCROLL TO OPEN THE LENS\n0\n1\n5 M\nPROJECT\nCASA GRAÓ\nDRAWING\nSECTION A–A\nSCALE\n1:100\nSHEET\nA-301\nSEC A-A // CUT Z -4.60M\nLENS 64°\n01\nSTAIR\n02\nKITCHEN\n03\nPATIO\n04\nLIVING\n05\nPOOL\nCASA GRAÓ\nSECTION A–A\n+10.10\nLEVELS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 390,
+      "maxScroll": 7205,
+      "route": "/flat-to-3d/03-open-section/index.html",
+      "scrollHeight": 7595,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+      "visibleHud": ""
+    },
+    "model": "UNRESOLVED",
+    "note": "01 main.js target() reads native scrollY, frame() smooths p and advances T by wall time; verify per take source before classifying."
+  },
+  "start": {
+    "bodyText": "GN HOUSES ON DIFFICULT GROUND, AND WE DRAW EVERY ONE OF THEM IN SECTION FIRST. ON A HILL, THE SECTION IS WHERE A HOUSE WORKS OR DOESN'T.\n\nCASA GRAÓ · DEIÀ, MALLORCA\nSITE\nDEIÀ, MALLORCA\nBUILT\n312 M²\nLEVELS\nTHREE, 6.60 M OF FALL\nSTAIR\n32 RISERS OF 206 MM\nSTRUCTURE\nCONCRETE, LOCAL STONE\nFINISHED\n2026\nSELECTED WORK\n+3.40\nCA'N POU\nSÓLLER · 2024 · A COURTYARD HOUSE ON TWO TERRACES\n+18.20\nTORRE BAIXA\nVALLDEMOSSA · 2023 · A STONE TOWER ON A STEEP PATH\n+4.10\nES RACÓ\nPOLLENÇA · 2022 · A HOUSE UNDER ITS GARDEN\n\nSTART WITH\nA SECTION.\n\nSTART A PROJECT\nSTUDIO@POCHE.EXAMPLE\n+34 971 000 000\nPALMA DE MALLORCA · 39.57° N, 2.65° E\nPOCHÉ ARCHITECTS · PALMA\nCASA GRAÓ · SECTION A–A · DRAWN LIVE IN THREE.JS\nWORK · STUDIO · JOURNAL\nPOCHÉ\nWORK\nSTUDIO\nJOURNAL\nSTART A PROJECT\nA · OPEN THE LENS\nC · DOWN THE STAIR\nCASA GRAÓ · DEIÀ, MALLORCA · 2026\nTHE CUT IS\nTHE HOUSE.\n\nTHREE LEVELS STEPPING DOWN A HILLSIDE ABOVE THE SEA, JOINED BY ONE STAIR. SCROLL INTO THE SECTION.\n\nSCROLL TO OPEN THE LENS\n0\n1\n5 M\nPROJECT\nCASA GRAÓ\nDRAWING\nSECTION A–A\nSCALE\n1:100\nSHEET\nA-301\nSEC A–A // LENS 1.6° · CUT Z -4.60M\nSEC A-A // CUT Z -4.60M\nLENS 1.6°\n01\nSTAIR\n02\nKITCHEN\n03\nPATIO\n04\nLIVING\n05\nPOOL\nCASA GRAÓ\nSECTION A–A\n+10.10\nLEVELS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 7205,
+    "route": "/flat-to-3d/03-open-section/index.html",
+    "scrollHeight": 7595,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+    "visibleHud": "SEC A–A // LENS 1.6° · CUT Z -4.60M"
+  },
+  "end": {
+    "bodyText": "POCHÉ · ARCHITECTS · PALMA\nBRING US\nA SLOPE.\n\nWE ARE FIVE ARCHITECTS IN PALMA. WE DESIGN HOUSES ON DIFFICULT GROUND, AND WE DRAW EVERY ONE OF THEM IN SECTION FIRST. ON A HILL, THE SECTION IS WHERE A HOUSE WORKS OR DOESN'T.\n\nCASA GRAÓ · DEIÀ, MALLORCA\nSITE\nDEIÀ, MALLORCA\nBUILT\n312 M²\nLEVELS\nTHREE, 6.60 M OF FALL\nSTAIR\n32 RISERS OF 206 MM\nSTRUCTURE\nCONCRETE, LOCAL STONE\nFINISHED\n2026\nSELECTED WORK\n+3.40\nCA'N POU\nSÓLLER · 2024 · A COURTYARD HOUSE ON TWO TERRACES\n+18.20\nTORRE BAIXA\nVALLDEMOSSA · 2023 · A STONE TOWER ON A STEEP PATH\n+4.10\nES RACÓ\nPOLLENÇA · 2022 · A HOUSE UNDER ITS GARDEN\n\nSTART WITH\nA SECTION.\n\nSTART A PROJECT\nSTUDIO@POCHE.EXAMPLE\n+34 971 000 000\nPALMA DE MALLORCA · 39.57° N, 2.65° E\nPOCHÉ ARCHITECTS · PALMA\nCASA GRAÓ · SECTION A–A · DRAWN LIVE IN THREE.JS\nWORK · STUDIO · JOURNAL\nPOCHÉ\nWORK\nSTUDIO\nJOURNAL\nSTART A PROJECT\nCASA GRAÓ · DEIÀ, MALLORCA · 2026\nTHE CUT IS\nTHE HOUSE.\n\nTHREE LEVELS STEPPING DOWN A HILLSIDE ABOVE THE SEA, JOINED BY ONE STAIR. SCROLL INTO THE SECTION.\n\nSCROLL TO OPEN THE LENS\n0\n1\n5 M\nPROJECT\nCASA GRAÓ\nDRAWING\nSECTION A–A\nSCALE\n1:100\nSHEET\nA-301\nCASA GRAÓ\nSECTION A–A\n+10.10\nLEVELS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 7205,
+    "route": "/flat-to-3d/03-open-section/index.html",
+    "scrollHeight": 7595,
+    "scrollY": 7205,
+    "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+    "visibleHud": ""
+  },
+  "restored": {
+    "bodyText": "· DEIÀ, MALLORCA\nSITE\nDEIÀ, MALLORCA\nBUILT\n312 M²\nLEVELS\nTHREE, 6.60 M OF FALL\nSTAIR\n32 RISERS OF 206 MM\nSTRUCTURE\nCONCRETE, LOCAL STONE\nFINISHED\n2026\nSELECTED WORK\n+3.40\nCA'N POU\nSÓLLER · 2024 · A COURTYARD HOUSE ON TWO TERRACES\n+18.20\nTORRE BAIXA\nVALLDEMOSSA · 2023 · A STONE TOWER ON A STEEP PATH\n+4.10\nES RACÓ\nPOLLENÇA · 2022 · A HOUSE UNDER ITS GARDEN\n\nSTART WITH\nA SECTION.\n\nSTART A PROJECT\nSTUDIO@POCHE.EXAMPLE\n+34 971 000 000\nPALMA DE MALLORCA · 39.57° N, 2.65° E\nPOCHÉ ARCHITECTS · PALMA\nCASA GRAÓ · SECTION A–A · DRAWN LIVE IN THREE.JS\nWORK · STUDIO · JOURNAL\nPOCHÉ\nWORK\nSTUDIO\nJOURNAL\nSTART A PROJECT\nA · OPEN THE LENS\nC · DOWN THE STAIR\nCASA GRAÓ · DEIÀ, MALLORCA · 2026\nTHE CUT IS\nTHE HOUSE.\n\nTHREE LEVELS STEPPING DOWN A HILLSIDE ABOVE THE SEA, JOINED BY ONE STAIR. SCROLL INTO THE SECTION.\n\nSCROLL TO OPEN THE LENS\n0\n1\n5 M\nPROJECT\nCASA GRAÓ\nDRAWING\nSECTION A–A\nSCALE\n1:100\nSHEET\nA-301\nTHE LENS OPENS. THE CUT KEEPS ITS SIZE.\n01 // CUT A–A · STAIR SPINE\nTHE STAIR\nONE FLIGHT PER LEVEL · 16 RISERS OF 206 MM · A ROOFLIGHT OVER THE TOP\nSEC A–A // LENS 1.6° · CUT Z -4.60M\nSEC A-A // CUT Z -4.60M\nLENS 1.6°\n01\nSTAIR\n02\nKITCHEN\n03\nPATIO\n04\nLIVING\n05\nPOOL\nCASA GRAÓ\nSECTION A–A\n+10.10\nLEVELS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 7205,
+    "route": "/flat-to-3d/03-open-section/index.html",
+    "scrollHeight": 7595,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+    "visibleHud": "THE LENS OPENS. THE CUT KEEPS ITS SIZE. | 01 // CUT A–A · STAIR SPINE\nTHE STAIR\nONE FLIGHT PER LEVEL · 16 RISERS OF 206 MM · A ROOFLIGHT OVER THE TOP | SEC A–A // LENS 1.6° · CUT Z -4.60M"
+  },
+  "forwardInputCount": 240,
+  "reverseInputCount": 240,
+  "forwardTelemetrySamples": 433,
+  "reverseTelemetrySamples": 375,
+  "files": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-start.png",
+      "bytes": 259897,
+      "sha256": "be70922a277ce8c16585479870301a6de807e0f80fe7a1972005a11f6c79fac4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-end.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery.webm",
+      "bytes": 7965441,
+      "sha256": "8759bf1482c0b7d5b45ed66061ce0f790fb8a69fa15abb0762c06455e42a08b3"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 360697,
+      "sha256": "f843306ca7c1a6f0dc7390e478a6dc0e23fab7f024a40ef858abc2a0fef2c2b6"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-restored-start.png",
+      "bytes": 238514,
+      "sha256": "11f55d23e8292ee805846c861eae3fbe9725de81dfde470356bf9a401c5b2a78"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-reverse-discovery.webm",
+      "bytes": 7308556,
+      "sha256": "6184d29a45bbfc2679737b9abc4646b39619bb064cca4e702fd98eeb88dd80b7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 327810,
+      "sha256": "e3118e7459294a2163bbc8ca0baa584807d64f1572c94b7809b9cabe82704e0b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p000.png",
+      "bytes": 238523,
+      "sha256": "88439f741168468ce0350b141edc5adce2084ad4198f754b7554bad3f32593f3"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p005.png",
+      "bytes": 260659,
+      "sha256": "85c92371987a6270de64b4da125540d4cad0a4e2949cd2efc67d143f36669fa2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p010.png",
+      "bytes": 300770,
+      "sha256": "eb9a81383074d3586ee4acd318653ed7e3800fa4388362e3f56f8e401ce404e5"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p015.png",
+      "bytes": 292795,
+      "sha256": "7a2846c7819cab76391dde3b664735e0ece44c7b893ae9510f3ddcc7ae283d3c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p020.png",
+      "bytes": 266171,
+      "sha256": "be55f178fd5a858a32da8e343b9e8acb1711429c630ff178fbe1c41ed08b4e3c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p025.png",
+      "bytes": 266377,
+      "sha256": "84ad75c80aa18b664d56cd815a28582e473c4c2e54bb79b04f80c0dd3849f30a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p030.png",
+      "bytes": 286276,
+      "sha256": "16e96c39b8155dfb6df0b74d70915bf8b381545419476014e4b16ad06a0754ac"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p035.png",
+      "bytes": 292482,
+      "sha256": "fe408c6ee7bd10213a1299a3a056d37e7dc03e175ac0672fa9865ac33e19f974"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p040.png",
+      "bytes": 320841,
+      "sha256": "9e040bef54fef9c3f62991732eb76a798d4907701d48c0f454bd33473d4dee00"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p045.png",
+      "bytes": 311861,
+      "sha256": "ace1713c121a7fa2a795aae074eaef08049fa212f8ae179097d84edd7e4122bc"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p050.png",
+      "bytes": 359088,
+      "sha256": "dca46731f4e00e129f250a00770ad5cb0f6bd69ce8ce36dc2bbcd4aca91b99d6"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p055.png",
+      "bytes": 312934,
+      "sha256": "c14f01dd5cfae455c8a3605ffb4da40a076ee70cff35ad3777ed6765ec79beb7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p060.png",
+      "bytes": 345980,
+      "sha256": "75ec439d8ad7394d6a37c6a73d3208f6fa142b3b0aedb502153190b3ae1df1f2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p065.png",
+      "bytes": 282805,
+      "sha256": "23f335f7a8e79fc28c0d3a521bf0a228b4e9fbd0544ecbc1835a4ab7692c40b0"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p070.png",
+      "bytes": 278908,
+      "sha256": "d9c2708c73aa9983a50f9d258ee68d360e3a3285c580cdf47655aea34edaeb51"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p075.png",
+      "bytes": 236718,
+      "sha256": "f8c5eab91400bf13b4f604a7551787f5c123018a25944604daadff6fee3fe860"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p080.png",
+      "bytes": 213383,
+      "sha256": "57b81904d378120e93ede70b170deed71000e7482556a4abdc5011c80b5af965"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p085.png",
+      "bytes": 18401,
+      "sha256": "e06af97cce2c11e4c3f121756d0604bc588bc2d2ee96fefacab8860e044524ea"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p090.png",
+      "bytes": 20286,
+      "sha256": "e596bcf52ccb37426b80e67f6f335cc3c46f910bf999438fc8cd18d49c14898f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p095.png",
+      "bytes": 38481,
+      "sha256": "4ee9b5bc1064a4b2775e2a6d7702a7724a833c1dfbfef10f90f62acec606da9c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\landscape\\landscape-forward-discovery-p100.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    }
+  ]
+}
