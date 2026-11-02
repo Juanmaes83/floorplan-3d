@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.partial-corrections.v1",
+  "status": "IN_PROGRESS",
+  "validation": "NOT_RUN",
+  "rawPackageContentSha256": "b423f27a60ab7cea8df7b65eb3f5cc6a6aab9c3738fce40ad4032d8a633cd877",
+  "records": [
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-start.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-start.png",
+      "bytes": 782226,
+      "sha256": "32c937fa664dd06f077dfa2c10f5b75f95eda46df377524031ffb4df32cc867a"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-end.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-end.png",
+      "bytes": 79834,
+      "sha256": "177a8eeac3294666a2677a1d173a2c24e7bc6e778a83203a29fe3d42c57d78c3"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-restored-start.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-restored-start.png",
+      "bytes": 782231,
+      "sha256": "5db5bf31f19534152afcef11818a162b0fae4886e8527ce58088d97171304520"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "bytes": 941043,
+      "sha256": "1115c293607b9fc29391361cdc232327b9e439cc43cd0ba1c0264ae9ac88dde0"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "bytes": 1244860,
+      "sha256": "0d53ceba247659fc7d5561f646fc67a5e6bc9e2527129789db9c01e7f8551ffe"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "bytes": 734725,
+      "sha256": "3a7dec15671f31850e49db64068f096921604d7afd50ce7fbddd481a1afc16ae"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 404285,
+      "sha256": "1c44bd3f86d0d941828d168d479588a0888f26885e6631573a44d401e77a1381"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 337893,
+      "sha256": "990c0ad17e7b46fa18f901fdf30294999e77a57bec3af732fe2f98c2f7eb29b5"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/calibration.json",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/calibration.json",
+      "bytes": 3286,
+      "sha256": "d9a82a30933cf88e6bb2797136ba3c15e0170b091c5dcbeaa39b083c6a9145fb"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/discovery-summary.json",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/discovery-summary.json",
+      "bytes": 16542,
+      "sha256": "177c8c7c38008c271a630904b2f80cd8d2e5126f4d8a9bf3cbb3dceb51104b0a"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/start-state.json",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/start-state.json",
+      "bytes": 8694,
+      "sha256": "8fdf41abb51a0bd86ed081d9085fa920b58d3918469924159bed39cd8176123c"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/end-state.json",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/end-state.json",
+      "bytes": 1700,
+      "sha256": "aec8c61033f4e3d031be7842353b9716bf93cb8614a495671b4f832ace36e9d5"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/desktop/discovery-correction-1/reverse-state.json",
+      "rawPath": "03-a-open-the-lens/desktop/discovery-correction-1/reverse-state.json",
+      "bytes": 2092,
+      "sha256": "c4e0558f90b0e611059c139ceda65a6a7ba9bd9773c3597608e814673c720273"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-start.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-start.png",
+      "bytes": 309961,
+      "sha256": "d9a83ede21e4b4f10c6e7c909b281eb5a2d768d121d3fea7a3d30f721729e2ab"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-end.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-end.png",
+      "bytes": 37934,
+      "sha256": "17f3223276b74241ab6b8f7168a004d2d47d1832d11ead25c288424f8ab745ac"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-restored-start.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-restored-start.png",
+      "bytes": 309954,
+      "sha256": "7b65bf9fe058af5632eb3f8fb95dc1ce2bcb246d27ec4d8e60bb152e2def8601"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-forward-discovery-p015.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-forward-discovery-p015.png",
+      "bytes": 295975,
+      "sha256": "93c806fc5d1c5ed1c509ee956141b56b08bd3cf2c393e28ac938c287d2dcc57a"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-forward-discovery-p050.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-forward-discovery-p050.png",
+      "bytes": 351777,
+      "sha256": "0bd0a2016666a86730871e72d22ab28cee18d193ed883fed8ba6d5e89a5e26b3"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-forward-discovery-p080.png",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-forward-discovery-p080.png",
+      "bytes": 303030,
+      "sha256": "253af54a3f063ed83b573d682977c402b44681b2dae861d2b64046e956228480"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-forward-discovery.telemetry.ndjson",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 333440,
+      "sha256": "97dcc3bb563ca5a49fe3e3f5f67e77e5af441200afc7bc0ed5cb315a33ae7b55"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/portrait-reverse-discovery.telemetry.ndjson",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 309158,
+      "sha256": "be16245921f33388de7709a4e1efad9b7396539cd00a46f5947a78baac0cbdba"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/calibration.json",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/calibration.json",
+      "bytes": 3339,
+      "sha256": "7887fa15d389062c5ca18482276617c2a7b6feba490ca6e18521fcc758474d62"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/discovery-summary.json",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/discovery-summary.json",
+      "bytes": 16308,
+      "sha256": "afb3e19d849e86dbe27dc9c174423b37e81c32ef76a781471b44a0dbf3e2e55d"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/start-state.json",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/start-state.json",
+      "bytes": 7216,
+      "sha256": "384f5f521cae2757015c50e2e3773ec58eb111bc9952fd0633f5c4af8cf9a256"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/end-state.json",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/end-state.json",
+      "bytes": 1557,
+      "sha256": "5b5511145628c6603bc632461253b268f72a1d910b7676da9ea758563c0a0d75"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/discovery-correction-1/reverse-state.json",
+      "rawPath": "03-a-open-the-lens/portrait/discovery-correction-1/reverse-state.json",
+      "bytes": 2068,
+      "sha256": "44ff159915f524e61f20d8be0c8e530ac58ed0180e17c1b65daa2fc1129213e3"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/semantic-correction-1/portrait-forward-m08-material-section-returns.png",
+      "rawPath": "03-a-open-the-lens/portrait/semantic-correction-1/portrait-forward-m08-material-section-returns.png",
+      "bytes": 300642,
+      "sha256": "5ad6a96c116490b3178cfe8c030897472379eb1f34bc19016fd8aae56d5c9b3a"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/semantic-correction-1/portrait-forward-m08r-material-section-right-half.png",
+      "rawPath": "03-a-open-the-lens/portrait/semantic-correction-1/portrait-forward-m08r-material-section-right-half.png",
+      "bytes": 279651,
+      "sha256": "6aa214a44c397ef9d087fe585aaa87a4b7f15c89e7cefd0f1816f0a966b2ad3a"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/semantic-correction-1/portrait-forward-m09-studio-service-copy.png",
+      "rawPath": "03-a-open-the-lens/portrait/semantic-correction-1/portrait-forward-m09-studio-service-copy.png",
+      "bytes": 142431,
+      "sha256": "4a60201fa285b0acf9510d47ad8f4aa7d2c8ac63beca1ccfe573aa920219dd12"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/portrait/semantic-correction-1/semantic-capture.json",
+      "rawPath": "03-a-open-the-lens/portrait/semantic-correction-1/semantic-capture.json",
+      "bytes": 13158,
+      "sha256": "b3e0e649292b03c87077dda9cbbef3ef424a3290d23e7940ebc32da25548c077"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/landscape/semantic-correction-1/landscape-forward-m05-bedroom-patio.png",
+      "rawPath": "03-a-open-the-lens/landscape/semantic-correction-1/landscape-forward-m05-bedroom-patio.png",
+      "bytes": 313764,
+      "sha256": "57aa21b933924c5d4b7105e868cab06e13036640c8a34ce71dd3c83535e57c9b"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/landscape/semantic-correction-1/landscape-forward-m08-material-section-returns.png",
+      "rawPath": "03-a-open-the-lens/landscape/semantic-correction-1/landscape-forward-m08-material-section-returns.png",
+      "bytes": 243441,
+      "sha256": "8d98ddb9bf445299e5d8c767f8e5b0921a3d90947089c1f198be1552fa433ce9"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/landscape/semantic-correction-1/landscape-forward-m09-studio-service-copy.png",
+      "rawPath": "03-a-open-the-lens/landscape/semantic-correction-1/landscape-forward-m09-studio-service-copy.png",
+      "bytes": 19883,
+      "sha256": "ec6c44a5216bcd599b7b217293ff20704ca8c8c7443596d77d108cb27cd2b297"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/03-a-open-the-lens/corrections/landscape/semantic-correction-1/semantic-capture.json",
+      "rawPath": "03-a-open-the-lens/landscape/semantic-correction-1/semantic-capture.json",
+      "bytes": 11956,
+      "sha256": "c0f6f2ff7f97350ce29347f3a70c97bc11cb6b4b6ca63735b40d2ae95b254f2b"
+    }
+  ],
+  "note": "Corrected Discovery in desktop/portrait and semantic cue corrections in portrait/landscape. Landscape stable-start Discovery and all final semantic passes remain outstanding. Original attempts remain in RAW."
+}

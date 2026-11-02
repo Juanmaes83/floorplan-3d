@@ -1,0 +1,258 @@
+{
+  "id": "03-a-open-the-lens",
+  "viewport": "portrait",
+  "run": "semantic-correction-1",
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 14679,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+    "visibleHud": "SEC A–A // LENS 1.6° · CUT Z -4.60M"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "SEC A–A // LENS 1.6° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:27.390Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m01-lens-opens.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 1005,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "THE LENS OPENS. THE CUT KEEPS ITS SIZE. | SEC A–A // LENS 25° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:31.630Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m02-material-sunlight-sweep.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 2479,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "MATERIAL AND SUNLIGHT SWEEP INTO THE 3D SECTION. | SEC A–A // LENS 62° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:36.841Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m03-stair-spine.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 4556,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "CLOSER, AT THE STAIR SPINE. | 01 // CUT A–A · STAIR SPINE\nTHE STAIR\nONE FLIGHT PER LEVEL · 16 RISERS OF 206 MM · A ROOFLIGHT OVER THE TOP | SEC A–A // LENS 66° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:43.355Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m04-kitchen-lantern.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 6164,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "UP TO THE KITCHEN AND ROOF LANTERN, AT STREET LEVEL. | 02 // LEVEL +6.60M · STREET LEVEL\nTHE KITCHEN & LANTERN\nSTREET LEVEL · TERRAZZO ISLAND, OAK FLOOR · DOUBLE-HEIGHT LANTERN OVER THE DINING TABLE | SEC A–A // LENS 68° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:48.626Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m05-bedroom-patio.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 7638,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "DOWN TO THE BEDROOM FLOOR AND COURTYARD PATIO. | 03 // LEVEL +3.30M · COURTYARD\nTHE BEDROOM & PATIO\nTHE STAIR LANDS HERE · BEDROOM AND STUDY OFF THE LANDING · CYPRESS COURTYARD BEYOND THE GLASS | SEC A–A // LENS 68° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:53.444Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m06-living-room.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 9380,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "OUT TO THE LIMESTONE TERRACE AND POOL. | 04 // LEVEL ±0.00M · DOUBLE HEIGHT\nTHE LIVING ROOM\n6.25 M HIGH · OAK LIBRARY WALL · FULL-HEIGHT GLASS TO THE GARDEN | SEC A–A // LENS 65° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:19:59.030Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m07-garden-pool.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 10452,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "OUT TO THE LIMESTONE TERRACE AND POOL. | 05 // LEVEL ±0.00M · TERRACE\nTHE GARDEN & POOL\nCANTILEVERED 6 M POOL ON THE LIMESTONE TERRACE · THE VALLEY BELOW | SEC A–A // LENS 56° · CUT Z -4.60M"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:02.809Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m08-material-section-returns.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 11591,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "THE SAME SECTION, RENDERED IN MATERIAL AND LIGHT. | 05 // LEVEL ±0.00M · TERRACE\nTHE GARDEN & POOL\nCANTILEVERED 6 M POOL ON THE LIMESTONE TERRACE · THE VALLEY BELOW | SEC A–A // 1:100 MATERIAL SECTION"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:06.767Z"
+    },
+    {
+      "label": "M08R",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m08r-material-section-right-half.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 12194,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "THE SAME SECTION, RENDERED IN MATERIAL AND LIGHT. | 05 // LEVEL ±0.00M · TERRACE\nTHE GARDEN & POOL\nCANTILEVERED 6 M POOL ON THE LIMESTONE TERRACE · THE VALLEY BELOW | SEC A–A // 1:100 MATERIAL SECTION"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:09.188Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m09-studio-service-copy.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 13065,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": "THE SAME SECTION, RENDERED IN MATERIAL AND LIGHT. | 05 // LEVEL ±0.00M · TERRACE\nTHE GARDEN & POOL\nCANTILEVERED 6 M POOL ON THE LIMESTONE TERRACE · THE VALLEY BELOW | SEC A–A // 1:100 MATERIAL SECTION"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:12.326Z"
+    },
+    {
+      "label": "M10",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m10-selected-work-footer.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 14405,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:16.741Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 14679,
+        "scrollY": 14679,
+        "url": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T14:20:18.776Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-semantic.webm",
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-semantic-start.png",
+      "bytes": 312686,
+      "sha256": "6a603be32fe28af066908f32629725739d231dd0fb3c399fea5118f70a29d3fa"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m01-lens-opens.png",
+      "bytes": 295198,
+      "sha256": "4b6836e33f6b74f4e77a93ae668abbf590e12da6ef3c6244dfcff0290648cd8d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m02-material-sunlight-sweep.png",
+      "bytes": 304620,
+      "sha256": "50435bfbf5161fcdb799850df9590e86c25ee22bb021fa2d421fa23536805c83"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m03-stair-spine.png",
+      "bytes": 342388,
+      "sha256": "b0af79b0bf5f5540a45bdd251a7ac566d9f5516680cca44e0cb1e0c69a50c9bd"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m04-kitchen-lantern.png",
+      "bytes": 313934,
+      "sha256": "2f4b39a963eb02b1b5bc20ec2085fda2165a63329aa921233943cfe021776c4a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m05-bedroom-patio.png",
+      "bytes": 351779,
+      "sha256": "c41206a59759e301e6b05fac3315c2e7bdad957fa503a32be6113bfbe79eaa95"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m06-living-room.png",
+      "bytes": 315314,
+      "sha256": "b9c00e6e9810d1423e380f7db0a426c5dae04f70619a0df43db4e7f560b78a03"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m07-garden-pool.png",
+      "bytes": 287250,
+      "sha256": "f2968050086ae5122e1446899ae2a78422723475421202bc312f9e6be0956052"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m08-material-section-returns.png",
+      "bytes": 300642,
+      "sha256": "5ad6a96c116490b3178cfe8c030897472379eb1f34bc19016fd8aae56d5c9b3a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m08r-material-section-right-half.png",
+      "bytes": 279651,
+      "sha256": "6aa214a44c397ef9d087fe585aaa87a4b7f15c89e7cefd0f1816f0a966b2ad3a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m09-studio-service-copy.png",
+      "bytes": 142431,
+      "sha256": "4a60201fa285b0acf9510d47ad8f4aa7d2c8ac63beca1ccfe573aa920219dd12"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-m10-selected-work-footer.png",
+      "bytes": 47066,
+      "sha256": "4256eb621399e8bc29b0fff8bb8b30586bceae5761e561c84149127890af4d20"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-semantic-end.png",
+      "bytes": 37934,
+      "sha256": "17f3223276b74241ab6b8f7168a004d2d47d1832d11ead25c288424f8ab745ac"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-a-open-the-lens\\portrait\\semantic-correction-1\\portrait-forward-semantic.webm",
+      "bytes": 10378520,
+      "sha256": "cf378dd3fbe06598cdd6701fae0cc7842bfd468b5910b485c12ddd3d8f6eff58"
+    }
+  ],
+  "inputCount": 220,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\03-a-open-the-lens\\semantic-plan.json"
+}

@@ -11,14 +11,16 @@ const state = JSON.parse(await readFile(statePath,'utf8'));
 const inventory = JSON.parse(await readFile(path.join(evidence,'reference-inventory.json'),'utf8'));
 const id = process.argv.find(a=>a.startsWith('--take='))?.slice(7);
 const viewport = process.argv.find(a=>a.startsWith('--viewport='))?.slice(11);
+const run = process.argv.find(a=>a.startsWith('--run='))?.slice(6);
 const dims = {desktop:[1440,900],portrait:[390,844],landscape:[844,390]};
 if (!id || !state.takes[id] || !dims[viewport]) throw new Error('Use --take=<id> --viewport=<desktop|portrait|landscape>');
 const ref = inventory.references.find(r=>r.id===id);
 const plan = JSON.parse(await readFile(path.join(evidence,'takes',id,'semantic-plan.json'),'utf8'));
-const rawDir = path.join(state.rawFolder,id,viewport);
+if (run && !/^semantic-correction-[1-9][0-9]*$/.test(run)) throw new Error('Correction run must be semantic-correction-N');
+const rawDir = path.join(state.rawFolder,id,viewport,...(run?[run]:[]));
 await mkdir(rawDir,{recursive:true});
 const bin = process.env.AGENT_BROWSER_BIN || 'C:/Users/temp123/donor-runtime-audit-tools-2026-11-02/node_modules/agent-browser/bin/agent-browser.js';
-const session = `rubik-donor-${id}-${viewport}-semantic-${Date.now()}`.replaceAll(/[^a-zA-Z0-9_-]/g,'-');
+const session = `rubik-donor-${id}-${viewport}-${run||'semantic'}-${Date.now()}`.replaceAll(/[^a-zA-Z0-9_-]/g,'-');
 const [width,height]=dims[viewport];
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function ab(args,optional=false) {
@@ -33,8 +35,9 @@ const capture=async(name,label)=>{
   ab(['screenshot',p]);
   return {label,path:p,metrics:evalJson(metrics),captureType:'LIVE_SCREENSHOT',capturedAt:new Date().toISOString()};
 };
+const milestones=plan.milestones.filter(m=>!m.viewports||m.viewports.includes(viewport));
 const records=[];
-state.takes[id].attempts.push({viewport,stage:'SEMANTIC',startedAt:new Date().toISOString(),status:'IN_PROGRESS'});
+state.takes[id].attempts.push({viewport,stage:'SEMANTIC',run:run||'original',startedAt:new Date().toISOString(),status:'IN_PROGRESS'});
 state.takes[id].timestamps.updatedAt=new Date().toISOString();
 await writeFile(statePath,JSON.stringify(state,null,2)+'\n');
 try{
@@ -42,14 +45,24 @@ try{
   ab(['set','viewport',String(width),String(height)]);
   ab(['open',ref.standaloneUrl]);
   ab(['wait','4500']);
+  if(id.startsWith('03-')){
+    let ready=false;
+    for(let poll=0;poll<24;poll++){
+      ready=evalJson('window.__ready===true');
+      if(ready)break;
+      ab(['wait','300']);
+    }
+    if(!ready)throw new Error('Open Section did not reach window.__ready');
+    ab(['wait','500']);
+  }
   const initial=evalJson(metrics);
   records.push(await capture('semantic-start','A'));
   const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);
   ab(['record','start',video,'--fps','30']);
   const step=Math.max(1,Math.floor(height*.08));
   let i=0;
-  for(const m of plan.milestones){
-    const targetY=initial.maxScroll*m.targetProgress;
+  for(const m of milestones){
+    const targetY=initial.maxScroll*(m.targetProgressByViewport?.[viewport]??m.targetProgress);
     while(i<Math.ceil(initial.maxScroll/step)+30){
       const current=evalJson(metrics);
       if(current.scrollY>=targetY-step*.5)break;
@@ -72,7 +85,7 @@ try{
   const assets=[];
   for(const r of records){assets.push({path:r.path,bytes:(await stat(r.path)).size,sha256:createHash('sha256').update(await readFile(r.path)).digest('hex')})}
   assets.push({path:video,bytes:(await stat(video)).size,sha256:createHash('sha256').update(await readFile(video)).digest('hex')});
-  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,initial,records,video,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
+  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',initial,records,video,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
   state.takes[id].attempts.at(-1).status='COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();
   state.takes[id].blockingUnresolved=state.takes[id].blockingUnresolved.filter(x=>!(x.viewport===viewport&&x.question==='Semantic capture failed'));
@@ -80,7 +93,7 @@ try{
   state.takes[id].lastSuccessfulStage=`SEMANTIC_${viewport.toUpperCase()}_COMPLETE`;
   state.takes[id].timestamps.updatedAt=new Date().toISOString();
   await writeFile(statePath,JSON.stringify(state,null,2)+'\n');
-  console.log(JSON.stringify({id,viewport,milestones:plan.milestones.length,finalY:records.at(-1).metrics.scrollY,maxScroll:records.at(-1).metrics.maxScroll,assets:assets.length},null,2));
+  console.log(JSON.stringify({id,viewport,run:run||'original',milestones:milestones.length,finalY:records.at(-1).metrics.scrollY,maxScroll:records.at(-1).metrics.maxScroll,assets:assets.length},null,2));
 }catch(e){
   state.takes[id].attempts.at(-1).status='FAILED';state.takes[id].attempts.at(-1).error=String(e);
   state.takes[id].blockingUnresolved.push({viewport,question:'Semantic capture failed',detail:String(e)});

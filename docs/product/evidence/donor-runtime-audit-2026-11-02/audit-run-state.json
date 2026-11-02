@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T13:59:05.870Z",
+  "updatedAt": "2026-11-02T14:27:00.358Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -337,7 +337,7 @@
       "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "lastSuccessfulStage": "DISCOVERY_PORTRAIT_COMPLETE",
       "attempts": [
         {
           "viewport": "desktop",
@@ -359,13 +359,72 @@
           "startedAt": "2026-11-02T13:57:32.990Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T13:59:05.870Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T14:11:01.720Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:12:06.257Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T14:12:28.411Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:13:27.104Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T14:13:41.372Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:14:40.199Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T14:17:52.018Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:18:52.749Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T14:19:20.664Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:20:18.884Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T14:23:14.640Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:24:53.176Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T14:25:28.515Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:27:00.358Z"
         }
       ],
-      "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "blockingUnresolved": [
+        {"severity":"BLOCKING","question":"Landscape Discovery A0 was captured before the initial draw/title block stabilized; stable-start A→B→A correction is outstanding.","evidenceNeeded":"discovery-correction-1 landscape with window.__ready and A0/A1 comparison"},
+        {"severity":"BLOCKING","question":"Final semantic passes must start after window.__ready in all three viewports; previous passes and viewport-target corrections remain preserved as attempts.","evidenceNeeded":"semantic-correction-2 desktop/portrait/landscape plus screenshot review"},
+        {"severity":"BLOCKING","question":"Source/Cut/Rubik reconciliation, hashes and individual 21-gate validation are outstanding.","evidenceNeeded":"03-a reconciliation.json, audit.md, manifest.json and validator PASS"}
+      ],
+      "nonBlockingUnresolved": [
+        {"severity":"NON_BLOCKING","question":"Exact donor internal camera/material/cap/shadow object identity after reverse is not passively exposed.","evidenceNeeded":"Narrow read-only state probe only if identity-level restore proof becomes necessary."}
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T13:59:05.870Z"
+        "updatedAt": "2026-11-02T14:27:00.358Z"
       }
     },
     "03-c-down-the-stair": {

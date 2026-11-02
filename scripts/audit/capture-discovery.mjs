@@ -11,6 +11,7 @@ const state = JSON.parse(await readFile(statePath, 'utf8'));
 const inventory = JSON.parse(await readFile(path.join(evidence, 'reference-inventory.json'), 'utf8'));
 const id = process.argv.find(a => a.startsWith('--take='))?.slice(7);
 const viewportName = process.argv.find(a => a.startsWith('--viewport='))?.slice(11);
+const run = process.argv.find(a => a.startsWith('--run='))?.slice(6);
 const dimensions = { desktop: [1440,900], portrait: [390,844], landscape: [844,390] };
 if (!id || !state.takes[id] || !dimensions[viewportName]) throw new Error('Use --take=<canonical-id> --viewport=<desktop|portrait|landscape>');
 const currentIndex = inventory.references.findIndex(r => r.id === id);
@@ -20,7 +21,8 @@ for (let i = 0; i < currentIndex; i++) {
   if (prev.validationStatus !== 'COMPLETE' && prev.captureStatus !== 'BLOCKED') throw new Error('Previous take not validated or locally blocked');
 }
 const ref = inventory.references[currentIndex];
-const rawDir = path.join(state.rawFolder, id, viewportName);
+if (run && !/^discovery-correction-[1-9][0-9]*$/.test(run)) throw new Error('Correction run must be discovery-correction-N');
+const rawDir = path.join(state.rawFolder, id, viewportName, ...(run ? [run] : []));
 await mkdir(rawDir, { recursive: true });
 const agentBin = process.env.AGENT_BROWSER_BIN || 'C:/Users/temp123/donor-runtime-audit-tools-2026-11-02/node_modules/agent-browser/bin/agent-browser.js';
 const [width, height] = dimensions[viewportName];
@@ -68,7 +70,7 @@ const stateUpdate = async (patch, stage) => {
 };
 const startAt = new Date().toISOString();
 state.takes[id].captureStatus = 'IN_PROGRESS';
-state.takes[id].attempts.push({ viewport: viewportName, stage: 'DISCOVERY', startedAt: startAt, status: 'IN_PROGRESS' });
+state.takes[id].attempts.push({ viewport: viewportName, stage: 'DISCOVERY', run:run||'original', startedAt: startAt, status: 'IN_PROGRESS' });
 await stateUpdate({}, 'DISCOVERY_STARTED');
 const calibrationSession = sessionBase + '-cal';
 let calibration;
@@ -77,6 +79,16 @@ try {
   ab(calibrationSession, ['set','viewport',String(width),String(height)]);
   ab(calibrationSession, ['open',ref.standaloneUrl]);
   ab(calibrationSession, ['wait','1000']);
+  if(id.startsWith('03-')){
+    let ready=false;
+    for(let poll=0;poll<36;poll++){
+      ready=evalJson(calibrationSession,'window.__ready===true');
+      if(ready)break;
+      ab(calibrationSession,['wait','300']);
+    }
+    if(!ready)throw new Error('Open Section calibration did not reach window.__ready');
+    ab(calibrationSession,['wait','500']);
+  }
   const before = evalJson(calibrationSession, metricsJs);
   ab(calibrationSession, ['mouse','wheel',String(Math.round(height * 0.5))]);
   ab(calibrationSession, ['wait','800']);
@@ -84,7 +96,7 @@ try {
   calibration = {
     purpose: 'INTERACTION_MODEL_ONLY_NOT_EVIDENCE', before, after,
     model: after.scrollY > before.scrollY ? 'SCROLL_PLUS_TIME' : 'UNRESOLVED',
-    note: '01 main.js target() reads native scrollY, frame() smooths p and advances T by wall time; verify per take source before classifying.'
+    note: id.startsWith('03-') ? 'Open Section page.js readScroll maps native scroll into a smoothed vh state; calibrated after loader-ready.' : 'Interaction model inferred only from calibration movement; verify per-take source before causal classification.'
   };
   await writeFile(path.join(rawDir,'calibration.json'),JSON.stringify(calibration,null,2)+'\n');
 } finally { ab(calibrationSession,['close'],true); }
@@ -96,6 +108,16 @@ try {
   ab(session,['set','viewport',String(width),String(height)]);
   ab(session,['open',ref.standaloneUrl]);
   ab(session,['wait','4500']);
+  if(id.startsWith('03-')){
+    let ready=false;
+    for(let poll=0;poll<24;poll++){
+      ready=evalJson(session,'window.__ready===true');
+      if(ready)break;
+      ab(session,['wait','300']);
+    }
+    if(!ready)throw new Error('Open Section did not reach window.__ready');
+    ab(session,['wait','500']);
+  }
   const start = evalJson(session, metricsJs);
   const snapshot = ab(session,['snapshot']);
   const consoleStart = ab(session,['console'],true);
@@ -174,7 +196,7 @@ try {
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets = await Promise.all([...files,...samplePaths].map(async p => ({path:p,bytes:(await stat(p)).size,sha256:createHash('sha256').update(await readFile(p)).digest('hex') })));
   await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary = { id, viewport:viewportName, calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
+  const summary = { id, viewport:viewportName, run:run||'original', stableStartReady:id.startsWith('03-')?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
   state.takes[id].attempts.at(-1).status = 'COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt = new Date().toISOString();
