@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T15:45:57.828Z",
+  "updatedAt": "2026-11-02T16:12:45.641Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -692,16 +692,95 @@
       }
     },
     "05-a-the-programme": {
-      "captureStatus": "NOT_STARTED",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:54:50.505Z",
+          "status": "FAILED",
+          "error": "Error: agent-browser record: ✗ Recording encoder fell behind by more than 16 buffered frames\n"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T15:56:39.059Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:57:27.007Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:58:06.990Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:58:50.194Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:59:15.148Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:00:26.292Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T16:03:49.910Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:04:46.946Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T16:06:18.467Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:07:08.929Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T16:08:18.960Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:09:23.609Z"
+        }
+      ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Hidden WebGL resource identity and the few-millisecond interior camera smoothing tail after returning to week zero are not established by screenshots.",
+          "attempts": [
+            "three independent virtual-week Discovery reverses",
+            "passive SHOT/TOUR telemetry",
+            "A0/A1 visual comparison"
+          ],
+          "evidenceNeeded": "Narrow resource or camera inspection only if exact hidden lifecycle identity becomes necessary; current visible restoration is supported."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Should Rubik support illustrative construction playback or a real editable planned/actual schedule?",
+          "attempts": [
+            "three-viewport donor runtime",
+            "pinned source",
+            "Cut4 D18",
+            "frozen Rubik C1-C4 crosswalk"
+          ],
+          "evidenceNeeded": "Product contract decision after the fourteen-take audit; no implementation authorized."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T16:12:45.641Z"
       }
     },
     "05-b-1-1-site-sheet": {

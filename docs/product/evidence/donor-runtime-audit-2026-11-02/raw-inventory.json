@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T15:46:42.894Z",
-  "fileCount": 1364,
-  "totalBytes": 2302433302,
-  "packageContentSha256": "7fce144fa0a7db79bd94165cbf0bc24ad051f3c102e1d06b9043ea38c41fdcb9",
+  "generatedAt": "2026-11-02T16:12:55.171Z",
+  "fileCount": 1534,
+  "totalBytes": 2379517496,
+  "packageContentSha256": "b1008486429cbf843ed35589ab5e33af999cf11c24b63ea29de1ec473303d6a8",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -6807,6 +6807,856 @@
       "path": "04-demo-build-time-lapse/portrait/start-state.json",
       "bytes": 8644,
       "sha256": "175ed03278c7a2304ec1936eecb61c391aeeba563a789083c1800deb0f94129b"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-entry-week7.png",
+      "bytes": 499763,
+      "sha256": "8fbf0c6d56c9227e82a29fb2e1ec553a1e472417088e8aefa0191fa6724c1c83"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m01-site-setup.png",
+      "bytes": 358607,
+      "sha256": "c62b29be4ef0a13ca7c38971920b15329da7cb583a36c5dd3a3498d371ee1731"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m02-excavation.png",
+      "bytes": 377826,
+      "sha256": "b487c1709e7ea333c574432240eeae3336af0780f3d74d1cd6cbf882c09a66f6"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m03-foundations.png",
+      "bytes": 320218,
+      "sha256": "1dcd3d02fe3446299e3f5495b1d0fb2e9c74f3c94b79453c272484bbd1fe3cc8"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m04-structure.png",
+      "bytes": 398887,
+      "sha256": "b7302c73b8b542e521e66a4c04b32b7fc881c0fdb4a7e5e3bcdd70f6d51de6d4"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m05-floors.png",
+      "bytes": 477565,
+      "sha256": "51f62c17e276abe19adf32f60f0c6db03e7e52733b6e4b715978d697272b7c53"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m06-walls.png",
+      "bytes": 514426,
+      "sha256": "baa8e81734c77a5fdbf7c1d40b3a7f6fa29948c1b34d2868de146d16b68759cf"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m07-roof.png",
+      "bytes": 607671,
+      "sha256": "2f7ff95f20c1034f5329ea8d0681422278f3118408b3849e2c16564f8f88dc24"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m08-windows-and-doors.png",
+      "bytes": 594685,
+      "sha256": "d236a22d932023087ffe4cea14dc9844085f6cf3dd6181f486dc1b4933056b43"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m09-finishes.png",
+      "bytes": 616491,
+      "sha256": "403604405b81f78635daa96d8f5e09d2003155a927e3650c77cf3a3689f18672"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m10-furniture-handover.png",
+      "bytes": 913602,
+      "sha256": "03e21aac7c943f892fe3fc240cdfdb0b22e6113e226804e580aa581fe958e1c2"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m11-inside-entry.png",
+      "bytes": 734077,
+      "sha256": "a965e8aac9f613dbdf92f0488216c7b5bde15e100bce1d006279cf53cc2187d5"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m12-inside-living.png",
+      "bytes": 782337,
+      "sha256": "775c165309273db7bf221894214091283f81b7dd98b0ec5a3e50ce2ee0193fe4"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m13-inside-kitchen.png",
+      "bytes": 1011509,
+      "sha256": "e22de5449f3986d1ae74bc126137abbb08a7f0252f40bd925bdf7edaf333e8d9"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m14-inside-loft.png",
+      "bytes": 1102564,
+      "sha256": "7944ce5f589efcca0a06b38eb897576bb22465e643d6081e31c2579fe1da3e20"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-m15-inside-gallery-overlook.png",
+      "bytes": 1098092,
+      "sha256": "3cb032820e2ce4af7cb396a6f18a0fd636b8ecf018aff12da885e68788bc614e"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-forward-semantic.webm",
+      "bytes": 12464331,
+      "sha256": "7b8640f9be5bb83d98eaaa90b51192e0223cae1b447ef798f453de03cfb74b2b"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-semantic-end.png",
+      "bytes": 1097607,
+      "sha256": "2e6553593b1f52e4274cf393929596116606bdcfc72c85e89ef7371adfe9a38c"
+    },
+    {
+      "path": "05-a-the-programme/desktop/desktop-semantic-start.png",
+      "bytes": 85082,
+      "sha256": "d944ddbbdc49a39ccb8eb5b61e80464511251ab1827823677ef7bdfed8a1f20f"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/calibration.json",
+      "bytes": 4316,
+      "sha256": "e9b64c5c858a98e954a3117bc639f7108a79fddcf1975456698ae5e1cc3bb164"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-end.png",
+      "bytes": 1096794,
+      "sha256": "5c9b63f4c20c0ef904ea855edc7103a574f91824acab84bbefa18c72b3f56491"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-entry-week7.png",
+      "bytes": 499763,
+      "sha256": "8fbf0c6d56c9227e82a29fb2e1ec553a1e472417088e8aefa0191fa6724c1c83"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p000.png",
+      "bytes": 85085,
+      "sha256": "d24cb9892e084be13f90afaa62362ef30235a590e9630649a773bf7f720cdf4e"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p005.png",
+      "bytes": 365811,
+      "sha256": "959104876897eb30074928d8f05de86d277c0d76ac712ae18dc30efc0a613c3f"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p010.png",
+      "bytes": 375356,
+      "sha256": "f89f4d84a2769a39bdc5ea6a49442f4a3c11f07cc6f2ef61fb8bad8932d1c830"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "bytes": 320206,
+      "sha256": "17cc2692b37f96ecb3b0b89e3ea85ca13d198198e829c47c348b117df4affd13"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p020.png",
+      "bytes": 318106,
+      "sha256": "284734436e2ac4945de59f860f66cf6ffce9654e6fd02f773d6cbdec267a6b5d"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p025.png",
+      "bytes": 339423,
+      "sha256": "57b164f5b478ba7b15aad5143d617dbe74ffd4417f30dc62ad23ffb091b634bc"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p030.png",
+      "bytes": 430208,
+      "sha256": "e805627c658803c099e55642e90307259b615fc1252fb41263c3aed422c96752"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p035.png",
+      "bytes": 471972,
+      "sha256": "fd76b777cb8949d8987a6c40d37cc5b2cf2fa1f3fe1e6295582ae425169b3973"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p040.png",
+      "bytes": 470530,
+      "sha256": "5b6753b1b9588d9e6b762255f162f7ec29d0314850436e2012940f42435a0cb2"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p045.png",
+      "bytes": 497887,
+      "sha256": "12fcf64cc9f219fa6c23b38b7b15af3abff40380b3e95d514a41b7273e3b6ff1"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "bytes": 522962,
+      "sha256": "41ca9249c95201dbfb4bcd49cedf3ea8230758693e2fa17b5c53b760aca8f4d4"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p055.png",
+      "bytes": 598050,
+      "sha256": "df86448b3b8a9936fc3759943f70bf304e9d0c546c9587420817ae909b523632"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p060.png",
+      "bytes": 594448,
+      "sha256": "85dbae5281e464cb9ed6b9f36d8f78ee3e0e7e6fa929e27b2c29e911e1185f71"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p065.png",
+      "bytes": 597896,
+      "sha256": "ea4d629e88afdd2ef81aeac5ea04035409e2eb39a7a55ca3919a35f0f8f679e7"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p070.png",
+      "bytes": 593615,
+      "sha256": "be54f9557fa468ba50f1423c4fe9029e1824cc01fee8747df16d89f2dedce6f5"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p075.png",
+      "bytes": 566315,
+      "sha256": "dfc901d5d1e7818f1a9169302d1575d3faedefa778775f29186a69a199865d3e"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p080.png",
+      "bytes": 566213,
+      "sha256": "a4bf15c0250b3a58affbeafd7658f37b0d768f835b2eccf9d62abacc12440fa8"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "bytes": 921276,
+      "sha256": "e1d4be7adb19553affc4defdd3be72f48d69149bce3c249b3c028530504eb2ed"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p090.png",
+      "bytes": 759379,
+      "sha256": "172c0b98e161126908f7b229efb6acd74edf64e2675ac576212d1eef72101f78"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p095.png",
+      "bytes": 1092124,
+      "sha256": "ec838cd2ed8d40808d1d8758e61d002cb7816434bb3d0da4e377dad281d5e212"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery-p100.png",
+      "bytes": 1096780,
+      "sha256": "6677e0e49eb2b324392d6e3fecc186e427a76e382f99d748f3c5688e5ab89df0"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 224788,
+      "sha256": "536c6fa2a7f3a829383089084356e9900cdcd9fc6b8937f46497bf481d7ef0fc"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-forward-discovery.webm",
+      "bytes": 4690176,
+      "sha256": "c5485d243841afc31328e3d11f5b37cf72741160bddee2abe64dc493b86f4186"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-prelude-to-week0.webm",
+      "bytes": 935957,
+      "sha256": "841f70c8a5002c4ae8dde171fe682841a15a286450218037cc9bb13821f70685"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-restored-start.png",
+      "bytes": 85082,
+      "sha256": "d944ddbbdc49a39ccb8eb5b61e80464511251ab1827823677ef7bdfed8a1f20f"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 165319,
+      "sha256": "5db8dc3d30f1eed142076d808cb0ac8fcff47d10643477a9670de5da5d0143bf"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-reverse-discovery.webm",
+      "bytes": 3814398,
+      "sha256": "0413fc872e546da36a55a5f6d0ee6d909609dfe434df5c54355a828bbaf98ae2"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/desktop-start.png",
+      "bytes": 85085,
+      "sha256": "d24cb9892e084be13f90afaa62362ef30235a590e9630649a773bf7f720cdf4e"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/discovery-assets.json",
+      "bytes": 8053,
+      "sha256": "8ab2e4348c4b120d4b0a81cd0a5e07f98aece9968563b821fe7f99d34459af98"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/discovery-summary.json",
+      "bytes": 20865,
+      "sha256": "8b47d59a8c41bc14b95b79a6d0c556033be564929895c3c5d8d76a1adfe80850"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/end-state.json",
+      "bytes": 2131,
+      "sha256": "8935b54cfc94a14875393f706bec3ed0b6fe97a9ae2462e8fc5d3166391ea084"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/entry-state.json",
+      "bytes": 2086,
+      "sha256": "b4e71e991be205516f0f8a620f474fcc44c2cc4d1a0009bfa3cbcc34f0ecdb77"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/reverse-state.json",
+      "bytes": 2074,
+      "sha256": "160a7b6048b1dbdaa0ffc20fa2f2ad0c68ff36fc9a8b8068ef9709bb67ec0cf4"
+    },
+    {
+      "path": "05-a-the-programme/desktop/discovery-correction-1/start-state.json",
+      "bytes": 6766,
+      "sha256": "7dc26989cea6b7a5328119ae573c4788b784950a9ea18a51af92e67196e7c375"
+    },
+    {
+      "path": "05-a-the-programme/desktop/entry-state.json",
+      "bytes": 2086,
+      "sha256": "b0e55a1df8542969a5e7768bfe2efb59cfaee035c46f151513eb8a777c350d1d"
+    },
+    {
+      "path": "05-a-the-programme/desktop/semantic-capture.json",
+      "bytes": 30169,
+      "sha256": "8c3a6baa2d65e3e7d0a749f7c65b68592b49a4fc9559c21383c669925977c70f"
+    },
+    {
+      "path": "05-a-the-programme/landscape/calibration.json",
+      "bytes": 4132,
+      "sha256": "2998b7ff70c1bbbd81860f84cc7325b949174b9d8db2121891afbc0f35f720ea"
+    },
+    {
+      "path": "05-a-the-programme/landscape/discovery-assets.json",
+      "bytes": 7450,
+      "sha256": "267dcf4935a6cb1f1237e47515a808a9b0270eb9b75139fd5dfaf6505aeb4a04"
+    },
+    {
+      "path": "05-a-the-programme/landscape/discovery-summary.json",
+      "bytes": 19740,
+      "sha256": "83a52f4b2975c54d552f23e6b96487845b64ea36e2a3045488457111fb9000b7"
+    },
+    {
+      "path": "05-a-the-programme/landscape/end-state.json",
+      "bytes": 2050,
+      "sha256": "782a7d2ff0321721c3c57a8bede2d33703b5a4266aafe35697a6894638fb0854"
+    },
+    {
+      "path": "05-a-the-programme/landscape/entry-state.json",
+      "bytes": 2004,
+      "sha256": "66136d4a5bfb136af152645fdb848f6d2a246f6ca798e36997385845c53feade"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-end.png",
+      "bytes": 232265,
+      "sha256": "6a9ba99cae7d1110357391324d4acacd9cbdffdddc97a0a24d4e8e559a5cf287"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-entry-week7.png",
+      "bytes": 146772,
+      "sha256": "dc7558927d93b78d9372ff742cf3ee71c819c95f78cce4cc3089b912593f59da"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p000.png",
+      "bytes": 61672,
+      "sha256": "6415fe75b022682d0813dc2038e005618ccf361debf207e589005f26b53cd5c9"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p005.png",
+      "bytes": 128934,
+      "sha256": "688884e92d712ca71d52071a9c1c33c69549d0f86f54d81a6f2058f4771ff24f"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p010.png",
+      "bytes": 132429,
+      "sha256": "dee72a328f65a8f1dfde3a75a08c473b1d0630e6e6dbb17636f6539f2de32e27"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p015.png",
+      "bytes": 117877,
+      "sha256": "20c1fc4f1db924554f0fbfc9be5c5a9a17fb0e17da980b4daeffe1fe8d0d0f21"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p020.png",
+      "bytes": 118534,
+      "sha256": "74ca905c1dbfc3ab14db5b5d8a4b1ae11233315af5d2fd7578ddd1a715533ec2"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p025.png",
+      "bytes": 121318,
+      "sha256": "f752ff5a4f2f6bc6a920b057c29f1db85f2833c6fac6336658bdf6c62b8682c4"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p030.png",
+      "bytes": 135249,
+      "sha256": "17b99f39eb38fd22a8c004c3908f1f008d435d4a1700fca7323d0ab41b3107e4"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p035.png",
+      "bytes": 141546,
+      "sha256": "2886703f2c798de1bf0165f6d6a7ccec8b2116b35269712ffa82eb31009957fe"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p040.png",
+      "bytes": 145332,
+      "sha256": "4497f050ae564671c1780a6b42736f515af7dc913aca11ad78c6eae37bd5df70"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p045.png",
+      "bytes": 148542,
+      "sha256": "1eec736a89fa0fe6f6fad8e4d07b77b8720813b689d464f3e9c7cc18f517c7aa"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p050.png",
+      "bytes": 148542,
+      "sha256": "b448c9d3de79842083e006ae9e339aebd2477a3a2985ad7a64fed4e8b40083c3"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p055.png",
+      "bytes": 153328,
+      "sha256": "4985b280ba3edb6fbd5b6384c949397c63b86c5fe643c080750a1ce5825dd266"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p060.png",
+      "bytes": 156883,
+      "sha256": "6b43ad92d90f920d3aead83d754b27f3d541b542e9e30e52382233bb0a24ff16"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p065.png",
+      "bytes": 156805,
+      "sha256": "25e0863dbb7e26395ed34bed82fc4b269eece375575838d570b8ed35475ba175"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p070.png",
+      "bytes": 161175,
+      "sha256": "0cc83a20c817a97f57063a015641e4c8ae66e0523777dc5792228c9d776f3fcf"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p075.png",
+      "bytes": 154366,
+      "sha256": "5aaf8e56e72960f8e61a02706b93cdce22d36fddf13f9c9947763c9d2f96bdf2"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p080.png",
+      "bytes": 153831,
+      "sha256": "073ee1093340199678b69a790bc258ef98b41a104399ecd1754e986f046d634e"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p085.png",
+      "bytes": 160425,
+      "sha256": "172fa3b6d773393e1a6c89a41a673084ba2f0c774662f9de2181b7b7c780df7c"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p090.png",
+      "bytes": 186080,
+      "sha256": "321e6006bf79a9e0ca29647cd90a732850ca4435272bbf982bf1c1a2f10b6156"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p095.png",
+      "bytes": 198114,
+      "sha256": "155aab5ac3edd12da970f689d8ecd1914ce9227e53229f8d28af77b32012d8a0"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery-p100.png",
+      "bytes": 232261,
+      "sha256": "f0160539535d80ae94d850fa47016457db046bfbe4ae740cad1beda174f30a04"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 342167,
+      "sha256": "c341cbb7957d3570723936da19c41c9b2b7e2ff27639a169c53f5aa6c4070f37"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-discovery.webm",
+      "bytes": 1904351,
+      "sha256": "b9bf8bc8450c6bee597dc9dadc48a58aa852cf3ec22e6821743fb47314dfaaa5"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m01-site-setup.png",
+      "bytes": 102132,
+      "sha256": "0cd590fb37b5875fad9a34a975bd1e5915de6b999c7d1d6d97964059a40e6fa3"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m02-excavation.png",
+      "bytes": 128839,
+      "sha256": "76f975dc5e639ce59ae8f4af280989a662331d6bf06cbb5cfa03602cc033f7a7"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m03-foundations.png",
+      "bytes": 118160,
+      "sha256": "60daf8879038d323d5ccbeb30ddb81073e1cf2a69e91b919bfa5f00db1e81fea"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m04-structure.png",
+      "bytes": 134927,
+      "sha256": "4a25ca9919466b2a86569cf2eea9cee2c4df053b978254982f8b749f1b78cbfe"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m05-floors.png",
+      "bytes": 143677,
+      "sha256": "0168143f30b1d62d5aef545567ffed4b1fbe528595a22b5c042ff8baae3bf07d"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m06-walls.png",
+      "bytes": 148458,
+      "sha256": "16edbb204c283a35d8277746231e37cf9ee3df1c34ec1eb45c8fc8ed9c5c9abe"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m07-roof.png",
+      "bytes": 157158,
+      "sha256": "b194b851131e66d229b0991965fd3c6dcf1aa77036e0d343f26674d3cb07c76e"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m08-windows-and-doors.png",
+      "bytes": 161618,
+      "sha256": "3c6e7487de3dc29be59c0796619a57d4f82f476f3bfb5fa4ffecc59d5bbc9e36"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m09-finishes.png",
+      "bytes": 154135,
+      "sha256": "b1ede963b9995940d4a4c630669776034609010aa1d3640756407b253e2f2987"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m10-furniture-handover.png",
+      "bytes": 185988,
+      "sha256": "a7ae3991a60260241e8b13d84bbd34f7a079f02fc513a7b9f66811eb766685d8"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m11-inside-entry.png",
+      "bytes": 185425,
+      "sha256": "0c173080aee5bfe888c4e8a073ac3c2651e5fd97318dd6c78a571e83554e9121"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m12-inside-living.png",
+      "bytes": 199020,
+      "sha256": "2a8287a2447d83202fe706a3995a9fbdca2214affa88bf4f7f475687a734ef71"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m13-inside-kitchen.png",
+      "bytes": 200134,
+      "sha256": "507e6321ab822891e6138d7c8f35b03352b14b9d3cfd7bec8ac580e1012fd16b"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m14-inside-loft.png",
+      "bytes": 211186,
+      "sha256": "956b94206a8a8ea3adc78aab3061774857a18e1fa9713de9450b5ea1dc281921"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-m15-inside-gallery-overlook.png",
+      "bytes": 231905,
+      "sha256": "9d86d09bb928424a46012917a2bbcadf3667a5bb8e8f7b0ee127cce4eb3b0bdb"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-forward-semantic.webm",
+      "bytes": 3345748,
+      "sha256": "b5c6a9d650ac9a31852d6f1fec46605f2451b514307b2e57b3132d57732ea016"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-prelude-to-week0.webm",
+      "bytes": 554227,
+      "sha256": "b2ce90989e7befab02e210f56f06c6ed6e74591c18858145d9c1c836e86a91bb"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-restored-start.png",
+      "bytes": 61672,
+      "sha256": "6415fe75b022682d0813dc2038e005618ccf361debf207e589005f26b53cd5c9"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 298785,
+      "sha256": "9372dc5313e0b35c19ec41baadb8a75023027e6c1ca7edca49cb615a4fefbd43"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-reverse-discovery.webm",
+      "bytes": 1795434,
+      "sha256": "7040458e851c1cf170a7601037c7289b71f4308de37a057140206675e68bb115"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-semantic-end.png",
+      "bytes": 232765,
+      "sha256": "30a1a253a8628aad5da1a3c93aa3bd80498fd76c81ea1bc66befc8f232460a9a"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-semantic-start.png",
+      "bytes": 61672,
+      "sha256": "6415fe75b022682d0813dc2038e005618ccf361debf207e589005f26b53cd5c9"
+    },
+    {
+      "path": "05-a-the-programme/landscape/landscape-start.png",
+      "bytes": 61672,
+      "sha256": "6415fe75b022682d0813dc2038e005618ccf361debf207e589005f26b53cd5c9"
+    },
+    {
+      "path": "05-a-the-programme/landscape/reverse-state.json",
+      "bytes": 1993,
+      "sha256": "5acd712ce0effb4036ebeafb9c04eb94ad2773bd65ff7378a4e4a311bc2cbc1c"
+    },
+    {
+      "path": "05-a-the-programme/landscape/semantic-capture.json",
+      "bytes": 29493,
+      "sha256": "281b9fe952df27cf8b68027d7972c02053081fde276914d610bc6cac91d8de13"
+    },
+    {
+      "path": "05-a-the-programme/landscape/start-state.json",
+      "bytes": 6457,
+      "sha256": "804182c29353bf3da0b79917ae0ba16cf4b04051b91878db703f034bbdb8dfa3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/calibration.json",
+      "bytes": 4130,
+      "sha256": "661e4ec17d11e62648363948aaccc699c22c222ca3a70ffcd47e870ae7f63f2a"
+    },
+    {
+      "path": "05-a-the-programme/portrait/discovery-assets.json",
+      "bytes": 7390,
+      "sha256": "4f657bb3b502ca19680df5ad79214431243d0db85519629ef89199873546a4f3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/discovery-summary.json",
+      "bytes": 19673,
+      "sha256": "cb76cbff4d61e9cdce6b84479d90a58218b7b0b9b00c76af7e983e7287c581b6"
+    },
+    {
+      "path": "05-a-the-programme/portrait/end-state.json",
+      "bytes": 2049,
+      "sha256": "96d8d1355d9882b2c2389ba5edcf59f175b526df15b1550161ed85d867e0df5f"
+    },
+    {
+      "path": "05-a-the-programme/portrait/entry-state.json",
+      "bytes": 2004,
+      "sha256": "232f48461c0d2cf93de5ed75def5cda4994b59e99b34f291104223c6f252a6a5"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-end.png",
+      "bytes": 235115,
+      "sha256": "f85473d26bc4c22d061cca35315a4ef27e48186884f530a097f987cd2896b05c"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-entry-week7.png",
+      "bytes": 213930,
+      "sha256": "abdef8de765efefe69e1d9ed3fe1a529edfb956ba3d690964317d80e9681fab6"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p000.png",
+      "bytes": 26699,
+      "sha256": "bd428d148c016b25437f477f467cdc7c924290bbf8cc08d3f6f48ec7a8b9a0c3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p005.png",
+      "bytes": 155091,
+      "sha256": "e6b0ff7f27a2d13f7535ec55957b0476bf3a4ea4868327a0aaf2f7d5f8dafdc2"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p010.png",
+      "bytes": 162705,
+      "sha256": "b86b586cac3dab35a9145c57d2d8a367ffb2bc2b8660aee1fc2db63086faa8dc"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p015.png",
+      "bytes": 107536,
+      "sha256": "fe2059238a566bb45953bb07a4eb3d423f6d86e9242a80886102b542b0eaa6bf"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p020.png",
+      "bytes": 106084,
+      "sha256": "2022103ab7569d5982ffe7efd6872c3c5c636d8f3d3d80fbd981799891fa3cda"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p025.png",
+      "bytes": 162734,
+      "sha256": "faf1239fcd223f242ca2ede37e02fd557ddf16e7a6131253b62f94c9ef475a0a"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p030.png",
+      "bytes": 164153,
+      "sha256": "299eb5e12c4579abed835ca95216b991c7d4a5407ed913dfbb60d13ce5fa8c14"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p035.png",
+      "bytes": 193745,
+      "sha256": "bceb71a202b786e30f9d50bfc50ec7fa9332d7534a8cc6cf799b5bbd771e3bd4"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p040.png",
+      "bytes": 208080,
+      "sha256": "294c93bbd35ef64377e6583e0be253469a9d7bc10530cbdaaee2cc6cbaa366f2"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p045.png",
+      "bytes": 219633,
+      "sha256": "78d65bb972eb5b1e71c87d78e827d6aa3743ef8e245efd1924025226318a309b"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p050.png",
+      "bytes": 218737,
+      "sha256": "8cd22863a4b82ef84ba7b06b6da1f28ca22bf0ec364906d70e4d4ae0872eb5af"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p055.png",
+      "bytes": 233729,
+      "sha256": "db86c04042f283a38e927b9a0db0b6f1c59aefbbf0f7f761bcf40248436a1ece"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p060.png",
+      "bytes": 250987,
+      "sha256": "b0ae64f69634247457738b2261eeceb5318cfb2a24f3ba71f7eb7c8b3386a149"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p065.png",
+      "bytes": 249650,
+      "sha256": "4af27d9ea86372ba2c58db544831967889f547acfc9f8e4fd384b09e6e877777"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p070.png",
+      "bytes": 249803,
+      "sha256": "7d1dfb71643d8b708fc7a2c5338af87e4d7df258f92125b00d528c1a2813bf7c"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p075.png",
+      "bytes": 237084,
+      "sha256": "e59e2fb5e420d2e39917da22197308039fe4301d64e7e1317da64008687e4b53"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p080.png",
+      "bytes": 235168,
+      "sha256": "9f86de10fa4e529ace0866b15516252cd6fe6e9405a518c1559d7ba07f7e8a4d"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p085.png",
+      "bytes": 282550,
+      "sha256": "d6197406593d168ad510172e9166e6f297df7aafe97a850a68349fe6c15b9431"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p090.png",
+      "bytes": 124118,
+      "sha256": "0ed81f85c115a9506be565104eccfbd83643143e81a20e8c82e874d2ddf359a8"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p095.png",
+      "bytes": 187396,
+      "sha256": "ef9d59430c4ddaa432f2c0571696aba82b2b86078dac3497718f3338e6fd2cdd"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery-p100.png",
+      "bytes": 235128,
+      "sha256": "e16e95af604d8e750d7971575c1f212970de34189fe1fa25770d55dd5360ceb2"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 192308,
+      "sha256": "04914f4ce96794b109da264d1122ee9984157125bb1d34bcc79f10cf060428d3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-discovery.webm",
+      "bytes": 1595618,
+      "sha256": "40e65c5259d5e190d9225e1d129a9def617471e810491d174c6dc2ad7b1a619e"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m01-site-setup.png",
+      "bytes": 150019,
+      "sha256": "738d6e35be8e3e6fbae0ce38d03ab2b62a39a79710b7ff6323cf9367f02f9ca9"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m02-excavation.png",
+      "bytes": 138562,
+      "sha256": "8e4e00d7b3382c6f8744ba66982e8a25241f1ec6730d8fa376adf00f13fedc98"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m03-foundations.png",
+      "bytes": 110571,
+      "sha256": "c518b7aa6fe53607da651c5752adc0778e700fe4821b2d4a1c97f926c4995301"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m04-structure.png",
+      "bytes": 164187,
+      "sha256": "7537766dcbc26e02a68873e95840ca9a005274075365b161300c9dafb2740fd0"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m05-floors.png",
+      "bytes": 208019,
+      "sha256": "b268fbe96775a4191268fdbab49622bd34dadfec4ed49b46bc301f0fcc926c88"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m06-walls.png",
+      "bytes": 216350,
+      "sha256": "3e7715a84c3eaac1398d68274d472fb23eac0cc1bf0d744abb77f950158097c9"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m07-roof.png",
+      "bytes": 250503,
+      "sha256": "3211ee3ad190c82b45cb9ee1ad9493a1759361101796f943a42b68feb0d2325f"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m08-windows-and-doors.png",
+      "bytes": 243563,
+      "sha256": "114a4dcaf9a797fe946c460a001e9c8ca470868b04d77e470552031112635843"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m09-finishes.png",
+      "bytes": 235034,
+      "sha256": "5d9648fe18c2458807d4606bcf3c86726351babf9c69bb7deba0bf568673c097"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m10-furniture-handover.png",
+      "bytes": 281437,
+      "sha256": "537db2293070d0bced82ffb3fe2adc4b3cea4866de94131d2ee90dc906e4ca5b"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m11-inside-entry.png",
+      "bytes": 182488,
+      "sha256": "54e5432882fa340bc6fd681c8f6c334e89e99a16ecc38222d62a0fe0fbe74259"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m12-inside-living.png",
+      "bytes": 186581,
+      "sha256": "711acc31435c458d7739b86ba13c6a9c2eda9d9dd8895b9accc083364b593598"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m13-inside-kitchen.png",
+      "bytes": 259983,
+      "sha256": "f013aeeb41045520b973aee8cbe4dd2a204d1919d8a0d516667363c9053af8a5"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m14-inside-loft.png",
+      "bytes": 268238,
+      "sha256": "d65079e82f72ba7a08b7ec9c13a15ff864ddcec7225656c896932beee33ff847"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-m15-inside-gallery-overlook.png",
+      "bytes": 234968,
+      "sha256": "d34656aef86a996829dc30037461dd1b6b76ae317e127617b5b46d3fd763293e"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-forward-semantic.webm",
+      "bytes": 3402573,
+      "sha256": "090387b223eed81a29bc4c5ec9f574d6f338c7c643a15db4a4fafb1b2292fcb2"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-prelude-to-week0.webm",
+      "bytes": 424041,
+      "sha256": "facb5d490588c3a85a48d45a79318da3ef145cc742a5f1d574c297bcf2e5e465"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-restored-start.png",
+      "bytes": 26699,
+      "sha256": "bd428d148c016b25437f477f467cdc7c924290bbf8cc08d3f6f48ec7a8b9a0c3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 157038,
+      "sha256": "79e9202c5134ab4086877b0459c9a7ceef74e193ac2bb7f4c9a1ff3d74cc88eb"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-reverse-discovery.webm",
+      "bytes": 1332230,
+      "sha256": "6ec0cfa3755afc4809a10091be192664bd3c8420bf85fcf0992edd5228b96d94"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-semantic-end.png",
+      "bytes": 234968,
+      "sha256": "d34656aef86a996829dc30037461dd1b6b76ae317e127617b5b46d3fd763293e"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-semantic-start.png",
+      "bytes": 26699,
+      "sha256": "bd428d148c016b25437f477f467cdc7c924290bbf8cc08d3f6f48ec7a8b9a0c3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/portrait-start.png",
+      "bytes": 26699,
+      "sha256": "bd428d148c016b25437f477f467cdc7c924290bbf8cc08d3f6f48ec7a8b9a0c3"
+    },
+    {
+      "path": "05-a-the-programme/portrait/reverse-state.json",
+      "bytes": 1990,
+      "sha256": "b4a7da7bf404d1ddef0988ad63b64f9b524008c184b8412f9dcfc31ce7187493"
+    },
+    {
+      "path": "05-a-the-programme/portrait/semantic-capture.json",
+      "bytes": 29539,
+      "sha256": "18124dfff87e988efc8f021339ca0988e27bffc06117caf41a5b523e80b01f8b"
+    },
+    {
+      "path": "05-a-the-programme/portrait/start-state.json",
+      "bytes": 6444,
+      "sha256": "dee9e3bba7cf0365f5689e86acba75479eeb363a217cc0f29949727b7c649fc7"
     },
     {
       "path": "tooling-test-annotated.png",

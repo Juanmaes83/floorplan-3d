@@ -1,0 +1,827 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "discoveryRun": {
+    "desktop": "discovery-correction-1"
+  },
+  "progressModel": {
+    "desktop": "VIRTUAL_SCROLL",
+    "portrait": "VIRTUAL_SCROLL",
+    "landscape": "VIRTUAL_SCROLL"
+  },
+  "transitions": [
+    [
+      0.01,
+      0.04,
+      0.06
+    ],
+    [
+      0.07,
+      0.11,
+      0.14
+    ],
+    [
+      0.15,
+      0.2,
+      0.25
+    ],
+    [
+      0.27,
+      0.32,
+      0.37
+    ],
+    [
+      0.38,
+      0.43,
+      0.47
+    ],
+    [
+      0.48,
+      0.53,
+      0.58
+    ],
+    [
+      0.59,
+      0.64,
+      0.68
+    ],
+    [
+      0.69,
+      0.73,
+      0.77
+    ],
+    [
+      0.78,
+      0.84,
+      0.89
+    ],
+    [
+      0.91,
+      0.94,
+      0.95
+    ],
+    [
+      0.951,
+      0.956,
+      0.962
+    ],
+    [
+      0.962,
+      0.967,
+      0.973
+    ],
+    [
+      0.973,
+      0.978,
+      0.984
+    ],
+    [
+      0.985,
+      0.992,
+      0.997
+    ],
+    [
+      0.997,
+      0.999,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:127-130,334-430,515-580,914-937",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,284-325,461-480,924-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,284-325,461-480,924-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,284-325,461-480,924-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,284-325,461-480,924-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,284-325,461-480,924-1007"
+  ],
+  "continuity": [
+    "The perimeter, welfare cabin and authored phase rows belong to the same single house site.",
+    "Excavation occurs within that fenced footprint while early phase intervals overlap.",
+    "Foundations occupy the excavated footprint rather than a second scene.",
+    "Timber portal frames rise on the same foundation slab.",
+    "The mezzanine and stair fit into the same portal structure.",
+    "Wall cassettes close the same frame and keep its openings aligned.",
+    "Roof cassettes and standing seam cover the same shell.",
+    "Glazing and doors fill openings in the completed wall and roof shell.",
+    "Interior and exterior finishes attach to that shell.",
+    "Furniture extends the completed house before the camera enters it.",
+    "The threshold is the entrance of the completed exterior house.",
+    "The living room follows the entrance within that house.",
+    "The kitchen and dining area remain below the same mezzanine.",
+    "The loft suite and study are reached along the same stair.",
+    "The upper gallery overlooks the double-height living room of the same house."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "DONOR_LIMITATION",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Desktop Gantt and 3D advance together through ten authored phases.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\desktop-forward-m07-roof.png"
+      }
+    ],
+    "portrait": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 390×844 the fixed-width programme side remains visible but the Gantt chart is outside the viewport and toolbar clips.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Fixed 320px side panel and no 390px chart layout.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/sketch.css:286-325,536-560"
+      }
+    ],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 week labels collide and programme covers most of the 3D.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\landscape\\landscape-forward-m07-roof.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Horizontal programme layout remains active at this width.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/sketch.css:286-325,536-560"
+      }
+    ]
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "Natural reverse returns virtual week 0, SHOT a2, the same canonical route and native scrollY=0. A0 and A1 screenshots are visually equivalent, including the same viewport-specific layout limitation. TOUR approaches zero with camera smoothing; hidden WebGL resource identity is NOT_OBSERVED.",
+    "portrait": "Natural reverse returns virtual week 0, SHOT a2, the same canonical route and native scrollY=0. A0 and A1 screenshots are visually equivalent, including the same viewport-specific layout limitation. TOUR approaches zero with camera smoothing; hidden WebGL resource identity is NOT_OBSERVED.",
+    "landscape": "Natural reverse returns virtual week 0, SHOT a2, the same canonical route and native scrollY=0. A0 and A1 screenshots are visually equivalent, including the same viewport-specific layout limitation. TOUR approaches zero with camera smoothing; hidden WebGL resource identity is NOT_OBSERVED."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "No independent reverse-only state established: the same five interior stops retreat to the exterior, then furniture, finishes, glazing, roof, walls, floors, structure and ground works withdraw as the virtual week returns to zero.",
+    "portrait": "No independent reverse-only state established: the same five interior stops retreat to the exterior, then furniture, finishes, glazing, roof, walls, floors, structure and ground works withdraw as the virtual week returns to zero.",
+    "landscape": "No independent reverse-only state established: the same five interior stops retreat to the exterior, then furniture, finishes, glazing, roof, walls, floors, structure and ground works withdraw as the virtual week returns to zero."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "discovery-correction-1/desktop-entry-week7.png",
+      "discovery-correction-1/desktop-start.png",
+      "desktop-forward-m03-foundations.png",
+      "desktop-forward-m07-roof.png",
+      "desktop-forward-m10-furniture-handover.png",
+      "desktop-forward-m11-inside-entry.png",
+      "desktop-forward-m15-inside-gallery-overlook.png",
+      "discovery-correction-1/desktop-end.png",
+      "discovery-correction-1/desktop-restored-start.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "portrait-forward-m07-roof.png",
+      "portrait-forward-m15-inside-gallery-overlook.png",
+      "portrait-end.png",
+      "portrait-restored-start.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-forward-m07-roof.png",
+      "landscape-forward-m15-inside-gallery-overlook.png",
+      "landscape-end.png",
+      "landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Communicates an example 14-week timber-house construction sequence with an aligned programme and visual build.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "construction planner"
+    ],
+    "serviceOutcome": "A viewer can scrub the same authored week across Gantt rows, staged house pieces and an automatic five-stop handover tour.",
+    "decisionValue": "Useful for discussing illustrative sequence and spatial consequences; its dates, durations, completion percentages and critical-path label are not verified planning or execution facts.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Desktop week 0 to 14 continuous capture.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Fixed PHASES and one week cursor drive house and chart.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,1416-1470; view.js:334-430,914-937"
+      },
+      {
+        "class": "CUT_ATLAS",
+        "statement": "D18 states the planning limits.",
+        "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "All ten authored phases act on the same timber house and site.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One house receives phase-assigned pieces.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Foundation and roof milestones.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\desktop-forward-m03-foundations.png"
+        }
+      ]
+    },
+    {
+      "statement": "The Gantt cursor and house pieces use the same virtual week but show planned illustration, not actual execution.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Shared PHASES and week cursor.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24; view.js:334-430,914-937"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 limits progress semantics.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    {
+      "statement": "The five interior stops remain within the completed house and follow entry, living, kitchen, loft and overlook.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Stop metadata and spline.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Final gallery stop.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\desktop-forward-m15-inside-gallery-overlook.png"
+        }
+      ]
+    },
+    {
+      "statement": "Reverse removes the same phase pieces and returns the visual start without route change.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A0 screenshot.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A1 screenshot.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous reverse.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-reverse-discovery.webm"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Canonical ?dir=a opens at week 7 in each independent viewport; the natural prelude reaches week 0 without reload.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-entry-week7.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Original desktop 30fps prelude encoder failed; RAW attempt was preserved and correction-1 at 10fps completed.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-summary.json"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "All three Discovery passes record virtual week 0→14→0 with continuous forward/reverse video and 21 normalized samples; native scrollY remains zero.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Independent semantic passes capture ten construction phases and five interior stops in each viewport.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\desktop-forward-semantic.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "A0/A1 start states are visually equivalent; week and shot return while interior camera smoothing approaches zero.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Portrait chart disappears outside 390px viewport; landscape week labels collide and programme overlays 3D.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "PHASES, piece placement and update govern authored stage appearance.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Wheel-driven virtual week, Gantt, automatic interior tour and exposed state are source-confirmed.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,334-430,914-1007"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut4 D18 and Atlas 05 distinguish shared-week presentation from real planning authority.",
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305; Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:150-155,189-194; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:416-450"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik Story, Building, presentation and C1-C4 are current separate authorities.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364; js/quantity-schedule-core.js:1-40; js/budget-draft-core.js:1-40"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/house.js",
+      "symbol": "PHASES/WEEKS/dateAt",
+      "lines": "9-45",
+      "claim": "Ten fixed overlapping phase intervals, 14 weeks and a fixed weekday-only calendar drive the example.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/house.js",
+      "symbol": "add/update",
+      "lines": "618-640,1416-1470",
+      "claim": "Manually assigned piece phase and local timing control appearance, tints and site works at one week.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "programmeSVG/updateUi",
+      "lines": "334-430,515-625",
+      "claim": "The authored PHASES, cursor date, decorative adjacent arrows and 3D share a week.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "INTERIOR_STOPS/TOUR_KEYS/wheel/__state",
+      "lines": "20-99,914-1007",
+      "claim": "Five-stop interior spline follows week 13.38, and natural wheel sets virtual week while native scroll stays zero.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/sketch.css",
+      "symbol": "html/body overflow and programme layout",
+      "lines": "14-15,286-325,536-560",
+      "claim": "Fixed horizontal programme and limited breakpoint account for observed narrow and landscape limitations.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 4 D18 @cut4-d16-d17-d18.md; Global D18; Atlas 05",
+      "documentedDisposition": "D18: shared week Gantt/3D is adaptable presentation; Story transport already exists; fixed phases, dates and critical-path label are reference only; real planning and execution need separate durable authority.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 static phases, no precedence graph, no professional calendar or actual progress.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A week advances Gantt and house in desktop.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\desktop-forward-m07-roof.png"
+        }
+      ]
+    },
+    {
+      "locator": "Atlas 05 @7696fb2c6c30f158001d38ecc53feb2674acaa25",
+      "documentedDisposition": "Programme, site and automatic interior handover share a virtual cursor; Atlas is a baseline and mobile/reverse required fresh verification.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Pinned Atlas 05.",
+          "locator": "Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:150-155,189-194"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Fresh three-viewport A→B→A reveals responsive limits and visual restoration.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-reverse-discovery.webm"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik Project/Building and C1-C4 own geometry, quantities and economic records; no durable job, calendar, dependency, element-to-job or execution authority is established. Donor PHASES is a fixed illustration.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Project/Building identity and Story state are separate.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 distinguishes current C1-C4 from construction planning.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns real Building geometry; donor assigns authored phase and per-piece appearance to a single house. A mapping from Rubik element IDs to authorized work packages is missing.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building geometry and level path.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Pieces are assigned phase and local timing in the donor.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik View3D/Story can represent a Building; the donor Gantt and 3D share one virtual week, but their fixed rows are not current project data.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building view and Story.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One PHASES array drives Gantt and house update.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,1416-1470; view.js:334-430"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has current surface rendering; donor stage tints, ghosts, material arrival and construction props are specific to its authored house.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface renderer consumes current project appearances.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Week update sets piece material/visibility.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:1416-1470"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns presentation camera and route mechanisms; donor automatic five-stop interior spline is authored for this house.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story route and camera authorities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Five interior stops and spline keys.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik Story can seek absolute progress; donor phase-piece arrivals and exterior-to-interior handover are authored transitions rather than verified project execution.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Absolute Story sequence and seek.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Week controls appearance and interior transition.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:1416-1470; view.js:924-1007"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story already owns transport. Donor blocks native scrolling and maps wheel to a virtual week; the transport mechanism provides no planning authority.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story seek/playback UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Wheel input changes virtual week.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:914-937"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls, while donor Gantt, WBS and percent-complete labels are authored. Decorative CRITICAL PATH and TODAY labels cannot be read as computed planning or current date.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 documents the critical-path, today and percent limitations.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has responsive presentation paths; donor 390×844 omits the chart from the viewport and clips controls, while 844×390 chart labels collide and the programme covers the 3D.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Responsive presentation and mobile QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Portrait mid-build screenshot lacks chart.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape chart labels overlap.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\landscape\\landscape-forward-m07-roof.png"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has lifecycle restore. Donor 05-a returns virtual week, camera shot, route, native scroll and visible A0 presentation; hidden render-resource identity was not observed.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story cleanup authority.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Natural reverse and A1 screenshot.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has image/share and economic outputs; the donor schedule is an on-screen illustration, with no verified project schedule export.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current image/share outputs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 finds no persistent editable schedule or certified execution.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Current presentation QA exists; a future schedule bridge would need source-of-truth tests for dates, dependencies, phase membership, deterministic seeking, mobile legibility and reverse cleanup.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 separates planning domain and Story transport.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "PRODUCT_DECISION_REQUIRED",
+      "statement": "A real plan requires durable tasks, element membership, calendar, dependencies, date provenance and separate actual-execution observations. The donor provides only fixed illustration.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Static PHASES and derived dates.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-45"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 contract decision required.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story progress is presentation state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364"
+        }
+      ]
+    },
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "Even an illustrative project-specific phase view needs explicit mapping from authorized Rubik element IDs to work states; donor piece assignments are house-specific.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Pieces receive manual phases.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building identity.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "CRITICAL PATH arrows and TODAY/date/complete labels imply planning precision absent from the fixed dataset.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Adjacent arrows and cursor date.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:382-430"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 planning semantics limits.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    {
+      "classification": "MOBILE_GAP",
+      "statement": "390×844 excludes the Gantt chart and clips controls; 844×390 overlaps week labels and obscures much of the 3D.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Portrait phase screenshot.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\portrait\\portrait-forward-m07-roof.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape phase screenshot.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-a-the-programme\\landscape\\landscape-forward-m07-roof.png"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REUSE_EXISTING",
+      "problemSolved": "Seek and replay a presentation week deterministically.",
+      "rubikAuthoritiesPreserved": [
+        "Story absolute progress",
+        "Story lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Story seek and playback",
+        "presentation UI"
+      ],
+      "missingConnector": "None for transport; meaningful construction dates require separate authority.",
+      "donorMechanismReference": "view.js wheel/setTargetWeek is transport only",
+      "confidence": "HIGH",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "Show a visual phase of actual Rubik Building elements.",
+      "rubikAuthoritiesPreserved": [
+        "Project and Building element IDs",
+        "Story presentation owner",
+        "material/light owners"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Building geometry",
+        "Story sequence",
+        "View3D renderer"
+      ],
+      "missingConnector": "Authorized element-to-task mapping and deterministic time-state evaluator.",
+      "donorMechanismReference": "house.js add/update principle, not the fixed PHASES",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "DEFER",
+      "problemSolved": "Expose a real planned and actual construction Gantt if product scope calls for it.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building IDs",
+        "C1-C4 economic authority",
+        "Story transport"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Building quantities",
+        "existing economic records",
+        "Story seek"
+      ],
+      "missingConnector": "Separate planning and execution data contracts with calendars, dependencies, work membership and provenance.",
+      "donorMechanismReference": "view.js programmeSVG as presentation reference only; decorative critical path rejected",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "PRODUCT_CONTRACT_DECISION: illustrative construction story versus real editable plan and actual execution.",
+    "TECHNICAL_PREREQUISITE: explicit Rubik element-to-work membership and date provenance before temporal visibility is treated as factual.",
+    "TECHNICAL_PREREQUISITE: retain Story-owned seek and lifecycle; do not use C1-C4 quantity tables as job schedules.",
+    "TECHNICAL_PREREQUISITE: responsive chart and camera layout if a schedule presentation is later authorized."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "A virtual week, scheduled week, current date and actual progress are separately labeled and sourced."
+    },
+    {
+      "category": "SEMANTIC",
+      "invariant": "Critical path appears only when calculated from an authorized dependency graph."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Temporal piece visibility preserves current Building IDs and the one-house continuity."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "All ten phase and five interior states are reproducible from absolute presentation progress."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Interior camera enters the completed house and reverse reaches the start view after smoothing settles."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "0→14→0 restores route, week, shot, visible HUD and presentation resources."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "At 390×844 and 844×390 programme rows, week labels, controls and 3D remain readable."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Week, phase and interior stop changes have nonvisual labels and usable controls."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Any schedule export identifies plan source and distinguishes planned from actual dates."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Donor phase assumptions do not persist into Rubik Project, C1-C4 or Building data."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Hidden WebGL resource identity and the few-millisecond interior camera smoothing tail after returning to week zero are not established by screenshots.",
+      "attempts": [
+        "three independent virtual-week Discovery reverses",
+        "passive SHOT/TOUR telemetry",
+        "A0/A1 visual comparison"
+      ],
+      "evidenceNeeded": "Narrow resource or camera inspection only if exact hidden lifecycle identity becomes necessary; current visible restoration is supported."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Should Rubik support illustrative construction playback or a real editable planned/actual schedule?",
+      "attempts": [
+        "three-viewport donor runtime",
+        "pinned source",
+        "Cut4 D18",
+        "frozen Rubik C1-C4 crosswalk"
+      ],
+      "evidenceNeeded": "Product contract decision after the fourteen-take audit; no implementation authorized."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "VALIDATED",
+  "validation": "Fresh independent desktop, portrait and landscape semantic passes each captured all 15 milestones and week 14. Visual review confirmed the phase sequence, five interior stops and viewport limitations; screenshots and continuous video remain in RAW.",
+  "basis": "Independent canonical ?dir=a entries at week 7, natural recorded preludes to week 0, and virtual-week 0→14→0 Discovery in desktop, portrait and landscape. Native scrollY remains zero. The ten PHASES in pinned house.js and five INTERIOR_STOPS/TOUR_KEYS in pinned view.js align with observed phase rows, piece arrivals and automatic handover walkthrough.",
+  "milestones": [
+    {"label":"M01","slug":"site-setup","targetProgress":0.03,"observedChange":"Site set-up raises perimeter fencing and the welfare cabin; by the captured week 0.6, excavation has also begun and the authored phase rows overlap."},
+    {"label":"M02","slug":"excavation","targetProgress":0.10,"observedChange":"Excavation removes ground inside the perimeter; by the captured week 1.6, foundations have also begun as the programme cursor advances."},
+    {"label":"M03","slug":"foundations","targetProgress":0.19,"observedChange":"Foundations and slab elements occupy the excavated site while the corresponding programme row fills."},
+    {"label":"M04","slug":"structure","targetProgress":0.31,"observedChange":"Timber portal frames rise under the crane on the same slab during the structure phase."},
+    {"label":"M05","slug":"floors","targetProgress":0.42,"observedChange":"The mezzanine floor and straight stair enter the portal frame during the floors phase."},
+    {"label":"M06","slug":"walls","targetProgress":0.52,"observedChange":"Timber wall cassettes close the frame; the programme highlights the walls phase and the active piece edges."},
+    {"label":"M07","slug":"roof","targetProgress":0.63,"observedChange":"Insulated roof cassettes and standing-seam roof surface enclose the same house."},
+    {"label":"M08","slug":"windows-and-doors","targetProgress":0.72,"observedChange":"Glazing, door and east gable openings are installed against the completed roof and wall shell."},
+    {"label":"M09","slug":"finishes","targetProgress":0.83,"observedChange":"Charred larch, plaster and oak finishes appear; the ten-row Gantt advances into finishes."},
+    {"label":"M10","slug":"furniture-handover","targetProgress":0.94,"observedChange":"Furniture and handover pieces arrive near week 14 while the external house remains complete."},
+    {"label":"M11","slug":"inside-entry","targetProgress":0.956,"observedChange":"The automatic camera enters through the oak threshold at the first of five authored interior stops."},
+    {"label":"M12","slug":"inside-living","targetProgress":0.967,"observedChange":"The double-height living room, hearth and bookcase follow the same house's entrance."},
+    {"label":"M13","slug":"inside-kitchen","targetProgress":0.978,"observedChange":"The camera turns across the first-floor kitchen, dining area and island beneath the mezzanine."},
+    {"label":"M14","slug":"inside-loft","targetProgress":0.992,"observedChange":"The walkthrough rises on the stair to the loft suite and study at the mezzanine level."},
+    {"label":"M15","slug":"inside-gallery-overlook","targetProgress":1,"observedChange":"Week 14 ends at the upper gallery overlooking the double-height room and garden terrace."}
+  ],
+  "reverseSemanticStates": "Natural reverse traverses the five-stop interior in reverse, returns to the exterior and withdraws furniture, finishes, glazing, roof, wall cassettes, mezzanine, portal frames, foundations and excavation as the same programme week decreases to zero. The mobile panels retain their observed viewport limitations."
+}
