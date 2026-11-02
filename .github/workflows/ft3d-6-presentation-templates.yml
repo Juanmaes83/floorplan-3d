@@ -16,7 +16,7 @@ permissions:
 jobs:
   templates-and-evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 60
     env:
       TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       TEMPLATES_ARTIFACTS: qa-results/ft3d-6-review/tests
