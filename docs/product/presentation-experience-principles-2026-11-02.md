@@ -8,6 +8,7 @@
 - `docs/product/current-delivery-capabilities-2026-11-02.md`
 - `docs/product/donor-to-rubik-integration-policy-2026-11-02.md`
 - `docs/product/ft3d-donor-global-reconciliation-2026-11-01.md`
+- `docs/product/construction-programme-domain-addendum-2026-11-02.md`
 - `docs/product/evidence/donor-visual-observations-2026-11-02/manifest.md`
 
 > Rubik should not only show a project. It should be able to explain the project while the same project changes representation, preserving technical rigor, spatial continuity and professional context.
@@ -62,6 +63,24 @@ Examples of possible emphasis, not approved feature definitions:
 - developer: building/level reading, programme and delivery facts where real data exists.
 
 The same capability may support different profiles with different information hierarchy.
+
+### 1.3 Contextual narrative has two authorities
+
+The newer Open Section / architectural reference frames make an important distinction visible. A contextual card can combine:
+
+```text
+PROJECT-DERIVED FACTS
+room · level · dimensions · material · orientation · quantities · evidence status
++
+PROFESSIONAL-AUTHORED NARRATIVE
+why the decision matters · what the client should notice · design intent
+```
+
+These authorities must remain distinguishable.
+
+Rubik may derive factual fields from project/professional data, while the explanatory narrative may be authored by the professional. Authored copy must not silently become a measured/project fact; derived facts must not be rewritten merely to make the story more attractive.
+
+This model fits the existing Story concept of a stop/scene plus caption without requiring narrative text to enter `FloorPlanProjectV1` as geometry authority.
 
 ## 2. Hybrid registered representation is a first-class experience principle
 
@@ -122,6 +141,30 @@ Intermediate coexistence can provide:
 
 Therefore future QA for these experiences should validate the transition band itself, not only endpoint screenshots.
 
+### 2.4 Enriched return
+
+The newer Open Section references show that maximum realism does not need to be the narrative endpoint.
+
+A useful sequence may return to the same technical representation after spatial/material exploration:
+
+```text
+DRAWING / SECTION A
+        ↓
+spatial understanding
+        ↓
+material / light understanding
+        ↓
+human-scale visit
+        ↓
+DRAWING / SECTION A'
+```
+
+Geometrically/representationally `A'` may closely match `A`, but cognitively it is richer because the user now understands the spaces represented by the drawing.
+
+Therefore a professional story may legitimately end on a section, elevation, plan or sheet. “More realistic” is not automatically “more final”.
+
+Reverse/restore still has a technical meaning: when the user actually scrubs backward or exits, runtime state must restore correctly. `Enriched return` is a narrative pattern, not permission to hide lifecycle defects.
+
 ## 3. Semantic timeline experiences must be data-driven
 
 Construction/programme references reveal a different class of problem from a camera/material transition.
@@ -161,7 +204,40 @@ If those semantics do not exist, Rubik must not fabricate a professional constru
 
 Story/Presentation may become the visualization/orchestration host for a future timeline capability, but the semantic schedule/phase authority belongs to the appropriate project/domain model.
 
-This distinction is particularly important for Build Time-Lapse / Schedule Build references and for any later FT3D-8-style construction/time work.
+This distinction is particularly important for Build Time-Lapse / Schedule Build references and for FT3D-8, which was already defined by the 2026-10-30 Flat-to-3D programme as a separate future temporal family.
+
+### 3.3 Multi-representation synchronization
+
+Supplemental Build imagery shows several coordinated professional readings around the same apparent construction state, including programme/schedule, technical sheet/drawing and camera/3D modes.
+
+The transferable principle is:
+
+```text
+ONE SEMANTIC STATE
+        ├── programme / Gantt view
+        ├── technical sheet / phase drawing
+        └── spatial / camera / 3D view
+```
+
+A mode selector is not evidence of three independent product truths. When a future domain authority exists, different representations should preferably consume the same semantic time/phase state.
+
+Visual evidence alone does not prove that the donor uses one internal model; D17/D18 and the runtime/source audit remain the technical authorities for that question.
+
+### 3.4 Temporary construction state is not final project truth
+
+Construction frames visibly contain excavation, plant, crane, fencing, scaffolding, props/supports and other process-specific states.
+
+A future professional construction experience may therefore need a temporary site layer distinct from final building geometry:
+
+```text
+FINAL PROJECT TRUTH
+≠ CONSTRUCTION PROGRAMME STATE
+≠ TEMPORARY SITE STATE
+```
+
+Presentation may visualize all three, but temporary equipment/works must not silently persist as final `FloorPlanProjectV1` / `FloorPlanBuildingV1` truth.
+
+Detailed documentary questions are captured in `docs/product/construction-programme-domain-addendum-2026-11-02.md`; no schema or FT3D-8 implementation is approved here.
 
 ## 4. High-quality UX is part of professional credibility
 
@@ -190,6 +266,28 @@ A contextual card should therefore make clear:
 - what the user can do next;
 - whether an action changes project truth or only presentation.
 
+### 4.1 Semantic UI hierarchy
+
+Across the reviewed references, a recurring hierarchy is visible even when the graphic design differs:
+
+```text
+reference universe / index
+        ↓
+professional experience / service
+        ↓
+mode / variant / reading
+        ↓
+current state / progress
+        ↓
+contextual information / controls
+```
+
+Examples include an experience such as `The Build` with programme/sheet/camera modes, or Open Section with variants such as `Open the Lens` / `Down the Stair`, followed by room/level cards and camera/state context.
+
+Rubik should not copy donor desktop navigation, but it should preserve this semantic clarity in a mobile-first hierarchy: the user needs to know which experience is active, which reading/mode is selected, current progress/state, and what contextual information refers to.
+
+This extends rather than replaces the existing Point 9 UX authority, whose primary organization remains `DISEÑAR / ANALIZAR / PRESUPUESTAR / ENTREGAR / MI ESTUDIO`.
+
 ## 5. Evidence vs implementation
 
 The following must remain separate:
@@ -199,7 +297,10 @@ The following must remain separate:
 - that a donor frame visibly combines technical and material/realistic representation;
 - that contextual information cards appear alongside a spatial scene;
 - that a visible programme/calendar is synchronized visually with a construction state;
-- that intermediate states exist and are meaningful.
+- that intermediate states exist and are meaningful;
+- that several named representation modes are visibly exposed around one experience;
+- that a narrative can visibly return from spatial/material states to a technical section/drawing;
+- that temporary site entities are shown during construction sequences.
 
 ### Visual evidence alone cannot establish
 
@@ -209,7 +310,9 @@ The following must remain separate:
 - lifecycle/restore correctness;
 - exact scroll/progress mapping;
 - whether donor programme data is genuinely semantic or authored specifically for the demo;
-- direct legal/code reusability.
+- whether `CRITICAL PATH` represents an actual CPM/dependency model;
+- whether programme/sheet/camera modes share one internal authority;
+- direct legal/code/asset reusability.
 
 Those questions remain for runtime/source/Cuts reconciliation.
 
@@ -222,6 +325,9 @@ When donor audit evidence is reconciled, check these possibilities before propos
 3. **Shared transition infrastructure:** can one representation primitive support plan, section, elevation, card-model or other services while preserving their distinct professional purpose?
 4. **Semantic domain gap:** does a timeline experience require real phase/programme semantics that Rubik does not yet own?
 5. **Delivery reuse:** can resulting experiences feed current views/images/video/dossier/client delivery rather than create duplicate outputs?
+6. **Multi-reading synchronization:** are apparent `programme / sheet / camera` modes different consumers of one semantic authority rather than separate features?
+7. **Narrative return:** would returning to an enriched technical representation better serve the professional/client goal than ending at maximum realism?
+8. **Temporary site state:** does the experience require construction-only entities that must remain separate from final project truth?
 
 ## 7. Non-goals
 
@@ -233,14 +339,20 @@ This document does not mean:
 - implement a universal `technical → realistic` state machine;
 - create a new top-level Delivery card for every experience;
 - fake construction schedules from animation timing;
+- treat a visible `CRITICAL PATH` label as proof of professional CPM semantics;
+- persist cranes/scaffolding/plant as final building truth;
+- create separate durable project models for programme/sheet/camera modes;
 - make AI output authoritative geometry.
 
 ## 8. Principle summary
 
-Three principles are carried forward from the reviewed visual evidence:
+Six principles are carried forward from the reviewed visual evidence:
 
 1. **Contextual cards are part of the experience.** Professional explanation may be synchronized with the spatial state and real Rubik data.
 2. **Hybrid registered representation is a first-class capability.** Technical and realistic/material states may coexist on the same project; the transition itself carries professional value.
 3. **Timeline experiences must be semantic, not decorative.** Time/programme/activity/elements/3D state must stay synchronized and must not imply professional data that Rubik does not possess.
+4. **One semantic state may have several professional representations.** Programme, technical sheet and camera/3D can be coordinated readings rather than independent product truths.
+5. **A technical representation can be the enriched endpoint.** A story may return to plan/section/elevation after the spatial visit; realism is not automatically the final state.
+6. **Construction-only state is distinct from final project truth.** Temporary works, plant and site entities require explicit lifecycle/domain treatment if ever implemented.
 
 These principles should be tested against the full 14-take runtime audit before any implementation selection.
