@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:11:13.731Z",
+  "updatedAt": "2026-11-02T19:19:49.846Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -993,9 +993,9 @@
     },
     "06-demo-card-model": {
       "captureStatus": "COMPLETE",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "CORRECTED_DISCOVERY_AND_SEMANTIC_CAPTURE_COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1107,10 +1107,32 @@
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact donor WebGL object, material, shadow and postprocess resource identities after reverse cannot be proven from passive runtime evidence.",
+          "attempts": [
+            "stable-start corrected A0/A1 screenshots in all viewports",
+            "continuous A→B→A video and NDJSON",
+            "pinned page.js/sweep.js lifecycle inspection"
+          ],
+          "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later acceptance criterion."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Professional usefulness and appropriate product placement of the card-to-real presentation are not decided by donor runtime.",
+          "attempts": [
+            "three-viewport runtime sequence",
+            "donor README/source",
+            "Cut3 D14/D15 and Global dispositions",
+            "frozen Rubik capability crosswalk"
+          ],
+          "evidenceNeeded": "Human review of all 14 audited references and Rubik service needs; no bridge implementation authorized."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T19:11:13.731Z"
+        "updatedAt": "2026-11-02T19:19:49.846Z"
       }
     },
     "07-a-one-door": {

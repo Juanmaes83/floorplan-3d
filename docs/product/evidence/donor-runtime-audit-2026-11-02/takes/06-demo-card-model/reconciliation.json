@@ -1,0 +1,810 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "discoveryRun": {
+    "desktop": "discovery-correction-1",
+    "portrait": "discovery-correction-1",
+    "landscape": "discovery-correction-1"
+  },
+  "semanticRun": {
+    "desktop": "semantic-correction-1",
+    "portrait": "semantic-correction-1",
+    "landscape": "semantic-correction-1"
+  },
+  "progressModel": {
+    "desktop": "SCROLL_PLUS_TIME",
+    "portrait": "SCROLL_PLUS_TIME",
+    "landscape": "SCROLL_PLUS_TIME"
+  },
+  "transitions": [
+    [
+      0.03,
+      0.05,
+      0.08
+    ],
+    [
+      0.14,
+      0.18,
+      0.2
+    ],
+    [
+      0.22,
+      0.25,
+      0.28
+    ],
+    [
+      0.29,
+      0.32,
+      0.36
+    ],
+    [
+      0.37,
+      0.4,
+      0.43
+    ],
+    [
+      0.44,
+      0.46,
+      0.49
+    ],
+    [
+      0.49,
+      0.51,
+      0.54
+    ],
+    [
+      0.55,
+      0.58,
+      0.61
+    ],
+    [
+      0.62,
+      0.65,
+      0.68
+    ],
+    [
+      0.68,
+      0.7,
+      0.73
+    ],
+    [
+      0.74,
+      0.77,
+      0.8
+    ],
+    [
+      0.82,
+      0.85,
+      0.88
+    ],
+    [
+      0.88,
+      0.91,
+      0.94
+    ],
+    [
+      0.95,
+      0.98,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:184-223,246-307,420-451; js/desk.js:292-340,316-390",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:270-307,420-451,545-557; js/desk.js:412-425",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:97-108,479-526; js/sweep.js:12-104",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:479-526; js/sweep.js:12-104; js/real.js:367-445",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:454-468,487-526; js/real.js:367-445",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:227-242,454-468; js/real.js:367-445",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:227-242,463-468; js/real.js:446-745",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:227-242,463-468; js/real.js:446-745",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:227-242,463-468; js/real.js:746-780",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:227-242,463-468,545-568; js/real.js:706-780",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:235-244,470-474,479-526; js/real.js:367-445",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:470-526; js/sweep.js:12-104",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:483-526,545-576; js/desk.js:292-340,316-390",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:529-576; index.html:57-66; css/page.css:158-184,208-239"
+  ],
+  "continuity": [
+    "The same glazing, upper band and stepped contour board frame the card house.",
+    "The human figure stands beside the same house on the same contour base.",
+    "The luminous front crosses the same roof, glazing and stepped site.",
+    "The house retains its flat roof, clerestory, balcony and lower stair as card gives way to real materials.",
+    "The exterior occupies the same contour footprint and keeps the same openings.",
+    "The approach targets the same balcony and glazed facade seen on the model.",
+    "The living room lies behind that glazed facade, below its upper study/gallery.",
+    "The low interior retains the same stair, shelving, furniture and daylight orientation.",
+    "The nested card model depicts the same house, now inside its own upper study; it is a separate small object.",
+    "The study and overlook remain above the same living room and terrace.",
+    "The railing, sliding glass and garden relate to the same house during the back-out.",
+    "The real facade, balcony, stair and contour board remain aligned while the front returns.",
+    "The card house returns on the same layered board with the same openings and trees.",
+    "The closing copy overlays the same card model and workshop desk rather than a new project."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "SUPPORTED",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Corrected A0/A1 are visually equivalent after natural reverse and the semantic pass covers M01–M14.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+      }
+    ],
+    "portrait": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "The portrait close and calls to action remain readable; corrected A0/A1 are visually equivalent.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\discovery-correction-1\\portrait-end.png"
+      }
+    ],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 the final heading and eyebrow overlap the top brand/nav header.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\discovery-correction-1\\landscape-end.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Mobile layout is selected at width <=759px or aspect <=4:5, excluding 844×390.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/css/page.css:208-239"
+      }
+    ]
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "After clean-context stable A0, natural forward to the stable end and reverse without reload, A1 returns to scrollY=0 and visually matches the fully assembled card house, contour base, headline, controls and workshop. Camera/material/light/shadow/temporary geometry/HUD appearance is visually equivalent; exact object/GPU identity remains NOT_OBSERVED. Original unstable-A0 runs are excluded.",
+    "portrait": "After clean-context stable A0, natural forward to the stable end and reverse without reload, A1 returns to scrollY=0 and visually matches the fully assembled card house, contour base, headline, controls and workshop. Camera/material/light/shadow/temporary geometry/HUD appearance is visually equivalent; exact object/GPU identity remains NOT_OBSERVED. Original unstable-A0 runs are excluded.",
+    "landscape": "After clean-context stable A0, natural forward to the stable end and reverse without reload, A1 returns to scrollY=0 and visually matches the fully assembled card house, contour base, headline, controls and workshop. Camera/material/light/shadow/temporary geometry/HUD appearance is visually equivalent; exact object/GPU identity remains NOT_OBSERVED. Original unstable-A0 runs are excluded."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "No distinct reverse-only semantic state established. The back-out from B removes closing copy, returns through card-to-real sweep, house/interior/scale dive, then restores the stable card hero. Review continuous reverse video for timing and hidden cleanup; internal resource identity is NOT_OBSERVED.",
+    "portrait": "No distinct reverse-only semantic state established. The back-out from B removes closing copy, returns through card-to-real sweep, house/interior/scale dive, then restores the stable card hero. Review continuous reverse video for timing and hidden cleanup; internal resource identity is NOT_OBSERVED.",
+    "landscape": "No distinct reverse-only semantic state established. The back-out from B removes closing copy, returns through card-to-real sweep, house/interior/scale dive, then restores the stable card hero. Review continuous reverse video for timing and hidden cleanup; internal resource identity is NOT_OBSERVED."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "discovery-correction-1/desktop-start.png",
+      "semantic-correction-1/desktop-forward-m02-card-at-eye-height.png",
+      "semantic-correction-1/desktop-forward-m03-luminous-transition-onset.png",
+      "semantic-correction-1/desktop-forward-m04-house-materialized.png",
+      "semantic-correction-1/desktop-forward-m07-living-interior.png",
+      "semantic-correction-1/desktop-forward-m09-desk-context-return.png",
+      "semantic-correction-1/desktop-forward-m12-return-sweep.png",
+      "semantic-correction-1/desktop-forward-m13-card-restored.png",
+      "discovery-correction-1/desktop-end.png",
+      "discovery-correction-1/desktop-restored-start.png"
+    ],
+    "portrait": [
+      "discovery-correction-1/portrait-start.png",
+      "semantic-correction-1/portrait-forward-m03-luminous-transition-onset.png",
+      "semantic-correction-1/portrait-forward-m07-living-interior.png",
+      "semantic-correction-1/portrait-forward-m09-desk-context-return.png",
+      "semantic-correction-1/portrait-forward-m13-card-restored.png",
+      "discovery-correction-1/portrait-end.png",
+      "discovery-correction-1/portrait-restored-start.png"
+    ],
+    "landscape": [
+      "discovery-correction-1/landscape-start.png",
+      "semantic-correction-1/landscape-forward-m03-luminous-transition-onset.png",
+      "semantic-correction-1/landscape-forward-m09-desk-context-return.png",
+      "semantic-correction-1/landscape-forward-m14-final-message.png",
+      "discovery-correction-1/landscape-end.png",
+      "discovery-correction-1/landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Lets an architect explain to a client how one physical 1:100 study model relates to the spatial scale and lived rooms of the proposed house.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "design reviewer"
+    ],
+    "serviceOutcome": "The same house and contoured site move from card and desk into a materialized exterior/interior visit, reveal a nested model in the study, and return to the original card presentation.",
+    "decisionValue": "Can clarify proportion, site relation and room experience during design discussion. The donor studio CTA and authored house are not evidence of a Rubik project or a verified construction outcome.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Corrected desktop A→B→A and M01–M14 show one house through card, real, nested model and return.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Donor README describes one parts list, scale dive, lamp-centered turn, two lighting states and return.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/README.md:1-22"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "Card and real house preserve the flat roof, clerestory, balcony, glazing and lower stair on one contoured site.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Card house at stable A0.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Materialized exterior.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m04-house-materialized.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "cardHouse and realHouse consume the same houseParts list.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/desk.js:290-304; js/real.js:367-391; js/house.js:13-136"
+        }
+      ]
+    },
+    {
+      "statement": "The scale figure leads to the same glazed facade and room arrangement, not an unrelated replacement model.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Card at eye height.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m02-card-at-eye-height.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Living interior behind the glazing.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m07-living-interior.png"
+        }
+      ]
+    },
+    {
+      "statement": "A distinct 1:100 model of that same house sits inside the full-size upper study.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Small study desk model and +3.20 room label.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m09-desk-context-return.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Secondary tiny group uses scale .01 on the real study desk.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/real.js:746-780"
+        }
+      ]
+    },
+    {
+      "statement": "The return front aligns real roof, balcony, openings and contour board before the card hero and CTA return.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Real house on desk-scale site during return.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m12-return-sweep.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Card model restored.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m13-card-restored.png"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Original A0 was captured during autonomous hero build in all viewports; originals remain preserved and superseded.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\start-state.json"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Corrected three-viewport Discovery records clean-context natural A→B→A, 5% samples, forward/reverse video and telemetry.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Independent corrected semantic passes capture M01–M14 with continuous video and passive camera/HUD NDJSON.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-semantic.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Corrected A0/A1 are visually equivalent in desktop, portrait and landscape, while internal resource identity is unobserved.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\discovery-correction-1\\portrait-restored-start.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Landscape final title collides with brand/nav at 844×390.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\discovery-correction-1\\landscape-end.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "The automatic hero model and copy finish after loader before the stable A0 marker used by the corrected harness.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:370-420"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "One parts list supplies card and real objects; separate tiny model is inside the study.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/house.js:13-136; js/desk.js:292-304; js/real.js:367-391,746-780"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Scroll-controlled fixed-center radius, visibility/depth front, light partition and camera routes produce the observed turn and return.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:97-108,180-307,479-576; js/sweep.js:12-104"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut3 D14/D15 and Global distinguish the main unscaled model, separate .01 tiny, and fixed-center sweep; Atlas 06 records the recursive study and return.",
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:14-155; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:335-373; Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:§4.6"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Current Rubik already owns project geometry, Story/camera, material/light, lifecycle and outputs, without accrediting this exact card/sphere presentation.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:46-110,346-364; js/surface-renderer.mjs:1-74; index.html:3344-3385,4615-4703"
+    },
+    {
+      "class": "INFERENCE",
+      "statement": "The professional value of a card-to-real narrative for Rubik customers remains a later product decision.",
+      "locator": "professionalService",
+      "basedOn": [
+        "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm",
+        "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/README.md:1-22"
+      ],
+      "inferenceStatus": "UNRESOLVED"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/house.js",
+      "symbol": "houseParts",
+      "lines": "13-136",
+      "claim": "A single metric house parts list supplies both primary representations.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/desk.js",
+      "symbol": "cardHouse/contourLayers/deskProps",
+      "lines": "290-390,427-493",
+      "claim": "Three-dimensional card and acetate house, thick contour board and oversized physical desk create the main miniaturized presentation without globally scaling the house .01.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/real.js",
+      "symbol": "realHouse/staging/tiny",
+      "lines": "367-445,446-780",
+      "claim": "Real materials/site/interior use the shared parts and a distinct tiny .01 model sits on the upper study desk.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/sweep.js",
+      "symbol": "SWEEP/sweepMaterial/DEPTH/sweepSide",
+      "lines": "12-104",
+      "claim": "One bulb-centered front uses radius, material discard, additive seam, separated light contributions and matching depth material.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/page.js",
+      "symbol": "CH/makeShot/diveCamera/turnCamera/walkCamera/backCamera/update/copy",
+      "lines": "180-307,420-576",
+      "claim": "Authored scroll chapters and scale-weighted camera dive drive forward turn, interior/study visit, back-out, reverse front, lamp fade and editorial close.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/js/page.js",
+      "symbol": "heroBuild/heroCopy",
+      "lines": "370-420",
+      "claim": "Autonomous assembly and heading timing explain why original A0 was premature.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "06-card-model/css/page.css",
+      "symbol": "mobile media query",
+      "lines": "208-239",
+      "claim": "Responsive rule excludes 844×390 and leaves final heading/header collision in desktop layout.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut3 D14 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md; Atlas 06 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md",
+      "documentedDisposition": "D14-C1 KEEP EXISTING Rubik perspective/framing/descent; C2 ADAPT derived card support/composition; C3 REFERENCE ONLY scale-weighted route; C4 REJECT giant desk/global .01 claim",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3 distinguishes unscaled main model, separate .01 tiny and existing Rubik camera capability.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:14-88"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "M09 reveals the tiny nested model in the real study, while M01 begins on the main card model.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m09-desk-context-return.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut3 D15 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md; Global D15 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md",
+      "documentedDisposition": "D15-C1 ADAPT spatial field/band; C2 REIMPLEMENT light/shadow partition only if required; C3 REJECT fixed indices and donor distance compression as product assumptions",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3 and Global describe bulb-centered expanding radius, separate light contributions and coherent depth/shadows.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:89-155; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:357-373"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "M03/M12 show a luminous boundary in opposite directions on the same house.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\semantic-correction-1\\desktop-forward-m03-luminous-transition-onset.png"
+        }
+      ]
+    },
+    {
+      "locator": "Historical Atlas 06 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md",
+      "documentedDisposition": "Reference-only donor runtime description, including hero assembly, scale descent, recursive study, return and lamp-off; earlier roadmap language is not adopted by this audit",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Atlas §4.6 lists the authored chapters and recursive model.",
+          "locator": "Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:§4.6"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Corrected full temporal videos and three viewport passes extend earlier reference observations.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik Project/Building owns real dimensions and identities. Donor 1:100 display values and studio message are authored presentation, not project facts.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Project geometry is derived from current project data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik has real building walls/openings/levels; a temporary layered card support derived from real bounds and contour data is not established as current geometry.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current building geometry and 3D architecture path.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik offers View3D and presentation surfaces; a physical card/acetate/edge representation and spatially co-registered materialized view are not accredited as a current mode.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story and presentation renderer authorities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns materials, HDR/PMREM and presentation light. The donor-specific simultaneous card/real light filtering and depth-matched sweep are not shown in current Rubik.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current material and light paths.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74; index.html:3758-3865"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has perspective, framing, Story descent and route authorities; the donor scale-weighted dive and fixed-house walk/back are authored choreography.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current camera descent, overview and route.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:46-110; js/presentation-route.js:1-156; index.html:4348-4395"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik has absolute Story/reveal state; no current spherical card/real visibility and shadow front is established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story state and presentationReveal.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364; index.html:3344-3385"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story already owns seek/playback and absolute progress. Donor 2030vh chapters and exponential smoothing are authored transport.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story seek and presentation player controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik already has presentation controls and sourced captions; donor studio CTA, scale chip and atmospheric HUD are presentation examples, not data authority.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation UI and captions.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has mobile presentation paths, while any card-model variant would need its own framing and collision QA; donor 844×390 closing copy overlaps its header.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik responsive and presentation QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has an end/restore owner. Donor corrected A0/A1 are visually equivalent after natural reverse, but hidden object and GPU identities are NOT_OBSERVED.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story end and renderer restore path.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has image/share/package outputs. Donor end CTA is studio marketing copy, not a new export format.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current image/share and ZIP output controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation QA; a reversible card/real representation would additionally require scale honesty, shadow-front coherence, mobile captions and reverse resource cleanup.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Existing presentation QA harness and mobile cases.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A derived, temporary physical card representation, contour support and edge/acetate cues are not accredited in current Rubik.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "cardHouse/contourLayers define representation-specific geometry.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/desk.js:290-390"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current project geometry and surface renderer do not establish a card-display layer.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    {
+      "classification": "TRANSITION_GAP",
+      "statement": "The exact radius-driven spatial card/real front with matching shadow/depth policy is absent from the audited current presentation scope.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "sweepMaterial/DEPTH implement card/real discard and shadow front.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/sweep.js:12-104"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story and presentationReveal use different transition paths.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; index.html:3344-3385"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "Existing Story, framing and route authorities would need project-derived states and one lifecycle owner to connect model-scale explanation with a valid room visit.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "CH/dive/walk/back are authored for one donor house.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/js/page.js:180-307,420-526"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story camera and route capabilities already exist.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:46-110,346-364; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "At 844×390 the donor close overlaps its brand/navigation because the mobile CSS branch does not apply; this is not a Rubik failure.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape closing collision.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\discovery-correction-1\\landscape-end.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Mobile layout rule excludes 844×390.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/css/page.css:208-239"
+        }
+      ]
+    },
+    {
+      "classification": "PRODUCT_DECISION_REQUIRED",
+      "statement": "Whether a card-to-real scale service merits Rubik product inclusion is outside this audit; Atlas/Cut dispositions remain bounded reference evidence.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D14/C2 and D15/C1 remain decision/reference bounded.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:335-373"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Runtime shows one donor-authored marketing presentation.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If approved later, present a project-derived physical study model while preserving real project units and geometry.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building units and IDs",
+        "existing View3D geometry",
+        "Story camera/lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "project geometry",
+        "framing/overviewPose",
+        "Story descent"
+      ],
+      "missingConnector": "A temporary card/contour display adapter derived from authorized bounds and site data, with explicit presentation-only provenance.",
+      "donorMechanismReference": "desk.js:292-390; page.js:246-307; Global D14-C2 ADAPT, C4 REJECT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "REIMPLEMENT_MECHANISM",
+      "problemSolved": "If useful, show the same authorized building changing representation through a spatially coherent front.",
+      "rubikAuthoritiesPreserved": [
+        "current renderer/material authority",
+        "Story absolute progress",
+        "Solar/light authority",
+        "project geometry"
+      ],
+      "existingCapabilitiesConsumed": [
+        "presentationReveal",
+        "surface renderer",
+        "Story seek/reverse"
+      ],
+      "missingConnector": "A verified representation mask/band and matching depth/shadow cleanup; dual light filtering only if coexistence requires it.",
+      "donorMechanismReference": "sweep.js:12-104; page.js:479-526; Global D15-C1 ADAPT, C2 conditional REIMPLEMENT, C3 REJECT",
+      "confidence": "LOW",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If the professional service is selected, carry the scale explanation through valid project rooms and return to the starting model.",
+      "rubikAuthoritiesPreserved": [
+        "current room IDs and route validity",
+        "Story camera and lifecycle",
+        "mobile framing"
+      ],
+      "existingCapabilitiesConsumed": [
+        "presentation-route",
+        "Story camera/seek",
+        "current semantic project"
+      ],
+      "missingConnector": "Project-derived room stops, bounded camera choreography and reversible model/room state handoff.",
+      "donorMechanismReference": "page.js:227-307,420-526; fixed donor coordinates are reference only",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: current project geometry and authorized site/bounds before deriving any card support.",
+    "TECHNICAL_PREREQUISITE: one Story-owned absolute state and restore before a reversible representation/light front.",
+    "TECHNICAL_PREREQUISITE: valid room/entry/route data before a house-scale interior visit."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Scale labels, site relation and room names derive from current project data or are explicitly marked as illustration."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Card and real views preserve the same opening, roof, balcony, stair and site identities; display support never becomes project geometry."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "The spatial front remains registered on geometry, materials and shadows without detached swatches or a lighting seam artifact."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Scale descent and room visit stay inside valid geometry and preserve readable framing at all three viewports."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse restores the starting camera, representation, materials, light, shadows, temporary support, HUD and scroll/Story state."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait and 844×390 landscape keep title, scale HUD and exit actions readable without obscuring the model."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Narrative states, scale meaning and room changes have accessible text and reduced-motion equivalents."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Any still or share output identifies the real project source and distinguishes a card display from measured geometry."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Presentation-only card and sweep states do not mutate editor materials, real project geometry or saved data."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor WebGL object, material, shadow and postprocess resource identities after reverse cannot be proven from passive runtime evidence.",
+      "attempts": [
+        "stable-start corrected A0/A1 screenshots in all viewports",
+        "continuous A→B→A video and NDJSON",
+        "pinned page.js/sweep.js lifecycle inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later acceptance criterion."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Professional usefulness and appropriate product placement of the card-to-real presentation are not decided by donor runtime.",
+      "attempts": [
+        "three-viewport runtime sequence",
+        "donor README/source",
+        "Cut3 D14/D15 and Global dispositions",
+        "frozen Rubik capability crosswalk"
+      ],
+      "evidenceNeeded": "Human review of all 14 audited references and Rubik service needs; no bridge implementation authorized."
+    }
+  ]
+}
