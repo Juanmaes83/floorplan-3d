@@ -1,0 +1,858 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "discoveryRun": {
+    "desktop": "discovery-correction-1"
+  },
+  "semanticRun": {
+    "desktop": "semantic-correction-1"
+  },
+  "progressModel": {
+    "desktop": "VIRTUAL_SCROLL",
+    "portrait": "VIRTUAL_SCROLL",
+    "landscape": "VIRTUAL_SCROLL"
+  },
+  "transitions": [
+    [
+      0.005,
+      0.03,
+      0.055
+    ],
+    [
+      0.075,
+      0.1,
+      0.125
+    ],
+    [
+      0.165,
+      0.19,
+      0.215
+    ],
+    [
+      0.285,
+      0.31,
+      0.335
+    ],
+    [
+      0.395,
+      0.42,
+      0.445
+    ],
+    [
+      0.495,
+      0.52,
+      0.545
+    ],
+    [
+      0.605,
+      0.63,
+      0.655
+    ],
+    [
+      0.695,
+      0.72,
+      0.745
+    ],
+    [
+      0.805,
+      0.83,
+      0.855
+    ],
+    [
+      0.915,
+      0.94,
+      0.965
+    ],
+    [
+      0.946,
+      0.95,
+      0.954
+    ],
+    [
+      0.961,
+      0.965,
+      0.969
+    ],
+    [
+      0.97,
+      0.974,
+      0.978
+    ],
+    [
+      0.978,
+      0.982,
+      0.986
+    ],
+    [
+      0.987,
+      0.991,
+      0.995
+    ],
+    [
+      0.996,
+      1,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640,1416-1470; view.js:165-177,316-329,597-625",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329,597-625,914-1007"
+  ],
+  "continuity": [
+    "The site perimeter and early works remain under one site-camera frame.",
+    "Excavation remains inside that fenced site.",
+    "Foundations occupy the same excavated footprint.",
+    "Timber frames rise from that same slab.",
+    "Mezzanine and stair fit into those frames.",
+    "Wall cassettes fill the same frame and openings.",
+    "Roof closes the same timber shell.",
+    "Glazing fills openings in that shell.",
+    "Finishes attach to that house while the site camera remains oriented to it.",
+    "Furniture is placed inside the finished shell.",
+    "The path camera approaches the entrance of the same house.",
+    "The entry view is within that entrance.",
+    "The living area shares the visible stair and glazing.",
+    "Kitchen and dining remain beneath the same mezzanine.",
+    "The loft sits above the same living area and stair.",
+    "The gallery overlooks that double-height living room and terrace."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "DONOR_LIMITATION",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Site camera, clock and programme advance with the same house.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m07-roof.png"
+      }
+    ],
+    "portrait": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 390×844 the toolbar/date and programme are cropped, though the house remains visible.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Fixed full-viewport C band and HUD with narrow breakpoint.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/sketch.css:15-25,450-453,478-536,536-560"
+      }
+    ],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 compact week labels collide and the band covers much of the house.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-end.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Fixed bottom band persists at narrow height.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/sketch.css:478-536,536-560"
+      }
+    ]
+  },
+  "endDemonstration": {
+    "desktop": "Natural wheel reached virtual week 14 and final gallery overlook; further wheel input after settling revealed no later canonical state. Native scrollY stayed zero.",
+    "portrait": "Natural wheel reached virtual week 14 and final gallery overlook; further wheel input after settling revealed no later canonical state. Native scrollY stayed zero.",
+    "landscape": "Natural wheel reached virtual week 14 and final gallery overlook; further wheel input after settling revealed no later canonical state. Native scrollY stayed zero."
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "Natural reverse returned virtual week 0, SHOT cam, same canonical route and scrollY=0. A0/A1 screenshots are visually equivalent. Exact camera pose history and hidden WebGL resource identity remain NOT_OBSERVED.",
+    "portrait": "Natural reverse returned virtual week 0, SHOT cam, same canonical route and scrollY=0. A0/A1 screenshots are visually equivalent. Exact camera pose history and hidden WebGL resource identity remain NOT_OBSERVED.",
+    "landscape": "Natural reverse returned virtual week 0, SHOT cam, same canonical route and scrollY=0. A0/A1 screenshots are visually equivalent. Exact camera pose history and hidden WebGL resource identity remain NOT_OBSERVED."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "Gallery→loft→kitchen→living→entry retreats to the approach path, then site camera; finished layers, frame and ground work withdraw as week returns to zero. No independent reverse-only construction phase was found.",
+    "portrait": "Gallery→loft→kitchen→living→entry retreats to the approach path, then site camera; finished layers, frame and ground work withdraw as week returns to zero. No independent reverse-only construction phase was found.",
+    "landscape": "Gallery→loft→kitchen→living→entry retreats to the approach path, then site camera; finished layers, frame and ground work withdraw as week returns to zero. No independent reverse-only construction phase was found."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "discovery-correction-1/desktop-entry-week7.png",
+      "discovery-correction-1/desktop-start.png",
+      "semantic-correction-1/desktop-forward-m04-structure.png",
+      "semantic-correction-1/desktop-forward-m07-roof.png",
+      "semantic-correction-1/desktop-forward-m10-furniture-handover.png",
+      "semantic-correction-1/desktop-forward-m11-approach-path.png",
+      "semantic-correction-1/desktop-forward-m12-inside-entry.png",
+      "semantic-correction-1/desktop-forward-m16-inside-gallery-overlook.png",
+      "discovery-correction-1/desktop-end.png",
+      "discovery-correction-1/desktop-restored-start.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "portrait-forward-m07-roof.png",
+      "portrait-forward-m11-approach-path.png",
+      "portrait-forward-m16-inside-gallery-overlook.png",
+      "portrait-end.png",
+      "portrait-restored-start.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-forward-m07-roof.png",
+      "landscape-forward-m11-approach-path.png",
+      "landscape-forward-m16-inside-gallery-overlook.png",
+      "landscape-end.png",
+      "landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Shows an illustrative construction sequence from a site-camera viewpoint while connecting visible build stages to a programme, a changing daylight clock and a final interior walk-through.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "site coordinator"
+    ],
+    "serviceOutcome": "A viewer can see how the same timber house rises over 14 authored weeks, approach it after handover and inspect five interior locations.",
+    "decisionValue": "Useful for communicating spatial consequences and a possible site presentation; the dates, clock, phase progress and CRITICAL PATH are synthetic demo displays, not actual site telemetry or certified work.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Continuous C 0→14 Discovery from site to gallery.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Fixed week maps to C sun/time, camera and house.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:165-177,285-329,597-625; house.js:1416-1470"
+      },
+      {
+        "class": "CUT_ATLAS",
+        "statement": "D18 planning limits.",
+        "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "The fenced site, slab, portal frames and finished shell belong to one house.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Structure stage.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m04-structure.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Completed exterior approach.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m11-approach-path.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One phase-assigned house root.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+        }
+      ]
+    },
+    {
+      "statement": "Date/time, compact chart and stage appearance share the same virtual week; they are not actual observations of site execution.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C clock is derived from state.tod and week.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:316-329,597-625"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 limits temporal authority.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Site camera at roof stage.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m07-roof.png"
+        }
+      ]
+    },
+    {
+      "statement": "The path and five interior stops remain in the completed house seen from site camera.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C camera poses and tour keys.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Path exterior.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m11-approach-path.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Final overlook.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m16-inside-gallery-overlook.png"
+        }
+      ]
+    },
+    {
+      "statement": "Reverse unwinds the same house and returns the initial site-camera view visually.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A0.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A1.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous reverse.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-reverse-discovery.webm"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Canonical C enters at week 7 and naturally wheels to zero without reload in each selected Discovery.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-entry-week7.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Three independent Discovery passes show week 0→14→0, with continuous forward/reverse video and telemetry.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Selected semantic passes show ten construction phases, path approach and five interior stops.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-semantic.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Desktop 10fps prelude encoder failed; initial desktop semantic gate wrongly required B terminal text. Both failed attempts remain RAW, and fresh 5fps corrections completed.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\discovery-summary.json"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Portrait crops controls/programme; landscape chart labels collide and band obscures 3D.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "C week drives synthetic date/time, sun placement, house update and camera mode.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:165-177,285-329,597-625,914-1007; house.js:1416-1470"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut4 D18 and Global separate shared-week presentation from real planning/execution authority.",
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:411-430"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik Building, Story, sun control and C1–C4 exist as current authorities.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364; index.html:534,3758-3779; js/quantity-schedule-core.js:1-40"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/house.js",
+      "symbol": "PHASES/add/update",
+      "lines": "9-24,618-640,1416-1470",
+      "claim": "Ten fixed authored phases govern one house and site piece appearances.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "placeSun/updateSceneForWeek",
+      "lines": "165-177,316-329",
+      "claim": "C virtual week derives synthetic time of day 7.3→18.4 and positions sun/light.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "CAM_POSES/autoShotForWeek/tour spline",
+      "lines": "20-99,242-261,285-329",
+      "claim": "C site camera switches cam→path at week 13.2→inside at 13.48, then follows five interior stops.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "renderHud/programmeSVG",
+      "lines": "334-430,597-625",
+      "claim": "Compact authored Gantt and synthetic date/time HUD share the week.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/view.js",
+      "symbol": "setTargetWeek/wheel/loop",
+      "lines": "783-790,914-1007",
+      "claim": "Natural wheel drives reversible virtual week while native scroll is blocked.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "05-schedule-build/sketch.css",
+      "symbol": "C band and responsive rule",
+      "lines": "478-560",
+      "claim": "Fixed lower programme band contributes to observed narrow-screen obstruction.",
+      "classification": "SOURCE_PARTIAL"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut4 D18; Global D18; pinned Atlas 05",
+      "documentedDisposition": "Shared virtual week governs illustrative programme and 3D; real tasks, dates, dependencies and execution require separate authority.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 and Global shared-time mechanism with limits.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:411-430"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "One week drives scene and lower programme.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m07-roof.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut4 D18; pinned Atlas 05",
+      "documentedDisposition": "Prior scope did not establish C-specific synthetic daylight clock, cam→path→inside choreography, three-viewport reverse or mobile clipping.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior D18 and Atlas scope.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305; Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:150-155,189-194"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "C approach and interior stop.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\semantic-correction-1\\desktop-forward-m11-approach-path.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik Project/Building and C1-C4 own geometry, quantities and economic records; no durable job, calendar, dependency, element-to-job or execution authority is established. Donor PHASES is a fixed illustration.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Project/Building identity and Story state are separate.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 distinguishes current C1-C4 from construction planning.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns real Building geometry; donor assigns authored phase and per-piece appearance to a single house. A mapping from Rubik element IDs to authorized work packages is missing.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building geometry and level path.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3594-3640; js/building-ui.js:36-95"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Pieces are assigned phase and local timing in the donor.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:618-640,1416-1470"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik View3D/Story can represent a Building; the donor Gantt and 3D share one virtual week, but their fixed rows are not current project data.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building view and Story.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95; js/presentation-story-core.js:254-364"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One PHASES array drives Gantt and house update.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,1416-1470; view.js:334-430"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik already has a sun/hour control, directional light, shadow map and Story solar snapshot. Donor C computes time of day 7.3→18.4 from the illustrative virtual week and moves a sun with that hour; no current Rubik construction-week-to-sun authority is established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current sun control and light application.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:534,2551-2558,3758-3779"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story solar snapshot phase.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:178-239"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C time-of-day and sun placement.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:165-177,316-329"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik Story already owns camera routes and presentation camera. Donor C uses one site camera, then a path approach at week 13.2 and an automatic five-stop interior spline from week 13.48.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story camera/route authorities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C camera poses, thresholds and tour keys.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:20-99,242-261,285-329"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik Story can seek absolute presentation progress. Donor C orchestrates fixed phase-piece arrivals, synthetic date/time/sun and camera shot cam→path→inside from the same virtual week.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story absolute sequence and seek.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170,346-364"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Week drives C time, sun, camera and house.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329,914-1007; house.js:1416-1470"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story already owns transport. Donor blocks native scrolling and maps wheel to a virtual week; the transport mechanism provides no planning authority.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story seek/playback UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Wheel input changes virtual week.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:914-937"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls. Donor C displays an authored 14-week programme, synthetic date/time, percent and CRITICAL PATH label; none establish actual site telemetry, CPM or execution.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation controls and Story UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C clock and compact chart are drawn from virtual week.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:334-430,597-625"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 limits date, CPM and execution claims.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has responsive presentation paths. Donor C crops toolbar/date and programme in portrait, while landscape week labels collide and the bottom programme covers much of the 3D.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current responsive presentation and QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448; docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Portrait final scene.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape final scene.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-end.png"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has lifecycle restore. Donor C natural reverse returns week 0, SHOT cam, route and native scroll to their A0 values with visual equivalence; exact camera pose/resource identity remains NOT_OBSERVED.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Story cleanup.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "C A1 after reverse.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\desktop\\discovery-correction-1\\desktop-restored-start.png"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has image/share and economic outputs; the donor schedule is an on-screen illustration, with no verified project schedule export.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current image/share outputs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 finds no persistent editable schedule or certified execution.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Current presentation QA exists; a future schedule bridge would need source-of-truth tests for dates, dependencies, phase membership, deterministic seeking, mobile legibility and reverse cleanup.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 separates planning domain and Story transport.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "A Rubik project construction view would need authorized Building element-to-work membership; donor pieces and PHASES are fixed to one house.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Manual phase membership.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/house.js:9-24,618-640"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:36-95"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "Story could own one presentation cursor connecting current geometry, camera, programme and sunlight; donor maps all to an authored week without factual date provenance.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Shared C week mapping.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:285-329,597-625"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story seek and Rubik sun control.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:254-364; index.html:3758-3779"
+        }
+      ]
+    },
+    {
+      "classification": "PRODUCT_DECISION_REQUIRED",
+      "statement": "Actual site telemetry and construction planning need durable task, calendar, dependency, provenance and observed execution contracts; synthetic donor clock is insufficient.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "D18 professional limits.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md:210-305"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "C time is deterministic function of illustrative week.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/view.js:316-329"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "Portrait clips toolbar/date/programme and landscape lower band obscures much of the scene; compact week labels collide.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Portrait end.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-end.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape end.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-end.png"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REUSE_EXISTING",
+      "problemSolved": "Seek and restore a presentation time state.",
+      "rubikAuthoritiesPreserved": [
+        "Story transport",
+        "Story lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Story seek and playback"
+      ],
+      "missingConnector": "None for transport; factual schedule authority remains separate.",
+      "donorMechanismReference": "view.js wheel/setTargetWeek as reference",
+      "confidence": "HIGH",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "Coordinate a site-facing camera and solar presentation with current Building geometry.",
+      "rubikAuthoritiesPreserved": [
+        "Building IDs",
+        "Story camera/route",
+        "Rubik sun/light owner"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Story camera",
+        "sun/hour control",
+        "View3D rendering"
+      ],
+      "missingConnector": "Story-owned presentation descriptor binding authorized project state to camera and light without treating synthetic week as current date.",
+      "donorMechanismReference": "view.js C cam→path→inside and placeSun principle",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "DEFER",
+      "problemSolved": "Show factual planned and actual site progress if product scope calls for it.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building",
+        "C1–C4 economics",
+        "Story transport"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Building quantities",
+        "Story seek"
+      ],
+      "missingConnector": "Separate durable planning and execution data contracts with provenance.",
+      "donorMechanismReference": "C clock, percent and CRITICAL PATH are illustrative only",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: stable Building IDs and authorized element-to-work membership for project-specific build stages.",
+    "TECHNICAL_PREREQUISITE: Story owns camera/light presentation and lifecycle restoration.",
+    "PRODUCT_CONTRACT_DECISION: illustrative site story versus factual planned/actual execution.",
+    "TECHNICAL_PREREQUISITE: date, time and sun labels need explicit provenance before use as professional telemetry."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Illustrative week, planned date, actual observation and clock are distinctly labeled and sourced."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Phase states preserve the same Building footprint, frame, openings and interior."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "All ten construction phases, path and five interior stops are reproducible from absolute progress."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "C goes cam→path→inside and reverse returns to cam without a residual stop."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Week 0→14→0 restores route, HUD, camera, lighting and visibility."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "390×844 and 844×390 keep camera view, date, week labels and controls readable."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Construction phase and site-camera time are available without visual chart interpretation."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Any site-camera output identifies the source and synthetic/actual status of dates and progress."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "A synthetic date or percent cannot write actual execution into Project or economic records."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact camera pose history and WebGL resource identity after reverse remain passively unobserved.",
+      "attempts": [
+        "three natural C reverses",
+        "week/shot/tour telemetry",
+        "A0/A1 visual comparison"
+      ],
+      "evidenceNeeded": "Narrow renderer/camera inspection only if exact hidden lifecycle identity becomes necessary."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Professional value of a site-camera story versus a real site-progress service requires human product review.",
+      "attempts": [
+        "three-viewport runtime",
+        "pinned C source",
+        "Cut4 D18 and Global",
+        "frozen Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Review after the fourteen-reference audit; no implementation authorized."
+    }
+  ]
+}

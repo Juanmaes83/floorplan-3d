@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T18:09:47.269Z",
+  "updatedAt": "2026-11-02T18:25:19.662Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -892,10 +892,10 @@
       }
     },
     "05-c-site-camera": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "SEMANTIC_LANDSCAPE_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -963,10 +963,32 @@
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact camera pose history and WebGL resource identity after reverse remain passively unobserved.",
+          "attempts": [
+            "three natural C reverses",
+            "week/shot/tour telemetry",
+            "A0/A1 visual comparison"
+          ],
+          "evidenceNeeded": "Narrow renderer/camera inspection only if exact hidden lifecycle identity becomes necessary."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Professional value of a site-camera story versus a real site-progress service requires human product review.",
+          "attempts": [
+            "three-viewport runtime",
+            "pinned C source",
+            "Cut4 D18 and Global",
+            "frozen Rubik crosswalk"
+          ],
+          "evidenceNeeded": "Review after the fourteen-reference audit; no implementation authorized."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T18:16:16.608Z"
+        "updatedAt": "2026-11-02T18:25:19.662Z"
       }
     },
     "06-demo-card-model": {

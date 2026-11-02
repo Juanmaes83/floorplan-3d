@@ -1,7 +1,7 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
-  "status": "READY_FOR_CAPTURE",
-  "validation": "Pending three independent semantic passes and visual review; Discovery is not semantic proof.",
+  "status": "VALIDATED",
+  "validation": "Desktop semantic-correction-1, portrait original and landscape original each captured 16 milestones. M11 is path and M12–M16 have matching entry, living, kitchen, loft and gallery HUD states in all three viewports; exact WK14. Continuous Discovery 0→14→0 and three-viewport visual review support the sequence. Individual validator passed 21/21; failed attempts remain preserved and excluded from selected proof.",
   "basis": "Independent canonical ?dir=c Discovery entered at virtual week 7, naturally wheeled to 0 and recorded 0→14→0 in desktop, portrait and landscape. Native scrollY remained zero. The same site and house build under a fixed site-camera composition and changing date/time/sun; pinned view.js maps C to camera shot cam→path→inside and time-of-day 7.3→18.4. A first 10fps desktop prelude failed in agent-browser encoder and was preserved; a fresh 5fps correction completed. Portrait and landscape 5fps completed. At 390×844 controls/date and programme are cropped; at 844×390 the HUD consumes much of the scene. This plan is based on observed Discovery frames/telemetry and pinned source, and must be verified by fresh semantic passes.",
   "milestones": [
     {"label":"M01","slug":"site-setup","targetProgress":0.03,"observedChange":"The fenced site and welfare cabin appear under an early-morning site camera with the programme at the first phase."},

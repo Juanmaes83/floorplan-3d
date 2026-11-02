@@ -1,5 +1,7 @@
 # Handoff — 05-c capture complete, reconciliation pending
 
+**Superseded by `CHECKPOINT-2026-11-02-05C-VALIDATED.md`.** This file records the preceding partial state; use the validated handoff to continue.
+
 This is a recoverability checkpoint, **not** validation of 05-c. Its HEAD SHA is the commit containing this file; verify it against `git ls-remote origin refs/heads/audit/donor-runtime-7x14-2026-11-02`. Previous remote HEAD: `3be4802997fa65f1233e092e31be93e1300461ab`. Frozen Rubik baseline: `0f9c6ead9732901681498efec326d1ca92e42ffe`. Branch/worktree: `audit/donor-runtime-7x14-2026-11-02`, `C:\Users\temp123\floorplan-3d-donor-runtime-audit-2026-11-02`. Pinned donor: `Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6`; canonical URL `https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c`.
 
 **9/14 takes, 189/294 hard gates validated.** `05-c-site-camera` remains **PARTIAL / IN_PROGRESS**, zero accredited gates, no manifest or reconciliation. Its run-state has capture `IN_PROGRESS`, reconciliation `NOT_STARTED`, validation `NOT_STARTED`; last successful stage `SEMANTIC_LANDSCAPE_COMPLETE`. The three selected Discovery and three selected semantic passes exist, but require visual review, source/Cut/Rubik reconciliation, hashes, manifest and 21-gate validation. No current capture blocker remains. Hidden camera/resource identity and professional product suitability are non-blocking unknowns to record during reconciliation.
