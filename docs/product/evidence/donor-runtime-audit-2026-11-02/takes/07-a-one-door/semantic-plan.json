@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "IN_PROGRESS",
+  "basis": "Original clean-context A→B→A Discovery videos, telemetry and 5% safety samples for desktop, portrait and landscape. Boundaries below are approximate capture targets, not claims that progress itself defines a semantic state. Desktop samples p005–p100 and corresponding portrait/landscape states were inspected. Subsequent semantic pass and reconciliation remain pending.",
+  "milestones": [
+    {"label":"M01","slug":"ink-depth-reveal","targetProgress":0.07,"observedChange":"The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable."},
+    {"label":"M02","slug":"material-sweep-onset","targetProgress":0.16,"observedChange":"A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry."},
+    {"label":"M03","slug":"material-sweep-complete","targetProgress":0.25,"observedChange":"The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable."},
+    {"label":"M04","slug":"sun-and-shadow-change","targetProgress":0.34,"observedChange":"The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows."},
+    {"label":"M05","slug":"threshold-approach","targetProgress":0.42,"observedChange":"The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess."},
+    {"label":"M06","slug":"door-opens","targetProgress":0.49,"observedChange":"The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening."},
+    {"label":"M07","slug":"reception-parlour","targetProgress":0.63,"observedChange":"The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible."},
+    {"label":"M08","slug":"dining-atrium","targetProgress":0.79,"observedChange":"The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour."},
+    {"label":"M09","slug":"rear-doors-open","targetProgress":0.85,"observedChange":"Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space."},
+    {"label":"M10","slug":"courtyard-arrival","targetProgress":0.92,"observedChange":"The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view."},
+    {"label":"M11","slug":"terminal-courtyard","targetProgress":0.99,"observedChange":"The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery."}
+  ],
+  "reverseSemanticStates": "Inspect continuous B→A Discovery for rear/front door closure, material sweep inversion, sun/shadow reset, camera/optic return, intro/HUD return and any asymmetry. Compare A0/A1 across all viewports; use VISUALLY_EQUIVALENT unless internal state restoration is directly demonstrated."
+}

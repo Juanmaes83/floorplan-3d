@@ -1139,7 +1139,7 @@
       "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "lastSuccessfulStage": "SEMANTIC_LANDSCAPE_COMPLETE",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1164,13 +1164,37 @@
           "startedAt": "2026-11-02T19:26:31.368Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T19:27:36.805Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:30:13.117Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:31:03.231Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:31:22.749Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:32:03.523Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:32:29.475Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:33:09.828Z"
         }
       ],
       "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T19:27:36.805Z"
+        "updatedAt": "2026-11-02T19:33:09.828Z"
       }
     },
     "07-b-the-row": {
