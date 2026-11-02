@@ -8,16 +8,21 @@
 - `docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md`
 - `docs/product/project-experience-delivery-architecture-2026-11-02.md`
 - `docs/product/current-delivery-capabilities-2026-11-02.md`
+- `docs/product/presentation-experience-principles-2026-11-02.md`
+- `docs/product/evidence/donor-visual-observations-2026-11-02/manifest.md`
 
 > The 7 donor groups / 14 takes are references to understand completely. They are not a promise of 14 Rubik features, 14 buttons or 14 Delivery cards.
 
 ## 1. Purpose
 
-This policy defines where donor-derived findings should land in Rubik after evidence is understood. It exists to prevent three recurring mistakes:
+This policy defines where donor-derived findings should land in Rubik after evidence is understood. It exists to prevent recurring mistakes:
 
 1. rebuilding a capability Rubik already owns;
 2. creating a parallel presentation/delivery system for a visual mechanism;
-3. turning documentary donor dispositions into implementation authorization.
+3. turning documentary donor dispositions into implementation authorization;
+4. treating professional contextual UI as decorative rather than as part of the experience;
+5. reducing hybrid technical/material transitions to endpoint style swaps;
+6. faking semantic construction/programme data because the renderer can animate geometry.
 
 `Rubik commands; donor informs.`
 
@@ -60,6 +65,8 @@ They are documentary knowledge, **not implementation authorization**.
 
 A later runtime audit may describe an implementation bridge candidate such as `CONNECT_EXISTING` or `ADAPT_EXISTING`; that is a separate reconciliation field. It must not silently rewrite the Cut disposition.
 
+Supplemental screenshots may establish visual coexistence or information hierarchy, but they do not replace runtime/source evidence for mechanism, lifecycle, semantics or legal reuse.
+
 ## 3. Service first, mechanism second
 
 Every take must first answer:
@@ -68,7 +75,7 @@ Every take must first answer:
 
 Only then ask how it works technically.
 
-A shader, camera tween, clipping plane, exploded transform or scroll mapping is not by itself a product service.
+A shader, camera tween, clipping plane, exploded transform, contextual card or scroll mapping is not by itself a product service.
 
 The mapping order is:
 
@@ -123,6 +130,7 @@ At minimum consider:
 - site context
 - FT3D-6 templates
 - manual presentation controls
+- existing professional/project data that could feed contextual information
 
 ### Delivery
 
@@ -154,7 +162,9 @@ Examples of mechanism families that often belong here:
 - section sweep/opening;
 - elevation → perspective/material/solar reading;
 - axonometric/exploded building reading;
-- room/level navigation choreography.
+- room/level navigation choreography;
+- contextual professional information synchronized with the current spatial subject;
+- controlled coexistence of technical and material/realistic representation.
 
 Do not create a separate renderer or story engine unless current authorities are proven insufficient and a later implementation decision explicitly authorizes it.
 
@@ -167,9 +177,11 @@ Examples:
 - section representation/transition;
 - building exploded transforms;
 - screen-space technical representation;
+- registered technical/material composition;
 - scroll/progress driver;
 - camera framing/choreography;
 - material/light transition;
+- contextual card/anchor presentation where supported by real Rubik data;
 - lifecycle capture/restore.
 
 Shared technical capability does **not** automatically merge professional services.
@@ -196,6 +208,58 @@ Some donor experiences may reveal a missing **semantic domain**, not merely a pr
 
 For example, construction/programme/time-based experiences may require real schedule/phase semantics before a faithful Rubik service can exist. In such cases, do not fake semantic data with presentation animation. Classify the missing domain/bridge accurately and defer implementation decisions to the relevant product phase.
 
+### 5.5 Contextual professional information
+
+Donor cards/panels should be evaluated as an information-system pattern, not copied as desktop UI.
+
+Ask:
+
+- what project/professional fact is being explained?
+- what room/material/façade/phase/view does it refer to?
+- does Rubik already own the underlying data?
+- is the information useful during the spatial experience or better suited to an existing dossier/workspace?
+- can FT3D-6/profile logic choose the information hierarchy without creating new project truth?
+
+Fictional donor copy, people, material claims, costs and marketing numbers are not Rubik data.
+
+A contextual card may be a Presentation-layer consumer of existing data; it is not automatically a new durable semantic model.
+
+### 5.6 Hybrid registered representation
+
+When donor evidence shows technical drawing and material/realistic imagery coexisting in one frame, do not reduce the finding to `style A → style B`.
+
+Audit whether the professional value depends on:
+
+- the same geometry remaining identifiable;
+- a moving spatial/material boundary;
+- technical line/hatch/poché remaining visible while depth/material/light appears;
+- physical shadow/material behavior corresponding to the technical reading;
+- a continuity invariant that makes the transformation trustworthy.
+
+The preferred Rubik question is whether a **shared registered representation capability/bridge** can serve several experiences without creating parallel project geometries or independent worlds.
+
+Visual coexistence alone does not prove the donor's exact shader/pass architecture. Source/runtime evidence must establish mechanism.
+
+### 5.7 Semantic timeline / programme experiences
+
+For Build Time-Lapse / Schedule Build style references, distinguish presentation choreography from domain truth.
+
+The target conceptual relationship is:
+
+```text
+time/date/progress
+        ↕
+programme / activity / phase
+        ↕
+affected project elements
+        ↕
+3D state
+```
+
+If Rubik lacks real or explicitly authored phase/programme semantics, classify that honestly as a semantic/domain gap. Do not derive a professional schedule from arbitrary animation timing.
+
+A later implementation may use Presentation to visualize the timeline, but Presentation must consume the semantic authority rather than invent it.
+
 ## 6. Gap interpretation
 
 Prefer the smallest accurate gap.
@@ -218,6 +282,8 @@ Useful distinctions include:
 - `PRODUCT_DECISION_REQUIRED`
 - `DONOR_LIMITATION`
 - `UNRESOLVED`
+
+For timeline experiences, also distinguish a real semantic/domain gap from a mere orchestration gap even if both would appear visually as “missing animation”.
 
 Do not escalate an integration/orchestration gap into `MISSING_CAPABILITY` merely because the final experience is not currently visible as one button.
 
@@ -246,11 +312,14 @@ Donor value is often not a simple style swap. The important behavior may be that
 - the technical section is the same model becoming spatial;
 - the drawn shadow corresponds to the physical shadow;
 - the card model is the same project at another representational scale;
-- the same opening/door/level remains identifiable across the transformation.
+- the same opening/door/level remains identifiable across the transformation;
+- technical and material/realistic regimes coexist while remaining registered to the same architecture.
 
 Therefore each candidate experience should preserve/document **continuity invariants**, not just visual endpoints.
 
 If a proposed implementation would replace project truth with unrelated generated geometry/images while pretending continuity, it violates the architecture.
+
+Intermediate transition states may be the professional value and must be included in visual/runtime QA when relevant.
 
 ## 9. No universal donor state machine
 
@@ -277,7 +346,8 @@ Rubik remains mobile-first. Any approved experience must eventually make clear:
 - progress/state;
 - touch/scroll/scrub behavior;
 - portrait/landscape behavior;
-- accessibility/lifecycle/restore.
+- accessibility/lifecycle/restore;
+- how contextual information is opened/closed without hiding the project or trapping navigation.
 
 Do not copy donor UI simply because the donor mechanism is useful.
 
@@ -308,7 +378,7 @@ These examples illustrate the policy and are **not implementation authorization*
 
 Possible current reading:
 
-`elevation + project materials + solar + camera/transition + Story lifecycle`
+`elevation + project materials + solar + camera/transition + Story lifecycle + registered technical/material representation`
 
 may be more accurate than `new standalone delivery feature`.
 
@@ -318,45 +388,10 @@ If a stronger elevation narrative becomes a Presentation capability, existing im
 
 They may share section/camera/representation mechanisms while still solving different professional readings. Reuse of section infrastructure does not prove they should become one product experience.
 
-### Exploded House takes
+### Contextual Craft / Team / Services cards
 
-Board and Floor by Floor may share building/exploded infrastructure while expressing different information: systems/layers versus vertical organisation. Shared mechanism does not erase service identity.
+The donor UI demonstrates that spatial presentation can be paired with high-quality professional explanation. The Rubik question is not “copy this panel”; it is whether a reusable contextual information layer can present real Rubik data, profile-aware, while the project remains visible and authoritative.
 
 ### Schedule Build
 
-A convincing schedule/construction experience may require real programme/phase semantics. If Rubik lacks that semantic authority, a camera/visibility animation alone is not a substitute for construction data.
-
-## 13. Required reconciliation output before implementation
-
-For every donor-derived candidate, later decision material should be able to state:
-
-```text
-professional service
-observed semantic sequence
-continuity invariants
-donor mechanism
-Cut / Atlas mapping
-current Rubik capability mapping
-real gap
-minimum bridge candidate
-existing outputs that can consume it
-dependencies / technical prerequisites
-mobile/lifecycle implications
-QA invariants
-conflicts / unresolved evidence
-implementationAuthorized = false
-```
-
-Only after human product review may an implementation contract be created.
-
-## 14. Final control rule
-
-The correct question is not:
-
-> “How do we copy this donor take into Rubik?”
-
-It is:
-
-> “What professional value does this reference demonstrate, which Rubik authorities/capabilities already provide part of it, what minimum gap remains, and how can that gap strengthen the existing Project → Experience → Delivery system without creating a second product?”
-
-That question governs donor integration until a later product decision explicitly says otherwise.
+The donor programme/3D synchronization is evidence of a distinct semantic problem. Rubik should not treat it as only another scroll animation. A faithful bridge depends on real/authored phase-programme semantics and explicit mapping to affected elements; until then the correct result may be `MISSING_CAPABILITY`, `PRODUCT_DECISION_REQUIRED` or `DEFER`, depending on the audited evidence.
