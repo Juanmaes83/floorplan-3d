@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "basis": "Observed full desktop, portrait and landscape Discovery A→B→A recordings, telemetry and safety samples; targets are capture cues, not product semantics.",
+  "milestones": [
+    {"label":"M01","slug":"sheet-to-floor","targetProgress":0.10,"observedChange":"The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed."},
+    {"label":"M02","slug":"west-sideboard-hinge","targetProgress":0.18,"observedChange":"The west sideboard wall rotates upward around its floor edge with attached joinery."},
+    {"label":"M03","slug":"north-kitchen-hinge","targetProgress":0.25,"observedChange":"The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it."},
+    {"label":"M04","slug":"east-window-hinge","targetProgress":0.32,"observedChange":"The window wall and its seat rotate into the room boundary without losing the opening."},
+    {"label":"M05","slug":"south-door-hinge","targetProgress":0.39,"observedChange":"The door wall rises, preserving the same opening and floor geometry."},
+    {"label":"M06","slug":"ceiling-lid-closes","targetProgress":0.49,"observedChange":"The ceiling pivots down over the four erected walls, enclosing the kitchen."},
+    {"label":"M07","slug":"closed-room","targetProgress":0.56,"observedChange":"All six authored surfaces read as one closed room; sheet and introductory copy have faded."},
+    {"label":"M08","slug":"door-approach","targetProgress":0.70,"observedChange":"The camera changes from near-parallel axonometric to eye-level view at the same door wall."},
+    {"label":"M09","slug":"door-threshold","targetProgress":0.79,"observedChange":"The same door opens and the camera crosses its opening into the room."},
+    {"label":"M10","slug":"sage-kitchen","targetProgress":0.88,"observedChange":"The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room."},
+    {"label":"M11","slug":"window-bench","targetProgress":0.99,"observedChange":"The final view reaches the window bench while the kitchen and room surfaces remain continuous."}
+  ],
+  "reverseSemanticStates": "Discovery showed return through the same room and hinges; no reverse-only milestone established. Inspect reverse telemetry/video for cleanup asymmetry before verdict."
+}

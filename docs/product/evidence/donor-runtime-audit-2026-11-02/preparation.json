@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.preparation.v1",
+  "checkedAtUtc": "2026-11-02T10:36:26Z",
+  "rubikRepository": "Juanmaes83/floorplan-3d",
+  "remote": "https://github.com/Juanmaes83/floorplan-3d.git",
+  "originMasterAfterFetch": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "approvedBaseSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "originalMasterHead": "5f4e3d20e905f5f302783f67fda0ab4a7eb21371",
+  "originalMasterStatus": "clean; 26 commits behind origin/master after fetch; unchanged",
+  "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+  "worktree": "C:/Users/temp123/floorplan-3d-donor-runtime-audit-2026-11-02",
+  "cleanAtStart": true,
+  "authoritiesRead": [
+    {
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/manifest.md",
+      "note": "Six source artifacts across five Cuts; precedence, hashes, pinned donor SHAs and older product baselines."
+    },
+    {
+      "locator": "git:6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md",
+      "note": "Cut 1 D01-D08, source mechanisms and bounded reuse claims; historical P labels are not adopted."
+    },
+    {
+      "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md",
+      "note": "Cut 2 D09-D13; cumulative D01-D08 counted once."
+    },
+    {
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md",
+      "note": "Card Model physical/perceived scale, spherical sweep/light separation, presentation detail."
+    },
+    {
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut4-d16-d17-d18.md",
+      "note": "Time by element, multiview same time, schedule/3D sync; authored demo dates are not Rubik authority."
+    },
+    {
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut5-d20-d21-base.md",
+      "note": "Evidence generation versus review, visual causality, REA source/execution boundary."
+    },
+    {
+      "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut5-d20-d21-completion.md",
+      "note": "Superseding classification and ledgers; visual QA and tool limits."
+    },
+    {
+      "locator": "git:7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md",
+      "note": "Historical reference identities, source pinned revisions and open hypotheses; superseded product absence claims recheck at approved SHA."
+    },
+    {
+      "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md",
+      "note": "D01-D21 component dispositions, conflict registry, evidence levels and later product delta; prior Rubik baseline is historical."
+    },
+    {
+      "locator": "docs/product/ft3d-5-axon-exploded-building-contract-2026-11-01.md",
+      "note": "Axon/exploded descriptors, Story integration, lifecycle and visual evidence requirements."
+    },
+    {
+      "locator": "docs/product/ft3d-5-axon-exploded-building-contract-audit-addendum-2026-11-01.md",
+      "note": "FT3D-5 contract audit addendum."
+    },
+    {
+      "locator": "docs/product/ft3d-6-profile-templates-working-contract-2026-11-01.md",
+      "note": "Template capability/coverage, adapter, Story and mobile contracts; current runtime checked separately."
+    },
+    {
+      "locator": "docs/qa/ft3d-6-implementation-2026-11-01.md",
+      "note": "FT3D-6 merged implementation evidence."
+    },
+    {
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:README.md,index.html",
+      "note": "Seven study groups, best-on-laptop note, 07 mobile caveat and exact selector variant URLs."
+    }
+  ],
+  "donorCheckouts": {
+    "flatTo3d": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "lintelFlat2d": "c6029d9bb0647483709a502daedc24c1dd7bc029",
+    "lintelLive": "791612f6f07fdd79bafeedc74ec6c9eee0f9a86a",
+    "reaLocal": "d54a4661da20382ad8456564a08569fdd24131c5",
+    "reaAuthority": "aa48d494e9726d469a1b9ed917f021d8a1a4c7ea"
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "node": "v24.14.1",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "agentBrowserDoctor": "9 pass, 0 warn, 0 fail; Chrome 153.0.8010.53; ffmpeg and libvpx available",
+    "ffmpeg": "8.1.2-full_build",
+    "playwright": "Installed in sibling audit tooling; version check pending"
+  },
+  "videoTest": {
+    "path": "C:/Users/temp123/donor-runtime-audit-RAW-2026-11-02/tooling-test.webm",
+    "sha256": "323a1515f5a3b1eb66fb2b06ee8668acf79d85de4e1089d2737ce1f6ab14c550",
+    "codec": "vp8",
+    "dimensions": "1440x900",
+    "durationSeconds": 1.433
+  },
+  "toolingObservations": [
+    "agent-browser is absent from PATH; version 0.41.1 was installed in a sibling audit-only tooling directory.",
+    "agent-browser open/snapshot/screenshot/screenshot --full/--annotate and WebM record start/stop worked in a named clean preparation session.",
+    "A direct Chrome navigation to example.com returned ERR_NAME_NOT_RESOLVED; the pinned donor URL opened, showed its navigation and controls, and had no page errors.",
+    "No donor runtime capture was made during preparation."
+  ]
+}

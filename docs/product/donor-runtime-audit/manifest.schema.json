@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rubik-donor-runtime-audit.take.v1",
+  "title": "Rubik donor runtime audit take",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "auditId", "take", "status", "baseline", "reference", "tooling", "professionalService", "continuityInvariants", "viewports", "evidenceLedger", "donorSourceLocators", "cutsAtlas", "rubikCrosswalk", "gaps", "candidateBridges", "dependencies", "qaExpectations", "unresolved", "assets", "integrity", "completion"],
+  "properties": {
+    "schemaVersion": {"const": "rubik-donor-runtime-audit.take.v1"},
+    "auditId": {"type": "string", "minLength": 1},
+    "take": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "group", "title", "inventoryIndex"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "group": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "inventoryIndex": {"type": "integer", "minimum": 1, "maximum": 14}
+      }
+    },
+    "status": {"enum": ["AUDITED", "AUDITED_WITH_DONOR_LIMITATION", "PARTIAL", "BLOCKED", "INVALID"]},
+    "baseline": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "approvedSha", "auditBranch", "worktree", "cleanAtStart"],
+      "properties": {
+        "repository": {"const": "Juanmaes83/floorplan-3d"},
+        "approvedSha": {"const": "0f9c6ead9732901681498efec326d1ca92e42ffe"},
+        "auditBranch": {"type": "string", "minLength": 1},
+        "worktree": {"type": "string", "minLength": 1},
+        "cleanAtStart": {"type": "boolean"}
+      }
+    },
+    "reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selectorUrl", "standaloneUrl", "resolvedUrl", "donorRepo", "donorCommit", "entrypoint", "urlDiscoveryEvidence"],
+      "properties": {
+        "selectorUrl": {"type": "string", "format": "uri"},
+        "standaloneUrl": {"type": "string", "format": "uri"},
+        "resolvedUrl": {"type": "string", "format": "uri"},
+        "donorRepo": {"type": "string", "minLength": 1},
+        "donorCommit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "entrypoint": {"type": "string", "minLength": 1},
+        "urlDiscoveryEvidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "tooling": {
+      "type": "object", "additionalProperties": false,
+      "required": ["os", "codexCli", "agentBrowser", "browser", "playwright", "ffmpeg"],
+      "properties": {
+        "os": {"type": "string", "minLength": 1},
+        "codexCli": {"type": "string", "minLength": 1},
+        "agentBrowser": {"type": "string", "minLength": 1},
+        "browser": {"type": "string", "minLength": 1},
+        "playwright": {"type": "string", "minLength": 1},
+        "ffmpeg": {"type": "string", "minLength": 1}
+      }
+    },
+    "professionalService": {
+      "type": "object", "additionalProperties": false,
+      "required": ["problemSolved", "primaryUsers", "serviceOutcome", "decisionValue", "evidence"],
+      "properties": {
+        "problemSolved": {"type": "string", "minLength": 1},
+        "primaryUsers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "serviceOutcome": {"type": "string", "minLength": 1},
+        "decisionValue": {"type": "string", "minLength": 1},
+        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "continuityInvariants": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["statement", "evidence"], "properties": {"statement": {"type": "string", "minLength": 1}, "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}}}},
+    "viewports": {
+      "type": "object", "additionalProperties": false, "required": ["desktop", "portrait", "landscape"],
+      "properties": {
+        "desktop": {"$ref": "#/$defs/viewport"},
+        "portrait": {"$ref": "#/$defs/viewport"},
+        "landscape": {"$ref": "#/$defs/viewport"}
+      }
+    },
+    "evidenceLedger": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+    "donorSourceLocators": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["repo", "sha", "path", "symbol", "claim", "classification"], "properties": {"repo": {"type": "string", "minLength": 1}, "sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "path": {"type": "string", "minLength": 1}, "symbol": {"type": "string", "minLength": 1}, "lines": {"type": ["string", "null"]}, "claim": {"type": "string", "minLength": 1}, "classification": {"enum": ["SOURCE_CONFIRMED", "SOURCE_PARTIAL", "SOURCE_ADJACENT", "SOURCE_NOT_FOUND"]}}}},
+    "cutsAtlas": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["locator", "documentedDisposition", "relationToRuntime", "evidence"], "properties": {"locator": {"type": "string", "minLength": 1}, "documentedDisposition": {"type": "string", "minLength": 1}, "relationToRuntime": {"enum": ["CONFIRMS", "EXTENDS", "CONFLICTS", "NOT_APPLICABLE", "UNRESOLVED"]}, "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}}}},
+    "rubikCrosswalk": {
+      "type": "object", "additionalProperties": false,
+      "required": ["semanticData", "geometry", "representation", "materialsLight", "camera", "transition", "scrollProgress", "ui", "mobile", "lifecycleRestore", "outputs", "qa"],
+      "properties": {
+        "semanticData": {"$ref": "#/$defs/crosswalk"}, "geometry": {"$ref": "#/$defs/crosswalk"},
+        "representation": {"$ref": "#/$defs/crosswalk"}, "materialsLight": {"$ref": "#/$defs/crosswalk"},
+        "camera": {"$ref": "#/$defs/crosswalk"}, "transition": {"$ref": "#/$defs/crosswalk"},
+        "scrollProgress": {"$ref": "#/$defs/crosswalk"}, "ui": {"$ref": "#/$defs/crosswalk"},
+        "mobile": {"$ref": "#/$defs/crosswalk"}, "lifecycleRestore": {"$ref": "#/$defs/crosswalk"},
+        "outputs": {"$ref": "#/$defs/crosswalk"}, "qa": {"$ref": "#/$defs/crosswalk"}
+      }
+    },
+    "gaps": {"type": "array", "items": {"type": "object", "required": ["classification", "statement", "evidence"], "properties": {"classification": {"enum": ["NO_GAP", "INTEGRATION_GAP", "ORCHESTRATION_GAP", "REPRESENTATION_GAP", "TRANSITION_GAP", "CAMERA_CHOREOGRAPHY_GAP", "MATERIAL_LIGHT_GAP", "INTERACTION_GAP", "MOBILE_GAP", "LIFECYCLE_GAP", "OUTPUT_GAP", "QA_GAP", "MISSING_CAPABILITY", "PRODUCT_DECISION_REQUIRED", "DONOR_LIMITATION", "UNRESOLVED"]}, "statement": {"type": "string", "minLength": 1}, "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}}}},
+    "candidateBridges": {"type": "array", "items": {"type": "object", "required": ["classification", "problemSolved", "rubikAuthoritiesPreserved", "existingCapabilitiesConsumed", "missingConnector", "donorMechanismReference", "confidence", "implementationAuthorized"], "properties": {"classification": {"enum": ["REUSE_EXISTING", "CONNECT_EXISTING", "ADAPT_EXISTING", "REIMPLEMENT_MECHANISM", "REFERENCE_ONLY", "DEFER", "REJECT", "UNRESOLVED"]}, "problemSolved": {"type": "string", "minLength": 1}, "rubikAuthoritiesPreserved": {"type": "array", "items": {"type": "string"}}, "existingCapabilitiesConsumed": {"type": "array", "items": {"type": "string"}}, "missingConnector": {"type": "string"}, "donorMechanismReference": {"type": "string", "minLength": 1}, "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "UNRESOLVED"]}, "implementationAuthorized": {"const": false}}}},
+    "dependencies": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "qaExpectations": {"type": "array", "items": {"type": "object", "required": ["category", "invariant"], "properties": {"category": {"enum": ["SEMANTIC", "GEOMETRY", "VISUAL", "CAMERA", "LIFECYCLE", "MOBILE", "ACCESSIBILITY", "OUTPUT", "REGRESSION"]}, "invariant": {"type": "string", "minLength": 1}}}},
+    "unresolved": {"type": "array", "items": {"type": "object", "required": ["severity", "question", "attempts", "evidenceNeeded"], "properties": {"severity": {"enum": ["BLOCKING", "NON_BLOCKING"]}, "question": {"type": "string", "minLength": 1}, "attempts": {"type": "array"}, "evidenceNeeded": {"type": "string", "minLength": 1}}}},
+    "assets": {"type": "array", "items": {"type": "object", "required": ["path", "sha256", "kind", "viewport"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "kind": {"type": "string", "minLength": 1}, "viewport": {"enum": ["desktop", "portrait", "landscape", "global"]}}}},
+    "integrity": {"type": "object", "required": ["assetsVerified", "productionDiffZero"], "properties": {"assetsVerified": {"type": "boolean"}, "productionDiffZero": {"type": "boolean"}}},
+    "completion": {"type": "object", "required": ["gates", "validatorResult", "validatedAt"], "properties": {"gates": {"type": "object"}, "validatorResult": {"enum": ["PASS", "FAIL", "NOT_RUN"]}, "validatedAt": {"type": ["string", "null"]}}}
+  },
+  "$defs": {
+    "evidence": {"type": "object", "required": ["class", "statement", "locator"], "properties": {"class": {"enum": ["OBSERVED_RUNTIME", "DONOR_SOURCE", "CUT_ATLAS", "RUBIK_CURRENT", "INFERENCE"]}, "statement": {"type": "string", "minLength": 1}, "locator": {"type": "string", "minLength": 1}, "basedOn": {"type": "array", "items": {"type": "string"}}, "inferenceStatus": {"enum": ["UNRESOLVED", "CONFIRMED"]}}},
+    "crosswalk": {"type": "object", "additionalProperties": false, "required": ["status", "claim", "evidence"], "properties": {"status": {"enum": ["EXISTS", "PARTIAL", "MISSING", "NOT_APPLICABLE", "UNRESOLVED"]}, "claim": {"type": "string", "minLength": 1}, "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}}},
+    "viewport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["width", "height", "dpr", "runtimeSupport", "progressModel", "startState", "forwardResult", "milestones", "endState", "reverseResult", "restoreVerdict", "interactions"],
+      "properties": {
+        "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
+        "dpr": {"type": "number", "exclusiveMinimum": 0},
+        "runtimeSupport": {"enum": ["SUPPORTED", "DONOR_LIMITATION", "BROKEN_AT_SOURCE", "UNRESOLVED"]},
+        "progressModel": {"enum": ["NATIVE_SCROLL", "SCROLL_PLUS_TIME", "VIRTUAL_SCROLL", "SCRUB", "CLICK_PLUS_SCROLL", "MIXED", "UNRESOLVED"]},
+        "startState": {"type": "object", "minProperties": 1},
+        "forwardResult": {"type": "object", "minProperties": 1},
+        "milestones": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["label", "semanticState", "changed", "continuous", "transitionStart", "semanticCenter", "transitionEnd", "evidence"], "properties": {"label": {"type": "string", "minLength": 1}, "semanticState": {"type": "string", "minLength": 1}, "changed": {"type": "array", "minItems": 1}, "continuous": {"type": "array", "minItems": 1}, "transitionStart": {"type": "object", "minProperties": 1}, "semanticCenter": {"type": "object", "minProperties": 1}, "transitionEnd": {"type": "object", "minProperties": 1}, "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}}}}},
+        "endState": {"type": "object", "minProperties": 1},
+        "reverseResult": {"type": "object", "minProperties": 1},
+        "restoreVerdict": {"enum": ["RESTORED", "VISUALLY_EQUIVALENT", "NOT_RESTORED", "NO_REVERSE_BEHAVIOR", "UNRESOLVED"]},
+        "interactions": {"type": "array", "minItems": 1}
+      }
+    }
+  }
+}

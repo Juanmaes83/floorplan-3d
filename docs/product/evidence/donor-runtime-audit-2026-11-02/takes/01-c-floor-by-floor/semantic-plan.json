@@ -1,0 +1,16 @@
+{
+  "schemaVersion":"rubik-donor-runtime-audit.semantic-plan.v1",
+  "basis":"Observed complete desktop, portrait and landscape Discovery forward/reverse videos, telemetry and safety samples. Targets are fresh-pass capture cues.",
+  "milestones":[
+    {"label":"M01","slug":"ground-and-first-level","targetProgress":0.09,"observedChange":"The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart."},
+    {"label":"M02","slug":"second-level","targetProgress":0.15,"observedChange":"The second authored timber level closes its vertical gap with the lower stack."},
+    {"label":"M03","slug":"furnished-third-level","targetProgress":0.22,"observedChange":"The furnished third level settles toward its base while its desks and columns stay attached."},
+    {"label":"M04","slug":"level-three-gap","targetProgress":0.35,"observedChange":"The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio."},
+    {"label":"M05","slug":"enter-level-three-gap","targetProgress":0.48,"observedChange":"The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level."},
+    {"label":"M06","slug":"under-suspended-level","targetProgress":0.61,"observedChange":"The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above."},
+    {"label":"M07","slug":"level-four-descends","targetProgress":0.76,"observedChange":"The highlighted level-four soffit descends toward the same columns over the occupied studio."},
+    {"label":"M08","slug":"soffit-closes","targetProgress":0.85,"observedChange":"The overhead gap closes into a ceiling over the same third-level workspace."},
+    {"label":"M09","slug":"studio-traverse","targetProgress":0.95,"observedChange":"The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation."}
+  ],
+  "reverseSemanticStates":"Discovery reverse shows the studio traverse, overhead reopening and levels separating again; no independent reverse-only state established."
+}

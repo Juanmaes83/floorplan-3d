@@ -1,0 +1,3165 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.take.v1",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "take": {
+    "id": "01-c-floor-by-floor",
+    "group": "01 · EXPLODED HOUSE",
+    "title": "C · FLOOR BY FLOOR",
+    "inventoryIndex": 3
+  },
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "baseline": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "approvedSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+    "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+    "cleanAtStart": true
+  },
+  "reference": {
+    "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#01:2",
+    "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+    "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+    "donorRepo": "Sam1983Aing/flat-to-3d",
+    "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "entrypoint": "01-exploded-house/index.html",
+    "urlDiscoveryEvidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:469",
+        "statement": "Selector variant C · Floor by Floor points to 01-exploded-house/index.html?dir=c"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/index.html",
+        "statement": "Entrypoint exists in pinned checkout"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c at 2026-11-02T10:33:06.640Z",
+        "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c"
+      }
+    ]
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "browser": "Google Chrome 153.0.8010.53",
+    "playwright": "1.64.1 installed as recording fallback; not used",
+    "ffmpeg": "8.1.2-full_build"
+  },
+  "professionalService": {
+    "problemSolved": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer.",
+    "primaryUsers": [
+      "architect",
+      "building design reviewer",
+      "client"
+    ],
+    "serviceOutcome": "An exploded building stacks from the ground upward, holds an upper-level gap to reveal the studio, then lowers the overhead plate as the camera traverses that same floor.",
+    "decisionValue": "Clarifies spatial relationship between levels and occupied studio in this study; the apparent weekly construction sequence, stretched core and roof garden are authored demo claims rather than Rubik project facts.",
+    "evidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Donor description specifies floor stack, level-three gap and level-four lowering.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:1-4,209-212"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Full A→B sequence shows stacking, entry and overhead descent.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "Concrete ground, central core, perimeter timber grid and level-three desks remain in the same building as floor gaps close.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Separated level stack.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Lower stack with level-three desks.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png"
+        }
+      ]
+    },
+    {
+      "statement": "The studio seen from axon is the level entered by the camera while the same level-four plate hangs over it.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Level-three gap before entry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Under suspended level.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m06-under-suspended-level.png"
+        }
+      ]
+    },
+    {
+      "statement": "The level-four soffit descends toward the same timber columns, desks and perimeter facade, preserving the workspace relation.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Highlighted overhead descent.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m07-level-four-descends.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Enclosed studio endpoint.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 9000,
+        "innerHeight": 900,
+        "maxScroll": 8100,
+        "visibleHud": "PROJ\nPARALLEL AXO\n(1.5°)  //  SEQ\n000% | FLOOR\n00\n/ 06 | LEVEL 03 // +11.50M FFL\nLEVEL 3 · CLT SOFFIT\n384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - generic\n    - StaticText \"00GROUND\"\n    - StaticText \"CONCRETE PODIUM, CAFÉ, LOBBY\"\n  - generic\n    - StaticText \"01LEVEL 1\"\n    - StaticText \"OFFICES · CLT 240 ON GLULAM\"\n  - generic\n    - StaticText \"02LEVEL 2\"\n    - StaticText \"OFFICES · 384 M²\"\n  - generic\n    - StaticText \"03LEVEL 3\"\n    - StaticText \"STUDIOS · 384 M²\"\n  - generic\n    - StaticText \"04LEVEL 4\"\n    - StaticText \"STUDIOS · 384 M²\"\n  - generic\n    - StaticText \"05ROOF\"\n    - StaticText \"GARDEN, PLANT ROOM, PV\"\n  - generic\n    - StaticText \"CCORE\"\n    - StaticText \"CONCRETE, CAST FIRST\"\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"STOREY\"\n    - StaticText \"//\"\n    - StaticText \"SEC.500\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01 THE BOARD\" [ref=e3]\n        - StaticText \"01\"\n        - StaticText \"THE BOARD\"\n      - link \"02 UNFOLDED ROOM\" [ref=e4]\n        - StaticText \"02\"\n        - StaticText \"UNFOLDED ROOM\"\n      - link \"03 FLOOR BY FLOOR\" [ref=e5]\n        - StaticText \"03\"\n        - StaticText \"FLOOR BY FLOOR\"\n    - navigation\n      - StaticText \"PROJECTS ENGINEERING CONTACT\"\n      - link \"TALK TO US\" [ref=e6]\n  - generic\n    - StaticText \"EXPLODED AXONOMETRIC · 1:500\"\n    - heading \"FOUR FLOORS OF TIMBER. ONE WEEK EACH.\" [level=1, ref=e2]\n      - StaticText \"FOUR FLOORS OF TIMBER.\"\n      - emphasis\n        - StaticText \"ONE WEEK EACH.\"\n    - paragraph\n      - StaticText \"A CONCRETE GROUND FLOOR, THEN FOUR FLOORS OF CROSS-LAMINATED TIMBER ON GLULAM COLUMNS. SCROLL TO STACK THEM, THEN STAND ON LEVEL 3 WHILE LEVEL 4 COMES DOWN.\"\n    - DescriptionList\n      - term \"BUILDING\"\n      - definition\n        - StaticText \"KERBSIDE HOUSE\"\n      - term \"FLOORS\"\n      - definition\n        - StaticText \"5 + ROOF\"\n      - term \"AREA\"\n      - definition\n        - StaticText \"1,920 M²\"\n  - generic\n    - StaticText \"LEVEL 03 // +11.50M FFL\"\n    - StaticText \"LEVEL 3 · CLT SOFFIT\"\n    - StaticText \"384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240\"\n  - generic \"Interactive CAD radar\"\n    - StaticText \"AXO // 000%\"\n    - StaticText \"1:500\"\n    - generic\n      - button \"STACK\" [ref=e7]\n      - button \"L3 GAP\" [ref=e8]\n      - button \"L4 DROP\" [ref=e9]\n      - button \"STUDIO\" [ref=e10]\n  - contentinfo\n    - StaticText \"SCROLL TO STACK IT\"\n    - generic\n      - StaticText \"PROJ\"\n      - StaticText \"PARALLEL AXO\"\n      - StaticText \"(1.5°)  //  SEQ\"\n      - StaticText \"000%\"\n    - generic\n      - StaticText \"FLOOR\"\n      - StaticText \"00\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"PLOTTING SHEET S-500 · 100%\"",
+        "consoleErrors": "",
+        "network": "[93F1B917302344002C56F2FB304B876C] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c (Document) 200\n[86860.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[86860.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[86860.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[86860.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[86860.9] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[86860.10] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[86860.11] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[86860.12] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[86860.13] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[86860.45] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[86860.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[86860.29] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[86860.21] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[86860.44] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[86860.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[86860.25] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[86860.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-c.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 34.266,
+          "bytes": 28081091,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 36.933,
+          "bytes": 33384980,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ground-and-first-level",
+          "changed": [
+            "The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0533,
+            "scrollY": 432,
+            "monotonicMs": 7963,
+            "videoSeconds": 2.01,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0889,
+            "scrollY": 720,
+            "monotonicMs": 8652.2,
+            "videoSeconds": 2.7,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1333,
+            "scrollY": 1080,
+            "monotonicMs": 10061,
+            "videoSeconds": 4.108,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.08888888888888889,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at desktop: The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m01-ground-and-first-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.05-0.13",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=2.01-4.108"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "second-level",
+          "changed": [
+            "The second authored timber level closes its vertical gap with the lower stack."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1067,
+            "scrollY": 864,
+            "monotonicMs": 9652.3,
+            "videoSeconds": 3.7,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1511,
+            "scrollY": 1224,
+            "monotonicMs": 10961.8,
+            "videoSeconds": 5.009,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1778,
+            "scrollY": 1440,
+            "monotonicMs": 11362.2,
+            "videoSeconds": 5.41,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.1511111111111111,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at desktop: The second authored timber level closes its vertical gap with the lower stack.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m02-second-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.11-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=3.7-5.41"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "furnished-third-level",
+          "changed": [
+            "The furnished third level settles toward its base while its desks and columns stay attached."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.16,
+            "scrollY": 1296,
+            "monotonicMs": 11056.5,
+            "videoSeconds": 5.104,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2222,
+            "scrollY": 1800,
+            "monotonicMs": 12757.5,
+            "videoSeconds": 6.805,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3022,
+            "scrollY": 2448,
+            "monotonicMs": 15252,
+            "videoSeconds": 9.299,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2222222222222222,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:114-188,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at desktop: The furnished third level settles toward its base while its desks and columns stay attached.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m03-furnished-third-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.16-0.3",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=5.104-9.299"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "level-three-gap",
+          "changed": [
+            "The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3022,
+            "scrollY": 2448,
+            "monotonicMs": 15252,
+            "videoSeconds": 9.299,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3467,
+            "scrollY": 2808,
+            "monotonicMs": 16552.5,
+            "videoSeconds": 10.6,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4,
+            "scrollY": 3240,
+            "monotonicMs": 18051.1,
+            "videoSeconds": 12.098,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3466666666666667,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-238",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at desktop: The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=9.299-12.098"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "enter-level-three-gap",
+          "changed": [
+            "The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4,
+            "scrollY": 3240,
+            "monotonicMs": 18051.1,
+            "videoSeconds": 12.098,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.48,
+            "scrollY": 3888,
+            "monotonicMs": 20453.1,
+            "videoSeconds": 14.5,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.56,
+            "scrollY": 4536,
+            "monotonicMs": 22755.1,
+            "videoSeconds": 16.802,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.48,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at desktop: The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m05-enter-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.4-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=12.098-16.802"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "under-suspended-level",
+          "changed": [
+            "The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5422,
+            "scrollY": 4392,
+            "monotonicMs": 22558.1,
+            "videoSeconds": 16.605,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6133,
+            "scrollY": 4968,
+            "monotonicMs": 24251.1,
+            "videoSeconds": 18.298,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6844,
+            "scrollY": 5544,
+            "monotonicMs": 26658.4,
+            "videoSeconds": 20.706,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6133333333333333,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222,239-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at desktop: The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m06-under-suspended-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.54-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=16.605-20.706"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "level-four-descends",
+          "changed": [
+            "The highlighted level-four soffit descends toward the same columns over the occupied studio."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7022,
+            "scrollY": 5688,
+            "monotonicMs": 26958.8,
+            "videoSeconds": 21.006,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7556,
+            "scrollY": 6120,
+            "monotonicMs": 28455.1,
+            "videoSeconds": 22.502,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8178,
+            "scrollY": 6624,
+            "monotonicMs": 31053.9,
+            "videoSeconds": 25.101,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7555555555555555,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at desktop: The highlighted level-four soffit descends toward the same columns over the occupied studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m07-level-four-descends.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.7-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=21.006-25.101"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "soffit-closes",
+          "changed": [
+            "The overhead gap closes into a ceiling over the same third-level workspace."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8,
+            "scrollY": 6480,
+            "monotonicMs": 30057.1,
+            "videoSeconds": 24.104,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8533,
+            "scrollY": 6912,
+            "monotonicMs": 31761.1,
+            "videoSeconds": 25.808,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8978,
+            "scrollY": 7272,
+            "monotonicMs": 33158.1,
+            "videoSeconds": 27.205,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8533333333333334,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-251",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at desktop: The overhead gap closes into a ceiling over the same third-level workspace.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m08-soffit-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=24.104-27.205"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "studio-traverse",
+          "changed": [
+            "The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8711,
+            "scrollY": 7056,
+            "monotonicMs": 32063,
+            "videoSeconds": 26.11,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9511,
+            "scrollY": 7704,
+            "monotonicMs": 34650.7,
+            "videoSeconds": 28.698,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 8100,
+            "monotonicMs": 36152.3,
+            "videoSeconds": 30.2,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9511111111111111,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at desktop: The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m09-studio-traverse.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.87-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm#t=26.11-30.2"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 8100,
+        "scrollHeight": 9000,
+        "innerHeight": 900,
+        "maxScroll": 8100,
+        "visibleHud": "PROJ\nEYE-LEVEL PERSP\n(58.0°)  //  SEQ\n100% |  | PERIMETER BAY // GLULAM GRID 5.4M\nOPEN TIMBER STUDIO\nGLULAM 360 × 500  ·  LARCH SOLAR FINS  ·  CONCRETE CORE",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 22.6,
+          "bytes": 18164608,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 72
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -72
+        }
+      ]
+    },
+    "portrait": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 8440,
+        "innerHeight": 844,
+        "maxScroll": 7596,
+        "visibleHud": "PROJ PARALLEL AXO (1.5°)  //  SEQ 000% | FLOOR\n00\n/ 06 | LEVEL 03 // +11.50M FFL\nLEVEL 3 · CLT SOFFIT\n384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - generic\n    - StaticText \"00GROUND\"\n  - generic\n    - StaticText \"01LEVEL 1\"\n  - generic\n    - StaticText \"02LEVEL 2\"\n  - generic\n    - StaticText \"03LEVEL 3\"\n  - generic\n    - StaticText \"04LEVEL 4\"\n  - generic\n    - StaticText \"05ROOF\"\n  - generic\n    - StaticText \"CCORE\"\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"STOREY\"\n    - StaticText \"//\"\n    - StaticText \"SEC.500\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01\" [ref=e3]\n        - StaticText \"01\"\n      - link \"02\" [ref=e4]\n        - StaticText \"02\"\n      - link \"03\" [ref=e5]\n        - StaticText \"03\"\n    - navigation\n      - link \"TALK TO US\" [ref=e6]\n  - generic\n    - StaticText \"EXPLODED AXONOMETRIC · 1:500\"\n    - heading \"FOUR FLOORS OF TIMBER. ONE WEEK EACH.\" [level=1, ref=e2]\n      - StaticText \"FOUR FLOORS OF TIMBER.\"\n      - emphasis\n        - StaticText \"ONE WEEK EACH.\"\n    - paragraph\n      - StaticText \"A CONCRETE GROUND FLOOR, THEN FOUR FLOORS OF CROSS-LAMINATED TIMBER ON GLULAM COLUMNS. SCROLL TO STACK THEM, THEN STAND ON LEVEL 3 WHILE LEVEL 4 COMES DOWN.\"\n  - generic\n    - StaticText \"LEVEL 03 // +11.50M FFL\"\n    - StaticText \"LEVEL 3 · CLT SOFFIT\"\n    - StaticText \"384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240\"\n  - StaticText \"AXO // 000%\"\n  - StaticText \"1:500\"\n  - contentinfo\n    - StaticText \"SCROLL TO STACK IT\"\n    - generic\n      - StaticText \"FLOOR\"\n      - StaticText \"00\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"PLOTTING SHEET S-500 · 100%\"",
+        "consoleErrors": "",
+        "network": "[8EEE6F3610388B30C3A7FA5BB8EADBF7] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c (Document) 200\n[156996.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[156996.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[156996.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[156996.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[156996.9] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[156996.10] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[156996.11] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[156996.12] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[156996.13] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[156996.45] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[156996.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[156996.29] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[156996.21] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[156996.44] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[156996.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[156996.25] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[156996.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-c.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 24.9,
+          "bytes": 11957666,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 30.066,
+          "bytes": 14728105,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ground-and-first-level",
+          "changed": [
+            "The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0529,
+            "scrollY": 402,
+            "monotonicMs": 7117.1,
+            "videoSeconds": 1.393,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0882,
+            "scrollY": 670,
+            "monotonicMs": 7626.4,
+            "videoSeconds": 1.902,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1323,
+            "scrollY": 1005,
+            "monotonicMs": 8618.1,
+            "videoSeconds": 2.894,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.08820431806213797,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at portrait: The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m01-ground-and-first-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.05-0.13",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=1.393-2.894"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "second-level",
+          "changed": [
+            "The second authored timber level closes its vertical gap with the lower stack."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1058,
+            "scrollY": 804,
+            "monotonicMs": 8215.5,
+            "videoSeconds": 2.491,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1499,
+            "scrollY": 1139,
+            "monotonicMs": 9116.1,
+            "videoSeconds": 3.392,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1764,
+            "scrollY": 1340,
+            "monotonicMs": 9528.1,
+            "videoSeconds": 3.804,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.14994734070563454,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at portrait: The second authored timber level closes its vertical gap with the lower stack.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m02-second-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.11-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=2.491-3.804"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "furnished-third-level",
+          "changed": [
+            "The furnished third level settles toward its base while its desks and columns stay attached."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1588,
+            "scrollY": 1206,
+            "monotonicMs": 9223.8,
+            "videoSeconds": 3.5,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2205,
+            "scrollY": 1675,
+            "monotonicMs": 10515.3,
+            "videoSeconds": 4.791,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2999,
+            "scrollY": 2278,
+            "monotonicMs": 12316.8,
+            "videoSeconds": 6.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2205107951553449,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:114-188,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at portrait: The furnished third level settles toward its base while its desks and columns stay attached.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m03-furnished-third-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.16-0.3",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=3.5-6.593"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "level-three-gap",
+          "changed": [
+            "The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2999,
+            "scrollY": 2278,
+            "monotonicMs": 12316.8,
+            "videoSeconds": 6.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3528,
+            "scrollY": 2680,
+            "monotonicMs": 13417.9,
+            "videoSeconds": 7.694,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3969,
+            "scrollY": 3015,
+            "monotonicMs": 14415.5,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.35281727224855186,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-238",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at portrait: The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m04-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=6.593-8.691"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "enter-level-three-gap",
+          "changed": [
+            "The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3969,
+            "scrollY": 3015,
+            "monotonicMs": 14415.5,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4763,
+            "scrollY": 3618,
+            "monotonicMs": 15916.7,
+            "videoSeconds": 10.192,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5557,
+            "scrollY": 4221,
+            "monotonicMs": 17718.3,
+            "videoSeconds": 11.994,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.476303317535545,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at portrait: The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m05-enter-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.4-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=8.691-11.994"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "under-suspended-level",
+          "changed": [
+            "The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.538,
+            "scrollY": 4087,
+            "monotonicMs": 17417.9,
+            "videoSeconds": 11.694,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6086,
+            "scrollY": 4623,
+            "monotonicMs": 18819.2,
+            "videoSeconds": 13.095,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6792,
+            "scrollY": 5159,
+            "monotonicMs": 20620,
+            "videoSeconds": 14.896,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.608609794628752,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222,239-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at portrait: The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m06-under-suspended-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.54-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=11.694-14.896"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "level-four-descends",
+          "changed": [
+            "The highlighted level-four soffit descends toward the same columns over the occupied studio."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6968,
+            "scrollY": 5293,
+            "monotonicMs": 20921,
+            "videoSeconds": 15.197,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7586,
+            "scrollY": 5762,
+            "monotonicMs": 22416.5,
+            "videoSeconds": 16.692,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8203,
+            "scrollY": 6231,
+            "monotonicMs": 23423.1,
+            "videoSeconds": 17.699,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7585571353343865,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at portrait: The highlighted level-four soffit descends toward the same columns over the occupied studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m07-level-four-descends.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.7-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=15.197-17.699"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "soffit-closes",
+          "changed": [
+            "The overhead gap closes into a ceiling over the same third-level workspace."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8027,
+            "scrollY": 6097,
+            "monotonicMs": 23221.2,
+            "videoSeconds": 17.497,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8468,
+            "scrollY": 6432,
+            "monotonicMs": 24118.1,
+            "videoSeconds": 18.394,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8997,
+            "scrollY": 6834,
+            "monotonicMs": 25119.1,
+            "videoSeconds": 19.395,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8467614533965245,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-251",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at portrait: The overhead gap closes into a ceiling over the same third-level workspace.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m08-soffit-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=17.497-19.395"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "studio-traverse",
+          "changed": [
+            "The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8732,
+            "scrollY": 6633,
+            "monotonicMs": 24518.5,
+            "videoSeconds": 18.794,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9526,
+            "scrollY": 7236,
+            "monotonicMs": 26122.4,
+            "videoSeconds": 20.398,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 7596,
+            "monotonicMs": 27217.4,
+            "videoSeconds": 21.493,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.95260663507109,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at portrait: The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m09-studio-traverse.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.87-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm#t=18.794-21.493"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 7596,
+        "scrollHeight": 8440,
+        "innerHeight": 844,
+        "maxScroll": 7596,
+        "visibleHud": "PROJ EYE-LEVEL PERSP (80.0°)  //  SEQ 100% |  | PERIMETER BAY // GLULAM GRID 5.4M\nOPEN TIMBER STUDIO\nGLULAM 360 × 500  ·  LARCH SOLAR FINS  ·  CONCRETE CORE",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 19.3,
+          "bytes": 10285597,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 67
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -67
+        }
+      ]
+    },
+    "landscape": {
+      "width": 844,
+      "height": 390,
+      "dpr": 1,
+      "runtimeSupport": "DONOR_LIMITATION",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 3900,
+        "innerHeight": 390,
+        "maxScroll": 3510,
+        "visibleHud": "PROJ\nPARALLEL AXO\n(1.5°)  //  SEQ\n000% | FLOOR\n00\n/ 06 | LEVEL 03 // +11.50M FFL\nLEVEL 3 · CLT SOFFIT\n384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - generic\n    - StaticText \"00GROUND\"\n    - StaticText \"CONCRETE PODIUM, CAFÉ, LOBBY\"\n  - generic\n    - StaticText \"01LEVEL 1\"\n    - StaticText \"OFFICES · CLT 240 ON GLULAM\"\n  - generic\n    - StaticText \"02LEVEL 2\"\n    - StaticText \"OFFICES · 384 M²\"\n  - generic\n    - StaticText \"03LEVEL 3\"\n    - StaticText \"STUDIOS · 384 M²\"\n  - generic\n    - StaticText \"04LEVEL 4\"\n    - StaticText \"STUDIOS · 384 M²\"\n  - generic\n    - StaticText \"05ROOF\"\n    - StaticText \"GARDEN, PLANT ROOM, PV\"\n  - generic\n    - StaticText \"CCORE\"\n    - StaticText \"CONCRETE, CAST FIRST\"\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"STOREY\"\n    - StaticText \"//\"\n    - StaticText \"SEC.500\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01 THE BOARD\" [ref=e3]\n        - StaticText \"01\"\n        - StaticText \"THE BOARD\"\n      - link \"02 UNFOLDED ROOM\" [ref=e4]\n        - StaticText \"02\"\n        - StaticText \"UNFOLDED ROOM\"\n      - link \"03 FLOOR BY FLOOR\" [ref=e5]\n        - StaticText \"03\"\n        - StaticText \"FLOOR BY FLOOR\"\n    - navigation\n      - StaticText \"PROJECTS ENGINEERING CONTACT\"\n      - link \"TALK TO US\" [ref=e6]\n  - generic\n    - StaticText \"EXPLODED AXONOMETRIC · 1:500\"\n    - heading \"FOUR FLOORS OF TIMBER. ONE WEEK EACH.\" [level=1, ref=e2]\n      - StaticText \"FOUR FLOORS OF TIMBER.\"\n      - emphasis\n        - StaticText \"ONE WEEK EACH.\"\n    - paragraph\n      - StaticText \"A CONCRETE GROUND FLOOR, THEN FOUR FLOORS OF CROSS-LAMINATED TIMBER ON GLULAM COLUMNS. SCROLL TO STACK THEM, THEN STAND ON LEVEL 3 WHILE LEVEL 4 COMES DOWN.\"\n    - DescriptionList\n      - term \"BUILDING\"\n      - definition\n        - StaticText \"KERBSIDE HOUSE\"\n      - term \"FLOORS\"\n      - definition\n        - StaticText \"5 + ROOF\"\n      - term \"AREA\"\n      - definition\n        - StaticText \"1,920 M²\"\n  - generic\n    - StaticText \"LEVEL 03 // +11.50M FFL\"\n    - StaticText \"LEVEL 3 · CLT SOFFIT\"\n    - StaticText \"384 M²  ·  3.5 M FLOOR TO FLOOR  ·  SPRUCE CLT 240\"\n  - generic \"Interactive CAD radar\"\n    - StaticText \"AXO // 000%\"\n    - StaticText \"1:500\"\n    - generic\n      - button \"STACK\" [ref=e7]\n      - button \"L3 GAP\" [ref=e8]\n      - button \"L4 DROP\" [ref=e9]\n      - button \"STUDIO\" [ref=e10]\n  - contentinfo\n    - StaticText \"SCROLL TO STACK IT\"\n    - generic\n      - StaticText \"PROJ\"\n      - StaticText \"PARALLEL AXO\"\n      - StaticText \"(1.5°)  //  SEQ\"\n      - StaticText \"000%\"\n    - generic\n      - StaticText \"FLOOR\"\n      - StaticText \"00\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"PLOTTING SHEET S-500 · 100%\"",
+        "consoleErrors": "",
+        "network": "[3A1518C3AB63F5606E1CA56789D84204] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c (Document) 200\n[87668.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[87668.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[87668.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[87668.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[87668.9] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[87668.10] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[87668.11] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[87668.12] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[87668.13] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[87668.45] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[87668.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[87668.29] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[87668.21] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[87668.44] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[87668.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[87668.25] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[87668.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-c.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 24.533,
+          "bytes": 10517216,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 29.6,
+          "bytes": 12772204,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": [
+          {
+            "class": "OBSERVED_RUNTIME",
+            "statement": "At 844×390 desktop nav, intro, level labels and radar crop or overlap the model, while progress and reverse still work.",
+            "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png"
+          },
+          {
+            "class": "DONOR_SOURCE",
+            "statement": "Phone layout is width-gated at 700px; 844px landscape follows desktop positioning.",
+            "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+          }
+        ]
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ground-and-first-level",
+          "changed": [
+            "The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.053,
+            "scrollY": 186,
+            "monotonicMs": 7113.8,
+            "videoSeconds": 1.494,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0883,
+            "scrollY": 310,
+            "monotonicMs": 7608.7,
+            "videoSeconds": 1.989,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1325,
+            "scrollY": 465,
+            "monotonicMs": 8509.5,
+            "videoSeconds": 2.89,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.08831908831908832,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at landscape: The concrete ground group lands and the first timber level is highlighted while the upper stack remains apart.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m01-ground-and-first-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.05-0.13",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=1.494-2.89"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "second-level",
+          "changed": [
+            "The second authored timber level closes its vertical gap with the lower stack."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.106,
+            "scrollY": 372,
+            "monotonicMs": 8109.1,
+            "videoSeconds": 2.49,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1501,
+            "scrollY": 527,
+            "monotonicMs": 9009.2,
+            "videoSeconds": 3.39,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1766,
+            "scrollY": 620,
+            "monotonicMs": 9409.7,
+            "videoSeconds": 3.79,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.15014245014245015,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at landscape: The second authored timber level closes its vertical gap with the lower stack.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m02-second-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.11-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=2.49-3.79"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "furnished-third-level",
+          "changed": [
+            "The furnished third level settles toward its base while its desks and columns stay attached."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.159,
+            "scrollY": 558,
+            "monotonicMs": 9209,
+            "videoSeconds": 3.589,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2208,
+            "scrollY": 775,
+            "monotonicMs": 10308.2,
+            "videoSeconds": 4.689,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3003,
+            "scrollY": 1054,
+            "monotonicMs": 12210,
+            "videoSeconds": 6.59,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2207977207977208,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:114-188,209-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at landscape: The furnished third level settles toward its base while its desks and columns stay attached.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m03-furnished-third-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.16-0.3",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=3.589-6.59"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "level-three-gap",
+          "changed": [
+            "The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio."
+          ],
+          "continuous": [
+            "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3003,
+            "scrollY": 1054,
+            "monotonicMs": 12210,
+            "videoSeconds": 6.59,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3533,
+            "scrollY": 1240,
+            "monotonicMs": 13411.1,
+            "videoSeconds": 7.792,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3974,
+            "scrollY": 1395,
+            "monotonicMs": 14311,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.35327635327635326,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-238",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at landscape: The lower levels now read as one stack, with the fourth level and roof visibly held above the furnished studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m04-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=6.59-8.691"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "enter-level-three-gap",
+          "changed": [
+            "The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3974,
+            "scrollY": 1395,
+            "monotonicMs": 14311,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4769,
+            "scrollY": 1674,
+            "monotonicMs": 15813.1,
+            "videoSeconds": 10.194,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5564,
+            "scrollY": 1953,
+            "monotonicMs": 17514.3,
+            "videoSeconds": 11.895,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.47692307692307695,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at landscape: The camera leaves the axon and dives toward the exposed studio gap below the suspended upper level.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m05-enter-level-three-gap.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.4-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=8.691-11.895"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "under-suspended-level",
+          "changed": [
+            "The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5387,
+            "scrollY": 1891,
+            "monotonicMs": 17210,
+            "videoSeconds": 11.59,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6094,
+            "scrollY": 2139,
+            "monotonicMs": 18512.6,
+            "videoSeconds": 12.893,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6801,
+            "scrollY": 2387,
+            "monotonicMs": 20115.7,
+            "videoSeconds": 14.496,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6094017094017095,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222,239-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at landscape: The camera reaches eye level among the third-level desks and columns while the upper soffit still hangs above.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m06-under-suspended-level.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.54-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=11.59-14.496"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "level-four-descends",
+          "changed": [
+            "The highlighted level-four soffit descends toward the same columns over the occupied studio."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6977,
+            "scrollY": 2449,
+            "monotonicMs": 20412.7,
+            "videoSeconds": 14.793,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7595,
+            "scrollY": 2666,
+            "monotonicMs": 22111.8,
+            "videoSeconds": 16.492,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8214,
+            "scrollY": 2883,
+            "monotonicMs": 23018.9,
+            "videoSeconds": 17.399,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7595441595441595,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-233",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at landscape: The highlighted level-four soffit descends toward the same columns over the occupied studio.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m07-level-four-descends.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.7-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=14.793-17.399"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "soffit-closes",
+          "changed": [
+            "The overhead gap closes into a ceiling over the same third-level workspace."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8037,
+            "scrollY": 2821,
+            "monotonicMs": 22816.6,
+            "videoSeconds": 17.197,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8479,
+            "scrollY": 2976,
+            "monotonicMs": 23812.9,
+            "videoSeconds": 18.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9009,
+            "scrollY": 3162,
+            "monotonicMs": 24820.7,
+            "videoSeconds": 19.201,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8478632478632478,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-251",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at landscape: The overhead gap closes into a ceiling over the same third-level workspace.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m08-soffit-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=17.197-19.201"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "studio-traverse",
+          "changed": [
+            "The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation."
+          ],
+          "continuous": [
+            "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8744,
+            "scrollY": 3069,
+            "monotonicMs": 24216.8,
+            "videoSeconds": 18.597,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9538,
+            "scrollY": 3348,
+            "monotonicMs": 25920,
+            "videoSeconds": 20.3,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 3510,
+            "monotonicMs": 27018.5,
+            "videoSeconds": 21.399,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9538461538461539,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-265",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at landscape: The camera traverses the now enclosed timber studio, preserving the column grid, desks and facade relation.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m09-studio-traverse.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.87-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm#t=18.597-21.399"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 3510,
+        "scrollHeight": 3900,
+        "innerHeight": 390,
+        "maxScroll": 3510,
+        "visibleHud": "PROJ\nEYE-LEVEL PERSP\n(58.0°)  //  SEQ\n100% |  | PERIMETER BAY // GLULAM GRID 5.4M\nOPEN TIMBER STUDIO\nGLULAM 360 × 500  ·  LARCH SOLAR FINS  ·  CONCRETE CORE",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 19.266,
+          "bytes": 9195956,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 31
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -31
+        }
+      ]
+    }
+  },
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "All three viewports have continuous forward/reverse videos, telemetry and a second semantic pass.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Six authored storeys use GAP/LAND absolute progress; core scales vertically and cityUp remains collapsed.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-245"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut 2 §22 D09 established source mechanism, demo assumptions and sampled probe; global D09 distinguishes already solved level reading from unresolved handoff.",
+      "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1058-1170"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik baseline has level-based axon/exploded Story with restore and separate room descent.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-364; index.html:4750-4840"
+    },
+    {
+      "class": "INFERENCE",
+      "statement": "This study may help a reviewer discuss spatial stacking and studio occupation, subject to authored building limitations.",
+      "locator": "professionalService",
+      "basedOn": [
+        "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm",
+        "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:1-4"
+      ],
+      "inferenceStatus": "UNRESOLVED"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "storey/timberFloor builders",
+      "lines": "74-188",
+      "claim": "Creates fixed ground, four timber levels and roof with authored furniture on level three.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "GAP/LAND/update",
+      "lines": "209-265",
+      "claim": "Six absolute vertical offsets land bottom-up with held upper gap, color/label/dash progress and authored UI.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "keys/eyeKey",
+      "lines": "213-222",
+      "claim": "Authored camera transitions from near-parallel axon into level three and across studio, with phone overrides.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "coreG/capG/cityUp",
+      "lines": "189-201;223-245",
+      "claim": "Global concrete core stretches to top of separated roof, cap translates, and cityUp stays compressed; no genuine connection proof.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/main.js",
+      "symbol": "target/frame/step",
+      "lines": "120-184",
+      "claim": "Native scroll drives smoothed p; intro shadows use separate wall-clock T.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/core.js",
+      "symbol": "camAt/applyCam/ctx.phone",
+      "lines": "23;312-348;414-417",
+      "claim": "Width-gated camera variants and projection.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 2 §22 D09 @cc04f67fc0b46c87bc696bf566adb362f43041fd",
+      "documentedDisposition": "EXTRACT MECHANISM historically; do not import authored GAP, core stretch, city or route as product truth",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 describes six groups, absolute LAND/GAP and sampled reverse probes.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1058-1170"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous three-viewport forward/reverse and semantic states extend temporal/mobile evidence.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Global reconciliation D09 at approved Rubik baseline",
+      "documentedDisposition": "D09-C1/C2 KEEP EXISTING; C3 REJECT; C4 UNRESOLVED",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Current FT3D-5 level reading and lifecycle already solve C1/C2, while generic handoff remains unverified.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed level stack and authored level-three entry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Atlas D09 historical and Cut 2 §27.1",
+      "documentedDisposition": "Six authored storeys and cumulative Y offsets differ from Board component layers and Unfolded faces",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 distinguishes membership, axes and prerequisites of D09/D10/D11.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1603-1617"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Six level labels in initial stack.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 1 D01 and Cut 2 D12/D13",
+      "documentedDisposition": "Camera/progress/orientation and valid route are separate from level offsets",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global catalog separates camera, player and route authorities.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:101-119,301-337"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Axon-to-eye-level camera transition.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m05-enter-level-three-gap.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "EXISTS",
+      "claim": "Project/Building preserve real level IDs, elevations, rooms and opening ownership; donor six authored floors are not imported.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Project derives room/wall/opening geometry from source IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon descriptor derives levels from current Building.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:79-98"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "EXISTS",
+      "claim": "Rubik constructs current multilevel building geometry and bounds for level separation.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Building geometry enters View3D sync.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,3808"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Level descriptor and separation bounds.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:58-98"
+        }
+      ]
+    },
+    "representation": {
+      "status": "EXISTS",
+      "claim": "FT3D-5 compact and exploded level reading already exists; the authored donor look and six-group stack are study-specific.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded narrative on actual levels.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon handles captured and applied.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4828"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has project appearances and lighting, but donor timber/CLT claims and lamp/sun treatment are not inferred as current project truth.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface appearances are assigned from current data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current light preset/state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik fits a building axon and has room descent; a general automatic exploded-to-valid-level-route handoff is unverified.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon camera state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent narrative is a separate current capability.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        }
+      ]
+    },
+    "transition": {
+      "status": "EXISTS",
+      "claim": "Absolute reversible compact/exploded level state and scene progress already exist; donor GAP/LAND constants are not required.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded level transition.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence/local progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Story player and seek map progress without donor native scrolling or a second scheduler.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Seek UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls, captions and minimap; donor floor-by-floor callouts are not assumed to be product labels.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation card/minimap/controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Minimap uses actual room/level data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Current presentation has responsive layout and mobile QA; exact donor composition is not adopted.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation mobile CSS.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "FT3D-6 mobile QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Current level presentation captures/applies/restores its own handles and state; donor itself has no editor rollback.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon begin/apply/end on current handles.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story runtime/scene lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik can capture/share images and batch ZIP current project views; donor has no special output contract to port.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Image/share.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Batch ZIP.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "FT3D-5/6 reproducible QA exists; a hypothetical automatic handoff would need separate evidence.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Template QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "NO_GAP",
+      "statement": "Real-level compact/exploded presentation, progress and reversible lifecycle already exist in Rubik; donor six-level constants add no required product capability.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D09-C1/C2 are KEEP EXISTING.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current level narrative and lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345; index.html:4750-4840"
+        }
+      ]
+    },
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "A general handoff from a level reading to an actual selected, navigable room/route is unverified even though Story, level geometry and room descent exist.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Donor camera enters its authored level-three studio.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D09-C4 remains UNRESOLVED.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent is separate from current axon states.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-345"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "844×390 donor desktop layout crops level labels/nav and overlays radar on the building; this does not establish a Rubik mobile defect.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "At 844×390 desktop nav, intro, level labels and radar crop or overlap the model, while progress and reverse still work.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Phone layout is width-gated at 700px; 844px landscape follows desktop positioning.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REUSE_EXISTING",
+      "problemSolved": "Represent real project levels in compact/exploded form with existing Rubik authority and lifecycle.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building level IDs, elevations and geometry",
+        "existing View3D/Story/player",
+        "mobile-first UI"
+      ],
+      "existingCapabilitiesConsumed": [
+        "FT3D-5 axon descriptor and scene",
+        "current Story progress/restore"
+      ],
+      "missingConnector": "None for the already supported level reading; donor GAP/LAND and six fixed groups are not required.",
+      "donorMechanismReference": "dir-c.js:209-245 as comparative reference; Global D09-C1/C2 KEEP EXISTING",
+      "confidence": "HIGH",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "UNRESOLVED",
+      "problemSolved": "If a future professional service requires continuing from level reading into a verified room visit, connect only a real selected level/entry/route.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building and current level selection",
+        "Rubik route planner and camera",
+        "Story lifecycle/player"
+      ],
+      "existingCapabilitiesConsumed": [
+        "current level reading",
+        "room descent and route if valid"
+      ],
+      "missingConnector": "Validated selection/entry, recomposed handoff pose and route in the current project; no authored coordinate fallback.",
+      "donorMechanismReference": "dir-c.js:213-222 camera keys; Global D09-C4 UNRESOLVED",
+      "confidence": "LOW",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: actual Building level descriptor and current geometry for any level reading.",
+    "TECHNICAL_PREREQUISITE: a valid selected room/entry/route and recomposed camera pose before any automatic visit handoff.",
+    "The stretched donor core, fixed six groups and invented construction schedule are reference-only demo content, not product dependencies."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Levels, elevations and materials in a presentation come from current Project/Building data; no authored donor week/CLT claims are imported."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Existing level explode/recompose keeps each object with its real level and never stretches a shared core as a fake connector."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Any handoff enters a validated level/room through a real route, after level geometry is recomposed."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse, cancel and End restore current levelView, visibility, transforms, camera and UI without drift."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Both mobile orientations preserve the selected level, readable cue and usable controls."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Level state and visit transition are understandable via keyboard and assistive text, independent of donor scroll."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "FT3D-5 compact/exploded and FT3D-6 template behavior remain valid for supported Building configurations."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal donor object/resource identity after B→A is not passively exposed; visual equivalence and route/scroll return are observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "Continuous reverse video and telemetry",
+        "Source absolute evaluator review"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource snapshot if a later technical question requires identity-level restore proof."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "The donor roof group also lands at .80–.90 in source, but its motion is occluded by the interior camera; no distinct roof milestone is claimed from runtime.",
+      "attempts": [
+        "Full desktop/portrait/landscape videos",
+        "5% safety samples",
+        "Pinned source LAND intervals"
+      ],
+      "evidenceNeeded": "A separately justified view of the roof during the same progress interval if roof motion becomes essential to a future decision."
+    }
+  ],
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\calibration.json",
+      "sha256": "482bce10b6c0c52784eb9d7c214d3d6765958fea2ffe8b2e03853959a0dc63d7",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-end.png",
+      "sha256": "ef9a309d9174169c79ec67069e9af02a9cc05eee4adaca6128824347570abf24",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p000.png",
+      "sha256": "eada1925220a6edbd5ddda5fbf175f5ff716ed97ccb78df88f343c26e681f483",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p005.png",
+      "sha256": "fac51c82d3a80707605c3e02a398629c9759f7459db5495b91f3b3b43f9f705d",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p010.png",
+      "sha256": "868304948f1d98db76974555061a3fed1352e90448ab07a5275e88f9c356b923",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p015.png",
+      "sha256": "12424febdd5cd2e32ce221ffda3e153982c7d822b625cfb6f0cdfeed92ce9be1",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p020.png",
+      "sha256": "5a503db82324bd6068ea2fd45ce5a6d61637ec18c65bfc3bce037b946c39c134",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p025.png",
+      "sha256": "94e33cc47d61dfbcf41d1d39178720fc074a8fc8fa345b4477023c2c9c01c338",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p030.png",
+      "sha256": "18c3d376a6c165eb3afb7f7604f5b1549c8eb62ed088c30945a2f73defc825d4",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p035.png",
+      "sha256": "f2fbedeb70b83c11f7163f57d0d43fac95de02e3d9414240261f818c82a7557a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p040.png",
+      "sha256": "0ba26b49ed765b0ef81bfc2c2862cbc55a20e8ee0cba9772bc3fa6a84b3c076a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p045.png",
+      "sha256": "daa038bea11ba5712dbb6972a48ddca758ff5bf328fe303445eb507093819561",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p050.png",
+      "sha256": "499d67927db75c11cdd815395d3ad1d805f8a8e47a1276dc791015612cdc5703",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p055.png",
+      "sha256": "0e94c055bb3da03f2b344f293714ce17c7b26dee70aa6878b31c7b6e3653d2c0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p060.png",
+      "sha256": "58be4b3817d395b5e0f8db6b74a48c47e173511e66287c10067866bbee2a35de",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p065.png",
+      "sha256": "3dc3422be214fe1fe69ac22b45a684ce66386c1d111ea2c04703903b8b8b9171",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p070.png",
+      "sha256": "c4120ddbf95a5830f9c5f5fbd8e9efd31b81e1d03530c33d55643f32e90286a2",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p075.png",
+      "sha256": "f4a2c1dde4c72ccda57cfb41da6e7cc789654c1351e405813e6cdd5bc7136d79",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p080.png",
+      "sha256": "9b650c93f45c005ebd4a7685ac593679a7e71eed7ba11bb0ac212bb20020ea11",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p085.png",
+      "sha256": "c77153109708ad2c17b235e3603474ddd06045dd95defb72c3792b66a205bb5f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p090.png",
+      "sha256": "6947313874ee834d03863cb606ee66884a8dbf2c0e5b24b34d11758741696700",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p095.png",
+      "sha256": "0199bfc3ac45f90b3c363210749cab82c547402149dfc8790159d5fe63acef3e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery-p100.png",
+      "sha256": "fe3ce5f84eb4f9b1231dea4142f4c13f41bda619f8fc39a2c0cdf76b2b23d697",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "sha256": "7778ebadcd95695c1bcfbcdec4e3160b54c64ae622ddf3ec981624212d44d6ca",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm",
+      "sha256": "372d0d9a52c0eae9f7a010417fce69c5f74f960405cfdfa79b73728e370dfc1a",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m01-ground-and-first-level.png",
+      "sha256": "a7a4deeb61e5d6f194762a8267720bfcf0b14d39841f65f86e981d4cb8adf0d3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m02-second-level.png",
+      "sha256": "65af8639ba2dea1a8f04367ae3705d101833b8632620d2e9766828dec2b43c43",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m03-furnished-third-level.png",
+      "sha256": "ee275afbdd5a96c5572f4f97cb9c6a00dc4652694f5576832c5c78868d4d0476",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png",
+      "sha256": "5f688702207b81e2ef0ca3bf139ce84f50d11bf677aeb15ff29d35cc3d71182c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m05-enter-level-three-gap.png",
+      "sha256": "e88161d3e8704e73cb4109b62497388d6dc2bb52362622260db2ef8ce58b2498",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m06-under-suspended-level.png",
+      "sha256": "4c4c748e98511097454611ce69b27d75352921aa8caa5dfcb8c1dfa625ee6776",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m07-level-four-descends.png",
+      "sha256": "85a45b518212f59ab6c4daf61052f0099ca7b99d946daece0effb919c1a70e3d",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m08-soffit-closes.png",
+      "sha256": "b7870c86caccd8c04725692388ff546b57229ab2bad6d8ebd31b3751b61c67b0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m09-studio-traverse.png",
+      "sha256": "513a138f8669624b35ce6c8c91b415c90aa5eed0063d0bdd8aaf0b9bdd46eeef",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-semantic.webm",
+      "sha256": "42d51ecaab1a6bbade82ef79131ad9f8dffb52e6eb2a386c8cd85c893d0faa0b",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-restored-start.png",
+      "sha256": "57798bc729ca7b99f9d699255d2c9fff3c3e23a66352640c90cbc1e58acda680",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "sha256": "74a91534b8427c47d81c2c899271d30334469c456805767d5102a4627e4f44a5",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-reverse-discovery.webm",
+      "sha256": "e36c02f867704c8328ec40653d87bf4f13b825dd09b929798167dfcf9e92e99d",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-semantic-end.png",
+      "sha256": "7dc6a60d09fa05ed761a2833fcaa1f6de3a9962940c671b29c39c6c2dada4a6b",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-semantic-start.png",
+      "sha256": "1a4ae0366679d969b9bf7a9e67fe5020345c8f554cdf1d2da0659a7c0f622306",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png",
+      "sha256": "c3d7a89cde54ed465cc2accccc8edbddeb1f1637d5c64df6ab054b8875ea0ce3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\discovery-assets.json",
+      "sha256": "9fc02cf42c193befd9e8a27ab05858e425ad77325b7322b24a71d555e7bf1f62",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\discovery-summary.json",
+      "sha256": "38096e3b4d43b44e22a22b9bea42b5c05cbcdfdfa3f5c88c991416f396748524",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\end-state.json",
+      "sha256": "754e86b13c3e3b5fe12b5a0d36012ff37dc432afc3da30e53a5a3ea66d9c6dad",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\reverse-state.json",
+      "sha256": "edeb47c56f14be06fb3aee123b4961902909de7c84cc7d6af6c9b1edb0da2841",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\semantic-capture.json",
+      "sha256": "ed3b748a35502e6f4ef7a44d3c97287f75881168a4d162641a2ae8b49e2beec5",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\start-state.json",
+      "sha256": "a4a2ffa4eddc4bd5e2ee6a0365f9aaed702b0ab2a879227d60cffb1297d2efb2",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\calibration.json",
+      "sha256": "1e56a6981ff439e88513fe4257361cab092cf3e485ffb1072dd7a6c09753f282",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\discovery-assets.json",
+      "sha256": "d2d96772c3147cc342956cd520678b9650cef323ae171638c2e2d7792786318d",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\discovery-summary.json",
+      "sha256": "e619cad01185ddfdefa5a59077802d28df6e253bfd0a8e287e67103c63cbf95f",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\end-state.json",
+      "sha256": "2fbb4df19565c3ea59d56a96b3ec5c7139baa7e89079a93cc60a75625b41100c",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-end.png",
+      "sha256": "e0503737143b92e88d6b45d926dd2c947b9453f47958b4dfd9d85f028fb25a25",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p000.png",
+      "sha256": "795782e43054a0a16eb9a34aae3791ba2b15c891030a0cb48ab61ea5bd94bf54",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p005.png",
+      "sha256": "3299c498fb6b534d0e8fc6195124047c607a1b569454d15c92105a38f530abee",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p010.png",
+      "sha256": "df58c2022097e478a35e9c0ec2220b565621fcf8090c855276a85be423ffe9c3",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p015.png",
+      "sha256": "ca835f9274d5644732af43645a117282612b0d52c50212f205461bf278436106",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p020.png",
+      "sha256": "bf8f11bfb54995b96079ea6cca8aae47266b614329498b46fae9291e4f39c3e4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p025.png",
+      "sha256": "2dfe769c184845d4a158bd71a0f58720dc1acb472cc577a5e806e2c95c5243a8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p030.png",
+      "sha256": "88a2b57ba98de4a739be15b465c8dd0d7fa603e2240b679a4b1d2d6614220bc7",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p035.png",
+      "sha256": "7a763a647be120c40959bd5dd7361f4ad951436d44e6a56e593365c595795f04",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p040.png",
+      "sha256": "6cda8be2b86a122007f0163ffa11a3703924801e8fcb7ba3556d34213ccdb8fa",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p045.png",
+      "sha256": "f6bcf648952073d3c99a248dd683361e50fabb9d5dedfb8ede39e4225566a6a8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p050.png",
+      "sha256": "2b470f43f93559293e0573a8d801240a5d5dbbba80d02108493a63e263c54d24",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p055.png",
+      "sha256": "fd1d42b4d9dfb07578794ffc4c8d990007c8ec51b2e5652f654acab86c286230",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p060.png",
+      "sha256": "d4736f86fea10c3f2b8d9e304e09712a708a0706c5e9cd2279c63f4c60d0a18b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p065.png",
+      "sha256": "955d23e15f8163248b1dce77a7a93411fce0b39be24683139ab5e7fbda7a5cd4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p070.png",
+      "sha256": "0ebd58b1a2bba316807540f138223813ec70e79a57671f77ee7e061a184f684a",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p075.png",
+      "sha256": "420e0edf8f55a7453be5f8628ca1a6969655199da5248f934dbebe9e0c8f246d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p080.png",
+      "sha256": "225dc683de3e63c6ced0b1893131e8029891e0b089174cd827caebc67281077c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p085.png",
+      "sha256": "bf4e641e8a54db2600fbc607ee772dc29ad31ef059219f4a56dc544cc4fb97fa",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p090.png",
+      "sha256": "fbe5f959bbfa74e9a3400aea0a193db0c059dc6b4a7fde6f0e18a413d24366ff",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p095.png",
+      "sha256": "bd6aecf921754e577e4e166c1c07f8b27fb57d6af1736b978835f2dd84f59100",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery-p100.png",
+      "sha256": "293f182e2289df9ed11f13c73103c5de3fa3c23e9c5e89157ba116571fe3e06b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "sha256": "2539956205a39aee5d690ef1ffdadc7928204c04e87ef5eaf4999a7c3fa2179d",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-discovery.webm",
+      "sha256": "a0b5252af7a92473ec1d8a013ac59c127350b54ab0b07926a60f06f36bf2af48",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m01-ground-and-first-level.png",
+      "sha256": "22b3eca519355af77bee01e6d1cd88ba99bd87f4a249e087826e632a31d984d6",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m02-second-level.png",
+      "sha256": "e600771f4802042ba731270ab4370474afb884f358cc8da77a1d562ee384fd18",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m03-furnished-third-level.png",
+      "sha256": "718848bbf7936d123202fd0853d25e3deea68321a938a222f1f4328556329cc4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m04-level-three-gap.png",
+      "sha256": "e49bf9961ffde324e30d6b6f8da94dd08d869cee06332881688e12f2c199f73f",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m05-enter-level-three-gap.png",
+      "sha256": "6ddeddc51b5e968e8fd69f4041b4929f123f76956cdcca61a3fe515f88299a68",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m06-under-suspended-level.png",
+      "sha256": "f68c6e30dea03c6b0d12f4ac5d93a38e72af4ccd7b66a73dbbdfa39d4da1eeef",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m07-level-four-descends.png",
+      "sha256": "685d8f8515a369cfcd86d8b94b7bb4df47133487ad56174d05d3c9f6e036e6eb",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m08-soffit-closes.png",
+      "sha256": "21defa6342aff04dce5630f58f68a8d6ba823bee85c8a4d1112b5a57c39c0a21",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-m09-studio-traverse.png",
+      "sha256": "0706a907b23a3d54470e9c8be48d77e377ff1d26bd6535736095f7a280183ab2",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-forward-semantic.webm",
+      "sha256": "5045674913a27ccb1872ea082c3282d5b3061f95629e5f033108f5ee0e06e93f",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-restored-start.png",
+      "sha256": "2ffeb9f9acbe446e4ca2df7fb1e9df1377657c88c27d8d7952c01164e1efc269",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "sha256": "5451fe7faeaec407740c05fd2aa514688dbab14dab950189cc7d0e0ae0598728",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-reverse-discovery.webm",
+      "sha256": "1d13ca0e2120f34747cd6afa179550a8f8f6ecdafd45cd0ba46d6f22cd233864",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-semantic-end.png",
+      "sha256": "e0503737143b92e88d6b45d926dd2c947b9453f47958b4dfd9d85f028fb25a25",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-semantic-start.png",
+      "sha256": "1f09aac041579d83a4f347e66b9f098823e06f47fa1d65b04d45482671aac048",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\portrait-start.png",
+      "sha256": "b78e63ac59e3de8eacdd31cfff0b356fb55b29d5c0dabcae9bb02366b96a6840",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\reverse-state.json",
+      "sha256": "7980a1d7aa09c093e2c53f7510a8eba5c48775beba46ff3389a07fc7224e588f",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\semantic-capture.json",
+      "sha256": "54cfa2c8745da9d65f4b68e35729a019d966960f6f8f1babf2747d64808287b2",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\portrait\\start-state.json",
+      "sha256": "8f71ba0fe679de1b2475ed5c0900fc80fbef8bf95110d9a43e6bf65e33ab19dc",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\calibration.json",
+      "sha256": "dc3428aa164df102dcb4b6cd68b4bfa2d1f0cd1eaabeff82998a797619caa862",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\discovery-assets.json",
+      "sha256": "7cfc6e09dc69793c9d18598c0240872d57cfded3188f79de5f09a9203c81e068",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\discovery-summary.json",
+      "sha256": "455ff578b0039f12b85eeb6346093f49137b3b0486da2c70869747f1c1384a57",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\end-state.json",
+      "sha256": "ea5a8e98c586039b7fbc51af70e1cedce7ec48214d7e6b00af8efd3ab38f8fad",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-end.png",
+      "sha256": "b64d62483d6a61ec21127b38b9e0c2cdc855e027f296aead8f915b8bb87112cc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p000.png",
+      "sha256": "0862b098c4437c8779ceda6430ea9f060919cba264b685fe1b990e04865df74b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p005.png",
+      "sha256": "0e1db35f0edc793175d2c5ea30672d42ff535824b9c1a65364e937eb3348766e",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p010.png",
+      "sha256": "bf305259d6088da3ee9933f890db16c05b4afa7635fae6d4aedfcdd3b1501d55",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p015.png",
+      "sha256": "21a6c0bf19a3f0c8f5ecfa14143803e3e07aab1e2cb2d3ff5997635e7153a91a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p020.png",
+      "sha256": "ec3ef3cb17b4009827d9cd3a706c65dd4f5edbebbe5f8761cef1d8451e0c41db",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p025.png",
+      "sha256": "2cde20c8bf90c87416f461bc0811af32e9af163cc97df2e05512d1a058e64453",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p030.png",
+      "sha256": "67991132c95038fdf977f45c1f7e2abc696666488a610ecab0ba45df1b926d41",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p035.png",
+      "sha256": "1641ac6305fe128fe292670f063a03c65559cf3932878812f1dc55ac955f6870",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p040.png",
+      "sha256": "94519f52d011e4637b42407de121c301500f29a476b0223ad884a98f136ac1d3",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p045.png",
+      "sha256": "7aa5fd8cd0c3f7a2cda4949b03658efbe9b4ba9e22585cfad9c8f6ec4465df6f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p050.png",
+      "sha256": "200b29f47c2a0968b274d97c9fa84b58f1f66ce9b2c0858d8a8173cd81233ce0",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p055.png",
+      "sha256": "f3d65d5c90f5a8eccd7a501a777aa234ecd494cf7992423e07c1404a68970656",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p060.png",
+      "sha256": "74d7fb0e7d6fc35cca9a4a39a2dd9931ef9906ae711ad20837331f767d62569b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p065.png",
+      "sha256": "b213bd13411cd76ddc231d38c495e3494437a1a9ced392d0869ae812dad72b8a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p070.png",
+      "sha256": "74e2ac076a54f161a61c19055c85f9a9fb3f905dea84d6e891b21496f14f516d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p075.png",
+      "sha256": "fe260dfe213014d76ded90b48d9e6269a830af8cec16e1c519c6eae3317ce05d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p080.png",
+      "sha256": "3e280baded0af121ea3b6cfb835b177cb75eed5e8bb0bd77a428bafeaa5feb09",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p085.png",
+      "sha256": "251c20f5e0671bd6d9b0e172138005929ac65be1ae4e38a2b693df49459dd055",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p090.png",
+      "sha256": "ba2de991fb66fa95fc9d0ffaf5c45c1096605f7a4ec6ed46cd83e423bbaf9266",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p095.png",
+      "sha256": "c298c401b3bc962ffe312211b3f4f3ddfdb2bf56da784e2e9f29427da6810851",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery-p100.png",
+      "sha256": "85a70f7123071503528595e9bd70db5e5ee1a7286b29c4eeec4a7cdabc1262cc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "sha256": "d0d5ba5413ac44f7d5bee7bdda2a720a276297ce630b399636508e1600f3db45",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-discovery.webm",
+      "sha256": "8816fe8ecc4dcc329eb3083f59a3ec15652f3dcdd0cb8d35f3dfd3b2a101d5cc",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m01-ground-and-first-level.png",
+      "sha256": "f4ca9dd7cb9b3fc6a8cdfcee7922c853dcab1d84e4d3c8b30d8988353d1b84ee",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m02-second-level.png",
+      "sha256": "1695c60a722d72ed478ac168f51386323ff550151b1da17cf70f7aad08621623",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m03-furnished-third-level.png",
+      "sha256": "328544af5ce276223d3a2888be306dc34373e7d13a85c004c6448a31e50b9319",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m04-level-three-gap.png",
+      "sha256": "b0927cc8c5657ad32e2ea3b99ae729c7fb42675b5c888502cab6d0a48b0a397e",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m05-enter-level-three-gap.png",
+      "sha256": "6d980ec3696d175892037942375c558b5c177d1b7e997fde9bcce47bbc4163dd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m06-under-suspended-level.png",
+      "sha256": "04e4d611e7729bd7288422d63665351f37ca8b72e527d8c825944565754b6065",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m07-level-four-descends.png",
+      "sha256": "156365cf816cf97d77e97fadb5d2216e3a0370c64ec0dc38ebb18130874ad02b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m08-soffit-closes.png",
+      "sha256": "73490f4de1e735bd04b44d90a02347d0472f03caf0b2ecf12b5035b1e225e357",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-m09-studio-traverse.png",
+      "sha256": "bf0b31f81232037d48204e12302b375a3d2dbc3842009eceb208e9908e894e2a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-forward-semantic.webm",
+      "sha256": "89488bcf9102c978ec1118fbf1ce00fe1419ac9772a0057ec684df4f8a488e7e",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-restored-start.png",
+      "sha256": "3d39b78c8b319a34013fa051a33fce38cd7ebfe787d841076cee65918228ac85",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "sha256": "3f432aa4541565e74f9b359a19daa7e81d745d1294e8853653e0913f3f1bac9d",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-reverse-discovery.webm",
+      "sha256": "47fe2edbe8c899ae236ad59e924f8a878beb6196c6f25b7ed095870f6586793a",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-semantic-end.png",
+      "sha256": "00a2afeef2c708048609f0bd3e5a5d0ff97f6c1e49524ba884a69afacd6d2833",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-semantic-start.png",
+      "sha256": "0a34351fbb81e08fe89cbd1564c96325c3397e047dd10c829247baa765b42589",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png",
+      "sha256": "d5314cf41b88869aa5d640dc4a1c9aaf20afa9f395cbbe27511502917e33083d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\reverse-state.json",
+      "sha256": "3f33c9c3c8ca5eb1aa86b08bb1f320a6df226b112b5bc864231f3faaa7031f7a",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\semantic-capture.json",
+      "sha256": "4e4a72733d9618ae462f12734d4c4bca13e756179e5861b37179c3c370a16b41",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\start-state.json",
+      "sha256": "01b931511c9202f7596dd9999eaa1a13b240656b2677ba2d14a7456e67480f85",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-start.png",
+      "sha256": "c3d7a89cde54ed465cc2accccc8edbddeb1f1637d5c64df6ab054b8875ea0ce3",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-forward-m03-furnished-third-level.png",
+      "sha256": "ee275afbdd5a96c5572f4f97cb9c6a00dc4652694f5576832c5c78868d4d0476",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-forward-m04-level-three-gap.png",
+      "sha256": "5f688702207b81e2ef0ca3bf139ce84f50d11bf677aeb15ff29d35cc3d71182c",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-forward-m05-enter-level-three-gap.png",
+      "sha256": "e88161d3e8704e73cb4109b62497388d6dc2bb52362622260db2ef8ce58b2498",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-forward-m07-level-four-descends.png",
+      "sha256": "85a45b518212f59ab6c4daf61052f0099ca7b99d946daece0effb919c1a70e3d",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-forward-m08-soffit-closes.png",
+      "sha256": "b7870c86caccd8c04725692388ff546b57229ab2bad6d8ebd31b3751b61c67b0",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-end.png",
+      "sha256": "ef9a309d9174169c79ec67069e9af02a9cc05eee4adaca6128824347570abf24",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/desktop/desktop-restored-start.png",
+      "sha256": "57798bc729ca7b99f9d699255d2c9fff3c3e23a66352640c90cbc1e58acda680",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/portrait/portrait-start.png",
+      "sha256": "b78e63ac59e3de8eacdd31cfff0b356fb55b29d5c0dabcae9bb02366b96a6840",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/portrait/portrait-forward-m04-level-three-gap.png",
+      "sha256": "e49bf9961ffde324e30d6b6f8da94dd08d869cee06332881688e12f2c199f73f",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/portrait/portrait-forward-m07-level-four-descends.png",
+      "sha256": "685d8f8515a369cfcd86d8b94b7bb4df47133487ad56174d05d3c9f6e036e6eb",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/portrait/portrait-end.png",
+      "sha256": "e0503737143b92e88d6b45d926dd2c947b9453f47958b4dfd9d85f028fb25a25",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/portrait/portrait-restored-start.png",
+      "sha256": "2ffeb9f9acbe446e4ca2df7fb1e9df1377657c88c27d8d7952c01164e1efc269",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/landscape/landscape-start.png",
+      "sha256": "d5314cf41b88869aa5d640dc4a1c9aaf20afa9f395cbbe27511502917e33083d",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/landscape/landscape-forward-m04-level-three-gap.png",
+      "sha256": "b0927cc8c5657ad32e2ea3b99ae729c7fb42675b5c888502cab6d0a48b0a397e",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/landscape/landscape-forward-m07-level-four-descends.png",
+      "sha256": "156365cf816cf97d77e97fadb5d2216e3a0370c64ec0dc38ebb18130874ad02b",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/landscape/landscape-end.png",
+      "sha256": "b64d62483d6a61ec21127b38b9e0c2cdc855e027f296aead8f915b8bb87112cc",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-c-floor-by-floor/keyframes/landscape/landscape-restored-start.png",
+      "sha256": "3d39b78c8b319a34013fa051a33fce38cd7ebfe787d841076cee65918228ac85",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    }
+  ],
+  "integrity": {
+    "assetsVerified": true,
+    "productionDiffZero": true
+  },
+  "completion": {
+    "gates": {
+      "T01": "PASS",
+      "T02": "PASS",
+      "T03": "PASS",
+      "T04": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "T07": "PASS",
+      "T08": "PASS",
+      "T09": "PASS",
+      "T10": "PASS",
+      "T11": "PASS",
+      "T12": "PASS",
+      "T13": "PASS",
+      "T14": "PASS",
+      "T15": "PASS",
+      "T16": "PASS",
+      "T17": "PASS",
+      "T18": "PASS",
+      "T19": "PASS",
+      "T20": "PASS",
+      "T21": "PASS"
+    },
+    "validatorResult": "PASS",
+    "validatedAt": "2026-11-02T13:25:28.812Z"
+  }
+}

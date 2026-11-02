@@ -1,0 +1,704 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "transitions": [
+    [
+      0.05,
+      0.09,
+      0.13
+    ],
+    [
+      0.11,
+      0.15,
+      0.18
+    ],
+    [
+      0.16,
+      0.22,
+      0.3
+    ],
+    [
+      0.3,
+      0.35,
+      0.4
+    ],
+    [
+      0.4,
+      0.48,
+      0.56
+    ],
+    [
+      0.54,
+      0.61,
+      0.68
+    ],
+    [
+      0.7,
+      0.76,
+      0.82
+    ],
+    [
+      0.8,
+      0.85,
+      0.9
+    ],
+    [
+      0.87,
+      0.95,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:74-115,209-233",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:114-188,209-233",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-238",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222; core.js:312-348",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-222,239-265",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-233",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-251",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:213-265"
+  ],
+  "continuity": [
+    "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close.",
+    "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close.",
+    "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close.",
+    "The same concrete core, floor plates, timber columns and level-three desks stay in one authored building as vertical gaps close.",
+    "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent.",
+    "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent.",
+    "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent.",
+    "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent.",
+    "The same level-three desks, timber columns, perimeter glazing and level-four soffit remain aligned during camera entry and overhead descent."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "SUPPORTED",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [],
+    "portrait": [],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 desktop nav, intro, level labels and radar crop or overlap the model, while progress and reverse still work.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Phone layout is width-gated at 700px; 844px landscape follows desktop positioning.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+      }
+    ]
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed.",
+    "portrait": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed.",
+    "landscape": "A0/A1 show the same separated levels, hero, labels, camera composition and HUD after natural reverse; internal object/resource identity was not passively observed."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence.",
+    "portrait": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence.",
+    "landscape": "No separate reverse-only state identified: studio traverse reverses, upper level rises and lower levels separate in sequence."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "desktop-start.png",
+      "desktop-forward-m03-furnished-third-level.png",
+      "desktop-forward-m04-level-three-gap.png",
+      "desktop-forward-m05-enter-level-three-gap.png",
+      "desktop-forward-m07-level-four-descends.png",
+      "desktop-forward-m08-soffit-closes.png",
+      "desktop-end.png",
+      "desktop-restored-start.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "portrait-forward-m04-level-three-gap.png",
+      "portrait-forward-m07-level-four-descends.png",
+      "portrait-end.png",
+      "portrait-restored-start.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-forward-m04-level-three-gap.png",
+      "landscape-forward-m07-level-four-descends.png",
+      "landscape-end.png",
+      "landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Explains the vertical organization and level-three workspace of one authored multilevel timber building to a client or design reviewer.",
+    "primaryUsers": [
+      "architect",
+      "building design reviewer",
+      "client"
+    ],
+    "serviceOutcome": "An exploded building stacks from the ground upward, holds an upper-level gap to reveal the studio, then lowers the overhead plate as the camera traverses that same floor.",
+    "decisionValue": "Clarifies spatial relationship between levels and occupied studio in this study; the apparent weekly construction sequence, stretched core and roof garden are authored demo claims rather than Rubik project facts.",
+    "evidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Donor description specifies floor stack, level-three gap and level-four lowering.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:1-4,209-212"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Full A→B sequence shows stacking, entry and overhead descent.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "Concrete ground, central core, perimeter timber grid and level-three desks remain in the same building as floor gaps close.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Separated level stack.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Lower stack with level-three desks.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png"
+        }
+      ]
+    },
+    {
+      "statement": "The studio seen from axon is the level entered by the camera while the same level-four plate hangs over it.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Level-three gap before entry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m04-level-three-gap.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Under suspended level.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m06-under-suspended-level.png"
+        }
+      ]
+    },
+    {
+      "statement": "The level-four soffit descends toward the same timber columns, desks and perimeter facade, preserving the workspace relation.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Highlighted overhead descent.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m07-level-four-descends.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Enclosed studio endpoint.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "All three viewports have continuous forward/reverse videos, telemetry and a second semantic pass.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Six authored storeys use GAP/LAND absolute progress; core scales vertically and cityUp remains collapsed.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:210-245"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut 2 §22 D09 established source mechanism, demo assumptions and sampled probe; global D09 distinguishes already solved level reading from unresolved handoff.",
+      "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1058-1170"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik baseline has level-based axon/exploded Story with restore and separate room descent.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-364; index.html:4750-4840"
+    },
+    {
+      "class": "INFERENCE",
+      "statement": "This study may help a reviewer discuss spatial stacking and studio occupation, subject to authored building limitations.",
+      "locator": "professionalService",
+      "basedOn": [
+        "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm",
+        "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-c.js:1-4"
+      ],
+      "inferenceStatus": "UNRESOLVED"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "storey/timberFloor builders",
+      "lines": "74-188",
+      "claim": "Creates fixed ground, four timber levels and roof with authored furniture on level three.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "GAP/LAND/update",
+      "lines": "209-265",
+      "claim": "Six absolute vertical offsets land bottom-up with held upper gap, color/label/dash progress and authored UI.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "keys/eyeKey",
+      "lines": "213-222",
+      "claim": "Authored camera transitions from near-parallel axon into level three and across studio, with phone overrides.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-c.js",
+      "symbol": "coreG/capG/cityUp",
+      "lines": "189-201;223-245",
+      "claim": "Global concrete core stretches to top of separated roof, cap translates, and cityUp stays compressed; no genuine connection proof.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/main.js",
+      "symbol": "target/frame/step",
+      "lines": "120-184",
+      "claim": "Native scroll drives smoothed p; intro shadows use separate wall-clock T.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/core.js",
+      "symbol": "camAt/applyCam/ctx.phone",
+      "lines": "23;312-348;414-417",
+      "claim": "Width-gated camera variants and projection.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 2 §22 D09 @cc04f67fc0b46c87bc696bf566adb362f43041fd",
+      "documentedDisposition": "EXTRACT MECHANISM historically; do not import authored GAP, core stretch, city or route as product truth",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 describes six groups, absolute LAND/GAP and sampled reverse probes.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1058-1170"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous three-viewport forward/reverse and semantic states extend temporal/mobile evidence.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Global reconciliation D09 at approved Rubik baseline",
+      "documentedDisposition": "D09-C1/C2 KEEP EXISTING; C3 REJECT; C4 UNRESOLVED",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Current FT3D-5 level reading and lifecycle already solve C1/C2, while generic handoff remains unverified.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed level stack and authored level-three entry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Atlas D09 historical and Cut 2 §27.1",
+      "documentedDisposition": "Six authored storeys and cumulative Y offsets differ from Board component layers and Unfolded faces",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 distinguishes membership, axes and prerequisites of D09/D10/D11.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1603-1617"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Six level labels in initial stack.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-start.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 1 D01 and Cut 2 D12/D13",
+      "documentedDisposition": "Camera/progress/orientation and valid route are separate from level offsets",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global catalog separates camera, player and route authorities.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:101-119,301-337"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Axon-to-eye-level camera transition.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-m05-enter-level-three-gap.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "EXISTS",
+      "claim": "Project/Building preserve real level IDs, elevations, rooms and opening ownership; donor six authored floors are not imported.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Project derives room/wall/opening geometry from source IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon descriptor derives levels from current Building.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:79-98"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "EXISTS",
+      "claim": "Rubik constructs current multilevel building geometry and bounds for level separation.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Building geometry enters View3D sync.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,3808"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Level descriptor and separation bounds.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-axon-core.js:58-98"
+        }
+      ]
+    },
+    "representation": {
+      "status": "EXISTS",
+      "claim": "FT3D-5 compact and exploded level reading already exists; the authored donor look and six-group stack are study-specific.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded narrative on actual levels.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon handles captured and applied.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4828"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has project appearances and lighting, but donor timber/CLT claims and lamp/sun treatment are not inferred as current project truth.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface appearances are assigned from current data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current light preset/state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik fits a building axon and has room descent; a general automatic exploded-to-valid-level-route handoff is unverified.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon camera state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent narrative is a separate current capability.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        }
+      ]
+    },
+    "transition": {
+      "status": "EXISTS",
+      "claim": "Absolute reversible compact/exploded level state and scene progress already exist; donor GAP/LAND constants are not required.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded level transition.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence/local progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Story player and seek map progress without donor native scrolling or a second scheduler.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Seek UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls, captions and minimap; donor floor-by-floor callouts are not assumed to be product labels.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation card/minimap/controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Minimap uses actual room/level data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Current presentation has responsive layout and mobile QA; exact donor composition is not adopted.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation mobile CSS.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "FT3D-6 mobile QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Current level presentation captures/applies/restores its own handles and state; donor itself has no editor rollback.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon begin/apply/end on current handles.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story runtime/scene lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik can capture/share images and batch ZIP current project views; donor has no special output contract to port.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Image/share.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Batch ZIP.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "FT3D-5/6 reproducible QA exists; a hypothetical automatic handoff would need separate evidence.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Template QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "NO_GAP",
+      "statement": "Real-level compact/exploded presentation, progress and reversible lifecycle already exist in Rubik; donor six-level constants add no required product capability.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D09-C1/C2 are KEEP EXISTING.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current level narrative and lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345; index.html:4750-4840"
+        }
+      ]
+    },
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "A general handoff from a level reading to an actual selected, navigable room/route is unverified even though Story, level geometry and room descent exist.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Donor camera enters its authored level-three studio.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D09-C4 remains UNRESOLVED.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:245-263"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent is separate from current axon states.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,249-345"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "844×390 donor desktop layout crops level labels/nav and overlays radar on the building; this does not establish a Rubik mobile defect.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "At 844×390 desktop nav, intro, level labels and radar crop or overlap the model, while progress and reverse still work.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-c-floor-by-floor\\landscape\\landscape-start.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Phone layout is width-gated at 700px; 844px landscape follows desktop positioning.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REUSE_EXISTING",
+      "problemSolved": "Represent real project levels in compact/exploded form with existing Rubik authority and lifecycle.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building level IDs, elevations and geometry",
+        "existing View3D/Story/player",
+        "mobile-first UI"
+      ],
+      "existingCapabilitiesConsumed": [
+        "FT3D-5 axon descriptor and scene",
+        "current Story progress/restore"
+      ],
+      "missingConnector": "None for the already supported level reading; donor GAP/LAND and six fixed groups are not required.",
+      "donorMechanismReference": "dir-c.js:209-245 as comparative reference; Global D09-C1/C2 KEEP EXISTING",
+      "confidence": "HIGH",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "UNRESOLVED",
+      "problemSolved": "If a future professional service requires continuing from level reading into a verified room visit, connect only a real selected level/entry/route.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building and current level selection",
+        "Rubik route planner and camera",
+        "Story lifecycle/player"
+      ],
+      "existingCapabilitiesConsumed": [
+        "current level reading",
+        "room descent and route if valid"
+      ],
+      "missingConnector": "Validated selection/entry, recomposed handoff pose and route in the current project; no authored coordinate fallback.",
+      "donorMechanismReference": "dir-c.js:213-222 camera keys; Global D09-C4 UNRESOLVED",
+      "confidence": "LOW",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: actual Building level descriptor and current geometry for any level reading.",
+    "TECHNICAL_PREREQUISITE: a valid selected room/entry/route and recomposed camera pose before any automatic visit handoff.",
+    "The stretched donor core, fixed six groups and invented construction schedule are reference-only demo content, not product dependencies."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Levels, elevations and materials in a presentation come from current Project/Building data; no authored donor week/CLT claims are imported."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Existing level explode/recompose keeps each object with its real level and never stretches a shared core as a fake connector."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Any handoff enters a validated level/room through a real route, after level geometry is recomposed."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse, cancel and End restore current levelView, visibility, transforms, camera and UI without drift."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Both mobile orientations preserve the selected level, readable cue and usable controls."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Level state and visit transition are understandable via keyboard and assistive text, independent of donor scroll."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "FT3D-5 compact/exploded and FT3D-6 template behavior remain valid for supported Building configurations."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal donor object/resource identity after B→A is not passively exposed; visual equivalence and route/scroll return are observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "Continuous reverse video and telemetry",
+        "Source absolute evaluator review"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource snapshot if a later technical question requires identity-level restore proof."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "The donor roof group also lands at .80–.90 in source, but its motion is occluded by the interior camera; no distinct roof milestone is claimed from runtime.",
+      "attempts": [
+        "Full desktop/portrait/landscape videos",
+        "5% safety samples",
+        "Pinned source LAND intervals"
+      ],
+      "evidenceNeeded": "A separately justified view of the roof during the same progress interval if roof motion becomes essential to a future decision."
+    }
+  ]
+}

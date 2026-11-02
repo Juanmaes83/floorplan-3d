@@ -1,0 +1,404 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.run-state.v1",
+  "baseSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "phase": "RUNTIME_AUDIT",
+  "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+  "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+  "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
+  "createdAt": "2026-11-02T10:33:06.640Z",
+  "updatedAt": "2026-11-02T13:25:28.812Z",
+  "takes": {
+    "01-a-the-board": {
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T10:41:03.611Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:42:07.138Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T10:43:23.646Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:44:26.726Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T10:44:38.876Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:45:32.742Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T10:45:36.557Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:46:30.658Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T10:48:15.448Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:49:00.943Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T10:49:05.330Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:49:44.488Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T10:49:48.938Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T10:50:27.743Z"
+        }
+      ],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact internal camera, material and geometry object state after donor B→A was not passively exposed; visual equivalence is observed, exact identity is not proven.",
+          "attempts": [
+            "Clean context A0/A1 screenshots at three viewports",
+            "Continuous reverse WebM",
+            "Passive scroll/HUD/route telemetry",
+            "Donor source absolute evaluator review"
+          ],
+          "evidenceNeeded": "Passive read-only object-state snapshot or narrowly scoped REA/probe if a future decision requires internal restore proof."
+        }
+      ],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T12:41:51.325Z"
+      }
+    },
+    "01-b-unfolded-room": {
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:42:06.977Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:43:14.519Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:43:45.212Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:44:41.473Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:45:07.479Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:46:03.300Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T12:47:18.053Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:48:01.839Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T12:48:30.194Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:49:08.780Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T12:49:34.848Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:50:13.041Z"
+        }
+      ],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact internal object identity and resource state after donor B→A were not passively exposed; visual equivalence, scroll and route return were observed.",
+          "attempts": [
+            "Fresh A0 and natural B→A/A1 at all viewports",
+            "A0/A1 visual comparison",
+            "Reverse video and telemetry",
+            "Absolute update/source inspection"
+          ],
+          "evidenceNeeded": "Read-only scoped object/resource snapshot if a later technical decision requires identity-level restore proof."
+        }
+      ],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T12:54:43.967Z"
+      }
+    },
+    "01-c-floor-by-floor": {
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:55:07.591Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:56:16.902Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:56:47.230Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:57:42.221Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T12:58:05.195Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T12:59:00.234Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:01:03.390Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:01:47.113Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:02:12.526Z",
+          "status": "FAILED",
+          "error": "Error: agent-browser record: ✗ Recording encoder fell behind by more than 16 buffered frames\n"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:06:42.385Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:07:18.812Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:08:02.636Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:08:38.936Z"
+        }
+      ],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact internal donor object/resource identity after B→A is not passively exposed; visual equivalence and route/scroll return are observed.",
+          "attempts": [
+            "Fresh A0 and natural B→A/A1 at all viewports",
+            "Continuous reverse video and telemetry",
+            "Source absolute evaluator review"
+          ],
+          "evidenceNeeded": "Narrow read-only object/resource snapshot if a later technical question requires identity-level restore proof."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "The donor roof group also lands at .80–.90 in source, but its motion is occluded by the interior camera; no distinct roof milestone is claimed from runtime.",
+          "attempts": [
+            "Full desktop/portrait/landscape videos",
+            "5% safety samples",
+            "Pinned source LAND intervals"
+          ],
+          "evidenceNeeded": "A separately justified view of the roof during the same progress interval if roof motion becomes essential to a future decision."
+        }
+      ],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T13:25:28.812Z"
+      }
+    },
+    "02-demo-section-sweep": {
+      "captureStatus": "IN_PROGRESS",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:14:19.352Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:17:41.908Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:19:26.722Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:22:14.981Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:22:20.971Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:25:00.026Z"
+        }
+      ],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T13:25:00.026Z"
+      }
+    },
+    "03-a-open-the-lens": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "03-c-down-the-stair": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "04-demo-build-time-lapse": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "05-a-the-programme": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "05-b-1-1-site-sheet": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "05-c-site-camera": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "06-demo-card-model": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "07-a-one-door": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "07-b-the-row": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    },
+    "07-c-the-face": {
+      "captureStatus": "NOT_STARTED",
+      "reconciliationStatus": "NOT_STARTED",
+      "validationStatus": "NOT_STARTED",
+      "lastSuccessfulStage": "NOT_STARTED",
+      "attempts": [],
+      "blockingUnresolved": [],
+      "nonBlockingUnresolved": [],
+      "timestamps": {
+        "createdAt": "2026-11-02T10:33:06.640Z",
+        "updatedAt": "2026-11-02T10:33:06.640Z"
+      }
+    }
+  }
+}

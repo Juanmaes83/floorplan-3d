@@ -1,0 +1,717 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "transitions": [
+    [
+      0.06,
+      0.1,
+      0.18
+    ],
+    [
+      0.12,
+      0.18,
+      0.24
+    ],
+    [
+      0.19,
+      0.25,
+      0.31
+    ],
+    [
+      0.26,
+      0.32,
+      0.38
+    ],
+    [
+      0.33,
+      0.39,
+      0.45
+    ],
+    [
+      0.42,
+      0.49,
+      0.56
+    ],
+    [
+      0.52,
+      0.56,
+      0.62
+    ],
+    [
+      0.62,
+      0.7,
+      0.75
+    ],
+    [
+      0.75,
+      0.79,
+      0.84
+    ],
+    [
+      0.83,
+      0.88,
+      0.94
+    ],
+    [
+      0.94,
+      0.99,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:199-202,262-283",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,138-149,198-229",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,150-166,198-229",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,198-229",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:198-237,263-283",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215; core.js:312-348",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-230; core.js:312-348",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348"
+  ],
+  "continuity": [
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces.",
+    "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room.",
+    "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room.",
+    "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room.",
+    "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "SUPPORTED",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [],
+    "portrait": [],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 the desktop navigation, introductory text, model labels and radar collide or crop during fold and walk.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Phone layout is selected by width <700, so 844px landscape retains desktop positions.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+      }
+    ]
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed.",
+    "portrait": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed.",
+    "landscape": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns.",
+    "portrait": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns.",
+    "landscape": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "desktop-start.png",
+      "desktop-forward-m02-west-sideboard-hinge.png",
+      "desktop-forward-m04-east-window-hinge.png",
+      "desktop-forward-m06-ceiling-lid-closes.png",
+      "desktop-forward-m09-door-threshold.png",
+      "desktop-forward-m10-sage-kitchen.png",
+      "desktop-end.png",
+      "desktop-restored-start.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "portrait-forward-m06-ceiling-lid-closes.png",
+      "portrait-forward-m09-door-threshold.png",
+      "portrait-end.png",
+      "portrait-restored-start.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-forward-m06-ceiling-lid-closes.png",
+      "landscape-forward-m09-door-threshold.png",
+      "landscape-end.png",
+      "landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior.",
+    "primaryUsers": [
+      "interior architect",
+      "joinery designer",
+      "client reviewer"
+    ],
+    "serviceOutcome": "A developed room drawing folds around its real pictured floor, then a camera passes through the same door to inspect kitchen and window bench.",
+    "decisionValue": "Supports discussion of spatial relationships and design intent in this study; printed dimensions, north and finish codes are authored demo content, not certified project data.",
+    "evidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "The donor describes floor, walls and ceiling laid flat and folded shut before a walk inside.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:1-6"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Full A→B transition from sheet to window bench.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "The developed floor, cabinet wall, door opening and window opening form the same kitchen after their parent faces rotate.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Flat sheet before fold.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Partly folded faces preserve openings and joinery.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m04-east-window-hinge.png"
+        }
+      ]
+    },
+    {
+      "statement": "The room enclosure and the entered kitchen retain the same south door and east window with no observed project swap.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Closed room through door approach.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m07-closed-room.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same door threshold and window bench.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png"
+        }
+      ]
+    },
+    {
+      "statement": "The sage cabinets, tile, table, pendant, plant and east window stay spatially related during the interior walk.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Kitchen interior.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m10-sage-kitchen.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Window bench endpoint.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Three viewport full forward, reverse and semantic passes with sidecar telemetry.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Five hinged faces with absolute fold/grow progress and parented openings/content.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-230"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Authored sheet decals are attached to owner pivots at construction, and the camera has desktop/phone keys.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215,262-283"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut 2 §24 D11 already established authored rectangular room, hinge math, topology limits and reverse evaluator.",
+      "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik has Project room/wall/opening geometry and Story lifecycle, without proven generic room-face unfolding.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292; index.html:4750-4840"
+    },
+    {
+      "class": "INFERENCE",
+      "statement": "This study may help a client review joinery and room enclosure together, subject to the authored demo limits.",
+      "locator": "professionalService",
+      "basedOn": [
+        "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm",
+        "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:1-6"
+      ],
+      "inferenceStatus": "UNRESOLVED"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "wall / N,S,Wst,E pivots and openings",
+      "lines": "106-166",
+      "claim": "Four cardinal, authored wall faces own their door/window and attached contents.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "FOLD/GROW/update",
+      "lines": "197-250",
+      "claim": "Absolute progress rotates each face around an edge, grows local contents, opens door, changes wash/sun/lamp and HUD.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "keys / eyeKey",
+      "lines": "204-215",
+      "claim": "Authored parallel-axo to eye-level poses, including phone overrides, drive the walk.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "SH / decal / drawSheet",
+      "lines": "262-283;377-455",
+      "claim": "Manual sheet and tags are generated as Canvas textures; decals are attached to parent pivots in the flat pose.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/main.js",
+      "symbol": "target / frame / step",
+      "lines": "120-184",
+      "claim": "Native scroll is smoothed into runtime progress; intro uses wall-clock time.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/core.js",
+      "symbol": "camAt / applyCam / ctx.phone",
+      "lines": "23;312-348;414-417",
+      "claim": "Camera interpolation and width-gated phone handling.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 2 §24 D11 @cc04f67fc0b46c87bc696bf566adb362f43041fd",
+      "documentedDisposition": "REIMPLEMENT FROM MECHANISM; authored rectangular room, not universal auto-unfold",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 established hinges, growth, source and sampled p0/.25/.5/.75/1/.5/0.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous three-viewport hinge/walk/reverse evolution adds temporal and mobile evidence.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 2 §28 C2-CC2 and historical Atlas D11",
+      "documentedDisposition": "Clarifies initial decal attach, lid parent and eight authored decals; Atlas retained as history",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Ownership and annotation precision is already documented.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1663-1668"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Lid and decal parent relationships confirmed in pinned source.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,262-283"
+        }
+      ]
+    },
+    {
+      "locator": "Global reconciliation D11 at approved Rubik baseline",
+      "documentedDisposition": "D11-C1 REIMPLEMENT; C2 ADAPT; C3 REJECT",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior dispositions distinguish face topology, temporary anchors and manual sheet.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:283-299"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed sheet-to-room continuity and authored labels.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 1 D01/D04 and Cut 2 D12/D13",
+      "documentedDisposition": "Camera, drawing treatment and navigation are separate mechanisms",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Shared mechanisms are separately catalogued.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:101-119,155-173,301-337"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Near-parallel to eye-level camera handoff is visible.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Project preserves room polygons, walls and opening.wallId; room-to-face side and shared-wall ownership are not established for an unfold.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rooms, wall rectangles and openings are derived from Project IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current renderer has wallId and roomId/face metadata for a separate reveal, not a proven unfolding topology.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3304-3367"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik has room, wall and opening geometry, including real openings; an ordered net of hinged room faces and a valid ceiling lid are not established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room polygons and wall opening geometries exist.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Wall and floor meshes are current View3D geometry.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,4899"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has room views and an axon/exploded level presentation, but no evidenced six-face developed drawing for arbitrary rooms.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent is a current Story narrative.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded level narrative is present.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has project surface appearances and lighting; authored sage/tile finish codes, plotter ink and donor sun movement are not project truth.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface material is derived from assigned appearance.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation light preset and status are exposed.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik already fits project views and has room descent, but donor camera coordinates and a hinge-to-threshold handoff do not identify a valid route for another room.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current room descent evaluator.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon camera fitting and state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Story has deterministic reversible state evaluation; no face-hinge descriptor with room topology and opening ownership is evidenced.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story stateAt derives scene state from progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:1-45"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "View3D presentation begin/apply/end exists.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "The existing Story player and seek controls provide controlled reversible progress without needing donor native scroll.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence maps global to local progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "UI exposes seeking.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Presentation cards, captions and minimap exist; sheet-specific face annotations and model-sourced dimensions are not established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation card and minimap controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Minimap uses current geometry and IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik presentation has mobile CSS and FT3D-6 QA; no unfolded-room variant has been tested in Rubik.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current mobile presentation layout.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "FT3D-6 mobile QA authority.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "PARTIAL",
+      "claim": "Current scenes capture/apply/restore their owned state; future face transforms, child overlays and resources need a separate proven lease.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon capture/apply/end restore current handles.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story runtime manages current presentation lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik already offers image/share and ZIP of current project views; donor sheet is no authorized deliverable.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Image/share controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "View/project batch ZIP.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Existing QA covers presentation scenes and templates; face-topology, opening attachment and reverse for an unfold have no project-specific suite.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon visual QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Template QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "PRODUCT_DECISION_REQUIRED",
+      "statement": "Which room face, ceiling and professional annotation can truthfully be shown for a real project requires a bounded service contract and topology evidence.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 D11 limits arbitrary/shared/non-rectangular rooms and manual sheet data.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik exposes polygons, walls and openings but no proven face-side graph.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A temporary, reversible face-hinge representation linked to real wall/opening IDs is not evidenced in Rubik current.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Five face hinges observed on this authored rectangular study.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon presentation separates levels, not room faces.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "Hinge, matrix-following annotations and valid room entry are not connected as one reversible Rubik service.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous sheet-to-room-to-interior handoff.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has Story and room descent as current capabilities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,346-364"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "The donor 844×390 desktop composition overlaps the model, nav, HUD and text; this does not establish a Rubik mobile defect.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "At 844×390 the desktop navigation, introductory text, model labels and radar collide or crop during fold and walk.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Phone layout is selected by width <700, so 844px landscape retains desktop positions.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REIMPLEMENT_MECHANISM",
+      "problemSolved": "A bounded room-face reading could unfold only validated faces and openings while retaining the real room identity.",
+      "rubikAuthoritiesPreserved": [
+        "Project room/wall/opening IDs and materials",
+        "Building level datum",
+        "View3D geometry and renderer",
+        "Story progress/player/lifecycle",
+        "mobile-first presentation UI"
+      ],
+      "existingCapabilitiesConsumed": [
+        "room polygon and wall/opening geometry",
+        "existing room descent and camera fit",
+        "Story reversible state evaluation",
+        "presentation image/ZIP if product chooses an output"
+      ],
+      "missingConnector": "Verified room-to-face association, side and shared ownership; temporary hinge representation/lease and matrix-following labels; valid camera handoff. No generic net or manual sheet copied.",
+      "donorMechanismReference": "dir-b.js:106-115,198-283 hinge/grow/parented annotation; Cut 2 §24 D11 and Global D11-C1/C2/C3",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: prove room-to-wall-face topology and opening side/owner before any temporary hinge evaluation.",
+    "TECHNICAL_PREREQUISITE: represent shared, non-rectangular and ceiling-absent cases explicitly or exclude them with a reason.",
+    "TECHNICAL_PREREQUISITE: obtain a real route/threshold before camera handoff; donor coordinates are not Rubik route authority.",
+    "Technical reuse of Story and geometry does not merge Unfolded Room with Board or FT3D-5 as a product service."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Only source-backed wall, opening, height and finish facts appear; demo codes, north and printed dimensions never become project claims."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "The same opening remains attached to exactly one validated wall face through hinge motion; shared walls have one declared owner."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "The room footprint, joinery and openings remain continuous from flat sheet to closed room to interior view."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "A camera handoff uses an actual navigable threshold and preserves the same room/level."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Forward, reverse, cancel and failure restore all temporary transforms, overlay resources, materials and camera state."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait and short landscape expose legible annotations and controls without collision or model occlusion."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "The state and reverse controls remain keyboard and screen-reader understandable without depending on scroll alone."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Existing FT3D-5 and FT3D-6 stories retain their current ownership and restore behavior."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal object identity and resource state after donor B→A were not passively exposed; visual equivalence, scroll and route return were observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "A0/A1 visual comparison",
+        "Reverse video and telemetry",
+        "Absolute update/source inspection"
+      ],
+      "evidenceNeeded": "Read-only scoped object/resource snapshot if a later technical decision requires identity-level restore proof."
+    }
+  ]
+}

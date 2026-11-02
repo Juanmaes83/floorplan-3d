@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "basis": "Observed desktop, portrait and landscape Discovery videos, telemetry and samples; progress targets are capture cues, not product semantics.",
+  "milestones": [
+    {"label": "M01", "slug": "floor-lands", "targetProgress": 0.09, "observedChange": "Floor slab lands on the drawn sheet; first assembly layer."},
+    {"label": "M02", "slug": "structure-lands", "targetProgress": 0.145, "observedChange": "Structural walls drop into position while higher layers retain their relation."},
+    {"label": "M03", "slug": "glazing-lands", "targetProgress": 0.20, "observedChange": "Glazing slides into the same building shell."},
+    {"label": "M04", "slug": "cladding-lands", "targetProgress": 0.255, "observedChange": "External cladding panels close around the same openings."},
+    {"label": "M05", "slug": "roof-structure-lands", "targetProgress": 0.315, "observedChange": "Rafters settle over the same walls."},
+    {"label": "M06", "slug": "roof-lands", "targetProgress": 0.37, "observedChange": "Roof panels complete the six-layer assembly."},
+    {"label": "M07", "slug": "assembled-house", "targetProgress": 0.44, "observedChange": "Whole building reads as a closed volume in axonometric projection."},
+    {"label": "M08", "slug": "lens-and-porch", "targetProgress": 0.62, "observedChange": "Long-lens axonometric view opens to eye-level perspective at the glazed porch; sliding door opens."},
+    {"label": "M09", "slug": "dining-threshold", "targetProgress": 0.71, "observedChange": "Camera passes the same glazed threshold and enters the dining room."},
+    {"label": "M10", "slug": "living-and-hearth", "targetProgress": 0.80, "observedChange": "Walk reaches kitchen, lounge and stove."},
+    {"label": "M11", "slug": "oak-loft", "targetProgress": 0.89, "observedChange": "Camera rises to the same building's mezzanine loft."},
+    {"label": "M12", "slug": "ridge-panorama", "targetProgress": 0.99, "observedChange": "Final camera looks back across the long room from the loft/ridge."}
+  ],
+  "reverseSemanticStates": "No reverse-only semantic state identified in Discovery contact sheets; reverse path follows assembly and walk backwards. Reassess if semantic pass shows asymmetry."
+}

@@ -1,0 +1,19 @@
+# Capture protocol
+
+Each take has independent desktop 1440×900, portrait 390×844 and landscape 844×390 audits. Record actual DPR. Start each viewport in a clean browser context; never reuse another take's session.
+
+1. **Calibration only.** Determine `NATIVE_SCROLL`, `SCROLL_PLUS_TIME`, `VIRTUAL_SCROLL`, `SCRUB`, `CLICK_PLUS_SCROLL`, `MIXED` or `UNRESOLVED`. Check physical versus runtime progress, smoothing, inertia, pinned sections, post-scroll animation, mandatory clicks and whether max scroll is END. Calibration is not evidence. Close context.
+2. **State A.** In a new context wait for stable load; log original/final URL, route/hash, viewport/DPR, scrollY/height/innerHeight/max, console/network errors, HUD/text, screenshot and state snapshot.
+3. **Forward Discovery.** Begin continuous WebM recording and NDJSON telemetry before first input. Use natural wheel/scroll or the observed interaction model. For scroll start around 0.6–0.8 viewport/s and steps ≤8% viewport; do not exceed about 1 viewport/s. Repeat at 0.25–0.4 viewport/s only when a transition was missed. Do not replace the pass by `scrollTo(maxScroll)`. Sample roughly every 5% when numeric progress is reliable, labeling samples `DISCOVERY_SAMPLE`.
+4. **End B.** Confirm no significant further natural progress, final narrative state stable, and extra input yields no important change. Normalized scroll 1 alone is insufficient.
+5. **Reverse Discovery.** Without reload/reset/navigation/internal function calls, record B→A via natural inverse input, with separate telemetry. Compare initial A0 to restored A1 across camera, visibility, transforms, materials, lighting, shadows, temporary geometry, clipping, HUD, UI, scroll and route. Verdict: `RESTORED`, `VISUALLY_EQUIVALENT`, `NOT_RESTORED`, `NO_REVERSE_BEHAVIOR` or `UNRESOLVED`; visual evidence alone cannot justify `RESTORED`.
+6. **Semantic pass.** Analyze video, telemetry, samples and HUD first. In another clean context reproduce A→B and capture every meaningful state A/Mxx/B. Capture reverse-specific RMxx where relevant. Mark `LIVE_SCREENSHOT` or `VIDEO_FRAME`; extract time-sensitive frames rather than freezing runtime.
+7. **Third pass.** Only for a named `AMBIGUOUS_TRANSITION`, `SOURCE_RUNTIME_CONFLICT`, `RESTORE_UNRESOLVED`, `MILESTONE_SKIPPED`, `CAPTURE_FAILURE`, `TOO_FAST` or `TEMPORAL_STATE_UNRESOLVED`; record the exact question.
+
+Telemetry samples include monotonic time, scrollY, scrollHeight, innerHeight, maxScroll, normalized native progress, runtime progress if observed, route/hash, visible HUD and input. Passively observable camera/target/FOV, chapter, visibility, transforms, material/light/sun, clipping may be added. Otherwise use `NOT_OBSERVED`. Do not infer these from pixels.
+
+Milestones have label, semantic state, changed and continuous properties, transition start/center/end, progress/scroll, timestamp, evidence, and same-project continuity invariants. Inspect representation, depth, geometry, visibility, camera, material, lighting/shadow, section, environment, scale, HUD, interaction, spatial relationships, construction and time. Avoid treating every camera increment as a milestone.
+
+Use deterministic names: `desktop-forward-discovery.webm`, matching `.telemetry.ndjson`, `desktop-reverse-discovery.webm`, `desktop-forward-semantic.webm`, `desktop-start.png`, `desktop-end.png`, `desktop-restored-start.png`, `desktop-forward-m03-material-sweep.png`. Prefer WebM ~30 fps at exact viewport dimensions, no page overlay or capture rescale. Verify bytes, readable codec, duration, dimensions, valid frames, inclusion of A/B, replay and SHA256.
+
+Raw videos, telemetry and safety samples live in sibling `donor-runtime-audit-RAW-2026-11-02/`; Git holds audit records, hashes and selected keyframes. Document capture failures and deterministic fallback. Agent-browser is principal navigation tool; Playwright/Chromium may record if needed.

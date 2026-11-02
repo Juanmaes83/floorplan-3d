@@ -1,0 +1,484 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.inventory.v1",
+  "baseSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "selectorSource": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html",
+  "generatedAt": "2026-11-02T10:33:06.640Z",
+  "references": [
+    {
+      "inventoryIndex": 1,
+      "id": "01-a-the-board",
+      "group": "01 · EXPLODED HOUSE",
+      "take": "A · THE BOARD",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#01",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=a",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "01-exploded-house/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:461",
+          "statement": "Selector variant A · The Board points to 01-exploded-house/index.html?dir=a"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=a at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=a"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 2,
+      "id": "01-b-unfolded-room",
+      "group": "01 · EXPLODED HOUSE",
+      "take": "B · UNFOLDED ROOM",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#01:1",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "01-exploded-house/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:465",
+          "statement": "Selector variant B · Unfolded Room points to 01-exploded-house/index.html?dir=b"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 3,
+      "id": "01-c-floor-by-floor",
+      "group": "01 · EXPLODED HOUSE",
+      "take": "C · FLOOR BY FLOOR",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#01:2",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "01-exploded-house/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:469",
+          "statement": "Selector variant C · Floor by Floor points to 01-exploded-house/index.html?dir=c"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=c"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 4,
+      "id": "02-demo-section-sweep",
+      "group": "02 · SECTION SWEEP",
+      "take": "DEMO",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#02",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/02-section-sweep/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/02-section-sweep/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "02-section-sweep/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:481",
+          "statement": "Selector variant Demo points to 02-section-sweep/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:02-section-sweep/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/02-section-sweep/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/02-section-sweep/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 5,
+      "id": "03-a-open-the-lens",
+      "group": "03 · OPEN SECTION",
+      "take": "A · OPEN THE LENS",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#03",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "03-open-section/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:493",
+          "statement": "Selector variant A · Open the lens points to 03-open-section/index.html?dir=a"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=a"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 6,
+      "id": "03-c-down-the-stair",
+      "group": "03 · OPEN SECTION",
+      "take": "C · DOWN THE STAIR",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#03:1",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=c",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "03-open-section/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:497",
+          "statement": "Selector variant C · Down the stair points to 03-open-section/index.html?dir=c"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=c at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/03-open-section/index.html?dir=c"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 7,
+      "id": "04-demo-build-time-lapse",
+      "group": "04 · BUILD TIME-LAPSE",
+      "take": "DEMO",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#04",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/04-build-time-lapse/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/04-build-time-lapse/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "04-build-time-lapse/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:509",
+          "statement": "Selector variant Demo points to 04-build-time-lapse/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:04-build-time-lapse/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/04-build-time-lapse/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/04-build-time-lapse/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 8,
+      "id": "05-a-the-programme",
+      "group": "05 · SCHEDULE BUILD",
+      "take": "A · THE PROGRAMME",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#05",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=a",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=a",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "05-schedule-build/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:521",
+          "statement": "Selector variant A · The Programme points to 05-schedule-build/index.html?dir=a"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=a at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=a"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 9,
+      "id": "05-b-1-1-site-sheet",
+      "group": "05 · SCHEDULE BUILD",
+      "take": "B · 1:1 SITE SHEET",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#05:1",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "05-schedule-build/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:525",
+          "statement": "Selector variant B · 1:1 Site Sheet points to 05-schedule-build/index.html?dir=b"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 10,
+      "id": "05-c-site-camera",
+      "group": "05 · SCHEDULE BUILD",
+      "take": "C · SITE CAMERA",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#05:2",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "05-schedule-build/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:529",
+          "statement": "Selector variant C · Site Camera points to 05-schedule-build/index.html?dir=c"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:05-schedule-build/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 11,
+      "id": "06-demo-card-model",
+      "group": "06 · CARD MODEL",
+      "take": "DEMO",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#06",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "06-card-model/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:541",
+          "statement": "Selector variant Demo points to 06-card-model/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:06-card-model/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 12,
+      "id": "07-a-one-door",
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "A · ONE DOOR",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "07-sunlit-elevation/a-one-door/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:553",
+          "statement": "Selector variant A · One Door points to 07-sunlit-elevation/a-one-door/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 13,
+      "id": "07-b-the-row",
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "B · THE ROW",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07:1",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "07-sunlit-elevation/b-the-row/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:557",
+          "statement": "Selector variant B · The Row points to 07-sunlit-elevation/b-the-row/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    },
+    {
+      "inventoryIndex": 14,
+      "id": "07-c-the-face",
+      "group": "07 · SUNLIT ELEVATION",
+      "take": "C · THE FACE",
+      "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07:2",
+      "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "donorRepo": "Sam1983Aing/flat-to-3d",
+      "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "sourceEntrypoint": "07-sunlit-elevation/c-the-face/index.html",
+      "discoveryMethod": "PINNED_SELECTOR_SOURCE_PLUS_HTTP_HEAD",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:561",
+          "statement": "Selector variant C · The Face points to 07-sunlit-elevation/c-the-face/index.html"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/index.html",
+          "statement": "Entrypoint exists in pinned checkout"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html at 2026-11-02T10:33:06.640Z",
+          "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html"
+        }
+      ],
+      "loadStatus": "HTTP_VERIFIED_NOT_RUNTIME_LOADED",
+      "httpStatus": 200,
+      "resolutionError": null,
+      "checkedAt": "2026-11-02T10:33:06.640Z"
+    }
+  ]
+}

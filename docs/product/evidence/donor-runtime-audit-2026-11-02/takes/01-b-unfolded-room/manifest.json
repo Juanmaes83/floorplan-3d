@@ -1,0 +1,3470 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.take.v1",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "take": {
+    "id": "01-b-unfolded-room",
+    "group": "01 · EXPLODED HOUSE",
+    "title": "B · UNFOLDED ROOM",
+    "inventoryIndex": 2
+  },
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "baseline": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "approvedSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+    "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+    "cleanAtStart": true
+  },
+  "reference": {
+    "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#01:1",
+    "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+    "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+    "donorRepo": "Sam1983Aing/flat-to-3d",
+    "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "entrypoint": "01-exploded-house/index.html",
+    "urlDiscoveryEvidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:465",
+        "statement": "Selector variant B · Unfolded Room points to 01-exploded-house/index.html?dir=b"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/index.html",
+        "statement": "Entrypoint exists in pinned checkout"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b at 2026-11-02T10:33:06.640Z",
+        "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b"
+      }
+    ]
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "browser": "Google Chrome 153.0.8010.53",
+    "playwright": "1.64.1 installed as recording fallback; not used",
+    "ffmpeg": "8.1.2-full_build"
+  },
+  "professionalService": {
+    "problemSolved": "Helps a client or design reviewer understand how the floor, four elevations and ceiling of this authored kitchen relate to the enclosed room and its usable interior.",
+    "primaryUsers": [
+      "interior architect",
+      "joinery designer",
+      "client reviewer"
+    ],
+    "serviceOutcome": "A developed room drawing folds around its real pictured floor, then a camera passes through the same door to inspect kitchen and window bench.",
+    "decisionValue": "Supports discussion of spatial relationships and design intent in this study; printed dimensions, north and finish codes are authored demo content, not certified project data.",
+    "evidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "The donor describes floor, walls and ceiling laid flat and folded shut before a walk inside.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:1-6"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Full A→B transition from sheet to window bench.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "The developed floor, cabinet wall, door opening and window opening form the same kitchen after their parent faces rotate.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Flat sheet before fold.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Partly folded faces preserve openings and joinery.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m04-east-window-hinge.png"
+        }
+      ]
+    },
+    {
+      "statement": "The room enclosure and the entered kitchen retain the same south door and east window with no observed project swap.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Closed room through door approach.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m07-closed-room.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same door threshold and window bench.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png"
+        }
+      ]
+    },
+    {
+      "statement": "The sage cabinets, tile, table, pendant, plant and east window stay spatially related during the interior walk.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Kitchen interior.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m10-sage-kitchen.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Window bench endpoint.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 9000,
+        "innerHeight": 900,
+        "maxScroll": 8100,
+        "visibleHud": "PROJ\nPARALLEL AXO\n(2.2°)  //  SEQ\n000% | SURFACE\n01\n/ 06 | ELEVATION C // SOUTH THRESHOLD\nC · THE DOOR WALL\nOK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - StaticText \"SG-01\"\n  - StaticText \"OK-02\"\n  - StaticText \"ZL-03\"\n  - StaticText \"OK-02\"\n  - StaticText \"OK-02\"\n  - StaticText \"LN-04\"\n  - StaticText \"ST-09\"\n  - StaticText \"WN-05\"\n  - StaticText \"OK-02\"\n  - StaticText \"WN-05\"\n  - StaticText \"AR-08\"\n  - StaticText \"LP-10\"\n  - StaticText \"PD-06\"\n  - StaticText \"6 240\"\n  - StaticText \"900\"\n  - StaticText \"2 200\"\n  - generic\n    - StaticText \"CDOOR WALL\"\n  - StaticText \"4 800\"\n  - StaticText \"2 600\"\n  - generic\n    - StaticText \"BWINDOW WALL\"\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"FIELD\"\n    - StaticText \"//\"\n    - StaticText \"ELEV.02\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01 THE BOARD\" [ref=e3]\n        - StaticText \"01\"\n        - StaticText \"THE BOARD\"\n      - link \"02 UNFOLDED ROOM\" [ref=e4]\n        - StaticText \"02\"\n        - StaticText \"UNFOLDED ROOM\"\n      - link \"03 FLOOR BY FLOOR\" [ref=e5]\n        - StaticText \"03\"\n        - StaticText \"FLOOR BY FLOOR\"\n    - navigation\n      - StaticText \"ROOMS JOINERY STUDIO\"\n      - link \"BOOK A VISIT\" [ref=e6]\n  - generic\n    - StaticText \"DEVELOPED ELEVATIONS · SHEET I-02\"\n    - heading \"WE DRAW ALL SIX SIDES OF A ROOM.\" [level=1, ref=e2]\n      - StaticText \"WE DRAW ALL SIX\"\n      - StaticText \"SIDES OF A \"\n      - emphasis\n        - StaticText \"ROOM.\"\n    - paragraph\n      - StaticText \"THE FLOOR, FOUR WALLS AND THE CEILING, LAID OUT FLAT THE WAY WE DRAW THEM. SCROLL AND THE KITCHEN FOLDS ITSELF SHUT, THEN WALK IN.\"\n    - DescriptionList\n      - term \"ROOM\"\n      - definition\n        - StaticText \"KITCHEN AND DINING\"\n      - term \"SIZE\"\n      - definition\n        - StaticText \"6.0 × 4.8 M\"\n      - term \"CEILING\"\n      - definition\n        - StaticText \"2.90 M\"\n  - generic\n    - StaticText \"ELEVATION C // SOUTH THRESHOLD\"\n    - StaticText \"C · THE DOOR WALL\"\n    - StaticText \"OK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240\"\n  - generic \"Interactive CAD radar\"\n    - StaticText \"AXO // 000%\"\n    - StaticText \"1:50\"\n    - generic\n      - button \"SHEET\" [ref=e7]\n      - button \"FOLD\" [ref=e8]\n      - button \"DOOR\" [ref=e9]\n      - button \"KITCHEN\" [ref=e10]\n      - button \"WINDOW\" [ref=e11]\n  - contentinfo\n    - StaticText \"SCROLL TO FOLD IT UP\"\n    - generic\n      - StaticText \"PROJ\"\n      - StaticText \"PARALLEL AXO\"\n      - StaticText \"(2.2°)  //  SEQ\"\n      - StaticText \"000%\"\n    - generic\n      - StaticText \"SURFACE\"\n      - StaticText \"01\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"DRAWING SHEET I-02 · 100%\"",
+        "consoleErrors": "",
+        "network": "[C079903129C36510D0BD8B09DFF01032] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b (Document) 200\n[118092.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[118092.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[118092.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[118092.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[118092.40] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[118092.29] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[118092.24] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[118092.16] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[118092.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[118092.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[118092.41] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[118092.42] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[118092.43] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[118092.44] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[118092.45] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[118092.20] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[118092.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-b.js (Script) 200\n[118092.47] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/geometries/RoundedBoxGeometry.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 31.8,
+          "bytes": 16844650,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 37.133,
+          "bytes": 20683604,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "sheet-to-floor",
+          "changed": [
+            "The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0622,
+            "scrollY": 504,
+            "monotonicMs": 8359.9,
+            "videoSeconds": 2.188,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0978,
+            "scrollY": 792,
+            "monotonicMs": 9360.3,
+            "videoSeconds": 3.189,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1778,
+            "scrollY": 1440,
+            "monotonicMs": 11159.1,
+            "videoSeconds": 4.988,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.09777777777777778,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:199-202,262-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at desktop: The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m01-sheet-to-floor.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.06-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=2.188-4.988"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "west-sideboard-hinge",
+          "changed": [
+            "The west sideboard wall rotates upward around its floor edge with attached joinery."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1156,
+            "scrollY": 936,
+            "monotonicMs": 9557.9,
+            "videoSeconds": 3.386,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1778,
+            "scrollY": 1440,
+            "monotonicMs": 11159.1,
+            "videoSeconds": 4.988,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.24,
+            "scrollY": 1944,
+            "monotonicMs": 13161.1,
+            "videoSeconds": 6.99,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.17777777777777778,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at desktop: The west sideboard wall rotates upward around its floor edge with attached joinery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m02-west-sideboard-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.12-0.24",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=3.386-6.99"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "north-kitchen-hinge",
+          "changed": [
+            "The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1867,
+            "scrollY": 1512,
+            "monotonicMs": 11659.8,
+            "videoSeconds": 5.488,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2489,
+            "scrollY": 2016,
+            "monotonicMs": 13361,
+            "videoSeconds": 7.19,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3111,
+            "scrollY": 2520,
+            "monotonicMs": 14862.3,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.24888888888888888,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at desktop: The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m03-north-kitchen-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.31",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=5.488-8.691"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "east-window-hinge",
+          "changed": [
+            "The window wall and its seat rotate into the room boundary without losing the opening."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2578,
+            "scrollY": 2088,
+            "monotonicMs": 13461.2,
+            "videoSeconds": 7.29,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.32,
+            "scrollY": 2592,
+            "monotonicMs": 15566.2,
+            "videoSeconds": 9.395,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3822,
+            "scrollY": 3096,
+            "monotonicMs": 16864.1,
+            "videoSeconds": 10.693,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.32,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,138-149,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at desktop: The window wall and its seat rotate into the room boundary without losing the opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m04-east-window-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.26-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=7.29-10.693"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "south-door-hinge",
+          "changed": [
+            "The door wall rises, preserving the same opening and floor geometry."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3289,
+            "scrollY": 2664,
+            "monotonicMs": 15660.4,
+            "videoSeconds": 9.489,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3911,
+            "scrollY": 3168,
+            "monotonicMs": 16964.2,
+            "videoSeconds": 10.793,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4533,
+            "scrollY": 3672,
+            "monotonicMs": 18665.6,
+            "videoSeconds": 12.494,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.39111111111111113,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,150-166,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at desktop: The door wall rises, preserving the same opening and floor geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m05-south-door-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.45",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=9.489-12.494"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "ceiling-lid-closes",
+          "changed": [
+            "The ceiling pivots down over the four erected walls, enclosing the kitchen."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4178,
+            "scrollY": 3384,
+            "monotonicMs": 18059.8,
+            "videoSeconds": 11.888,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4889,
+            "scrollY": 3960,
+            "monotonicMs": 19164.4,
+            "videoSeconds": 12.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.56,
+            "scrollY": 4536,
+            "monotonicMs": 21268,
+            "videoSeconds": 15.097,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4888888888888889,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at desktop: The ceiling pivots down over the four erected walls, enclosing the kitchen.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m06-ceiling-lid-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=11.888-15.097"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "closed-room",
+          "changed": [
+            "All six authored surfaces read as one closed room; sheet and introductory copy have faded."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5156,
+            "scrollY": 4176,
+            "monotonicMs": 20059.4,
+            "videoSeconds": 13.888,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.56,
+            "scrollY": 4536,
+            "monotonicMs": 21268,
+            "videoSeconds": 15.097,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6222,
+            "scrollY": 5040,
+            "monotonicMs": 22568.5,
+            "videoSeconds": 16.397,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.56,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:198-237,263-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at desktop: All six authored surfaces read as one closed room; sheet and introductory copy have faded.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m07-closed-room.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.62",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=13.888-16.397"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-approach",
+          "changed": [
+            "The camera changes from near-parallel axonometric to eye-level view at the same door wall."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6222,
+            "scrollY": 5040,
+            "monotonicMs": 22568.5,
+            "videoSeconds": 16.397,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7022,
+            "scrollY": 5688,
+            "monotonicMs": 24757.8,
+            "videoSeconds": 18.586,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7467,
+            "scrollY": 6048,
+            "monotonicMs": 26058,
+            "videoSeconds": 19.887,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7022222222222222,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at desktop: The camera changes from near-parallel axonometric to eye-level view at the same door wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m08-door-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.62-0.75",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=16.397-19.887"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "door-threshold",
+          "changed": [
+            "The same door opens and the camera crosses its opening into the room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7467,
+            "scrollY": 6048,
+            "monotonicMs": 26058,
+            "videoSeconds": 19.887,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7911,
+            "scrollY": 6408,
+            "monotonicMs": 27260.3,
+            "videoSeconds": 21.089,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8356,
+            "scrollY": 6768,
+            "monotonicMs": 28757.6,
+            "videoSeconds": 22.586,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7911111111111111,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-230; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at desktop: The same door opens and the camera crosses its opening into the room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.75-0.84",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=19.887-22.586"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "sage-kitchen",
+          "changed": [
+            "The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8267,
+            "scrollY": 6696,
+            "monotonicMs": 28657.4,
+            "videoSeconds": 22.486,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.88,
+            "scrollY": 7128,
+            "monotonicMs": 29858.5,
+            "videoSeconds": 23.687,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9422,
+            "scrollY": 7632,
+            "monotonicMs": 32162.9,
+            "videoSeconds": 25.991,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.88,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at desktop: The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m10-sage-kitchen.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.83-0.94",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=22.486-25.991"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "window-bench",
+          "changed": [
+            "The final view reaches the window bench while the kitchen and room surfaces remain continuous."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9422,
+            "scrollY": 7632,
+            "monotonicMs": 32162.9,
+            "videoSeconds": 25.991,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9867,
+            "scrollY": 7992,
+            "monotonicMs": 33564.2,
+            "videoSeconds": 27.393,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 8100,
+            "monotonicMs": 33861.9,
+            "videoSeconds": 27.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9866666666666667,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at desktop: The final view reaches the window bench while the kitchen and room surfaces remain continuous.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m11-window-bench.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm#t=25.991-27.691"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 8100,
+        "scrollHeight": 9000,
+        "innerHeight": 900,
+        "maxScroll": 8100,
+        "visibleHud": "PROJ\nEYE-LEVEL PERSP\n(58.0°)  //  SEQ\n100% |  | ELEVATION B // EAST WINDOW SEAT\nDINING & WINDOW BENCH\nWN-05 WALNUT TABLE  ·  PD-06 PAPER PENDANT  ·  LN-04 LINEN",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 22.3,
+          "bytes": 13762584,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 72
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -72
+        }
+      ]
+    },
+    "portrait": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 8440,
+        "innerHeight": 844,
+        "maxScroll": 7596,
+        "visibleHud": "PROJ PARALLEL AXO (2.2°)  //  SEQ 000% | SURFACE\n01\n/ 06 | ELEVATION C // SOUTH THRESHOLD\nC · THE DOOR WALL\nOK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"FIELD\"\n    - StaticText \"//\"\n    - StaticText \"ELEV.02\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01\" [ref=e3]\n        - StaticText \"01\"\n      - link \"02\" [ref=e4]\n        - StaticText \"02\"\n      - link \"03\" [ref=e5]\n        - StaticText \"03\"\n    - navigation\n      - link \"BOOK A VISIT\" [ref=e6]\n  - generic\n    - StaticText \"DEVELOPED ELEVATIONS · SHEET I-02\"\n    - heading \"WE DRAW ALL SIX SIDES OF A ROOM.\" [level=1, ref=e2]\n      - StaticText \"WE DRAW ALL SIX\"\n      - StaticText \"SIDES OF A \"\n      - emphasis\n        - StaticText \"ROOM.\"\n    - paragraph\n      - StaticText \"THE FLOOR, FOUR WALLS AND THE CEILING, LAID OUT FLAT THE WAY WE DRAW THEM. SCROLL AND THE KITCHEN FOLDS ITSELF SHUT, THEN WALK IN.\"\n  - generic\n    - StaticText \"ELEVATION C // SOUTH THRESHOLD\"\n    - StaticText \"C · THE DOOR WALL\"\n    - StaticText \"OK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240\"\n  - generic\n    - StaticText \"A KITCHEN  B WINDOW  C DOOR  D SIDEBOARD  E CEILING\"\n  - StaticText \"AXO // 000%\"\n  - StaticText \"1:50\"\n  - contentinfo\n    - StaticText \"SCROLL TO FOLD IT UP\"\n    - generic\n      - StaticText \"SURFACE\"\n      - StaticText \"01\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"DRAWING SHEET I-02 · 100%\"",
+        "consoleErrors": "",
+        "network": "[8D58FE6F4C5104F5AE7AF70E23D1A940] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b (Document) 200\n[41864.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[41864.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[41864.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[41864.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[41864.9] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[41864.10] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[41864.11] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[41864.12] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[41864.13] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[41864.45] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[41864.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[41864.29] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[41864.21] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[41864.44] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[41864.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[41864.25] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[41864.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-b.js (Script) 200\n[41864.47] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/geometries/RoundedBoxGeometry.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 25.666,
+          "bytes": 5676409,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 32.033,
+          "bytes": 6874312,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "sheet-to-floor",
+          "changed": [
+            "The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0617,
+            "scrollY": 469,
+            "monotonicMs": 7378,
+            "videoSeconds": 1.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.097,
+            "scrollY": 737,
+            "monotonicMs": 8183.6,
+            "videoSeconds": 2.399,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1764,
+            "scrollY": 1340,
+            "monotonicMs": 9571.6,
+            "videoSeconds": 3.787,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.09702474986835176,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:199-202,262-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at portrait: The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m01-sheet-to-floor.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.06-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=1.593-3.787"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "west-sideboard-hinge",
+          "changed": [
+            "The west sideboard wall rotates upward around its floor edge with attached joinery."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1235,
+            "scrollY": 938,
+            "monotonicMs": 8571.1,
+            "videoSeconds": 2.786,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1764,
+            "scrollY": 1340,
+            "monotonicMs": 9571.6,
+            "videoSeconds": 3.787,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2382,
+            "scrollY": 1809,
+            "monotonicMs": 11173.9,
+            "videoSeconds": 5.389,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.17640863612427593,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at portrait: The west sideboard wall rotates upward around its floor edge with attached joinery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m02-west-sideboard-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.12-0.24",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=2.786-5.389"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "north-kitchen-hinge",
+          "changed": [
+            "The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.194,
+            "scrollY": 1474,
+            "monotonicMs": 10172.2,
+            "videoSeconds": 4.387,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.247,
+            "scrollY": 1876,
+            "monotonicMs": 11373.7,
+            "videoSeconds": 5.589,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3087,
+            "scrollY": 2345,
+            "monotonicMs": 12570.8,
+            "videoSeconds": 6.786,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2469720905739863,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at portrait: The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m03-north-kitchen-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.31",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=4.387-6.786"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "east-window-hinge",
+          "changed": [
+            "The window wall and its seat rotate into the room boundary without losing the opening."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2558,
+            "scrollY": 1943,
+            "monotonicMs": 11473.6,
+            "videoSeconds": 5.689,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3175,
+            "scrollY": 2412,
+            "monotonicMs": 13171.1,
+            "videoSeconds": 7.386,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3793,
+            "scrollY": 2881,
+            "monotonicMs": 14372.1,
+            "videoSeconds": 8.587,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3175355450236967,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,138-149,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at portrait: The window wall and its seat rotate into the room boundary without losing the opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m04-east-window-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.26-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=5.689-8.587"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "south-door-hinge",
+          "changed": [
+            "The door wall rises, preserving the same opening and floor geometry."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3264,
+            "scrollY": 2479,
+            "monotonicMs": 13271.2,
+            "videoSeconds": 7.486,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3881,
+            "scrollY": 2948,
+            "monotonicMs": 14471.8,
+            "videoSeconds": 8.687,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4498,
+            "scrollY": 3417,
+            "monotonicMs": 15776.3,
+            "videoSeconds": 9.992,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.38809899947340704,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,150-166,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at portrait: The door wall rises, preserving the same opening and floor geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m05-south-door-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.45",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=7.486-9.992"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "ceiling-lid-closes",
+          "changed": [
+            "The ceiling pivots down over the four erected walls, enclosing the kitchen."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4234,
+            "scrollY": 3216,
+            "monotonicMs": 15072.8,
+            "videoSeconds": 9.288,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4939,
+            "scrollY": 3752,
+            "monotonicMs": 16777.9,
+            "videoSeconds": 10.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5557,
+            "scrollY": 4221,
+            "monotonicMs": 18071.8,
+            "videoSeconds": 12.287,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4939441811479726,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at portrait: The ceiling pivots down over the four erected walls, enclosing the kitchen.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m06-ceiling-lid-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=9.288-12.287"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "closed-room",
+          "changed": [
+            "All six authored surfaces read as one closed room; sheet and introductory copy have faded."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5204,
+            "scrollY": 3953,
+            "monotonicMs": 17174.5,
+            "videoSeconds": 11.39,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5557,
+            "scrollY": 4221,
+            "monotonicMs": 18071.8,
+            "videoSeconds": 12.287,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6174,
+            "scrollY": 4690,
+            "monotonicMs": 19273.2,
+            "videoSeconds": 13.489,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5556872037914692,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:198-237,263-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at portrait: All six authored surfaces read as one closed room; sheet and introductory copy have faded.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m07-closed-room.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.62",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=11.39-13.489"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-approach",
+          "changed": [
+            "The camera changes from near-parallel axonometric to eye-level view at the same door wall."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6174,
+            "scrollY": 4690,
+            "monotonicMs": 19273.2,
+            "videoSeconds": 13.489,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6968,
+            "scrollY": 5293,
+            "monotonicMs": 21171.6,
+            "videoSeconds": 15.387,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7497,
+            "scrollY": 5695,
+            "monotonicMs": 22371,
+            "videoSeconds": 16.586,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.69681411269089,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at portrait: The camera changes from near-parallel axonometric to eye-level view at the same door wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m08-door-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.62-0.75",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=13.489-16.586"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "door-threshold",
+          "changed": [
+            "The same door opens and the camera crosses its opening into the room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7497,
+            "scrollY": 5695,
+            "monotonicMs": 22371,
+            "videoSeconds": 16.586,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7938,
+            "scrollY": 6030,
+            "monotonicMs": 23370.8,
+            "videoSeconds": 17.586,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8379,
+            "scrollY": 6365,
+            "monotonicMs": 24072.1,
+            "videoSeconds": 18.287,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7938388625592417,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-230; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at portrait: The same door opens and the camera crosses its opening into the room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m09-door-threshold.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.75-0.84",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=16.586-18.287"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "sage-kitchen",
+          "changed": [
+            "The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8291,
+            "scrollY": 6298,
+            "monotonicMs": 23977.6,
+            "videoSeconds": 18.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.882,
+            "scrollY": 6700,
+            "monotonicMs": 25078.6,
+            "videoSeconds": 19.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9438,
+            "scrollY": 7169,
+            "monotonicMs": 26783,
+            "videoSeconds": 20.998,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8820431806213797,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at portrait: The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m10-sage-kitchen.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.83-0.94",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=18.193-20.998"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "window-bench",
+          "changed": [
+            "The final view reaches the window bench while the kitchen and room surfaces remain continuous."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9438,
+            "scrollY": 7169,
+            "monotonicMs": 26783,
+            "videoSeconds": 20.998,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9879,
+            "scrollY": 7504,
+            "monotonicMs": 27783.7,
+            "videoSeconds": 21.999,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 7596,
+            "monotonicMs": 28080.6,
+            "videoSeconds": 22.296,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9878883622959452,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at portrait: The final view reaches the window bench while the kitchen and room surfaces remain continuous.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m11-window-bench.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm#t=20.998-22.296"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 7596,
+        "scrollHeight": 8440,
+        "innerHeight": 844,
+        "maxScroll": 7596,
+        "visibleHud": "PROJ EYE-LEVEL PERSP (74.0°)  //  SEQ 100% |  | ELEVATION B // EAST WINDOW SEAT\nDINING & WINDOW BENCH\nWN-05 WALNUT TABLE  ·  PD-06 PAPER PENDANT  ·  LN-04 LINEN",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 19.4,
+          "bytes": 4877080,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 67
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -67
+        }
+      ]
+    },
+    "landscape": {
+      "width": 844,
+      "height": 390,
+      "dpr": 1,
+      "runtimeSupport": "DONOR_LIMITATION",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 3900,
+        "innerHeight": 390,
+        "maxScroll": 3510,
+        "visibleHud": "PROJ\nPARALLEL AXO\n(2.2°)  //  SEQ\n000% | SURFACE\n01\n/ 06 | ELEVATION C // SOUTH THRESHOLD\nC · THE DOOR WALL\nOK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png",
+        "snapshot": "- Canvas\n- image\n- generic\n  - StaticText \"SG-01\"\n  - StaticText \"OK-02\"\n  - StaticText \"ZL-03\"\n  - StaticText \"OK-02\"\n  - StaticText \"OK-02\"\n  - StaticText \"LN-04\"\n  - StaticText \"ST-09\"\n  - StaticText \"WN-05\"\n  - StaticText \"OK-02\"\n  - StaticText \"WN-05\"\n  - StaticText \"AR-08\"\n  - StaticText \"LP-10\"\n  - StaticText \"PD-06\"\n  - StaticText \"6 240\"\n  - StaticText \"900\"\n  - StaticText \"2 200\"\n  - generic\n    - StaticText \"CDOOR WALL\"\n  - StaticText \"4 800\"\n  - StaticText \"2 600\"\n  - generic\n    - StaticText \"BWINDOW WALL\"\n- generic\n  - banner\n    - StaticText \"[\"\n    - StaticText \"FIELD\"\n    - StaticText \"//\"\n    - StaticText \"ELEV.02\"\n    - StaticText \"]\"\n    - navigation \"Drawing direction\" [ref=e1]\n      - link \"01 THE BOARD\" [ref=e3]\n        - StaticText \"01\"\n        - StaticText \"THE BOARD\"\n      - link \"02 UNFOLDED ROOM\" [ref=e4]\n        - StaticText \"02\"\n        - StaticText \"UNFOLDED ROOM\"\n      - link \"03 FLOOR BY FLOOR\" [ref=e5]\n        - StaticText \"03\"\n        - StaticText \"FLOOR BY FLOOR\"\n    - navigation\n      - StaticText \"ROOMS JOINERY STUDIO\"\n      - link \"BOOK A VISIT\" [ref=e6]\n  - generic\n    - StaticText \"DEVELOPED ELEVATIONS · SHEET I-02\"\n    - heading \"WE DRAW ALL SIX SIDES OF A ROOM.\" [level=1, ref=e2]\n      - StaticText \"WE DRAW ALL SIX\"\n      - StaticText \"SIDES OF A \"\n      - emphasis\n        - StaticText \"ROOM.\"\n    - paragraph\n      - StaticText \"THE FLOOR, FOUR WALLS AND THE CEILING, LAID OUT FLAT THE WAY WE DRAW THEM. SCROLL AND THE KITCHEN FOLDS ITSELF SHUT, THEN WALK IN.\"\n    - DescriptionList\n      - term \"ROOM\"\n      - definition\n        - StaticText \"KITCHEN AND DINING\"\n      - term \"SIZE\"\n      - definition\n        - StaticText \"6.0 × 4.8 M\"\n      - term \"CEILING\"\n      - definition\n        - StaticText \"2.90 M\"\n  - generic\n    - StaticText \"ELEVATION C // SOUTH THRESHOLD\"\n    - StaticText \"C · THE DOOR WALL\"\n    - StaticText \"OK-02 OAK DOOR  ·  900 × 2 200  ·  WALL 6 240\"\n  - generic \"Interactive CAD radar\"\n    - StaticText \"AXO // 000%\"\n    - StaticText \"1:50\"\n    - generic\n      - button \"SHEET\" [ref=e7]\n      - button \"FOLD\" [ref=e8]\n      - button \"DOOR\" [ref=e9]\n      - button \"KITCHEN\" [ref=e10]\n      - button \"WINDOW\" [ref=e11]\n  - contentinfo\n    - StaticText \"SCROLL TO FOLD IT UP\"\n    - generic\n      - StaticText \"PROJ\"\n      - StaticText \"PARALLEL AXO\"\n      - StaticText \"(2.2°)  //  SEQ\"\n      - StaticText \"000%\"\n    - generic\n      - StaticText \"SURFACE\"\n      - StaticText \"01\"\n      - StaticText \"/ 06\"\n- generic\n  - StaticText \"PLOTTER // HP-7585B\"\n  - StaticText \"PEN 0.35MM\"\n  - StaticText \"DRAWING SHEET I-02 · 100%\"",
+        "consoleErrors": "",
+        "network": "[276FA5C5A4747AB33A9A1642237F12F4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b (Document) 200\n[132968.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[132968.3] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/sketch.css (Stylesheet) 200\n[132968.4] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/main.js (Script) 200\n[132968.8] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/core.js (Script) 200\n[132968.9] GET https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js (Script) 200\n[132968.10] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[132968.11] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegments2.js (Script) 200\n[132968.12] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[132968.13] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/lines/LineMaterial.js (Script) 200\n[132968.45] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .38  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[132968.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2 (Font) 200\n[132968.29] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[132968.21] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[132968.44] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[132968.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[132968.25] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[132968.46] GET https://sam1983aing.github.io/flat-to-3d/01-exploded-house/dir-b.js (Script) 200\n[132968.47] GET https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/geometries/RoundedBoxGeometry.js (Script) 200"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 25.533,
+          "bytes": 5791612,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 31.6,
+          "bytes": 6906097,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": [
+          {
+            "class": "OBSERVED_RUNTIME",
+            "statement": "At 844×390 the desktop navigation, introductory text, model labels and radar collide or crop during fold and walk.",
+            "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png"
+          },
+          {
+            "class": "DONOR_SOURCE",
+            "statement": "Phone layout is selected by width <700, so 844px landscape retains desktop positions.",
+            "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+          }
+        ]
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "sheet-to-floor",
+          "changed": [
+            "The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0618,
+            "scrollY": 217,
+            "monotonicMs": 7232.6,
+            "videoSeconds": 1.606,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0972,
+            "scrollY": 341,
+            "monotonicMs": 8036.8,
+            "videoSeconds": 2.41,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1766,
+            "scrollY": 620,
+            "monotonicMs": 9633.4,
+            "videoSeconds": 4.007,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.09715099715099715,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:199-202,262-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at landscape: The developed sheet fades behind the floor and the room contents gain depth while the footprint remains fixed.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m01-sheet-to-floor.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.06-0.18",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=1.606-4.007"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "west-sideboard-hinge",
+          "changed": [
+            "The west sideboard wall rotates upward around its floor edge with attached joinery."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1236,
+            "scrollY": 434,
+            "monotonicMs": 8433.8,
+            "videoSeconds": 2.807,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1766,
+            "scrollY": 620,
+            "monotonicMs": 9633.4,
+            "videoSeconds": 4.007,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2385,
+            "scrollY": 837,
+            "monotonicMs": 11327.7,
+            "videoSeconds": 5.701,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.17663817663817663,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at landscape: The west sideboard wall rotates upward around its floor edge with attached joinery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m02-west-sideboard-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.12-0.24",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=2.807-5.701"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "north-kitchen-hinge",
+          "changed": [
+            "The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1943,
+            "scrollY": 682,
+            "monotonicMs": 10333.6,
+            "videoSeconds": 4.707,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2473,
+            "scrollY": 868,
+            "monotonicMs": 11527.4,
+            "videoSeconds": 5.901,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3091,
+            "scrollY": 1085,
+            "monotonicMs": 12728.5,
+            "videoSeconds": 7.102,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2472934472934473,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at landscape: The kitchen wall rises around the same floor edge; the cabinets and tile remain associated with it.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m03-north-kitchen-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.31",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=4.707-7.102"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "east-window-hinge",
+          "changed": [
+            "The window wall and its seat rotate into the room boundary without losing the opening."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2561,
+            "scrollY": 899,
+            "monotonicMs": 11635.4,
+            "videoSeconds": 6.009,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3179,
+            "scrollY": 1116,
+            "monotonicMs": 13337.9,
+            "videoSeconds": 7.711,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3798,
+            "scrollY": 1333,
+            "monotonicMs": 14625.3,
+            "videoSeconds": 8.999,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.31794871794871793,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,138-149,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at landscape: The window wall and its seat rotate into the room boundary without losing the opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m04-east-window-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.26-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=6.009-8.999"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "south-door-hinge",
+          "changed": [
+            "The door wall rises, preserving the same opening and floor geometry."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3268,
+            "scrollY": 1147,
+            "monotonicMs": 13432.1,
+            "videoSeconds": 7.806,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3886,
+            "scrollY": 1364,
+            "monotonicMs": 14725.6,
+            "videoSeconds": 9.099,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4504,
+            "scrollY": 1581,
+            "monotonicMs": 16226.7,
+            "videoSeconds": 10.6,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3886039886039886,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,150-166,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at landscape: The door wall rises, preserving the same opening and floor geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m05-south-door-hinge.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.45",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=7.806-10.6"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "ceiling-lid-closes",
+          "changed": [
+            "The ceiling pivots down over the four erected walls, enclosing the kitchen."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4239,
+            "scrollY": 1488,
+            "monotonicMs": 15425.9,
+            "videoSeconds": 9.799,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4858,
+            "scrollY": 1705,
+            "monotonicMs": 16727.3,
+            "videoSeconds": 11.101,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5564,
+            "scrollY": 1953,
+            "monotonicMs": 18425.5,
+            "videoSeconds": 12.799,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.48575498575498577,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,198-229",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at landscape: The ceiling pivots down over the four erected walls, enclosing the kitchen.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m06-ceiling-lid-closes.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.56",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=9.799-12.799"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "closed-room",
+          "changed": [
+            "All six authored surfaces read as one closed room; sheet and introductory copy have faded."
+          ],
+          "continuous": [
+            "Same kitchen floor footprint, door and window openings, sage cabinets and dining table remain associated with the rotating wall faces."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5211,
+            "scrollY": 1829,
+            "monotonicMs": 17527.5,
+            "videoSeconds": 11.901,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5564,
+            "scrollY": 1953,
+            "monotonicMs": 18425.5,
+            "videoSeconds": 12.799,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6182,
+            "scrollY": 2170,
+            "monotonicMs": 19726.6,
+            "videoSeconds": 14.1,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5564102564102564,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:198-237,263-283",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at landscape: All six authored surfaces read as one closed room; sheet and introductory copy have faded.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m07-closed-room.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.62",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=11.901-14.1"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-approach",
+          "changed": [
+            "The camera changes from near-parallel axonometric to eye-level view at the same door wall."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6182,
+            "scrollY": 2170,
+            "monotonicMs": 19726.6,
+            "videoSeconds": 14.1,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6977,
+            "scrollY": 2449,
+            "monotonicMs": 21528.2,
+            "videoSeconds": 15.902,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7507,
+            "scrollY": 2635,
+            "monotonicMs": 22629.2,
+            "videoSeconds": 17.003,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6977207977207978,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at landscape: The camera changes from near-parallel axonometric to eye-level view at the same door wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m08-door-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.62-0.75",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=14.1-17.003"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "door-threshold",
+          "changed": [
+            "The same door opens and the camera crosses its opening into the room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7507,
+            "scrollY": 2635,
+            "monotonicMs": 22629.2,
+            "videoSeconds": 17.003,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.786,
+            "scrollY": 2759,
+            "monotonicMs": 23429.8,
+            "videoSeconds": 17.803,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.839,
+            "scrollY": 2945,
+            "monotonicMs": 24330.6,
+            "videoSeconds": 18.704,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7860398860398861,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-230; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at landscape: The same door opens and the camera crosses its opening into the room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m09-door-threshold.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.75-0.84",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=17.003-18.704"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "sage-kitchen",
+          "changed": [
+            "The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8302,
+            "scrollY": 2914,
+            "monotonicMs": 24130.3,
+            "videoSeconds": 18.504,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8832,
+            "scrollY": 3100,
+            "monotonicMs": 25231.2,
+            "videoSeconds": 19.605,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9362,
+            "scrollY": 3286,
+            "monotonicMs": 26732.6,
+            "videoSeconds": 21.106,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8831908831908832,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at landscape: The camera faces the sage kitchen, dining table, tile and pendant inside the assembled room.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m10-sage-kitchen.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.83-0.94",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=18.504-21.106"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "window-bench",
+          "changed": [
+            "The final view reaches the window bench while the kitchen and room surfaces remain continuous."
+          ],
+          "continuous": [
+            "The same south door, east window, sage tile, dining table and pendant are seen from a moving camera inside the assembled room."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9362,
+            "scrollY": 3286,
+            "monotonicMs": 26732.6,
+            "videoSeconds": 21.106,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9892,
+            "scrollY": 3472,
+            "monotonicMs": 27729.9,
+            "videoSeconds": 22.103,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 3510,
+            "monotonicMs": 27928.5,
+            "videoSeconds": 22.302,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9891737891737892,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-248; core.js:312-348",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at landscape: The final view reaches the window bench while the kitchen and room surfaces remain continuous.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m11-window-bench.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm#t=21.106-22.302"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/01-exploded-house/index.html?dir=b",
+        "route": "/flat-to-3d/01-exploded-house/index.html",
+        "hash": "",
+        "scrollY": 3510,
+        "scrollHeight": 3900,
+        "innerHeight": 390,
+        "maxScroll": 3510,
+        "visibleHud": "PROJ\nEYE-LEVEL PERSP\n(58.0°)  //  SEQ\n100% |  | ELEVATION B // EAST WINDOW SEAT\nDINING & WINDOW BENCH\nWN-05 WALNUT TABLE  ·  PD-06 PAPER PENDANT  ·  LN-04 LINEN",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 19.4,
+          "bytes": 4831610,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "A0 and A1 show the same unfolded sheet, callouts, camera composition and HUD after natural reverse; exact internal object identity was not passively observed.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": "No separate reverse-only state identified in continuous reverse review; camera exits, roof/walls unfold and sheet returns."
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 31
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -31
+        }
+      ]
+    }
+  },
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Three viewport full forward, reverse and semantic passes with sidecar telemetry.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Five hinged faces with absolute fold/grow progress and parented openings/content.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:106-115,198-230"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Authored sheet decals are attached to owner pivots at construction, and the camera has desktop/phone keys.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:204-215,262-283"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Cut 2 §24 D11 already established authored rectangular room, hinge math, topology limits and reverse evaluator.",
+      "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik has Project room/wall/opening geometry and Story lifecycle, without proven generic room-face unfolding.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292; index.html:4750-4840"
+    },
+    {
+      "class": "INFERENCE",
+      "statement": "This study may help a client review joinery and room enclosure together, subject to the authored demo limits.",
+      "locator": "professionalService",
+      "basedOn": [
+        "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm",
+        "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:1-6"
+      ],
+      "inferenceStatus": "UNRESOLVED"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "wall / N,S,Wst,E pivots and openings",
+      "lines": "106-166",
+      "claim": "Four cardinal, authored wall faces own their door/window and attached contents.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "FOLD/GROW/update",
+      "lines": "197-250",
+      "claim": "Absolute progress rotates each face around an edge, grows local contents, opens door, changes wash/sun/lamp and HUD.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "keys / eyeKey",
+      "lines": "204-215",
+      "claim": "Authored parallel-axo to eye-level poses, including phone overrides, drive the walk.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/dir-b.js",
+      "symbol": "SH / decal / drawSheet",
+      "lines": "262-283;377-455",
+      "claim": "Manual sheet and tags are generated as Canvas textures; decals are attached to parent pivots in the flat pose.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/main.js",
+      "symbol": "target / frame / step",
+      "lines": "120-184",
+      "claim": "Native scroll is smoothed into runtime progress; intro uses wall-clock time.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "01-exploded-house/core.js",
+      "symbol": "camAt / applyCam / ctx.phone",
+      "lines": "23;312-348;414-417",
+      "claim": "Camera interpolation and width-gated phone handling.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 2 §24 D11 @cc04f67fc0b46c87bc696bf566adb362f43041fd",
+      "documentedDisposition": "REIMPLEMENT FROM MECHANISM; authored rectangular room, not universal auto-unfold",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 established hinges, growth, source and sampled p0/.25/.5/.75/1/.5/0.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous three-viewport hinge/walk/reverse evolution adds temporal and mobile evidence.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 2 §28 C2-CC2 and historical Atlas D11",
+      "documentedDisposition": "Clarifies initial decal attach, lid parent and eight authored decals; Atlas retained as history",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Ownership and annotation precision is already documented.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1663-1668"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Lid and decal parent relationships confirmed in pinned source.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/dir-b.js:110-115,262-283"
+        }
+      ]
+    },
+    {
+      "locator": "Global reconciliation D11 at approved Rubik baseline",
+      "documentedDisposition": "D11-C1 REIMPLEMENT; C2 ADAPT; C3 REJECT",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior dispositions distinguish face topology, temporary anchors and manual sheet.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:283-299"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed sheet-to-room continuity and authored labels.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 1 D01/D04 and Cut 2 D12/D13",
+      "documentedDisposition": "Camera, drawing treatment and navigation are separate mechanisms",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Shared mechanisms are separately catalogued.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:101-119,155-173,301-337"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Near-parallel to eye-level camera handoff is visible.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Project preserves room polygons, walls and opening.wallId; room-to-face side and shared-wall ownership are not established for an unfold.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rooms, wall rectangles and openings are derived from Project IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current renderer has wallId and roomId/face metadata for a separate reveal, not a proven unfolding topology.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3304-3367"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik has room, wall and opening geometry, including real openings; an ordered net of hinged room faces and a valid ceiling lid are not established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room polygons and wall opening geometries exist.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Wall and floor meshes are current View3D geometry.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3499-3500,4899"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has room views and an axon/exploded level presentation, but no evidenced six-face developed drawing for arbitrary rooms.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Room descent is a current Story narrative.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon/exploded level narrative is present.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has project surface appearances and lighting; authored sage/tile finish codes, plotter ink and donor sun movement are not project truth.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface material is derived from assigned appearance.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:6-74"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation light preset and status are exposed.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4899"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik already fits project views and has room descent, but donor camera coordinates and a hinge-to-threshold handoff do not identify a valid route for another room.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current room descent evaluator.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon camera fitting and state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Story has deterministic reversible state evaluation; no face-hinge descriptor with room topology and opening ownership is evidenced.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story stateAt derives scene state from progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:1-45"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "View3D presentation begin/apply/end exists.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "The existing Story player and seek controls provide controlled reversible progress without needing donor native scroll.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence maps global to local progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "UI exposes seeking.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Presentation cards, captions and minimap exist; sheet-specific face annotations and model-sourced dimensions are not established.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current presentation card and minimap controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Minimap uses current geometry and IDs.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:129-155"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik presentation has mobile CSS and FT3D-6 QA; no unfolded-room variant has been tested in Rubik.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current mobile presentation layout.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:css/design-system.css:95-136"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "FT3D-6 mobile QA authority.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "PARTIAL",
+      "claim": "Current scenes capture/apply/restore their owned state; future face transforms, child overlays and resources need a separate proven lease.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon capture/apply/end restore current handles.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4750-4840"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story runtime manages current presentation lifecycle.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4554-4656"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik already offers image/share and ZIP of current project views; donor sheet is no authorized deliverable.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Image/share controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "View/project batch ZIP.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Existing QA covers presentation scenes and templates; face-topology, opening attachment and reverse for an unfold have no project-specific suite.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Axon visual QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-axon.cjs:1-40"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Template QA harness.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "PRODUCT_DECISION_REQUIRED",
+      "statement": "Which room face, ceiling and professional annotation can truthfully be shown for a real project requires a bounded service contract and topology evidence.",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut 2 D11 limits arbitrary/shared/non-rectangular rooms and manual sheet data.",
+          "locator": "git:cc04f67fc0b46c87bc696bf566adb362f43041fd:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md:1279-1384"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik exposes polygons, walls and openings but no proven face-side graph.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/project-core.js:261-292"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A temporary, reversible face-hinge representation linked to real wall/opening IDs is not evidenced in Rubik current.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Five face hinges observed on this authored rectangular study.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current axon presentation separates levels, not room faces.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:249-345"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "Hinge, matrix-following annotations and valid room entry are not connected as one reversible Rubik service.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous sheet-to-room-to-interior handoff.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has Story and room descent as current capabilities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:87-124,346-364"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "The donor 844×390 desktop composition overlaps the model, nav, HUD and text; this does not establish a Rubik mobile defect.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "At 844×390 the desktop navigation, introductory text, model labels and radar collide or crop during fold and walk.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Phone layout is selected by width <700, so 844px landscape retains desktop positions.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:01-exploded-house/core.js:23,414; sketch.css:315-356"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "REIMPLEMENT_MECHANISM",
+      "problemSolved": "A bounded room-face reading could unfold only validated faces and openings while retaining the real room identity.",
+      "rubikAuthoritiesPreserved": [
+        "Project room/wall/opening IDs and materials",
+        "Building level datum",
+        "View3D geometry and renderer",
+        "Story progress/player/lifecycle",
+        "mobile-first presentation UI"
+      ],
+      "existingCapabilitiesConsumed": [
+        "room polygon and wall/opening geometry",
+        "existing room descent and camera fit",
+        "Story reversible state evaluation",
+        "presentation image/ZIP if product chooses an output"
+      ],
+      "missingConnector": "Verified room-to-face association, side and shared ownership; temporary hinge representation/lease and matrix-following labels; valid camera handoff. No generic net or manual sheet copied.",
+      "donorMechanismReference": "dir-b.js:106-115,198-283 hinge/grow/parented annotation; Cut 2 §24 D11 and Global D11-C1/C2/C3",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: prove room-to-wall-face topology and opening side/owner before any temporary hinge evaluation.",
+    "TECHNICAL_PREREQUISITE: represent shared, non-rectangular and ceiling-absent cases explicitly or exclude them with a reason.",
+    "TECHNICAL_PREREQUISITE: obtain a real route/threshold before camera handoff; donor coordinates are not Rubik route authority.",
+    "Technical reuse of Story and geometry does not merge Unfolded Room with Board or FT3D-5 as a product service."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Only source-backed wall, opening, height and finish facts appear; demo codes, north and printed dimensions never become project claims."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "The same opening remains attached to exactly one validated wall face through hinge motion; shared walls have one declared owner."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "The room footprint, joinery and openings remain continuous from flat sheet to closed room to interior view."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "A camera handoff uses an actual navigable threshold and preserves the same room/level."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Forward, reverse, cancel and failure restore all temporary transforms, overlay resources, materials and camera state."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait and short landscape expose legible annotations and controls without collision or model occlusion."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "The state and reverse controls remain keyboard and screen-reader understandable without depending on scroll alone."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Existing FT3D-5 and FT3D-6 stories retain their current ownership and restore behavior."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact internal object identity and resource state after donor B→A were not passively exposed; visual equivalence, scroll and route return were observed.",
+      "attempts": [
+        "Fresh A0 and natural B→A/A1 at all viewports",
+        "A0/A1 visual comparison",
+        "Reverse video and telemetry",
+        "Absolute update/source inspection"
+      ],
+      "evidenceNeeded": "Read-only scoped object/resource snapshot if a later technical decision requires identity-level restore proof."
+    }
+  ],
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\calibration.json",
+      "sha256": "f9dab6fca1ba35afa39030163ddc29d41445c7d7d6ef2327807f36fb1271f806",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-end.png",
+      "sha256": "6e4207011438cc699a9d16aa719f74e7b2b1a085b8f8c1a52302af92f848b535",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p000.png",
+      "sha256": "c15f669e9c9bdb592d6eb3a6f36da723b22858870429005c0b0ed86411c34b20",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p005.png",
+      "sha256": "8ba15ffd1d5691450976352be5b4b0d0b54af6a657f451833457e1675558899a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p010.png",
+      "sha256": "d2aa99c9be78ce1fc390396d6d9d5b619c2816d672f6b0de5e4bcd8c780a17cb",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p015.png",
+      "sha256": "2f03ae09e83a9449a7a60bd1fe82bf01e8fe0db79aea82f157bb19e44fa23e75",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p020.png",
+      "sha256": "c768bfc0c3167e635e562e73c0d498a588d989b04f4a345260f35e51bb940f26",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p025.png",
+      "sha256": "1f4fa0389951c6bfd6a8858e1375eb6dca63034c96d1cad04e6e804c8a317290",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p030.png",
+      "sha256": "5f5f39beb5927c0e1c6ea0c784c69b6c679ac3a65995f99a8776f99ebfe1c0f7",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p035.png",
+      "sha256": "f01cc344944f26cf2e53b58e50b48b62dfa150bd548f0245332f9b6073ba933a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p040.png",
+      "sha256": "663b58575353868ca791260cab0ca56a460df6ae61f8e892e7fbe215c6eadddd",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p045.png",
+      "sha256": "cf213cf23e35c69da6ef26eceabef84f7dca5afcd07ab1d1f9d0f5b851c4108e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p050.png",
+      "sha256": "da5dfc7818387982063ac3c2bfd24e092aae234ca004ed06f149cd98bf39f93d",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p055.png",
+      "sha256": "184f04780d148dc984521007c93dfb24bad8e74e739025a59df0e2f149949062",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p060.png",
+      "sha256": "1ef035e6da694b201dabce713196eb246e030f85fb5a777f1ecbf1314971c035",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p065.png",
+      "sha256": "8ae8e6f67a8fe6c785836b8a00a816b2690415620683ee5e531f54fbd977239f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p070.png",
+      "sha256": "affca1322598067a3fc20416cafc310b5873b209546a162d449bd4367e7eb365",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p075.png",
+      "sha256": "17e97ad2d62c8d88ad0a5563411b9da9716595aac36e9750928700a5476ff608",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p080.png",
+      "sha256": "43cfe687384a16d4d31c7e0a0bf4a2bcb4ee3b8f7a8f9d2447d2ff99546715d5",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p085.png",
+      "sha256": "77d68c1d810a55579af997a760c5972dc79d58500eff4c481aee08977fe10494",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p090.png",
+      "sha256": "c037cd3b9870d90d42bec5f44777ad03f13858fd8b7a79fdecb71fa9b8cbb5a8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p095.png",
+      "sha256": "2ac53e067624311115111026a625d13cd0ce29c5b21b35de7c27ae7630cac565",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery-p100.png",
+      "sha256": "a85e6de2ca33a9d8d09c1fdfc94c23ce4bb5deb8e76d637b66959e058c6571f8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "sha256": "b5ab612780ef24cf75b6d9fe9cb5a38d23542c4888528c78462c80a0ead08592",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-discovery.webm",
+      "sha256": "b8eac32b3f4461e2d3e7a56cbffa04a7751b0dfa9de35e1a1056d9a7abec8dad",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m01-sheet-to-floor.png",
+      "sha256": "fcad519332679870a480d496633ceaeeac343415d5231afda8b459d5373d2e72",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m02-west-sideboard-hinge.png",
+      "sha256": "f840bcf0c7afff4a191453f65fae5e96d5781d87d46d5c3cb0508091cbe59f72",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m03-north-kitchen-hinge.png",
+      "sha256": "ae73a98830214481533a44387b73a42ccc56cccb0b651757c4a478b398dc14ab",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m04-east-window-hinge.png",
+      "sha256": "dab030e584379810e1301ead83ea000e96ebece908a1cd93c2a43f7b87097e56",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m05-south-door-hinge.png",
+      "sha256": "a2040d17b59815a17eac4f08643f43b62aee96dce4e05534180c6c02e9dd56f3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m06-ceiling-lid-closes.png",
+      "sha256": "fc3743caab80d9f5a9cd0e808c32e88f7f64dfabc5537a8952087d4af910b9a6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m07-closed-room.png",
+      "sha256": "61b79280b185b73baa28ca578fb3e41303c77183aa98db0100360f77c7cd5ac8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m08-door-approach.png",
+      "sha256": "f042b87c0ba25c1368a2d25cdf488bc66f07ba89027082f36c0e28132defe4a5",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m09-door-threshold.png",
+      "sha256": "4751194ed07dc6d44366955871ca49a47af9dbb6810cde23dc95d0153f265bc1",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m10-sage-kitchen.png",
+      "sha256": "024e69050ce2ed418782da2900fc7d584443e0f0fbe5f9c68e830e55729a1837",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-m11-window-bench.png",
+      "sha256": "b70d7366f46c2d5beb9738fc70e7aebf7fa8213031ad4ff336d472cb36c1a6c3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-forward-semantic.webm",
+      "sha256": "66151f7cde114d8305de23eef07a222a8ad1dcbeaba891b0f93bb2a32bc730ac",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-restored-start.png",
+      "sha256": "ebde311ac093d5804e08012b64abdfedb5b5ddfc11b28deaf59f56b2a9f9dec6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "sha256": "a53d5ff3f89de28a877541802b33d3406025a75a0b00caca7849062c4ffacbf7",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-reverse-discovery.webm",
+      "sha256": "568650ea08dc3d4a737d8db8e4dc8fccfe75a589e261f4f3464fd6521190de65",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-semantic-end.png",
+      "sha256": "bbb58bd2a0f3b71bb5b1fd59ae979d03aeb78a059cc3ab3ec501f9f0f5acb56e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-semantic-start.png",
+      "sha256": "8e6df0a038a7a9c1a4cf398c19bfc073b71efeda82f72a5539a0b41fccac1636",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\desktop-start.png",
+      "sha256": "c15f669e9c9bdb592d6eb3a6f36da723b22858870429005c0b0ed86411c34b20",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\discovery-assets.json",
+      "sha256": "533d316d61c6022d3f05e845b088a0d88b84ef47cdbe5b365fa5dfe6701c18f5",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\discovery-summary.json",
+      "sha256": "8f603df87050ecca00d9fbbbad5898691776df043813bfadf558abfe253682b4",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\end-state.json",
+      "sha256": "ee6efdf8a57d8f4ee44c7e8af4408c0f371311af9f45c922110ecb79b478efff",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\reverse-state.json",
+      "sha256": "afce0e2478cc662d617178011953bd5b1d92cf759a0d83d7cd60e0e19950c1de",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\semantic-capture.json",
+      "sha256": "de4cf88f8de97506a5d9b4d12b2b9322157138b4afcfc07f49a9d06f1b8694de",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\desktop\\start-state.json",
+      "sha256": "32176718b3267fba0087996d13f6ba76ab78d6c68da727d568b21fd8bbae3e3f",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\calibration.json",
+      "sha256": "a994117f71377734a787103a1b8efd05fd1ea24894971121632c9203f26d1e44",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\discovery-assets.json",
+      "sha256": "33f4350dada0872aced254aa27c0309ebd9fe43ff515acddfacdd8674030934f",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\discovery-summary.json",
+      "sha256": "dbb76bc6f9d1f9dd082ac7c3c479d55829f153b883e50b6a94de98befd912fbb",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\end-state.json",
+      "sha256": "2a3bf0a0ea4effedd64bac5387196f8c3087f8837f5d8783519af54ff7245468",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-end.png",
+      "sha256": "75197984f2fbed80b28ce9f9bda67d6a2f26b917241040ea5588bd7e9f1244a4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p000.png",
+      "sha256": "e4dbda89544cccb5345304a6ad3be35fb39a2fc47d204cefec6e38ec0718a80a",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p005.png",
+      "sha256": "c62b6ab6ad8589a7bb493d0c4588708280da36d5fcc263de26d0ac83f41aa9a3",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p010.png",
+      "sha256": "f2abb208a026c53b84998f67289f33c0671cb740a2e620465838b0e44c85b026",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p015.png",
+      "sha256": "1fcaf263576241528775b15524d3619c63fdc6fb5e335014af8163c748392a45",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p020.png",
+      "sha256": "582eb7970660c214b246c11dd7bd8eeef8d183a7bde8e05e6f1c8fc2a8c37887",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p025.png",
+      "sha256": "2e01658d023a4bd4e499adadfb6965ae99f0984c59601eee48137e360f8cb1c8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p030.png",
+      "sha256": "438ff90d7b4392c43ee328a191484e761024da56518d0162180e817bb2a96e2a",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p035.png",
+      "sha256": "0ff0baa3bec6d17da29c0eaa47884fbfab6d9841b5d5abc7997adcdc63c76f4f",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p040.png",
+      "sha256": "138f93e507969639d31549b3d1944f49e1e76a3fe2493407bc5923574a6cce72",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p045.png",
+      "sha256": "c348ccf91c9487310f0e05ba380a4355bea277b70969b9251b64de91ad08c492",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p050.png",
+      "sha256": "7fff77709ea5df8266fbb2b06a057839123672d13bff487ca70d5eb2941f27d3",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p055.png",
+      "sha256": "265191381a83686c1b287ab32038e25ded6ff24590f6beb5b34b180108c27f21",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p060.png",
+      "sha256": "2a3bde0e546f868598c3900265def3426e618f729012bada481bd69fc15b9417",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p065.png",
+      "sha256": "505ae205dbbf0e506c6908074f920e578387d779b4d5b487b72ff4d0eb0f5d85",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p070.png",
+      "sha256": "13f2ed080224e310ad93b96a5543e061f1e27f3fd0eaebbad0244621e42c08ca",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p075.png",
+      "sha256": "0212992b8b10e42e5bee08468768c99f39e18cde30cee8bebc3036f9d1eb8f99",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p080.png",
+      "sha256": "0fac5852a00d09b9b10f867dbd54c0f48c62e37f7064780100a750d50ee98ce5",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p085.png",
+      "sha256": "5e7a9032eb10e40c333e898156a95da570a659102d64743cde92e3af21672ec8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p090.png",
+      "sha256": "663787fb4fa79b9259538a7a15307d44d051b83987b1437a12b45a019d414c26",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p095.png",
+      "sha256": "bfeee370d96f1f57146088ff0696bbf18a0d3b308648c41d917e5adfbef0cbab",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery-p100.png",
+      "sha256": "4556f04600944b53e509fdab4c10ffe1e691b50e7a5a05cc88a80836e0cd179d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "sha256": "9f92186d39b1fe7a92237c5fd0ae28c3823c2e2e54f9ceb2e26c2f9a52a01e06",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-discovery.webm",
+      "sha256": "19bae9b753f0e9b1f075242af991552fa27e190d8f72f7aea08bf9e764d06437",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m01-sheet-to-floor.png",
+      "sha256": "c28da19cee9a40add40bb5b4d7acc66597387e571d3fc04803b392d5c2ba94fc",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m02-west-sideboard-hinge.png",
+      "sha256": "eea6aefcca72704f3ee89eb04a530c6c8e96cd443c04bd83194e83167e8e1c64",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m03-north-kitchen-hinge.png",
+      "sha256": "5857a3cbe40f8245df53050bcbb305c2c629d194bdf61d4f2f84ff2147b57d50",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m04-east-window-hinge.png",
+      "sha256": "c7c94873d42efb679d181de8279505faf0c226f884c4b491d9ae87a6884385a3",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m05-south-door-hinge.png",
+      "sha256": "0ef0b713dca16d15c2cbd37c48ef70a1f0752563344fb6ea60c629efdec9d763",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m06-ceiling-lid-closes.png",
+      "sha256": "55ba9b6bbf3b9c4a7f78fefdb070745a387654aa8e8b211e086874a95258141d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m07-closed-room.png",
+      "sha256": "d433f30b6b19f1d7af20d90937cf8041e278f74c863d26b205246f63fedd2233",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m08-door-approach.png",
+      "sha256": "48d981d5a1e51fa63535bb91c6dbbbbc8de66324fee79977c662b644984c7a2e",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m09-door-threshold.png",
+      "sha256": "ea8d74547bc60e3237f394c024953594a8c0d8cf109d8e7bed604a61b84fe656",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m10-sage-kitchen.png",
+      "sha256": "b42e2b46d7f12798f38049b70ffce7e03ec9366c15b92bffebf7ce5adcdbf672",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-m11-window-bench.png",
+      "sha256": "203a3e7905ff87ca19f0542a8e182dc87cc5ad4439f966e5794dca756ca70fec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-forward-semantic.webm",
+      "sha256": "81b78c3e8041a2c879744a9b4fd391d91210372966594af363f99ef2459123bc",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-restored-start.png",
+      "sha256": "0dcdf081bfa8d111fb2d7dc6109cb7b44fdf468c1cf81c2206bd1d2165bb07d0",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "sha256": "e23c24d790d32e7bb33595d1c5174bdf373caaa8d71b0123cf48c10f063643f7",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-reverse-discovery.webm",
+      "sha256": "5d655c659f7d4be456ff38ce243d899c6bc8a7ad576f912270f86f246ab9c004",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-semantic-end.png",
+      "sha256": "5ac35e04e442cc956d1660b9d3a39442efd9fc3d7eb876241e02efbb4934030d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-semantic-start.png",
+      "sha256": "6e86619c08c6bccf0bbb2dbd4fd3fa234f01a9c50fd1ca2e93e96077068b34b1",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\portrait-start.png",
+      "sha256": "8cf126944da7c2fe280dab3dd851b96b153fb11e5a101490b6b5837bc42a81a3",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\reverse-state.json",
+      "sha256": "f556b6767d428a1e3db808d1762666e8a58ea3ba29bf68b2728390a37a14fb02",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\semantic-capture.json",
+      "sha256": "08c1d2379aeace20142c1d37cda3a65855f3db15c305e008e9038ab8f1a7a181",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\portrait\\start-state.json",
+      "sha256": "e6ee7da6550bffaa853984473c1833350ec31bbd8f5208c63d87c86cedb55f93",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\calibration.json",
+      "sha256": "08349b956b55a5305eb2b74652f24515310acebe4f8eebe31bf3479df00627e4",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\discovery-assets.json",
+      "sha256": "2e13ecb17fa9518236c8486ce169811c90f1b9edd755122799cf30c833528d38",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\discovery-summary.json",
+      "sha256": "bfb60d34ac7f1f4c5c1ad933da695381a53025c2247ab53165d25677dcbf9b87",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\end-state.json",
+      "sha256": "9c7eca95d915ec98fa8fb502dd08eb13c15bfa3daf9b5ea3c5735a4180dc2fa3",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-end.png",
+      "sha256": "6eca59bed523a4f28aafbd7ffa3bf8c737e2444a3077e1be092c24aa4992d1cd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p000.png",
+      "sha256": "e03c51010f031a89c9f8e7b1a5c055e2e14d9bbd12bfee20e63a407dba05a8fc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p005.png",
+      "sha256": "3de5da32735425377041a3deb3fd0350c74ccd91e874ca16fade8e67a4af8dbc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p010.png",
+      "sha256": "2cd838e9c8b9f22926a2c591bd3e544de20f96f2a4537a132710c3ac6485b371",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p015.png",
+      "sha256": "a8fc8637e358608b0e95bf93f70d26170910764891b8eb90ad5222beb7f7b4f5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p020.png",
+      "sha256": "0181c9f4b3bddc0b675100d44d757d3f710ef6d59c884aca280d8861873d63af",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p025.png",
+      "sha256": "5f7efcec109d68738eba9a6552427dc9ca365d88ad46b3dff476aab1844c7f6d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p030.png",
+      "sha256": "7ec0240587c05e99db15923a8fca503c7ee36b311a86d312715307c14997f886",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p035.png",
+      "sha256": "7b6b8d725c61e8151c45387364c2117dba27752c58524264dd7c245d273e3a69",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p040.png",
+      "sha256": "b1cadb4add03dc4f12f7da48386f99c8ae1717eabf599cdc7e2262c8fcf9bd05",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p045.png",
+      "sha256": "e0b27731f16d29a10ef202eacf88bb16383483d8f4e0a754d19a2c239fa7efc1",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p050.png",
+      "sha256": "fa3d83df8cfb28e5e94cf4e04a4821a52551ccdb1d8e4fffc7f0e8f2567fc959",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p055.png",
+      "sha256": "9390671f48c713360de7e8a5f3eb552a8cd94104e4e34551f56205b3d98193cc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p060.png",
+      "sha256": "ef2503fb6b1f2ad575c7f4a8b56c5e11fea7bf5a44a28edc5951445a6774c13f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p065.png",
+      "sha256": "aacebc4cdbd47cee2f4aeba351dc764f782571b42342b7b28d8debe997a18a61",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p070.png",
+      "sha256": "2591fbc3d491a04df3e40faa47623a1af61330a83a210fa9e1ca18fb2ccb43aa",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p075.png",
+      "sha256": "776878230bdc8c670aa03f786cf7523a8fa5924fc0a16d6a8aafb89687a8483b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p080.png",
+      "sha256": "fb09a384bfa15d3cba2c1b6ff721744a207813e6ebaae82f1a9b7872c7e5c506",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p085.png",
+      "sha256": "7c2f980e0137a35fee176e93ad69970fa744bfed321e20970f517ea51548636e",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p090.png",
+      "sha256": "591876650bb635a1f03556509de44570db2094a01adcaf28613e97ecbbd2bc3b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p095.png",
+      "sha256": "c206f1f2ab00016eb84362235adb99a9bd01c3316c2c833e2d068f1b6d1f9bbe",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery-p100.png",
+      "sha256": "d6552166c8d3ed0c4f2da4ba79fd73a298d5d3a40198cfe6e055e20b575c7345",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "sha256": "3bd19bafb484654458039150b6fa84f0f282c11309f012381adda5e08ac720a1",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-discovery.webm",
+      "sha256": "a413d92f3f29e8e7754493e085b1028d385fca2b44246a301af03041a950d497",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m01-sheet-to-floor.png",
+      "sha256": "1a7400f3780d7b2f3a1f474876b47b7d01266c52a1ddcf181f46c0f1c82c3cd0",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m02-west-sideboard-hinge.png",
+      "sha256": "839d280f8f0ee71743ebd2bbc7dccb999972ce413db707813321bfb58a757177",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m03-north-kitchen-hinge.png",
+      "sha256": "e49647e500d656e0c00275312f8c2574c80a7a2c79f2903c0232db9a45575ade",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m04-east-window-hinge.png",
+      "sha256": "412ffc81ffab0d13c124e00d0409703c4cbfdd6a42ffdcac29b3c6e2ca1725b6",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m05-south-door-hinge.png",
+      "sha256": "1346dfacdbf0b19d39db38cce641d3a0a324159af4ef0b9bc0a788f13e0b7d3d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m06-ceiling-lid-closes.png",
+      "sha256": "211dc6e2567a5cf80f92c4e533d043f93badd923d22b87b612bdf8217a3863e8",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m07-closed-room.png",
+      "sha256": "de542d6f2ad2b509ff5a52434dacfc8300cdff949db4528e7b9bcbd26ca9c66f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m08-door-approach.png",
+      "sha256": "e14ebe845b12a3bbd336c244acddcdbb26490b3ea2b466a0e4dfd71ad5fc2c8c",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m09-door-threshold.png",
+      "sha256": "56480e242ee6f2d5a5bc90a405ef439863fe9132058afe775074c6b168e402df",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m10-sage-kitchen.png",
+      "sha256": "aec96ec2a8f6f6cf355221848a4bd2ec068237a95d68154a5e977769fc234d58",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-m11-window-bench.png",
+      "sha256": "e1a23553be5b785b18b5f504d6b49706ba396a49c4f0d714f9f467251f4a0874",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-forward-semantic.webm",
+      "sha256": "5b4afcd1e92b24293a46b1b653998849089e1ce602881ac52d667fee1ad5aee3",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-restored-start.png",
+      "sha256": "78999854b8c0864d4648158b0e518b4ee896ac69c6797a3499114af076b4be5f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "sha256": "5ad408e1b514bcf8496702e7e7491fba3536e30b5ffb77fff50734616af11fba",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-reverse-discovery.webm",
+      "sha256": "137effb2524392f180bbc1f78fbc0343c2dce6dc6ef3671687cdba5f39d0578a",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-semantic-end.png",
+      "sha256": "cf9befbfd75bcff46bd8e4e22bd20ec1efee88561c57b99a487c0e315e18af90",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-semantic-start.png",
+      "sha256": "c4c1123fe04e11df4b181de026f6ca3006f5ab31061cc2679942489d934e2763",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\landscape-start.png",
+      "sha256": "e03c51010f031a89c9f8e7b1a5c055e2e14d9bbd12bfee20e63a407dba05a8fc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\reverse-state.json",
+      "sha256": "1d41d068a0597b08e1c712ea640318e677217dbdf408daebbf1a2c17856d2222",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\semantic-capture.json",
+      "sha256": "d9f2d9a4c60b8118b83c7b031fcf8861a9eca3a85a8fdd2f6fc5872db1f124da",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\01-b-unfolded-room\\landscape\\start-state.json",
+      "sha256": "68cb76dc628852ac433a2311e0db8b6a85ebf4d8d254a26a987028ae9070a234",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-start.png",
+      "sha256": "c15f669e9c9bdb592d6eb3a6f36da723b22858870429005c0b0ed86411c34b20",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-forward-m02-west-sideboard-hinge.png",
+      "sha256": "f840bcf0c7afff4a191453f65fae5e96d5781d87d46d5c3cb0508091cbe59f72",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-forward-m04-east-window-hinge.png",
+      "sha256": "dab030e584379810e1301ead83ea000e96ebece908a1cd93c2a43f7b87097e56",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-forward-m06-ceiling-lid-closes.png",
+      "sha256": "fc3743caab80d9f5a9cd0e808c32e88f7f64dfabc5537a8952087d4af910b9a6",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-forward-m09-door-threshold.png",
+      "sha256": "4751194ed07dc6d44366955871ca49a47af9dbb6810cde23dc95d0153f265bc1",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-forward-m10-sage-kitchen.png",
+      "sha256": "024e69050ce2ed418782da2900fc7d584443e0f0fbe5f9c68e830e55729a1837",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-end.png",
+      "sha256": "6e4207011438cc699a9d16aa719f74e7b2b1a085b8f8c1a52302af92f848b535",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/desktop/desktop-restored-start.png",
+      "sha256": "ebde311ac093d5804e08012b64abdfedb5b5ddfc11b28deaf59f56b2a9f9dec6",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/portrait/portrait-start.png",
+      "sha256": "8cf126944da7c2fe280dab3dd851b96b153fb11e5a101490b6b5837bc42a81a3",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/portrait/portrait-forward-m06-ceiling-lid-closes.png",
+      "sha256": "55ba9b6bbf3b9c4a7f78fefdb070745a387654aa8e8b211e086874a95258141d",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/portrait/portrait-forward-m09-door-threshold.png",
+      "sha256": "ea8d74547bc60e3237f394c024953594a8c0d8cf109d8e7bed604a61b84fe656",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/portrait/portrait-end.png",
+      "sha256": "75197984f2fbed80b28ce9f9bda67d6a2f26b917241040ea5588bd7e9f1244a4",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/portrait/portrait-restored-start.png",
+      "sha256": "0dcdf081bfa8d111fb2d7dc6109cb7b44fdf468c1cf81c2206bd1d2165bb07d0",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/landscape/landscape-start.png",
+      "sha256": "e03c51010f031a89c9f8e7b1a5c055e2e14d9bbd12bfee20e63a407dba05a8fc",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/landscape/landscape-forward-m06-ceiling-lid-closes.png",
+      "sha256": "211dc6e2567a5cf80f92c4e533d043f93badd923d22b87b612bdf8217a3863e8",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/landscape/landscape-forward-m09-door-threshold.png",
+      "sha256": "56480e242ee6f2d5a5bc90a405ef439863fe9132058afe775074c6b168e402df",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/landscape/landscape-end.png",
+      "sha256": "6eca59bed523a4f28aafbd7ffa3bf8c737e2444a3077e1be092c24aa4992d1cd",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/01-b-unfolded-room/keyframes/landscape/landscape-restored-start.png",
+      "sha256": "78999854b8c0864d4648158b0e518b4ee896ac69c6797a3499114af076b4be5f",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    }
+  ],
+  "integrity": {
+    "assetsVerified": true,
+    "productionDiffZero": true
+  },
+  "completion": {
+    "gates": {
+      "T01": "PASS",
+      "T02": "PASS",
+      "T03": "PASS",
+      "T04": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "T07": "PASS",
+      "T08": "PASS",
+      "T09": "PASS",
+      "T10": "PASS",
+      "T11": "PASS",
+      "T12": "PASS",
+      "T13": "PASS",
+      "T14": "PASS",
+      "T15": "PASS",
+      "T16": "PASS",
+      "T17": "PASS",
+      "T18": "PASS",
+      "T19": "PASS",
+      "T20": "PASS",
+      "T21": "PASS"
+    },
+    "validatorResult": "PASS",
+    "validatedAt": "2026-11-02T12:54:43.967Z"
+  }
+}
