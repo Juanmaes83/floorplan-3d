@@ -1,0 +1,223 @@
+{
+  "id": "06-demo-card-model",
+  "viewport": "desktop",
+  "run": "original",
+  "fps": 10,
+  "stableStartReady": "NOT_OBSERVED",
+  "calibration": {
+    "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+    "before": {
+      "bodyText": "100\n34.8 M\nIN THE HOUSE // 1:1\n\nA CENTIMETRE OF CARD IS A METRE OF HOUSE.\n\nDATUM +0.16M\nEYE HEIGHT 16 MM // 1:100\nSCALE 1:100 → 1:1\nSCAN R 38.0M\n\nTHEN THE CARD\nBECOMES THE HOUSE.\n\nLEVEL ±0.00M // LIVING\nTHE LIVING ROOM\n6.40 M TO THE CEILING. OAK FLOOR, BOARD-MARKED CONCRETE, THE SOUTH WALL ALL GLASS.\nLEVEL +3.20M // STUDY\nTHE STUDY\n+3.20, OVER THE LIVING ROOM. THE MODEL IS STILL ON THE DESK.\n\nAND BACK TO THE DESK.\n\nSCROLL TO SHRINK\nA white card model of a house on a slope, on an architect's desk at night\nDown to the height of the scale figure\nThen the card becomes the house, and the desk lamp becomes the sun\nThrough the big glass into the living room, and up to the study\nAnd back to the desk\nStart a project\n\nATELIER 1:100\nHOUSES ON DIFFICULT SITES\n\nEVERY HOUSE WE BUILD\nSTARTS ON THIS DESK.\n\nSEND US THE SITE AND WHAT YOU NEED FROM IT. WE START IN CARD, UNDER A LAMP, AND THE MODEL STAYS ON THE DESK UNTIL THE HOUSE IS BUILT.\n\nSTART A PROJECT\nSEE THE HOUSES\nWRITE TO THE STUDIO\nHOUSE ON A SLOPE, 2026\nMODEL AT 1:100, MOUNT BOARD AND GREYBOARD\nTHE STUDIO IS OPEN MONDAY TO FRIDAY\nATELIER 1:100\nSCORING THE FIRST SHEET\n097\nHOUSE ON A SLOPE  /  1:100  /  MOUNT BOARD, 1.5 MM\nSWANN-MORTON No. 3",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 900,
+      "maxScroll": 18900,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/06-card-model/index.html",
+      "scrollHeight": 19800,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+      "visibleHud": ""
+    },
+    "after": {
+      "bodyText": ":100\n54.3 M\nIN THE HOUSE // 1:1\n\nA CENTIMETRE OF CARD IS A METRE OF HOUSE.\n\nDATUM +0.16M\nEYE HEIGHT 16 MM // 1:100\nSCALE 1:100 → 1:1\nSCAN R 0.0M\n\nTHEN THE CARD\nBECOMES THE HOUSE.\n\nLEVEL ±0.00M // LIVING\nTHE LIVING ROOM\n6.40 M TO THE CEILING. OAK FLOOR, BOARD-MARKED CONCRETE, THE SOUTH WALL ALL GLASS.\nLEVEL +3.20M // STUDY\nTHE STUDY\n+3.20, OVER THE LIVING ROOM. THE MODEL IS STILL ON THE DESK.\n\nAND BACK TO THE DESK.\n\nSCROLL TO SHRINK\nA white card model of a house on a slope, on an architect's desk at night\nDown to the height of the scale figure\nThen the card becomes the house, and the desk lamp becomes the sun\nThrough the big glass into the living room, and up to the study\nAnd back to the desk\nStart a project\n\nATELIER 1:100\nHOUSES ON DIFFICULT SITES\n\nEVERY HOUSE WE BUILD\nSTARTS ON THIS DESK.\n\nSEND US THE SITE AND WHAT YOU NEED FROM IT. WE START IN CARD, UNDER A LAMP, AND THE MODEL STAYS ON THE DESK UNTIL THE HOUSE IS BUILT.\n\nSTART A PROJECT\nSEE THE HOUSES\nWRITE TO THE STUDIO\nHOUSE ON A SLOPE, 2026\nMODEL AT 1:100, MOUNT BOARD AND GREYBOARD\nTHE STUDIO IS OPEN MONDAY TO FRIDAY\nATELIER 1:100\nSCORING THE FIRST SHEET\n100\nHOUSE ON A SLOPE  /  1:100  /  MOUNT BOARD, 1.5 MM\nSWANN-MORTON No. 3",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 900,
+      "maxScroll": 18900,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/06-card-model/index.html",
+      "scrollHeight": 19800,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+      "visibleHud": ""
+    },
+    "model": "UNRESOLVED",
+    "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+  },
+  "start": {
+    "bodyText": "ON A SLOPE, CUT FROM CARD AT 1:100. SCROLL DOWN TO THE LITTLE FIGURE.\n\nABOVE THE GARDEN\n51.0 CM\nON THE DESK // 1:100\n51.0 M\nIN THE HOUSE // 1:1\n\nA CENTIMETRE OF CARD IS A METRE OF HOUSE.\n\nDATUM +0.16M\nEYE HEIGHT 16 MM // 1:100\nSCALE 1:100 → 1:1\nSCAN R 0.0M\n\nTHEN THE CARD\nBECOMES THE HOUSE.\n\nLEVEL ±0.00M // LIVING\nTHE LIVING ROOM\n6.40 M TO THE CEILING. OAK FLOOR, BOARD-MARKED CONCRETE, THE SOUTH WALL ALL GLASS.\nLEVEL +3.20M // STUDY\nTHE STUDY\n+3.20, OVER THE LIVING ROOM. THE MODEL IS STILL ON THE DESK.\n\nAND BACK TO THE DESK.\n\nSCROLL TO SHRINK\nA white card model of a house on a slope, on an architect's desk at night\nDown to the height of the scale figure\nThen the card becomes the house, and the desk lamp becomes the sun\nThrough the big glass into the living room, and up to the study\nAnd back to the desk\nStart a project\n\nATELIER 1:100\nHOUSES ON DIFFICULT SITES\n\nEVERY HOUSE WE BUILD\nSTARTS ON THIS DESK.\n\nSEND US THE SITE AND WHAT YOU NEED FROM IT. WE START IN CARD, UNDER A LAMP, AND THE MODEL STAYS ON THE DESK UNTIL THE HOUSE IS BUILT.\n\nSTART A PROJECT\nSEE THE HOUSES\nWRITE TO THE STUDIO\nHOUSE ON A SLOPE, 2026\nMODEL AT 1:100, MOUNT BOARD AND GREYBOARD\nTHE STUDIO IS OPEN MONDAY TO FRIDAY",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 18900,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/06-card-model/index.html",
+    "scrollHeight": 19800,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+    "visibleHud": ""
+  },
+  "end": {
+    "bodyText": "N A SLOPE, CUT FROM CARD AT 1:100. SCROLL DOWN TO THE LITTLE FIGURE.\n\nABOVE THE GARDEN\n36.2 CM\nON THE DESK // 1:100\n36.2 M\nIN THE HOUSE // 1:1\n\nA CENTIMETRE OF CARD IS A METRE OF HOUSE.\n\nDATUM +0.16M\nEYE HEIGHT 16 MM // 1:100\nSCALE 1:100 → 1:1\nSCAN R 0.0M\n\nTHEN THE CARD\nBECOMES THE HOUSE.\n\nLEVEL ±0.00M // LIVING\nTHE LIVING ROOM\n6.40 M TO THE CEILING. OAK FLOOR, BOARD-MARKED CONCRETE, THE SOUTH WALL ALL GLASS.\nLEVEL +3.20M // STUDY\nTHE STUDY\n+3.20, OVER THE LIVING ROOM. THE MODEL IS STILL ON THE DESK.\n\nAND BACK TO THE DESK.\n\nSCROLL TO WALK IN\nA white card model of a house on a slope, on an architect's desk at night\nDown to the height of the scale figure\nThen the card becomes the house, and the desk lamp becomes the sun\nThrough the big glass into the living room, and up to the study\nAnd back to the desk\nStart a project\n\nATELIER 1:100\nHOUSES ON DIFFICULT SITES\n\nEVERY HOUSE WE BUILD\nSTARTS ON THIS DESK.\n\nSEND US THE SITE AND WHAT YOU NEED FROM IT. WE START IN CARD, UNDER A LAMP, AND THE MODEL STAYS ON THE DESK UNTIL THE HOUSE IS BUILT.\n\nSTART A PROJECT\nSEE THE HOUSES\nWRITE TO THE STUDIO\nHOUSE ON A SLOPE, 2026\nMODEL AT 1:100, MOUNT BOARD AND GREYBOARD\nTHE STUDIO IS OPEN MONDAY TO FRIDAY",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 18900,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/06-card-model/index.html",
+    "scrollHeight": 19800,
+    "scrollY": 18900,
+    "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+    "visibleHud": ""
+  },
+  "restored": {
+    "bodyText": "ON A SLOPE, CUT FROM CARD AT 1:100. SCROLL DOWN TO THE LITTLE FIGURE.\n\nABOVE THE GARDEN\n35.4 CM\nON THE DESK // 1:100\n35.4 M\nIN THE HOUSE // 1:1\n\nA CENTIMETRE OF CARD IS A METRE OF HOUSE.\n\nDATUM +0.16M\nEYE HEIGHT 16 MM // 1:100\nSCALE 1:100 → 1:1\nSCAN R 0.0M\n\nTHEN THE CARD\nBECOMES THE HOUSE.\n\nLEVEL ±0.00M // LIVING\nTHE LIVING ROOM\n6.40 M TO THE CEILING. OAK FLOOR, BOARD-MARKED CONCRETE, THE SOUTH WALL ALL GLASS.\nLEVEL +3.20M // STUDY\nTHE STUDY\n+3.20, OVER THE LIVING ROOM. THE MODEL IS STILL ON THE DESK.\n\nAND BACK TO THE DESK.\n\nSCROLL TO SHRINK\nA white card model of a house on a slope, on an architect's desk at night\nDown to the height of the scale figure\nThen the card becomes the house, and the desk lamp becomes the sun\nThrough the big glass into the living room, and up to the study\nAnd back to the desk\nStart a project\n\nATELIER 1:100\nHOUSES ON DIFFICULT SITES\n\nEVERY HOUSE WE BUILD\nSTARTS ON THIS DESK.\n\nSEND US THE SITE AND WHAT YOU NEED FROM IT. WE START IN CARD, UNDER A LAMP, AND THE MODEL STAYS ON THE DESK UNTIL THE HOUSE IS BUILT.\n\nSTART A PROJECT\nSEE THE HOUSES\nWRITE TO THE STUDIO\nHOUSE ON A SLOPE, 2026\nMODEL AT 1:100, MOUNT BOARD AND GREYBOARD\nTHE STUDIO IS OPEN MONDAY TO FRIDAY",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 18900,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/06-card-model/index.html",
+    "scrollHeight": 19800,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+    "visibleHud": ""
+  },
+  "forwardInputCount": 270,
+  "reverseInputCount": 270,
+  "forwardTelemetrySamples": 633,
+  "reverseTelemetrySamples": 539,
+  "files": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-start.png",
+      "bytes": 1441222,
+      "sha256": "54c4eebd857117b16b6085c72abae15ab21d4b9f91e4614e8399789e5f1bf4e7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-end.png",
+      "bytes": 1475346,
+      "sha256": "5805465de912abbdc3d297a2c70398c7861c9000d54a39666a98e2833493c390"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery.webm",
+      "bytes": 22621125,
+      "sha256": "d64639d8a154bd32dede463a8060e575208296f11226e39d2b14ad06b678c59b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 438501,
+      "sha256": "91fad04cb0f5404b5bc31a9e21d80ced2d844b22453de3d631e23a322484748b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-restored-start.png",
+      "bytes": 1489104,
+      "sha256": "07639743bd6310d0a6692b1cb030b770395821c7a04959a89bf740b34582f817"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-reverse-discovery.webm",
+      "bytes": 19802112,
+      "sha256": "5311329ca772f8e3dbd07e206fb74c3bc6d853c921de23055d08374106924d3f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 374819,
+      "sha256": "3fc6fac670997e756586756df8c82a0f2a6c7b8d31e435c15859331a4ebb7674"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p000.png",
+      "bytes": 1476079,
+      "sha256": "8b264594dce3f478a002e2ad6779dd4170daf8dc15d410c28e30298d74795fe1"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p005.png",
+      "bytes": 1487057,
+      "sha256": "2c13dc3bfa8f2242731bddf0fb0b0e3809c3e1dc30bb45f9aa0fb02378618cc5"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p010.png",
+      "bytes": 1458812,
+      "sha256": "4249c1a9bc56ee2c53e812b3296e29340d691aa8f05a2e403520892c9b7904ea"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p015.png",
+      "bytes": 1409955,
+      "sha256": "50fb89dbacc70562fc2d8e7fbad924962930849630e25155c90a3474cca859c4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p020.png",
+      "bytes": 1391129,
+      "sha256": "a0b3b2fde2b322a36709495bae818da18bc0a012fb418b05d76d3d218c29ba0e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p025.png",
+      "bytes": 1471203,
+      "sha256": "f0da376aad0af4b381067050b9b5fa1e47b1df9f2f74eebe631251ab0caa2601"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p030.png",
+      "bytes": 1650630,
+      "sha256": "42b5e0c17ccff862c99fe2311707972d2f7aa8efee71393255e1377afe54c2e6"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p035.png",
+      "bytes": 1595617,
+      "sha256": "fde2ee7f9489e7d44788b41480b69390163a22c700bd9bbae15506dacfb68715"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p040.png",
+      "bytes": 1627933,
+      "sha256": "cf1c144e6f2c09ce9734b0bc55d767b60b27d6c24c52dd4fdedc9caba90f08db"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p045.png",
+      "bytes": 1646119,
+      "sha256": "832e13ff55f219a38cee778588265bcdaa962d3439d79ce89f98ac14d957a0c2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p050.png",
+      "bytes": 1649477,
+      "sha256": "9100b328c9f3e19bad3e776bc654c4332ed158d7f25a9387095b207fd77c646c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p055.png",
+      "bytes": 1645843,
+      "sha256": "8cb68cb5c8405479a5def7bb40bc7f0006ec40b59f912215beaddd4adfed2649"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p060.png",
+      "bytes": 1498504,
+      "sha256": "9acc0775fba18c4777c9c3c7735a828fe2da1a3a09e66c36e34a89e515d1c0da"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p065.png",
+      "bytes": 1642245,
+      "sha256": "b9052af5fc4dacf7975c6b56e4a7be96860471a0c6d31ab38fdfd7782f24a4f3"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p070.png",
+      "bytes": 1559426,
+      "sha256": "ea1173d4162d11917815ec037be4285e16c14e0d8fea6ea07eb59915e1fb62b7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p075.png",
+      "bytes": 1341709,
+      "sha256": "b8e7fb4c5f546b6176adc24390d66629d667e43b95dfb6069a5c0327061618f1"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p080.png",
+      "bytes": 1587025,
+      "sha256": "52027e9fe33640e170a745b07a5f1ea7e8f2c199aa9506c7549f7acb408e9915"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p085.png",
+      "bytes": 1695683,
+      "sha256": "e3d4066bf2cc51e96137ca6e178aa869c023f576552bbdcd558e82c30db4d060"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p090.png",
+      "bytes": 1527158,
+      "sha256": "2bd11a42606e9825dc32511659fbe1a2ddc66d268eaa9c498de8fbdb2a743d63"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p095.png",
+      "bytes": 1459666,
+      "sha256": "001c75fb9534e2f4fae013c0a7ab637e9f809d11ea7e07cec18171a90cf22840"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\desktop\\desktop-forward-discovery-p100.png",
+      "bytes": 1475667,
+      "sha256": "fb6d71adab0dd7ea1daad9865a865139cb40ccc00b8f38c8d0b2b4dad7eaeef0"
+    }
+  ]
+}

@@ -12,6 +12,8 @@ const inventory = JSON.parse(await readFile(path.join(evidence, 'reference-inven
 const id = process.argv.find(a => a.startsWith('--take='))?.slice(7);
 const viewportName = process.argv.find(a => a.startsWith('--viewport='))?.slice(11);
 const run = process.argv.find(a => a.startsWith('--run='))?.slice(6);
+const fps = Number(process.argv.find(a => a.startsWith('--fps='))?.slice(6) ?? 30);
+if (!Number.isInteger(fps) || fps < 1 || fps > 30) throw new Error('Use --fps=1..30');
 const dimensions = { desktop: [1440,900], portrait: [390,844], landscape: [844,390] };
 if (!id || !state.takes[id] || !dimensions[viewportName]) throw new Error('Use --take=<canonical-id> --viewport=<desktop|portrait|landscape>');
 const currentIndex = inventory.references.findIndex(r => r.id === id);
@@ -123,7 +125,7 @@ try {
   await writeFile(path.join(rawDir,'start-state.json'),JSON.stringify({start,snapshot,consoleStart,errorsStart,networkStart,observedAt:new Date().toISOString()},null,2)+'\n');
   evalJson(session,telemetryJs);
   const forwardVideo = path.join(rawDir,`${viewportName}-forward-discovery.webm`);
-  ab(session,['record','start',forwardVideo,'--fps','30']);
+  ab(session,['record','start',forwardVideo,'--fps',String(fps)]);
   const forward = [];
   const samplePaths = [];
   const initialSample = path.join(rawDir,`${viewportName}-forward-discovery-p000.png`);
@@ -166,7 +168,7 @@ try {
   await writeFile(path.join(rawDir,'end-state.json'),JSON.stringify({end,additionalInputAfterMax:2,forwardInputCount:inputCount,forwardSampleCount:samplePaths.length,observedAt:new Date().toISOString()},null,2)+'\n');
   const reverseVideo = path.join(rawDir,`${viewportName}-reverse-discovery.webm`);
   const reverse = [];
-  ab(session,['record','start',reverseVideo,'--fps','30']);
+  ab(session,['record','start',reverseVideo,'--fps',String(fps)]);
   let reverseCount = 0, atTop = 0;
   while (reverseCount < Math.ceil(maxScroll/step) + 30) {
     const t = performance.now();
@@ -191,11 +193,12 @@ try {
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets = await Promise.all([...files,...samplePaths].map(async p => ({path:p,bytes:(await stat(p)).size,sha256:createHash('sha256').update(await readFile(p)).digest('hex') })));
   await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary = { id, viewport:viewportName, run:run||'original', stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
+  const summary = { id, viewport:viewportName, run:run||'original', fps, stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
   state.takes[id].attempts.at(-1).status = 'COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt = new Date().toISOString();
-  await stateUpdate({},`DISCOVERY_${viewportName.toUpperCase()}_COMPLETE`);
+  state.takes[id].blockingUnresolved = state.takes[id].blockingUnresolved.filter(x => !(x.viewport===viewportName && x.question==='Discovery capture failed'));
+  await stateUpdate({captureStatus:'IN_PROGRESS'},`DISCOVERY_${viewportName.toUpperCase()}_COMPLETE`);
   console.log(JSON.stringify({id,viewport:viewportName,startY:start.scrollY,endY:end.scrollY,maxScroll:end.maxScroll,restoredY:restored.scrollY,forwardSamples:forward.length,reverseSamples:reverse.length,assets:assets.length},null,2));
 } catch (error) {
   state.takes[id].attempts.at(-1).status = 'FAILED';

@@ -1,0 +1,142 @@
+[
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-start.png",
+    "bytes": 385916,
+    "sha256": "9b065cf632e0bfcbbdf53fbb11d3239fea493b1996d990d504237ebf665ed496"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-end.png",
+    "bytes": 401561,
+    "sha256": "db2db850b800fd9bb3a048acc46a9268921e79e12281f931d16fcb0c416b85b4"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery.webm",
+    "bytes": 8417131,
+    "sha256": "f185b6ab3199664757fffe341d392aff5447ce0bd3f8b9738d1c95d17c65202e"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+    "bytes": 346328,
+    "sha256": "8d8bfd5d1f462940cc7b73515dd061fc9bce3aade565707999be32b6ddf82e9a"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-restored-start.png",
+    "bytes": 398718,
+    "sha256": "e024f3d92400c4f49167716c5f7cd35a715e4a9d495bb698cadd1f985e9cd59c"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-reverse-discovery.webm",
+    "bytes": 7747402,
+    "sha256": "042e04463ad0cd85ad55ff004120fe30e3f3f20bb0446f0415f6c037fd7403e9"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+    "bytes": 306046,
+    "sha256": "7cc051f5147d12da3dd839694c2ce01876ab9d273155ee371e8b8777b40748b3"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p000.png",
+    "bytes": 387403,
+    "sha256": "4bf2d20ffe7952ee2c1c1fb4cd1175b4a5d6245654719f1d891ddc38cdb5130b"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p005.png",
+    "bytes": 387210,
+    "sha256": "d2b8b1b9947501657f01d226a2b0a597db4af42758f9b6b04b49f7b7123a5a21"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p010.png",
+    "bytes": 387572,
+    "sha256": "fb6addad6ef522026b425859f9c7d39c68bd9377b567bad6be33ba9ec5b837b8"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p015.png",
+    "bytes": 370022,
+    "sha256": "6d7bbfb758d03513e2304410418901411f1f36574b3f893314b14f13510f6e0f"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p020.png",
+    "bytes": 367014,
+    "sha256": "2a517a30b38fb118c52d0c9a892b25d834076dbf05e3548ce3b1e0df41ff629c"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p025.png",
+    "bytes": 429846,
+    "sha256": "b2059c49b1600dd2c1025451a408be1f5ea6351d58fdb4702c6d4deb3ee79cb1"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p030.png",
+    "bytes": 451697,
+    "sha256": "3490612d7ed4fecf129ee6f3d5ff50da84ce3faa4b41c26e23a7d44afa2b6651"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p035.png",
+    "bytes": 434292,
+    "sha256": "a6d9708cb21342c3c76d63da079d0d6e17f8fb52b21319b77f154bec5105d38d"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p040.png",
+    "bytes": 435947,
+    "sha256": "5b762c232b8a6e58012c82157fbef3c06130fbc386ed801f43591385c48a8564"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p045.png",
+    "bytes": 443300,
+    "sha256": "ca7d53098abcab804fa55706bdd7c32851d8d369e96f353c14384676727ea5dc"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p050.png",
+    "bytes": 439545,
+    "sha256": "c628e0e4f525a6be52f76cf3af5437aecd8cc6f4c1d93d4d60d30acd3ab530c0"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p055.png",
+    "bytes": 406611,
+    "sha256": "1182d7b52f11a7f6627e900b70e71c328c7cb13b26918e7aadc55249b22e14d1"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p060.png",
+    "bytes": 396445,
+    "sha256": "d04ce96b6af4a7b2fb2f54e2307213df36442784fec8eb186277d6ebe37b4587"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p065.png",
+    "bytes": 440524,
+    "sha256": "c6f3c649be333063418c5c7a328e379c45b84c21cb12e900d9e0305db626c7ba"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p070.png",
+    "bytes": 405520,
+    "sha256": "b50d722d478d6c9061f03f11bfa97db357676959508a70e2772094f0daae7e62"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p075.png",
+    "bytes": 385024,
+    "sha256": "11b5c123205edadf20c6d006d133c774a2aacbe2145ac4e31e2779d071bdcf79"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p080.png",
+    "bytes": 454619,
+    "sha256": "1ede37a3a2a72aacdaca415f5b46a8bbf6d44a3a485f1735c788312d1b9feb60"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p085.png",
+    "bytes": 441364,
+    "sha256": "2d654b5f395b9d184a3f429f72f0d7d26347ef760fe0e8a40623735fd3f3bbb4"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p090.png",
+    "bytes": 410144,
+    "sha256": "cdbba69db19aaba4b5b9d218454abed5aa21db07e173b77c049933298da4a8c2"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p095.png",
+    "bytes": 403601,
+    "sha256": "2cca95a046c587b534a6088a6690dc18a84f24553b90334bf077d6103d246e18"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\landscape\\landscape-forward-discovery-p100.png",
+    "bytes": 401684,
+    "sha256": "a357a79e16070124a40eb57b5314f6e87a2d57d16c8444c861a873688cfa7a64"
+  }
+]
