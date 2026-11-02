@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T19:04:36.867Z",
-  "fileCount": 2206,
-  "totalBytes": 2981598894,
-  "packageContentSha256": "874b7c75831dbb1a7d033899bb37d2797af50dec90fe7dd857ff0ed89e0996c2",
+  "generatedAt": "2026-11-02T19:11:20.580Z",
+  "fileCount": 2244,
+  "totalBytes": 3017219776,
+  "packageContentSha256": "247201145d6007af0d479408e4cfa2d4794b6c7b095f3d6bfbd5b11f18893cad",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -10584,6 +10584,101 @@
       "sha256": "8820fcb14fa71e294fd2a855b60a52271363285eb6ff1f2c255b626ca2826617"
     },
     {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m01-scale-readout.png",
+      "bytes": 384461,
+      "sha256": "1667f97a63a236cd172a020c4cf8b366788a4bbaa42a725a5985f056037f358c"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m02-card-at-eye-height.png",
+      "bytes": 364424,
+      "sha256": "47455316faf9d9865a45095ae5046538eb5a18820cb089e9bc20e43e02869471"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m03-luminous-transition-onset.png",
+      "bytes": 409220,
+      "sha256": "49ed5c801cd1388a4e4c921f8407f6b62e476011da04deb9520195e0c00764b3"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m04-house-materialized.png",
+      "bytes": 440370,
+      "sha256": "79352f608c008104b2ef1539779d176a73e48681d71a730a7cc18438e5664708"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m05-real-exterior.png",
+      "bytes": 444850,
+      "sha256": "7befda14a6c8a182f67be7b2fbc7a50b0bb93ef85226df9430eff77961ddb75b"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m06-facade-approach.png",
+      "bytes": 455345,
+      "sha256": "ab97a0ec6fd1350952746e0d0bc1427a48d1b8d1ee2d97f7e16ff466dceb058f"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m07-living-interior.png",
+      "bytes": 438226,
+      "sha256": "e198bfef376ddc948a9c03d6a60c32978a7551bcbae747a88b1890631ac28116"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m08-interior-low-view.png",
+      "bytes": 420918,
+      "sha256": "bd2b1de02b744ad550aad26abb6007a955d048228e87d02b5b91a6f4e10054d1"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m09-desk-context-return.png",
+      "bytes": 446337,
+      "sha256": "9a9270e4195b9594a8f1cbb105cf94d2a06fc4a5d03f5a66061e48f0135d076d"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m10-study-overlook.png",
+      "bytes": 415425,
+      "sha256": "d509d3e6a42030837cc8a1a397b8cfa180b6368aee0a7cc7070ad71e094503d2"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m11-terrace-night.png",
+      "bytes": 376978,
+      "sha256": "e5212e627e94249989203ffca9d7929c895e32b7c783907ce78e0da9ab176239"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m12-return-sweep.png",
+      "bytes": 443024,
+      "sha256": "8693c19360588c7d864fe744e2844ce61eec353e525d6131520956bccde73c49"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m13-card-restored.png",
+      "bytes": 402407,
+      "sha256": "9ea7b6cf46e1754ed3ecdf6d16ddc5c2ba164753967fb4f7b95cfa3545caf084"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-m14-final-message.png",
+      "bytes": 401982,
+      "sha256": "53c9a3a153c41a5ee146e95e9315fea1700a4557f9a2bdd7688e9ef2a53f8afd"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-semantic.telemetry.ndjson",
+      "bytes": 521918,
+      "sha256": "98d248dbd5c31e9b3f67abf37bc7920eb0b324bbc2b843fbc67c8fd5021a0953"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-forward-semantic.webm",
+      "bytes": 10805630,
+      "sha256": "dcdacb2021bbc504610b163d133ea3f142c5e3b8a4b043dbf37db92c525f56f7"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-semantic-end.png",
+      "bytes": 401667,
+      "sha256": "d1306c2817141a4484f5d599f83decb4c3cad3d2b0934c21a37203a8870155fe"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/landscape-semantic-start.png",
+      "bytes": 398931,
+      "sha256": "f542e85c22cd2a3000c04f513112ca6f2bc43cb385d510dc7fcf368bff2ee2c1"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-correction-1/semantic-capture.json",
+      "bytes": 13981,
+      "sha256": "932f5db9a979c1ef807fc335ccde37af5d477e8b4cf6e2e17ea2679bf346d331"
+    },
+    {
       "path": "06-demo-card-model/landscape/start-state.json",
       "bytes": 7114,
       "sha256": "fe0e74e04243a07426899d75e9d6e1c28f1908d2420e9664dadfbe9e6b8c21e3"
@@ -11012,6 +11107,101 @@
       "path": "06-demo-card-model/portrait/semantic-capture.json",
       "bytes": 12653,
       "sha256": "057dbd25177c778aa43cf1d3c7da11de9b231ccefb4a5bb7cab859c5650b85e9"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m01-scale-readout.png",
+      "bytes": 402670,
+      "sha256": "548c4351312a1d6809418b6b7368962a3fee9dca7a211bce016aff670dc5f794"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m02-card-at-eye-height.png",
+      "bytes": 349241,
+      "sha256": "bff8493172a1128337aea951a13b12122f3cdec68b66e0ddf38353e28ccfca30"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m03-luminous-transition-onset.png",
+      "bytes": 384565,
+      "sha256": "b21e0e674d9e920fbbd206eb85a581cd86d8e8223736714fb642f03996ab1c86"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m04-house-materialized.png",
+      "bytes": 417321,
+      "sha256": "fad8dbe0e89dcfd38bc78a27ae353723095f2b87236b3ae1e33dbcd45bf63235"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m05-real-exterior.png",
+      "bytes": 403089,
+      "sha256": "4e956bbd72cde945dce48acf9e4b2374404c6cc21581fe69768e466a11e8c62b"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m06-facade-approach.png",
+      "bytes": 388556,
+      "sha256": "503e254234a9accba74249ba4d7792613f59f21c092dd1729bcd228b6741cd34"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m07-living-interior.png",
+      "bytes": 395532,
+      "sha256": "28ec83d5ec57aba4a390f80bb188d1d4138a9227bad4f9ef82f7568b313bce01"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m08-interior-low-view.png",
+      "bytes": 378084,
+      "sha256": "bf9191541fd8d6fe44bd3562d8b1096daa373138492d9d937aa1de75f6dd08ee"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m09-desk-context-return.png",
+      "bytes": 402433,
+      "sha256": "a442d718687836525486290ea91a4ba43c49e4e97655d8e7332afd835a06d6d5"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m10-study-overlook.png",
+      "bytes": 388018,
+      "sha256": "26b70fdeed7b9cb4695061ef759a858e1c233e18f7c2b30232e42f3104470f01"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m11-terrace-night.png",
+      "bytes": 324309,
+      "sha256": "0a8bf8545ad387af61b6813102c3c946cae228a8e50926c5310ba8bce924a959"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m12-return-sweep.png",
+      "bytes": 429610,
+      "sha256": "fd01a28266c8aa898b3ded98df421dab0c43a3e1579984588fcc3496cde78717"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m13-card-restored.png",
+      "bytes": 417418,
+      "sha256": "5f37fe9afbc0c2b931be814b733502f8ef9d5128f9ec97e8daf7f3491fa3d651"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-m14-final-message.png",
+      "bytes": 390139,
+      "sha256": "6c0a824373780977783fa595e080c1120acef2b0880e43a898b38cc5cad93948"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-semantic.telemetry.ndjson",
+      "bytes": 524600,
+      "sha256": "6d21859edc5777f210149ecbe5ed96ee462893983fafe034139b71bf256cdd50"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-forward-semantic.webm",
+      "bytes": 10822332,
+      "sha256": "134c253ef5d7fb0d0ca9a5e8d354d44b22419dfe6f84db19d794b4f70c89577c"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-semantic-end.png",
+      "bytes": 390267,
+      "sha256": "c2be1347300ca850589f726158105cf343a97006f6e138b01538d3c29ada33df"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/portrait-semantic-start.png",
+      "bytes": 412671,
+      "sha256": "add2fc1fb2863e5a4066dc1cc5cb275707938acc1aa305277f65efa90681ef36"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-correction-1/semantic-capture.json",
+      "bytes": 13933,
+      "sha256": "523256547f45f5cda9d32e379a5c36ee13d8dda454b0cb77547f306b0a311c20"
     },
     {
       "path": "06-demo-card-model/portrait/start-state.json",

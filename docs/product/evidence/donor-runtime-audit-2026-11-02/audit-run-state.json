@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:01:05.102Z",
+  "updatedAt": "2026-11-02T19:11:13.731Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -992,10 +992,10 @@
       }
     },
     "06-demo-card-model": {
-      "captureStatus": "IN_PROGRESS",
+      "captureStatus": "COMPLETE",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "SEMANTIC_DESKTOP_COMPLETE",
+      "lastSuccessfulStage": "CORRECTED_DISCOVERY_AND_SEMANTIC_CAPTURE_COMPLETE",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1088,18 +1088,29 @@
           "startedAt": "2026-11-02T19:02:11.218Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T19:03:57.126Z"
-        }
-      ],
-      "blockingUnresolved": [
+        },
         {
-          "question": "Stable A0 correction required",
-          "detail": "Repeat Discovery and semantic in all three viewports after the autonomous card assembly and hero copy have settled; compare corrected A0/A1."
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T19:06:33.166Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:08:03.202Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T19:08:49.780Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:10:20.090Z"
         }
       ],
+      "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T19:03:57.126Z"
+        "updatedAt": "2026-11-02T19:11:13.731Z"
       }
     },
     "07-a-one-door": {

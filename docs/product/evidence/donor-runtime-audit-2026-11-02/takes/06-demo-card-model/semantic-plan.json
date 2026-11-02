@@ -1,7 +1,7 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
-  "status": "PARTIAL / IN_PROGRESS",
-  "basis": "Original three-viewport Discovery videos and 5%-interval samples exposed the narrative but their A0 was still in autonomous hero assembly, so they are superseded for stable-start and restore proof. Corrected stable-A0 Discovery is being captured in fresh contexts. Target progress values are sampling positions in the second pass, not inferred product states. Source/Cut/Rubik reconciliation and restore verdict remain pending.",
+  "status": "CAPTURED / RECONCILIATION_PENDING",
+  "basis": "Original three-viewport Discovery videos and 5%-interval samples exposed the narrative but their A0 was still in autonomous hero assembly, so they are superseded for stable-start and restore proof. Discovery-correction-1 waits for the complete hero in three fresh contexts and records A→B→A. Semantic-correction-1 then captures M01–M14 in three other fresh contexts, with continuous WebM and NDJSON. Target progress values are sampling positions, not inferred product states. Source/Cut/Rubik reconciliation and formal restore verdict remain pending.",
   "milestones": [
     {"label":"M01","slug":"scale-readout","targetProgress":0.05,"observedChange":"The camera approaches the card house on its layered contour board; a 1:100 desk versus 1:1 house scale readout appears."},
     {"label":"M02","slug":"card-at-eye-height","targetProgress":0.18,"observedChange":"The camera descends toward a small human figure at the card model's entry, making its scaled height tangible."},
