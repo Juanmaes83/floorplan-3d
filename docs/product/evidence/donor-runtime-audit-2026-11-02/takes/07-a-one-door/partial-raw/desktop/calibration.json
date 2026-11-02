@@ -1,0 +1,31 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DWG // A-201  ·  NO. 7 ALBION ROW\n\nPLOTTING FRONT ELEVATION 1:50  100%\n\nNO. 7\nALBION ROW · A-201\nBOOK A VIEWING\n\nNO. 7 ALBION ROW\n ·  FRONT ELEVATION 1:50\n\nSIX METRES OF STREET.\nONE DOOR.\n±0.00\nSTREET\n+0.45\nGROUND FLOOR\n+3.60\nFIRST FLOOR\n+6.60\nSECOND FLOOR\n+9.10\nROOF\n+12.00\nROOF STOREY\nPROJECT\nNO. 7 ALBION ROW\nDRAWING\nFRONT ELEVATION\nSCALE\n1 : 50\nSHEET\nA-201\nSCROLL\nCAD // ELV.02\nSUN ALT 35.3° · AZ 135°\nOPTIC 2.0° ORTHO\nCAD PLAN // 1:100\nSTREET · 2° LENS\nSTREET\nPORCH\nPARLOUR\nATRIUM\nGARDEN",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 6840,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "scrollHeight": 7740,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nSTREET · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "after": {
+    "bodyText": "DWG // A-201  ·  NO. 7 ALBION ROW\n\nPLOTTING FRONT ELEVATION 1:50  100%\n\nNO. 7\nALBION ROW · A-201\nBOOK A VIEWING\n\nNO. 7 ALBION ROW\n ·  FRONT ELEVATION 1:50\n\nSIX METRES OF STREET.\nONE DOOR.\n±0.00\nSTREET\n+0.45\nGROUND FLOOR\n+3.60\nFIRST FLOOR\n+6.60\nSECOND FLOOR\n+9.10\nROOF\n+12.00\nROOF STOREY\nPROJECT\nNO. 7 ALBION ROW\nDRAWING\nFRONT ELEVATION\nSCALE\n1 : 50\nSHEET\nA-201\nSCROLL\nCAD // ELV.02\nSUN ALT 35.3° · AZ 135°\nOPTIC 2.4° ORTHO\nCAD PLAN // 1:100\nSTREET · 2° LENS\nSTREET\nPORCH\nPARLOUR\nATRIUM\nGARDEN",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 6840,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "scrollHeight": 7740,
+    "scrollY": 402,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nSTREET · 2° LENS | ALT 35.3° · AZ 135° | 2.4° ORTHO"
+  },
+  "model": "SCROLL_PLUS_TIME",
+  "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+}

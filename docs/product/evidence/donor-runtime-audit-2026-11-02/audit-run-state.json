@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:19:49.846Z",
+  "updatedAt": "2026-11-02T19:27:36.805Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -1136,16 +1136,41 @@
       }
     },
     "07-a-one-door": {
-      "captureStatus": "NOT_STARTED",
+      "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T19:22:31.381Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:23:51.875Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T19:24:30.216Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:25:36.406Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T19:26:31.368Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:27:36.805Z"
+        }
+      ],
       "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T19:27:36.805Z"
       }
     },
     "07-b-the-row": {

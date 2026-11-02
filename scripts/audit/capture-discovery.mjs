@@ -40,8 +40,8 @@ function evalJson(session, js) {
   try { return JSON.parse(out); } catch { throw new Error(`Could not parse eval output: ${out.slice(0,400)}`); }
 }
 function waitForStableStart(session) {
-  if (!id.startsWith('03-') && id !== '04-demo-build-time-lapse' && id !== '06-demo-card-model') return;
-  const marker = id === '04-demo-build-time-lapse' ? 'window.__heroDone===true' : id === '06-demo-card-model' ? "window.__rig?.ready===true && Number(document.querySelector('.hero .sub')?.style.opacity)>=0.99 && Number(document.querySelector('.top')?.style.opacity)>=0.99" : 'window.__ready===true';
+  if (!id.startsWith('03-') && !id.startsWith('07-') && id !== '04-demo-build-time-lapse' && id !== '06-demo-card-model') return;
+  const marker = id === '04-demo-build-time-lapse' ? 'window.__heroDone===true' : id === '06-demo-card-model' ? "window.__rig?.ready===true && Number(document.querySelector('.hero .sub')?.style.opacity)>=0.99 && Number(document.querySelector('.top')?.style.opacity)>=0.99" : id.startsWith('07-') ? 'window.__introDone===true' : 'window.__ready===true';
   let ready = false;
   for (let poll = 0; poll < 60; poll++) {
     ready = evalJson(session, marker);
@@ -51,7 +51,7 @@ function waitForStableStart(session) {
   if (!ready) throw new Error(`${id} did not reach stable start marker ${marker}`);
   ab(session, ['wait','500']);
 }
-const hudJs = `['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700)`;
+const hudJs = `['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud','#hudSun','#hudOptic'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700)`;
 const programmeJs = id === '04-demo-build-time-lapse' ? `(()=>{const e=document.querySelector('#prog');if(!e)return 'NOT_OBSERVED';const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {className:e.className,opacity:s.opacity,rect:{x:r.x,y:r.y,width:r.width,height:r.height},text:e.innerText.slice(0,180)}})()` : `'NOT_OBSERVED'`;
 const metricsJs = `({url:location.href,route:location.pathname,hash:location.hash,scrollY,scrollHeight:document.documentElement.scrollHeight,innerHeight,maxScroll:Math.max(0,document.documentElement.scrollHeight-innerHeight),dpr:devicePixelRatio,visibleHud:${hudJs},bodyText:document.body.innerText.slice(-1200),programme:${programmeJs}})`;
 const telemetryJs = `(() => {
@@ -59,11 +59,11 @@ const telemetryJs = `(() => {
   addEventListener('wheel',e=>{window.__auditInput={type:'wheel',deltaY:e.deltaY,t:performance.now()}},{passive:true});
   window.__auditTimer=setInterval(()=>{
     const d=document.documentElement, maxScroll=Math.max(0,d.scrollHeight-innerHeight);
-    const hud=['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700);
+    const hud=['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud','#hudSun','#hudOptic'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700);
     const m=hud.match(/SEQ\\s+(\\d+)%/);
     const rs=window.__st && typeof window.__st==='object' ? {...window.__st} : null;
     const rig=window.__rig?.ready===true ? window.__rig : null;
-    const rigCamera=rig?.camera;
+    const rigCamera=rig?.camera||window.__stage?.camera;
     const chapterEnd=window.__ch?.end?.[1];
     window.__auditSamples.push({monotonicMs:performance.now(),scrollY,scrollHeight:d.scrollHeight,innerHeight,maxScroll,normalizedNativeProgress:maxScroll?scrollY/maxScroll:0,runtimeProgress:rs&&Number.isFinite(chapterEnd)?rs.y/chapterEnd:m?Number(m[1])/100:'NOT_OBSERVED',route:location.pathname,hash:location.hash,visibleHud:hud.slice(0,350),interactionInput:window.__auditInput,camera:rs?.pos||rigCamera?.position?.toArray()||'NOT_OBSERVED',cameraQuaternion:rigCamera?.quaternion?.toArray()||'NOT_OBSERVED',cameraFov:rs?.fov??rigCamera?.fov??'NOT_OBSERVED',activeChapter:rs?.chapter||'NOT_OBSERVED',cutPlanePosition:rs?.scanX??'NOT_OBSERVED',frontVisibility:rs?.front??'NOT_OBSERVED',runtimeState:rs||'NOT_OBSERVED',visibility:'NOT_OBSERVED',transforms:'NOT_OBSERVED',materialState:'NOT_OBSERVED',lighting:'NOT_OBSERVED',sunState:'NOT_OBSERVED',clipping:'NOT_OBSERVED'});
   },100);
@@ -195,7 +195,7 @@ try {
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets = await Promise.all([...files,...samplePaths].map(async p => ({path:p,bytes:(await stat(p)).size,sha256:createHash('sha256').update(await readFile(p)).digest('hex') })));
   await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary = { id, viewport:viewportName, run:run||'original', fps, stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'||id==='06-demo-card-model'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
+  const summary = { id, viewport:viewportName, run:run||'original', fps, stableStartReady:id.startsWith('03-')||id.startsWith('07-')||id==='04-demo-build-time-lapse'||id==='06-demo-card-model'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
   state.takes[id].attempts.at(-1).status = 'COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt = new Date().toISOString();

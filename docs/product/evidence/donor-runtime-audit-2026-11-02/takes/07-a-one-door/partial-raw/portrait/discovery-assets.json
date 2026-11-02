@@ -1,0 +1,142 @@
+[
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-start.png",
+    "bytes": 150989,
+    "sha256": "f2f9260c5454985092a36b564cc8a850551fdce13af6d280aa5315a076c14789"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-end.png",
+    "bytes": 238944,
+    "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm",
+    "bytes": 3210366,
+    "sha256": "cba0082844468833f3f8a6416b764bbc0d94ed8761e530199831b4afd23d11d4"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+    "bytes": 240960,
+    "sha256": "3340cbcbbb9ce9fd03a3975752af01da8c20a6d4cc63883ad814940a321742b8"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-restored-start.png",
+    "bytes": 150990,
+    "sha256": "21f56426c908cb829bdfeb12683c44355dcb380fbc0d7ede24f64322b1476f7c"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.webm",
+    "bytes": 2857341,
+    "sha256": "9399fc83171528c7750384bf6d38cf63703f52c55a95a85745d5f6f63158b1d5"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+    "bytes": 198306,
+    "sha256": "3511ad4eb8c4dc77f3ac5af25ebcc3448ada463dd3fbe831f8af6be7c1d53b93"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p000.png",
+    "bytes": 150985,
+    "sha256": "08cb07b5920df5d79148e60564d96485784ce6cee1977b53803a7df012b0f132"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p005.png",
+    "bytes": 155502,
+    "sha256": "3d7e972c6c8bc2eb48354d7f6fbf738e70c4ff2f01e95bb9cd0a568d880091c2"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p010.png",
+    "bytes": 149963,
+    "sha256": "cf8293dfa2f731d8c38ddf7d4d94c3b9277da99ba8d1a8a8bee151b13d404030"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p015.png",
+    "bytes": 152050,
+    "sha256": "e4ba21f9c04aa67cdf1413f0fdcfbb185eff87e74dfc02650ec2ab8130a558e9"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p020.png",
+    "bytes": 230879,
+    "sha256": "bb50f03dd84d11fcdcff0b8e57432acad3596daf352f8e90c4369163ca25b3cf"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p025.png",
+    "bytes": 223632,
+    "sha256": "2fc07608eae475857979ff59ca07916673304343b3b53f75c5a50b8b1094fab7"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p030.png",
+    "bytes": 226150,
+    "sha256": "f27448fa1050472b8b8b51fba17e3150583869e875816c944ce3156a535f9a66"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p035.png",
+    "bytes": 244009,
+    "sha256": "9274d928e59fd6241869897bf9d052994105bc095b363a7cddb1140341d17cee"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p040.png",
+    "bytes": 247002,
+    "sha256": "a9bb7a67a6254495000ff3db8a7413ed9306cca1647ee81361a4d81c4235f369"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p045.png",
+    "bytes": 276919,
+    "sha256": "b198d239d95d75d6359f8c5db48046526393d2a8c754d9ad33065d760abf6389"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p050.png",
+    "bytes": 195887,
+    "sha256": "d06db5c8d786448c3aa5cd6e287d22e475be51242c73e8014fe4d12b3fce0c0d"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p055.png",
+    "bytes": 302885,
+    "sha256": "66a4dc19623e088e9a6eebdf7519da548435d976571280e2e9d8bc45578793ea"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p060.png",
+    "bytes": 326348,
+    "sha256": "81cb4b14bbcbae87c90a3bdecae5beffcd19a90916f10611245480ffbae60750"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p065.png",
+    "bytes": 312049,
+    "sha256": "b420c498fb527f3ca6863f55e0efcbd48f6cc1c309371568e6cb4ffc37339fba"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p070.png",
+    "bytes": 351418,
+    "sha256": "4c2f2df0b822a1025e85cef215ed6c350bc2138dfef26c44f090b46ce3f53c34"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p075.png",
+    "bytes": 252791,
+    "sha256": "0d569c2fbf9e98caae289c7fcd4b4aafda087a270fe92df88b2c7addcaeaee80"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p080.png",
+    "bytes": 232746,
+    "sha256": "22de19d00b035c5bbd7e31f96b0c4b648f5e44a820a1c77ab409891052022077"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p085.png",
+    "bytes": 264141,
+    "sha256": "1bfe909cec8f592393089ce7745114a2f8b4837bc7fb5540772f39f4edb3249a"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p090.png",
+    "bytes": 225082,
+    "sha256": "1b831a5c0f168b886400d34f5c47e1b57b7e8b5cb4cc940076dca0f595583295"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p095.png",
+    "bytes": 238944,
+    "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c"
+  },
+  {
+    "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p100.png",
+    "bytes": 238944,
+    "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c"
+  }
+]
