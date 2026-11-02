@@ -8,6 +8,8 @@ The final PR description is the dated final implementation report, with the exac
 
 The new CI workflow publishes `ft3d-6-human-review-<exact SHA>`: frozen-baseline/candidate screenshots, real videos and hashes. The candidate reuses the baseline's ZIP fixtures (identical bytes), blocks all nonlocal requests except locally fulfilled pinned Three, and records capture as `CAPTURED`, never as human-approved. The preview remains a project preview, not a production deployment. The final PR must include reviewer access/protection details and an artifact link; a local-only handoff is not complete.
 
+Temporal evidence QA caught overly fast automated scrubbing (180 ms holds). The evidence harness now waits at least 1 s at each scrubbed state, including reduced-motion/mobile and reverse checkpoints. This changes only capture pacing, not product timings. The earlier `a8ff068` campaign and interrupted broad run are retained as development/stale evidence; the final campaign and complete suite must use the subsequent clean checkpoint.
+
 Planned final commands (actual outputs/counts belong to the final review record):
 
 ```text
