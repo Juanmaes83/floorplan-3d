@@ -6,9 +6,11 @@
 **Companion authorities:**
 - `docs/product/ft3d-donor-global-reconciliation-2026-11-01.md`
 - `docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md`
+- `docs/product/flat-to-3d-presentation-knowledge-programme-2026-10-30.md`
 - `docs/product/project-experience-delivery-architecture-2026-11-02.md`
 - `docs/product/current-delivery-capabilities-2026-11-02.md`
 - `docs/product/presentation-experience-principles-2026-11-02.md`
+- `docs/product/construction-programme-domain-addendum-2026-11-02.md`
 - `docs/product/evidence/donor-visual-observations-2026-11-02/manifest.md`
 
 > The 7 donor groups / 14 takes are references to understand completely. They are not a promise of 14 Rubik features, 14 buttons or 14 Delivery cards.
@@ -22,7 +24,9 @@ This policy defines where donor-derived findings should land in Rubik after evid
 3. turning documentary donor dispositions into implementation authorization;
 4. treating professional contextual UI as decorative rather than as part of the experience;
 5. reducing hybrid technical/material transitions to endpoint style swaps;
-6. faking semantic construction/programme data because the renderer can animate geometry.
+6. faking semantic construction/programme data because the renderer can animate geometry;
+7. treating several representations of one semantic state as separate durable product truths;
+8. assuming maximum realism must be the endpoint of every professional narrative.
 
 `Rubik commands; donor informs.`
 
@@ -224,6 +228,15 @@ Fictional donor copy, people, material claims, costs and marketing numbers are n
 
 A contextual card may be a Presentation-layer consumer of existing data; it is not automatically a new durable semantic model.
 
+When cards combine measured/project-derived facts with professional explanation, preserve the distinction:
+
+```text
+DERIVED / AUTHORITY-BACKED FACT
+≠ PROFESSIONAL-AUTHORED NARRATIVE
+```
+
+The professional may explain *why* something matters without changing the project's factual authority.
+
 ### 5.6 Hybrid registered representation
 
 When donor evidence shows technical drawing and material/realistic imagery coexisting in one frame, do not reduce the finding to `style A → style B`.
@@ -259,6 +272,69 @@ affected project elements
 If Rubik lacks real or explicitly authored phase/programme semantics, classify that honestly as a semantic/domain gap. Do not derive a professional schedule from arbitrary animation timing.
 
 A later implementation may use Presentation to visualize the timeline, but Presentation must consume the semantic authority rather than invent it.
+
+FT3D-8 and Global Reconciliation D16–D18 remain the existing documentary authorities for this future family. Supplemental screenshots strengthen the domain reading but do not move the work out of `DEFER`/future status.
+
+### 5.8 Multi-representation synchronization
+
+Some donor/reference experiences visibly expose several readings of one apparent semantic state, for example programme, technical sheet and camera/3D modes.
+
+Do not automatically translate:
+
+```text
+A // PROG
+B // 1:1 SHEET
+C // CAM
+```
+
+into three Rubik features.
+
+First test whether they are better understood as:
+
+```text
+ONE SEMANTIC AUTHORITY
+        ├── programme representation
+        ├── technical-sheet representation
+        └── spatial/camera representation
+```
+
+If that reading is confirmed by runtime/source evidence, prefer shared state plus multiple consumers over duplicated timelines/state machines.
+
+### 5.9 Enriched return to technical representation
+
+A donor narrative may return to plan/section/elevation after opening depth, materials or human-scale space.
+
+Do not assume the product service must end at maximum realism.
+
+A technical representation can be a valid final state when the journey has made it more understandable to the client/professional. This is especially relevant to section experiences where `the same cut` returns after spatial/material exploration.
+
+Keep technical lifecycle restore separate from narrative meaning: a reverse scrub still must restore exact state even if the authored story deliberately ends on a technical drawing.
+
+### 5.10 Temporary construction/site state
+
+Construction references show excavation, plant, cranes, scaffolding, props, fencing and other temporary/process entities.
+
+If future evidence supports implementing this domain, distinguish:
+
+```text
+FINAL PROJECT / BUILDING TRUTH
+≠ PROGRAMME / PHASE STATE
+≠ TEMPORARY SITE STATE
+```
+
+Do not persist construction-only objects in final project truth merely because a 3D timeline needs them.
+
+See `docs/product/construction-programme-domain-addendum-2026-11-02.md` for documentary boundary questions. No schema is approved by this policy.
+
+### 5.11 Complementary reference universes
+
+The current formal runtime audit remains exactly the 7 groups / 14 takes already authorized.
+
+Supplemental screenshots also expose an `ARCH // 12 [INDEX]` reference universe with labels such as `The Section`, `The Elevation`, `The Study Model`, `The Exploded Axo`, `The Sun Study`, `Site to Room`, `The Napkin Sketch`, `The Build`, `The Material Board` and `Section Sweep`.
+
+Treat this as **complementary visual/reference evidence**, not as an automatic expansion from 14 audited takes to 26 features or a second runtime mission.
+
+If later investigation of an `ARCH // 12` reference is useful, it requires an explicit evidence task or targeted escalation; do not silently add it to the current Definition of DONE.
 
 ## 6. Gap interpretation
 
@@ -333,6 +409,8 @@ That is a useful family resemblance, not a product contract.
 
 Each take has its own professional service, semantic milestones and appropriate host capabilities. Shared infrastructure should be reused without flattening those differences.
 
+A narrative may also return to a technical/abstract state after spatial exploration; the final state is determined by professional purpose, not a universal realism ladder.
+
 ## 10. Mobile and interaction
 
 Donor desktop limitations are evidence about the donor, not Rubik requirements.
@@ -347,9 +425,12 @@ Rubik remains mobile-first. Any approved experience must eventually make clear:
 - touch/scroll/scrub behavior;
 - portrait/landscape behavior;
 - accessibility/lifecycle/restore;
-- how contextual information is opened/closed without hiding the project or trapping navigation.
+- how contextual information is opened/closed without hiding the project or trapping navigation;
+- when several readings/modes exist, which one is active and whether they share the same semantic state.
 
 Do not copy donor UI simply because the donor mechanism is useful.
+
+The semantic hierarchy visible in donor/reference menus can inform Rubik's own mobile-first hierarchy, but Point 9 remains the product IA authority: `DISEÑAR / ANALIZAR / PRESUPUESTAR / ENTREGAR / MI ESTUDIO`.
 
 ## 11. Preserve existing product value
 
@@ -388,10 +469,16 @@ If a stronger elevation narrative becomes a Presentation capability, existing im
 
 They may share section/camera/representation mechanisms while still solving different professional readings. Reuse of section infrastructure does not prove they should become one product experience.
 
-### Contextual Craft / Team / Services cards
+`Open the Lens`, `Down the Stair`, `Section Sweep` and complementary `The Section` references should therefore be reconciled against the existing FT3D-3 section authority before proposing another section engine.
 
-The donor UI demonstrates that spatial presentation can be paired with high-quality professional explanation. The Rubik question is not “copy this panel”; it is whether a reusable contextual information layer can present real Rubik data, profile-aware, while the project remains visible and authoritative.
+### Contextual Craft / Team / Services / room cards
 
-### Schedule Build
+The donor UI demonstrates that spatial presentation can be paired with high-quality professional explanation. The Rubik question is not “copy this panel”; it is whether a reusable contextual information layer can present real Rubik data plus clearly separated professional-authored narrative, profile-aware, while the project remains visible and authoritative.
 
-The donor programme/3D synchronization is evidence of a distinct semantic problem. Rubik should not treat it as only another scroll animation. A faithful bridge depends on real/authored phase-programme semantics and explicit mapping to affected elements; until then the correct result may be `MISSING_CAPABILITY`, `PRODUCT_DECISION_REQUIRED` or `DEFER`, depending on the audited evidence.
+### Schedule Build / The Build
+
+The donor programme/3D synchronization is evidence of a distinct semantic problem. Rubik should not treat it as only another scroll animation.
+
+Visible programme, technical sheet and camera modes may be several readings of the same time/phase state. Temporary construction entities additionally suggest domain state outside final building truth.
+
+A faithful bridge depends on real/authored phase-programme semantics and explicit mapping to affected elements; until then the correct result may be `MISSING_CAPABILITY`, `PRODUCT_DECISION_REQUIRED` or `DEFER`, depending on the audited evidence.
