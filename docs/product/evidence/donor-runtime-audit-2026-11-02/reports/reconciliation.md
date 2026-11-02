@@ -59,6 +59,6 @@ The 12-dimensional crosswalk in `capability-map.json` credits current project/bu
 
 ## RAW and integrity
 
-Verified RAW: 2710 files, 3435107182 bytes, directory content SHA256 8a495d4623f819d0af961bf250681ec28653b73c622d2e09dec731d6f4e6660c. Local ZIP: C:\Users\temp123\donor-runtime-audit-RAW-2026-11-02.zip, 3435687200 bytes, SHA256 80b0cb67fe140d5ccf2a33b6d1e4a4a768581a1cb7cdc3309b305fc8e7a6c5ee; NOT_UPLOADED. The ZIP and WebM remain outside normal Git history. All selected keyframes/manifests and nonvideo checkpoints are on the audit branch. Production diff against frozen baseline is zero.
+Verified RAW: 2710 files, 3435107182 bytes, directory content SHA256 8a495d4623f819d0af961bf250681ec28653b73c622d2e09dec731d6f4e6660c. Local ZIP: C:\Users\temp123\donor-runtime-audit-RAW-2026-11-02.zip, 3435687200 bytes, SHA256 80b0cb67fe140d5ccf2a33b6d1e4a4a768581a1cb7cdc3309b305fc8e7a6c5ee; GITHUB_DRAFT_RELEASE_VERIFIED. The ZIP and WebM remain outside normal Git history. All selected keyframes/manifests and nonvideo checkpoints are on the audit branch. Production diff against frozen baseline is zero.
 
 The global validator alone may emit `AUDIT 14/14 COMPLETE` after checking all A01–A18 gates; this report does not assert completion on its own.
