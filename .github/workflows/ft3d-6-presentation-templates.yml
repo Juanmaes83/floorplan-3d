@@ -1,0 +1,61 @@
+name: FT3D-6 templates and review evidence
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'js/presentation-*'
+      - 'tests/presentation-*'
+      - 'scripts/qa/render-presentation-templates.cjs'
+      - 'index.html'
+      - 'css/design-system.css'
+      - '.github/workflows/ft3d-6-presentation-templates.yml'
+  push:
+    branches: [feat/ft3d-6-professional-presentation-templates]
+permissions:
+  contents: read
+jobs:
+  templates-and-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      TEMPLATES_ARTIFACTS: qa-results/ft3d-6-review/tests
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.1'
+      - name: Browser dependency (same pinned version as local evidence)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/templates-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/templates-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/templates-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/templates-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Exact source, syntax and pure regressions
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check js/presentation-templates-core.js
+          node --check js/presentation-templates-ui.js
+          node --check js/presentation-ui.js
+          node --check scripts/qa/render-presentation-templates.cjs
+          git diff --check
+          node --test tests/presentation-templates.test.cjs tests/presentation-core.test.cjs tests/presentation-story.test.cjs tests/presentation-axon.test.cjs
+      - name: Real browser integration
+        run: node --test --test-concurrency=1 tests/presentation-templates.browser.test.cjs
+      - name: Frozen baseline and candidate screenshots and videos
+        run: |
+          mkdir -p "$RUNNER_TEMP/ft3d-6-baseline"
+          git archive e6bc3f3c19d1cd2ebef2dd44de05c007790d678e | tar -xf - -C "$RUNNER_TEMP/ft3d-6-baseline"
+          node scripts/qa/render-presentation-templates.cjs "$RUNNER_TEMP/ft3d-6-baseline" qa-results/ft3d-6-review/baseline baseline
+          QA_FIXTURE_DIR=qa-results/ft3d-6-review/baseline node scripts/qa/render-presentation-templates.cjs "$GITHUB_WORKSPACE" qa-results/ft3d-6-review/candidate candidate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-6-human-review-${{ env.TESTED_SHA }}
+          path: qa-results/ft3d-6-review/
+          retention-days: 30
+          if-no-files-found: warn

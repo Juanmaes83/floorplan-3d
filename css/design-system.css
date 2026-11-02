@@ -172,3 +172,10 @@ body.guided.next-present:has(#guideBar:not([hidden])) #presentationBtn{display:n
   /* A temporary message never covers the selection bar: it sits above it (--fab-top is measured by app-shell.js). */
   body:has(#fab.show) #toast{bottom:calc(100vh - var(--fab-top,100vh) + 8px)}
 }
+.presentation-template{margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel,#fff)}
+.presentation-template-picker{display:grid;gap:6px;font-weight:700}.presentation-template select{min-height:44px;width:100%;max-width:100%;font:inherit}
+.presentation-template-hint{margin:6px 0;color:var(--muted);font-size:13px;line-height:1.5;overflow-wrap:anywhere}.presentation-template-state{font-weight:700;margin:12px 0 4px}
+.presentation-template-warnings{padding-inline-start:22px;font-size:13px;line-height:1.5}.presentation-template-warnings li+li{margin-top:6px}
+.presentation-template-options{border-top:1px solid var(--line);padding-top:8px;margin-top:10px}.presentation-template-options summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}
+.presentation-template-capability{margin:8px 0}.presentation-template-capability label,label.presentation-template-capability{display:flex;gap:10px;align-items:center;min-height:44px}.presentation-template-capability input{width:20px;height:20px;flex:none}
+.presentation-template [hidden]{display:none}.presentation-template button{min-height:44px;white-space:normal}.presentation-template input:disabled+span{color:var(--muted)}
