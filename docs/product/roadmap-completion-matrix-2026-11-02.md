@@ -1,11 +1,12 @@
 # Matriz de cierre del roadmap — 02-11-2026
 
-**Base funcional consolidada:** `master@0f9c6ead9732901681498efec326d1ca92e42ffe`.  
-**Cambio respecto a la matriz 30-10/01-11:** FT3D-5 y FT3D-6 ya no son pendientes; ambos están integrados, y la investigación donor runtime 7×14 es el workstream activo antes de decidir bridges/implementación posterior.
+**Baseline funcional de producto:** `0f9c6ead9732901681498efec326d1ca92e42ffe` (merge de PR #159).  
+**Cambio respecto a la matriz 30-10/01-11:** FT3D-5 y FT3D-6 ya no son pendientes; ambos están integrados, y la investigación donor runtime 7×14 es el workstream activo antes de decidir bridges/implementación posterior.  
+**Nota:** commits posteriores exclusivamente documentales pueden avanzar `master` sin cambiar este baseline funcional; verificar siempre el HEAD real antes de actuar.
 
 ## Convenciones
 
-- **INTEGRADO:** contenido presente en `master`.
+- **INTEGRADO:** contenido presente en `master` o en el baseline funcional indicado, según la fecha del registro.
 - **VALIDADO:** QA exigido para el alcance acreditado.
 - **APROBADO HUMANO:** existe revisión humana requerida para el alcance visual/funcional.
 - **PENDIENTE:** fase/capability todavía no implementada.
@@ -31,7 +32,7 @@
 | FT3D-3 | **INTEGRADO Y VALIDADO** | sección dinámica |
 | FT3D-4 | **INTEGRADO Y VALIDADO** | alzado/fachada narrativa |
 | FT3D-5 | **INTEGRADO** | tested checkpoint `bf3e5ca...` 710 PASS / 0 FAIL / 2 SKIP; integración `18848fbf...` |
-| FT3D-6 | **INTEGRADO + APROBADO HUMANO** | PR #159; implementation head `0313ac14...`; merge/master `0f9c6ead...` |
+| FT3D-6 | **INTEGRADO + APROBADO HUMANO** | PR #159; implementation head `0313ac14...`; merge funcional `0f9c6ead...` |
 | Donor 7×14 | **EN INVESTIGACIÓN** | auditoría A→B→A; no es una fase de implementación ni 14 features |
 | FT3D-7 | **PENDIENTE** | esperar resultados/revisión de investigación y autorización de siguiente misión |
 | FT3D-8 | **FUTURO / SEPARADO** | construcción/timeline; no mezclar automáticamente con donor audit |
@@ -51,11 +52,11 @@
 - Branch de implementación histórica: `feat/ft3d-6-professional-presentation-templates`.
 - HEAD exacto revisado: `0313ac14b17cedb998981e2c832b8175f9b9c03f`.
 - PR: #159.
-- Merge: `0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- Merge funcional: `0f9c6ead9732901681498efec326d1ca92e42ffe`.
 - Nuevos tests: **57/57 PASS** (39 pure + 18 browser).
 - Python: **56/56 PASS**.
 - Suite Node final registrada: **1251 PASS / 31 fallos conocidos reconciliados / 2 SKIP**.
-- Checks remotos del HEAD exacto: success antes de merge.
+- Los ocho workflows PR-localizados del HEAD exacto terminaron en `success`, incluidos `FT3D-6 templates and review evidence` e `Integrated browser regressions`.
 - Revisión visual humana: aprobada.
 
 **Decisión:** FT3D-6 está integrado. No seguir usando el estado histórico `DRAFT / pendiente de reconciliación tras FT3D-5`.
@@ -83,7 +84,7 @@ Un take no se considera revisado sólo por abrir la página o capturar START/END
 ## Orden operativo vigente
 
 ```text
-master@0f9c6ead (FT3D-6 integrado)
+baseline funcional 0f9c6ead (FT3D-6 integrado)
         ↓
 donor runtime audit 7×14
         ↓
@@ -116,9 +117,8 @@ Ver `docs/ops/MULTI-AGENT-OPERATING-PROTOCOL.md`.
 ## Deuda que sigue abierta
 
 - B2/B8: validación externa OpenAI cuando se desbloquee la dependencia correspondiente.
-- branch protection de `master`: pendiente.
-- documentación histórica: varias fuentes fechadas 30-10/01-11 describen FT3D-4/5 como estado vigente; se conservan como historia pero deben enlazar a la autoridad 02-11.
-- FT3D-6 ledger: su encabezado pre-freeze aún dice `Implementation is in progress`; necesita nota de cierre segura sin borrar la historia del proceso.
+- branch protection de `master`: pendiente mientras siga sin protección.
+- documentación histórica: varias fuentes fechadas 30-10/01-11 describen FT3D-4/5 como estado vigente; deben conservarse como historia y enlazar a la autoridad 02-11.
 - limpieza administrativa histórica de ramas/PRs donde siga pendiente.
 
 ## Criterio de siguiente autorización
