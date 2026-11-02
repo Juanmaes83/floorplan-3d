@@ -1,0 +1,643 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED",
+  "discoveryRun": {
+    "desktop": null,
+    "portrait": null,
+    "landscape": null
+  },
+  "semanticRun": {
+    "desktop": null,
+    "portrait": null,
+    "landscape": null
+  },
+  "progressModel": {
+    "desktop": "SCROLL_PLUS_TIME",
+    "portrait": "SCROLL_PLUS_TIME",
+    "landscape": "SCROLL_PLUS_TIME"
+  },
+  "transitions": [
+    [
+      0.04,
+      0.07,
+      0.1
+    ],
+    [
+      0.14,
+      0.16,
+      0.19
+    ],
+    [
+      0.23,
+      0.25,
+      0.29
+    ],
+    [
+      0.3,
+      0.34,
+      0.38
+    ],
+    [
+      0.39,
+      0.42,
+      0.46
+    ],
+    [
+      0.46,
+      0.49,
+      0.53
+    ],
+    [
+      0.57,
+      0.63,
+      0.68
+    ],
+    [
+      0.74,
+      0.79,
+      0.82
+    ],
+    [
+      0.81,
+      0.85,
+      0.88
+    ],
+    [
+      0.88,
+      0.92,
+      0.95
+    ],
+    [
+      0.96,
+      0.99,
+      1
+    ]
+  ],
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-61; engine/elevation.js:1146-1187",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:65-70; engine/elevation.js:143-161",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-60; engine/elevation.js:1146-1187",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:977-1003,1090-1096",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,79-80; engine/elevation.js:566-850,1146-1187",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,81; engine/elevation.js:566-850,1146-1187",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:847-855,1094-1096",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:566-850,1146-1187",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:1205-1422"
+  ],
+  "continuity": [
+    "The same central door, balcony, stacked windows and neighboring row remain while the optic reveals depth.",
+    "The luminous front crosses the same central door, balcony, windows and shadow-bearing facade.",
+    "Finished brick retains the original openings and balcony positions.",
+    "The same facade edges produce the moving shadow pattern under a changing sun.",
+    "The camera approaches the central door that was present on the initial elevation.",
+    "The oak leaf pivots within that same central opening, revealing the hall behind it.",
+    "The continuous hall floor and stair lead toward the parlour, bookshelves and rear glazing.",
+    "The parlour floor and rear glazing lead to the same kitchen/dining atrium.",
+    "The garden doors occupy the glazing already visible from the atrium, with the same tree beyond.",
+    "The camera passes through those garden doors to the walled courtyard and same tree.",
+    "The walled courtyard and tree stay in place as the donor property text settles."
+  ],
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "SUPPORTED",
+    "landscape": "SUPPORTED"
+  },
+  "viewportEvidence": {
+    "desktop": [],
+    "portrait": [],
+    "landscape": []
+  },
+  "restoreVerdict": {
+    "desktop": "VISUALLY_EQUIVALENT",
+    "portrait": "VISUALLY_EQUIVALENT",
+    "landscape": "VISUALLY_EQUIVALENT"
+  },
+  "restoreReview": {
+    "desktop": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore.",
+    "portrait": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore.",
+    "landscape": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": [],
+    "portrait": [],
+    "landscape": []
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "desktop-start.png",
+      "desktop-end.png",
+      "desktop-restored-start.png",
+      "desktop-forward-m02-material-sweep-onset.png",
+      "desktop-forward-m06-door-opens.png",
+      "desktop-forward-m09-rear-doors-open.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "portrait-end.png",
+      "portrait-restored-start.png",
+      "portrait-forward-m02-material-sweep-onset.png",
+      "portrait-forward-m06-door-opens.png",
+      "portrait-forward-m09-rear-doors-open.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-end.png",
+      "landscape-restored-start.png",
+      "landscape-forward-m02-material-sweep-onset.png",
+      "landscape-forward-m06-door-opens.png",
+      "landscape-forward-m09-rear-doors-open.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "design reviewer"
+    ],
+    "serviceOutcome": "The same townhouse drawing gains depth, brick and physically related shadow; a reversible camera route tests entry, parlour, atrium and garden continuity.",
+    "decisionValue": "Can clarify facade depth, orientation, shadow and room sequence in project review. Donor address, area, status and booking call to action are authored copy, not verified Rubik project facts.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "The drawn No. 7 elevation becomes materialized and the route reaches its courtyard.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m11-terminal-courtyard.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Pinned take describes depth, material, sun movement and front-to-back walk.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:1-7"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "The same doorway, balcony and stacked windows survive oblique depth and paper-to-brick transformation.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Central facade in ink.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same facade after material sweep.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p025.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One h house and shared geometry drive both appearances.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:9-13,59-73; engine/elevation.js:938-1003"
+        }
+      ]
+    },
+    {
+      "statement": "The front door opens into the entrance hall, with a continuous floor, stair, parlour and atrium toward the rear.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Front door partially open.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m06-door-opens.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous reception view.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m07-reception-parlour.png"
+        }
+      ]
+    },
+    {
+      "statement": "Rear glazing and tree remain related as doors open and camera enters the same walled courtyard.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Doors opening from atrium.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m09-rear-doors-open.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Courtyard end.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Three clean-context Discovery A→B→A passes and semantic A→B passes recorded.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Desktop ink elevation and 2° optic at stable A0.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Portrait separately reaches the courtyard.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-end.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Landscape separately reaches the courtyard.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-end.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "All three restored A1 screenshots match the start visually after natural reverse.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-restored-start.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Frame maps camera, depth cue, spatial sweep, sun and doors from absolute p.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-73"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Global D07 retains Rubik light/material authority and adapts coherent hatching.",
+      "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik elevation Story already composes facade framing and optional solar state.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/a-one-door/page.js",
+      "symbol": "KEYS / frame",
+      "lines": "28-73",
+      "claim": "Camera keys and absolute depth/sweep/sun/door mapping produce the observed ordered states.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "GLSL_COMMON / mat",
+      "lines": "31-119,352-429",
+      "claim": "Shadow-derived technical hatch and spatial uSweep determine ink/material appearance.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setSun / sun shadow",
+      "lines": "143-161",
+      "claim": "Directional light and its shadow map move together.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "house / setDoor / setGardenDoor",
+      "lines": "938-1096",
+      "claim": "One house has pivoting front and rear door groups.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "camAt",
+      "lines": "1146-1187",
+      "claim": "Perspective/orthographic look and phone framing interpolate authored camera keys.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "run / scrollP / __introDone",
+      "lines": "1205-1422",
+      "claim": "Lenis animatedScroll drives progress; self-drawn intro completes before stable A0.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut1 D07 Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; Atlas D07 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D07 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225",
+      "documentedDisposition": "D07-C1 ADAPT shadow-coherent hatch; C2 KEEP EXISTING Rubik material/light/Solar; C3 REJECT donor-specific AO and one-light assumptions. Historical Cut1 extraction is prior analysis, not an implementation instruction.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior Cut1 and Global distinguish shadow-based graphical principle from Rubik light authority.",
+          "locator": "Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed hatching tracks the same facade shadow before/after materialization.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m02-material-sweep-onset.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut3 D19 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; Atlas D19 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D19 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447",
+      "documentedDisposition": "D19-C1 KEEP EXISTING geometry/material/environment; C2 ADAPT sourced camera/light/material coordination; C3 REJECT universal brick/clearcoat/renderer rewrite.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3 and Global already credit Rubik geometry/material infrastructure.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "The same townhouse displays richer brick/detail without becoming a different geometry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m03-material-sweep-complete.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "EXISTS",
+      "claim": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "EXISTS",
+      "claim": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "NO_GAP",
+      "statement": "Rubik already owns project geometry, materials, light, presentation progress and restore infrastructure.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Existing project/Story/elevation infrastructure.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/presentation-elevation-core.js:171-247; js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A project-derived shadow-coherent ink hatch and spatially registered ink-to-material facade front are not accredited in current Rubik.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Donor shader connects shadow, hatch and uSweep.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119,352-429"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current elevation Story composes camera/solar without this donor front.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "If selected later, one Story state would have to coordinate drawing, relief, sun, doors and front-to-back route without mutating project authority.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Donor frame coordinates those states from p.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-73"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story and elevation already have absolute progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If selected later, preserve the same project facade while moving from technical shadow hatching to sourced material/light.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building geometry",
+        "Rubik material/light/Solar",
+        "Story absolute state"
+      ],
+      "existingCapabilitiesConsumed": [
+        "elevation Story",
+        "View3D geometry/materials",
+        "Solar snapshot"
+      ],
+      "missingConnector": "Project-derived hatch/mask adapter registered to geometry and shadow, with independent source/data provenance.",
+      "donorMechanismReference": "engine/elevation.js:31-119,352-429; Global D07-C1 ADAPT, D07-C2 KEEP, D07-C3 REJECT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If selected later, relate one facade opening to valid room and garden stops while preserving reverse.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building openings and room IDs",
+        "Story camera/restore",
+        "mobile framing"
+      ],
+      "existingCapabilitiesConsumed": [
+        "presentation-route",
+        "elevation Story camera",
+        "Story lifecycle"
+      ],
+      "missingConnector": "Validated project-derived entry/interior/garden route and door-state handoff; donor fixed camera keys and sales copy remain references only.",
+      "donorMechanismReference": "a-one-door/page.js:28-82; engine/elevation.js:1090-1096,1146-1187",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: authorized facade/opening and valid room/route data before any front-to-back visit.",
+    "TECHNICAL_PREREQUISITE: Story-owned absolute presentation state and restoration before reversible ink/material/sun/door coordination.",
+    "TECHNICAL_PREREQUISITE: material and light authority remains Rubik-owned; any hatch adapter must follow its shadows, not invent project solar facts."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Address, area, levels and sales status come from current project data or are explicitly marked illustrative."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Door, balcony and window identities remain registered through ink, depth and brick states."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "Hatching follows the same shadow geometry as materialized light; spatial sweep does not detach from the facade."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Route enters only through a valid opening and stays clear of project geometry in all viewports."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Natural reverse restores camera, optic, hatch/material, sun/shadows, doors, HUD and progress."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait and 844×390 keep facade, essential captions and plan radar readable."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Drawing-to-building meaning and room changes have text and reduced-motion equivalents."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Still/video output distinguishes verified project facts from authored donor sales copy."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Presentation state does not alter saved project geometry, materials or Solar configuration."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Passive evidence does not prove donor GPU material/shadow-map/resource identity after reverse.",
+      "attempts": [
+        "A0/A1 screenshots, route/scroll/HUD equality in all viewports",
+        "continuous reverse WebM/telemetry",
+        "pinned page.js and engine/elevation.js absolute-state inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource identity probe if later acceptance requires internal identity."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Professional value and placement of this experience among 14 references remain a later product decision.",
+      "attempts": [
+        "three-viewport observed sequence",
+        "pinned README/source",
+        "Cut1 D07, Cut3 D19 and Global reconciliation"
+      ],
+      "evidenceNeeded": "Human review after full 14-reference audit; no bridge authorized here."
+    }
+  ]
+}

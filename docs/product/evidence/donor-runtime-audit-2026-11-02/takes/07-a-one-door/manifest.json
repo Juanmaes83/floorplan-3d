@@ -1,0 +1,3399 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.take.v1",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "take": {
+    "id": "07-a-one-door",
+    "group": "07 · SUNLIT ELEVATION",
+    "title": "A · ONE DOOR",
+    "inventoryIndex": 12
+  },
+  "status": "AUDITED",
+  "baseline": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "approvedSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+    "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+    "cleanAtStart": true
+  },
+  "reference": {
+    "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07",
+    "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+    "donorRepo": "Sam1983Aing/flat-to-3d",
+    "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "entrypoint": "07-sunlit-elevation/a-one-door/index.html",
+    "urlDiscoveryEvidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:553",
+        "statement": "Selector variant A · One Door points to 07-sunlit-elevation/a-one-door/index.html"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/index.html",
+        "statement": "Entrypoint exists in pinned checkout"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html at 2026-11-02T10:33:06.640Z",
+        "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html"
+      }
+    ]
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "browser": "Google Chrome 153.0.8010.53",
+    "playwright": "1.64.1 installed as recording fallback; not used",
+    "ffmpeg": "8.1.2-full_build"
+  },
+  "professionalService": {
+    "problemSolved": "Let an architect or client read one drawn street elevation as a sunlit, materialized house and follow its front door through actual room relationships to the rear courtyard.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "design reviewer"
+    ],
+    "serviceOutcome": "The same townhouse drawing gains depth, brick and physically related shadow; a reversible camera route tests entry, parlour, atrium and garden continuity.",
+    "decisionValue": "Can clarify facade depth, orientation, shadow and room sequence in project review. Donor address, area, status and booking call to action are authored copy, not verified Rubik project facts.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "The drawn No. 7 elevation becomes materialized and the route reaches its courtyard.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m11-terminal-courtyard.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Pinned take describes depth, material, sun movement and front-to-back walk.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:1-7"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "The same doorway, balcony and stacked windows survive oblique depth and paper-to-brick transformation.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Central facade in ink.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same facade after material sweep.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p025.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One h house and shared geometry drive both appearances.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:9-13,59-73; engine/elevation.js:938-1003"
+        }
+      ]
+    },
+    {
+      "statement": "The front door opens into the entrance hall, with a continuous floor, stair, parlour and atrium toward the rear.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Front door partially open.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m06-door-opens.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Continuous reception view.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m07-reception-parlour.png"
+        }
+      ]
+    },
+    {
+      "statement": "Rear glazing and tree remain related as doors open and camera enters the same walled courtyard.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Doors opening from atrium.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m09-rear-doors-open.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Courtyard end.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 7740,
+        "innerHeight": 900,
+        "maxScroll": 6840,
+        "visibleHud": "CAD PLAN // 1:100\nSTREET · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-201  ·  NO. 7 ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING FRONT ELEVATION 1:50  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ NO. 7 ALBION ROW · A-201 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"NO. 7\"\n    - StaticText \"ALBION ROW · A-201\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"BOOK A VIEWING →\" [ref=e3]\n    - StaticText \"BOOK A VIEWING\"\n    - StaticText \"→\"\n- region \"No. 7 Albion Row, front elevation\" [ref=e1]\n  - StaticText \"NO. 7 ALBION ROW\"\n  - StaticText \" ·  FRONT ELEVATION 1:50\"\n  - heading \"SIX METRES OF STREET. ONE DOOR.\" [level=1, ref=e4]\n    - StaticText \"SIX METRES OF STREET.\"\n    - StaticText \"ONE \"\n    - emphasis\n      - StaticText \"DOOR.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"STREET · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"STREET\" [ref=e5]\n  - button \"PORCH\" [ref=e6]\n  - button \"PARLOUR\" [ref=e7]\n  - button \"ATRIUM\" [ref=e8]\n  - button \"GARDEN\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[71219AE4030C453F0D879B2378102708] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html (Document) 200\n[43976.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[43976.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[43976.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/page.js (Script) 200\n[43976.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[43976.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[43976.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[43976.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[43976.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[43976.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[43976.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[43976.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[43976.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[43976.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[43976.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[43976.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[43976.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[43976.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 34.4,
+          "bytes": 15445532,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 41.7,
+          "bytes": 19563262,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ink-depth-reveal",
+          "changed": [
+            "The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable."
+          ],
+          "continuous": [
+            "The same central door, balcony, stacked windows and neighboring row remain while the optic reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0408,
+            "scrollY": 279,
+            "monotonicMs": 10388.6,
+            "videoSeconds": 1.507,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0678,
+            "scrollY": 464,
+            "monotonicMs": 10979,
+            "videoSeconds": 2.097,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1007,
+            "scrollY": 689,
+            "monotonicMs": 11788,
+            "videoSeconds": 2.906,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.07587719298245614,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-61; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at desktop: The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m01-ink-depth-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.04-0.1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=1.507-2.906"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "material-sweep-onset",
+          "changed": [
+            "A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry."
+          ],
+          "continuous": [
+            "The luminous front crosses the same central door, balcony, windows and shadow-bearing facade."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1399,
+            "scrollY": 957,
+            "monotonicMs": 12577.2,
+            "videoSeconds": 3.695,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1611,
+            "scrollY": 1102,
+            "monotonicMs": 13281.8,
+            "videoSeconds": 4.4,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1905,
+            "scrollY": 1303,
+            "monotonicMs": 14273.2,
+            "videoSeconds": 5.391,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.170906432748538,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at desktop: A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m02-material-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.14-0.19",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=3.695-5.391"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "material-sweep-complete",
+          "changed": [
+            "The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable."
+          ],
+          "continuous": [
+            "Finished brick retains the original openings and balcony positions."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2317,
+            "scrollY": 1585,
+            "monotonicMs": 15073.5,
+            "videoSeconds": 6.192,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2506,
+            "scrollY": 1714,
+            "monotonicMs": 15874.1,
+            "videoSeconds": 6.992,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2896,
+            "scrollY": 1981,
+            "monotonicMs": 17175.6,
+            "videoSeconds": 8.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2565789473684211,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at desktop: The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m03-material-sweep-complete.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.23-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=6.192-8.294"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "sun-and-shadow-change",
+          "changed": [
+            "The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows."
+          ],
+          "continuous": [
+            "The same facade edges produce the moving shadow pattern under a changing sun."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2982,
+            "scrollY": 2040,
+            "monotonicMs": 17375.2,
+            "videoSeconds": 8.493,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3423,
+            "scrollY": 2341,
+            "monotonicMs": 19077.6,
+            "videoSeconds": 10.196,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3797,
+            "scrollY": 2597,
+            "monotonicMs": 20176.1,
+            "videoSeconds": 11.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.34210526315789475,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:65-70; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at desktop: The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m04-sun-and-shadow-change.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=8.493-11.294"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "threshold-approach",
+          "changed": [
+            "The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess."
+          ],
+          "continuous": [
+            "The camera approaches the central door that was present on the initial elevation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3909,
+            "scrollY": 2674,
+            "monotonicMs": 20475.9,
+            "videoSeconds": 11.594,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4193,
+            "scrollY": 2868,
+            "monotonicMs": 20979,
+            "videoSeconds": 12.097,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.457,
+            "scrollY": 3126,
+            "monotonicMs": 22377,
+            "videoSeconds": 13.495,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4276315789473684,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-60; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at desktop: The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m05-threshold-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.39-0.46",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=11.594-13.495"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "door-opens",
+          "changed": [
+            "The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening."
+          ],
+          "continuous": [
+            "The oak leaf pivots within that same central opening, revealing the hall behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.457,
+            "scrollY": 3126,
+            "monotonicMs": 22377,
+            "videoSeconds": 13.495,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.493,
+            "scrollY": 3372,
+            "monotonicMs": 23580.2,
+            "videoSeconds": 14.698,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5291,
+            "scrollY": 3619,
+            "monotonicMs": 24881,
+            "videoSeconds": 15.999,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.49415204678362573,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at desktop: The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m06-door-opens.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.46-0.53",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=13.495-15.999"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "reception-parlour",
+          "changed": [
+            "The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible."
+          ],
+          "continuous": [
+            "The continuous hall floor and stair lead toward the parlour, bookshelves and rear glazing."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5697,
+            "scrollY": 3897,
+            "monotonicMs": 26081.2,
+            "videoSeconds": 17.199,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6304,
+            "scrollY": 4312,
+            "monotonicMs": 27882.3,
+            "videoSeconds": 19,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6819,
+            "scrollY": 4664,
+            "monotonicMs": 29384.2,
+            "videoSeconds": 20.502,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6366959064327485,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,79-80; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at desktop: The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m07-reception-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.57-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=17.199-20.502"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour."
+          ],
+          "continuous": [
+            "The parlour floor and rear glazing lead to the same kitchen/dining atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7412,
+            "scrollY": 5070,
+            "monotonicMs": 30985,
+            "videoSeconds": 22.103,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7906,
+            "scrollY": 5408,
+            "monotonicMs": 32485.6,
+            "videoSeconds": 23.604,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8175,
+            "scrollY": 5592,
+            "monotonicMs": 33574.4,
+            "videoSeconds": 24.693,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7982456140350878,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,81; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at desktop: The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.74-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=22.103-24.693"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space."
+          ],
+          "continuous": [
+            "The garden doors occupy the glazing already visible from the atrium, with the same tree beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8091,
+            "scrollY": 5534,
+            "monotonicMs": 33374.3,
+            "videoSeconds": 24.492,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.85,
+            "scrollY": 5814,
+            "monotonicMs": 34181.7,
+            "videoSeconds": 25.3,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8784,
+            "scrollY": 6008,
+            "monotonicMs": 34874.9,
+            "videoSeconds": 25.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8552631578947368,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at desktop: Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.81-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=24.492-25.993"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "courtyard-arrival",
+          "changed": [
+            "The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view."
+          ],
+          "continuous": [
+            "The camera passes through those garden doors to the walled courtyard and same tree."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8784,
+            "scrollY": 6008,
+            "monotonicMs": 34874.9,
+            "videoSeconds": 25.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9216,
+            "scrollY": 6304,
+            "monotonicMs": 36072.9,
+            "videoSeconds": 27.191,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.95,
+            "scrollY": 6498,
+            "monotonicMs": 37073.7,
+            "videoSeconds": 28.192,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9216374269005848,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at desktop: The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m10-courtyard-arrival.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.88-0.95",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=25.993-28.192"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "terminal-courtyard",
+          "changed": [
+            "The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery."
+          ],
+          "continuous": [
+            "The walled courtyard and tree stay in place as the donor property text settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9583,
+            "scrollY": 6555,
+            "monotonicMs": 37273.7,
+            "videoSeconds": 28.392,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9909,
+            "scrollY": 6778,
+            "monotonicMs": 37874.1,
+            "videoSeconds": 28.992,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 6840,
+            "monotonicMs": 39175.5,
+            "videoSeconds": 30.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9978070175438597,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at desktop: The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m11-terminal-courtyard.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.96-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm#t=28.392-30.294"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 6840,
+        "scrollHeight": 7740,
+        "innerHeight": 900,
+        "maxScroll": 6840,
+        "visibleHud": "CAD PLAN // 1:100\nGARDEN · Z:+12.3M | ALT 20.6° · AZ 152° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 25.6,
+          "bytes": 11998108,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 115,
+          "stepPx": 72
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -72
+        }
+      ]
+    },
+    "portrait": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 7258,
+        "innerHeight": 844,
+        "maxScroll": 6414,
+        "visibleHud": "CAD PLAN // 1:100\nSTREET · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-201  ·  NO. 7 ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING FRONT ELEVATION 1:50  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ NO. 7 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"NO. 7\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"BOOK A VIEWING →\" [ref=e3]\n    - StaticText \"BOOK A VIEWING\"\n    - StaticText \"→\"\n- region \"No. 7 Albion Row, front elevation\" [ref=e1]\n  - StaticText \"NO. 7 ALBION ROW\"\n  - StaticText \" ·  FRONT ELEVATION 1:50\"\n  - heading \"SIX METRES OF STREET. ONE DOOR.\" [level=1, ref=e4]\n    - StaticText \"SIX METRES OF STREET.\"\n    - StaticText \"ONE \"\n    - emphasis\n      - StaticText \"DOOR.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"STREET · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e5] clickable [cursor:pointer]\n    - graphics-symbol [ref=e6] clickable [cursor:pointer]\n    - graphics-symbol [ref=e7] clickable [cursor:pointer]\n    - graphics-symbol [ref=e8] clickable [cursor:pointer]\n    - graphics-symbol [ref=e9] clickable [cursor:pointer]",
+        "consoleErrors": "",
+        "network": "[44C746A86FB4011B4D88B337A5893FC3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html (Document) 200\n[115284.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[115284.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[115284.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/page.js (Script) 200\n[115284.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[115284.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[115284.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[115284.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[115284.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[115284.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[115284.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[115284.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[115284.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[115284.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[115284.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[115284.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[115284.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[115284.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 26.2,
+          "bytes": 3210366,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 32.7,
+          "bytes": 4057261,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ink-depth-reveal",
+          "changed": [
+            "The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable."
+          ],
+          "continuous": [
+            "The same central door, balcony, stacked windows and neighboring row remain while the optic reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0399,
+            "scrollY": 256,
+            "monotonicMs": 9011.7,
+            "videoSeconds": 1.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.072,
+            "scrollY": 462,
+            "monotonicMs": 9614.5,
+            "videoSeconds": 1.897,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1027,
+            "scrollY": 659,
+            "monotonicMs": 10321.3,
+            "videoSeconds": 2.603,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.07452447770502027,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-61; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at portrait: The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m01-ink-depth-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.04-0.1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=1.294-2.603"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "material-sweep-onset",
+          "changed": [
+            "A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry."
+          ],
+          "continuous": [
+            "The luminous front crosses the same central door, balcony, windows and shadow-bearing facade."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1389,
+            "scrollY": 891,
+            "monotonicMs": 11212.9,
+            "videoSeconds": 3.495,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1618,
+            "scrollY": 1038,
+            "monotonicMs": 11615,
+            "videoSeconds": 3.897,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.189,
+            "scrollY": 1212,
+            "monotonicMs": 12223.6,
+            "videoSeconds": 4.506,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.1682257561584035,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at portrait: A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m02-material-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.14-0.19",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=3.495-4.506"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "material-sweep-complete",
+          "changed": [
+            "The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable."
+          ],
+          "continuous": [
+            "Finished brick retains the original openings and balcony positions."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2311,
+            "scrollY": 1482,
+            "monotonicMs": 13024.3,
+            "videoSeconds": 5.306,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2521,
+            "scrollY": 1617,
+            "monotonicMs": 13516,
+            "videoSeconds": 5.798,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2925,
+            "scrollY": 1876,
+            "monotonicMs": 14425.2,
+            "videoSeconds": 6.707,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.261771125662613,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at portrait: The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m03-material-sweep-complete.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.23-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=5.306-6.707"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "sun-and-shadow-change",
+          "changed": [
+            "The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows."
+          ],
+          "continuous": [
+            "The same facade edges produce the moving shadow pattern under a changing sun."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2981,
+            "scrollY": 1912,
+            "monotonicMs": 14515.5,
+            "videoSeconds": 6.798,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3428,
+            "scrollY": 2199,
+            "monotonicMs": 15515.6,
+            "videoSeconds": 7.798,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3801,
+            "scrollY": 2438,
+            "monotonicMs": 16320.3,
+            "videoSeconds": 8.602,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.34596195821640163,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:65-70; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at portrait: The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m04-sun-and-shadow-change.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=6.798-8.602"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "threshold-approach",
+          "changed": [
+            "The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess."
+          ],
+          "continuous": [
+            "The camera approaches the central door that was present on the initial elevation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3934,
+            "scrollY": 2523,
+            "monotonicMs": 16524.8,
+            "videoSeconds": 8.807,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4192,
+            "scrollY": 2689,
+            "monotonicMs": 17126.5,
+            "videoSeconds": 9.409,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4602,
+            "scrollY": 2952,
+            "monotonicMs": 17820.2,
+            "videoSeconds": 10.102,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.42999688182101653,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-60; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at portrait: The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m05-threshold-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.39-0.46",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=8.807-10.102"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "door-opens",
+          "changed": [
+            "The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening."
+          ],
+          "continuous": [
+            "The oak leaf pivots within that same central opening, revealing the hall behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4602,
+            "scrollY": 2952,
+            "monotonicMs": 17820.2,
+            "videoSeconds": 10.102,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4903,
+            "scrollY": 3145,
+            "monotonicMs": 18514.8,
+            "videoSeconds": 10.797,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5284,
+            "scrollY": 3389,
+            "monotonicMs": 19412.9,
+            "videoSeconds": 11.695,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4954786404739632,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at portrait: The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m06-door-opens.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.46-0.53",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=10.102-11.695"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "reception-parlour",
+          "changed": [
+            "The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible."
+          ],
+          "continuous": [
+            "The continuous hall floor and stair lead toward the parlour, bookshelves and rear glazing."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5722,
+            "scrollY": 3670,
+            "monotonicMs": 20412.5,
+            "videoSeconds": 12.695,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6316,
+            "scrollY": 4051,
+            "monotonicMs": 21313,
+            "videoSeconds": 13.595,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.679,
+            "scrollY": 4355,
+            "monotonicMs": 22313.9,
+            "videoSeconds": 14.596,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6359526036794512,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,79-80; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at portrait: The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m07-reception-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.57-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=12.695-14.596"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour."
+          ],
+          "continuous": [
+            "The parlour floor and rear glazing lead to the same kitchen/dining atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7385,
+            "scrollY": 4737,
+            "monotonicMs": 23513.4,
+            "videoSeconds": 15.796,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7894,
+            "scrollY": 5063,
+            "monotonicMs": 24614.3,
+            "videoSeconds": 16.896,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8174,
+            "scrollY": 5243,
+            "monotonicMs": 25316.2,
+            "videoSeconds": 17.598,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7948238228874337,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,81; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at portrait: The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.74-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=15.796-17.598"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space."
+          ],
+          "continuous": [
+            "The garden doors occupy the glazing already visible from the atrium, with the same tree beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8112,
+            "scrollY": 5203,
+            "monotonicMs": 25216.2,
+            "videoSeconds": 17.498,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8516,
+            "scrollY": 5462,
+            "monotonicMs": 26116.4,
+            "videoSeconds": 18.398,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8782,
+            "scrollY": 5633,
+            "monotonicMs": 26515.6,
+            "videoSeconds": 18.798,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8604614904895541,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at portrait: Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.81-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=17.498-18.798"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "courtyard-arrival",
+          "changed": [
+            "The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view."
+          ],
+          "continuous": [
+            "The camera passes through those garden doors to the walled courtyard and same tree."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8782,
+            "scrollY": 5633,
+            "monotonicMs": 26515.6,
+            "videoSeconds": 18.798,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9183,
+            "scrollY": 5890,
+            "monotonicMs": 27417.9,
+            "videoSeconds": 19.7,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9504,
+            "scrollY": 6096,
+            "monotonicMs": 28214,
+            "videoSeconds": 20.496,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9257873401933271,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at portrait: The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m10-courtyard-arrival.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.88-0.95",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=18.798-20.496"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "terminal-courtyard",
+          "changed": [
+            "The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery."
+          ],
+          "continuous": [
+            "The walled courtyard and tree stay in place as the donor property text settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9584,
+            "scrollY": 6147,
+            "monotonicMs": 28318.6,
+            "videoSeconds": 20.601,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9911,
+            "scrollY": 6357,
+            "monotonicMs": 29119.5,
+            "videoSeconds": 21.402,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 6414,
+            "monotonicMs": 30119.2,
+            "videoSeconds": 22.401,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9998440910508263,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at portrait: The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m11-terminal-courtyard.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.96-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm#t=20.601-22.401"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 6414,
+        "scrollHeight": 7258,
+        "innerHeight": 844,
+        "maxScroll": 6414,
+        "visibleHud": "CAD PLAN // 1:100\nGARDEN · Z:+12.3M | ALT 20.6° · AZ 152° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 21.4,
+          "bytes": 2857341,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 120,
+          "stepPx": 67
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -67
+        }
+      ]
+    },
+    "landscape": {
+      "width": 844,
+      "height": 390,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 3354,
+        "innerHeight": 390,
+        "maxScroll": 2964,
+        "visibleHud": "CAD PLAN // 1:100\nSTREET · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-201  ·  NO. 7 ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING FRONT ELEVATION 1:50  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ NO. 7 ALBION ROW · A-201 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"NO. 7\"\n    - StaticText \"ALBION ROW · A-201\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"BOOK A VIEWING →\" [ref=e3]\n    - StaticText \"BOOK A VIEWING\"\n    - StaticText \"→\"\n- region \"No. 7 Albion Row, front elevation\" [ref=e1]\n  - StaticText \"NO. 7 ALBION ROW\"\n  - StaticText \" ·  FRONT ELEVATION 1:50\"\n  - heading \"SIX METRES OF STREET. ONE DOOR.\" [level=1, ref=e4]\n    - StaticText \"SIX METRES OF STREET.\"\n    - StaticText \"ONE \"\n    - emphasis\n      - StaticText \"DOOR.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"STREET · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"STREET\" [ref=e5]\n  - button \"PORCH\" [ref=e6]\n  - button \"PARLOUR\" [ref=e7]\n  - button \"ATRIUM\" [ref=e8]\n  - button \"GARDEN\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[6C675418881835C2D9645054C981D052] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html (Document) 200\n[98160.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[98160.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[98160.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/page.js (Script) 200\n[98160.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[98160.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[98160.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[98160.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[98160.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[98160.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[98160.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[98160.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[98160.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[98160.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[98160.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[98160.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[98160.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[98160.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 25.7,
+          "bytes": 4171162,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 32.4,
+          "bytes": 5221350,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "ink-depth-reveal",
+          "changed": [
+            "The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable."
+          ],
+          "continuous": [
+            "The same central door, balcony, stacked windows and neighboring row remain while the optic reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0418,
+            "scrollY": 124,
+            "monotonicMs": 8749.6,
+            "videoSeconds": 1.487,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.0675,
+            "scrollY": 200,
+            "monotonicMs": 9250.1,
+            "videoSeconds": 1.987,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1022,
+            "scrollY": 303,
+            "monotonicMs": 9950.3,
+            "videoSeconds": 2.688,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.0752361673414305,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-61; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at landscape: The initially frontal ink elevation rotates into an oblique relief view while its same central door, balcony and windows remain identifiable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m01-ink-depth-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.04-0.1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=1.487-2.688"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "material-sweep-onset",
+          "changed": [
+            "A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry."
+          ],
+          "continuous": [
+            "The luminous front crosses the same central door, balcony, windows and shadow-bearing facade."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.14,
+            "scrollY": 415,
+            "monotonicMs": 10751.2,
+            "videoSeconds": 3.488,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1603,
+            "scrollY": 475,
+            "monotonicMs": 11147.5,
+            "videoSeconds": 3.885,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1886,
+            "scrollY": 559,
+            "monotonicMs": 11749,
+            "videoSeconds": 4.486,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.16970310391363022,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at landscape: A luminous boundary starts crossing the row; drawn facade and brick/material representation coexist on the same house geometry.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m02-material-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.14-0.19",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=3.488-4.486"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "material-sweep-complete",
+          "changed": [
+            "The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable."
+          ],
+          "continuous": [
+            "Finished brick retains the original openings and balcony positions."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2314,
+            "scrollY": 686,
+            "monotonicMs": 12549.2,
+            "videoSeconds": 5.286,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2517,
+            "scrollY": 746,
+            "monotonicMs": 13151.4,
+            "videoSeconds": 5.889,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2881,
+            "scrollY": 854,
+            "monotonicMs": 14051.6,
+            "videoSeconds": 6.789,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.25472334682861,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:61-64; engine/elevation.js:34-58,106-119",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at landscape: The row is fully materialized, with the same central openings, balcony and neighboring volumes, while front elevation framing remains readable.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m03-material-sweep-complete.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.23-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=5.286-6.789"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "sun-and-shadow-change",
+          "changed": [
+            "The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows."
+          ],
+          "continuous": [
+            "The same facade edges produce the moving shadow pattern under a changing sun."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3006,
+            "scrollY": 891,
+            "monotonicMs": 14253.1,
+            "videoSeconds": 6.99,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3397,
+            "scrollY": 1007,
+            "monotonicMs": 15153.6,
+            "videoSeconds": 7.891,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3799,
+            "scrollY": 1126,
+            "monotonicMs": 15953.4,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3491902834008097,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:65-70; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at landscape: The daylight direction and facade shadows move after materialization; the same architectural edges cast the changed shadows.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m04-sun-and-shadow-change.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.3-0.38",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=6.99-8.691"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "threshold-approach",
+          "changed": [
+            "The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess."
+          ],
+          "continuous": [
+            "The camera approaches the central door that was present on the initial elevation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.39,
+            "scrollY": 1156,
+            "monotonicMs": 16147.9,
+            "videoSeconds": 8.885,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.42,
+            "scrollY": 1245,
+            "monotonicMs": 16647.1,
+            "videoSeconds": 9.384,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4585,
+            "scrollY": 1359,
+            "monotonicMs": 17455.3,
+            "videoSeconds": 10.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4251012145748988,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,59-60; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at landscape: The camera leaves the street-wide facade framing and approaches the central oak door, steps and porch recess.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m05-threshold-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.39-0.46",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=8.885-10.193"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "door-opens",
+          "changed": [
+            "The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening."
+          ],
+          "continuous": [
+            "The oak leaf pivots within that same central opening, revealing the hall behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4585,
+            "scrollY": 1359,
+            "monotonicMs": 17455.3,
+            "videoSeconds": 10.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4889,
+            "scrollY": 1449,
+            "monotonicMs": 18256.1,
+            "videoSeconds": 10.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5327,
+            "scrollY": 1579,
+            "monotonicMs": 19255.4,
+            "videoSeconds": 11.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5003373819163293,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at landscape: The front oak door turns inward while the camera reaches the threshold; the entrance hall remains aligned behind the original facade opening.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m06-door-opens.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.46-0.53",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=10.193-11.993"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "reception-parlour",
+          "changed": [
+            "The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible."
+          ],
+          "continuous": [
+            "The continuous hall floor and stair lead toward the parlour, bookshelves and rear glazing."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5702,
+            "scrollY": 1690,
+            "monotonicMs": 20150.7,
+            "videoSeconds": 12.888,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6272,
+            "scrollY": 1859,
+            "monotonicMs": 21452.1,
+            "videoSeconds": 14.189,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6785,
+            "scrollY": 2011,
+            "monotonicMs": 22557.7,
+            "videoSeconds": 15.295,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6420377867746289,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,79-80; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at landscape: The camera is inside the reception parlour, with the continuous stair, floor, bookcase, seating and glazed rear direction visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m07-reception-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.57-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=12.888-15.295"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour."
+          ],
+          "continuous": [
+            "The parlour floor and rear glazing lead to the same kitchen/dining atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7426,
+            "scrollY": 2201,
+            "monotonicMs": 23553.9,
+            "videoSeconds": 16.291,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7935,
+            "scrollY": 2352,
+            "monotonicMs": 24559.4,
+            "videoSeconds": 17.297,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8212,
+            "scrollY": 2434,
+            "monotonicMs": 25349.6,
+            "videoSeconds": 18.087,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7931848852901484,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,81; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at landscape: The route advances to kitchen/dining atrium, including table, island, tall rear glazing and tree beyond; its floor and walls connect to the parlour.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.74-0.82",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=16.291-18.087"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space."
+          ],
+          "continuous": [
+            "The garden doors occupy the glazing already visible from the atrium, with the same tree beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8097,
+            "scrollY": 2400,
+            "monotonicMs": 25149.7,
+            "videoSeconds": 17.887,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8485,
+            "scrollY": 2515,
+            "monotonicMs": 25953.1,
+            "videoSeconds": 18.69,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8789,
+            "scrollY": 2605,
+            "monotonicMs": 26449.3,
+            "videoSeconds": 19.187,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8593117408906883,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:71-73; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at landscape: Rear steel glazed doors open toward the same walled courtyard and tree seen from within the dining space.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.81-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=17.887-19.187"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "courtyard-arrival",
+          "changed": [
+            "The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view."
+          ],
+          "continuous": [
+            "The camera passes through those garden doors to the walled courtyard and same tree."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8789,
+            "scrollY": 2605,
+            "monotonicMs": 26449.3,
+            "videoSeconds": 19.187,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9227,
+            "scrollY": 2735,
+            "monotonicMs": 27361.6,
+            "videoSeconds": 20.099,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9528,
+            "scrollY": 2824,
+            "monotonicMs": 28152.3,
+            "videoSeconds": 20.89,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9254385964912281,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at landscape: The camera passes through the rear doors into the courtyard; brick enclosure and tree remain spatially continuous with the atrium view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m10-courtyard-arrival.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.88-0.95",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=19.187-20.89"
+            }
+          ]
+        },
+        {
+          "label": "M11",
+          "semanticState": "terminal-courtyard",
+          "changed": [
+            "The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery."
+          ],
+          "continuous": [
+            "The walled courtyard and tree stay in place as the donor property text settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9585,
+            "scrollY": 2841,
+            "monotonicMs": 28246.4,
+            "videoSeconds": 20.984,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9902,
+            "scrollY": 2935,
+            "monotonicMs": 28945.8,
+            "videoSeconds": 21.683,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 2964,
+            "monotonicMs": 29846.2,
+            "videoSeconds": 22.584,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9996626180836707,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-36,82; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M11 in fresh semantic pass at landscape: The route stabilizes near the rear courtyard wall and tree with donor-authored property/booking copy. No further natural input reveals a new state in Discovery.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m11-terminal-courtyard.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.96-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm#t=20.984-22.584"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/a-one-door/index.html",
+        "hash": "",
+        "scrollY": 2964,
+        "scrollHeight": 3354,
+        "innerHeight": 390,
+        "maxScroll": 2964,
+        "visibleHud": "CAD PLAN // 1:100\nGARDEN · Z:+12.3M | ALT 20.6° · AZ 152° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 21.5,
+          "bytes": 3612901,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural B→A returned to scrollY 0, same route/hash, initial 2° orthographic elevation, sun readout, hero/sheet text and central townhouse appearance. Front and rear doors, material sweep and changed shadows are no longer visually present; passive evidence does not prove identity-level internal restore.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 115,
+          "stepPx": 31
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 120,
+          "stepPx": -31
+        }
+      ]
+    }
+  },
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Three clean-context Discovery A→B→A passes and semantic A→B passes recorded.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Desktop ink elevation and 2° optic at stable A0.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Portrait separately reaches the courtyard.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-end.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Landscape separately reaches the courtyard.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-end.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "All three restored A1 screenshots match the start visually after natural reverse.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-restored-start.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Frame maps camera, depth cue, spatial sweep, sun and doors from absolute p.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-73"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Global D07 retains Rubik light/material authority and adapts coherent hatching.",
+      "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik elevation Story already composes facade framing and optional solar state.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/a-one-door/page.js",
+      "symbol": "KEYS / frame",
+      "lines": "28-73",
+      "claim": "Camera keys and absolute depth/sweep/sun/door mapping produce the observed ordered states.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "GLSL_COMMON / mat",
+      "lines": "31-119,352-429",
+      "claim": "Shadow-derived technical hatch and spatial uSweep determine ink/material appearance.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setSun / sun shadow",
+      "lines": "143-161",
+      "claim": "Directional light and its shadow map move together.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "house / setDoor / setGardenDoor",
+      "lines": "938-1096",
+      "claim": "One house has pivoting front and rear door groups.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "camAt",
+      "lines": "1146-1187",
+      "claim": "Perspective/orthographic look and phone framing interpolate authored camera keys.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "run / scrollP / __introDone",
+      "lines": "1205-1422",
+      "claim": "Lenis animatedScroll drives progress; self-drawn intro completes before stable A0.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut1 D07 Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; Atlas D07 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D07 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225",
+      "documentedDisposition": "D07-C1 ADAPT shadow-coherent hatch; C2 KEEP EXISTING Rubik material/light/Solar; C3 REJECT donor-specific AO and one-light assumptions. Historical Cut1 extraction is prior analysis, not an implementation instruction.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior Cut1 and Global distinguish shadow-based graphical principle from Rubik light authority.",
+          "locator": "Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Observed hatching tracks the same facade shadow before/after materialization.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m02-material-sweep-onset.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut3 D19 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; Atlas D19 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D19 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447",
+      "documentedDisposition": "D19-C1 KEEP EXISTING geometry/material/environment; C2 ADAPT sourced camera/light/material coordination; C3 REJECT universal brick/clearcoat/renderer rewrite.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3 and Global already credit Rubik geometry/material infrastructure.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "The same townhouse displays richer brick/detail without becoming a different geometry.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m03-material-sweep-complete.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns project dimensions/identities; donor street address, 186 m², sales status and CTA are authored demonstration data.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "EXISTS",
+      "claim": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik already builds walls, openings and levels from its project. Donor fixed townhouses/interior do not replace that authority.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation/story representation and View3D; shadow-coherent ink hatching and co-registered spatial paper-to-brick sweep are not established as current modes.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "EXISTS",
+      "claim": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns materials, HDR/PMREM, shadows and optional Solar snapshot. The donor hatch and sun animation need separate adaptation if selected.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation framing, Story lenses and route authorities; the exact street-to-courtyard camera keys are donor choreography.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has absolute Story/reveal state; the donor shadow-derived technical/material front is a particular representation transition.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story owns absolute seek and playback. Donor Lenis 760vh track is a transport implementation.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation controls and captions. Donor radar, sheet labels, address and booking CTA are authored communication and require source truth if reused.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has mobile presentation paths; this donor uses a portrait camera override and landscape composition, which need independent framing QA for any adapted service.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has end/restore ownership. Donor A0/A1 are visually equivalent after natural reverse; internal donor resource identity is not observed.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation/still outputs and project provenance; donor sales CTA is not a Rubik output requirement.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has FT3D-6 QA, while a shadow-coherent sweep/door route would require its own reverse, mobile and semantic truth checks.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "NO_GAP",
+      "statement": "Rubik already owns project geometry, materials, light, presentation progress and restore infrastructure.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Existing project/Story/elevation infrastructure.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/presentation-elevation-core.js:171-247; js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A project-derived shadow-coherent ink hatch and spatially registered ink-to-material facade front are not accredited in current Rubik.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Donor shader connects shadow, hatch and uSweep.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119,352-429"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current elevation Story composes camera/solar without this donor front.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "If selected later, one Story state would have to coordinate drawing, relief, sun, doors and front-to-back route without mutating project authority.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Donor frame coordinates those states from p.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/a-one-door/page.js:28-73"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story and elevation already have absolute progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If selected later, preserve the same project facade while moving from technical shadow hatching to sourced material/light.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building geometry",
+        "Rubik material/light/Solar",
+        "Story absolute state"
+      ],
+      "existingCapabilitiesConsumed": [
+        "elevation Story",
+        "View3D geometry/materials",
+        "Solar snapshot"
+      ],
+      "missingConnector": "Project-derived hatch/mask adapter registered to geometry and shadow, with independent source/data provenance.",
+      "donorMechanismReference": "engine/elevation.js:31-119,352-429; Global D07-C1 ADAPT, D07-C2 KEEP, D07-C3 REJECT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If selected later, relate one facade opening to valid room and garden stops while preserving reverse.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building openings and room IDs",
+        "Story camera/restore",
+        "mobile framing"
+      ],
+      "existingCapabilitiesConsumed": [
+        "presentation-route",
+        "elevation Story camera",
+        "Story lifecycle"
+      ],
+      "missingConnector": "Validated project-derived entry/interior/garden route and door-state handoff; donor fixed camera keys and sales copy remain references only.",
+      "donorMechanismReference": "a-one-door/page.js:28-82; engine/elevation.js:1090-1096,1146-1187",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: authorized facade/opening and valid room/route data before any front-to-back visit.",
+    "TECHNICAL_PREREQUISITE: Story-owned absolute presentation state and restoration before reversible ink/material/sun/door coordination.",
+    "TECHNICAL_PREREQUISITE: material and light authority remains Rubik-owned; any hatch adapter must follow its shadows, not invent project solar facts."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Address, area, levels and sales status come from current project data or are explicitly marked illustrative."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Door, balcony and window identities remain registered through ink, depth and brick states."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "Hatching follows the same shadow geometry as materialized light; spatial sweep does not detach from the facade."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Route enters only through a valid opening and stays clear of project geometry in all viewports."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Natural reverse restores camera, optic, hatch/material, sun/shadows, doors, HUD and progress."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait and 844×390 keep facade, essential captions and plan radar readable."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Drawing-to-building meaning and room changes have text and reduced-motion equivalents."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Still/video output distinguishes verified project facts from authored donor sales copy."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Presentation state does not alter saved project geometry, materials or Solar configuration."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Passive evidence does not prove donor GPU material/shadow-map/resource identity after reverse.",
+      "attempts": [
+        "A0/A1 screenshots, route/scroll/HUD equality in all viewports",
+        "continuous reverse WebM/telemetry",
+        "pinned page.js and engine/elevation.js absolute-state inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource identity probe if later acceptance requires internal identity."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Professional value and placement of this experience among 14 references remain a later product decision.",
+      "attempts": [
+        "three-viewport observed sequence",
+        "pinned README/source",
+        "Cut1 D07, Cut3 D19 and Global reconciliation"
+      ],
+      "evidenceNeeded": "Human review after full 14-reference audit; no bridge authorized here."
+    }
+  ],
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\calibration.json",
+      "sha256": "065ce01fb433138a575b03d238b816c2add6cd6bbd910446300c23fe55f934b3",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-end.png",
+      "sha256": "3b2e1c86c3f0740129cbd2bcdf99a991a9c74d46b474e77c866f1bed4caf54a8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p000.png",
+      "sha256": "43894359a09fec8be54328969714df12095ee4d4754590924c67f8ba3e8978d4",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p005.png",
+      "sha256": "ff20d8deacb2f0128524bb089aac4532d5f22a5ff43994312b3fd4835948b760",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p010.png",
+      "sha256": "c584f72f1cc4fb3d11a659c4e767638ef0d7a1a8e35c25b999ec019573bbcb28",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p015.png",
+      "sha256": "b7a7da2af0dca846dd7b21f9bafe54e9ba34a279b37dc89ccc4e95ae94026304",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p020.png",
+      "sha256": "6dfcf1ff6305e2cd98f417beef67343c54ae50c08d2cc173cc27748d6985fc7c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p025.png",
+      "sha256": "9fdcd76fff5f9c0dbd427843ab10ed52b91c40356fe140b7d3159be5049a36f0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p030.png",
+      "sha256": "ba486182fbe2323e0da357c0813085fa116f7342bfc65fe63cc0047ac7abed00",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p035.png",
+      "sha256": "bed1993aa2216a11c01add327051b317595692b4193d660e8b7a10e6850ddf09",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p040.png",
+      "sha256": "dbb0cfc2f2842b2fbad4c93c94139170dddc2800274b4b79c45b8119c7a96024",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p045.png",
+      "sha256": "3f94fae194b8f58de5bc4a8c49920b1dc51b9c032dd625652dcbf134574d8af6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p050.png",
+      "sha256": "d13179d60c3b86811aa6c7ce5790e073643bdff1cb553413ccd40da6439b59b2",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p055.png",
+      "sha256": "e901ed598df6c8657d2eac2fb3e7a3e20ad16c0d6dc055832b69a3a26ace00d5",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p060.png",
+      "sha256": "8d8a6071a646f023aa7429b1ce6727112c54991c8b3c3c366d44cd6b23271b07",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p065.png",
+      "sha256": "fae4548180aed97da01b1494a4922b43ebd49b06d8f6bce65efe72cf14102ca3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p070.png",
+      "sha256": "ee6416814b4baea0cbf82209b8e0b8dddddb8ca30c7297358447a2de92ff3507",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p075.png",
+      "sha256": "acf6494c3925ecfd8c823e522b93841a1ea27a2bb6b3a2d2d3ed8ca276ef7bb8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p080.png",
+      "sha256": "d2c44eed198d359b4e26dd77f50fe9947cb3abf5d32baa938336764447215953",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p085.png",
+      "sha256": "2f3aed16327c637edfc9b458711f942dcafa1a54b3fd82563874ecd7aba37753",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p090.png",
+      "sha256": "7e9722fc24e03fc2c62af7b2127af3debb4ca773bac2b9d38893cc47705db6dd",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p095.png",
+      "sha256": "3b2e1c86c3f0740129cbd2bcdf99a991a9c74d46b474e77c866f1bed4caf54a8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery-p100.png",
+      "sha256": "3b2e1c86c3f0740129cbd2bcdf99a991a9c74d46b474e77c866f1bed4caf54a8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "sha256": "87b7f05801d8368bc4f4bc575e1bc1b90a0436c0cebb6bb4a07d936f69c344be",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-discovery.webm",
+      "sha256": "6537fb0097211cbeb70b1eccb587e68974b8914342495ce05d7f1aa16f8c5bf2",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m01-ink-depth-reveal.png",
+      "sha256": "762a9e59222c2fe1af0d3c9ccdaf631c9c3b7ee2c1fc854795ec8ba438463848",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m02-material-sweep-onset.png",
+      "sha256": "3c886dba0db9d2771393c855c840975768eafb122504ea37fef2d466aa432a5a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m03-material-sweep-complete.png",
+      "sha256": "50bd9a9aa7fbae543a0dacb0210804957c5724fa40c2a78247919d368d2cd560",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m04-sun-and-shadow-change.png",
+      "sha256": "d49da7cef1b13060ab673fe5a6d9bbb03de0063e259bdd2e9083a21d91a4c60c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m05-threshold-approach.png",
+      "sha256": "adc267076bc817777cbb2d3b2cbd98a26d4d0b04ba4b4a9772bd538b6fa6bdc3",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m06-door-opens.png",
+      "sha256": "c243a9e965c7c97a740ba0c79e33bc275440e2b19869885b37eb6d0a7a67e4f1",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m07-reception-parlour.png",
+      "sha256": "c66e677de8c412080e3235968be313cc0e1283e06e6ce1a9b669e5d55321fe52",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m08-dining-atrium.png",
+      "sha256": "b999d013a4e92dd0227e66e0f659d7d7539d74cc8a3eaea18562ff2588a3e703",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m09-rear-doors-open.png",
+      "sha256": "9d45405fdbf6b9d819379089be87a04632c432ab6620a2436d7669ab021ca0bb",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m10-courtyard-arrival.png",
+      "sha256": "431cfc673842bf1affe1613dceb65224e821af5356617ffe7e0338f517549c9c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-m11-terminal-courtyard.png",
+      "sha256": "3b2e1c86c3f0740129cbd2bcdf99a991a9c74d46b474e77c866f1bed4caf54a8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-semantic.telemetry.ndjson",
+      "sha256": "e4e4517bcb72231697eb01674f5c43a35e7d24e7ef81906d32ef13f9f071ed40",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-forward-semantic.webm",
+      "sha256": "72ab1c49b7b238323f26ac4c05ffbdc5f24ccdab896245a916b3f218ccc8cb10",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-restored-start.png",
+      "sha256": "92cde33b8e59906be124abea0523c9e4700b98c50ecaddba2e1ebdd97b3de414",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "sha256": "6905d5746faa6f86c755706c86445696b19ac23b3113485b67911b478849197e",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-reverse-discovery.webm",
+      "sha256": "383c228c57eb7f884c0294a09c4ca8d764fbe3289afc3e5f51db5a9149debc6f",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-semantic-end.png",
+      "sha256": "16dda7f1ec6d8f940313246a1d16266e8c479d0e39232f2374510e4cf61409d4",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-semantic-start.png",
+      "sha256": "dca186341100607697ccc1c5073925f10ae82fc1e8f30ecfede57c56563e62ea",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\desktop-start.png",
+      "sha256": "b7047b523b0c2b76807c984029f6eb950d33ad2ca4fa74be0b41e15ed4401e11",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\discovery-assets.json",
+      "sha256": "45816f5f88863864e4d868f8ad44c72f9aac74395c2ea53485132a05d52702fd",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\discovery-summary.json",
+      "sha256": "e14bca6a2045e2d3b04579455ec1f36295084a21660813c37fb331770925017d",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\end-state.json",
+      "sha256": "77f6df17c8e2d53b17e33a530673b732a5966635d388916e020baefe53f6b7ef",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\reverse-state.json",
+      "sha256": "3d1000d22415bc1990db72bda06d4ad0270a21b43d9ea333affde5240bc72596",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\semantic-capture.json",
+      "sha256": "8aa0f487d7d6a70bd71be6a051c59ce0a93565352263420c518ea586fbc65fa8",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\desktop\\start-state.json",
+      "sha256": "74985c2b961970eb6e3f09d39bfc7880b15fa60ed2bd8fe9e0ff268d62276206",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\calibration.json",
+      "sha256": "f128b42dfe2c463f72c2e4fc7de55b5474b3a26cc2f3fa9495f52a8d71917710",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\discovery-assets.json",
+      "sha256": "16bc7b4a562e05127684118c0a7e3e339291abfb8c232401f3014bb6a50e2fdd",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\discovery-summary.json",
+      "sha256": "76dc2f31c45c7ffa6a6c6f8ab0a48e80a46fe09cc3de0ddc54b4f3dae54f6df4",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\end-state.json",
+      "sha256": "bab82410185d118633d2759355d65448d320986ac399fe9f3c4f37e55aed673e",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-end.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p000.png",
+      "sha256": "08cb07b5920df5d79148e60564d96485784ce6cee1977b53803a7df012b0f132",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p005.png",
+      "sha256": "3d7e972c6c8bc2eb48354d7f6fbf738e70c4ff2f01e95bb9cd0a568d880091c2",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p010.png",
+      "sha256": "cf8293dfa2f731d8c38ddf7d4d94c3b9277da99ba8d1a8a8bee151b13d404030",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p015.png",
+      "sha256": "e4ba21f9c04aa67cdf1413f0fdcfbb185eff87e74dfc02650ec2ab8130a558e9",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p020.png",
+      "sha256": "bb50f03dd84d11fcdcff0b8e57432acad3596daf352f8e90c4369163ca25b3cf",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p025.png",
+      "sha256": "2fc07608eae475857979ff59ca07916673304343b3b53f75c5a50b8b1094fab7",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p030.png",
+      "sha256": "f27448fa1050472b8b8b51fba17e3150583869e875816c944ce3156a535f9a66",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p035.png",
+      "sha256": "9274d928e59fd6241869897bf9d052994105bc095b363a7cddb1140341d17cee",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p040.png",
+      "sha256": "a9bb7a67a6254495000ff3db8a7413ed9306cca1647ee81361a4d81c4235f369",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p045.png",
+      "sha256": "b198d239d95d75d6359f8c5db48046526393d2a8c754d9ad33065d760abf6389",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p050.png",
+      "sha256": "d06db5c8d786448c3aa5cd6e287d22e475be51242c73e8014fe4d12b3fce0c0d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p055.png",
+      "sha256": "66a4dc19623e088e9a6eebdf7519da548435d976571280e2e9d8bc45578793ea",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p060.png",
+      "sha256": "81cb4b14bbcbae87c90a3bdecae5beffcd19a90916f10611245480ffbae60750",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p065.png",
+      "sha256": "b420c498fb527f3ca6863f55e0efcbd48f6cc1c309371568e6cb4ffc37339fba",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p070.png",
+      "sha256": "4c2f2df0b822a1025e85cef215ed6c350bc2138dfef26c44f090b46ce3f53c34",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p075.png",
+      "sha256": "0d569c2fbf9e98caae289c7fcd4b4aafda087a270fe92df88b2c7addcaeaee80",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p080.png",
+      "sha256": "22de19d00b035c5bbd7e31f96b0c4b648f5e44a820a1c77ab409891052022077",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p085.png",
+      "sha256": "1bfe909cec8f592393089ce7745114a2f8b4837bc7fb5540772f39f4edb3249a",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p090.png",
+      "sha256": "1b831a5c0f168b886400d34f5c47e1b57b7e8b5cb4cc940076dca0f595583295",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p095.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery-p100.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "sha256": "3340cbcbbb9ce9fd03a3975752af01da8c20a6d4cc63883ad814940a321742b8",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-discovery.webm",
+      "sha256": "cba0082844468833f3f8a6416b764bbc0d94ed8761e530199831b4afd23d11d4",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m01-ink-depth-reveal.png",
+      "sha256": "f202f9dd456082d9e9a0cf1e6102abdfcb557e60ea7228c5d5fba03159886712",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m02-material-sweep-onset.png",
+      "sha256": "b3ab7d88d46dc3abacee6529d496d33dc5ad2009a53286f7b42b8e44690500ac",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m03-material-sweep-complete.png",
+      "sha256": "32b24f66c2ff1b1bc08c207b1c3f7f0b5894392c84c3e06065267c9c94802eba",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m04-sun-and-shadow-change.png",
+      "sha256": "693d62987f422edeb1782dd7832f6aaed06bdd9508fc4898092b5024e9d430a8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m05-threshold-approach.png",
+      "sha256": "1c1381ea552a01561b175745251949c542eb10658ecc9ae763c8afc65debd36b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m06-door-opens.png",
+      "sha256": "95de22df2148b7f5b2d35b2af1bc55c865ae5c13b62fc18af27cf540da72b5f8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m07-reception-parlour.png",
+      "sha256": "f04eca83dc12e86f2d229e543678094fd810cd703ce0a897cb9c961107c528d0",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m08-dining-atrium.png",
+      "sha256": "5b6a5910c5e64e365126a94ebe37c772819244640ab8a89f1e498d88980f87ba",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m09-rear-doors-open.png",
+      "sha256": "62e7e43a354c6d4e11d631ee5395a6072fd6be70cf75cf0f9370545c6fe51322",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m10-courtyard-arrival.png",
+      "sha256": "527c40400a41382d75029ba0a735cb6adfc8788c8bb0a8372017ae8998ce0a60",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-m11-terminal-courtyard.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-semantic.telemetry.ndjson",
+      "sha256": "d96fa134a291d610d02dc00b9e7f448ae2353c2b1b6d580f04f33b880c225b45",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-forward-semantic.webm",
+      "sha256": "9484b99b16f539623d2a5d55e6e72ed9130d081171eaa84248ee2ad420749278",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-restored-start.png",
+      "sha256": "21f56426c908cb829bdfeb12683c44355dcb380fbc0d7ede24f64322b1476f7c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "sha256": "3511ad4eb8c4dc77f3ac5af25ebcc3448ada463dd3fbe831f8af6be7c1d53b93",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-reverse-discovery.webm",
+      "sha256": "9399fc83171528c7750384bf6d38cf63703f52c55a95a85745d5f6f63158b1d5",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-semantic-end.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-semantic-start.png",
+      "sha256": "278bb80fd241a990c2f30085e6047e076e0e16e651a465d7f73825a0b4c3cdc8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\portrait-start.png",
+      "sha256": "f2f9260c5454985092a36b564cc8a850551fdce13af6d280aa5315a076c14789",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\reverse-state.json",
+      "sha256": "065791e3dcefdbbbad22a58859c329b3b9747386dd1a3235ab618fdac3fc4056",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\semantic-capture.json",
+      "sha256": "cbb580fcfc6a1fc479e2652c01d1252f677ff235e344adc2ee6f5d343ee98c67",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\portrait\\start-state.json",
+      "sha256": "15fc99a46d3b85738ca01124b8d83d9bd22fbfce1150a0362d59fc901a934c1c",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\calibration.json",
+      "sha256": "ea60c8a24b2f513611b988b1e8e98e7b4d50e5c760cd2373ce6ee74e7cb7f93a",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\discovery-assets.json",
+      "sha256": "00bfc69d9cac6b28f0d18a2a33723a1957322c1c25a43b2dd925c489bcc23ff5",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\discovery-summary.json",
+      "sha256": "87c647bfc9e487a229e43d061ce3f34afd7daf0bd0566866770ac5c9f1804719",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\end-state.json",
+      "sha256": "6c6bf98ddf8394c0b8156e7c8a535a6f2b09d5412f98ad1a30257cd336d50050",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-end.png",
+      "sha256": "1097bac9183a04dc604e21aa7011b62da0d33b2cbfce53c2eb4b983348a4441d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p000.png",
+      "sha256": "0295a42398098c7719a237df6d8bb291a77ab83970cb337ac1e73437e5f989f4",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p005.png",
+      "sha256": "dcf659eb037043815e5b597e293d20166fcdc87c699a0a1dc30b240e5e1e42b8",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p010.png",
+      "sha256": "1e0629119fa866ba7e01afcff26b1684daa9e2c77e21f14e003ecae7652ad5a8",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p015.png",
+      "sha256": "27c3eabd23f30225c0507e1c0300b1d7387e1af4e16b45d6c47c32bf22431f39",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p020.png",
+      "sha256": "b04f1d2b1f7c97bf419744d89587e5c036cbb359185fede9fce921417e41b300",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p025.png",
+      "sha256": "cd9d63236a49b12ad88d89b370ced37aec1518ef1d9e15c43ef5cb8193cd9c27",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p030.png",
+      "sha256": "e82a24f5f5a0f3e8ac55d2c7e577cc592a0e6e7ea508f8f3326eb755b981a408",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p035.png",
+      "sha256": "3a122336e2af3909f9b0a69db8b0dbb3df6e84307ba68458dddad9e2d6c61230",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p040.png",
+      "sha256": "0bee997d11aa4445a79adaa1e296d9fea359e199a5ddf062aa1eaf1bd6fbfc12",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p045.png",
+      "sha256": "efa34d9ea9dd67b54f927a650f60a4c178cbc1dc91fdad0dd349599937d69313",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p050.png",
+      "sha256": "1e479c7dc04342fc782c425066f3543c2c1b005914e67640bbc8c836fb150947",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p055.png",
+      "sha256": "6a71dce3c39582932d879a2667bdbd8417d7d0439483e4f9f8992f78e03c0b11",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p060.png",
+      "sha256": "593d9222c0c7604a7937de0198f8d8ce900bce8b854c36b4bcd3d799b755dfe4",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p065.png",
+      "sha256": "26389a5ac798596dc938b0dd54ab36f7740061d130b05ceeff4f3d7cfaea22e0",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p070.png",
+      "sha256": "3e1b4e2ce56cf0cd9be1b237f7d334af38e1e77234ad4657cc8adab799927cc1",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p075.png",
+      "sha256": "ab2430137821de44c1ae0019f72f14ca03c85b3a8d5868cc29cdfbec16809118",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p080.png",
+      "sha256": "b50318da1f8a9f60817cf85a645762d3dd4ee2a16c4b572a91829c72035caf97",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p085.png",
+      "sha256": "8fbb0adb1de4c328a8d228f89dc359f7445357f7906424f0bcbdcd8ecc967396",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p090.png",
+      "sha256": "be72605125866ec4b689543e70efa1bb1da631c830bdaa2edb28a091f8c726cd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p095.png",
+      "sha256": "0cf45f1785934105a96357311fe7796c1480caf1e8901825a2ff25e2c75973f9",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery-p100.png",
+      "sha256": "1097bac9183a04dc604e21aa7011b62da0d33b2cbfce53c2eb4b983348a4441d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "sha256": "05cc4ae243b9d17ed5893a68725fbd4663f0f4fe71f36966e9180ef0008ed069",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-discovery.webm",
+      "sha256": "a32575504069a6c9174e161e71e180c4b9c814688b2a2865393ac5521405b570",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m01-ink-depth-reveal.png",
+      "sha256": "3230cd50fd738e87f95ca77ca9431f7ead65c79463d0e293c462fdd2fb8ae764",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m02-material-sweep-onset.png",
+      "sha256": "5013c6c89665354f88e18bf4043544c7f23619093f08a3e74e57274328c608cd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m03-material-sweep-complete.png",
+      "sha256": "c5fd5ba82dd0c8acb411cc490192ad9a1bc463669b9e1000b70ba62feadddcdd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m04-sun-and-shadow-change.png",
+      "sha256": "4fc1bc040c7987694d4e46eda4b374ffce7118351e8ccc46ad70e44e16884995",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m05-threshold-approach.png",
+      "sha256": "18f968cf20b509b620eac1795066406ef29a329c3dc7288971b35247cad743f5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m06-door-opens.png",
+      "sha256": "4265b6c290ebf5f31f1385900a776ae55927bfaba4e63017c29e4edb60b2eec7",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m07-reception-parlour.png",
+      "sha256": "40eac6521601dc7d66fca6c3fde7683a9ab2702066e143fbc2c37acbb2b2abca",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m08-dining-atrium.png",
+      "sha256": "a74878a25e42ad1bfc9fc7adef27659fdcadcb52f8b0594ba73d646936789df5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m09-rear-doors-open.png",
+      "sha256": "9a423faebd0627147bb24c12f79bf9b77603eeed7c9cf0663f49657797f53dac",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m10-courtyard-arrival.png",
+      "sha256": "471b374a3d4f468bc643d17b5087cdcf6fe8516a1b2b320764e5b4e7f461caaa",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-m11-terminal-courtyard.png",
+      "sha256": "1097bac9183a04dc604e21aa7011b62da0d33b2cbfce53c2eb4b983348a4441d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-semantic.telemetry.ndjson",
+      "sha256": "18ca34f956422a3ea00a522e2426bdbfa4358df64f7e61283c490e102fe6f3de",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-forward-semantic.webm",
+      "sha256": "603e3c1cadf314d78f5e18af7b4751e66ba0c9ecbff9cd539aa81bd3619bfff5",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-restored-start.png",
+      "sha256": "da76a522a78a0bdbc4f01bc60b354028c5c4ea18b392e65fdbaeb938c262e08b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "sha256": "b4fa7534b1db65d1998dc0a21fed15652576004bc9562e08ea3e0c935b07d964",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-reverse-discovery.webm",
+      "sha256": "73334de3b0129bd0d619660baf7b6e823f2ca95807f10cdcc1946bfa609e8768",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-semantic-end.png",
+      "sha256": "1097bac9183a04dc604e21aa7011b62da0d33b2cbfce53c2eb4b983348a4441d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-semantic-start.png",
+      "sha256": "aac769411ac81ca77c47cbc65b81e0b9bd1dff9c46ccd1a32b94a75421d6e2aa",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\landscape-start.png",
+      "sha256": "1ef1f070a8fb405bba2d93ef93bcc48d1119b3b1dd19dc2387de1895350d1312",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\reverse-state.json",
+      "sha256": "f2ecbd3d4b2a91f98ec42049da68ff099b86ca43f852db32796662f97aba5450",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\semantic-capture.json",
+      "sha256": "05897be8f4ed61c27e848f504d64938deab5fbe215dac7c7320330092e020899",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-a-one-door\\landscape\\start-state.json",
+      "sha256": "cdf2a185859b68fdb2c840549124e89140274bb2382b63ddcd70dc32625f0ee7",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-start.png",
+      "sha256": "b7047b523b0c2b76807c984029f6eb950d33ad2ca4fa74be0b41e15ed4401e11",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-end.png",
+      "sha256": "3b2e1c86c3f0740129cbd2bcdf99a991a9c74d46b474e77c866f1bed4caf54a8",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-restored-start.png",
+      "sha256": "92cde33b8e59906be124abea0523c9e4700b98c50ecaddba2e1ebdd97b3de414",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-forward-m02-material-sweep-onset.png",
+      "sha256": "3c886dba0db9d2771393c855c840975768eafb122504ea37fef2d466aa432a5a",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-forward-m06-door-opens.png",
+      "sha256": "c243a9e965c7c97a740ba0c79e33bc275440e2b19869885b37eb6d0a7a67e4f1",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/desktop/desktop-forward-m09-rear-doors-open.png",
+      "sha256": "9d45405fdbf6b9d819379089be87a04632c432ab6620a2436d7669ab021ca0bb",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-start.png",
+      "sha256": "f2f9260c5454985092a36b564cc8a850551fdce13af6d280aa5315a076c14789",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-end.png",
+      "sha256": "ec26637a15cd5d8a06516f998de3248add55bf4f6d5f3779a6ac28fa973f9e3c",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-restored-start.png",
+      "sha256": "21f56426c908cb829bdfeb12683c44355dcb380fbc0d7ede24f64322b1476f7c",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-forward-m02-material-sweep-onset.png",
+      "sha256": "b3ab7d88d46dc3abacee6529d496d33dc5ad2009a53286f7b42b8e44690500ac",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-forward-m06-door-opens.png",
+      "sha256": "95de22df2148b7f5b2d35b2af1bc55c865ae5c13b62fc18af27cf540da72b5f8",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/portrait/portrait-forward-m09-rear-doors-open.png",
+      "sha256": "62e7e43a354c6d4e11d631ee5395a6072fd6be70cf75cf0f9370545c6fe51322",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-start.png",
+      "sha256": "1ef1f070a8fb405bba2d93ef93bcc48d1119b3b1dd19dc2387de1895350d1312",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-end.png",
+      "sha256": "1097bac9183a04dc604e21aa7011b62da0d33b2cbfce53c2eb4b983348a4441d",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-restored-start.png",
+      "sha256": "da76a522a78a0bdbc4f01bc60b354028c5c4ea18b392e65fdbaeb938c262e08b",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-forward-m02-material-sweep-onset.png",
+      "sha256": "5013c6c89665354f88e18bf4043544c7f23619093f08a3e74e57274328c608cd",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-forward-m06-door-opens.png",
+      "sha256": "4265b6c290ebf5f31f1385900a776ae55927bfaba4e63017c29e4edb60b2eec7",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-a-one-door/keyframes/landscape/landscape-forward-m09-rear-doors-open.png",
+      "sha256": "9a423faebd0627147bb24c12f79bf9b77603eeed7c9cf0663f49657797f53dac",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    }
+  ],
+  "integrity": {
+    "assetsVerified": true,
+    "productionDiffZero": true
+  },
+  "completion": {
+    "gates": {
+      "T01": "PASS",
+      "T02": "PASS",
+      "T03": "PASS",
+      "T04": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "T07": "PASS",
+      "T08": "PASS",
+      "T09": "PASS",
+      "T10": "PASS",
+      "T11": "PASS",
+      "T12": "PASS",
+      "T13": "PASS",
+      "T14": "PASS",
+      "T15": "PASS",
+      "T16": "PASS",
+      "T17": "PASS",
+      "T18": "PASS",
+      "T19": "PASS",
+      "T20": "PASS",
+      "T21": "PASS"
+    },
+    "validatorResult": "PASS",
+    "validatedAt": "2026-11-02T19:39:27.567Z"
+  }
+}

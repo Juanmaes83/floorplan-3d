@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:27:36.805Z",
+  "updatedAt": "2026-11-02T19:39:27.567Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -1136,10 +1136,10 @@
       }
     },
     "07-a-one-door": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "SEMANTIC_LANDSCAPE_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1191,10 +1191,31 @@
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Passive evidence does not prove donor GPU material/shadow-map/resource identity after reverse.",
+          "attempts": [
+            "A0/A1 screenshots, route/scroll/HUD equality in all viewports",
+            "continuous reverse WebM/telemetry",
+            "pinned page.js and engine/elevation.js absolute-state inspection"
+          ],
+          "evidenceNeeded": "Narrow read-only object/resource identity probe if later acceptance requires internal identity."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Professional value and placement of this experience among 14 references remain a later product decision.",
+          "attempts": [
+            "three-viewport observed sequence",
+            "pinned README/source",
+            "Cut1 D07, Cut3 D19 and Global reconciliation"
+          ],
+          "evidenceNeeded": "Human review after full 14-reference audit; no bridge authorized here."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T19:33:09.828Z"
+        "updatedAt": "2026-11-02T19:39:27.567Z"
       }
     },
     "07-b-the-row": {
