@@ -92,3 +92,32 @@ test('FT6 preferred adapter Begin failure restores and degrades, required tour f
  await start(page);await page.locator('#presentationStoryNext').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'));
  const end=await state(page);for(const key of ['project','revision','undo','level'])assert.deepEqual(end[key],before[key]);noTemplateStorage(before.storage,end.storage);assert.deepEqual(errors,[]);
 });
+test('FT6 Apply failure after real axon mutation rolls back without an unhandled frame rejection',async t=>{
+ const {page,errors}=await open(t,{zip:duplex}),before=await state(page);await config(page);await page.locator('#presentationTemplate').selectOption('architecture');
+ await page.evaluate(()=>{const apply=View3D.presentationStoryApply;View3D.presentationStoryApply=function(...args){const value=apply.apply(this,args);if(FloorPlanPresentation.story?.kind==='axon-open')throw Error('QA after actual Apply');return value;};});
+ await start(page);for(let i=0;i<3;i++){await page.locator('#presentationStoryNext').click();await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy);}
+ await page.waitForFunction(()=>FloorPlanPresentation.templates.failures.some(f=>f.capability==='axon'));assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true);
+ const residue=await page.evaluate(()=>View3D.presentationAxonResidue);assert.equal(residue.active,false);assert.equal(residue.handles,0);assert.ok(residue.levelDeltas.every(l=>Math.abs(l.deltaY)<1e-9));
+ const failedP=await page.evaluate(()=>{const run=FloorPlanPresentation.story,seq=FloorPlanPresentationStory.sequence(run.kinds.map(k=>FloorPlanPresentationStory.SCENE_MS[k]));return seq.at(run.kinds.indexOf('axon-open'),.5);});
+ await scrub(page,.99);await scrub(page,failedP);assert.equal(await page.evaluate(()=>View3D.presentationAxonResidue.active),false,'seeking back to a skipped scene must not reactivate its renderer state');
+ await stop(page);assert.deepEqual((await state(page)).project,before.project);assert.deepEqual(errors,[]);
+});
+test('FT6 historical explicit sidecar >6 survives profile/reset and is never rewritten by a template',async t=>{
+ const {page,errors}=await open(t);const saved=await page.evaluate(()=>{const app=FloorPlanApp,C=FloorPlanPresentationCore,ids=app.geometry.rooms.filter(r=>r.poly.length>=3&&C.area(r.poly)>0).slice(0,8).map(r=>r.id),key=C.key(app.entryId,app.project.id),value=JSON.stringify(C.sidecar(app.project.id,app.entryId,FloorPlanGuide.revision(app.project),ids));localStorage.setItem(key,value);return {key,value,ids};});
+ await config(page);await page.locator('#presentationTemplate').selectOption('real-estate');assert.equal((await templates(page)).resolved.selectedRooms.length,8);assert.equal(await page.locator('[data-code=room-budget-exceeded]').count(),1);
+ await page.locator('#presentationTemplate').selectOption('interior-design');await page.locator('#presentationTemplateReset').click();assert.deepEqual((await templates(page)).resolved.selectedRooms.map(r=>r.roomId),saved.ids);
+ await start(page);await stop(page);assert.equal(await page.evaluate(k=>localStorage.getItem(k),saved.key),saved.value);assert.deepEqual(errors,[]);
+});
+for(const reading of ['compact','exploded'])test(`FT6 ${reading}: p0/p1 equal real overview, five reversible cycles, no rebuild per Apply`,async t=>{
+ const {page,errors}=await open(t,{zip:duplex});await config(page);await page.locator('#presentationTemplate').selectOption('architecture');await page.locator('.presentation-template-options').first().locator('summary').click();await page.locator('#presentationTemplateBuildingReading').selectOption(reading);await start(page);
+ await page.locator('.presentation-stops button').first().click();await page.waitForFunction(()=>!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false');
+ const pose=()=>page.evaluate(()=>View3D.presentationPose()),overview=await pose();
+ const same=(actual)=>{for(const key of ['position','target'])actual[key].forEach((v,i)=>assert.ok(Math.abs(v-overview[key][i])<1e-6,key+' overview endpoint'));assert.ok(Math.abs(actual.fov-overview.fov)<1e-6);};
+ for(let cycle=0;cycle<5;cycle++){
+  await page.locator('#presentationAxonPlay').click();await page.waitForFunction(()=>!!FloorPlanPresentation.story);await scrub(page,0);same(await pose());const rebuilds=await page.evaluate(()=>View3D.presentationAxonResidue.rebuilds);
+  for(const p of reading==='exploded'?[.22,.645,.86,1,.645,0,.645]:[.5,1,.5,0,.5]){await scrub(page,p);if(p===0||p===1)same(await pose());}
+  assert.equal(await page.evaluate(()=>View3D.presentationAxonResidue.rebuilds),rebuilds,'Apply must not rebuild');
+  await page.locator('#presentationStoryPlan').click();await page.waitForFunction(()=>!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false');const residue=await page.evaluate(()=>View3D.presentationAxonResidue);assert.equal(residue.active,false);assert.equal(residue.handles,0);assert.ok(residue.levelDeltas.every(l=>Math.abs(l.deltaY)<1e-9));same(await pose());
+ }
+ await stop(page);assert.deepEqual(errors,[]);
+});

@@ -724,6 +724,7 @@
   index=sceneEnd(sc);draw();const region=viewRegion();
   let fromRegion=null;if(sc.kind==='room-descent'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
+  if(run.failed?.has(i)){View3D.presentationStoryEnd?.({keepPose:true});await View3D.presentationGo(plan.stops[index],true,{region:viewRegion()});return story===run;}
   try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{})},sc.kind);}
   catch(error){if(!frozenTemplate)throw error;return templateSceneFailure(run,sc,error);}
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
