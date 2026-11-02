@@ -1,3 +1,5 @@
+> **SUPERSEDED FOR CURRENT OPERATIONS — 02-11-2026.** Este archivo se conserva como snapshot histórico. Para el estado operativo vigente usar [`roadmap-completion-matrix-2026-11-02.md`](roadmap-completion-matrix-2026-11-02.md) y [`current-status-2026-11-02.md`](current-status-2026-11-02.md). Las menciones inferiores a FT3D-5 como «siguiente corte» y FT3D-6 como draft describen el momento histórico de este documento y no el producto actual.
+
 # Matriz de cierre del roadmap — actualizado 01-11-2026
 
 **Base funcional consolidada:** FT3D-4 integrado en `e716ba920e26485ae112b8f12b342534dff34030`.  
