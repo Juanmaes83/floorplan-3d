@@ -1,0 +1,31 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nRELIEF BRICK · D-104\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nPRODUCT\nKC-06 DIAPER\nDRAWING\nDETAIL ELEVATION\nSCALE\n1 : 20\nSHEET\nD-104\nSCROLL\nCAD // ELV.02\nSUN ALT 35.3° · AZ 135°\nOPTIC 2.0° ORTHO\nCAD PLAN // 1:100\n1:20 WALL · 2° LENS\n1:20 WALL\nRAKE SUN\nHEADER\nPORCH\nINTERIOR",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 2106,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 2496,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "after": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nRELIEF BRICK · D-104\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nPRODUCT\nKC-06 DIAPER\nDRAWING\nDETAIL ELEVATION\nSCALE\n1 : 20\nSHEET\nD-104\nSCROLL\n01  ·  DRAWN AT 1:20\n\nEVERY BRICK ON THE SHEET. EVERY HEADER STANDS 60 MM PROUD, SO EVERY HEADER HAS ITS OWN SHADOW.\n\nCAD // ELV.02\nSUN ALT 35.3° · AZ 135°\nOPTIC 2.7° ORTHO\nCAD PLAN // 1:100\n1:20 WALL · 3° LENS\n1:20 WALL\nRAKE SUN\nHEADER\nPORCH\nINTERIOR",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 2106,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 2496,
+    "scrollY": 175,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 3° LENS | ALT 35.3° · AZ 135° | 2.7° ORTHO"
+  },
+  "model": "SCROLL_PLUS_TIME",
+  "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+}

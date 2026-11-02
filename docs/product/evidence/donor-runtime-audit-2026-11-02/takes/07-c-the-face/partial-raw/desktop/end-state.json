@@ -1,0 +1,19 @@
+{
+  "end": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nRELIEF BRICK · D-104\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nPRODUCT\nKC-06 DIAPER\nDRAWING\nDETAIL ELEVATION\nSCALE\n1 : 20\nSHEET\nD-104\nSCROLL\n05  ·  INTO THE REVEAL\n\nTHE BOND TURNS INTO THE DEEP PORCH REVEAL AND OPENS INTO THE SUNLIT OAK HALLWAY.\n\nBOND\nFLEMISH DIAPER\nMORTAR\n10 MM LIME\nSAMPLE\n3-BRICK BOX\nORDER A SAMPLE PANEL\nCAD // ELV.02\nSUN ALT 16.9° · AZ 168°\nOPTIC 56.0° PERSP\nCAD PLAN // 1:100\nHEADER · Z:+1.7M\n1:20 WALL\nRAKE SUN\nHEADER\nPORCH\nINTERIOR",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 4860,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5760,
+    "scrollY": 4860,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+  },
+  "additionalInputAfterMax": 2,
+  "forwardInputCount": 85,
+  "forwardSampleCount": 21,
+  "observedAt": "2026-11-02T19:53:52.277Z"
+}

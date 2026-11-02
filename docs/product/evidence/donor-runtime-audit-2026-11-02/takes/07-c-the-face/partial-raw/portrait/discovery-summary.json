@@ -1,0 +1,223 @@
+{
+  "id": "07-c-the-face",
+  "viewport": "portrait",
+  "run": "original",
+  "fps": 10,
+  "stableStartReady": true,
+  "calibration": {
+    "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+    "before": {
+      "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\nCAD PLAN // 1:100\n1:20 WALL · 2° LENS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 844,
+      "maxScroll": 4558,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "scrollHeight": 5402,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+    },
+    "after": {
+      "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\n01  ·  DRAWN AT 1:20\n\nEVERY BRICK ON THE SHEET. EVERY HEADER STANDS 60 MM PROUD, SO EVERY HEADER HAS ITS OWN SHADOW.\n\nCAD PLAN // 1:100\n1:20 WALL · 3° LENS",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 844,
+      "maxScroll": 4558,
+      "programme": "NOT_OBSERVED",
+      "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "scrollHeight": 5402,
+      "scrollY": 377,
+      "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+      "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 3° LENS | ALT 35.3° · AZ 135° | 2.7° ORTHO"
+    },
+    "model": "SCROLL_PLUS_TIME",
+    "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+  },
+  "start": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\nCAD PLAN // 1:100\n1:20 WALL · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 4558,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5402,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "end": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\n05  ·  INTO THE REVEAL\n\nTHE BOND TURNS INTO THE DEEP PORCH REVEAL AND OPENS INTO THE SUNLIT OAK HALLWAY.\n\nBOND\nFLEMISH DIAPER\nMORTAR\n10 MM LIME\nSAMPLE\n3-BRICK BOX\nORDER A SAMPLE PANEL\nCAD PLAN // 1:100\nHEADER · Z:+1.7M",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 4558,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5402,
+    "scrollY": 4558,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+  },
+  "restored": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\nCAD PLAN // 1:100\n1:20 WALL · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 4558,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5402,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "forwardInputCount": 90,
+  "reverseInputCount": 90,
+  "forwardTelemetrySamples": 218,
+  "reverseTelemetrySamples": 161,
+  "files": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-start.png",
+      "bytes": 129372,
+      "sha256": "e31e1e4a52cae9192d669295128c776c92c32e8dc021e1f7cfa4625ad5137267"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-end.png",
+      "bytes": 312802,
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm",
+      "bytes": 3809921,
+      "sha256": "dbd3c100408bfceb7136b5bca8ac09b674eea28294b70f2f170062c9ab827d0d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 201946,
+      "sha256": "90426ab980eb3b117c44a4210b090cf66135a87d1fe0a93981355f88c0118a8d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-restored-start.png",
+      "bytes": 129368,
+      "sha256": "1bf4db9f0f658f7f6a8f9c0a6e85d2414ca57085b1ae7a7d69fb035be76ed75b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.webm",
+      "bytes": 2651313,
+      "sha256": "880787ebff2334bbd47b7e7d1510f0d2c9f879f2014b18bf83959e64c9f9811b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 146198,
+      "sha256": "90a790870895e2bce2229d45e8c725fb29d6e764da2007da22ce175e15fe38c9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p000.png",
+      "bytes": 129374,
+      "sha256": "dd7078ae095310c8c34ab8f61fb8d2975dfe4a34f6a7466e3fab4ea916aa7e04"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p005.png",
+      "bytes": 138870,
+      "sha256": "cbd0b97588458455dde8ba8e06f2328651da9662bb66070f92acb8768e1d5a9b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p010.png",
+      "bytes": 148637,
+      "sha256": "f529b7ec9fe340a86e50599f694ad66c81a2878a7389e1ddbc8a9e0ccd2f2e11"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p015.png",
+      "bytes": 162009,
+      "sha256": "5b8ab212d32f85ad7fdc62ab54350c301c2e80cba689ccfb71f2cce6586bf291"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p020.png",
+      "bytes": 223967,
+      "sha256": "adf48149f429474d8fba4a1c44bcff2ea06201493432a8e5565a4714a02d8e95"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p025.png",
+      "bytes": 228296,
+      "sha256": "b9dec2ab9607b882f0cad50d8e8a92972d07e1ced6097e04f45d7a2254a3e527"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p030.png",
+      "bytes": 247458,
+      "sha256": "a37d3a26445604a96b7693b9c716e8adc384d8b3ac1a60470f231063c338a8e8"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p035.png",
+      "bytes": 239746,
+      "sha256": "bed51eeaf79ebfe3f71833ff030cf1fac15cf32b4230b338733e3c30c0d0d91b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p040.png",
+      "bytes": 240424,
+      "sha256": "c536bb082817e18ec5154f1df0e4cfb86500180a1719eccb0680803e1e4ce49b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p045.png",
+      "bytes": 275860,
+      "sha256": "f2d9c9fa174adf928b657e9707b71fe1600a88a79b37a4a2544b94badfe34962"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p050.png",
+      "bytes": 275668,
+      "sha256": "b044141bdaab1b356177f88fb6a07600bfe89de83c6bc860163bd278d35a007b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p055.png",
+      "bytes": 297331,
+      "sha256": "db5c18a0b86a3e9a92b30d798fe53e5366d058bd6c90e4f4293851659c3dbeee"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p060.png",
+      "bytes": 401881,
+      "sha256": "a86efccd75ca1c895a7727f88c2138b24de070946e99591629c2308bedb96599"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p065.png",
+      "bytes": 428281,
+      "sha256": "8e1ae88d0919f50d401086c423bcccdd9f292ad376629732ef4a680ddf0da1b9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p070.png",
+      "bytes": 429610,
+      "sha256": "c54b4421740da8e84d3e49fa89cc4c457f01202b0ef6529ee1678adacb5a58ba"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p075.png",
+      "bytes": 304686,
+      "sha256": "94926021378b9b791907bbd148ad86b705f907e8cb56a1f007561890f2a954bb"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p080.png",
+      "bytes": 220538,
+      "sha256": "6bf48aded0d504e087729a9ca0347e8755bcaa5e582ba775c06f6a57d21f4792"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p085.png",
+      "bytes": 237685,
+      "sha256": "721a415569a3676d8580c522a9fe6e3c1550335c2f23378f93f16cb136d83d7e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p090.png",
+      "bytes": 267494,
+      "sha256": "194fb2ce51c78a55d38d012df5d3596925fe6e051b3cc7dba842fbc08650c93b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p095.png",
+      "bytes": 312802,
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p100.png",
+      "bytes": 312802,
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec"
+    }
+  ]
+}

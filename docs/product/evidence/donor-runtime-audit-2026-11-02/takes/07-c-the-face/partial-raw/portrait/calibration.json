@@ -1,0 +1,31 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\nCAD PLAN // 1:100\n1:20 WALL · 2° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 4558,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5402,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "after": {
+    "bodyText": "DWG // D-104  ·  KILN & COURSE\n\nPLOTTING MASONRY DETAIL 1:20  100%\n\nKILN & COURSE\nORDER A SAMPLE PANEL\n\nKC-06 DIAPER\n ·  DETAIL ELEVATION 1:20\n\nTHE SHADOW\nIS THE PRODUCT.\nSCROLL\n01  ·  DRAWN AT 1:20\n\nEVERY BRICK ON THE SHEET. EVERY HEADER STANDS 60 MM PROUD, SO EVERY HEADER HAS ITS OWN SHADOW.\n\nCAD PLAN // 1:100\n1:20 WALL · 3° LENS",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 4558,
+    "programme": "NOT_OBSERVED",
+    "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "scrollHeight": 5402,
+    "scrollY": 377,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 3° LENS | ALT 35.3° · AZ 135° | 2.7° ORTHO"
+  },
+  "model": "SCROLL_PLUS_TIME",
+  "note": "Interaction model inferred only from calibration movement; verify per-take source before causal classification."
+}
