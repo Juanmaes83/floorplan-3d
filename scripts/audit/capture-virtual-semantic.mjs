@@ -40,7 +40,7 @@ try{
   let inputCount=0;
   for(const m of milestones){
     const target=14*(m.targetProgressByViewport?.[viewport]??m.targetProgress);
-    while(now.runtimeWeek<target-0.008&&inputCount<500){const t=performance.now();const delta=now.runtimeWeek>=13?Math.min(step,10):step;ab(['mouse','wheel',String(delta)]);inputCount++;now=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}
+    while(now.runtimeWeek<target-(target>=14?0:0.008)&&inputCount<500){const t=performance.now();const delta=now.runtimeWeek>=13?Math.min(step,10):step;ab(['mouse','wheel',String(delta)]);inputCount++;now=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}
     ab(['wait','450']);now=ev(metrics);records.push(capture(`forward-${m.label.toLowerCase()}-${m.slug}`,m.label));
   }
   while(now.runtimeWeek<13.998&&inputCount<450){const t=performance.now();ab(['mouse','wheel',String(step)]);inputCount++;now=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}

@@ -1,0 +1,271 @@
+{
+  "id": "05-b-1-1-site-sheet",
+  "viewport": "landscape",
+  "run": "original",
+  "stableStartReady": true,
+  "entry": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0.5,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "sig",
+    "runtimeTour": 0,
+    "runtimeWeek": 7,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "calibration": {
+    "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+    "before": {
+      "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 390,
+      "maxScroll": 0,
+      "normalizedRuntimeProgress": 0.5,
+      "route": "/flat-to-3d/05-schedule-build/index.html",
+      "runtimeMax": 14,
+      "runtimeShot": "sig",
+      "runtimeTour": 0,
+      "runtimeWeek": 7,
+      "scrollHeight": 390,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+      "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+    },
+    "after": {
+      "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+      "dpr": 1,
+      "hash": "",
+      "innerHeight": 390,
+      "maxScroll": 0,
+      "normalizedRuntimeProgress": 0,
+      "route": "/flat-to-3d/05-schedule-build/index.html",
+      "runtimeMax": 14,
+      "runtimeShot": "top",
+      "runtimeTour": 0,
+      "runtimeWeek": 0,
+      "scrollHeight": 390,
+      "scrollY": 0,
+      "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+      "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+    },
+    "model": "VIRTUAL_SCROLL",
+    "note": "Native scroll remains zero; wheel drives the exposed 05 week state. The natural prelude from canonical week 7 to week 0 is recorded without reload.",
+    "preludeInputCount": 54,
+    "preludeVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-prelude-to-week0.webm"
+  },
+  "start": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "end": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 100% COMPLETE\nPRACTICAL COMPLETION\nKEYS HANDED OVER · SCROLL OR SELECT A ROOM BELOW TO TOUR INSIDE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 1,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 14,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 100% COMPLETE\nPRACTICAL COMPLETION\nKEYS HANDED OVER · SCROLL OR SELECT A ROOM BELOW TO TOUR INSIDE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "restored": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "forwardInputCount": 120,
+  "reverseInputCount": 120,
+  "forwardTelemetrySamples": 505,
+  "reverseTelemetrySamples": 459,
+  "files": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-entry-week7.png",
+      "bytes": 216029,
+      "sha256": "64e949589eb046e57d2fe6cf202d97d5970eda7f38d8a9b03658f1baf01ff1fe"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-prelude-to-week0.webm",
+      "bytes": 1821960,
+      "sha256": "0c4c893554e23837edf22c0301086f8e2ec3820b721dfbcec6b48e90b2197ccd"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-start.png",
+      "bytes": 68338,
+      "sha256": "8ff6bfd51f2147c9a1f221afa7d7a497404cff2f513d5ebc36c2b92d6b2b9066"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-end.png",
+      "bytes": 73407,
+      "sha256": "c655b26eff6a2fe7a19c6e81bc32e8059234885516422de958996011c30762dd"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery.webm",
+      "bytes": 2464563,
+      "sha256": "f721fa578b7cf553bf8fefe82c4610e30ec39d4749be8f673a28ffb3f14d882f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 571141,
+      "sha256": "3bf2740663eef5fd06f5e2f7c459ebe5975f9fc28bb6f1d5355eec8190ccc1c2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-restored-start.png",
+      "bytes": 67803,
+      "sha256": "7659c33a71db77dad19998e240de77d9494291b4af48147dba021b4fd5b7be46"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-reverse-discovery.webm",
+      "bytes": 2067819,
+      "sha256": "0a490e2598b9725e396a9f8b787925f9f0d987f406d26dd51b0ea7aa59d177e2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 518870,
+      "sha256": "df51a73b7ac1d99c35010fb745bd80d406cf9d71b8ab8a646efd0712f70fd318"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p000.png",
+      "bytes": 68338,
+      "sha256": "8ff6bfd51f2147c9a1f221afa7d7a497404cff2f513d5ebc36c2b92d6b2b9066"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p005.png",
+      "bytes": 198117,
+      "sha256": "e27bc5cbd6b4b99c81abd11373dfa15844b342a4cf3da2de019d779d8a73b726"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p010.png",
+      "bytes": 204314,
+      "sha256": "fd639ff15321ddc1ca965a76bbfa9ca089e5c37679caa501c787861859fa9369"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p015.png",
+      "bytes": 207552,
+      "sha256": "fa84ddec95f7d4666d58237a9bafb03461ac90a0b2f23fceb0938a0681ffe2c4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p020.png",
+      "bytes": 212528,
+      "sha256": "26cc895c8c99e567903c84368dad49d9e08452b0d467f8a6ab98faa50b77c610"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p025.png",
+      "bytes": 209817,
+      "sha256": "5ba62cbd23aca9a74edcd97e64aed9a992e0498bafe2cae01461d84ccbf757fa"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p030.png",
+      "bytes": 212439,
+      "sha256": "aa2ba71dbf730b27d721302a2eb7890701dfd3b6bef44c93f17a4a65765de436"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p035.png",
+      "bytes": 216540,
+      "sha256": "576f388eebbf415673c302648f81f0916d20a734fa7182d7fca9b35ea4277ab0"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p040.png",
+      "bytes": 214754,
+      "sha256": "659016a604938f3ab22d6104fe5be557314c90ce62f46f633d5aa3519a239a83"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p045.png",
+      "bytes": 214869,
+      "sha256": "6f27929a0c5e467a2993e5dd2279f515f15386d3713e82746cb56d5e6b34a28e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p050.png",
+      "bytes": 214572,
+      "sha256": "7a32d2690cd29d8a0393bc9d3aacc742e831c5345f55c4d1fa17ff9f23b46b97"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p055.png",
+      "bytes": 220205,
+      "sha256": "46f9ef4a4f5f859339409966c7d5867034311e4057e9918d6f0542bbbbc5d7d7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p060.png",
+      "bytes": 221051,
+      "sha256": "86cb8e2e2bf644c83cd48475944b5c72fd9c57204bda80aa832d15444649277c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p065.png",
+      "bytes": 214345,
+      "sha256": "9914ac0f09344e6b5ce8a2fbd94fd3a091a084134c30e126eeea701b21954b91"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p070.png",
+      "bytes": 213478,
+      "sha256": "7e20f71818429f365798868f9a8cfd2175a3a317cdaffbd3565a0cd35db46614"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p075.png",
+      "bytes": 209725,
+      "sha256": "8f4e44522265bcbbfbbaf2641616aba759aea709068245b0980cad5e91060a29"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p080.png",
+      "bytes": 203537,
+      "sha256": "fc557a109093e8df6e5df765fba4d463896f4eb6986ae615161339bb10ae97c5"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p085.png",
+      "bytes": 208489,
+      "sha256": "d1d0733988b9bc88025dacbd2a3271ee113fd3cef7eb24a57541aad3587e64e2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p090.png",
+      "bytes": 219389,
+      "sha256": "84762f2c23a5ba46b388818d8e28737519e0ac8682085f04e6775b96b1d1a832"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p095.png",
+      "bytes": 179718,
+      "sha256": "a120e3092d04e1d74fc9d50b069a8714547ad5a357c2b2745696fc752de2f525"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\landscape\\landscape-forward-discovery-p100.png",
+      "bytes": 73407,
+      "sha256": "c655b26eff6a2fe7a19c6e81bc32e8059234885516422de958996011c30762dd"
+    }
+  ]
+}

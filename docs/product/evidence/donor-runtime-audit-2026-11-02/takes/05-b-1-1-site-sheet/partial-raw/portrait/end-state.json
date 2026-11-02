@@ -1,0 +1,23 @@
+{
+  "end": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 100% COMPLETE\nPRACTICAL COMPLETION\nKEYS HANDED OVER · SCROLL OR SELECT A ROOM BELOW TO TOUR INSIDE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 1,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 14,
+    "scrollHeight": 844,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 100% COMPLETE\nPRACTICAL COMPLETION\nKEYS HANDED OVER · SCROLL OR SELECT A ROOM BELOW TO TOUR INSIDE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "additionalInputAfterMax": 2,
+  "forwardInputCount": 54,
+  "forwardSampleCount": 21,
+  "observedAt": "2026-11-02T16:16:46.371Z"
+}

@@ -1,0 +1,41 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0.5,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "sig",
+    "runtimeTour": 0,
+    "runtimeWeek": 7,
+    "scrollHeight": 844,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 50% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nMON 19 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "after": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 844,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollHeight": 844,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "model": "VIRTUAL_SCROLL",
+  "note": "Native scroll remains zero; wheel drives the exposed 05 week state. The natural prelude from canonical week 7 to week 0 is recorded without reload.",
+  "preludeInputCount": 27,
+  "preludeVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\portrait\\portrait-prelude-to-week0.webm"
+}

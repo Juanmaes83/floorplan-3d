@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "READY_FOR_CAPTURE",
+  "validation": "Pending fresh semantic passes and visual review",
+  "basis": "Independent canonical ?dir=b Discovery opens at week 7 and naturally wheels to 0. Desktop and portrait 0→14→0 show a foundation plan and authored programme texture on the ground, with the same house assembled above it. Pinned view.js drawSheet updates a cached base canvas at the virtual week; autoShotForWeek changes top→b2→b3→top. At 13.5–14 no PHASES row is active, so HUD falls back to Site Mobilisation until the exact week-14 completion branch. Interior stops are offered as tabs but the automatic B route returns overhead; no automatic five-stop tour is claimed.",
+  "milestones": [
+    {"label":"M01","slug":"paper-foundation-start","targetProgress":0.03,"observedChange":"The foundation plan and fourteen-week programme are printed on the ground; site set-up and early excavation overlap above the same plan."},
+    {"label":"M02","slug":"excavation-on-plan","targetProgress":0.11,"observedChange":"Excavation and its temporary work occur inside the foundation footprint while the on-ground programme cursor advances."},
+    {"label":"M03","slug":"footings-and-slab","targetProgress":0.20,"observedChange":"Pad footings, ring beam and slab develop over the matching drawn foundation geometry."},
+    {"label":"M04","slug":"portal-frames","targetProgress":0.32,"observedChange":"The camera has moved to the oblique B3 view and timber portal frames rise, with future work still visible as ghost outlines."},
+    {"label":"M05","slug":"mezzanine-floor","targetProgress":0.43,"observedChange":"The CLT mezzanine and stair enter the frame as the adjacent phase bars fill on the site sheet."},
+    {"label":"M06","slug":"wall-cassettes-and-ghosts","targetProgress":0.53,"observedChange":"Wall cassettes replace some ghost outlines, retaining the one-house geometry above the printed programme."},
+    {"label":"M07","slug":"roof-assembly","targetProgress":0.64,"observedChange":"Roof cassettes and standing-seam surface close the same structure under the crane."},
+    {"label":"M08","slug":"windows-and-doors","targetProgress":0.73,"observedChange":"Glazing and doors occupy the intended openings while the week line advances across the paper programme."},
+    {"label":"M09","slug":"surface-finishes","targetProgress":0.84,"observedChange":"Exterior cladding and internal finishes cover the assembled shell; sheet and HUD still track one virtual week."},
+    {"label":"M10","slug":"furniture-handover","targetProgress":0.95,"observedChange":"Furniture and handover pieces arrive after the finishes, with room tabs becoming available near the end."},
+    {"label":"M11","slug":"late-phase-gap","targetProgress":0.974,"observedChange":"After the last authored phase ends at week 13.5, automatic camera returns overhead and the HUD wrongly says Site Mobilisation on a near-complete house."},
+    {"label":"M12","slug":"overhead-completion-sheet","targetProgress":1,"observedChange":"At week 14 the overhead view shows the completed house over the plan, filled programme bars and Practical Completion text."}
+  ],
+  "reverseSemanticStates": "The overhead complete sheet reverses through the oblique staged build, ghost future pieces, structure and ground work back to the initial plan at virtual week zero. The late-phase Site Mobilisation fallback can reappear in reverse; the canonical B route does not auto-enter the five-stop interior."
+}

@@ -1,0 +1,352 @@
+{
+  "id": "05-b-1-1-site-sheet",
+  "viewport": "desktop",
+  "run": "original",
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0,
+        "runtimeMax": 14,
+        "runtimeShot": "top",
+        "runtimeTour": 0,
+        "runtimeWeek": 0,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:19:54.026Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m01-paper-foundation-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.06942857142857142,
+        "runtimeMax": 14,
+        "runtimeShot": "b2",
+        "runtimeTour": 0,
+        "runtimeWeek": 0.972,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 00.9\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-02 // WK 01 · 7% COMPLETE\nEXCAVATION\n750MM REDUCED-LEVEL DIG · 84 M³ SPOIL HEAP\nFRI 5 MAR 2027 · [TR-02]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:19:56.455Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m02-excavation-on-plan.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.13885714285714282,
+        "runtimeMax": 14,
+        "runtimeShot": "b2",
+        "runtimeTour": 0,
+        "runtimeWeek": 1.9439999999999995,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 01.9\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-03 // WK 02 · 14% COMPLETE\nFOUNDATIONS\nC35 RC PAD FOOTINGS · 600×450 RING BEAM · 100 EPS · 300 SLAB\nFRI 12 MAR 2027 · [TR-03]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:19:58.185Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m03-footings-and-slab.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.23142857142857137,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 3.239999999999999,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 03.2\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-03 // WK 04 · 23% COMPLETE\nFOUNDATIONS\nC35 RC PAD FOOTINGS · 600×450 RING BEAM · 100 EPS · 300 SLAB\nTUE 23 MAR 2027 · [TR-03]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:00.343Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m04-portal-frames.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.34714285714285703,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 4.8599999999999985,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 04.8\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-04 // WK 05 · 35% COMPLETE\nSTRUCTURE\n5× GL28C SPRUCE PORTAL FRAMES · STEEL BASE SHOES\nFRI 2 APR 2027 · [TR-04]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:03.663Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m05-mezzanine-floor.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.4628571428571427,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 6.479999999999998,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 06.4\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 07 · 46% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nWED 14 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:06.203Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m06-wall-cassettes-and-ghosts.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.5554285714285713,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 7.775999999999997,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 07.7\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-06 // WK 08 · 56% COMPLETE\nWALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nTHU 22 APR 2027 · [TR-06]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:08.595Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m07-roof-assembly.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.6711428571428569,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 9.395999999999995,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 09.3\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-07 // WK 10 · 67% COMPLETE\nROOF\n260MM INSULATED CASSETTES · STANDING-SEAM VMZINC\nTUE 4 MAY 2027 · [TR-07]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:11.293Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m08-windows-and-doors.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.7637142857142855,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 10.691999999999997,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 10.6\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-09 // WK 11 · 76% COMPLETE\nFINISHES\nCHARRED LARCH CLADDING · LIME PLASTER · EUROPEAN OAK\nTHU 13 MAY 2027 · [TR-09]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:14.055Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m09-surface-finishes.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.8794285714285711,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 12.311999999999996,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 12.3\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-09 // WK 13 · 88% COMPLETE\nFINISHES\nCHARRED LARCH CLADDING · LIME PLASTER · EUROPEAN OAK\nTUE 25 MAY 2027 · [TR-09]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:16.831Z"
+    },
+    {
+      "label": "M10",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m10-furniture-handover.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.955285714285714,
+        "runtimeMax": 14,
+        "runtimeShot": "b3",
+        "runtimeTour": 0,
+        "runtimeWeek": 13.373999999999995,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 13.3\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 96% COMPLETE\nFURNITURE\nBESPOKE JOINERY · CAST-IRON HEARTH · KEY HANDOVER\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nTUE 1 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:19.484Z"
+    },
+    {
+      "label": "M11",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m11-late-phase-gap.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.9736714285714284,
+        "runtimeMax": 14,
+        "runtimeShot": "top",
+        "runtimeTour": 0,
+        "runtimeWeek": 13.631399999999996,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 13.6\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 14 · 97% COMPLETE\nSITE MOBILISATION\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nTHU 3 JUN 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:26.880Z"
+    },
+    {
+      "label": "M12",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m12-overhead-completion-sheet.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.999835714285714,
+        "runtimeMax": 14,
+        "runtimeShot": "top",
+        "runtimeTour": 0,
+        "runtimeWeek": 13.997699999999996,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 13.9\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 14 · 100% COMPLETE\nSITE MOBILISATION\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:36.700Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 1,
+        "runtimeMax": 14,
+        "runtimeShot": "top",
+        "runtimeTour": 0,
+        "runtimeWeek": 14,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 14.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-10 // WK 14 · 100% COMPLETE\nPRACTICAL COMPLETION\nKEYS HANDED OVER · SCROLL OR SELECT A ROOM BELOW TO TOUR INSIDE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nFRI 4 JUN 2027 · [TR-10]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T16:20:38.325Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-semantic.webm",
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-semantic-start.png",
+      "bytes": 276344,
+      "sha256": "7c16ef35ddd55a04aee9eddc997d98f2889371f6d6b7915cc4295294ca8b2c40"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m01-paper-foundation-start.png",
+      "bytes": 660525,
+      "sha256": "9a0d5834ab3185efb119aa2540998c34b48661d4f47bea07f7a2053f27049922"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m02-excavation-on-plan.png",
+      "bytes": 701800,
+      "sha256": "a16e3b22f8d032f9eb00d29ab718ffe9f1bb5255684d49a2618915484ffc2f8f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m03-footings-and-slab.png",
+      "bytes": 688502,
+      "sha256": "15360ae205e0f6dba2d75ade4a3d1c6e172333fb7157fe20fb68bee10f23e747"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m04-portal-frames.png",
+      "bytes": 662060,
+      "sha256": "1789a933b1ff437bed741413f223513b7a1cdeffc1f7b14a065d006070b127a2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m05-mezzanine-floor.png",
+      "bytes": 680442,
+      "sha256": "144e714d3de7003c00ca218155893a845c6dcab26b498d42fce3a3346d77b7a4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m06-wall-cassettes-and-ghosts.png",
+      "bytes": 689633,
+      "sha256": "1d52471adf749ee26d02cc08d3ec3031d46d8054074a573bf4bed8b43a5e21b3"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m07-roof-assembly.png",
+      "bytes": 725907,
+      "sha256": "c80b4f53f4157a764a4074dba01408420bfeb3094e5c978978dfc4e48cd9cd03"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m08-windows-and-doors.png",
+      "bytes": 701007,
+      "sha256": "c72b5222dd3fa83997cc4837fc50b126d95b59b591843defb1b2c6af62ac3af4"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m09-surface-finishes.png",
+      "bytes": 724395,
+      "sha256": "5f33c882ac41bfe243dc4177639c4fdc44b669ba694135ea0804f6e2fa2b5ccf"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m10-furniture-handover.png",
+      "bytes": 672399,
+      "sha256": "94c1861c1a833d0bd9ecbfd6c5343eb011de192395cd5754f9b9883729d571a9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m11-late-phase-gap.png",
+      "bytes": 365370,
+      "sha256": "ef3c72c3760d4216431d7cdd7ef1eaba70f2df85f3c5e17b3d463c46544718e7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-m12-overhead-completion-sheet.png",
+      "bytes": 262506,
+      "sha256": "fadec6a5dae1cbff234a39a97e8bb080bd71235ccf1e1feb9e6fc94f0d205b32"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-semantic-end.png",
+      "bytes": 263344,
+      "sha256": "d358810323d92e8fa02f239056e96ac63350fb8239cd46ce1a60a9c47e361caf"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-b-1-1-site-sheet\\desktop\\desktop-forward-semantic.webm",
+      "bytes": 6380388,
+      "sha256": "dc1bbd01503fbc0659728f417ddbbbde418e07152fa8d87de289dcdef381515c"
+    }
+  ],
+  "preludeInputCount": 27,
+  "inputCount": 107,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\05-b-1-1-site-sheet\\semantic-plan.json"
+}

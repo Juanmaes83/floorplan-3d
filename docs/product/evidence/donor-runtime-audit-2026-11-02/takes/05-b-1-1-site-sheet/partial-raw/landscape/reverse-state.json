@@ -1,0 +1,23 @@
+{
+  "restored": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "top",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=b",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nPURLIN\nDWG 08-101 · FOUNDATION PLAN & PROGRAMME · SCALE 1:1\nTR-01 // WK 01 · 0% COMPLETE\nSITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nMON 1 MAR 2027 · [TR-01]\nSCROLL OR DRAG SLIDER TO BUILD & TOUR INSIDE"
+  },
+  "reverseInputCount": 120,
+  "consoleEnd": "",
+  "errorsEnd": "",
+  "observedAt": "2026-11-02T16:19:22.407Z"
+}

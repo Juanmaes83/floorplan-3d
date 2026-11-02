@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T16:12:45.641Z",
+  "updatedAt": "2026-11-02T16:19:22.420Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -784,16 +784,65 @@
       }
     },
     "05-b-1-1-site-sheet": {
-      "captureStatus": "NOT_STARTED",
+      "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "lastSuccessfulStage": "SEMANTIC_PORTRAIT_COMPLETE",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T16:14:17.762Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:15:35.076Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T16:15:53.132Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:17:10.884Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T16:17:17.000Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:19:22.419Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T16:19:35.497Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:20:38.552Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T16:21:14.546Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:22:11.398Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T16:22:18.490Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T16:24:40.267Z"
+        }
+      ],
       "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T16:24:40.267Z"
       }
     },
     "05-c-site-camera": {
