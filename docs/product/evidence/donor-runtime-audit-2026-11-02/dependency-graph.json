@@ -2012,12 +2012,6 @@
       "evidence": "takes/07-c-the-face/manifest.json#rubikCrosswalk/qa"
     },
     {
-      "from": "DM-01-a-the-board",
-      "to": "DM-01-a-the-board",
-      "type": "SHARES",
-      "evidence": "shared-mechanisms.json#SM-01-EXPLODED"
-    },
-    {
       "from": "DM-01-b-unfolded-room",
       "to": "DM-01-a-the-board",
       "type": "SHARES",
@@ -2030,22 +2024,10 @@
       "evidence": "shared-mechanisms.json#SM-01-EXPLODED"
     },
     {
-      "from": "DM-03-a-open-the-lens",
-      "to": "DM-03-a-open-the-lens",
-      "type": "SHARES",
-      "evidence": "shared-mechanisms.json#SM-03-OPEN-SECTION"
-    },
-    {
       "from": "DM-03-c-down-the-stair",
       "to": "DM-03-a-open-the-lens",
       "type": "SHARES",
       "evidence": "shared-mechanisms.json#SM-03-OPEN-SECTION"
-    },
-    {
-      "from": "DM-05-a-the-programme",
-      "to": "DM-05-a-the-programme",
-      "type": "SHARES",
-      "evidence": "shared-mechanisms.json#SM-05-SCHEDULE"
     },
     {
       "from": "DM-05-b-1-1-site-sheet",
@@ -2058,12 +2040,6 @@
       "to": "DM-05-a-the-programme",
       "type": "SHARES",
       "evidence": "shared-mechanisms.json#SM-05-SCHEDULE"
-    },
-    {
-      "from": "DM-07-a-one-door",
-      "to": "DM-07-a-one-door",
-      "type": "SHARES",
-      "evidence": "shared-mechanisms.json#SM-07-ELEVATION"
     },
     {
       "from": "DM-07-b-the-row",

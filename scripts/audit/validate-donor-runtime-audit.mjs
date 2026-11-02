@@ -1,4 +1,5 @@
 import { readFile, writeFile, access, stat, readdir } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -23,7 +24,11 @@ const git = (...args) => {
   if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr.trim()}`);
   return r.stdout.trim();
 };
-const sha256 = async p => createHash('sha256').update(await readFile(p)).digest('hex');
+const sha256 = async p => {
+  const hash = createHash('sha256');
+  for await (const chunk of createReadStream(p)) hash.update(chunk);
+  return hash.digest('hex');
+};
 const isUrl = x => {
   try { const u = new URL(x); return u.protocol === 'https:' || u.protocol === 'http:'; }
   catch { return false; }
@@ -209,19 +214,42 @@ async function main() {
     say('PASS', 'CHECKPOINT', `${requested} at ${stamp}`);
     return;
   }
-  const globalFiles = ['master-manifest.json','conflicts.json','unresolved.json','capability-map.json','dependency-graph.json','shared-mechanisms.json','reports/reconciliation.md','raw-package-manifest.json'];
+  const globalFiles = ['master-manifest.json','conflicts.json','unresolved.json','capability-map.json','dependency-graph.json','shared-mechanisms.json','reports/reconciliation.md','raw-package-manifest.json','raw-inventory.json'];
   const globalExist = (await Promise.all(globalFiles.map(f => exists(path.join(evidence, f))))).every(Boolean);
-  let rawValid = false, blocking = 0;
-  if (await exists(path.join(evidence, 'raw-package-manifest.json'))) {
-    const raw = await readJson(path.join(evidence, 'raw-package-manifest.json'));
-    rawValid = !!raw.packagePath && await exists(raw.packagePath) && !!raw.sha256 && (await sha256(raw.packagePath)) === raw.sha256;
-  }
-  if (await exists(path.join(evidence, 'unresolved.json'))) {
-    const u = await readJson(path.join(evidence, 'unresolved.json'));
-    blocking = (u.items || []).filter(x => x.severity === 'BLOCKING').length;
-  }
-  const full = prep.pass && passed === 294 && results.every(r => !r.errors.length) && globalExist && rawValid && blocking === 0 && productionDiff().length === 0;
-  say(full ? 'PASS' : 'FAIL', 'GLOBAL', `14 IDs, ${passed}/294 gates; global files ${globalExist}; RAW package ${rawValid}; blocking ${blocking}; production diff ${productionDiff().length}`);
+  if (!globalExist) { say('FAIL', 'GLOBAL', 'required aggregate file absent'); process.exitCode = 1; return; }
+  const [master, conflicts, unresolved, capability, graph, shared, pkg, inventory, state] = await Promise.all(['master-manifest.json','conflicts.json','unresolved.json','capability-map.json','dependency-graph.json','shared-mechanisms.json','raw-package-manifest.json','raw-inventory.json','audit-run-state.json'].map(f => readJson(path.join(evidence, f))));
+  const report = await readFile(path.join(evidence, 'reports/reconciliation.md'), 'utf8');
+  const manifests = await Promise.all(IDS.map(id => readJson(path.join(evidence, 'takes', id, 'manifest.json'))));
+  const ref = inv.references;
+  const everyViewport = fn => manifests.every(m => Object.entries(DIMS).every(([name, dim]) => fn(m.viewports[name], name, dim)));
+  const unique = arr => new Set(arr).size === arr.length;
+  const rawFileLines = inventory.files?.map(f => `${f.sha256}  ${f.bytes}  ${f.path}\n`).join('') || '';
+  const rawContentHash = createHash('sha256').update(rawFileLines).digest('hex');
+  const rawValid = pkg.schemaVersion === 'rubik-donor-runtime-audit.raw-package.v1' && pkg.memberPathsAndCRCsVerified === true && pkg.originalRawPreserved === true && pkg.format === 'ZIP_STORED_ZIP64' && pkg.rawFileCount === inventory.fileCount && pkg.rawBytes === inventory.totalBytes && pkg.rawPackageContentSha256 === inventory.packageContentSha256 && rawContentHash === inventory.packageContentSha256 && inventory.files.length === inventory.fileCount && unique(inventory.files.map(f => f.path)) && pkg.rawInventorySha256 === await sha256(path.join(evidence, 'raw-inventory.json')) && await exists(pkg.packagePath) && (await stat(pkg.packagePath)).size === pkg.bytes && await sha256(pkg.packagePath) === pkg.sha256;
+  const noInferenceOnly = manifests.every(m => m.continuityInvariants.every(x => nonInference(x.evidence)) && m.cutsAtlas.every(x => nonInference(x.evidence)) && m.viewports && Object.values(m.viewports).every(v => v.milestones.every(mm => mm.evidence?.some(e => e.class === 'OBSERVED_RUNTIME'))));
+  const globalGates = {
+    A01: ref.length === 14 && unique(ref.map(r => r.id)) && ref.every((r,i) => r.id === IDS[i]) && master.references?.length === 14 && master.references.every((r,i) => r.id === IDS[i]),
+    A02: manifests.length === 14 && manifests.every(m => ['AUDITED','AUDITED_WITH_DONOR_LIMITATION'].includes(m.status)) && master.validatedReferences === 14,
+    A03: passed === 294 && results.every(r => !r.errors.length && Object.values(r.gates).every(Boolean)) && master.individualHardGatesPassed === 294 && master.individualHardGatesExpected === 294,
+    A04: ref.every((r,i) => isUrl(r.standaloneUrl) && isUrl(r.resolvedUrl) && r.httpStatus === 200 && manifests[i].reference.standaloneUrl === r.standaloneUrl && manifests[i].reference.resolvedUrl === r.resolvedUrl),
+    A05: everyViewport((v,name) => name !== 'desktop' || v.forwardResult.complete === true && v.forwardResult.videoVerified === true),
+    A06: everyViewport((v,name) => name !== 'desktop' || v.reverseResult.attempted === true && v.restoreVerdict !== 'UNRESOLVED'),
+    A07: everyViewport((v,name) => name !== 'portrait' || v.forwardResult.assessed === true && v.reverseResult.attempted === true && ['SUPPORTED','DONOR_LIMITATION'].includes(v.runtimeSupport)),
+    A08: everyViewport((v,name) => name !== 'landscape' || v.forwardResult.assessed === true && v.reverseResult.attempted === true && ['SUPPORTED','DONOR_LIMITATION'].includes(v.runtimeSupport)),
+    A09: everyViewport(v => v.forwardResult.videoVerified === true && v.reverseResult.videoVerified === true && v.forwardResult.semanticPassComplete === true),
+    A10: everyViewport(v => v.milestones.length > 0 && v.forwardResult.semanticScreenshotsVerified === true && v.milestones.every(mm => mm.evidence?.some(e => e.class === 'OBSERVED_RUNTIME'))),
+    A11: manifests.every(m => m.donorSourceLocators.length > 0 && m.cutsAtlas.length > 0 && m.cutsAtlas.every(c => c.relationToRuntime)),
+    A12: Object.keys(capability.byTake || {}).length === 14 && IDS.every(id => Object.keys(capability.byTake[id]?.crosswalk || {}).length === 12 && CROSS.every(k => capability.byTake[id].crosswalk[k]?.status === manifests[IDS.indexOf(id)].rubikCrosswalk[k]?.status)),
+    A13: results.every(r => r.gates.T20) && inventory.fileCount > 0 && rawContentHash === inventory.packageContentSha256,
+    A14: rawValid && master.rawPackage?.sha256 === pkg.sha256,
+    A15: productionDiff().length === 0,
+    A16: noInferenceOnly,
+    A17: unresolved.items?.every(u => u.severity === 'NON_BLOCKING') && manifests.every(m => m.unresolved.every(u => u.severity !== 'BLOCKING')) && master.blockingUnresolvedCount === 0,
+    A18: report.includes('## Fourteen references and professional services') && IDS.every(id => report.includes(id)) && report.includes('## Dependencies and QA') && report.includes('## Conflicts and unresolved') && !/\b(?:P0|P1|P2|Sprint|implement next|must build first)\b/i.test(report) && shared.items?.length > 0 && shared.items.every(s => s.takesUsedBy.length > 1 && s.professionalServiceIdentity?.length === s.takesUsedBy.length) && graph.nodes?.length > 0 && graph.edges?.length > 0 && graph.edges.every(e => e.from !== e.to && graph.nodes.some(n => n.id === e.from) && graph.nodes.some(n => n.id === e.to) && graph.edgeTypes.includes(e.type)) && Array.isArray(conflicts.items) && conflicts.items.every(c => c.evidence?.length && c.statements?.length && c.severity && c.status) && state.baseSha === BASE && IDS.every(id => state.takes[id]?.validationStatus === 'COMPLETE')
+  };
+  for (const [gate, ok] of Object.entries(globalGates)) say(ok ? 'PASS' : 'FAIL', gate);
+  const full = prep.pass && Object.values(globalGates).every(Boolean);
+  say(full ? 'PASS' : 'FAIL', 'GLOBAL', `${Object.values(globalGates).filter(Boolean).length}/18 global gates; ${passed}/294 take gates; blocking ${unresolved.items.filter(x => x.severity === 'BLOCKING').length}; production diff ${productionDiff().length}`);
   if (full) console.log('AUDIT 14/14 COMPLETE');
   else process.exitCode = 1;
 }
