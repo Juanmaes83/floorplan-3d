@@ -16,7 +16,7 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));B.validate(b);
  const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);const duplex=path.join(await fs.mkdtemp(path.join(os.tmpdir(),'hybrid-qa-')),'duplex.zip');await fs.writeFile(duplex,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));
  await fs.mkdir(out,{recursive:true});const errors=[],external=[];
- async function page(viewport,{reduced=true,video=null,dpr=1}={}){const mobile=viewport.width<1000,ctx=await browser.newContext({viewport,deviceScaleFactor:dpr,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference',...(video?{recordVideo:{dir:video,size:viewport}}:{})});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
+ async function page(viewport,{reduced=false,video=null,dpr=1}={}){const mobile=viewport.width<1000,ctx=await browser.newContext({viewport,deviceScaleFactor:dpr,isMobile:mobile,hasTouch:mobile,reducedMotion:reduced?'reduce':'no-preference',...(video?{recordVideo:{dir:video,size:viewport}}:{})});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));
   await p.route('**/*',async r=>{const t=r.request().url();if(t.startsWith('https://cdn.jsdelivr.net/npm/three@0.160.0/'))return r.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await three(t,()=>{throw Error('no local three');})});
    if(t.startsWith(url)||t.startsWith('blob:')||t.startsWith('data:'))return r.continue();external.push(t);return r.abort();});
   await p.goto(url);await p.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationElevation,null,{timeout:60000});p.setDefaultTimeout(120000);return {p,ctx};}
@@ -36,11 +36,17 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   await p.locator('#presentationElevationOption').check();if(hybrid)await p.locator('#presentationElevationHybrid').check();
   const s=p.getByRole('button',{name:'Iniciar presentación'});await s.scrollIntoViewIfNeeded();await s.click();await settled(p);
   await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open'||View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:180000});
-  await at(p,0);}
+  // normal motion autoplays the scene: let it finish, then every state is set from the slider (absolute p)
+  await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing,null,{timeout:180000});await at(p,0);}
  const at=async(p,v)=>{await p.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},v);await frames(p);await frames(p);};
  const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo,e=i?.elevation;return {surfaceQuality:View3D.surfaceQuality,light:(({preset,environment,exposure,sunIntensity})=>({preset,environment,exposure,sunIntensity}))(View3D.presentationLight),p:i?.p??null,phase:i?.phase??null,facade:e?.candidateId??null,solar:e?.solarOn??null,hybrid:e?.hybrid??null,materials:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detail:m.detailState})),pendingAssets:View3D.lifecycleMetrics.pendingAssets,dpr:devicePixelRatio,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};});
  const record=async(p,file,extra)=>{await p.screenshot({path:file});manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,...extra,viewport:p.viewportSize(),state:await read(p),output:file});};
- if(scenario==='lines'){
+ if(scenario==='reduced'){
+  // REDUCED MOTION QA only (separate from the normal visual QA): the player's own holds.
+  const {p,ctx}=await page({width:1440,height:900},{reduced:true});await setup(p,{zip:null});
+  for(let k=0;k<4;k++){await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing,null,{timeout:60000});await frames(p);await record(p,path.join(out,`reduced-1440x900-hold${k}.png`),{scenario:'reduced',shot:'hold'+k});await p.locator('#presentationStoryPlay').click();}
+  await ctx.close();
+ }else if(scenario==='lines'){
   // Ink contour legibility vs effective DPR (native 1-device-pixel lines): technical and M02-equivalent states.
   for(const [W,H,dprs] of [[1440,900,[1,2]],[390,844,[2,3]],[844,390,[2,3]]])for(const dpr of dprs){const {p,ctx}=await page({width:W,height:H},{dpr});await setup(p,{zip:null});
    for(const [n,v] of [['technical',35],['m02',45]]){await at(p,v);await record(p,path.join(out,`lines-${W}x${H}-dpr${dpr}-${n}.png`),{scenario:'lines',dpr,shot:n,slider:v});}await ctx.close();}
