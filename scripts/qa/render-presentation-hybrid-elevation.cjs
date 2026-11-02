@@ -22,18 +22,32 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   await p.goto(url);await p.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin&&window.FloorPlanPresentationElevation,null,{timeout:60000});p.setDefaultTimeout(120000);return {p,ctx};}
  const frames=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
  const settled=p=>p.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:180000});
- async function setup(p,{zip,hybrid=true}){
+ async function setup(p,{zip,hybrid=true,quality=null}){
+  const oak=zip==='qa-oak';if(oak){await p.locator('#welcomeExample').click();await p.waitForTimeout(800);
+   // QA-only fixture variant (never stored): the example with surface-oak-wood-planks (baseColor+normal+roughness) on the
+   // default façade's walls, applied through the product's own FloorPlanSurfaces.apply — a PBR control for base/enhanced.
+   await p.waitForFunction(()=>window.FloorPlanSurfaces?.entries?.length>0,null,{timeout:60000});
+   await p.evaluate(()=>{const E=FloorPlanPresentationElevation,d=E.derive({levels:[{levelId:null,project,geometry}]}),c=d.candidates.find(x=>x.id===d.defaultId),entry=FloorPlanSurfaces.get('surface-oak-wood-planks');
+    for(const r of c.wallRefs)project=FloorPlanSurfaces.apply(project,entry,{kind:'wall',id:r.wallId});refreshProject();renderAll();window.View3D?.refreshSurfaces();});zip=null;}
+  if(quality)await p.evaluate(q=>View3D.setSurfaceQuality(q),quality).catch(()=>{});
   if(zip){const [c]=await Promise.all([p.waitForEvent('filechooser'),p.locator('#welcomeUpload').click()]);await c.setFiles(zip);await p.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:60000});}
-  else await p.locator('#welcomeExample').click();
+  else if(!oak)await p.locator('#welcomeExample').click();
   await p.waitForTimeout(1000);await p.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await p.locator('#presentationConfig[open]').waitFor();
   await p.locator('#presentationElevationOption').check();if(hybrid)await p.locator('#presentationElevationHybrid').check();
   const s=p.getByRole('button',{name:'Iniciar presentación'});await s.scrollIntoViewIfNeeded();await s.click();await settled(p);
   await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open'||View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:180000});
   await at(p,0);}
  const at=async(p,v)=>{await p.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},v);await frames(p);await frames(p);};
- const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo,e=i?.elevation;return {p:i?.p??null,phase:i?.phase??null,facade:e?.candidateId??null,solar:e?.solarOn??null,hybrid:e?.hybrid??null,materials:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detail:m.detailState})),pendingAssets:View3D.lifecycleMetrics.pendingAssets,dpr:devicePixelRatio,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};});
+ const read=p=>p.evaluate(()=>{const i=View3D.presentationStoryInfo,e=i?.elevation;return {surfaceQuality:View3D.surfaceQuality,light:(({preset,environment,exposure,sunIntensity})=>({preset,environment,exposure,sunIntensity}))(View3D.presentationLight),p:i?.p??null,phase:i?.phase??null,facade:e?.candidateId??null,solar:e?.solarOn??null,hybrid:e?.hybrid??null,materials:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detail:m.detailState})),pendingAssets:View3D.lifecycleMetrics.pendingAssets,dpr:devicePixelRatio,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches};});
  const record=async(p,file,extra)=>{await p.screenshot({path:file});manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,...extra,viewport:p.viewportSize(),state:await read(p),output:file});};
- if(scenario==='off'){
+ if(scenario==='m03'){
+  // M03-equivalent (material complete, frontal) and M02-equivalent: same fixture/façade/camera/light/viewport/SHA,
+  // surfaceQuality base vs enhanced; the example as is and the QA oak-façade variant (PBR control).
+  for(const fx of ['example','qa-oak'])for(const q of ['base','enhanced']){const {p,ctx}=await page({width:1440,height:900});await setup(p,{zip:fx==='qa-oak'?'qa-oak':null,quality:q});
+   const ready=async()=>{await p.waitForFunction(()=>View3D.surfaceMetrics.every(m=>m.state!=='loading'&&!['loading','waiting'].includes(m.detailState)),null,{timeout:60000}).catch(()=>{});await p.waitForTimeout(400);};
+   for(const [n,v] of [['m02',45],['m03',56]]){await at(p,v);await ready();await at(p,v);await record(p,path.join(out,`${n}-${fx}-${q}.png`),{scenario:'m03',fixture:fx==='qa-oak'?'qa-fixture: example + surface-oak-wood-planks on default façade (not stored)':'example',surfaceQuality:q,shot:n,slider:v});}
+   await ctx.close();}
+ }else if(scenario==='off'){
   // Hybrid OFF on the same fixture/states: comparable pixel-for-pixel with the baseline (0f9c6ea) run of this script.
   const {p,ctx}=await page({width:1440,height:900});await setup(p,{zip:null,hybrid:false});
   for(const [n,v] of [['00-overview',0],['02-frontal',35],['04-frontal-light',48],['06-frontal-light',56],['08-exterior',86],['10-restored',100]]){await at(p,v);await p.waitForTimeout(300);await record(p,path.join(out,`off-1440x900-${n}.png`),{scenario:'off',shot:n,slider:v});}await ctx.close();

@@ -180,7 +180,7 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
    uHybridSun:{value:new THREE.Vector3(...(sun||[0,1,0])).normalize()},uHybridCenter:{value:new THREE.Vector3(...frame.center)},uHybridTangent:{value:new THREE.Vector3(...frame.tangent)},uHybridNormal:{value:new THREE.Vector3(...frame.normal)},
    uHybridPaper:{value:hex(HYBRID.paper)},uHybridInk:{value:hex(HYBRID.ink)},uHybridAccent:{value:hex(HYBRID.accent)},uHybridPeriod:{value:periodFor(frame.width)},uHybridLinePx:{value:1.05*Math.max(1,linePx)}};
   const clones=new Map(); // source material → presentation clone
-  const lineMat=new THREE.LineBasicMaterial({color:HYBRID.ink,transparent:true,depthWrite:false});lineMat.userData.hybridPresentation=true;
+  const lineMat=new THREE.LineBasicMaterial({color:HYBRID.ink,transparent:true,depthWrite:false,toneMapped:false});lineMat.userData.hybridPresentation=true;
   lineMat.onBeforeCompile=shader=>patchLine(shader,U);lineMat.customProgramCacheKey=()=>HYBRID.cacheKey+'-line';
   const edges=new Map(); // geometry → EdgesGeometry (presentation-owned)
   const lines=[]; // {line, parent}
@@ -219,6 +219,7 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   ctl.end=()=>{ctl.swap(false);for(const r of records)r.mesh.material=r.original;records.length=0;unline();for(const c of clones.values()){c.dispose();ctl.disposed++;}clones.clear();
    for(const g of edges.values()){g.dispose();ctl.edgesDisposed++;}ctl.edgesCreated=ctl.edgesCreated||0;edges.clear();lineMat.dispose();ctl.lineMaterialDisposed=true;ctl.state=null;};
   ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
+   maps:[...clones].map(([src,c])=>({source:src.uuid,map:!!src.map,normalMap:!!src.normalMap,roughnessMap:!!src.roughnessMap,sameMap:c.map===src.map,sameNormal:c.normalMap===src.normalMap,sameRoughness:c.roughnessMap===src.roughnessMap})),
    state:ctl.state&&{...ctl.state},uniforms:{tech:U.uHybridTech.value,hatch:U.uHybridHatch.value,sweepZ:U.uHybridSweep.value.z,sweepSoft:U.uHybridSweep.value.w,period:U.uHybridPeriod.value,sun:U.uHybridSun.value.toArray()},
    frame:{...frame,center:[...frame.center],tangent:[...frame.tangent],normal:[...frame.normal]}});
   return ctl;
