@@ -1,19 +1,21 @@
 # Estado operativo de producto e integración — 02-11-2026
 
 **Fuente operativa de verdad para trabajo nuevo a partir de esta fecha.**  
-**`master` verificado:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.  
-**Último cambio integrado:** PR #159 — FT3D-6 Professional Presentation Templates V1.
+**Baseline funcional de producto verificado:** `0f9c6ead9732901681498efec326d1ca92e42ffe` (merge de PR #159).  
+**Último cambio de producto integrado:** PR #159 — FT3D-6 Professional Presentation Templates V1.
+
+> Verificar siempre el HEAD real de `master` antes de actuar. Commits posteriores exclusivamente documentales pueden descender de `0f9c6ead...` sin cambiar el baseline funcional de producto descrito aquí.
 
 > Los documentos `current-status-*` anteriores se conservan como snapshots históricos. Cuando discrepen con este documento sobre el estado actual, prevalece este archivo para operaciones posteriores al 02-11-2026.
 
-## 1. Estado real de master
+## 1. Baseline funcional de producto
 
-El HEAD verificado `0f9c6ead9732901681498efec326d1ca92e42ffe` es el merge de PR #159 y tiene como padres:
+El baseline funcional verificado `0f9c6ead9732901681498efec326d1ca92e42ffe` es el merge de PR #159 y tiene como padres:
 
 - `e6bc3f3c19d1cd2ebef2dd44de05c007790d678e` — baseline/documentación canónica FT3D-6 previa a implementación;
 - `0313ac14b17cedb998981e2c832b8175f9b9c03f` — HEAD exacto de la implementación FT3D-6 revisada.
 
-No usar `e716ba9...` ni `e6bc3f3...` como descripción del estado actual de producto.
+No usar `e716ba9...` ni `e6bc3f3...` como descripción del estado actual de producto. Si `master` avanza sólo por documentación, registrar el nuevo HEAD sin atribuirle nuevos cambios funcionales.
 
 ## 2. Flat-to-3D / Presentation Story — estado vigente
 
@@ -25,7 +27,7 @@ No usar `e716ba9...` ni `e6bc3f3...` como descripción del estado actual de prod
 | FT3D-3 | **INTEGRADO Y VALIDADO** | sección dinámica |
 | FT3D-4 | **INTEGRADO Y VALIDADO** | alzado/fachada narrativa |
 | FT3D-5 | **INTEGRADO** | axonometría / exploded; código probado en `bf3e5ca5c8df1f6bc2bd61925a0a1456b2d1353d`; integración/reconciliación `18848fbf3308ef8c2c8841edf626221f74922d23` |
-| FT3D-6 | **INTEGRADO, QA DE IMPLEMENTACIÓN COMPLETADO Y APROBACIÓN VISUAL HUMANA RECIBIDA** | PR #159; HEAD de rama `0313ac14b17cedb998981e2c832b8175f9b9c03f`; merge `0f9c6ead9732901681498efec326d1ca92e42ffe` |
+| FT3D-6 | **INTEGRADO, QA DE IMPLEMENTACIÓN COMPLETADO Y APROBACIÓN VISUAL HUMANA RECIBIDA** | PR #159; HEAD de rama `0313ac14b17cedb998981e2c832b8175f9b9c03f`; merge funcional `0f9c6ead9732901681498efec326d1ca92e42ffe` |
 | FT3D-7 | **PENDIENTE COMO FASE** | no iniciar automáticamente hasta cerrar la investigación/reconciliación donor activa y decidir bridges/producto |
 | FT3D-8 | **FUTURO / FAMILIA TEMPORAL SEPARADA** | construcción/timeline; no mezclar por defecto con la investigación actual |
 
@@ -57,11 +59,11 @@ Resultado de cierre real posterior al texto histórico inicial del ledger:
 - 39 tests puros + 18 browser nuevos = **57/57 nuevos PASS**;
 - Python final **56/56 PASS**;
 - suite Node final registrada: **1251 PASS / 31 FAIL conocidos y reconciliados / 2 SKIP**;
-- workflows del SHA `0313ac14...` terminaron en `success` antes de merge;
+- los ocho workflows PR-localizados del SHA `0313ac14...` terminaron en `success`, incluidos `FT3D-6 templates and review evidence` e `Integrated browser regressions`;
 - revisión visual humana aprobada por Juanma;
-- PR #159 mergeada y `master` verificado en `0f9c6ead...`.
+- PR #159 mergeada y baseline funcional fijado en `0f9c6ead...`.
 
-Las frases del ledger que dicen `Implementation is in progress` pertenecen al protocolo pre-freeze y deben leerse como historia del proceso, no como estado vigente.
+Las frases históricas del ledger que dicen `Implementation is in progress` pertenecen al protocolo pre-freeze y no describen el estado post-merge.
 
 ## 3. Donor / Cuts — fase activa después de FT3D-6
 
@@ -157,11 +159,10 @@ Carry-forward relevante:
 
 ## 7. Deuda / control
 
-- `master` continúa sin branch protection habilitada en la verificación del 02-11-2026; mantener como deuda de consolidación.
+- `master` estaba sin branch protection habilitada en la verificación del 02-11-2026; mantener como deuda de consolidación mientras siga así.
 - No confundir fallos históricos reproducidos en baseline con regresiones de FT3D-5/6 sin evidencia nueva.
 - Los documentos fechados antiguos no deben borrarse para “hacerlos parecer actuales”; deben mantenerse como snapshots y enlazar a la autoridad nueva.
-- El ledger FT3D-6 necesita una nota de cierre post-merge en una reconciliación documental futura o mediante edición segura local; su cuerpo pre-freeze debe preservarse.
-- `docs/ROADMAP.md` y `roadmap-completion-matrix-2026-10-30.md` contienen estados fechados que no describen el HEAD actual; consultar este archivo para operaciones nuevas hasta su reconciliación explícita.
+- Las fuentes históricas principales deben llevar avisos/punteros explícitos hacia este estado actual sin borrar su contenido fechado.
 
 ## 8. Regla para cualquier agente nuevo
 
