@@ -2,6 +2,45 @@
 
 Implementation is in progress. No final validation, preview approval or merge is claimed.
 
+## Implementation checkpoints (not final evidence)
+
+- Pure resolver checkpoint `25761d7`: 39/39 pure tests PASS after adding the detached/frozen runtime boundary and malformed-catalog diagnostics.
+- Configuration/player integration: 13/13 Chromium tests PASS, 0 FAIL, 0 SKIP; `logs/browser-fifth.log`, 64775.7726 ms. These are development results; final HEAD validation must replace them at handoff.
+- Five profiles start their compiled story on the existing player. Further rooms stay navigation stops, with one descent per level. No additional narrative, route, renderer, timer or output format was introduced.
+- No template selection/overrides/automatic room selection is stored. The existing guide/journey/pane progress writes remain; their three exact keys are proven in the frozen baseline campaign. Browser checks preserve every other storage key/value, including existing room sidecars, brand and audience.
+- `Sin plantilla` keeps manual choices and the existing story path. Switching profiles and reset clear session overrides; existing valid room sidecars remain authoritative.
+- Snapshot authority is structural levels, independent of selected rooms. Start revalidates the source key. Runtime checks read the active structural level revision; they do not rederive building geometry per frame.
+- Missing materialized anchors produce structured notices and degraded state. Begin/Apply/reframe failures call the existing renderer End rollback and evaluate the remaining minimum; the run skips safely or closes and restores. The frozen semantic story is never silently replaced.
+
+### Changed-file responsibility
+
+| File | Responsibility / requirements |
+|---|---|
+| `js/presentation-templates-core.js` | Pure catalog, validator, immutable snapshot, policies/minima, rooms, sequence/anchors, runtime-failure policy; F6-02–48 |
+| `js/presentation-templates-ui.js` | Ephemeral selector/options/warnings/resources, keyboard focus and localized labels; F6-05/22/29/35/39 |
+| `js/presentation-ui.js` | Existing authorities → DTO; real plan materialization; frozen run → existing player; failure rollback; F6-02/09/18/42/46 |
+| `index.html` | Load the two new modules before the existing UI; no renderer/camera/model edits |
+| `css/design-system.css` | Scoped template configuration styles, 44px controls, bounded content; F6-39 |
+| `tests/presentation-templates.test.cjs` | 39 pure contract/edge tests |
+| `tests/presentation-templates.browser.test.cjs` | 13 real-browser integration tests, five profiles, mobiles, languages, failure and restore |
+| `scripts/qa/render-presentation-templates.cjs` | Reproducible baseline/candidate screenshots, held states and actual normal-motion desktop playback; hashes; no approval inferred |
+| `.github/workflows/ft3d-6-presentation-templates.yml` | Exact-head validation and downloadable review artifact; read-only repository permission |
+| This ledger | Requirements, baseline, limitations and evidence traceability |
+
+### Development defect / harness ledger
+
+| Finding | Resolution | Current state |
+|---|---|---|
+| New browser harness omitted JavaScript MIME for `.mjs` | Correct MIME; no runtime change | Fixed |
+| Storage assertion incorrectly required existing guide/journey/pane progress to stay unchanged | Frozen baseline proves these exact three writes; all other values/new keys still fail | Fixed |
+| Automation `selectOption` does not focus the native select | Focus before changing it, then require preserved focus | Fixed |
+| Playwright `isDisabled` reports false for a native disabled `<option>` | Assert the native option's `disabled` property; unsupported choice still disabled/rejected | Fixed |
+| Starting test while 3D entry was still busy | Wait for actual editor view readiness, not an arbitrary sleep | Fixed |
+| Active structural level omitted from room-selected plan | Validate frozen structural identity, not membership in selected room plan | Fixed; lower-only/all→all test PASS |
+| Materialization can omit scenes without a real overview | Show its structured warnings and degraded state | Fixed |
+
+The corrected Three-local supplemental baseline finished with **58 tests: 41 PASS / 17 FAIL / 0 SKIP**, 1050003.213 ms (`logs/baseline-three-local-supplement.log`). It ran on the frozen PINNED_BASE archive, independently of candidate edits. Preserve these results alongside the original broad baseline, not as a replacement or an aggregate count.
+
 ## Authority and control
 
 - Implementation authorized by the attached user mission (167 sections), 2026-11-01.

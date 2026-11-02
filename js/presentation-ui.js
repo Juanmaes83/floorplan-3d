@@ -73,6 +73,55 @@
  // Building presentation (two levels): the configuration per level, the level that was active when it started (it
  // comes back when the presentation ends).
  let buildingConfig=null,startLevelId=null;
+ // FT3D-6: the immutable capability snapshot and resolved story belong to this dialog/run only.
+ const Templates=window.FloorPlanPresentationTemplates;
+ let templateUi=null,templateSnapshot=null,templateSources=[],templateContext=null,templateHistory=null,templateMissing=0;
+ let templateLegacy=null,frozenTemplate=null,templateMaterialized=null,templateFailures=[],templateRuntimeNote=null;
+ const templateMode=()=>!!templateUi?.selected;
+ const templateDecision=id=>frozenTemplate?.decisions.find(c=>c.id===id)?.included;
+ function templateSelection(){return buildingConfig?buildingConfig.flatMap(l=>l.roomOrder.filter(id=>l.selected.includes(id)).map(roomId=>({levelId:l.levelId,roomId}))):roomOrder.filter(id=>selectedRooms.includes(id)).map(roomId=>({levelId:activeLevelId(),roomId}));}
+ function templatePlan(selection){
+  if(templateContext)return Core.createBuilding(templateContext.building,templateSources,app.entryId,selection);
+  const l=templateSources[0];if(!l)return null;
+  const result=Core.create(l.project,l.geometry,app.entryId,l.revision,selection.filter(r=>r.levelId===(l.levelId??null)).map(r=>r.roomId));
+  // Core's single-project plan has no level identity; attach the actual source level to the ephemeral adapter DTO.
+  if(result)for(const stop of result.stops)stop.levelId=l.levelId??null;
+  return result;
+ }
+ function templateKey(){const sources=templateContext?building()?.presentationSources()?.levels:templateSources.map(l=>({...l,project:app.project,revision:FloorPlanGuide.revision(app.project)}));
+  return Templates.keyOf({entryId:app.entryId,levels:sources||[]});}
+ function notifyTemplateRooms(){if(templateMode())templateUi.changeRooms(templateSelection());}
+ function templateChanged(result,{renderRooms:render=true,materialized}={}){
+  if(result&&!templateLegacy)templateLegacy={rooms:templateSelection(),order:[...roomOrder],building:buildingConfig?.map(l=>({levelId:l.levelId,order:[...l.roomOrder],selected:[...l.selected]})),storyChosen,sectionChosen,elevationChosen,elevationCandidateId,elevationSolarChosen,axonMode};
+  config.querySelectorAll('.presentation-story-option').forEach(n=>{n.hidden=!!result;});
+  const rooms=result?.selectedRooms||templateLegacy?.rooms;
+  if(rooms&&render&&roomList){
+   if(buildingConfig)for(const l of buildingConfig){const chosen=rooms.filter(r=>r.levelId===l.levelId).map(r=>r.roomId),old=templateLegacy?.building?.find(x=>x.levelId===l.levelId);l.selected=chosen;l.roomOrder=result?[...chosen,...l.roomOrder.filter(id=>!chosen.includes(id))]:[...(old?.order||l.roomOrder)];}
+   else{selectedRooms=rooms.map(r=>r.roomId);roomOrder=result?[...selectedRooms,...roomOrder.filter(id=>!selectedRooms.includes(id))]:[...templateLegacy.order];}
+   renderConfig();
+  }
+  if(roomList)roomList.hidden=!!result&&!result.decisions.find(c=>c.id==='room-tour')?.included;
+  if(!result&&templateLegacy){({storyChosen,sectionChosen,elevationChosen,elevationCandidateId,elevationSolarChosen,axonMode}=templateLegacy);templateLegacy=null;}
+  if(startButton&&result)startButton.disabled=!result.execution.available||!materialized?.available;
+ }
+ function prepareTemplates(levels,context=null){
+  if(!Templates||!window.FloorPlanPresentationTemplatesUI)return;
+  templateSources=levels.map((l,i)=>({...l,levelId:l.levelId??null,order:l.order??i,revision:l.revision??FloorPlanGuide.revision(l.project)}));templateContext=context;
+  // A roomless project still receives honest structural capabilities, but never a fabricated executable plan.
+  if(!sectionLevels.size){const fragment=document.createDocumentFragment();sectionOption(fragment,templateSources);elevationOption(fragment,templateSources);axonOption(fragment,templateSources);}
+  const dto=templateSources.map(l=>({levelId:l.levelId,name:l.name||l.project.name,order:l.order,projectId:l.project.id,revision:l.revision,
+   hasPlan:l.project.walls.some(w=>w.status!=='demolished')&&l.geometry.envelope?.w>0&&l.geometry.envelope?.h>0,
+   rooms:l.geometry.rooms.filter(r=>r.poly.length>=3&&Core.area(r.poly)>0).map(r=>({roomId:r.id,family:l.project.rooms.find(x=>x.id===r.id)?.family??null,areaM2:Core.area(r.poly)}))}));
+  const allRooms=dto.flatMap(l=>l.rooms.map(r=>({levelId:l.levelId,roomId:r.roomId}))),resources={};
+  const boards=templateSources.map(l=>window.FloorPlanMoodboard?.derive(l.project)).filter(Boolean);
+  const resource=(available,reason='resource-unavailable')=>({availability:available?'supported':'unsupported',reason:available?null:reason});
+  resources.materials=resource(boards.some(b=>b.floors.length||b.walls.length));resources.moodboard=resource(boards.some(b=>!b.empty));
+  resources['budget-summary']=resource(!!window.FloorPlanBudgetUI?.current()?.saved);
+  resources.dossier=resource(!!allRooms.length);resources['site-data']=resource(!!(context?building()?.site:app.project.site)?.buildingPlacement,'site-data-unavailable');
+  templateSnapshot=Templates.buildSnapshot({entryId:app.entryId,levels:dto,plan:templatePlan(allRooms),sections:[...sectionLevels].map(([levelId,descriptor])=>({levelId,descriptor})),elevation:elevationDescriptor,axon:axonDescriptor,resources,historicalRooms:templateHistory,missingRooms:templateMissing});
+  templateUi=window.FloorPlanPresentationTemplatesUI.create({parent:config,snapshot:templateSnapshot,getRuntime:()=>({solarAvailable:window.FloorPlanSolarUI?.result?.status==='available-orientative'}),getPlan:templatePlan,onChange:templateChanged,isLocked:()=>active||!!pendingStart});
+ }
+ function resetTemplates(){templateUi?.dispose();templateUi=null;templateSnapshot=null;templateSources=[];templateContext=null;templateHistory=null;templateMissing=0;templateLegacy=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;}
  const building=()=>window.FloorPlanBuildingUI;
  const isBuildingPlan=()=>plan?.scope==='building';
  const activeLevelId=()=>app.levelContext?.levelId||null;
@@ -128,6 +177,7 @@
  }
  function sourceCurrent(){
   if(!plan)return false;
+  if(frozenTemplate){const key=frozenTemplate.snapshotKey,level=key.revisions.find(l=>l.levelId===activeLevelId());return !!level&&key.entryId===app.entryId&&level.projectId===app.project.id&&level.revision===FloorPlanGuide.revision(app.project);}
   if(!isBuildingPlan())return Core.current(plan,app.project.id,app.entryId,FloorPlanGuide.revision(app.project));
   // Only the active level can change on screen; the batch checks every level again before writing the ZIP.
   const level=plan.levels.find(l=>l.levelId===activeLevelId());
@@ -506,7 +556,7 @@
   solar.onchange=()=>{elevationSolarChosen=solar.checked&&solarOk;};
   input.onchange=()=>{elevationChosen=input.checked;details.hidden=!input.checked;};
  }
- const elevationCandidate=()=>elevationDescriptor?.candidates.find(c=>c.id===elevationCandidateId)||elevationDescriptor?.candidates.find(c=>c.id===elevationDescriptor.defaultId)||null;
+ const elevationCandidate=()=>elevationDescriptor?.candidates.find(c=>c.id===(frozenTemplate?frozenTemplate.facade:elevationCandidateId))||elevationDescriptor?.candidates.find(c=>c.id===elevationDescriptor.defaultId)||null;
  const elevationAt=stop=>!!stop&&stop.kind==='overview'&&!!elevationDescriptor?.supported&&!!elevationCandidate();
  // FT3D-5: one choice of three. Compact is available whenever a level can be read; the spatial breakdown needs two valid
  // levels and says so; a partial reading names the levels it leaves out.
@@ -533,7 +583,7 @@
   const hint=el('p',parts.join(' '),box,'presentation-story-hint');hint.id=hintId;
   if(d.partial)hint.classList.add('presentation-axon-partial');
  }
- const axonKind=()=>axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
+ const axonKind=()=>frozenTemplate?(frozenTemplate.buildingReading==='exploded-levels'?'exploded-levels-open':frozenTemplate.buildingReading==='axon'?'axon-open':null):axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
  const axonAt=stop=>{if(!stop||stop.kind!=='overview'||!axonDescriptor?.supported)return false;if(axonMode==='exploded'&&!axonDescriptor.variants.exploded.supported)return false;
   return !isBuildingPlan()||axonDescriptor.levels.some(l=>l.levelId===stop.levelId);};
  const axonView=kind=>({descriptor:axonDescriptor,variant:kind==='exploded-levels-open'?'vertical-levels':'compact-building',activeLevelId:activeLevelId()??null});
@@ -567,7 +617,7 @@
   const replay=button('',tools,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
   const enter=button('',tools,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,[{kind:'room-descent',stop:to,from:index}],{from:0,to:1});});enter.id='presentationStoryEnter';enter.hidden=true;
   // With reduced motion the story waits at its start, as the 1a chapter: scene buttons and «Reproducir historia» jump.
-  const full=button('',tools,()=>{const scenes=fullStory();if(scenes.length>1)openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
+  const full=button('',tools,()=>{const scenes=fullStory();if(scenes.length>(frozenTemplate?0:1))openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
   // FT3D-3: only when the section was chosen, so a presentation without it keeps exactly its tools.
   let section=null;if(sectionEnabled){section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
   // FT3D-4: likewise only when the façade was chosen; it plays the façade scene on the same player.
@@ -580,7 +630,7 @@
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
  // FT3D-2: the whole presentation as one story — for each level, its plan rising to its overview, then the descent into
  // its first chosen room. Derived from the presentation plan, so the dialog's order and selection edit it.
- function fullStory(){const scenes=[];let facade=false,building=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
+ function fullStory(){if(frozenTemplate)return templateMaterialized.scenes.map(sc=>({...sc}));const scenes=[];let facade=false,building=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
   // FT3D-4: the façade belongs to the whole building, so it is read once, at the first overview that can show it.
   if(elevationEnabled&&!facade&&elevationAt(s)){scenes.push({kind:'elevation-open',stop:i});facade=true;}
   // FT3D-5: the reading of the building is global too: once, at the first overview of a level it includes.
@@ -607,8 +657,10 @@
   u.replay.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';
   const nextRoom=nextRoomIndex();
   u.enter.hidden=u.replay.hidden||nextRoom===null;u.enter.disabled=u.replay.disabled;
+  if(frozenTemplate)u.enter.hidden=!templateDecision('room-tour')||on||!plan||plan.stops[index]?.kind!=='overview'||nextRoom===null;
   if(nextRoom!==null)u.enter.textContent=tx(`Entrar en ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`Enter ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`进入 ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`);
   u.full.textContent=tx('Ver la historia completa','Play the whole story','播放完整故事');u.full.hidden=u.replay.hidden||fullStory().length<2;u.full.disabled=u.replay.disabled;
+  if(frozenTemplate)u.full.hidden=on||!plan||plan.stops[index]?.kind!=='overview'||!fullStory().length;
   if(u.section){u.section.textContent=tx('Ver sección dinámica','See dynamic section','查看动态剖面');u.section.hidden=!sectionEnabled||on||!plan||!sectionAt(plan.stops[index]);u.section.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   if(u.elevation){u.elevation.textContent=tx('Ver fachada','See the façade','查看立面');u.elevation.hidden=!elevationEnabled||on||!plan||!elevationAt(plan.stops[index]);u.elevation.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   if(u.axon){const kind=axonKind();u.axon.textContent=kind==='exploded-levels-open'?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');
@@ -672,17 +724,35 @@
   index=sceneEnd(sc);draw();const region=viewRegion();
   let fromRegion=null;if(sc.kind==='room-descent'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
-  View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{})},sc.kind);
+  try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{})},sc.kind);}
+  catch(error){if(!frozenTemplate)throw error;return templateSceneFailure(run,sc,error);}
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
   return true;
  }
+ // The renderer's End remains the rollback authority. A failure never silently selects another template or scene.
+ function templateSceneFailure(run,sc,error){
+  if(!frozenTemplate)throw error;
+  window.View3D?.presentationStoryEnd?.({keepPose:true});
+  const capability=sc.capability||Templates.catalog.capabilities.find(c=>c.adapterId===sc.kind)?.id;
+  const target=sc.target||{levelId:plan.stops[sc.stop]?.levelId??null};
+  if(!templateFailures.some(f=>f.capability===capability&&f.target?.levelId===target.levelId))templateFailures.push({capability,target,reason:'adapter-failed'});
+  const result=Templates.runtimeFailure(frozenTemplate,templateFailures);(run.failed||(run.failed=new Set())).add(run.i);
+  if(!templateRuntimeNote){templateRuntimeNote=el('p',undefined,card,'presentation-warning');templateRuntimeNote.id='presentationTemplateRuntimeWarning';templateRuntimeNote.setAttribute('role','alert');}
+  templateRuntimeNote.textContent=result.warnings.map(w=>FloorPlanPresentationTemplatesUI.warningText(w,templateSnapshot)).join(' ');
+  if(result.action==='close'){pauseStory();toast(templateRuntimeNote.textContent,6000);setTimeout(()=>stop(),0);return false;}
+  const home=plan.stops.findIndex(s=>s.kind==='overview'&&(s.levelId??null)===activeLevelId());
+  if(home<0){pauseStory();toast(templateRuntimeNote.textContent,6000);setTimeout(()=>stop(),0);return false;}
+  index=home;View3D.presentationGo(plan.stops[index],true,{region:viewRegion()}).catch(()=>{});
+  return true;
+ }
+ function applyStory(run,p){if(run.failed?.has(run.i))return true;try{View3D.presentationStoryApply(p);return true;}catch(error){if(!frozenTemplate)throw error;return templateSceneFailure(run,run.scenes[run.i],error);}}
  // Applies a global progress: within the current scene it is immediate; another scene is entered first.
  async function seekStory(P){
   const run=story;if(!run)return false;const loc=run.seq.locate(P);
-  if(loc.i!==run.i){if(run.busy)return false;run.busy=true;drawStory();try{if(!await enterScene(run,loc.i))return false;}finally{run.busy=false;}if(story!==run)return false;}
-  run.P=Math.min(1,Math.max(0,P));run.p=loc.p;View3D.presentationStoryApply(run.p);drawStory();return true;
+  if(loc.i!==run.i){if(run.busy)return false;run.busy=true;drawStory();try{if(!await enterScene(run,loc.i))return false;}catch(error){if(!frozenTemplate)throw error;run.i=loc.i;if(!templateSceneFailure(run,run.scenes[loc.i],error))return false;}finally{run.busy=false;}if(story!==run)return false;}
+  run.P=Math.min(1,Math.max(0,P));run.p=loc.p;if(!applyStory(run,run.p))return false;drawStory();return true;
  }
- function setStory(P){const run=story;if(!run)return;const loc=run.seq.locate(P);if(loc.i!==run.i){seekStory(P);return;}run.P=Math.min(1,Math.max(0,P));run.p=loc.p;View3D.presentationStoryApply(run.p);drawStory();}
+ function setStory(P){const run=story;if(!run)return;const loc=run.seq.locate(P);if(loc.i!==run.i){seekStory(P);return;}run.P=Math.min(1,Math.max(0,P));run.p=loc.p;if(applyStory(run,run.p))drawStory();}
  function pauseStory(){if(!story?.playing)return;cancelAnimationFrame(story.raf);story.playing=false;const done=story.resolve;story.resolve=null;done?.(false);drawStory();}
  // Plays P linearly in time (the easing is in each narrative); reduced motion goes straight to the target state.
  function playStory(target){
@@ -712,8 +782,8 @@
   if(!active||token!==epoch)return;
   storyControls();overlay.dataset.moving='false';
   const run={scenes:scenes.map(sc=>({...sc})),seq,i:-1,p:from,P:from,playing:false,raf:0,resolve:null,busy:false};story=run;
-  try{await enterScene(run,start.i);if(story!==run)return;run.p=start.p;run.P=Math.min(1,Math.max(0,from));View3D.presentationStoryApply(run.p);drawStory();}
-  catch(error){story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
+  try{if(!await enterScene(run,start.i)||story!==run)return;run.p=start.p;run.P=Math.min(1,Math.max(0,from));if(!applyStory(run,run.p))return;drawStory();}
+  catch(error){if(frozenTemplate){templateSceneFailure(run,run.scenes[start.i],error);return;}story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
   draw();updateCapture();
   if(to!==null){const done=await playStory(to);if(done&&to>=1&&story===run)await finishStory();}
  }
@@ -721,9 +791,9 @@
  // moment (1b) settles on the nearer of its two stops, as before.
  function restartStory(){if(!story)return;const run=story,P=run.P;pauseStory();
   // FT3D-5: the same descriptor, overview and p; only the pure narrative is rebuilt for the new aspect and free region.
-  if(isAxonKind(run.scenes[run.i]?.kind)&&window.View3D?.presentationStoryReframe){requestAnimationFrame(()=>{if(story!==run||!active)return;try{draw();View3D.presentationStoryReframe({region:viewRegion(),startRegion:viewRegion()});setStory(P);}catch{closeStory();go(index);}});return;}
+  if(isAxonKind(run.scenes[run.i]?.kind)&&window.View3D?.presentationStoryReframe){requestAnimationFrame(()=>{if(story!==run||!active)return;try{draw();View3D.presentationStoryReframe({region:viewRegion(),startRegion:viewRegion()});setStory(P);}catch(error){if(frozenTemplate)templateSceneFailure(run,run.scenes[run.i],error);else{closeStory();go(index);}}});return;}
   if(run.scenes.length===1&&run.scenes[0].kind==='room-descent'){const sc=run.scenes[0],to=P>=.5?sc.stop:sc.from;closeStory();go(to);return;}
-  requestAnimationFrame(async()=>{if(story!==run||!active)return;try{await enterScene(run,run.i);if(story===run)setStory(P);}catch{closeStory();go(index);}});}
+  requestAnimationFrame(async()=>{if(story!==run||!active)return;try{await enterScene(run,run.i);if(story===run)setStory(P);}catch(error){if(frozenTemplate)templateSceneFailure(run,run.scenes[run.i],error);else{closeStory();go(index);}}});}
  // The ends of a story are presentation stops (the last scene's stop; for a story that starts with a descent, its
  // overview too): the narrative ends there and the presentation continues from the same view. P = 0 of a plan is not a
  // stop: the story stays on the plan.
@@ -732,7 +802,7 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi=null;}}
+ function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi=null;}}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -818,7 +888,7 @@
   // A building with a pending distribution is not presented as a finished proposal (see FloorPlanBuildingUI.gate).
   if(window.FloorPlanBuildingUI&&!window.FloorPlanBuildingUI.gate('Presentar mi vivienda'))return;
   returnFocus=document.activeElement;
-  config.replaceChildren();buildingConfig=null;roomList=null;
+  resetTemplates();config.replaceChildren();buildingConfig=null;roomList=null;startButton=null;sectionLevels=new Map();elevationDescriptor=null;axonDescriptor=null;
   const heading=el('h2',tx('Presentar mi vivienda','Present my home','展示我的住宅'),config);heading.id='presentationConfigTitle';
   // A building of two levels is presented as a whole: rooms chosen per level, one presentation and one batch.
   const sources=app.levelContext?.levels>1?building()?.presentationSources():null;
@@ -828,6 +898,7 @@
    el('p',tx('Primero crea una estancia con muros en Distribuir. El proyecto actual se conserva.','Create a room with walls in Layout first. The current project is kept.','请先在布局中创建带墙的房间。当前项目会保留。'),config);
    const row=el('div',undefined,config,'presentation-config-actions');button(tx('Ir a Distribuir','Go to Layout','前往布局'),row,()=>{config.close();FloorPlanGuideUI?.openDetails('geometry');});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
+   prepareTemplates([{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
   }else{
    el('p',tx('Vista general y estancias elegidas. La presentación no cambia el proyecto ni tu objetivo.','Overview and chosen rooms. The presentation does not change your project or goal.','总览和选定房间。展示不会更改项目或目标。'),config);
    provenance(config,[{name:app.project.name,project:app.project}]);
@@ -836,6 +907,7 @@
    let saved=null,corrupt=false;
    try{const raw=localStorage.getItem(storageKey);if(raw!==null){saved=JSON.parse(raw);if(saved===null)corrupt=true;}}catch{corrupt=true;}
    const result=Core.reconcile(saved,app.project,app.geometry,app.entryId,FloorPlanGuide.revision(app.project));
+   templateHistory=saved&&!corrupt&&!result.invalid?result.selected.map(roomId=>({levelId:activeLevelId(),roomId})):null;templateMissing=result.missing;
    selectedRooms=result.selected;
    roomOrder=[...selectedRooms,...valid.map(r=>r.id).filter(id=>!selectedRooms.includes(id))];
    configMessage=el('p',undefined,config,'presentation-config-message');configMessage.setAttribute('role','status');
@@ -851,6 +923,7 @@
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
    renderConfig();
+   prepareTemplates([{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
   }
   config.showModal();
   (config.querySelector('input')||config.querySelector('button'))?.focus();
@@ -866,7 +939,7 @@
    try{const raw=localStorage.getItem(Core.key(app.entryId,level.project.id));if(raw!==null){saved=JSON.parse(raw);if(saved===null)corrupt=true;}}catch{corrupt=true;}
    const result=presentable?Core.reconcile(saved,level.project,level.geometry,app.entryId,level.revision):{selected:[],changed:false,missing:0,invalid:false};
    return {levelId:level.levelId,name:level.name,presentable,selected:result.selected,roomOrder:[...result.selected,...valid.map(r=>r.id).filter(id=>!result.selected.includes(id))],
-    project:level.project,names:new Map(valid.map(r=>[r.id,roomDisplay(level.project.rooms.find(room=>room.id===r.id))])),message:corrupt||result.invalid?'invalid':result.changed?'changed':null};
+    project:level.project,historical:!!saved&&!corrupt&&!result.invalid,missing:result.missing,names:new Map(valid.map(r=>[r.id,roomDisplay(level.project.rooms.find(room=>room.id===r.id))])),message:corrupt||result.invalid?'invalid':result.changed?'changed':null};
   });
   if(!buildingConfig.some(level=>level.presentable)){buildingConfig=null;return false;}
   const note=el('p',tx(`Presentación del edificio «${sources.building.name}»: las estancias elegidas de sus ${levels.length} plantas, en una sola presentación y un solo lote. Cada planta empieza con su vista general; la escalera no se recorre.`,`Building presentation «${sources.building.name}»: the chosen rooms of its ${levels.length} levels in one presentation and one batch. Each level starts with its overview; the stair is not walked.`,`建筑展示：«${sources.building.name}»。`),config,'presentation-level-note');note.id='presentationLevelNote';
@@ -883,7 +956,8 @@
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
-  renderConfig();return true;
+  renderConfig();templateHistory=buildingConfig.some(l=>l.historical)?buildingConfig.flatMap(l=>l.historical?l.selected.map(roomId=>({levelId:l.levelId,roomId})):[]):null;templateMissing=buildingConfig.reduce((n,l)=>n+l.missing,0);
+  prepareTemplates(levels,sources);return true;
  }
  function renderBuildingConfig(){
   roomList.replaceChildren();
@@ -893,10 +967,10 @@
    level.roomOrder.forEach((id,i)=>{
     const row=el('div',undefined,group,'presentation-room-row'),name=level.names.get(id)||id;
     const label=el('label',undefined,row);const input=el('input',undefined,label);input.type='checkbox';input.value=id;input.dataset.level=level.levelId;input.checked=level.selected.includes(id);
-    input.onchange=()=>{level.selected=input.checked?[...level.selected,id]:level.selected.filter(x=>x!==id);startButton.disabled=!buildingConfig.some(l=>l.selected.length);};
+    input.onchange=()=>{level.selected=input.checked?[...level.selected,id]:level.selected.filter(x=>x!==id);startButton.disabled=!buildingConfig.some(l=>l.selected.length);notifyTemplateRooms();};
     el('span',name,label);
     const move=delta=>{const j=i+delta;if(j<0||j>=level.roomOrder.length)return;[level.roomOrder[i],level.roomOrder[j]]=[level.roomOrder[j],level.roomOrder[i]];renderConfig();roomList.querySelector(`fieldset[data-level="${CSS.escape(level.levelId)}"]`)?.querySelectorAll('.presentation-room-row')[j]?.querySelector(delta<0?'button:first-of-type':'button:last-of-type')?.focus();};
-    const up=button('↑',row,()=>move(-1)),down=button('↓',row,()=>move(1));
+    const up=button('↑',row,()=>{move(-1);notifyTemplateRooms();}),down=button('↓',row,()=>{move(1);notifyTemplateRooms();});
     up.setAttribute('aria-label',tx(`Subir ${name} (${level.name})`,`Move ${name} up (${level.name})`,`上移 ${name}`));
     down.setAttribute('aria-label',tx(`Bajar ${name} (${level.name})`,`Move ${name} down (${level.name})`,`下移 ${name}`));
     up.disabled=i===0;down.disabled=i===level.roomOrder.length-1;
@@ -912,9 +986,9 @@
   roomOrder.forEach((id,i)=>{
    const row=el('div',undefined,roomList,'presentation-room-row');
    const label=el('label',undefined,row);const input=el('input',undefined,label);input.type='checkbox';input.value=id;input.checked=selectedRooms.includes(id);
-   input.onchange=()=>{selectedRooms=input.checked?[...selectedRooms,id]:selectedRooms.filter(x=>x!==id);startButton.disabled=!selectedRooms.length;};
+   input.onchange=()=>{selectedRooms=input.checked?[...selectedRooms,id]:selectedRooms.filter(x=>x!==id);startButton.disabled=!selectedRooms.length;notifyTemplateRooms();};
    el('span',names.get(id)||id,label);
-   const up=button('↑',row,()=>reorder(i,-1)),down=button('↓',row,()=>reorder(i,1));
+   const up=button('↑',row,()=>{reorder(i,-1);notifyTemplateRooms();}),down=button('↓',row,()=>{reorder(i,1);notifyTemplateRooms();});
    up.setAttribute('aria-label',tx(`Subir ${names.get(id)}`,`Move ${names.get(id)} up`,`上移 ${names.get(id)}`));
    down.setAttribute('aria-label',tx(`Bajar ${names.get(id)}`,`Move ${names.get(id)} down`,`下移 ${names.get(id)}`));
    up.disabled=i===0;down.disabled=i===roomOrder.length-1;
@@ -923,11 +997,19 @@
  }
  function reorder(i,delta){const j=i+delta;if(j<0||j>=roomOrder.length)return;[roomOrder[i],roomOrder[j]]=[roomOrder[j],roomOrder[i]];renderConfig();roomList.querySelectorAll('.presentation-room-row')[j]?.querySelector(delta<0?'button:first-of-type':'button:last-of-type')?.focus();}
  async function start(){
+  if(templateMode()){
+   if(!Templates.sameKey(templateSnapshot.key,templateKey())){toast(tx('El proyecto cambió. Vuelve a abrir la configuración.','The project changed. Reopen configuration.','项目已更改，请重新打开配置。'),6000);return;}
+   templateUi.recompute();if(!templateUi.resolved?.execution.available||!templateUi.materialized?.available)return;
+   frozenTemplate=Templates.freezeResolved(templateUi.resolved);templateMaterialized=templateUi.materialized;templateFailures=[];
+   storyChosen=templateDecision('plan');sectionChosen=templateDecision('section');elevationChosen=templateDecision('elevation');elevationCandidateId=frozenTemplate.facade;elevationSolarChosen=templateDecision('solar');
+   axonMode=frozenTemplate.buildingReading==='exploded-levels'?'exploded':frozenTemplate.buildingReading==='axon'?'compact':'off';
+  }
   const token=++epoch;
   batchStatus.hidden=true;batchStatus.textContent='';
   entry=app.capturePresentationEntry();entry.focus=returnFocus;
   brandSnap=window.FloorPlanBrandUI?.snapshot()||null;
-  if(buildingConfig){
+  if(frozenTemplate){plan=templateMaterialized.plan;startLevelId=templateContext?.activeLevelId||null;}
+  else if(buildingConfig){
    const sources=building().presentationSources();
    const selection=buildingConfig.flatMap(level=>level.roomOrder.filter(id=>level.selected.includes(id)).map(roomId=>({levelId:level.levelId,roomId})));
    plan=sources&&Core.createBuilding(sources.building,sources.levels,app.entryId,selection);
@@ -966,15 +1048,16 @@
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
    updateAssetWarning();
-   if(sectionEnabled||elevationEnabled||axonEnabled)storyControls();
-   if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,[{kind:'plan-reveal',stop:0}],{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
+   if(frozenTemplate||sectionEnabled||elevationEnabled||axonEnabled)storyControls();
+   if(frozenTemplate&&fullStory().length)await openStory(token,fullStory(),{from:0,to:reducedMotion()?null:1});
+   else if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,[{kind:'plan-reveal',stop:0}],{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
     toast(error.message,6000);
     document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
     if(startLevelId&&activeLevelId()!==startLevelId)building()?.presentLevel(startLevelId);startLevelId=null;
     await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;entry=null;plan=null;sceneState=null;
-    if(location.hash==='#presentacion')history.back();refocus(returnFocus);}
+    disposeStory();if(location.hash==='#presentacion')history.back();refocus(returnFocus);}
   }
  }
  async function go(target,token=epoch){
@@ -1010,14 +1093,14 @@
   stopping=false;
  }
  function invalidate(){
-  if(!active&&!pendingStart)return;
+  if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
   cancelBatch();closeStory();disposeStory();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
   if(location.hash==='#presentacion')history.replaceState(history.state,'','#editor');
  }
- function onProjectChange(){if(active&&!sourceCurrent())stop();}
+ function onProjectChange(){if(active&&!sourceCurrent())stop();else if(config.open&&templateMode()&&templateSnapshot&&!Templates.sameKey(templateSnapshot.key,templateKey())){config.close();resetTemplates();}}
  function contextLost(){
   const saved=entry,level=startLevelId;
   invalidate();
@@ -1057,5 +1140,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();
