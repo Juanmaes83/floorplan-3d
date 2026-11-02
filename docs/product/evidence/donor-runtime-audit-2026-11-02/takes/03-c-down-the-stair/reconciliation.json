@@ -1,0 +1,850 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.reconciliation.v1",
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "semanticRun": {
+    "portrait": "semantic-correction-1"
+  },
+  "progressModel": {
+    "desktop": "SCROLL_PLUS_TIME",
+    "portrait": "SCROLL_PLUS_TIME",
+    "landscape": "SCROLL_PLUS_TIME"
+  },
+  "transitions": [
+    [
+      0.03,
+      0.07,
+      0.1
+    ],
+    [
+      0.11,
+      0.16,
+      0.21
+    ],
+    [
+      0.25,
+      0.32,
+      0.37
+    ],
+    [
+      0.43,
+      0.49,
+      0.54
+    ],
+    [
+      0.57,
+      0.63,
+      0.67
+    ],
+    [
+      0.66,
+      0.7,
+      0.74
+    ],
+    [
+      0.76,
+      0.8,
+      0.83
+    ],
+    [
+      0.87,
+      0.9,
+      0.93
+    ],
+    [
+      0.94,
+      0.98,
+      1
+    ]
+  ],
+  "transitionsByViewport": {
+    "portrait": [
+      [
+        0.03,
+        0.07,
+        0.1
+      ],
+      [
+        0.12,
+        0.17,
+        0.21
+      ],
+      [
+        0.25,
+        0.3,
+        0.35
+      ],
+      [
+        0.42,
+        0.47,
+        0.51
+      ],
+      [
+        0.54,
+        0.59,
+        0.63
+      ],
+      [
+        0.62,
+        0.66,
+        0.69
+      ],
+      [
+        0.69,
+        0.72,
+        0.75
+      ],
+      [
+        0.76,
+        0.8,
+        0.82
+      ],
+      [
+        0.83,
+        0.86,
+        0.9
+      ],
+      [
+        0.94,
+        0.98,
+        1
+      ]
+    ],
+    "landscape": [
+      [
+        0.03,
+        0.07,
+        0.1
+      ],
+      [
+        0.1,
+        0.15,
+        0.2
+      ],
+      [
+        0.25,
+        0.3,
+        0.35
+      ],
+      [
+        0.4,
+        0.45,
+        0.49
+      ],
+      [
+        0.51,
+        0.55,
+        0.59
+      ],
+      [
+        0.59,
+        0.62,
+        0.66
+      ],
+      [
+        0.68,
+        0.71,
+        0.74
+      ],
+      [
+        0.78,
+        0.82,
+        0.86
+      ],
+      [
+        0.94,
+        0.98,
+        1
+      ]
+    ]
+  },
+  "milestoneSources": [
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,92-107,190-212; engine.js:109-230,561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,190-212; engine.js:561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,190-212; engine.js:491-513,561-592",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:116-155,190-212; index.html:194-227",
+    "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:194-227"
+  ],
+  "milestoneSourcesByViewport": {
+    "portrait": [
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,92-107,190-212; engine.js:109-230,561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,116-155; engine.js:561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,190-212; engine.js:561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,190-212; engine.js:491-513,561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,101-105,190-212; engine.js:491-513,561-592",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:116-155,190-212; index.html:194-227",
+      "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:194-227"
+    ]
+  },
+  "continuity": [
+    "The same stair spine, slabs, hillside and pool remain registered as ink gains depth and material.",
+    "The street-level kitchen and lantern remain connected to the stair in the initial cut.",
+    "The same stair descends to the bedroom landing and glazed cypress courtyard.",
+    "The stair continues below the patio to the double-height living room and library wall.",
+    "The living room opens through garden glazing to the terrace and cantilevered pool.",
+    "The camera pulls back along the same section geometry; no new house replaces the pool view.",
+    "The same roof, slabs, stair, terrace and pool return as a measured material section.",
+    "Studio copy describes the section service outside the interactive model, without introducing a new observed project.",
+    "Selected-work cards and footer are editorial content below the same section narrative."
+  ],
+  "continuityByViewport": {
+    "portrait": [
+      "The same stair spine, slabs, hillside and pool remain registered as ink gains depth and material.",
+      "The street-level kitchen and lantern remain connected to the stair in the initial cut.",
+      "The same stair descends to the bedroom landing and glazed cypress courtyard.",
+      "The stair continues below the patio to the double-height living room and library wall.",
+      "The living room opens through garden glazing to the terrace and cantilevered pool.",
+      "The camera pulls back along the same section geometry; no new house replaces the pool view.",
+      "The same roof, slabs, stair, terrace and pool return as a measured material section.",
+      "The right portrait half continues the same section and pool from its left half.",
+      "Studio copy describes the section service outside the interactive model, without introducing a new observed project.",
+      "Selected-work cards and footer are editorial content below the same section narrative."
+    ]
+  },
+  "viewportSupport": {
+    "desktop": "SUPPORTED",
+    "portrait": "SUPPORTED",
+    "landscape": "DONOR_LIMITATION"
+  },
+  "viewportEvidence": {
+    "desktop": [],
+    "portrait": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Portrait returns to left and right halves of one material section.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\portrait\\semantic-correction-1\\portrait-forward-m07r-material-section-right-half.png"
+      }
+    ],
+    "landscape": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "At 844×390 room card, radar and drawing overlap during the descent.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\landscape\\landscape-forward-m03-bedroom-patio.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Mobile CSS uses a width threshold of 700px.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:239-271"
+      }
+    ]
+  },
+  "restoreVerdict": {
+    "desktop": "NOT_RESTORED",
+    "portrait": "NOT_RESTORED",
+    "landscape": "NOT_RESTORED"
+  },
+  "restoreReview": {
+    "desktop": "A0/A1 pixels, route/hash and scroll origin are visually equivalent in desktop. Passive start-state.json versus reverse-state.json shows residual caption and room text in the DOM at A1. page.js removes show classes but does not clear text. Full UI state is NOT_RESTORED; internal render-resource identity is NOT_OBSERVED.",
+    "portrait": "A0/A1 pixels, route/hash and scroll origin are visually equivalent in portrait. Passive start-state.json versus reverse-state.json shows residual caption and room text in the DOM at A1. page.js removes show classes but does not clear text. Full UI state is NOT_RESTORED; internal render-resource identity is NOT_OBSERVED.",
+    "landscape": "A0/A1 pixels, route/hash and scroll origin are visually equivalent in landscape. Passive start-state.json versus reverse-state.json shows residual caption and room text in the DOM at A1. page.js removes show classes but does not clear text. Full UI state is NOT_RESTORED; internal render-resource identity is NOT_OBSERVED."
+  },
+  "reverseOnlyMilestones": {
+    "desktop": "No independent reverse-only geometry state established. Editorial content retreats, then material section, pullback, pool, living room, patio and kitchen reverse to ink. Portrait traverses both section halves. Hidden caption/room DOM text remains at scroll origin.",
+    "portrait": "No independent reverse-only geometry state established. Editorial content retreats, then material section, pullback, pool, living room, patio and kitchen reverse to ink. Portrait traverses both section halves. Hidden caption/room DOM text remains at scroll origin.",
+    "landscape": "No independent reverse-only geometry state established. Editorial content retreats, then material section, pullback, pool, living room, patio and kitchen reverse to ink. Portrait traverses both section halves. Hidden caption/room DOM text remains at scroll origin."
+  },
+  "selectedKeyframes": {
+    "desktop": [
+      "desktop-start.png",
+      "desktop-forward-m01-section-enters-depth.png",
+      "desktop-forward-m02-street-level-lantern.png",
+      "desktop-forward-m03-bedroom-patio.png",
+      "desktop-forward-m04-living-room.png",
+      "desktop-forward-m05-garden-pool.png",
+      "desktop-forward-m06-whole-house-pullback.png",
+      "desktop-forward-m07-material-section-returns.png",
+      "desktop-forward-m08-studio-service-copy.png",
+      "desktop-end.png",
+      "desktop-restored-start.png"
+    ],
+    "portrait": [
+      "portrait-start.png",
+      "semantic-correction-1/portrait-forward-m03-bedroom-patio.png",
+      "semantic-correction-1/portrait-forward-m04-living-room.png",
+      "semantic-correction-1/portrait-forward-m05-garden-pool.png",
+      "semantic-correction-1/portrait-forward-m07-material-section-returns.png",
+      "semantic-correction-1/portrait-forward-m07r-material-section-right-half.png",
+      "semantic-correction-1/portrait-forward-m08-studio-service-copy.png",
+      "portrait-end.png",
+      "portrait-restored-start.png"
+    ],
+    "landscape": [
+      "landscape-start.png",
+      "landscape-forward-m03-bedroom-patio.png",
+      "landscape-forward-m04-living-room.png",
+      "landscape-forward-m05-garden-pool.png",
+      "landscape-forward-m07-material-section-returns.png",
+      "landscape-forward-m08-studio-service-copy.png",
+      "landscape-end.png",
+      "landscape-restored-start.png"
+    ]
+  },
+  "professionalService": {
+    "problemSolved": "Helps an architect explain how one hillside house connects its street, bedroom and garden levels through the stair while retaining the section as the common spatial reference.",
+    "primaryUsers": [
+      "architect",
+      "client",
+      "design reviewer"
+    ],
+    "serviceOutcome": "A measured section gains depth and material, the camera descends from street kitchen through bedroom and living levels to the pool, then returns to the whole material section.",
+    "decisionValue": "Supports discussion of circulation, level relationships, daylight and the route from street to garden. The house and level numbers are donor-authored examples.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Continuous desktop descent and return.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-discovery.webm"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "PLAN.c encodes the distinct descending path and chapter copy.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "One stair connects the same street, bedroom and garden-level slabs throughout the descent.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Initial cut shows all levels.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Bedroom landing.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m03-bedroom-patio.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Garden-level living room.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m04-living-room.png"
+        }
+      ]
+    },
+    {
+      "statement": "The same terrace and pool remain beyond the living room before and after pullback.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Pool at garden level.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m05-garden-pool.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Pool in returned material section.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m07-material-section-returns.png"
+        }
+      ]
+    },
+    {
+      "statement": "Portrait left and right frames are contiguous views of the same returned section.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Left section half.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\portrait\\semantic-correction-1\\portrait-forward-m07-material-section-returns.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Right section half.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\portrait\\semantic-correction-1\\portrait-forward-m07r-material-section-right-half.png"
+        }
+      ]
+    }
+  ],
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Independent desktop, portrait and landscape Discovery captures include natural A→B→A video and passive telemetry.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Fresh semantic passes resolve the 03-c descent and viewport-specific return to the section.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-semantic.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "After reverse, the screenshot returns visually but passive HUD/body text differs from A0 in all three viewports.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\reverse-state.json"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "PLAN.c owns the 1250vh descent, distinct from PLAN.a; words leaves hidden caption/room text in the DOM at zero.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83,116-155"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Atlas 03C records the same residual caption and distinguishes PLAN.c from PLAN.a.",
+      "locator": "Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:139-143,187-188,559"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik current has section, Story, route, UI and lifecycle authorities.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105; js/presentation-story-core.js:111-170; js/presentation-route.js:1-156; index.html:4615-4705"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "03-open-section/page.js",
+      "symbol": "PLAN.c/stateAt/colourAt",
+      "lines": "61-107",
+      "claim": "Distinct authored 1250vh descent, room cards, lens and colour front.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "03-open-section/page.js",
+      "symbol": "words",
+      "lines": "116-155",
+      "claim": "Chapter captions, level HUD and room cards follow internal vh; show classes are removed without clearing caption/room DOM text.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "03-open-section/page.js",
+      "symbol": "readScroll/frame/__ready",
+      "lines": "162-212,215-268",
+      "claim": "Native scroll maps to smoothed internal vh after loader readiness.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "03-open-section/engine.js",
+      "symbol": "withColour/updateCaps/resolve/place",
+      "lines": "109-230,491-513,561-592",
+      "claim": "Material front and caps stay attached to the section while lens-derived distance and view offset frame the descending camera.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "03-open-section/index.html",
+      "symbol": "@media (max-width: 700px)",
+      "lines": "239-271",
+      "claim": "Width-only CSS leaves 844×390 in overlapping desktop overlay layout.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut 1 D02 @6a573f1955fd70dd52bb10450c9b9df9b4833aa0; Atlas 03C @7696fb2c6c30f158001d38ecc53feb2674acaa25",
+      "documentedDisposition": "D02-C1 KEEP EXISTING section; C2 ADAPT bounded frame/viewpoint; C3 REJECT authored PLAN and house",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Atlas separates PLAN.c 1250vh descent and flags residual caption.",
+          "locator": "Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:139-143,187-188"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "The stair descends through the same cut.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m03-bedroom-patio.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut 1 D06 @6a573f1955fd70dd52bb10450c9b9df9b4833aa0",
+      "documentedDisposition": "D06-C1 KEEP EXISTING section/caps; C2 ADAPT sourced style and notes; C3 REJECT universal caps/authored numbers",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Global D06 bounds section/cap claims.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:191-207"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Material section returns over the same house.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\desktop-forward-m07-material-section-returns.png"
+        }
+      ]
+    },
+    {
+      "locator": "Atlas U04 @7696fb2c6c30f158001d38ecc53feb2674acaa25",
+      "documentedDisposition": "03C reverse geometry returns but caption text remains in DOM",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior Atlas residual-caption finding.",
+          "locator": "Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md:559"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A1 retains hidden caption/room text.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\reverse-state.json"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "EXISTS",
+      "claim": "Current Project/Building levels, rooms and derived section facts own Rubik meaning; donor site, dimensions and copy are authored demo facts.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Section derives from current project and geometry.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik derives a real section and caps for supported project geometry; the donor three-level furnished house is fixed authored geometry.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Section target groups and active-level bound.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4694"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Section descriptor derives supported intersections.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:1-105"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has dynamic section/caps; the donor ink-to-lit-material front on one registered cut is not demonstrated as a current Rubik representation.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Dynamic section clipping and caps over current geometry.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Section descriptor derives current project intersections.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "PARTIAL",
+      "claim": "Rubik has surface and light infrastructure; a spatial front coupling material and sunlight to a real section is not accredited.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Surface renderer consumes current project appearances.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/surface-renderer.mjs:1-74"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current section preserves material clipping state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4675-4703"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has section-open camera and route capabilities; a project-derived vertical stair descent with coherent cut framing is a specific choreography not currently demonstrated.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current section-open camera evaluates absolute progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:111-170"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current route planner is distinct from donor authored room stops.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Story supports absolute reversible state, but this coupled vertical descent, material front, room cards and return is not one demonstrated current sequence.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Section-open stateAt(p).",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:125-170"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story sequence/local progress.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story/player progress and seek are current authorities; the donor 1250vh calendar is a presentation choice.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story progress and sequences.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation seek UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation captions and controls; donor radar, level HUD and authored marketing close do not become Rubik contracts.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Presentation UI and minimap use project state.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,129-155"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has small-screen presentation paths; donor portrait section halves and 844×390 overlay collisions are donor-specific observations.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Responsive presentation card and controls.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:442-448"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "FT3D-6 mobile QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-55"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik has Story/section snapshot and restore. Donor 03-c returns visually but retains hidden caption/room DOM content; Rubik must not copy that lifecycle defect.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Story end and section cleanup.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4615-4703"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has current image/share outputs. Donor selected-work and contact CTA are editorial, not an export capability requirement.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Image/share and batch ZIP.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:239-288,321-360"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Current presentation QA exists; a stair-descent bridge would need vertical continuity, reverse, DOM cleanup and mobile evidence.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Existing presentation QA harnesses.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:scripts/qa/render-presentation-templates.cjs:1-46"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "A Rubik section-facing descent would need project-derived level/room stops across existing Section, Story and route authorities.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "PLAN.c supplies fixed stops and camera rects.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:61-83"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Section, Story and route are distinct capabilities.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-section-core.js:30-105; js/presentation-story-core.js:111-170; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    {
+      "classification": "TRANSITION_GAP",
+      "statement": "A spatial ink-to-material front on a current Rubik section is not demonstrated, although section and material infrastructure exist.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "colourAt and withColour couple the spatial front to the donor geometry.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:107; engine.js:109-230"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current section and surface renderer exist.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:4664-4705; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "At 844×390 donor room cards and radar obscure the cut.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape overlap during bedroom chapter.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\landscape\\landscape-forward-m03-bedroom-patio.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "The donor mobile layout is width-only at 700px.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/index.html:239-271"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "The donor reverse leaves caption and room text in the DOM after the visible section returns.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "A0/A1 passive body text differs.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\03-c-down-the-stair\\desktop\\reverse-state.json"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "words removes show classes without clearing text.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:03-open-section/page.js:121-129"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "Explain street-to-garden circulation on a current Rubik project section.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building level and room identities",
+        "Section descriptor/caps",
+        "Story camera and lifecycle",
+        "route safety"
+      ],
+      "existingCapabilitiesConsumed": [
+        "sectionOpen",
+        "presentation-route",
+        "semantic Project/Building"
+      ],
+      "missingConnector": "Project-derived vertical section stops and section-facing camera orchestration.",
+      "donorMechanismReference": "PLAN.c at page.js:61-83 as reference only; fixed house/coords rejected",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If useful, carry one real cut from technical ink to lit material during the descent.",
+      "rubikAuthoritiesPreserved": [
+        "current Building geometry",
+        "current Section clipping",
+        "View3D material/light owner"
+      ],
+      "existingCapabilitiesConsumed": [
+        "dynamic section/caps",
+        "surface renderer",
+        "Story absolute state"
+      ],
+      "missingConnector": "A verified spatial style/material front over current geometry with consistent clipping and light.",
+      "donorMechanismReference": "page.js:107; engine.js:109-230; Global D06-C2 ADAPT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "REUSE_EXISTING",
+      "problemSolved": "Return cleanly from a section story without stale captions or room labels.",
+      "rubikAuthoritiesPreserved": [
+        "Story snapshot/restore",
+        "presentation UI lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "Story seek/reverse",
+        "section snapshot/restore"
+      ],
+      "missingConnector": "None asserted; preserve existing lifecycle owner and test DOM cleanup.",
+      "donorMechanismReference": "page.js:121-129 is a donor limitation to reject",
+      "confidence": "HIGH",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: real Section descriptor/caps and current Building levels before section-facing stops.",
+    "TECHNICAL_PREREQUISITE: project-derived room/level IDs and route validity before stair descent choreography.",
+    "TECHNICAL_PREREQUISITE: Story-owned absolute progress and restore before any coupled camera/material narrative."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Level and room captions derive from authorized current project data."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "One stair and the same floor/slab intersections persist across the entire descent."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "The ink-to-material front does not replace or misregister the section geometry."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "The vertical camera path keeps the relevant stair, room and level legible within the cut."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse clears caption and room DOM state as well as restoring visible geometry, HUD and camera."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Portrait traverses both section halves; landscape overlays leave the cut readable."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Hidden captions and room cards do not remain in the accessibility tree after reverse."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Any section output uses current project geometry and labels."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "The narrative does not alter saved project geometry or ordinary editing."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Exact donor camera/material/cap/shadow object identity after reverse is not passively exposed, despite visual geometry return and observed DOM residue.",
+      "attempts": [
+        "clean A0/A1 screenshots in three viewports",
+        "passive body/HUD snapshots",
+        "continuous reverse video",
+        "pinned page.js and engine.js lifecycle inspection"
+      ],
+      "evidenceNeeded": "Narrow read-only object/resource snapshot only if identity-level proof becomes necessary."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Product suitability of the donor-authored vertical tour is undecided by this audit.",
+      "attempts": [
+        "three-viewport runtime review",
+        "pinned PLAN.c/source inspection",
+        "Cut/Atlas and current Rubik crosswalk"
+      ],
+      "evidenceNeeded": "Later human product review after all 14 takes."
+    }
+  ]
+}

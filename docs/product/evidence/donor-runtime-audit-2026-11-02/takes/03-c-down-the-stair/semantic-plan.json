@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "COMPLETE",
+  "validation": "Visually reviewed desktop, portrait semantic-correction-1 and landscape; individual validator PASS 21/21",
+  "basis": "Independent stable-start Discovery A→B→A in desktop, portrait and landscape. Five-percent samples locate different physical page-progress positions for the same PLAN.c chapters. The editorial end of the standalone page is included.",
+  "milestones": [
+    {"label":"M01","slug":"section-enters-depth","targetProgress":0.07,"observedChange":"The initial 1:100 ink cut opens into a lit perspective section while preserving the stair, slabs, hillside and pool."},
+    {"label":"M02","slug":"street-level-lantern","targetProgress":0.16,"targetProgressByViewport":{"portrait":0.17,"landscape":0.15},"observedChange":"The section-facing view frames the street-level kitchen, dining table and roof lantern above the stair."},
+    {"label":"M03","slug":"bedroom-patio","targetProgress":0.32,"targetProgressByViewport":{"portrait":0.30,"landscape":0.30},"observedChange":"The camera descends the same stair to the bedroom landing and glazed cypress courtyard."},
+    {"label":"M04","slug":"living-room","targetProgress":0.49,"targetProgressByViewport":{"portrait":0.47,"landscape":0.45},"observedChange":"The view descends to the double-height living room, library wall and garden glazing."},
+    {"label":"M05","slug":"garden-pool","targetProgress":0.63,"targetProgressByViewport":{"portrait":0.59,"landscape":0.55},"observedChange":"The camera crosses the garden-level living room toward the terrace and cantilevered pool."},
+    {"label":"M06","slug":"whole-house-pullback","targetProgress":0.70,"targetProgressByViewport":{"portrait":0.66,"landscape":0.62},"observedChange":"The camera pulls back from the pool to the same three-level house and stair spine."},
+    {"label":"M07","slug":"material-section-returns","targetProgress":0.80,"targetProgressByViewport":{"portrait":0.72,"landscape":0.71},"observedChange":"The house returns to a measured material section; portrait first shows its left half."},
+    {"label":"M07R","slug":"material-section-right-half","viewports":["portrait"],"targetProgress":0.80,"observedChange":"Portrait pans across the same material section to its right half, terrace and pool."},
+    {"label":"M08","slug":"studio-service-copy","targetProgress":0.90,"targetProgressByViewport":{"portrait":0.86,"landscape":0.82},"observedChange":"The interactive section yields to the studio's authored service copy and project facts on the same page."},
+    {"label":"M09","slug":"selected-work-footer","targetProgress":0.98,"observedChange":"Selected-work cards, contact call to action and footer close the standalone page."}
+  ],
+  "reverseSemanticStates": "Natural B→A passes back through the editorial footer and studio copy, the material section (both portrait halves), the pool, living room, patio, kitchen and initial ink cut. No independent reverse-only geometry state is established from Discovery."
+}

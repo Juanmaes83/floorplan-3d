@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T14:55:38.427Z",
+  "updatedAt": "2026-11-02T15:10:20.218Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -491,16 +491,95 @@
       }
     },
     "03-c-down-the-stair": {
-      "captureStatus": "NOT_STARTED",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T14:57:03.245Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:58:31.392Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T14:58:36.557Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:59:54.738Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:00:00.664Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:01:23.280Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:02:09.278Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:03:04.557Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:03:14.460Z",
+          "status": "FAILED",
+          "error": "Error: agent-browser record: ✗ Recording encoder fell behind by more than 16 buffered frames\n"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T15:04:25.769Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:05:16.296Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:05:22.400Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:06:14.432Z"
+        }
+      ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact donor camera/material/cap/shadow object identity after reverse is not passively exposed, despite visual geometry return and observed DOM residue.",
+          "attempts": [
+            "clean A0/A1 screenshots in three viewports",
+            "passive body/HUD snapshots",
+            "continuous reverse video",
+            "pinned page.js and engine.js lifecycle inspection"
+          ],
+          "evidenceNeeded": "Narrow read-only object/resource snapshot only if identity-level proof becomes necessary."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Product suitability of the donor-authored vertical tour is undecided by this audit.",
+          "attempts": [
+            "three-viewport runtime review",
+            "pinned PLAN.c/source inspection",
+            "Cut/Atlas and current Rubik crosswalk"
+          ],
+          "evidenceNeeded": "Later human product review after all 14 takes."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T15:10:20.218Z"
       }
     },
     "04-demo-build-time-lapse": {
