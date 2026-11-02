@@ -1,0 +1,3302 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.take.v1",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "take": {
+    "id": "07-b-the-row",
+    "group": "07 · SUNLIT ELEVATION",
+    "title": "B · THE ROW",
+    "inventoryIndex": 13
+  },
+  "status": "AUDITED_WITH_DONOR_LIMITATION",
+  "baseline": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "approvedSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+    "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+    "cleanAtStart": true
+  },
+  "reference": {
+    "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07:1",
+    "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "donorRepo": "Sam1983Aing/flat-to-3d",
+    "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "entrypoint": "07-sunlit-elevation/b-the-row/index.html",
+    "urlDiscoveryEvidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:557",
+        "statement": "Selector variant B · The Row points to 07-sunlit-elevation/b-the-row/index.html"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/index.html",
+        "statement": "Entrypoint exists in pinned checkout"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html at 2026-11-02T10:33:06.640Z",
+        "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html"
+      }
+    ]
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "browser": "Google Chrome 153.0.8010.53",
+    "playwright": "1.64.1 installed as recording fallback; not used",
+    "ffmpeg": "8.1.2-full_build"
+  },
+  "professionalService": {
+    "problemSolved": "Let a developer, architect or buyer compare six distinct townhouse plots in one street composition, identify the available plot 04 and inspect its entrance and key rooms.",
+    "primaryUsers": [
+      "developer",
+      "architect",
+      "prospective buyer",
+      "design reviewer"
+    ],
+    "serviceOutcome": "The same numbered row changes from drawing to materialized street while plot 04 stays identified; the route enters its show house and ends in the atrium facing its garden.",
+    "decisionValue": "Clarifies repeated-versus-varied facade relation and the spatial experience behind one selected plot. Donor sold/reserved/available states, bedroom count, area and reservation CTA are authored, not verified Rubik facts.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Six status-labeled houses and outlined plot 04 at A0.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Plot 04 atrium at B.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-end.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Pinned take defines six houses, statuses and only plot 04 interior.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:1-31"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "All six plot positions and their repeated/alternate roof, window and door patterns persist through ink, relief and material front.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Six-house ink row.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Materialized row.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p035.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Six S.house instances are built once and animated by one stage.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:8-27,87-99"
+        }
+      ]
+    },
+    {
+      "statement": "Orange plot 04 is the same house singled out from the row and entered through its door.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Plot 04 orange in ink.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Approached plot 04 facade.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m05-plot-04-approach.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "plot4 is houses[3] and only its doors open.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-20,98-99"
+        }
+      ]
+    },
+    {
+      "statement": "The show-house interior keeps its stair, dining relation, rear glazing and tree through the visit.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Plot 04 parlour.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m07-front-parlour.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Terminal atrium and garden glazing.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 6840,
+        "innerHeight": 900,
+        "maxScroll": 5940,
+        "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-200  ·  ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING STREET ELEVATION 1:100  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ ALBION ROW SIX TOWNHOUSES · A-200 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"ALBION ROW\"\n    - StaticText \"SIX TOWNHOUSES · A-200\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"RESERVE PLOT 04 →\" [ref=e3]\n    - StaticText \"RESERVE PLOT 04\"\n    - StaticText \"→\"\n- region \"Albion Row, street elevation\" [ref=e1]\n  - StaticText \"ALBION ROW\"\n  - StaticText \" ·  STREET ELEVATION 1:100\"\n  - heading \"SIX FRONT DOORS. TWO STILL OPEN.\" [level=1, ref=e4]\n    - StaticText \"SIX FRONT DOORS.\"\n    - StaticText \"TWO STILL \"\n    - emphasis\n      - StaticText \"OPEN.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"ROW · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"ROW\" [ref=e5]\n  - button \"PLOT 04\" [ref=e6]\n  - button \"PARLOUR\" [ref=e7]\n  - button \"ATRIUM\" [ref=e8]\n  - button \"GARDEN\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[CB7B2616115DD8FD8ED14DFFDF5C93E4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html (Document) 200\n[99276.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[99276.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[99276.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/page.js (Script) 200\n[99276.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[99276.40] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[99276.39] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[99276.34] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[99276.24] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[99276.16] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[99276.20] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[99276.41] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[99276.42] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[99276.43] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[99276.44] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[99276.45] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[99276.46] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[99276.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 32.7,
+          "bytes": 16215969,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 36.1,
+          "bytes": 19942762,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "row-relief",
+          "changed": [
+            "The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors."
+          ],
+          "continuous": [
+            "Six numbered facades keep the same alternating roof rooms, windows, doors and orange plot 04 outline through camera relief."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0941,
+            "scrollY": 559,
+            "monotonicMs": 10803,
+            "videoSeconds": 2.596,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1328,
+            "scrollY": 789,
+            "monotonicMs": 11913.2,
+            "videoSeconds": 3.706,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1678,
+            "scrollY": 997,
+            "monotonicMs": 13099.6,
+            "videoSeconds": 4.893,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.1420875420875421,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at desktop: The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m01-row-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.09-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=2.596-4.893"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "multi-house-sweep",
+          "changed": [
+            "A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row."
+          ],
+          "continuous": [
+            "The luminous front crosses the same six facades one after another; plot 04 remains in the same place."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.203,
+            "scrollY": 1206,
+            "monotonicMs": 13698,
+            "videoSeconds": 5.491,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2492,
+            "scrollY": 1480,
+            "monotonicMs": 14814,
+            "videoSeconds": 6.607,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2921,
+            "scrollY": 1735,
+            "monotonicMs": 16001.7,
+            "videoSeconds": 7.795,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2516835016835017,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at desktop: A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m02-multi-house-sweep.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.2-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=5.491-7.795"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-row",
+          "changed": [
+            "The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified."
+          ],
+          "continuous": [
+            "Materialized doors/windows match their ink predecessors and plot 04 remains identified."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.332,
+            "scrollY": 1972,
+            "monotonicMs": 17202.7,
+            "videoSeconds": 8.996,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3726,
+            "scrollY": 2213,
+            "monotonicMs": 17799.6,
+            "videoSeconds": 9.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3976,
+            "scrollY": 2362,
+            "monotonicMs": 18804.1,
+            "videoSeconds": 10.597,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3720538720538721,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at desktop: The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m03-materialized-row.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=8.996-10.597"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "late-sun-and-plot",
+          "changed": [
+            "Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit."
+          ],
+          "continuous": [
+            "Changed shadows attach to the same brick/roof facade edges while the camera selects plot 04."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4306,
+            "scrollY": 2558,
+            "monotonicMs": 19302.2,
+            "videoSeconds": 11.095,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4702,
+            "scrollY": 2793,
+            "monotonicMs": 20501,
+            "videoSeconds": 12.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5116,
+            "scrollY": 3039,
+            "monotonicMs": 21803.9,
+            "videoSeconds": 13.597,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.48148148148148145,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:91-97; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at desktop: Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m04-late-sun-and-plot.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.43-0.51",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=11.095-13.597"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "plot-04-approach",
+          "changed": [
+            "The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline."
+          ],
+          "continuous": [
+            "The approached front opening belongs to the orange outlined plot 04 from the row view."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.517,
+            "scrollY": 3071,
+            "monotonicMs": 21904.2,
+            "videoSeconds": 13.697,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5487,
+            "scrollY": 3259,
+            "monotonicMs": 23006,
+            "videoSeconds": 14.799,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5918,
+            "scrollY": 3515,
+            "monotonicMs": 23702.4,
+            "videoSeconds": 15.496,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5580808080808081,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at desktop: The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m05-plot-04-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.59",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=13.697-15.496"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "plot-04-door-open",
+          "changed": [
+            "The oak door of the same plot 04 opens inward and the route passes its threshold."
+          ],
+          "continuous": [
+            "The pivoting oak leaf occupies that same plot 04 door frame."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5997,
+            "scrollY": 3562,
+            "monotonicMs": 24002.8,
+            "videoSeconds": 15.796,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6508,
+            "scrollY": 3866,
+            "monotonicMs": 25206.5,
+            "videoSeconds": 17,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.681,
+            "scrollY": 4045,
+            "monotonicMs": 26305.6,
+            "videoSeconds": 18.099,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6565656565656566,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:98-99; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at desktop: The oak door of the same plot 04 opens inward and the route passes its threshold.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m06-plot-04-door-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.6-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=15.796-18.099"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "front-parlour",
+          "changed": [
+            "Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior."
+          ],
+          "continuous": [
+            "The parlour floor, stair and rear glazing belong behind that plot 04 entrance."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7099,
+            "scrollY": 4217,
+            "monotonicMs": 26999.4,
+            "videoSeconds": 18.793,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7495,
+            "scrollY": 4452,
+            "monotonicMs": 28407.8,
+            "videoSeconds": 20.201,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7896,
+            "scrollY": 4690,
+            "monotonicMs": 29709.5,
+            "videoSeconds": 21.503,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7550505050505051,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,104; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at desktop: Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m07-front-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.71-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=18.793-21.503"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond."
+          ],
+          "continuous": [
+            "The route from parlour to dining atrium shares floor/ceiling and rearward orientation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.82,
+            "scrollY": 4871,
+            "monotonicMs": 30601.7,
+            "videoSeconds": 22.395,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8593,
+            "scrollY": 5104,
+            "monotonicMs": 31398.6,
+            "videoSeconds": 23.192,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.897,
+            "scrollY": 5328,
+            "monotonicMs": 32598.3,
+            "videoSeconds": 24.392,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8644781144781145,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at desktop: The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.82-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=22.395-24.392"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear glazed doors open toward the walled courtyard while the camera remains within the atrium."
+          ],
+          "continuous": [
+            "Glazed rear doors and tree remain in the same wall as the view advances within the atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.897,
+            "scrollY": 5328,
+            "monotonicMs": 32598.3,
+            "videoSeconds": 24.392,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9424,
+            "scrollY": 5598,
+            "monotonicMs": 34002.2,
+            "videoSeconds": 25.795,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9626,
+            "scrollY": 5718,
+            "monotonicMs": 34311.3,
+            "videoSeconds": 26.105,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.952020202020202,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:99; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at desktop: Rear glazed doors open toward the walled courtyard while the camera remains within the atrium.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.9-0.96",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=24.392-26.105"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "terminal-atrium",
+          "changed": [
+            "The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible."
+          ],
+          "continuous": [
+            "The final view still belongs to plot 04 atrium, with the same open rear doors and garden beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.969,
+            "scrollY": 5756,
+            "monotonicMs": 34405.6,
+            "videoSeconds": 26.199,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9909,
+            "scrollY": 5886,
+            "monotonicMs": 35198.2,
+            "videoSeconds": 26.991,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 5940,
+            "monotonicMs": 36200.9,
+            "videoSeconds": 27.994,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9957912457912458,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at desktop: The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m10-terminal-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.97-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm#t=26.199-27.994"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 5940,
+        "scrollHeight": 6840,
+        "innerHeight": 900,
+        "maxScroll": 5940,
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 21.3,
+          "bytes": 12331805,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, 2° ink elevation with six plot-status markers and plot 04 orange, initial sun/optic HUD; hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 105,
+          "stepPx": 72
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 105,
+          "stepPx": -72
+        }
+      ]
+    },
+    "portrait": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 6414,
+        "innerHeight": 844,
+        "maxScroll": 5570,
+        "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-200  ·  ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING STREET ELEVATION 1:100  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ ALBION ROW // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"ALBION ROW\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"RESERVE PLOT 04 →\" [ref=e3]\n    - StaticText \"RESERVE PLOT 04\"\n    - StaticText \"→\"\n- region \"Albion Row, street elevation\" [ref=e1]\n  - StaticText \"ALBION ROW\"\n  - StaticText \" ·  STREET ELEVATION 1:100\"\n  - heading \"SIX FRONT DOORS. TWO STILL OPEN.\" [level=1, ref=e4]\n    - StaticText \"SIX FRONT DOORS.\"\n    - StaticText \"TWO STILL \"\n    - emphasis\n      - StaticText \"OPEN.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"ROW · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e5] clickable [cursor:pointer]\n    - graphics-symbol [ref=e6] clickable [cursor:pointer]\n    - graphics-symbol [ref=e7] clickable [cursor:pointer]\n    - graphics-symbol [ref=e8] clickable [cursor:pointer]\n    - graphics-symbol [ref=e9] clickable [cursor:pointer]",
+        "consoleErrors": "",
+        "network": "[ABD28914D80526C960F922F706789827] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html (Document) 200\n[118508.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[118508.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[118508.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/page.js (Script) 200\n[118508.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[118508.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[118508.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[118508.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[118508.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[118508.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[118508.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[118508.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[118508.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[118508.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[118508.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[118508.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[118508.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[118508.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 24.6,
+          "bytes": 3368873,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 28,
+          "bytes": 4110727,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "row-relief",
+          "changed": [
+            "The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors."
+          ],
+          "continuous": [
+            "Six numbered facades keep the same alternating roof rooms, windows, doors and orange plot 04 outline through camera relief."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0871,
+            "scrollY": 485,
+            "monotonicMs": 9604.3,
+            "videoSeconds": 2.098,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1282,
+            "scrollY": 714,
+            "monotonicMs": 10401.9,
+            "videoSeconds": 2.895,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.17,
+            "scrollY": 947,
+            "monotonicMs": 11302.8,
+            "videoSeconds": 3.796,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.13967684021543986,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at portrait: The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m01-row-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.09-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=2.098-3.796"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "multi-house-sweep",
+          "changed": [
+            "A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row."
+          ],
+          "continuous": [
+            "The luminous front crosses the same six facades one after another; plot 04 remains in the same place."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1984,
+            "scrollY": 1105,
+            "monotonicMs": 11703.9,
+            "videoSeconds": 4.197,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2508,
+            "scrollY": 1397,
+            "monotonicMs": 12904.1,
+            "videoSeconds": 5.398,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2867,
+            "scrollY": 1597,
+            "monotonicMs": 13805.8,
+            "videoSeconds": 6.299,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.2583482944344704,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at portrait: A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m02-multi-house-sweep.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.2-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=4.197-6.299"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-row",
+          "changed": [
+            "The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified."
+          ],
+          "continuous": [
+            "Materialized doors/windows match their ink predecessors and plot 04 remains identified."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3273,
+            "scrollY": 1823,
+            "monotonicMs": 14705.1,
+            "videoSeconds": 7.199,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3698,
+            "scrollY": 2060,
+            "monotonicMs": 15303.9,
+            "videoSeconds": 7.797,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4018,
+            "scrollY": 2238,
+            "monotonicMs": 16007.2,
+            "videoSeconds": 8.501,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.37666068222621185,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at portrait: The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m03-materialized-row.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=7.199-8.501"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "late-sun-and-plot",
+          "changed": [
+            "Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit."
+          ],
+          "continuous": [
+            "Changed shadows attach to the same brick/roof facade edges while the camera selects plot 04."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4289,
+            "scrollY": 2389,
+            "monotonicMs": 16607.2,
+            "videoSeconds": 9.101,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4725,
+            "scrollY": 2632,
+            "monotonicMs": 17307.7,
+            "videoSeconds": 9.801,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5072,
+            "scrollY": 2825,
+            "monotonicMs": 18109.3,
+            "videoSeconds": 10.603,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4737881508078995,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:91-97; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at portrait: Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m04-late-sun-and-plot.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.43-0.51",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=9.101-10.603"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "plot-04-approach",
+          "changed": [
+            "The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline."
+          ],
+          "continuous": [
+            "The approached front opening belongs to the orange outlined plot 04 from the row view."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5235,
+            "scrollY": 2916,
+            "monotonicMs": 18310.2,
+            "videoSeconds": 10.804,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.553,
+            "scrollY": 3080,
+            "monotonicMs": 19106.4,
+            "videoSeconds": 11.6,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5905,
+            "scrollY": 3289,
+            "monotonicMs": 19808.5,
+            "videoSeconds": 12.302,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5597845601436265,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at portrait: The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m05-plot-04-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.59",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=10.804-12.302"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "plot-04-door-open",
+          "changed": [
+            "The oak door of the same plot 04 opens inward and the route passes its threshold."
+          ],
+          "continuous": [
+            "The pivoting oak leaf occupies that same plot 04 door frame."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6014,
+            "scrollY": 3350,
+            "monotonicMs": 20009.1,
+            "videoSeconds": 12.503,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6501,
+            "scrollY": 3621,
+            "monotonicMs": 20911.2,
+            "videoSeconds": 13.405,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6776,
+            "scrollY": 3774,
+            "monotonicMs": 21308.8,
+            "videoSeconds": 13.802,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6567324955116697,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:98-99; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at portrait: The oak door of the same plot 04 opens inward and the route passes its threshold.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m06-plot-04-door-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.6-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=12.503-13.802"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "front-parlour",
+          "changed": [
+            "Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior."
+          ],
+          "continuous": [
+            "The parlour floor, stair and rear glazing belong behind that plot 04 entrance."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7138,
+            "scrollY": 3976,
+            "monotonicMs": 22109.5,
+            "videoSeconds": 14.603,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7506,
+            "scrollY": 4181,
+            "monotonicMs": 22710.7,
+            "videoSeconds": 15.204,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7925,
+            "scrollY": 4414,
+            "monotonicMs": 23512.7,
+            "videoSeconds": 16.006,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7646319569120287,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,104; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at portrait: Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m07-front-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.71-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=14.603-16.006"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond."
+          ],
+          "continuous": [
+            "The route from parlour to dining atrium shares floor/ceiling and rearward orientation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8192,
+            "scrollY": 4563,
+            "monotonicMs": 24314.8,
+            "videoSeconds": 16.808,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.86,
+            "scrollY": 4790,
+            "monotonicMs": 25203.2,
+            "videoSeconds": 17.697,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8968,
+            "scrollY": 4995,
+            "monotonicMs": 25914.2,
+            "videoSeconds": 18.408,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8723518850987433,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at portrait: The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.82-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=16.808-18.408"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear glazed doors open toward the walled courtyard while the camera remains within the atrium."
+          ],
+          "continuous": [
+            "Glazed rear doors and tree remain in the same wall as the view advances within the atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8968,
+            "scrollY": 4995,
+            "monotonicMs": 25914.2,
+            "videoSeconds": 18.408,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9363,
+            "scrollY": 5215,
+            "monotonicMs": 26702.7,
+            "videoSeconds": 19.196,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9607,
+            "scrollY": 5351,
+            "monotonicMs": 27015,
+            "videoSeconds": 19.509,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.947576301615799,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:99; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at portrait: Rear glazed doors open toward the walled courtyard while the camera remains within the atrium.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.9-0.96",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=18.408-19.509"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "terminal-atrium",
+          "changed": [
+            "The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible."
+          ],
+          "continuous": [
+            "The final view still belongs to plot 04 atrium, with the same open rear doors and garden beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9715,
+            "scrollY": 5411,
+            "monotonicMs": 27414.7,
+            "videoSeconds": 19.908,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9885,
+            "scrollY": 5506,
+            "monotonicMs": 27708.4,
+            "videoSeconds": 20.202,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 5570,
+            "monotonicMs": 28707.9,
+            "videoSeconds": 21.201,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.999640933572711,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at portrait: The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m10-terminal-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.97-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm#t=19.908-21.201"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 5570,
+        "scrollHeight": 6414,
+        "innerHeight": 844,
+        "maxScroll": 5570,
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 18.8,
+          "bytes": 2843651,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, 2° ink elevation with six plot-status markers and plot 04 orange, initial sun/optic HUD; hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 105,
+          "stepPx": 67
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 105,
+          "stepPx": -67
+        }
+      ]
+    },
+    "landscape": {
+      "width": 844,
+      "height": 390,
+      "dpr": 1,
+      "runtimeSupport": "DONOR_LIMITATION",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 2964,
+        "innerHeight": 390,
+        "maxScroll": 2574,
+        "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // A-200  ·  ALBION ROW\"\n  - paragraph\n    - StaticText \"PLOTTING STREET ELEVATION 1:100  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ ALBION ROW SIX TOWNHOUSES · A-200 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"ALBION ROW\"\n    - StaticText \"SIX TOWNHOUSES · A-200\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"RESERVE PLOT 04 →\" [ref=e3]\n    - StaticText \"RESERVE PLOT 04\"\n    - StaticText \"→\"\n- region \"Albion Row, street elevation\" [ref=e1]\n  - StaticText \"ALBION ROW\"\n  - StaticText \" ·  STREET ELEVATION 1:100\"\n  - heading \"SIX FRONT DOORS. TWO STILL OPEN.\" [level=1, ref=e4]\n    - StaticText \"SIX FRONT DOORS.\"\n    - StaticText \"TWO STILL \"\n    - emphasis\n      - StaticText \"OPEN.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"ROW · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"ROW\" [ref=e5]\n  - button \"PLOT 04\" [ref=e6]\n  - button \"PARLOUR\" [ref=e7]\n  - button \"ATRIUM\" [ref=e8]\n  - button \"GARDEN\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[D9E7178F071761525B2507E8CA5F21DC] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html (Document) 200\n[93412.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[93412.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[93412.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/page.js (Script) 200\n[93412.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[93412.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[93412.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[93412.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[93412.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[93412.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[93412.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[93412.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[93412.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[93412.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[93412.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[93412.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[93412.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[93412.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 23.7,
+          "bytes": 4516597,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 28.4,
+          "bytes": 5773967,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": [
+          {
+            "class": "OBSERVED_RUNTIME",
+            "statement": "At 844×390 initial title overlays the model and plot-status cards extend beyond the bottom viewport, reducing six-plot comparison readability.",
+            "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png"
+          },
+          {
+            "class": "DONOR_SOURCE",
+            "statement": "Only portrait aspect ratio W/H<0.8 receives the explicit phone camera override.",
+            "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:89-103,1146-1187; b-the-row/page.js:38-48"
+          }
+        ]
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "row-relief",
+          "changed": [
+            "The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors."
+          ],
+          "continuous": [
+            "Six numbered facades keep the same alternating roof rooms, windows, doors and orange plot 04 outline through camera relief."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0866,
+            "scrollY": 223,
+            "monotonicMs": 9544.7,
+            "videoSeconds": 2.087,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1259,
+            "scrollY": 324,
+            "monotonicMs": 10351.4,
+            "videoSeconds": 2.893,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1713,
+            "scrollY": 441,
+            "monotonicMs": 11144.2,
+            "videoSeconds": 3.686,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.14102564102564102,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at landscape: The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m01-row-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.09-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=2.087-3.686"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "multi-house-sweep",
+          "changed": [
+            "A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row."
+          ],
+          "continuous": [
+            "The luminous front crosses the same six facades one after another; plot 04 remains in the same place."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.2028,
+            "scrollY": 522,
+            "monotonicMs": 11543.4,
+            "videoSeconds": 4.085,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2494,
+            "scrollY": 642,
+            "monotonicMs": 12644.9,
+            "videoSeconds": 5.187,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2925,
+            "scrollY": 753,
+            "monotonicMs": 13548.3,
+            "videoSeconds": 6.09,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.26107226107226106,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at landscape: A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m02-multi-house-sweep.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.2-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=4.085-6.09"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-row",
+          "changed": [
+            "The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified."
+          ],
+          "continuous": [
+            "Materialized doors/windows match their ink predecessors and plot 04 remains identified."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3279,
+            "scrollY": 844,
+            "monotonicMs": 14245.4,
+            "videoSeconds": 6.787,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.371,
+            "scrollY": 955,
+            "monotonicMs": 14847.2,
+            "videoSeconds": 7.389,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3986,
+            "scrollY": 1026,
+            "monotonicMs": 15544.9,
+            "videoSeconds": 8.087,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3803418803418803,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:87-90; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at landscape: The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m03-materialized-row.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.33-0.4",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=6.787-8.087"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "late-sun-and-plot",
+          "changed": [
+            "Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit."
+          ],
+          "continuous": [
+            "Changed shadows attach to the same brick/roof facade edges while the camera selects plot 04."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4308,
+            "scrollY": 1109,
+            "monotonicMs": 16045.7,
+            "videoSeconds": 8.588,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4666,
+            "scrollY": 1201,
+            "monotonicMs": 16647.4,
+            "videoSeconds": 9.189,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5093,
+            "scrollY": 1311,
+            "monotonicMs": 17549.5,
+            "videoSeconds": 10.091,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.47824397824397824,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:91-97; engine/elevation.js:143-161",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at landscape: Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m04-late-sun-and-plot.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.43-0.51",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=8.588-10.091"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "plot-04-approach",
+          "changed": [
+            "The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline."
+          ],
+          "continuous": [
+            "The approached front opening belongs to the orange outlined plot 04 from the row view."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5225,
+            "scrollY": 1345,
+            "monotonicMs": 17746.2,
+            "videoSeconds": 10.288,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5509,
+            "scrollY": 1418,
+            "monotonicMs": 18347.9,
+            "videoSeconds": 10.89,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5894,
+            "scrollY": 1517,
+            "monotonicMs": 18847.5,
+            "videoSeconds": 11.389,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5652680652680653,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,75-86; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at landscape: The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m05-plot-04-approach.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.52-0.59",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=10.288-11.389"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "plot-04-door-open",
+          "changed": [
+            "The oak door of the same plot 04 opens inward and the route passes its threshold."
+          ],
+          "continuous": [
+            "The pivoting oak leaf occupies that same plot 04 door frame."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6014,
+            "scrollY": 1548,
+            "monotonicMs": 19248.3,
+            "videoSeconds": 11.79,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.65,
+            "scrollY": 1673,
+            "monotonicMs": 20047.7,
+            "videoSeconds": 12.59,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.6814,
+            "scrollY": 1754,
+            "monotonicMs": 20549.6,
+            "videoSeconds": 13.091,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6631701631701632,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:98-99; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at landscape: The oak door of the same plot 04 opens inward and the route passes its threshold.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m06-plot-04-door-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.6-0.68",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=11.79-13.091"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "front-parlour",
+          "changed": [
+            "Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior."
+          ],
+          "continuous": [
+            "The parlour floor, stair and rear glazing belong behind that plot 04 entrance."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7086,
+            "scrollY": 1824,
+            "monotonicMs": 21148.9,
+            "videoSeconds": 13.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7517,
+            "scrollY": 1935,
+            "monotonicMs": 21750.5,
+            "videoSeconds": 14.292,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.789,
+            "scrollY": 2031,
+            "monotonicMs": 22550.9,
+            "videoSeconds": 15.093,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7610722610722611,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,104; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at landscape: Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m07-front-parlour.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.71-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=13.691-15.093"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "dining-atrium",
+          "changed": [
+            "The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond."
+          ],
+          "continuous": [
+            "The route from parlour to dining atrium shares floor/ceiling and rearward orientation."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8178,
+            "scrollY": 2105,
+            "monotonicMs": 23450.1,
+            "videoSeconds": 15.992,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8617,
+            "scrollY": 2218,
+            "monotonicMs": 24145.6,
+            "videoSeconds": 16.688,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8998,
+            "scrollY": 2316,
+            "monotonicMs": 24953.2,
+            "videoSeconds": 17.495,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8698523698523698,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at landscape: The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m08-dining-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.82-0.9",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=15.992-17.495"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "rear-doors-open",
+          "changed": [
+            "Rear glazed doors open toward the walled courtyard while the camera remains within the atrium."
+          ],
+          "continuous": [
+            "Glazed rear doors and tree remain in the same wall as the view advances within the atrium."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8998,
+            "scrollY": 2316,
+            "monotonicMs": 24953.2,
+            "videoSeconds": 17.495,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9425,
+            "scrollY": 2426,
+            "monotonicMs": 25752.2,
+            "videoSeconds": 18.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.9584,
+            "scrollY": 2467,
+            "monotonicMs": 25952.5,
+            "videoSeconds": 18.494,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.945998445998446,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:99; engine/elevation.js:847-855,1094-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at landscape: Rear glazed doors open toward the walled courtyard while the camera remains within the atrium.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m09-rear-doors-open.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.9-0.96",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=17.495-18.494"
+            }
+          ]
+        },
+        {
+          "label": "M10",
+          "semanticState": "terminal-atrium",
+          "changed": [
+            "The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible."
+          ],
+          "continuous": [
+            "The final view still belongs to plot 04 atrium, with the same open rear doors and garden beyond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9716,
+            "scrollY": 2501,
+            "monotonicMs": 26152.4,
+            "videoSeconds": 18.694,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9915,
+            "scrollY": 2552,
+            "monotonicMs": 26653,
+            "videoSeconds": 19.195,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 2574,
+            "monotonicMs": 27454.2,
+            "videoSeconds": 19.996,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9996114996114996,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:38-48,105; engine/elevation.js:1205-1422",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M10 in fresh semantic pass at landscape: The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m10-terminal-atrium.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.97-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm#t=18.694-19.996"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "hash": "",
+        "scrollY": 2574,
+        "scrollHeight": 2964,
+        "innerHeight": 390,
+        "maxScroll": 2574,
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 18.5,
+          "bytes": 3829730,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, 2° ink elevation with six plot-status markers and plot 04 orange, initial sun/optic HUD; hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 105,
+          "stepPx": 31
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 105,
+          "stepPx": -31
+        }
+      ]
+    }
+  },
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Desktop, portrait and landscape each have original natural A→B→A and semantic passes.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Landscape A0 crowds/clips plot status cards, a donor viewport limitation.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Final camera stays in atrium, not courtyard.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-end.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Natural reverse restores the initial six-plot sheet visually.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-restored-start.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Pinned page.js controls six houses, selected plot, sweep, sun and doors.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:8-105"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Global D07 preserves Rubik light/material authority and adapts shadow-coherent hatch.",
+      "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik owns building geometry and Story elevation camera/Solar.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36; js/presentation-elevation-core.js:171-247"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/b-the-row/page.js",
+      "symbol": "V / houses / plot4 / STATUS",
+      "lines": "8-31",
+      "claim": "Six authored house variants and plot status labels; only plot4 gains interior.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/b-the-row/page.js",
+      "symbol": "KEYS / frame",
+      "lines": "38-99",
+      "claim": "Absolute progress maps row camera, depth, sweep, sun and plot4 door states.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "GLSL_COMMON / mat",
+      "lines": "31-119,352-429",
+      "claim": "One shader uses shadow-derived hatch and spatial sweep for technical/material appearance.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setSun",
+      "lines": "143-161",
+      "claim": "Directional light and its shadow map move together.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setDoor / setGardenDoor",
+      "lines": "977-1003,1090-1096",
+      "claim": "Front and rear pivot geometry of one selected house.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "camAt / run / scrollP",
+      "lines": "1146-1187,1205-1422",
+      "claim": "Camera keys, phone overrides, Lenis progress and stable intro marker.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut1 D07 Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; Atlas D07 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D07 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225",
+      "documentedDisposition": "D07-C1 ADAPT coherent shadow hatch; C2 KEEP EXISTING Rubik light/material/Solar; C3 REJECT donor-specific AO and single-light implementation. Older Cut1 extraction remains historical prior analysis.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Prior Cut1/Global establish the principle and Rubik authority.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "One front is observed crossing multiple houses.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m02-multi-house-sweep.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut3 D19 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; Atlas D19 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D19 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447",
+      "documentedDisposition": "D19-C1 KEEP EXISTING Rubik geometry/material/environment; C2 ADAPT sourced camera/light/material coordination; C3 REJECT universal brick/renderer rewrite.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3/Global credit Rubik visual infrastructure.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same row appears with material/detail.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m03-materialized-row.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns project/building dimensions and IDs; an authoritative six-plot status inventory is not accredited by this frozen baseline. Donor sold/reserved/available, 142 m² and CTA are authored.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns project/building dimensions and IDs; an authoritative six-plot status inventory is not accredited by this frozen baseline. Donor sold/reserved/available, 142 m² and CTA are authored.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36; index.html:2408-2428"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik builds one project/building and levels from data; a single composed six-plot street with six independently identified homes is not accredited.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik builds one project/building and levels from data; a single composed six-plot street with six independently identified homes is not accredited.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36,317-377; index.html:3486-3640"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation Story/View3D; cross-house shadow hatch and registered technical/material front are not established modes.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation Story/View3D; cross-house shadow hatch and registered technical/material front are not established modes.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "EXISTS",
+      "claim": "Rubik owns material, shadow and optional Solar authority; donor one-light animation is an authored visual reference.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns material, shadow and optional Solar authority; donor one-light animation is an authored visual reference.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has facade Story framing and routes; isolate-one-plot row-to-interior choreography is donor authored.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has facade Story framing and routes; isolate-one-plot row-to-interior choreography is donor authored.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik has Story/reveal state; donor sweep across six houses is a particular co-registered representation transition.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has Story/reveal state; donor sweep across six houses is a particular co-registered representation transition.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has absolute seek/playback; donor Lenis 660vh transport need not be copied.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has absolute seek/playback; donor Lenis 660vh transport need not be copied.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls; donor plot-status cards, radar and reserve CTA are authored UI and need project source truth.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation controls; donor plot-status cards, radar and reserve CTA are authored UI and need project source truth.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has mobile presentation paths; donor landscape A0 clips plot cards and overlays heading on row, so any adapted six-plot service needs independent framing.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has mobile presentation paths; donor landscape A0 clips plot cards and overlays heading on row, so any adapted six-plot service needs independent framing.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has restore owner; donor A0/A1 are visually equivalent after natural reverse but GPU identity is unobserved.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has restore owner; donor A0/A1 are visually equivalent after natural reverse but GPU identity is unobserved.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has presentation/output paths; donor plot reservation CTA is not an output requirement.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation/output paths; donor plot reservation CTA is not an output requirement.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Rubik has FT3D-6 QA; six-plot status truth, highlight continuity, mobile and reverse would require dedicated checks.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has FT3D-6 QA; six-plot status truth, highlight continuity, mobile and reverse would require dedicated checks.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "A source-backed plot/status record would have to connect multiple authorized buildings to the six-plot presentation; donor statuses are static copy.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "STATUS is authored inline in page.js.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:22-31"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current Building UI is project/level centric.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/building-ui.js:1-36,317-377"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "Shadow-coherent ink/material front across multiple homes is not accredited in Rubik current.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Shared shader and uSweep drive row front.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119; b-the-row/page.js:87-90"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current elevation Story has facade/solar state but no proven six-house front.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "One selected plot would need continuity from row identity to valid entry/rooms, with reversible sun, door and camera state.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "plot4 alone has interior and animated doors.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/b-the-row/page.js:16-20,98-105"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has Story route/restore to consume.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-route.js:1-156; js/presentation-story-core.js:346-364"
+        }
+      ]
+    },
+    {
+      "classification": "DONOR_LIMITATION",
+      "statement": "At 844×390 the initial heading overlays the row and plot cards are clipped, weakening the six-plot comparison.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Landscape A0 overlap/clipping.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Phone camera override only applies at portrait ratio.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:89-103,1146-1187"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If later selected, show source-backed multi-plot identities/statuses and select one valid project/building for a visit.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building IDs and units",
+        "current geometry",
+        "Story lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "project library",
+        "Building data",
+        "presentation UI"
+      ],
+      "missingConnector": "Authorized plot inventory and selected-building reference; never infer live sale status from donor labels.",
+      "donorMechanismReference": "b-the-row/page.js:8-31 illustrates status/highlight only; authored data is not reusable truth",
+      "confidence": "LOW",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If later selected, carry one coherent shadow/ink/material front across an authorized street ensemble.",
+      "rubikAuthoritiesPreserved": [
+        "current renderer/material authority",
+        "Solar/light authority",
+        "project geometry"
+      ],
+      "existingCapabilitiesConsumed": [
+        "elevation Story",
+        "surface renderer",
+        "Solar snapshot"
+      ],
+      "missingConnector": "Per-building registered hatch/front and shared lighting state, with explicit cleanup.",
+      "donorMechanismReference": "engine/elevation.js:31-119; b-the-row/page.js:87-97; Global D07-C1 ADAPT/C2 KEEP/C3 REJECT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If later selected, follow the chosen plot from row to valid rooms and return to the original row.",
+      "rubikAuthoritiesPreserved": [
+        "project room/opening IDs",
+        "Story absolute seek/restore",
+        "mobile framing"
+      ],
+      "existingCapabilitiesConsumed": [
+        "presentation-route",
+        "Story camera",
+        "current semantic project"
+      ],
+      "missingConnector": "Selected plot-to-entry/room route and reversible door/camera handoff.",
+      "donorMechanismReference": "b-the-row/page.js:38-105 fixed camera keys are reference only",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: authoritative plot/building identities and status provenance before any multi-plot claim.",
+    "TECHNICAL_PREREQUISITE: valid selected-plot opening/room route before a show-house visit.",
+    "TECHNICAL_PREREQUISITE: Story-owned reversible material/light/door/camera state before an ink-to-real row transition."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Plot labels and status derive from verified project data or are explicitly illustrative."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "All six plot identities and openings remain registered across ink/material states."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "One sun/shadow convention remains coherent across all six facades during the sweep."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Selected plot 04 stays traceable from row to its entrance and interior without crossing geometry."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse restores plot labels/highlight, doors, sun, materials, camera, HUD and scroll."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "390×844 and 844×390 keep plot statuses and selection legible without clipping."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Plot status and selected unit are conveyed in text/keyboard-accessible form."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Any export distinguishes live plot facts from donor-authored status/CTA."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Presentation effects do not mutate saved buildings, statuses or materials."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Passive reverse does not prove internal donor GPU/shadow-map resource identity.",
+      "attempts": [
+        "three A0/A1 screenshots and NDJSON",
+        "continuous reverse video",
+        "pinned frame/engine source"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if internal identity later matters."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Current Rubik data does not establish whether six independently marketable plots belong in one authoritative presentation service.",
+      "attempts": [
+        "frozen Building/project/library inspection",
+        "donor six-plot authored data",
+        "Cut/Global crosswalk"
+      ],
+      "evidenceNeeded": "Human product/data authority decision after all 14 references; no implementation in this audit."
+    }
+  ],
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\calibration.json",
+      "sha256": "775ff279c5f641e6f86285e11519e9e032eb6dd963b10fc4f58fd768eab5ab98",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-end.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p000.png",
+      "sha256": "1db919839aecb7b507c9e1bf10798d6df4e9e7b9fb59d07d7095de9c29f2d5b0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p005.png",
+      "sha256": "dad67d8d9e082d6ef270a29470936bed72f96d0615bbdf5ed740c993ae170732",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p010.png",
+      "sha256": "ebb6f53343d150893e86a1250ab882eb0530bc2373dede283f3d8749eb0f51e0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p015.png",
+      "sha256": "fc1729878c7636cc01b706b4a671ba079b0299cfee19279cb71313939bac09d2",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p020.png",
+      "sha256": "9a7169200e38d008cc5a6d795e58aaf8bb4fd8c705b483c078e28fba09269356",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p025.png",
+      "sha256": "7bcd4c3c6eb069d33e00e7b8d90645844cb995054f1975d29bf94e0c9104f007",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p030.png",
+      "sha256": "6ed712c26da168c60597792d94fbe09de7682c4cc7adf55539f7e741f9083151",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p035.png",
+      "sha256": "cd8ea03c6cbb05b6e2f852b2e3be93b24edb1823f3afc7ba5e99a4e00b47b98e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p040.png",
+      "sha256": "e394a6091250bd38e20fb34311773b4488183b385f006dbc4b5536e48f5172ac",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p045.png",
+      "sha256": "1a14a848595518583852b506f4e337a481bf24c1d335ecb02c22c6cb83f2d6ff",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p050.png",
+      "sha256": "d93fd253110e28bfa6de2d44a10bb90b950d2ba5e26e2f4ac81a5b6003494fcc",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p055.png",
+      "sha256": "c3e6f28acca8df3cf43c9821a20f0e3d0618be50c88a678da6c18bcba014ebe0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p060.png",
+      "sha256": "1b6a76e28aa5b2cd70fa81f465cd7f2e0463b8063920331bf04c4f5594e61f68",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p065.png",
+      "sha256": "8c3f4530842ce79032469faa7a2a8df5944cf1a67f30f2ca14d89294e4a32ae7",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p070.png",
+      "sha256": "cb07d30154cb9adfb4c23fd8725ecdcffe74c54fb4c3f98cd3ecbccffac36a3f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p075.png",
+      "sha256": "678f76b642ad2933271e52c1653a6b819d89cfb55b17b8414f26c806ad700156",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p080.png",
+      "sha256": "d5d91cebbb9108ab17059ef80875ebcbdd51bd7708fc3fbe2e8ec5e1ff1cb077",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p085.png",
+      "sha256": "9dbebc259162b8e88a998ada3dc420cda54b0257419be1c82a5afa73e1e785ce",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p090.png",
+      "sha256": "156c22552d5cbfc76df9d9e6e918add5a724660ae15f4ce6b3321f15fee56407",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p095.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery-p100.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "sha256": "f05e409c1c2b18fa952f35a17c5af965a1eb2c87fd6932114c6296da1e3492f7",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-discovery.webm",
+      "sha256": "2edc2fdfd8c5ea3e14cc930d06dc2b15951f137f9138ac98dbe32d41a0840975",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m01-row-relief.png",
+      "sha256": "68cfdd57a3ceb75a0e2d394a38e5147ea35cb955fd412941ca3b39302d4afffc",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m02-multi-house-sweep.png",
+      "sha256": "1cb0e2046bd50dc33bd697fdf61ca8791f86a4dbfb18cee783f96b15222fd570",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m03-materialized-row.png",
+      "sha256": "4c35b5cc3b73d6e269af9e32e7f3d7a1ff9fc01a0d7655994b27421676b37fef",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m04-late-sun-and-plot.png",
+      "sha256": "2912d82307b8ae22566050da0af8cacd587f10c4abf73fe667069889aed3d90d",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m05-plot-04-approach.png",
+      "sha256": "7c5eb7e554a873a9e6ef7c4bc99f6cea40136ca929f93ff1775acde078185604",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m06-plot-04-door-open.png",
+      "sha256": "35c156358d6343ce9ed2c2ae94faf568a6b355dd67130fbb8b823ba27f8bf289",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m07-front-parlour.png",
+      "sha256": "6997179ca273a4016a2ec701d7820365a5301de332643e84193b0f089760080e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m08-dining-atrium.png",
+      "sha256": "28acea3e37c16d6aeeb61cf9dd53e233bd867dacfd872dcc59623418f5828796",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m09-rear-doors-open.png",
+      "sha256": "9dc76ed62382adcdc7d63685248ff9069c092fcbbb140173ee9cd9de017e2b82",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-m10-terminal-atrium.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-semantic.telemetry.ndjson",
+      "sha256": "500f26329e3dea4b4c664b261e64ae717a3699308fef205cf162b9c28db7da85",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-forward-semantic.webm",
+      "sha256": "53426308bc833dcd243fc82a03867c8085ff5de01be00c8abd56948477e0fec7",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-restored-start.png",
+      "sha256": "36e15bd1ccb805b5e051f4f10f32694839d8d85bfc147edac03d65409ceb2433",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "sha256": "941957f90c5758e2483785e1cc485d85dde331b8074bb130acade7c94840d36f",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-reverse-discovery.webm",
+      "sha256": "eed0125b56222691f6be0cf5327c2a2f6007410a6aee9eb9f5b3efffcbddba2f",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-semantic-end.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-semantic-start.png",
+      "sha256": "d99a9a203fd02c3b21a33142ea8372cb9efe823ade9525c2d5b6e00a5c19605e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\desktop-start.png",
+      "sha256": "0ec4bbe18a17b8ef4530fa7624df07c312c781e4016885fa31f781f44b74195f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\discovery-assets.json",
+      "sha256": "5ecea6f484cf3c50be53814c7c7fc6e5bab921ce6fdf599af08d30d70ff8e5a8",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\discovery-summary.json",
+      "sha256": "800da2de48776bfe3a374e017569bc7f65bba1f0abd3c10f5c57eb8c165db070",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\end-state.json",
+      "sha256": "b17194128235112002eb5ea9c0e316b57fb7901505713d6a54814dc0b4559aab",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\reverse-state.json",
+      "sha256": "a1694c8aed4685d8a4f8f98489ec0cec9aca5dd537b6321f7ee87a5a9b761917",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\semantic-capture.json",
+      "sha256": "f66b0707390fb61ca5b7408cb8b6c48638e755521a3f2d4b95534ea6c2eae26b",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\desktop\\start-state.json",
+      "sha256": "2079206b6751b7bcfabd0fe567b181ebfac2ec286d24bd3a75d2b09d9b103dc7",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\calibration.json",
+      "sha256": "7f8a5331959b0d49aa76723bb6d0023463be20657e0b2ebb5f6d2cdb49f23eac",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\discovery-assets.json",
+      "sha256": "48fae6da450e29513186fee95eaa8760893de0b3651977f02137832c01bdee73",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\discovery-summary.json",
+      "sha256": "81e0247b6ac4ed2f11716d1f772f1e894116e908624b54104b04e2e1d8609b9f",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\end-state.json",
+      "sha256": "38c80e1f6df1d1f70533bbb9301452017d7693d77beee09a044c21366d27ea8d",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-end.png",
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p000.png",
+      "sha256": "4cbc9aabd313a49a439cb626ff456189894fdbea4437c0bf5a0b86966041b1d4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p005.png",
+      "sha256": "6786e467617a995c4b0a39980be7a627aef4c202e2e8d27ccf1d6ec60886b3b5",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p010.png",
+      "sha256": "50f22512367a67e0cfeb85484244a97a84890e96b0ef98df4a97c750f2fc8a67",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p015.png",
+      "sha256": "158d073b7dfc7235e1f92b89af6944a93c170b8faf91c8b2a20acdf7577cd819",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p020.png",
+      "sha256": "f90240113a986b39ee86ac473aa7805b689a60106fd47d4e8f893bc736c97f9c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p025.png",
+      "sha256": "bbc1a504064bf74cfb17f80f861b65f31455b88549914105853063fb417fa039",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p030.png",
+      "sha256": "802a29288cd388ba79977c741363052ae771a290e81195fecb6084aa27ff3fcb",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p035.png",
+      "sha256": "768e6b6cb955b04a1449fe32d6bc7dfdf7cc17272b514a22f7f75045496b9a7b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p040.png",
+      "sha256": "57a8611130297ab58e53969027b17470d278d76cdac007d2ed5a6fd729974253",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p045.png",
+      "sha256": "2e99dda4833574200aa9f5bd7a9e88195c7a63b1a98aad792beabb58262a05a9",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p050.png",
+      "sha256": "dd19f3fbdddaa29d85fed659d69e2a8b500765bb665cd4ffe534ee657a469a70",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p055.png",
+      "sha256": "93e7d9ab6da4c2ea5a9628a2027dc7f9fdfcbf2683ef70e0ac0447bc017f7ae4",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p060.png",
+      "sha256": "1037b4386f033c120dd9751466e6594c4fd87bebad481e81fd5aadd337d9a96c",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p065.png",
+      "sha256": "39d667c0140ba0d3b1c0353fa812ce845035b34247434353cf97b280c7fd1d0e",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p070.png",
+      "sha256": "59f740eb4e5225d68e54517d7476d59e0641c56207893613f1210bc8e24c17d7",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p075.png",
+      "sha256": "ec90625be69af33f862da5ee8736800a90d355c759899ef342493e0bf4801e51",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p080.png",
+      "sha256": "ea1017fe8c08691956c2c139943fc8b34e9b02d7be94be63a27ca60edac5d4b5",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p085.png",
+      "sha256": "1a90aefd9c65eee312f53e3aee459b27fdb25251eaea3e9a2e45c3e2f75bd8f9",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p090.png",
+      "sha256": "4f475971e316ed0947b9352d790b2c2c4fd2baad2e83f28033f6a738a1293a41",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p095.png",
+      "sha256": "ed9e4d9308408107eb4c75f01ab28ac162fc165fdf2242be39ee18d44f2ba440",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery-p100.png",
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "sha256": "623cb1b628444a8243299b1896f49ab62d62a62df115e80e78201756dd9132b6",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-discovery.webm",
+      "sha256": "ca643157854d2420805d5503769969d37aa9cf109af66d97c4f31525ce16ad9f",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m01-row-relief.png",
+      "sha256": "0d621f400a6e0ef1072b0616a2fd5ae1f1f7bfb1172558651792ba9b3bf49639",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m02-multi-house-sweep.png",
+      "sha256": "9094466a1ecfcd7e25b8dc7f3ae52e38245c92cfd1ef163bf3d334e841193bbb",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m03-materialized-row.png",
+      "sha256": "827d561c19e30268a4492ecdd3f8c24fe1a8fb565053a7d9a77be5af9ffb90e1",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m04-late-sun-and-plot.png",
+      "sha256": "4872d430661aa04f91fae98c47358b875726ae8e1692844abc7cd16d36263366",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m05-plot-04-approach.png",
+      "sha256": "c8b70981f2e8b4d9bb03ed060680377603d5d13876190f14b52c1deed9f9e181",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m06-plot-04-door-open.png",
+      "sha256": "4782d3f0cb00361445de49cb8f2509138c6110b631e1b0977bb35d1802afb101",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m07-front-parlour.png",
+      "sha256": "5ddeba25b00e6d48bd8c4cb56e2b1b1ae9c85e8ee71a5c9b97b358e843d0a389",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m08-dining-atrium.png",
+      "sha256": "8601679068684f4ec8782a13e9783f5a68e89628bb23ae17e80bb5348982f533",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m09-rear-doors-open.png",
+      "sha256": "11da6d91d57596e2bba75e4358bcaa278117bb25c6b3d1ef4dcef05a8bc46486",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m10-terminal-atrium.png",
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.telemetry.ndjson",
+      "sha256": "d1f50f0edb0d63e928c27fa235f450c9a489aa84bfd4785300373cf8433d0fb8",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.webm",
+      "sha256": "f0dc75c7ead4fa47e7c7da7cd102d8965b4fbd4884e0d82905babeddf5106cb0",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-restored-start.png",
+      "sha256": "6b6da93f282e39e208bdfc4fca01c486a6ff8e220b1c50018ee30c686fefcf44",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "sha256": "626b28017f5c752f149da0c7ef161c90daea34a0ebbe011dd6af51083f2a223d",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-reverse-discovery.webm",
+      "sha256": "be38ea0d1612d0500cec80a174fafb3d23d73194168372b7c11ce8fc10de9b8a",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-end.png",
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-start.png",
+      "sha256": "c3d6139d01b8c7cbe620d7d9fb717bd2e2b10a633cdac466fc0c7e661a47ea75",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-start.png",
+      "sha256": "dc827c0a4adfd7482a46dd74794b7bb9ebab74adeb7133e2fe5b8675a3608b87",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\reverse-state.json",
+      "sha256": "2bd2d2f3e1850ff9773e659151cd8e908bff4e36f2e2fcdc57187980de7e9e46",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\semantic-capture.json",
+      "sha256": "55d75cb280b54c05a13adead8c69282530383b65103b5b7b12ebaeaa40ed1321",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\start-state.json",
+      "sha256": "fdb51a84dcc35cc59593f3b543d4598ae9d8c31360806762bce1f90ab01f8ccb",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\calibration.json",
+      "sha256": "61115771dfda532ed8cbb5fb7a54c6b0603be25c891361914da133f7b98df38f",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\discovery-assets.json",
+      "sha256": "1f743252989a38f4b89364612fcf1cb83a3d9ce1217929c653da396e614ae927",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\discovery-summary.json",
+      "sha256": "d3debe6dbd8944bba90669338c75b728e32d8fde6a42a3c4943cbed3785083e0",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\end-state.json",
+      "sha256": "a510ad2adbc6c47eccfe1bfa841db06b5939d3081555a9d38991d09552750dc7",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-end.png",
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p000.png",
+      "sha256": "68d22e6b602928f559574ef8452b79fe5a1591f70bc253096bb7c229024346e3",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p005.png",
+      "sha256": "5d5f545ff74535eb915156ffc5202b007569a5e365087e91485aa580f4abba45",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p010.png",
+      "sha256": "86844d186e839287ef2c2c1b781aaaeacbc444bfa4e3e07741e9314cc393975f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p015.png",
+      "sha256": "24cea0ecd1af7ec89df8c741f2e6b44fb1740293cde180d072f6297a86e42f85",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p020.png",
+      "sha256": "42a4ab9c6e329760c73955e812b89d2d6fc9a2ad06149473b39a9a737ea02f62",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p025.png",
+      "sha256": "f8575bf7bba39fd066578d6e12ba65580fdaf6e6dc88af7ed743b9d5b5c60a60",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p030.png",
+      "sha256": "513ecd3a18a0d0d82e9b59b0859e495b4ce33b3a92912aeebc73da7f342c2e25",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p035.png",
+      "sha256": "65622d34b9b84f605bd2388e3545db0a621bbf7f4e336ce4caac1ae72474f1d6",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p040.png",
+      "sha256": "d5d1170afb800a9e7c24722c986b866a98302db9ef4e49f479cde1484f03ae0c",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p045.png",
+      "sha256": "9d780f1c1dae293c1d0d0ada817d8ba5d9e9757d3ff13e6cb07d26082b3adbdc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p050.png",
+      "sha256": "add2d093f3e737a2db8aad141ccd8d947e467c53ca27508e254990ca86f1b21f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p055.png",
+      "sha256": "08e5f93bde405c7b8dbc1323b463f539463ff19372f1ca28618e615766ab26ac",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p060.png",
+      "sha256": "271db06502bf100b0650f38efd3b745d5fe11b44117bb8369e6f42c655d3907a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p065.png",
+      "sha256": "0614b52b530d42cd82d02d60558f150056f32d4a81ebe3bdddd9f87f96f8c680",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p070.png",
+      "sha256": "5407c40f79138a337e15c74d00a98054cb792f8b58d46b4b8353a2bf93004a6b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p075.png",
+      "sha256": "4d63bbb506318901b3e50dc014389f4ef02e6f0eca0ff378239a8bbc4b491a93",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p080.png",
+      "sha256": "b0bfd2b54ef6dc8eb65e57c37e8ac9d52cdcf4a925501f63d006fa8e511cb955",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p085.png",
+      "sha256": "1c2d1ec84103d1791194e55fa177bc8cd6290cd42ab8f870e2ab17bf1de48b48",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p090.png",
+      "sha256": "3a5882cf38c90700d36ba0851eefb4da438e7fe92edb5cef35f5b699ded9a188",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p095.png",
+      "sha256": "e194c9f890cf0b2465a5757b4a79a39b45da9e361551da579ad88839425b3e8b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery-p100.png",
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "sha256": "c8f012fd40bf4e4f2668c1e614fcf74c0c4c7ee50e8f37273385651c9ca3650d",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-discovery.webm",
+      "sha256": "3b7d46bfe7c9628db357586337ce3ecd33508cbc4afa3feebb7606eabfb189d8",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m01-row-relief.png",
+      "sha256": "9c6c22a6c38808101ff813bce484084b83ab4c3101b3acdb1ff4a668ef19990f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m02-multi-house-sweep.png",
+      "sha256": "7129f4d6240d805cbe98a417eb4113a8a3330fbc1e78c45fd61bb30d4d953716",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m03-materialized-row.png",
+      "sha256": "834fa70aff38db567e599ec2bbe575cde09994457166875083e63d8b6305e429",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m04-late-sun-and-plot.png",
+      "sha256": "3ef6762d73a1b9b3bbe4ed860f7b2d3967598ed5a5b69351bc8fc875c26fd0fc",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m05-plot-04-approach.png",
+      "sha256": "a09a24171b7a090bd3a0427891c223ab71f73bcadb0168986089a7a74d96766c",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m06-plot-04-door-open.png",
+      "sha256": "4c03dcc6267e3af824d981cb476803402afb6cf803adfc2922634439003b3218",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m07-front-parlour.png",
+      "sha256": "c443d0f009d4056e6aa55f21e25e6162c27e0ed7691bbeaa0c1ac779bc0ffe68",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m08-dining-atrium.png",
+      "sha256": "798390424a671c07ab37dff017500bffde53c8dff1468e3b96ff5291d40962a8",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m09-rear-doors-open.png",
+      "sha256": "1e8a95c7f5df71020a018a411482c64bca451adfa500245236e3c95fdbb89ddb",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-m10-terminal-atrium.png",
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-semantic.telemetry.ndjson",
+      "sha256": "cf487e035bc636e73a4171f606d1fa471b0cb658c5e521f9c58cafe37d0d369c",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-forward-semantic.webm",
+      "sha256": "1c92274b37741aaace533408eb8abf85b8b18b7a537e60bc4c3b02de8e89b57e",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-restored-start.png",
+      "sha256": "edca29faaa1d2714bf699350da6dcc17731fc2fde1cf3f2e67187d5c2cb775d5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "sha256": "4c0d3041ab3429edc9ce6ba3c0a1cfb077ef1b56200f7aab422a36ef8cc57620",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-reverse-discovery.webm",
+      "sha256": "2ab77db5badb36fc68b47966c14f21fb4e5220423c078c18d27c9dd079790eca",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-semantic-end.png",
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-semantic-start.png",
+      "sha256": "2c18508928d8b62f29a1ab3bdcf7b63e47b1985c175cd0990ac40f4b6fdab23d",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\landscape-start.png",
+      "sha256": "8b5bfcaac7b07c507c55b3b2341e43cd632d140f975f7b98291e4de8fa7d0994",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\reverse-state.json",
+      "sha256": "025d3aba75befe4c5ccea04682ea778d14aeb0d952781baac39d0fdc59ba090f",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\semantic-capture.json",
+      "sha256": "adf77131d0bcb76ccf9cd1a00a73b7a3152a22be2eb6b2c3ece16bfb91091f58",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\landscape\\start-state.json",
+      "sha256": "0571e324c7c80013cde72c5028760d484dbf2b1b1a3a18d101f4befdd53427d5",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-start.png",
+      "sha256": "0ec4bbe18a17b8ef4530fa7624df07c312c781e4016885fa31f781f44b74195f",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-end.png",
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-restored-start.png",
+      "sha256": "36e15bd1ccb805b5e051f4f10f32694839d8d85bfc147edac03d65409ceb2433",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-forward-m02-multi-house-sweep.png",
+      "sha256": "1cb0e2046bd50dc33bd697fdf61ca8791f86a4dbfb18cee783f96b15222fd570",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-forward-m06-plot-04-door-open.png",
+      "sha256": "35c156358d6343ce9ed2c2ae94faf568a6b355dd67130fbb8b823ba27f8bf289",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/desktop/desktop-forward-m09-rear-doors-open.png",
+      "sha256": "9dc76ed62382adcdc7d63685248ff9069c092fcbbb140173ee9cd9de017e2b82",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-start.png",
+      "sha256": "dc827c0a4adfd7482a46dd74794b7bb9ebab74adeb7133e2fe5b8675a3608b87",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-end.png",
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-restored-start.png",
+      "sha256": "6b6da93f282e39e208bdfc4fca01c486a6ff8e220b1c50018ee30c686fefcf44",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-forward-m02-multi-house-sweep.png",
+      "sha256": "9094466a1ecfcd7e25b8dc7f3ae52e38245c92cfd1ef163bf3d334e841193bbb",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-forward-m06-plot-04-door-open.png",
+      "sha256": "4782d3f0cb00361445de49cb8f2509138c6110b631e1b0977bb35d1802afb101",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/portrait/portrait-forward-m09-rear-doors-open.png",
+      "sha256": "11da6d91d57596e2bba75e4358bcaa278117bb25c6b3d1ef4dcef05a8bc46486",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-start.png",
+      "sha256": "8b5bfcaac7b07c507c55b3b2341e43cd632d140f975f7b98291e4de8fa7d0994",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-end.png",
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-restored-start.png",
+      "sha256": "edca29faaa1d2714bf699350da6dcc17731fc2fde1cf3f2e67187d5c2cb775d5",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-forward-m02-multi-house-sweep.png",
+      "sha256": "7129f4d6240d805cbe98a417eb4113a8a3330fbc1e78c45fd61bb30d4d953716",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-forward-m06-plot-04-door-open.png",
+      "sha256": "4c03dcc6267e3af824d981cb476803402afb6cf803adfc2922634439003b3218",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/keyframes/landscape/landscape-forward-m09-rear-doors-open.png",
+      "sha256": "1e8a95c7f5df71020a018a411482c64bca451adfa500245236e3c95fdbb89ddb",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    }
+  ],
+  "integrity": {
+    "assetsVerified": true,
+    "productionDiffZero": true
+  },
+  "completion": {
+    "gates": {
+      "T01": "PASS",
+      "T02": "PASS",
+      "T03": "PASS",
+      "T04": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "T07": "PASS",
+      "T08": "PASS",
+      "T09": "PASS",
+      "T10": "PASS",
+      "T11": "PASS",
+      "T12": "PASS",
+      "T13": "PASS",
+      "T14": "PASS",
+      "T15": "PASS",
+      "T16": "PASS",
+      "T17": "PASS",
+      "T18": "PASS",
+      "T19": "PASS",
+      "T20": "PASS",
+      "T21": "PASS"
+    },
+    "validatorResult": "PASS",
+    "validatedAt": "2026-11-02T19:51:50.659Z"
+  }
+}

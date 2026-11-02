@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:44:11.759Z",
+  "updatedAt": "2026-11-02T19:51:50.659Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -1219,10 +1219,10 @@
       }
     },
     "07-b-the-row": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1247,13 +1247,58 @@
           "startedAt": "2026-11-02T19:43:11.082Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T19:44:11.759Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:46:34.988Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:47:19.192Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:47:29.132Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:48:05.257Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T19:48:25.889Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:49:02.351Z"
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Passive reverse does not prove internal donor GPU/shadow-map resource identity.",
+          "attempts": [
+            "three A0/A1 screenshots and NDJSON",
+            "continuous reverse video",
+            "pinned frame/engine source"
+          ],
+          "evidenceNeeded": "Narrow read-only resource identity probe if internal identity later matters."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Current Rubik data does not establish whether six independently marketable plots belong in one authoritative presentation service.",
+          "attempts": [
+            "frozen Building/project/library inspection",
+            "donor six-plot authored data",
+            "Cut/Global crosswalk"
+          ],
+          "evidenceNeeded": "Human product/data authority decision after all 14 references; no implementation in this audit."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T19:44:11.759Z"
+        "updatedAt": "2026-11-02T19:51:50.659Z"
       }
     },
     "07-c-the-face": {

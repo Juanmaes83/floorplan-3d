@@ -1,9 +1,9 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.partial-evidence-index.v1",
   "take": "07-a-one-door",
-  "status": "PARTIAL / IN_PROGRESS",
-  "lastSuccessfulStage": "SEMANTIC_LANDSCAPE_COMPLETE",
-  "inventoryContentSha256": "001f0da68aaf66d7f6302edee83893d1358af07ed02d8feda7d20439972daf6c",
+  "status": "VALIDATED_NONVIDEO_MIRROR",
+  "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+  "inventoryContentSha256": "6186feb365481a48538bcf473878449982e7196fcdac8afb901aaa214d5679ea",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "rawFileCount": 150,
   "rawBytes": 127607016,

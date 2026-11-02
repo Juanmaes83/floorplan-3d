@@ -26,7 +26,7 @@ for(const f of files){
 }
 const index={
   schemaVersion:'rubik-donor-runtime-audit.partial-evidence-index.v1',
-  take:id,status:'PARTIAL / IN_PROGRESS',
+  take:id,status:runState.takes[id].validationStatus==='COMPLETE'?'VALIDATED_NONVIDEO_MIRROR':'PARTIAL / IN_PROGRESS',
   lastSuccessfulStage:runState.takes[id].lastSuccessfulStage,
   inventoryContentSha256:inventory.packageContentSha256,
   rawRoot:inventory.rawRoot,rawFileCount:files.length,rawBytes:files.reduce((a,f)=>a+f.bytes,0),

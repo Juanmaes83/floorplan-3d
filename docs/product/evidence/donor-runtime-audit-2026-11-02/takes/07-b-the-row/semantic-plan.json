@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "VALIDATED",
+  "basis": "Three original clean-context Discovery A→B→A videos and 5% samples. Desktop p000/p015/p025/p035/p050/p070/p090/p100, portrait p000/p025/p050/p100 and landscape p000/p020/p035/p050/p075/p100 were visually inspected. Targets sample observed state changes; exact transition bounds require continuous video/telemetry reconciliation. Three semantic passes and milestone/source/Cut/Rubik reconciliation passed the individual take validator.",
+  "milestones": [
+    {
+      "label": "M01",
+      "slug": "row-relief",
+      "targetProgress": 0.13,
+      "observedChange": "The flat six-house ink elevation opens to an oblique row view; plot 04 retains its orange outline among numbered neighbors."
+    },
+    {
+      "label": "M02",
+      "slug": "multi-house-sweep",
+      "targetProgress": 0.25,
+      "observedChange": "A luminous spatial front moves across successive townhouses; ink/hatch and material/brick coexist on one row."
+    },
+    {
+      "label": "M03",
+      "slug": "materialized-row",
+      "targetProgress": 0.37,
+      "observedChange": "The row is materialized with the same alternating roof rooms, doors and windows, while plot 04 stays visually identified."
+    },
+    {
+      "label": "M04",
+      "slug": "late-sun-and-plot",
+      "targetProgress": 0.47,
+      "observedChange": "Sun/shadows shift across the finished row and the camera isolates the outlined plot 04 for a show-house visit."
+    },
+    {
+      "label": "M05",
+      "slug": "plot-04-approach",
+      "targetProgress": 0.55,
+      "observedChange": "The camera approaches plot 04's street door, steps and front window, retaining its orange architectural outline."
+    },
+    {
+      "label": "M06",
+      "slug": "plot-04-door-open",
+      "targetProgress": 0.65,
+      "observedChange": "The oak door of the same plot 04 opens inward and the route passes its threshold."
+    },
+    {
+      "label": "M07",
+      "slug": "front-parlour",
+      "targetProgress": 0.75,
+      "observedChange": "Inside plot 04, the route reveals oak floor, hearth, library joinery, stair and rearward view within one interior."
+    },
+    {
+      "label": "M08",
+      "slug": "dining-atrium",
+      "targetProgress": 0.86,
+      "observedChange": "The camera moves to the double-height kitchen/dining atrium, with island, table, glazed garden wall and tree beyond."
+    },
+    {
+      "label": "M09",
+      "slug": "rear-doors-open",
+      "targetProgress": 0.94,
+      "observedChange": "Rear glazed doors open toward the walled courtyard while the camera remains within the atrium."
+    },
+    {
+      "label": "M10",
+      "slug": "terminal-atrium",
+      "targetProgress": 0.99,
+      "observedChange": "The settled final view remains inside the atrium looking through open doors toward the courtyard; the donor plot reservation CTA is visible."
+    }
+  ],
+  "reverseSemanticStates": "Review continuous natural B→A for rear/front door closure, sun/shadow reset, inverse row sweep, plot 04 highlight and numbered status recovery. Compare A0/A1 in each viewport. Landscape initial plot cards are clipped at 844×390; classify against donor source/layout, not Rubik."
+}

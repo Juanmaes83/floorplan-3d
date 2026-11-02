@@ -1,0 +1,248 @@
+{
+  "id": "07-b-the-row",
+  "viewport": "portrait",
+  "run": "original",
+  "fps": 10,
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 5570,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+    "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nROW · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:36.775Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m01-row-relief.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 778,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nROW · 13° LENS | ALT 35.3° · AZ 135° | 13.2° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:40.705Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m02-multi-house-sweep.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 1439,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nSWEEP // S:1.1M | ALT 35.3° · AZ 135° | 14.6° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:43.726Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m03-materialized-row.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 2098,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nSWEEP // S:27.7M | ALT 35.3° · AZ 135° | 16.0° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:46.709Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m04-late-sun-and-plot.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 2639,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nROW · Z:-34.3M | ALT 21.9° · AZ 150° | 27.3° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:49.309Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m05-plot-04-approach.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 3118,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nPLOT 04 · Z:-6.8M | ALT 20.6° · AZ 152° | 40.8° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:51.722Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m06-plot-04-door-open.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 3658,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nPLOT 04 · Z:-0.5M | ALT 20.6° · AZ 152° | 54.4° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:54.191Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m07-front-parlour.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 4259,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nPLOT 04 · Z:+1.9M | ALT 20.6° · AZ 152° | 56.2° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:56.973Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m08-dining-atrium.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 4859,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nPARLOUR · Z:+3.0M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:47:59.874Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m09-rear-doors-open.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 5278,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.6M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:48:02.120Z"
+    },
+    {
+      "label": "M10",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m10-terminal-atrium.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 5568,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:48:03.809Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 5570,
+        "scrollY": 5570,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/b-the-row/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nATRIUM · Z:+7.8M | ALT 20.6° · AZ 152° | 58.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T19:48:05.001Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.webm",
+  "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.telemetry.ndjson",
+  "telemetrySamples": 279,
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-start.png",
+      "bytes": 122709,
+      "sha256": "c3d6139d01b8c7cbe620d7d9fb717bd2e2b10a633cdac466fc0c7e661a47ea75"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m01-row-relief.png",
+      "bytes": 161240,
+      "sha256": "0d621f400a6e0ef1072b0616a2fd5ae1f1f7bfb1172558651792ba9b3bf49639"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m02-multi-house-sweep.png",
+      "bytes": 174174,
+      "sha256": "9094466a1ecfcd7e25b8dc7f3ae52e38245c92cfd1ef163bf3d334e841193bbb"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m03-materialized-row.png",
+      "bytes": 204133,
+      "sha256": "827d561c19e30268a4492ecdd3f8c24fe1a8fb565053a7d9a77be5af9ffb90e1"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m04-late-sun-and-plot.png",
+      "bytes": 238994,
+      "sha256": "4872d430661aa04f91fae98c47358b875726ae8e1692844abc7cd16d36263366"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m05-plot-04-approach.png",
+      "bytes": 256464,
+      "sha256": "c8b70981f2e8b4d9bb03ed060680377603d5d13876190f14b52c1deed9f9e181"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m06-plot-04-door-open.png",
+      "bytes": 268957,
+      "sha256": "4782d3f0cb00361445de49cb8f2509138c6110b631e1b0977bb35d1802afb101"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m07-front-parlour.png",
+      "bytes": 350322,
+      "sha256": "5ddeba25b00e6d48bd8c4cb56e2b1b1ae9c85e8ee71a5c9b97b358e843d0a389"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m08-dining-atrium.png",
+      "bytes": 351082,
+      "sha256": "8601679068684f4ec8782a13e9783f5a68e89628bb23ae17e80bb5348982f533"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m09-rear-doors-open.png",
+      "bytes": 236369,
+      "sha256": "11da6d91d57596e2bba75e4358bcaa278117bb25c6b3d1ef4dcef05a8bc46486"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-m10-terminal-atrium.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-semantic-end.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.webm",
+      "bytes": 4110727,
+      "sha256": "f0dc75c7ead4fa47e7c7da7cd102d8965b4fbd4884e0d82905babeddf5106cb0"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-b-the-row\\portrait\\portrait-forward-semantic.telemetry.ndjson",
+      "bytes": 205633,
+      "sha256": "d1f50f0edb0d63e928c27fa235f450c9a489aa84bfd4785300373cf8433d0fb8"
+    }
+  ],
+  "inputCount": 93,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\07-b-the-row\\semantic-plan.json"
+}

@@ -1,19 +1,24 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.partial-evidence-index.v1",
   "take": "07-b-the-row",
-  "status": "PARTIAL / IN_PROGRESS",
-  "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
-  "inventoryContentSha256": "7f12c13b0919fd73342846f58bda9aa340a3fd4d396eaf0e86844bb252621c76",
+  "status": "VALIDATED_NONVIDEO_MIRROR",
+  "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+  "inventoryContentSha256": "6186feb365481a48538bcf473878449982e7196fcdac8afb901aaa214d5679ea",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "rawFileCount": 102,
-  "rawBytes": 81658518,
-  "copiedNonVideoFiles": 96,
-  "copiedNonVideoBytes": 38551893,
+  "rawFileCount": 147,
+  "rawBytes": 131405252,
+  "copiedNonVideoFiles": 138,
+  "copiedNonVideoBytes": 58471171,
   "videosRawOnly": [
     {
       "path": "07-b-the-row/desktop/desktop-forward-discovery.webm",
       "bytes": 16215969,
       "sha256": "2edc2fdfd8c5ea3e14cc930d06dc2b15951f137f9138ac98dbe32d41a0840975"
+    },
+    {
+      "path": "07-b-the-row/desktop/desktop-forward-semantic.webm",
+      "bytes": 19942762,
+      "sha256": "53426308bc833dcd243fc82a03867c8085ff5de01be00c8abd56948477e0fec7"
     },
     {
       "path": "07-b-the-row/desktop/desktop-reverse-discovery.webm",
@@ -26,6 +31,11 @@
       "sha256": "3b7d46bfe7c9628db357586337ce3ecd33508cbc4afa3feebb7606eabfb189d8"
     },
     {
+      "path": "07-b-the-row/landscape/landscape-forward-semantic.webm",
+      "bytes": 5773967,
+      "sha256": "1c92274b37741aaace533408eb8abf85b8b18b7a537e60bc4c3b02de8e89b57e"
+    },
+    {
       "path": "07-b-the-row/landscape/landscape-reverse-discovery.webm",
       "bytes": 3829730,
       "sha256": "2ab77db5badb36fc68b47966c14f21fb4e5220423c078c18d27c9dd079790eca"
@@ -34,6 +44,11 @@
       "path": "07-b-the-row/portrait/portrait-forward-discovery.webm",
       "bytes": 3368873,
       "sha256": "ca643157854d2420805d5503769969d37aa9cf109af66d97c4f31525ce16ad9f"
+    },
+    {
+      "path": "07-b-the-row/portrait/portrait-forward-semantic.webm",
+      "bytes": 4110727,
+      "sha256": "f0dc75c7ead4fa47e7c7da7cd102d8965b4fbd4884e0d82905babeddf5106cb0"
     },
     {
       "path": "07-b-the-row/portrait/portrait-reverse-discovery.webm",
@@ -187,6 +202,72 @@
       "sha256": "f05e409c1c2b18fa952f35a17c5af965a1eb2c87fd6932114c6296da1e3492f7"
     },
     {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m01-row-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m01-row-relief.png",
+      "bytes": 850465,
+      "sha256": "68cfdd57a3ceb75a0e2d394a38e5147ea35cb955fd412941ca3b39302d4afffc"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m02-multi-house-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m02-multi-house-sweep.png",
+      "bytes": 970283,
+      "sha256": "1cb0e2046bd50dc33bd697fdf61ca8791f86a4dbfb18cee783f96b15222fd570"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m03-materialized-row.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m03-materialized-row.png",
+      "bytes": 1082269,
+      "sha256": "4c35b5cc3b73d6e269af9e32e7f3d7a1ff9fc01a0d7655994b27421676b37fef"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m04-late-sun-and-plot.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m04-late-sun-and-plot.png",
+      "bytes": 1214579,
+      "sha256": "2912d82307b8ae22566050da0af8cacd587f10c4abf73fe667069889aed3d90d"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m05-plot-04-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m05-plot-04-approach.png",
+      "bytes": 1219383,
+      "sha256": "7c5eb7e554a873a9e6ef7c4bc99f6cea40136ca929f93ff1775acde078185604"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m06-plot-04-door-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m06-plot-04-door-open.png",
+      "bytes": 1396842,
+      "sha256": "35c156358d6343ce9ed2c2ae94faf568a6b355dd67130fbb8b823ba27f8bf289"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m07-front-parlour.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m07-front-parlour.png",
+      "bytes": 1306344,
+      "sha256": "6997179ca273a4016a2ec701d7820365a5301de332643e84193b0f089760080e"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m08-dining-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m08-dining-atrium.png",
+      "bytes": 1188812,
+      "sha256": "28acea3e37c16d6aeeb61cf9dd53e233bd867dacfd872dcc59623418f5828796"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m09-rear-doors-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m09-rear-doors-open.png",
+      "bytes": 1121315,
+      "sha256": "9dc76ed62382adcdc7d63685248ff9069c092fcbbb140173ee9cd9de017e2b82"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-m10-terminal-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-m10-terminal-atrium.png",
+      "bytes": 1106072,
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-forward-semantic.telemetry.ndjson",
+      "bytes": 264090,
+      "sha256": "500f26329e3dea4b4c664b261e64ae717a3699308fef205cf162b9c28db7da85"
+    },
+    {
       "rawPath": "07-b-the-row/desktop/desktop-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-restored-start.png",
       "bytes": 561315,
@@ -197,6 +278,18 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-reverse-discovery.telemetry.ndjson",
       "bytes": 203899,
       "sha256": "941957f90c5758e2483785e1cc485d85dde331b8074bb130acade7c94840d36f"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-semantic-end.png",
+      "bytes": 1106072,
+      "sha256": "912d1e3d5070aa358445cb9401160afc54427a95129a9f40b7f2c97b6fb4dc81"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/desktop-semantic-start.png",
+      "bytes": 561084,
+      "sha256": "d99a9a203fd02c3b21a33142ea8372cb9efe823ade9525c2d5b6e00a5c19605e"
     },
     {
       "rawPath": "07-b-the-row/desktop/desktop-start.png",
@@ -227,6 +320,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/reverse-state.json",
       "bytes": 1075,
       "sha256": "a1694c8aed4685d8a4f8f98489ec0cec9aca5dd537b6321f7ee87a5a9b761917"
+    },
+    {
+      "rawPath": "07-b-the-row/desktop/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/desktop/semantic-capture.json",
+      "bytes": 11068,
+      "sha256": "f66b0707390fb61ca5b7408cb8b6c48638e755521a3f2d4b95534ea6c2eae26b"
     },
     {
       "rawPath": "07-b-the-row/desktop/start-state.json",
@@ -397,6 +496,72 @@
       "sha256": "c8f012fd40bf4e4f2668c1e614fcf74c0c4c7ee50e8f37273385651c9ca3650d"
     },
     {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m01-row-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m01-row-relief.png",
+      "bytes": 203044,
+      "sha256": "9c6c22a6c38808101ff813bce484084b83ab4c3101b3acdb1ff4a668ef19990f"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m02-multi-house-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m02-multi-house-sweep.png",
+      "bytes": 243163,
+      "sha256": "7129f4d6240d805cbe98a417eb4113a8a3330fbc1e78c45fd61bb30d4d953716"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m03-materialized-row.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m03-materialized-row.png",
+      "bytes": 283233,
+      "sha256": "834fa70aff38db567e599ec2bbe575cde09994457166875083e63d8b6305e429"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m04-late-sun-and-plot.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m04-late-sun-and-plot.png",
+      "bytes": 265438,
+      "sha256": "3ef6762d73a1b9b3bbe4ed860f7b2d3967598ed5a5b69351bc8fc875c26fd0fc"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m05-plot-04-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m05-plot-04-approach.png",
+      "bytes": 295130,
+      "sha256": "a09a24171b7a090bd3a0427891c223ab71f73bcadb0168986089a7a74d96766c"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m06-plot-04-door-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m06-plot-04-door-open.png",
+      "bytes": 358581,
+      "sha256": "4c03dcc6267e3af824d981cb476803402afb6cf803adfc2922634439003b3218"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m07-front-parlour.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m07-front-parlour.png",
+      "bytes": 323271,
+      "sha256": "c443d0f009d4056e6aa55f21e25e6162c27e0ed7691bbeaa0c1ac779bc0ffe68"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m08-dining-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m08-dining-atrium.png",
+      "bytes": 328565,
+      "sha256": "798390424a671c07ab37dff017500bffde53c8dff1468e3b96ff5291d40962a8"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m09-rear-doors-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m09-rear-doors-open.png",
+      "bytes": 271822,
+      "sha256": "1e8a95c7f5df71020a018a411482c64bca451adfa500245236e3c95fdbb89ddb"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-m10-terminal-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-m10-terminal-atrium.png",
+      "bytes": 267819,
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-forward-semantic.telemetry.ndjson",
+      "bytes": 207590,
+      "sha256": "cf487e035bc636e73a4171f606d1fa471b0cb658c5e521f9c58cafe37d0d369c"
+    },
+    {
       "rawPath": "07-b-the-row/landscape/landscape-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-restored-start.png",
       "bytes": 147767,
@@ -409,6 +574,18 @@
       "sha256": "4c0d3041ab3429edc9ce6ba3c0a1cfb077ef1b56200f7aab422a36ef8cc57620"
     },
     {
+      "rawPath": "07-b-the-row/landscape/landscape-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-semantic-end.png",
+      "bytes": 267819,
+      "sha256": "ae456e845adcf34a9e78510ba42add4611c44594540c235669a431e1c04ca667"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/landscape-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-semantic-start.png",
+      "bytes": 147651,
+      "sha256": "2c18508928d8b62f29a1ab3bdcf7b63e47b1985c175cd0990ac40f4b6fdab23d"
+    },
+    {
       "rawPath": "07-b-the-row/landscape/landscape-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/landscape-start.png",
       "bytes": 147665,
@@ -419,6 +596,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/reverse-state.json",
       "bytes": 1075,
       "sha256": "025d3aba75befe4c5ccea04682ea778d14aeb0d952781baac39d0fdc59ba090f"
+    },
+    {
+      "rawPath": "07-b-the-row/landscape/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/landscape/semantic-capture.json",
+      "bytes": 11169,
+      "sha256": "adf77131d0bcb76ccf9cd1a00a73b7a3152a22be2eb6b2c3ece16bfb91091f58"
     },
     {
       "rawPath": "07-b-the-row/landscape/start-state.json",
@@ -589,6 +772,72 @@
       "sha256": "623cb1b628444a8243299b1896f49ab62d62a62df115e80e78201756dd9132b6"
     },
     {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m01-row-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m01-row-relief.png",
+      "bytes": 161240,
+      "sha256": "0d621f400a6e0ef1072b0616a2fd5ae1f1f7bfb1172558651792ba9b3bf49639"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m02-multi-house-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m02-multi-house-sweep.png",
+      "bytes": 174174,
+      "sha256": "9094466a1ecfcd7e25b8dc7f3ae52e38245c92cfd1ef163bf3d334e841193bbb"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m03-materialized-row.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m03-materialized-row.png",
+      "bytes": 204133,
+      "sha256": "827d561c19e30268a4492ecdd3f8c24fe1a8fb565053a7d9a77be5af9ffb90e1"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m04-late-sun-and-plot.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m04-late-sun-and-plot.png",
+      "bytes": 238994,
+      "sha256": "4872d430661aa04f91fae98c47358b875726ae8e1692844abc7cd16d36263366"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m05-plot-04-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m05-plot-04-approach.png",
+      "bytes": 256464,
+      "sha256": "c8b70981f2e8b4d9bb03ed060680377603d5d13876190f14b52c1deed9f9e181"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m06-plot-04-door-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m06-plot-04-door-open.png",
+      "bytes": 268957,
+      "sha256": "4782d3f0cb00361445de49cb8f2509138c6110b631e1b0977bb35d1802afb101"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m07-front-parlour.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m07-front-parlour.png",
+      "bytes": 350322,
+      "sha256": "5ddeba25b00e6d48bd8c4cb56e2b1b1ae9c85e8ee71a5c9b97b358e843d0a389"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m08-dining-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m08-dining-atrium.png",
+      "bytes": 351082,
+      "sha256": "8601679068684f4ec8782a13e9783f5a68e89628bb23ae17e80bb5348982f533"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m09-rear-doors-open.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m09-rear-doors-open.png",
+      "bytes": 236369,
+      "sha256": "11da6d91d57596e2bba75e4358bcaa278117bb25c6b3d1ef4dcef05a8bc46486"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-m10-terminal-atrium.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-m10-terminal-atrium.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-forward-semantic.telemetry.ndjson",
+      "bytes": 205633,
+      "sha256": "d1f50f0edb0d63e928c27fa235f450c9a489aa84bfd4785300373cf8433d0fb8"
+    },
+    {
       "rawPath": "07-b-the-row/portrait/portrait-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-restored-start.png",
       "bytes": 122734,
@@ -601,6 +850,18 @@
       "sha256": "626b28017f5c752f149da0c7ef161c90daea34a0ebbe011dd6af51083f2a223d"
     },
     {
+      "rawPath": "07-b-the-row/portrait/portrait-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-semantic-end.png",
+      "bytes": 232557,
+      "sha256": "8cf9541ad03df493111e277fa5f32521ed1e315e7858fcc835357fb81436670d"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/portrait-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-semantic-start.png",
+      "bytes": 122709,
+      "sha256": "c3d6139d01b8c7cbe620d7d9fb717bd2e2b10a633cdac466fc0c7e661a47ea75"
+    },
+    {
       "rawPath": "07-b-the-row/portrait/portrait-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/portrait-start.png",
       "bytes": 122733,
@@ -611,6 +872,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/reverse-state.json",
       "bytes": 871,
       "sha256": "2bd2d2f3e1850ff9773e659151cd8e908bff4e36f2e2fcdc57187980de7e9e46"
+    },
+    {
+      "rawPath": "07-b-the-row/portrait/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-b-the-row/partial-raw/portrait/semantic-capture.json",
+      "bytes": 11114,
+      "sha256": "55d75cb280b54c05a13adead8c69282530383b65103b5b7b12ebaeaa40ed1321"
     },
     {
       "rawPath": "07-b-the-row/portrait/start-state.json",
