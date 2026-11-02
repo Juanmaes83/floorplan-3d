@@ -13,5 +13,26 @@
   "memberPathsAndCRCsVerified": true,
   "originalRawPreserved": true,
   "remoteBinaryBackup": "NOT_UPLOADED",
-  "note": "ZIP is outside Git and does not alter the original RAW folder. Git carries per-file hashes and nonvideo evidence."
+  "note": "ZIP is outside Git and does not alter the original RAW folder. Git carries per-file hashes and nonvideo evidence.",
+  "releaseParts": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02.zip.part001",
+      "name": "donor-runtime-audit-RAW-2026-11-02.zip.part001",
+      "bytes": 1500000000,
+      "sha256": "07b9365ee8dcc29fed256de289da58f6b8ddea381619192dd2b01953cc18e5ac"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02.zip.part002",
+      "name": "donor-runtime-audit-RAW-2026-11-02.zip.part002",
+      "bytes": 1500000000,
+      "sha256": "ea9cd121f71dc7b5ed92a602890dc2dd0eb22a751a7c2b6cc600f71d84ecd3f8"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02.zip.part003",
+      "name": "donor-runtime-audit-RAW-2026-11-02.zip.part003",
+      "bytes": 435687200,
+      "sha256": "19f9b28187d606168ed936e2b519ecdd78176ebf951eac258fe6642cd2b63a19"
+    }
+  ],
+  "releaseReassembly": "Concatenate parts in numeric order as raw bytes; then verify the ZIP SHA256."
 }
