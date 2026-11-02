@@ -1,0 +1,313 @@
+{
+  "id": "06-demo-card-model",
+  "viewport": "portrait",
+  "run": "original",
+  "fps": 10,
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 17724,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+    "visibleHud": ""
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:23.212Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m01-scale-readout.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 871,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:27.282Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m02-card-at-eye-height.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 3216,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:35.011Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m03-luminous-transition-onset.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 4422,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:39.612Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m04-house-materialized.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 5695,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:44.124Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m05-real-exterior.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 7102,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:49.110Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m06-facade-approach.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 8174,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:52.939Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m07-living-interior.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 9045,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:45:56.179Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m08-interior-low-view.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 10251,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:00.665Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m09-desk-context-return.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 11524,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:04.999Z"
+    },
+    {
+      "label": "M10",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m10-study-overlook.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 12395,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:08.312Z"
+    },
+    {
+      "label": "M11",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m11-terrace-night.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 13668,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:12.918Z"
+    },
+    {
+      "label": "M12",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m12-return-sweep.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 15075,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:17.736Z"
+    },
+    {
+      "label": "M13",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m13-card-restored.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 16147,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:21.742Z"
+    },
+    {
+      "label": "M14",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m14-final-message.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 17353,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:25.974Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 17724,
+        "scrollY": 17724,
+        "url": "https://sam1983aing.github.io/flat-to-3d/06-card-model/index.html",
+        "visibleHud": ""
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:46:28.334Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-semantic.webm",
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-semantic-start.png",
+      "bytes": 391560,
+      "sha256": "f6ad7014a23e02d19ba12ff1a44e59bd19c9ae4154386391e9fff6aaad944a59"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m01-scale-readout.png",
+      "bytes": 402339,
+      "sha256": "bcab3c1dc6e14ce129cd9d902e2d9ef91debc208ea621b7bde45f17eda008e5c"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m02-card-at-eye-height.png",
+      "bytes": 349650,
+      "sha256": "071efaa931c7b4d12437c6cb824f892c8db5d1d156d72530d411809c469fdd9b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m03-luminous-transition-onset.png",
+      "bytes": 383954,
+      "sha256": "98a110fac13279a17979cdcfc9d7515f76365c4dfdb5734fdb32d21ef4875c68"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m04-house-materialized.png",
+      "bytes": 418891,
+      "sha256": "255cb48792685f60ba4aeb8670652b779461336bc89cc1932538d7fa7de5c886"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m05-real-exterior.png",
+      "bytes": 405417,
+      "sha256": "c78ed907ed1605a04cc26c0d7f8fed9418307ddf6ba8de5e3dfeb40d0f2e7f0e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m06-facade-approach.png",
+      "bytes": 389682,
+      "sha256": "fb788e1355042e2574d549d11c9c020bf5fa26f103dae1124984f26df130e6ef"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m07-living-interior.png",
+      "bytes": 394954,
+      "sha256": "b4baee9dd0fdaccfa299637158cd7503d75776fa3b8926c031e8f5651f5bb58f"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m08-interior-low-view.png",
+      "bytes": 377752,
+      "sha256": "d4e3718bff9d569cadd9d813260d84305ee3119d4dc240e7d5ad5b4b55612706"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m09-desk-context-return.png",
+      "bytes": 404008,
+      "sha256": "166a3304a341a3606cd51437e0bd5135d4f4db6a3bd5b9136b394086f027e238"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m10-study-overlook.png",
+      "bytes": 388431,
+      "sha256": "86823cbe8b47c29b4c6c533562e1a94a1fec79d43d633e5a72ac03ef980fb5f1"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m11-terrace-night.png",
+      "bytes": 322746,
+      "sha256": "0dc654f8a228358c389cf5a6a8d03bfd792c0f15f90b68cfe4079d403368b5f6"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m12-return-sweep.png",
+      "bytes": 428822,
+      "sha256": "53b5388f4bc2ead140fce8ea9989e7005f096b9263a1f90b4dca04a9d5bc6b60"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m13-card-restored.png",
+      "bytes": 416989,
+      "sha256": "8b802ce0e633e11d55ca5b613831238ea8b38dd26060a3062895b0dfe47219e2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-m14-final-message.png",
+      "bytes": 390187,
+      "sha256": "a6f63fc6d3de9f9416329b9ab24c6675672cf6ae3cc12ae9dd31641a7966f19b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-semantic-end.png",
+      "bytes": 390032,
+      "sha256": "20b87279fe9968acbf07ee80c2d0f731e56b1bf8acd5683e66837cca2bd0f884"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\06-demo-card-model\\portrait\\portrait-forward-semantic.webm",
+      "bytes": 10285539,
+      "sha256": "faf0e48b8d50d6039a1b26d427ef05236aa106170e488b9b2eea692fce81f879"
+    }
+  ],
+  "inputCount": 265,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\06-demo-card-model\\semantic-plan.json"
+}

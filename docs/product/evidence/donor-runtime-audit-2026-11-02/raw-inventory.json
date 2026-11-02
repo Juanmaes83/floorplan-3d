@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T18:40:56.001Z",
-  "fileCount": 2031,
-  "totalBytes": 2702826604,
-  "packageContentSha256": "3a0d7f8ed39ad75b2ffe4fda2b18a76938a8cc053556cea4dedeeeee54cb6137",
+  "generatedAt": "2026-11-02T18:50:17.924Z",
+  "fileCount": 2085,
+  "totalBytes": 2791727521,
+  "packageContentSha256": "1f8e3dcc9f2e3a933053fee1c1e74d2f4d36fc4b6a649408805dc364f49dc17d",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -9759,6 +9759,81 @@
       "sha256": "d64639d8a154bd32dede463a8060e575208296f11226e39d2b14ad06b678c59b"
     },
     {
+      "path": "06-demo-card-model/desktop/desktop-forward-m01-scale-readout.png",
+      "bytes": 1475514,
+      "sha256": "98ca3857c2406b0d5f61a980b119ed8056a1974032413192277183f9e3f7a107"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m02-card-at-eye-height.png",
+      "bytes": 1388459,
+      "sha256": "8ef0cc7316809a6bbb17f7b26de48d12dd1a2b723306be45afed4f2951117db1"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m03-luminous-transition-onset.png",
+      "bytes": 1488691,
+      "sha256": "3ce766df7f79de5af20c4f93dc826c8e8bbe1f0d1bd8dc65890c06c49734e737"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m04-house-materialized.png",
+      "bytes": 1612688,
+      "sha256": "ed7f6ce74051e1e39bf1f7058a0e2ef7a8f002f555c8ae44d3bf736dcbbf1eb9"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m05-real-exterior.png",
+      "bytes": 1633346,
+      "sha256": "fd033f4ebb6f335b0d835e679e4d04f1e099f6a1f5c0ff98bb883b12f62e1a34"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m06-facade-approach.png",
+      "bytes": 1670392,
+      "sha256": "91eb558324a627b0b3ff11d22e54910ab27c276ef6d4b027e190d2c89217ee08"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m07-living-interior.png",
+      "bytes": 1644442,
+      "sha256": "e51ebc80d1c87d5965355a0cf08097094dd800eb106807b87f0ed338ce8d448f"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m08-interior-low-view.png",
+      "bytes": 1642161,
+      "sha256": "0b0a2ebc25d9a469b17160f74c6c533a3fdb2d4b73acb2cb8e2de9051958187c"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m09-desk-context-return.png",
+      "bytes": 1660637,
+      "sha256": "73e1baf442775c88c44a7c685d5a2d5a50e743c0d0288ea840b2d32bc89d3012"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m10-study-overlook.png",
+      "bytes": 1565946,
+      "sha256": "c2d5f5cf170f16c336201d3cec17225b073ad7b795fac7e2038b8d83d85c0595"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m11-terrace-night.png",
+      "bytes": 1354170,
+      "sha256": "9b6cf33b31aebeceb117c2629950472632350607ca3cb909cc899488d960c0b7"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m12-return-sweep.png",
+      "bytes": 1670430,
+      "sha256": "bac6d06b57701b11e3f14e4778f7af61acc5729000ad6845b7fd87e34a4d98ae"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m13-card-restored.png",
+      "bytes": 1532964,
+      "sha256": "32bbc0c001ff3caa0efd08c39c6245da9fb139a3960d57020afc18aeea6d85a2"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-m14-final-message.png",
+      "bytes": 1474465,
+      "sha256": "26bbf7dbd2c7bb2d178299f6bb2cd447688cf295f4752382e7da48826de295ac"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-semantic.webm",
+      "bytes": 30197754,
+      "sha256": "a0d8e1e12f203a93b45501b4aa4dccee0160abe6a304af2de4f70a9836cef94d"
+    },
+    {
       "path": "06-demo-card-model/desktop/desktop-restored-start.png",
       "bytes": 1489104,
       "sha256": "07639743bd6310d0a6692b1cb030b770395821c7a04959a89bf740b34582f817"
@@ -9772,6 +9847,16 @@
       "path": "06-demo-card-model/desktop/desktop-reverse-discovery.webm",
       "bytes": 19802112,
       "sha256": "5311329ca772f8e3dbd07e206fb74c3bc6d853c921de23055d08374106924d3f"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-semantic-end.png",
+      "bytes": 1473735,
+      "sha256": "9db8574df856e1334b0fbe25b4b70da803a15a6863655094ce4b11ed3336f25c"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-semantic-start.png",
+      "bytes": 1437318,
+      "sha256": "53ee39c23e4496524b440bf841b8af058ef68713f86d0b8bf3a334f3247251fd"
     },
     {
       "path": "06-demo-card-model/desktop/desktop-start.png",
@@ -9797,6 +9882,11 @@
       "path": "06-demo-card-model/desktop/reverse-state.json",
       "bytes": 1716,
       "sha256": "d3b416094e525c0a68e06420475abb2260d4ffc479320610c975e233b10a8b09"
+    },
+    {
+      "path": "06-demo-card-model/desktop/semantic-capture.json",
+      "bytes": 12600,
+      "sha256": "cca2a2b493963d1a90d2b21f7b44916757d180644a7772e2f76cfa72659083d7"
     },
     {
       "path": "06-demo-card-model/desktop/start-state.json",
@@ -9944,6 +10034,81 @@
       "sha256": "f185b6ab3199664757fffe341d392aff5447ce0bd3f8b9738d1c95d17c65202e"
     },
     {
+      "path": "06-demo-card-model/landscape/landscape-forward-m01-scale-readout.png",
+      "bytes": 383940,
+      "sha256": "d9196fe9e9e2397d2a946052f43e57dd5501632de7d09fbe25a4f87b9a37e6f7"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m02-card-at-eye-height.png",
+      "bytes": 364963,
+      "sha256": "28e9898229398f33427bfddad9f09f48df9fbf2f4073ccc9d53ca70a9f5df419"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m03-luminous-transition-onset.png",
+      "bytes": 409459,
+      "sha256": "f90f5f6f255a6ba60c1ebdb9f7af46919df696e65fd0b61b1ec2749df7d1c3c3"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m04-house-materialized.png",
+      "bytes": 439810,
+      "sha256": "e60be867d1ebf593476752064ef50ad3590c3bfb4094b567e00c1d0c48644965"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m05-real-exterior.png",
+      "bytes": 444868,
+      "sha256": "9eda16ec2ca2371372806d194872ff7b92464ef1c0e77738050a3da8c34efbfb"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m06-facade-approach.png",
+      "bytes": 455356,
+      "sha256": "e27dfda2a63f8277d5b910bd6421bae24af6cb6625bfb0a80670448511acd93b"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m07-living-interior.png",
+      "bytes": 438846,
+      "sha256": "4978ba870a13f04aac74bbec7ca8fcc865e1c4471ce582a18d5a0ccd4f537c12"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m08-interior-low-view.png",
+      "bytes": 420618,
+      "sha256": "b01cd723d4df5fd8faacb9a9cb17466bf753df8ddca56b3b1582ac739eb4ef3c"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m09-desk-context-return.png",
+      "bytes": 445919,
+      "sha256": "c523b375ca3ce5abe2e1d4214f2b4716d76a16baa674cfb6c1473b77d16774ab"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m10-study-overlook.png",
+      "bytes": 415097,
+      "sha256": "4890a96450e30d5ec6ae2e244d4c65ab12cef3dc5bceb3c808556c04e11d5a30"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m11-terrace-night.png",
+      "bytes": 374653,
+      "sha256": "0c6c2747df58741a699d595b053e0c1294e8ab8eb5ad3146af72c4a749fafaf5"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m12-return-sweep.png",
+      "bytes": 443122,
+      "sha256": "e225a159d1a9bcac4f0838d6d61406cd3590aba2aec104bd00fbc92dedd06fd0"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m13-card-restored.png",
+      "bytes": 402646,
+      "sha256": "433b2d9d84963a6d062f75cd23744b879edd618fd4cedca43520e7f645031a17"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-m14-final-message.png",
+      "bytes": 400881,
+      "sha256": "35f58b737e65c8c78476c97cbed4d6b297248c6a81699be047018ddce8599635"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-forward-semantic.webm",
+      "bytes": 10769554,
+      "sha256": "ba4e49377452afcf3b64ad983bf255e89b568f2a8dffc8fbe2711c937fd57b57"
+    },
+    {
       "path": "06-demo-card-model/landscape/landscape-restored-start.png",
       "bytes": 398718,
       "sha256": "e024f3d92400c4f49167716c5f7cd35a715e4a9d495bb698cadd1f985e9cd59c"
@@ -9959,6 +10124,16 @@
       "sha256": "042e04463ad0cd85ad55ff004120fe30e3f3f20bb0446f0415f6c037fd7403e9"
     },
     {
+      "path": "06-demo-card-model/landscape/landscape-semantic-end.png",
+      "bytes": 401892,
+      "sha256": "d8e613300ad969f2a672a664898e9219cb6408790db3268060e432cd42a8c13d"
+    },
+    {
+      "path": "06-demo-card-model/landscape/landscape-semantic-start.png",
+      "bytes": 387278,
+      "sha256": "0895f78930d8185779ec418790b349034d90cf6b960d72d39b054c1950f77aab"
+    },
+    {
       "path": "06-demo-card-model/landscape/landscape-start.png",
       "bytes": 385916,
       "sha256": "9b065cf632e0bfcbbdf53fbb11d3239fea493b1996d990d504237ebf665ed496"
@@ -9967,6 +10142,11 @@
       "path": "06-demo-card-model/landscape/reverse-state.json",
       "bytes": 1714,
       "sha256": "2742adf7d43dfd8c574f632e5067ca11c3049516c8858f0d2165ea8b4e9760e4"
+    },
+    {
+      "path": "06-demo-card-model/landscape/semantic-capture.json",
+      "bytes": 12697,
+      "sha256": "8820fcb14fa71e294fd2a855b60a52271363285eb6ff1f2c255b626ca2826617"
     },
     {
       "path": "06-demo-card-model/landscape/start-state.json",
@@ -10114,6 +10294,81 @@
       "sha256": "ad5fde0b517e0c981f32aed7267a36203d61075aaf092c243b1860613cc1338e"
     },
     {
+      "path": "06-demo-card-model/portrait/portrait-forward-m01-scale-readout.png",
+      "bytes": 402339,
+      "sha256": "bcab3c1dc6e14ce129cd9d902e2d9ef91debc208ea621b7bde45f17eda008e5c"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m02-card-at-eye-height.png",
+      "bytes": 349650,
+      "sha256": "071efaa931c7b4d12437c6cb824f892c8db5d1d156d72530d411809c469fdd9b"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m03-luminous-transition-onset.png",
+      "bytes": 383954,
+      "sha256": "98a110fac13279a17979cdcfc9d7515f76365c4dfdb5734fdb32d21ef4875c68"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m04-house-materialized.png",
+      "bytes": 418891,
+      "sha256": "255cb48792685f60ba4aeb8670652b779461336bc89cc1932538d7fa7de5c886"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m05-real-exterior.png",
+      "bytes": 405417,
+      "sha256": "c78ed907ed1605a04cc26c0d7f8fed9418307ddf6ba8de5e3dfeb40d0f2e7f0e"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m06-facade-approach.png",
+      "bytes": 389682,
+      "sha256": "fb788e1355042e2574d549d11c9c020bf5fa26f103dae1124984f26df130e6ef"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m07-living-interior.png",
+      "bytes": 394954,
+      "sha256": "b4baee9dd0fdaccfa299637158cd7503d75776fa3b8926c031e8f5651f5bb58f"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m08-interior-low-view.png",
+      "bytes": 377752,
+      "sha256": "d4e3718bff9d569cadd9d813260d84305ee3119d4dc240e7d5ad5b4b55612706"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m09-desk-context-return.png",
+      "bytes": 404008,
+      "sha256": "166a3304a341a3606cd51437e0bd5135d4f4db6a3bd5b9136b394086f027e238"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m10-study-overlook.png",
+      "bytes": 388431,
+      "sha256": "86823cbe8b47c29b4c6c533562e1a94a1fec79d43d633e5a72ac03ef980fb5f1"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m11-terrace-night.png",
+      "bytes": 322746,
+      "sha256": "0dc654f8a228358c389cf5a6a8d03bfd792c0f15f90b68cfe4079d403368b5f6"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m12-return-sweep.png",
+      "bytes": 428822,
+      "sha256": "53b5388f4bc2ead140fce8ea9989e7005f096b9263a1f90b4dca04a9d5bc6b60"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m13-card-restored.png",
+      "bytes": 416989,
+      "sha256": "8b802ce0e633e11d55ca5b613831238ea8b38dd26060a3062895b0dfe47219e2"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-m14-final-message.png",
+      "bytes": 390187,
+      "sha256": "a6f63fc6d3de9f9416329b9ab24c6675672cf6ae3cc12ae9dd31641a7966f19b"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-semantic.webm",
+      "bytes": 10285539,
+      "sha256": "faf0e48b8d50d6039a1b26d427ef05236aa106170e488b9b2eea692fce81f879"
+    },
+    {
       "path": "06-demo-card-model/portrait/portrait-restored-start.png",
       "bytes": 411515,
       "sha256": "6fb929d7033ca65719c9c78474d6e27a27ca1347f171d5d218e3deff96e6cc95"
@@ -10129,6 +10384,16 @@
       "sha256": "3ede16f6d4f30dbcadb65cb1c3b3238733b7991351b2eddc17dd90c9a518549b"
     },
     {
+      "path": "06-demo-card-model/portrait/portrait-semantic-end.png",
+      "bytes": 390032,
+      "sha256": "20b87279fe9968acbf07ee80c2d0f731e56b1bf8acd5683e66837cca2bd0f884"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-semantic-start.png",
+      "bytes": 391560,
+      "sha256": "f6ad7014a23e02d19ba12ff1a44e59bd19c9ae4154386391e9fff6aaad944a59"
+    },
+    {
       "path": "06-demo-card-model/portrait/portrait-start.png",
       "bytes": 393842,
       "sha256": "9843a60856808028112d22ca1cc7a2736c43bb419acb19fd69e9785d6e19c298"
@@ -10137,6 +10402,11 @@
       "path": "06-demo-card-model/portrait/reverse-state.json",
       "bytes": 1718,
       "sha256": "1d34b8e839ba1e0ab884abd1fd18743c913a1aab65332bfbbe0672da5c4df214"
+    },
+    {
+      "path": "06-demo-card-model/portrait/semantic-capture.json",
+      "bytes": 12653,
+      "sha256": "057dbd25177c778aa43cf1d3c7da11de9b231ccefb4a5bb7cab859c5650b85e9"
     },
     {
       "path": "06-demo-card-model/portrait/start-state.json",

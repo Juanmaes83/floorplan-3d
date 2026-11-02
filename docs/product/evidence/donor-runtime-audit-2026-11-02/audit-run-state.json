@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T18:37:09.635Z",
+  "updatedAt": "2026-11-02T18:50:12.320Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -995,7 +995,7 @@
       "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "lastSuccessfulStage": "ORIGINAL_SEMANTIC_CAPTURED_SUPERSEDED_UNSTABLE_A0",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1003,7 +1003,9 @@
           "run": "original",
           "startedAt": "2026-11-02T18:29:28.143Z",
           "status": "COMPLETE",
-          "finishedAt": "2026-11-02T18:31:56.826Z"
+          "finishedAt": "2026-11-02T18:31:56.826Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
         },
         {
           "viewport": "portrait",
@@ -1011,7 +1013,9 @@
           "run": "original",
           "startedAt": "2026-11-02T18:32:40.435Z",
           "status": "COMPLETE",
-          "finishedAt": "2026-11-02T18:34:44.903Z"
+          "finishedAt": "2026-11-02T18:34:44.903Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
         },
         {
           "viewport": "landscape",
@@ -1019,14 +1023,51 @@
           "run": "original",
           "startedAt": "2026-11-02T18:35:06.025Z",
           "status": "COMPLETE",
-          "finishedAt": "2026-11-02T18:37:09.635Z"
+          "finishedAt": "2026-11-02T18:37:09.635Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:43:07.824Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:44:52.635Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:45:08.921Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:46:28.487Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:46:42.217Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:48:04.079Z",
+          "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
+          "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
         }
       ],
-      "blockingUnresolved": [],
+      "blockingUnresolved": [
+        {
+          "question": "Stable A0 correction required",
+          "detail": "Repeat Discovery and semantic in all three viewports after the autonomous card assembly and hero copy have settled; compare corrected A0/A1."
+        }
+      ],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T18:37:09.635Z"
+        "updatedAt": "2026-11-02T18:50:12.320Z"
       }
     },
     "07-a-one-door": {

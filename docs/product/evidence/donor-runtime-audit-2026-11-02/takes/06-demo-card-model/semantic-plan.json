@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "PARTIAL / IN_PROGRESS",
+  "basis": "Three complete, clean-context Discovery A→B→A runs at 10fps, with native-scroll telemetry and 5%-interval safety samples. Target progress values are sampling positions in the second pass, not inferred product states. The source/Cut/Rubik reconciliation and restore verdict remain pending.",
+  "milestones": [
+    {"label":"M01","slug":"scale-readout","targetProgress":0.05,"observedChange":"The camera approaches the card house on its layered contour board; a 1:100 desk versus 1:1 house scale readout appears."},
+    {"label":"M02","slug":"card-at-eye-height","targetProgress":0.18,"observedChange":"The camera descends toward a small human figure at the card model's entry, making its scaled height tangible."},
+    {"label":"M03","slug":"luminous-transition-onset","targetProgress":0.25,"observedChange":"A bright sweep begins over the same model, with card and materialized house appearances overlapping."},
+    {"label":"M04","slug":"house-materialized","targetProgress":0.32,"observedChange":"Glass, dark mullions, planted ground and finished materials appear on the same house and site while workshop references still surround it."},
+    {"label":"M05","slug":"real-exterior","targetProgress":0.40,"observedChange":"The now materialized house is seen from outside with its balcony, stair, glazing and garden relation legible."},
+    {"label":"M06","slug":"facade-approach","targetProgress":0.46,"observedChange":"The camera approaches the glazed facade and balcony at house scale."},
+    {"label":"M07","slug":"living-interior","targetProgress":0.51,"observedChange":"The route enters the living and dining interior; furniture, bookcase and upper gallery belong to the same house."},
+    {"label":"M08","slug":"interior-low-view","targetProgress":0.58,"observedChange":"The camera drops to a lower interior view under the table, with the stair, shelving and daylight still spatially continuous."},
+    {"label":"M09","slug":"desk-context-return","targetProgress":0.65,"observedChange":"A small card model appears on a desk in the full-size house's upper study, beside books and a lit task lamp. This is a nested model inside the real house, not yet the return to the original workshop desk. The capture filename retains the preliminary slug for traceability."},
+    {"label":"M10","slug":"study-overlook","targetProgress":0.70,"observedChange":"The route reveals the upper study and living area with terrace beyond the glass; the workshop drawings remain visible outside the donor scene."},
+    {"label":"M11","slug":"terrace-night","targetProgress":0.77,"observedChange":"The route reaches the terrace as lighting darkens; rail, lounge chairs, planted ground and interior glass relation remain identifiable."},
+    {"label":"M12","slug":"return-sweep","targetProgress":0.85,"observedChange":"The house is again seen at desk scale while a luminous boundary and scale readout accompany the return toward card representation."},
+    {"label":"M13","slug":"card-restored","targetProgress":0.91,"observedChange":"The card house and contour board are back on the cutting mat with 1:100/1:1 scale readout and desk tools."},
+    {"label":"M14","slug":"final-message","targetProgress":0.98,"observedChange":"The workshop darkens and the editorial final message appears over the same card house."}
+  ],
+  "reverseSemanticStates": "Review the continuous reverse video and start/restored screenshots for representation, camera, lighting, HUD, scroll and temporary sweep cleanup. Do not assume that B→A follows the forward camera route exactly."
+}

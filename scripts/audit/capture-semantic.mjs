@@ -12,6 +12,8 @@ const inventory = JSON.parse(await readFile(path.join(evidence,'reference-invent
 const id = process.argv.find(a=>a.startsWith('--take='))?.slice(7);
 const viewport = process.argv.find(a=>a.startsWith('--viewport='))?.slice(11);
 const run = process.argv.find(a=>a.startsWith('--run='))?.slice(6);
+const fps = Number(process.argv.find(a=>a.startsWith('--fps='))?.slice(6) ?? 30);
+if (!Number.isInteger(fps) || fps < 1 || fps > 30) throw new Error('Use --fps=1..30');
 const dims = {desktop:[1440,900],portrait:[390,844],landscape:[844,390]};
 if (!id || !state.takes[id] || !dims[viewport]) throw new Error('Use --take=<id> --viewport=<desktop|portrait|landscape>');
 const ref = inventory.references.find(r=>r.id===id);
@@ -30,8 +32,8 @@ function ab(args,optional=false) {
 }
 function evalJson(js){const s=ab(['eval',js]);try{return JSON.parse(s)}catch{throw new Error(`eval parse: ${s.slice(0,200)}`)}}
 function waitForStableStart(){
-  if(!id.startsWith('03-')&&id!=='04-demo-build-time-lapse')return;
-  const marker=id==='04-demo-build-time-lapse'?'window.__heroDone===true':'window.__ready===true';
+  if(!id.startsWith('03-')&&id!=='04-demo-build-time-lapse'&&id!=='06-demo-card-model')return;
+  const marker=id==='04-demo-build-time-lapse'?'window.__heroDone===true':id==='06-demo-card-model'?"window.__rig?.ready===true && Number(document.querySelector('.hero .sub')?.style.opacity)>=0.99 && Number(document.querySelector('.top')?.style.opacity)>=0.99":'window.__ready===true';
   let ready=false;
   for(let poll=0;poll<60;poll++){
     ready=evalJson(marker);
@@ -61,7 +63,7 @@ try{
   const initial=evalJson(metrics);
   records.push(await capture('semantic-start','A'));
   const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);
-  ab(['record','start',video,'--fps','30']);
+  ab(['record','start',video,'--fps',String(fps)]);
   const step=Math.max(1,Math.floor(height*.08));
   let i=0;
   for(const m of milestones){
@@ -88,7 +90,7 @@ try{
   const assets=[];
   for(const r of records){assets.push({path:r.path,bytes:(await stat(r.path)).size,sha256:createHash('sha256').update(await readFile(r.path)).digest('hex')})}
   assets.push({path:video,bytes:(await stat(video)).size,sha256:createHash('sha256').update(await readFile(video)).digest('hex')});
-  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',initial,records,video,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
+  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',fps,initial,records,video,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
   state.takes[id].attempts.at(-1).status='COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();
   state.takes[id].blockingUnresolved=state.takes[id].blockingUnresolved.filter(x=>!(x.viewport===viewport&&x.question==='Semantic capture failed'));

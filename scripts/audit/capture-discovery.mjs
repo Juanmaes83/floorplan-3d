@@ -40,8 +40,8 @@ function evalJson(session, js) {
   try { return JSON.parse(out); } catch { throw new Error(`Could not parse eval output: ${out.slice(0,400)}`); }
 }
 function waitForStableStart(session) {
-  if (!id.startsWith('03-') && id !== '04-demo-build-time-lapse') return;
-  const marker = id === '04-demo-build-time-lapse' ? 'window.__heroDone===true' : 'window.__ready===true';
+  if (!id.startsWith('03-') && id !== '04-demo-build-time-lapse' && id !== '06-demo-card-model') return;
+  const marker = id === '04-demo-build-time-lapse' ? 'window.__heroDone===true' : id === '06-demo-card-model' ? "window.__rig?.ready===true && Number(document.querySelector('.hero .sub')?.style.opacity)>=0.99 && Number(document.querySelector('.top')?.style.opacity)>=0.99" : 'window.__ready===true';
   let ready = false;
   for (let poll = 0; poll < 60; poll++) {
     ready = evalJson(session, marker);
@@ -193,7 +193,7 @@ try {
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets = await Promise.all([...files,...samplePaths].map(async p => ({path:p,bytes:(await stat(p)).size,sha256:createHash('sha256').update(await readFile(p)).digest('hex') })));
   await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary = { id, viewport:viewportName, run:run||'original', fps, stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
+  const summary = { id, viewport:viewportName, run:run||'original', fps, stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'||id==='06-demo-card-model'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
   state.takes[id].attempts.at(-1).status = 'COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt = new Date().toISOString();

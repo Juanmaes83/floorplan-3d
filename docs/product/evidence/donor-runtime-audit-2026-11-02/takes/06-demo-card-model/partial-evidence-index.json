@@ -2,18 +2,23 @@
   "schemaVersion": "rubik-donor-runtime-audit.partial-evidence-index.v1",
   "take": "06-demo-card-model",
   "status": "PARTIAL / IN_PROGRESS",
-  "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
-  "inventoryContentSha256": "3a0d7f8ed39ad75b2ffe4fda2b18a76938a8cc053556cea4dedeeeee54cb6137",
+  "lastSuccessfulStage": "ORIGINAL_SEMANTIC_CAPTURED_SUPERSEDED_UNSTABLE_A0",
+  "inventoryContentSha256": "1f8e3dcc9f2e3a933053fee1c1e74d2f4d36fc4b6a649408805dc364f49dc17d",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "rawFileCount": 102,
-  "rawBytes": 132294116,
-  "copiedNonVideoFiles": 96,
-  "copiedNonVideoBytes": 58198711,
+  "rawFileCount": 156,
+  "rawBytes": 221195033,
+  "copiedNonVideoFiles": 147,
+  "copiedNonVideoBytes": 95846781,
   "videosRawOnly": [
     {
       "path": "06-demo-card-model/desktop/desktop-forward-discovery.webm",
       "bytes": 22621125,
       "sha256": "d64639d8a154bd32dede463a8060e575208296f11226e39d2b14ad06b678c59b"
+    },
+    {
+      "path": "06-demo-card-model/desktop/desktop-forward-semantic.webm",
+      "bytes": 30197754,
+      "sha256": "a0d8e1e12f203a93b45501b4aa4dccee0160abe6a304af2de4f70a9836cef94d"
     },
     {
       "path": "06-demo-card-model/desktop/desktop-reverse-discovery.webm",
@@ -26,6 +31,11 @@
       "sha256": "f185b6ab3199664757fffe341d392aff5447ce0bd3f8b9738d1c95d17c65202e"
     },
     {
+      "path": "06-demo-card-model/landscape/landscape-forward-semantic.webm",
+      "bytes": 10769554,
+      "sha256": "ba4e49377452afcf3b64ad983bf255e89b568f2a8dffc8fbe2711c937fd57b57"
+    },
+    {
       "path": "06-demo-card-model/landscape/landscape-reverse-discovery.webm",
       "bytes": 7747402,
       "sha256": "042e04463ad0cd85ad55ff004120fe30e3f3f20bb0446f0415f6c037fd7403e9"
@@ -34,6 +44,11 @@
       "path": "06-demo-card-model/portrait/portrait-forward-discovery.webm",
       "bytes": 8315821,
       "sha256": "ad5fde0b517e0c981f32aed7267a36203d61075aaf092c243b1860613cc1338e"
+    },
+    {
+      "path": "06-demo-card-model/portrait/portrait-forward-semantic.webm",
+      "bytes": 10285539,
+      "sha256": "faf0e48b8d50d6039a1b26d427ef05236aa106170e488b9b2eea692fce81f879"
     },
     {
       "path": "06-demo-card-model/portrait/portrait-reverse-discovery.webm",
@@ -187,6 +202,90 @@
       "sha256": "91fad04cb0f5404b5bc31a9e21d80ced2d844b22453de3d631e23a322484748b"
     },
     {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m01-scale-readout.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m01-scale-readout.png",
+      "bytes": 1475514,
+      "sha256": "98ca3857c2406b0d5f61a980b119ed8056a1974032413192277183f9e3f7a107"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m02-card-at-eye-height.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m02-card-at-eye-height.png",
+      "bytes": 1388459,
+      "sha256": "8ef0cc7316809a6bbb17f7b26de48d12dd1a2b723306be45afed4f2951117db1"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m03-luminous-transition-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m03-luminous-transition-onset.png",
+      "bytes": 1488691,
+      "sha256": "3ce766df7f79de5af20c4f93dc826c8e8bbe1f0d1bd8dc65890c06c49734e737"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m04-house-materialized.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m04-house-materialized.png",
+      "bytes": 1612688,
+      "sha256": "ed7f6ce74051e1e39bf1f7058a0e2ef7a8f002f555c8ae44d3bf736dcbbf1eb9"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m05-real-exterior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m05-real-exterior.png",
+      "bytes": 1633346,
+      "sha256": "fd033f4ebb6f335b0d835e679e4d04f1e099f6a1f5c0ff98bb883b12f62e1a34"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m06-facade-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m06-facade-approach.png",
+      "bytes": 1670392,
+      "sha256": "91eb558324a627b0b3ff11d22e54910ab27c276ef6d4b027e190d2c89217ee08"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m07-living-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m07-living-interior.png",
+      "bytes": 1644442,
+      "sha256": "e51ebc80d1c87d5965355a0cf08097094dd800eb106807b87f0ed338ce8d448f"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m08-interior-low-view.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m08-interior-low-view.png",
+      "bytes": 1642161,
+      "sha256": "0b0a2ebc25d9a469b17160f74c6c533a3fdb2d4b73acb2cb8e2de9051958187c"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m09-desk-context-return.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m09-desk-context-return.png",
+      "bytes": 1660637,
+      "sha256": "73e1baf442775c88c44a7c685d5a2d5a50e743c0d0288ea840b2d32bc89d3012"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m10-study-overlook.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m10-study-overlook.png",
+      "bytes": 1565946,
+      "sha256": "c2d5f5cf170f16c336201d3cec17225b073ad7b795fac7e2038b8d83d85c0595"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m11-terrace-night.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m11-terrace-night.png",
+      "bytes": 1354170,
+      "sha256": "9b6cf33b31aebeceb117c2629950472632350607ca3cb909cc899488d960c0b7"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m12-return-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m12-return-sweep.png",
+      "bytes": 1670430,
+      "sha256": "bac6d06b57701b11e3f14e4778f7af61acc5729000ad6845b7fd87e34a4d98ae"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m13-card-restored.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m13-card-restored.png",
+      "bytes": 1532964,
+      "sha256": "32bbc0c001ff3caa0efd08c39c6245da9fb139a3960d57020afc18aeea6d85a2"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-forward-m14-final-message.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-forward-m14-final-message.png",
+      "bytes": 1474465,
+      "sha256": "26bbf7dbd2c7bb2d178299f6bb2cd447688cf295f4752382e7da48826de295ac"
+    },
+    {
       "rawPath": "06-demo-card-model/desktop/desktop-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-restored-start.png",
       "bytes": 1489104,
@@ -197,6 +296,18 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-reverse-discovery.telemetry.ndjson",
       "bytes": 374819,
       "sha256": "3fc6fac670997e756586756df8c82a0f2a6c7b8d31e435c15859331a4ebb7674"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-semantic-end.png",
+      "bytes": 1473735,
+      "sha256": "9db8574df856e1334b0fbe25b4b70da803a15a6863655094ce4b11ed3336f25c"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/desktop-semantic-start.png",
+      "bytes": 1437318,
+      "sha256": "53ee39c23e4496524b440bf841b8af058ef68713f86d0b8bf3a334f3247251fd"
     },
     {
       "rawPath": "06-demo-card-model/desktop/desktop-start.png",
@@ -227,6 +338,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/reverse-state.json",
       "bytes": 1716,
       "sha256": "d3b416094e525c0a68e06420475abb2260d4ffc479320610c975e233b10a8b09"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-capture.json",
+      "bytes": 12600,
+      "sha256": "cca2a2b493963d1a90d2b21f7b44916757d180644a7772e2f76cfa72659083d7"
     },
     {
       "rawPath": "06-demo-card-model/desktop/start-state.json",
@@ -397,6 +514,90 @@
       "sha256": "8d8bfd5d1f462940cc7b73515dd061fc9bce3aade565707999be32b6ddf82e9a"
     },
     {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m01-scale-readout.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m01-scale-readout.png",
+      "bytes": 383940,
+      "sha256": "d9196fe9e9e2397d2a946052f43e57dd5501632de7d09fbe25a4f87b9a37e6f7"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m02-card-at-eye-height.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m02-card-at-eye-height.png",
+      "bytes": 364963,
+      "sha256": "28e9898229398f33427bfddad9f09f48df9fbf2f4073ccc9d53ca70a9f5df419"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m03-luminous-transition-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m03-luminous-transition-onset.png",
+      "bytes": 409459,
+      "sha256": "f90f5f6f255a6ba60c1ebdb9f7af46919df696e65fd0b61b1ec2749df7d1c3c3"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m04-house-materialized.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m04-house-materialized.png",
+      "bytes": 439810,
+      "sha256": "e60be867d1ebf593476752064ef50ad3590c3bfb4094b567e00c1d0c48644965"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m05-real-exterior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m05-real-exterior.png",
+      "bytes": 444868,
+      "sha256": "9eda16ec2ca2371372806d194872ff7b92464ef1c0e77738050a3da8c34efbfb"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m06-facade-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m06-facade-approach.png",
+      "bytes": 455356,
+      "sha256": "e27dfda2a63f8277d5b910bd6421bae24af6cb6625bfb0a80670448511acd93b"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m07-living-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m07-living-interior.png",
+      "bytes": 438846,
+      "sha256": "4978ba870a13f04aac74bbec7ca8fcc865e1c4471ce582a18d5a0ccd4f537c12"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m08-interior-low-view.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m08-interior-low-view.png",
+      "bytes": 420618,
+      "sha256": "b01cd723d4df5fd8faacb9a9cb17466bf753df8ddca56b3b1582ac739eb4ef3c"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m09-desk-context-return.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m09-desk-context-return.png",
+      "bytes": 445919,
+      "sha256": "c523b375ca3ce5abe2e1d4214f2b4716d76a16baa674cfb6c1473b77d16774ab"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m10-study-overlook.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m10-study-overlook.png",
+      "bytes": 415097,
+      "sha256": "4890a96450e30d5ec6ae2e244d4c65ab12cef3dc5bceb3c808556c04e11d5a30"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m11-terrace-night.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m11-terrace-night.png",
+      "bytes": 374653,
+      "sha256": "0c6c2747df58741a699d595b053e0c1294e8ab8eb5ad3146af72c4a749fafaf5"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m12-return-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m12-return-sweep.png",
+      "bytes": 443122,
+      "sha256": "e225a159d1a9bcac4f0838d6d61406cd3590aba2aec104bd00fbc92dedd06fd0"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m13-card-restored.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m13-card-restored.png",
+      "bytes": 402646,
+      "sha256": "433b2d9d84963a6d062f75cd23744b879edd618fd4cedca43520e7f645031a17"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-forward-m14-final-message.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-forward-m14-final-message.png",
+      "bytes": 400881,
+      "sha256": "35f58b737e65c8c78476c97cbed4d6b297248c6a81699be047018ddce8599635"
+    },
+    {
       "rawPath": "06-demo-card-model/landscape/landscape-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-restored-start.png",
       "bytes": 398718,
@@ -409,6 +610,18 @@
       "sha256": "7cc051f5147d12da3dd839694c2ce01876ab9d273155ee371e8b8777b40748b3"
     },
     {
+      "rawPath": "06-demo-card-model/landscape/landscape-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-semantic-end.png",
+      "bytes": 401892,
+      "sha256": "d8e613300ad969f2a672a664898e9219cb6408790db3268060e432cd42a8c13d"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/landscape-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-semantic-start.png",
+      "bytes": 387278,
+      "sha256": "0895f78930d8185779ec418790b349034d90cf6b960d72d39b054c1950f77aab"
+    },
+    {
       "rawPath": "06-demo-card-model/landscape/landscape-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/landscape-start.png",
       "bytes": 385916,
@@ -419,6 +632,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/reverse-state.json",
       "bytes": 1714,
       "sha256": "2742adf7d43dfd8c574f632e5067ca11c3049516c8858f0d2165ea8b4e9760e4"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/semantic-capture.json",
+      "bytes": 12697,
+      "sha256": "8820fcb14fa71e294fd2a855b60a52271363285eb6ff1f2c255b626ca2826617"
     },
     {
       "rawPath": "06-demo-card-model/landscape/start-state.json",
@@ -589,6 +808,90 @@
       "sha256": "331314ed58d8d3261dbeec6ba7ed24ad0f9c4c16353948b372373a99c5089533"
     },
     {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m01-scale-readout.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m01-scale-readout.png",
+      "bytes": 402339,
+      "sha256": "bcab3c1dc6e14ce129cd9d902e2d9ef91debc208ea621b7bde45f17eda008e5c"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m02-card-at-eye-height.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m02-card-at-eye-height.png",
+      "bytes": 349650,
+      "sha256": "071efaa931c7b4d12437c6cb824f892c8db5d1d156d72530d411809c469fdd9b"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m03-luminous-transition-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m03-luminous-transition-onset.png",
+      "bytes": 383954,
+      "sha256": "98a110fac13279a17979cdcfc9d7515f76365c4dfdb5734fdb32d21ef4875c68"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m04-house-materialized.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m04-house-materialized.png",
+      "bytes": 418891,
+      "sha256": "255cb48792685f60ba4aeb8670652b779461336bc89cc1932538d7fa7de5c886"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m05-real-exterior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m05-real-exterior.png",
+      "bytes": 405417,
+      "sha256": "c78ed907ed1605a04cc26c0d7f8fed9418307ddf6ba8de5e3dfeb40d0f2e7f0e"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m06-facade-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m06-facade-approach.png",
+      "bytes": 389682,
+      "sha256": "fb788e1355042e2574d549d11c9c020bf5fa26f103dae1124984f26df130e6ef"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m07-living-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m07-living-interior.png",
+      "bytes": 394954,
+      "sha256": "b4baee9dd0fdaccfa299637158cd7503d75776fa3b8926c031e8f5651f5bb58f"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m08-interior-low-view.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m08-interior-low-view.png",
+      "bytes": 377752,
+      "sha256": "d4e3718bff9d569cadd9d813260d84305ee3119d4dc240e7d5ad5b4b55612706"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m09-desk-context-return.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m09-desk-context-return.png",
+      "bytes": 404008,
+      "sha256": "166a3304a341a3606cd51437e0bd5135d4f4db6a3bd5b9136b394086f027e238"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m10-study-overlook.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m10-study-overlook.png",
+      "bytes": 388431,
+      "sha256": "86823cbe8b47c29b4c6c533562e1a94a1fec79d43d633e5a72ac03ef980fb5f1"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m11-terrace-night.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m11-terrace-night.png",
+      "bytes": 322746,
+      "sha256": "0dc654f8a228358c389cf5a6a8d03bfd792c0f15f90b68cfe4079d403368b5f6"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m12-return-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m12-return-sweep.png",
+      "bytes": 428822,
+      "sha256": "53b5388f4bc2ead140fce8ea9989e7005f096b9263a1f90b4dca04a9d5bc6b60"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m13-card-restored.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m13-card-restored.png",
+      "bytes": 416989,
+      "sha256": "8b802ce0e633e11d55ca5b613831238ea8b38dd26060a3062895b0dfe47219e2"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-forward-m14-final-message.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-forward-m14-final-message.png",
+      "bytes": 390187,
+      "sha256": "a6f63fc6d3de9f9416329b9ab24c6675672cf6ae3cc12ae9dd31641a7966f19b"
+    },
+    {
       "rawPath": "06-demo-card-model/portrait/portrait-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-restored-start.png",
       "bytes": 411515,
@@ -601,6 +904,18 @@
       "sha256": "2e5a6f81db31ef695151cc8f481da9f0f33bb64c3e14245a0776d441b2be0782"
     },
     {
+      "rawPath": "06-demo-card-model/portrait/portrait-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-semantic-end.png",
+      "bytes": 390032,
+      "sha256": "20b87279fe9968acbf07ee80c2d0f731e56b1bf8acd5683e66837cca2bd0f884"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/portrait-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-semantic-start.png",
+      "bytes": 391560,
+      "sha256": "f6ad7014a23e02d19ba12ff1a44e59bd19c9ae4154386391e9fff6aaad944a59"
+    },
+    {
       "rawPath": "06-demo-card-model/portrait/portrait-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/portrait-start.png",
       "bytes": 393842,
@@ -611,6 +926,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/reverse-state.json",
       "bytes": 1718,
       "sha256": "1d34b8e839ba1e0ab884abd1fd18743c913a1aab65332bfbbe0672da5c4df214"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/semantic-capture.json",
+      "bytes": 12653,
+      "sha256": "057dbd25177c778aa43cf1d3c7da11de9b231ccefb4a5bb7cab859c5650b85e9"
     },
     {
       "rawPath": "06-demo-card-model/portrait/start-state.json",
