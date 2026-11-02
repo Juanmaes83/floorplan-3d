@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "basis": "Observed complete desktop, portrait and landscape Discovery forward/reverse recordings, sidecars and 5-percent safety samples. Targets are fresh-pass capture cues, not claims that native percent is runtime progress.",
+  "milestones": [
+    {"label":"M01","slug":"section-lens-opens","targetProgress":0.05,"observedChange":"The orthographic section gains perspective while the same floor plates, stair and glazing remain aligned."},
+    {"label":"M02","slug":"materialized-cut","targetProgress":0.10,"observedChange":"The same opened three-level section acquires material, landscape and an orange CAD cut-plane annotation."},
+    {"label":"M03","slug":"through-the-cut","targetProgress":0.16,"observedChange":"The eye-level camera approaches the open face and reads upper, entrance and lower rooms through the same cut."},
+    {"label":"M04","slug":"entrance-and-stair","targetProgress":0.21,"observedChange":"The camera enters the entrance-level living space and turns toward its continuous stair."},
+    {"label":"M05","slug":"the-study","targetProgress":0.29,"observedChange":"The route reaches the upper study with its desk, book wall and section drawing."},
+    {"label":"M06","slug":"upper-lounge","targetProgress":0.35,"observedChange":"The camera crosses the upper lounge beside the long glazed wall."},
+    {"label":"M07","slug":"over-living-room","targetProgress":0.40,"observedChange":"The mezzanine edge reveals the entrance-level living room and exterior below."},
+    {"label":"M08","slug":"stair-descent","targetProgress":0.49,"observedChange":"The camera descends the same stair toward the lower garden level."},
+    {"label":"M09","slug":"lower-lounge","targetProgress":0.56,"observedChange":"The route crosses the lower lounge with its sofa, sideboard and garden-side light."},
+    {"label":"M10","slug":"the-bedroom","targetProgress":0.65,"observedChange":"The camera enters the lower bedroom and reveals the garden through the glazed facade."},
+    {"label":"M11","slug":"lower-garden","targetProgress":0.75,"observedChange":"The route passes outside the lower glazed facade and reads the house from the garden."},
+    {"label":"M12","slug":"return-to-living","targetProgress":0.81,"observedChange":"The camera returns toward the entrance-level living room while the same art, stair and furniture remain recognizable."},
+    {"label":"M13","slug":"cut-reappears","targetProgress":0.90,"observedChange":"The camera withdraws to a materialized section and the orange cut-plane annotation reappears."},
+    {"label":"M14","slug":"sheet-returns","targetProgress":0.96,"observedChange":"The materialized section flattens into the original technical sheet and the ending editorial copy begins."}
+  ],
+  "reverseSemanticStates": "Discovery reverse shows the ending copy clear, sheet become a materialized section, the same spatial route traverse backward, and the opening sheet/hero return. No independent reverse-only spatial state established; A0/A1 comparison remains a separate verdict."
+}

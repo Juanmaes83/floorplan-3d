@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T13:25:28.812Z",
+  "updatedAt": "2026-11-02T13:50:38.773Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -236,10 +236,10 @@
       }
     },
     "02-demo-section-sweep": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -261,13 +261,76 @@
           "startedAt": "2026-11-02T13:22:20.971Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T13:25:00.026Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:27:45.724Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:29:54.649Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:30:24.676Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:32:14.251Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "startedAt": "2026-11-02T13:32:31.055Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:34:22.457Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:37:21.736Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:40:41.327Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:41:15.042Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:44:02.898Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "startedAt": "2026-11-02T13:44:20.966Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T13:47:02.710Z"
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact donor render-target, shader and shadow resource identity after natural B→A is not passively observable; visual, camera/chapter/scanX/front and scroll/route restore are observed.",
+          "attempts": [
+            "A0/A1 screenshots at all three viewports",
+            "continuous reverse video and corrected passive runtime telemetry",
+            "source story/update/real review"
+          ],
+          "evidenceNeeded": "A narrowly scoped read-only resource snapshot if identity-level lifecycle proof becomes necessary."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "The handoff from drawn sun angle to volumetric beam is source-confirmed but its precise optical timing cannot be isolated from the available frames without a targeted light pass.",
+          "attempts": [
+            "Full Discovery and semantic video",
+            "5-percent samples and room keyframes",
+            "README/main.js/draw.js/real.js review"
+          ],
+          "evidenceNeeded": "Targeted time-sensitive frames around scanX crossing south glazing and passive shaft-state telemetry if a light-specific decision depends on it."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T13:25:00.026Z"
+        "updatedAt": "2026-11-02T13:50:38.773Z"
       }
     },
     "03-a-open-the-lens": {

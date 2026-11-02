@@ -44,7 +44,9 @@ const telemetryJs = `(() => {
     const d=document.documentElement, maxScroll=Math.max(0,d.scrollHeight-innerHeight);
     const hud=['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700);
     const m=hud.match(/SEQ\\s+(\\d+)%/);
-    window.__auditSamples.push({monotonicMs:performance.now(),scrollY,scrollHeight:d.scrollHeight,innerHeight,maxScroll,normalizedNativeProgress:maxScroll?scrollY/maxScroll:0,runtimeProgress:m?Number(m[1])/100:'NOT_OBSERVED',route:location.pathname,hash:location.hash,visibleHud:hud.slice(0,350),interactionInput:window.__auditInput,camera:'NOT_OBSERVED',visibility:'NOT_OBSERVED',transforms:'NOT_OBSERVED',materialState:'NOT_OBSERVED',lighting:'NOT_OBSERVED',sunState:'NOT_OBSERVED',clipping:'NOT_OBSERVED'});
+    const rs=window.__st && typeof window.__st==='object' ? {...window.__st} : null;
+    const chapterEnd=window.__ch?.end?.[1];
+    window.__auditSamples.push({monotonicMs:performance.now(),scrollY,scrollHeight:d.scrollHeight,innerHeight,maxScroll,normalizedNativeProgress:maxScroll?scrollY/maxScroll:0,runtimeProgress:rs&&Number.isFinite(chapterEnd)?rs.y/chapterEnd:m?Number(m[1])/100:'NOT_OBSERVED',route:location.pathname,hash:location.hash,visibleHud:hud.slice(0,350),interactionInput:window.__auditInput,camera:rs?.pos||'NOT_OBSERVED',cameraFov:rs?.fov??'NOT_OBSERVED',activeChapter:rs?.chapter||'NOT_OBSERVED',cutPlanePosition:rs?.scanX??'NOT_OBSERVED',frontVisibility:rs?.front??'NOT_OBSERVED',runtimeState:rs||'NOT_OBSERVED',visibility:'NOT_OBSERVED',transforms:'NOT_OBSERVED',materialState:'NOT_OBSERVED',lighting:'NOT_OBSERVED',sunState:'NOT_OBSERVED',clipping:'NOT_OBSERVED'});
   },100);
   return true;
 })()`;
