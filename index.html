@@ -2460,6 +2460,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-route.js"></script>
 <script src="js/presentation-section-core.js"></script>
 <script src="js/presentation-elevation-core.js"></script>
+<script src="js/presentation-elevation-hybrid.js"></script>
 <script src="js/presentation-axon-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
 <script src="js/delivery-image.js"></script>
@@ -3533,7 +3534,7 @@ function buildArch(other){
     wallBox(r, 0, Math.min(sill, top)); if (top > head) wallBox(r, head, Math.min(top,r.height));
     colliders.push({x:wx(r.center[0]),z:wz(r.center[1]),angle:r.angle,length:M(r.spanMm),thickness:M(r.thickness)});
     const gTop = Math.min(head, top); if (gTop <= sill) return;
-    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+    const L=M(r.spanMm),gh=gTop-sill,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=r.openingId;archUp.add(group);
     const pane=new THREE.Mesh(new THREE.BoxGeometry(L,gh,.01),glassMat);pane.position.set(0,sill+gh/2,0);group.add(pane);
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
@@ -3547,11 +3548,11 @@ function buildArch(other){
     pivot.add(leaf, knob);
     const ang = v => Math.atan2(-v[1], v[0]), door = {id:d.id,pivot, a0:ang(d.c), a1:ang(d.o), open:true,len:L};
     if (door.a1 - door.a0 > Math.PI) door.a1 -= Math.PI*2; if (door.a0 - door.a1 > Math.PI) door.a1 += Math.PI*2;
-    door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
+    door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door; pivot.userData.openingId = d.id;
     doors.push(door); archUp.add(pivot);
   });
-  geometry.slides.forEach(({rect:r,height})=>{
-    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;archUp.add(group);
+  geometry.slides.forEach(({id,rect:r,height})=>{
+    const L=M(r.spanMm),ph=Math.min(height,top),pl=L*.55,group=new THREE.Group();group.position.set(wx(r.center[0]),0,wz(r.center[1]));group.rotation.y=-r.angle;group.userData.openingId=id;archUp.add(group);
     [[-1,-.02],[1,.02]].forEach(([s,off])=>{const x=s<0?-L/2+pl/2:L/2-pl/2;
       const pane=new THREE.Mesh(new THREE.BoxGeometry(pl,ph,.02),glassMat);pane.position.set(x,ph/2,off);group.add(pane);
       [ph-.03,.03].forEach(y=>{const fr=new THREE.Mesh(new THREE.BoxGeometry(pl,.05,.04),frameMat);fr.position.set(x,y,off);group.add(fr);});
@@ -4199,6 +4200,7 @@ function loop(){
   updateSel();
   syncCeilingFixtures(camera);
   syncRoofVisibility();
+  if(storyRun?.elevation?.hybrid?.swapped)storyRun.elevation.hybrid.sync();
   renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 }
@@ -4584,7 +4586,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     // box from the same descriptor (walls of every level, never furniture), the overview it starts and ends on.
     elevation=beginElevation(view.elevation);
     const end=presentationStopPose(stop,aspect,view.region);
-    narrative=window.FloorPlanPresentationStory.create('elevation-open',{facade:elevation.facade,corners:elevation.corners,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far},solar:!!elevation.solar});
+    narrative=window.FloorPlanPresentationStory.create('elevation-open',{facade:elevation.facade,corners:elevation.corners,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far},solar:!!elevation.solar,hybrid:!!elevation.hybrid});
   }else if(kind==='section-open'){
     // FT3D-3: the vertical cut derived from this level's own walls and rooms (descriptor computed once, here).
     const d=window.FloorPlanPresentationSection.derive({project,geometry},{overviewDirection:OVERVIEW_DIRECTION,axis:view.sectionAxis,levelId:levelContext?.activeLevelId??null});
@@ -4727,7 +4729,31 @@ function beginElevation(spec){
   if(above.length&&levelsG)el.extra=levelsG.children.filter(g=>above.includes(g.userData.levelId));
   for(const g of el.extra){g.scale.y=.001;g.visible=false;}
   el.above=above;
+  // Hybrid Registered Elevation (opt-in): fails closed — when anything is missing the façade plays as before.
+  el.hybridRequested=!!spec.hybrid;el.hybrid=null;el.hybridReason=null;
+  if(el.hybridRequested){try{el.hybrid=beginElevationHybrid(el,c);}catch(e){el.hybrid=null;el.hybridReason=e.hybridReason||'shader-error';}}
   return el;
+}
+/* Hybrid targets: the active level (archUp, its walls and opening groups) and the level groups of levelsG (their own
+   levelId). Identity only: wallId on wall meshes, openingId on opening groups (set at build time from geometry ids). */
+let elevationHybridLast=null;
+function elevationHybridRoots(){const A=levelContext?.activeLevelId??null;return [{object:archUp,levelId:A},...(levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined).map(g=>({object:g,levelId:g.userData.levelId})):[])];}
+// Towards Rubik's directional light (the light that casts the shadow map the hatch reads; a solar snapshot moves it).
+function elevationHybridSun(){if(!sun)return null;sun.updateMatrixWorld();sun.target.updateMatrixWorld();const d=new THREE.Vector3().setFromMatrixPosition(sun.matrixWorld).sub(new THREE.Vector3().setFromMatrixPosition(sun.target.matrixWorld));return d.lengthSq()>0?d.normalize().toArray():null;}
+function attachedToScene(o){while(o){if(o===scene)return true;o=o.parent;}return false;}
+function beginElevationHybrid(el,c){
+  const H=window.FloorPlanElevationHybrid;const fail=reason=>{const e=Error(H?.HYBRID.REASONS[reason]||reason);e.hybridReason=reason;throw e;};
+  if(!H)fail('shader-unavailable');
+  const refs={wallRefs:c.wallRefs,openingRefs:c.openingRefs||[]};el.hybridRefs=refs;
+  const sel=H.selectTargets(elevationHybridRoots(),refs),v=H.validate(sel,{shader:!!renderer?.capabilities&&(renderer.capabilities.isWebGL2||!!renderer.extensions.get('OES_standard_derivatives'))});
+  if(!v.supported)fail(v.reason);
+  const ctl=H.create(THREE,{targets:sel,facade:el.facade,sun:elevationHybridSun(),linePx:renderer.getPixelRatio()});ctl.glass=sel.glass;
+  // Compile once with the presentation clones in place: a shader that does not compile ends the hybrid here.
+  try{ctl.apply({active:true,technicalMix:1,materialReveal:0,hatchStrength:1},elevationHybridSun());renderer.compile(scene,camera);
+    for(const m of ctl.clones.values()){const prog=renderer.properties.get(m).currentProgram;if(prog?.diagnostics&&prog.diagnostics.runnable===false)fail('shader-error');}}
+  catch(e){ctl.end();throw e;}
+  ctl.apply(null);
+  return ctl;
 }
 function applyElevation(el,st){
   // A rebuilt level group (an asset that loaded) is found again; nothing is recomputed per frame.
@@ -4735,8 +4761,14 @@ function applyElevation(el,st){
   el.levelScale=st.levelScale??1;for(const g of el.extra){g.scale.y=Math.max(el.levelScale,.001);g.visible=el.levelScale>.001;}
   if(el.contextGroup){el.contextVisible=!!st.contextVisible;el.contextGroup.visible=el.contextBefore&&el.contextVisible;}
   const solar=!!(st.solar&&el.solar);if(solar!==el.solarOn){el.solarOn=solar;solarResult=solar?structuredClone(el.solar):(el.savedSolar&&structuredClone(el.savedSolar));applyLight();}
+  if(el.hybrid){
+    // A rebuilt façade (levelView or an asset rebuild) is found again by identity; its originals are the new meshes'.
+    if(!el.hybrid.attached(attachedToScene)){const sel=FloorPlanElevationHybrid.selectTargets(elevationHybridRoots(),el.hybridRefs);el.hybrid.rebind(sel.meshes);}
+    el.hybrid.apply(st.hybrid||null,elevationHybridSun());
+  }
 }
 function endElevation(el){
+  if(el.hybrid){const h=el.hybrid;el.hybrid=null;h.end();elevationHybridLast=h.info();}
   if(el.solarOn||JSON.stringify(solarResult)!==JSON.stringify(el.savedSolar)){solarResult=el.savedSolar&&structuredClone(el.savedSolar);applyLight();}el.solarOn=false;
   if(el.contextGroup)el.contextGroup.visible=el.contextBefore;
   for(const g of el.extra){g.scale.y=1;g.visible=true;}el.extra=[];
@@ -4745,10 +4777,12 @@ function endElevation(el){
 function elevationInfo(el){return {candidateId:el.candidate.id,label:el.candidate.label,cardinal:el.candidate.cardinal,normalPlan:[...el.candidate.normalPlan],walls:el.candidate.wallRefs.length,facade:{normal:[...el.facade.normal],center:[...el.facade.center],width:el.facade.width,height:el.facade.height},
   solarChosen:!!el.solar,solarOn:el.solarOn,solarSnapshot:el.solar?{instant:el.solar.instant,azimuthDeg:el.solar.azimuthDeg,altitudeDeg:el.solar.altitudeDeg}:null,
   levelView,levelViewBefore:el.levelViewBefore,extraLevels:el.extra.length,levelScale:el.levelScale,extraVisible:el.extra.filter(g=>g.visible).length,
-  context:!!el.contextGroup&&el.contextBefore&&el.contextGroup.children.some(o=>o.visible),contextVisible:el.contextGroup?el.contextGroup.visible:null};}
+  context:!!el.contextGroup&&el.contextBefore&&el.contextGroup.children.some(o=>o.visible),contextVisible:el.contextGroup?el.contextGroup.visible:null,
+  hybrid:{requested:!!el.hybridRequested,supported:!!el.hybrid,reason:el.hybridReason,...(el.hybrid?el.hybrid.info():{})}};}
 // Read-only state the façade scene touches, for tests: what must be back once it ends.
 function presentationElevationResidue(){return {levelView,territoryVisible:territoryRenderer?territoryRenderer.group.visible:null,solar:solarResult&&{instant:solarResult.instant,status:solarResult.status},
-  extraScaled:levelsG?levelsG.children.filter(g=>g.scale.y!==1).length:0,elevationActive:!!storyRun?.elevation};}
+  extraScaled:levelsG?levelsG.children.filter(g=>g.scale.y!==1).length:0,elevationActive:!!storyRun?.elevation,
+  hybridMaterials:(()=>{let n=0;scene?.traverse(o=>{for(const m of Array.isArray(o.material)?o.material:o.material?[o.material]:[])if(m.userData?.hybridPresentation)n++;});return n;})()};}
 /* FT3D-5 axonometric reading and spatial breakdown on the one scene (js/presentation-axon-core.js gives the descriptor,
    in model mm; js/presentation-story-core.js gives the state f(p)). Runtime only, transactional, never persisted:
    - Begin captures, semantically, what the overview shows (levelView, the levels visible, stairs, ground, context,
@@ -4896,7 +4930,7 @@ window.View3D = {
     activeFloorHoles:archFloor?archFloor.children.reduce((n,m)=>n+(m.userData.holes||0),0):0,activeCeilingHoles:archUp?archUp.children.reduce((n,m)=>n+(m.userData.ceilRoom?(m.userData.holes||0):0),0):0};},
   get territoryLayers(){return territoryRenderer?.layers;},setTerritoryLayers(patch){territoryRenderer?.setLayers(patch);syncTerritory();},get territoryInfo(){return territoryRenderer?{children:territoryRenderer.group.children.map(o=>({layers:o.userData.territoryLayers,visible:o.visible,vertices:o.geometry?.attributes.position?.count})),attribution:territoryRenderer.attribution,disposals:territoryRenderer.disposals,layers:territoryRenderer.layers}:null;},
   setSuspended(value){renderSuspended=!!value;},get suspended(){return renderSuspended;},
-  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',
+  shotSize,setEnvironment3D,get environment3D(){return env3d;},presentationCapture,presentationGo,presentationRestore,presentationInspect,presentationPose,presentationRestorePose,presentationViewState,presentationRestoreView,setPresentationLightPreset,get presentationLight(){return {preset:lightPreset,status:lightStatus,error:lightError,bytes:lightBytes,source:presentationHdr.path,estimatedSourceGpuBytes:presentationHdr.width*presentationHdr.height*8,estimatedPmremGpuBytes:lightTarget?Math.ceil(256*256*6*8*4/3):0,environment:scene?.environment===lightTarget?.texture&&!!lightTarget?'hdr':scene?.environment===baseEnvTex?'synthetic':'editor',hemiColor:hemi?.color.getHex(),hemiGround:hemi?.groundColor.getHex(),hemiIntensity:hemi?.intensity,sunColor:sun?.color.getHex(),sunIntensity:sun?.intensity,background:scene?.background?.getHex?.(),exposure:renderer?.toneMappingExposure,envK};},get contextAvailable(){return !contextLost;},get surfaceQuality(){return opt.surfaceQuality;},setSurfaceQuality:quality=>{if(!active||contextLost)throw Error('Vista 3D no disponible');surfaceRenderer.setQuality(quality);if(opt.surfaceQuality!==quality){opt.surfaceQuality=quality;sigArch=null;sync();}},get lifecycleMetrics(){return {loopActive:!!raf,animating:!!anim,flying:!!fly,pendingAssets:assetRequests.size};},get cameraState(){return camera && {position:camera.position.toArray(), quaternion:camera.quaternion.toArray(), fov:camera.fov, aspect:camera.aspect};}, get canvasState(){return renderer && {width:renderer.domElement.width, height:renderer.domElement.height, style:renderer.domElement.style.cssText, pixelRatio:renderer.getPixelRatio()};}, refreshSurfaces:()=>{sigArch=null;sync();},get surfaceMetrics(){return surfaceRenderer.metrics();},get surfaceDisposals(){return surfaceRenderer.history;},get presentationHybridLast(){return elevationHybridLast&&structuredClone(elevationHybridLast);},get rendererPrograms(){return inited?renderer.info.programs?.length??null:null;},get rendererMemory(){return inited?{...renderer.info.memory}:null;},refreshAssets:()=>{sigFurn=null;sync();},assetStatus:id=>assetStates.get(id),get assetObjects(){return furnG?.children.filter(g=>g.userData.authorizedAsset).map(g=>({id:g.userData.fid,position:g.position.toArray(),rotation:g.rotation.y,scale:g.scale.toArray()}))||[];},get assetMetrics(){return [...assetStates.entries()].map(([id,value])=>({id,...value}));},get source(){return geometry.source;},get renderedSource(){return renderedSource;},get renderedGeometry(){return renderedGeometry;},get wallMeshes(){return archUp?.children.filter(o=>o.userData.wallId).map(o=>({id:o.userData.wallId,dimensions:o.geometry.parameters,position:o.position.toArray(),angle:o.rotation.y}));},enter, exit, relang, sync:() => sync(), shot, deliveryShot, groundAt, flyToRoom:id => active && !anim && flyToRoom(id), walking:() => active && opt.mode === 'walk',
   // Doors the walk can open (read-only): open state, current and target angles, hinge (plan mm) and leaf length.
   // What the cross points at in the walk (read-only): the first hit, its kind and distance; the door the next E toggles.
   get walkAim(){if(!active)return null;ptr.set(0,0);ray.setFromCamera(ptr,camera);const h=ray.intersectObjects([...(opt.furn?[furnG]:[]),archUp,archFloor],true).find(h=>h.object.material!==glassMat&&!h.object.isLine&&!h.object.isPoints);if(!h)return null;const o=h.object;return {door:o.userData.door?.id||null,wall:o.userData.wallId||null,name:o.name||o.type,dist:+h.distance.toFixed(2),mesh:o.geometry?.type};},
