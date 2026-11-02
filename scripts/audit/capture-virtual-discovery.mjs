@@ -14,6 +14,8 @@ const inventory=JSON.parse(await readFile(path.join(evidence,'reference-inventor
 const id=process.argv.find(a=>a.startsWith('--take='))?.slice(7);
 const viewport=process.argv.find(a=>a.startsWith('--viewport='))?.slice(11);
 const run=process.argv.find(a=>a.startsWith('--run='))?.slice(6);
+const fps=Number(process.argv.find(a=>a.startsWith('--fps='))?.slice(6)??10);
+if(!Number.isInteger(fps)||fps<1||fps>30)throw Error('Use --fps=1..30');
 const dimensions={desktop:[1440,900],portrait:[390,844],landscape:[844,390]};
 if(!id?.startsWith('05-')||!state.takes[id]||!dimensions[viewport])throw Error('Use --take=<05 canonical id> --viewport=<desktop|portrait|landscape>');
 if(run&&!/^discovery-correction-[1-9][0-9]*$/.test(run))throw Error('Correction run must be discovery-correction-N');
@@ -46,7 +48,7 @@ try{
   const entry=ev(metrics);if(!Number.isFinite(entry.runtimeWeek))throw Error('No passive week state');
   const entryFile=path.join(rawDir,`${viewport}-entry-week7.png`);ab(['screenshot',entryFile]);files.push(entryFile);
   await writeFile(path.join(rawDir,'entry-state.json'),JSON.stringify({entry,sourceUrl:ref.standaloneUrl,observedAt:new Date().toISOString()},null,2)+'\n');
-  const preludeVideo=path.join(rawDir,`${viewport}-prelude-to-week0.webm`);ab(['record','start',preludeVideo,'--fps','10']);
+  const preludeVideo=path.join(rawDir,`${viewport}-prelude-to-week0.webm`);ab(['record','start',preludeVideo,'--fps',String(fps)]);
   let before=entry,after=entry,preludeCount=0;
   while(after.runtimeWeek>0.002&&preludeCount<300){const t=performance.now();ab(['mouse','wheel',String(-step)]);preludeCount++;if(preludeCount%3===0)after=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}
   ab(['wait','700']);after=ev(metrics);if(after.runtimeWeek>0.01)throw Error(`Prelude did not reach week 0: ${after.runtimeWeek}`);
@@ -57,7 +59,7 @@ try{
   const startFile=path.join(rawDir,`${viewport}-start.png`);ab(['screenshot',startFile]);files.push(startFile);
   await writeFile(path.join(rawDir,'start-state.json'),JSON.stringify({start,snapshot,consoleStart,errorsStart,networkStart,observedAt:new Date().toISOString()},null,2)+'\n');
   ev(telemetryJs);
-  const forwardVideo=path.join(rawDir,`${viewport}-forward-discovery.webm`);ab(['record','start',forwardVideo,'--fps','10']);
+  const forwardVideo=path.join(rawDir,`${viewport}-forward-discovery.webm`);ab(['record','start',forwardVideo,'--fps',String(fps)]);
   const p0=path.join(rawDir,`${viewport}-forward-discovery-p000.png`);ab(['screenshot',p0]);samplePaths.push(p0);
   let inputCount=0,nextSample=5,current=start;
   while(current.runtimeWeek<13.998&&inputCount<400){
@@ -71,7 +73,7 @@ try{
   const endFile=path.join(rawDir,`${viewport}-end.png`);ab(['screenshot',endFile]);files.push(endFile);ab(['record','stop']);files.push(forwardVideo);
   await saveTelemetry(`${viewport}-forward-discovery.telemetry.ndjson`,forward);
   await writeFile(path.join(rawDir,'end-state.json'),JSON.stringify({end,additionalInputAfterMax:2,forwardInputCount:inputCount,forwardSampleCount:samplePaths.length,observedAt:new Date().toISOString()},null,2)+'\n');
-  const reverseVideo=path.join(rawDir,`${viewport}-reverse-discovery.webm`);ab(['record','start',reverseVideo,'--fps','10']);
+  const reverseVideo=path.join(rawDir,`${viewport}-reverse-discovery.webm`);ab(['record','start',reverseVideo,'--fps',String(fps)]);
   let reverseCount=0,currentReverse=end;
   while(currentReverse.runtimeWeek>0.002&&reverseCount<400){const t=performance.now();ab(['mouse','wheel',String(-step)]);reverseCount++;if(reverseCount%3===0){currentReverse=ev(metrics);flush('REVERSE_DISCOVERY',reverse)}await sleep(Math.max(0,114-(performance.now()-t)))}
   ab(['wait','1200']);flush('REVERSE_DISCOVERY',reverse);
@@ -81,9 +83,9 @@ try{
   const consoleEnd=ab(['console'],true),errorsEnd=ab(['errors'],true);
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets=await Promise.all([...files,...samplePaths].map(asset));await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary={id,viewport,run:run||'original',stableStartReady:true,entry,calibration,start,end,restored,forwardInputCount:inputCount,reverseInputCount:reverseCount,forwardTelemetrySamples:forward.length,reverseTelemetrySamples:reverse.length,files:assets};
+  const summary={id,viewport,run:run||'original',fps,stableStartReady:true,entry,calibration,start,end,restored,forwardInputCount:inputCount,reverseInputCount:reverseCount,forwardTelemetrySamples:forward.length,reverseTelemetrySamples:reverse.length,files:assets};
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
-  state.takes[id].attempts.at(-1).status='COMPLETE';state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();await stateUpdate({},`DISCOVERY_${viewport.toUpperCase()}_COMPLETE`);
+  state.takes[id].attempts.at(-1).status='COMPLETE';state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();state.takes[id].blockingUnresolved=state.takes[id].blockingUnresolved.filter(x=>!(x.viewport===viewport&&x.question==='Discovery capture failed'));await stateUpdate({captureStatus:'IN_PROGRESS'},`DISCOVERY_${viewport.toUpperCase()}_COMPLETE`);
   console.log(JSON.stringify({id,viewport,entryWeek:entry.runtimeWeek,startWeek:start.runtimeWeek,endWeek:end.runtimeWeek,restoredWeek:restored.runtimeWeek,forwardSamples:forward.length,reverseSamples:reverse.length,assets:assets.length},null,2));
 }catch(e){state.takes[id].attempts.at(-1).status='FAILED';state.takes[id].attempts.at(-1).error=String(e);state.takes[id].blockingUnresolved.push({viewport,question:'Discovery capture failed',detail:String(e)});await stateUpdate({captureStatus:'FAILED'},'DISCOVERY_FAILED');throw e}
 finally{ab(['close'],true)}

@@ -1,0 +1,23 @@
+{
+  "end": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 14.0\nPURLIN\nFRI 4 JUN 2027 · 18:24\nWK 14 / 14 · 100%\nGALLERY OVERLOOK\nGLASS BALUSTRADE · DOUBLE-HEIGHT LIVING ROOM & EASTERN GARDEN TERRACE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 4 JUN",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 900,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 1,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "inside",
+    "runtimeTour": 1,
+    "runtimeWeek": 14,
+    "scrollHeight": 900,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\nCAM\nAUTO\nISO\nHIGH\nTOP\nPATH\nINSIDE\n▶ BUILD\nWK 14.0\nPURLIN\nFRI 4 JUN 2027 · 18:24\nWK 14 / 14 · 100%\nGALLERY OVERLOOK\nGLASS BALUSTRADE · DOUBLE-HEIGHT LIVING ROOM & EASTERN GARDEN TERRACE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 4 JUN"
+  },
+  "additionalInputAfterMax": 2,
+  "forwardInputCount": 51,
+  "forwardSampleCount": 21,
+  "observedAt": "2026-11-02T18:05:46.835Z"
+}

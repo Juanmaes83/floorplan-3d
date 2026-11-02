@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.calibration.v1",
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "reference": "05-c-site-camera",
+  "separateContextsClosedBeforeCapture": true,
+  "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+  "results": {
+    "desktop": {"entryWeek":7,"afterWheel50Week":7.225,"nativeScrollY":0,"maxScroll":0,"model":"VIRTUAL_SCROLL"},
+    "portrait": {"entryWeek":7,"afterWheel50Week":7.225,"nativeScrollY":0,"maxScroll":0,"dpr":1,"model":"VIRTUAL_SCROLL"},
+    "landscape": {"entryWeek":7,"afterWheel50Week":7.225,"nativeScrollY":0,"maxScroll":0,"dpr":1,"model":"VIRTUAL_SCROLL"}
+  },
+  "tool": "agent-browser 0.41.1",
+  "note": "Each calibration used its own agent-browser session and was closed. Discovery then opened a fresh context. A 10fps desktop encoder failure was recorded and preserved before the successful 5fps correction."
+}

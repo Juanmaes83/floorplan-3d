@@ -1,0 +1,446 @@
+{
+  "id": "05-c-site-camera",
+  "viewport": "portrait",
+  "run": "original",
+  "fps": 5,
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "runtimeMax": 14,
+    "runtimeShot": "cam",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nCAM 02\nMON 1 MAR 2027 · 07:18\nWK 01 / 14 · 0%\n[TR-01] SITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 1 MAR"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 0,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nCAM 02\nMON 1 MAR 2027 · 07:18\nWK 01 / 14 · 0%\n[TR-01] SITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 1 MAR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:12.760Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m01-site-setup.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.04307142857142857,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 0.603,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.6\nCAM 02\nTHU 4 MAR 2027 · 07:47\nWK 01 / 14 · 4%\n[TR-01+TR-02] SITE SET-UP + EXCAVATION\n750MM REDUCED-LEVEL DIG · 84 M³ SPOIL HEAP\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · THU 4 MAR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:14.451Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m02-excavation.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.1292142857142857,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 1.8089999999999995,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 01.8\nCAM 02\nFRI 12 MAR 2027 · 08:44\nWK 02 / 14 · 13%\n[TR-03] FOUNDATIONS\nC35 RC PAD FOOTINGS · 600×450 RING BEAM · 100 EPS · 300 SLAB\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 12 MAR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:16.194Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m03-foundations.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.2153571428571428,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 3.0149999999999992,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 03.0\nCAM 02\nMON 22 MAR 2027 · 09:41\nWK 04 / 14 · 22%\n[TR-03] FOUNDATIONS\nC35 RC PAD FOOTINGS · 600×450 RING BEAM · 100 EPS · 300 SLAB\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 22 MAR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:17.777Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m04-structure.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.3230357142857142,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 4.522499999999999,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 04.5\nCAM 02\nWED 31 MAR 2027 · 10:53\nWK 05 / 14 · 32%\n[TR-04] STRUCTURE\n5× GL28C SPRUCE PORTAL FRAMES · STEEL BASE SHOES\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · WED 31 MAR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:19.632Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m05-floors.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.4307142857142856,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 6.0299999999999985,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 06.0\nCAM 02\nMON 12 APR 2027 · 12:05\nWK 07 / 14 · 43%\n[TR-05] FLOORS\n100MM 5-PLY CLT MEZZANINE DECK · GLULAM STRAIGHT STAIR\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 12 APR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:21.402Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m06-walls.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.538392857142857,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 7.537499999999998,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.5\nCAM 02\nWED 21 APR 2027 · 13:17\nWK 08 / 14 · 54%\n[TR-06] WALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · WED 21 APR"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:23.270Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m07-roof.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.6460714285714285,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 9.045,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 09.0\nCAM 02\nMON 3 MAY 2027 · 14:28\nWK 10 / 14 · 65%\n[TR-07] ROOF\n260MM INSULATED CASSETTES · STANDING-SEAM VMZINC\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 3 MAY"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:25.124Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m08-windows-and-doors.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.7322142857142859,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 10.251000000000005,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 10.2\nCAM 02\nTUE 11 MAY 2027 · 15:26\nWK 11 / 14 · 73%\n[TR-08] WINDOWS AND DOORS\nTRIPLE-GLAZED ALU FRAMES · EAST GABLE CURTAIN WALL\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · TUE 11 MAY"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:27.171Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m09-finishes.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.861428571428572,
+        "runtimeMax": 14,
+        "runtimeShot": "cam",
+        "runtimeTour": 0,
+        "runtimeWeek": 12.060000000000008,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 12.0\nCAM 02\nMON 24 MAY 2027 · 16:52\nWK 13 / 14 · 86%\n[TR-09] FINISHES\nCHARRED LARCH CLADDING · LIME PLASTER · EUROPEAN OAK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 24 MAY"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:29.235Z"
+    },
+    {
+      "label": "M10",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m10-furniture-handover.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.950785714285715,
+        "runtimeMax": 14,
+        "runtimeShot": "path",
+        "runtimeTour": 0,
+        "runtimeWeek": 13.31100000000001,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.3\nPURLIN\nTUE 1 JUN 2027 · 17:51\nWK 14 / 14 · 95%\n[TR-10] FURNITURE\nBESPOKE JOINERY · CAST-IRON HEARTH · KEY HANDOVER\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · TUE 1 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:31.083Z"
+    },
+    {
+      "label": "M11",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m11-approach-path.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.950785714285715,
+        "runtimeMax": 14,
+        "runtimeShot": "path",
+        "runtimeTour": 0,
+        "runtimeWeek": 13.31100000000001,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.3\nPURLIN\nTUE 1 JUN 2027 · 17:51\nWK 14 / 14 · 95%\n[TR-10] FURNITURE\nBESPOKE JOINERY · CAST-IRON HEARTH · KEY HANDOVER\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · TUE 1 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:31.955Z"
+    },
+    {
+      "label": "M12",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m12-inside-entry.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.9653142857142863,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 0.06615384615386626,
+        "runtimeWeek": 13.51440000000001,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.5\nPURLIN\nWED 2 JUN 2027 · 18:01\nWK 14 / 14 · 97%\nENTRY THRESHOLD\nHINGED EUROPEAN OAK FRONT DOOR · BASALT THRESHOLD · VIEW INTO THE FRAME\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · WED 2 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:36.327Z"
+    },
+    {
+      "label": "M13",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m13-inside-living.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.9738000000000008,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 0.2946153846154054,
+        "runtimeWeek": 13.633200000000013,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.6\nPURLIN\nTHU 3 JUN 2027 · 18:07\nWK 14 / 14 · 97%\nLIVING & HEARTH\nDOUBLE-HEIGHT GL28C SPRUCE PORTALS · CAST-IRON STOVE · BOOKCASE · EAST GABLE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · THU 3 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:39.848Z"
+    },
+    {
+      "label": "M14",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m14-inside-kitchen.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.9822857142857152,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 0.5230769230769444,
+        "runtimeWeek": 13.752000000000011,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.7\nPURLIN\nTHU 3 JUN 2027 · 18:12\nWK 14 / 14 · 98%\nKITCHEN & DINING\nWATERFALL TRAVERTINE & OAK ISLAND · BRASS FIXTURES · 6-SEAT DINING TABLE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · THU 3 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:43.169Z"
+    },
+    {
+      "label": "M15",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m15-inside-loft.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 0.9907714285714294,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 0.7515384615384836,
+        "runtimeWeek": 13.870800000000012,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 13.8\nPURLIN\nFRI 4 JUN 2027 · 18:18\nWK 14 / 14 · 99%\nTHE LOFT SUITE\n100MM 5-PLY CLT DECK · OAK PLATFORM BED · ARCHITECT’S STUDY DESK\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 4 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:46.473Z"
+    },
+    {
+      "label": "M16",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m16-inside-gallery-overlook.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 1,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 1,
+        "runtimeWeek": 14,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nFRI 4 JUN 2027 · 18:24\nWK 14 / 14 · 100%\nGALLERY OVERLOOK\nGLASS BALUSTRADE · DOUBLE-HEIGHT LIVING ROOM & EASTERN GARDEN TERRACE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 4 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:50.170Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 0,
+        "normalizedRuntimeProgress": 1,
+        "runtimeMax": 14,
+        "runtimeShot": "inside",
+        "runtimeTour": 1,
+        "runtimeWeek": 14,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+        "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 14.0\nPURLIN\nFRI 4 JUN 2027 · 18:24\nWK 14 / 14 · 100%\nGALLERY OVERLOOK\nGLASS BALUSTRADE · DOUBLE-HEIGHT LIVING ROOM & EASTERN GARDEN TERRACE\n01 ENTRY\n02 LIVING\n03 KITCHEN\n04 LOFT\n05 OVERLOOK\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · FRI 4 JUN"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T18:14:51.522Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-semantic.webm",
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-semantic-start.png",
+      "bytes": 33014,
+      "sha256": "a54181ece177beda862e0533b1f2c8256e96182dd24d21de80c0c1038c700265"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m01-site-setup.png",
+      "bytes": 135259,
+      "sha256": "d9f7b5beb904dafb2d3d9ef98e4276b74a059b0f5dddd3ef2fff95bfcdf13b5a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m02-excavation.png",
+      "bytes": 143478,
+      "sha256": "7f0fecaba8957b0d87758c2361d4f8adbe0f7a3d4fc79c59a8de02d638148dc2"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m03-foundations.png",
+      "bytes": 113152,
+      "sha256": "59b13633129cb86fbb8641a6ccbfe68e7a7145bdf1c08235f19e5ca2afa2f106"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m04-structure.png",
+      "bytes": 162037,
+      "sha256": "be613d0cb7786bc4b36265777cfc402b2b52c83e1c424739d25ac6b6d52fbd95"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m05-floors.png",
+      "bytes": 190022,
+      "sha256": "65339a792fcaf0f6564b5ac54885bab6b8f9d7e69c66e481f8205685061c5053"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m06-walls.png",
+      "bytes": 218420,
+      "sha256": "adf52963547ab61c7f32e166d03b4b4d363aaef2e69e9f85927914630761bc1d"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m07-roof.png",
+      "bytes": 248317,
+      "sha256": "4dacabf7aeb9f0ba2b2b4aa2e3f12de088cd548cc68d5b3a798e3bec29c762db"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m08-windows-and-doors.png",
+      "bytes": 242535,
+      "sha256": "2a79bdeb409f5f9d1c394cc865a0ffb7a13bd95daafb37a59ea9b08696fb11ff"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m09-finishes.png",
+      "bytes": 240388,
+      "sha256": "9eb0369b4776b02231286be335ea196a8faf52151954fb94784c06351cedf4f7"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m10-furniture-handover.png",
+      "bytes": 181517,
+      "sha256": "309d1ec93d513190336d87901c49cf1b7baa391c075aac518ea5677c4f868971"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m11-approach-path.png",
+      "bytes": 181519,
+      "sha256": "2387b0a1b4f8c38c9122741b64c8fe7feeaa76cf99fb74266479f8e28fa084cb"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m12-inside-entry.png",
+      "bytes": 182871,
+      "sha256": "60f6647a22a368eae6123e8536dde1851ffc8468bcca6cdca12f50058d3d238e"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m13-inside-living.png",
+      "bytes": 230298,
+      "sha256": "7a445e8ef49d72f1de2fc5a6b25f8852e033bf252adc2350bdf48aac0db65e39"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m14-inside-kitchen.png",
+      "bytes": 282720,
+      "sha256": "076b067b84b420b4fae3bb10f78d021f316168a071411710c8310122509b5fdd"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m15-inside-loft.png",
+      "bytes": 282738,
+      "sha256": "e0ab80eeed48a672f6718331b0549f74a022a1b57c5f5610279e0b7a2e12fc01"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-m16-inside-gallery-overlook.png",
+      "bytes": 233999,
+      "sha256": "cbf6b3cbf552738328cdf2e325078e9afeed1d00d703fddd32b304b993df0204"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-semantic-end.png",
+      "bytes": 233994,
+      "sha256": "a0c4f92c3bdedd7a96db0cbff959b495bfcce01e32f861f928fec427934cf2c8"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\portrait\\portrait-forward-semantic.webm",
+      "bytes": 2320874,
+      "sha256": "8722c204b631a87ef349788ee3633102a3e82d0316ff4c43e65efa7e516a0355"
+    }
+  ],
+  "preludeInputCount": 27,
+  "inputCount": 112,
+  "terminalInput": "WHEEL_ONLY",
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\05-c-site-camera\\semantic-plan.json"
+}

@@ -12,6 +12,8 @@ const inventory=JSON.parse(await readFile(path.join(evidence,'reference-inventor
 const id=process.argv.find(a=>a.startsWith('--take='))?.slice(7);
 const viewport=process.argv.find(a=>a.startsWith('--viewport='))?.slice(11);
 const run=process.argv.find(a=>a.startsWith('--run='))?.slice(6);
+const fps=Number(process.argv.find(a=>a.startsWith('--fps='))?.slice(6)??10);
+if(!Number.isInteger(fps)||fps<1||fps>30)throw Error('Use --fps=1..30');
 const dims={desktop:[1440,900],portrait:[390,844],landscape:[844,390]};
 if(!id?.startsWith('05-')||!state.takes[id]||!dims[viewport])throw Error('Use --take=<05 canonical id> --viewport=<desktop|portrait|landscape>');
 if(run&&!/^semantic-correction-[1-9][0-9]*$/.test(run))throw Error('Correction run must be semantic-correction-N');
@@ -36,7 +38,7 @@ try{
   while(now.runtimeWeek>0.002&&preludeCount<300){const t=performance.now();ab(['mouse','wheel',String(-step)]);preludeCount++;if(preludeCount%3===0)now=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}
   ab(['wait','700']);now=ev(metrics);if(now.runtimeWeek>0.01)throw Error(`Prelude did not reach week 0: ${now.runtimeWeek}`);
   const initial=now;records.push(capture('semantic-start','A'));
-  const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);ab(['record','start',video,'--fps','10']);
+  const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);ab(['record','start',video,'--fps',String(fps)]);
   let inputCount=0,terminalInput='WHEEL_ONLY';
   for(const m of milestones){
     const target=14*(m.targetProgressByViewport?.[viewport]??m.targetProgress);
@@ -55,11 +57,15 @@ try{
     records.push(capture(`forward-${m.label.toLowerCase()}-${m.slug}`,m.label));
   }
   while(now.runtimeWeek<13.998&&inputCount<450){const t=performance.now();ab(['mouse','wheel',String(step)]);inputCount++;now=ev(metrics);await sleep(Math.max(0,114-(performance.now()-t)))}
-  ab(['wait','900']);now=ev(metrics);if(now.runtimeWeek!==14||!now.visibleHud.includes('PRACTICAL COMPLETION'))throw Error(`Semantic forward did not reach exact Practical Completion: ${now.runtimeWeek}`);
+  ab(['wait','900']);now=ev(metrics);
+  const terminalStateOk=id.startsWith('05-b-')
+    ? now.visibleHud.includes('PRACTICAL COMPLETION')
+    : now.runtimeShot==='inside'&&now.visibleHud.toUpperCase().includes('GALLERY OVERLOOK');
+  if(now.runtimeWeek!==14||!terminalStateOk)throw Error(`Semantic forward did not reach the take's exact terminal state: week=${now.runtimeWeek}, shot=${now.runtimeShot}`);
   records.push(capture('semantic-end','B'));ab(['record','stop']);
   const assets=[];for(const r of records)assets.push({path:r.path,bytes:(await stat(r.path)).size,sha256:createHash('sha256').update(await readFile(r.path)).digest('hex')});
   assets.push({path:video,bytes:(await stat(video)).size,sha256:createHash('sha256').update(await readFile(video)).digest('hex')});
-  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',initial,records,video,assets,preludeInputCount:preludeCount,inputCount,terminalInput,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
+  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',fps,initial,records,video,assets,preludeInputCount:preludeCount,inputCount,terminalInput,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
   state.takes[id].attempts.at(-1).status='COMPLETE';state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();state.takes[id].blockingUnresolved=state.takes[id].blockingUnresolved.filter(x=>!(x.viewport===viewport&&x.question==='Semantic capture failed'));state.takes[id].captureStatus='IN_PROGRESS';state.takes[id].lastSuccessfulStage=`SEMANTIC_${viewport.toUpperCase()}_COMPLETE`;state.takes[id].timestamps.updatedAt=new Date().toISOString();await writeFile(statePath,JSON.stringify(state,null,2)+'\n');
   console.log(JSON.stringify({id,viewport,run:run||'original',milestones:milestones.length,finalWeek:now.runtimeWeek,assets:assets.length},null,2));
 }catch(e){state.takes[id].attempts.at(-1).status='FAILED';state.takes[id].attempts.at(-1).error=String(e);state.takes[id].blockingUnresolved.push({viewport,question:'Semantic capture failed',detail:String(e)});state.takes[id].captureStatus='FAILED';state.takes[id].timestamps.updatedAt=new Date().toISOString();await writeFile(statePath,JSON.stringify(state,null,2)+'\n');throw e}

@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T18:01:59.438Z",
+  "updatedAt": "2026-11-02T18:09:47.269Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -892,16 +892,81 @@
       }
     },
     "05-c-site-camera": {
-      "captureStatus": "NOT_STARTED",
+      "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "lastSuccessfulStage": "SEMANTIC_LANDSCAPE_COMPLETE",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T18:04:04.153Z",
+          "status": "FAILED",
+          "error": "Error: agent-browser record: ✗ Recording encoder fell behind by more than 16 buffered frames\n"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T18:05:12.732Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:06:00.617Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T18:06:46.742Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:07:32.692Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T18:08:33.064Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:09:47.269Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:11:21.199Z",
+          "status": "FAILED",
+          "error": "Error: Semantic forward did not reach exact Practical Completion: 14"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T18:12:51.925Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:13:49.333Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:14:00.390Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:14:51.681Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T18:15:09.411Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:16:16.608Z"
+        }
+      ],
       "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T18:16:16.608Z"
       }
     },
     "06-demo-card-model": {

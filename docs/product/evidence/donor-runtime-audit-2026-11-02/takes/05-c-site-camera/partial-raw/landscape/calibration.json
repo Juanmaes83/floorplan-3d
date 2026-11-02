@@ -1,0 +1,41 @@
+{
+  "purpose": "INTERACTION_MODEL_ONLY_NOT_EVIDENCE",
+  "before": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nCAM 02\nMON 19 APR 2027 · 15:30\nWK 08 / 14 · 50%\n[TR-06] WALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 19 APR",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0.5,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "sig",
+    "runtimeTour": 0,
+    "runtimeWeek": 7,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 07.0\nCAM 02\nMON 19 APR 2027 · 15:30\nWK 08 / 14 · 50%\n[TR-06] WALLS\n240MM CLOSED-PANEL TIMBER CASSETTES · OSB/3 SHEATHING\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 19 APR"
+  },
+  "after": {
+    "bodyText": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nCAM 02\nMON 1 MAR 2027 · 07:18\nWK 01 / 14 · 0%\n[TR-01] SITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 1 MAR",
+    "dpr": 1,
+    "hash": "",
+    "innerHeight": 390,
+    "maxScroll": 0,
+    "normalizedRuntimeProgress": 0,
+    "route": "/flat-to-3d/05-schedule-build/index.html",
+    "runtimeMax": 14,
+    "runtimeShot": "cam",
+    "runtimeTour": 0,
+    "runtimeWeek": 0,
+    "scrollHeight": 390,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/05-schedule-build/index.html?dir=c",
+    "visibleHud": "DIR\nA // PROG\nB // 1:1 SHEET\nC // CAM\n▶ BUILD\nWK 00.0\nCAM 02\nMON 1 MAR 2027 · 07:18\nWK 01 / 14 · 0%\n[TR-01] SITE SET-UP\nHERAS PERIMETER · WELFARE CABIN · DATUM PROFILES\nWBS // CRITICAL PATH\nWK 01\nWK 02\nWK 03\nWK 04\nWK 05\nWK 06\nWK 07\nWK 08\nWK 09\nWK 10\nWK 11\nWK 12\nWK 13\nWK 14\n00\nSITE SET-UP\n01\nEXCAVATION\n02\nFOUNDATIONS\n03\nSTRUCTURE\n04\nFLOORS\n05\nWALLS\n06\nROOF\n07\nWINDOWS AND DOORS\n08\nFINISHES\n09\nFURNITURE\nTODAY · MON 1 MAR"
+  },
+  "model": "VIRTUAL_SCROLL",
+  "note": "Native scroll remains zero; wheel drives the exposed 05 week state. The natural prelude from canonical week 7 to week 0 is recorded without reload.",
+  "preludeInputCount": 54,
+  "preludeVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\05-c-site-camera\\landscape\\landscape-prelude-to-week0.webm"
+}

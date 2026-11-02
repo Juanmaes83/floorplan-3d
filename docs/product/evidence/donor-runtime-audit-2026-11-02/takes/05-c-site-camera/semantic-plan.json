@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "READY_FOR_CAPTURE",
+  "validation": "Pending three independent semantic passes and visual review; Discovery is not semantic proof.",
+  "basis": "Independent canonical ?dir=c Discovery entered at virtual week 7, naturally wheeled to 0 and recorded 0→14→0 in desktop, portrait and landscape. Native scrollY remained zero. The same site and house build under a fixed site-camera composition and changing date/time/sun; pinned view.js maps C to camera shot cam→path→inside and time-of-day 7.3→18.4. A first 10fps desktop prelude failed in agent-browser encoder and was preserved; a fresh 5fps correction completed. Portrait and landscape 5fps completed. At 390×844 controls/date and programme are cropped; at 844×390 the HUD consumes much of the scene. This plan is based on observed Discovery frames/telemetry and pinned source, and must be verified by fresh semantic passes.",
+  "milestones": [
+    {"label":"M01","slug":"site-setup","targetProgress":0.03,"observedChange":"The fenced site and welfare cabin appear under an early-morning site camera with the programme at the first phase."},
+    {"label":"M02","slug":"excavation","targetProgress":0.10,"observedChange":"Ground work and excavation develop in the same footprint as the time/date and programme cursor advance."},
+    {"label":"M03","slug":"foundations","targetProgress":0.19,"observedChange":"Pad footings and slab form in the excavated footprint while morning light shifts."},
+    {"label":"M04","slug":"structure","targetProgress":0.31,"observedChange":"Timber portal frames rise on that slab; the site camera holds the house as the day's light advances."},
+    {"label":"M05","slug":"floors","targetProgress":0.42,"observedChange":"Mezzanine floor and stair occupy the timber frames; date/time and programme still share the virtual week."},
+    {"label":"M06","slug":"walls","targetProgress":0.52,"observedChange":"Wall cassettes fill the same frame around the existing openings."},
+    {"label":"M07","slug":"roof","targetProgress":0.63,"observedChange":"Roof cassettes and standing seam close the same building, with later daylight and moving shadows."},
+    {"label":"M08","slug":"windows-and-doors","targetProgress":0.72,"observedChange":"Glazing and doors fill the established wall and roof openings."},
+    {"label":"M09","slug":"finishes","targetProgress":0.83,"observedChange":"Cladding and internal finishes cover the same house as the site camera reaches afternoon light."},
+    {"label":"M10","slug":"furniture-handover","targetProgress":0.94,"observedChange":"Furniture and handover details arrive in the near-complete house before the camera transition."},
+    {"label":"M11","slug":"approach-path","targetProgress":0.95,"observedChange":"The automatic camera changes from site-camera shot to path, approaching the completed house."},
+    {"label":"M12","slug":"inside-entry","targetProgress":0.965,"observedChange":"The camera enters the completed house at the entry threshold while the same date/week stays visible."},
+    {"label":"M13","slug":"inside-living","targetProgress":0.974,"observedChange":"The interior camera advances to the living area of the same house."},
+    {"label":"M14","slug":"inside-kitchen","targetProgress":0.982,"observedChange":"The route reaches kitchen and dining below the existing mezzanine."},
+    {"label":"M15","slug":"inside-loft","targetProgress":0.991,"observedChange":"The camera rises to the loft suite and study along the same stair/upper level."},
+    {"label":"M16","slug":"inside-gallery-overlook","targetProgress":1,"observedChange":"At week 14 the route ends at the gallery overlooking the same double-height living room and terrace."}
+  ],
+  "reverseSemanticStates": "The interior tour retreats through the same rooms to the path/site camera; finishes and structural pieces withdraw as the virtual week returns to zero. Review the actual reverse video for any separate cleanup or late camera/sun behavior. Do not assume an exact inverse camera frame from source alone."
+}
