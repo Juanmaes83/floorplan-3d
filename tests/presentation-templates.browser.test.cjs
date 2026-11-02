@@ -53,7 +53,10 @@ for(const profile of ['real-estate','developer','architecture','renovation','int
  await config(page);assert.equal(await page.locator('#presentationTemplate').inputValue(),'');assert.equal((await templates(page)).resolved,null);
 });
 for(const viewport of [{width:390,height:844},{width:844,height:390}])test(`FT6 mobile ${viewport.width}: controls, focus, reset, explicit exploded choice and no overflow`,async t=>{
- const {page,errors}=await open(t,{viewport,zip:duplex});await config(page);await page.locator('#presentationTemplate').selectOption('architecture');
+ const {page,errors}=await open(t,{viewport,zip:duplex});await config(page);
+ const entry=await page.evaluate(()=>{const picker=document.querySelector('#presentationTemplate').getBoundingClientRect(),title=document.querySelector('#presentationConfigTitle').getBoundingClientRect();return {focus:document.activeElement.id,pickerTop:picker.top,pickerBottom:picker.bottom,titleTop:title.top,height:innerHeight,scroll:document.querySelector('#presentationConfig').scrollTop};});
+ assert.equal(entry.focus,'presentationTemplate');assert.equal(entry.scroll,0);assert.ok(entry.titleTop>=0&&entry.pickerTop>=0&&entry.pickerBottom<entry.height-44,'heading and template choice visible on open');
+ await page.screenshot({path:path.join(QA,'initial-'+viewport.width+'-config.png')});await page.locator('#presentationTemplate').selectOption('architecture');
  await page.locator('.presentation-template-options').first().locator('summary').click();await page.locator('#presentationTemplateBuildingReading').focus();await page.locator('#presentationTemplateBuildingReading').selectOption('exploded');assert.equal((await templates(page)).resolved.buildingReading,'exploded-levels');
  assert.equal(await page.locator('#presentationTemplateBuildingReading').evaluate(n=>n===document.activeElement),true);assert.equal(await overflow(page),false);
  await page.locator('#presentationTemplateReset').click();assert.equal((await templates(page)).session.buildingReading,'automatic');assert.equal((await templates(page)).resolved.buildingReading,'axon');

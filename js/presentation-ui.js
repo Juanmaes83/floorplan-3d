@@ -893,7 +893,7 @@
   const heading=el('h2',tx('Presentar mi vivienda','Present my home','展示我的住宅'),config);heading.id='presentationConfigTitle';
   // A building of two levels is presented as a whole: rooms chosen per level, one presentation and one batch.
   const sources=app.levelContext?.levels>1?building()?.presentationSources():null;
-  if(sources&&sources.levels.length<=Core.MAX_LEVELS&&openBuilding(sources)){config.showModal();(config.querySelector('input')||config.querySelector('button'))?.focus();return;}
+  if(sources&&sources.levels.length<=Core.MAX_LEVELS&&openBuilding(sources)){config.showModal();(config.querySelector('#presentationTemplate')||config.querySelector('input')||config.querySelector('button'))?.focus({preventScroll:true});config.scrollTop=0;return;}
   const possible=Core.create(app.project,app.geometry,app.entryId,FloorPlanGuide.revision(app.project));
   if(!possible){
    el('p',tx('Primero crea una estancia con muros en Distribuir. El proyecto actual se conserva.','Create a room with walls in Layout first. The current project is kept.','请先在布局中创建带墙的房间。当前项目会保留。'),config);
@@ -927,7 +927,7 @@
    prepareTemplates([{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
   }
   config.showModal();
-  (config.querySelector('input')||config.querySelector('button'))?.focus();
+  (config.querySelector('#presentationTemplate')||config.querySelector('input')||config.querySelector('button'))?.focus({preventScroll:true});config.scrollTop=0;
  }
  // Building configuration: one group per level with its valid rooms, the selection saved per level (same local
  // sidecar as a single-level presentation of that level). Returns false when no level has a room to present.

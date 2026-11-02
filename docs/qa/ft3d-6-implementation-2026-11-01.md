@@ -14,6 +14,8 @@ End-frame review of `09db29b` found that one video closed before the compositor 
 
 Authority audit then reproduced one missing resource: in a one-level building, `site` belongs to the building even though the presentation plan uses the single-project path. The host now uses the same existing building/project site authority as Elevation. A real validated synthetic one-level building test fails before that one-line correction and passes after it. No territory/provider/schema/data changes are involved. Final browser coverage now includes 18 cases; all final evidence must use the subsequent checkpoint (the earlier `ec845e7` preview/campaign is superseded).
 
+Landscape review at `cdcb0b6` caught the original room-checkbox autofocus scrolling the newly added template picker above the viewport. Dialog entry now focuses the template selector without scrolling and starts at scrollTop 0, for single-project and building configuration. Both mobile tests assert focused picker, visible heading/picker and top scroll position before choosing a profile. No player or room-selection semantics change. Earlier media/runs remain stale; final review uses the following checkpoint.
+
 Planned final commands (actual outputs/counts belong to the final review record):
 
 ```text
