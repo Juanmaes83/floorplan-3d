@@ -1,0 +1,3180 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.take.v1",
+  "auditId": "donor-runtime-7x14-2026-11-02",
+  "take": {
+    "id": "07-c-the-face",
+    "group": "07 · SUNLIT ELEVATION",
+    "title": "C · THE FACE",
+    "inventoryIndex": 14
+  },
+  "status": "AUDITED",
+  "baseline": {
+    "repository": "Juanmaes83/floorplan-3d",
+    "approvedSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
+    "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
+    "cleanAtStart": true
+  },
+  "reference": {
+    "selectorUrl": "https://sam1983aing.github.io/flat-to-3d/#07:2",
+    "standaloneUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "resolvedUrl": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "donorRepo": "Sam1983Aing/flat-to-3d",
+    "donorCommit": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+    "entrypoint": "07-sunlit-elevation/c-the-face/index.html",
+    "urlDiscoveryEvidence": [
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:index.html:561",
+        "statement": "Selector variant C · The Face points to 07-sunlit-elevation/c-the-face/index.html"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/index.html",
+        "statement": "Entrypoint exists in pinned checkout"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "locator": "HTTP HEAD https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html at 2026-11-02T10:33:06.640Z",
+        "statement": "HTTP 200; final URL https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html"
+      }
+    ]
+  },
+  "tooling": {
+    "os": "Windows x86_64",
+    "codexCli": "0.155.1",
+    "agentBrowser": "0.41.1",
+    "browser": "Google Chrome 153.0.8010.53",
+    "playwright": "1.64.1 installed as recording fallback; not used",
+    "ffmpeg": "8.1.2-full_build"
+  },
+  "professionalService": {
+    "problemSolved": "Let an architect, material supplier or client inspect how a proposed facade bond and physically projecting headers read at drawing scale, under normal/raking sun and at human approach scale.",
+    "primaryUsers": [
+      "architect",
+      "facade/material reviewer",
+      "material supplier",
+      "client"
+    ],
+    "serviceOutcome": "A 1:20 ink facade becomes a material wall; the same header lattice casts changing real shadows, is inspected close up and remains continuous through the porch into the hall.",
+    "decisionValue": "Can support material/relief discussion and sample-panel evaluation. Kiln & Course, KC-06, 60 mm headers, mortar and order CTA are invented donor specifications, not verified Rubik material/project facts.",
+    "evidence": [
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Ink bond and hatch at A0.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-start.png"
+      },
+      {
+        "class": "OBSERVED_RUNTIME",
+        "statement": "Close projecting header geometry and long shadows.",
+        "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png"
+      },
+      {
+        "class": "DONOR_SOURCE",
+        "statement": "Pinned take describes invented brand and 60 mm proud headers.",
+        "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:1-16"
+      }
+    ]
+  },
+  "continuityInvariants": [
+    {
+      "statement": "Drawn zigzag header lattice, window and porch retain their spatial coordinates through material front.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Drawn facade.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-start.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Sweep across same bond.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m02-brick-sweep-onset.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Same h0 house receives relief and shader state.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:8-12,63-75; engine/elevation.js:1069-1083"
+        }
+      ]
+    },
+    {
+      "statement": "Low sun changes shadow length on fixed protruding header geometry, without a geometry swap.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Materialized wall before full rake.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p030.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Header close-up after rake.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png"
+        },
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Header boxes are created once; sun direction alone changes in frame.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:1069-1083; c-the-face/page.js:67-74"
+        }
+      ]
+    },
+    {
+      "statement": "The bond wraps into the same deep porch and door opening; the camera enters behind it.",
+      "evidence": [
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Same porch at materialized facade.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p030.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Door opening.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m08-door-opening.png"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Interior B.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-end.png"
+        }
+      ]
+    }
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 5760,
+        "innerHeight": 900,
+        "maxScroll": 4860,
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // D-104  ·  KILN & COURSE\"\n  - paragraph\n    - StaticText \"PLOTTING MASONRY DETAIL 1:20  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ KILN & COURSE RELIEF BRICK · D-104 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"KILN & COURSE\"\n    - StaticText \"RELIEF BRICK · D-104\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"ORDER A SAMPLE PANEL →\" [ref=e3]\n    - StaticText \"ORDER A SAMPLE PANEL\"\n    - StaticText \"→\"\n- region \"KC-06 Diaper, detail elevation\" [ref=e1]\n  - StaticText \"KC-06 DIAPER\"\n  - StaticText \" ·  DETAIL ELEVATION 1:20\"\n  - heading \"THE SHADOW IS THE PRODUCT.\" [level=1, ref=e4]\n    - StaticText \"THE SHADOW\"\n    - StaticText \"IS THE \"\n    - emphasis\n      - StaticText \"PRODUCT.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"1:20 WALL · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"1:20 WALL\" [ref=e5]\n  - button \"RAKE SUN\" [ref=e6]\n  - button \"HEADER\" [ref=e7]\n  - button \"PORCH\" [ref=e8]\n  - button \"INTERIOR\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[5AA15B266CF639F11D691ACBEA1A3FD0] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html (Document) 200\n[32068.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[32068.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[32068.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/page.js (Script) 200\n[32068.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[32068.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[32068.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[32068.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[32068.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[32068.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[32068.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[32068.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[32068.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[32068.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[32068.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[32068.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[32068.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[32068.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 26.9,
+          "bytes": 15884981,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 33.334,
+          "bytes": 14923109,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "drawn-relief",
+          "changed": [
+            "The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth."
+          ],
+          "continuous": [
+            "The same window, porch opening, human figure and zigzag header bond remain as the lens reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0831,
+            "scrollY": 404,
+            "monotonicMs": 9481.9,
+            "videoSeconds": 2.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1298,
+            "scrollY": 631,
+            "monotonicMs": 10185.4,
+            "videoSeconds": 2.897,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1733,
+            "scrollY": 842,
+            "monotonicMs": 10888.8,
+            "videoSeconds": 3.6,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.1337448559670782,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,55-62; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at desktop: The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m01-drawn-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.08-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=2.193-3.6"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "brick-sweep-onset",
+          "changed": [
+            "A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall."
+          ],
+          "continuous": [
+            "The luminous front crosses the original header pattern, window and porch without changing their locations."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1912,
+            "scrollY": 929,
+            "monotonicMs": 11096.2,
+            "videoSeconds": 3.807,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2531,
+            "scrollY": 1230,
+            "monotonicMs": 12386.4,
+            "videoSeconds": 5.098,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2893,
+            "scrollY": 1406,
+            "monotonicMs": 13681.6,
+            "videoSeconds": 6.393,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.25411522633744854,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at desktop: A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m02-brick-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=3.807-6.393"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-bond",
+          "changed": [
+            "Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations."
+          ],
+          "continuous": [
+            "The materialized bond keeps the same diagonal burnt-header lattice and porch/window geometry."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3235,
+            "scrollY": 1572,
+            "monotonicMs": 14082.3,
+            "videoSeconds": 6.793,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3611,
+            "scrollY": 1755,
+            "monotonicMs": 15081.6,
+            "videoSeconds": 7.793,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3924,
+            "scrollY": 1907,
+            "monotonicMs": 15493.8,
+            "videoSeconds": 8.205,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.37448559670781895,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at desktop: Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m03-materialized-bond.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.32-0.39",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=6.793-8.205"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "low-sun-transition",
+          "changed": [
+            "The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible."
+          ],
+          "continuous": [
+            "Moving light changes shadows on existing projected headers; the header positions remain fixed."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4237,
+            "scrollY": 2059,
+            "monotonicMs": 16383.3,
+            "videoSeconds": 9.095,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4601,
+            "scrollY": 2236,
+            "monotonicMs": 16882.2,
+            "videoSeconds": 9.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5021,
+            "scrollY": 2440,
+            "monotonicMs": 18284.4,
+            "videoSeconds": 10.996,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.46810699588477367,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at desktop: The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m04-low-sun-transition.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.5",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=9.095-10.996"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "raking-shadow-settled",
+          "changed": [
+            "Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift."
+          ],
+          "continuous": [
+            "The same built-out header bricks cast longer shadows as the raking sun settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5099,
+            "scrollY": 2478,
+            "monotonicMs": 18383.8,
+            "videoSeconds": 11.095,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5498,
+            "scrollY": 2672,
+            "monotonicMs": 19384.8,
+            "videoSeconds": 12.096,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5825,
+            "scrollY": 2831,
+            "monotonicMs": 19786,
+            "videoSeconds": 12.497,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5617283950617284,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at desktop: Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m05-raking-shadow-settled.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.51-0.58",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=11.095-12.497"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "header-closeup",
+          "changed": [
+            "The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail."
+          ],
+          "continuous": [
+            "Close camera view reveals those same headers as physical boxes proud of the same buff bond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6272,
+            "scrollY": 3048,
+            "monotonicMs": 20985.4,
+            "videoSeconds": 13.697,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6798,
+            "scrollY": 3304,
+            "monotonicMs": 22687.1,
+            "videoSeconds": 15.398,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.714,
+            "scrollY": 3470,
+            "monotonicMs": 23087.7,
+            "videoSeconds": 15.799,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6820987654320988,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,67-74; engine/elevation.js:1069-1083,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at desktop: The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.63-0.71",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=13.697-15.799"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "porch-reveal",
+          "changed": [
+            "The camera follows the same patterned wall toward the deep porch reveal and original oak door."
+          ],
+          "continuous": [
+            "The patterned facade leads around the same deep porch reveal toward the original oak door."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7216,
+            "scrollY": 3507,
+            "monotonicMs": 23184,
+            "videoSeconds": 15.895,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7514,
+            "scrollY": 3652,
+            "monotonicMs": 24188.3,
+            "videoSeconds": 16.899,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7928,
+            "scrollY": 3853,
+            "monotonicMs": 24690.5,
+            "videoSeconds": 17.402,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7489711934156379,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,75; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at desktop: The camera follows the same patterned wall toward the deep porch reveal and original oak door.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m07-porch-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.72-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=15.895-17.402"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-opening",
+          "changed": [
+            "The oak door opens inward while the bond and porch remain spatially continuous with the wall detail."
+          ],
+          "continuous": [
+            "The door leaf pivots within that same porch/brick opening, with interior aligned behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8002,
+            "scrollY": 3889,
+            "monotonicMs": 24984.7,
+            "videoSeconds": 17.696,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.843,
+            "scrollY": 4097,
+            "monotonicMs": 25882.1,
+            "videoSeconds": 18.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8833,
+            "scrollY": 4293,
+            "monotonicMs": 27284.8,
+            "videoSeconds": 19.996,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8425925925925926,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:75; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at desktop: The oak door opens inward while the bond and porch remain spatially continuous with the wall detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m08-door-opening.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=17.696-19.996"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "sunlit-interior",
+          "changed": [
+            "The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view."
+          ],
+          "continuous": [
+            "The interior floor and stair lie behind the original facade and porch; the donor sample CTA is an overlay."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9368,
+            "scrollY": 4553,
+            "monotonicMs": 28385.2,
+            "videoSeconds": 21.096,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9749,
+            "scrollY": 4738,
+            "monotonicMs": 28881.6,
+            "videoSeconds": 21.593,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 4860,
+            "monotonicMs": 29985,
+            "videoSeconds": 22.696,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9897119341563786,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,81-86; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at desktop: The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m09-sunlit-interior.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm#t=21.096-22.696"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 4860,
+        "scrollHeight": 5760,
+        "innerHeight": 900,
+        "maxScroll": 4860,
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 17.6,
+          "bytes": 11015868,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, ink 1:20 patterned facade, 2° optic and original sun/HUD; no visual residue of material/rake/door. Hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 85,
+          "stepPx": 72
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 85,
+          "stepPx": -72
+        }
+      ]
+    },
+    "portrait": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 5402,
+        "innerHeight": 844,
+        "maxScroll": 4558,
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // D-104  ·  KILN & COURSE\"\n  - paragraph\n    - StaticText \"PLOTTING MASONRY DETAIL 1:20  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ KILN & COURSE // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"KILN & COURSE\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"ORDER A SAMPLE PANEL →\" [ref=e3]\n    - StaticText \"ORDER A SAMPLE PANEL\"\n    - StaticText \"→\"\n- region \"KC-06 Diaper, detail elevation\" [ref=e1]\n  - StaticText \"KC-06 DIAPER\"\n  - StaticText \" ·  DETAIL ELEVATION 1:20\"\n  - heading \"THE SHADOW IS THE PRODUCT.\" [level=1, ref=e4]\n    - StaticText \"THE SHADOW\"\n    - StaticText \"IS THE \"\n    - emphasis\n      - StaticText \"PRODUCT.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"1:20 WALL · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e5] clickable [cursor:pointer]\n    - graphics-symbol [ref=e6] clickable [cursor:pointer]\n    - graphics-symbol [ref=e7] clickable [cursor:pointer]\n    - graphics-symbol [ref=e8] clickable [cursor:pointer]\n    - graphics-symbol [ref=e9] clickable [cursor:pointer]",
+        "consoleErrors": "",
+        "network": "[4183A340145C920E9A5E4D94F79E78FF] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html (Document) 200\n[96640.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[96640.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[96640.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/page.js (Script) 200\n[96640.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[96640.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[96640.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[96640.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[96640.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[96640.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[96640.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[96640.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[96640.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[96640.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[96640.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[96640.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[96640.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[96640.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 21.9,
+          "bytes": 3809921,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 26.167,
+          "bytes": 2724890,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "drawn-relief",
+          "changed": [
+            "The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth."
+          ],
+          "continuous": [
+            "The same window, porch opening, human figure and zigzag header bond remain as the lens reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.0794,
+            "scrollY": 362,
+            "monotonicMs": 9611,
+            "videoSeconds": 1.892,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.131,
+            "scrollY": 597,
+            "monotonicMs": 10416.2,
+            "videoSeconds": 2.697,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1703,
+            "scrollY": 776,
+            "monotonicMs": 10911.8,
+            "videoSeconds": 3.193,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.1445809565598947,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,55-62; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at portrait: The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m01-drawn-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.08-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=1.892-3.193"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "brick-sweep-onset",
+          "changed": [
+            "A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall."
+          ],
+          "continuous": [
+            "The luminous front crosses the original header pattern, window and porch without changing their locations."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1911,
+            "scrollY": 871,
+            "monotonicMs": 11213.3,
+            "videoSeconds": 3.494,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2521,
+            "scrollY": 1149,
+            "monotonicMs": 12106.4,
+            "videoSeconds": 4.387,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.2867,
+            "scrollY": 1307,
+            "monotonicMs": 13007.5,
+            "videoSeconds": 5.288,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.22356296621325142,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at portrait: A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m02-brick-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=3.494-5.288"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-bond",
+          "changed": [
+            "Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations."
+          ],
+          "continuous": [
+            "The materialized bond keeps the same diagonal burnt-header lattice and porch/window geometry."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3194,
+            "scrollY": 1456,
+            "monotonicMs": 13407,
+            "videoSeconds": 5.688,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3607,
+            "scrollY": 1644,
+            "monotonicMs": 14208,
+            "videoSeconds": 6.489,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3894,
+            "scrollY": 1775,
+            "monotonicMs": 14608.3,
+            "videoSeconds": 6.889,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.36836331724440546,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at portrait: Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m03-materialized-bond.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.32-0.39",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=5.688-6.889"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "low-sun-transition",
+          "changed": [
+            "The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible."
+          ],
+          "continuous": [
+            "Moving light changes shadows on existing projected headers; the header positions remain fixed."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4197,
+            "scrollY": 1913,
+            "monotonicMs": 15208.6,
+            "videoSeconds": 7.49,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4581,
+            "scrollY": 2088,
+            "monotonicMs": 15808.7,
+            "videoSeconds": 8.09,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.4961,
+            "scrollY": 2261,
+            "monotonicMs": 16309.5,
+            "videoSeconds": 8.591,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4736726634488811,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at portrait: The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m04-low-sun-transition.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.5",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=7.49-8.591"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "raking-shadow-settled",
+          "changed": [
+            "Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift."
+          ],
+          "continuous": [
+            "The same built-out header bricks cast longer shadows as the raking sun settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5059,
+            "scrollY": 2306,
+            "monotonicMs": 16409.8,
+            "videoSeconds": 8.691,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5507,
+            "scrollY": 2510,
+            "monotonicMs": 17510.8,
+            "videoSeconds": 9.792,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.579,
+            "scrollY": 2639,
+            "monotonicMs": 17810.9,
+            "videoSeconds": 10.092,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5658183413777973,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at portrait: Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m05-raking-shadow-settled.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.51-0.58",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=8.691-10.092"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "header-closeup",
+          "changed": [
+            "The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail."
+          ],
+          "continuous": [
+            "Close camera view reveals those same headers as physical boxes proud of the same buff bond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6277,
+            "scrollY": 2861,
+            "monotonicMs": 18711,
+            "videoSeconds": 10.992,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.681,
+            "scrollY": 3104,
+            "monotonicMs": 19711.8,
+            "videoSeconds": 11.993,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7071,
+            "scrollY": 3223,
+            "monotonicMs": 20013.5,
+            "videoSeconds": 12.294,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6974550241333919,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,67-74; engine/elevation.js:1069-1083,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at portrait: The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m06-header-closeup.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.63-0.71",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=10.992-12.294"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "porch-reveal",
+          "changed": [
+            "The camera follows the same patterned wall toward the deep porch reveal and original oak door."
+          ],
+          "continuous": [
+            "The patterned facade leads around the same deep porch reveal toward the original oak door."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7203,
+            "scrollY": 3283,
+            "monotonicMs": 20312.7,
+            "videoSeconds": 12.594,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7525,
+            "scrollY": 3430,
+            "monotonicMs": 21114,
+            "videoSeconds": 13.395,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7874,
+            "scrollY": 3589,
+            "monotonicMs": 21708.8,
+            "videoSeconds": 13.99,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7632733655111891,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,75; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at portrait: The camera follows the same patterned wall toward the deep porch reveal and original oak door.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m07-porch-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.72-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=12.594-13.99"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-opening",
+          "changed": [
+            "The oak door opens inward while the bond and porch remain spatially continuous with the wall detail."
+          ],
+          "continuous": [
+            "The door leaf pivots within that same porch/brick opening, with interior aligned behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8012,
+            "scrollY": 3652,
+            "monotonicMs": 21909.8,
+            "videoSeconds": 14.191,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8368,
+            "scrollY": 3814,
+            "monotonicMs": 22310.5,
+            "videoSeconds": 14.591,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.8813,
+            "scrollY": 4017,
+            "monotonicMs": 23015.4,
+            "videoSeconds": 15.296,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8554190434401053,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:75; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at portrait: The oak door opens inward while the bond and porch remain spatially continuous with the wall detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m08-door-opening.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=14.191-15.296"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "sunlit-interior",
+          "changed": [
+            "The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view."
+          ],
+          "continuous": [
+            "The interior floor and stair lie behind the original facade and porch; the donor sample CTA is an overlay."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.9384,
+            "scrollY": 4277,
+            "monotonicMs": 24110.8,
+            "videoSeconds": 16.392,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.9805,
+            "scrollY": 4469,
+            "monotonicMs": 24607.1,
+            "videoSeconds": 16.888,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 4558,
+            "monotonicMs": 25717.6,
+            "videoSeconds": 17.999,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.9870557261956999,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,81-86; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at portrait: The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m09-sunlit-interior.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm#t=16.392-17.999"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 4558,
+        "scrollHeight": 5402,
+        "innerHeight": 844,
+        "maxScroll": 4558,
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 15.9,
+          "bytes": 2651313,
+          "dimensions": [
+            390,
+            844
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, ink 1:20 patterned facade, 2° optic and original sun/HUD; no visual residue of material/rake/door. Hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 90,
+          "stepPx": 67
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 90,
+          "stepPx": -67
+        }
+      ]
+    },
+    "landscape": {
+      "width": 844,
+      "height": 390,
+      "dpr": 1,
+      "runtimeSupport": "SUPPORTED",
+      "progressModel": "SCROLL_PLUS_TIME",
+      "startState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 0,
+        "scrollHeight": 2496,
+        "innerHeight": 390,
+        "maxScroll": 2106,
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-start.png",
+        "snapshot": "- generic\n  - paragraph\n    - StaticText \"DWG // D-104  ·  KILN & COURSE\"\n  - paragraph\n    - StaticText \"PLOTTING MASONRY DETAIL 1:20  \"\n    - StaticText \"100%\"\n- banner\n  - link \"[ KILN & COURSE RELIEF BRICK · D-104 // ELV.02 ]\" [ref=e2]\n    - StaticText \"[\"\n    - StaticText \"KILN & COURSE\"\n    - StaticText \"RELIEF BRICK · D-104\"\n    - StaticText \"// ELV.02 ]\"\n  - link \"ORDER A SAMPLE PANEL →\" [ref=e3]\n    - StaticText \"ORDER A SAMPLE PANEL\"\n    - StaticText \"→\"\n- region \"KC-06 Diaper, detail elevation\" [ref=e1]\n  - StaticText \"KC-06 DIAPER\"\n  - StaticText \" ·  DETAIL ELEVATION 1:20\"\n  - heading \"THE SHADOW IS THE PRODUCT.\" [level=1, ref=e4]\n    - StaticText \"THE SHADOW\"\n    - StaticText \"IS THE \"\n    - emphasis\n      - StaticText \"PRODUCT.\"\n- generic\n- main\n- generic \"Interactive CAD townhouse plan radar\"\n  - generic\n    - StaticText \"CAD PLAN // 1:100\"\n    - StaticText \"1:20 WALL · 2° LENS\"\n  - SvgRoot\n    - graphics-symbol [ref=e10] clickable [cursor:pointer]\n    - graphics-symbol [ref=e11] clickable [cursor:pointer]\n    - graphics-symbol [ref=e12] clickable [cursor:pointer]\n    - graphics-symbol [ref=e13] clickable [cursor:pointer]\n    - graphics-symbol [ref=e14] clickable [cursor:pointer]\n  - button \"1:20 WALL\" [ref=e5]\n  - button \"RAKE SUN\" [ref=e6]\n  - button \"HEADER\" [ref=e7]\n  - button \"PORCH\" [ref=e8]\n  - button \"INTERIOR\" [ref=e9]",
+        "consoleErrors": "",
+        "network": "[E6C2F2A1ECB528D8D29708680A52CECC] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html (Document) 200\n[103584.2] GET https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap (Stylesheet) 200\n[103584.3] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/page.css (Stylesheet) 200\n[103584.4] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/page.js (Script) 200\n[103584.8] GET https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/engine/elevation.js (Script) 200\n[103584.9] GET https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js (Script) 200\n[103584.10] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegments2.js (Script) 200\n[103584.11] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineSegmentsGeometry.js (Script) 200\n[103584.12] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lines/LineMaterial.js (Script) 200\n[103584.13] GET https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js (Script) 200\n[103584.14] GET https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs (Script) 200\n[103584.46] GET data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .52  0 0 0 0 .47  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg> (Image) 200\n[103584.45] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2 (Font) 200\n[103584.40] GET https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2 (Font) 200\n[103584.30] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeJI91R5_F.woff2 (Font) 200\n[103584.22] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkebIl1R5_F.woff2 (Font) 200\n[103584.26] GET https://fonts.gstatic.com/s/chakrapetch/v13/cIflMapbsEk7TDLdtEz1BwkeQI51R5_F.woff2 (Font) 200\n[103584.47] GET https://sam1983aing.github.io/favicon.ico (Other) 404"
+      },
+      "forwardResult": {
+        "assessed": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 20.6,
+          "bytes": 3587241,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+        "semanticVideo": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.webm",
+        "semanticVideoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 24.834,
+          "bytes": 2953596,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "semanticPassComplete": true,
+        "semanticScreenshotsVerified": true,
+        "discoverySamples": 21,
+        "additionalInputAfterMax": 2,
+        "endDemonstration": "Natural wheel reached the end; additional wheel inputs after settling revealed no further major state.",
+        "limitationEvidence": []
+      },
+      "milestones": [
+        {
+          "label": "M01",
+          "semanticState": "drawn-relief",
+          "changed": [
+            "The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth."
+          ],
+          "continuous": [
+            "The same window, porch opening, human figure and zigzag header bond remain as the lens reveals depth."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.076,
+            "scrollY": 160,
+            "monotonicMs": 9478.6,
+            "videoSeconds": 1.705,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.1301,
+            "scrollY": 274,
+            "monotonicMs": 10274.8,
+            "videoSeconds": 2.501,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.1747,
+            "scrollY": 368,
+            "monotonicMs": 10977.2,
+            "videoSeconds": 3.204,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.14577397910731243,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,55-62; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M01 in fresh semantic pass at landscape: The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m01-drawn-relief.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.08-0.17",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=1.705-3.204"
+            }
+          ]
+        },
+        {
+          "label": "M02",
+          "semanticState": "brick-sweep-onset",
+          "changed": [
+            "A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall."
+          ],
+          "continuous": [
+            "The luminous front crosses the original header pattern, window and porch without changing their locations."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.1904,
+            "scrollY": 401,
+            "monotonicMs": 11175.1,
+            "videoSeconds": 3.402,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.2469,
+            "scrollY": 520,
+            "monotonicMs": 11968.8,
+            "videoSeconds": 4.195,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.293,
+            "scrollY": 617,
+            "monotonicMs": 12972.8,
+            "videoSeconds": 5.199,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.22602089268755934,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:31-119,352-429",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M02 in fresh semantic pass at landscape: A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m02-brick-sweep-onset.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.19-0.29",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=3.402-5.199"
+            }
+          ]
+        },
+        {
+          "label": "M03",
+          "semanticState": "materialized-bond",
+          "changed": [
+            "Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations."
+          ],
+          "continuous": [
+            "The materialized bond keeps the same diagonal burnt-header lattice and porch/window geometry."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.3219,
+            "scrollY": 678,
+            "monotonicMs": 13277.2,
+            "videoSeconds": 5.504,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.3585,
+            "scrollY": 755,
+            "monotonicMs": 13970.4,
+            "videoSeconds": 6.197,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.3917,
+            "scrollY": 825,
+            "monotonicMs": 14370,
+            "videoSeconds": 6.596,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.3717948717948718,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:63-66; engine/elevation.js:1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M03 in fresh semantic pass at landscape: Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m03-materialized-bond.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.32-0.39",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=5.504-6.596"
+            }
+          ]
+        },
+        {
+          "label": "M04",
+          "semanticState": "low-sun-transition",
+          "changed": [
+            "The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible."
+          ],
+          "continuous": [
+            "Moving light changes shadows on existing projected headers; the header positions remain fixed."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.4193,
+            "scrollY": 883,
+            "monotonicMs": 14872.5,
+            "videoSeconds": 7.099,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.4601,
+            "scrollY": 969,
+            "monotonicMs": 15379.7,
+            "videoSeconds": 7.606,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5024,
+            "scrollY": 1058,
+            "monotonicMs": 16168.6,
+            "videoSeconds": 8.395,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.4781576448243115,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M04 in fresh semantic pass at landscape: The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m04-low-sun-transition.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.42-0.5",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=7.099-8.395"
+            }
+          ]
+        },
+        {
+          "label": "M05",
+          "semanticState": "raking-shadow-settled",
+          "changed": [
+            "Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift."
+          ],
+          "continuous": [
+            "The same built-out header bricks cast longer shadows as the raking sun settles."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.5128,
+            "scrollY": 1080,
+            "monotonicMs": 16274.6,
+            "videoSeconds": 8.501,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.5465,
+            "scrollY": 1151,
+            "monotonicMs": 16975.9,
+            "videoSeconds": 9.202,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.5769,
+            "scrollY": 1215,
+            "monotonicMs": 17269.6,
+            "videoSeconds": 9.496,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.5579297245963912,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:67-74; engine/elevation.js:143-161,1069-1083",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M05 in fresh semantic pass at landscape: Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m05-raking-shadow-settled.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.51-0.58",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=8.501-9.496"
+            }
+          ]
+        },
+        {
+          "label": "M06",
+          "semanticState": "header-closeup",
+          "changed": [
+            "The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail."
+          ],
+          "continuous": [
+            "Close camera view reveals those same headers as physical boxes proud of the same buff bond."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.6268,
+            "scrollY": 1320,
+            "monotonicMs": 18076.9,
+            "videoSeconds": 10.303,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.6785,
+            "scrollY": 1429,
+            "monotonicMs": 19171.6,
+            "videoSeconds": 11.398,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7085,
+            "scrollY": 1492,
+            "monotonicMs": 19475.6,
+            "videoSeconds": 11.702,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.6908831908831908,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,67-74; engine/elevation.js:1069-1083,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M06 in fresh semantic pass at landscape: The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m06-header-closeup.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.63-0.71",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=10.303-11.702"
+            }
+          ]
+        },
+        {
+          "label": "M07",
+          "semanticState": "porch-reveal",
+          "changed": [
+            "The camera follows the same patterned wall toward the deep porch reveal and original oak door."
+          ],
+          "continuous": [
+            "The patterned facade leads around the same deep porch reveal toward the original oak door."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.7189,
+            "scrollY": 1514,
+            "monotonicMs": 19584.3,
+            "videoSeconds": 11.811,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.7536,
+            "scrollY": 1587,
+            "monotonicMs": 20374.1,
+            "videoSeconds": 12.601,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.7882,
+            "scrollY": 1660,
+            "monotonicMs": 20775.9,
+            "videoSeconds": 13.002,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.7573599240265907,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,75; engine/elevation.js:1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M07 in fresh semantic pass at landscape: The camera follows the same patterned wall toward the deep porch reveal and original oak door.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m07-porch-reveal.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.72-0.79",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=11.811-13.002"
+            }
+          ]
+        },
+        {
+          "label": "M08",
+          "semanticState": "door-opening",
+          "changed": [
+            "The oak door opens inward while the bond and porch remain spatially continuous with the wall detail."
+          ],
+          "continuous": [
+            "The door leaf pivots within that same porch/brick opening, with interior aligned behind it."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.8025,
+            "scrollY": 1690,
+            "monotonicMs": 21180.5,
+            "videoSeconds": 13.407,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.8409,
+            "scrollY": 1771,
+            "monotonicMs": 21569.1,
+            "videoSeconds": 13.796,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 0.878,
+            "scrollY": 1849,
+            "monotonicMs": 22468.9,
+            "videoSeconds": 14.695,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.8504273504273504,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:75; engine/elevation.js:977-1003,1090-1096",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M08 in fresh semantic pass at landscape: The oak door opens inward while the bond and porch remain spatially continuous with the wall detail.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m08-door-opening.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.8-0.88",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=13.407-14.695"
+            }
+          ]
+        },
+        {
+          "label": "M09",
+          "semanticState": "sunlit-interior",
+          "changed": [
+            "The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view."
+          ],
+          "continuous": [
+            "The interior floor and stair lie behind the original facade and porch; the donor sample CTA is an overlay."
+          ],
+          "transitionStart": {
+            "normalizedNativeProgress": 0.944,
+            "scrollY": 1988,
+            "monotonicMs": 23470.1,
+            "videoSeconds": 15.697,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticCenter": {
+            "normalizedNativeProgress": 0.982,
+            "scrollY": 2068,
+            "monotonicMs": 23869.8,
+            "videoSeconds": 16.096,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "transitionEnd": {
+            "normalizedNativeProgress": 1,
+            "scrollY": 2106,
+            "monotonicMs": 24970.4,
+            "videoSeconds": 17.197,
+            "precision": "approximate passive telemetry locator; review continuous video for exact frame"
+          },
+          "semanticScreenshotProgress": 0.99667616334283,
+          "sourceLocator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-28,81-86; engine/elevation.js:566-850,1146-1187",
+          "evidence": [
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "M09 in fresh semantic pass at landscape: The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view.",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m09-sunlit-interior.png"
+            },
+            {
+              "class": "OBSERVED_RUNTIME",
+              "statement": "Continuous transition around native progress 0.94-1",
+              "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm#t=15.697-17.197"
+            }
+          ]
+        }
+      ],
+      "endState": {
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "route": "/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "hash": "",
+        "scrollY": 2106,
+        "scrollHeight": 2496,
+        "innerHeight": 390,
+        "maxScroll": 2106,
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP",
+        "screenshot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-end.png"
+      },
+      "reverseResult": {
+        "attempted": true,
+        "complete": true,
+        "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-reverse-discovery.webm",
+        "videoVerified": true,
+        "videoMetadata": {
+          "codec": "vp8",
+          "durationSeconds": 15.5,
+          "bytes": 2970160,
+          "dimensions": [
+            844,
+            390
+          ],
+          "decoded": true
+        },
+        "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+        "comparison": {
+          "A0": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-start.png",
+          "A1": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-restored-start.png",
+          "scrollEqual": true,
+          "routeEqual": true,
+          "hashEqual": true,
+          "visualReview": "Natural reverse returned to scrollY 0, same route/hash, ink 1:20 patterned facade, 2° optic and original sun/HUD; no visual residue of material/rake/door. Hidden GPU resource identity remains NOT_OBSERVED.",
+          "runtimeInternalState": "NOT_OBSERVED"
+        },
+        "reverseOnlyMilestones": []
+      },
+      "restoreVerdict": "VISUALLY_EQUIVALENT",
+      "interactions": [
+        {
+          "type": "wheel",
+          "direction": "forward",
+          "count": 85,
+          "stepPx": 31
+        },
+        {
+          "type": "wheel",
+          "direction": "reverse",
+          "count": 85,
+          "stepPx": -31
+        }
+      ]
+    }
+  },
+  "evidenceLedger": [
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Desktop, portrait and landscape original Discovery A→B→A recorded.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Selected semantic desktop correction-2, portrait original and landscape original recorded.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m02-brick-sweep-onset.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Original desktop semantic encoder failed; correction-1 was superseded only for M02 visibility.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\semantic-capture.json"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Header close-up shows physical projection and raking shadows.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png"
+    },
+    {
+      "class": "OBSERVED_RUNTIME",
+      "statement": "Natural reverse visually returns ink 1:20 facade.",
+      "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-restored-start.png"
+    },
+    {
+      "class": "DONOR_SOURCE",
+      "statement": "Donor builds 0.06 m protruding header boxes and moves sun separately.",
+      "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:1069-1083; c-the-face/page.js:67-74"
+    },
+    {
+      "class": "CUT_ATLAS",
+      "statement": "Global D19 rejects universal 60 mm detail/renderer rewrite.",
+      "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447"
+    },
+    {
+      "class": "RUBIK_CURRENT",
+      "statement": "Rubik already has primary wall geometry, materials and optional presentation Solar.",
+      "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640,3758-3865; js/presentation-elevation-core.js:225-247"
+    }
+  ],
+  "donorSourceLocators": [
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/c-the-face/page.js",
+      "symbol": "h0 / KEYS / frame",
+      "lines": "8-75",
+      "claim": "A facade with explicit relief uses absolute camera, sweep, sun and door progress.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "house / relief bricks",
+      "lines": "938-1083",
+      "claim": "Protruding header boxes are merged into geometry with v.relief 0.06 m.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "GLSL_COMMON / mat",
+      "lines": "31-119,166-429",
+      "claim": "Shadow-derived technical hatch and spatial paper/material front, with procedural brick response.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setSun",
+      "lines": "143-161",
+      "claim": "Directional light/shadow map move under raking sun.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "camAt",
+      "lines": "1146-1187",
+      "claim": "Author camera keys including portrait overrides.",
+      "classification": "SOURCE_CONFIRMED"
+    },
+    {
+      "repo": "Sam1983Aing/flat-to-3d",
+      "sha": "d7b9b69753d3af679535ee56695a05c8d955c3c6",
+      "path": "07-sunlit-elevation/engine/elevation.js",
+      "symbol": "setDoor / run / scrollP",
+      "lines": "1090-1096,1205-1422",
+      "claim": "Front door pivot and Lenis-driven reversible absolute frame; intro stable marker.",
+      "classification": "SOURCE_CONFIRMED"
+    }
+  ],
+  "cutsAtlas": [
+    {
+      "locator": "Cut1 D07 Juanmaes83/floorplan-3d@6a573f1955fd70dd52bb10450c9b9df9b4833aa0:docs/product/ft3d-donor-code-gap-analysis-2026-11-01.md; Atlas D07 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D07 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225",
+      "documentedDisposition": "D07-C1 ADAPT shadow-coherent technical hatch; C2 KEEP EXISTING Rubik light/material/Solar; C3 REJECT donor-specific AO/one-light assumptions.",
+      "relationToRuntime": "EXTENDS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut1/Global distinguish transferable shadow-hatch principle from donor renderer.",
+          "locator": "docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:209-225"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Header shadow shape survives paper/material front.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m02-brick-sweep-onset.png"
+        }
+      ]
+    },
+    {
+      "locator": "Cut3 D19 docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; Atlas D19 Juanmaes83/floorplan-3d@7696fb2c6c30f158001d38ecc53feb2674acaa25:docs/product/ft3d-reference-atlas-2026-11-01.md; Global D19 docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447",
+      "documentedDisposition": "D19-C1 KEEP EXISTING Rubik geometry/material/environment; C2 ADAPT sourced camera/light/material coordination; C3 REJECT universal 60 mm brick, clearcoat/postFX or new renderer.",
+      "relationToRuntime": "CONFIRMS",
+      "evidence": [
+        {
+          "class": "CUT_ATLAS",
+          "statement": "Cut3 and Global specifically cite c-the-face relief/RAKE and reject universal detail recipe.",
+          "locator": "docs/product/evidence/donor-cuts-2026-11-01/cut3-d14-d15-d19.md:162-239; docs/product/ft3d-donor-global-reconciliation-2026-11-01.md:431-447"
+        },
+        {
+          "class": "OBSERVED_RUNTIME",
+          "statement": "Close-up proves relief and light work together on this authored wall.",
+          "locator": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png"
+        }
+      ]
+    }
+  ],
+  "rubikCrosswalk": {
+    "semanticData": {
+      "status": "PARTIAL",
+      "claim": "Rubik owns project dimensions and identities; invented KC-06, 60 mm projection, mortar, sample pack and CTA are not current project facts.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns project dimensions and identities; invented KC-06, 60 mm projection, mortar, sample pack and CTA are not current project facts.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "geometry": {
+      "status": "PARTIAL",
+      "claim": "Rubik has authoritative walls/openings; a verified project-derived header relief/diaper pattern is not established. Donor 0.06 m is instance data only.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has authoritative walls/openings; a verified project-derived header relief/diaper pattern is not established. Donor 0.06 m is instance data only.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3486-3640; js/building-ui.js:36-95"
+        }
+      ]
+    },
+    "representation": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation Story/View3D; shadow-derived drawn hatch linked to the same material wall is not an accredited current mode.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation Story/View3D; shadow-derived drawn hatch linked to the same material wall is not an accredited current mode.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/surface-renderer.mjs:1-74"
+        }
+      ]
+    },
+    "materialsLight": {
+      "status": "EXISTS",
+      "claim": "Rubik owns materials, shadows and optional Solar; donor rake response is a service-specific coordination of material, relief and light.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik owns materials, shadows and optional Solar; donor rake response is a service-specific coordination of material, relief and light.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:3758-3865; js/presentation-elevation-core.js:225-247"
+        }
+      ]
+    },
+    "camera": {
+      "status": "PARTIAL",
+      "claim": "Rubik has elevation camera and route authorities; the 1:20-to-header-to-porch inspection path is donor choreography.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has elevation camera and route authorities; the 1:20-to-header-to-porch inspection path is donor choreography.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247; js/presentation-route.js:1-156"
+        }
+      ]
+    },
+    "transition": {
+      "status": "PARTIAL",
+      "claim": "Rubik has absolute Story/reveal; donor paper-to-brick facade sweep and sun rake are particular presentation transitions.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has absolute Story/reveal; donor paper-to-brick facade sweep and sun rake are particular presentation transitions.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; index.html:3344-3385"
+        }
+      ]
+    },
+    "scrollProgress": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has absolute seek/playback; donor Lenis 540vh is transport.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has absolute seek/playback; donor Lenis 540vh is transport.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "ui": {
+      "status": "PARTIAL",
+      "claim": "Rubik has presentation controls/captions; invented product spec/order CTA is donor-authored UI.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation controls/captions; invented product spec/order CTA is donor-authored UI.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "PARTIAL",
+      "claim": "Rubik has mobile presentation paths; a detail-level bond and spec panel require independent portrait/landscape framing and legibility QA.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has mobile presentation paths; a detail-level bond and spec panel require independent portrait/landscape framing and legibility QA.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:210-218; docs/qa/ft3d-6-implementation-2026-11-01.md:46-54"
+        }
+      ]
+    },
+    "lifecycleRestore": {
+      "status": "EXISTS",
+      "claim": "Rubik Story has restore owner; donor natural reverse visually recovers ink, 2° optic and original sun, with internal GPU identity unobserved.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story has restore owner; donor natural reverse visually recovers ink, 2° optic and original sun, with internal GPU identity unobserved.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-ui.js:751-774"
+        }
+      ]
+    },
+    "outputs": {
+      "status": "EXISTS",
+      "claim": "Rubik has presentation/export paths; sample panel ordering is not an authorized output from this audit.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has presentation/export paths; sample panel ordering is not an authorized output from this audit.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-ui.js:8-31,613-774"
+        }
+      ]
+    },
+    "qa": {
+      "status": "PARTIAL",
+      "claim": "Rubik has FT3D-6 QA; verified relief dimensions/material provenance, lighting and reverse across viewports need service-specific tests.",
+      "evidence": [
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik has FT3D-6 QA; verified relief dimensions/material provenance, lighting and reverse across viewports need service-specific tests.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:docs/qa/ft3d-6-implementation-2026-11-01.md:1-75"
+        }
+      ]
+    }
+  },
+  "gaps": [
+    {
+      "classification": "INTEGRATION_GAP",
+      "statement": "A sourced facade material/relief specification would have to connect to authorized project data; invented KC-06 facts cannot fill that role.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Donor product attributes are inline authored copy and v.relief=0.06.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:1-16,81-86"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik project owns current geometry/material source.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:index.html:1034-1053,3486-3640"
+        }
+      ]
+    },
+    {
+      "classification": "REPRESENTATION_GAP",
+      "statement": "A shadow-coherent technical hatch and spatial ink/material front for verified relief are not accredited in current Rubik.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "Shader derives hatch/front from shadow and uSweep.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/engine/elevation.js:31-119,352-429"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Current elevation Story does not establish this drawing/material front.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-elevation-core.js:171-247"
+        }
+      ]
+    },
+    {
+      "classification": "ORCHESTRATION_GAP",
+      "statement": "If selected later, sourced relief, raking light, close camera and door route would require one reversible Story-owned state.",
+      "evidence": [
+        {
+          "class": "DONOR_SOURCE",
+          "statement": "One frame maps sun, camera and door over same h0.",
+          "locator": "Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6:07-sunlit-elevation/c-the-face/page.js:18-75"
+        },
+        {
+          "class": "RUBIK_CURRENT",
+          "statement": "Rubik Story seek/restore and Solar already exist.",
+          "locator": "Juanmaes83/floorplan-3d@0f9c6ead9732901681498efec326d1ca92e42ffe:js/presentation-story-core.js:346-364; js/presentation-elevation-core.js:225-247"
+        }
+      ]
+    }
+  ],
+  "candidateBridges": [
+    {
+      "classification": "CONNECT_EXISTING",
+      "problemSolved": "If later selected, tie a material/relief demonstration to verified project/facade dimensions and material identity.",
+      "rubikAuthoritiesPreserved": [
+        "Project/Building geometry and IDs",
+        "current materials",
+        "output provenance"
+      ],
+      "existingCapabilitiesConsumed": [
+        "wall/opening geometry",
+        "material selection",
+        "presentation captions"
+      ],
+      "missingConnector": "Source-backed facade relief descriptor; no hard-coded universal 60 mm projection or invented brand as project truth.",
+      "donorMechanismReference": "engine/elevation.js:1069-1083 and c-the-face/page.js:8-12 as instance reference; Global D19-C3 REJECT universal detail",
+      "confidence": "LOW",
+      "implementationAuthorized": false
+    },
+    {
+      "classification": "ADAPT_EXISTING",
+      "problemSolved": "If later selected, show that the same sourced relief produces both technical hatching and physical/raking shadows.",
+      "rubikAuthoritiesPreserved": [
+        "Rubik renderer/material/light/Solar",
+        "project geometry",
+        "Story lifecycle"
+      ],
+      "existingCapabilitiesConsumed": [
+        "elevation Story",
+        "surface renderer",
+        "Solar/light/shadows"
+      ],
+      "missingConnector": "Shadow-registered drawing/material adapter and reversible light/camera coordination; avoid donor-specific AO/renderer rewrite.",
+      "donorMechanismReference": "engine/elevation.js:31-119,143-161,352-429; c-the-face/page.js:63-75; Global D07-C1 ADAPT/D19-C2 ADAPT",
+      "confidence": "MEDIUM",
+      "implementationAuthorized": false
+    }
+  ],
+  "dependencies": [
+    "TECHNICAL_PREREQUISITE: verified facade bond/projection dimensions and material source before a professional material claim.",
+    "TECHNICAL_PREREQUISITE: same geometry/normals and Rubik-owned shadow/light authority before comparing technical hatch with raking shadow.",
+    "TECHNICAL_PREREQUISITE: Story-owned reversible camera/light/door/material state before a detail-to-interior route."
+  ],
+  "qaExpectations": [
+    {
+      "category": "SEMANTIC",
+      "invariant": "Material name, bond, projection and mortar values derive from verified project/specification or are marked illustrative."
+    },
+    {
+      "category": "GEOMETRY",
+      "invariant": "Header positions and relief dimension stay the same through drawing, material and low-sun states."
+    },
+    {
+      "category": "VISUAL",
+      "invariant": "Technical hatch and physical shadow correspond to the same relief geometry; raking light does not fake geometry."
+    },
+    {
+      "category": "CAMERA",
+      "invariant": "Close inspection resolves bond/relief without clipping, then follows the valid porch opening."
+    },
+    {
+      "category": "LIFECYCLE",
+      "invariant": "Reverse restores ink, sun, material, camera, door, HUD and scroll in each viewport."
+    },
+    {
+      "category": "MOBILE",
+      "invariant": "Bond detail, material label and action remain legible at 390×844 and 844×390."
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "invariant": "Relief and shadow differences have textual/reduced-motion equivalents."
+    },
+    {
+      "category": "OUTPUT",
+      "invariant": "Exports preserve provenance of material specification and label illustrative values."
+    },
+    {
+      "category": "REGRESSION",
+      "invariant": "Presentation relief/light state does not mutate saved project geometry or materials."
+    }
+  ],
+  "unresolved": [
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Passive evidence does not prove internal donor GPU/shadow-map resource identity after reverse.",
+      "attempts": [
+        "three A0/A1 screenshots and reverse telemetry/video",
+        "pinned absolute-state source",
+        "corrected semantic videos"
+      ],
+      "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later requirement."
+    },
+    {
+      "severity": "NON_BLOCKING",
+      "question": "Whether a verified Rubik facade material specification can support this professional sample-panel service remains a later product/data decision.",
+      "attempts": [
+        "donor authored brand/spec source",
+        "runtime relief/shadow sequence",
+        "Cut3/Global D19 and frozen Rubik inspection"
+      ],
+      "evidenceNeeded": "Human review after all references; no bridge implementation authorized."
+    }
+  ],
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\calibration.json",
+      "sha256": "c8e630fb4b7c5a6295750d76a4db3c4b27ede0506177308dd13266ffce0efa72",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-end.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p000.png",
+      "sha256": "c3d3916c90be25ff76b64cff002c052590afc1b29b70d9d24148a41401910e10",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p005.png",
+      "sha256": "055acf24b7ec3554ef436f1bafc6e18d65540459baacb84b727d34d062b37d24",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p010.png",
+      "sha256": "3e5b638ad93850b84885dbf2089a145bc1ca0be7609c48e73a9140d7a1c2f357",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p015.png",
+      "sha256": "5adf398bdd823d3aa9921c53f9453b1666402a0f12df839984dbbddef57e747a",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p020.png",
+      "sha256": "e84956eb2354e4643f0f4555701630ff81e835d648901cbcca1943c2002f7e7b",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p025.png",
+      "sha256": "af0727cb191c490d29e5410023a62747404ec8de68e03e75dd05583e9679c972",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p030.png",
+      "sha256": "bdee6c6e3a108f52c28a3b41346b9f1ddf8e3a0308e8ceb3eddff5f3168be1b8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p035.png",
+      "sha256": "584d741a6d6a1cbbfb35ba58498c9d2b327a64798461a63b9476f552599b1e2e",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p040.png",
+      "sha256": "02417d1a334298003385976bfe40edce6865a8f55bcd59f910b66f071730abbb",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p045.png",
+      "sha256": "04b2ebeb792c5a68e72095b1e8ef58d4fefd4cb638107c194e328600b13613bd",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p050.png",
+      "sha256": "02da5c7f8ef9d74fde0fc4442fa3cd432f276086598314c6540631fdb9eed822",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p055.png",
+      "sha256": "82a2d33dd2043b089c01970cee17ad437c9cd7a0677049a0187d4c88e15b51ed",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p060.png",
+      "sha256": "4d28bfe9a1c06475240c0a2c01ae7a70bfd84071f33fdda963af3d09ae76a630",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p065.png",
+      "sha256": "c048d06508924bdad0361726b3424f4c45544f9c850b9c5af71e1faa6688fbe0",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p070.png",
+      "sha256": "5c22e94cc8e1f761b5486450cb804edecdab36f43e93f7e7a97998c08f3de618",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p075.png",
+      "sha256": "7bd6eaeedd69768e8ff8000548d848c31b1d658cdb0cf76822f656ff962c0724",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p080.png",
+      "sha256": "1ee4cc63ba1d404ee1e18093d3150d95810b54eebeeb806cd9393126a91305a4",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p085.png",
+      "sha256": "9d8c3f1dbad4acc032914cad905c1bc10b14859e9378cc4cd7c151f0253258a6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p090.png",
+      "sha256": "91b23c41906d1666243a3eaa5aa3a9398eb3fbd1980fd4bfe0c916a025ba4752",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p095.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery-p100.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.telemetry.ndjson",
+      "sha256": "9c0c56baa3d9eab85a1406253101533513591af53e76dfd7a978abcac03b2314",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-discovery.webm",
+      "sha256": "60fbd29227a5db3e22a67294a650557de89a3368e78b5c25c3013c10a8e0ece3",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m01-drawn-relief.png",
+      "sha256": "37f5a7d2ed22414424071787c786b76195aa6ecb23cb4c51f7170dedc67aee17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m02-brick-sweep-onset.png",
+      "sha256": "d0f713252ca490ffe4ac7f3e9973ab2bc8bd9ce6243e036dcd28bd74c87faa0f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m03-materialized-bond.png",
+      "sha256": "3fc48c469f57fe69406c1cf140e48ea2d37fbaf17d389286730fcfcc36ec5974",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m04-low-sun-transition.png",
+      "sha256": "dd2bf1265fadfa5f5880e5a2f3c9b8cf05bec1b0ef230c2bd953de399333e0c9",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m05-raking-shadow-settled.png",
+      "sha256": "2ecdbc47aab4a749102c6dfea7a115d521c21f0e216312279f9439bca81fbe43",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m06-header-closeup.png",
+      "sha256": "8a6b785598785ab7db4b045ae055e3f0544eabbca605555eed7445c6f281d957",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m07-porch-reveal.png",
+      "sha256": "460eac871740d068574869da75c60c05135dd8544b3ee383d7149f925c583cb2",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m08-door-opening.png",
+      "sha256": "a16e4cd81d90bcb2062d583d0ca84c121ced126998478b89f25e374946abe735",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-forward-m09-sunlit-interior.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-restored-start.png",
+      "sha256": "1d629ef4c227a71e233ad3ab5f6a5ffd04d88871440bfb5a3b62f3623a6094c8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-reverse-discovery.telemetry.ndjson",
+      "sha256": "a11abc67e8dbf4359c207c0dfc50e858ea81f2f98ce60e07a1fde88ae81a5b1e",
+      "kind": "TELEMETRY",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-reverse-discovery.webm",
+      "sha256": "69768dc6e81017a4aa0b20d02d18083f90dacf36f7d48ff0e934aa2f9564726c",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-semantic-end.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-semantic-start.png",
+      "sha256": "bf7bab54e9a709b537f7001a128cc84f7240ce778d505dc6392b818c7b0a479c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\desktop-start.png",
+      "sha256": "d3398cd5f537007d2bdf125606c781f18dd9b95f96ea8f84b5139e32af005281",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\discovery-assets.json",
+      "sha256": "e69a55734adc86ccce57122ad63a09bc484dd6860e55ea2a2a831419312c12b1",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\discovery-summary.json",
+      "sha256": "fe79b2206a855328319d1ede8ede2129d10e0ff06d0dfc67e265333e98a935b3",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\end-state.json",
+      "sha256": "dce7b87e7e3cc7c763f6c44117708bde812a6aa5244006fcd5b57a649db414a2",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\reverse-state.json",
+      "sha256": "23ae5c008994047e1db0ea741d6fc5c33f3fa24f88fe453095bc96a641cefe17",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\start-state.json",
+      "sha256": "7e7397d3d0e27512caaa2146db733ec5484213f3e9555cbcb2ebd8114d03baba",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m01-drawn-relief.png",
+      "sha256": "f50d7ffc1d592336157473f2682cc0958bcf95e7809953fda3d420c18c3b558c",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m02-brick-sweep-onset.png",
+      "sha256": "dac6cd048c7d20f8b785b7e305ed0c3f1ee1a4e37f33510d3196dac17558ed08",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m03-materialized-bond.png",
+      "sha256": "8f3e0c298049270095598d1109be10b58f29f7b8c029792e35e2ef7e0b2869b8",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m04-low-sun-transition.png",
+      "sha256": "10e6db7b60f6b0a31174ece3435b8a9fc29fe0698ffa4b011526ba8b10830be6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m05-raking-shadow-settled.png",
+      "sha256": "dad13c21e987463a5eac4977b48a8669660d8baaf6d864f5a6b2710f5c296d4f",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m06-header-closeup.png",
+      "sha256": "74e1d35f5ca3f68ff3d8ebad8e084c56e918210e624a0e783f74d7a8853d6a91",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m07-porch-reveal.png",
+      "sha256": "fd2c71bba02e9becd45e9549678bfa211a7699f262dbb753ebf43a94eb7d19f9",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m08-door-opening.png",
+      "sha256": "09a6e440ad442809e4c026def6c55746922c2160decdedf9e6d95e9317d82450",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-m09-sunlit-interior.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-semantic.telemetry.ndjson",
+      "sha256": "5a45654a3b1d799c67e5f77e435475fd30ce0f8a0982d87bdc08f599d27c06d0",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-forward-semantic.webm",
+      "sha256": "bd24c8e8e29e9d0edf3bdf687a7ed9efb3e24c777ef7b20f7c89a1efc5459993",
+      "kind": "VIDEO",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-semantic-end.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\desktop-semantic-start.png",
+      "sha256": "02a8687ca1147a858dfc3631747dfe7f23669aa9759cb9ac7c58c68a143558c6",
+      "kind": "IMAGE",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-2\\semantic-capture.json",
+      "sha256": "eb26868400fffb8a54fc1a52b2641e8ce06dc05a72463d9e62572026897d1be1",
+      "kind": "METADATA",
+      "viewport": "desktop"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\calibration.json",
+      "sha256": "30a72c32ca0bb3d52df10d148df21c7da08a4bf508293859c3eecb94e9da7539",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\discovery-assets.json",
+      "sha256": "d16bea93e07d0a6eef1f6fae9c6b09eaa8e611729cf16589e8c56bdb39d056be",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\discovery-summary.json",
+      "sha256": "05254b67203190172196c8f201db9af0b99c6bc69d056d1dcef2db8b2b7bc8a7",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\end-state.json",
+      "sha256": "38de935bbd97a323f08a9671d568d68c388e48d45153a10f758617668e4c6326",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-end.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p000.png",
+      "sha256": "dd7078ae095310c8c34ab8f61fb8d2975dfe4a34f6a7466e3fab4ea916aa7e04",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p005.png",
+      "sha256": "cbd0b97588458455dde8ba8e06f2328651da9662bb66070f92acb8768e1d5a9b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p010.png",
+      "sha256": "f529b7ec9fe340a86e50599f694ad66c81a2878a7389e1ddbc8a9e0ccd2f2e11",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p015.png",
+      "sha256": "5b8ab212d32f85ad7fdc62ab54350c301c2e80cba689ccfb71f2cce6586bf291",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p020.png",
+      "sha256": "adf48149f429474d8fba4a1c44bcff2ea06201493432a8e5565a4714a02d8e95",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p025.png",
+      "sha256": "b9dec2ab9607b882f0cad50d8e8a92972d07e1ced6097e04f45d7a2254a3e527",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p030.png",
+      "sha256": "a37d3a26445604a96b7693b9c716e8adc384d8b3ac1a60470f231063c338a8e8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p035.png",
+      "sha256": "bed51eeaf79ebfe3f71833ff030cf1fac15cf32b4230b338733e3c30c0d0d91b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p040.png",
+      "sha256": "c536bb082817e18ec5154f1df0e4cfb86500180a1719eccb0680803e1e4ce49b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p045.png",
+      "sha256": "f2d9c9fa174adf928b657e9707b71fe1600a88a79b37a4a2544b94badfe34962",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p050.png",
+      "sha256": "b044141bdaab1b356177f88fb6a07600bfe89de83c6bc860163bd278d35a007b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p055.png",
+      "sha256": "db5c18a0b86a3e9a92b30d798fe53e5366d058bd6c90e4f4293851659c3dbeee",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p060.png",
+      "sha256": "a86efccd75ca1c895a7727f88c2138b24de070946e99591629c2308bedb96599",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p065.png",
+      "sha256": "8e1ae88d0919f50d401086c423bcccdd9f292ad376629732ef4a680ddf0da1b9",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p070.png",
+      "sha256": "c54b4421740da8e84d3e49fa89cc4c457f01202b0ef6529ee1678adacb5a58ba",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p075.png",
+      "sha256": "94926021378b9b791907bbd148ad86b705f907e8cb56a1f007561890f2a954bb",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p080.png",
+      "sha256": "6bf48aded0d504e087729a9ca0347e8755bcaa5e582ba775c06f6a57d21f4792",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p085.png",
+      "sha256": "721a415569a3676d8580c522a9fe6e3c1550335c2f23378f93f16cb136d83d7e",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p090.png",
+      "sha256": "194fb2ce51c78a55d38d012df5d3596925fe6e051b3cc7dba842fbc08650c93b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p095.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery-p100.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.telemetry.ndjson",
+      "sha256": "90426ab980eb3b117c44a4210b090cf66135a87d1fe0a93981355f88c0118a8d",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-discovery.webm",
+      "sha256": "dbd3c100408bfceb7136b5bca8ac09b674eea28294b70f2f170062c9ab827d0d",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m01-drawn-relief.png",
+      "sha256": "c68c47eddba44e7a9f4dc6e6ada8457a8f44c4e8286c82572de80b34ac6789a8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m02-brick-sweep-onset.png",
+      "sha256": "1e87f612e9fbb1277f03cfe099e4649a84a43ea98ab06638969ad0dcf21b1535",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m03-materialized-bond.png",
+      "sha256": "43a544eb58a42522058d8cb16e7c50cde8367f5e7fe7d5e406edd12a20f87da2",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m04-low-sun-transition.png",
+      "sha256": "32ca17ff5bcdb4f3bace1c955f2bcf2a4973fafd81dc774139cc9162e7d52d29",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m05-raking-shadow-settled.png",
+      "sha256": "30f8be8782bf72847f84c3dff420b79085c6bbdf36818793a01edb04833f7ce8",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m06-header-closeup.png",
+      "sha256": "5ca6411eb03bbcccf45ad7c05ef9f776587dfad49fa6f795e6e138d44f5d22af",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m07-porch-reveal.png",
+      "sha256": "97084035c90bc7a23e05f5362efa884bb312cf32c197b56f954c15d417f3570e",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m08-door-opening.png",
+      "sha256": "1e15a37ddea380b279321cd72c98796a23afa5f9fbdc506b9132c453be3d5327",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-m09-sunlit-interior.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-semantic.telemetry.ndjson",
+      "sha256": "800607d98bf09494ebdb221b064f1ae9101ef0edaf558b46253cdbea2512dfc5",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-forward-semantic.webm",
+      "sha256": "242091466737e834d0daad64c6b0934788c8346066e2d1a1a6ef55ed13e26f7a",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-restored-start.png",
+      "sha256": "1bf4db9f0f658f7f6a8f9c0a6e85d2414ca57085b1ae7a7d69fb035be76ed75b",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.telemetry.ndjson",
+      "sha256": "90a790870895e2bce2229d45e8c725fb29d6e764da2007da22ce175e15fe38c9",
+      "kind": "TELEMETRY",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-reverse-discovery.webm",
+      "sha256": "880787ebff2334bbd47b7e7d1510f0d2c9f879f2014b18bf83959e64c9f9811b",
+      "kind": "VIDEO",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-semantic-end.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-semantic-start.png",
+      "sha256": "233ea4c545f69d08f3450eb1aef2393a1ece156344f997625b444587aa32c618",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\portrait-start.png",
+      "sha256": "e31e1e4a52cae9192d669295128c776c92c32e8dc021e1f7cfa4625ad5137267",
+      "kind": "IMAGE",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\reverse-state.json",
+      "sha256": "bcbbe2da49700b78633fc5f27cda972b10df0eb8807403852758b604d0db8497",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\semantic-capture.json",
+      "sha256": "8a2659ea87120d8fcfcd7679dba093fb3b12b728fe3b1d8566798b1b759cc47f",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\portrait\\start-state.json",
+      "sha256": "2161e4890574e90e0d53710e210c3527f4c67f7d0c8b6d6e63922aab7d7b3aa7",
+      "kind": "METADATA",
+      "viewport": "portrait"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\calibration.json",
+      "sha256": "b0f5dc2e6bed5b01a1bb943ed29d49ad962752588add46dc9379318a4b25e197",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\discovery-assets.json",
+      "sha256": "37d0adbfe5979bb03b0ed911c82ea9f8c00062687ef4e63adfc1056dfeb37b3d",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\discovery-summary.json",
+      "sha256": "8f30f1d2508fbb6b87d107a01d5fd2561232ee19f2704c5aa72382b42562ac7f",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\end-state.json",
+      "sha256": "2de29f27a92ec8b7626773fe6bf5ff1197c968d0e3bd3e5f6a9ad1fa6d83c2c0",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-end.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p000.png",
+      "sha256": "a3d870f9ce9a405c1582960ce0cf6370731bf1e0f2e244780822ef5f8d80558c",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p005.png",
+      "sha256": "ea53185fa7e91c6bcaa0881380be44ca10d012f38f805f218ce2d3e9e679f8a9",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p010.png",
+      "sha256": "49577ac4df14fe1920ed573c5556e53775034e6f5c7f92832e9bdf02c3d0a7d2",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p015.png",
+      "sha256": "ac9becc864aeac324c95452acd81966465a07119016d14af7a6b518e3a94e111",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p020.png",
+      "sha256": "afc0e35f33fc6f346abdc3301142d3fa5920897d49289f30dbbad58f5039a204",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p025.png",
+      "sha256": "ccb6d01a812ad8987238fa394a825e846e6041c5c4b709b2e0d986e319906a92",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p030.png",
+      "sha256": "229dc42d5cdda078bcf880cab60248a39441f072cd13b9661daec492bcaadfb5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p035.png",
+      "sha256": "0bd8fce9499b704ea6e3daa5aa807e1b42dfd682fdf328001462cd8b9c6214a2",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p040.png",
+      "sha256": "b8bc809da309b049bb96ddfb646717b72a3eb210914e05e616bd713e8c9ac22b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p045.png",
+      "sha256": "e9713973b3aff41db0a7781d7c4c7ea8cb897009c34650c964cd1d6d4d14d881",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p050.png",
+      "sha256": "c295d9f01793d8685db9a113bd720f84f09530d8869b02ace38a0d638418ea1b",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p055.png",
+      "sha256": "d837a1731bb71aab7cc37ed49fb8d24c3c73c78314af9470b5ba3a1fcb8a0ecb",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p060.png",
+      "sha256": "f4c3b3be2959f65507c02a1f728fceaef8b371b1fec90f9d1e1234b2315876f5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p065.png",
+      "sha256": "f09d3867b25c973f2f9cd4a44ee949be7fd2d1c83a1f71415fb089021b13eca5",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p070.png",
+      "sha256": "27ab002f3cd277d72d5d447986c3c137f6b946d817ad840f27970814521a2b50",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p075.png",
+      "sha256": "e71d1581c82917dad0c88ad548aac037fefb28694c60394c7c66688e14a21eec",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p080.png",
+      "sha256": "63f6a0ba3579d6e6b17e57288764d88c767775fdaf7534d91001dc461467818a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p085.png",
+      "sha256": "2308a456c9d79409251a0d1268971383f656b3f1d3197b6ea8787dca641587d2",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p090.png",
+      "sha256": "57868d178a3bef1394f5ac9f5f623de5593d676b94bf0baa164a61b3557c527c",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p095.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery-p100.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.telemetry.ndjson",
+      "sha256": "56237627c7d0194d95bbb896a0496f4bdfe53e2f45c69769feb41c47596b8f87",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-discovery.webm",
+      "sha256": "cd1038c016b1e625df145614618c911b486863db0e2ec278429f472e659e70ae",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m01-drawn-relief.png",
+      "sha256": "3fdcc49e47e4d2117c0cacb3614a52222df3c7cd742830da5f3eb07f2a79faf9",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m02-brick-sweep-onset.png",
+      "sha256": "025cbf98d7e1b77a3753475410c5a9b48bf6b350cc228135030edb68080ec803",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m03-materialized-bond.png",
+      "sha256": "5510437e4ee851e94c056cd1d0a8ef30874e2ae1125b90fae67ef16e922e5b3a",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m04-low-sun-transition.png",
+      "sha256": "c73091eea9c257ff49d7013308265da340c0010ee13d83b2a0404634b03fe6bb",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m05-raking-shadow-settled.png",
+      "sha256": "029081018f5a9deb430b6ab9d6531c657997eabbf30582d5eadfd6fbe64dc479",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m06-header-closeup.png",
+      "sha256": "bdd9a6804a8938e5229b6fb86b85a7cbba9a691635a351bf10f8e1af789ec121",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m07-porch-reveal.png",
+      "sha256": "c51be4eb248f7aaa20d5d73ca1629344ab2f2f5e63ba5f608b035fe6300f5994",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m08-door-opening.png",
+      "sha256": "6798ff6d325fc6284321bc2b83cdf9d9df035549c85e8b9c503372c83fa039fd",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m09-sunlit-interior.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.telemetry.ndjson",
+      "sha256": "241afd8a918be49e1e1860ee1838f7e896279553f47de84a3506d30ef1b059df",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.webm",
+      "sha256": "d94854bd7efa89a256c9436981356759bc45a40dbc9f8f9a6fa7bf63961a67be",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-restored-start.png",
+      "sha256": "52f9f495cf858c47a96a364bb91b704f82bac76e118fc3fe04de10072352540f",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-reverse-discovery.telemetry.ndjson",
+      "sha256": "1619d9042f8b735347cbfca7e3791780179cc2f09cf66749fb465b2e2f6b62f0",
+      "kind": "TELEMETRY",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-reverse-discovery.webm",
+      "sha256": "e2823f1bd3c3c4282737bb794dd83e6413fd2672d3e0496d8febcce0d457a44a",
+      "kind": "VIDEO",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-end.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-start.png",
+      "sha256": "f1c69f88fd22c966ac193fe0af667a6b140e81afa33f2c47d16acd2b41ca7095",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-start.png",
+      "sha256": "e424caf65debc647b3e6eb5da9e29c914d8eef69293cb18f9cc29a8a2ad81800",
+      "kind": "IMAGE",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\reverse-state.json",
+      "sha256": "ab73cfefef75eedfc3d91308b9bc4fd2317a3439e1e00b01040cc58dd6783c45",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\semantic-capture.json",
+      "sha256": "95e9ffa6c9ddfdb91bd6b0b4983686a19fd14e4dad7dadcf05518172860d0a73",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\start-state.json",
+      "sha256": "6968cdaf558016a032791026be701b0272df512e3da9f6c4c897f7f1e73815ec",
+      "kind": "METADATA",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/desktop-start.png",
+      "sha256": "d3398cd5f537007d2bdf125606c781f18dd9b95f96ea8f84b5139e32af005281",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/desktop-end.png",
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/desktop-restored-start.png",
+      "sha256": "1d629ef4c227a71e233ad3ab5f6a5ffd04d88871440bfb5a3b62f3623a6094c8",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/semantic-correction-2--desktop-forward-m02-brick-sweep-onset.png",
+      "sha256": "dac6cd048c7d20f8b785b7e305ed0c3f1ee1a4e37f33510d3196dac17558ed08",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/semantic-correction-2--desktop-forward-m06-header-closeup.png",
+      "sha256": "74e1d35f5ca3f68ff3d8ebad8e084c56e918210e624a0e783f74d7a8853d6a91",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/desktop/semantic-correction-2--desktop-forward-m08-door-opening.png",
+      "sha256": "09a6e440ad442809e4c026def6c55746922c2160decdedf9e6d95e9317d82450",
+      "kind": "KEYFRAME",
+      "viewport": "desktop"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-start.png",
+      "sha256": "e31e1e4a52cae9192d669295128c776c92c32e8dc021e1f7cfa4625ad5137267",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-end.png",
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-restored-start.png",
+      "sha256": "1bf4db9f0f658f7f6a8f9c0a6e85d2414ca57085b1ae7a7d69fb035be76ed75b",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-forward-m02-brick-sweep-onset.png",
+      "sha256": "1e87f612e9fbb1277f03cfe099e4649a84a43ea98ab06638969ad0dcf21b1535",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-forward-m06-header-closeup.png",
+      "sha256": "5ca6411eb03bbcccf45ad7c05ef9f776587dfad49fa6f795e6e138d44f5d22af",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/portrait/portrait-forward-m08-door-opening.png",
+      "sha256": "1e15a37ddea380b279321cd72c98796a23afa5f9fbdc506b9132c453be3d5327",
+      "kind": "KEYFRAME",
+      "viewport": "portrait"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-start.png",
+      "sha256": "e424caf65debc647b3e6eb5da9e29c914d8eef69293cb18f9cc29a8a2ad81800",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-end.png",
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-restored-start.png",
+      "sha256": "52f9f495cf858c47a96a364bb91b704f82bac76e118fc3fe04de10072352540f",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-forward-m02-brick-sweep-onset.png",
+      "sha256": "025cbf98d7e1b77a3753475410c5a9b48bf6b350cc228135030edb68080ec803",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-forward-m06-header-closeup.png",
+      "sha256": "bdd9a6804a8938e5229b6fb86b85a7cbba9a691635a351bf10f8e1af789ec121",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    },
+    {
+      "path": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/keyframes/landscape/landscape-forward-m08-door-opening.png",
+      "sha256": "6798ff6d325fc6284321bc2b83cdf9d9df035549c85e8b9c503372c83fa039fd",
+      "kind": "KEYFRAME",
+      "viewport": "landscape"
+    }
+  ],
+  "integrity": {
+    "assetsVerified": true,
+    "productionDiffZero": true
+  },
+  "completion": {
+    "gates": {
+      "T01": "PASS",
+      "T02": "PASS",
+      "T03": "PASS",
+      "T04": "PASS",
+      "T05": "PASS",
+      "T06": "PASS",
+      "T07": "PASS",
+      "T08": "PASS",
+      "T09": "PASS",
+      "T10": "PASS",
+      "T11": "PASS",
+      "T12": "PASS",
+      "T13": "PASS",
+      "T14": "PASS",
+      "T15": "PASS",
+      "T16": "PASS",
+      "T17": "PASS",
+      "T18": "PASS",
+      "T19": "PASS",
+      "T20": "PASS",
+      "T21": "PASS"
+    },
+    "validatorResult": "PASS",
+    "validatedAt": "2026-11-02T20:13:16.882Z"
+  }
+}

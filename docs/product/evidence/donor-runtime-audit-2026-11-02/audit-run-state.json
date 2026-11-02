@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T19:56:44.175Z",
+  "updatedAt": "2026-11-02T20:13:16.882Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -1302,10 +1302,10 @@
       }
     },
     "07-c-the-face": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "SEMANTIC_DESKTOP_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1373,10 +1373,31 @@
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Passive evidence does not prove internal donor GPU/shadow-map resource identity after reverse.",
+          "attempts": [
+            "three A0/A1 screenshots and reverse telemetry/video",
+            "pinned absolute-state source",
+            "corrected semantic videos"
+          ],
+          "evidenceNeeded": "Narrow read-only resource identity probe if identity-level restore becomes a later requirement."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Whether a verified Rubik facade material specification can support this professional sample-panel service remains a later product/data decision.",
+          "attempts": [
+            "donor authored brand/spec source",
+            "runtime relief/shadow sequence",
+            "Cut3/Global D19 and frozen Rubik inspection"
+          ],
+          "evidenceNeeded": "Human review after all references; no bridge implementation authorized."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T20:07:40.372Z"
+        "updatedAt": "2026-11-02T20:13:16.882Z"
       }
     }
   }
