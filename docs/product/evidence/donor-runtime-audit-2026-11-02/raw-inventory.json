@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T16:52:13.406Z",
-  "fileCount": 1693,
-  "totalBytes": 2472910835,
-  "packageContentSha256": "1eb91bad36c799e8703150e68078bff7325bec9bbc3af63cb65f69d439ab3d39",
+  "generatedAt": "2026-11-02T17:54:15.499Z",
+  "fileCount": 1738,
+  "totalBytes": 2488746652,
+  "packageContentSha256": "485f7cc85971b2c119385979f00b5434d23f81fe6403b6b5a0887aaa9dcff28f",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -8154,6 +8154,71 @@
       "sha256": "f721fa578b7cf553bf8fefe82c4610e30ec39d4749be8f673a28ffb3f14d882f"
     },
     {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m01-paper-foundation-start.png",
+      "bytes": 168793,
+      "sha256": "602d1a41e76a7a079529c0d6ccc9cb4960feab23f92b2c2b6f0b98f046e511f1"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m02-excavation-on-plan.png",
+      "bytes": 204267,
+      "sha256": "e837aea53d24a34ff11f339fcc1bf83d36892469211be5af15ace9083841796c"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m03-footings-and-slab.png",
+      "bytes": 209056,
+      "sha256": "e715e41e83e0dff3200b041179babd72baae533941386d98a9ff917cd174ad5a"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m04-portal-frames.png",
+      "bytes": 212453,
+      "sha256": "01d5ea310751a1446b97b7b41ffb3d3ecf51da1366e5c003810ca5f1a7341dcf"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m05-mezzanine-floor.png",
+      "bytes": 215672,
+      "sha256": "efc09be4ec8fc78532f29fcb2631fdccd9345fc803ced88f4be9d7350237b525"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m06-wall-cassettes-and-ghosts.png",
+      "bytes": 214847,
+      "sha256": "0a2e8ebfbf00347a253b116dd4f5c38e76b37eeeb156698e36529806ab9cf3c3"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m07-roof-assembly.png",
+      "bytes": 216846,
+      "sha256": "e3486045a01aa6a4783a8606d6e650dd3b048676bcd39d9510ecd2c981ec5ea9"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m08-windows-and-doors.png",
+      "bytes": 208596,
+      "sha256": "f354cf9c90cb822fa39a17ab848e8c53a20672f67abcdbbf74d4926eac6c9b48"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m09-surface-finishes.png",
+      "bytes": 208341,
+      "sha256": "d8f5a69449fb7c5c71cab6bfb02984601a5d2205540d4c8d490587d07d6ad9a7"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m10-furniture-handover.png",
+      "bytes": 183374,
+      "sha256": "f92bf2c25d0358832071452744114b2f644971a30dafcb6c2c52cf9373b282b4"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m11-late-phase-gap.png",
+      "bytes": 91156,
+      "sha256": "4c8db2041a1fc1933630379351ae86a485f0a5cd5b579349f462d2ee74321df2"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-m12-overhead-completion-sheet.png",
+      "bytes": 73400,
+      "sha256": "c276afc31bb7f3753d56c5b141ef69e344ceb8b3dfbdc03cc6b119617ea431c1"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-forward-semantic.webm",
+      "bytes": 2405717,
+      "sha256": "bc361d7679c70b092a227c7bb8871a28a3cf4acb11ead5c761547aba3cfdced6"
+    },
+    {
       "path": "05-b-1-1-site-sheet/landscape/landscape-prelude-to-week0.webm",
       "bytes": 1821960,
       "sha256": "0c4c893554e23837edf22c0301086f8e2ec3820b721dfbcec6b48e90b2197ccd"
@@ -8174,6 +8239,16 @@
       "sha256": "0a490e2598b9725e396a9f8b787925f9f0d987f406d26dd51b0ea7aa59d177e2"
     },
     {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-semantic-end.png",
+      "bytes": 73400,
+      "sha256": "c276afc31bb7f3753d56c5b141ef69e344ceb8b3dfbdc03cc6b119617ea431c1"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/landscape-semantic-start.png",
+      "bytes": 67003,
+      "sha256": "3d782444a74596e9c1ce79b8365270c57c58acd6f42e0b63d3944ccbecbc02ee"
+    },
+    {
       "path": "05-b-1-1-site-sheet/landscape/landscape-start.png",
       "bytes": 68338,
       "sha256": "8ff6bfd51f2147c9a1f221afa7d7a497404cff2f513d5ebc36c2b92d6b2b9066"
@@ -8182,6 +8257,11 @@
       "path": "05-b-1-1-site-sheet/landscape/reverse-state.json",
       "bytes": 1154,
       "sha256": "94f159733554053de0b7fa4752de6897ed3aac183f6f0c903471bbdbf60fce35"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/landscape/semantic-capture.json",
+      "bytes": 18715,
+      "sha256": "bce1bc71df9b0e8268f51ea8f0396b4b323526c06176b533ee437366a6a3f886"
     },
     {
       "path": "05-b-1-1-site-sheet/landscape/start-state.json",
@@ -8447,6 +8527,151 @@
       "path": "05-b-1-1-site-sheet/portrait/semantic-capture.json",
       "bytes": 18648,
       "sha256": "a1f801afd3750611806e9a6c0107ad7993c6cd444df5a73a316eb604b9d8105d"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m01-paper-foundation-start.png",
+      "bytes": 255633,
+      "sha256": "e88e0b36cc934dfd7ff3607459e1d8a4966e6fae0d88da1901d54861174508b2"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m02-excavation-on-plan.png",
+      "bytes": 254396,
+      "sha256": "afdd8246eef4302575615ce4b57148b0ac2f0d18fb8f3010cb4d4ee4ceec41b3"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m03-footings-and-slab.png",
+      "bytes": 235509,
+      "sha256": "bc9dc160cb1a207361caa637094d1b89e5fd45747c8261fc005c93b0730b511c"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m04-portal-frames.png",
+      "bytes": 223176,
+      "sha256": "cd469966319c6c647f398dd9854f3b5577af816c7d9014262a51147a8a37bf57"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m05-mezzanine-floor.png",
+      "bytes": 235869,
+      "sha256": "48ba3b15ab6cf7e465b13c31f1a11fe590389a99388b391bf65e522dab34597e"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m06-wall-cassettes-and-ghosts.png",
+      "bytes": 255129,
+      "sha256": "40b81a3a0230f7da1cb5adfcd774e4302f6e47f4e072a598c3b58d73e3908851"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m07-roof-assembly.png",
+      "bytes": 238705,
+      "sha256": "360900f417a29a007274a310847d54489a6890618dab15702cd714ee36f6500b"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m08-windows-and-doors.png",
+      "bytes": 224624,
+      "sha256": "9685c574264e50e0fd3f7dcf04b10784d666ff41097a70a0a784676cd08cec2d"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m09-surface-finishes.png",
+      "bytes": 214837,
+      "sha256": "675e2cb6e6d2055bfa00638e15134ef8eaccd7d9a96c150cfa3f52cf37514581"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m10-furniture-handover.png",
+      "bytes": 210362,
+      "sha256": "1f48cb1bb65c122dc54a831084d407d95b14db9b4d072c9da37080b2ec1e8e31"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-m11-late-phase-gap.png",
+      "bytes": 147269,
+      "sha256": "885e1aa4b2dfb7f45ba084b030f9b05e4d51561a4a89eb2be492b00428e791a2"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-forward-semantic.webm",
+      "bytes": 2883584,
+      "sha256": "1c6552cd901986f1209e6a6e5df80b11bb3795157e4ceeac5ef6272b4f1bba98"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-1/portrait-semantic-start.png",
+      "bytes": 99189,
+      "sha256": "6b0997f33d725123a0a6934baf7f3286ca5b08c9f3d7f60f748f8b0a2ae550ba"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m01-paper-foundation-start.png",
+      "bytes": 256841,
+      "sha256": "fbec6c87fbd284473b33e356214f7d063346d99b9573ae4ed2111023a45a05b4"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m02-excavation-on-plan.png",
+      "bytes": 260461,
+      "sha256": "0cd450b9ade55d48f61114dac937e617db41af66d78b0bb6f9986c1dc371054a"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m03-footings-and-slab.png",
+      "bytes": 242216,
+      "sha256": "9ff108f5a15a54826ac78624a434619338388bc2cc2ca6835928c41bb0cb1287"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m04-portal-frames.png",
+      "bytes": 222915,
+      "sha256": "08ead8c8ac6f7a4e20a998304bf5610b6d6df8e5aab0ad1e16b14a32dcd03105"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m05-mezzanine-floor.png",
+      "bytes": 234954,
+      "sha256": "9281003d2ce2625e69cef7aa4f83c36027667ae9eab24b75a4930631904f56b6"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m06-wall-cassettes-and-ghosts.png",
+      "bytes": 255376,
+      "sha256": "b8c9606d6d501e079bd66ab4a3fc143a3af5a51f6789d692f2751fcde46a868d"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m07-roof-assembly.png",
+      "bytes": 238944,
+      "sha256": "c26251ed7441e9e8297608548b93a3fd728aa90c920e7e4a5b0e8a5877e40cbc"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m08-windows-and-doors.png",
+      "bytes": 224439,
+      "sha256": "a0328b8a6bb126852c5ec0c9961799de76f2f2740c368b3c88a29bf6ea940471"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m09-surface-finishes.png",
+      "bytes": 214752,
+      "sha256": "f14d162469d7ef0630f736f3a406a95be0f0d8131cab3325bcee20c1311b2c52"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m10-furniture-handover.png",
+      "bytes": 210363,
+      "sha256": "02a50d371da505646de794198fe15e28d4e788f3f0fc4ac618b918315e673788"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m11-late-phase-gap.png",
+      "bytes": 138608,
+      "sha256": "4e1d076af423a8a735a1b2e93fdb76a69859937aaee4e2126e824d5f3bba581e"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-m12-overhead-completion-sheet.png",
+      "bytes": 117133,
+      "sha256": "274d8e20035189e04a1b4637abd7d7cd4ec4d06b91b7d77b7bfcd2ca1c80057e"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-forward-semantic.webm",
+      "bytes": 2733815,
+      "sha256": "1e97f6ed8c17d76e501035bb10da5ec5823c11efb432f3ddc1a7f9a728f3a9a7"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-semantic-end.png",
+      "bytes": 117133,
+      "sha256": "274d8e20035189e04a1b4637abd7d7cd4ec4d06b91b7d77b7bfcd2ca1c80057e"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/portrait-semantic-start.png",
+      "bytes": 98596,
+      "sha256": "29a5c364b81ee1de9c2c5d9f118120a85d8b51777681b119d9a6d229b51c41f2"
+    },
+    {
+      "path": "05-b-1-1-site-sheet/portrait/semantic-correction-2/semantic-capture.json",
+      "bytes": 19353,
+      "sha256": "e62a2281788eb59be7354a8d70ac9555b0af28ef8650660f75cfafd30482bfcf"
     },
     {
       "path": "05-b-1-1-site-sheet/portrait/start-state.json",

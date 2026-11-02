@@ -1,5 +1,7 @@
 # Handoff — 05-b partial progress (IN_PROGRESS)
 
+**Superseded by `CHECKPOINT-2026-11-02-05B-CAPTURE-COMPLETE.md`.** This file describes the previous checkpoint at remote SHA `b06312ef8f428847872935171c19e9c98dc87aca`; use the newer handoff for continuation.
+
 This is a remote recoverability checkpoint, **not** validation of 05-b. Its commit is the HEAD SHA containing it; compare `git rev-parse HEAD` with `git ls-remote origin refs/heads/audit/donor-runtime-7x14-2026-11-02`. Previous actual remote HEAD before this checkpoint: `710664f10ea5bf71f5fc069a334314d00d77aab6`. The user's older known SHA `53e3e175ef461f23cc9966d56dd6d719fdb17c96` is not the current branch tip. Frozen Rubik baseline: `0f9c6ead9732901681498efec326d1ca92e42ffe`. Pinned donor: `Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6`. Sole branch/worktree: `audit/donor-runtime-7x14-2026-11-02`, `C:\Users\temp123\floorplan-3d-donor-runtime-audit-2026-11-02`.
 
 ## Exact status

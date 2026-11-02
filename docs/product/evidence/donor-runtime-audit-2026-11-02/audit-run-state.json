@@ -836,13 +836,37 @@
           "startedAt": "2026-11-02T16:22:18.490Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T16:24:40.267Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T17:48:07.419Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T17:49:32.613Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T17:49:42.220Z",
+          "status": "FAILED",
+          "error": "Error: M12 did not reach exact week 14: 13.999500000000012"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-2",
+          "startedAt": "2026-11-02T17:52:29.753Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T17:53:34.658Z"
         }
       ],
       "blockingUnresolved": [],
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T16:24:40.267Z"
+        "updatedAt": "2026-11-02T17:53:34.658Z"
       }
     },
     "05-c-site-camera": {

@@ -31,8 +31,8 @@ const index={
   videosRawOnly:files.filter(f=>f.path.endsWith('.webm')).map(f=>({path:f.path,bytes:f.bytes,sha256:f.sha256})),
   validCurrentEvidence:{
     discovery:{desktop:'original',portrait:'original',landscape:'original'},
-    semantic:{desktop:'semantic-correction-1: M01-M12',portrait:'original: M01-M11 usable; M12 terminal still requires correction',landscape:'NOT_CAPTURED'},
-    reason:'Desktop original semantic M12 was captured just below week 14 and still showed the donor late-phase Site Mobilisation fallback. Correction-1 uses exact week 14. Portrait original M12 is at week 13.9995, so its completion label is not accredited. All original attempts remain in RAW and their non-video files are copied here.'
+    semantic:{desktop:'semantic-correction-1: M01-M12 at exact WK14',portrait:'semantic-correction-2: inspect semantic-capture.json for exact WK14; original and correction-1 retained',landscape:'original: M01-M12 at exact WK14'},
+    reason:'Desktop original and portrait original terminal frames stopped just below week 14. Landscape original reached exact week 14. Portrait correction-1 failed because an End key on an already-maxed range input emitted no input event; correction-2 uses ArrowLeft then End on the donor visible slider after the wheel traversal. All attempts remain in RAW; only completed semantic-capture.json records are valid evidence.'
   },
   copiedFiles:files.filter(f=>!f.path.endsWith('.webm')).map(f=>({rawPath:f.path,gitPath:`docs/product/evidence/donor-runtime-audit-2026-11-02/takes/${id}/partial-raw/${f.path.slice(id.length+1)}`,bytes:f.bytes,sha256:f.sha256}))
 };
