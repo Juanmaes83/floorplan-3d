@@ -1,0 +1,230 @@
+{
+  "id": "07-c-the-face",
+  "viewport": "landscape",
+  "run": "original",
+  "fps": 6,
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 2106,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:44.621Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m01-drawn-relief.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 307,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 10° LENS | ALT 35.3° · AZ 135° | 9.6° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:48.057Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m02-brick-sweep-onset.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 476,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nSWEEP // S:-3.3M | ALT 35.3° · AZ 135° | 10.1° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:50.057Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m03-materialized-bond.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 783,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 12° LENS | ALT 35.3° · AZ 135° | 12.0° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:53.279Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m04-low-sun-transition.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 1007,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 14° LENS | ALT 22.2° · AZ 161° | 13.5° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:55.766Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m05-raking-shadow-settled.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 1175,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 14° LENS | ALT 16.9° · AZ 168° | 14.1° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:04:57.782Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m06-header-closeup.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 1455,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.9M | ALT 16.9° · AZ 168° | 28.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:05:00.826Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m07-porch-reveal.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 1595,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.8M | ALT 16.9° · AZ 168° | 33.9° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:05:02.643Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m08-door-opening.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 1791,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.4M | ALT 16.9° · AZ 168° | 52.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:05:04.766Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m09-sunlit-interior.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 2099,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:05:07.729Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 2106,
+        "scrollY": 2106,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:05:09.424Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.webm",
+  "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.telemetry.ndjson",
+  "telemetrySamples": 246,
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-start.png",
+      "bytes": 138278,
+      "sha256": "f1c69f88fd22c966ac193fe0af667a6b140e81afa33f2c47d16acd2b41ca7095"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m01-drawn-relief.png",
+      "bytes": 158063,
+      "sha256": "3fdcc49e47e4d2117c0cacb3614a52222df3c7cd742830da5f3eb07f2a79faf9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m02-brick-sweep-onset.png",
+      "bytes": 165679,
+      "sha256": "025cbf98d7e1b77a3753475410c5a9b48bf6b350cc228135030edb68080ec803"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m03-materialized-bond.png",
+      "bytes": 279471,
+      "sha256": "5510437e4ee851e94c056cd1d0a8ef30874e2ae1125b90fae67ef16e922e5b3a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m04-low-sun-transition.png",
+      "bytes": 278764,
+      "sha256": "c73091eea9c257ff49d7013308265da340c0010ee13d83b2a0404634b03fe6bb"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m05-raking-shadow-settled.png",
+      "bytes": 302811,
+      "sha256": "029081018f5a9deb430b6ab9d6531c657997eabbf30582d5eadfd6fbe64dc479"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m06-header-closeup.png",
+      "bytes": 291166,
+      "sha256": "bdd9a6804a8938e5229b6fb86b85a7cbba9a691635a351bf10f8e1af789ec121"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m07-porch-reveal.png",
+      "bytes": 254624,
+      "sha256": "c51be4eb248f7aaa20d5d73ca1629344ab2f2f5e63ba5f608b035fe6300f5994"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m08-door-opening.png",
+      "bytes": 314505,
+      "sha256": "6798ff6d325fc6284321bc2b83cdf9d9df035549c85e8b9c503372c83fa039fd"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-m09-sunlit-interior.png",
+      "bytes": 297069,
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-semantic-end.png",
+      "bytes": 297069,
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.webm",
+      "bytes": 2953596,
+      "sha256": "d94854bd7efa89a256c9436981356759bc45a40dbc9f8f9a6fa7bf63961a67be"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\landscape\\landscape-forward-semantic.telemetry.ndjson",
+      "bytes": 180789,
+      "sha256": "241afd8a918be49e1e1860ee1838f7e896279553f47de84a3506d30ef1b059df"
+    }
+  ],
+  "inputCount": 77,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\07-c-the-face\\semantic-plan.json"
+}

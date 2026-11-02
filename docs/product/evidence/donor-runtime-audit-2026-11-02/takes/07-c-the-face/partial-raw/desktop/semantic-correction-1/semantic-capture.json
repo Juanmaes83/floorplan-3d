@@ -1,0 +1,230 @@
+{
+  "id": "07-c-the-face",
+  "viewport": "desktop",
+  "run": "semantic-correction-1",
+  "fps": 6,
+  "initial": {
+    "dpr": 1,
+    "maxScroll": 4860,
+    "scrollY": 0,
+    "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+    "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+  },
+  "records": [
+    {
+      "label": "A",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-semantic-start.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 0,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 2° LENS | ALT 35.3° · AZ 135° | 2.0° ORTHO"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:01.987Z"
+    },
+    {
+      "label": "M01",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m01-drawn-relief.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 714,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 10° LENS | ALT 35.3° · AZ 135° | 9.7° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:06.158Z"
+    },
+    {
+      "label": "M02",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m02-brick-sweep-onset.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 1039,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nSWEEP // S:-4.0M | ALT 35.3° · AZ 135° | 10.1° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:08.348Z"
+    },
+    {
+      "label": "M03",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m03-materialized-bond.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 1755,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nSWEEP // S:6.5M | ALT 35.3° · AZ 135° | 12.0° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:12.727Z"
+    },
+    {
+      "label": "M04",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m04-low-sun-transition.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 2275,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 13° LENS | ALT 25.2° · AZ 156° | 13.2° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:15.921Z"
+    },
+    {
+      "label": "M05",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m05-raking-shadow-settled.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 2730,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\n1:20 WALL · 14° LENS | ALT 16.9° · AZ 168° | 14.1° RELIEF"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:18.904Z"
+    },
+    {
+      "label": "M06",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m06-header-closeup.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 3315,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.9M | ALT 16.9° · AZ 168° | 28.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:22.923Z"
+    },
+    {
+      "label": "M07",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m07-porch-reveal.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 3704,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.7M | ALT 16.9° · AZ 168° | 35.5° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:25.522Z"
+    },
+    {
+      "label": "M08",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m08-door-opening.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 4095,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nRAKE SUN · Z:-1.4M | ALT 16.9° · AZ 168° | 52.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:28.091Z"
+    },
+    {
+      "label": "M09",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m09-sunlit-interior.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 4810,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:32.571Z"
+    },
+    {
+      "label": "B",
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-semantic-end.png",
+      "metrics": {
+        "dpr": 1,
+        "maxScroll": 4860,
+        "scrollY": 4860,
+        "url": "https://sam1983aing.github.io/flat-to-3d/07-sunlit-elevation/c-the-face/index.html",
+        "visibleHud": "CAD PLAN // 1:100\nHEADER · Z:+1.7M | ALT 16.9° · AZ 168° | 56.0° PERSP"
+      },
+      "captureType": "LIVE_SCREENSHOT",
+      "capturedAt": "2026-11-02T20:02:34.930Z"
+    }
+  ],
+  "video": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-semantic.webm",
+  "telemetry": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-semantic.telemetry.ndjson",
+  "telemetrySamples": 325,
+  "assets": [
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-semantic-start.png",
+      "bytes": 625371,
+      "sha256": "49236313e62ca42551e73b98ce2c1071df31e70a7bab4d71785e7bdf05d13256"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m01-drawn-relief.png",
+      "bytes": 847291,
+      "sha256": "ea3db0b1f8f356d8683df62ece9e53735a5e7c0a36287adcda905cb8d0172194"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m02-brick-sweep-onset.png",
+      "bytes": 856094,
+      "sha256": "752eae0933efec95623209fcf880e5d3fbddd8633b52610602d6d5aadfe3bace"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m03-materialized-bond.png",
+      "bytes": 1194016,
+      "sha256": "e82e0766cf55544f4fb0b10b050c2d087b5d7db0fce4d8e15ed18ce37bf83e2a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m04-low-sun-transition.png",
+      "bytes": 1297507,
+      "sha256": "1aafe1f5a1d548b0b593b9e62b38ed2a06b37e84d4cd417c3aa828c07ac2995a"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m05-raking-shadow-settled.png",
+      "bytes": 1376557,
+      "sha256": "06337cf0de5617a8f811766b0c6afed23bf9453e157f09d30bebae75e5e567df"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m06-header-closeup.png",
+      "bytes": 1351489,
+      "sha256": "bd3375f8cdd127144e24b77918c5eb502e5b4492621bad4d2c2c581addeb5fd8"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m07-porch-reveal.png",
+      "bytes": 581645,
+      "sha256": "1eb1effb7ff638d41d7201074d28d7a464b54a61bd6aa73535e69f03b4d8b460"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m08-door-opening.png",
+      "bytes": 1467178,
+      "sha256": "0191feb72d5c9d28df8ccd10d782f6b03e8a4374c338adef0b85133a2849afd9"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-m09-sunlit-interior.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-semantic-end.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-semantic.webm",
+      "bytes": 14483509,
+      "sha256": "8f6fc43e22ed002de0809f1bda06e1ff24a37676cbedc4101ded186b3a3d012b"
+    },
+    {
+      "path": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02\\07-c-the-face\\desktop\\semantic-correction-1\\desktop-forward-semantic.telemetry.ndjson",
+      "bytes": 238990,
+      "sha256": "8e480e4263342071ff2b4e84d751810986341a5eb37f1e20e9c3c40b3e3f0048"
+    }
+  ],
+  "inputCount": 78,
+  "planSource": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02\\docs\\product\\evidence\\donor-runtime-audit-2026-11-02\\takes\\07-c-the-face\\semantic-plan.json"
+}

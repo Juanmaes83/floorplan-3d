@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "IN_PROGRESS",
+  "basis": "Three original clean-context A→B→A Discovery videos and 5% samples. Desktop p000/p010/p020/p030/p045/p060/p075/p090/p100, portrait p000/p025/p050/p065/p100, landscape p000/p045/p065/p100 were inspected. Targets are approximate observed-state sampling positions; continuous video and telemetry provide transition bounds.",
+  "milestones": [
+    {"label":"M01","slug":"drawn-relief","targetProgress":0.13,"observedChange":"The front-on 1:20 ink facade shifts obliquely; the same door, window and zigzag diaper/header pattern acquire visible depth."},
+    {"label":"M02","slug":"brick-sweep-onset","targetProgress":0.21,"targetProgressByViewport":{"desktop":0.25},"observedChange":"A luminous spatial boundary begins replacing the hatched paper facade with brick/material on the same patterned wall."},
+    {"label":"M03","slug":"materialized-bond","targetProgress":0.36,"observedChange":"Brick, burnt headers, mortar, window and porch appear fully materialized in their original drawn locations."},
+    {"label":"M04","slug":"low-sun-transition","targetProgress":0.46,"observedChange":"The sun moves lower and more along the wall; shadows lengthen from the physically proud headers and the diaper pattern becomes more legible."},
+    {"label":"M05","slug":"raking-shadow-settled","targetProgress":0.55,"observedChange":"Raking light is settled; the same 60 mm-style header relief now has long directional shadows, with no new facade geometry introduced during the light shift."},
+    {"label":"M06","slug":"header-closeup","targetProgress":0.68,"observedChange":"The camera moves close enough to inspect projecting burnt headers, buff stretcher courses, mortar and relief shadows as material detail."},
+    {"label":"M07","slug":"porch-reveal","targetProgress":0.75,"observedChange":"The camera follows the same patterned wall toward the deep porch reveal and original oak door."},
+    {"label":"M08","slug":"door-opening","targetProgress":0.84,"observedChange":"The oak door opens inward while the bond and porch remain spatially continuous with the wall detail."},
+    {"label":"M09","slug":"sunlit-interior","targetProgress":0.98,"observedChange":"The route reaches the interior with timber stair, floor and rear glazing; donor sample-panel CTA overlays the final view."}
+  ],
+  "reverseSemanticStates": "Review continuous natural B→A for door closure, camera pullback from header detail, raking sun reset, material-to-ink front and restored hatching/intro/HUD. Compare A0/A1 separately in all three viewports; do not claim internal resource identity from visual equality."
+}

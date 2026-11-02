@@ -2,13 +2,13 @@
   "schemaVersion": "rubik-donor-runtime-audit.partial-evidence-index.v1",
   "take": "07-c-the-face",
   "status": "PARTIAL / IN_PROGRESS",
-  "lastSuccessfulStage": "DISCOVERY_LANDSCAPE_COMPLETE",
-  "inventoryContentSha256": "131c995e96cdd09bdfaa6446a1e17f2443ff8dad4861501e87c7384ae7f1f79f",
+  "lastSuccessfulStage": "SEMANTIC_DESKTOP_COMPLETE",
+  "inventoryContentSha256": "8a495d4623f819d0af961bf250681ec28653b73c622d2e09dec731d6f4e6660c",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "rawFileCount": 102,
-  "rawBytes": 80207371,
-  "copiedNonVideoFiles": 96,
-  "copiedNonVideoBytes": 40287887,
+  "rawFileCount": 169,
+  "rawBytes": 158875138,
+  "copiedNonVideoFiles": 159,
+  "copiedNonVideoBytes": 83870550,
   "videosRawOnly": [
     {
       "path": "07-c-the-face/desktop/desktop-forward-discovery.webm",
@@ -21,9 +21,24 @@
       "sha256": "69768dc6e81017a4aa0b20d02d18083f90dacf36f7d48ff0e934aa2f9564726c"
     },
     {
+      "path": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-semantic.webm",
+      "bytes": 14483509,
+      "sha256": "8f6fc43e22ed002de0809f1bda06e1ff24a37676cbedc4101ded186b3a3d012b"
+    },
+    {
+      "path": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-semantic.webm",
+      "bytes": 14923109,
+      "sha256": "bd24c8e8e29e9d0edf3bdf687a7ed9efb3e24c777ef7b20f7c89a1efc5459993"
+    },
+    {
       "path": "07-c-the-face/landscape/landscape-forward-discovery.webm",
       "bytes": 3587241,
       "sha256": "cd1038c016b1e625df145614618c911b486863db0e2ec278429f472e659e70ae"
+    },
+    {
+      "path": "07-c-the-face/landscape/landscape-forward-semantic.webm",
+      "bytes": 2953596,
+      "sha256": "d94854bd7efa89a256c9436981356759bc45a40dbc9f8f9a6fa7bf63961a67be"
     },
     {
       "path": "07-c-the-face/landscape/landscape-reverse-discovery.webm",
@@ -34,6 +49,11 @@
       "path": "07-c-the-face/portrait/portrait-forward-discovery.webm",
       "bytes": 3809921,
       "sha256": "dbd3c100408bfceb7136b5bca8ac09b674eea28294b70f2f170062c9ab827d0d"
+    },
+    {
+      "path": "07-c-the-face/portrait/portrait-forward-semantic.webm",
+      "bytes": 2724890,
+      "sha256": "242091466737e834d0daad64c6b0934788c8346066e2d1a1a6ef55ed13e26f7a"
     },
     {
       "path": "07-c-the-face/portrait/portrait-reverse-discovery.webm",
@@ -187,6 +207,60 @@
       "sha256": "9c0c56baa3d9eab85a1406253101533513591af53e76dfd7a978abcac03b2314"
     },
     {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m01-drawn-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m01-drawn-relief.png",
+      "bytes": 847402,
+      "sha256": "37f5a7d2ed22414424071787c786b76195aa6ecb23cb4c51f7170dedc67aee17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m02-brick-sweep-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m02-brick-sweep-onset.png",
+      "bytes": 874551,
+      "sha256": "d0f713252ca490ffe4ac7f3e9973ab2bc8bd9ce6243e036dcd28bd74c87faa0f"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m03-materialized-bond.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m03-materialized-bond.png",
+      "bytes": 1195728,
+      "sha256": "3fc48c469f57fe69406c1cf140e48ea2d37fbaf17d389286730fcfcc36ec5974"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m04-low-sun-transition.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m04-low-sun-transition.png",
+      "bytes": 1296798,
+      "sha256": "dd2bf1265fadfa5f5880e5a2f3c9b8cf05bec1b0ef230c2bd953de399333e0c9"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m05-raking-shadow-settled.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m05-raking-shadow-settled.png",
+      "bytes": 1377865,
+      "sha256": "2ecdbc47aab4a749102c6dfea7a115d521c21f0e216312279f9439bca81fbe43"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m06-header-closeup.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m06-header-closeup.png",
+      "bytes": 1355640,
+      "sha256": "8a6b785598785ab7db4b045ae055e3f0544eabbca605555eed7445c6f281d957"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m07-porch-reveal.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m07-porch-reveal.png",
+      "bytes": 580597,
+      "sha256": "460eac871740d068574869da75c60c05135dd8544b3ee383d7149f925c583cb2"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m08-door-opening.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m08-door-opening.png",
+      "bytes": 1471067,
+      "sha256": "a16e4cd81d90bcb2062d583d0ca84c121ced126998478b89f25e374946abe735"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-forward-m09-sunlit-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-forward-m09-sunlit-interior.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
       "rawPath": "07-c-the-face/desktop/desktop-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-restored-start.png",
       "bytes": 625634,
@@ -197,6 +271,18 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-reverse-discovery.telemetry.ndjson",
       "bytes": 168302,
       "sha256": "a11abc67e8dbf4359c207c0dfc50e858ea81f2f98ce60e07a1fde88ae81a5b1e"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-semantic-end.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/desktop-semantic-start.png",
+      "bytes": 625492,
+      "sha256": "bf7bab54e9a709b537f7001a128cc84f7240ce778d505dc6392b818c7b0a479c"
     },
     {
       "rawPath": "07-c-the-face/desktop/desktop-start.png",
@@ -227,6 +313,162 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/reverse-state.json",
       "bytes": 1023,
       "sha256": "23ae5c008994047e1db0ea741d6fc5c33f3fa24f88fe453095bc96a641cefe17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m01-drawn-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m01-drawn-relief.png",
+      "bytes": 847291,
+      "sha256": "ea3db0b1f8f356d8683df62ece9e53735a5e7c0a36287adcda905cb8d0172194"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m02-brick-sweep-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m02-brick-sweep-onset.png",
+      "bytes": 856094,
+      "sha256": "752eae0933efec95623209fcf880e5d3fbddd8633b52610602d6d5aadfe3bace"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m03-materialized-bond.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m03-materialized-bond.png",
+      "bytes": 1194016,
+      "sha256": "e82e0766cf55544f4fb0b10b050c2d087b5d7db0fce4d8e15ed18ce37bf83e2a"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m04-low-sun-transition.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m04-low-sun-transition.png",
+      "bytes": 1297507,
+      "sha256": "1aafe1f5a1d548b0b593b9e62b38ed2a06b37e84d4cd417c3aa828c07ac2995a"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m05-raking-shadow-settled.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m05-raking-shadow-settled.png",
+      "bytes": 1376557,
+      "sha256": "06337cf0de5617a8f811766b0c6afed23bf9453e157f09d30bebae75e5e567df"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m06-header-closeup.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m06-header-closeup.png",
+      "bytes": 1351489,
+      "sha256": "bd3375f8cdd127144e24b77918c5eb502e5b4492621bad4d2c2c581addeb5fd8"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m07-porch-reveal.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m07-porch-reveal.png",
+      "bytes": 581645,
+      "sha256": "1eb1effb7ff638d41d7201074d28d7a464b54a61bd6aa73535e69f03b4d8b460"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m08-door-opening.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m08-door-opening.png",
+      "bytes": 1467178,
+      "sha256": "0191feb72d5c9d28df8ccd10d782f6b03e8a4374c338adef0b85133a2849afd9"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-m09-sunlit-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-m09-sunlit-interior.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-forward-semantic.telemetry.ndjson",
+      "bytes": 238990,
+      "sha256": "8e480e4263342071ff2b4e84d751810986341a5eb37f1e20e9c3c40b3e3f0048"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-semantic-end.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/desktop-semantic-start.png",
+      "bytes": 625371,
+      "sha256": "49236313e62ca42551e73b98ce2c1071df31e70a7bab4d71785e7bdf05d13256"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-1/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-1/semantic-capture.json",
+      "bytes": 10944,
+      "sha256": "cca8d35fba828512f51ea567376b149e1ca4a03bcf792e705a9fdde687e397fd"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m01-drawn-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m01-drawn-relief.png",
+      "bytes": 838135,
+      "sha256": "f50d7ffc1d592336157473f2682cc0958bcf95e7809953fda3d420c18c3b558c"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m02-brick-sweep-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m02-brick-sweep-onset.png",
+      "bytes": 1027606,
+      "sha256": "dac6cd048c7d20f8b785b7e305ed0c3f1ee1a4e37f33510d3196dac17558ed08"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m03-materialized-bond.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m03-materialized-bond.png",
+      "bytes": 1194779,
+      "sha256": "8f3e0c298049270095598d1109be10b58f29f7b8c029792e35e2ef7e0b2869b8"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m04-low-sun-transition.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m04-low-sun-transition.png",
+      "bytes": 1294590,
+      "sha256": "10e6db7b60f6b0a31174ece3435b8a9fc29fe0698ffa4b011526ba8b10830be6"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m05-raking-shadow-settled.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m05-raking-shadow-settled.png",
+      "bytes": 1376960,
+      "sha256": "dad13c21e987463a5eac4977b48a8669660d8baaf6d864f5a6b2710f5c296d4f"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m06-header-closeup.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m06-header-closeup.png",
+      "bytes": 1352694,
+      "sha256": "74e1d35f5ca3f68ff3d8ebad8e084c56e918210e624a0e783f74d7a8853d6a91"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m07-porch-reveal.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m07-porch-reveal.png",
+      "bytes": 1041697,
+      "sha256": "fd2c71bba02e9becd45e9549678bfa211a7699f262dbb753ebf43a94eb7d19f9"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m08-door-opening.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m08-door-opening.png",
+      "bytes": 1467104,
+      "sha256": "09a6e440ad442809e4c026def6c55746922c2160decdedf9e6d95e9317d82450"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-m09-sunlit-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-m09-sunlit-interior.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-forward-semantic.telemetry.ndjson",
+      "bytes": 243309,
+      "sha256": "5a45654a3b1d799c67e5f77e435475fd30ce0f8a0982d87bdc08f599d27c06d0"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-semantic-end.png",
+      "bytes": 1295773,
+      "sha256": "9c1329b22f1398942bd022c5fb9b07b27b88447e023510eaa3b05208997c3b17"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/desktop-semantic-start.png",
+      "bytes": 625496,
+      "sha256": "02a8687ca1147a858dfc3631747dfe7f23669aa9759cb9ac7c58c68a143558c6"
+    },
+    {
+      "rawPath": "07-c-the-face/desktop/semantic-correction-2/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/desktop/semantic-correction-2/semantic-capture.json",
+      "bytes": 10952,
+      "sha256": "eb26868400fffb8a54fc1a52b2641e8ce06dc05a72463d9e62572026897d1be1"
     },
     {
       "rawPath": "07-c-the-face/desktop/start-state.json",
@@ -397,6 +639,66 @@
       "sha256": "56237627c7d0194d95bbb896a0496f4bdfe53e2f45c69769feb41c47596b8f87"
     },
     {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m01-drawn-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m01-drawn-relief.png",
+      "bytes": 158063,
+      "sha256": "3fdcc49e47e4d2117c0cacb3614a52222df3c7cd742830da5f3eb07f2a79faf9"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m02-brick-sweep-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m02-brick-sweep-onset.png",
+      "bytes": 165679,
+      "sha256": "025cbf98d7e1b77a3753475410c5a9b48bf6b350cc228135030edb68080ec803"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m03-materialized-bond.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m03-materialized-bond.png",
+      "bytes": 279471,
+      "sha256": "5510437e4ee851e94c056cd1d0a8ef30874e2ae1125b90fae67ef16e922e5b3a"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m04-low-sun-transition.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m04-low-sun-transition.png",
+      "bytes": 278764,
+      "sha256": "c73091eea9c257ff49d7013308265da340c0010ee13d83b2a0404634b03fe6bb"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m05-raking-shadow-settled.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m05-raking-shadow-settled.png",
+      "bytes": 302811,
+      "sha256": "029081018f5a9deb430b6ab9d6531c657997eabbf30582d5eadfd6fbe64dc479"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m06-header-closeup.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m06-header-closeup.png",
+      "bytes": 291166,
+      "sha256": "bdd9a6804a8938e5229b6fb86b85a7cbba9a691635a351bf10f8e1af789ec121"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m07-porch-reveal.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m07-porch-reveal.png",
+      "bytes": 254624,
+      "sha256": "c51be4eb248f7aaa20d5d73ca1629344ab2f2f5e63ba5f608b035fe6300f5994"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m08-door-opening.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m08-door-opening.png",
+      "bytes": 314505,
+      "sha256": "6798ff6d325fc6284321bc2b83cdf9d9df035549c85e8b9c503372c83fa039fd"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-m09-sunlit-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-m09-sunlit-interior.png",
+      "bytes": 297069,
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-forward-semantic.telemetry.ndjson",
+      "bytes": 180789,
+      "sha256": "241afd8a918be49e1e1860ee1838f7e896279553f47de84a3506d30ef1b059df"
+    },
+    {
       "rawPath": "07-c-the-face/landscape/landscape-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-restored-start.png",
       "bytes": 138572,
@@ -409,6 +711,18 @@
       "sha256": "1619d9042f8b735347cbfca7e3791780179cc2f09cf66749fb465b2e2f6b62f0"
     },
     {
+      "rawPath": "07-c-the-face/landscape/landscape-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-semantic-end.png",
+      "bytes": 297069,
+      "sha256": "049690ea7c79dc282ed0978ed20ce9e49293f4dfbd5a5e6752c738cebe0c3c06"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/landscape-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-semantic-start.png",
+      "bytes": 138278,
+      "sha256": "f1c69f88fd22c966ac193fe0af667a6b140e81afa33f2c47d16acd2b41ca7095"
+    },
+    {
       "rawPath": "07-c-the-face/landscape/landscape-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/landscape-start.png",
       "bytes": 138372,
@@ -419,6 +733,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/reverse-state.json",
       "bytes": 1023,
       "sha256": "ab73cfefef75eedfc3d91308b9bc4fd2317a3439e1e00b01040cc58dd6783c45"
+    },
+    {
+      "rawPath": "07-c-the-face/landscape/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/landscape/semantic-capture.json",
+      "bytes": 10436,
+      "sha256": "95e9ffa6c9ddfdb91bd6b0b4983686a19fd14e4dad7dadcf05518172860d0a73"
     },
     {
       "rawPath": "07-c-the-face/landscape/start-state.json",
@@ -589,6 +909,66 @@
       "sha256": "90426ab980eb3b117c44a4210b090cf66135a87d1fe0a93981355f88c0118a8d"
     },
     {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m01-drawn-relief.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m01-drawn-relief.png",
+      "bytes": 150503,
+      "sha256": "c68c47eddba44e7a9f4dc6e6ada8457a8f44c4e8286c82572de80b34ac6789a8"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m02-brick-sweep-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m02-brick-sweep-onset.png",
+      "bytes": 159475,
+      "sha256": "1e87f612e9fbb1277f03cfe099e4649a84a43ea98ab06638969ad0dcf21b1535"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m03-materialized-bond.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m03-materialized-bond.png",
+      "bytes": 242782,
+      "sha256": "43a544eb58a42522058d8cb16e7c50cde8367f5e7fe7d5e406edd12a20f87da2"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m04-low-sun-transition.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m04-low-sun-transition.png",
+      "bytes": 257359,
+      "sha256": "32ca17ff5bcdb4f3bace1c955f2bcf2a4973fafd81dc774139cc9162e7d52d29"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m05-raking-shadow-settled.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m05-raking-shadow-settled.png",
+      "bytes": 304622,
+      "sha256": "30f8be8782bf72847f84c3dff420b79085c6bbdf36818793a01edb04833f7ce8"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m06-header-closeup.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m06-header-closeup.png",
+      "bytes": 425879,
+      "sha256": "5ca6411eb03bbcccf45ad7c05ef9f776587dfad49fa6f795e6e138d44f5d22af"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m07-porch-reveal.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m07-porch-reveal.png",
+      "bytes": 176274,
+      "sha256": "97084035c90bc7a23e05f5362efa884bb312cf32c197b56f954c15d417f3570e"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m08-door-opening.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m08-door-opening.png",
+      "bytes": 221360,
+      "sha256": "1e15a37ddea380b279321cd72c98796a23afa5f9fbdc506b9132c453be3d5327"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-m09-sunlit-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-m09-sunlit-interior.png",
+      "bytes": 312802,
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-forward-semantic.telemetry.ndjson",
+      "bytes": 190617,
+      "sha256": "800607d98bf09494ebdb221b064f1ae9101ef0edaf558b46253cdbea2512dfc5"
+    },
+    {
       "rawPath": "07-c-the-face/portrait/portrait-restored-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-restored-start.png",
       "bytes": 129368,
@@ -601,6 +981,18 @@
       "sha256": "90a790870895e2bce2229d45e8c725fb29d6e764da2007da22ce175e15fe38c9"
     },
     {
+      "rawPath": "07-c-the-face/portrait/portrait-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-semantic-end.png",
+      "bytes": 312802,
+      "sha256": "19e9de48b398c74cd192f1ccd9c8277b0b4ac20c619ab62b87a77f70b8ca3aec"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/portrait-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-semantic-start.png",
+      "bytes": 128897,
+      "sha256": "233ea4c545f69d08f3450eb1aef2393a1ece156344f997625b444587aa32c618"
+    },
+    {
       "rawPath": "07-c-the-face/portrait/portrait-start.png",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/portrait-start.png",
       "bytes": 129372,
@@ -611,6 +1003,12 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/reverse-state.json",
       "bytes": 813,
       "sha256": "bcbbe2da49700b78633fc5f27cda972b10df0eb8807403852758b604d0db8497"
+    },
+    {
+      "rawPath": "07-c-the-face/portrait/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/07-c-the-face/partial-raw/portrait/semantic-capture.json",
+      "bytes": 10385,
+      "sha256": "8a2659ea87120d8fcfcd7679dba093fb3b12b728fe3b1d8566798b1b759cc47f"
     },
     {
       "rawPath": "07-c-the-face/portrait/start-state.json",
