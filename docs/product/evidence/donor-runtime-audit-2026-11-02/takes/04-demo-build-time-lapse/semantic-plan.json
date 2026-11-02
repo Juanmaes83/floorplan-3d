@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
+  "status": "COMPLETE",
+  "validation": "Fresh desktop, portrait and landscape semantic passes visually reviewed; individual validator pending",
+  "basis": "Independent desktop discovery-correction-2, portrait discovery-correction-1 and original landscape A→B→A passes. Native progress samples were reviewed against the pinned 29.4vh scroll calendar, WEEK_KEYS and END return. The two original desktop/portrait passes began while the autonomous hero drawings were still rendering and remain preserved in RAW. Desktop correction-1 had a 1-second A1 settle; correction-2 extended it to 2.5 seconds and passively recorded the offscreen programme rect.",
+  "milestones": [
+    {"label":"M01","slug":"drawing-01-dive","targetProgress":0.05,"observedChange":"The six completed A-901 drawings yield to drawing 01; the excavation and footing geometry expands into the paper viewport."},
+    {"label":"M02","slug":"footings-site","targetProgress":0.15,"observedChange":"The paper resolves into a material site with excavation, boundary protection, machine and exposed footings around the same pit."},
+    {"label":"M03","slug":"walls-mezzanine","targetProgress":0.30,"observedChange":"The first concrete walls and mezzanine structure rise; crane, temporary stair/rail and props appear as the shared week indicator reaches the early teens."},
+    {"label":"M04","slug":"roof-pour-props","targetProgress":0.45,"observedChange":"Roof formwork and dense yellow props occupy the same interior below the slab around week 19."},
+    {"label":"M05","slug":"finish-replaces-temporaries","targetProgress":0.55,"observedChange":"Temporary props disappear; the same structural room now has an oak floor, finished ceiling and framed window around week 27."},
+    {"label":"M06","slug":"second-floor-library","targetProgress":0.60,"observedChange":"A fitted library wall appears in the second-floor room around week 32; the studio table enters at the edge of the frame."},
+    {"label":"M07","slug":"mezzanine-lounge","targetProgress":0.65,"observedChange":"The same upper room gains desk, lounge furniture, pendant lights and finished surfaces around week 34."},
+    {"label":"M08","slug":"first-floor-kitchen","targetProgress":0.74,"targetProgressByViewport":{"portrait":0.70},"observedChange":"The camera descends to the first-floor kitchen and dining area with island, stools and stair as the fit out approaches week 36.","observedChangeByViewport":{"portrait":"The portrait camera reaches the first-floor kitchen around week 35, but its narrow crop shows only cabinetry and floor; the island is outside this frame."}},
+    {"label":"M09","slug":"living-terrace","targetProgress":0.80,"targetProgressByViewport":{"portrait":0.78},"observedChange":"At week 38 the first-floor living room, stair, sofa and terrace join the finished kitchen in one spatial view.","observedChangeByViewport":{"portrait":"The portrait frame shows the sofa, coffee table and glazing toward the terrace around week 37; kitchen and stair lie outside this crop."}},
+    {"label":"M10","slug":"handover-exterior","targetProgress":0.90,"observedChange":"The camera exits to the completed glazed hillside house and terrace, retaining the geometry assembled on site."},
+    {"label":"M11","slug":"drawing-06-return","targetProgress":0.95,"observedChange":"The completed house changes back from material rendering into drawing 06 on sheet A-901."},
+    {"label":"M12","slug":"six-drawing-close","targetProgress":0.99,"observedChange":"All six fixed-week drawings reappear together with the authored 'Your house, week by week' service close and contact action."}
+  ],
+  "reverseSemanticStates": "The natural reverse passes from the six-drawing close through drawing 06, completed exterior and interiors, finished second floor, temporary props, structure, excavation and paper drawing 01. The drawings return at scrollY=0, but the programme block visible at the stable A0 is absent from A1 in desktop and portrait; landscape A0 clips it outside the right edge. This restore difference needs explicit final review."
+}

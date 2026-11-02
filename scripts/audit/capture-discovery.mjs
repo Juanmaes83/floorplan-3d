@@ -37,8 +37,21 @@ function evalJson(session, js) {
   const out = ab(session, ['eval', js]);
   try { return JSON.parse(out); } catch { throw new Error(`Could not parse eval output: ${out.slice(0,400)}`); }
 }
+function waitForStableStart(session) {
+  if (!id.startsWith('03-') && id !== '04-demo-build-time-lapse') return;
+  const marker = id === '04-demo-build-time-lapse' ? 'window.__heroDone===true' : 'window.__ready===true';
+  let ready = false;
+  for (let poll = 0; poll < 60; poll++) {
+    ready = evalJson(session, marker);
+    if (ready) break;
+    ab(session, ['wait','300']);
+  }
+  if (!ready) throw new Error(`${id} did not reach stable start marker ${marker}`);
+  ab(session, ['wait','500']);
+}
 const hudJs = `['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700)`;
-const metricsJs = `({url:location.href,route:location.pathname,hash:location.hash,scrollY,scrollHeight:document.documentElement.scrollHeight,innerHeight,maxScroll:Math.max(0,document.documentElement.scrollHeight-innerHeight),dpr:devicePixelRatio,visibleHud:${hudJs},bodyText:document.body.innerText.slice(-1200)})`;
+const programmeJs = id === '04-demo-build-time-lapse' ? `(()=>{const e=document.querySelector('#prog');if(!e)return 'NOT_OBSERVED';const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {className:e.className,opacity:s.opacity,rect:{x:r.x,y:r.y,width:r.width,height:r.height},text:e.innerText.slice(0,180)}})()` : `'NOT_OBSERVED'`;
+const metricsJs = `({url:location.href,route:location.pathname,hash:location.hash,scrollY,scrollHeight:document.documentElement.scrollHeight,innerHeight,maxScroll:Math.max(0,document.documentElement.scrollHeight-innerHeight),dpr:devicePixelRatio,visibleHud:${hudJs},bodyText:document.body.innerText.slice(-1200),programme:${programmeJs}})`;
 const telemetryJs = `(() => {
   window.__auditSamples=[]; window.__auditInput={type:'NONE'};
   addEventListener('wheel',e=>{window.__auditInput={type:'wheel',deltaY:e.deltaY,t:performance.now()}},{passive:true});
@@ -79,16 +92,7 @@ try {
   ab(calibrationSession, ['set','viewport',String(width),String(height)]);
   ab(calibrationSession, ['open',ref.standaloneUrl]);
   ab(calibrationSession, ['wait','1000']);
-  if(id.startsWith('03-')){
-    let ready=false;
-    for(let poll=0;poll<36;poll++){
-      ready=evalJson(calibrationSession,'window.__ready===true');
-      if(ready)break;
-      ab(calibrationSession,['wait','300']);
-    }
-    if(!ready)throw new Error('Open Section calibration did not reach window.__ready');
-    ab(calibrationSession,['wait','500']);
-  }
+  waitForStableStart(calibrationSession);
   const before = evalJson(calibrationSession, metricsJs);
   ab(calibrationSession, ['mouse','wheel',String(Math.round(height * 0.5))]);
   ab(calibrationSession, ['wait','800']);
@@ -108,16 +112,7 @@ try {
   ab(session,['set','viewport',String(width),String(height)]);
   ab(session,['open',ref.standaloneUrl]);
   ab(session,['wait','4500']);
-  if(id.startsWith('03-')){
-    let ready=false;
-    for(let poll=0;poll<24;poll++){
-      ready=evalJson(session,'window.__ready===true');
-      if(ready)break;
-      ab(session,['wait','300']);
-    }
-    if(!ready)throw new Error('Open Section did not reach window.__ready');
-    ab(session,['wait','500']);
-  }
+  waitForStableStart(session);
   const start = evalJson(session, metricsJs);
   const snapshot = ab(session,['snapshot']);
   const consoleStart = ab(session,['console'],true);
@@ -185,7 +180,7 @@ try {
     }
     await sleep(Math.max(0,114-(performance.now()-t)));
   }
-  ab(session,['wait','1000']);
+  ab(session,['wait',id === '04-demo-build-time-lapse' ? '2500' : '1000']);
   flush(session,'REVERSE_DISCOVERY',reverse);
   const restored = evalJson(session,metricsJs);
   const restoredFile = path.join(rawDir,`${viewportName}-restored-start.png`);
@@ -196,7 +191,7 @@ try {
   await writeFile(path.join(rawDir,'reverse-state.json'),JSON.stringify({restored,reverseInputCount:reverseCount,consoleEnd,errorsEnd,observedAt:new Date().toISOString()},null,2)+'\n');
   const assets = await Promise.all([...files,...samplePaths].map(async p => ({path:p,bytes:(await stat(p)).size,sha256:createHash('sha256').update(await readFile(p)).digest('hex') })));
   await writeFile(path.join(rawDir,'discovery-assets.json'),JSON.stringify(assets,null,2)+'\n');
-  const summary = { id, viewport:viewportName, run:run||'original', stableStartReady:id.startsWith('03-')?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
+  const summary = { id, viewport:viewportName, run:run||'original', stableStartReady:id.startsWith('03-')||id==='04-demo-build-time-lapse'?true:'NOT_OBSERVED', calibration, start, end, restored, forwardInputCount:inputCount, reverseInputCount:reverseCount, forwardTelemetrySamples:forward.length, reverseTelemetrySamples:reverse.length, files:assets };
   await writeFile(path.join(rawDir,'discovery-summary.json'),JSON.stringify(summary,null,2)+'\n');
   state.takes[id].attempts.at(-1).status = 'COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt = new Date().toISOString();

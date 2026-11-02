@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T15:10:20.218Z",
+  "updatedAt": "2026-11-02T15:45:57.828Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -583,16 +583,112 @@
       }
     },
     "04-demo-build-time-lapse": {
-      "captureStatus": "NOT_STARTED",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "NOT_STARTED",
-      "attempts": [],
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
+      "attempts": [
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:11:50.372Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:14:30.194Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:14:50.050Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:17:04.869Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T15:19:39.084Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:22:29.975Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T15:22:34.683Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:25:02.173Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "original",
+          "startedAt": "2026-11-02T15:25:14.757Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:27:43.235Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:28:52.878Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:30:45.216Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:31:05.022Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:32:39.839Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "original",
+          "startedAt": "2026-11-02T15:32:57.449Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:34:33.164Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-2",
+          "startedAt": "2026-11-02T15:34:50.013Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T15:37:41.443Z"
+        }
+      ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "The cause of the programme rect moving outside the desktop viewport after reverse, and hidden render-resource identity, are not established from passive captures.",
+          "attempts": [
+            "stable A0/A1 screenshots in three viewports",
+            "natural reverse videos",
+            "pinned programme.js/main.js inspection",
+            "separate desktop 2.5-second settled correction with passive programme rect and opacity"
+          ],
+          "evidenceNeeded": "A narrow read-only computed-style/transform trace only if root-cause attribution becomes necessary; do not infer hidden WebGL resource identity from screenshots."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Whether Rubik should offer an illustrative sequence or a real planned/actual construction domain is a later product/contract decision.",
+          "attempts": [
+            "three-viewport runtime audit",
+            "pinned donor source",
+            "Cut4 D16/D17",
+            "frozen Rubik crosswalk"
+          ],
+          "evidenceNeeded": "Human product decision after all 14 take audits; no implementation authorized here."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T10:33:06.640Z"
+        "updatedAt": "2026-11-02T15:45:57.828Z"
       }
     },
     "05-a-the-programme": {

@@ -29,6 +29,18 @@ function ab(args,optional=false) {
   return (r.stdout||'').trim();
 }
 function evalJson(js){const s=ab(['eval',js]);try{return JSON.parse(s)}catch{throw new Error(`eval parse: ${s.slice(0,200)}`)}}
+function waitForStableStart(){
+  if(!id.startsWith('03-')&&id!=='04-demo-build-time-lapse')return;
+  const marker=id==='04-demo-build-time-lapse'?'window.__heroDone===true':'window.__ready===true';
+  let ready=false;
+  for(let poll=0;poll<60;poll++){
+    ready=evalJson(marker);
+    if(ready)break;
+    ab(['wait','300']);
+  }
+  if(!ready)throw new Error(`${id} did not reach stable start marker ${marker}`);
+  ab(['wait','500']);
+}
 const metrics=`({url:location.href,scrollY,maxScroll:Math.max(0,document.documentElement.scrollHeight-innerHeight),dpr:devicePixelRatio,visibleHud:['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700)})`;
 const capture=async(name,label)=>{
   const p=path.join(rawDir,`${viewport}-${name}.png`);
@@ -45,16 +57,7 @@ try{
   ab(['set','viewport',String(width),String(height)]);
   ab(['open',ref.standaloneUrl]);
   ab(['wait','4500']);
-  if(id.startsWith('03-')){
-    let ready=false;
-    for(let poll=0;poll<24;poll++){
-      ready=evalJson('window.__ready===true');
-      if(ready)break;
-      ab(['wait','300']);
-    }
-    if(!ready)throw new Error('Open Section did not reach window.__ready');
-    ab(['wait','500']);
-  }
+  waitForStableStart();
   const initial=evalJson(metrics);
   records.push(await capture('semantic-start','A'));
   const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);

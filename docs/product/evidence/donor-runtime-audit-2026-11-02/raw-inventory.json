@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T15:10:05.254Z",
-  "fileCount": 1112,
-  "totalBytes": 1594775812,
-  "packageContentSha256": "ce7eb4dbd73140fe24d8c41178905ca5c61e1bb3aa1ada84ae77289ad3a590b3",
+  "generatedAt": "2026-11-02T15:46:42.894Z",
+  "fileCount": 1364,
+  "totalBytes": 2302433302,
+  "packageContentSha256": "7fce144fa0a7db79bd94165cbf0bc24ad051f3c102e1d06b9043ea38c41fdcb9",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -5547,6 +5547,1266 @@
       "path": "03-c-down-the-stair/portrait/start-state.json",
       "bytes": 7174,
       "sha256": "27c680327c4d6a5568dd4ddca0a990d19225074698bc514837abe12f7daea7d1"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/calibration.json",
+      "bytes": 2574,
+      "sha256": "d1114a14d9183b14984585c447de91578702d86f7cfc95e8fcb4319e51344d63"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-end.png",
+      "bytes": 300800,
+      "sha256": "cc182b860660feaae22050547d8a904efa5b3c0b23d92b12ad2df0259285b3e1"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p000.png",
+      "bytes": 292626,
+      "sha256": "6ae377c3e0701a0b562f6b782c8f8718003a599510eefba022e4a4aa76ed5060"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p005.png",
+      "bytes": 195960,
+      "sha256": "2f0736f7c493d616e118a4d9846b801175c916b84d5f901dee1a2cb554d23646"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p010.png",
+      "bytes": 1465751,
+      "sha256": "55de8b5cb0ea205c82f9be2d20ca5744907c919119e962480237a81c6bbeff01"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p015.png",
+      "bytes": 1956251,
+      "sha256": "ec48979f14e3931e90e0cd834c80435673b66b3f0c2565ef5263bcb7ebde0837"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p020.png",
+      "bytes": 1485555,
+      "sha256": "44f3c4fb4c1a761f3c5398ee3f400cbaf8e348b00dfa30e7c79f121ef5b294c8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p025.png",
+      "bytes": 1144389,
+      "sha256": "0df913e164d1256bf9a37e178dc004647f9a17f11285efc0a45d44834113b36d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p030.png",
+      "bytes": 1226620,
+      "sha256": "0f851491bc164dacdf9be3bae348d7d468b0931e905a272c72e0de034eb2bd04"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p035.png",
+      "bytes": 1101531,
+      "sha256": "6dbef584d163176a266d9fcf59b59c2e31e6dfe28cf33831c10ecceef17e28a6"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p040.png",
+      "bytes": 1623908,
+      "sha256": "8598af687203c9ebfc8d38b5befc0b8faf72aee9f47407306d137fd82c710180"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p045.png",
+      "bytes": 1744316,
+      "sha256": "5dc2dfbdbe734481e616d92a23473d6481a510c7b0a2ac7f386cce6c37e83fff"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p050.png",
+      "bytes": 1653250,
+      "sha256": "a94772698b280051b004ae5e911e902a8c7795cb969f9da6f636515a27fcf498"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p055.png",
+      "bytes": 941583,
+      "sha256": "12ce0bd50169ab236477c2304ac2c85e386f9e4d600ca60a18e78f9c8dfa682e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p060.png",
+      "bytes": 1095347,
+      "sha256": "40056c9c8b9e912745d127cf615a06451bad84605c186201f5a80ee28ac4dcf2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p065.png",
+      "bytes": 1174298,
+      "sha256": "eb2058c9c6cc09f44d57688c34f460833d151111e9c352ed0b28a9b00254cd1d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p070.png",
+      "bytes": 909632,
+      "sha256": "5fad2358e223c31b99e57aa4490e4ca6371582738e7e9393d28f892b47e942e5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p075.png",
+      "bytes": 1250303,
+      "sha256": "8b3e33d6a59b1d7e3f6251df08e48feb56efc2ef5ef0dceb1f196f2aa07c7af1"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p080.png",
+      "bytes": 1091467,
+      "sha256": "8bea9d6c8be948e382e4f6dc0b02309d950a9045aa195540dd00f07f99d87eba"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p085.png",
+      "bytes": 1116938,
+      "sha256": "9c9fa2cfdc62033871d85228342c5def2e486aca21da7ae9a2ed4e51d5eb9198"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p090.png",
+      "bytes": 1170329,
+      "sha256": "95117f757df9b15f265738132925f142a7a981c37a7f1ca4d06f49729ef3f49b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p095.png",
+      "bytes": 132127,
+      "sha256": "993b8f80a97b17abcc50f0f2dba1c4fe0062de47266c90685cc8f989a788bf79"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery-p100.png",
+      "bytes": 300800,
+      "sha256": "cc182b860660feaae22050547d8a904efa5b3c0b23d92b12ad2df0259285b3e1"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 694433,
+      "sha256": "2a218bd7bb30e0155c1d16afb3c0281d138f2921d654ab1b297190f31cf54e21"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-discovery.webm",
+      "bytes": 59329818,
+      "sha256": "909313226c30f86227744420919dff7db31921a257c3900399eccb577d4bda99"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m01-drawing-01-dive.png",
+      "bytes": 190287,
+      "sha256": "36d2303ab66ea75adb019b6f5b9b3030c589bad6864e30f88c8aef0b5c040dab"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m02-footings-site.png",
+      "bytes": 1961209,
+      "sha256": "e5dc72054c4be6e55fc491158267ca31f9421c8bfa03be493e03bea1549c3e2c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m03-walls-mezzanine.png",
+      "bytes": 1226139,
+      "sha256": "8ab8b7f1c3ad0b45c6647ecc193d2adcb026b5d252555c0bd1b0d636075cd65b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m04-roof-pour-props.png",
+      "bytes": 1748143,
+      "sha256": "5b225a5960de45380feb36c26ba5e0a17fbf7e3a897f217f94cfce648e1c3c00"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m05-finish-replaces-temporaries.png",
+      "bytes": 1009977,
+      "sha256": "4aa1a1a21e1e45bf5a57f696c5e796d2dbeed6225a8ab4a76215cb1dff2092bd"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m06-second-floor-library.png",
+      "bytes": 1095624,
+      "sha256": "6f786ce789ca5c3064c5e4093fe1d0dad01e7711b8cb81cee0b58395ece5d6cb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m07-mezzanine-lounge.png",
+      "bytes": 1173175,
+      "sha256": "346e422862f99df0a967b4d4356d56e81a3e349aa5595f6d1c008680f8223917"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m08-first-floor-kitchen.png",
+      "bytes": 1219505,
+      "sha256": "0cbffb2769e9b24866623e5335dc6c4ec585e976c728bdc31c61a783f78b232b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m09-living-terrace.png",
+      "bytes": 1093849,
+      "sha256": "26a87947da802c1864f01752d243c6e4f589d3f7c73bde83f46e2ee3d552f472"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m10-handover-exterior.png",
+      "bytes": 1147684,
+      "sha256": "a7b1984c7a7e090006edcb70e3a6378922f9b0117fd8a558b7f91be50c6787f0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m11-drawing-06-return.png",
+      "bytes": 134769,
+      "sha256": "6cfdc920a3a0003454e8e3b048daa05ca9033fc4a8106aa18e55955f46101570"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-m12-six-drawing-close.png",
+      "bytes": 300612,
+      "sha256": "ba47245dd2de3889e94b100e0e31314b6056fc4fd53f5743e8e065d78b020b68"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-forward-semantic.webm",
+      "bytes": 75984366,
+      "sha256": "f1112a1340d9a9a7a808d26c984987f69f83e57197c75f0734958559c24b8e77"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-restored-start.png",
+      "bytes": 291500,
+      "sha256": "38f874a97d93dd942d83ec5b70acfe23c40215387af6166ff4fde3ebc5edcf3b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 605376,
+      "sha256": "b21796811c2484c0a175a9490dd824eb89d3d5f696f029292c8d92acdf7757d7"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-reverse-discovery.webm",
+      "bytes": 53396292,
+      "sha256": "a93392aee7199f4d94a304d9a74d693b911111a64bad147d6572da1486653b40"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-semantic-end.png",
+      "bytes": 300612,
+      "sha256": "ba47245dd2de3889e94b100e0e31314b6056fc4fd53f5743e8e065d78b020b68"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-semantic-start.png",
+      "bytes": 297964,
+      "sha256": "c91bee881fe571220f0daaf35799590537b986b8b1be14d71dbf2c6cafa55470"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/desktop-start.png",
+      "bytes": 283816,
+      "sha256": "50ba8a4651420ae04c387392b57ccd9531be3d3b976dc7ffffbdb20ad3f8eb3e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-assets.json",
+      "bytes": 7042,
+      "sha256": "a173eb6999bd2c672e69654178aa592692ae0dea7bb743c9a3809105e13da028"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/calibration.json",
+      "bytes": 2792,
+      "sha256": "21ab71761dbcd114174c2dcee4129a45995cbc2f1372c40dac565dfe8cac7d6d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-end.png",
+      "bytes": 300522,
+      "sha256": "e58942a253cce9c757d9e590b6b5b37558098055e0b2028077ff5f5e1d895ed4"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p000.png",
+      "bytes": 297961,
+      "sha256": "f5de7fc5d76cbc9b470c50be5d01644dfed6d0e305b39c0009e729f3277eb988"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p005.png",
+      "bytes": 197184,
+      "sha256": "7462712b0fa850a7b55b64ed92e388be457757f6d9604969982cc11f6a1949c0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p010.png",
+      "bytes": 1459743,
+      "sha256": "2855ab094c5cd02c52ce6a3c823a38af5a3e1d84d053d1f1e792021110d60b3f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "bytes": 1957681,
+      "sha256": "6492f7daabfd85f00b7956d8b3aad4f9a5d54ab0d2e06a55767d3a7d884bc6d5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p020.png",
+      "bytes": 1485481,
+      "sha256": "abb82468ad940e8b9c180d306a0a8e2603e27642864b0d6232941f037f5b1bc7"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p025.png",
+      "bytes": 1143295,
+      "sha256": "d85f824e50906b0f8928ec54b3ebde9499d10bb5d13b7020bad2a4513c9fecfe"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p030.png",
+      "bytes": 1228769,
+      "sha256": "d1abeccfbd70f7ee87f2179fa51522ff1dce452464c6653ce7f5c87835cc9977"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p035.png",
+      "bytes": 1102721,
+      "sha256": "2dcd54274934ee14d087da44a308ec0cd7e8c3101520feb14ce997be42ede3ac"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p040.png",
+      "bytes": 1624084,
+      "sha256": "3823dda573d419542721125f2f41c2bf2c3ec62765a2d5aadd06cb8b1299fca6"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p045.png",
+      "bytes": 1741916,
+      "sha256": "c90f35c978428fd3cdd76f0e73fdbe1287472f5cddb80f05f17ce912c474dacb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "bytes": 1637154,
+      "sha256": "57fbf1b57c2a13c923985f0f5198fab7fde903b2a3aa6ff714dc8ef0a6e5f1f1"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p055.png",
+      "bytes": 943728,
+      "sha256": "becd587142c657f9cdd5f4a2d5d6bf936e08fa8c872bbb49a2425e97f217c63f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p060.png",
+      "bytes": 1098143,
+      "sha256": "83d8f9d754cfe45b02f5445c9eec11f58245d3f7e3bb8fd06f497bc0a8a6e2e0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p065.png",
+      "bytes": 1174035,
+      "sha256": "06a1460f92a4bad40a41dca64cb9adbbfac34d11773a8d0f32deb04e72836dc9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p070.png",
+      "bytes": 908725,
+      "sha256": "8564bd6939492861e231d80ca00b27fad44693fa2697e859430b9f3051abb11c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p075.png",
+      "bytes": 1248972,
+      "sha256": "45cc096661701aadc9643a145b5ce32dc15efde3144b70ca15e466661dda9cd0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p080.png",
+      "bytes": 1092204,
+      "sha256": "ec6a1d7fc5639a71fe5063d87b4b150371dbbcaeca3db9ab4883f71e04014120"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "bytes": 1112534,
+      "sha256": "6a25916c9d97855db33e81d3e02ba7ec4041261bdddf2e93efa42f7452c6f2a3"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p090.png",
+      "bytes": 1173243,
+      "sha256": "4d27763a493fc9ffdb151f24493b05acc8e3221f81449e2f158505dd77d93a82"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p095.png",
+      "bytes": 130347,
+      "sha256": "5558ae5cc0df2e40da0522abe6f989fbc00b49da3653fd5d958c94c72068f745"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery-p100.png",
+      "bytes": 300522,
+      "sha256": "e58942a253cce9c757d9e590b6b5b37558098055e0b2028077ff5f5e1d895ed4"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 682369,
+      "sha256": "9f176d9362b781be74253169c19cc5a4c989a161d37805582b439eea54fc632c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-forward-discovery.webm",
+      "bytes": 58248904,
+      "sha256": "6aca4cca4ccec1494d235261dc03d9b958e4d083b66b9fd7f3e87989e4d0e749"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-restored-start.png",
+      "bytes": 291636,
+      "sha256": "38ce0c90b3577e6636e4473feceea00a8951e0eb98100bc12e13576f63cc689e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 616649,
+      "sha256": "55feabc11959467a085e6bc99ced52ce21788719fbf9463a98901152b2bd22ab"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-reverse-discovery.webm",
+      "bytes": 54150825,
+      "sha256": "934b33d076a025985db1cc41caed7e5d4b3def219fa1820c50decb68edc219db"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/desktop-start.png",
+      "bytes": 297961,
+      "sha256": "f5de7fc5d76cbc9b470c50be5d01644dfed6d0e305b39c0009e729f3277eb988"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/discovery-assets.json",
+      "bytes": 7714,
+      "sha256": "27604cf9172e95528fd45e40791be01a993dc7030e51d2c288e89663542eb24e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/discovery-summary.json",
+      "bytes": 14997,
+      "sha256": "0a47ad47d626dd986bc1aab63e39b2b84d2e0ce2ef06bd404f2881707dd99c5b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/end-state.json",
+      "bytes": 1426,
+      "sha256": "b08804a15b78db586ea46e8a3c01fcdda6469098064408ef09ae9edefae4d081"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/reverse-state.json",
+      "bytes": 3096,
+      "sha256": "eb1cd9227824b4adc89bb92eeedf3763e3840b6a7bb869ff2ea555a1f38b8cfe"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-1/start-state.json",
+      "bytes": 8884,
+      "sha256": "037941c43edf863bc2be6b1003dc98f0eee3995265897d5bf4bc285d70369900"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/calibration.json",
+      "bytes": 3550,
+      "sha256": "a760cfad76394eb03a5bda379574712fd181d6d3f1ddee69c3376cfbae10e3e2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-end.png",
+      "bytes": 300619,
+      "sha256": "29e2f78116ca88c2d84d95efd6782a9a89bd9109bc08df6190309157bafe9174"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p000.png",
+      "bytes": 297972,
+      "sha256": "420bacd020feec8d51f3ff9bbe66fc1ca7e9d77a8989818702320a3594866300"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p005.png",
+      "bytes": 197081,
+      "sha256": "0f657080846b687f8edab208355d8ba3ca76ed0167aefa7199ccaa77483df597"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p010.png",
+      "bytes": 1460144,
+      "sha256": "1ca5a52389d0eb07ab370cd30f94410459f5c216dadfda3df3003f973ccd43c2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p015.png",
+      "bytes": 1956763,
+      "sha256": "2f5ac072590bbceb4c367f1043591befc9d8cb4953256324f7ca6ffafced3534"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p020.png",
+      "bytes": 1485414,
+      "sha256": "4f63764169c4655992db7acef4dcafdbd6d316430c87597780b6d97d357a5293"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p025.png",
+      "bytes": 1142275,
+      "sha256": "60831326225e8a3b2450a90e083b0a1ef26062c0753748d04c67e33fb76cf01a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p030.png",
+      "bytes": 1229801,
+      "sha256": "5a7b8452e1b5ac2ddbcb730f37a604d400d0ea6cb90a3cf97d24fd3cb28bc7eb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p035.png",
+      "bytes": 1102711,
+      "sha256": "5c016674a4f89413f80ec8e8c41561fc41c1403f854566a860281a1fb111d991"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p040.png",
+      "bytes": 1624850,
+      "sha256": "1b37c27af69f0817f5b3db475e2d74b4dd80da80e477fcb8a00d60218bcadb55"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p045.png",
+      "bytes": 1744881,
+      "sha256": "7088a61733727dbf21c619c089c7c8838bf28ad83080f1925b8bc776dbd48d11"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p050.png",
+      "bytes": 1633836,
+      "sha256": "cefc23c754070b022c4449052f3192fa3f53f25f6927ad9cca3e2fd7d1001275"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p055.png",
+      "bytes": 943633,
+      "sha256": "5b713baed23e01ca63d7fbe4cfd24df174344417a3ca01094b8044cf1395db9f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p060.png",
+      "bytes": 1097872,
+      "sha256": "413d754903267aa4da6ce5c33c0d702474190f6cf0a4c9b34766f2541e10c496"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p065.png",
+      "bytes": 1177065,
+      "sha256": "550dcde4206cc72ed3e8b49f5b20e77d5f2302de84631fc45216165f85beb5a0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p070.png",
+      "bytes": 968216,
+      "sha256": "1ce5560f9f809b6efeea4cd2b332bed69a90eb12120887b74348e40f15895d52"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p075.png",
+      "bytes": 1252584,
+      "sha256": "9209e23bac474e31d6ce287453ac9c6ef4b352f66f3daf00b8f3f94307f7f7d9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p080.png",
+      "bytes": 1093278,
+      "sha256": "33f14d32c7b8578df592ce06bd5f4698e861483624fe3958af4013258fd43e1b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p085.png",
+      "bytes": 1120695,
+      "sha256": "7e18b3000e97b7868f8300f1c029a2fbb054825cb3b7b6b7e2ec1953ff86d090"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p090.png",
+      "bytes": 1173701,
+      "sha256": "43a5a5138f8464b5bb38051dcadc3d8d8a13112fe2cdaa9e66477164ed2ad8eb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p095.png",
+      "bytes": 133455,
+      "sha256": "4b667f49b10957f55247fda50d1fb7f38e54435015c729be0baec21121e563ca"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery-p100.png",
+      "bytes": 300619,
+      "sha256": "29e2f78116ca88c2d84d95efd6782a9a89bd9109bc08df6190309157bafe9174"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 690726,
+      "sha256": "f276fd84ce40321c429e880cd682fd3d860398419929fb48299688c7c1f92860"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-forward-discovery.webm",
+      "bytes": 59039747,
+      "sha256": "bfccb997b2b55195527bf833b49a2a08e8eafa6fa9fb9e0a48c2f074f6f7221d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-restored-start.png",
+      "bytes": 291591,
+      "sha256": "ca43418f0a67189776d5d3d00f09a77e99fbce4a922069971172b428f8ecb9e2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 611701,
+      "sha256": "d091bbf306a60b52baf7e35f56dd54c51fb6e077120df9031fabd1360e9f128f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-reverse-discovery.webm",
+      "bytes": 53271036,
+      "sha256": "f69cb9c3276dd171da902c45ed2cf1c8816eae8af5da361627903fa8384c504e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/desktop-start.png",
+      "bytes": 297972,
+      "sha256": "420bacd020feec8d51f3ff9bbe66fc1ca7e9d77a8989818702320a3594866300"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/discovery-assets.json",
+      "bytes": 7714,
+      "sha256": "a0038892a36d51a1c5c37cb8120771829aed505677cb682adb2980dc17c092d6"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/discovery-summary.json",
+      "bytes": 16953,
+      "sha256": "7023400416cd974418f19fb9d313ceff24bea0cf97d036bb4b68132b7688776c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/end-state.json",
+      "bytes": 1805,
+      "sha256": "023181b6a6026a2547ceba90fc92d81b41777e6cc0318270ca575830315ac570"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/reverse-state.json",
+      "bytes": 3492,
+      "sha256": "25a1eb28f23748e45f23b7beacf719ff8a2e35684f4e7cbf96c2b8727d748111"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-correction-2/start-state.json",
+      "bytes": 9236,
+      "sha256": "530b03912c1e374c2a0c64fc7e5a1596756c365539e8ff88b56a45b759a976f5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/discovery-summary.json",
+      "bytes": 14103,
+      "sha256": "aea4dfb37c6976b8cce9cb46fec8aa5c85e857a7ae714e71959885eceec23d54"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/end-state.json",
+      "bytes": 1426,
+      "sha256": "162f80591c17428c68a0010d96d4f0bd962d8b174a79b4d63d6cd5fcbcd521bc"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/reverse-state.json",
+      "bytes": 3096,
+      "sha256": "1c3ebe4d061c705a7f25772a6427cbc11992fa7d901461e77c7351f73c803bd0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/semantic-capture.json",
+      "bytes": 14143,
+      "sha256": "20668ee1ee4416f3f6907601b2e507cfa99f812f474f07d44412d025e867fc7e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/desktop/start-state.json",
+      "bytes": 8884,
+      "sha256": "9e56830f9ff204d8a24753dabd9308e0c35c72cf61555da50bfc04075e282319"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/calibration.json",
+      "bytes": 2792,
+      "sha256": "46bbfc806850477d9c37b462e46759a29e45004733ac9fa57694c1f2f1a19a62"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/discovery-assets.json",
+      "bytes": 7133,
+      "sha256": "4cb36451d10d1fa30610c5796d31c435dd66cc18917b4eb4b49fb490f6ad44ab"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/discovery-summary.json",
+      "bytes": 14404,
+      "sha256": "a80e46be12ff9786b0dc231b3bcd870638abbd6584a6f4fdeb2f86f356775c74"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/end-state.json",
+      "bytes": 1426,
+      "sha256": "b6031e50f1881a1782b01b6b13bd1798d43ec1d37023fe8ba539952ded00b661"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-end.png",
+      "bytes": 74897,
+      "sha256": "9a2c40078e753940902e40618f9d376136af976a96d7ba3fbb6f8d27b79766f5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p000.png",
+      "bytes": 69079,
+      "sha256": "fdd9aed6cd82150b25c914f2b399ec1e90abd8c5c15f13c80ae4900996339a61"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p005.png",
+      "bytes": 121074,
+      "sha256": "9ced9a8d3ea438277f9c557efa11baf50b530a59d7ea8b3e3beb6980ce149514"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p010.png",
+      "bytes": 343709,
+      "sha256": "0f2abfbed7f122658854444bcf1f3aa756263094d501691598e76b341fb10e7b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p015.png",
+      "bytes": 447228,
+      "sha256": "97c718cf0906fdfcfee70bd6cd5e4f6b5d03401294086ebcf1da591bbfd32f64"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p020.png",
+      "bytes": 369083,
+      "sha256": "9f773841891cf8dc2637d29bfbcf63948a3d6a6de0f7ac7d10408c14e91993de"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p025.png",
+      "bytes": 282290,
+      "sha256": "c7f8e416531ae55ed14b2c56a156de74ac34f985f5eb02613fcd12aa17f5987e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p030.png",
+      "bytes": 264673,
+      "sha256": "5841e714bfa6be36adc407b2c2aa4a06da5a09d019c51ca1b161d750ac92ef17"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p035.png",
+      "bytes": 266651,
+      "sha256": "1b5667673c9aff304da4e595513b74a0f62e07009f325a590010bb7f306e9d08"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p040.png",
+      "bytes": 358650,
+      "sha256": "12b9a59de0437060345f64c33606a2072cf4d70f954be7bb5a4c113ae8f9ec80"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p045.png",
+      "bytes": 394136,
+      "sha256": "f8292a45daf5cc1800b05f1ab230f1f9b09d4a057d1bc3bfd107e3f0ca6a98d3"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p050.png",
+      "bytes": 392099,
+      "sha256": "5bc07c8aaf3dce344b19eefacb5f00d46b6d1b883ce8850d19c10a3f10804ecf"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p055.png",
+      "bytes": 243227,
+      "sha256": "18aaaac9cdf588bdf2613a3db0e58f2f8d2decc2bbc9cefa8cddccf8e92bb821"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p060.png",
+      "bytes": 265532,
+      "sha256": "5910d104de76b09ca2fe0ec83bbb1c4b80c11541cdcf51976e615429c39bf411"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p065.png",
+      "bytes": 304545,
+      "sha256": "3651d0bde89bff718b3e267ade2e5b4bc7fc248519902247892e817843eed76e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p070.png",
+      "bytes": 245954,
+      "sha256": "b24b9b343963785362448c07d48f41ff53a0b5079685e8de477c78ccbcdec8b5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p075.png",
+      "bytes": 241459,
+      "sha256": "0ae525385e8e0b9ac50d13c64646528db4d0f4c3238e181f44fd35f2e8e21a60"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p080.png",
+      "bytes": 274960,
+      "sha256": "11f7dd97d10d60e23c73e3f327eba9be2f782910bc77c0a97431ac35a7be372d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p085.png",
+      "bytes": 277933,
+      "sha256": "b2e148a3db790a47046dfd44458f8d3cbe18f1c5f7517f3e04eb944f46df1daa"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p090.png",
+      "bytes": 256526,
+      "sha256": "dbe9f8a9db6d1dd83ba600158dcd96bc8b7f2e071ff0d92aa15de96f1c8a48d8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p095.png",
+      "bytes": 77311,
+      "sha256": "92c6f4ff34bce57479d38fd2ac434d4104fec09d18dd518363d42121c185b3c8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery-p100.png",
+      "bytes": 74897,
+      "sha256": "9a2c40078e753940902e40618f9d376136af976a96d7ba3fbb6f8d27b79766f5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 565934,
+      "sha256": "408948da79134963311599dd44f734abb4b166e8e7e47d846d20a098f3d095f6"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-discovery.webm",
+      "bytes": 25745465,
+      "sha256": "adc77aea2204384c402fbddcc4cd66cfdfa5c4f2698b40d7af4b4a557facbc60"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m01-drawing-01-dive.png",
+      "bytes": 118047,
+      "sha256": "7748f466dd2f8e75bcd2658191eb10ef601f3f495c7d448bd89f85759b98b79c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m02-footings-site.png",
+      "bytes": 447069,
+      "sha256": "932a4f664fbaf466bdc1993abf74f05047a4cedbade26af1af0d87678e4bbec9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m03-walls-mezzanine.png",
+      "bytes": 300401,
+      "sha256": "a344f13ff143b4d7e031f0a474b4ea7f4cf4fb74df6f1d9602a1df90dd2c0f63"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m04-roof-pour-props.png",
+      "bytes": 381552,
+      "sha256": "b2abf5ba53f5f65cf3009a6622910b4e99612101e774de5bc036a18a165c30f9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m05-finish-replaces-temporaries.png",
+      "bytes": 237224,
+      "sha256": "5afa15dc0fe01659e9a650405e51b9dddec6ca4ab1ad284875ee5829e26ee32d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m06-second-floor-library.png",
+      "bytes": 261912,
+      "sha256": "e8baad1ed9d1044d6ac89dfbdd0d9893fc9d6869fbf9ca60b9be3fb5aa08731c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m07-mezzanine-lounge.png",
+      "bytes": 305403,
+      "sha256": "b41180f7d1270364aea7fc42de4314b9daaf9666114584ce67addb22ea5fbaeb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m08-first-floor-kitchen.png",
+      "bytes": 282987,
+      "sha256": "585cf3b5d5f1b75943bcdecd2a8e86cf16231b357654f7b58e701ec6e6d25498"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m09-living-terrace.png",
+      "bytes": 276932,
+      "sha256": "0bef44a6fddbc784de42bf378226981dbbe9cc7b168f6c25d40ac0063acc335d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m10-handover-exterior.png",
+      "bytes": 263399,
+      "sha256": "93bb9ec123ae6dec320bddcc577b91e630053b0a17d25326b29d1619d6c30b0a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m11-drawing-06-return.png",
+      "bytes": 96356,
+      "sha256": "2df64413554866f3bef0c21c97a32809ba4f6f443ff840011b32c91aa840c41e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-m12-six-drawing-close.png",
+      "bytes": 75280,
+      "sha256": "9ca99c6a92d0f62091de324497b2ab0251a48f9b56887530c58045d30abbbff8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-forward-semantic.webm",
+      "bytes": 32915187,
+      "sha256": "188b69b0f72eb737956e9091bd6ea9f18dbef66bd0a22294628eaaa052bf9e5a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-restored-start.png",
+      "bytes": 69519,
+      "sha256": "f4f7b183bd46b2e13632a1ed1607743e7879facb16b03ac05342b8d24916b890"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 522763,
+      "sha256": "d986de99366abf730ac3f2117dd46604048d072264cc741bfc064d5651944dd2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-reverse-discovery.webm",
+      "bytes": 24561171,
+      "sha256": "04ddc1297944a1df0950357233f2483e09d8e3e9b67f0f3bf328713ea98b256f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-semantic-end.png",
+      "bytes": 75280,
+      "sha256": "9ca99c6a92d0f62091de324497b2ab0251a48f9b56887530c58045d30abbbff8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-semantic-start.png",
+      "bytes": 69079,
+      "sha256": "fdd9aed6cd82150b25c914f2b399ec1e90abd8c5c15f13c80ae4900996339a61"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/landscape-start.png",
+      "bytes": 69079,
+      "sha256": "fdd9aed6cd82150b25c914f2b399ec1e90abd8c5c15f13c80ae4900996339a61"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/reverse-state.json",
+      "bytes": 3096,
+      "sha256": "50811d73bc9e8543c7794dc08200d9139470d10a8e92968f1652be4fc7aba390"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/semantic-capture.json",
+      "bytes": 14245,
+      "sha256": "239fef51eacde42f3891145be6f680f89ef1ef5033fbf779ea10452553a71377"
+    },
+    {
+      "path": "04-demo-build-time-lapse/landscape/start-state.json",
+      "bytes": 8884,
+      "sha256": "d79a74f7e3fcb39b66b303c60c856b69afaef6bceb012839c438f14fbb4e370c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/calibration.json",
+      "bytes": 2418,
+      "sha256": "c5cb7df92da95ee9481c758439c8728ee940339e5fb24799f5fbcc913064a891"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-assets.json",
+      "bytes": 7076,
+      "sha256": "b82a70d311518ff83502166eab882e98880b84b83b49f483cb7978f2e3c2bbd2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/calibration.json",
+      "bytes": 2636,
+      "sha256": "f8afecb781401920d08ef215c8d56144c5e66017003c7cab79c80ed32af5309c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/discovery-assets.json",
+      "bytes": 7750,
+      "sha256": "0ba6a3ec983f39903c6a5e1e398874a5d74d5658475346a6292ff46b5ad44280"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/discovery-summary.json",
+      "bytes": 14644,
+      "sha256": "c758a079d9a607b14e7ab59b67fdb36d6ec04604f6f09290a4b606bfb6bf7719"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/end-state.json",
+      "bytes": 1348,
+      "sha256": "727f501a2f4b958419d2d1362e67487aeec191c3904c5be13a2add1233b791a5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-end.png",
+      "bytes": 107155,
+      "sha256": "ea493a1e68a46f247a7b315b32bf910c40dc5cce922c32bc0a41a855b4f62770"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p000.png",
+      "bytes": 96052,
+      "sha256": "0294c83dd26267bfb73c14b7eb9c42d40bbc0f96fa0de16bb42df1655bbb0d2a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p005.png",
+      "bytes": 47008,
+      "sha256": "3ecc0486c6c5d67c83a0676007378326cf8dd5a29b1636efd19d805dacc1dd1c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p010.png",
+      "bytes": 146083,
+      "sha256": "290a6765e3008ead240aede5dd8df63033d558bce876cea23076b9a77f8b6d13"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p015.png",
+      "bytes": 452612,
+      "sha256": "a6b7d3a70b76e86bff43c3aeb85af79a2ef005f701b4379aad25cfbee808e4ae"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p020.png",
+      "bytes": 281664,
+      "sha256": "0d0fb36ea7dab6f5847153e99e2233502c511bb85e6035710c80955772be4f7c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p025.png",
+      "bytes": 243640,
+      "sha256": "c7536880c793a602b2270acd8ea19e93d929fd776d629065c73085dca8593d48"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p030.png",
+      "bytes": 279842,
+      "sha256": "69e62bbe9d72dc4a1bdcb99a7fe756485de7d6139ff471cf91364f7065156a87"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p035.png",
+      "bytes": 246295,
+      "sha256": "5b787edb98c173fd3fb4882bf396b72000cb370ad90393e2cfdc7a806c5d09a5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p040.png",
+      "bytes": 245113,
+      "sha256": "aff0889461acb00c8a4c24f2d6786622f1e660ce702075aa64685076e22568d2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p045.png",
+      "bytes": 264117,
+      "sha256": "fde83efe8c59ab37e84b70ef03c418b3fa25434685c48a8cef7f78832e4ce6a7"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p050.png",
+      "bytes": 215246,
+      "sha256": "4d37e9eec15426f8f90b9f872bc254ca266c71f418001b0d340add2456f426f8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p055.png",
+      "bytes": 234420,
+      "sha256": "8fe2077af3b726da221964de6a5be352e45ab36b907b253165e6497c5438c47c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p060.png",
+      "bytes": 171355,
+      "sha256": "c6035fda83b1db18943d17505ffadb61d27a1e04b6bd28ff051653e41f143cad"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p065.png",
+      "bytes": 193925,
+      "sha256": "630fd848b7f21ff7d49947c24c55d4950031fc30c556db91c7a3c9bb5e95a099"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p070.png",
+      "bytes": 177361,
+      "sha256": "0f2b0fad8b5265b01ce74f75c0c9ec1c72d365e8673accfc242cb1bfbd9fa993"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p075.png",
+      "bytes": 244734,
+      "sha256": "64350ce4f1d74abe99a89679fc70af9165e33e586e32216d739e81f11cb48f8c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p080.png",
+      "bytes": 236226,
+      "sha256": "e66704ef7850447635a6ef358e384074253de73589cf1c5c05137933101737fc"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p085.png",
+      "bytes": 251464,
+      "sha256": "82b669e634063b137ce3865c939a8088c375d8b47ce20e5c2fb1a72f2f352d28"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p090.png",
+      "bytes": 181521,
+      "sha256": "9a29077d8765e5fd7cbeb63163daa09f5656b2a76bd9f328ab6596505958024e"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p095.png",
+      "bytes": 46206,
+      "sha256": "82d4b20d8bcabad3c4205403150ce80f3299ea640dcd1ed22411db2af0c84366"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery-p100.png",
+      "bytes": 107155,
+      "sha256": "ea493a1e68a46f247a7b315b32bf910c40dc5cce922c32bc0a41a855b4f62770"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 572192,
+      "sha256": "18948e9ec4ff0246e9c608a1d2d920b221ac939af3a64f6c55b39018d0a7ee75"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-forward-discovery.webm",
+      "bytes": 19246675,
+      "sha256": "7417fb3f07c0d34b117b54b4c4e1c6376b74889bb1b85779c1457f10bfa8b16f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-restored-start.png",
+      "bytes": 86272,
+      "sha256": "8b1bf4a394f7501b5a296a10decd3234950891d83c027879a6ae7b99da7a41bb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 521416,
+      "sha256": "448136c1803a31e26cf92ecabb0a1884c5bc83b37546525f5e8c38d6f969eb51"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-reverse-discovery.webm",
+      "bytes": 18050292,
+      "sha256": "f5e49c243586f3a964135b96693c8454495766ebbb0fbff5fc1ae683803b2893"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/portrait-start.png",
+      "bytes": 96052,
+      "sha256": "0294c83dd26267bfb73c14b7eb9c42d40bbc0f96fa0de16bb42df1655bbb0d2a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/reverse-state.json",
+      "bytes": 2837,
+      "sha256": "0a2d7ff628ed177413726ae3e4d59b5b7360f7e9945bc0313e7dbfc941d8e7f6"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-correction-1/start-state.json",
+      "bytes": 8671,
+      "sha256": "4b4b5a61e5768b9c017a6bf8a123f02c07d86a55bb2feac91f36aff9dafae7e8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/discovery-summary.json",
+      "bytes": 13748,
+      "sha256": "ad35afb9bec00b23c15ea856357325cb9efbc2ec0c5e8e3090aef76f5b21cb34"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/end-state.json",
+      "bytes": 1348,
+      "sha256": "6896344d0dd95c2e81b2d8a3779da7719f2fad6b36d58bd554d701ee6808cb57"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-end.png",
+      "bytes": 96951,
+      "sha256": "cdb2c95bf33ca640a130c5e523fe73499c2cae37b5ca13a3a4e1d50931288459"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p000.png",
+      "bytes": 92249,
+      "sha256": "bc2fe9f745d6cd6af13ad536d6d9b514e820b20d52d6735ffa0f44f04d935b21"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p005.png",
+      "bytes": 46812,
+      "sha256": "b0b54caab9ab5d90471b511467d693d3ff5651bf4a08c8feeace69b8b28c27ab"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p010.png",
+      "bytes": 146085,
+      "sha256": "fa10c0bd81b258e784236464be89d3ca30b2096287b939528db405f5b97b79b7"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p015.png",
+      "bytes": 453262,
+      "sha256": "2ac3b3d8102984ad83a0a212df6af67c0ef9aa4e92589464e122f61e5d6d5f0c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p020.png",
+      "bytes": 281682,
+      "sha256": "57c609cb4f896145dc55c9db8e5f2ab9a37bb9ee63899560f42345a5c3f9f94f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p025.png",
+      "bytes": 242669,
+      "sha256": "357ca986dc3c43ab5ba5aef1d4d4517b26ac642b5b05c363d6b097097be0c69b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p030.png",
+      "bytes": 282497,
+      "sha256": "840448675848f276488c75218004d8faa5e0dbfe93f69b07906c59b186ff3ec4"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p035.png",
+      "bytes": 245977,
+      "sha256": "ccbc286eac3c65b10d23aa41748a64b3e02be7e0155d83f62d17f1c01e41eaae"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p040.png",
+      "bytes": 244819,
+      "sha256": "062622105fd0fd1a38b5fc1b30343544efcaea8739437be98d49a6c48e1ada62"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p045.png",
+      "bytes": 264263,
+      "sha256": "6e66aaf758c887547b7f346a590cdca3b371b4ce5d300de9e534b611f181a115"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p050.png",
+      "bytes": 214992,
+      "sha256": "f75afce294ba74591bfed96ff76397478dcd373febe0a26adb730e196a534d24"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p055.png",
+      "bytes": 234518,
+      "sha256": "8ca885a524d6b9f2e59053334c5d32a3f6ff9a373bf0c2aa375196bf2ace7d1d"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p060.png",
+      "bytes": 171187,
+      "sha256": "8a14fde4503cf1485ef6a633886e164e186c2b3bda965012a919993bd5146199"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p065.png",
+      "bytes": 193565,
+      "sha256": "4522dbabf8d24fec346ae967a4a52218bfd3bf0decad885a5c20b554325db979"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p070.png",
+      "bytes": 177749,
+      "sha256": "2c59a2da255ae0c44c00c698528ea524ac5a96e0740ef3b8702e5fd5be280681"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p075.png",
+      "bytes": 242714,
+      "sha256": "d53f11c5829238f924a666095e2939cd4eb7da9157af4d468a880888ed1fbf7c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p080.png",
+      "bytes": 236688,
+      "sha256": "c8d32cecd2027916df174ea146a491ff2972a148ff5ecd355c5af7cc25e33f98"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p085.png",
+      "bytes": 251380,
+      "sha256": "e5247a037444011ee951d1f81f28da5f857d2c22ff778c59b67e87d78b1e2314"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p090.png",
+      "bytes": 181355,
+      "sha256": "909f0ff030e5bcf37e38011dd62a12d07bfa6fafda04740696fdbcd137a83656"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p095.png",
+      "bytes": 46886,
+      "sha256": "13783c48f69ff987528a12dd1fa4038a02a819e78ba6c21c474167cbd427cfe9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery-p100.png",
+      "bytes": 96951,
+      "sha256": "cdb2c95bf33ca640a130c5e523fe73499c2cae37b5ca13a3a4e1d50931288459"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 569206,
+      "sha256": "938355eece626d39546af569271c3a1a31939ac2a86e64a2318a6f09f78f6256"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-discovery.webm",
+      "bytes": 18927965,
+      "sha256": "cbaff864340157a2ba349751d5b6d09a29225f337f7e1cfe1a66f0b0caec76f8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m01-drawing-01-dive.png",
+      "bytes": 46340,
+      "sha256": "2be1e50c9ef6c3357597c5c01364ae55badd599c1011a333906925897d75feb5"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m02-footings-site.png",
+      "bytes": 450794,
+      "sha256": "8d9773449dbb1bc8228d02823a571f4a65a9abaa8433c2421c790a66766e092f"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m03-walls-mezzanine.png",
+      "bytes": 273810,
+      "sha256": "121c7b5b16340248c1e77926c661dd3080961a99574c70bd58e9a6259e4bf01a"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m04-roof-pour-props.png",
+      "bytes": 259998,
+      "sha256": "b825a80303c3a891c98e7abb770f3b44b4b6534673a96a0ca78e26e91d31caf2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m05-finish-replaces-temporaries.png",
+      "bytes": 234800,
+      "sha256": "30b75bdaed4a37585840b9f7bd2b371b73c97eef7609e70813ee3a8ee3134851"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m06-second-floor-library.png",
+      "bytes": 173665,
+      "sha256": "c1fdc974b944a5bd3f2683c9b6b05b8c23cd2da1ca2399b1c59adf405badd318"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m07-mezzanine-lounge.png",
+      "bytes": 201085,
+      "sha256": "4054272cc1141cbd0aeab0c221c9eed5f31ec66b2c44efed4fccf174b89fe909"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m08-first-floor-kitchen.png",
+      "bytes": 182491,
+      "sha256": "1657e26d91c47c5bb99be4224f6e9e24c22384c58887949d828736820ef8c573"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m09-living-terrace.png",
+      "bytes": 200180,
+      "sha256": "a6629712ddb91a5792ddd718166e87469e9021609d918d1bfb6924751bfac029"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m10-handover-exterior.png",
+      "bytes": 193353,
+      "sha256": "f35ccd5e575c83353b38f1c05068ca03c79206f0bd1229b129d1aee0c56750e9"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m11-drawing-06-return.png",
+      "bytes": 30708,
+      "sha256": "d83676ec6abe6d9a9cf14ccaf47cbeed05d505aa75408c8314d27d84a8926cf0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-m12-six-drawing-close.png",
+      "bytes": 108226,
+      "sha256": "74740c58d05b56497ad373a70596684434d12f0b0384f926f533d6e2c1f9a6c8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-forward-semantic.webm",
+      "bytes": 23527052,
+      "sha256": "ba990f9dd43f3123a473cb0126656de7f87fcb40a4f2d4bbd7a88404a78e92bd"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-restored-start.png",
+      "bytes": 86148,
+      "sha256": "fd4197d7b43ef894a0a165ed3fa3ee564d4625d73acafc6fafb69a435489a221"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 524087,
+      "sha256": "de27bbb952b82c1a528211788efb29c753524284c8f003ceacc157a745f4381b"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-reverse-discovery.webm",
+      "bytes": 18178258,
+      "sha256": "c0f0bb73177acc8b5c0879a3585a3418280cd2b416f7d5f7bb0a007cb4e325b2"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-semantic-end.png",
+      "bytes": 108226,
+      "sha256": "74740c58d05b56497ad373a70596684434d12f0b0384f926f533d6e2c1f9a6c8"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-semantic-start.png",
+      "bytes": 96081,
+      "sha256": "7aeecba3af4f1b31cb34d92df542e2f8d86cb33c011425c51026fab778ab088c"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/portrait-start.png",
+      "bytes": 92174,
+      "sha256": "83e468199d997afb5cba524c36f7924436d54016808817c03b5f996a5712bbfb"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/reverse-state.json",
+      "bytes": 2837,
+      "sha256": "3d2bacf997635e413248f89bb45e4b99d3b577b2f1b6d1bc832a60133f27ecd0"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/semantic-capture.json",
+      "bytes": 14206,
+      "sha256": "bf448af48794bd913164823dfdcd6a6a69c277098717be29d8fd0c77cde86054"
+    },
+    {
+      "path": "04-demo-build-time-lapse/portrait/start-state.json",
+      "bytes": 8644,
+      "sha256": "175ed03278c7a2304ec1936eecb61c391aeeba563a789083c1800deb0f94129b"
     },
     {
       "path": "tooling-test-annotated.png",
