@@ -44,6 +44,15 @@ function waitForStableStart(){
   ab(['wait','500']);
 }
 const metrics=`({url:location.href,scrollY,maxScroll:Math.max(0,document.documentElement.scrollHeight-innerHeight),dpr:devicePixelRatio,visibleHud:['#camReadout','#counter','#caption','#room','#tb','#cm-lbl','#chip','#hud'].map(q=>document.querySelector(q)?.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700)})`;
+const telemetryJs=`(()=>{
+  window.__semanticSamples=[];window.__semanticInput={type:'NONE'};
+  addEventListener('wheel',e=>{window.__semanticInput={type:'wheel',deltaY:e.deltaY,t:performance.now()}},{passive:true});
+  window.__semanticTimer=setInterval(()=>{
+    const d=document.documentElement,maxScroll=Math.max(0,d.scrollHeight-innerHeight),cam=window.__rig?.camera;
+    const visibleHud=['.hero','.turn-line','.room','.back-line','.end'].map(q=>document.querySelector(q)).filter(e=>e&&Number(getComputedStyle(e).opacity)>0.05).map(e=>e.innerText?.trim()||'').filter(Boolean).join(' | ').slice(0,700);
+    window.__semanticSamples.push({monotonicMs:performance.now(),scrollY,scrollHeight:d.scrollHeight,innerHeight,maxScroll,normalizedNativeProgress:maxScroll?scrollY/maxScroll:0,runtimeProgress:'NOT_OBSERVED',route:location.pathname,hash:location.hash,visibleHud,interactionInput:window.__semanticInput,camera:cam?.position?.toArray()||'NOT_OBSERVED',cameraQuaternion:cam?.quaternion?.toArray()||'NOT_OBSERVED',cameraFov:cam?.fov??'NOT_OBSERVED',activeChapter:'NOT_OBSERVED',visibility:'NOT_OBSERVED',transforms:'NOT_OBSERVED',materialState:'NOT_OBSERVED',lighting:'NOT_OBSERVED',sunState:'NOT_OBSERVED',clipping:'NOT_OBSERVED'});
+  },100);return true;
+})()`;
 const capture=async(name,label)=>{
   const p=path.join(rawDir,`${viewport}-${name}.png`);
   ab(['screenshot',p]);
@@ -64,6 +73,7 @@ try{
   records.push(await capture('semantic-start','A'));
   const video=path.join(rawDir,`${viewport}-forward-semantic.webm`);
   ab(['record','start',video,'--fps',String(fps)]);
+  evalJson(telemetryJs);
   const step=Math.max(1,Math.floor(height*.08));
   let i=0;
   for(const m of milestones){
@@ -87,10 +97,14 @@ try{
   ab(['wait','800']);
   records.push(await capture('semantic-end','B'));
   ab(['record','stop']);
+  const telemetry=evalJson('clearInterval(window.__semanticTimer);window.__semanticSamples.splice(0)');
+  const telemetryPath=path.join(rawDir,`${viewport}-forward-semantic.telemetry.ndjson`);
+  await writeFile(telemetryPath,telemetry.map(x=>JSON.stringify(x)).join('\n')+'\n');
   const assets=[];
   for(const r of records){assets.push({path:r.path,bytes:(await stat(r.path)).size,sha256:createHash('sha256').update(await readFile(r.path)).digest('hex')})}
   assets.push({path:video,bytes:(await stat(video)).size,sha256:createHash('sha256').update(await readFile(video)).digest('hex')});
-  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',fps,initial,records,video,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
+  assets.push({path:telemetryPath,bytes:(await stat(telemetryPath)).size,sha256:createHash('sha256').update(await readFile(telemetryPath)).digest('hex')});
+  await writeFile(path.join(rawDir,'semantic-capture.json'),JSON.stringify({id,viewport,run:run||'original',fps,initial,records,video,telemetry:telemetryPath,telemetrySamples:telemetry.length,assets,inputCount:i,planSource:path.join(evidence,'takes',id,'semantic-plan.json')},null,2)+'\n');
   state.takes[id].attempts.at(-1).status='COMPLETE';
   state.takes[id].attempts.at(-1).finishedAt=new Date().toISOString();
   state.takes[id].blockingUnresolved=state.takes[id].blockingUnresolved.filter(x=>!(x.viewport===viewport&&x.question==='Semantic capture failed'));

@@ -2,13 +2,13 @@
   "schemaVersion": "rubik-donor-runtime-audit.partial-evidence-index.v1",
   "take": "06-demo-card-model",
   "status": "PARTIAL / IN_PROGRESS",
-  "lastSuccessfulStage": "ORIGINAL_SEMANTIC_CAPTURED_SUPERSEDED_UNSTABLE_A0",
-  "inventoryContentSha256": "1f8e3dcc9f2e3a933053fee1c1e74d2f4d36fc4b6a649408805dc364f49dc17d",
+  "lastSuccessfulStage": "SEMANTIC_DESKTOP_COMPLETE",
+  "inventoryContentSha256": "874b7c75831dbb1a7d033899bb37d2797af50dec90fe7dd857ff0ed89e0996c2",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "rawFileCount": 156,
-  "rawBytes": 221195033,
-  "copiedNonVideoFiles": 147,
-  "copiedNonVideoBytes": 95846781,
+  "rawFileCount": 277,
+  "rawBytes": 411066406,
+  "copiedNonVideoFiles": 261,
+  "copiedNonVideoBytes": 180000190,
   "videosRawOnly": [
     {
       "path": "06-demo-card-model/desktop/desktop-forward-discovery.webm",
@@ -26,6 +26,31 @@
       "sha256": "5311329ca772f8e3dbd07e206fb74c3bc6d853c921de23055d08374106924d3f"
     },
     {
+      "path": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery.webm",
+      "bytes": 24786376,
+      "sha256": "4c3c9b4eb3a7462ad5f9e5c0b2bb1c393ce4790d54dbeedbb48b048a32692820"
+    },
+    {
+      "path": "06-demo-card-model/desktop/discovery-correction-1/desktop-reverse-discovery.webm",
+      "bytes": 20654076,
+      "sha256": "92affb2407b8bfc295df65b8dc26ab0366aaf3d0fc4de59968fec927e03ccccc"
+    },
+    {
+      "path": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-semantic.webm",
+      "bytes": 28795696,
+      "sha256": "a603ea7a2c7c542ba397581b3da3a904b38815b9b36ee5c2950d9c6db012c9aa"
+    },
+    {
+      "path": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery.webm",
+      "bytes": 8384513,
+      "sha256": "4716d58c77a3c8cb36669de7f1653b25ea11cdab58a55cd5337015417cf46b48"
+    },
+    {
+      "path": "06-demo-card-model/landscape/discovery-correction-1/landscape-reverse-discovery.webm",
+      "bytes": 7734978,
+      "sha256": "7cbeeab94d4ce0531851e0385d0f8abd2bc222c5887f3448090d222eace085f4"
+    },
+    {
       "path": "06-demo-card-model/landscape/landscape-forward-discovery.webm",
       "bytes": 8417131,
       "sha256": "f185b6ab3199664757fffe341d392aff5447ce0bd3f8b9738d1c95d17c65202e"
@@ -39,6 +64,16 @@
       "path": "06-demo-card-model/landscape/landscape-reverse-discovery.webm",
       "bytes": 7747402,
       "sha256": "042e04463ad0cd85ad55ff004120fe30e3f3f20bb0446f0415f6c037fd7403e9"
+    },
+    {
+      "path": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery.webm",
+      "bytes": 8164089,
+      "sha256": "d570ced078171fdb22df5c01f5659f6cc8c16d88436b992debcfa9c37f48f853"
+    },
+    {
+      "path": "06-demo-card-model/portrait/discovery-correction-1/portrait-reverse-discovery.webm",
+      "bytes": 7198236,
+      "sha256": "6b8a838554858a56cd0691cc1d2078370e9450b12c78bea1a08e7def02f2fb65"
     },
     {
       "path": "06-demo-card-model/portrait/portrait-forward-discovery.webm",
@@ -322,6 +357,198 @@
       "sha256": "c8d22ef39f58b6f54a7e1436c58d90c66c808996d4187aa3c5a0ace37dda7c77"
     },
     {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/calibration.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/calibration.json",
+      "bytes": 3412,
+      "sha256": "bf0138a49e5609552575fff14ca2a48e1a0c762c1cc7b5bbde1f37bb6986d825"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-end.png",
+      "bytes": 1473729,
+      "sha256": "7fe3d9438a99786d3447e93026b110734a0a89ea2f83181283722c569b46da54"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p000.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p000.png",
+      "bytes": 1492792,
+      "sha256": "eb41f20621aaa3c235dfb0f3a504d162964f4e90a4c22ae9e6a12290f907a6cf"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p005.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p005.png",
+      "bytes": 1505903,
+      "sha256": "fc190e83677211268facf21ea0ca5b19c94e055ee8d68f05032652069c2c2ec0"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p010.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p010.png",
+      "bytes": 1455858,
+      "sha256": "154ec9b431503ac4b3c836cd9eb89bdfccf8441a05684769e43cc97575663bdd"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p015.png",
+      "bytes": 1409482,
+      "sha256": "01f372c47fbfd593920190970cce709b6dd49f96e6e641e2dafc961f1e777cca"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p020.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p020.png",
+      "bytes": 1389221,
+      "sha256": "1433884e1b426799f0dcf5552aaf43a7036f1bbb5c26905f690b0609e266515a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p025.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p025.png",
+      "bytes": 1471797,
+      "sha256": "022fa6e935869e2f7898ba723fa73d57216c72ad7ec3ca0948baae8c727b5b0f"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p030.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p030.png",
+      "bytes": 1651770,
+      "sha256": "33f7cf19e2ed1a71b10cb783b2a6c44d9b5ad762b3d81984ce3ca6b72e6ecaa3"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p035.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p035.png",
+      "bytes": 1598246,
+      "sha256": "4f05e4b631057e61535f6f627ce5828a98bd84ba9a8b6a0e73e47aaaae019d49"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p040.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p040.png",
+      "bytes": 1631217,
+      "sha256": "1af5abc1604a1012d0a61348f330db51f43d26ba0e6533235fb1559dc1c92a91"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p045.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p045.png",
+      "bytes": 1644065,
+      "sha256": "1436911de18db8a01bd08fb5e8c655040a75f1dc41572a0ae4cc37098ae05604"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p050.png",
+      "bytes": 1652513,
+      "sha256": "87695e93f88c9aef90be605c5147ac2f495c42ecfff0439c903f4f2bf2dab14a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p055.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p055.png",
+      "bytes": 1646360,
+      "sha256": "275a86225251ffd30c00f177fb7760d7aad02e028c6267be9d8e5b591b98ba58"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p060.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p060.png",
+      "bytes": 1520751,
+      "sha256": "5deaa9248c14f6f25c9b261743e912fba931fd7ebd56ae5d5f67900dc043f9d7"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p065.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p065.png",
+      "bytes": 1645263,
+      "sha256": "e8c2701394ceb0cca49f862886080048057311e97ce897d9b41e3b938e5ec3e2"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p070.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p070.png",
+      "bytes": 1566484,
+      "sha256": "33a8e547804f499e7951289569bd015fd24e4303e079e29df4cf379e578957e6"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p075.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p075.png",
+      "bytes": 1330323,
+      "sha256": "fa3a2d7d16f87aaa9c7c293e16af4297f0550bd89edb7eb47de6ef484e3a0bab"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p080.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p080.png",
+      "bytes": 1587147,
+      "sha256": "d3f5208ea8cddfa19af192021f4675c7142152094fd0098b4725505fe1acb5e8"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p085.png",
+      "bytes": 1698613,
+      "sha256": "bfab77976e996d18c56c210e6b47057f9422411b2aa749f416d06447399c0326"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p090.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p090.png",
+      "bytes": 1531412,
+      "sha256": "4d74c2e3aef53300d6ba343ed32fbee9c6f4e8cc5170c15a328778085b586e5a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p095.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p095.png",
+      "bytes": 1460948,
+      "sha256": "1003af051818d34c1d42948e2ac254a7963425be34e9880c0a9a0235beb1c5f0"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery-p100.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery-p100.png",
+      "bytes": 1473739,
+      "sha256": "3db7a11ccacaf01cea71f31b90b180ebc476e712f8dd9125ef882a2095c982cb"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-forward-discovery.telemetry.ndjson",
+      "bytes": 488552,
+      "sha256": "8fc33de91000aabca507ab120306cd7638f1e7e992c80dd0cd92999d27dcd11a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-restored-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-restored-start.png",
+      "bytes": 1491213,
+      "sha256": "a13aa9818fe4d1add0842ca98eb77ec5e556a4c3607354f0a1a8a00cafc5facf"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-reverse-discovery.telemetry.ndjson",
+      "bytes": 403130,
+      "sha256": "19521f8ec1cea17329093c781f7e2070723ab93803f70af1ce4b7a51815ac25b"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/desktop-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/desktop-start.png",
+      "bytes": 1493409,
+      "sha256": "3ad588400a71e29343c8361cd02fa956ecf09acc577827cfe78d76d8f6d6869a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/discovery-assets.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/discovery-assets.json",
+      "bytes": 7555,
+      "sha256": "38141ad9ab1d0092c09df45f78bd1384890030320789d1c1bf065f2341514fd6"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/discovery-summary.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/discovery-summary.json",
+      "bytes": 16399,
+      "sha256": "19b6ae12cfd19f8ce6a6817da7e5d054c0941b7768f9616ebec09fca47347cc1"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/end-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/end-state.json",
+      "bytes": 1736,
+      "sha256": "0c88faa5f71a083452d25d42324876e551bb5530d215ed71cd2fa4aa60838ee3"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/reverse-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/reverse-state.json",
+      "bytes": 1716,
+      "sha256": "ae0ed7d89da6c309a2b41b1a7274375772c0201b08117fa90fcfc653d6dad487"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/discovery-correction-1/start-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-correction-1/start-state.json",
+      "bytes": 7116,
+      "sha256": "2dc62d1d8d4356c4797b458b9dc1c1c2e0683ceebc1f9b1c3fb75b85840f45e0"
+    },
+    {
       "rawPath": "06-demo-card-model/desktop/discovery-summary.json",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/discovery-summary.json",
       "bytes": 15725,
@@ -346,6 +573,114 @@
       "sha256": "cca2a2b493963d1a90d2b21f7b44916757d180644a7772e2f76cfa72659083d7"
     },
     {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m01-scale-readout.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m01-scale-readout.png",
+      "bytes": 1475733,
+      "sha256": "27b0d9e8049b9a99e69e48011d1c8754172fb98b412901658c0fb32fb9b2f608"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m02-card-at-eye-height.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m02-card-at-eye-height.png",
+      "bytes": 1390702,
+      "sha256": "42a50580ddd67868596895bfd93a8112b8e038f56b1b057588e477c5b199e125"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m03-luminous-transition-onset.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m03-luminous-transition-onset.png",
+      "bytes": 1488989,
+      "sha256": "2f9ea429e932a0f0c21366ffe8ddcb1a103ddf2b93aab579f2677c14dd7dece1"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m04-house-materialized.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m04-house-materialized.png",
+      "bytes": 1612313,
+      "sha256": "a9aff6028349c94c4656dfcd264378f123d71c189bc486c65dbf0d439890cc7a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m05-real-exterior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m05-real-exterior.png",
+      "bytes": 1633299,
+      "sha256": "17c7a901d3a4d11df93fd8ff0739e7ab03251c0c10444c6d5b08e5e9e6952de3"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m06-facade-approach.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m06-facade-approach.png",
+      "bytes": 1670743,
+      "sha256": "0406fc82035c5cfb09d52faecaf55deeb081c3eb6936baccb86ef0163d91e52a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m07-living-interior.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m07-living-interior.png",
+      "bytes": 1646711,
+      "sha256": "0d8d14f8d59bf99385fc7505b51d3e54c207df1f91494dc85e803b37391b6821"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m08-interior-low-view.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m08-interior-low-view.png",
+      "bytes": 1639367,
+      "sha256": "21a48da6e90cb1adba438a892e2e061611769523cba32a889bfaba1d2123508b"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m09-desk-context-return.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m09-desk-context-return.png",
+      "bytes": 1662272,
+      "sha256": "9d4e66734a437d6588fec47cdf1907fd0299b20262b729629d88cf390f59fd56"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m10-study-overlook.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m10-study-overlook.png",
+      "bytes": 1564802,
+      "sha256": "726a1a68d65183f5e6894997b374c98eb2f8bafea603b24e633aed36ae7fa16a"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m11-terrace-night.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m11-terrace-night.png",
+      "bytes": 1347212,
+      "sha256": "18223f9d8f28d432731ee4eca02ef8adc7875d686728e5b35b5aba05fd6f8345"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m12-return-sweep.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m12-return-sweep.png",
+      "bytes": 1672396,
+      "sha256": "1eadf391384557391a9d24bf3a3985f19d6a62cb2601cc1f56bea6c5b2d1d10b"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m13-card-restored.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m13-card-restored.png",
+      "bytes": 1531084,
+      "sha256": "4b9b158bf728e5fc602daaf51bd9b1e6956496676c009749edc5c1eb1d6863a3"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-m14-final-message.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-m14-final-message.png",
+      "bytes": 1474496,
+      "sha256": "85927394f73aaf76caf3de0c8f0e6f7186908ef8c8b5ad6fcb4fd7ead1008b6e"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-forward-semantic.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-forward-semantic.telemetry.ndjson",
+      "bytes": 634722,
+      "sha256": "fff4c5905a9ea90261fbbdd6ef4e70b33a354ecda7e19dbd73a821333dacf09f"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-semantic-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-semantic-end.png",
+      "bytes": 1473392,
+      "sha256": "2335bbca5945b905d7d19d032c12814c5e25123dea7b798487d58f40c813adc5"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/desktop-semantic-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/desktop-semantic-start.png",
+      "bytes": 1492873,
+      "sha256": "372a3962c780fb01c19a26c4640380c2a4453c866504638c29363b3ac7cf52fc"
+    },
+    {
+      "rawPath": "06-demo-card-model/desktop/semantic-correction-1/semantic-capture.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/semantic-correction-1/semantic-capture.json",
+      "bytes": 13876,
+      "sha256": "bc791359118c3687ed68416c3a64d4719047e10c3862bcc66dd2302c7da97e2c"
+    },
+    {
       "rawPath": "06-demo-card-model/desktop/start-state.json",
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/desktop/start-state.json",
       "bytes": 7116,
@@ -362,6 +697,198 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-assets.json",
       "bytes": 6969,
       "sha256": "0acced6f8d76d4a0f133f2d421a6669f43eed6c0373db60e916fd41436bde04e"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/calibration.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/calibration.json",
+      "bytes": 3408,
+      "sha256": "c90187f88e1e5a7bc3d0d42d652f1c58eb23d6e440d811d268616f0c1da0d215"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/discovery-assets.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/discovery-assets.json",
+      "bytes": 7641,
+      "sha256": "952c40570c972c8bdd1b8f9c41d3073380c2f2171621f225abf816f3502f136f"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/discovery-summary.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/discovery-summary.json",
+      "bytes": 16476,
+      "sha256": "ebe368691fc76e295f3c77df5d4b1a6214bc2a04cabff1d7f95b6d30b771f99e"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/end-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/end-state.json",
+      "bytes": 1733,
+      "sha256": "49bb1327eb9f2e55c21cd1d7ab860d30afe4b821afb1cda2446616f4b9ed9428"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-end.png",
+      "bytes": 401149,
+      "sha256": "39e1c41f8b2cda7db1006d1efa3ef4f57a92ce7f1416120c54b85dad667f4003"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p000.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p000.png",
+      "bytes": 399001,
+      "sha256": "7227c8d60856a071b8aeb255115179ca587d045866cb6e949312b1a052f54415"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p005.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p005.png",
+      "bytes": 385185,
+      "sha256": "f85b30d88a81060bdb0f72a97a3f3cb24feb36d1a9ee49089af0173ff819012c"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p010.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p010.png",
+      "bytes": 386938,
+      "sha256": "173a89dbf318ce6ea954ba56ebc694cf088ce5203b4bf0d43baf0a5b852ee22c"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p015.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p015.png",
+      "bytes": 369848,
+      "sha256": "f5a04b663a8d9737d5d9a2dfb9adbbf317c83defdd5ae224c672af0604b2fa0c"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p020.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p020.png",
+      "bytes": 367248,
+      "sha256": "0353a0b50923ddaadf85f6cd22ed3e8364ba12fc2dcb5d349892ee48e9a324a4"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p025.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p025.png",
+      "bytes": 434614,
+      "sha256": "20c0234dc4b1064e3e60dad2c2d8de4f1543cbe74ba03d93955578dbcb8fa928"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p030.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p030.png",
+      "bytes": 451533,
+      "sha256": "290c97f48bddf8e70e45ffbf6ace89e7f17122eb0121e7e7637c294c85eb7783"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p035.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p035.png",
+      "bytes": 434259,
+      "sha256": "0ef046f402cb7fb34cecfe9f924f62248ef0d2a43cdcd43002742ab491f027d3"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p040.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p040.png",
+      "bytes": 437120,
+      "sha256": "5ce7867394db1d58e4383e16fbf89e45b3b6cff51994e899023ad4c7d5bf9bc7"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p045.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p045.png",
+      "bytes": 443114,
+      "sha256": "fcb8211439f73a1f1d085982cdd72a17cb1e2e557f226ae64960cb3ff46db44c"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p050.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p050.png",
+      "bytes": 440479,
+      "sha256": "c6d60b0b2ddd4f834bfc025c656fa0c5ac929bda31e4ffc6881be6210e074e25"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p055.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p055.png",
+      "bytes": 408099,
+      "sha256": "3a6bc0741dd9544ae6aa9da8946c6234ea4a598427728b56d395b1f673f46c06"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p060.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p060.png",
+      "bytes": 395657,
+      "sha256": "5e1539031dda26ea543b6919275531524ee46341d58b872951398e02e628ae2a"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p065.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p065.png",
+      "bytes": 437732,
+      "sha256": "c1865bc42f1d07a40a60831dbe10c8e2a0f62f8ce54fce3894382bdae1cf600a"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p070.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p070.png",
+      "bytes": 403222,
+      "sha256": "d51603fcbb91cf05e78e0a54b55baf3998e534eee586dce479ee4b034f8bb214"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p075.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p075.png",
+      "bytes": 385906,
+      "sha256": "10ec5f48648cab0a2b8228df28ff8da3a4e890694ccbc3e3716ccd96953a77ae"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p080.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p080.png",
+      "bytes": 456161,
+      "sha256": "9402b663ca2d031a6b96701b6bc5762050635087a73b5e15afda2c2ccf24d27b"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p085.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p085.png",
+      "bytes": 440154,
+      "sha256": "6e2582466cd093b4b73661aa34111e21ab4853862057f9747af0a89c9a586386"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p090.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p090.png",
+      "bytes": 409639,
+      "sha256": "cf1f93448a4c24ae1e314f2290b1833356b0414967640f90fdbdf09467432c97"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p095.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p095.png",
+      "bytes": 399789,
+      "sha256": "b6fe38dedc5835f71240d2faeaeb9777a215ac4056773cfb33fa9767f4fbf7cc"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery-p100.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery-p100.png",
+      "bytes": 400745,
+      "sha256": "2e0c7ebe86f3e46879cb6e8b05346b7bc924dcc9f991aed585bf832900c3ed70"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-forward-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 412434,
+      "sha256": "a74500e2a22d98f9425995bcb099df47f3e683f171ca7e4efad9a59b16d8d329"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-restored-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-restored-start.png",
+      "bytes": 399080,
+      "sha256": "02fad8b7cb5d0cc4f01870e872400daac9a76bc210477938ce39c68459a61f9e"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-reverse-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 378199,
+      "sha256": "3fd90cf1862826a014cbe56e86ad84fbfc381b78dc1cbea4a908518fae989070"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/landscape-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/landscape-start.png",
+      "bytes": 399044,
+      "sha256": "3d63aeb7d363f421c52c0c3e38cb1d2d4f791097aca9897486c319bc1a6cbb15"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/reverse-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/reverse-state.json",
+      "bytes": 1714,
+      "sha256": "78127208c3afebb4b809b6cc6e47d84a0ebb7af9978463bf5d4a30196389cf53"
+    },
+    {
+      "rawPath": "06-demo-card-model/landscape/discovery-correction-1/start-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/landscape/discovery-correction-1/start-state.json",
+      "bytes": 7114,
+      "sha256": "b470ed215d4cd6b4434dd19b91285f5e3de527db6918cf05561eb36265e16699"
     },
     {
       "rawPath": "06-demo-card-model/landscape/discovery-summary.json",
@@ -656,6 +1183,198 @@
       "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-assets.json",
       "bytes": 6913,
       "sha256": "a1ef3cf466cfb3f26ee7b6d03cf0b746743bc4b80ea8a758200e48b7ed752da4"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/calibration.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/calibration.json",
+      "bytes": 3416,
+      "sha256": "72a171f32168dd6638a590fcc4dd8ec11564b61dbf722fa80af995a332d32371"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/discovery-assets.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/discovery-assets.json",
+      "bytes": 7585,
+      "sha256": "57dd138c395772b6f9dc9c50ccf9b3c2a819d689ff4b3d87003ffd8bfac21c20"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/discovery-summary.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/discovery-summary.json",
+      "bytes": 16440,
+      "sha256": "b938d072a0658d844c502f6e5e535a5866146c0d3feeb1648b3120ac7c5b58c1"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/end-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/end-state.json",
+      "bytes": 1738,
+      "sha256": "145d5d09c7b5dc94011c1864869d659ad6689083d813650c76bdcc9890c62567"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-end.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-end.png",
+      "bytes": 390507,
+      "sha256": "95ba185fb74388da2c29b459f4d9fc76977bf1fa913b87d5bf63417882080297"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p000.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p000.png",
+      "bytes": 412945,
+      "sha256": "043e1eadbafbf06d45681f01ae07a642ab426bc11635c395c96bf3cacbc7a6a9"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p005.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p005.png",
+      "bytes": 404994,
+      "sha256": "6a1d8569a875054b6de2f73ddaa8df8649fe82717f702c94829681ceb11cdf1f"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p010.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p010.png",
+      "bytes": 393099,
+      "sha256": "6f3cb262049ae8cd831f1b4820e8e50f367f3d415df34ad970fbf864d1dd1f8c"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p015.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p015.png",
+      "bytes": 351472,
+      "sha256": "7300056943def3464447da14009f4baed3a9c6113b785f24db3bbcbf2e926749"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p020.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p020.png",
+      "bytes": 350797,
+      "sha256": "91ec34246780e27d7ea986276381237d6ae3fcdc1349c352d02e2ce705827ff6"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p025.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p025.png",
+      "bytes": 399434,
+      "sha256": "643f0fd0eedba8324bee2f571478c664afbc902276f9ebbe78eb786b49213bb3"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p030.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p030.png",
+      "bytes": 425796,
+      "sha256": "92840c7b26d3ed78af73534690016d11e13f6c7105b9cd5a53f48fe67f61a25d"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p035.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p035.png",
+      "bytes": 402684,
+      "sha256": "94712c4d6dc89a065276ddf52142618ea9f80a67244154adf3d893a73dd7a3f3"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p040.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p040.png",
+      "bytes": 382451,
+      "sha256": "4ff3181cfcacbb47d2baeebd7056431ec3d8568d41d45e07b46c2030c42fa8b2"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p045.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p045.png",
+      "bytes": 378422,
+      "sha256": "fe438d942baabea3212f86d233146fdfd9a3ba77d2b26d4e85febf4e1beba72f"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p050.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p050.png",
+      "bytes": 394967,
+      "sha256": "331a3ff995d52b57f6d661be87d62deed1bb96093c6e7caab8c17752a77a9cde"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p055.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p055.png",
+      "bytes": 380457,
+      "sha256": "15b1ac9443f783f82439080bca1ad5a47f5a0e92ab469f587766aaf67ab4a620"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p060.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p060.png",
+      "bytes": 373517,
+      "sha256": "58744d7e21e85301888d0f6449b1ed12aa2ba43472a062fef8eb61e43f5fef3e"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p065.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p065.png",
+      "bytes": 389453,
+      "sha256": "eb2aca0e339be09361baf25dbed2ba708add406e384e159240427af099833456"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p070.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p070.png",
+      "bytes": 385891,
+      "sha256": "0b478635f6a2a659cfc29da6f1fbe3e3154919c21761f05ba343c82d2ea633b5"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p075.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p075.png",
+      "bytes": 345828,
+      "sha256": "b5d0f387a2a9a0ba4269775f2291354297c080b07784252b68b39ed833d7f38f"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p080.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p080.png",
+      "bytes": 409996,
+      "sha256": "a92da429449c5a16efb47e37b9828300d1920f80eb8f7b7735143711b5c37e56"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p085.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p085.png",
+      "bytes": 427890,
+      "sha256": "8b7d184b0629d7a8ce9f88e675d9fd838dfa1268da0de876461660be9b502712"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p090.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p090.png",
+      "bytes": 426683,
+      "sha256": "84c39652240d75377268caffe2657254e23c17d234e9696abd78c666a49c3216"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p095.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p095.png",
+      "bytes": 389017,
+      "sha256": "ed991d6436c4a97f5844b8754823ab9e1a28b8020a0ae4828716cc157ae878ca"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery-p100.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery-p100.png",
+      "bytes": 390507,
+      "sha256": "1ffd0281d1e0c7104e7f034d1e6ebdeff7290fb4e90129fb4fbc2d6069c12976"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-forward-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-forward-discovery.telemetry.ndjson",
+      "bytes": 416511,
+      "sha256": "9858fef8cd03e822a97c7d2acd8cdb15ab85b2178d44ef87daf9e5e3f992422e"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-restored-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-restored-start.png",
+      "bytes": 411460,
+      "sha256": "8d3b3c9f312227b8cef96d3f73633b3c72317c21eb3cc2fbc700e5e05fc1a3fc"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-reverse-discovery.telemetry.ndjson",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-reverse-discovery.telemetry.ndjson",
+      "bytes": 376661,
+      "sha256": "2ec8720aa371a3dd0f56696ae7e0e2b8aca12fb82c147f100a8f0dc75f47a5b0"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/portrait-start.png",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/portrait-start.png",
+      "bytes": 412667,
+      "sha256": "b15272f34b6af2228ee7d277f8d69cd1cac602a6ccf13b3371e3cb04c97b6b09"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/reverse-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/reverse-state.json",
+      "bytes": 1718,
+      "sha256": "17339cc66e10732895589bca131ec548d76f894805daca6c6d977540f238146d"
+    },
+    {
+      "rawPath": "06-demo-card-model/portrait/discovery-correction-1/start-state.json",
+      "gitPath": "docs/product/evidence/donor-runtime-audit-2026-11-02/takes/06-demo-card-model/partial-raw/portrait/discovery-correction-1/start-state.json",
+      "bytes": 7118,
+      "sha256": "6011f0e5b1f79b10a89c60c22576e61da5eb01758010f292a2b36121f03e778d"
     },
     {
       "rawPath": "06-demo-card-model/portrait/discovery-summary.json",

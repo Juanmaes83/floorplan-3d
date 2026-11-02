@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T18:50:12.320Z",
+  "updatedAt": "2026-11-02T19:01:05.102Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -995,7 +995,7 @@
       "captureStatus": "IN_PROGRESS",
       "reconciliationStatus": "NOT_STARTED",
       "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "ORIGINAL_SEMANTIC_CAPTURED_SUPERSEDED_UNSTABLE_A0",
+      "lastSuccessfulStage": "SEMANTIC_DESKTOP_COMPLETE",
       "attempts": [
         {
           "viewport": "desktop",
@@ -1056,6 +1056,38 @@
           "finishedAt": "2026-11-02T18:48:04.079Z",
           "evidenceValidity": "SUPERSEDED_UNSTABLE_A0",
           "validityReason": "Autonomous hero assembly and copy were incomplete at A0; raw capture remains preserved but cannot prove stable-start restore."
+        },
+        {
+          "viewport": "desktop",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T18:52:23.603Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:55:16.513Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T18:56:13.171Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T18:58:31.163Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T18:58:49.827Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:01:05.102Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-1",
+          "startedAt": "2026-11-02T19:02:11.218Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T19:03:57.126Z"
         }
       ],
       "blockingUnresolved": [
@@ -1067,7 +1099,7 @@
       "nonBlockingUnresolved": [],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T18:50:12.320Z"
+        "updatedAt": "2026-11-02T19:03:57.126Z"
       }
     },
     "07-a-one-door": {
