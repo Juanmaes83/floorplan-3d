@@ -12,6 +12,8 @@ Temporal evidence QA caught overly fast automated scrubbing (180 ms holds). The 
 
 End-frame review of `09db29b` found that one video closed before the compositor encoded the restored editor, although its restored PNG and state checks were correct. Capture now holds configuration/closing for 1 s and the restored editor for 2 s before closing the browser context. The product is unchanged. That campaign/interrupted broad run is also stale; final visual review must include actual raw end frames before the full final suite starts.
 
+Authority audit then reproduced one missing resource: in a one-level building, `site` belongs to the building even though the presentation plan uses the single-project path. The host now uses the same existing building/project site authority as Elevation. A real validated synthetic one-level building test fails before that one-line correction and passes after it. No territory/provider/schema/data changes are involved. Final browser coverage now includes 18 cases; all final evidence must use the subsequent checkpoint (the earlier `ec845e7` preview/campaign is superseded).
+
 Planned final commands (actual outputs/counts belong to the final review record):
 
 ```text
@@ -45,7 +47,7 @@ Development additions: post-mutation Apply failure and historical explicit sidec
 | `index.html` | Load the two new modules before the existing UI; no renderer/camera/model edits |
 | `css/design-system.css` | Scoped template configuration styles, 44px controls, bounded content; F6-39 |
 | `tests/presentation-templates.test.cjs` | 39 pure contract/edge tests |
-| `tests/presentation-templates.browser.test.cjs` | 13 real-browser integration tests, five profiles, mobiles, languages, failure and restore |
+| `tests/presentation-templates.browser.test.cjs` | 18 real-browser integration tests, five profiles, mobiles, languages, failure, source authority and restore |
 | `scripts/qa/render-presentation-templates.cjs` | Reproducible baseline/candidate screenshots, held states and actual normal-motion desktop playback; hashes; no approval inferred |
 | `.github/workflows/ft3d-6-presentation-templates.yml` | Exact-head validation and downloadable review artifact; read-only repository permission |
 | This ledger | Requirements, baseline, limitations and evidence traceability |

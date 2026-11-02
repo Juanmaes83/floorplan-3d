@@ -3,11 +3,13 @@ const {test,before,after}=require('node:test'),assert=require('node:assert/stric
 const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:os'),http=require('node:http'),{chromium}=require('playwright');
 const B=require('../js/building-core.js'),P=require('../js/project-package.js'),T=require('../js/tracing-core.js'),S=require('./fixtures/stair-conflict-building.cjs');
 const ROOT=path.resolve(__dirname,'..'),QA=process.env.TEMPLATES_ARTIFACTS||path.join(os.tmpdir(),'presentation-templates');
-let server,url,browser,duplex,partial;const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.hdr':'application/octet-stream'};
+let server,url,browser,duplex,partial,singleSite;const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.glb':'model/gltf-binary','.hdr':'application/octet-stream'};
 before(async()=>{
  await fs.mkdir(QA,{recursive:true});
  const pack=async(name,mutate)=>{const b=S.build().building;for(const l of b.levels)l.project.objects=l.project.objects.filter(o=>!/sofa|bed/.test(o.id));mutate?.(b);const {entries}=await B.packageEntries(b,()=>null,T.imageInfo);const file=path.join(QA,name+'.zip');await fs.writeFile(file,Buffer.from(await P.zip(entries,{check:B.packagePath}).arrayBuffer()));return file;};
  duplex=await pack('duplex');partial=await pack('partial',b=>{for(const w of b.levels[1].project.walls)w.status='demolished';});
+ const site=require('./fixtures/territorial-integration.cjs').build().building.site;
+ singleSite=await pack('single-site',b=>{b.levels=b.levels.slice(0,1);b.stairs=[];Object.assign(b,B.setSite(b,{parcel:site.parcel,northOffsetDeg:site.northOffsetDeg,buildingPlacement:{horizontal:{modelAnchorMm:{x:1300,y:-700},parcelLocalAnchorMm:{x:4200,y:9100},source:{type:'user-entered'}},vertical:{modelZeroElevationM:621.35,verticalReference:'orthometric',source:{type:'user-entered'}}}}));});
  server=http.createServer(async(req,res)=>{try{const file=path.resolve(ROOT,'.'+(req.url==='/'?'/index.html':new URL(req.url,'http://local').pathname));if(!file.startsWith(ROOT+path.sep))throw Error('path');res.setHeader('content-type',mime[path.extname(file)]||'application/octet-stream');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));url=`http://127.0.0.1:${server.address().port}/`;
  browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});
@@ -18,7 +20,7 @@ async function open(t,{viewport={width:1440,height:900},zip=null,locale='es'}={}
  await page.addInitScript(lang=>localStorage.setItem('rubik-sota-floorplan-lang',lang),locale);
  await page.route('**/*',async route=>{const target=route.request().url(),prefix='https://cdn.jsdelivr.net/npm/three@0.160.0/';if(target.startsWith(prefix))return route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await fs.readFile(path.join(process.env.THREE_LOCAL_DIR||path.join(ROOT,'vendor/three'),target.slice(prefix.length)))});if(target.startsWith(url)||/^(blob:|data:)/.test(target))return route.continue();external.push(target);return route.abort();});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin);
- if(zip){const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(zip);await page.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1);}else await page.locator('#welcomeExample').click();
+ if(zip){const [chooser]=await Promise.all([page.waitForEvent('filechooser'),page.locator('#welcomeUpload').click()]);await chooser.setFiles(zip);await page.waitForFunction(()=>!!FloorPlanBuildingUI?.context);}else await page.locator('#welcomeExample').click();
  await page.waitForTimeout(800);return {page,context,errors,external};
 }
 const config=async page=>{await page.evaluate(()=>FloorPlanPresentation.open());await page.locator('#presentationConfig[open]').waitFor();};
@@ -120,4 +122,9 @@ for(const reading of ['compact','exploded'])test(`FT6 ${reading}: p0/p1 equal re
   await page.locator('#presentationStoryPlan').click();await page.waitForFunction(()=>!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false');const residue=await page.evaluate(()=>View3D.presentationAxonResidue);assert.equal(residue.active,false);assert.equal(residue.handles,0);assert.ok(residue.levelDeltas.every(l=>Math.abs(l.deltaY)<1e-9));same(await pose());
  }
  await stop(page);assert.deepEqual(errors,[]);
+});
+test('FT6 one-level building reads existing site data from its building authority',async t=>{
+ const {page,errors}=await open(t,{zip:singleSite}),before=await state(page);assert.equal(await page.evaluate(()=>FloorPlanApp.levelContext.levels),1);
+ assert.equal(await page.evaluate(()=>!!FloorPlanBuildingUI.site.buildingPlacement),true);assert.equal(await page.evaluate(()=>!!FloorPlanApp.project.site),false);
+ await config(page);await page.locator('#presentationTemplate').selectOption('developer');const data=await templates(page);assert.equal(data.snapshot.resources['site-data'].availability,'supported');assert.deepEqual(data.resolved.decisions.find(c=>c.id==='site-context').compatibleHosts,['elevation']);assert.deepEqual((await state(page)).project,before.project);assert.deepEqual(errors,[]);
 });

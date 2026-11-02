@@ -117,7 +117,7 @@
   const resource=(available,reason='resource-unavailable')=>({availability:available?'supported':'unsupported',reason:available?null:reason});
   resources.materials=resource(boards.some(b=>b.floors.length||b.walls.length));resources.moodboard=resource(boards.some(b=>!b.empty));
   resources['budget-summary']=resource(!!window.FloorPlanBudgetUI?.current()?.saved);
-  resources.dossier=resource(!!allRooms.length);resources['site-data']=resource(!!(context?building()?.site:app.project.site)?.buildingPlacement,'site-data-unavailable');
+  resources.dossier=resource(!!allRooms.length);resources['site-data']=resource(!!(app.levelContext?building()?.site:app.project.site)?.buildingPlacement,'site-data-unavailable');
   templateSnapshot=Templates.buildSnapshot({entryId:app.entryId,levels:dto,plan:templatePlan(allRooms),sections:[...sectionLevels].map(([levelId,descriptor])=>({levelId,descriptor})),elevation:elevationDescriptor,axon:axonDescriptor,resources,historicalRooms:templateHistory,missingRooms:templateMissing});
   templateUi=window.FloorPlanPresentationTemplatesUI.create({parent:config,snapshot:templateSnapshot,getRuntime:()=>({solarAvailable:window.FloorPlanSolarUI?.result?.status==='available-orientative'}),getPlan:templatePlan,onChange:templateChanged,isLocked:()=>active||!!pendingStart});
  }
