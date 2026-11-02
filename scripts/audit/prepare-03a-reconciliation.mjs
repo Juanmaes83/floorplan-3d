@@ -14,8 +14,9 @@ const S=(statement,locator)=>({class:'DONOR_SOURCE',statement,locator:`${donor}:
 const C=(statement,locator)=>({class:'CUT_ATLAS',statement,locator});
 const R=(statement,locator)=>({class:'RUBIK_CURRENT',statement,locator:`${rubik}:${locator}`});
 const f=(vp,name,run)=>path.join(raw,vp,...(run?[run]:[]),`${vp}-${name}`);
-const disc=(vp,name)=>f(vp,name,vp==='portrait'?undefined:'discovery-correction-1');
-const sem=(vp,name)=>f(vp,name,'semantic-correction-2');
+const discoveryRuns={desktop:'discovery-correction-1',portrait:'discovery-correction-1',landscape:'discovery-correction-2'};
+const disc=(vp,name)=>f(vp,name,discoveryRuns[vp]);
+const sem=(vp,name)=>f(vp,name,vp==='portrait'?'semantic-correction-3':'semantic-correction-2');
 const plan=JSON.parse(await readFile(path.join(takeDir,'semantic-plan.json'),'utf8'));
 const base=JSON.parse(await readFile(path.join(ev,'takes/02-demo-section-sweep/reconciliation.json'),'utf8'));
 const transitions=[
@@ -28,7 +29,7 @@ const landscapeTransitions=[
 ];
 const portraitTransitions=[
   [.02,.07,.11],[.11,.17,.22],[.24,.31,.35],[.35,.42,.46],[.46,.52,.56],
-  [.56,.64,.67],[.66,.71,.73],[.75,.79,.81],[.81,.83,.85],[.85,.89,.94],[.94,.98,1]
+  [.56,.60,.63],[.66,.71,.73],[.75,.79,.81],[.81,.83,.85],[.85,.89,.94],[.94,.98,1]
 ];
 const sources=[
   '03-open-section/page.js:29-70,92-107; engine.js:561-592',
@@ -78,8 +79,8 @@ crosswalk.camera.evidence=[R('Current section-open camera evaluates absolute pro
 
 const config={
   schemaVersion:'rubik-donor-runtime-audit.reconciliation.v1',status:'AUDITED_WITH_DONOR_LIMITATION',
-  discoveryRun:{desktop:'discovery-correction-1',landscape:'discovery-correction-1'},
-  semanticRun:{desktop:'semantic-correction-2',portrait:'semantic-correction-2',landscape:'semantic-correction-2'},
+  discoveryRun:discoveryRuns,
+  semanticRun:{desktop:'semantic-correction-2',portrait:'semantic-correction-3',landscape:'semantic-correction-2'},
   progressModel:{desktop:'SCROLL_PLUS_TIME',portrait:'SCROLL_PLUS_TIME',landscape:'SCROLL_PLUS_TIME'},
   transitions,transitionsByViewport:{portrait:portraitTransitions,landscape:landscapeTransitions},
   milestoneSources:sources.map(x=>`${donor}:${x}`),
@@ -95,8 +96,8 @@ const config={
   reverseOnlyMilestones:Object.fromEntries(['desktop','portrait','landscape'].map(v=>[v,'No separate reverse-only geometry state established. The footer and studio close retreat, the material section returns, framing runs back through pool/living/bedroom/kitchen/stair, then material and lens return to ink. Portrait traverses both section halves.'])),
   selectedKeyframes:{
     desktop:['discovery-correction-1/desktop-start.png','semantic-correction-2/desktop-forward-m01-lens-opens.png','semantic-correction-2/desktop-forward-m02-material-sunlight-sweep.png','semantic-correction-2/desktop-forward-m04-kitchen-lantern.png','semantic-correction-2/desktop-forward-m05-bedroom-patio.png','semantic-correction-2/desktop-forward-m07-garden-pool.png','semantic-correction-2/desktop-forward-m08-material-section-returns.png','semantic-correction-2/desktop-forward-m09-studio-service-copy.png','discovery-correction-1/desktop-end.png','discovery-correction-1/desktop-restored-start.png'],
-    portrait:['portrait-start.png','semantic-correction-2/portrait-forward-m05-bedroom-patio.png','semantic-correction-2/portrait-forward-m08-material-section-returns.png','semantic-correction-2/portrait-forward-m08r-material-section-right-half.png','semantic-correction-2/portrait-forward-m09-studio-service-copy.png','portrait-end.png','portrait-restored-start.png'],
-    landscape:['discovery-correction-1/landscape-start.png','semantic-correction-2/landscape-forward-m05-bedroom-patio.png','semantic-correction-2/landscape-forward-m08-material-section-returns.png','semantic-correction-2/landscape-forward-m09-studio-service-copy.png','discovery-correction-1/landscape-end.png','discovery-correction-1/landscape-restored-start.png']
+    portrait:['discovery-correction-1/portrait-start.png','semantic-correction-3/portrait-forward-m05-bedroom-patio.png','semantic-correction-3/portrait-forward-m06-living-room.png','semantic-correction-3/portrait-forward-m08-material-section-returns.png','semantic-correction-3/portrait-forward-m08r-material-section-right-half.png','semantic-correction-3/portrait-forward-m09-studio-service-copy.png','discovery-correction-1/portrait-end.png','discovery-correction-1/portrait-restored-start.png'],
+    landscape:['discovery-correction-2/landscape-start.png','semantic-correction-2/landscape-forward-m05-bedroom-patio.png','semantic-correction-2/landscape-forward-m08-material-section-returns.png','semantic-correction-2/landscape-forward-m09-studio-service-copy.png','discovery-correction-2/landscape-end.png','discovery-correction-2/landscape-restored-start.png']
   },
   professionalService:{
     problemSolved:'Helps an architect explain what rooms and vertical movement lie behind one hillside section drawing while keeping the cut readable as perspective, material and light are introduced.',

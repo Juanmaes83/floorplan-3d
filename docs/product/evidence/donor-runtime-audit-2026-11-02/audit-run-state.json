@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T14:27:00.358Z",
+  "updatedAt": "2026-11-02T14:55:38.427Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -334,10 +334,10 @@
       }
     },
     "03-a-open-the-lens": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "DISCOVERY_PORTRAIT_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -412,19 +412,82 @@
           "startedAt": "2026-11-02T14:25:28.515Z",
           "status": "COMPLETE",
           "finishedAt": "2026-11-02T14:27:00.358Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-1",
+          "startedAt": "2026-11-02T14:33:28.080Z",
+          "status": "FAILED",
+          "error": "Error: agent-browser record: ✗ Recording encoder fell behind by more than 16 buffered frames\n"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "DISCOVERY",
+          "run": "discovery-correction-2",
+          "startedAt": "2026-11-02T14:45:11.817Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:46:50.636Z"
+        },
+        {
+          "viewport": "desktop",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-2",
+          "startedAt": "2026-11-02T14:47:06.149Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:48:12.236Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-2",
+          "startedAt": "2026-11-02T14:48:16.103Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:49:14.961Z"
+        },
+        {
+          "viewport": "landscape",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-2",
+          "startedAt": "2026-11-02T14:49:24.594Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:50:25.964Z"
+        },
+        {
+          "viewport": "portrait",
+          "stage": "SEMANTIC",
+          "run": "semantic-correction-3",
+          "startedAt": "2026-11-02T14:52:08.395Z",
+          "status": "COMPLETE",
+          "finishedAt": "2026-11-02T14:53:07.953Z"
         }
       ],
-      "blockingUnresolved": [
-        {"severity":"BLOCKING","question":"Landscape Discovery A0 was captured before the initial draw/title block stabilized; stable-start A→B→A correction is outstanding.","evidenceNeeded":"discovery-correction-1 landscape with window.__ready and A0/A1 comparison"},
-        {"severity":"BLOCKING","question":"Final semantic passes must start after window.__ready in all three viewports; previous passes and viewport-target corrections remain preserved as attempts.","evidenceNeeded":"semantic-correction-2 desktop/portrait/landscape plus screenshot review"},
-        {"severity":"BLOCKING","question":"Source/Cut/Rubik reconciliation, hashes and individual 21-gate validation are outstanding.","evidenceNeeded":"03-a reconciliation.json, audit.md, manifest.json and validator PASS"}
-      ],
+      "blockingUnresolved": [],
       "nonBlockingUnresolved": [
-        {"severity":"NON_BLOCKING","question":"Exact donor internal camera/material/cap/shadow object identity after reverse is not passively exposed.","evidenceNeeded":"Narrow read-only state probe only if identity-level restore proof becomes necessary."}
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Exact donor camera/material/cap/shadow object identities after B→A are not passively observable; visually equivalent A0/A1, route/hash and scroll are observed.",
+          "attempts": [
+            "stable-start corrected A0/A1 screenshots",
+            "continuous reverse video at all viewports",
+            "pinned page.js/engine.js state update and cap lifecycle review"
+          ],
+          "evidenceNeeded": "Narrow read-only donor object-state probe if identity-level restoration becomes essential."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "A section-facing room tour and editorial service copy have possible professional value, but Rubik product suitability is not decided by this audit.",
+          "attempts": [
+            "full runtime and source inspection",
+            "Cut/Atlas crosswalk",
+            "Rubik current capability inspection"
+          ],
+          "evidenceNeeded": "Later human product review using the complete 7-group audit."
+        }
       ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T14:27:00.358Z"
+        "updatedAt": "2026-11-02T14:55:38.427Z"
       }
     },
     "03-c-down-the-stair": {

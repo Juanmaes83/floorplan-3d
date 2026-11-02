@@ -2,10 +2,10 @@
   "schemaVersion": "rubik-donor-runtime-audit.raw-inventory.v1",
   "status": "DIRECTORY_UNPACKAGED",
   "rawRoot": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
-  "generatedAt": "2026-11-02T14:30:53.404Z",
-  "fileCount": 841,
-  "totalBytes": 1336052206,
-  "packageContentSha256": "b423f27a60ab7cea8df7b65eb3f5cc6a6aab9c3738fce40ad4032d8a633cd877",
+  "generatedAt": "2026-11-02T14:53:58.496Z",
+  "fileCount": 958,
+  "totalBytes": 1442594612,
+  "packageContentSha256": "0e584d78e14279fd3f1a3724b1c67af0fabec43c85d26209861af6575b144470",
   "hashDefinition": "SHA256 over UTF-8 sorted lines: <file-sha256><two spaces><bytes><two spaces><relative POSIX path><LF>; not a ZIP hash",
   "files": [
     {
@@ -3394,6 +3394,76 @@
       "sha256": "6995d3fee158c986124d70e40fd073613df75a477a6c8baa89096604e62c4b95"
     },
     {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m01-lens-opens.png",
+      "bytes": 772689,
+      "sha256": "ede45f61c6bae8434a86bfbe2b0059b2dbfa8857dffd9a73762428e623702f63"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m02-material-sunlight-sweep.png",
+      "bytes": 940957,
+      "sha256": "707d6c7e930f30325d755bb89260a0b19f35fd5d4c4b6afe3cec5f8bee3d8596"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m03-stair-spine.png",
+      "bytes": 1292291,
+      "sha256": "958606b6a457cc36c8baa49a015a4e8659b19696097f42234ba305b554079b67"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m04-kitchen-lantern.png",
+      "bytes": 1041298,
+      "sha256": "acb66da7633e721a2a276606366db83ca5ec21844193a23d4dd8bbfd9a8d4618"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m05-bedroom-patio.png",
+      "bytes": 1249508,
+      "sha256": "8ed7d7e5aa05208f2324ae1b8fba5dd50161945e186234f6e10bb0d993e0f276"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m06-living-room.png",
+      "bytes": 1276657,
+      "sha256": "183634be0876629f05283ddd063f9eda83e730793bce03be9fa0b2e767327038"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m07-garden-pool.png",
+      "bytes": 1060690,
+      "sha256": "beb4167253f43373727281a924fa089ee879b7204bcea829b8232b4cf28878f0"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m08-material-section-returns.png",
+      "bytes": 731195,
+      "sha256": "0a931e7106b1ae3974e6f1cc302688ecbb3c0434d8f856f1491f00fe29a1d80a"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m09-studio-service-copy.png",
+      "bytes": 121598,
+      "sha256": "31d603947541f1a917f5ceb2b66e31db7690335bb629b223506d2fc886ef1f4d"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-m10-selected-work-footer.png",
+      "bytes": 80022,
+      "sha256": "c8c903fcff5415562658b0776ee99a73a48c2e1dc671c2ff90f5174efc349fcd"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-forward-semantic.webm",
+      "bytes": 31176094,
+      "sha256": "44a7118fb632ea908ba6aa00c9ccb5c42dcf126184ec5ace85e2a9f30de14262"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-semantic-end.png",
+      "bytes": 79834,
+      "sha256": "177a8eeac3294666a2677a1d173a2c24e7bc6e778a83203a29fe3d42c57d78c3"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/desktop-semantic-start.png",
+      "bytes": 782231,
+      "sha256": "8ba03ab4f6a497bb1aa944b1fcdad2889c4e8ecd8064a85dbf43ba3b66a9fde6"
+    },
+    {
+      "path": "03-a-open-the-lens/desktop/semantic-correction-2/semantic-capture.json",
+      "bytes": 12083,
+      "sha256": "afd3a66b05537e83cc03bfee7d1fe3c8446e97fde76984b60c70ff3d8ea76fc4"
+    },
+    {
       "path": "03-a-open-the-lens/desktop/start-state.json",
       "bytes": 8698,
       "sha256": "bf03fd73d5aaec257e25cbc24c56d532385df8e59ad85117352a2502cccd8356"
@@ -3407,6 +3477,301 @@
       "path": "03-a-open-the-lens/landscape/discovery-assets.json",
       "bytes": 6964,
       "sha256": "c83262507687b8d5257281ab2afe127277a216a10a59fc080bff5473d2a54288"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/calibration.json",
+      "bytes": 3619,
+      "sha256": "9f6276200bf2a76e3834323b60e80ed68528a462649ba741f8c82ad214bb7815"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-end.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p000.png",
+      "bytes": 238521,
+      "sha256": "134d90aea10383d97eca39e6be8a1ba033ec55c6b8210677a2722e59ec9bd9a9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p005.png",
+      "bytes": 260939,
+      "sha256": "ba10ec3c237a07252e3fd9259a2a246a69b1a51b24c9bafb79dbdee93354e3c6"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p010.png",
+      "bytes": 300787,
+      "sha256": "6359a6b48e9845b8428263ba35af2d2a2c439ab147217a3bf8faa9a16aba4e6c"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p015.png",
+      "bytes": 292972,
+      "sha256": "26d59949eac84522269512cd09237511b1fe1bcf69c60b9eb5678bb10d1f5507"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p020.png",
+      "bytes": 266211,
+      "sha256": "ba2faee90f4b4987bc80171f053106ccd10491f1d330f34c7bf11bb6233413be"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p025.png",
+      "bytes": 263472,
+      "sha256": "f04323ca3e48a599e125e24fa03c6a8a851b01986c5f3910f95d144dbde21e8d"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p030.png",
+      "bytes": 286279,
+      "sha256": "c05c8fe600928d8af66ed8de884099a98f01e7c1a783f23cda74d2d5148e8460"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p035.png",
+      "bytes": 292750,
+      "sha256": "2d43290562a18384d1931160c53ea7af07c3f8601c85b51123ef746d1412509d"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p040.png",
+      "bytes": 320854,
+      "sha256": "5bdcb424a6803a6153bef1331cfca7fecdf8ea18815eab6a8d1717853363b147"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p045.png",
+      "bytes": 312025,
+      "sha256": "ccf2d13d5f07942363f0bde71e56342110d87ca1c19925407669852988b3b54a"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p050.png",
+      "bytes": 359993,
+      "sha256": "174087a6730f01a5eb3f9d35732fa45a690bab7111339a100d810c0f22d311f7"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p055.png",
+      "bytes": 312271,
+      "sha256": "c41a75a30c9b6b56ee14861c81f3d6a914ca3ebd2f6fcd89d21db580527ce8b8"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p060.png",
+      "bytes": 345886,
+      "sha256": "5acfc523e4ac8ee22fabea003199316c19dab849ea974c17d33cb518a107119c"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p065.png",
+      "bytes": 282787,
+      "sha256": "c903faab93bb80176dbe4c54cfbeeed092a248eb744a05ecb468d7be58848b3b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p070.png",
+      "bytes": 280734,
+      "sha256": "5db9e6d0063861b6124cbfc9f7731bf191888562a2b64fd312ab6f4ea5559cdf"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p075.png",
+      "bytes": 236718,
+      "sha256": "96720f8b6582b8619be3956d1f104d8912a143870ca0e3c0380cffb8a43e7537"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p080.png",
+      "bytes": 213293,
+      "sha256": "260b207f1def8d445c867d90808cc6558acf8c85dd071207a8308adafb775d7c"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p085.png",
+      "bytes": 18401,
+      "sha256": "e06af97cce2c11e4c3f121756d0604bc588bc2d2ee96fefacab8860e044524ea"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p090.png",
+      "bytes": 20286,
+      "sha256": "e596bcf52ccb37426b80e67f6f335cc3c46f910bf999438fc8cd18d49c14898f"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p095.png",
+      "bytes": 38481,
+      "sha256": "4ee9b5bc1064a4b2775e2a6d7702a7724a833c1dfbfef10f90f62acec606da9c"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-forward-discovery-p100.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/landscape-start.png",
+      "bytes": 238521,
+      "sha256": "134d90aea10383d97eca39e6be8a1ba033ec55c6b8210677a2722e59ec9bd9a9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-1/start-state.json",
+      "bytes": 8692,
+      "sha256": "73156a5bd9f4bdc03a0df78e221e4fd6182671f73ad89b18406759f727b76591"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/calibration.json",
+      "bytes": 3619,
+      "sha256": "9f6276200bf2a76e3834323b60e80ed68528a462649ba741f8c82ad214bb7815"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/discovery-assets.json",
+      "bytes": 7636,
+      "sha256": "642913b457dab02c04a7717edfc021804359d15d21f7da4dc32ea5b0ce0ac76d"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/discovery-summary.json",
+      "bytes": 16966,
+      "sha256": "2560dffdbe1e9f62d3ea121f53c8938ba2e723290000cf816ec2f406f760629d"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/end-state.json",
+      "bytes": 1697,
+      "sha256": "e91917c5760ca26165c62e9c71c46d0e3269d946ae1f77cf86e1a9d6ce8bef06"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-end.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p000.png",
+      "bytes": 238514,
+      "sha256": "11f55d23e8292ee805846c861eae3fbe9725de81dfde470356bf9a401c5b2a78"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p005.png",
+      "bytes": 260799,
+      "sha256": "45700d61b8659f8aca2983e98ad3a54d2445c6ace396bef8f12567fedaff6df6"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p010.png",
+      "bytes": 301005,
+      "sha256": "25946c35df97b38c74df36a47eadb72d2d7cef31a8b1369e6869078ec43df95a"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p015.png",
+      "bytes": 293355,
+      "sha256": "77038d3728fbe663b966ed1f83bfe175f5c948c311dbd2d4d000f9ce76215430"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p020.png",
+      "bytes": 266096,
+      "sha256": "4ed464a32a532c4ff14033ea89bb3f27e453147648b868c888e2b55aef0ee52b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p025.png",
+      "bytes": 266169,
+      "sha256": "e14213a7efd97fc80a3a7212c71ff97e3c4167e2ada14a25a20c236bbd1cd4ef"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p030.png",
+      "bytes": 286292,
+      "sha256": "96e3ae2c5270a2b5abd25b75b1bcb812d5dfaf6f851f51bd5dc3ee0c9208e15b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p035.png",
+      "bytes": 290047,
+      "sha256": "9bb292d493396df455e37302f17303b8d5db4e7e8e6436fe31004abfe9b004e3"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p040.png",
+      "bytes": 314073,
+      "sha256": "8397699e6cc51f4f3ab88c7756e4623dffe7edc4d4d6590402bf2e174eadb735"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p045.png",
+      "bytes": 311499,
+      "sha256": "db69d56e43ff3effc73f107a8d1cbfce535a35e2e69547db45640900c1118a7b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p050.png",
+      "bytes": 358979,
+      "sha256": "e41c9451c70a08d2e1d9e4a081ccbbe815056e0f0d70f9db356d96a427d13c3b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p055.png",
+      "bytes": 312601,
+      "sha256": "837c8cbf8eab18750a3f36899cc2dcc350a50ed71803ecbf348783374493c135"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p060.png",
+      "bytes": 346568,
+      "sha256": "d33521a1487ee43b1d02ba24ddd8b66bbea4a36e8a04316b5e79235b52661159"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p065.png",
+      "bytes": 282805,
+      "sha256": "d8dbda26e1db1b265e51212b6182673a08c23231bc63b82ab02d861c6cf8c6ea"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p070.png",
+      "bytes": 278215,
+      "sha256": "463d805b59c57d253cb104b4b81709c8e183fdf531997172ef6738f53f41e072"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p075.png",
+      "bytes": 236714,
+      "sha256": "0aaf8f7e26f50e2b95ab4f124702865ffd73c9dd6efae2feddb749ef431caf48"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p080.png",
+      "bytes": 213402,
+      "sha256": "ecffa05515f8148e46ae586214c6a02c969a3b3dcfecb8abda24f4c25381af28"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p085.png",
+      "bytes": 18401,
+      "sha256": "e06af97cce2c11e4c3f121756d0604bc588bc2d2ee96fefacab8860e044524ea"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p090.png",
+      "bytes": 20286,
+      "sha256": "e596bcf52ccb37426b80e67f6f335cc3c46f910bf999438fc8cd18d49c14898f"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p095.png",
+      "bytes": 38481,
+      "sha256": "4ee9b5bc1064a4b2775e2a6d7702a7724a833c1dfbfef10f90f62acec606da9c"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery-p100.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery.telemetry.ndjson",
+      "bytes": 348558,
+      "sha256": "e12d012f679e2a627855a4b17b0bc3a445afd8265838e93b7e0fd1fd03d67ce6"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-forward-discovery.webm",
+      "bytes": 7812431,
+      "sha256": "1b19dd2ec40aeef5d67f9a82dbce1e3faa6dfd55b68e01e666db5c727265fe19"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-restored-start.png",
+      "bytes": 238523,
+      "sha256": "911e783d4c91a6f10c6bfce4a4871d6a48f313a397abf3a96bf358fc9c29e38d"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-reverse-discovery.telemetry.ndjson",
+      "bytes": 325174,
+      "sha256": "ab3d3945f32a840bbd5656acf0d54f7cb64fc3f975906822bca5fdd3aa980154"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-reverse-discovery.webm",
+      "bytes": 7260307,
+      "sha256": "f1d192d4edf31340e3d983a084d1c3cb0881e2d766f78c72622fe50f33543495"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/landscape-start.png",
+      "bytes": 242681,
+      "sha256": "e564fee082f7443d251743667d7b6e4ef72d8bc0a97b3ad84d57c8dd9a1bbb02"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/reverse-state.json",
+      "bytes": 2090,
+      "sha256": "b804f7aff362aa27f4400b3bbeb07fd53c0168a7a5970da14570177025266f16"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/discovery-correction-2/start-state.json",
+      "bytes": 8679,
+      "sha256": "d7b53272622ceba3971bb269e1d315045b8b02955f4a4cac517856ae022d35de"
     },
     {
       "path": "03-a-open-the-lens/landscape/discovery-summary.json",
@@ -3702,6 +4067,76 @@
       "path": "03-a-open-the-lens/landscape/semantic-correction-1/semantic-capture.json",
       "bytes": 11956,
       "sha256": "c0f6f2ff7f97350ce29347f3a70c97bc11cb6b4b6ca63735b40d2ae95b254f2b"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m01-lens-opens.png",
+      "bytes": 259969,
+      "sha256": "ab61ddffb91031b7ec6c6e740e51d605afaa1a69bb784623a7194e2e260bace8"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m02-material-sunlight-sweep.png",
+      "bytes": 291855,
+      "sha256": "b3e63484eefb9abda613def5403c04c4a73eb829e8090595dcf9ac52ef28c408"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m03-stair-spine.png",
+      "bytes": 280452,
+      "sha256": "3008ab3cfca4582268568e5369e790e3af8ab28f537bd3286983f1be19e42275"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m04-kitchen-lantern.png",
+      "bytes": 293430,
+      "sha256": "5be31009833fdcac6a639b0bd86c17812d0ed924c0fb9456d9a3e3a6e65533ba"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m05-bedroom-patio.png",
+      "bytes": 313591,
+      "sha256": "bec7db4f85bfe769db27bc2247229477c1aa511f3b6c3581eeec12e68de5e3dd"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m06-living-room.png",
+      "bytes": 313051,
+      "sha256": "830adc1f9d1dfa9ce94b5674d35e9d913e202f0838e195cc9100b27daf9ac2a7"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m07-garden-pool.png",
+      "bytes": 282516,
+      "sha256": "c00bd1c49aec1090277fd417a14bee1bcfc6add24aa5a29b3466228282d2e3e1"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m08-material-section-returns.png",
+      "bytes": 242903,
+      "sha256": "bbe82ca33705edccf9347b09d42776fadc524cf59ef0b2915792f8c202d0e4db"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m09-studio-service-copy.png",
+      "bytes": 19883,
+      "sha256": "ec6c44a5216bcd599b7b217293ff20704ca8c8c7443596d77d108cb27cd2b297"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-m10-selected-work-footer.png",
+      "bytes": 27817,
+      "sha256": "f3c9b7c7af5e31279f4aaaabfd824300060fa37d736dc38da6f622d711890867"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-forward-semantic.webm",
+      "bytes": 9533345,
+      "sha256": "1f1d2bad1bc5bda9dbff4e5ff737d80ad763ff8c984fdf9e6c899e8191d3cc99"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-semantic-end.png",
+      "bytes": 21840,
+      "sha256": "c78bce4199aac71d6ca01f01c9a098edfd94223af82ec2b9ab0fa282c660bdd9"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/landscape-semantic-start.png",
+      "bytes": 244530,
+      "sha256": "f4b3133fcfaeb58f2983d73b7955e060ab63ae0d85dd46a4d3c7fe097f27aa73"
+    },
+    {
+      "path": "03-a-open-the-lens/landscape/semantic-correction-2/semantic-capture.json",
+      "bytes": 11956,
+      "sha256": "65b1b8530aa9723484c7ac172ff915ab17fcb1a845dac0a39f98c66790424ff6"
     },
     {
       "path": "03-a-open-the-lens/landscape/start-state.json",
@@ -4187,6 +4622,156 @@
       "path": "03-a-open-the-lens/portrait/semantic-correction-1/semantic-capture.json",
       "bytes": 13158,
       "sha256": "b3e0e649292b03c87077dda9cbbef3ef424a3290d23e7940ebc32da25548c077"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m01-lens-opens.png",
+      "bytes": 295264,
+      "sha256": "b3451af4e4dc0857c6490847c696273f36d348d3ced6ea02faac6d6e3529f55c"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m02-material-sunlight-sweep.png",
+      "bytes": 304751,
+      "sha256": "069fb3dfb9061ed886d915a4289a991f1647bf3888e64c487151b7a65de860d6"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m03-stair-spine.png",
+      "bytes": 342404,
+      "sha256": "52343d72d1964cb21a14079f6e8a20256c0ffe6a11372c8369f2baff858cf5f4"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m04-kitchen-lantern.png",
+      "bytes": 313942,
+      "sha256": "fa9e98270efac0eccde22e7b034f70ebd2ce04f64a2bbdb8d5d6599c3a1e6aba"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m05-bedroom-patio.png",
+      "bytes": 351767,
+      "sha256": "dadab3e1c32a41b2cca830100eb675ac3831fb88a1cf8d3536c8e969dab29b52"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m06-living-room.png",
+      "bytes": 315730,
+      "sha256": "1c0709eff0772e84c7f1a1caa4a530902903f5c289d7d1c00e30c61ce8385f3d"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m07-garden-pool.png",
+      "bytes": 287225,
+      "sha256": "9f3ef8c5d5afa1d44801973b91bf490e3e8145fd024e3091a909fcdd21689f30"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m08-material-section-returns.png",
+      "bytes": 299853,
+      "sha256": "693a301611c93751f517717fe75718ae8f6079bc6761346b35add68fbf564184"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m08r-material-section-right-half.png",
+      "bytes": 279292,
+      "sha256": "a52f701ab8e12abc12d034f168dba314fc9fbc785357df7038cd4721e550fb4b"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m09-studio-service-copy.png",
+      "bytes": 142431,
+      "sha256": "4a60201fa285b0acf9510d47ad8f4aa7d2c8ac63beca1ccfe573aa920219dd12"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-m10-selected-work-footer.png",
+      "bytes": 47066,
+      "sha256": "4256eb621399e8bc29b0fff8bb8b30586bceae5761e561c84149127890af4d20"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-forward-semantic.webm",
+      "bytes": 10350159,
+      "sha256": "65b2b8a3299b01e94858654a01857b9ab3409390814c2370a15ba9fd9ec23f7d"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-semantic-end.png",
+      "bytes": 37934,
+      "sha256": "17f3223276b74241ab6b8f7168a004d2d47d1832d11ead25c288424f8ab745ac"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/portrait-semantic-start.png",
+      "bytes": 309961,
+      "sha256": "d9a83ede21e4b4f10c6e7c909b281eb5a2d768d121d3fea7a3d30f721729e2ab"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-2/semantic-capture.json",
+      "bytes": 13158,
+      "sha256": "e6d8e568b54fca25551128d2d8163cba4b80b18ffabaccbb9bb082ca7ce5a4db"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m01-lens-opens.png",
+      "bytes": 295257,
+      "sha256": "4f3d83fd3015ce8d00321098e17e42e9c70e6a78c827eb4e53c305729b4c953c"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m02-material-sunlight-sweep.png",
+      "bytes": 304807,
+      "sha256": "2e9a3bf9ab1c900f74f137419005c51a8a563455d45f1a46c8aba6d6d5d053ca"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m03-stair-spine.png",
+      "bytes": 342413,
+      "sha256": "517fad2a95acb17b8072c6b7625c578011bafaf32af0d6f56a81b96abcb942ab"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m04-kitchen-lantern.png",
+      "bytes": 313951,
+      "sha256": "9adc3789d620db2538c0a951204212db6ff03c987ec2a647102e977a6d5a1fcf"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m05-bedroom-patio.png",
+      "bytes": 351768,
+      "sha256": "b1a8cce72d8f5ab2bc55af7a807a05eb655cfbfd228b49bc8a7da3dd0c1a6092"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m06-living-room.png",
+      "bytes": 306368,
+      "sha256": "ba283011bf414799a2820f94cb309d5bddcdbf0f8415caaafba6d0878623264d"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m07-garden-pool.png",
+      "bytes": 287237,
+      "sha256": "1e2ee717f9481cc6fd525304376eb346f1b018644d0c490d59d38d6af697d8e8"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m08-material-section-returns.png",
+      "bytes": 300312,
+      "sha256": "208f4d7144e66873b1b8bd05f14447a4b6c21fc1a152b0ab61741d6d88633074"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m08r-material-section-right-half.png",
+      "bytes": 279481,
+      "sha256": "9bd4033e085e897c55419ffa9247b3a89a28e73c46d1ad467768c4ce8db114da"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m09-studio-service-copy.png",
+      "bytes": 142431,
+      "sha256": "4a60201fa285b0acf9510d47ad8f4aa7d2c8ac63beca1ccfe573aa920219dd12"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-m10-selected-work-footer.png",
+      "bytes": 47066,
+      "sha256": "4256eb621399e8bc29b0fff8bb8b30586bceae5761e561c84149127890af4d20"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-forward-semantic.webm",
+      "bytes": 10280523,
+      "sha256": "980b97550faf26327f4e2090b6f93983c5c685b47f452a188da68beb3b188d1a"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-semantic-end.png",
+      "bytes": 37934,
+      "sha256": "17f3223276b74241ab6b8f7168a004d2d47d1832d11ead25c288424f8ab745ac"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/portrait-semantic-start.png",
+      "bytes": 309965,
+      "sha256": "b14bdba02606f4df344fdf7eac21bcb22103bb72c4616b5e13b6caf38732ce1b"
+    },
+    {
+      "path": "03-a-open-the-lens/portrait/semantic-correction-3/semantic-capture.json",
+      "bytes": 13157,
+      "sha256": "0e8315ec7372692b44f3563e36b06f765cf78565b834a4c63a9f46eb9b1ef535"
     },
     {
       "path": "03-a-open-the-lens/portrait/start-state.json",

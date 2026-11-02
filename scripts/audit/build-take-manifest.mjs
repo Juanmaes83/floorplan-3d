@@ -80,7 +80,7 @@ for(const vp of Object.keys(dims)){
 }
 for(const [vp,names] of Object.entries(config.selectedKeyframes)){
   const target=path.join(takeDir,'keyframes',vp);await mkdir(target,{recursive:true});
-  for(const name of names){if(name.includes('..'))throw Error(`Unsafe keyframe path ${name}`);const from=path.join(rawRoot,id,vp,name),to=path.join(target,path.basename(name));await copyFile(from,to);assets.push({path:path.relative(root,to).replaceAll('\\','/'),sha256:await hash(to),kind:'KEYFRAME',viewport:vp});}
+  for(const name of names){if(name.includes('..'))throw Error(`Unsafe keyframe path ${name}`);const from=path.join(rawRoot,id,vp,name),to=path.join(target,name.replaceAll(/[\\/]/g,'--'));await copyFile(from,to);assets.push({path:path.relative(root,to).replaceAll('\\','/'),sha256:await hash(to),kind:'KEYFRAME',viewport:vp});}
 }
 const manifest={
   schemaVersion:'rubik-donor-runtime-audit.take.v1',auditId:'donor-runtime-7x14-2026-11-02',take:{id,group:ref.group,title:ref.take,inventoryIndex:ref.inventoryIndex},status:config.status,
