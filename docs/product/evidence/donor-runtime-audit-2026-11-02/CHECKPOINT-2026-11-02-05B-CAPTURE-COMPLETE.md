@@ -1,5 +1,7 @@
 # Handoff — 05-b capture complete, reconciliation pending
 
+**Superseded by `CHECKPOINT-2026-11-02-05B-VALIDATED.md`.** This file records the preceding partial state; use the validated handoff to continue.
+
 This is a recoverability checkpoint, **not** 05-b validation. Its HEAD SHA is the commit containing this file; verify with `git rev-parse HEAD` and `git ls-remote origin refs/heads/audit/donor-runtime-7x14-2026-11-02`. Previous remote HEAD: `b06312ef8f428847872935171c19e9c98dc87aca`. Frozen Rubik baseline: `0f9c6ead9732901681498efec326d1ca92e42ffe`. Sole branch/worktree: `audit/donor-runtime-7x14-2026-11-02`, `C:\Users\temp123\floorplan-3d-donor-runtime-audit-2026-11-02`. Pinned donor: `Sam1983Aing/flat-to-3d@d7b9b69753d3af679535ee56695a05c8d955c3c6`.
 
 ## State and completed capture stages

@@ -6,7 +6,7 @@
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T16:19:22.420Z",
+  "updatedAt": "2026-11-02T18:01:59.438Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",
@@ -784,10 +784,10 @@
       }
     },
     "05-b-1-1-site-sheet": {
-      "captureStatus": "IN_PROGRESS",
-      "reconciliationStatus": "NOT_STARTED",
-      "validationStatus": "NOT_STARTED",
-      "lastSuccessfulStage": "SEMANTIC_PORTRAIT_COMPLETE",
+      "captureStatus": "COMPLETE",
+      "reconciliationStatus": "COMPLETE",
+      "validationStatus": "COMPLETE",
+      "lastSuccessfulStage": "VALIDATED_CHECKPOINT",
       "attempts": [
         {
           "viewport": "desktop",
@@ -863,10 +863,32 @@
         }
       ],
       "blockingUnresolved": [],
-      "nonBlockingUnresolved": [],
+      "nonBlockingUnresolved": [
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Hidden WebGL resource identity and exact camera pose history after reverse are not passively observable.",
+          "attempts": [
+            "three natural Discovery reverses",
+            "SHOT/week telemetry",
+            "A0/A1 visual comparison"
+          ],
+          "evidenceNeeded": "Narrow camera/resource inspection only if exact internal lifecycle identity becomes necessary."
+        },
+        {
+          "severity": "NON_BLOCKING",
+          "question": "Whether a spatial site sheet provides enough professional value in Rubik remains a product decision.",
+          "attempts": [
+            "three-viewport runtime",
+            "pinned source",
+            "Cut4 D18 and Global",
+            "frozen Rubik crosswalk"
+          ],
+          "evidenceNeeded": "Human review after fourteen-take evidence set; no implementation authorized."
+        }
+      ],
       "timestamps": {
         "createdAt": "2026-11-02T10:33:06.640Z",
-        "updatedAt": "2026-11-02T17:53:34.658Z"
+        "updatedAt": "2026-11-02T18:01:59.438Z"
       }
     },
     "05-c-site-camera": {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.semantic-plan.v1",
-  "status": "READY_FOR_CAPTURE",
-  "validation": "Pending fresh semantic passes and visual review",
+  "status": "VALIDATED",
+  "validation": "Independent desktop, portrait and landscape semantic passes captured all 12 milestones with exact week-14 Practical Completion. Desktop semantic-correction-1, portrait semantic-correction-2 and landscape original are selected; earlier short/failed terminal attempts remain in RAW. Visual review confirmed the same site sheet/house continuity, B camera sequence and donor mobile limitations. Individual validator passed 21/21.",
   "basis": "Independent canonical ?dir=b Discovery opens at week 7 and naturally wheels to 0. Desktop and portrait 0→14→0 show a foundation plan and authored programme texture on the ground, with the same house assembled above it. Pinned view.js drawSheet updates a cached base canvas at the virtual week; autoShotForWeek changes top→b2→b3→top. At 13.5–14 no PHASES row is active, so HUD falls back to Site Mobilisation until the exact week-14 completion branch. Interior stops are offered as tabs but the automatic B route returns overhead; no automatic five-stop tour is claimed.",
   "milestones": [
     {"label":"M01","slug":"paper-foundation-start","targetProgress":0.03,"observedChange":"The foundation plan and fourteen-week programme are printed on the ground; site set-up and early excavation overlap above the same plan."},
