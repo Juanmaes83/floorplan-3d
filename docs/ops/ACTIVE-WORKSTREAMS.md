@@ -23,15 +23,19 @@
 
 - **ID:** `documentation-reconciliation-multi-agent-ops`
 - **Objetivo:** documentar protocolo multiagente y reconciliar el estado documental tras FT3D-5/FT3D-6 sin interferir con WS-001.
-- **Baseline:** `master@0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- **Baseline funcional:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
 - **Owner:** ChatGPT, sesión de revisión documental del 2026-11-02.
 - **Branch:** `docs/multi-agent-ops-status-2026-11-02`.
-- **Estado:** `IN_PROGRESS`.
+- **PR:** #160 Draft.
+- **Estado:** `WIP_PUSHED / REVIEWED_WITH_TWO_SAFE_INSERTIONS_PENDING`.
 - **Scope de escritura:** documentación exclusivamente.
-- **Checkpoint remoto:** esta rama existe en GitHub y recibe commits documentales incrementales.
-- **Siguiente acción:** completar `current-status-2026-11-02.md` + informe de reconciliación documental; revisar diff; dejar handoff/resultado.
+- **Checkpoint remoto:** rama/PR remotos; verificar el HEAD exacto de PR #160 antes de cualquier integración.
+- **Revisión sustantiva:** aprobada; corregida la distinción entre `master` vivo y baseline funcional de producto, y endurecidas autoridad de workstreams + frescura de run-state.
+- **Correcciones históricas aplicadas:** avisos `SUPERSEDED` en `current-status-2026-10-30.md` y `roadmap-completion-matrix-2026-10-30.md`, conservando su cuerpo histórico.
+- **Pendiente seguro:** insertar un puntero en `docs/ROADMAP.md` y una nota post-merge en `docs/qa/ft3d-6-implementation-2026-11-01.md`. El conector disponible sólo reemplaza archivos completos; no reconstruir manualmente esos dos documentos largos para una inserción pequeña. Aplicar con edición local/patch seguro antes de merge.
+- **Siguiente acción:** aplicar esas dos inserciones seguras, volver a revisar diff/HEAD/checks y entonces decidir si #160 pasa a merge-ready.
 - **Concurrencia:** no tocar la rama/worktree del donor runtime audit.
-- **Merge:** pendiente de revisión; `pushed` no equivale a `approved`.
+- **Merge:** no autorizado todavía; `pushed`/`reviewed` no equivale a permiso de merge.
 
 ## Cómo añadir un workstream
 
