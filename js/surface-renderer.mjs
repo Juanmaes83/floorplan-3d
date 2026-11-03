@@ -1,4 +1,5 @@
 /* Active assignments only. Verified bytes are decoded before GPU publication. */
+import {replaceStoneTexture} from './surface-fidelity.mjs';
 export class SurfaceRenderer{
  constructor(THREE,library){this.THREE=THREE;this.library=library;this.cache=new Map();this.used=new Set();this.history=[];this.quality='base';}
  setQuality(quality){if(!['base','enhanced'].includes(quality))throw Error('Calidad de material inválida');this.quality=quality;}
@@ -12,7 +13,8 @@ export class SurfaceRenderer{
   const enhanced=this.quality==='enhanced'&&!!entry.maps.normal&&!!entry.maps.roughness;
   const key=JSON.stringify([material.id,entry.id,repeat.x,repeat.y,enhanced]);this.used.add(key);
   if(this.cache.has(key))return this.cache.get(key).material;
-  const m=new T.MeshStandardMaterial({color:material.appearance.color,roughness:entry.roughness});
+  const stone=enhanced&&entry.id==='surface-marble-01';
+  const m=stone?new T.MeshPhysicalMaterial({color:material.appearance.color,roughness:entry.roughness,clearcoat:.15,clearcoatRoughness:.22}):new T.MeshStandardMaterial({color:material.appearance.color,roughness:entry.roughness});
   if(entry.normalStrength!==undefined)m.normalScale.setScalar(entry.normalStrength);
   const record={material:m,entry,key,state:'loading',detailState:enhanced?'waiting':'off',controller:new AbortController(),textures:[],bitmaps:[]};
   this.cache.set(key,record);record.promise=this.load(record,repeat,enhanced);return m;
@@ -34,7 +36,7 @@ export class SurfaceRenderer{
   texture.wrapS=texture.wrapT=this.THREE.RepeatWrapping;
   texture.repeat.set(1000/repeat.x,1000/repeat.y);
   texture.colorSpace=linear?this.THREE.NoColorSpace:this.THREE.SRGBColorSpace;
-  texture.anisotropy=1;texture.needsUpdate=true;
+  texture.anisotropy=4;texture.needsUpdate=true;
   return {texture,bitmap,bytes:data.byteLength,gpuBytes:Math.ceil(file.width*file.height*4*4/3)};
  }
  async load(record,repeat,enhanced){
@@ -42,6 +44,7 @@ export class SurfaceRenderer{
   try{
    base=await this.verifiedMap(record.entry.maps.baseColor,record,repeat,false);
    if(!base)return;
+   if(enhanced&&record.entry.id==='surface-marble-01'){replaceStoneTexture(this.THREE,base,'color');record.recipe='honed-stone-v1';}
    record.textures.push(base.texture);record.bitmaps.push(base.bitmap);
    record.material.map=base.texture;record.material.color.set(record.entry.mapTint||'#ffffff');record.material.needsUpdate=true;
    record.state='ready';record.bytes=base.bytes;record.gpuBytes=base.gpuBytes;record.loadMs=performance.now()-start;
@@ -54,6 +57,7 @@ export class SurfaceRenderer{
    if(!normal)return;
    roughness=await this.verifiedMap(record.entry.maps.roughness,record,repeat,true);
    if(!roughness)return;
+   if(record.recipe==='honed-stone-v1')replaceStoneTexture(this.THREE,roughness,'roughness');
    if(record.controller.signal.aborted)return;
    record.textures.push(normal.texture,roughness.texture);
    record.bitmaps.push(normal.bitmap,roughness.bitmap);
