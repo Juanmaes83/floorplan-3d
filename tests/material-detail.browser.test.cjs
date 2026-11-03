@@ -14,6 +14,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const initial=await inspect(page);await page.locator('#presentationBtn').click();assert.match(await page.locator('#presentationConfig').textContent(),/Iniciar presentación/);await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});await ready(page,'enhanced');
  const enhanced=await inspect(page),button=page.locator('#presentationMaterialQuality');assert.equal(await button.isVisible(),true);assert.equal(await button.getAttribute('aria-pressed'),'true');
+ assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').material,{color:'e0e0e0',roughness:1,metalness:0,normalScale:[.65,.65]});
+ assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-marble-01').material,{color:'dedede',roughness:.95,metalness:0,normalScale:[.5,.5]});
  for(const metric of enhanced.metrics.filter(m=>m.detailState==='ready')){assert.deepEqual(metric.map.repeat,metric.normalMap.repeat);assert.deepEqual(metric.map.repeat,metric.roughnessMap.repeat);assert.equal(metric.map.colorSpace,'srgb');assert.equal(metric.normalMap.colorSpace,'');assert.equal(metric.roughnessMap.colorSpace,'');assert.ok(metric.bytes<=512*1024*3);}
  assert.ok(await page.locator('#stage').evaluate(e=>e.getBoundingClientRect().height)>viewport.height*.7);
  await page.screenshot({path:path.join(QA,`${size}-enhanced.png`)});await button.click();await ready(page,'base');const base=await inspect(page);sameCamera(base.camera,enhanced.camera);assert.deepEqual(JSON.parse(base.project),JSON.parse(initial.project));assert.equal(base.entry,initial.entry);assert.ok(base.metrics.every(m=>m.detailState==='off'));await page.screenshot({path:path.join(QA,`${size}-base.png`)});
@@ -36,8 +38,8 @@ test('M08 rejects HTTP, hash and decode failures while preserving albedo and dis
   if(sha)await page.evaluate(hash=>{FloorPlanSurfaces.get('surface-oak-wood-planks').maps.normal.sha256=hash;},sha);
   await page.route(target,route=>route.fulfill({status,contentType:'image/webp',body}));
   await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));
-  await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='fallback',null,{timeout:15000});
-  const metric=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(metric.state,'ready');assert.ok(metric.map);assert.equal(metric.normalMap,null);assert.equal(metric.roughnessMap,null);assert.match(metric.detailError,label);
+ await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='fallback',null,{timeout:15000});
+  const metric=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(metric.state,'ready');assert.ok(metric.map);assert.equal(metric.material.color,'e0e0e0');assert.equal(metric.normalMap,null);assert.equal(metric.roughnessMap,null);assert.match(metric.detailError,label);
   await page.unroute(target);await page.evaluate(()=>View3D.setSurfaceQuality('base'));
   await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='off');
  }
@@ -49,7 +51,7 @@ test('M08 rejects HTTP, hash and decode failures while preserving albedo and dis
  await page.screenshot({path:path.join(QA,'1440x900-recovered.png')});
  await page.evaluate(()=>View3D.setSurfaceQuality('base'));await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='ready');
  const baseTarget='**/assets/materials/oak-wood-planks.webp';await page.route(baseTarget,route=>route.fulfill({status:503,body:'unavailable'}));await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));
- await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='fallback');const baseFailure=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(baseFailure.detailState,'fallback');assert.equal(baseFailure.map,null);assert.match(baseFailure.error,/HTTP 503/);
+ await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='fallback');const baseFailure=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(baseFailure.detailState,'fallback');assert.equal(baseFailure.map,null);assert.equal(baseFailure.material.color,'a27553');assert.match(baseFailure.error,/HTTP 503/);
  await page.unroute(baseTarget);await page.evaluate(()=>View3D.setSurfaceQuality('base'));await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='ready');
  await page.evaluate(()=>document.querySelector('#view3d canvas').dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
  await page.waitForFunction(()=>!View3D.contextAvailable&&View3D.surfaceMetrics.length===0);

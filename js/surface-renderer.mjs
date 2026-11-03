@@ -13,6 +13,7 @@ export class SurfaceRenderer{
   const key=JSON.stringify([material.id,entry.id,repeat.x,repeat.y,enhanced]);this.used.add(key);
   if(this.cache.has(key))return this.cache.get(key).material;
   const m=new T.MeshStandardMaterial({color:material.appearance.color,roughness:entry.roughness});
+  if(entry.normalStrength!==undefined)m.normalScale.setScalar(entry.normalStrength);
   const record={material:m,entry,key,state:'loading',detailState:enhanced?'waiting':'off',controller:new AbortController(),textures:[],bitmaps:[]};
   this.cache.set(key,record);record.promise=this.load(record,repeat,enhanced);return m;
  }
@@ -42,7 +43,7 @@ export class SurfaceRenderer{
    base=await this.verifiedMap(record.entry.maps.baseColor,record,repeat,false);
    if(!base)return;
    record.textures.push(base.texture);record.bitmaps.push(base.bitmap);
-   record.material.map=base.texture;record.material.color.set('#ffffff');record.material.needsUpdate=true;
+   record.material.map=base.texture;record.material.color.set(record.entry.mapTint||'#ffffff');record.material.needsUpdate=true;
    record.state='ready';record.bytes=base.bytes;record.gpuBytes=base.gpuBytes;record.loadMs=performance.now()-start;
    this.library.status.delete(record.entry.id);dispatchEvent(new Event('surface-status'));
   }catch(e){if(record.controller.signal.aborted)return;record.state='fallback';record.detailState='fallback';record.error=e.message;this.library.notify(record.entry.id,`${record.entry.name}: ${e.message}; se muestra el color de respaldo.`);return;}
@@ -69,6 +70,7 @@ export class SurfaceRenderer{
  }}
  disposeAll(){this.used.clear();this.end();}
  metrics(){return [...this.cache.values()].map(r=>({id:r.entry.id,key:r.key,state:r.state,detailState:r.detailState,bytes:r.bytes||0,gpuBytes:r.gpuBytes||0,loadMs:r.loadMs,error:r.error,detailError:r.detailError,
+  material:{color:r.material.color.getHexString(),roughness:r.material.roughness,metalness:r.material.metalness,normalScale:r.material.normalScale.toArray()},
   map:r.material.map?{repeat:r.material.map.repeat.toArray(),colorSpace:r.material.map.colorSpace}:null,
   normalMap:r.material.normalMap?{repeat:r.material.normalMap.repeat.toArray(),colorSpace:r.material.normalMap.colorSpace}:null,
   roughnessMap:r.material.roughnessMap?{repeat:r.material.roughnessMap.repeat.toArray(),colorSpace:r.material.roughnessMap.colorSpace}:null}));}

@@ -266,7 +266,9 @@
         "Tablones de roble"
       ],
       "color": "#a27553",
-      "roughness": 0.65,
+      "roughness": 1,
+      "mapTint": "#e0e0e0",
+      "normalStrength": 0.65,
       "source": {
         "assetId": "oak_wood_planks",
         "title": "Oak Wood Planks",
@@ -1290,7 +1292,9 @@
         "Mármol de veta natural"
       ],
       "color": "#b19d79",
-      "roughness": 0.65,
+      "roughness": 0.95,
+      "mapTint": "#dedede",
+      "normalStrength": 0.5,
       "source": {
         "assetId": "marble_01",
         "title": "Marble 01",
@@ -1942,7 +1946,8 @@
         "Hormigón cepillado"
       ],
       "color": "#6a6358",
-      "roughness": 0.92,
+      "roughness": 0.82,
+      "mapTint": "#eeeeee",
       "source": {
         "assetId": "brushed_concrete",
         "title": "Brushed Concrete",
@@ -2561,7 +2566,8 @@
         "Yeso blanco fino"
       ],
       "color": "#8e877b",
-      "roughness": 0.92,
+      "roughness": 1,
+      "mapTint": "#f2f2f2",
       "source": {
         "assetId": "white_plaster_02",
         "title": "White Plaster 02",
