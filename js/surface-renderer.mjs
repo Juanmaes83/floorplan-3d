@@ -1,5 +1,5 @@
 /* Active assignments only. Verified bytes are decoded before GPU publication. */
-import {replaceStoneTexture} from './surface-fidelity.mjs';
+import {replaceStoneTexture,proceduralFamily,bitmapPixels,meanColor,bakeSurface,recipeTextures} from './surface-fidelity.mjs';
 export class SurfaceRenderer{
  constructor(THREE,library){this.THREE=THREE;this.library=library;this.cache=new Map();this.used=new Set();this.history=[];this.quality='base';}
  setQuality(quality){if(!['base','enhanced'].includes(quality))throw Error('Calidad de material inválida');this.quality=quality;}
@@ -10,11 +10,11 @@ export class SurfaceRenderer{
   if(!entry){if(material.appearance.preset?.startsWith('surface-'))this.library.notify(material.appearance.preset,'Acabado desconocido: '+material.appearance.preset+'; se muestra el color de respaldo.');return null;}
   if(!entry.applications.includes(material.category)){this.library.notify(entry.id,'Acabado incompatible: '+entry.name+'; se muestra el color de respaldo.');return null;}
   const repeat=material.appearance.repeatMm||entry.repeatMm;
-  const enhanced=this.quality==='enhanced'&&!!entry.maps.normal&&!!entry.maps.roughness;
+  const family=proceduralFamily(entry.id),enhanced=this.quality==='enhanced'&&(!!entry.maps.normal&&!!entry.maps.roughness||!!family);
   const key=JSON.stringify([material.id,entry.id,repeat.x,repeat.y,enhanced]);this.used.add(key);
   if(this.cache.has(key))return this.cache.get(key).material;
   const stone=enhanced&&entry.id==='surface-marble-01';
-  const m=stone?new T.MeshPhysicalMaterial({color:material.appearance.color,roughness:entry.roughness,clearcoat:.15,clearcoatRoughness:.22}):new T.MeshStandardMaterial({color:material.appearance.color,roughness:entry.roughness});
+  const m=stone||enhanced&&family==='oak'?new T.MeshPhysicalMaterial({color:material.appearance.color,roughness:entry.roughness,clearcoat:stone ? .15 : .16,clearcoatRoughness:stone ? .22 : .30}):new T.MeshStandardMaterial({color:material.appearance.color,roughness:entry.roughness});
   if(entry.normalStrength!==undefined)m.normalScale.setScalar(entry.normalStrength);
   const record={material:m,entry,key,state:'loading',detailState:enhanced?'waiting':'off',controller:new AbortController(),textures:[],bitmaps:[]};
   this.cache.set(key,record);record.promise=this.load(record,repeat,enhanced);return m;
@@ -44,13 +44,17 @@ export class SurfaceRenderer{
   try{
    base=await this.verifiedMap(record.entry.maps.baseColor,record,repeat,false);
    if(!base)return;
-   if(enhanced&&record.entry.id==='surface-marble-01'){replaceStoneTexture(this.THREE,base,'color');record.recipe='honed-stone-v1';}
+   if(enhanced&&record.entry.id==='surface-marble-01'){
+    try{replaceStoneTexture(this.THREE,base,'color');record.recipe='honed-stone-v1';}
+    catch(error){record.detailError='Stone transfer fallback: '+error.message;}
+   }
    record.textures.push(base.texture);record.bitmaps.push(base.bitmap);
    record.material.map=base.texture;record.material.color.set(record.entry.mapTint||'#ffffff');record.material.needsUpdate=true;
    record.state='ready';record.bytes=base.bytes;record.gpuBytes=base.gpuBytes;record.loadMs=performance.now()-start;
    this.library.status.delete(record.entry.id);dispatchEvent(new Event('surface-status'));
   }catch(e){if(record.controller.signal.aborted)return;record.state='fallback';record.detailState='fallback';record.error=e.message;this.library.notify(record.entry.id,`${record.entry.name}: ${e.message}; se muestra el color de respaldo.`);return;}
   if(!enhanced)return;
+  if(proceduralFamily(record.entry.id)&&!record.entry.maps.normal){await this.procedural(record,base,repeat);return;}
   record.detailState='loading';let normal,roughness;
   try{
    normal=await this.verifiedMap(record.entry.maps.normal,record,repeat,true);
@@ -61,19 +65,37 @@ export class SurfaceRenderer{
    if(record.controller.signal.aborted)return;
    record.textures.push(normal.texture,roughness.texture);
    record.bitmaps.push(normal.bitmap,roughness.bitmap);
+   normal.owned=roughness.owned=true;
    record.material.normalMap=normal.texture;record.material.roughnessMap=roughness.texture;
    record.material.needsUpdate=true;record.detailState='ready';
    record.bytes+=normal.bytes+roughness.bytes;record.gpuBytes+=normal.gpuBytes+roughness.gpuBytes;
    record.loadMs=performance.now()-start;
+   if(proceduralFamily(record.entry.id))await this.procedural(record,base,repeat);
   }catch(e){if(record.controller.signal.aborted)return;record.detailState='fallback';record.detailError=e.message;this.library.notify(record.entry.id,`${record.entry.name}: ${e.message}; se conserva el albedo verificado.`);}
-  finally{if(record.detailState!=='ready')for(const item of [normal,roughness]){item?.texture.dispose();item?.bitmap.close();}}
+  finally{for(const item of [normal,roughness])if(item&&!item.owned){item.texture.dispose();item.bitmap.close();}if(!record.controller.signal.aborted)dispatchEvent(new Event('surface-status'));}
+ }
+ async procedural(record,base,repeat){
+  record.detailState='loading';
+  try{
+   const family=proceduralFamily(record.entry.id),bake=bakeSurface(family,meanColor(bitmapPixels(base.bitmap)),repeat);
+   const hashes=await Promise.all([bake.color,bake.normal,bake.roughness].map(async data=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)),v=>v.toString(16).padStart(2,'0')).join('')));
+   if(record.controller.signal.aborted)return;
+   const textures=recipeTextures(this.THREE,bake,repeat);
+   for(const t of record.textures)t.dispose();for(const b of record.bitmaps)b.close();
+   record.textures=textures;record.bitmaps=[];
+   [record.material.map,record.material.normalMap,record.material.roughnessMap]=textures;
+   record.material.normalScale.setScalar(1);record.material.roughness=1;record.material.needsUpdate=true;
+   record.recipe=family+'-physical-v1';record.generated={size:bake.size,textures:3,sha256:hashes};
+   record.gpuBytes=3*Math.ceil(bake.size*bake.size*4*4/3);record.detailState='ready';
+  }catch(error){if(record.controller.signal.aborted)return;record.detailState='fallback';record.detailError='Procedural fallback: '+error.message;this.library.notify(record.entry.id,record.detailError);}
+  finally{if(!record.controller.signal.aborted)dispatchEvent(new Event('surface-status'));}
  }
  end(){for(const [key,r]of this.cache)if(!this.used.has(key)){
   r.controller.abort();for(const texture of r.textures)texture.dispose();for(const bitmap of r.bitmaps)bitmap.close();r.material.dispose();
   this.history.push({id:r.entry.id,state:'disposed',quality:r.detailState});if(this.history.length>100)this.history.shift();this.cache.delete(key);
  }}
  disposeAll(){this.used.clear();this.end();}
- metrics(){return [...this.cache.values()].map(r=>({id:r.entry.id,key:r.key,state:r.state,detailState:r.detailState,bytes:r.bytes||0,gpuBytes:r.gpuBytes||0,loadMs:r.loadMs,error:r.error,detailError:r.detailError,
+ metrics(){return [...this.cache.values()].map(r=>({id:r.entry.id,key:r.key,state:r.state,detailState:r.detailState,bytes:r.bytes||0,gpuBytes:r.gpuBytes||0,loadMs:r.loadMs,error:r.error,detailError:r.detailError,recipe:r.recipe||null,generated:r.generated||null,ownedTextures:r.textures.length,ownedBitmaps:r.bitmaps.length,physical:{type:r.material.type,clearcoat:r.material.clearcoat||0,clearcoatRoughness:r.material.clearcoatRoughness||0},
   material:{color:r.material.color.getHexString(),roughness:r.material.roughness,metalness:r.material.metalness,normalScale:r.material.normalScale.toArray()},
   map:r.material.map?{repeat:r.material.map.repeat.toArray(),colorSpace:r.material.map.colorSpace}:null,
   normalMap:r.material.normalMap?{repeat:r.material.normalMap.repeat.toArray(),colorSpace:r.material.normalMap.colorSpace}:null,

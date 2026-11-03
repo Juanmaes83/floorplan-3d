@@ -14,7 +14,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  const initial=await inspect(page);await page.locator('#presentationBtn').click();assert.match(await page.locator('#presentationConfig').textContent(),/Iniciar presentación/);await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});await ready(page,'enhanced');
  const enhanced=await inspect(page),button=page.locator('#presentationMaterialQuality');assert.equal(await button.isVisible(),true);assert.equal(await button.getAttribute('aria-pressed'),'true');
- assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').material,{color:'e0e0e0',roughness:1,metalness:0,normalScale:[.65,.65]});
+ assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').material,{color:'e0e0e0',roughness:1,metalness:0,normalScale:[1,1]});
+ assert.equal(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').recipe,'oak-physical-v1');
  assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-marble-01').material,{color:'dedede',roughness:.95,metalness:0,normalScale:[.5,.5]});
  for(const metric of enhanced.metrics.filter(m=>m.detailState==='ready')){assert.deepEqual(metric.map.repeat,metric.normalMap.repeat);assert.deepEqual(metric.map.repeat,metric.roughnessMap.repeat);assert.equal(metric.map.colorSpace,'srgb');assert.equal(metric.normalMap.colorSpace,'');assert.equal(metric.roughnessMap.colorSpace,'');assert.ok(metric.bytes<=512*1024*3);}
  assert.ok(await page.locator('#stage').evaluate(e=>e.getBoundingClientRect().height)>viewport.height*.7);

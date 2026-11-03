@@ -60,6 +60,7 @@ async function present(page){
  await page.waitForFunction(({ids,q})=>{const picked=View3D.surfaceMetrics.filter(m=>ids.includes(m.id));
   return View3D.surfaceQuality===q&&picked.length===ids.length&&picked.every(m=>m.state==='ready'&&(m.detailState==='ready'||m.detailState==='off'));
  },{ids:fixture.assignments.map(a=>a.surfaceId),q:fixture.presentation.surfaceQuality},{timeout:90000});
+ await page.waitForFunction(()=>View3D.lifecycleMetrics.pendingAssets===0&&!document.querySelector('#presentationCapture').disabled,null,{timeout:90000});
  await require('./layout-fixture.cjs')(page);
 }
 async function snapshot(page,hash){
@@ -98,8 +99,8 @@ async function reproduce(label){
   const projectSha256=await setupProject(page);await present(page);const runtime=await snapshot(page,projectSha256);assertFrozen(runtime);
   assert.deepEqual(errors,[],`${label}: page/console errors`);
   const png=path.join(output,`${label}-1440x900.png`);await page.screenshot({path:png});
-  const diagnostic={sourceSha,fixtureSha,viewsSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-views.json'))),side,label,browserVersion:browser.version(),runtime,geometrySha256:digest(JSON.stringify(await page.evaluate(()=>View3D.renderedGeometry))),
-   surfaceMaterialMetrics:await page.evaluate(ids=>View3D.surfaceMetrics.filter(m=>ids.includes(m.id)).map(m=>({id:m.id,material:m.material||null,bytes:m.bytes,gpuBytes:m.gpuBytes,detailState:m.detailState})).sort((a,b)=>a.id.localeCompare(b.id)),fixture.assignments.map(a=>a.surfaceId)),
+  const diagnostic={sourceSha,fixtureSha,viewsSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-views.json'))),captureProtocolSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-capture-v2.json'))),side,label,browserVersion:browser.version(),runtime,geometrySha256:digest(JSON.stringify(await page.evaluate(()=>View3D.renderedGeometry))),
+   surfaceMaterialMetrics:await page.evaluate(ids=>View3D.surfaceMetrics.filter(m=>ids.includes(m.id)).map(m=>({id:m.id,material:m.material||null,bytes:m.bytes,gpuBytes:m.gpuBytes,detailState:m.detailState,recipe:m.recipe||null,generated:m.generated||null,physical:m.physical||null,ownedTextures:m.ownedTextures??null,ownedBitmaps:m.ownedBitmaps??null})).sort((a,b)=>a.id.localeCompare(b.id)),fixture.assignments.map(a=>a.surfaceId)),
    rendererMemory:await page.evaluate(()=>View3D.rendererMemory),
    surfaceDisposals:await page.evaluate(()=>View3D.surfaceDisposals),errors,warnings,screenshotSha256:digest(await fs.readFile(png))};
   diagnostic.closeups=[];
@@ -146,4 +147,40 @@ test(`VQ-01 CP2 ${side} reproduces four-family fixture twice`,{timeout:600000},a
  const closeupDeltas=[];for(let i=0;i<first.closeups.length;i++){const a=first.closeups[i],b=second.closeups[i];assert.deepEqual(a.pose,b.pose);const delta=await pngDelta(await fs.readFile(path.join(output,a.file)),await fs.readFile(path.join(output,b.file)));assert.ok(delta.changedPixels<=500&&delta.maxChannelDelta<=1,JSON.stringify({id:a.id,delta}));closeupDeltas.push({id:a.id,...delta});}
  assert.ok(pixelDelta.changedPixels<=500&&pixelDelta.maxChannelDelta<=1,`fresh screenshots diverge: ${JSON.stringify(pixelDelta)}`);
  await fs.writeFile(path.join(output,'ab-side-result.json'),JSON.stringify({result:'PASS',side,sourceSha,fixtureSha,projectSha256:first.runtime.projectSha256,screenshotSha256:[first.screenshotSha256,second.screenshotSha256],pixelDelta,closeupDeltas,runs:2,browserVersion:browser.version()},null,2)+'\n');
+});
+
+if(side==='B2'&&process.env.VQ01_LIFECYCLE==='1')test('CP2 recipes recreate, fall back, dispose and recover after context loss',{timeout:900000},async()=>{
+ const {context,page,errors,warnings}=await newPage(),cycles=[];
+ try{
+  const hash=await setupProject(page),saved=await page.evaluate(()=>FloorPlanApp.project);
+  const waitQuality=async quality=>{await page.waitForFunction(q=>View3D.surfaceQuality===q&&View3D.surfaceMetrics.length===4&&View3D.surfaceMetrics.every(m=>m.state==='ready'&&(q==='base'?m.detailState==='off':m.detailState==='ready')),quality,{timeout:90000});await require('./layout-fixture.cjs')(page);};
+  const measure=()=>page.evaluate(()=>({memory:View3D.rendererMemory,metrics:View3D.surfaceMetrics,pendingAssets:View3D.lifecycleMetrics.pendingAssets}));
+  for(let i=0;i<3;i++){
+   await present(page);await waitQuality('enhanced');const enhanced=await measure();
+   assert.equal(enhanced.pendingAssets,0);assert.equal(enhanced.metrics.reduce((n,m)=>n+m.ownedTextures,0),12);
+   assert.ok(enhanced.metrics.reduce((n,m)=>n+m.gpuBytes,0)<=fixture.surfaces.reduce((n,m)=>n+m.gpuBytes,0)+views.resources.maxExtraSurfaceGpuBytes);
+   if(i){assert.deepEqual(enhanced.memory,cycles[0].enhanced.memory);assert.deepEqual(enhanced.metrics.map(m=>m.generated),cycles[0].enhanced.metrics.map(m=>m.generated));}
+   await page.evaluate(()=>View3D.setSurfaceQuality('base'));await waitQuality('base');const base=await measure();
+   assert.equal(base.metrics.reduce((n,m)=>n+m.ownedTextures,0),4);assert.ok(base.metrics.every(m=>m.generated===null));
+   await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));await waitQuality('enhanced');
+   await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:30000});
+   assert.equal(digest(JSON.stringify(await page.evaluate(()=>FloorPlanApp.project))),hash);cycles.push({enhanced,base});
+  }
+  await present(page);await page.evaluate(()=>View3D.setSurfaceQuality('base'));await waitQuality('base');
+  await page.evaluate(()=>{window.__qaGetContext=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,options){if(options?.willReadFrequently)throw Error('QA recipe bake failure');return window.__qaGetContext.call(this,type,options);};View3D.setSurfaceQuality('enhanced');});
+  await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-white-plaster-02')?.detailState==='fallback',null,{timeout:90000});
+  const fallback=await measure(),plaster=fallback.metrics.find(m=>m.id==='surface-white-plaster-02');assert.ok(plaster.map);assert.equal(plaster.normalMap,null);assert.equal(plaster.ownedTextures,1);assert.match(plaster.detailError,/QA recipe bake failure/);
+  await page.evaluate(()=>{HTMLCanvasElement.prototype.getContext=window.__qaGetContext;delete window.__qaGetContext;View3D.setSurfaceQuality('base');});await waitQuality('base');
+  await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));await waitQuality('enhanced');
+  await page.evaluate(()=>document.querySelector('#view3d canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
+  await page.waitForFunction(()=>!View3D.contextAvailable&&View3D.surfaceMetrics.length===0&&View3D.lifecycleMetrics.pendingAssets===0);
+  const loss=await page.evaluate(()=>({metrics:View3D.surfaceMetrics,disposals:View3D.surfaceDisposals,pendingAssets:View3D.lifecycleMetrics.pendingAssets}));
+  // Baseline Rubik deliberately fails closed on context loss. Recovery is a page reload, not an invented live renderer restore.
+  await page.reload();await page.waitForFunction(()=>window.View3D&&window.FloorPlanPresentation&&FloorPlanSurfaces.entries.length===50);
+  if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');
+  await page.evaluate(()=>{document.querySelector('#guideDetails').click();document.querySelector('#guideAllTools').click();});
+  await page.evaluate(p=>FloorPlanApp.importProject(p),saved);await present(page);await waitQuality('enhanced');const recovered=await measure();
+  assert.deepEqual(recovered.memory,cycles[0].enhanced.memory);assert.equal(digest(JSON.stringify(await page.evaluate(()=>FloorPlanApp.project))),hash);assert.deepEqual(errors,[]);
+  await fs.writeFile(path.join(output,'lifecycle.json'),JSON.stringify({result:'PASS',cycles,fallback,loss,recovery:'reload',recovered,errors,warnings},null,2)+'\n');
+ }finally{await context.close();}
 });
