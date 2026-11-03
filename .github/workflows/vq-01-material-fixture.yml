@@ -1,0 +1,52 @@
+name: VQ-01 material A fixture
+
+on:
+  push:
+    branches: [feat/vq-01-material-fidelity-foundation]
+    paths:
+      - 'tests/fixtures/vq01-material-ab-fixture.json'
+      - 'tests/vq01-ab-fixture.browser.test.cjs'
+      - '.github/workflows/vq-01-material-fixture.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce-a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TESTED_SHA: ${{ github.sha }}
+      VQ01_ARTIFACTS: qa-results/vq01-cp1-a
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Verify exact source and fixture syntax
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check tests/vq01-ab-fixture.browser.test.cjs
+          node -e "const f=require('./tests/fixtures/vq01-material-ab-fixture.json'); if(f.baselineSha!=='0f9c6ead9732901681498efec326d1ca92e42ffe') process.exit(2)"
+      - name: Install isolated Playwright and pinned Three 0.160.0
+        run: |
+          npm install --prefix "$RUNNER_TEMP/vq01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/vq01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/vq01-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/vq01-three"
+          test -f "$RUNNER_TEMP/vq01-three/package/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules node -e 'console.log(require(\"playwright\").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Reproduce documented A fixture
+        run: node --test --test-concurrency=1 tests/vq01-ab-fixture.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vq01-cp1-a-${{ env.TESTED_SHA }}
+          path: qa-results/vq01-cp1-a/
+          if-no-files-found: error
