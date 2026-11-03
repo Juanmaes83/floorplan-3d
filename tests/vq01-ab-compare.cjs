@@ -36,7 +36,11 @@ async function pixelDelta(browser,a,b){
  assert.deepEqual(b1.runtime,a1.runtime,'A/B Project, camera, light, Presentation, UV/maps or lifecycle drift');
  assert.deepEqual(a1.rendererMemory,a2.rendererMemory);assert.deepEqual(b1.rendererMemory,b2.rendererMemory);
  assert.deepEqual(b1.rendererMemory,a1.rendererMemory,'A/B GPU memory drift');
- for(const m of [a1,a2,b1,b2]){assert.deepEqual(m.errors,[]);assert.deepEqual(m.warnings,[]);}
+ for(const m of [a1,a2,b1,b2])assert.deepEqual(m.errors,[],'page/console errors');
+ const normalizedWarnings=m=>m.warnings.map(w=>w.replace(/WebGL-0x[0-9a-f]+/g,'WebGL-ADDRESS'));
+ assert.deepEqual(normalizedWarnings(b1),normalizedWarnings(a1),'new B warnings in first context');
+ assert.deepEqual(normalizedWarnings(b2),normalizedWarnings(a2),'new B warnings in second context');
+ for(const m of [a1,a2,b1,b2])for(const warning of m.warnings)assert.match(warning,/GL Driver Message \(OpenGL, Performance, GL_CLOSE_PATH_NV, High\): GPU stall due to ReadPixels/,'unexpected WebGL/shader warning');
  assert.deepEqual(b1.surfaceDisposals,a1.surfaceDisposals,'A/B disposal history drift');
  for(const [old,newer] of a1.surfaceMaterialMetrics.map((m,i)=>[m,b1.surfaceMaterialMetrics[i]])){
   assert.equal(old.id,newer.id);assert.equal(old.bytes,newer.bytes);assert.equal(old.gpuBytes,newer.gpuBytes);assert.equal(old.detailState,newer.detailState);
@@ -57,7 +61,7 @@ async function pixelDelta(browser,a,b){
   withinSidePixelDeltaA:aResult.pixelDelta,withinSidePixelDeltaB:bResult.pixelDelta,betweenSidePixelDelta:visualDifference,
   rendererMemoryA:a1.rendererMemory,rendererMemoryB:b1.rendererMemory,
   surfaceMaterialMetricsA:a1.surfaceMaterialMetrics,surfaceMaterialMetricsB:b1.surfaceMaterialMetrics,
-  pageConsoleWebGLShaderErrors:[],warnings:[],surfaceDisposalsA:a1.surfaceDisposals,surfaceDisposalsB:b1.surfaceDisposals};
+  pageConsoleWebGLShaderErrors:[],warningsA:[a1.warnings,a2.warnings],warningsB:[b1.warnings,b2.warnings],surfaceDisposalsA:a1.surfaceDisposals,surfaceDisposalsB:b1.surfaceDisposals};
  await fs.mkdir(path.dirname(outFile),{recursive:true});await fs.writeFile(outFile,JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify({status:result.status,sourceA:result.sourceA,sourceB:result.sourceB,projectSha256:result.projectSha256,betweenSidePixelDelta:visualDifference}));
 })().catch(error=>{console.error(error);process.exitCode=1;});
