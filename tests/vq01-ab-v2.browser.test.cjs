@@ -97,7 +97,9 @@ async function reproduce(label){
   const projectSha256=await setupProject(page);await present(page);const runtime=await snapshot(page,projectSha256);assertFrozen(runtime);
   assert.deepEqual(errors,[],`${label}: page/console errors`);
   const png=path.join(output,`${label}-1440x900.png`);await page.screenshot({path:png});
-  const diagnostic={sourceSha,fixtureSha,side,label,browserVersion:browser.version(),runtime,rendererMemory:await page.evaluate(()=>View3D.rendererMemory),
+  const diagnostic={sourceSha,fixtureSha,side,label,browserVersion:browser.version(),runtime,
+   surfaceMaterialMetrics:await page.evaluate(ids=>View3D.surfaceMetrics.filter(m=>ids.includes(m.id)).map(m=>({id:m.id,material:m.material||null,bytes:m.bytes,gpuBytes:m.gpuBytes,detailState:m.detailState})).sort((a,b)=>a.id.localeCompare(b.id)),fixture.assignments.map(a=>a.surfaceId)),
+   rendererMemory:await page.evaluate(()=>View3D.rendererMemory),
    surfaceDisposals:await page.evaluate(()=>View3D.surfaceDisposals),errors,warnings,screenshotSha256:digest(await fs.readFile(png))};
   await fs.writeFile(path.join(output,`${label}-manifest.json`),JSON.stringify(diagnostic,null,2)+'\n');return diagnostic;
  }finally{await context.close();}

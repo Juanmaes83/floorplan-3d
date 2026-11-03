@@ -7,6 +7,13 @@ on:
       - 'tests/fixtures/vq01-material-ab-v2.json'
       - 'tests/fixtures/vq01-material-ab-v2-a-evidence.json'
       - 'tests/vq01-ab-v2.browser.test.cjs'
+      - 'tests/vq01-ab-compare.cjs'
+      - 'tests/surfaces.test.cjs'
+      - 'tests/material-detail.browser.test.cjs'
+      - 'assets/materials/catalog.json'
+      - 'js/surface-catalog.js'
+      - 'js/surface-renderer.mjs'
+      - 'index.html'
       - '.github/workflows/vq-01-material-ab-v2.yml'
   workflow_dispatch:
 
@@ -14,7 +21,7 @@ permissions:
   contents: read
 
 jobs:
-  reproduce-v2-a:
+  reproduce-v2-ab:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -33,6 +40,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "${{ github.sha }}"
           test "$(git -C baseline rev-parse HEAD)" = "0f9c6ead9732901681498efec326d1ca92e42ffe"
           node --check tests/vq01-ab-v2.browser.test.cjs
+          node --check tests/vq01-ab-compare.cjs
           node -e "const f=require('./tests/fixtures/vq01-material-ab-v2.json');if(f.version!==2||f.assignments.length!==4)process.exit(2)"
       - name: Install isolated browser tooling and pinned Three
         run: |
@@ -43,15 +51,30 @@ jobs:
           tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/vq01-three"
           echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(node -p "require('$RUNNER_TEMP/vq01-playwright/node_modules/playwright').chromium.executablePath()")" >> "$GITHUB_ENV"
       - name: Reproduce V2 A from exact baseline
         env:
           VQ01_APP_ROOT: ${{ github.workspace }}/baseline
           VQ01_AB_SIDE: A
           VQ01_ARTIFACTS: qa-results/vq01-cp1-c/a
         run: node --test --test-concurrency=1 tests/vq01-ab-v2.browser.test.cjs
+      - name: Reproduce V2 B from candidate
+        env:
+          VQ01_AB_SIDE: B
+          VQ01_ARTIFACTS: qa-results/vq01-cp1-c/b
+        run: node --test --test-concurrency=1 tests/vq01-ab-v2.browser.test.cjs
+      - name: Verify material contract and browser lifecycle
+        env:
+          M08_ARTIFACTS: qa-results/vq01-cp1-c/m08
+        run: |
+          node --test --test-concurrency=1 tests/surfaces.test.cjs
+          node --test --test-concurrency=1 tests/material-detail.browser.test.cjs
+          node --test --test-concurrency=1 tests/surfaces.browser.test.cjs
+      - name: Compare immutable A/B invariants and capture identities
+        run: node tests/vq01-ab-compare.cjs qa-results/vq01-cp1-c/a qa-results/vq01-cp1-c/b qa-results/vq01-cp1-c/comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: vq01-v2-a-${{ github.sha }}
-          path: qa-results/vq01-cp1-c/a/
+          name: vq01-v2-ab-${{ github.sha }}
+          path: qa-results/vq01-cp1-c/
           if-no-files-found: error
