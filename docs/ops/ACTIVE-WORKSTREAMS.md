@@ -28,7 +28,7 @@
 - **PR:** #160 Draft.
 - **Estado:** `WIP_PUSHED`.
 - **Scope de escritura:** documentación exclusivamente.
-- **Checkpoint remoto:** verificar HEAD vivo antes de integrar; esta branch contiene ya el contrato VQ-01 canónico y su reconciliación CP0.1.
+- **Checkpoint remoto:** verificar HEAD vivo antes de integrar; esta branch contiene el contrato VQ-01 canónico y handoffs CP0.1/CP1-A.
 - **Siguiente acción:** mantener al día ACTIVE-WORKSTREAMS, handoffs y autoridades operativas según checkpoints reales; no mezclar código de producto.
 - **Concurrencia:** no escribir en worktrees de Hybrid ni VQ-01.
 - **Merge:** no autorizado; `pushed`/`reviewed` no equivale a permiso de merge.
@@ -52,23 +52,26 @@
 
 - **ID:** `vq-01-material-fidelity-foundation`.
 - **Objetivo:** establecer una única foundation Rubik de fidelidad material mediante mecanismos seleccionados de CL-STONE-01, CS-STONE-01 y LT-STONE-01, sin crear sistemas donor paralelos.
-- **Baseline funcional:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- **Baseline funcional / A:** `master@0f9c6ead9732901681498efec326d1ca92e42ffe`.
 - **Branch:** `feat/vq-01-material-fidelity-foundation`.
 - **Worktree local autorizado:** `C:\Users\temp123\floorplan-3d-vq-01`.
-- **Owner operativo:** Codex como único writer técnico del workstream; ChatGPT como supervisor/arquitectura; Juanma como gate visual/producto.
-- **Remote product checkpoint actual:** `0f9c6ead9732901681498efec326d1ca92e42ffe`; todavía no contiene cambios VQ.
-- **Estado:** `READY_FOR_CP1`.
-- **CP0:** preflight read-only completado; su handoff histórico permanece en `docs/ops/handoffs/vq-01-material-fidelity-foundation-cp0-2026-11-03.md`.
-- **CP0.1:** blocker-closure completado. Proof records reconciliados; nuevos bytes Casa Serra deferred por provenance; normal convention tratada asset-specific; browser baseline restaurado/establecido; ownership `SAFE_BOUNDED`; Lintel procedural y reveal deferred; producto/worktree quedó limpio y sin commit.
-- **Contrato exacto autorizado:** `docs/product/vq-01-material-fidelity-foundation-contract-2026-11-03.md` — **CANONICAL IMPLEMENTATION CONTRACT V1 — READY_FOR_CP1 — MERGE NOT AUTHORIZED**.
-- **Handoff actual:** `docs/ops/handoffs/vq-01-material-fidelity-foundation-cp0-1-2026-11-03.md`.
-- **Primer slice:** `STONE/MARBLE`, `TIMBER/WOOD`, `PLASTER/CONCRETE`, `GLASS/METAL`; Rubik mantiene Project/Surface/Render authorities.
-- **Aceptado para CP1:** no new CS asset copy; normals asset-specific; AO unbound; `ARM.B=UNKNOWN` y nunca metalness; SurfaceRenderer owner de nuevos recursos VQ de superficies; no refactor global de caches; no Three upgrade; Hybrid read-only; no `onBeforeCompile`.
-- **No canonizado aún:** tiers globales `BASE/PBR1K/HIGH/DELIVERY`, relajación general 512px/512KiB, blanket 1K/2K, KTX2, framework general de canales opcionales, AO binding, full cache refactor, nuevos assets CS por inferencia.
-- **Siguiente acción exacta:** `CP1-A`: durabilizar en la branch VQ el fixture A/B ya demostrado por CP0.1 y reproducir A exacto antes de cualquier mutación visual. Sólo si no hay drift, continuar a CP1-B/CP1-C dentro del contrato.
-- **Gate siguiente:** `READY_FOR_HUMAN_AB`; Juanma emite `PASS / FAIL / INCONCLUSIVE` sobre A=`master@0f9c6ead...` vs B=misma vivienda/geometry/camera/light/environment/viewport + cambios materiales CP1.
+- **Owner operativo:** Codex como único writer técnico al reanudar; ChatGPT como supervisor/arquitectura; Juanma como gate visual/producto.
+- **Remote product checkpoint actual:** `f1c6da4e76dc016a7b8ce23b4353b32741c563c5`.
+- **Estado:** `CP1_A_COMPLETE / CP1_B_AUTHORIZED`.
+- **Contrato exacto:** `docs/product/vq-01-material-fidelity-foundation-contract-2026-11-03.md` — **CANONICAL IMPLEMENTATION CONTRACT V1 — READY_FOR_CP1 — MERGE NOT AUTHORIZED**.
+- **Handoff actual:** `docs/ops/handoffs/vq-01-material-fidelity-foundation-cp1-a-2026-11-03.md`.
+- **CP0/CP0.1:** cerrados; no rehacer.
+- **CP1-A:** PASS. Fixture A durabilizado en `tests/fixtures/vq01-material-ab-fixture.json`; browser guard en `tests/vq01-ab-fixture.browser.test.cjs`; workflow aislado `.github/workflows/vq-01-material-fixture.yml`.
+- **Identidad A bloqueada:** Project SHA-256 `9e0cf855bbc37576351f40aa109aebe253d4cb92ec620510b33975fdf61d0946`; oak → floor room[0], marble → floor room[1]; Presentation overview / Vista 1 de 2; viewport/stage/canvas `1440×900`, DPR 1; cámara/luz/options/material metrics/bindings fijados en fixture.
+- **QA CP1-A:** GitHub Actions run `41632402356` SUCCESS en `f1c6da4e...`; A1 y A2 reproducciones fresh-context; runtime JSON idénticos SHA-256 `6ca18718f584ee7bd415c7f42ff83a1c610de7df7f45498f1066ce996be5ef5a`; screenshots idénticos SHA-256 `f6749f6db8443167d9eb886e86a3b2e8643154e4ec0f81e4c23a203c18a48bbe`; no page/console errors; pendingAssets=0.
+- **Diff CP1-A:** sólo fixture/test/workflow; ningún source product JS/index/assets/Hybrid modificado.
+- **Primer slice CP1-B:** `STONE/MARBLE`, `TIMBER/WOOD`, `PLASTER/CONCRETE`, `GLASS/METAL`; Rubik mantiene Project/Surface/Render authorities.
+- **Aceptado:** no new CS asset copy; normals asset-specific; AO unbound; `ARM.B=UNKNOWN` y nunca metalness; SurfaceRenderer owner de nuevos recursos VQ de superficies; no refactor global de caches; no Three upgrade; Hybrid read-only; no `onBeforeCompile`.
+- **No canonizado:** tiers globales `BASE/PBR1K/HIGH/DELIVERY`, relajación general 512px/512KiB, blanket 1K/2K, KTX2, framework general de canales opcionales, AO binding, full cache refactor, nuevos assets CS por inferencia.
+- **Siguiente acción exacta:** Codex debe primero reconciliar su worktree local con `origin/feat/vq-01-material-fidelity-foundation@f1c6da4e...` sin destruir trabajo local desconocido; después ejecutar **CP1-B bounded material implementation**, preservar A inmutable, ejecutar CP1-C y detenerse en `READY_FOR_HUMAN_AB`.
+- **Gate siguiente:** `READY_FOR_HUMAN_AB`; Juanma emite `PASS / FAIL / INCONCLUSIVE` sobre A vs B bajo el fixture idéntico.
 - **Concurrencia:** ningún otro agente escribe en esta branch/worktree mientras Codex sea writer. Hybrid y stones son sólo lectura salvo misión separada explícita.
-- **Merge:** NO autorizado. `READY_FOR_CP1` autoriza implementación acotada, no merge ni CP2.
+- **Merge:** NO autorizado. No CP2. Si CP1-B requiere una opción no canonizada, `CONTRACT_DELTA_REQUIRED` y stop.
 
 ## Cómo añadir un workstream
 
