@@ -27,3 +27,30 @@ synthetic wall + projecting slab + pier and one shadow-casting directional light
 where lit and hatched where the shadow map says shade; the reveal exists; two cameras with different pose and FOV see the
 same world points on the same side of the boundary (registered, not screen space); returning to the same uniforms gives
 identical pixels (reverse, no accumulation). 7/7 checks.
+
+## Phases C/D — SCULPT + RUBIKIZE (what survives)
+
+`js/presentation-elevation-hybrid.js` carries the full MIT notice in its header. Surviving donor-derived parts, each
+rewritten for Rubik inputs:
+
+- `lineAt` / `lineFade` → `hybridLineAt` / `hybridLineFade` (unchanged maths).
+- shade = 1 − `getShadowMask()` · smoothstep(−0.02, 0.06, N·sun) (unchanged maths); `sun` is now the direction of Rubik's
+  own directional light (solar snapshot included), never a donor convention.
+- `revealAt` sweep smoothstep and the diagonal direction (√½, −√½), now in façade-local metres (centre/tangent/normal of
+  `FloorPlanPresentationElevation`), threshold from Story `materialReveal`.
+- `frontBand` laser + halo (grid removed), accent = Rubik.
+- paper composite after `dithering_fragment`; paper / ink colours (0xf2efe7 / 0x1d1c19).
+- ink contours: `EdgesGeometry(geo, 25°)` → `LineSegmentsGeometry.fromEdgesGeometry` → `LineSegments2` + `LineMaterial`
+  (width in CSS px × DPR) with visibility cut by the same sweep — the donor `add()`/`lineMat()` mechanism, applied to the
+  target meshes' own geometry (no second model). Requires three@0.160.0 line addons, vendored through
+  `scripts/vendor-three.cjs` (official package, MIT; existing vendored files unchanged).
+
+Removed in sculpture: material kinds (brick/zinc/wood…), height/normal perturbation, porch AO, drafting animation
+(`uDraw`, `vT0`), hatch/detail wipes, noise, discard modes, depth cue, `uReal`, `realLines`, all donor geometry, camera
+keys, sun angles, copy and data.
+
+## Phase E — CLEAN
+
+The stone (`js/vendor/donor-elevation-stone.mjs`) and its proof harness (`scripts/qa/hybrid-elevation-stone-proof.cjs`)
+were removed from the tree after the integrated visual QA; both remain in history at `6a646a3` for differential
+diagnosis (STONE → SCULPT → RUBIK). No production code loads donor URLs or runtime.

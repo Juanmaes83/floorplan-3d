@@ -29,12 +29,14 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
    await p.waitForFunction(()=>window.FloorPlanSurfaces?.entries?.length>0,null,{timeout:60000});
    await p.evaluate(()=>{const E=FloorPlanPresentationElevation,d=E.derive({levels:[{levelId:null,project,geometry}]}),c=d.candidates.find(x=>x.id===d.defaultId),entry=FloorPlanSurfaces.get('surface-oak-wood-planks');
     for(const r of c.wallRefs)project=FloorPlanSurfaces.apply(project,entry,{kind:'wall',id:r.wallId});refreshProject();renderAll();window.View3D?.refreshSurfaces();});zip=null;}
-  if(quality)await p.evaluate(q=>View3D.setSurfaceQuality(q),quality).catch(()=>{});
   if(zip){const [c]=await Promise.all([p.waitForEvent('filechooser'),p.locator('#welcomeUpload').click()]);await c.setFiles(zip);await p.waitForFunction(()=>FloorPlanBuildingUI?.context?.levels>1,null,{timeout:60000});}
   else if(!oak)await p.locator('#welcomeExample').click();
   await p.waitForTimeout(1000);await p.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await p.locator('#presentationConfig[open]').waitFor();
   await p.locator('#presentationElevationOption').check();if(hybrid)await p.locator('#presentationElevationHybrid').check();
   const s=p.getByRole('button',{name:'Iniciar presentación'});await s.scrollIntoViewIfNeeded();await s.click();await settled(p);
+  // surface quality through the Presentation's own control («Material: básico ↔ detalle»), then wait for the rebuild
+  if(quality){if(await p.evaluate(()=>View3D.surfaceQuality)!==quality)await p.evaluate(()=>document.querySelector('#presentationMaterialQuality').click());
+   await p.waitForFunction(q=>View3D.surfaceQuality===q,quality,{timeout:30000});await settled(p);}
   await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='elevation-open'||View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:180000});
   // normal motion autoplays the scene (and closes it at the end): take the slider at once — every state is then set
   // from it (absolute p) and the scene stays open
@@ -67,8 +69,11 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   const [,size]=scenario.split(':'),[W,H]=size.split('x').map(Number),vdir=path.join(out,`real-${size}`);await fs.mkdir(vdir,{recursive:true});
   const {p,ctx}=await page({width:W,height:H},{reduced:false,video:vdir});await setup(p,{zip:null});
   await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing,null,{timeout:180000});await at(p,0);await p.waitForTimeout(500);
-  const t0=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await p.waitForFunction(()=>(View3D.presentationStoryInfo?.p??0)>=.999||!FloorPlanPresentation.story,null,{timeout:180000});const forwardMs=Date.now()-t0;
-  await at(p,52);await p.waitForTimeout(400);const t1=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlan').click());await p.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:180000});const reverseMs=Date.now()-t1;await p.waitForTimeout(800);
+  const t0=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await p.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:180000});const forwardMs=Date.now()-t0;
+  // the scene closes at p = 1: back to the overview stop, reopen the scene, hold it mid-sweep, then play it back for real
+  await p.locator('.presentation-stops button').first().click();await settled(p);
+  await p.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await p.waitForFunction(()=>View3D.presentationStoryInfo?.kind==='elevation-open',null,{timeout:60000});await at(p,52);
+  await p.waitForFunction(()=>!FloorPlanPresentation.story?.playing);await p.waitForTimeout(600);const t1=Date.now();await p.evaluate(()=>document.querySelector('#presentationStoryPlan').click());await p.waitForFunction(()=>!FloorPlanPresentation.story,null,{timeout:180000});const reverseMs=Date.now()-t1;await p.waitForTimeout(800);
   const video=p.video();await ctx.close();const file=await video.path();
   manifest.push({headSha:head,dirtyWorktree:dirty,chromium:chromiumInfo,scenario,viewport:{width:W,height:H},forwardMs,reverseMs,output:file});
  }else if(scenario==='shots'){
