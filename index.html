@@ -4745,9 +4745,11 @@ let elevationHybridLast=null;
 function presentationHybridInspect(){
   const h=storyRun?.elevation?.hybrid||null,ids=m=>(Array.isArray(m)?m:[m]).map(x=>x?.uuid),targets=new Set(h?h.records.map(r=>r.mesh):[]);
   let foreign=0,glassHybrid=0,hybridMeshes=0;const bindings={};
-  scene?.traverse(o=>{if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];const hy=ms.some(m=>m?.userData?.hybridPresentation);if(hy)hybridMeshes++;if(hy&&!targets.has(o))foreign++;if(ms.some(m=>m?.userData?.hybridPresentation&&(m.transparent||m.opacity<1)))glassHybrid++;bindings[o.uuid]=ms.map(m=>m?.uuid).join(',');});
+  let contourNodes=0;
+  // Hybrid-owned contour objects (LineSegments2 is a Mesh subclass) are counted apart: they are not Rubik meshes.
+  scene?.traverse(o=>{if(o.userData?.hybridPresentation){contourNodes++;return;}if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];const hy=ms.some(m=>m?.userData?.hybridPresentation);if(hy)hybridMeshes++;if(hy&&!targets.has(o))foreign++;if(ms.some(m=>m?.userData?.hybridPresentation&&(m.transparent||m.opacity<1)))glassHybrid++;bindings[o.uuid]=ms.map(m=>m?.uuid).join(',');});
   return {active:!!h,swapped:!!h?.swapped,records:h?h.records.map(r=>({mesh:r.mesh.uuid,kind:r.kind,current:ids(r.mesh.material),original:ids(r.original),hybrid:ids(r.hybrid),wallId:r.mesh.userData.wallId??null})):[],
-    foreign,glassHybrid,hybridMeshes,bindings,glassTouched:glassMat?(h?[...h.clones.keys()].includes(glassMat):false):null,programs:renderer?.info.programs?.length??null,geometries:renderer?.info.memory.geometries??null,textures:renderer?.info.memory.textures??null};
+    foreign,glassHybrid,hybridMeshes,contourNodes,bindings,glassTouched:glassMat?(h?[...h.clones.keys()].includes(glassMat):false):null,programs:renderer?.info.programs?.length??null,geometries:renderer?.info.memory.geometries??null,textures:renderer?.info.memory.textures??null};
 }
 function elevationHybridRoots(){const A=levelContext?.activeLevelId??null;return [{object:archUp,levelId:A},...(levelsG?levelsG.children.filter(g=>g.userData.levelId!==undefined).map(g=>({object:g,levelId:g.userData.levelId})):[])];}
 // Towards Rubik's directional light (the light that casts the shadow map the hatch reads; a solar snapshot moves it).

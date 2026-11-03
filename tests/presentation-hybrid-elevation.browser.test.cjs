@@ -48,7 +48,7 @@ test('on: real façade targets, registered reveal, exact original materials back
  await scrub(page,35);let i=await info(page),x=await inspect(page);
  assert.equal(i.phase,'front');assert.equal(i.hybrid.supported,true);assert.ok(i.hybrid.walls>0,'façade walls mapped');assert.equal(i.hybrid.state.technicalMix,1);assert.equal(i.hybrid.state.materialReveal,0);
  assert.match(i.caption,/Lectura técnica/);assert.match(i.caption,/Elevación híbrida/);
- assert.equal(x.swapped,true);assert.equal(x.foreign,0,'only targets carry presentation materials');assert.equal(x.glassHybrid,0,'glass keeps its own material');assert.equal(x.glassTouched,false);
+ assert.equal(x.swapped,true);assert.equal(x.foreign,0,'only targets carry presentation materials');assert.ok(x.contourNodes>0,'ink contours present (same target geometry)');assert.equal(x.glassHybrid,0,'glass keeps its own material');assert.equal(x.glassTouched,false);
  for(const r of x.records){assert.deepEqual(r.current,r.hybrid);assert.equal(r.original.join(','),pre[r.mesh],'original = material before the scene');}
  assert.deepEqual(nonTargets(x.bindings,x.records),nonTargets(pre,x.records),'every other mesh keeps its material');
  const ids=new Set(x.records.filter(r=>r.wallId).map(r=>r.wallId));const cand=await page.evaluate(()=>View3D.presentationStoryInfo.elevation);assert.ok(cand.walls>=ids.size);
@@ -60,10 +60,10 @@ test('on: real façade targets, registered reveal, exact original materials back
  await scrub(page,86);i=await info(page);assert.equal(i.phase,'exterior');assert.equal((await inspect(page)).swapped,false);
  await scrub(page,100);assert.equal((await inspect(page)).swapped,false);
  for(const v of [56,48]){await scrub(page,v);}i=await info(page);assert.equal(JSON.stringify(i.hybrid.state),mid,'reverse gives the same state');assert.equal((await inspect(page)).swapped,true);
- await scrub(page,0);x=await inspect(page);assert.equal(x.swapped,false);assert.deepEqual(x.bindings,pre,'p = 0: every mesh has its exact material');
+ await scrub(page,0);x=await inspect(page);assert.equal(x.swapped,false);assert.equal(x.contourNodes,x.records.length,'contours stay attached to their targets, hidden');assert.deepEqual(x.bindings,pre,'p = 0: every mesh has its exact material');
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(600);
  const last=await page.evaluate(()=>View3D.presentationHybridLast);assert.equal(last.created,last.disposed,'every presentation clone disposed');assert.equal(last.targets,0);
- assert.equal((await page.evaluate(()=>View3D.presentationElevationResidue)).hybridMaterials,0);
+ assert.equal((await page.evaluate(()=>View3D.presentationElevationResidue)).hybridMaterials,0);assert.equal((await inspect(page)).contourNodes,0,'no contour node left after the scene');
  const after=await snapshot(page);assert.equal(after.project,before.project,'project JSON identical');assert.deepEqual(after.storage,[]);assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
  await page.screenshot({path:path.join(QA,'restored-1440x900.png')});
 });
@@ -78,7 +78,7 @@ test('five lifecycles begin → seek → reverse → seek → end: no growth, cl
   await page.evaluate(()=>document.querySelector('#presentationStoryPlan').click());await page.waitForFunction(()=>!FloorPlanPresentation.story&&!View3D.presentationStoryInfo?.active,null,{timeout:60000});await frames(page);
   metrics.push(await page.evaluate(()=>({last:View3D.presentationHybridLast,i:View3D.presentationHybridInspect(),mem:View3D.rendererMemory,programs:View3D.rendererPrograms})));
  }
- for(const m of metrics){assert.equal(m.last.created,m.last.disposed);assert.equal(m.i.hybridMeshes,0);}
+ for(const m of metrics){assert.equal(m.last.created,m.last.disposed);assert.equal(m.i.hybridMeshes,0);assert.equal(m.i.contourNodes,0);assert.equal(m.last.edgesCreated,m.last.edgesDisposed,'edge geometries disposed');assert.equal(m.last.lineMaterialDisposed,true);}
  const P=metrics.map(m=>m.programs),G=metrics.map(m=>m.mem.geometries),T=metrics.map(m=>m.mem.textures);
  assert.ok(P.at(-1)<=P[1],`programs bounded ${P}`);assert.ok(G.at(-1)<=G[1],`geometries bounded ${G}`);assert.ok(T.at(-1)<=T[1],`textures bounded ${T}`);
  await fs.writeFile(path.join(QA,'five-cycles.json'),JSON.stringify(metrics.map(m=>({created:m.last.created,disposed:m.last.disposed,programs:m.programs,mem:m.mem})),null,1));
