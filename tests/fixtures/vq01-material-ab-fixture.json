@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "status": "cp1-a-probe",
+  "authority": "VQ-01 Material Fidelity Foundation canonical contract V1",
+  "baselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "expectedProjectSha256": "9e0cf855bbc37576351f40aa109aebe253d4cb92ec620510b33975fdf61d0946",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "deviceScaleFactor": 1
+  },
+  "expectedCanvas": {
+    "width": 884,
+    "height": 498
+  },
+  "presentation": {
+    "startMode": "default",
+    "stopIndex": 0,
+    "surfaceQuality": "enhanced"
+  },
+  "candidateAssignments": [
+    {
+      "id": "oak-marble",
+      "assignments": [
+        {"surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0},
+        {"surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1}
+      ]
+    },
+    {
+      "id": "oak-marble-concrete",
+      "assignments": [
+        {"surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0},
+        {"surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1},
+        {"surfaceId": "surface-brushed-concrete", "kind": "floor", "targetIndex": 2}
+      ]
+    },
+    {
+      "id": "oak-marble-plaster",
+      "assignments": [
+        {"surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0},
+        {"surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1},
+        {"surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 0}
+      ]
+    },
+    {
+      "id": "oak-marble-concrete-plaster",
+      "assignments": [
+        {"surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0},
+        {"surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1},
+        {"surfaceId": "surface-brushed-concrete", "kind": "floor", "targetIndex": 2},
+        {"surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 0}
+      ]
+    }
+  ]
+}
