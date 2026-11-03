@@ -1,6 +1,6 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.master.v1",
-  "status": "READY_FOR_GLOBAL_VALIDATOR",
+  "status": "VALIDATED_COMPLETE",
   "auditId": "donor-runtime-7x14-2026-11-02",
   "rubikBaselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
   "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
@@ -469,5 +469,12 @@
       "blockingUnresolved": 0,
       "nonBlockingUnresolved": 2
     }
-  ]
+  ],
+  "globalValidator": {
+    "result": "PASS",
+    "gates": 18,
+    "references": 14,
+    "perTakeHardGates": 294,
+    "validatedAt": "2026-11-03T11:07:40.923Z"
+  }
 }

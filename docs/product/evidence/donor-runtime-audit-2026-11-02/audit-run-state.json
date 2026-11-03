@@ -1,12 +1,12 @@
 {
   "schemaVersion": "rubik-donor-runtime-audit.run-state.v1",
   "baseSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
-  "phase": "RUNTIME_AUDIT",
+  "phase": "GLOBAL_VALIDATED",
   "auditBranch": "audit/donor-runtime-7x14-2026-11-02",
   "worktree": "C:\\Users\\temp123\\floorplan-3d-donor-runtime-audit-2026-11-02",
   "rawFolder": "C:\\Users\\temp123\\donor-runtime-audit-RAW-2026-11-02",
   "createdAt": "2026-11-02T10:33:06.640Z",
-  "updatedAt": "2026-11-02T20:13:16.882Z",
+  "updatedAt": "2026-11-03T11:07:40.934Z",
   "takes": {
     "01-a-the-board": {
       "captureStatus": "COMPLETE",

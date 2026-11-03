@@ -250,7 +250,19 @@ async function main() {
   for (const [gate, ok] of Object.entries(globalGates)) say(ok ? 'PASS' : 'FAIL', gate);
   const full = prep.pass && Object.values(globalGates).every(Boolean);
   say(full ? 'PASS' : 'FAIL', 'GLOBAL', `${Object.values(globalGates).filter(Boolean).length}/18 global gates; ${passed}/294 take gates; blocking ${unresolved.items.filter(x => x.severity === 'BLOCKING').length}; production diff ${productionDiff().length}`);
-  if (full) console.log('AUDIT 14/14 COMPLETE');
+  if (full) {
+    if (master.status !== 'VALIDATED_COMPLETE') {
+      master.status = 'VALIDATED_COMPLETE';
+      master.globalValidator = { result: 'PASS', gates: 18, references: 14, perTakeHardGates: 294, validatedAt: new Date().toISOString() };
+      await writeFile(path.join(evidence, 'master-manifest.json'), JSON.stringify(master, null, 2) + '\n');
+    }
+    if (state.phase !== 'GLOBAL_VALIDATED') {
+      state.phase = 'GLOBAL_VALIDATED';
+      state.updatedAt = new Date().toISOString();
+      await writeFile(path.join(evidence, 'audit-run-state.json'), JSON.stringify(state, null, 2) + '\n');
+    }
+    console.log('AUDIT 14/14 COMPLETE');
+  }
   else process.exitCode = 1;
 }
 main().catch(e => { console.error('VALIDATOR ERROR:', e.message); process.exitCode = 1; });
