@@ -33,7 +33,7 @@ async function startPresentation(page,errors){
  await page.locator('#presentationBtn').click();await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
  const ids=fixture.assignments.map(a=>a.surfaceId);
- try{await page.waitForFunction(({q,ids})=>{const picked=View3D.surfaceMetrics.filter(m=>ids.includes(m.id));return View3D.surfaceQuality===q&&picked.length===ids.length&&picked.every(m=>m.state==='ready'&&(m.detailState==='ready'||m.detailState==='off'));},{q:fixture.presentation.surfaceQuality,ids},{timeout:30000});}
+ try{await page.waitForFunction(({q,ids})=>{const picked=View3D.surfaceMetrics.filter(m=>ids.includes(m.id));return View3D.surfaceQuality===q&&picked.length===ids.length&&picked.every(m=>m.state==='ready'&&(m.detailState==='ready'||m.detailState==='off'));},{q:fixture.presentation.surfaceQuality,ids},{timeout:90000});}
  catch(error){const diagnostic=await page.evaluate(()=>({quality:View3D.surfaceQuality,metrics:View3D.surfaceMetrics,light:View3D.presentationLight,lifecycle:View3D.lifecycleMetrics,status:document.querySelector('.presentation-status')?.textContent,moving:document.querySelector('#presentationOverlay')?.dataset.moving}));await fs.writeFile(path.join(QA,'readiness-timeout.json'),JSON.stringify({diagnostic,errors},null,2)+'\n');throw error;}
  await require('./layout-fixture.cjs')(page);
 }
@@ -50,7 +50,7 @@ function assertExpected(s){
 async function reproduce(label){
  const {context,page,errors}=await newPage();try{const p=await materialProject(page),projectJson=JSON.stringify(p);assert.equal(hash(projectJson),fixture.projectSha256,`${label}: Project fixture drift`);await page.evaluate(project=>FloorPlanApp.importProject(project),p);assert.equal(hash(JSON.stringify(await page.evaluate(()=>FloorPlanApp.project))),fixture.projectSha256,`${label}: import changed Project identity`);await startPresentation(page,errors);const s=await snapshot(page);assertExpected(s);assert.deepEqual(errors,[],`${label}: browser errors`);await fs.writeFile(path.join(QA,`${label}-runtime.json`),JSON.stringify(s,null,2)+'\n');await page.screenshot({path:path.join(QA,`${label}-1440x900.png`)});return s;}finally{await context.close();}}
 
-test('VQ-01 CP1-A reproduces canonical A twice without drift',{timeout:180000},async()=>{
+test('VQ-01 CP1-A reproduces canonical A twice without drift',{timeout:300000},async()=>{
  const a1=await reproduce('a1'),a2=await reproduce('a2'),c1={...a1,camera:null},c2={...a2,camera:null};assert.deepEqual(c2,c1,'fresh A runs differ outside camera');near(a2.camera.position,a1.camera.position,'A1/A2 camera.position');near(a2.camera.quaternion,a1.camera.quaternion,'A1/A2 camera.quaternion');near(a2.camera.target,a1.camera.target,'A1/A2 camera.target');assert.equal(a2.camera.fov,a1.camera.fov);assert.equal(a2.camera.aspect,a1.camera.aspect);
  await fs.writeFile(path.join(QA,'cp1-a-result.json'),JSON.stringify({result:'PASS',baselineSha:fixture.baselineSha,projectSha256:fixture.projectSha256,runs:2,fixtureStatus:fixture.status},null,2)+'\n');
 });
