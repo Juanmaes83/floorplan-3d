@@ -111,3 +111,22 @@ for(const [w,h] of [[390,844],[844,390]])test(`phone ${w}×${h}: technical, mid 
  assert.ok(await page.locator('#presentationStoryPlay').isVisible());assert.ok(await page.locator('#presentationStorySlider').isVisible());
  assert.deepEqual(errors,[]);
 });
+test('real Presentation PNG (1280, view aspect) of the technical state: ink set for the output buffer, interactive line state restored, valid PNG with contours, no residue',async t=>{
+ const {page,errors,external}=await open(t,{width:1440,height:900});const before=await snapshot(page);await configure(page);await play(page);await scrub(page,35);
+ const pre=await page.evaluate(()=>({h:View3D.presentationStoryInfo.elevation.hybrid,x:View3D.presentationHybridInspect()}));
+ assert.equal(pre.h.fatLines,true);assert.equal(pre.x.swapped,true);
+ const out=await page.evaluate(()=>{const r=View3D.shot({size:'1280',aspect:'view',download:false});return {width:r.width,height:r.height,mode:r.mode,head:r.dataUrl.slice(0,22),len:r.dataUrl.length,dataUrl:r.dataUrl};});
+ assert.equal(out.mode!=='view',true);assert.equal(out.width,1280);assert.equal(out.head,'data:image/png;base64,');
+ const post=await page.evaluate(()=>({h:View3D.presentationStoryInfo.elevation.hybrid,x:View3D.presentationHybridInspect()}));
+ assert.deepEqual(post.h.lastOutput,{resolution:[out.width,out.height],linewidth:1},'ink width/resolution set for the 1280 output buffer (pixel ratio 1)');
+ assert.deepEqual(post.h.lineResolution,pre.h.lineResolution,'interactive line resolution restored');assert.equal(post.h.lineWidthPx,pre.h.lineWidthPx,'interactive line width restored');
+ assert.equal(post.x.swapped,true);assert.equal(post.x.foreign,0);assert.equal(post.x.contourNodes,pre.x.contourNodes);
+ const ink=await page.evaluate(async u=>{const img=new Image();img.src=u;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const g=c.getContext('2d');g.drawImage(img,0,0);const d=g.getImageData(0,0,c.width,c.height).data;let n=0;for(let i=0;i<d.length;i+=4)if(d[i]<70&&d[i+1]<70&&d[i+2]<70)n++;return {n,w:img.width,h:img.height};},out.dataUrl);
+ assert.equal(ink.w,1280);assert.ok(ink.n>2000,`ink present in the PNG (${ink.n} dark px)`);
+ await fs.writeFile(path.join(QA,'png-1280-technical.png'),Buffer.from(out.dataUrl.split(',')[1],'base64'));
+ await scrub(page,45);const m02=await page.evaluate(()=>View3D.shot({size:'1280',aspect:'view',download:false}).dataUrl);await fs.writeFile(path.join(QA,'png-1280-m02.png'),Buffer.from(m02.split(',')[1],'base64'));
+ await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(600);
+ assert.equal((await inspect(page)).contourNodes,0);assert.equal((await page.evaluate(()=>View3D.presentationElevationResidue)).hybridMaterials,0);
+ const last=await page.evaluate(()=>View3D.presentationHybridLast);assert.equal(last.created,last.disposed);assert.equal(last.edgesCreated,last.edgesDisposed);
+ assert.equal((await snapshot(page)).project,before.project);assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+});

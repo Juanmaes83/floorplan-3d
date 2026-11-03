@@ -4203,7 +4203,7 @@ function loop(){
   updateSel();
   syncCeilingFixtures(camera);
   syncRoofVisibility();
-  if(storyRun?.elevation?.hybrid?.swapped)storyRun.elevation.hybrid.sync();
+  if(storyRun?.elevation?.hybrid?.swapped){const h=storyRun.elevation.hybrid;h.sync();const b=renderer.getDrawingBufferSize(hybridBuf);h.setResolution(b.x,b.y);}
   renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 }
@@ -4235,17 +4235,18 @@ function shot(opts = {}){
   else {
     const {width:w, height:h} = size, gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
     // "Contain" framing: everything visible in the working view stays visible; the other axis gains margin, never stretched.
+    let hybridOut=null; // Hybrid ink contours follow the capture buffer while it renders (restored in finally)
     const cam = camera.clone(), work = camera.aspect, aspect = w/h;
     cam.aspect = aspect;
     if (aspect < work) cam.fov = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*work/aspect)*180/Math.PI;
     cam.updateProjectionMatrix();
     try {
-      renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);hybridOut=storyRun?.elevation?.hybrid?.forOutput(w,h,1);
       if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
       renderer.render(scene, cam);
       url = territoryFooter(renderer.domElement.toDataURL('image/png'),territoryRenderer?FloorPlanTerritoryExportPolicy.attributions(territoryRenderer.group.children.filter(o=>o.visible).flatMap(o=>o.userData.territoryPolicies||[])):[]);
     } finally {
-      renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false);
+      hybridOut?.();renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false);
       renderer.render(scene, camera);
     }
   }
@@ -4290,16 +4291,16 @@ function deliveryShot({width, height, margin = .03, frame = true} = {}){
 }
 function renderDelivery(cam, w, h, corners){
   const gl = renderer.getContext(), prevRatio = renderer.getPixelRatio(), prev = renderer.getSize(new THREE.Vector2());
-  let url, fill = null;const territoryCapture=territoryRenderer?.capture();
+  let url, fill = null,hybridOut=null;const territoryCapture=territoryRenderer?.capture();
   try {
-    renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);
+    renderer.setPixelRatio(1); renderer.setSize(w, h, false); syncCeilingFixtures(cam);hybridOut=storyRun?.elevation?.hybrid?.forOutput(w,h,1);
     if (gl.drawingBufferWidth !== w || gl.drawingBufferHeight !== h) throw Error(tr('浏览器无法生成该截图尺寸，请选择更小的尺寸。', 'This browser cannot create that capture size; choose a smaller one.') + ` (${w} × ${h} px)`);
     renderer.render(scene, cam);
     url = territoryFooter(renderer.domElement.toDataURL('image/png'),territoryRenderer?FloorPlanTerritoryExportPolicy.attributions(territoryRenderer.group.children.filter(o=>o.visible).flatMap(o=>o.userData.territoryPolicies||[])):[]);
     if (corners){ let a = Infinity, b = -Infinity, c = Infinity, d = -Infinity; for (const k of corners){ const p = k.clone().project(cam); a = Math.min(a, p.x); b = Math.max(b, p.x); c = Math.min(c, p.y); d = Math.max(d, p.y); }
       fill = {x:(Math.min(b, 1) - Math.max(a, -1))/2, y:(Math.min(d, 1) - Math.max(c, -1))/2}; }
   } finally {
-    renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false); syncCeilingFixtures(camera);territoryCapture?.restore();
+    hybridOut?.();renderer.setPixelRatio(prevRatio); renderer.setSize(prev.x, prev.y, false); syncCeilingFixtures(camera);territoryCapture?.restore();
     renderer.render(scene, camera);
   }
   return {width:w, height:h, dataUrl:url, fill,attribution:territoryCapture?.attribution||[]};
@@ -4739,7 +4740,7 @@ function beginElevation(spec){
 }
 /* Hybrid targets: the active level (archUp, its walls and opening groups) and the level groups of levelsG (their own
    levelId). Identity only: wallId on wall meshes, openingId on opening groups (set at build time from geometry ids). */
-let elevationHybridLast=null;
+let elevationHybridLast=null;const hybridBuf=new THREE.Vector2();
 // Read-only inspection for tests: which meshes carry which material now, and whether anything outside the targets or any
 // glass carries a presentation material. Never changes the scene.
 function presentationHybridInspect(){

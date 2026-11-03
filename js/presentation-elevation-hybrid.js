@@ -227,6 +227,10 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   // h: the Story's hybrid state at p (plain data); sunNow: Rubik's current light direction (solar snapshot included).
   ctl.fatLines=fat;
   ctl.setResolution=(w,h)=>{if(fat&&w>0&&h>0)lineMat.resolution.set(w,h);};
+  // Off-screen output (PNG capture / delivery image at its own size and pixel ratio 1): the ink is set for that buffer
+  // and the returned function puts back exactly the interactive resolution and width.
+  ctl.forOutput=(w,h,pixelRatio=1)=>{if(!fat)return ()=>{};const res=lineMat.resolution.clone(),lw=lineMat.linewidth;
+   lineMat.resolution.set(w,h);lineMat.linewidth=HYBRID.lineCssPx*Math.max(1,pixelRatio);ctl.lastOutput={resolution:[w,h],linewidth:lineMat.linewidth};return ()=>{lineMat.resolution.copy(res);lineMat.linewidth=lw;};};
   ctl.apply=(h,sunNow)=>{
    ctl.state=h?{...h}:null;const on=!!h&&h.active;
    if(sunNow&&sunNow.every(Number.isFinite))U.uHybridSun.value.set(...sunNow).normalize();
@@ -235,7 +239,7 @@ float hybridReveal(vec3 l){return 1.0-smoothstep(uHybridSweep.z-uHybridSweep.w,u
   };
   ctl.end=()=>{ctl.swap(false);for(const r of records)r.mesh.material=r.original;records.length=0;unline();for(const c of clones.values()){c.dispose();ctl.disposed++;}clones.clear();
    for(const g of edges.values()){g.dispose();ctl.edgesDisposed++;}ctl.edgesCreated=ctl.edgesCreated||0;edges.clear();lineMat.dispose();ctl.lineMaterialDisposed=true;ctl.state=null;};
-  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,fatLines:fat,lineWidthPx:fat?lineMat.linewidth:1,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
+  ctl.info=()=>({targets:records.length,walls:records.filter(r=>r.kind==='wall').length,openings:records.filter(r=>r.kind==='opening').length,clones:clones.size,lines:lines.length,fatLines:fat,lineWidthPx:fat?lineMat.linewidth:1,lineResolution:fat?lineMat.resolution.toArray():null,lastOutput:ctl.lastOutput||null,edgeGeometries:edges.size,edgesCreated:ctl.edgesCreated||0,edgesDisposed:ctl.edgesDisposed,lineMaterialDisposed:ctl.lineMaterialDisposed,swapped:ctl.swapped,created:ctl.created,disposed:ctl.disposed,syncs:ctl.syncs,
    maps:[...clones].map(([src,c])=>({source:src.uuid,map:!!src.map,normalMap:!!src.normalMap,roughnessMap:!!src.roughnessMap,sameMap:c.map===src.map,sameNormal:c.normalMap===src.normalMap,sameRoughness:c.roughnessMap===src.roughnessMap})),
    state:ctl.state&&{...ctl.state},uniforms:{tech:U.uHybridTech.value,hatch:U.uHybridHatch.value,sweepZ:U.uHybridSweep.value.z,sweepSoft:U.uHybridSweep.value.w,period:U.uHybridPeriod.value,sun:U.uHybridSun.value.toArray()},
    frame:{...frame,center:[...frame.center],tangent:[...frame.tangent],normal:[...frame.normal]}});
