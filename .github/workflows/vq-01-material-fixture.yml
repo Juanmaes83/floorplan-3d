@@ -41,7 +41,6 @@ jobs:
           test -f "$RUNNER_TEMP/vq01-three/package/build/three.module.js"
           echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
           echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
-          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules node -e 'console.log(require(\"playwright\").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Reproduce documented A fixture
         run: node --test --test-concurrency=1 tests/vq01-ab-fixture.browser.test.cjs
       - uses: actions/upload-artifact@v4
