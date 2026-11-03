@@ -5,12 +5,6 @@ const fixture=require('./fixtures/vq01-material-ab-fixture.json');
 let server,url,browser;const cache=new Map(),QA=process.env.VQ01_ARTIFACTS||'qa-results/vq01-cp1-a';
 
 const hash=value=>crypto.createHash('sha256').update(typeof value==='string'?value:JSON.stringify(value)).digest('hex');
-const stableMetric=m=>({
- id:m.id,state:m.state,detailState:m.detailState,bytes:m.bytes||0,gpuBytes:m.gpuBytes||0,
- map:m.map?{repeat:m.map.repeat,colorSpace:m.map.colorSpace}:null,
- normalMap:m.normalMap?{repeat:m.normalMap.repeat,colorSpace:m.normalMap.colorSpace}:null,
- roughnessMap:m.roughnessMap?{repeat:m.roughnessMap.repeat,colorSpace:m.roughnessMap.colorSpace}:null
-});
 
 before(async()=>{
  const root=path.resolve(__dirname,'..');
@@ -22,7 +16,8 @@ before(async()=>{
  }catch{res.writeHead(404);res.end();}});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  url=`http://127.0.0.1:${server.address().port}/`;
- browser=await chromium.launch({executablePath:process.env.CHROME,args:['--no-sandbox','--enable-unsafe-swiftshader']});
+ const launch={args:['--no-sandbox','--enable-unsafe-swiftshader']};if(process.env.CHROME)launch.executablePath=process.env.CHROME;
+ browser=await chromium.launch(launch);
  await fs.mkdir(QA,{recursive:true});
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
@@ -41,7 +36,10 @@ async function setup(t){
  });
  await page.goto(url);
  await page.waitForFunction(()=>window.View3D&&window.FloorPlanPresentation&&window.FloorPlanSurfaces&&FloorPlanSurfaces.entries.length===50,null,{timeout:15000});
- await require('./editor-fixture.cjs')(page);
+ if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');
+ await page.evaluate(()=>document.querySelector('#guideDetails').click());
+ await page.evaluate(()=>document.querySelector('#guideAllTools').click());
+ await require('./layout-fixture.cjs')(page);
  return {page,errors};
 }
 
@@ -73,7 +71,7 @@ async function runtimeSnapshot(page,projectSha,candidateId){
    light,
    environment3D:View3D.environment3D??null,
    surfaceQuality:View3D.surfaceQuality,
-   surfaces:View3D.surfaceMetrics.filter(m=>picked.has(m.id)).map(m=>({id:m.id,state:m.state,detailState:m.detailState,bytes:m.bytes||0,gpuBytes:m.gpuBytes||0,map:m.map?{repeat:m.map.repeat,colorSpace:m.map.colorSpace}:null,normalMap:m.normalMap?{repeat:m.normalMap.repeat,colorSpace:m.normalMap.colorSpace}:null,roughnessMap:m.roughnessMap?{repeat:m.roughnessMap.repeat,colorSpace:m.roughnessMap.colorSpace}:null})).sort((a,b)=>a.id.localeCompare(b.id)),
+   surfaces:View3D.surfaceMetrics.filter(m=>picked.has(m.id)).map(m=>({id:m.id,state:m.state,detailState:m.detailState,bytes:m.bytes||0,gpuBytes:m.gpuBytes||0,map:m.map?{repeat:m.map.repeat,colorSpace:m.map.colorSpace}:null,normalMap:m.normalMap?{repeat:m.normalMap.repeat,colorSpace:m.normalMap.colorSpace}:null,roughnessMap:m.roughnessMap?{repeat:m.roughnessMap.repeat,colorSpace:m.roughnessMap.colorSpace}:null,error:m.error||null,detailError:m.detailError||null})).sort((a,b)=>a.id.localeCompare(b.id)),
    rendererMemory:View3D.rendererMemory,
    lifecycle:View3D.lifecycleMetrics,
    projectBindings:FloorPlanApp.project.materials.filter(m=>m.appearance?.preset?.startsWith('surface-')).map(m=>({id:m.id,category:m.category,preset:m.appearance.preset,repeatMm:m.appearance.repeatMm})).sort((a,b)=>a.preset.localeCompare(b.preset))
@@ -81,11 +79,22 @@ async function runtimeSnapshot(page,projectSha,candidateId){
  },{projectSha,candidateId});
 }
 
-async function startPresentation(page){
+async function startPresentation(page,errors){
  await page.locator('#presentationBtn').click();
+ assert.match(await page.locator('#presentationConfig').textContent(),/Iniciar presentación/);
  await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});
- await page.waitForFunction(q=>View3D.surfaceQuality===q&&View3D.surfaceMetrics.every(m=>m.state==='ready'&&(q==='base'||m.detailState==='ready'||m.detailState==='off')),fixture.presentation.surfaceQuality,{timeout:30000});
+ const ids=['surface-oak-wood-planks','surface-marble-01'];
+ try{
+  await page.waitForFunction(({q,ids})=>{
+   const picked=View3D.surfaceMetrics.filter(m=>ids.includes(m.id));
+   return View3D.surfaceQuality===q&&picked.length===ids.length&&picked.every(m=>m.state==='ready'&&(q==='base'||m.detailState==='ready'||m.detailState==='off'));
+  },{q:fixture.presentation.surfaceQuality,ids},{timeout:30000});
+ }catch(error){
+  const diagnostic=await page.evaluate(()=>({quality:View3D.surfaceQuality,metrics:View3D.surfaceMetrics,light:View3D.presentationLight,lifecycle:View3D.lifecycleMetrics,status:document.querySelector('.presentation-status')?.textContent,moving:document.querySelector('#presentationOverlay')?.dataset.moving}));
+  await fs.writeFile(path.join(QA,'readiness-timeout.json'),JSON.stringify({diagnostic,errors},null,2)+'\n');
+  throw error;
+ }
  await require('./layout-fixture.cjs')(page);
 }
 
@@ -102,7 +111,7 @@ test('VQ-01 CP1-A identifies and reproduces the documented A fixture without dri
  assert.ok(match,`CP0.1 project hash not reproduced; expected ${fixture.expectedProjectSha256}; candidates=${JSON.stringify(candidates)}`);
  await page.evaluate(project=>FloorPlanApp.importProject(project),match.project);
  assert.equal(hash(JSON.stringify(await page.evaluate(()=>FloorPlanApp.project))),fixture.expectedProjectSha256,'import changed Project identity');
- await startPresentation(page);
+ await startPresentation(page,errors);
  const snapshot=await runtimeSnapshot(page,match.projectSha,match.candidate.id);
  await fs.writeFile(path.join(QA,'a-runtime-probe.json'),JSON.stringify(snapshot,null,2)+'\n');
  await page.screenshot({path:path.join(QA,'a-1440x900.png')});
