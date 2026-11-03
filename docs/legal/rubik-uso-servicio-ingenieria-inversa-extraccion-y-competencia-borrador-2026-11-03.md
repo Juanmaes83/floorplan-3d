@@ -70,3 +70,42 @@ Cuando existan indicios razonables de uso contrario a estas condiciones, Rubik p
 - **No autoriza ni incentiva extracción de terceros:** la política de Rubik para investigación externa sigue exigiendo cumplimiento de licencias, derechos y términos aplicables.
 - **No es consejo jurídico definitivo ni garantía de exigibilidad.**
 - **No se publicará como términos efectivos ni se hará merge automáticamente.**
+
+## E. Decision record y punto de reanudación (2026-11-03)
+
+**Decisión de producto del responsable:** `APPROVED_FOR_DURABLE_DOCUMENTATION`. Incorporar el objetivo de proteger a Rubik frente a ingeniería inversa no autorizada, extracción automatizada y replicación competitiva basada en apropiación de código, activos o información protegidos.
+
+**Importante — separación de gates:**
+- **Aprobado ahora:** guardar y mantener en el repositorio la propuesta legal, su alcance y los pendientes.
+- **No aprobado todavía:** considerar esta redacción revisada por abogado, hacerla vinculante para clientes, publicarla como términos oficiales, activar sanciones automáticas, cambiar licencias existentes o fusionar el PR.
+- **No es una prohibición general de competencia ni de estudio legítimo:** siguen aplicando los derechos imperativos de interoperabilidad y los demás límites legales.
+- **No copiar los términos de Maket:** redacción propia, cuya eficacia se revisará conforme al contrato, jurisdicción y modo de prestación de Rubik.
+
+**Identidad durable del trabajo:**
+- Repositorio: `Juanmaes83/floorplan-3d`
+- Base de la propuesta: `master@0f9c6ead9732901681498efec326d1ca92e42ffe`
+- Rama: `docs/legal-rubik-proteccion-extraccion-2026-11-03`
+- PR en borrador: https://github.com/Juanmaes83/floorplan-3d/pull/161
+- Primer commit del borrador: `0c88c4b289187e757f8ddf8e1cc87801611d7387`
+- Estado de referencia: `DRAFT_LEGAL_REVIEW / NOT_EFFECTIVE / MERGE_NOT_AUTHORIZED`
+
+**Checklist pendiente cuando se retome este expediente:**
+- [ ] Determinar quién es el prestador legal de Rubik y para qué productos se aplican los términos (SaaS, API, B2B, contratos a medida, código disponible públicamente).
+- [ ] Obtener revisión jurídica específica para España/UE; ajustar prohibiciones y excepciones imperativas.
+- [ ] Alinear con licencias abiertas, derechos del cliente sobre sus proyectos, privacidad y derechos de exportación.
+- [ ] Preparar términos completos, vigencia, política de cambios y mecanismo verificable de aceptación.
+- [ ] Revisar si hacen falta controles técnicos independientes de antiabuso, rate limiting y seguridad de API, con contratos y pruebas propios.
+- [ ] Obtener aprobación final expresa antes de publicar o fusionar; no confundir una redacción depositada en GitHub con protección contractual activa.
+
+**Punto exacto para volver al brainstorming, por separado de este expediente legal:**
+
+El programa `RUBIK CAPABILITY DISCOVERY` está en **investigación, no en implementación autorizada**. Los cuatro frentes registrados en conversación son:
+
+1. **NeonPlan3D + REA:** auditoría focalizada de mecanismos 2D/3D, render bajo demanda, GPU, importación y mobiliario, aprovechando el código open source MIT y sin transplante integral.
+2. **Maket:** benchmark funcional/UX a partir de información autorizada y pública; no extracción no autorizada de código propietario ni suposiciones sobre backend/modelos.
+3. **image-to-3d-pipeline + img2threejs:** spike aislado foto → activo 3D con evaluación, licencias, provenance y calidad; sin prometer precisión a partir de una sola imagen.
+4. **Rubik API + catálogo F3:** el producto ya cuenta con `api/render.js`, `js/asset-loader.mjs`, `js/asset-catalog.js` y `FloorPlanProjectV1`; la integración futura será un servicio/adapter sobre estas autoridades, no un segundo core.
+
+**Reglas de separación:** Codex sigue con VQ-01/CP2 en su propio worktree; `Hybrid@07ae6f9969cae9df746443e97410e40cee2e932a` congelado y sin tocar; `master` sin cambios derivados de este PR; ningún brainstorming abre por sí solo nueva cantera VQ ni autoriza un merge.
+
+**Siguiente conversación deseada:** retomar desde la matrix de oportunidades y elegir un primer piloto acotado (por ejemplo, foto → activo GLB validado por F3), sólo después de comparar el gap con el Rubik que ya existe. No iniciar cambios de producto basándose exclusivamente en esta nota.
