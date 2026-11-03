@@ -1,0 +1,57 @@
+name: VQ-01 material A/B V2
+
+on:
+  push:
+    branches: [feat/vq-01-material-fidelity-foundation]
+    paths:
+      - 'tests/fixtures/vq01-material-ab-v2.json'
+      - 'tests/fixtures/vq01-material-ab-v2-a-evidence.json'
+      - 'tests/vq01-ab-v2.browser.test.cjs'
+      - '.github/workflows/vq-01-material-ab-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce-v2-a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          ref: 0f9c6ead9732901681498efec326d1ca92e42ffe
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Verify source and fixture
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git -C baseline rev-parse HEAD)" = "0f9c6ead9732901681498efec326d1ca92e42ffe"
+          node --check tests/vq01-ab-v2.browser.test.cjs
+          node -e "const f=require('./tests/fixtures/vq01-material-ab-v2.json');if(f.version!==2||f.assignments.length!==4)process.exit(2)"
+      - name: Install isolated browser tooling and pinned Three
+        run: |
+          npm install --prefix "$RUNNER_TEMP/vq01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/vq01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/vq01-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/vq01-three"
+          echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
+      - name: Reproduce V2 A from exact baseline
+        env:
+          VQ01_APP_ROOT: ${{ github.workspace }}/baseline
+          VQ01_AB_SIDE: A
+          VQ01_ARTIFACTS: qa-results/vq01-cp1-c/a
+        run: node --test --test-concurrency=1 tests/vq01-ab-v2.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vq01-v2-a-${{ github.sha }}
+          path: qa-results/vq01-cp1-c/a/
+          if-no-files-found: error
