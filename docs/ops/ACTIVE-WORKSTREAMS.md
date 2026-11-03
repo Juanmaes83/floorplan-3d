@@ -1,6 +1,6 @@
 # Rubik — Active Workstreams
 
-**Actualizado:** 2026-11-02.  
+**Actualizado:** 2026-11-03.  
 **Propósito:** índice operativo compartido entre cuentas/agentes.  
 **Regla:** este archivo indica ownership y checkpoint; no sustituye contratos, QA ni run-state específicos.
 
@@ -9,34 +9,61 @@
 - **ID:** `donor-runtime-audit-7x14`
 - **Objetivo:** auditar 7 grupos / 14 referencias donor mediante recorrido A→B→A, vídeo/telemetry/screenshots, source/Cuts/Rubik reconciliation y manifests; **sin implementación de producto**.
 - **Baseline Rubik aprobado:** `master@0f9c6ead9732901681498efec326d1ca92e42ffe`.
-- **Owner operativo actual:** Codex Terminal, cuenta/sesión que inició la misión el 2026-11-02.
-- **Estado:** `RUNNING_RESUMED` — la sesión agotó temporalmente créditos, después recuperó disponibilidad y el usuario confirmó el 2026-11-02 que volvió a ejecutar la misión. No se ha comunicado un defecto bloqueante del repo.
-- **Branch local:** verificar desde la Terminal al cerrar el primer checkpoint; la misión recomendó `audit/donor-runtime-7x14-2026-11-02`.
-- **Remote checkpoint:** **NO LOCALIZADO en GitHub en la última comprobación documental previa a la reanudación**. No asumir que sigue ausente cuando termine Codex: comprobar remoto/branch/SHA a partir de su informe final.
-- **Riesgo actual:** mientras no exista un checkpoint remoto confirmado, el trabajo local no es todavía transferible con autoridad a otra cuenta/agente.
-- **Siguiente acción segura:** dejar trabajar la sesión activa. En el primer punto coherente de checkpoint/cierre: inventariar estado local → commit → push → registrar branch + SHA remoto + handoff. No reiniciar la auditoría desde cero y no interrumpir el worktree mientras Codex esté trabajando.
-- **Concurrencia:** ninguna otra cuenta/Claude debe escribir sobre el mismo worktree local sin checkpoint/handoff. Sí puede hacer revisión de sólo lectura de `master` y documentación ya remota.
-- **Autoridades de la misión:** Cuts/Atlas/Global Donor Reconciliation + Audit Pack/run-state creado por la misión cuando esté disponible.
-- **Merge:** no autorizado por la misión de auditoría.
+- **Owner final:** Codex Terminal.
+- **Estado:** `CLOSED`.
+- **Branch:** `audit/donor-runtime-7x14-2026-11-02`.
+- **Remote checkpoint final:** `5b818cf96d3b16c5a2a4352f3e14d70da4bc2a59`.
+- **Cierre:** 14/14 referencias; 294/294 take gates; 18/18 global gates; producción vs baseline funcional sin diff; 0 blockers sin resolver.
+- **Siguiente acción segura:** no reiniciar la auditoría salvo evidencia nueva contradictoria. Usar su evidencia y `post-audit-operating-authority-2026-11-02.md` para bridges posteriores.
+- **Concurrencia:** cerrado; no reutilizar su branch como workstream de implementación.
+- **Merge:** no aplica como feature de producto; branch de evidencia/auditoría.
 
 ## WS-002 — Documentation reconciliation + multi-agent operations
 
 - **ID:** `documentation-reconciliation-multi-agent-ops`
-- **Objetivo:** documentar protocolo multiagente, reconciliar el estado documental tras FT3D-5/FT3D-6 y registrar comprensión/evidencia suplementaria del producto/donor sin interferir con WS-001.
+- **Objetivo:** mantener documentación operativa/canónica, protocolo multiagente y reconciliar estado después de FT3D-5/6, cierre del audit y nuevos bridges sin interferir con branches de producto.
 - **Baseline funcional:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
-- **Owner:** ChatGPT, sesión de revisión documental del 2026-11-02.
+- **Owner:** ChatGPT, revisión/supervisión documental.
 - **Branch:** `docs/multi-agent-ops-status-2026-11-02`.
 - **PR:** #160 Draft.
-- **Estado:** `WIP_PUSHED / REVIEWED_WITH_TWO_SAFE_INSERTIONS_PENDING`.
+- **Estado:** `WIP_PUSHED`.
 - **Scope de escritura:** documentación exclusivamente.
-- **Checkpoint remoto:** rama/PR remotos; HEAD documental tras la última ampliación visual/domain: `fc22224ca62f3486d5cdab63a0af557ea67a8d50` antes de esta actualización operativa; verificar siempre el HEAD vivo de #160 antes de integrar.
-- **Revisión sustantiva:** aprobada; corregida la distinción entre `master` vivo y baseline funcional de producto, endurecidas autoridad de workstreams + frescura de run-state, y auditadas las autoridades previas antes de ampliar principios de experiencia/construcción.
-- **Documentación de arquitectura/evidencia añadida:** mapa Project→Experience→Delivery, inventario actual de Delivery, política donor→Rubik, principios de Presentation, manifest visual y addendum de dominio construction/programme. El addendum complementa FT3D-8 + D16–D18; no crea una fase/schema nuevo.
-- **Correcciones históricas aplicadas:** avisos `SUPERSEDED` en `current-status-2026-10-30.md` y `roadmap-completion-matrix-2026-10-30.md`, conservando su cuerpo histórico.
-- **Pendiente seguro:** insertar un puntero en `docs/ROADMAP.md` y una nota post-merge en `docs/qa/ft3d-6-implementation-2026-11-01.md`. El conector disponible sólo reemplaza archivos completos; no reconstruir manualmente esos dos documentos largos para una inserción pequeña. Aplicar con edición local/patch seguro antes de merge.
-- **Siguiente acción:** esperar el resultado de WS-001 para reconciliar su evidencia con estas autoridades; en paralelo, cuando sea oportuno, aplicar las dos inserciones históricas seguras y volver a revisar diff/HEAD/checks antes de decidir merge de #160.
-- **Concurrencia:** no tocar la rama/worktree del donor runtime audit.
-- **Merge:** no autorizado todavía; `pushed`/`reviewed` no equivale a permiso de merge.
+- **Checkpoint remoto actual al iniciar esta actualización:** `10764965b56a88bb9329bfba0e3aa22601416974`; verificar HEAD vivo antes de integrar.
+- **Siguiente acción:** mantener al día ACTIVE-WORKSTREAMS, handoffs y autoridades operativas según checkpoints reales; no mezclar código de producto.
+- **Concurrencia:** no escribir en worktrees de Hybrid ni VQ-01.
+- **Merge:** no autorizado; `pushed`/`reviewed` no equivale a permiso de merge.
+
+## WS-003 — Hybrid Registered Elevation V1
+
+- **ID:** `hybrid-registered-elevation-v1`.
+- **Objetivo:** representación híbrida registrada técnica→material para alzado/fachada usando autoridades Rubik existentes.
+- **Baseline:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- **Branch:** `feat/hybrid-registered-elevation-v1`.
+- **Owner de implementación:** Claude Code durante el workstream; actualmente sin escritura autorizada.
+- **Estado:** `READY_FOR_REVIEW_TECHNICALLY / HUMAN_VISUAL_NOT_APPROVED`.
+- **Remote checkpoint congelado:** `07ae6f9969cae9df746443e97410e40cee2e932a`.
+- **QA técnico reportado:** F11 corregido; suites dirigidas PASS; lifecycle/GPU sin crecimiento observado; Project schema inalterado; Surface/Story authorities preservadas.
+- **Gate pendiente:** revisión visual humana posterior sobre una base de materialidad mejorada; no continuar embellecimiento en esta branch ahora.
+- **Siguiente acción:** mantener congelado mientras VQ-01 establece la foundation de materialidad; más adelante revisar adaptación/rebase e integración visual.
+- **Concurrencia:** VQ-01 puede inspeccionar Hybrid en sólo lectura para collision analysis; no escribir ni cherry-pick/merge desde Hybrid sin autorización.
+- **Merge:** NO autorizado.
+
+## WS-004 — VQ-01 Material Fidelity Foundation
+
+- **ID:** `vq-01-material-fidelity-foundation`.
+- **Objetivo:** establecer una única foundation Rubik de fidelidad material mediante mecanismos seleccionados de CL-STONE-01, CS-STONE-01 y LT-STONE-01, sin crear sistemas donor paralelos.
+- **Baseline funcional:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- **Branch:** `feat/vq-01-material-fidelity-foundation`.
+- **Worktree local autorizado:** `C:\Users\temp123\floorplan-3d-vq-01`.
+- **Owner operativo:** Codex como writer técnico del workstream; ChatGPT como supervisor/arquitectura; Juanma como gate visual/producto.
+- **Remote checkpoint actual:** `0f9c6ead9732901681498efec326d1ca92e42ffe`.
+- **Estado:** `BLOCKED_AFTER_CP0`.
+- **CP0:** read-only architecture/collision/transplant preflight completado; no cambios de producto, commits ni merges. Informe final: `BLOCKED`.
+- **Hallazgos principales:** Rubik conserva autoridad de surface identity/binding; SurfaceRenderer + caches legacy requieren consolidación cuidadosa; policy histórica PBR 512px/2-candidates/Casa-Serra-only necesita decisión; CS asset provenance y normal convention no están cerrados; LT procedural timber/plaster sigue acoplado a shader/room/geometry; Hybrid presenta colisión alta con futuros `onBeforeCompile`; browser baseline no ejecutó por dependencia Playwright ausente en ese checkout.
+- **Decisiones supervisoras tras CP0:** first slice sin registered reveal ni shader procedural Lintel; mantener luz/environment/post/cámara/geometría congelados; no usar ARM.B; AO permanece sin binding; VQ entra por autoridad Rubik existente; no convertir CP1 en refactor total de todos los caches legacy; Playwright se tratará como tooling restaurable, no defecto de producto.
+- **Siguiente acción exacta:** `CP0.1 blocker closure` antes de CP1: reconciliar proof records; demostrar provenance de assets exactos propuestos; resolver normal convention/flip behavior; restaurar browser QA environment; formalizar nueva policy PBR; aislar/deferir mecanismos LT procedurales; redactar contrato durable VQ-01 y revisar gate.
+- **Concurrencia:** ningún otro agente debe escribir en esta branch/worktree mientras Codex sea owner. Hybrid y quarry stones sólo lectura salvo misión separada explícita.
+- **Merge:** NO autorizado; `remote checkpoint != approved`.
 
 ## Cómo añadir un workstream
 
