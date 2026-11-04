@@ -4,8 +4,8 @@
    - BLOB_READ_WRITE_TOKEN (Vercel Blob) never reaches the browser.
    - The same access code as the AI render (RUBIK_RENDER_TOKEN) is required, so the public URL of Rubik cannot be used
      to store files in the owner's account.
-   - Anyone with the link can open it: it is read-only, carries no editable project, and the owner removes it from the
-     Vercel Blob dashboard. Vercel limits a function request to 4.5 MB, so files are capped at 4 MB. */
+   - Anyone with the link can open it: it is read-only, carries no editable project, and the owner removes it from
+     Rubik («Retirar», /api/unshare) or from the Vercel Blob dashboard. Vercel limits a function request to 4.5 MB, so files are capped at 4 MB. */
 'use strict';
 const LIMIT=4*1024*1024;
 // delivery (Delivery 3D V1): the read-only client 3D snapshot (FloorPlanDelivery contract), validated here before storing.

@@ -12,7 +12,7 @@
  'use strict';
  const SCHEMA='rubik-sota.client-delivery',VERSION=1,MAX_BYTES=4*1024*1024,MAX_HERO=900*1024,MAX_LOGO=120*1024;
  const PROJECT_KEEP=['schema','schemaVersion','id','name','createdAt','updatedAt','units','coordinateSystem','scale','defaults','walls','openings','rooms','materials','objects','roofParapet'];
- const PROJECT_DROPPED=['sourceImages','measurements','app','extensions','site (except north)'];
+ const PROJECT_DROPPED=['sourceImages (only a bare reference named by the scale stays)','measurements','app','extensions','site (except north)'];
  const BUILDING_KEEP=['schema','schemaVersion','id','name','createdAt','updatedAt','units','stairs'];
  const LEVEL_KEEP=['id','name','order','elevationMm','slabThicknessMm','offsetMm'];
  const finite=v=>typeof v==='number'&&Number.isFinite(v);
@@ -21,9 +21,18 @@
  // North only: orientation is a fact of the model; location/parcel/orthophoto/terrain would expose an address and make the
  // client's browser call external providers.
  const siteOf=s=>s&&finite(s.northOffsetDeg)?{northOffsetDeg:s.northOffsetDeg}:undefined;
+ // Scale: a «real» scale is only valid with its calibration, and the calibration names the source plan image. The delivery
+ // keeps the scale as it is (pixel points and lengths, no personal data) and, for each image the scale names, a bare
+ // reference: id, type and size. Never the image, its file name, its storage path or its hash; never visible.
+ const IMAGE_REF_KEYS=['id','mediaType','widthPx','heightPx','storage','visible'];
+ function imageRefsOf(p){
+  const ids=new Set([p.scale?.calibration?.sourceImageId,p.scale?.verification?.sourceImageId].filter(Boolean));
+  return (p.sourceImages||[]).filter(i=>ids.has(i.id)).map(i=>({id:i.id,mediaType:i.mediaType,widthPx:i.widthPx,heightPx:i.heightPx,storage:{kind:'local-browser'},visible:false}));
+ }
  function sanitizeProject(p){
   if(!p||typeof p!=='object')throw Error('delivery: project missing');
   const out=pick(p,PROJECT_KEEP),site=siteOf(p.site);if(site)out.site=site;
+  const refs=imageRefsOf(p);if(refs.length)out.sourceImages=refs;
   return out;
  }
  function sanitizeBuilding(b){
@@ -71,8 +80,9 @@
   if(!!c.project===!!c.building)fail('content');
   const projects=c.building?(Array.isArray(c.building.levels)?c.building.levels.map(l=>l.project):fail('levels')):[c.project];
   for(const p of projects){if(!p||!Array.isArray(p.walls)||!Array.isArray(p.rooms))fail('project');
-   for(const k of Object.keys(p))if(!PROJECT_KEEP.includes(k)&&k!=='site')fail('field '+k);
-   if(p.site&&Object.keys(p.site).some(k=>k!=='northOffsetDeg'))fail('site');}
+   if(p.site&&Object.keys(p.site).some(k=>k!=='northOffsetDeg'))fail('site');
+   for(const k of Object.keys(p))if(!PROJECT_KEEP.includes(k)&&k!=='site'&&k!=='sourceImages')fail('field '+k);
+   if(p.sourceImages!==undefined&&(!Array.isArray(p.sourceImages)||p.sourceImages.length>2||p.sourceImages.some(i=>!i||Object.keys(i).some(k=>!IMAGE_REF_KEYS.includes(k))||i.visible!==false||JSON.stringify(i.storage)!=='{"kind":"local-browser"}')))fail('sourceImages');}
   const sc=s.presentation?.sidecars;if(!Array.isArray(sc))fail('presentation');
   for(const x of sc)if(!x||typeof x.projectId!=='string'||!Array.isArray(x.roomIds)||x.roomIds.some(id=>typeof id!=='string'))fail('sidecar');
   return s;
