@@ -1,8 +1,8 @@
 # Rubik VQ-01 / CP2 — cierre de CI y evaluación visual responsable
 
 **Fecha de verificación:** 2026-11-04.  
-**Naturaleza:** `DOCS_ONLY / TECHNICAL_PASS / HUMAN_VISUAL_PENDING`.  
-**No constituye autorización de merge a master, ni PASS visual firmado por Juanma.**
+**Naturaleza:** `DOCS_ONLY / TECHNICAL_PASS / HUMAN_VISUAL_PARTIAL_ACCEPT_FOUNDATION`.  
+**Decisión posterior del propietario, 2026-11-04:** [`VISUAL_PARTIAL_ACCEPT_FOUNDATION`](./vq01-cp2-human-visual-partial-acceptance-2026-11-04.md). Conserva B2 como fundación material y traslada brechas visuales a Visual Families; **no autoriza merge a master ni declara un PASS visual total**.
 
 ## 1. Fuente congelada, ejecución definitiva y evidencias
 
@@ -27,7 +27,7 @@
 5. Ejecuta `tests/vq01-cp2-compare.cjs` para comparar `A0→B2` y `B1→B2`.
 6. Publica el artifact QA (`vq01-cp2-894607b38fa43a5e89a9f5296a41cdbcc989d5ce`, ~64.7 MB ZIP comprimido en el artefacto descargado).
 
-**Estado real del comparador** (`review/comparison.json`): `status=READY_FOR_HUMAN_AB_CP2`, `visualVerdict=PENDING_JUANMA`. El comparador no asigna puntuación a B1/B2: conserva sólo `A0=100` como base conceptual. La mejora perceptiva de +30% era una aspiración humana, NO un resultado medido.
+**Estado histórico del comparador** (`review/comparison.json`): `status=READY_FOR_HUMAN_AB_CP2`, `visualVerdict=PENDING_JUANMA` — se generó antes del veredicto humano. **Decisión humana posterior registrada en la [acta de aceptación parcial](./vq01-cp2-human-visual-partial-acceptance-2026-11-04.md): `VISUAL_PARTIAL_ACCEPT_FOUNDATION`**. No reescribir el artifact histórico. El comparador no asigna puntuación a B1/B2: conserva sólo `A0=100` como base conceptual. La mejora perceptiva de +30% era una aspiración humana, NO un resultado medido.
 
 ### Contenido comprobado del archivo definitivo
 
@@ -74,12 +74,13 @@ Las observaciones se basan en las capturas oficiales A0/B1/B2 del artifact 13310
 
 **No faltan:** reabrir las tres piedras, generar A0/B1/B2, resolver M08, lanzar CI, reproducir manifests, ejecutar comparador, revisar los límites GPU ni producir ZIP técnico. Todo eso ya está realizado con el SHA indicado.
 
-**Sí falta decisión humana y de producto:**
+**Decisión humana registrada, no pendiente:** el propietario eligió el 2026-11-04 [`VISUAL_PARTIAL_ACCEPT_FOUNDATION`](./vq01-cp2-human-visual-partial-acceptance-2026-11-04.md). Preservar B2 y derivar los defectos residuales a familias visuales. **No inventar el score B2≈130 ni declarar que toda VQ está finalizada.**
 
-1. Juanma evalúa B2 frente a A0/B1 por madera, piedra, yeso, hormigón, vidrio y GLOBAL; asigna score o verdict explícito. Nunca inventar `B2≈130`.
-2. Elegir `VISUAL_PASS_CP2`, `VISUAL_PARTIAL_ACCEPT_FOUNDATION` o `VISUAL_NON_PASS`. En caso de aprobación parcial, preservar el mecanismo técnico B2 y trasladar gaps a nuevas familias; **no declarar el VQ completo finalizado**.
-3. [PR #165, B2→`master`](https://github.com/Juanmaes83/floorplan-3d/pull/165) **ya preparado como borrador** (no fusionado), para evitar a Astra la preparación del PR; necesita revisión y decisión humana. El merge de PR #163 a la rama VQ **no equivale** al merge de VQ a master.
-4. Determinar la estrategia de retención de evidencias antes de que el artifact de Actions caduque: Git LFS, storage de release u otro repositorio de QA; **no introducir ZIP masivos en Git por defecto**.
+**Sí falta decisión de integración y producto:**
+
+1. Revisar [PR #165, B2→`master`](https://github.com/Juanmaes83/floorplan-3d/pull/165): **sigue como borrador y sin fusionar**; requiere revisión de 26 archivos y autorización expresa **adicional** de merge. El merge de PR #163 a rama VQ no fue un merge a master.
+2. Determinar la política de retención de evidencias antes de caducidad del artifact (Git LFS, release o repositorio QA); **no introducir ZIP masivos en Git por defecto**.
+3. Preparar Visual Families sin reabrir CP2: nuevo contrato de imágenes/vídeo, ventanas, fachadas, familias arquitectónicas y contexto de VECINIA/Costa Blanca.
 
 **Trabajo que Astra no debe repetir:** todos los pasos completados por run 41802674784. Próxima invocación, si necesaria: leer este checkpoint, el comparison oficial y el veredicto humano; no realizar más microajustes VQ-01 sin decisión de alcance. Los problemas de iluminación, carpinterías, fachadas y contexto no son deuda oculta de CP2; forman parte del programa de familias visuales separado.
 
@@ -92,7 +93,7 @@ Las observaciones se basan en las capturas oficiales A0/B1/B2 del artifact 13310
 
 ## 6. Ruta de continuación recomendada
 
-- **Ahora:** congelar evidencia final técnica, obtener decisión humana sobre B2 y conservar el candidato.
+- **Ahora:** decisión humana parcial ya registrada; congelar el candidato B2, sus evidencias y mantener PR #165 como borrador hasta autorización distinta para el merge.
 - **En paralelo, sin tocar CP2:** discovery del sistema semántico de familias y preparación de fixtures/referencias profesionales.
 - **Después:** integrar la fundación material sólo con aprobación expresa, y reanudar deuda técnica, Hybrid y fases siguientes por sus gates específicos.
 - **Programa visual futuro:** [Rubik Visual Families + Residential Experience](../research/vecinia/rubik-visual-families-integration-roadmap-2026-11-04.md), separando materiales, carpinterías, arquitectura y contexto ilustrativo.
