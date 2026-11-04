@@ -2,7 +2,7 @@
 
 - **Rama:** `feat/section-spatial-visit-v1`. **Base:** `master@0f9c6ea` + misión `0ff2c97`.
 - **Worktree:** `/home/user/fp-ssv`, aislado de Delivery, Hybrid y Kimi.
-- **Estado:** R2 en curso (R1 grabado e inspeccionado).
+- **Estado:** R4 en curso (R1–R3 grabados e inspeccionados).
 
 ## Qué existe (no se reconstruye)
 - **FT3D-3:**
@@ -62,5 +62,8 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
   - el aterrizaje seguía en la entrada, porque la coreografía termina en una vista desde la puerta: ahora la referencia es ese final;
   - la tarjeta de Recorrer decía «desde la entrada»: ahora habla de «esta estancia».
 
+| R3 | `982546f` → evidencia `ab81f88` | aterrizaje junto al destino, ruta en el minimapa, texto del relevo | `evidence/r3/` 348 fotogramas |
+| R4 | `9323105` | Escape e invalidación durante el paseo; test de navegador 6/6 (OFF, ON, fallback, 5 ciclos, móvil vertical y horizontal) | log local |
+
 ## Próxima acción
-Render R3 (aterrizaje cerca del destino y minimapa) e inspección; después R4 (reduced motion, cancelaciones, 2 plantas, móvil y ciclos).
+Regresiones (sección, historia, ruta, Recorrer, controles de Recorrer, revelado, plantillas), rendimiento comparable y PR en borrador.
