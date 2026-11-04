@@ -1,0 +1,38 @@
+name: QA M08 PNG export real-pointer proof (isolated)
+on:
+  push:
+    branches:
+      - qa/vq01-cp2-m08-pointer-proof-2026-11-04
+permissions:
+  contents: read
+jobs:
+  m08-real-pointer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install exact CP2 browser tooling
+        run: |
+          npm install --prefix "$RUNNER_TEMP/vq01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/vq01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/vq01-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/vq01-three"
+          echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(node -p "require('$RUNNER_TEMP/vq01-playwright/node_modules/playwright').chromium.executablePath()")" >> "$GITHUB_ENV"
+      - name: Exercise real browser PNG export and verify image bytes
+        env:
+          M08_ARTIFACTS: qa-results/cp2/m08
+        run: |
+          mkdir -p qa-results/cp2/m08
+          node --test --test-concurrency=1 --test-name-pattern='1440x900|rejects' tests/material-detail.browser.test.cjs | tee qa-results/cp2/m08.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vq01-m08-pointer-proof-${{ github.sha }}
+          path: qa-results/cp2/
+          if-no-files-found: warn
