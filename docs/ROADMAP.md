@@ -1,3 +1,5 @@
+> **AVISO DE VIGENCIA (05-11-2026): HISTÓRICO.** Este roadmap contiene decisiones y PR fotografiadas en octubre y **no** es la cola ejecutable vigente. Para el estado actual de A/B/C, FT3D-5/6, Claude/Kimi, IA y gates de lanzamiento véase el [Roadmap operativo reconciliado](product/rubik-roadmap-operativo-reconciliado-2026-11-05.md). Los hitos antiguos no autorizan nuevas implementaciones ni merges.
+
 # Rubik Sota Floor Plan Designer — roadmap canónico
 
 ## Propuesta paralela del 21-10-2026 — entrada profesional y entrega al cliente
