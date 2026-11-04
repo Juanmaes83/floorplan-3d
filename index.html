@@ -3303,7 +3303,7 @@ function wallBox(rect, yb, yt, m){
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
-  if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
+  if(assignment||m===facadeMat){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
   o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';
   o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:yt-yb};
@@ -3542,7 +3542,7 @@ function buildArch(other){
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
-    if(!other)windowVisual.register({projectId:geometry.source.id,id:r.openingId,kind:'window',widthMm:r.spanMm,heightMm:(head-sill)*1000,thicknessMm:r.thickness,sillMm:sill*1000,fullHeight:gTop===head},group,group.children.filter(o=>o.isMesh&&o.material===frameMat));
+    if(!other)windowVisual.register({projectId:geometry.source.id,id:r.openingId,wallId:r.id,kind:'window',widthMm:r.spanMm,heightMm:(head-sill)*1000,thicknessMm:r.thickness,sillMm:sill*1000,fullHeight:gTop===head},group,group.children.filter(o=>o.isMesh&&o.material===frameMat),[pane],archUp.children.filter(o=>o.isMesh&&o.userData.wallId===r.id&&o.material===facadeMat));
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
