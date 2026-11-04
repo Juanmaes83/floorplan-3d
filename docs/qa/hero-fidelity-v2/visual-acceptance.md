@@ -40,4 +40,10 @@ Desktop ANGLE/NVIDIA frame intervals over 90 samples: OFF p50/p95 16.7/16.8 ms; 
 
 Next: demonstrate a second architecturally distinct frame system using the same semantic recipe, then run emulated-mobile and expanded lifecycle checks without claiming a physical-device result.
 
+## R3 — second architectural system, code `95c792f4a7aad3f027d0bb32d8cb4ada87f4d060`
+
+Added `frame.system: flush-sash` beside the default `recessed-sash`. It changes outer/sash sections, maximum frame depth and the sash/gasket/bead planes; it is not a finish-only variant. Both systems share the same aperture, sill, glazing and material mechanisms.
+
+Unit tests remain 3/3 PASS and now assert different geometry with unchanged materials between systems. `tests/hero-fidelity-v2-systems.browser.test.cjs`: 1/1 PASS, eight identical-camera captures, distinct image hashes, clean OFF and unchanged Project/rendered geometry. Opened RECESSED/FLUSH D1/M1/M2/M3 and the contact sheet: FLUSH reads slimmer and closer to the outer frame while preserving depth and the real interior. No new visual defect was observed in the inspected views. Both remain experimental and human approval is pending.
+
 Human verdict: VISUAL_PENDING_HUMAN.
