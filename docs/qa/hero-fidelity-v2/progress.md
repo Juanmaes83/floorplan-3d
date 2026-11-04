@@ -4,7 +4,8 @@
 - Branch: `feat/visual-families-hero-fidelity-v2`; no merge or deploy.
 - Base: Visual Families V1 `de6ba2c22a33f5ca6d51939fc92813a5dd64bab5`; B2 `894607b38fa43a5e89a9f5296a41cdbcc989d5ce`.
 - Mission: `51896b010ff16d0f4f10edc895c4dc5a231b8ced`.
-- Phase: R6 handoff ready for draft PR. Human visual gate remains pending.
+- Phase: R6 handoff published in draft PR #167, unmerged. Human visual gate remains pending.
+- Handoff: https://github.com/Juanmaes83/floorplan-3d/pull/167 (`DRAFT_UNMERGED`).
 - Code tested / remote verified: `a2db71c5dce142e74b50af299e7ed8ffdd4d297e` (`git ls-remote` matched).
 - Improvement implemented: versioned `recessed-sash` and geometrically distinct `flush-sash`, aperture liners, separate frame/sash/bead/gasket sections, paired sills, clear per-bay glazing over real interiors and correlated plaster maps. Default OFF; no Project or collider mutation.
 - Tests: unit 3/3 PASS; fixed-view, HDR, 12-window coverage, recessed/flush and emulated-mobile lifecycle browser tests PASS. Three full-coverage ON/OFF cycles leave zero owned resources. Presentation exit now releases derived resources after entry restoration; reentry restores all 12 balanced windows; forced context loss leaves zero resources and unchanged Project/geometry.
