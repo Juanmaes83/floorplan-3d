@@ -23,7 +23,24 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
  await button.click();await ready(page,'enhanced');sameCamera((await inspect(page)).camera,enhanced.camera);
  await page.locator('#presentationOverlay .presentation-stops .btn').nth(1).click();await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'),null,{timeout:15000});
  const roomEnhanced=await inspect(page);await page.screenshot({path:path.join(QA,`${size}-room-enhanced.png`)});
- await page.locator('#presentationCapture').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled);const download=page.waitForEvent('download');await page.locator('#presentationCapture').click();const stream=await (await download).createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);const png=Buffer.concat(chunks);assert.ok(png.length>10000);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');sameCamera((await inspect(page)).camera,roomEnhanced.camera);
+ await page.locator('#presentationCapture').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled);// A software WebGL PNG export may block the page thread after a genuine input event.
+  // locator.click() additionally waits for post-click action completion (30s default).
+  // Send a real browser mouse event to the actionable button and make the PNG download,
+  // its contents and the unchanged camera the actual success criteria.
+  const captureControl=page.locator('#presentationCapture');
+  await captureControl.scrollIntoViewIfNeeded();
+  const captureBox=await captureControl.boundingBox();
+  assert.ok(captureBox&&captureBox.width>0&&captureBox.height>0,'PNG capture button has a hit target');
+  const capturePoint={x:captureBox.x+captureBox.width/2,y:captureBox.y+captureBox.height/2};
+  assert.equal(await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.closest('#presentationCapture')?.id,capturePoint),
+    'presentationCapture','The real pointer must hit the PNG button');
+  const downloadStart=Date.now();
+  const download=page.waitForEvent('download',{timeout:120000});
+  await page.mouse.click(capturePoint.x,capturePoint.y);
+  const saved=await download;
+  console.log('M08 real-pointer PNG export event duration_ms:',Date.now()-downloadStart);
+  assert.match(saved.suggestedFilename(),/-3D\.png$/,'capture retains the application PNG filename');
+  const stream=await saved.createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);const png=Buffer.concat(chunks);assert.ok(png.length>10000);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');sameCamera((await inspect(page)).camera,roomEnhanced.camera);
  await button.click();await ready(page,'base');sameCamera((await inspect(page)).camera,roomEnhanced.camera);await page.screenshot({path:path.join(QA,`${size}-room-base.png`)});
  if(viewport.width===360){await page.setViewportSize({width:844,height:390});await page.waitForFunction(()=>{const c=View3D.canvasState,cam=View3D.cameraState,s=document.querySelector('#stage');return s.clientWidth>0&&Math.abs(cam.aspect-s.clientWidth/s.clientHeight)<.001&&Math.abs(c.width-s.clientWidth*c.pixelRatio)<=2;});await page.screenshot({path:path.join(QA,'360x800-to-844x390-room-base.png')});}
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:30000});const returned=await inspect(page);assert.deepEqual(JSON.parse(returned.project),JSON.parse(initial.project));assert.equal(returned.entry,initial.entry);assert.equal(returned.guide,initial.guide);assert.equal(returned.quality,'base');assert.deepEqual(errors,[]);
