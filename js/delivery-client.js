@@ -91,7 +91,7 @@
   try{
    if(kind==='walk'){
     if(!await app.enterPresentation3D())throw Error('3d');
-    showBar(tx('Exploración libre','Free exploration','自由探索'));document.querySelector('[data-mode="walk"]')?.click();
+    showBar(tx('Exploración libre','Free exploration','自由探索'));document.querySelector('[data-mode="walk"]')?.click();openMap();
    }else{
     showBar(tx('Presentación preparada','Prepared presentation','预设展示'));seedPresentation();
     window.FloorPlanPresentation.open();
@@ -105,7 +105,7 @@
   }catch{render('ready');}
  }
  function leave(){
-  clearInterval(watch);
+  clearInterval(watch);closeMap();
   if(window.FloorPlanPresentation?.active)document.querySelector('#presentationClose')?.click();
   document.querySelector('#walkExit')?.offsetParent&&document.querySelector('#walkExit').click();
   document.querySelector('[data-mode="orbit"]')?.click();
@@ -119,6 +119,57 @@
   for(const s of snap.presentation.sidecars){const p=projects.find(x=>x.id===s.projectId);if(!p)continue;
    try{localStorage.setItem(Core.key(app.entryId,p.id),JSON.stringify(Core.sidecar(p.id,app.entryId,FloorPlanGuide.revision(p),s.roomIds)));}catch{}}
  }
+ // ── Free-walk mini-map ───────────────────────────────────────────────────────────────────────────────────────────
+ // The presentation's orientation map (FloorPlanPresentationCore.minimap + its .presentation-minimap look), for the free
+ // walk: where the visitor is and looks, the room they are in, every room of the level; a room is a button that moves
+ // the visitor into it (View3D.walkToRoom: inside the room, clear of walls and doors). Collapsible; the choice is kept
+ // for this visit. On a short screen (phone in landscape) it starts collapsed so the home stays in view.
+ const Map2=window.FloorPlanDeliveryMap,PCore=window.FloorPlanPresentationCore,SVG='http://www.w3.org/2000/svg';
+ let map=null,mapOpen=null,mapTimer=0,mapRoom=undefined,mapMarker=null,mapSvg=null;
+ const roomLabel=r=>r?(typeof nm==='function'?nm(r.name):r.name)||tx('Estancia','Room','房间'):tx('Fuera de las estancias','Outside the rooms','房间外');
+ const svgEl=(tag,parent,attrs)=>{const n=document.createElementNS(SVG,tag);for(const [k,v] of Object.entries(attrs||{}))n.setAttribute(k,v);parent.append(n);return n;};
+ function mapRooms(){return (app.geometry?.rooms||[]).filter(r=>r.poly?.length>=3);}
+ function openMap(){
+  closeMap();if(!Map2||!PCore?.minimap||!window.View3D?.walkPose)return;
+  const data=PCore.minimap(app.geometry,null,null);if(!data)return;
+  if(mapOpen===null)mapOpen=innerHeight>=520;
+  map=el('section',undefined,document.querySelector('#stage'),'presentation-minimap delivery-map');map.id='deliveryMap';map.setAttribute('aria-label',tx('Plano de la vivienda','Home map','住宅平面图'));
+  for(const t of ['pointerdown','pointerup','touchstart','touchmove','wheel','click','dblclick'])map.addEventListener(t,e=>e.stopPropagation(),{passive:true});
+  const head=el('div',undefined,map,'delivery-map-head');
+  const here=el('p','',head,'delivery-map-here');here.id='deliveryMapHere';here.setAttribute('aria-live','polite');
+  const toggle=btn('',head,'btn delivery-map-toggle');toggle.id='deliveryMapToggle';toggle.setAttribute('aria-controls','deliveryMapPanel');
+  const panel=el('div',undefined,map,'presentation-minimap-panel delivery-map-panel');panel.id='deliveryMapPanel';
+  mapSvg=svgEl('svg',panel,{viewBox:data.viewBox.join(' '),role:'group','aria-label':tx('Estancias: pulsa una para ir','Rooms: press one to go there','房间：点击前往')});
+  const size=Math.max(data.viewBox[2],data.viewBox[3]);
+  for(const r of data.rooms){
+   const poly=svgEl('polygon',mapSvg,{points:r.poly.map(p=>p.join(',')).join(' '),'data-room-id':r.id,class:'presentation-minimap-room selectable',role:'button',tabindex:'0','aria-label':tx(`Ir a ${roomLabel(r)}`,`Go to ${roomLabel(r)}`,`前往 ${roomLabel(r)}`)});
+   const go=()=>{const ok=window.View3D.walkToRoom(r.id);note.textContent=ok?'':tx('No hay un sitio libre en esa estancia.','There is no free spot in that room.','该房间没有空位。');updateMap(true);};
+   poly.addEventListener('click',go);poly.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+  }
+  // A name is printed only where it fits inside its room; every room keeps its full name as a tooltip and in the
+  // «you are here» line, so small rooms never turn the map into overlapping text.
+  const font=Math.round(size*.04);
+  for(const r of data.rooms){const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]),w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys),name=roomLabel(r);
+   svgEl('title',mapSvg.querySelector(`polygon[data-room-id="${CSS.escape(r.id)}"]`),{}).textContent=name;
+   if(name.length*font*.56>w*.9||font*1.3>h)continue;
+   const t=svgEl('text',mapSvg,{x:Math.round((Math.max(...xs)+Math.min(...xs))/2),y:Math.round((Math.max(...ys)+Math.min(...ys))/2),class:'delivery-map-label','font-size':font});t.textContent=name;}
+  mapMarker=svgEl('g',mapSvg,{class:'delivery-map-you','aria-hidden':'true'});mapMarker.dataset.size=size;
+  svgEl('path',mapMarker,{class:'delivery-map-cone'});svgEl('circle',mapMarker,{class:'delivery-map-dot'});
+  const note=el('p','',panel,'delivery-map-note');note.setAttribute('role','status');
+  const sync=()=>{toggle.textContent=mapOpen?tx('Ocultar plano','Hide map','隐藏平面图'):tx('Ver plano','Show map','显示平面图');toggle.setAttribute('aria-expanded',String(mapOpen));panel.hidden=!mapOpen;map.classList.toggle('is-collapsed',!mapOpen);};
+  toggle.onclick=()=>{mapOpen=!mapOpen;sync();updateMap(true);};sync();
+  mapRoom=undefined;updateMap(true);mapTimer=setInterval(()=>updateMap(false),150);
+ }
+ function updateMap(force){
+  if(!map)return;const pose=window.View3D.walkPose();if(!pose)return;
+  const r=Map2.roomAt(mapRooms(),pose.x,pose.y),id=r?.id||null;
+  if(force||id!==mapRoom){mapRoom=id;document.querySelector('#deliveryMapHere').textContent=roomLabel(r);
+   for(const p of mapSvg.querySelectorAll('polygon'))p.classList.toggle('active',p.dataset.roomId===id),p.setAttribute('aria-current',p.dataset.roomId===id?'location':'false');}
+  if(!mapOpen)return;const m=Map2.marker(pose,+mapMarker.dataset.size);if(!m)return;
+  mapMarker.querySelector('path').setAttribute('d',m.cone);const dot=mapMarker.querySelector('circle');dot.setAttribute('cx',m.x);dot.setAttribute('cy',m.y);dot.setAttribute('r',m.r);
+  map.dataset.x=m.x;map.dataset.y=m.y;map.dataset.angle=m.angleDeg;map.dataset.room=id||'';
+ }
+ function closeMap(){clearInterval(mapTimer);mapTimer=0;map?.remove();map=null;mapSvg=null;mapMarker=null;}
  // ── Loading ───────────────────────────────────────────────────────────────────────────────────────────────────────
  async function receive(){
   if(D.preview){
@@ -146,6 +197,6 @@
  }
  let interrupted=false;
  addEventListener('webglcontextlost',()=>{if(mode!=='gate'){interrupted=true;leave();}},true);
- window.FloorPlanDeliveryClient={get state(){return gate.dataset.state;},get mode(){return mode;},get snapshot(){return snap&&structuredClone(snap);},visit,leave};
+ window.FloorPlanDeliveryClient={get state(){return gate.dataset.state;},get mode(){return mode;},get snapshot(){return snap&&structuredClone(snap);},visit,leave,get map(){return map?{open:mapOpen,room:map.dataset.room||null,x:+map.dataset.x,y:+map.dataset.y,angle:+map.dataset.angle}:null;}};
  if(document.readyState==='complete')load();else addEventListener('load',load,{once:true});
 })();
