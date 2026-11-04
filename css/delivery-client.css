@@ -1,0 +1,81 @@
+/* Delivery 3D Client Experience V1 — client mode (html.delivery-client) and the professional's card in «Entregar».
+   Uses the Rubik design-system roles (css/design-system.css): petrol action, graphite selection, «Perla» surfaces. */
+
+/* ── Client mode: no editor, the home fills the screen ───────────────────────────────────────────────────────── */
+html.delivery-client,html.delivery-client body{height:100%;overflow:hidden;background:var(--surface-app)}
+html.delivery-client .app>header,html.delivery-client .app>nav,html.delivery-client .app>#guideBar,
+html.delivery-client .app>aside,html.delivery-client .app>footer,html.delivery-client #toast,html.delivery-client #welcomeDialog,
+html.delivery-client #levelConflicts,html.delivery-client #scalebar,html.delivery-client #sbBar,html.delivery-client #modehint,
+html.delivery-client #fab,html.delivery-client #guideAnnouncement,html.delivery-client #presentationConfig{display:none!important}
+html.delivery-client .app{display:block!important;height:100%}
+html.delivery-client #stage{position:fixed!important;inset:0!important;width:auto!important;height:auto!important}
+/* Presentation in a client visit: only the room path and its own controls, never the professional's batch/capture tools. */
+html.delivery-client #presentationOverlay [id^="presentationCapture"],html.delivery-client #presentationOverlay [id^="presentationBatch"],
+html.delivery-client #presentationOverlay [id^="presentationShare"],html.delivery-client #presentationOverlay [id^="presentationRecord"],
+html.delivery-client #presentationOverlay [id^="presentationNote"],html.delivery-client #presentationOverlay .presentation-edit{display:none!important}
+/* The client moves through the prepared stops only: the professional's tool row (image, light, shadows, video, batch,
+   story replays), «Volver a editar» (the bar's «Salir de la visita» is the one way out), the provenance block, the
+   territory layer switcher and the walk hint that points to the editor's «Presentar mi vivienda» are not theirs. */
+html.delivery-client #presentationTools,html.delivery-client #presentationClose,html.delivery-client #presentationProvenance,
+html.delivery-client #territoryLayers,html.delivery-client #wo4{display:none!important}
+
+/* ── Gate: first screen and between visits ────────────────────────────────────────────────────────────────────── */
+.delivery-gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;overflow:auto;background:var(--surface-app);
+  padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.delivery-gate[hidden]{display:none}
+.delivery-card{width:min(620px,100%);display:grid;gap:14px;background:var(--surface-panel);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:clamp(18px,4vw,30px)}
+.delivery-studio{display:flex;align-items:center;gap:10px;color:var(--ink-muted);font-size:13px;letter-spacing:.02em}
+.delivery-studio img{height:28px;width:auto;max-width:120px;object-fit:contain}
+.delivery-hero{margin:0;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:var(--surface-sunken);display:grid;place-items:center}
+.delivery-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.delivery-hero.is-empty span{font:600 clamp(18px,4vw,24px)/1.2 inherit;color:var(--ink-muted);padding:16px;text-align:center}
+.delivery-eyebrow{margin:4px 0 0;color:var(--action);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.delivery-title{margin:0;font-size:clamp(22px,5vw,30px);line-height:1.15;color:var(--ink);text-wrap:balance}
+.delivery-lead{margin:0;color:var(--ink);font-size:16px;line-height:1.5;max-width:60ch}
+.delivery-actions{display:flex;flex-wrap:wrap;gap:10px}
+.delivery-actions .btn{min-height:48px;padding:0 20px;font-size:16px;border-radius:10px}
+.delivery-facts{margin:0;padding:12px 0 0;border-top:1px solid var(--line);list-style:none;display:grid;gap:6px;color:var(--ink-muted);font-size:14px;line-height:1.45}
+.delivery-version{margin:0;color:var(--ink-muted);font-size:12px;font-variant-numeric:tabular-nums}
+.delivery-status{margin:12px 0;color:var(--ink);font-size:16px}
+.delivery-note{margin:0;padding:10px 12px;border-radius:8px;background:var(--action-soft);color:var(--ink);font-size:14px}
+.delivery-note.is-warn{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:520px){.delivery-actions .btn{flex:1 1 100%}.delivery-card{border-radius:12px}}
+@media (max-height:520px) and (orientation:landscape){
+  .delivery-card{width:min(860px,100%);grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);column-gap:22px;align-items:start}
+  .delivery-studio,.delivery-hero{grid-column:1}.delivery-hero{grid-row:2/span 6}
+  .delivery-card>:not(.delivery-studio):not(.delivery-hero){grid-column:2}}
+
+/* ── In-visit bar: the home first, one way out ─────────────────────────────────────────────────────────────── */
+.delivery-bar{position:fixed;z-index:55;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;min-height:52px;
+  padding:max(6px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left));
+  background:color-mix(in srgb,var(--surface-panel) 88%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.delivery-bar[hidden]{display:none}
+.delivery-bar-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-size:15px}
+.delivery-bar-mode{flex:none;padding:3px 10px;border-radius:999px;background:var(--select-soft);color:var(--ink);font-size:12px;font-weight:600}
+.delivery-bar-exit{margin-left:auto;flex:none;min-height:40px}
+html.delivery-in-visit #stage{top:52px!important}
+html.delivery-in-visit #presentationOverlay{top:0}
+
+/* ── Professional: «Visita 3D para tu cliente» card in Entregar ────────────────────────────────────────────── */
+.delivery3d-card{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.delivery3d-card figure{margin:0;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:var(--surface-sunken);display:grid;place-items:center}
+.delivery3d-card figure img{width:100%;height:100%;object-fit:cover;display:block}
+.delivery3d-card figure.is-scheme{padding:10px}
+.delivery3d-card figcaption{font-size:12px;color:var(--ink-muted);padding:6px 2px 0}
+.delivery3d-body{display:grid;gap:10px;min-width:0}
+.delivery3d-body h3{margin:0;font-size:20px;line-height:1.2;text-wrap:balance}
+.delivery3d-lead{margin:0;color:var(--ink);line-height:1.5}
+.delivery3d-chip{justify-self:start;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--select-soft);color:var(--ink)}
+.delivery3d-chip[data-tone="ready"]{background:var(--action-soft);color:var(--action)}
+.delivery3d-chip[data-tone="warn"]{background:var(--warn-soft);color:var(--warn)}
+.delivery3d-chip[data-tone="live"]{background:#e3f1e8;color:var(--success)}
+.delivery3d-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+.delivery3d-list li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px;align-items:start}
+.delivery3d-list li::before{content:"✓";color:var(--success);font-weight:700}
+.delivery3d-list li.is-off::before{content:"–";color:var(--ink-muted)}
+.delivery3d-list li.is-off{color:var(--ink-muted)}
+.delivery3d-actions{display:flex;flex-wrap:wrap;gap:8px}
+.delivery3d-actions .btn{min-height:42px}
+.delivery3d-meta{margin:0;font-size:12px;color:var(--ink-muted)}
+@media (max-width:760px){.delivery3d-card{grid-template-columns:minmax(0,1fr)}}

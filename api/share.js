@@ -8,7 +8,9 @@
      Vercel Blob dashboard. Vercel limits a function request to 4.5 MB, so files are capped at 4 MB. */
 'use strict';
 const LIMIT=4*1024*1024;
-const KINDS={html:{type:'text/html; charset=utf-8',ext:'html'},mp4:{type:'video/mp4',ext:'mp4'},webm:{type:'video/webm',ext:'webm'}};
+// delivery (Delivery 3D V1): the read-only client 3D snapshot (FloorPlanDelivery contract), validated here before storing.
+const KINDS={html:{type:'text/html; charset=utf-8',ext:'html'},mp4:{type:'video/mp4',ext:'mp4'},webm:{type:'video/webm',ext:'webm'},delivery:{type:'application/json; charset=utf-8',ext:'delivery.json'}};
+const Delivery=require('../js/delivery-core.js');
 function send(res,status,body){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(body));}
 async function bodyBytes(req){
  if(Buffer.isBuffer(req.body))return req.body;if(typeof req.body==='string')return Buffer.from(req.body);
@@ -24,6 +26,7 @@ async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  const kind=String(req.headers['x-rubik-share-kind']||'');if(!Object.hasOwn(KINDS,kind))return send(res,400,{error:'kind'});
  const bytes=await bodyBytes(req);if(!bytes||!bytes.length||bytes.length>LIMIT)return send(res,413,{error:'size'});
  if(kind==='html'&&!bytes.subarray(0,200).toString('utf8').toLowerCase().startsWith('<!doctype html>'))return send(res,400,{error:'file'});
+ if(kind==='delivery'){try{Delivery.validate(JSON.parse(bytes.toString('utf8')),{bytes:bytes.length});}catch{return send(res,400,{error:'file'});}}
  const pathname=`rubik-share/${slug(decodeName(req.headers['x-rubik-share-name']))}.${KINDS[kind].ext}`;
  let r;try{r=await fetchImpl('https://blob.vercel-storage.com/'+pathname,{method:'PUT',headers:{authorization:`Bearer ${env.BLOB_READ_WRITE_TOKEN}`,'x-api-version':'7','x-content-type':KINDS[kind].type,'x-add-random-suffix':'1','x-cache-control-max-age':'60'},body:bytes});}
  catch{return send(res,502,{error:'storage-unreachable'});}

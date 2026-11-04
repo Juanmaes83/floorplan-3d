@@ -47,6 +47,8 @@
    for(const[key,title,routes]of groups){const group=el('section',undefined,grid,'professional-delivery-group');group.dataset.group=key;const h=el('h2',title,group);h.id='delivery-group-'+key;group.setAttribute('aria-labelledby',h.id);const items=el('div',undefined,group,'professional-group-items');for(const id of routes){const c=grid.querySelector('.professional-card[data-module="'+id+'"]');if(c)items.append(c);}}
    // The group provides the identity heading; retain the card's original title for existing accessible routes.
    grid.querySelector('[data-group="signature"]>h2').textContent=tx('La firma del profesional','Professional signature','专业签名');
+   // Delivery 3D V1: the client's 3D visit opens the «La vivienda, para tu cliente» group.
+   window.FloorPlanDeliveryUI?.card(grid.querySelector('[data-group="experience"] .professional-group-items'));
   }
   if(area==='studio'){
    const profiles=grid.querySelector('[data-module="studio"]'),snap=FloorPlanBrandUI.snapshot(),profile=snap?.profile;
