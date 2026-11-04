@@ -4604,21 +4604,40 @@ function roomVisitPlan(roomId,region){
   if(k<0)k=S.findIndex((q,i)=>i>=Math.max(0,enter)&&landable(q));
   if(k<0)k=S.findIndex(landable);
   if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
-  return {ok:true,plan,moves,landing:k,vfov};
+  // Arrival inside the destination: the choreography may settle on a doorway view from the space before; the visit then
+  // goes on along the same validated route path (clearance already checked) until 0.9 m inside the room, from rest to
+  // rest, turning to the room's farthest corner — the pose handed over to «Recorrer» is in the room it names.
+  let samples=S.slice(k),arrival={yaw:moves.arrival.cameraYaw,pitchDeg:moves.arrival.cameraPitchDeg},extended=0;
+  const last=samples.at(-1);
+  if(!inPoly(dest.poly,last.x,last.y)&&plan.path?.length){
+    const path=plan.path;let j0=0,best=Infinity;path.forEach((q,i)=>{const d=Math.hypot(q.x-last.x,q.y-last.y);if(d<best){best=d;j0=i;}});
+    const ext=[{x:last.x,y:last.y}];let inside=-1,acc=0;
+    for(let i=j0+1;i<path.length;i++){const q=path[i],prev=ext.at(-1);acc+=Math.hypot(q.x-prev.x,q.y-prev.y);ext.push({x:q.x,y:q.y,s:acc});if(inPoly(dest.poly,q.x,q.y)&&inside<0)inside=acc;if(inside>=0&&acc-inside>=900)break;}
+    const fin=ext.at(-1);
+    if(inside>=0&&inPoly(dest.poly,fin.x,fin.y)){
+      const L=acc,T=L/550+.8,n=Math.max(8,Math.ceil(L/60)),far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-fin.x,p[1]-fin.y)>Math.hypot(b[0]-fin.x,b[1]-fin.y)?p:b,dest.poly[0]);
+      const yEnd=Math.atan2(far[1]-fin.y,far[0]-fin.x),y0=last.cameraYaw??last.yaw,dy=Math.atan2(Math.sin(yEnd-y0),Math.cos(yEnd-y0)),p0=last.cameraPitchDeg??last.pitchDeg;
+      const sm=t=>t*t*(3-2*t),at=d=>{for(let i=1;i<ext.length;i++)if(ext[i].s>=d){const a=ext[i-1],b=ext[i],k=(d-(a.s||0))/Math.max(1e-9,b.s-(a.s||0));return {x:a.x+(b.x-a.x)*k,y:a.y+(b.y-a.y)*k};}return fin;};
+      for(let m=1;m<=n;m++){const u=m/n,q=at(L*sm(u));samples.push({t:last.t+T*u,s:(last.s||0)+L*sm(u),x:q.x,y:q.y,cameraYaw:y0+dy*sm(u),cameraPitchDeg:p0+(10-p0)*sm(u)});}
+      arrival={yaw:yEnd,pitchDeg:10};extended=Math.round(L);
+    }
+  }
+  if(!inPoly(dest.poly,samples.at(-1).x,samples.at(-1).y))return {ok:false,code:'outside_arrival',reason:'La ruta validada no llega a una posición libre dentro de la estancia.',plan};
+  return {ok:true,plan,moves,landing:k,vfov,samples,arrival,extended};
 }
 function beginRoomVisit(stop,view,aspect,startPose){
   const r=roomVisitPlan(stop.roomId,view.region);if(!r.ok)throw Error(r.reason);
   const fromPose=view.fromStop?.bounds?presentationStopPose(view.fromStop,aspect,view.fromRegion??view.region):null;
   const start=fromPose?{position:fromPose.p.toArray(),target:fromPose.t.toArray(),fov:camera.fov}:startPose;
-  const S=r.moves.samples.slice(r.landing),t0=S[0].t;
+  const S=r.samples,t0=S[0].t;
   const samples=S.map(q=>({t:q.t-t0,x:wx(q.x),z:wz(q.y),yaw:q.cameraYaw??q.yaw,pitchDeg:q.cameraPitchDeg??q.pitchDeg}));
   const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size?.heightMm||0)));
   // Eye height of «Recorrer» (1.6 m), so the hand-over never moves the horizon.
   const above=Math.max(fullTop,tallest)+.8,eye=WALK_EYE;
-  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:{yaw:r.moves.arrival.cameraYaw,pitchDeg:r.moves.arrival.cameraPitchDeg},base:{near:camera.near,far:camera.far}});
+  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far}});
   const doorIds=[...(r.plan.doorIds||[])];
   return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,2.4),doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
-    route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
+    route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,extendedMm:r.extended,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
 }
 function applyRoomVisit(v,st){
   const cut=st.fullHeight?2.8:v.cutaway;

@@ -32,7 +32,8 @@ const validity=page=>page.evaluate(()=>{const g=FloorPlanApp.geometry,P=FloorPla
  const top=Math.max(P.defaults.wallHeightMm,...P.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...P.objects.map(o=>(o.size?.heightMm||0)/1000));
  const inWall=g.walls.filter(w=>w.status!=='demolished').some(w=>inRect(w,x,y,0)),inObj=P.objects.some(o=>{if(o.type==='rug'||!o.position)return false;const a=(o.rotationDeg||0)*Math.PI/180,dx=x-o.position.x,dy=y-o.position.y;return Math.abs(dx*Math.cos(a)+dy*Math.sin(a))<o.size.widthMm/2&&Math.abs(-dx*Math.sin(a)+dy*Math.cos(a))<o.size.depthMm/2&&h<(o.size.heightMm||0)/1000;});
  const room=g.rooms.find(r=>{let inside=false;for(let i=0,j=r.poly.length-1;i<r.poly.length;j=i++){const a=r.poly[i],b=r.poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;});
- const s=View3D.presentationStoryInfo;return {phase:s.phase,kind:s.kind,cut:s.cut,h,above:h>Math.max(top,tallest),inWall,inObj,room:room?.id||null,pos:c.map(v=>+v.toFixed(4))};});
+ const inDoor=g.doors.some(d=>inRect(d.rect,x,y,80));
+ const s=View3D.presentationStoryInfo;return {phase:s.phase,kind:s.kind,cut:s.cut,h,above:h>Math.max(top,tallest),inWall,inObj,inDoor,room:room?.id||null,pos:c.map(v=>+v.toFixed(4))};});
 
 test('OFF: the base story is unchanged (no room-visit, no visit controls)',{timeout:600000},async t=>{
  const {page,errors}=await open(t);await start(page,{visit:false});
@@ -52,7 +53,7 @@ test('ON: section → validated visit → eye level; reversible; hand-over to Re
   if(v.kind!=='room-visit'||v.phase==='overview')continue;
   assert.equal(v.inWall,false,`camera inside a wall at P=${P.toFixed(3)} (${v.phase})`);assert.equal(v.inObj,false,`camera inside furniture at P=${P.toFixed(3)}`);
   if(v.phase==='approach')assert.ok(v.above,`approach above walls and furniture (${v.h})`);
-  if(['walk','turn','arrive','room'].includes(v.phase)){assert.ok(Math.abs(v.h-1.6)<1e-6,'eye height');assert.ok(v.room,'inside a room');assert.equal(v.cut,2.8,'full height at eye level');}
+  if(['walk','turn','arrive','room'].includes(v.phase)){assert.ok(Math.abs(v.h-1.6)<1e-6,'eye height');assert.ok(v.room||v.inDoor,`inside a room or a doorway at P=${P.toFixed(3)}`);assert.equal(v.cut,2.8,'full height at eye level');}
   if(v.phase==='approach'||v.phase==='descend')assert.ok(v.cut<2.8,'cutaway while above and going down: no ceiling to cross');}
  const info=await page.evaluate(()=>View3D.presentationVisitInfo);assert.equal(info.route.kind,'interior');
  const end=states.at(-1);assert.equal(end.phase,'room');assert.equal(end.room,info.roomId,'arrives in the destination room');

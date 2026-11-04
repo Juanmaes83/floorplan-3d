@@ -83,6 +83,9 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   for(let i=0;i<=steps;i++){const P=range.from+(1-range.from)*i/steps;await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(v*1000));s.dispatchEvent(new Event('input',{bubbles:true}));},P);
    await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:120000});await shot(i===0?18:1);
    if(i%Math.max(1,Math.round(steps/24))===0)log.push(await page.evaluate(()=>{const s=View3D.presentationStoryInfo;return {P:FloorPlanPresentation.story?.P,kind:s.kind,phase:s.phase,cut:s.cut,cam:View3D.cameraState?.position.map(v=>+v.toFixed(2))};}));}
-  await shot(36);console.error(JSON.stringify({visit:await page.evaluate(()=>View3D.presentationVisitInfo),log}));}
+  await shot(36);console.error(JSON.stringify({visit:await page.evaluate(()=>View3D.presentationVisitInfo),log}));
+  // Hand-over to «Recorrer» at the same pose, then back to the section.
+  if(await page.locator('#presentationVisitWalk').isVisible()){await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());await shot(36);
+   await page.locator('#presentationWalkSection').click();await page.waitForFunction(()=>!View3D.walking()&&FloorPlanPresentation.story?.kind==='section-open'&&!FloorPlanPresentation.story.busy,null,{timeout:180000});await shot(36);}}
  await browser.close();server.close();console.log(JSON.stringify({frames:frames.length,dir,errors}));
 })().catch(e=>{console.error(e);process.exit(1);});
