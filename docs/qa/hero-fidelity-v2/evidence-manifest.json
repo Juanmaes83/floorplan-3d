@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "branch": "feat/visual-families-hero-fidelity-v2",
+  "baseSha": "de6ba2c22a33f5ca6d51939fc92813a5dd64bab5",
+  "missionSha": "51896b010ff16d0f4f10edc895c4dc5a231b8ced",
+  "status": "LOCAL_ONLY",
+  "codeSha": null,
+  "captures": [],
+  "limitations": [
+    "No V2 candidate has been rendered.",
+    "No human visual approval or performance certification."
+  ]
+}
