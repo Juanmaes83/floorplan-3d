@@ -3,6 +3,7 @@
    image edit endpoint with a fixed, server-side prompt that keeps the view's geometry, and returns the image.
    - OPENAI_API_KEY never reaches the browser (Vercel environment secret).
    - RUBIK_RENDER_TOKEN: shared access token the professional enters once in Rubik; without it the endpoint refuses,
+   - RUBIK_RENDER_TOKEN_PREVIEW: optional preview-only override; never affects production access.
      so nobody can spend the owner's OpenAI credit through the public URL.
    - Only the image and a style are sent: no project data, location or contact. Nothing is stored here.
    The Rubik geometry stays the authority: the AI only changes the presentation of one image. */
@@ -45,9 +46,10 @@ function parseImage(dataUrl){
 }
 async function handler(req,res,{fetchImpl=globalThis.fetch,env=process.env}={}){
  if(req.method!=='POST')return send(res,405,{error:'method'});
- if(!env.OPENAI_API_KEY||!env.RUBIK_RENDER_TOKEN)return send(res,503,{error:'not-configured'});
+ const accessToken=env.VERCEL_ENV==='preview'&&env.RUBIK_RENDER_TOKEN_PREVIEW||env.RUBIK_RENDER_TOKEN;
+ if(!env.OPENAI_API_KEY||!accessToken)return send(res,503,{error:'not-configured'});
  const token=req.headers['x-rubik-render-token'];
- if(typeof token!=='string'||token.length>200||!same(token,env.RUBIK_RENDER_TOKEN))return send(res,401,{error:'token'});
+ if(typeof token!=='string'||token.length>200||!same(token,accessToken))return send(res,401,{error:'token'});
  let body=req.body;if(typeof body==='string'){try{body=JSON.parse(body);}catch{return send(res,400,{error:'json'});}}
  const style=body?.style;if(!Object.hasOwn(STYLES,style))return send(res,400,{error:'style'});
  const floor=body?.floor??null,walls=body?.walls??null;
