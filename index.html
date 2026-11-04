@@ -4500,6 +4500,7 @@ function presentationRoute(roomId,reduced=false,view={}){
   });
 }
 function presentationRestore(state){
+  windowVisual.release();
   endPresentationStory();releaseHeldEntry();storyPlanStart=null;
   restoreTerritorialViewLimits();
   territorialPresentation=false;territorialBaseLevelView=null;if(state?.levelView)levelView=state.levelView;
