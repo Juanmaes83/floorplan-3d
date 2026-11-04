@@ -43,7 +43,7 @@ export function compatibleWindow(source,decision){
 export function windowAssembly(source,decision){
  if(!compatibleWindow(source,decision))return null;
  const w=source.widthMm/1000,h=source.heightMm/1000,wall=source.thicknessMm/1000,n=Math.max(1,Math.round(w/.95));
- const outer=.048,sash=.032,frameDepth=Math.min(.072,wall*.36),boxes=[],glass=[];
+ const outer=.038,sash=.026,frameDepth=Math.min(.056,wall*.28),boxes=[],glass=[];
  const add=(material,x,y,z,sx,sy,sz)=>boxes.push({material,position:[x,y,z],size:[sx,sy,sz]});
  const ring=(material,x,y,width,height,b,z,d)=>{
   add(material,x-width/2+b/2,y,z,b,height,d);add(material,x+width/2-b/2,y,z,b,height,d);
@@ -67,7 +67,7 @@ export function windowAssembly(source,decision){
  }
  const finish=decision.tokens['frame.finish'];
  return {boxes,glass,finish,sourceId:source.id,materials:{
-  frame:finish==='chalk'?{color:'#d7d4cc',roughness:.42,metalness:.08}:{color:'#384144',roughness:.30,metalness:.62},
+  frame:finish==='chalk'?{color:'#d7d4cc',roughness:.42,metalness:.08}:{color:'#465154',roughness:.36,metalness:.5},
   seal:{color:'#151b1c',roughness:.88,metalness:0},reveal:{color:'#c8c1b5',roughness:.82,metalness:0},sill:{color:'#b7ab98',roughness:.86,metalness:0}
- },glazing:{color:'#dcebf0',roughness:.065,metalness:0,transparent:true,opacity:.30,transmission:.32,thickness:.012,ior:1.5,clearcoat:1,clearcoatRoughness:.08,specularIntensity:1,envMapIntensity:1.15,depthWrite:false},facade:{family:'plaster',mean:[217,203,187],repeatMm:{x:1000,y:1000}},triangles:(boxes.length+glass.length)*12,gpuBytes:(boxes.length+glass.length)*64};
+ },glazing:{color:'#e7f1f3',roughness:.045,metalness:0,transparent:true,opacity:.22,transmission:.15,thickness:.012,ior:1.5,clearcoat:1,clearcoatRoughness:.06,specularIntensity:1,envMapIntensity:1.05,depthWrite:false},facade:{family:'plaster',mean:[217,203,187],repeatMm:{x:1000,y:1000}},triangles:(boxes.length+glass.length)*12,gpuBytes:(boxes.length+glass.length)*64};
 }
