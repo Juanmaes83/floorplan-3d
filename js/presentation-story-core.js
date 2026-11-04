@@ -389,7 +389,9 @@
    if(leg.name==='approach')return pose(lerp3(A.position,top,e),lerp(yawA,yawFirst,e),lerp(pitch0,o.lookPitchDeg,e),lerp(A.fov,walkFov,e),'approach',p);
    if(leg.name==='descend')return pose([first.x,lerp(above,eye,e),first.z],first.yaw,lerp(o.lookPitchDeg,first.pitchDeg,e),walkFov,'descend',p);
    if(leg.name==='close')return pose([first.x,eye,first.z],first.yaw,first.pitchDeg,walkFov,'close',p,{closed:t>=.25});
-   if(leg.name==='walk'){const q=walkAt(first.t+t*(last.t-first.t));return pose([q.x,eye,q.z],q.yaw,q.pitchDeg,walkFov,'walk',p);}
+   // The visit may start part-way along the route: its walking clock eases in from rest (and the choreography already
+   // eases out on arrival), so the camera never starts at cruising speed.
+   if(leg.name==='walk'){const c=1/.51,u=t<.3?c*t*t:c*.09+.6*c*(t-.3);const q=walkAt(first.t+Math.min(1,u)*(last.t-first.t));return pose([q.x,eye,q.z],q.yaw,q.pitchDeg,walkFov,'walk',p);}
    if(leg.name==='turn')return pose([last.x,eye,last.z],lerp(last.yaw,arrYaw,e),lerp(last.pitchDeg,arrPitch,e),walkFov,'turn',p);
    return pose([last.x,eye,last.z],arrYaw,arrPitch,walkFov,p>=1?'room':'arrive',p);
   }

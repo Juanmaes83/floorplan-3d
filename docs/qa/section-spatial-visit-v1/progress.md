@@ -2,7 +2,7 @@
 
 - **Rama:** `feat/section-spatial-visit-v1`. **Base:** `master@0f9c6ea` + misión `0ff2c97`.
 - **Worktree:** `/home/user/fp-ssv`, aislado de Delivery, Hybrid y Kimi.
-- **Estado:** R1 en curso.
+- **Estado:** R2 en curso (R1 grabado e inspeccionado).
 
 ## Qué existe (no se reconstruye)
 - **FT3D-3:**
@@ -36,3 +36,16 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 | Hito | SHA | Estado | Evidencia |
 |---|---|---|---|
 | R0 | (este commit) | checkpoint | — |
+| R1 | `7b32e23` | room-visit + opción profesional + tests unitarios (56/56) | `evidence/r1/` hoja de contactos y vídeo de 10 s (fotograma a fotograma, 1280×800, SwiftShader) |
+| R2 WIP | `78bc59d` | relevo a Recorrer, vuelta a la presentación y a la sección; test de navegador escrito | — |
+
+## Inspección R1 (vídeo `evidence/r1/r1-section-to-visit-1280x800.mp4`)
+- **S1 sección frontal:** legible, con caras de corte rojas y caption veraz. **S2 apertura:** continua sobre el mismo modelo.
+- **S3/S4, defecto:** el descenso aterriza junto a la entrada (salón) y el paseo recorre la casa entera, con encuadres de pared blanca muy cercanos. Válido, pero poco legible y largo.
+- **Corrección aplicada:**
+  - el aterrizaje pasa a ser 1,2–4 m de ruta antes de la puerta del destino, en la estancia previa, para cruzar el acceso real;
+  - el reloj del paseo arranca desde parado (curva C¹).
+- **Pendiente:** el minimapa no sigue la posición durante la visita (R3); el render se cortó a los 40 min (unos 170 de 200 pasos).
+
+## Próxima acción
+Volver a renderizar (960×600, 120 pasos), inspeccionar y ejecutar `tests/presentation-visit.browser.test.cjs`.

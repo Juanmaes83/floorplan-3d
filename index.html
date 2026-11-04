@@ -4595,7 +4595,14 @@ function roomVisitPlan(roomId,region){
   // The descent lands on the first route sample that lies inside a room and outside every doorway (no lintel above).
   const inPoly=(poly,x,y)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
   const inRectP=(r,x,y,pad)=>{const dx=x-r.center[0],dy=y-r.center[1],c=Math.cos(r.angle),s=Math.sin(r.angle);return Math.abs(dx*c+dy*s)<r.spanMm/2+pad&&Math.abs(-dx*s+dy*c)<r.thickness/2+pad;};
-  const S=moves.samples,k=S.findIndex(q=>geometry.rooms.some(r=>r.poly.length>=3&&inPoly(r.poly,q.x,q.y))&&!geometry.doors.some(d=>inRectP(d.rect,q.x,q.y,250)));
+  // Landing: a short walk that shows the room and its access — the camera comes down in the space just before the
+  // destination (1.2–4 m of route before its door), then walks through the real doorway. A route sample counts only
+  // inside a room and clear of every doorway (no lintel above). Fallback: the destination's first such sample.
+  const S=moves.samples,dest=geometry.rooms.find(x=>x.id===roomId),landable=q=>geometry.rooms.some(r=>r.poly.length>=3&&inPoly(r.poly,q.x,q.y))&&!geometry.doors.some(d=>inRectP(d.rect,q.x,q.y,250));
+  const enter=S.findIndex(q=>inPoly(dest.poly,q.x,q.y)),at=i=>S[i].s??0;let k=-1;
+  if(enter>0){for(let i=enter-1;i>=0;i--){const back=at(enter)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){k=i;break;}}}
+  if(k<0)k=S.findIndex((q,i)=>i>=Math.max(0,enter)&&landable(q));
+  if(k<0)k=S.findIndex(landable);
   if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
   return {ok:true,plan,moves,landing:k,vfov};
 }

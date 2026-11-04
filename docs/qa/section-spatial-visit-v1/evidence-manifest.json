@@ -1,0 +1,25 @@
+{
+ "mission": "section-spatial-visit-v1",
+ "items": [
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r1/r1-contact-sheet.jpg",
+   "sha256": "4763c258bb990888fb7a2917eb27473975af504582c29ee0b4e26ef244410acd",
+   "bytes": 264566,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "7b32e23 (R1 code; frames stepped deterministically)",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R1 first transition: section-open \u2192 room-visit (landing at entrance-side route sample). Defect found: long, wall-filled walk; fixed next (landing 1.2\u20134 m before the destination door)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r1/r1-section-to-visit-1280x800.mp4",
+   "sha256": "b022312116a3b65ee43b147865517255def5d53077e1b25b3ebc58005bc92250",
+   "bytes": 914631,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "7b32e23 (R1 code; frames stepped deterministically)",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R1 first transition: section-open \u2192 room-visit (landing at entrance-side route sample). Defect found: long, wall-filled walk; fixed next (landing 1.2\u20134 m before the destination door)."
+  }
+ ]
+}
