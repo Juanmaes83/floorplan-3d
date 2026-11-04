@@ -40,6 +40,26 @@
    "testedSha": "b0e1088",
    "status": "CAPTURED/INSPECTED",
    "note": "R2: arrival inside the master bedroom, hand-over to Recorrer, back to section. Defects: landing still at entrance (choreography ends at a doorway view, fixed after), walk card text from base mode (fixed after)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r3/r3-contact-sheet.jpg",
+   "sha256": "6efe25657d379437981b37f8407bc4d531bde324c606ef50f37ad87398038042",
+   "bytes": 217613,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "982546f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R3: landing in the hall 1.2-4 m before the master bedroom door (sample 142), validated route on the minimap, walk through the real doorway, arrival inside with the bed in view, hand-over and back to section. Minor: during the descent a cut wall top passes close to the lens (valid, 220 mm clearance)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r3/r3-section-visit-960x600.mp4",
+   "sha256": "d9255dbd7658cf26cecab2ca3945bb3641380f15ed042887ecf41dff776656f4",
+   "bytes": 522508,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "982546f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R3: landing in the hall 1.2-4 m before the master bedroom door (sample 142), validated route on the minimap, walk through the real doorway, arrival inside with the bed in view, hand-over and back to section. Minor: during the descent a cut wall top passes close to the lens (valid, 220 mm clearance)."
   }
  ]
 }
