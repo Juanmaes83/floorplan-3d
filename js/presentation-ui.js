@@ -1161,6 +1161,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
+  if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
   cancelBatch();closeStory();disposeStory();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
@@ -1180,6 +1181,8 @@
   // A dialog opened over the presentation («Añadir observación», «Compartir imagen») owns the keyboard: Escape closes
   // that dialog only and the arrows stay in it. A second Escape then ends the presentation.
   if(active&&modalOpen())return;
+  // Walking from the visit: the keys belong to the walk (arrows move); Escape first returns to the presentation.
+  if(active&&walking){if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();leaveWalk('stop');}return;}
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;

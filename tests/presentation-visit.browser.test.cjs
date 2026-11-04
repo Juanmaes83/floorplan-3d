@@ -82,3 +82,40 @@ async function seekBackToSectionFromWalk(page){
  await page.locator('#presentationWalkSection').click();await page.waitForFunction(()=>!View3D.walking()&&FloorPlanPresentation.story?.kind==='section-open'&&!FloorPlanPresentation.story.busy,null,{timeout:180000});
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.story.local),0,'held at the section start');
 }
+
+// The professional's own room choice (the presentation sidecar), as «Presentar mi vivienda» saves it.
+const chooseRooms=(page,ids)=>page.evaluate(ids=>{const C=FloorPlanPresentationCore,a=FloorPlanApp,p=a.project;localStorage.setItem(C.key(a.entryId,p.id),JSON.stringify(C.sidecar(p.id,a.entryId,FloorPlanGuide.revision(p),ids)));},ids);
+async function toArrival(page){
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await seek(page,1);await page.locator('#presentationVisitWalk').waitFor();}
+
+test('fallback: a chosen room without an interior route keeps the base descent and says why',{timeout:600000},async t=>{
+ const {page,errors}=await open(t);await chooseRooms(page,['rom_kitchen']);await start(page,{visit:true});
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ const kinds=await page.evaluate(()=>FloorPlanPresentation.story.kinds);assert.ok(!kinds.includes('room-visit'),'no visit invented');assert.ok(kinds.includes('room-descent'));
+ assert.match(await page.locator('#presentationStoryCaption').textContent(),/Visita espacial no disponible: .*aéreo/);
+ assert.deepEqual(errors,[]);
+});
+
+test('Escape while walking returns to the presentation; five cycles keep resources stable',{timeout:1500000},async t=>{
+ const {page,errors}=await open(t);await start(page,{visit:true});const mem=[];
+ for(let i=0;i<5;i++){
+  if(i)await page.locator('.presentation-stops button').nth(0).click(),await settled(page);
+  await toArrival(page);await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());
+  await page.keyboard.press('Escape');await page.waitForFunction(()=>!View3D.walking());await settled(page);
+  assert.equal(await page.evaluate(()=>FloorPlanPresentation.active),true,'Escape left the walk, not the presentation');
+  mem.push(await page.evaluate(()=>({...View3D.rendererMemory,doorsOpen:View3D.presentationVisitInfo})));}
+ const g=mem.map(m=>m.geometries);assert.ok(Math.max(...g.slice(1))-Math.min(...g.slice(1))<=4,'geometries stable over cycles: '+g.join(','));
+ const tex=mem.map(m=>m.textures);assert.ok(Math.max(...tex)-Math.min(...tex)<=2,'textures stable: '+tex.join(','));
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!FloorPlanPresentation.active);assert.deepEqual(errors,[]);
+});
+
+for(const [name,viewport] of [['phone portrait',{width:390,height:844}],['phone landscape',{width:844,height:390}]])
+test(`${name}: arrival, hand-over bar fits, no horizontal overflow`,{timeout:900000},async t=>{
+ const {page,errors}=await open(t,viewport);await start(page,{visit:true});await toArrival(page);
+ const cta=await page.locator('#presentationVisitWalk').boundingBox();assert.ok(cta&&cta.height>=40,'CTA reachable');
+ await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());
+ const bar=await page.locator('#presentationWalkBar').boundingBox();assert.ok(bar.x>=0&&bar.x+bar.width<=viewport.width+1,'bar inside the screen');
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
+ await page.locator('#presentationWalkBack').click();await page.waitForFunction(()=>!View3D.walking());assert.deepEqual(errors,[]);
+});
