@@ -75,6 +75,23 @@ test('A + F + G: prepare, preview as client, walk, guided, publish, open from th
  await pv.locator('#deliveryWalk').click();await pv.waitForFunction(()=>View3D.walking());
  await pv.locator('#deliveryBar').waitFor();assert.equal(await pv.locator('#presentationTools').isVisible(),false);
  await shot(pv,'A-client-walk');
+ // Mini-map: open by default on a desktop, where the visitor is and looks, every room clickable.
+ await pv.locator('#deliveryMap').waitFor();await pv.waitForFunction(()=>FloorPlanDeliveryClient.map?.room);
+ let m=await pv.evaluate(()=>FloorPlanDeliveryClient.map);assert.equal(m.open,true);
+ const roomsOnMap=await pv.locator('#deliveryMap polygon[data-room-id][role="button"]').count();
+ assert.equal(roomsOnMap,await pv.evaluate(()=>FloorPlanApp.geometry.rooms.filter(r=>r.poly.length>=3).length),'every room on the map');
+ assert.equal(await pv.locator(`#deliveryMap polygon.active[data-room-id="${m.room}"]`).count(),1,'current room highlighted');
+ assert.equal(await pv.locator('#deliveryMap .delivery-map-dot').count(),1);assert.match(await pv.locator('#deliveryMapHere').textContent(),/\S/);
+ // Navigation: a room on the map moves the visitor inside it (collision-checked by View3D).
+ const target=await pv.evaluate(cur=>FloorPlanApp.geometry.rooms.filter(r=>r.id!==cur&&r.poly.length>=3).sort((a,b)=>b.area-a.area)[0].id,m.room);
+ await pv.locator(`#deliveryMap polygon[data-room-id="${target}"]`).click({force:true});
+ await pv.waitForFunction(id=>FloorPlanDeliveryClient.map.room===id,target);assert.equal(await pv.evaluate(()=>View3D.walking()),true,'still walking');
+ await shot(pv,'A-client-walk-map-navigated');
+ // Keyboard: Enter on a room works too.
+ await pv.locator(`#deliveryMap polygon[data-room-id="${m.room}"]`).focus();await pv.keyboard.press('Enter');await pv.waitForFunction(id=>FloorPlanDeliveryClient.map.room===id,m.room);
+ // Collapsible.
+ await pv.locator('#deliveryMapToggle').click();assert.equal(await pv.locator('#deliveryMapPanel').isVisible(),false);assert.equal(await pv.locator('#deliveryMapToggle').getAttribute('aria-expanded'),'false');
+ await shot(pv,'A-client-walk-map-collapsed');await pv.locator('#deliveryMapToggle').click();assert.equal(await pv.locator('#deliveryMapPanel').isVisible(),true);
  await pv.locator('#deliveryExit').click();await pv.waitForFunction(()=>FloorPlanDeliveryClient.mode==='gate'&&!View3D.walking());
  // Guided: the professional's rooms, in order; no professional tool.
  const decided=await pro.evaluate(()=>{const C=FloorPlanPresentationCore;return JSON.parse(localStorage.getItem(C.key(FloorPlanApp.entryId,FloorPlanApp.project.id))).roomIds;});
@@ -174,6 +191,13 @@ test(`D: phone ${name}: the gate fits, 44px targets, walk with touch controls`,{
  assert.ok(m.sw<=m.w,'no horizontal scroll');for(const h of m.btn)assert.ok(h>=44,'touch target '+h);
  assert.match(await page.locator('#deliveryFacts').textContent(),/joystick/);await shot(page,`D-${name}-gate`);
  await page.locator('#deliveryWalk').tap();await page.waitForFunction(()=>View3D.walking());
+ await page.locator('#deliveryMap').waitFor();const mapOpen=await page.evaluate(()=>FloorPlanDeliveryClient.map.open);
+ assert.equal(mapOpen,viewport.height>=520,'map open on a tall screen, collapsed on a short one');
+ const mb=await page.locator('#deliveryMap').boundingBox();assert.ok(mb.x>=0&&mb.x+mb.width<=viewport.width,'map inside the screen');
+ const toggleBox=await page.locator('#deliveryMapToggle').boundingBox();assert.ok(toggleBox.height>=40,'map toggle touch target');
+ if(!mapOpen)await page.locator('#deliveryMapToggle').tap();
+ const tgt=await page.evaluate(()=>{const cur=FloorPlanDeliveryClient.map.room;const rs=FloorPlanApp.geometry.rooms.filter(r=>r.poly.length>=3);return (rs.find(r=>r.id!==cur)||rs[0]).id;});
+ await page.locator(`#deliveryMap polygon[data-room-id="${tgt}"]`).tap({force:true});await page.waitForFunction(id=>FloorPlanDeliveryClient.map.room===id,tgt);
  const bar=await page.locator('#deliveryExit').boundingBox();assert.ok(bar.height>=40);
  const fill=await page.evaluate(()=>({stage:document.querySelector('#stage').getBoundingClientRect().width,canvas:document.querySelector('#stage canvas').getBoundingClientRect().width,w:innerWidth}));
  assert.equal(Math.round(fill.stage),fill.w,'the 3D fills the width (no editor side rail)');assert.equal(Math.round(fill.canvas),fill.w);await page.waitForTimeout(800);await shot(page,`D-${name}-walk`);
