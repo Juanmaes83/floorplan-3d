@@ -55,6 +55,7 @@ jobs:
           VQ01_LIFECYCLE: '1'
         run: node --test --test-concurrency=1 tests/vq01-cp2.browser.test.cjs
       - name: Verify contracts and existing browser coverage
+        shell: bash
         env:
           M08_ARTIFACTS: qa-results/cp2/m08
         run: |
