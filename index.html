@@ -380,6 +380,13 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
 .presentation-overlay{position:absolute;inset:0;z-index:15;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding:12px}
 .presentation-overlay[hidden]{display:none}
+/* Section → Spatial Visit V1: while walking from the visit, the card steps aside for a compact bar (top centre). */
+.presentation-overlay[data-walking="true"] .presentation-card,.presentation-overlay[data-walking="true"] .presentation-minimap{display:none}
+.presentation-walkbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:3;pointer-events:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px);padding:8px 10px;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 30px #2b282433}
+.presentation-walkbar[hidden]{display:none}
+.presentation-walkbar-label{margin:0 4px;font-weight:700;font-size:14px}
+.presentation-walkbar .btn{min-height:44px;border:1px solid var(--line)}
+.presentation-visit-option{margin:6px 0 0 26px}
 .presentation-minimap{position:absolute;top:12px;left:12px;z-index:1;pointer-events:auto;width:min(220px,calc(100% - 24px));padding:7px;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 30px #2b282433}
 .presentation-minimap[hidden],.presentation-minimap-panel[hidden]{display:none}
 .presentation-minimap .btn{border:1px solid var(--line);min-height:44px;width:100%}
@@ -4557,6 +4564,26 @@ let storyRun=null,storyPlanStart=null;
    the cut stays horizontal (cutaway, no ceiling to cross); at eye height inside the room the cut returns to full height
    once (walls, openings and ceiling close around the viewer). The route's doors are open for the visit and get their
    state back when it ends. */
+const WALK_EYE=1.6;
+/* Hand-over to «Recorrer» (S5): the walk takes the camera exactly where the visit arrived (same position, yaw and pitch)
+   when that spot is clear for the walker; otherwise the walk's own start. Collisions, doors, keyboard, pointer lock,
+   joystick and the walk card are the walk's, untouched. presentationWalkEnd leaves the walk without the orbit's fly-back
+   (the presentation reframes its stop itself) and puts the presentation's wall cut back. */
+function presentationWalkFrom(){
+  if(!active||contextLost||anim||opt.mode==='walk')return {ok:false};
+  const pos=camera.position.clone(),q=camera.quaternion.clone(),clear=!blocked(pos.x,pos.z,.25);
+  endPresentationStory({keepPose:true});
+  setMode('walk');
+  if(clear){camera.position.set(pos.x,WALK_EYE,pos.z);camera.quaternion.copy(q);}
+  return {ok:true,keptPose:clear,position:camera.position.toArray()};
+}
+function presentationWalkEnd(){
+  if(!active||opt.mode!=='walk')return false;
+  walkCtl.unlock();stopTouchWalk();opt.mode='orbit';syncModeBtns();orbit.enabled=true;
+  $('#walkOverlay').style.display='none';$('#cross').style.display='none';syncHint3d();
+  if(presentationBaseCut!=null&&opt.cut!==presentationBaseCut)setPresentationCut(presentationBaseCut);
+  return true;
+}
 function roomVisitPlan(roomId,region){
   const Route=window.FloorPlanPresentationRoute;if(!Route)return {ok:false,code:'no_route_module',reason:'Rutas no disponibles.'};
   const aspect=SW()/Math.max(1,SH()),vfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/aspect)*180/Math.PI)),hfovDeg=2*Math.atan(Math.tan(vfov*Math.PI/360)*aspect)*180/Math.PI;
@@ -4579,7 +4606,8 @@ function beginRoomVisit(stop,view,aspect,startPose){
   const S=r.moves.samples.slice(r.landing),t0=S[0].t;
   const samples=S.map(q=>({t:q.t-t0,x:wx(q.x),z:wz(q.y),yaw:q.cameraYaw??q.yaw,pitchDeg:q.cameraPitchDeg??q.pitchDeg}));
   const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size?.heightMm||0)));
-  const above=Math.max(fullTop,tallest)+.8,eye=r.moves.eyeHeight||1.5;
+  // Eye height of «Recorrer» (1.6 m), so the hand-over never moves the horizon.
+  const above=Math.max(fullTop,tallest)+.8,eye=WALK_EYE;
   const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:{yaw:r.moves.arrival.cameraYaw,pitchDeg:r.moves.arrival.cameraPitchDeg},base:{near:camera.near,far:camera.far}});
   const doorIds=[...(r.plan.doorIds||[])];
   return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,2.4),doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
@@ -4973,6 +5001,7 @@ Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
+window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
 window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};
 Object.defineProperty(window.View3D,'presentationVisitInfo',{get:()=>storyRun?.visit?{roomId:storyRun.visit.roomId,route:{...storyRun.visit.route,points:storyRun.visit.route.points.map(p=>({...p}))},fullHeight:storyRun.visit.full,cut:opt.cut}:null});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
