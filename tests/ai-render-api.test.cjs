@@ -32,7 +32,7 @@ test('sends a fixed geometry-preserving prompt and the image; returns the render
  assert.equal(r.status,200);assert.equal(r.json.image,'data:image/png;base64,QUJD');assert.equal(r.json.style,'warm');assert.equal(r.headers['cache-control'],'no-store');
  assert.ok(!JSON.stringify(r.json).includes('sk-test-secret'));
  assert.equal(calls.length,1);assert.equal(calls[0].url,'https://api.openai.com/v1/images/edits');assert.equal(calls[0].init.headers.Authorization,'Bearer sk-test-secret');
- const form=calls[0].init.body;assert.equal(form.get('model'),'gpt-image-1');assert.equal(form.get('n'),'1');
+ const form=calls[0].init.body;assert.equal(form.get('model'),process.env.RUBIK_RENDER_MODEL||'gpt-image-2.5-sunburst');assert.equal(form.get('n'),'1');
  assert.match(form.get('prompt'),/Keep EXACTLY the same camera angle, walls/);assert.match(form.get('prompt'),/Do not add or remove rooms, walls, openings/);assert.match(form.get('prompt'),/warm evening light/);
  assert.deepEqual([...form.keys()].sort(),['image','model','n','prompt','size'],'only the image and the fixed prompt reach the provider');
  const image=form.get('image');assert.equal(image.type,'image/png');assert.deepEqual([...new Uint8Array(await image.arrayBuffer())].slice(0,4),[0x89,0x50,0x4e,0x47]);
