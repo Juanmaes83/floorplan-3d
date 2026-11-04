@@ -61,7 +61,7 @@ Las observaciones se basan en las capturas oficiales A0/B1/B2 del artifact 13310
 
 | Vista / familia | A0→B2 píxeles diferentes | B1→B2 | Qué se ve en B2 | Gate visual actual |
 |---|---:|---:|---|---|
-| GLOBAL | 1.81% | 1.19% | Composición general casi idéntica; mejoras concentradas en regiones materiales, no en atmósfera/arquitectura | `PENDING_JUANMA` |
+| GLOBAL | 1.81% | 1.19% | Composición general casi idéntica; mejoras concentradas en regiones materiales, no en atmósfera/arquitectura | `VISUAL_PARTIAL_ACCEPT_FOUNDATION`: gap global abierto |
 | TIMBER_CLOSEUP | 39.83% | 39.80% | Veta más legible, tablas/juntas con mejor definición; vigilar exceso de contraste, escala y repetición | Candidato positivo; sin PASS firmado |
 | CONCRETE_CLOSEUP | 70.20% | 68.53% | Paso de patrón oscuro rayado a granulado mineral más continuo; revisar si parece uniforme o demasiado oscuro | Candidato positivo; sin PASS firmado |
 | PLASTER_CLOSEUP | 74.69% | 74.47% | Desaparece el patrón visual antiguo y queda pared mate cálida bastante uniforme; puede ser más verosímil, pero falta relieve con luz rasante | Requiere prueba dirigida |
