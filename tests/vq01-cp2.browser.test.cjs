@@ -106,7 +106,7 @@ async function reproduce(label){
   diagnostic.closeups=[];
   for(const view of views.closeups){
    const result=await page.evaluate(async view=>{
-    const T=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+    const T=await import('three');
     const c=new T.PerspectiveCamera(view.fov,innerWidth/innerHeight,.1,300);c.position.fromArray(view.position);c.lookAt(new T.Vector3(...view.target));
     const pose={...view,quaternion:c.quaternion.toArray()};View3D.presentationRestorePose(pose);
     return {pose:View3D.presentationPose(),png:document.querySelector('#view3d canvas').toDataURL('image/png'),light:View3D.presentationLight};

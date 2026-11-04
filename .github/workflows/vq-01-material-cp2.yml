@@ -1,0 +1,75 @@
+name: VQ-01 CP2 material impact
+on:
+  push:
+    branches: [feat/vq-01-material-fidelity-foundation]
+    paths: ['js/surface-*.mjs', 'js/presentation-ui.js', 'tests/*cp2*', 'tests/surface-fidelity.test.cjs', 'tests/fixtures/vq01-cp2*', '.github/workflows/vq-01-material-cp2.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  material-impact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: 0f9c6ead9732901681498efec326d1ca92e42ffe
+          path: baseline-a0
+      - uses: actions/checkout@v4
+        with:
+          ref: fac408025c9cc11ed554f6f395cd3153d1838861
+          path: baseline-b1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Install isolated browser tooling and pinned Three
+        run: |
+          npm install --prefix "$RUNNER_TEMP/vq01-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/vq01-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          npm pack three@0.160.0 --pack-destination "$RUNNER_TEMP" --silent
+          mkdir -p "$RUNNER_TEMP/vq01-three"
+          tar -xzf "$RUNNER_TEMP/three-0.160.0.tgz" -C "$RUNNER_TEMP/vq01-three"
+          echo "NODE_PATH=$RUNNER_TEMP/vq01-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$RUNNER_TEMP/vq01-three/package" >> "$GITHUB_ENV"
+          echo "CHROME=$(node -p "require('$RUNNER_TEMP/vq01-playwright/node_modules/playwright').chromium.executablePath()")" >> "$GITHUB_ENV"
+      - name: Reproduce A0 global and closeups twice
+        env:
+          VQ01_APP_ROOT: ${{ github.workspace }}/baseline-a0
+          VQ01_AB_SIDE: A0
+          VQ01_ARTIFACTS: qa-results/cp2/a0
+          VQ01_LIFECYCLE: '1'
+        run: node --test --test-concurrency=1 tests/vq01-cp2.browser.test.cjs
+      - name: Reproduce B1 global and closeups twice
+        env:
+          VQ01_APP_ROOT: ${{ github.workspace }}/baseline-b1
+          VQ01_AB_SIDE: B1
+          VQ01_ARTIFACTS: qa-results/cp2/b1
+          VQ01_LIFECYCLE: '1'
+        run: node --test --test-concurrency=1 tests/vq01-cp2.browser.test.cjs
+      - name: Reproduce B2 global and closeups twice
+        env:
+          VQ01_APP_ROOT: ${{ github.workspace }}/.
+          VQ01_AB_SIDE: B2
+          VQ01_ARTIFACTS: qa-results/cp2/b2
+          VQ01_LIFECYCLE: '1'
+        run: node --test --test-concurrency=1 tests/vq01-cp2.browser.test.cjs
+      - name: Verify contracts and existing browser coverage
+        env:
+          M08_ARTIFACTS: qa-results/cp2/m08
+        run: |
+          node --test tests/surfaces.test.cjs tests/surface-fidelity.test.cjs | tee qa-results/cp2/unit.log
+          node --test --test-concurrency=1 --test-name-pattern='1440x900|rejects' tests/material-detail.browser.test.cjs | tee qa-results/cp2/m08.log
+          node --test --test-concurrency=1 --test-name-pattern='1440x900|HTTP, hash, decode' tests/surfaces.browser.test.cjs | tee qa-results/cp2/surfaces.log
+      - name: Compare cumulative and incremental impact
+        run: |
+          node tests/vq01-cp2-compare.cjs qa-results/cp2/a0 qa-results/cp2/b1 qa-results/cp2/b2 qa-results/cp2/review
+          cp tests/fixtures/vq01-cp2*.json qa-results/cp2/
+          cp tests/fixtures/vq01-material-ab-v2.json qa-results/cp2/
+          cp docs/qa/vq01-cp2-impact.md qa-results/cp2/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vq01-cp2-${{ github.sha }}
+          path: qa-results/cp2/
+          if-no-files-found: error
