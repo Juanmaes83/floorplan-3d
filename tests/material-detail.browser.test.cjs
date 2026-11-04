@@ -39,7 +39,7 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844
   await page.mouse.click(capturePoint.x,capturePoint.y);
   const saved=await download;
   console.log('M08 real-pointer PNG export event duration_ms:',Date.now()-downloadStart);
-  assert.match(saved.suggestedFilename(),/-3D\\.png$/,'capture retains the application PNG filename');
+  assert.match(saved.suggestedFilename(),/-3D\.png$/,'capture retains the application PNG filename');
   const stream=await saved.createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);const png=Buffer.concat(chunks);assert.ok(png.length>10000);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');sameCamera((await inspect(page)).camera,roomEnhanced.camera);
  await button.click();await ready(page,'base');sameCamera((await inspect(page)).camera,roomEnhanced.camera);await page.screenshot({path:path.join(QA,`${size}-room-base.png`)});
  if(viewport.width===360){await page.setViewportSize({width:844,height:390});await page.waitForFunction(()=>{const c=View3D.canvasState,cam=View3D.cameraState,s=document.querySelector('#stage');return s.clientWidth>0&&Math.abs(cam.aspect-s.clientWidth/s.clientHeight)<.001&&Math.abs(c.width-s.clientWidth*c.pixelRatio)<=2;});await page.screenshot({path:path.join(QA,'360x800-to-844x390-room-base.png')});}
