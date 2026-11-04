@@ -1,0 +1,26 @@
+name: B2 B8 image API compatibility
+
+on:
+  push:
+    branches:
+      - fix/b2-b8-gpt-image-25-compat-2026-11-04
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax validation
+        run: |
+          node --check api/render.js
+          node --check tests/ai-render-api.test.cjs
+      - name: B2 and B8 mock provider tests (no API key or charges)
+        run: node --test tests/ai-render-api.test.cjs
