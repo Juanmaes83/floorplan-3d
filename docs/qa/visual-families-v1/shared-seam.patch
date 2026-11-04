@@ -1,0 +1,63 @@
+--- a/index.html
++++ b/index.html
+@@ -2499,6 +2499,8 @@
+ import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+ import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+ import {SurfaceRenderer} from './js/surface-renderer.mjs';
++import {WindowVisualAdapter} from './js/visual-families-adapter.mjs';
++import {mountVisualPreview} from './js/visual-families-preview.mjs';
+ import * as AssetLoader from './js/asset-loader.mjs';
+
+ const stage = $('#stage'), host = $('#view3d');
+@@ -2649,6 +2651,7 @@
+ };
+ const floorMats = {};
+ const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
++const windowVisual=new WindowVisualAdapter(THREE);
+ function floorMat(materialId){
+   const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
+   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
+@@ -3492,6 +3495,7 @@
+   clearPresentationRoute();
+   renderedSource=project; renderedGeometry=geometry;
+   }
++  if(!other)windowVisual.clearBindings();
+   clearGroup(archFloor); clearGroup(archUp);
+   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
+   doors.length = 0; colliders = [];
+@@ -3538,6 +3542,7 @@
+     const n=Math.max(1,Math.round(L/.9));
+     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
+     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
++    if(!other)windowVisual.register({projectId:geometry.source.id,id:r.openingId,kind:'window',widthMm:r.spanMm,heightMm:(head-sill)*1000,thicknessMm:r.thickness,sillMm:sill*1000,fullHeight:gTop===head},group,group.children.filter(o=>o.isMesh&&o.material===frameMat));
+   });
+   geometry.doors.forEach(d => {
+     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
+@@ -3561,7 +3566,7 @@
+   if(other)return;
+   buildLevels();
+   buildRoof();
+-  applyLight(); applyGrow(); surfaceRenderer.end();
++  windowVisual.apply();applyLight(); applyGrow(); surfaceRenderer.end();
+ }
+
+ /* ======================= 多层建筑 / building levels ======================= */
+@@ -3939,7 +3944,7 @@
+   if(anim?.res)anim.res();anim=null;
+   if(fly?.res)fly.res(false);fly=null;
+   assetGeneration++;assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
+-  surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
++  windowVisual.clearBindings();surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
+   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
+   active=false;stage.classList.remove('is3d','animating');
+ }
+@@ -4906,6 +4911,9 @@
+   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
+
+ window.View3D.presentationReveal=presentationReveal;
++Object.defineProperty(window.View3D,'visualFamilies',{get:()=>windowVisual.snapshot()});
++window.View3D.setVisualFamilies=options=>{if(!active||contextLost)throw Error('3D view unavailable');if(options.enabled&&options.projectId!==geometry.source.id)throw Error('Visual target Project mismatch');const result=windowVisual.set(options);renderer.render(scene,camera);return result;};
++mountVisualPreview(window.View3D);
+ Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
+ Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
+ Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
