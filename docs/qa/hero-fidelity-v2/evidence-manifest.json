@@ -19,6 +19,21 @@
       ],
       "localFullManifestSha256": "49d333c686fe44f0e36d43d2299302b4cd094854f9b082413f1f2137a89c9259",
       "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "iteration-2",
+      "codeSha": "49555e9d063cb39ee47d5a90e7e35dfd70a7eba8",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; HDR rejected by MIME",
+      "files": [
+        { "path": "evidence/iteration-2/off-v2-contact.jpg", "sha256": "4ec2b8f6e21b789f1e3a543d8694eb41a8d3bcf7df335643b3c157ef01619bb8" },
+        { "path": "evidence/iteration-2/v2-detail.jpg", "sha256": "5dab6288b9a646bcba99a2c72e639011a56a39d17fcdade04341e003069a6b62" },
+        { "path": "evidence/iteration-2/v2-medium.jpg", "sha256": "efba3b25f5eef6308a1e8c9df5707319661defd8158c83d55861acbae8e7e863" }
+      ],
+      "localFullManifestSha256": "86753508345f79134f07eabae8f41c83d9dd4fb33d97648cecc8d0eafb6bccf5",
+      "visualState": "VISUAL_PENDING_HUMAN"
     }
   ],
   "limitations": [
