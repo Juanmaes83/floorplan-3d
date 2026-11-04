@@ -47,5 +47,20 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
   - el reloj del paseo arranca desde parado (curva C¹).
 - **Pendiente:** el minimapa no sigue la posición durante la visita (R3); el render se cortó a los 40 min (unos 170 de 200 pasos).
 
+| R2 | `b0e1088` | llegada dentro del destino (prolongación por la ruta validada), relevo y vuelta; test de navegador 2/2 | `evidence/r2/` 348 fotogramas, 14,5 s |
+| R3 parcial | `1619efc` | el minimapa muestra destino y ruta durante la visita; motivo del fallback visible | — |
+
+## Inspección R2
+- **Correcto:**
+  - S1/S2;
+  - la continuidad de la vista general con corte a la aproximación;
+  - la entrada por el corte;
+  - la llegada en el dormitorio a la altura de los ojos;
+  - Recorrer con la barra de vuelta;
+  - la vuelta a la sección.
+- **Defectos corregidos tras el render:**
+  - el aterrizaje seguía en la entrada, porque la coreografía termina en una vista desde la puerta: ahora la referencia es ese final;
+  - la tarjeta de Recorrer decía «desde la entrada»: ahora habla de «esta estancia».
+
 ## Próxima acción
-Volver a renderizar (960×600, 120 pasos), inspeccionar y ejecutar `tests/presentation-visit.browser.test.cjs`.
+Render R3 (aterrizaje cerca del destino y minimapa) e inspección; después R4 (reduced motion, cancelaciones, 2 plantas, móvil y ciclos).

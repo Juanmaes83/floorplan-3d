@@ -20,6 +20,26 @@
    "testedSha": "7b32e23 (R1 code; frames stepped deterministically)",
    "status": "CAPTURED/INSPECTED",
    "note": "R1 first transition: section-open \u2192 room-visit (landing at entrance-side route sample). Defect found: long, wall-filled walk; fixed next (landing 1.2\u20134 m before the destination door)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r2/r2-contact-sheet.jpg",
+   "sha256": "f3991d04633f0f7e5c10012271de900374e3a581eb16cdb4c0f70fa54e5cf309",
+   "bytes": 224576,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "b0e1088",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R2: arrival inside the master bedroom, hand-over to Recorrer, back to section. Defects: landing still at entrance (choreography ends at a doorway view, fixed after), walk card text from base mode (fixed after)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r2/r2-section-visit-handover-960x600.mp4",
+   "sha256": "b851a1dc5f38da4b7259ec0568b062608cb4e628ac55868047ac9b6e6a9a278c",
+   "bytes": 568453,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "b0e1088",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R2: arrival inside the master bedroom, hand-over to Recorrer, back to section. Defects: landing still at entrance (choreography ends at a doorway view, fixed after), walk card text from base mode (fixed after)."
   }
  ]
 }

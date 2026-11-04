@@ -4575,12 +4575,16 @@ function presentationWalkFrom(){
   endPresentationStory({keepPose:true});
   setMode('walk');
   if(clear){camera.position.set(pos.x,WALK_EYE,pos.z);camera.quaternion.copy(q);}
+  // The walk card speaks of this hand-over (from the room, not the entrance; no pointer to «Presentar mi vivienda»).
+  const t3=(es,en,zh)=>LANG==='en'?en:LANG==='zh'?zh:es;
+  $('#wo1').textContent=clear?t3('Visita libre a la altura de los ojos, desde esta estancia. No cambia nada del proyecto.','A free visit at eye level, from this room. Nothing in the project changes.','从此房间开始视线高度自由漫游，不会改变项目。'):t3('Visita libre a la altura de los ojos, desde la entrada (este punto no deja sitio para caminar). No cambia nada del proyecto.','A free visit at eye level, from the entrance (this spot leaves no room to walk). Nothing in the project changes.','从入户门开始视线高度自由漫游，不会改变项目。');
+  $('#wo4').hidden=true;
   return {ok:true,keptPose:clear,position:camera.position.toArray()};
 }
 function presentationWalkEnd(){
   if(!active||opt.mode!=='walk')return false;
   walkCtl.unlock();stopTouchWalk();opt.mode='orbit';syncModeBtns();orbit.enabled=true;
-  $('#walkOverlay').style.display='none';$('#cross').style.display='none';syncHint3d();
+  $('#walkOverlay').style.display='none';$('#cross').style.display='none';syncHint3d();$('#wo4').hidden=false;syncWalkTexts();
   if(presentationBaseCut!=null&&opt.cut!==presentationBaseCut)setPresentationCut(presentationBaseCut);
   return true;
 }
@@ -4600,7 +4604,10 @@ function roomVisitPlan(roomId,region){
   // inside a room and clear of every doorway (no lintel above). Fallback: the destination's first such sample.
   const S=moves.samples,dest=geometry.rooms.find(x=>x.id===roomId),landable=q=>geometry.rooms.some(r=>r.poly.length>=3&&inPoly(r.poly,q.x,q.y))&&!geometry.doors.some(d=>inRectP(d.rect,q.x,q.y,250));
   const enter=S.findIndex(q=>inPoly(dest.poly,q.x,q.y)),at=i=>S[i].s??0;let k=-1;
-  if(enter>0){for(let i=enter-1;i>=0;i--){const back=at(enter)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){k=i;break;}}}
+  // The reference point is where the route enters the destination; when the choreography stops at a doorway view before
+  // it (its samples never enter), the end of the samples (that doorway) is used.
+  const ref=enter>0?enter:enter<0?S.length-1:0;
+  if(ref>0){for(let i=ref-1;i>=0;i--){const back=at(ref)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){k=i;break;}}}
   if(k<0)k=S.findIndex((q,i)=>i>=Math.max(0,enter)&&landable(q));
   if(k<0)k=S.findIndex(landable);
   if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
