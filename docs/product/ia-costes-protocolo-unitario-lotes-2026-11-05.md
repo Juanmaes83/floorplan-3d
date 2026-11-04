@@ -3,6 +3,12 @@
 **Relación:** [Plan maestro IA](ia-imagenes-asistente-plan-maestro-2026-11-05.md).
 **No implica generar más imágenes, fusionar PR, activar pagos ni fijar tarifas comerciales.**
 
+## Nueva familia de costes y precios (05/11/2026)
+
+Se añade la oferta **Foto→reforma** sin proyecto previo, y como líneas de exploración **panorama conceptual 360°, 360° consistente derivado del modelo 3D, animación no generativa de imágenes y vídeo generativo de imagen**. Ver [anexo detallado](ia-servicios-foto-reforma-panorama-360-video-valor-comercial-2026-11-05.md). Medir por separado el coste API de fotos editadas, número de imágenes de referencia, retoques, protección de datos y revisión; panoramas requieren QA de costuras; vídeo generativo se factura en USD/segundo según modelo/resolución. Precio premium de venta `!=` gasto de proveedor. Los valores de ofertas del anexo son **hipótesis para validar**, no tarifas oficiales RUBIK.
+
+La presencia de una cifra de gasto en una captura agregada de OpenAI puede documentar **gasto observado de cuenta**, pero no garantiza asignación al único render de RUBIK salvo correlación de petición/horario. Registrar cifra exacta y fuente al recibir evidencia verificable.
+
 ## 1. Qué conocemos, qué no conocemos
 
 **Conocido:**
