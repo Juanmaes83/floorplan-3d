@@ -135,7 +135,9 @@
   mapToggle.textContent=tx(mapOpen?'Ocultar plano':'Mostrar plano',mapOpen?'Hide map':'Show map',mapOpen?'隐藏平面图':'显示平面图');
   mapToggle.setAttribute('aria-expanded',String(mapOpen));mapPanel.hidden=!mapOpen;
   if(!mapOpen)return;
-  const data=Core.minimap(app.geometry,overlay.dataset.moving==='true'?null:View3D.presentationPose(),plan.stops[index].roomId);
+  // Section → Spatial Visit V1: during the visit the map names its destination (not the overview it started from).
+  const visitScene=story&&story.scenes[story.i]?.kind==='room-visit'?story.scenes[story.i]:null;
+  const data=Core.minimap(app.geometry,overlay.dataset.moving==='true'?null:View3D.presentationPose(),visitScene?plan.stops[visitScene.stop].roomId:plan.stops[index].roomId);
   if(!data){map.hidden=true;return;}
   mapSvg.replaceChildren();mapSvg.setAttribute('viewBox',data.viewBox.join(' '));
   mapSvg.setAttribute('aria-label',tx('Plano de orientación','Orientation map','方向平面图'));
@@ -151,6 +153,10 @@
   }
   const route=View3D.presentationRouteInfo;
   if(route?.points?.length>1&&['running','complete'].includes(route.status))svgEl('polyline',mapSvg,{points:route.points.map(point=>`${point.x},${point.y}`).join(' '),class:'presentation-minimap-route'});
+  // Section → Spatial Visit V1: the validated route of the visit, from the entrance to the destination.
+  const visit=visitScene&&story.p>0?View3D.presentationVisitInfo:null;
+  if(visit?.route?.points?.length>1){svgEl('polyline',mapSvg,{points:visit.route.points.map(point=>`${point.x},${point.y}`).join(' '),class:'presentation-minimap-route','data-visit-route':'true'});
+   mapSvg.setAttribute('aria-label',tx('Plano de orientación con la ruta validada hasta la estancia','Orientation map with the validated route to the room','带已验证路线的方向平面图'));}
   // FT3D-3: while the section is on, its cut line and the way the frontal camera looks, from the same descriptor.
   const cut=story&&story.scenes[story.i]?.kind==='section-open'&&story.p>0?View3D.presentationStoryInfo?.dynamicSection:null;
   if(cut){const [a,b]=cut.line,len=Math.max(data.viewBox[2],data.viewBox[3])*.09,mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
@@ -759,6 +765,8 @@
    if(!multi){u.panel.setAttribute('aria-label',tx('Desde el plano','From the plan','从平面图'));u.slider.setAttribute('aria-label',tx('Del plano (0) a la vista 3D (100)','From plan (0) to 3D view (100)','从平面图 (0) 到 3D 视图 (100)'));
     u.planButton.textContent=tx('Ver el plano','Show the plan','查看平面图');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver en 3D','See in 3D','查看 3D');}}
+  // An honest fallback is said, not hidden: the descent replaced the visit, and why.
+  if(visitEnabled&&visitFallback&&story.scenes.some(x=>x.kind==='room-descent')&&!story.scenes.some(x=>x.kind==='room-visit'))caption+=tx(` · Visita espacial no disponible: ${visitFallback}`,` · Spatial visit unavailable: ${visitFallback}`,` · 空间参观不可用：${visitFallback}`);
   u.caption.textContent=caption;
   if(multi){u.panel.setAttribute('aria-label',tx('Historia completa','Whole story','完整故事'));u.slider.max='1000';u.slider.value=String(Math.round(story.P*1000));
    u.slider.setAttribute('aria-label',tx('Progreso de la historia, del plano a la última estancia','Story progress, from the plan to the last room','故事进度'));
@@ -768,7 +776,7 @@
   else{u.slider.max='100';u.slider.value=String(Math.round(p*100));}
   u.slider.setAttribute('aria-valuetext',`${Math.round(story.P*100)} % · ${caption}`);
   u.panel.dataset.scene=sc.kind;
-  if(sc.kind==='section-open'||sc.kind==='elevation-open'||u.panel.dataset.sectionMap)renderMinimap();
+  if(sc.kind==='section-open'||sc.kind==='elevation-open'||sc.kind==='room-visit'||u.panel.dataset.sectionMap)renderMinimap();
  }
  // Builds a scene on the scene graph: the card is measured as its stops show it (so its ends are the poses go() frames),
  // the previous narrative ends, the level of the scene is shown, and the narrative begins at local p.
