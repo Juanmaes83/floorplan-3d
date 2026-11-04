@@ -1,7 +1,13 @@
 # Hero Fidelity V2 — visual acceptance
 
-No V2 candidate has been rendered or reviewed yet.
+## Iteration 1 — code `9e8829a51ca93ee3661cd0d5300af3ac207e63e7`
 
-The first candidate will use the real Rubik fixture and fixed D1 detail, M1 medium, M2 oblique, M3 opposite oblique and G1 general views. B2/OFF and V2 must retain equivalent geometry, camera, resolution, lighting and quality. Images will be opened and inspected; pixel differences alone are not acceptance.
+Opened and inspected OFF/V2 D1, M1, M2, M3 and G1 Chromium renders of the real fixture. The candidate adds a legible sill and nose, deeper lateral reading and distinct frame/sash/bead lines. M1 and M2 show a perceptible architectural improvement rather than a finish-only change; the real bedroom remains visible and G1 preserves the source geometry.
 
-Required first gate: visibly more credible aperture depth and wall junctions, less flat material response, coherent glazing over the real interior, and no detached decorative-window treatment. Human visual approval remains pending. No propagation beyond representative compatible openings before that gate.
+Remaining defects: the combined outer frame and sash still read too dark/heavy, glazing slightly washes out the interior, and mineral facade variation is too subtle at medium distance. Iteration 1 is not human-approved and is not a propagation gate.
+
+Next correction: reduce stock overlap, improve graphite response and lower glazing opacity/transmission while retaining the new aperture/sill geometry. Then repeat the same cameras and lighting.
+
+Lighting for both variants: requested `assets/environments/studio-small-09-1k.hdr`; effective environment is synthetic fallback because the harness reports invalid HDR MIME; exposure 1.04, neutral preset. No HDR evaluation is claimed.
+
+Human verdict: VISUAL_PENDING_HUMAN.

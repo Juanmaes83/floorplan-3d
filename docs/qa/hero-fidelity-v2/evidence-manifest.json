@@ -3,11 +3,26 @@
   "branch": "feat/visual-families-hero-fidelity-v2",
   "baseSha": "de6ba2c22a33f5ca6d51939fc92813a5dd64bab5",
   "missionSha": "51896b010ff16d0f4f10edc895c4dc5a231b8ced",
-  "status": "LOCAL_ONLY",
-  "codeSha": null,
-  "captures": [],
+  "status": "PUBLISHED",
+  "iterations": [
+    {
+      "id": "iteration-1",
+      "codeSha": "9e8829a51ca93ee3661cd0d5300af3ac207e63e7",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; HDR rejected by MIME",
+      "files": [
+        { "path": "evidence/iteration-1/off-v2-contact.jpg", "sha256": "8422e47206780f120dea5250fdafaae997222e204fe9eca3567e858e33ae32e3" },
+        { "path": "evidence/iteration-1/v2-detail.jpg", "sha256": "51db7830955d6a6bd2d910c080502b9af6813bba79c55dbc8b791c5292fa716d" },
+        { "path": "evidence/iteration-1/v2-medium.jpg", "sha256": "fd878333cbd65687abcd7a7641d4366a1971b18a8522b044812afc58e854ae52" }
+      ],
+      "localFullManifestSha256": "49d333c686fe44f0e36d43d2299302b4cd094854f9b082413f1f2137a89c9259",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    }
+  ],
   "limitations": [
-    "No V2 candidate has been rendered.",
-    "No human visual approval or performance certification."
+    "Full PNGs remain local; compressed permanent review images are in this directory.",
+    "No human visual approval, physical-mobile result or GPU-time certification."
   ]
 }
