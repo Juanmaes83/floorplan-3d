@@ -3,7 +3,7 @@
 **Fecha:** 2026-11-04.  
 **Estado:** `PROPOSED / RESEARCH_AND_QA_ONLY / NO_PRODUCT_MUTATION`.  
 **Fuentes propias:** `Juanmaes83/VECINIA-WORLDS` y `Juanmaes83/WORLD-COSTA-BLANCA`. Ambas se tratarán como fuentes propias del usuario, **sin asumir** que todas sus dependencias, texturas y atlas externos tengan los mismos derechos.  
-**Relación con CP2:** la base material VQ-01 está técnicamente validada por CI en el SHA `894607b38fa43a5e89a9f5296a41cdbcc989d5ce`, pendiente de veredicto visual humano. Este programa es **posterior e independiente**; no altera su comparador.  
+**Relación con CP2:** la base material VQ-01 está técnicamente validada por CI en el SHA `894607b38fa43a5e89a9f5296a41cdbcc989d5ce` y el propietario decidió **`VISUAL_PARTIAL_ACCEPT_FOUNDATION` el 2026-11-04**, documentado en [el acta de QA](../../qa/vq01-cp2-human-visual-partial-acceptance-2026-11-04.md). Se conserva B2 como fundación visual/material; la calidad profesional global sigue pendiente y **no se autoriza merge automático**. Este programa es **posterior e independiente** y no altera su comparador.  
 **Referencias:** [Registro de evolución visual de VECINIA — PR #162](https://github.com/Juanmaes83/floorplan-3d/pull/162) y [CI final CP2](https://github.com/Juanmaes83/floorplan-3d/actions/runs/41802674784).
 
 ## 1. Principio de diseño no negociable
@@ -102,7 +102,7 @@ Cada iteración entrega:
 
 ### W0 — Cierre CP2, SIN nuevo modelado
 
-Ver [checkpoint de CI y handoff](../../qa/vq01-cp2-ci-success-human-visual-handoff-2026-11-04.md). NO gastar otra sesión de Astra en las pruebas A0/B1/B2 o M08. Si Juanma acepta parcialmente, congelar B2 como foundation técnica, con gaps visuales asignados a familias.
+Ver [checkpoint CI](../../qa/vq01-cp2-ci-success-human-visual-handoff-2026-11-04.md) y [decisión humana ya emitida](../../qa/vq01-cp2-human-visual-partial-acceptance-2026-11-04.md). **El propietario ha aceptado parcialmente B2**; congelar su SHA como fundación técnica, con gaps visuales asignados a familias. NO gastar otra sesión de Astra en las pruebas A0/B1/B2 o M08; NO convertir el reconocimiento de mejora en autorización de merge.
 
 ### W1 — Discovery y contrato de visual families (independiente)
 
@@ -124,6 +124,6 @@ Rama `feat/hybrid-registered-elevation-v1@07ae6f9969cae9df746443e97410e40cee2e93
 
 ## 7. Continuación para Astra/Codex al recuperar créditos
 
-**No reiniciar CP2**. Fuente verificable: QA run `41802674784`, artifact `13310485726`, SHA `894607b38fa43a5e89a9f5296a41cdbcc989d5ce`. Leer primero checkpoint y registrar veredicto humano sin inventar PASS. Si B2 obtiene decisión suficiente para integrar, proponer un PR B2→master con prueba específica y autorización humana. Después tomar **un workstream nuevo** de familias o deuda técnica, no ambos a la vez; comenzar por contrato reducido y referencias profesionales.
+**No reiniciar CP2.** Fuente verificable: QA run `41802674784`, artifact `13310485726`, SHA `894607b38fa43a5e89a9f5296a41cdbcc989d5ce`. El veredicto **`VISUAL_PARTIAL_ACCEPT_FOUNDATION` ya está registrado**. [PR #165 B2→master](https://github.com/Juanmaes83/floorplan-3d/pull/165) ya está preparado en **draft**, sin merge. Astra/Codex no deben regenerar este trabajo: en el futuro sólo revisarlo si se solicita una **autorización de merge independiente**. Después tomar **un workstream nuevo** de familias o deuda técnica, no ambos a la vez; empezar por contrato reducido y referencias profesionales.
 
 **STOP:** introducir contenido de VECINIA en CP2 para dar un salto rápido; trasladar shader source con hooks prohibidos; implementar las nueve familias a la vez; falsear geometría real; publicar atlas privados sin licencia; perder la trazabilidad A/B; o gastar tokens reejecutando acciones técnicas que GitHub ya ha validado.
