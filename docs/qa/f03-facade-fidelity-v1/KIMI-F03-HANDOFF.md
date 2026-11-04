@@ -1,6 +1,6 @@
 # MISIÓN PARA KIMI CODE — F03 Facade Fidelity · biblioteca verificada
 
-**Proyecto:** RUBIK SOTA, `Juanmaes83/floorplan-3d`. **Referencia de documentación:** `docs/f03-facade-fidelity-v1` en la rama `docs/f03-facade-visual-references-v1`. **Baseline técnico de ventanas:** PR #167 @ `fe876c1c2016beafba48f1993b5c23ecb82f6814`, sin fusionar. **Estado:** contrato de trabajo; no se autoriza merge ni deploy.
+**Proyecto:** RUBIK SOTA, `Juanmaes83/floorplan-3d`. **Referencia de documentación:** `docs/qa/f03-facade-fidelity-v1` en la rama `docs/f03-facade-visual-references-v1`. **Baseline técnico de ventanas:** PR #167 @ `fe876c1c2016beafba48f1993b5c23ecb82f6814`, sin fusionar. **Estado:** contrato de trabajo; no se autoriza merge ni deploy.
 
 ## Tu objetivo
 Transformar la biblioteca de referencias y materiales PBR publicada en GitHub en **una mejora visible de la fachada completa**, preservando la vivienda real y las ventanas F02 aprobadas para el alcance visual. No cambies ventanas, vidrio, perfilería, alféizares, huecos, medidas, IDs ni contrato F02. Tampoco inventes datos de proyecto.
