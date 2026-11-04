@@ -50,7 +50,7 @@ html.delivery-client #territoryLayers,html.delivery-client #wo4{display:none!imp
 /* ── In-visit bar: the home first, one way out ─────────────────────────────────────────────────────────────── */
 .delivery-bar{position:fixed;z-index:55;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;min-height:52px;
   padding:max(6px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left));
-  background:color-mix(in srgb,var(--surface-panel) 88%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+  background:var(--surface-panel);border-bottom:1px solid var(--line)}
 .delivery-bar[hidden]{display:none}
 .delivery-bar-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-size:15px}
 .delivery-bar-mode{flex:none;padding:3px 10px;border-radius:999px;background:var(--select-soft);color:var(--ink);font-size:12px;font-weight:600}

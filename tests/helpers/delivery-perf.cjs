@@ -17,16 +17,16 @@ const summary=t=>({frames:t.length,medianMs:+median(t).toFixed(1),p95Ms:+p95(t).
  const snap=D.buildSnapshot({project,title:project.name});out.snapshotBytes=Buffer.byteLength(JSON.stringify(snap));
  const url=S.STORE+'/rubik-share/perf-p1.delivery.json';srv.blob.files.set(url,{body:Buffer.from(JSON.stringify(snap)),type:'application/json'});
  // Baseline: the normal app, same project, walk mode.
- const base=pro;await base.evaluate(()=>FloorPlanApp.enterPresentation3D());await base.locator('[data-mode="walk"]').click();await base.waitForFunction(()=>View3D.walking());await base.waitForTimeout(1500);
- out.baselineWalk=summary(await frames(base));
+ const base=await br.newPage({viewport:{width:1440,height:900}});await base.goto(srv.url);await base.waitForFunction(()=>window.FloorPlanDeliveryUI);await base.locator('#welcomeExample').click();await base.waitForFunction(()=>FloorPlanApp.project.rooms.length>3);await base.evaluate(()=>FloorPlanApp.enterPresentation3D());await base.locator('[data-mode="walk"]').click();await base.waitForFunction(()=>View3D.walking());await base.waitForTimeout(1500);
+ out.baselineWalk={...summary(await frames(base)),canvas:await base.evaluate(()=>View3D.canvasState)};
  for(const [label,viewport,mobile] of [['desktop 1440×900',{width:1440,height:900},false],['phone 390×844',{width:390,height:844},true]]){
   const ctx=await br.newContext({viewport,isMobile:mobile,hasTouch:mobile});const p=await ctx.newPage();
-  const start=Date.now();await p.goto(srv.url+'?entrega='+encodeURIComponent(url));await p.waitForFunction(()=>FloorPlanDeliveryClient?.state==='ready',null,{timeout:180000});
+  const start=Date.now();await p.goto(srv.url+'?entrega='+encodeURIComponent(url));await p.waitForFunction(()=>['ready','error','no-3d'].includes(window.FloorPlanDeliveryClient?.state),null,{timeout:180000});const st=await p.evaluate(()=>FloorPlanDeliveryClient.state);if(st!=='ready')throw Error('client state '+st+' '+await p.locator('#deliveryGate').innerText());
   const run={label,readyMs:Date.now()-start,cycles:[]};
-  for(let i=0;i<5;i++){
+  for(let i=0;i<+(process.env.CYCLES||5);i++){
    const e0=Date.now();await p.locator('#deliveryWalk').click();await p.waitForFunction(()=>View3D.walking());const enterMs=Date.now()-e0;await p.waitForTimeout(800);
-   const f=i===0||i===4?summary(await frames(p,3000)):null;
-   const mem=await p.evaluate(()=>({gpu:View3D.rendererMemory,heapMB:performance.memory?+(performance.memory.usedJSHeapSize/1048576).toFixed(1):null}));
+   const f=i===0||i===+(process.env.CYCLES||5)-1?summary(await frames(p,3000)):null;
+   const mem=await p.evaluate(()=>({canvas:View3D.canvasState&&[View3D.canvasState.width,View3D.canvasState.height,View3D.canvasState.pixelRatio],gpu:View3D.rendererMemory,heapMB:performance.memory?+(performance.memory.usedJSHeapSize/1048576).toFixed(1):null}));
    const x0=Date.now();await p.locator('#deliveryExit').click();await p.waitForFunction(()=>FloorPlanDeliveryClient.mode==='gate');
    run.cycles.push({enterMs,exitMs:Date.now()-x0,...(f?{walk:f}:{}),...mem});
   }
