@@ -9,7 +9,7 @@
 'use strict';
 const {timingSafeEqual}=require('node:crypto');
 const same=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&timingSafeEqual(x,y);};
-const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-1';
+const MODEL=process.env.RUBIK_RENDER_MODEL||'gpt-image-2.5-sunburst';
 const MAX_BYTES=3.5*1024*1024;
 const STYLES={
  natural:'natural daylight, soft realistic shadows, neutral contemporary finishes',
