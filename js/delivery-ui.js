@@ -16,6 +16,7 @@
  const tx=(es,en,zh)=>({es,en,zh})[typeof LANG==='string'?LANG:'es']||es;
  const el=(tag,text,parent,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;parent?.append(n);return n;};
  const btn=(text,parent,cls='btn')=>{const b=el('button',text,parent,cls);b.type='button';return b;};
+ const listeners=new Set();
  const PUB_KEY='rubik-delivery-publications',TOKEN_KEY='rubik-render-token';
  const localName=s=>typeof nm==='function'?nm(s||''):(s||'');
  const building=()=>app.levelContext?.levels>1?window.FloorPlanBuildingUI?.building||null:null;
@@ -62,10 +63,11 @@
   if(!r.ok)throw Error(tx('No se pudo retirar la entrega. Vuelve a intentarlo.','The delivery could not be withdrawn. Try again.','无法撤回交付，请重试。'));
   try{localStorage.setItem(PUB_KEY,JSON.stringify(publications().filter(x=>x.link!==p.link)));}catch{}listeners.forEach(fn=>fn());return true;
  }
- const listeners=new Set();
  // ── Card in «Entregar» ───────────────────────────────────────────────────────────────────────────────────────────
+ // The card follows its publications: publishing or withdrawing redraws it where it is.
+ let cardHost=null;listeners.add(()=>{if(cardHost?.isConnected)card(cardHost);});
  function card(container){
-  if(!container)return null;container.querySelector('[data-module="client-3d"]')?.remove();
+  if(!container)return null;cardHost=container;container.querySelector('[data-module="client-3d"]')?.remove();
   const s=status(),c=el('article',undefined,undefined,'professional-card delivery3d-card');c.dataset.module='client-3d';c.id='delivery3dCard';container.prepend(c);
   const view=overview(),f=el('figure',undefined,c);
   if(view){const img=el('img',undefined,f);img.src=view.dataUrl;img.alt=tx('Vista general real de la vivienda en 3D','Real 3D overview of the home','住宅真实三维总览');el('figcaption',tx('Esta vista real abre la visita de tu cliente.','This real view opens your client\'s visit.','此真实视图将作为客户参观的封面。'),f);}

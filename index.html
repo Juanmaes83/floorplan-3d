@@ -8,7 +8,7 @@
 (function(){try{var q=new URLSearchParams(location.search),f=q.get('entrega');if(!f)return;
  function mem(){var m=new Map();return {getItem:function(k){k=String(k);return m.has(k)?m.get(k):null;},setItem:function(k,v){m.set(String(k),String(v));},removeItem:function(k){m.delete(String(k));},clear:function(){m.clear();},key:function(i){return Array.from(m.keys())[i]||null;},get length(){return m.size;}};}
  Object.defineProperty(window,'localStorage',{value:mem(),configurable:true});Object.defineProperty(window,'sessionStorage',{value:mem(),configurable:true});
- window.RUBIK_DELIVERY={source:f.slice(0,600),preview:f==='vista-previa'};document.documentElement.classList.add('delivery-client');
+ window.RUBIK_DELIVERY={source:f.slice(0,600),preview:f==='vista-previa',fromDocument:location.hash==='#desde-documento'&&history.length>1,historyStart:history.length};document.documentElement.classList.add('delivery-client');
 }catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">

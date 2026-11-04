@@ -29,6 +29,7 @@ html.delivery-client #territoryLayers,html.delivery-client #wo4{display:none!imp
 .delivery-studio img{height:28px;width:auto;max-width:120px;object-fit:contain}
 .delivery-hero{margin:0;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:var(--surface-sunken);display:grid;place-items:center}
 .delivery-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.delivery-hero.is-scheme{position:relative}.delivery-hero.is-scheme svg{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px)}
 .delivery-hero.is-empty span{font:600 clamp(18px,4vw,24px)/1.2 inherit;color:var(--ink-muted);padding:16px;text-align:center}
 .delivery-eyebrow{margin:4px 0 0;color:var(--action);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .delivery-title{margin:0;font-size:clamp(22px,5vw,30px);line-height:1.15;color:var(--ink);text-wrap:balance}
