@@ -33,6 +33,8 @@ A local Physical transmission trial (`transmission=.9`, `ior=1.5`, `thickness=.0
 
 Full local suites: surfaces unit + finite recipe unit 12/12; material-detail browser 5/5; surfaces browser 7/7. Generated historical QA screenshots were saved externally and restored in the product tree. CP1's V2 workflow is retained as a manual exact-B1 historical replay; CP2 has a separate workflow with measured resource deltas, rather than applying CP1's identical-memory requirement to a richer material candidate. Original CP1 fixtures and tests are not rewritten.
 
+CI run 41790140871 stopped on A0's combined capture-readiness wait, after its surfaces were ready. Protocol v3 splits the real pending-assets check from control readiness, records both control states and replays the existing `floorplan-asset-status` notification after actual completion on every side. This refreshes the historical missed UI notification without changing readiness data or baseline product source. V2 evidence remains historical; final comparisons must all use v3. The prior run 41789897374 was cancelled when superseded by the explicit shell/pipefail QA correction.
+
 ## CP2-B evidence and bounded corrections
 
 The first baked wood/pores prototype was rejected locally for overly periodic grain and lattice-shaped pore normals. The revised recipe uses longitudinal multiscale grain, per-board log-section rings, sparse radial pores and four subpixel samples per texel. Finite maps deliberately omit LT's room-specific wear, world lookup, shaders and per-fragment octave logic. Mipmaps replace its screen-space filtering; this is a bounded approximation, not the full donor shader.

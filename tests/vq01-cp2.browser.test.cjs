@@ -60,8 +60,16 @@ async function present(page){
  await page.waitForFunction(({ids,q})=>{const picked=View3D.surfaceMetrics.filter(m=>ids.includes(m.id));
   return View3D.surfaceQuality===q&&picked.length===ids.length&&picked.every(m=>m.state==='ready'&&(m.detailState==='ready'||m.detailState==='off'));
  },{ids:fixture.assignments.map(a=>a.surfaceId),q:fixture.presentation.surfaceQuality},{timeout:90000});
- await page.waitForFunction(()=>View3D.lifecycleMetrics.pendingAssets===0&&!document.querySelector('#presentationCapture').disabled,null,{timeout:90000});
+ await page.waitForFunction(()=>View3D.lifecycleMetrics.pendingAssets===0,null,{timeout:90000});
+ const readiness=await page.evaluate(()=>{
+  const before={pendingAssets:View3D.lifecycleMetrics.pendingAssets,disabled:document.querySelector('#presentationCapture').disabled,details:View3D.surfaceMetrics.map(m=>({id:m.id,state:m.state,detailState:m.detailState}))};
+  dispatchEvent(new Event('floorplan-asset-status'));
+  return {before,after:{pendingAssets:View3D.lifecycleMetrics.pendingAssets,disabled:document.querySelector('#presentationCapture').disabled}};
+ });
+ await fs.writeFile(path.join(output,'capture-readiness-last.json'),JSON.stringify(readiness,null,2)+'\n');
+ await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled,null,{timeout:30000});
  await require('./layout-fixture.cjs')(page);
+ return readiness;
 }
 async function snapshot(page,hash){
  return page.evaluate(({hash,ids})=>{
@@ -96,10 +104,10 @@ function assertFrozen(s){
 }
 async function reproduce(label){
  const {context,page,errors,warnings}=await newPage();try{
-  const projectSha256=await setupProject(page);await present(page);const runtime=await snapshot(page,projectSha256);assertFrozen(runtime);
+  const projectSha256=await setupProject(page),captureReadiness=await present(page);const runtime=await snapshot(page,projectSha256);assertFrozen(runtime);
   assert.deepEqual(errors,[],`${label}: page/console errors`);
   const png=path.join(output,`${label}-1440x900.png`);await page.screenshot({path:png});
-  const diagnostic={sourceSha,fixtureSha,viewsSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-views.json'))),captureProtocolSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-capture-v2.json'))),side,label,browserVersion:browser.version(),runtime,geometrySha256:digest(JSON.stringify(await page.evaluate(()=>View3D.renderedGeometry))),
+  const diagnostic={sourceSha,fixtureSha,captureReadiness,viewsSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-views.json'))),captureProtocolSha:digest(require('node:fs').readFileSync(path.join(__dirname,'fixtures/vq01-cp2-capture-v3.json'))),side,label,browserVersion:browser.version(),runtime,geometrySha256:digest(JSON.stringify(await page.evaluate(()=>View3D.renderedGeometry))),
    surfaceMaterialMetrics:await page.evaluate(ids=>View3D.surfaceMetrics.filter(m=>ids.includes(m.id)).map(m=>({id:m.id,material:m.material||null,bytes:m.bytes,gpuBytes:m.gpuBytes,detailState:m.detailState,recipe:m.recipe||null,generated:m.generated||null,physical:m.physical||null,ownedTextures:m.ownedTextures??null,ownedBitmaps:m.ownedBitmaps??null})).sort((a,b)=>a.id.localeCompare(b.id)),fixture.assignments.map(a=>a.surfaceId)),
    rendererMemory:await page.evaluate(()=>View3D.rendererMemory),
    surfaceDisposals:await page.evaluate(()=>View3D.surfaceDisposals),errors,warnings,screenshotSha256:digest(await fs.readFile(png))};
