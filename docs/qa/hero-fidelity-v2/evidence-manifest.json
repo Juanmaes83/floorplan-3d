@@ -80,6 +80,21 @@
       ],
       "localFullManifestSha256": "be672d7e1a8e43392a4a874c717430bf0f0dce37d8e87a1764dc2dbd7d793a9d",
       "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "lifecycle",
+      "codeSha": "e044da7038c361aed46d6bdf7598cdd3a0758edf",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 390, "height": 844, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1; emulated mobile viewport",
+      "environment": "synthetic light during captures; context intentionally lost at test end",
+      "files": [
+        { "path": "evidence/lifecycle/mobile-contact.jpg", "sha256": "328f234e675ea712e246f8cefdf5cb43a45e592d13f81b6f94988b3f7ae542a4" },
+        { "path": "evidence/lifecycle/mobile-medium.jpg", "sha256": "5c1ea95b6c502c24fcaced711e9d50dfcac712f7e05af6eff3ee77f25adca424" },
+        { "path": "evidence/lifecycle/mobile-general.jpg", "sha256": "146081c50e73ea5c15125a9884ad61cf880f79ac293cadb27a811b46f9cf4b2b" }
+      ],
+      "localFullManifestSha256": "403d4f1a47fb8d39efc0997e779f68c5f54742bd73aa674b1c984cd5138ba598",
+      "visualState": "VISUAL_PENDING_HUMAN"
     }
   ],
   "limitations": [

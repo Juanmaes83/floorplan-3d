@@ -47,3 +47,13 @@ Added `frame.system: flush-sash` beside the default `recessed-sash`. It changes 
 Unit tests remain 3/3 PASS and now assert different geometry with unchanged materials between systems. `tests/hero-fidelity-v2-systems.browser.test.cjs`: 1/1 PASS, eight identical-camera captures, distinct image hashes, clean OFF and unchanged Project/rendered geometry. Opened RECESSED/FLUSH D1/M1/M2/M3 and the contact sheet: FLUSH reads slimmer and closer to the outer frame while preserving depth and the real interior. No new visual defect was observed in the inspected views. Both remain experimental and human approval is pending.
 
 Human verdict: VISUAL_PENDING_HUMAN.
+
+## R5 — emulated mobile and lifecycle, code `e044da7038c361aed46d6bdf7598cdd3a0758edf`
+
+The first lifecycle run exposed a real exit defect: 12 derived windows remained active after entry restoration rebuilt the 3D scene. Cleanup was moved to the end of restoration and exposed as the small `releaseVisualFamilies()` runtime hook. The final test passes: exit has zero owned resources, reentry reapplies all 12 windows with the balanced profile, and forced WebGL context loss clears bindings/resources without changing Project or rendered geometry.
+
+Opened and inspected MOBILE M1/G1 and their contact sheet at 390×844, DPR 1. The mullion, sash and sill remain legible and the real bedroom is unobstructed; the general view keeps the source layout and all visible window treatments. Slight glass veiling remains and mineral grain is subtle. This is an emulated viewport on the desktop browser, not a physical-mobile result.
+
+`tests/hero-fidelity-v2-lifecycle.browser.test.cjs`: 1/1 PASS, two captures and no browser errors/warnings. Over 60 frame intervals, OFF and V2 both measured p50/p95 16.7/16.8 ms. These are `requestAnimationFrame` intervals, not GPU work duration. Balanced resources: 1 geometry, 6 materials, 3 textures, 69 owned meshes, 22 facade meshes, 7740 triangles and 1,090,698 estimated bytes.
+
+Human verdict remains VISUAL_PENDING_HUMAN.
