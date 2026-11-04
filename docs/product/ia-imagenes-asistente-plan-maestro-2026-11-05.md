@@ -16,6 +16,12 @@ Se diferencian cuatro autoridades:
 
 **Beneficio buscado**: explicar al cliente no solo cómo es su vivienda, sino cómo se sentiría y usaría el espacio; permitir decisiones de acabados y generar una entrega profesional convincente. El valor comercial debe medirse con calidad aceptada y coste real, no asumirse.
 
+## Nueva ampliación comercial documentada (05/11/2026)
+
+Por decisión de producto, se incorpora un nuevo frente prioritario de **reforma visual a partir de fotografías enviadas por clientes**, diferenciado de reconstrucción métrica, junto con **panorámicas conceptuales 360°, 360° vinculado al modelo 3D y vídeo desde renders aprobados**. También se formalizan paquetes premium y la reevaluación de prioridades visuales con Kimi, **sin detener ni modificar ramas ajenas**.
+
+**Contrato detallado y criterios:** [Foto→reforma, panorama 360, vídeo y precio premium](ia-servicios-foto-reforma-panorama-360-video-valor-comercial-2026-11-05.md). Este documento es un **complemento normativo de planificación**; las prioridades antiguas deben interpretarse junto a él. No se afirma que las funciones añadidas ya estén implementadas.
+
 ## 1. Evidencias y estado real (no mezclar integraciones con propuestas)
 
 | Elemento | Evidencia / estado al corte | Falta |
