@@ -22,4 +22,12 @@ The slimmer perimeter and mullions read less heavy, the real bedroom is clearer,
 
 Next independent correction: serve the existing HDR with the presentation harness MIME rule and capture a separately declared lighting comparison before expanding coverage.
 
+## Iteration 3 — separately declared HDR comparison, code `b0696419822eebedefc7984c286d3b6fc19d6800`
+
+Corrected only the V2 test-server MIME for `.hdr`, reusing the presentation harness rule. The real `studio-small-09-1k.hdr` loaded successfully: status/environment `hdr`, 1,615,248 source bytes and 4,194,304 estimated PMREM bytes; exposure remained 1.04 with the neutral preset. `tests/hero-fidelity-v2-lighting.browser.test.cjs`: 1/1 PASS, three captures, no browser errors/warnings and unchanged Project/rendered geometry.
+
+Opened the synthetic/HDR contact sheet and HDR D1/M1/M2 images. HDR gives the graphite a brighter metallic response, but washes out the bedroom, facade and glass more than the synthetic comparison. It is recorded as a valid technical lighting probe but not selected as superior visual evidence. No production lighting or material constants were changed for this probe.
+
+Next: apply the already inspected iteration-2 recipe to every compatible real window in an explicit experimental capture, record exclusions and inspect general/facade views. Human approval remains pending.
+
 Human verdict: VISUAL_PENDING_HUMAN.

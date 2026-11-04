@@ -34,6 +34,21 @@
       ],
       "localFullManifestSha256": "86753508345f79134f07eabae8f41c83d9dd4fb33d97648cecc8d0eafb6bccf5",
       "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "iteration-3-hdr",
+      "codeSha": "b0696419822eebedefc7984c286d3b6fc19d6800",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "HDR loaded; separate comparison against iteration-2 synthetic fallback",
+      "files": [
+        { "path": "evidence/iteration-3-hdr/synthetic-hdr-contact.jpg", "sha256": "358f7e6ffd6ff58a18910cc7561ab57a94530135aaf4d8266473fd99973f9ed3" },
+        { "path": "evidence/iteration-3-hdr/hdr-detail.jpg", "sha256": "557b0e3b92808295a57bd18ced745d9f1d8e6de4f602ea0201f6023e17de987a" },
+        { "path": "evidence/iteration-3-hdr/hdr-medium.jpg", "sha256": "896473a784ab37b6a5fad53f9939724210d14e90eab10dbb9b4d13f7636f4238" }
+      ],
+      "localFullManifestSha256": "7a392258c7d759ad4508d5d3110dbeddedeecfbb573c76286d2bf4b0a6c38000",
+      "visualState": "VISUAL_PENDING_HUMAN"
     }
   ],
   "limitations": [
