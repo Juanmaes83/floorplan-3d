@@ -8,7 +8,7 @@ html.delivery-client .app>aside,html.delivery-client .app>footer,html.delivery-c
 html.delivery-client #levelConflicts,html.delivery-client #scalebar,html.delivery-client #sbBar,html.delivery-client #modehint,
 html.delivery-client #fab,html.delivery-client #guideAnnouncement,html.delivery-client #presentationConfig{display:none!important}
 html.delivery-client .app{display:block!important;height:100%}
-html.delivery-client #stage{position:fixed!important;inset:0!important;width:auto!important;height:auto!important}
+html.delivery-client #stage{position:fixed!important;inset:0!important;width:auto!important;height:auto!important;margin:0!important}
 /* Presentation in a client visit: only the room path and its own controls, never the professional's batch/capture tools. */
 html.delivery-client #presentationOverlay [id^="presentationCapture"],html.delivery-client #presentationOverlay [id^="presentationBatch"],
 html.delivery-client #presentationOverlay [id^="presentationShare"],html.delivery-client #presentationOverlay [id^="presentationRecord"],

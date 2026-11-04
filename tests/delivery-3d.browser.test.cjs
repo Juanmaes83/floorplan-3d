@@ -174,7 +174,9 @@ test(`D: phone ${name}: the gate fits, 44px targets, walk with touch controls`,{
  assert.ok(m.sw<=m.w,'no horizontal scroll');for(const h of m.btn)assert.ok(h>=44,'touch target '+h);
  assert.match(await page.locator('#deliveryFacts').textContent(),/joystick/);await shot(page,`D-${name}-gate`);
  await page.locator('#deliveryWalk').tap();await page.waitForFunction(()=>View3D.walking());
- const bar=await page.locator('#deliveryExit').boundingBox();assert.ok(bar.height>=40);await page.waitForTimeout(800);await shot(page,`D-${name}-walk`);
+ const bar=await page.locator('#deliveryExit').boundingBox();assert.ok(bar.height>=40);
+ const fill=await page.evaluate(()=>({stage:document.querySelector('#stage').getBoundingClientRect().width,canvas:document.querySelector('#stage canvas').getBoundingClientRect().width,w:innerWidth}));
+ assert.equal(Math.round(fill.stage),fill.w,'the 3D fills the width (no editor side rail)');assert.equal(Math.round(fill.canvas),fill.w);await page.waitForTimeout(800);await shot(page,`D-${name}-walk`);
  await page.locator('#deliveryExit').tap();await page.waitForFunction(()=>FloorPlanDeliveryClient.mode==='gate');
  assert.deepEqual(errors,[]);srv.blob.files.delete(url);
 });
