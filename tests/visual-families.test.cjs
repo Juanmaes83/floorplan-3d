@@ -9,7 +9,7 @@ test('versioned opt-in resolver is pure, strict and stable with explicit precede
 });
 test('architectural recipe derives reveals, distinct sash sections, sills and real-interior glazing',async()=>{
  const {resolveVisual,windowAssembly}=await core,a=resolveVisual({enabled:true,projectId:'project-a',sourceIds:['window-a','window-b']}),b=resolveVisual({enabled:true,projectId:'project-a',sourceIds:['window-a','window-b'],overrides:{'frame.finish':'chalk'}});
- const sa=windowAssembly(source,a),sb=windowAssembly(source,b);assert.deepEqual(sa.boxes,sb.boxes);assert.notDeepEqual(sa.materials,sb.materials);
+ const sa=windowAssembly(source,a),sb=windowAssembly(source,b),flush=windowAssembly(source,resolveVisual({enabled:true,projectId:'project-a',sourceIds:['window-a','window-b'],overrides:{'frame.system':'flush-sash'}}));assert.deepEqual(sa.boxes,sb.boxes);assert.notDeepEqual(sa.materials,sb.materials);assert.notDeepEqual(sa.boxes,flush.boxes);assert.deepEqual(sa.materials,flush.materials);assert.notEqual(sa.boxes.find(b=>b.material==='frame').size[0],flush.boxes.find(b=>b.material==='frame').size[0]);
  assert.ok(windowAssembly({...source,id:'window-b',widthMm:1800},a));
  for(const excluded of [{...source,projectId:'other-project'},{...source,id:'other'},{...source,kind:'door'},{...source,fullHeight:false},{...source,widthMm:500},{...source,heightMm:NaN}])assert.equal(windowAssembly(excluded,a),null);
  for(const box of sa.boxes){assert.ok(box.size.every(v=>v>0));assert.ok(Math.abs(box.position[0])+box.size[0]/2<=1.27+1e-9);assert.ok(box.position[1]-box.size[1]/2>=-.057-1e-9);assert.ok(box.position[1]+box.size[1]/2<=1.604+1e-9);}

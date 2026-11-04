@@ -4,7 +4,7 @@ const freeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==='object')freeze(v
 export const registry=freeze({F02:{label:'Carpinterias y huecos',recipes:{'window-assembly':{
  version:2,target:'existing-window',roles:['HERO'],sourceIds:[],enabled:false,
  defaults:{'frame.finish':'graphite','frame.system':'recessed-sash','glazing.optics':'clear-low-iron','facade.grain':'mineral-fine'},
- tokens:{'frame.finish':['graphite','chalk'],'frame.system':['recessed-sash'],'glazing.optics':['clear-low-iron'],'facade.grain':['mineral-fine']},
+ tokens:{'frame.finish':['graphite','chalk'],'frame.system':['recessed-sash','flush-sash'],'glazing.optics':['clear-low-iron'],'facade.grain':['mineral-fine']},
  resources:['Rubik.MeshStandardMaterial','Rubik.MeshPhysicalMaterial','Rubik.BoxGeometry','Rubik.DataTexture'],
  provenance:{author:'Rubik',method:'original adapter; VECINIA granularMaps/addWindow/addResidentialWindow mechanisms; Rubik correlated plaster fields',externalAssets:[]},
  renderBudget:{instances:64,textures:3,geometries:1,materials:6,drawCalls:640,triangles:160000,gpuBytes:1600000},
@@ -42,8 +42,8 @@ export function compatibleWindow(source,decision){
 }
 export function windowAssembly(source,decision){
  if(!compatibleWindow(source,decision))return null;
- const w=source.widthMm/1000,h=source.heightMm/1000,wall=source.thicknessMm/1000,n=Math.max(1,Math.round(w/.95));
- const outer=.038,sash=.026,frameDepth=Math.min(.056,wall*.28),boxes=[],glass=[];
+ const w=source.widthMm/1000,h=source.heightMm/1000,wall=source.thicknessMm/1000,n=Math.max(1,Math.round(w/.95)),flush=decision.tokens['frame.system']==='flush-sash';
+ const outer=flush?.034:.038,sash=flush?.020:.026,frameDepth=Math.min(flush?.044:.056,wall*(flush?.22:.28)),boxes=[],glass=[];
  const add=(material,x,y,z,sx,sy,sz)=>boxes.push({material,position:[x,y,z],size:[sx,sy,sz]});
  const ring=(material,x,y,width,height,b,z,d)=>{
   add(material,x-width/2+b/2,y,z,b,height,d);add(material,x+width/2-b/2,y,z,b,height,d);
@@ -56,10 +56,10 @@ export function windowAssembly(source,decision){
   ring('seal',0,h/2,w+.008,h+.008,.005,face,.005);
   ring('frame',0,h/2,w,h,outer,frameZ,frameDepth);
   for(let k=0;k<n;k++){
-   const bw=w/n,x=-w/2+(k+.5)*bw,sw=bw-outer*.55,sh=h-outer*1.25,sashZ=side*(wall/2-frameDepth-.014);
+   const bw=w/n,x=-w/2+(k+.5)*bw,sw=bw-outer*.55,sh=h-outer*1.25,sashZ=side*(wall/2-frameDepth+(flush?.006:-.014));
    ring('frame',x,h/2,sw,sh,sash,sashZ,.038);
-   ring('seal',x,h/2,sw-sash*1.35,sh-sash*1.35,.004,side*(wall/2-frameDepth-.035),.005);
-   if(decision.profile==='detail')ring('frame',x,h/2,sw-sash*1.65,sh-sash*1.65,.008,side*(wall/2-frameDepth-.039),.009);
+   ring('seal',x,h/2,sw-sash*1.35,sh-sash*1.35,.004,side*(wall/2-frameDepth+(flush?-.012:-.035)),.005);
+   if(decision.profile==='detail')ring('frame',x,h/2,sw-sash*1.65,sh-sash*1.65,.008,side*(wall/2-frameDepth+(flush?-.016:-.039)),.009);
    if(side===1)glass.push({position:[x,h/2,0],size:[sw-2*sash-.012,sh-2*sash-.012,.012]});
   }
   add('sill',0,-.022,side*(wall/2+.044),w+.12,.036,.16);
