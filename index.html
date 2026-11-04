@@ -2445,6 +2445,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     else{drawer('lib',!entry.hiddenLib);drawer('panel',!entry.hiddenPanel);}
     $('header').scrollLeft=entry.headerScroll;
     if(entry.focus?.isConnected)entry.focus.focus({preventScroll:true});
+    window.View3D?.releaseVisualFamilies();
     return true;
   },
   importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
@@ -4500,7 +4501,6 @@ function presentationRoute(roomId,reduced=false,view={}){
   });
 }
 function presentationRestore(state){
-  windowVisual.release();
   endPresentationStory();releaseHeldEntry();storyPlanStart=null;
   restoreTerritorialViewLimits();
   territorialPresentation=false;territorialBaseLevelView=null;if(state?.levelView)levelView=state.levelView;
@@ -4913,6 +4913,7 @@ window.View3D = {
 
 window.View3D.presentationReveal=presentationReveal;
 Object.defineProperty(window.View3D,'visualFamilies',{get:()=>windowVisual.snapshot()});
+window.View3D.releaseVisualFamilies=()=>windowVisual.release();
 window.View3D.setVisualFamilies=options=>{if(!active||contextLost)throw Error('3D view unavailable');if(options.enabled&&options.projectId!==geometry.source.id)throw Error('Visual target Project mismatch');const result=windowVisual.set(options);renderer.render(scene,camera);return result;};
 mountVisualPreview(window.View3D);
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
