@@ -1,0 +1,475 @@
+{
+  "schema": 1,
+  "createdAt": "2026-11-04",
+  "repository": "Juanmaes83/floorplan-3d",
+  "branch": "docs/f03-facade-visual-references-v1",
+  "sourceCommit": "2623d12ebbb97c167cc8bdda6dc8a1b8ecd92a42",
+  "classificationStatus": "PENDING_VISUAL_INSPECTION",
+  "constraints": {
+    "requestedOriginalArchitecturalScenes": 36,
+    "confirmedIndependentArchitecturalScenes": 0,
+    "unclassifiedCandidatePNGs": 12,
+    "pbrColorSources": 13,
+    "pbrSupplementarySourceMaps": 9,
+    "pbrCompleteSourceSets": 3,
+    "unpublishedLocalJPGsReported": 4
+  },
+  "architecturalCandidates": [
+    {
+      "id": "V-01",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/14236036-ea00-48f6-89e7-9f75dcc2051e.png",
+      "fileName": "14236036-ea00-48f6-89e7-9f75dcc2051e.png",
+      "sizeBytes": 2887154,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-02",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/2ce99dbf-6fd5-41be-b102-8cf184bd90db.png",
+      "fileName": "2ce99dbf-6fd5-41be-b102-8cf184bd90db.png",
+      "sizeBytes": 3306092,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-03",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/3725ba05-4a35-433a-bb3d-983804406b06.png",
+      "fileName": "3725ba05-4a35-433a-bb3d-983804406b06.png",
+      "sizeBytes": 3569039,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-04",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/52467fe7-2618-4034-a1b3-550f81036ed7.png",
+      "fileName": "52467fe7-2618-4034-a1b3-550f81036ed7.png",
+      "sizeBytes": 3238623,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-05",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/88a2a672-6030-4e2d-9ddf-ffab022abae5.png",
+      "fileName": "88a2a672-6030-4e2d-9ddf-ffab022abae5.png",
+      "sizeBytes": 2567618,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-06",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/Catálogo Mediterráneo de Fachadas y Texturas.png",
+      "fileName": "Catálogo Mediterráneo de Fachadas y Texturas.png",
+      "sizeBytes": 3810810,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": "Filename suggests catalogue or contact sheet; inspect"
+    },
+    {
+      "id": "V-07",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/a9ed6dc5-5200-46f2-88a7-e4af8b2927e2.png",
+      "fileName": "a9ed6dc5-5200-46f2-88a7-e4af8b2927e2.png",
+      "sizeBytes": 2466797,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-08",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/c112f716-7a3f-44da-814b-f1bebc73bd79.png",
+      "fileName": "c112f716-7a3f-44da-814b-f1bebc73bd79.png",
+      "sizeBytes": 3029680,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-09",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/cf411fa9-18fe-461f-a98f-16673356e2cb.png",
+      "fileName": "cf411fa9-18fe-461f-a98f-16673356e2cb.png",
+      "sizeBytes": 3333471,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-10",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/d8ec669c-8b2d-4d60-89f6-60dfa71a56c1.png",
+      "fileName": "d8ec669c-8b2d-4d60-89f6-60dfa71a56c1.png",
+      "sizeBytes": 3180170,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-11",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/dfb59322-707c-4dcb-84cd-5bed2d243b87.png",
+      "fileName": "dfb59322-707c-4dcb-84cd-5bed2d243b87.png",
+      "sizeBytes": 2711475,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    },
+    {
+      "id": "V-12",
+      "path": "docs/qa/f03-facade-fidelity-v1/references/00-originales-por-clasificar/fd9cfd61-fb5b-4c54-b406-64b2d02bbb27.png",
+      "fileName": "fd9cfd61-fb5b-4c54-b406-64b2d02bbb27.png",
+      "sizeBytes": 2815071,
+      "kind": "USER_REFERENCE_CANDIDATE",
+      "visualClassification": "UNREVIEWED",
+      "independentSceneConfirmed": false,
+      "license": "UNVERIFIED",
+      "notes": null
+    }
+  ],
+  "materialSources": [
+    {
+      "id": "white_stucco",
+      "proposedSemanticToken": "MATERIAL.WALL.MINERAL_WHITE_STUCCO",
+      "scope": "POTENTIAL_WALL",
+      "description": "Estuco mineral blanco exterior",
+      "existingPresetAnalogy": "surface-white-plaster-02",
+      "analogyRule": "EVALUAR; NO AUTOMAP",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_stucco_diff_4k.jpg",
+        "fileName": "white_stucco_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_nor_gl_4k.exr",
+          "fileName": "white_stucco_nor_gl_4k.exr",
+          "sourceRole": "NORMAL_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_rough_4k.exr",
+          "fileName": "white_stucco_rough_4k.exr",
+          "sourceRole": "ROUGHNESS_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_disp_4k.png",
+          "fileName": "white_stucco_disp_4k.png",
+          "sourceRole": "DISPLACEMENT_SOURCE_NOT_WEB_OPTIMIZED"
+        }
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "white_stucco_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "SOURCE_4_OF_4_PRESENT"
+    },
+    {
+      "id": "white_rough_plaster",
+      "proposedSemanticToken": "MATERIAL.WALL.MINERAL_WHITE_ROUGH_PLASTER",
+      "scope": "POTENTIAL_WALL",
+      "description": "Revoco blanco de grano visible",
+      "existingPresetAnalogy": "surface-white-plaster-02",
+      "analogyRule": "EVALUAR; NO AUTOMAP",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_rough_plaster_diff_4k.jpg",
+        "fileName": "white_rough_plaster_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_nor_gl_4k.exr",
+          "fileName": "white_rough_plaster_nor_gl_4k.exr",
+          "sourceRole": "NORMAL_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_rough_4k.jpg",
+          "fileName": "white_rough_plaster_rough_4k.jpg",
+          "sourceRole": "ROUGHNESS_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_disp_4k.png",
+          "fileName": "white_rough_plaster_disp_4k.png",
+          "sourceRole": "DISPLACEMENT_SOURCE_NOT_WEB_OPTIMIZED"
+        }
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "white_rough_plaster_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "SOURCE_4_OF_4_PRESENT"
+    },
+    {
+      "id": "rough_plaster_03",
+      "proposedSemanticToken": "MATERIAL.WALL.MINERAL_ROUGH_PLASTER_03",
+      "scope": "POTENTIAL_WALL",
+      "description": "Revoco artesanal rugoso",
+      "existingPresetAnalogy": "surface-plastered-wall-03",
+      "analogyRule": "EVALUAR; NO AUTOMAP",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/rough_plaster_03_diff_4k.jpg",
+        "fileName": "rough_plaster_03_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_nor_gl_4k.exr",
+          "fileName": "rough_plaster_03_nor_gl_4k.exr",
+          "sourceRole": "NORMAL_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_rough_4k.jpg",
+          "fileName": "rough_plaster_03_rough_4k.jpg",
+          "sourceRole": "ROUGHNESS_SOURCE_NOT_WEB_OPTIMIZED"
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_disp_4k.png",
+          "fileName": "rough_plaster_03_disp_4k.png",
+          "sourceRole": "DISPLACEMENT_SOURCE_NOT_WEB_OPTIMIZED"
+        }
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "rough_plaster_03_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "SOURCE_4_OF_4_PRESENT"
+    },
+    {
+      "id": "rough_plasterbrick_05",
+      "proposedSemanticToken": "MATERIAL.WALL.MINERAL_PLASTERBRICK_05",
+      "scope": "POTENTIAL_WALL",
+      "description": "Revestimiento mineral con lectura de ladrillo",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/rough_plasterbrick_05_diff_4k.jpg",
+        "fileName": "rough_plasterbrick_05_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "rough_plasterbrick_05_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "stacked_brick_wall",
+      "proposedSemanticToken": "MATERIAL.WALL.BRICK_STACKED",
+      "scope": "POTENTIAL_WALL",
+      "description": "Ladrillo apilado / aparejo",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/stacked_brick_wall_diff_4k.jpg",
+        "fileName": "stacked_brick_wall_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "stacked_brick_wall_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "patterned_terracotta_tiling",
+      "proposedSemanticToken": "MATERIAL.WALL.CERAMIC_TERRACOTTA_PATTERN",
+      "scope": "POTENTIAL_WALL",
+      "description": "Aplacado cerámico terracota",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/patterned_terracotta_tiling_diff_4k.jpg",
+        "fileName": "patterned_terracotta_tiling_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "patterned_terracotta_tiling_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "coated_pine",
+      "proposedSemanticToken": "MATERIAL.WALL.WOOD_COATED_PINE",
+      "scope": "POTENTIAL_WALL",
+      "description": "Revestimiento de pino tratado",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/coated_pine_diff_4k.jpg",
+        "fileName": "coated_pine_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "coated_pine_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "dark_paneled_wood",
+      "proposedSemanticToken": "MATERIAL.WALL.WOOD_DARK_PANELED",
+      "scope": "POTENTIAL_WALL",
+      "description": "Panelado de madera oscura",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/dark_paneled_wood_diff_4k.jpg",
+        "fileName": "dark_paneled_wood_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "dark_paneled_wood_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "white_oak_veneer",
+      "proposedSemanticToken": "MATERIAL.WALL.WOOD_WHITE_OAK_VENEER",
+      "scope": "POTENTIAL_WALL",
+      "description": "Chapa de roble claro, no tablón",
+      "existingPresetAnalogy": "surface-oak-wood-planks",
+      "analogyRule": "ANALOGÍA; NO EQUIVALENCIA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_oak_veneer_diff_4k.jpg",
+        "fileName": "white_oak_veneer_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "white_oak_veneer_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "rounded_square_tiled_wall",
+      "proposedSemanticToken": "MATERIAL.WALL.CERAMIC_ROUNDED_SQUARE",
+      "scope": "POTENTIAL_WALL",
+      "description": "Revestimiento cerámico de módulos cuadrados redondeados",
+      "existingPresetAnalogy": null,
+      "analogyRule": "SIN EQUIVALENCIA CERTIFICADA",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/rounded_square_tiled_wall_diff_4k.jpg",
+        "fileName": "rounded_square_tiled_wall_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "rounded_square_tiled_wall_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "brown_floor_tiles",
+      "proposedSemanticToken": "EXCLUDED_FROM_MATERIAL.WALL",
+      "scope": "GROUND_ONLY",
+      "description": "Baldosa de suelo; contexto horizontal",
+      "existingPresetAnalogy": "surface-brown-floor-tiles",
+      "analogyRule": "NO USAR COMO FACHADA SIN DECISIÓN",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/brown_floor_tiles_diff_4k.jpg",
+        "fileName": "brown_floor_tiles_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "brown_floor_tiles_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "cobblestone_floor_08",
+      "proposedSemanticToken": "EXCLUDED_FROM_MATERIAL.WALL",
+      "scope": "GROUND_ONLY",
+      "description": "Adoquín de pavimento; contexto urbano",
+      "existingPresetAnalogy": null,
+      "analogyRule": "CONTEXTO DE SUELO",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/cobblestone_floor_08_diff_4k.jpg",
+        "fileName": "cobblestone_floor_08_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "cobblestone_floor_08_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    },
+    {
+      "id": "ganges_river_pebbles",
+      "proposedSemanticToken": "EXCLUDED_FROM_MATERIAL.WALL",
+      "scope": "GROUND_ONLY",
+      "description": "Grava / guijarros; terreno",
+      "existingPresetAnalogy": null,
+      "analogyRule": "CONTEXTO DE SUELO",
+      "albedo": {
+        "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/ganges_river_pebbles_diff_4k.jpg",
+        "fileName": "ganges_river_pebbles_diff_4k.jpg",
+        "sourceRole": "BASE_COLOR_SOURCE_NOT_WEB_OPTIMIZED"
+      },
+      "maps": {
+        "normal": null,
+        "roughness": null,
+        "displacement": null
+      },
+      "sourceProvenance": "Poly Haven CC0 per user; material asset-specific license not reverified here",
+      "sourceArchive": "ganges_river_pebbles_4k.blend.zip",
+      "runtimeStatus": "NOT_INTEGRATED",
+      "channelStatus": "GITHUB_ONLY_ALBEDO"
+    }
+  ]
+}
