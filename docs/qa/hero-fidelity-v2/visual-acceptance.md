@@ -30,4 +30,14 @@ Opened the synthetic/HDR contact sheet and HDR D1/M1/M2 images. HDR gives the gr
 
 Next: apply the already inspected iteration-2 recipe to every compatible real window in an explicit experimental capture, record exclusions and inspect general/facade views. Human approval remains pending.
 
+## Coverage — all compatible real windows, code `5ad25c912004c81de3b549bb0ae70cf7c814a515`
+
+Applied the inspected iteration-2 recipe explicitly to all 12 existing windows: 12 compatible, 12 treated, zero excluded. Opened OFF/V2 M1, M3 and G1 plus the contact sheet. The treatment is coherent across narrow and wide openings, preserves the real rooms and shows the same sill/reveal language on the visible facades. No new overlap or opaque-glass defect was observed in these views.
+
+`tests/hero-fidelity-v2-coverage.browser.test.cjs`: 1/1 PASS. Shared resources at full coverage: 1 geometry, 6 materials, 3 textures, 69 owned meshes, 22 facade meshes, 9756 triangles and 1,101,450 estimated bytes, all within the declared budget. Three ON/OFF cycles returned every owned-resource count to zero; Project/rendered geometry stayed unchanged and no browser errors/warnings occurred.
+
+Desktop ANGLE/NVIDIA frame intervals over 90 samples: OFF p50/p95 16.7/16.8 ms; V2 p50/p95 16.7/16.8 ms. This is a partial desktop navigation signal, not GPU duration, physical-mobile certification or proof for every scene.
+
+Next: demonstrate a second architecturally distinct frame system using the same semantic recipe, then run emulated-mobile and expanded lifecycle checks without claiming a physical-device result.
+
 Human verdict: VISUAL_PENDING_HUMAN.

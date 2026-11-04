@@ -49,6 +49,22 @@
       ],
       "localFullManifestSha256": "7a392258c7d759ad4508d5d3110dbeddedeecfbb573c76286d2bf4b0a6c38000",
       "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "coverage-12",
+      "codeSha": "5ad25c912004c81de3b549bb0ae70cf7c814a515",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; intentionally matched to iteration 2",
+      "coverage": { "existing": 12, "compatible": 12, "treated": 12, "excluded": 0 },
+      "files": [
+        { "path": "evidence/coverage-12/off-v2-contact.jpg", "sha256": "dc3eede20df75790d0f82967a4360d83d1936eb6a0aa30ddd1b88f9ad9aad35e" },
+        { "path": "evidence/coverage-12/v2-detail.jpg", "sha256": "ee78e56110e3a033f28f07bf939d43427a2dfd828361e94e93756b237dd4d8c8" },
+        { "path": "evidence/coverage-12/v2-general.jpg", "sha256": "48d32540b0ffd4dc86dbb0683e7a56f71b92ef416d4665b22cad38188160e9d2" }
+      ],
+      "localFullManifestSha256": "fc1bc977bce0b56f7873aa30c1b3df5b956f8efd318869a2f6edeef0156f36a2",
+      "visualState": "VISUAL_PENDING_HUMAN"
     }
   ],
   "limitations": [
