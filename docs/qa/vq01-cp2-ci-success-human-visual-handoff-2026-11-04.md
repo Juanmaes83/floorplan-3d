@@ -78,7 +78,7 @@ Las observaciones se basan en las capturas oficiales A0/B1/B2 del artifact 13310
 
 1. Juanma evalúa B2 frente a A0/B1 por madera, piedra, yeso, hormigón, vidrio y GLOBAL; asigna score o verdict explícito. Nunca inventar `B2≈130`.
 2. Elegir `VISUAL_PASS_CP2`, `VISUAL_PARTIAL_ACCEPT_FOUNDATION` o `VISUAL_NON_PASS`. En caso de aprobación parcial, preservar el mecanismo técnico B2 y trasladar gaps a nuevas familias; **no declarar el VQ completo finalizado**.
-3. Decidir explícitamente si se abre PR de B2 hacia `master`, separado de la firma de QA, con revisión y comprobación de producto. El merge de PR #163 a la rama VQ **no equivale** al merge de VQ a master.
+3. [PR #165, B2→`master`](https://github.com/Juanmaes83/floorplan-3d/pull/165) **ya preparado como borrador** (no fusionado), para evitar a Astra la preparación del PR; necesita revisión y decisión humana. El merge de PR #163 a la rama VQ **no equivale** al merge de VQ a master.
 4. Determinar la estrategia de retención de evidencias antes de que el artifact de Actions caduque: Git LFS, storage de release u otro repositorio de QA; **no introducir ZIP masivos en Git por defecto**.
 
 **Trabajo que Astra no debe repetir:** todos los pasos completados por run 41802674784. Próxima invocación, si necesaria: leer este checkpoint, el comparison oficial y el veredicto humano; no realizar más microajustes VQ-01 sin decisión de alcance. Los problemas de iluminación, carpinterías, fachadas y contexto no son deuda oculta de CP2; forman parte del programa de familias visuales separado.
