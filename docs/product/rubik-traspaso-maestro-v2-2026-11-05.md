@@ -1,3 +1,5 @@
+> **ADDENDUM DE COORDINACIÓN (05-11-2026).** Tras comprobar el estado de GitHub y los avances actuales de Claude/Kimi, el [Roadmap operativo reconciliado](rubik-roadmap-operativo-reconciliado-2026-11-05.md) aporta una fotografía posterior, distingue E1/E2/E3 y corrige tareas históricas. Este traspaso se conserva íntegro como fuente de decisiones; no constituye autorización para programar, consumir API, fusionar o desplegar.
+
 # RUBIK SOTA — TRASPASO MAESTRO V2
 ## Reconciliación global del producto, Home V2, Entregas, IA visual, asistente, servicios premium y roadmap
 
