@@ -58,3 +58,17 @@ test('material alternatives: only known keys, geometry rules kept, reported back
  const only=[];await call(req({style:'natural',image:png,floor:'walnut'}),{env,fetchImpl:okFetch(only)});assert.match(only[0].init.body.get('prompt'),/floor: dark walnut[^;]*\. Style/);
  const plain=[];await call(req({style:'natural',image:png}),{env,fetchImpl:okFetch(plain)});assert.doesNotMatch(plain[0].init.body.get('prompt'),/Change ONLY/);
 });
+
+
+test('preview-only render token overrides legacy token without changing production or other previews',async()=>{
+ const testEnv={...env,VERCEL_ENV:'preview',RUBIK_RENDER_TOKEN_PREVIEW:'preview-secret'};
+ const calls=[];
+ assert.equal((await call(req({style:'natural',image:png},{token:'preview-secret'}),{env:testEnv,fetchImpl:okFetch(calls)})).status,200);
+ assert.equal(calls.length,1);
+ assert.equal((await call(req({style:'natural',image:png},{token:'access-123'}),{env:testEnv,fetchImpl:()=>assert.fail('no provider call')})).status,401);
+ const prod={...testEnv,VERCEL_ENV:'production'};
+ assert.equal((await call(req({style:'natural',image:png},{token:'access-123'}),{env:prod,fetchImpl:okFetch([])})).status,200);
+ assert.equal((await call(req({style:'natural',image:png},{token:'preview-secret'}),{env:prod,fetchImpl:()=>assert.fail('no provider call')})).status,401);
+ const otherPreview={...env,VERCEL_ENV:'preview'};
+ assert.equal((await call(req({style:'natural',image:png},{token:'access-123'}),{env:otherPreview,fetchImpl:okFetch([])})).status,200);
+});
