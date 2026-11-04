@@ -89,3 +89,46 @@ Las capturas de cada escenario (`QA_SHOTS=<dir> node --test tests/delivery-3d.br
 - error con reintento;
 - sin WebGL;
 - contexto perdido.
+
+## 6. Mejora visual: mini-mapa en la exploración libre y estados de botón
+
+### Mini-mapa
+- **Componente reutilizado.** Es el plano de orientación de la presentación. La geometría la da `FloorPlanPresentationCore.minimap()`, que es función pura y calcula `viewBox` y polígonos en mm. El aspecto viene de las clases `.presentation-minimap*`: panel, polígonos de estancia, activa y seleccionable. No hay un mapa paralelo. Lo nuevo vive en `js/delivery-map-core.js`, un módulo puro con tests, que añade dos funciones:
+  - `roomAt()` resuelve la estancia actual por punto en polígono; si hay polígonos solapados, gana el más pequeño.
+  - `marker()` dibuja el punto «estás aquí» y un cono de visión.
+- **Posición y orientación.** Se leen de un gancho nuevo y mínimo de View3D: `View3D.walkPose()`, que devuelve la posición de la cámara en mm del plano (`x·1000+OX`, `z·1000+OY`) y la dirección de la mirada proyectada en planta. El mapa se refresca cada 150 ms mientras dura la exploración libre. Al salir, se elimina el temporizador.
+- **Navegación clicable.** Cada estancia del mapa es un botón: clic, *tap* o Enter/Espacio con teclado. Llama a `View3D.walkToRoom(id)`, que aplica las mismas reglas que el inicio del recorrido:
+  - entra por una puerta de la estancia y queda justo dentro, o, si no hay puerta, se coloca cerca de su centro;
+  - comprueba colisiones con muros y puertas (`blocked`);
+  - mira hacia la esquina más lejana de la estancia, que da la vista más profunda y nunca una pared a un palmo.
+
+  Si la estancia no tiene un sitio libre, lo dice y no mueve al visitante. Los eventos del mapa no se propagan al lienzo, así que no inician un arrastre ni la mirada.
+- **Plegable.** «Ocultar plano» y «Ver plano», con `aria-expanded`. Está abierto por defecto si la pantalla mide 520 px de alto o más, y plegado en un móvil en horizontal, para no tapar la vivienda. Plegado sigue mostrando la estancia actual.
+- **Legible.** Los nombres se pintan solo si caben en su estancia. El nombre completo queda como tooltip y en la línea «estás aquí».
+- **Responsive.** 300 px en escritorio, 200 px en móvil vertical y 210 px en móvil horizontal. El botón de plegar mide 40 px o más.
+- **Gancho en `index.html`.** `walkPose` y `walkToRoom` están junto a la lógica de Recorrer (`walkStart`/`blocked`) y en la lista de exportación de View3D, **lejos del bloque de ventanas y de los hooks F02**.
+
+### Sistema de estados de botón
+Un solo tratamiento, definido en `css/delivery-client.css`, que usa los roles del design system (`--action`, `--line-strong`, `--focus`, …). Su alcance está limitado a la visita del cliente (portada, barra, tarjeta de Recorrer, panel de la presentación y mapa) y a `#professionalWorkspace[data-area="deliver"]`. El resto del editor no cambia. Estados:
+
+| Estado | Tratamiento |
+|---|---|
+| default | Superficie de panel, línea fuerte y elevación suave (dos sombras) |
+| hover | Sube 1 px, sombra más profunda y borde del color de acción |
+| active / pressed | Baja 1 px, sombra interior y superficie hundida |
+| focus-visible | Anillo de foco de 3 px (solo con teclado) más la elevación |
+| disabled | Plano, apagado, sin elevación y cursor `not-allowed` |
+| acento | La acción principal de cada pantalla, con los mismos estados sobre petróleo: «Explorar la vivienda» y «Empezar el recorrido» |
+
+- La parada actual de la presentación se pinta en grafito (`aria-current="step"`).
+- «Salir de la visita» lleva una flecha y un borde más marcado.
+- `prefers-reduced-motion` desactiva los desplazamientos.
+- **En «Entregar» se mantiene la regla Point9:** ninguna tarjeta tiene un CTA relleno. «Revisar como cliente» usa un **contorno de acento** (`data-emphasis="accent"`) para tener jerarquía dentro de su tarjeta sin competir con las demás.
+
+### Pruebas añadidas
+- `tests/delivery-map-core.test.cjs`: 2/2.
+- Escenario A, escritorio:
+  - mapa abierto, todas las estancias y la actual resaltada;
+  - navegación por clic a otra estancia y por teclado de vuelta, sin dejar de caminar;
+  - plegar y desplegar.
+- Escenario D, móvil vertical y horizontal: abierto en vertical, plegado en horizontal, dentro de la pantalla, objetivo táctil del botón y navegación por *tap*.
