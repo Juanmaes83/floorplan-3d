@@ -2,7 +2,7 @@ name: VQ-01 CP2 material impact
 on:
   push:
     branches: [feat/vq-01-material-fidelity-foundation]
-    paths: ['js/surface-*.mjs', 'js/presentation-ui.js', 'tests/*cp2*', 'tests/surface-fidelity.test.cjs', 'tests/fixtures/vq01-cp2*', '.github/workflows/vq-01-material-cp2.yml']
+    paths: ['js/surface-*.mjs', 'js/presentation-ui.js', 'tests/*cp2*', 'tests/surface-fidelity.test.cjs', 'tests/material-detail.browser.test.cjs', 'tests/fixtures/vq01-cp2*', '.github/workflows/vq-01-material-cp2.yml']
   workflow_dispatch:
 permissions:
   contents: read
