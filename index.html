@@ -4551,9 +4551,53 @@ function presentationRestorePose(state){
    restores it; nothing here edits the project, rebuilds geometry or adds a second model. The narrative ends exactly on
    the pose presentationGo computes for the same stop, so continuing to the presentation has no jump. */
 let storyRun=null,storyPlanStart=null;
+/* Section → Spatial Visit V1 (room-visit): the camera path is FloorPlanPresentationRoute's — the same plan and
+   choreography as presentationRoute (wall, window, low-door and furniture clearance), never a new spline. Only the
+   timing is new, and it is a pure Story narrative: seekable, reversible, pausable. While above the walls and going down
+   the cut stays horizontal (cutaway, no ceiling to cross); at eye height inside the room the cut returns to full height
+   once (walls, openings and ceiling close around the viewer). The route's doors are open for the visit and get their
+   state back when it ends. */
+function roomVisitPlan(roomId,region){
+  const Route=window.FloorPlanPresentationRoute;if(!Route)return {ok:false,code:'no_route_module',reason:'Rutas no disponibles.'};
+  const aspect=SW()/Math.max(1,SH()),vfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/aspect)*180/Math.PI)),hfovDeg=2*Math.atan(Math.tan(vfov*Math.PI/360)*aspect)*180/Math.PI;
+  const plan=Route.plan(project,geometry,roomId);
+  if(plan.kind!=='interior')return {ok:false,code:plan.code||plan.kind,reason:plan.reason||'Sin ruta interior.',plan};
+  const moves=Route.choreography(project,geometry,roomId,plan,{hfovDeg,vfovDeg:vfov,region});
+  if(!moves)return {ok:false,code:'no_moves',reason:'La ruta no tiene coreografía.',plan};
+  if(moves.readable===false)return {ok:false,code:'illegible',reason:'La ruta interior segura no ofrece una vista legible.',plan};
+  // The descent lands on the first route sample that lies inside a room and outside every doorway (no lintel above).
+  const inPoly=(poly,x,y)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+  const inRectP=(r,x,y,pad)=>{const dx=x-r.center[0],dy=y-r.center[1],c=Math.cos(r.angle),s=Math.sin(r.angle);return Math.abs(dx*c+dy*s)<r.spanMm/2+pad&&Math.abs(-dx*s+dy*c)<r.thickness/2+pad;};
+  const S=moves.samples,k=S.findIndex(q=>geometry.rooms.some(r=>r.poly.length>=3&&inPoly(r.poly,q.x,q.y))&&!geometry.doors.some(d=>inRectP(d.rect,q.x,q.y,250)));
+  if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
+  return {ok:true,plan,moves,landing:k,vfov};
+}
+function beginRoomVisit(stop,view,aspect,startPose){
+  const r=roomVisitPlan(stop.roomId,view.region);if(!r.ok)throw Error(r.reason);
+  const fromPose=view.fromStop?.bounds?presentationStopPose(view.fromStop,aspect,view.fromRegion??view.region):null;
+  const start=fromPose?{position:fromPose.p.toArray(),target:fromPose.t.toArray(),fov:camera.fov}:startPose;
+  const S=r.moves.samples.slice(r.landing),t0=S[0].t;
+  const samples=S.map(q=>({t:q.t-t0,x:wx(q.x),z:wz(q.y),yaw:q.cameraYaw??q.yaw,pitchDeg:q.cameraPitchDeg??q.pitchDeg}));
+  const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size?.heightMm||0)));
+  const above=Math.max(fullTop,tallest)+.8,eye=r.moves.eyeHeight||1.5;
+  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:{yaw:r.moves.arrival.cameraYaw,pitchDeg:r.moves.arrival.cameraPitchDeg},base:{near:camera.near,far:camera.far}});
+  const doorIds=[...(r.plan.doorIds||[])];
+  return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,2.4),doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
+    route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
+}
+function applyRoomVisit(v,st){
+  const cut=st.fullHeight?2.8:v.cutaway;
+  if(opt.cut!==cut||v.full===null){setPresentationCut(cut);clearRoomOutline();}
+  if(v.full!==st.fullHeight||!doors.every(d=>!v.doorIds.includes(d.id)||d.open)){doors.forEach(d=>{if(v.doorIds.includes(d.id))d.open=true;});setWalkAids(!!st.fullHeight);v.full=!!st.fullHeight;}
+}
+function endRoomVisit(v){
+  setWalkAids(false);
+  if(opt.cut!==v.baseCut&&v.baseCut!=null)setPresentationCut(v.baseCut);
+  restoreRouteDoors(v.doorsSaved);
+}
 function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
-  if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
+  if((kind==='room-descent'||kind==='room-visit')&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
   if(kind==='section-open'&&(stop.kind!=='overview'||!window.FloorPlanPresentationSection))throw Error('Narrativa no disponible.');
   if(kind==='elevation-open'&&(stop.kind!=='overview'||!view.elevation?.candidate||!view.elevation?.envelope))throw Error('Narrativa no disponible.');
   if((kind==='axon-open'||kind==='exploded-levels-open')&&(stop.kind!=='overview'||!view.axon?.descriptor?.supported||(kind==='exploded-levels-open'&&!view.axon.descriptor.variants?.exploded?.supported)))throw Error('Narrativa no disponible.');
@@ -4573,7 +4617,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null,section=null,elevation=null,axon=null;
+  let narrative,sectionCut=null,section=null,elevation=null,axon=null,visit=null;
   if(kind==='axon-open'||kind==='exploded-levels-open'){
     // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
     // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
@@ -4595,6 +4639,9 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const line={from:[wx(d.line[0][0]),wz(d.line[0][1])],to:[wx(d.line[1][0]),wz(d.line[1][1])]};
     narrative=window.FloorPlanPresentationStory.create('section-open',{plane,line,wallTop:builtTop,depth:d.span/1000,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far}});
     section=beginSection(d,{normal,plane,builtTop});
+  }else if(kind==='room-visit'){
+    // Section → Spatial Visit V1: the route Rubik validates (FloorPlanPresentationRoute) timed as a Story narrative.
+    visit=beginRoomVisit(stop,view,aspect,startPose);narrative=visit.narrative;
   }else if(kind==='room-descent'){
     // The room stop exactly as presentationGo frames it; a lower wall section is reached by lowering the walls built at
     // the overview's cut, and presentationGo then applies the real section when the presentation continues.
@@ -4612,7 +4659,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon};
+  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon,visit};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4627,6 +4674,7 @@ function presentationStoryApply(p){
   if(storyRun.sectionCut){const cut=st.section?storyRun.sectionCut.section:storyRun.sectionCut.base;if(opt.cut!==cut)setPresentationCut(cut);}
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(storyRun.visit)applyRoomVisit(storyRun.visit,st);
   if(storyRun.section)applySection(storyRun.section,st);
   if(storyRun.elevation)applyElevation(storyRun.elevation,st);
   if(storyRun.axon)applyAxon(storyRun.axon,st);
@@ -4649,6 +4697,7 @@ function presentationStoryReframe(view={}){
 function endPresentationStory({keepPose=true}={}){
   if(!storyRun)return null;
   const run=storyRun;storyRun=null;
+  if(run.visit)endRoomVisit(run.visit);
   if(run.section)endSection(run.section);
   if(run.elevation)endElevation(run.elevation);
   if(run.axon)endAxon(run.axon);
@@ -4924,6 +4973,8 @@ Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
+window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};
+Object.defineProperty(window.View3D,'presentationVisitInfo',{get:()=>storyRun?.visit?{roomId:storyRun.visit.roomId,route:{...storyRun.visit.route,points:storyRun.visit.route.points.map(p=>({...p}))},fullHeight:storyRun.visit.full,cut:opt.cut}:null});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
 Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});

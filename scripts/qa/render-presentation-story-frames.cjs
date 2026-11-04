@@ -33,7 +33,7 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:30000});
  await page.locator('#welcomeExample').click();await page.waitForTimeout(1500);await shot(24);
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
- await page.locator('#presentationStoryOption').check();if(parts.some(p=>p.startsWith('3')))await page.locator('#presentationSectionOption').check();if(parts.some(p=>p.startsWith('4')))await page.locator('#presentationElevationOption').check();await shot(24);await page.getByRole('button',{name:'Iniciar presentación'}).click();
+ await page.locator('#presentationStoryOption').check();if(parts.some(p=>p.startsWith('3')))await page.locator('#presentationSectionOption').check();if(parts.some(p=>p.startsWith('4')))await page.locator('#presentationElevationOption').check();if(parts.includes('5')){await page.locator('#presentationSectionOption').check();await page.locator('#presentationVisitOption').check();}await shot(24);await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await hold('plan-reveal');await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:180000});
  if(parts.includes('1a')){await shot(18);await step();await shot(18);}
  await page.locator('#presentationStoryPlay').click();await idle();await shot(24);
@@ -73,5 +73,16 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
   await page.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await hold('elevation-open');
   for(let i=steps;i>=0;i--){await page.evaluate(k=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(k*Number(s.max)));s.dispatchEvent(new Event('input',{bubbles:true}));},i/steps);await shot(i===steps?18:1);}
   await shot(18);}
+ // Section → Spatial Visit V1: from the start of the section to the eye-level arrival in the first chosen room with a
+ // validated route, stepping the story's global progress; the arrival is held, then the presentation is left.
+ if(parts.includes('5')){if(!await page.locator('#presentationStoryFull').isVisible()){await page.locator('.presentation-stops button').nth(0).click();await idle();}
+  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());
+  await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+  const range=await page.evaluate(()=>{const kinds=FloorPlanPresentation.story.kinds,seq=FloorPlanPresentationStory.sequence(kinds.map(k=>FloorPlanPresentationStory.SCENE_MS[k]));return {kinds,from:seq.at(kinds.indexOf('section-open'),0)};});
+  console.error(JSON.stringify({story:range}));const log=[];
+  for(let i=0;i<=steps;i++){const P=range.from+(1-range.from)*i/steps;await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(v*1000));s.dispatchEvent(new Event('input',{bubbles:true}));},P);
+   await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:120000});await shot(i===0?18:1);
+   if(i%Math.max(1,Math.round(steps/24))===0)log.push(await page.evaluate(()=>{const s=View3D.presentationStoryInfo;return {P:FloorPlanPresentation.story?.P,kind:s.kind,phase:s.phase,cut:s.cut,cam:View3D.cameraState?.position.map(v=>+v.toFixed(2))};}));}
+  await shot(36);console.error(JSON.stringify({visit:await page.evaluate(()=>View3D.presentationVisitInfo),log}));}
  await browser.close();server.close();console.log(JSON.stringify({frames:frames.length,dir,errors}));
 })().catch(e=>{console.error(e);process.exit(1);});
