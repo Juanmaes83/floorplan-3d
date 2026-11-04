@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN DE AUTORIDAD (05-11-2026): SNAPSHOT HISTÓRICO AL 01/11.** Las declaraciones inferiores de «próximo trabajo = FT3D-5», «FT3D-6 no implementado» y «B2/B8 sin prueba real» ya no describen master/Preview vigentes. Consultar [Roadmap operativo reconciliado del 05/11](rubik-roadmap-operativo-reconciliado-2026-11-05.md). Conservar este documento como evidencia histórica, no como instrucciones para agentes.
+
 # Estado operativo de producto e integración — actualizado 01-11-2026
 
 **Fuente operativa de verdad para el trabajo actual.**  
