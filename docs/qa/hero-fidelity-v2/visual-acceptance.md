@@ -57,3 +57,7 @@ Opened and inspected MOBILE M1/G1 and their contact sheet at 390×844, DPR 1. Th
 `tests/hero-fidelity-v2-lifecycle.browser.test.cjs`: 1/1 PASS, two captures and no browser errors/warnings. Over 60 frame intervals, OFF and V2 both measured p50/p95 16.7/16.8 ms. These are `requestAnimationFrame` intervals, not GPU work duration. Balanced resources: 1 geometry, 6 materials, 3 textures, 69 owned meshes, 22 facade meshes, 7740 triangles and 1,090,698 estimated bytes.
 
 Human verdict remains VISUAL_PENDING_HUMAN.
+
+## Final focused regression — code `a2db71c5dce142e74b50af299e7ed8ffdd4d297e`
+
+Unit tests: 3/3 PASS. Browser tests: 6/6 PASS, covering fixed views, HDR, architectural systems, 12-window coverage, emulated-mobile lifecycle and the original F02 smoke path. Final mobile M1 and full-coverage G1 were opened and inspected; no new visual regression was observed. This does not change the independent human visual gate.

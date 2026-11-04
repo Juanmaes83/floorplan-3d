@@ -4,6 +4,8 @@
   "baseSha": "de6ba2c22a33f5ca6d51939fc92813a5dd64bab5",
   "missionSha": "51896b010ff16d0f4f10edc895c4dc5a231b8ced",
   "status": "PUBLISHED",
+  "finalRegressionSha": "a2db71c5dce142e74b50af299e7ed8ffdd4d297e",
+  "finalRegression": { "unit": "3/3 PASS", "browser": "6/6 PASS", "visualInspection": "FINAL_MOBILE_M1_AND_COVERAGE_G1_INSPECTED" },
   "iterations": [
     {
       "id": "iteration-1",
