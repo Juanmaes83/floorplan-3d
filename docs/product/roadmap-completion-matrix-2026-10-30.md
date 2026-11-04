@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN DE AUTORIDAD (05-11-2026): SNAPSHOT HISTÓRICO AL 01/11.** FT3D-5 y FT3D-6 ya están integrados en master; B2/B8 tienen una primera prueba real de proveedor en Preview, pero no cierre comercial. Para estados actuales, PR activas y gates E1/E2/E3 consultar [Roadmap operativo reconciliado del 05/11](rubik-roadmap-operativo-reconciliado-2026-11-05.md). No iniciar FT3D-5/6 como tareas nuevas a partir de la tabla histórica inferior.
+
 # Matriz de cierre del roadmap — actualizado 01-11-2026
 
 **Base funcional consolidada:** FT3D-4 integrado en `e716ba920e26485ae112b8f12b342534dff34030`.  
