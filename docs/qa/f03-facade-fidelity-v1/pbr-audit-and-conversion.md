@@ -1,6 +1,6 @@
 # F03 — Auditoría PBR y pipeline de conversión para Three.js
 
-**Estado documental:** archivos confirmados en GitHub; **ninguna conversión ni rendimiento F03 certificados**. Prohibido tratar `*_diff_4k.jpg` como “material PBR completo”. Fuente: `pbr-preview-source-map.csv`, `pbr-source-manifest.csv` y árbol remoto de esta rama @ `2623d12`.
+**Estado de implementación:** los tres sets ya tienen derivados WebP verificados; la integración visual y el rendimiento aún no están certificados. Consulta el [informe de conversión ejecutado](pbr-conversion-report.md), `assets/materials/f03/derivatives-manifest.json` y `assets/materials/f03/source-audit.json`. Las instrucciones históricas siguen como referencia; la fuente se mantiene en `pbr-preview-source-map.csv` y `pbr-source-manifest.csv`. Prohibido tratar `*_diff_4k.jpg` como “material PBR completo”.
 
 ## 1. Inventario con rutas verificadas
 | Material | Color (4K, JPG) | Canales fuente suplementarios (GitHub) | Completitud en esta rama |

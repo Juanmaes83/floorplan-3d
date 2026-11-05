@@ -1,0 +1,703 @@
+{
+  "schema": "F03/pbr-derivatives@1",
+  "visualOnly": true,
+  "enabledByDefault": false,
+  "tool": {
+    "script": "scripts/qa/f03/convert-pbr.py",
+    "python": "3.11.9",
+    "OpenEXR": "3.5.3",
+    "NumPy": "2.4.6",
+    "Pillow": "12.3.0",
+    "albedoWebP": {
+      "quality": 88,
+      "method": 6
+    },
+    "dataWebP": {
+      "lossless": true,
+      "method": 6,
+      "exact": true
+    }
+  },
+  "sourceColorPolicy": "Albedo convertido a sRGB si ICC está presente; sin ICC se conservan valores y se declara sRGB. Datos EXR/JPG lineales sin gamma.",
+  "profiles": {
+    "hero": 1024,
+    "balanced": 512
+  },
+  "materials": {
+    "white_stucco": {
+      "sourceArchive": "white_stucco_4k.blend.zip",
+      "provenance": "Poly Haven; CC0 comunicada por el usuario",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_stucco_diff_4k.jpg",
+          "bytes": 8618925,
+          "sha256": "bf6faa3491ec6d7bff9c0b83cf2167504fe82ff0735acd08e3497b2b3e6a2fce",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": "sRGB IEC61966-2.1",
+          "extrema": [
+            [
+              62,
+              244
+            ],
+            [
+              47,
+              241
+            ],
+            [
+              42,
+              237
+            ]
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_nor_gl_4k.exr",
+          "bytes": 25943653,
+          "sha256": "48467b5c369ccb218fc7d936dcae67beac026c3d5ee3185a8a9e14cc5f8affa3",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGB": {
+              "min": 0.033355712890625,
+              "max": 1.0263671875,
+              "mean": 0.6633678078651428
+            }
+          },
+          "degeneratePixelsBelow0.1": 0,
+          "degeneratePixelPolicy": "Reparados como normal plana +Z; los demás vectores se normalizan."
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_rough_4k.exr",
+          "bytes": 4136097,
+          "sha256": "2879c74883f1c438babd4abc14f4250155b0aa5ed3681a049d841ab9945d069d",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "Y": {
+              "min": 0.845703125,
+              "max": 0.98828125,
+              "mean": 0.8805335760116577
+            }
+          }
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_disp_4k.png",
+          "bytes": 27029552,
+          "sha256": "536d9bcd9bec05179e123f5ba4b7fca7097bb2ffdca65c452ff1007917038caf",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 16,
+          "mode": "I;16",
+          "channels": [
+            "I"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            5029,
+            62906
+          ],
+          "runtimeEnabled": false,
+          "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
+        }
+      },
+      "variants": {
+        "hero": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/white_stucco/hero/albedo.webp",
+              "bytes": 103474,
+              "sha256": "a77794825812d2756064157368d49a862506b71c3c9bfa09a615e2bbcf1b6cc8",
+              "role": "baseColor",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "bf6faa3491ec6d7bff9c0b83cf2167504fe82ff0735acd08e3497b2b3e6a2fce",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "normal": {
+              "path": "assets/materials/f03/white_stucco/hero/normal-gl.webp",
+              "bytes": 1656104,
+              "sha256": "5c7481f1652bcac2a511acc9cb1a1b7b40973d3ed0d16bfd4b971e5662457de8",
+              "role": "normalOpenGL_Yplus",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "48467b5c369ccb218fc7d936dcae67beac026c3d5ee3185a8a9e14cc5f8affa3",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "roughness": {
+              "path": "assets/materials/f03/white_stucco/hero/roughness.webp",
+              "bytes": 317626,
+              "sha256": "d768c1338761e141217e2e69e62f006fd5568a1ceaad9546c49f08b7c2d798b1",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "2879c74883f1c438babd4abc14f4250155b0aa5ed3681a049d841ab9945d069d",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 1.8116432825724285,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.0018086645286530256,
+              "max": 0.005845606327056885
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        },
+        "balanced": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/white_stucco/balanced/albedo.webp",
+              "bytes": 10402,
+              "sha256": "8e7939b688d7aced31fda9c8dbef5bf784517e4f95f4f43575f0931a278068db",
+              "role": "baseColor",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "bf6faa3491ec6d7bff9c0b83cf2167504fe82ff0735acd08e3497b2b3e6a2fce",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "normal": {
+              "path": "assets/materials/f03/white_stucco/balanced/normal-gl.webp",
+              "bytes": 329290,
+              "sha256": "ec9659476dfdb998334c67137d2e4eb07d3c51a24c8cb7a555fa9b2d63c2baa6",
+              "role": "normalOpenGL_Yplus",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "48467b5c369ccb218fc7d936dcae67beac026c3d5ee3185a8a9e14cc5f8affa3",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "roughness": {
+              "path": "assets/materials/f03/white_stucco/balanced/roughness.webp",
+              "bytes": 73468,
+              "sha256": "a10f0bc3820172ff83b6607692a5d087cc02a1c5b6e7fab9f7542e9e0cb2b913",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "2879c74883f1c438babd4abc14f4250155b0aa5ed3681a049d841ab9945d069d",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 1.5316836039225261,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.001365768606774509,
+              "max": 0.005041539669036865
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        }
+      }
+    },
+    "white_rough_plaster": {
+      "sourceArchive": "white_rough_plaster_4k.blend.zip",
+      "provenance": "Poly Haven; CC0 comunicada por el usuario",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_rough_plaster_diff_4k.jpg",
+          "bytes": 10000080,
+          "sha256": "e1c043995a8d82bde685bd907af7ed14779356f8f4a55bb44a015407c58743d3",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              255
+            ]
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_nor_gl_4k.exr",
+          "bytes": 17081596,
+          "sha256": "44dfa67d27ddb7db9fb07861336c0c469775c8168518769babd5e9d953c206bf",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGB": {
+              "min": 0.02398681640625,
+              "max": 1.0234375,
+              "mean": 0.6894448399543762
+            }
+          },
+          "degeneratePixelsBelow0.1": 1,
+          "degeneratePixelPolicy": "Reparados como normal plana +Z; los demás vectores se normalizan."
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_rough_4k.jpg",
+          "bytes": 3845155,
+          "sha256": "04ae7dad6262965a13854541863d37d0dca918cbdf59d255dc39a2265aaa5ade",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "L",
+          "channels": [
+            "L"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            98,
+            195
+          ]
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_disp_4k.png",
+          "bytes": 31715437,
+          "sha256": "52478d892b95a241e2e62fe26f9d91f587f35a60ab85b9033a1744419cd2ec15",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 16,
+          "mode": "I;16",
+          "channels": [
+            "I"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            32,
+            65535
+          ],
+          "runtimeEnabled": false,
+          "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
+        }
+      },
+      "variants": {
+        "hero": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/white_rough_plaster/hero/albedo.webp",
+              "bytes": 400596,
+              "sha256": "c6a40a8f81a25973c8e4510ae51b4d0dc22577af1c69442da63efc4e250eb8bc",
+              "role": "baseColor",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "e1c043995a8d82bde685bd907af7ed14779356f8f4a55bb44a015407c58743d3",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "normal": {
+              "path": "assets/materials/f03/white_rough_plaster/hero/normal-gl.webp",
+              "bytes": 1644732,
+              "sha256": "5136a8bb26e39a20790ab8880fa1992ff61c4a065f9438a4b95942c26dd17c20",
+              "role": "normalOpenGL_Yplus",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "44dfa67d27ddb7db9fb07861336c0c469775c8168518769babd5e9d953c206bf",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "roughness": {
+              "path": "assets/materials/f03/white_rough_plaster/hero/roughness.webp",
+              "bytes": 525900,
+              "sha256": "d915bc39ef41c98b47841f9a67a3aeb1c520868dcb266ae78d9769476f6f5fd6",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "04ae7dad6262965a13854541863d37d0dca918cbdf59d255dc39a2265aaa5ade",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 2.4460153579711914,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.0019527541007846594,
+              "max": 0.0064026713371276855
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        },
+        "balanced": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/white_rough_plaster/balanced/albedo.webp",
+              "bytes": 102050,
+              "sha256": "4dc9a3b96d9ad05bcc2deeecbf665f434d911aec75de1df0ad4bbc2d7c0c6f10",
+              "role": "baseColor",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "e1c043995a8d82bde685bd907af7ed14779356f8f4a55bb44a015407c58743d3",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "normal": {
+              "path": "assets/materials/f03/white_rough_plaster/balanced/normal-gl.webp",
+              "bytes": 421590,
+              "sha256": "f80faf48f8f65e6b9de560696696edf2ee3ea35905e3a47630c9f0c2710964e3",
+              "role": "normalOpenGL_Yplus",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "44dfa67d27ddb7db9fb07861336c0c469775c8168518769babd5e9d953c206bf",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "roughness": {
+              "path": "assets/materials/f03/white_rough_plaster/balanced/roughness.webp",
+              "bytes": 127854,
+              "sha256": "80f7ea0a13c8097d73ac5aa95b78b45ed372b67adda3d7e34163bfa729b25cd5",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "04ae7dad6262965a13854541863d37d0dca918cbdf59d255dc39a2265aaa5ade",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 2.5212987263997397,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.0019555576145648956,
+              "max": 0.006093084812164307
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        }
+      }
+    },
+    "rough_plaster_03": {
+      "sourceArchive": "rough_plaster_03_4k.blend.zip",
+      "provenance": "Poly Haven; CC0 comunicada por el usuario",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/rough_plaster_03_diff_4k.jpg",
+          "bytes": 8843908,
+          "sha256": "0d9e1fb7341b9c35647a12f50b8bb5e2f9e30030c74745327cf389d11d5d8134",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              18,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              0,
+              251
+            ]
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_nor_gl_4k.exr",
+          "bytes": 29093383,
+          "sha256": "7cd632c8bb3f9e8d195601e1fde2a9e16d474173a65e7aee303066ed4d4d8dab",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGBA": {
+              "min": -3.933906555175781e-06,
+              "max": 1.0283203125,
+              "mean": 0.7400882840156555
+            }
+          },
+          "degeneratePixelsBelow0.1": 0,
+          "degeneratePixelPolicy": "Reparados como normal plana +Z; los demás vectores se normalizan."
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_rough_4k.jpg",
+          "bytes": 4663079,
+          "sha256": "ce8af36b76500509c71c40bcf779bfdba20b7db6fb1bcd83f74e7647f121c872",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "L",
+          "channels": [
+            "L"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            81,
+            255
+          ]
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_disp_4k.png",
+          "bytes": 26950127,
+          "sha256": "e19f3ff3611af4d091321dfefc98169a96a173feabf46bf1bccaf222b68245b0",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGBA",
+          "channels": [
+            "R",
+            "G",
+            "B",
+            "A"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              2,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "runtimeEnabled": false,
+          "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
+        }
+      },
+      "variants": {
+        "hero": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/rough_plaster_03/hero/albedo.webp",
+              "bytes": 399194,
+              "sha256": "8b7b103da50ea41b898c71fe805233aad34d8852c77d79917f3f06f1073d3b38",
+              "role": "baseColor",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "0d9e1fb7341b9c35647a12f50b8bb5e2f9e30030c74745327cf389d11d5d8134",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "normal": {
+              "path": "assets/materials/f03/rough_plaster_03/hero/normal-gl.webp",
+              "bytes": 1899448,
+              "sha256": "8fd6c02d5826aa5288958833fd7cd39c2eeaf652365ff2db0ac55cc2534552d2",
+              "role": "normalOpenGL_Yplus",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "7cd632c8bb3f9e8d195601e1fde2a9e16d474173a65e7aee303066ed4d4d8dab",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            },
+            "roughness": {
+              "path": "assets/materials/f03/rough_plaster_03/hero/roughness.webp",
+              "bytes": 604800,
+              "sha256": "ae19d3d2235d1dfc0d017c14a959c1332c2b312e5789c375aff455c52f3339a0",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 1024,
+              "height": 1024,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "ce8af36b76500509c71c40bcf779bfdba20b7db6fb1bcd83f74e7647f121c872",
+              "estimatedGpuBytesWithMipmaps": 5592406
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 2.528714179992676,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.0019211662001907825,
+              "max": 0.0065146684646606445
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        },
+        "balanced": {
+          "repeatMm": {
+            "x": 2000,
+            "y": 2000
+          },
+          "scaleAuthority": "EXPERIMENTAL_NOT_SOURCE_CERTIFIED",
+          "maps": {
+            "albedo": {
+              "path": "assets/materials/f03/rough_plaster_03/balanced/albedo.webp",
+              "bytes": 100942,
+              "sha256": "519b9e6ec7aef0955191f0d729f601010b8d2de3c5e03002f2e5df81deefe1df",
+              "role": "baseColor",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "SRGBColorSpace",
+              "sourceSha256": "0d9e1fb7341b9c35647a12f50b8bb5e2f9e30030c74745327cf389d11d5d8134",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "normal": {
+              "path": "assets/materials/f03/rough_plaster_03/balanced/normal-gl.webp",
+              "bytes": 473886,
+              "sha256": "91e9d00277d018950eeaf23d13c268a5963cb23bf11cb145ba5733c5ac0b21e6",
+              "role": "normalOpenGL_Yplus",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "7cd632c8bb3f9e8d195601e1fde2a9e16d474173a65e7aee303066ed4d4d8dab",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            },
+            "roughness": {
+              "path": "assets/materials/f03/rough_plaster_03/balanced/roughness.webp",
+              "bytes": 151806,
+              "sha256": "f58dc5a60c2b3b1f8d6ab6c22eee70c764d50a752372139ce55e52909a6bc64e",
+              "role": "roughness_replicated_RGB_read_G",
+              "width": 512,
+              "height": 512,
+              "format": "WebP",
+              "colorSpace": "NoColorSpace",
+              "sourceSha256": "ce8af36b76500509c71c40bcf779bfdba20b7db6fb1bcd83f74e7647f121c872",
+              "estimatedGpuBytesWithMipmaps": 1398102
+            }
+          },
+          "verification": {
+            "albedoMeanAbsoluteError8bit": 2.5400721232096353,
+            "normalUnitLengthErrorAfter8bit": {
+              "mean": 0.0019051427952945232,
+              "max": 0.006209135055541992
+            },
+            "normalYFlippedByPipeline": false,
+            "roughnessGreenEqualsRedAndBlue": true,
+            "displacementEnabled": false
+          }
+        }
+      }
+    }
+  }
+}

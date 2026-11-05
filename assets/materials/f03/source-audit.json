@@ -1,0 +1,352 @@
+{
+  "schema": "F03/pbr-derivatives@1",
+  "visualOnly": true,
+  "enabledByDefault": false,
+  "tool": {
+    "script": "scripts/qa/f03/convert-pbr.py",
+    "python": "3.11.9",
+    "OpenEXR": "3.5.3",
+    "NumPy": "2.4.6",
+    "Pillow": "12.3.0",
+    "albedoWebP": {
+      "quality": 88,
+      "method": 6
+    },
+    "dataWebP": {
+      "lossless": true,
+      "method": 6,
+      "exact": true
+    }
+  },
+  "sourceColorPolicy": "Albedo convertido a sRGB si ICC está presente; sin ICC se conservan valores y se declara sRGB. Datos EXR/JPG lineales sin gamma.",
+  "profiles": {
+    "hero": 1024,
+    "balanced": 512
+  },
+  "materials": {
+    "white_stucco": {
+      "sourceArchive": "white_stucco_4k.blend.zip",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_stucco_diff_4k.jpg",
+          "bytes": 8618925,
+          "sha256": "bf6faa3491ec6d7bff9c0b83cf2167504fe82ff0735acd08e3497b2b3e6a2fce",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": "sRGB IEC61966-2.1",
+          "extrema": [
+            [
+              62,
+              244
+            ],
+            [
+              47,
+              241
+            ],
+            [
+              42,
+              237
+            ]
+          ]
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_disp_4k.png",
+          "bytes": 27029552,
+          "sha256": "536d9bcd9bec05179e123f5ba4b7fca7097bb2ffdca65c452ff1007917038caf",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 16,
+          "mode": "I;16",
+          "channels": [
+            "I"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            5029,
+            62906
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_nor_gl_4k.exr",
+          "bytes": 25943653,
+          "sha256": "48467b5c369ccb218fc7d936dcae67beac026c3d5ee3185a8a9e14cc5f8affa3",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGB": {
+              "min": 0.033355712890625,
+              "max": 1.0263671875,
+              "mean": 0.6633678078651428
+            }
+          }
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_stucco_rough_4k.exr",
+          "bytes": 4136097,
+          "sha256": "2879c74883f1c438babd4abc14f4250155b0aa5ed3681a049d841ab9945d069d",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "Y": {
+              "min": 0.845703125,
+              "max": 0.98828125,
+              "mean": 0.8805335760116577
+            }
+          }
+        }
+      }
+    },
+    "white_rough_plaster": {
+      "sourceArchive": "white_rough_plaster_4k.blend.zip",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/white_rough_plaster_diff_4k.jpg",
+          "bytes": 10000080,
+          "sha256": "e1c043995a8d82bde685bd907af7ed14779356f8f4a55bb44a015407c58743d3",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              255
+            ]
+          ]
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_rough_4k.jpg",
+          "bytes": 3845155,
+          "sha256": "04ae7dad6262965a13854541863d37d0dca918cbdf59d255dc39a2265aaa5ade",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "L",
+          "channels": [
+            "L"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            98,
+            195
+          ]
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_disp_4k.png",
+          "bytes": 31715437,
+          "sha256": "52478d892b95a241e2e62fe26f9d91f587f35a60ab85b9033a1744419cd2ec15",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 16,
+          "mode": "I;16",
+          "channels": [
+            "I"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            32,
+            65535
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/white_rough_plaster_nor_gl_4k.exr",
+          "bytes": 17081596,
+          "sha256": "44dfa67d27ddb7db9fb07861336c0c469775c8168518769babd5e9d953c206bf",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGB": {
+              "min": 0.02398681640625,
+              "max": 1.0234375,
+              "mean": 0.6894448399543762
+            }
+          }
+        }
+      }
+    },
+    "rough_plaster_03": {
+      "sourceArchive": "rough_plaster_03_4k.blend.zip",
+      "sources": {
+        "albedo": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/albedo-previews/rough_plaster_03_diff_4k.jpg",
+          "bytes": 8843908,
+          "sha256": "0d9e1fb7341b9c35647a12f50b8bb5e2f9e30030c74745327cf389d11d5d8134",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGB",
+          "channels": [
+            "R",
+            "G",
+            "B"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              18,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              0,
+              251
+            ]
+          ]
+        },
+        "roughness": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_rough_4k.jpg",
+          "bytes": 4663079,
+          "sha256": "ce8af36b76500509c71c40bcf779bfdba20b7db6fb1bcd83f74e7647f121c872",
+          "format": "JPEG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "L",
+          "channels": [
+            "L"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            81,
+            255
+          ]
+        },
+        "displacement": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_disp_4k.png",
+          "bytes": 26950127,
+          "sha256": "e19f3ff3611af4d091321dfefc98169a96a173feabf46bf1bccaf222b68245b0",
+          "format": "PNG",
+          "width": 4096,
+          "height": 4096,
+          "depth": 8,
+          "mode": "RGBA",
+          "channels": [
+            "R",
+            "G",
+            "B",
+            "A"
+          ],
+          "iccProfile": null,
+          "extrema": [
+            [
+              2,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              2,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ]
+        },
+        "normal": {
+          "path": "docs/qa/f03-facade-fidelity-v1/references/02-facade-materials/pbr-source-maps/rough_plaster_03_nor_gl_4k.exr",
+          "bytes": 29093383,
+          "sha256": "7cd632c8bb3f9e8d195601e1fde2a9e16d474173a65e7aee303066ed4d4d8dab",
+          "format": "EXR",
+          "width": 4096,
+          "height": 4096,
+          "depth": "float16",
+          "colorSpace": "linear",
+          "compression": "Compression.DWAA_COMPRESSION",
+          "dataWindow": [
+            [
+              0,
+              0
+            ],
+            [
+              4095,
+              4095
+            ]
+          ],
+          "channels": {
+            "RGBA": {
+              "min": -3.933906555175781e-06,
+              "max": 1.0283203125,
+              "mean": 0.7400882840156555
+            }
+          }
+        }
+      }
+    }
+  }
+}
