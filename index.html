@@ -4588,7 +4588,19 @@ function presentationWalkEnd(){
   if(presentationBaseCut!=null&&opt.cut!==presentationBaseCut)setPresentationCut(presentationBaseCut);
   return true;
 }
-function roomVisitPlan(roomId,region){
+// The plan is computed once per geometry, room and screen layout: the availability check of the dialog/story and the
+// scene that then begins share it (a new geometry object — any edit, level or project change — invalidates it).
+const visitPlanCache=new WeakMap();
+// The visit's camera is centred on the whole screen, not on the region left free by the card: the hand-over to «Recorrer»
+// is full screen, and the (costly, ~1 s of JavaScript) choreography is then shared by the availability check and the
+// scene, so entering the scene has no hitch.
+function roomVisitPlan(roomId){
+  const key=`${roomId}|${SW()}x${SH()}`,region=undefined;let byGeo=visitPlanCache.get(geometry);
+  if(!byGeo){byGeo=new Map();visitPlanCache.set(geometry,byGeo);}
+  if(!byGeo.has(key))byGeo.set(key,computeVisitPlan(roomId,region));
+  return byGeo.get(key);
+}
+function computeVisitPlan(roomId,region){
   const Route=window.FloorPlanPresentationRoute;if(!Route)return {ok:false,code:'no_route_module',reason:'Rutas no disponibles.'};
   const aspect=SW()/Math.max(1,SH()),vfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/aspect)*180/Math.PI)),hfovDeg=2*Math.atan(Math.tan(vfov*Math.PI/360)*aspect)*180/Math.PI;
   const plan=Route.plan(project,geometry,roomId);
