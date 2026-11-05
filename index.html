@@ -2625,7 +2625,10 @@ function init(){
     else if (h?.room) window.select({kind:'room', id:h.room});
     else window.select(null);
   });
+  // A stage of 0 px (a layout being rebuilt, e.g. leaving the presentation) never becomes the camera's aspect: the
+  // camera keeps its last valid projection until the stage has a real size again.
   new ResizeObserver(() => {
+    if (!SW() || !SH()) return;
     renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH());
     camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
   }).observe(stage);
@@ -4516,7 +4519,7 @@ function presentationRestore(state){
   Object.assign(opt,state.options);if(state.territoryLayers)territoryRenderer?.setLayers(state.territoryLayers);
   surfaceRenderer.setQuality(opt.surfaceQuality);
   camera.position.fromArray(state.position);orbit.target.fromArray(state.target);
-  camera.fov=state.fov;camera.aspect=SW()/Math.max(1,SH());camera.updateProjectionMatrix();
+  camera.fov=state.fov;if(SW()&&SH())camera.aspect=SW()/SH();camera.updateProjectionMatrix();
   if(opt.mode==='walk'){
     camera.quaternion.fromArray(state.quaternion);orbit.enabled=false;
     $('#walkOverlay').style.display='flex';$('#cross').style.display='none';
@@ -4525,7 +4528,18 @@ function presentationRestore(state){
   document.querySelectorAll('#toggles3d .btn').forEach(b=>b.classList.toggle('on',!!opt[b.dataset.t]));
   $('#sun').value=String(opt.hour);applyLight();sync(true);showLabels(opt.labels&&!roofG?.visible);
   state.doors.forEach((saved,i)=>{if(doors[i]){doors[i].open=saved.open;doors[i].cur=saved.cur;doors[i].pivot.rotation.y=saved.cur;}});
-  renderer.setSize(SW(),SH());labelRenderer.setSize(SW(),SH());
+  if(SW()&&SH()){renderer.setSize(SW(),SH());labelRenderer.setSize(SW(),SH());}
+}
+// Resolves once the stage has a real size and the camera and renderer match it (after a layout change such as leaving
+// the presentation); bounded so a hidden 3D view never blocks the caller.
+function viewportSettled(timeoutMs=3000){
+  const t0=performance.now();
+  let last='',same=0;
+  return new Promise(resolve=>{const check=()=>{const w=SW(),h=SH(),key=w+'x'+h;
+    same=w&&h&&key===last?same+1:0;last=key;
+    // Settled: the same real size on three consecutive frames (a layout rebuild passes through transient heights too).
+    if(same>=2){if(Math.abs(camera.aspect-w/h)>1e-9){camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);labelRenderer.setSize(w,h);}resolve(true);return;}
+    if(!active||performance.now()-t0>timeoutMs){resolve(false);return;}requestAnimationFrame(check);};check();});
 }
 function presentationInspect(){return active?{
   position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),
@@ -5046,7 +5060,7 @@ Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
-window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
+window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
 window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};
 Object.defineProperty(window.View3D,'presentationVisitInfo',{get:()=>storyRun?.visit?{roomId:storyRun.visit.roomId,route:{...storyRun.visit.route,points:storyRun.visit.route.points.map(p=>({...p}))},fullHeight:storyRun.visit.full,cut:opt.cut}:null});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});

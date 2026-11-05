@@ -1152,12 +1152,15 @@
   document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
   if(saved)await app.restorePresentationEntry(saved,three);
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presentation-exiting');
+  // The presentation reports itself closed only once the editor's 3D view has its real size and the camera matches it
+  // (the layout rebuild passes through a 0 px stage); then the roof, hidden while presenting, is synced again.
+  if(saved?.viewMode==='3d')await window.View3D?.viewportSettled?.();
   if(!fromPop&&location.hash==='#presentacion'){
    const focus=saved?.focus;
    addEventListener('popstate',()=>refocus(focus),{once:true});
    history.back();
   }else if(document.activeElement===document.body||!shown(document.activeElement))refocus(saved?.focus);
-  stopping=false;
+  stopping=false;window.View3D?.syncRoofVisibility?.();
  }
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
@@ -1210,5 +1213,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active||stopping;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();
