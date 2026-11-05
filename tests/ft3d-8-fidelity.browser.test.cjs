@@ -163,6 +163,8 @@ test(`fidelity lab interaction ${viewport.width}x${viewport.height}`,{timeout:24
   const page=await ctx.newPage(),errors=[],external=[];watch(page,errors,external);
   await page.goto(`${base}labs/ft3d-8/?case=A`);await page.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
   const f=(fn,arg)=>page.evaluate(([fn,arg])=>window.__ft3dFidelity[fn](arg),[fn,arg]);const last=()=>page.evaluate(()=>window.__ft3dFidelity.last);
+  // Technical blocks live in «Proyecto › Detalles técnicos» (Gate D layout): open them before reading, as a user would.
+  const read=async sel=>{await page.evaluate(s=>window.__ft3dUI.reveal(s),sel);return page.locator(sel).innerText();};
   const c=await F.build('A'),tl=V.timeline(c.schedule);
   assert.match(await page.locator('#origin').innerText(),/FIXTURE/);
   assert.equal((await last()).date,tl.preStartDate);assert.deepEqual((await last()).presentElements,[]);
@@ -181,23 +183,23 @@ test(`fidelity lab interaction ${viewport.width}x${viewport.height}`,{timeout:24
   if(shots)await page.screenshot({path:path.join(shots,`${name}-A-03-final.png`)});
   s=await f('setDate','2027-10-01');assert.ok(!s.presentElements.includes('project/roof'),'reversible: roof gone again');
   // Project change: C reform starts from the existing building.
-  await page.locator('#caseSel').selectOption('C');await page.waitForFunction(()=>document.body.dataset.case==='C');
+  await page.evaluate(()=>window.__ft3dUI.reveal('#caseSel'));await page.locator('#caseSel').selectOption('C');await page.waitForFunction(()=>document.body.dataset.case==='C');
   s=await last();assert.equal(s.modes['project/wal_c-x0'],'pre-existing');assert.ok(s.presentElements.includes('project/wal_c-old'));
-  assert.match(await page.locator('#coverage').innerText(),/repartos pendientes: opening:door 50%/);
+  assert.match(await read('#coverage'),/repartos pendientes: opening:door 50%/);
   if(shots)await page.screenshot({path:path.join(shots,`${name}-C-reforma-inicio.png`)});
   // Missing data: D has no plan; nothing is invented.
-  await page.locator('#caseSel').selectOption('D');await page.waitForFunction(()=>document.body.dataset.case==='D');
+  await page.evaluate(()=>window.__ft3dUI.reveal('#caseSel'));await page.locator('#caseSel').selectOption('D');await page.waitForFunction(()=>document.body.dataset.case==='D');
   assert.match(await page.locator('#gantt').innerText(),/PLANIFICACIÓN NO DISPONIBLE O PENDIENTE/);
-  assert.match(await page.locator('#delivery').innerText(),/Vista interna exploratoria/);
-  assert.match(await page.locator('#coverage').innerText(),/sin plan válido: no se reparte entre tareas/);
+  assert.match(await read('#delivery'),/Vista interna exploratoria/);
+  assert.match(await read('#coverage'),/sin plan válido: no se reparte entre tareas/);
   assert.equal(await page.locator('.transport').getAttribute('data-disabled'),'true');
   if(shots)await page.screenshot({path:path.join(shots,`${name}-D-datos-insuficientes.png`),fullPage:!mobile});
   // Revision change: the professional's schedule no longer matches an edited project file.
   const edited=structuredClone(c.source);edited.walls[0].heightMm=2900;edited.updatedAt='2026-11-05T09:00:00Z';
   await page.evaluate(([p,s])=>window.__ft3dFidelity.importText(p,{scheduleText:s}),[JSON.stringify(edited),JSON.stringify(c.schedule)]);
   assert.match(await page.locator('#origin').innerText(),/importado localmente/);
-  assert.match(await page.locator('#coverage').innerText(),/schedule-project-revision-obsolete/);
-  assert.doesNotMatch(await page.locator('#delivery').innerText(),/Entrega profesional/);
+  assert.match(await read('#coverage'),/schedule-project-revision-obsolete/);
+  assert.doesNotMatch(await read('#delivery'),/Entrega profesional/);
   // Strict validation of a broken file, with an explanatory message.
   const bad=structuredClone(c.source);bad.walls[0].status='half-built';
   await page.locator('#fileInput').setInputFiles({name:'roto.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(bad))});

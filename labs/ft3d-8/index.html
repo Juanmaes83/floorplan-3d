@@ -8,6 +8,8 @@
 <title>FT3D-8 Expediente de obra — RUBIK</title>
 <link rel="stylesheet" href="./lab.css">
 <link rel="stylesheet" href="./fidelity.css">
+<link rel="stylesheet" href="../../css/design-system.css">
+<link rel="stylesheet" href="./ux.css">
 <script type="importmap">
 {"imports":{"three":"../../vendor/three/build/three.module.js","three/addons/":"../../vendor/three/examples/jsm/"}}
 </script>
@@ -53,36 +55,64 @@
 <script type="module" src="./fidelity-app.js"></script>
 <script type="module" src="./delivery-ui.js"></script>
 <script type="module" src="./dossier-ui.js"></script>
+<script type="module" src="./ux-shell.js"></script>
 </head>
-<body data-stage="inicio">
-<header class="topbar">
-  <span class="brand"><i></i>RUBIK // FT3D-8 <em>[FIDELIDAD]</em></span>
-  <span class="tab on">Expediente: proyecto → parcela → presupuesto → plan</span>
-  <a class="tab" href="./demo.html">Demo ilustrativa</a>
-  <span class="modes" role="group" aria-label="Modo"><button data-mode="pro" aria-pressed="true">Modo profesional</button><button data-mode="client" aria-pressed="false">Modo cliente</button></span>
-  <span class="origin" id="origin" data-kind="fixture" role="status"></span>
+<body data-stage="inicio" data-tab="evolucion" data-mode="pro">
+<a class="skip" href="#stage">Ir al visor 3D</a>
+<header class="topbar ux">
+  <span class="brand"><i></i>RUBIK <em>Evolución de obra</em></span>
+  <span class="ptitle"><b id="topProject">—</b><span class="readypill" id="readiness" data-state="loading" role="status">Cargando…</span></span>
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tab-proyecto" data-tab="proyecto" aria-controls="panel-proyecto" aria-selected="false">Proyecto</button>
+    <button type="button" role="tab" id="tab-evolucion" data-tab="evolucion" aria-controls="panel-evolucion" aria-selected="true">Evolución</button>
+    <button type="button" role="tab" id="tab-entrega" data-tab="entrega" aria-controls="panel-entrega" aria-selected="false">Entrega</button>
+  </nav>
+  <span class="modes" role="group" aria-label="Modo"><button data-mode="pro" aria-pressed="true">Profesional</button><button data-mode="client" aria-pressed="false">Presentación</button></span>
+  <span class="origin pro-only" id="origin" data-kind="fixture" role="status"></span>
+  <a class="demo pro-only" href="./demo.html">Demo</a>
 </header>
 <main>
-  <section class="dossier" id="dossierPanel" aria-labelledby="dossierTitle">
-    <header class="dossier-head">
-      <div><h2 id="dossierTitle">Expediente del proyecto</h2>
-        <p class="pitch">Comprueba que la vivienda, su parcela, su presupuesto y su plan de obra pertenecen al mismo proyecto antes de enseñarle al cliente cómo evolucionará.</p>
-        <p class="route" id="dossierRoute"><strong>Ruta S1:</strong> documentos exportados desde RUBIK y cargados en este navegador. Nada se envía a ningún servidor. Todavía no es la conexión directa con tu biblioteca de proyectos.</p></div>
+  <section class="tabpanel" id="panel-proyecto" role="tabpanel" aria-labelledby="tab-proyecto" data-panel="proyecto">
+    <div class="psum" id="projSummary" aria-live="polite"></div>
+    <p class="err" id="dossierError" role="alert"></p>
+    <p class="dossier-change" id="dossierChange" aria-live="polite"></p>
+    <p class="budget-pick" id="budgetPick" hidden><label>Hay varios presupuestos de este proyecto: <select id="budgetPickSel"></select></label> <button type="button" class="btn" id="budgetPickGo">Usar este</button></p>
+    <div class="pload pro-only">
       <div class="dossier-controls">
         <label>Expediente de prueba <select id="dossierSel" aria-label="Expediente de prueba"></select></label>
         <label class="file">Cargar documentos del proyecto <small>(proyecto o edificio .json, presupuesto .json, plan, vínculo, marca, parcela .gml o un expediente)</small>
           <input id="dossierFiles" type="file" multiple accept=".json,.gml,.xml,application/json,application/gml+xml,text/xml"></label>
         <button type="button" class="btn" id="dossierSave">Guardar expediente (.json)</button>
       </div>
+    </div>
+    <details class="pblock" id="dossierFull"><summary>Expediente completo · seis comprobaciones</summary>
+      <section class="dossier" id="dossierPanel" aria-labelledby="dossierTitle">
+    <header class="dossier-head">
+      <div><h2 id="dossierTitle">Expediente del proyecto</h2>
+        <p class="pitch">Comprueba que la vivienda, su parcela, su presupuesto y su plan de obra pertenecen al mismo proyecto antes de enseñarle al cliente cómo evolucionará.</p>
+        <p class="route" id="dossierRoute"><strong>Ruta S1:</strong> documentos exportados desde RUBIK y cargados en este navegador. Nada se envía a ningún servidor. Todavía no es la conexión directa con tu biblioteca de proyectos.</p></div>
+      
     </header>
     <p class="dossier-id" id="dossierId" role="status"></p>
-    <p class="dossier-change" id="dossierChange" aria-live="polite"></p>
-    <p class="err" id="dossierError" role="alert"></p>
-    <p class="budget-pick" id="budgetPick" hidden><label>Hay varios presupuestos de este proyecto: <select id="budgetPickSel"></select></label> <button type="button" class="btn" id="budgetPickGo">Usar este</button></p>
+    
+    
+    
     <ol class="dflow" id="dossierFlow"></ol>
     <details class="ddiag"><summary>Diagnóstico profesional (códigos técnicos y huellas)</summary><div id="dossierDiag"></div></details>
   </section>
-  <section class="sources" aria-label="Fuente del proyecto">
+    </details>
+    <details class="pblock pro-only" id="techDetails"><summary>Detalles técnicos · cobertura, revisiones y avisos</summary>
+      <div class="hud tech">
+      <h3 id="projName">—</h3>
+      <p class="meta" id="projMeta"></p>
+      <p class="delivery" id="delivery" data-level="internal"></p>
+      <p class="blockers" id="blockers"></p>
+      <p class="simulation" id="simulation"></p>
+    </div>
+      <section class="coverage" id="coverage" aria-label="Cobertura y evidencias"></section>
+    </details>
+    <details class="pblock pro-only" id="fidelityMode"><summary>Modo fidelidad · casos A–D y archivos sueltos sin expediente</summary>
+      <section class="sources" aria-label="Fuente del proyecto">
     <span class="srclabel">Modo fidelidad (sin expediente):</span>
     <label>Proyecto de prueba <select id="caseSel" aria-label="Proyecto de prueba"></select></label>
     <label class="file">Importar proyecto RUBIK (.json) <input id="fileInput" type="file" accept=".json,application/json"></label>
@@ -92,23 +122,32 @@
     <label class="chk"><input id="roofToggle" type="checkbox" checked> Cubierta derivada</label>
     <span class="err" id="importError" role="alert"></span>
   </section>
-  <div class="client-header" id="clientHeader" aria-label="Identidad de la entrega"></div>
-  <section class="stagewrap" aria-label="Escena 3D del proyecto">
-    <canvas id="stage"></canvas>
-    <div class="hud">
-      <h1 id="projName">—</h1>
-      <p class="meta" id="projMeta"></p>
-      <p class="delivery" id="delivery" data-level="internal"></p>
-      <p class="blockers" id="blockers"></p>
-      <p class="simulation" id="simulation"></p>
-    </div>
-    <div class="cams" role="group" aria-label="Cámara">
-      <button data-view="auto">AUTO</button><button data-view="iso">ISO</button><button data-view="front">ALZADO</button><button data-view="top">PLANTA</button>
-    </div>
-    <div class="stamp" id="cardStage" data-stage="inicio">—</div>
-    <p class="legend3d"><i class="g"></i>contorno gris = elemento del proyecto sin tarea · <i class="r"></i>tono crudo = acabado aún no aplicado (ilustrativo) · rojo = en demolición</p>
+    </details>
   </section>
-  <nav class="transport" aria-label="Controles de reproducción">
+  <section class="tabpanel" id="panel-evolucion" role="tabpanel" aria-labelledby="tab-evolucion" data-panel="evolucion">
+    <section class="stagewrap" aria-label="Escena 3D del proyecto">
+    <canvas id="stage" tabindex="0" aria-label="Escena 3D de la vivienda. Usa la barra de reproducción o el plan de obra para cambiar el momento."></canvas>
+    
+    <div class="cams" role="group" aria-label="Cámara">
+      <button data-view="auto">AUTO</button><button data-view="iso">ISO</button><button data-view="front">ALZADO</button><button data-view="top">PLANTA</button><button data-view="free">LIBRE</button>
+    </div>
+    <div class="hero" id="hero">
+      <p class="hero-k" id="heroProject">—</p>
+      <h1 class="hero-t">La obra, día a día<span class="num"><b id="heroWeeks">–</b> <span id="heroUnit">semanas</span></span></h1>
+      <p class="hero-meta" id="heroMeta"></p>
+      <p class="hero-fx pro-only" id="heroFixture" hidden>Datos de prueba · no es un proyecto real de cliente</p>
+    </div>
+    <div class="scene-top"><div class="stamp" id="cardStage" data-stage="inicio">—</div><p class="scene-note" id="sceneNote" hidden></p></div>
+    <div class="intro" id="introOverlay" hidden role="region" aria-label="Situación inicial">
+      <p class="intro-k" id="introTitle">Antes del comienzo de la obra</p>
+      <p class="intro-t" id="introText">Esta es la situación inicial de la evolución prevista.</p>
+      <p class="intro-m" id="introMeta"></p>
+      <button type="button" class="btn primary" id="introPlay">▶ Reproducir evolución</button>
+    </div>
+    <div class="pick" id="pickInfo" hidden role="dialog" aria-label="Trabajos del elemento"></div>
+    
+  </section>
+    <nav class="transport" aria-label="Controles de reproducción">
     <button id="reset" aria-label="Reiniciar">⏮</button><button id="wback" aria-label="Semana anterior">«</button><button id="back" aria-label="Día anterior">‹</button>
     <button id="play" class="play" aria-label="Reproducir">▶</button>
     <button id="fwd" aria-label="Día siguiente">›</button><button id="wfwd" aria-label="Semana siguiente">»</button><button id="end" aria-label="Final del plan">⏭</button>
@@ -117,17 +156,24 @@
     <span class="speed" role="group" aria-label="Velocidad"><button data-speed="1" aria-pressed="true">×1</button><button data-speed="2" aria-pressed="false">×2</button><button data-speed="4" aria-pressed="false">×4</button></span>
     <output id="dateReadout"></output>
   </nav>
-  <section class="panel">
-    <article class="card" aria-live="polite">
+    <section class="panel evo-panel" aria-label="Momento de la obra y plan">
+      <article class="card" aria-live="polite">
       <div class="cardtop"><span id="cardWeek"></span><span id="cardDate"></span></div>
       <p class="evidence" id="cardEvidence"></p>
       <h2 id="cardHeadline"></h2>
       <ul id="cardTasks"></ul>
+        <div class="cardx" id="cardExtra"></div>
     </article>
-    <div class="ganttwrap"><div class="gantt" id="gantt"></div></div>
+      <div class="ganttwrap" id="ganttWrap"><div class="gantt" id="gantt"></div>
+        <p class="legend glegend" id="ganttLegend"><b>Plan previsto, no obra ejecutada.</b> <i class="k done"></i>completada según plan <i class="k act"></i>en curso <i class="k todo"></i>pendiente
+          · → fin→inicio · <span class="dep">SS/FF/SF</span> otras dependencias · <b>€</b> partidas revisadas · <b>€?</b> sin revisar · <b>€½</b> parcial · <b>€✕</b> desconocido · <b>·</b> sin partidas</p>
+      </div>
+    </section>
+    <div class="evo-foot"><p class="legend3d"><i class="g"></i>contorno gris = elemento del proyecto sin tarea · <i class="r"></i>tono crudo = acabado aún no aplicado (ilustrativo) · rojo = en demolición</p> <span class="sim">Pulsa una tarea del plan para ver su momento y sus elementos. Pulsa un elemento de la vivienda para ver sus trabajos.</span></div>
   </section>
-  <section class="coverage" id="coverage" aria-label="Cobertura y evidencias"></section>
-  <section class="deliver" id="deliverPanel" aria-labelledby="deliverTitle">
+  <section class="tabpanel" id="panel-entrega" role="tabpanel" aria-labelledby="tab-entrega" data-panel="entrega">
+    <div class="client-header" id="clientHeader" aria-label="Identidad de la entrega"></div>
+    <section class="deliver" id="deliverPanel" aria-labelledby="deliverTitle">
     <header class="deliver-head"><h2 id="deliverTitle">Entrega al cliente</h2>
       <p class="pitch">Muestra a tu cliente cómo evolucionará su proyecto: qué se construirá, cuándo y con qué presupuesto. Todo sale del proyecto, el plan y el presupuesto seleccionados.</p></header>
     <ol class="steps">
@@ -173,6 +219,7 @@
           <div id="publishResult" hidden><input id="publishUrl" readonly aria-label="Enlace para el cliente"><button type="button" class="btn" id="publishCopy">Copiar</button><a class="btn" id="publishOpen" target="_blank" rel="noopener noreferrer">Abrir</a></div>
         </details></li>
     </ol>
+  </section>
   </section>
 </main>
 <footer class="credits">

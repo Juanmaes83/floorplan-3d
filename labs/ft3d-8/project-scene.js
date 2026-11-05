@@ -25,11 +25,18 @@ export function createProjectScene(canvas){
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#e2e0da',{roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.002;ground.receiveShadow=true;scene.add(ground);
   const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;
   const root=new THREE.Group();scene.add(root);
+  // Outside root (never part of inspect() or of the model): the initial footprint and the selection outlines.
+  const foot=new THREE.Group();foot.visible=false;scene.add(foot);
+  const marks=new THREE.Group();scene.add(marks);
+  const footMat=new THREE.MeshBasicMaterial({color:0x9aa7ad,transparent:true,opacity:.55,depthWrite:false});
+  const footLine=new THREE.LineBasicMaterial({color:0x2b3034});
+  const markLine=new THREE.LineBasicMaterial({color:0x1f5a66,depthTest:false,transparent:true,opacity:.95});
   let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false;
   const glass=new THREE.MeshPhysicalMaterial({color:0xcfe6ef,roughness:.05,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide});
   const frameMat=mat('#5d6166',{roughness:.5,metalness:.4});
   const capMat=mat('#34312d',{roughness:.9});
-  function clear(){root.traverse(o=>o.geometry?.dispose());root.clear();objects=new Map();}
+  function clear(){root.traverse(o=>o.geometry?.dispose());root.clear();objects=new Map();
+    for(const grp of [foot,marks]){grp.traverse(o=>o.geometry?.dispose());grp.clear();}}
   // World mapping identical to the editor: x=(xmm-OX)/1000, z=(ymm-OY)/1000, levels lifted by elevation.
   function load(inventory){
     clear();frame={origin:inventory.origin};
@@ -41,6 +48,11 @@ export function createProjectScene(canvas){
       const parts={appear:[],layer:[],meshes:[]};
       const keep=(m,{color=null,layer=false}={})=>{m.castShadow=m.receiveShadow=true;m.userData.base={y:m.position.y,sy:m.scale.y};m.userData.final=color;parts.meshes.push(m);(layer?parts.layer:parts.appear).push(m);return m;};
       if(e.type==='wall'){
+        // Footprint of the REAL walls (same pieces, flat): shows where the house will stand before anything is built.
+        if(l.elevationMm===Math.min(...inventory.levels.map(x=>x.elevationMm)))for(const p of e.pieces){
+          const fp=new THREE.Mesh(new THREE.PlaneGeometry(p.spanMm/1000,p.thicknessMm/1000),footMat);fp.rotation.x=-Math.PI/2;
+          const holder=new THREE.Group();holder.position.set(wx(p.center[0],l),.004,wz(p.center[1],l));holder.rotation.y=-p.angle;holder.add(fp);
+          const edge=new THREE.LineSegments(new THREE.EdgesGeometry(fp.geometry),footLine);edge.rotation.x=-Math.PI/2;holder.add(edge);foot.add(holder);}
         for(const p of e.pieces){const h=(p.ytMm-p.ybMm)/1000;if(h<=.001)continue;
           // Editor rule (wallBox): walls with no declared material and not on the facade get a dark top cap.
           const face=()=>new THREE.MeshStandardMaterial({color:e.material.color,roughness:.92});
@@ -103,7 +115,15 @@ export function createProjectScene(canvas){
       o.ghost.visible=false;
       const present=s.present??1;o.g.visible=present>0.001;if(!o.g.visible)continue;
       const b=ease(s.build??1),rem=ease(s.removal??0);
-      o.parts.appear.forEach((m,i)=>{const n=o.parts.appear.length,k=ease(Math.min(1,Math.max(0,b*n-i)));m.visible=k>0.001;if(!m.visible)return;
+      // Roofs and slabs are thin: growing their height would show them complete on day one and hide the works below.
+      // While their task runs they are drawn translucent (opacity follows the elapsed share of the task, illustrative);
+      // when it ends they get back their own materials untouched.
+      const fade=(o.e.type==='roof'||o.e.type==='slab')&&b<.999;
+      if(o.e.type==='roof'||o.e.type==='slab')o.parts.meshes.forEach(m=>m.traverse(x=>{if(!x.isMesh)return;
+        if(!x.userData.solid){x.userData.solid=x.material;x.userData.fadeMat=[].concat(x.material).map(mm=>{const c=mm.clone();c.transparent=true;c.depthWrite=false;return c;});}
+        if(fade){x.material=Array.isArray(x.userData.solid)?x.userData.fadeMat:x.userData.fadeMat[0];for(const mm of x.userData.fadeMat)mm.opacity=.12+.7*b;}
+        else x.material=x.userData.solid;}));
+      o.parts.appear.forEach((m,i)=>{const n=o.parts.appear.length,k=fade?1:ease(Math.min(1,Math.max(0,b*n-i)));m.visible=(fade?b:k)>0.001;if(!m.visible)return;
         m.scale.y=m.userData.base.sy*Math.max(.001,k)*(1-rem*.98);m.position.y=m.userData.base.y;visiblePieces++;});
       const layerK=s.layer===null||s.layer===undefined?1:s.layer;
       o.parts.meshes.forEach(m=>{if(m.userData.final)tint(m,m.userData.final,layerK);});
@@ -118,6 +138,16 @@ export function createProjectScene(canvas){
     const cx=((env.x0+env.x1)/2-frame.origin.x)/1000,cz=((env.y0+env.y1)/2-frame.origin.y)/1000,d=span*1.25+6;
     const dirs={iso:[.62,.55,.72],front:[0,.28,1],top:[0,1,.001],auto:[.62,.55,.72]},v=new THREE.Vector3(...dirs[view]).normalize();
     return {position:[cx+v.x*d,top/2+v.y*d,cz+v.z*d],target:[cx,top/3,cz],fov:45};
+  }
+  // Presentation framing (the evolution view): closer than frameEnvelope and, on wide screens, shifted so the house sits
+  // right of the headline. frameEnvelope stays the neutral framing used by the fidelity comparison with the editor.
+  function presentationPose(inventory,view='iso'){
+    const p=frameEnvelope(inventory,view),t=new THREE.Vector3(...p.target),pos=new THREE.Vector3(...p.position),dir=pos.clone().sub(t);
+    const wide=(canvas.clientWidth||1)/(canvas.clientHeight||1)>1.6&&(canvas.clientWidth||0)>760;
+    dir.multiplyScalar(wide?.8:.86);
+    const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize(),shift=wide?dir.length()*.14:0;
+    t.add(right.multiplyScalar(shift));
+    return {position:t.clone().add(dir).toArray(),target:t.toArray(),fov:p.fov};
   }
   let fixedSize=null;
   const resize=()=>{const [w,h]=fixedSize||[canvas.clientWidth||1,canvas.clientHeight||1];renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
@@ -137,7 +167,24 @@ export function createProjectScene(canvas){
     const entry={min:b.min.toArray().map(v=>+v.toFixed(4)),max:b.max.toArray().map(v=>+v.toFixed(4)),type:o.e.type};
     const pv=o.parts.meshes.find(m=>m.userData.doorPivot);if(pv){const w=pv.getWorldPosition(new THREE.Vector3());entry.pivot={x:+w.x.toFixed(4),z:+w.z.toFixed(4),angle:+pv.rotation.y.toFixed(4)};}
     out[key]=entry;}return out;}
-  return {load,setState,setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
+  // Outline (selection) of the given elements, drawn over the model without touching its geometry or materials.
+  function highlight(keys=[]){
+    marks.traverse(o=>o.geometry?.dispose());marks.clear();
+    for(const k of keys){const o=objects.get(k);if(!o||!o.g.visible)continue;o.g.updateWorldMatrix(true,true);
+      o.g.traverse(m=>{if(!m.isMesh||!m.visible)return;const ln=new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry,30),markLine);
+        ln.applyMatrix4(m.matrixWorld);ln.renderOrder=10;marks.add(ln);});}
+    return marks.children.length;
+  }
+  // Element under a screen point (client coordinates), or null. Read-only: no association is created.
+  const ray=new THREE.Raycaster();
+  function pick(clientX,clientY){
+    const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return null;
+    ray.setFromCamera(new THREE.Vector2((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1),camera);
+    const hits=ray.intersectObjects(root.children,true).filter(h=>{for(let o=h.object;o;o=o.parent)if(!o.visible)return false;return true;});
+    for(const h of hits)for(let o=h.object;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;
+    return null;
+  }
+  return {load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov};},get visiblePieces(){return visiblePieces;},
     get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};

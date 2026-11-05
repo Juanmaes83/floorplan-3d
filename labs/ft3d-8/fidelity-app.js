@@ -76,7 +76,8 @@ function renderCard(date){
 function setPos(p){
   if(!ctx)return;const tl=ctx.timeline;
   if(!tl){scene.setState(stateFor(ctx.model,null,null,0));$('dateReadout').textContent='';
-    api.last={date:null,stage:'none',activeTaskIds:[],presentElements:ctx.model.visualElements.filter(v=>v.representable).map(v=>v.key),modes:Object.fromEntries(ctx.model.visualElements.map(v=>[v.key,'pre-existing']))};return;}
+    api.last={date:null,stage:'none',activeTaskIds:[],presentElements:ctx.model.visualElements.filter(v=>v.representable).map(v=>v.key),modes:Object.fromEntries(ctx.model.visualElements.map(v=>[v.key,'pre-existing']))};
+    window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));return;}
   const LAST=tl.positions-1;pos=Math.max(0,Math.min(LAST,p));
   const i=Math.floor(pos+1e-9),j=Math.min(LAST,i+1),f=pos-i,date=iso(ms(tl.preStartDate)+i*DAY);
   const states=stateFor(ctx.model,ctx.frames[i],ctx.frames[j],f);scene.setState(states);
@@ -85,7 +86,9 @@ function setPos(p){
     const w=P.weekOf(ctx.schedule,date),ws=P.weeks(ctx.schedule);$('weekSel').value=String(i>=LAST?LAST:w.n===0?0:Math.round((ms(ws[w.n-1].startDate)-ms(tl.preStartDate))/DAY));
     const fr=ctx.frames[i];document.body.dataset.stage=fr.stage;
     api.last={date,stage:fr.stage,activeTaskIds:fr.activeTaskIds,ganttCursorDate:document.querySelector('#gantt [data-role=cursor]').dataset.date,
-      presentElements:fr.elements.filter(e=>e.present).map(e=>e.elementId),modes:Object.fromEntries([...states].map(([k,s])=>[k,s.mode]))};}
+      presentElements:fr.elements.filter(e=>e.present).map(e=>e.elementId),modes:Object.fromEntries([...states].map(([k,s])=>[k,s.mode]))};
+    // One evaluation per day, shared: the shell (intro, notes, selection) listens instead of recomputing the plan.
+    window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));}
 }
 // model/dossier: when a construction dossier (S1) was evaluated, its model is reused as is (one evaluation, one source).
 async function show(input,meta,preModel=null,dossier=null){
@@ -95,7 +98,7 @@ async function show(input,meta,preModel=null,dossier=null){
   ctx={input,model,schedule,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
-  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.frameEnvelope(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
+  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.presentationPose(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
   const controls=document.querySelector('.transport');controls.dataset.disabled=String(!timeline);
   if(timeline){$('scrub').max=String(timeline.positions-1);
@@ -144,7 +147,10 @@ $('play').onclick=()=>playing?pause():play();$('reset').onclick=()=>{pause();set
 $('back').onclick=()=>step(-1);$('fwd').onclick=()=>step(1);$('wback').onclick=()=>step(-7);$('wfwd').onclick=()=>step(7);
 $('scrub').oninput=()=>{pause();setPos(Number($('scrub').value));};$('weekSel').onchange=()=>{pause();setPos(Number($('weekSel').value));};
 for(const b of document.querySelectorAll('[data-speed]'))b.onclick=()=>{speed=Number(b.dataset.speed);document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
-for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>{if(!ctx)return;if(b.dataset.view==='auto')scene.setAuto(true);else{scene.setPose(scene.frameEnvelope(ctx.model.inventory,b.dataset.view));}};
+// AUTO orbits, ISO/ALZADO/PLANTA frame the whole project, LIBRE keeps the current view for free exploration.
+for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>{if(!ctx)return;const v=b.dataset.view;
+  if(v==='auto')scene.setAuto(true);else if(v==='free')scene.setAuto(false);else{scene.setAuto(false);scene.setPose(v==='iso'?scene.presentationPose(ctx.model.inventory,'iso'):scene.frameEnvelope(ctx.model.inventory,v));}
+  document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
 $('roofToggle').onchange=()=>api.setRoof($('roofToggle').checked);
 $('caseSel').innerHTML=FX.ids.map(id=>`<option value="${id}">${id}</option>`).join('');$('caseSel').onchange=()=>loadCase($('caseSel').value).catch(e=>$('importError').textContent=e.message);
 const fail=e=>{$('importError').textContent='Importación rechazada: '+e.message;};

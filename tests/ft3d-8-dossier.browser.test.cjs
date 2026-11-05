@@ -21,8 +21,11 @@ function watch(page){const errors=[],external=[];page.on('pageerror',e=>errors.p
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))external.push(u);});return {errors,external};}
 // The 3D loop is paused while an element is captured (SwiftShader keeps the page busy otherwise).
+// Gate D layout: open the section and blocks that contain an element before reading or capturing it, as a user would.
+const reveal=(page,sel)=>page.evaluate(s=>window.__ft3dUI.reveal(s),sel);
+const read=async(page,sel)=>{await reveal(page,sel);return page.locator(sel).innerText();};
 // A full-page capture clipped to the element: no «element is stable» wait, which a busy CI runner can starve.
-async function shot(page,selector,name){if(!shots)return;await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(true));
+async function shot(page,selector,name){if(!shots)return;await reveal(page,selector);await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(true));
   try{const box=await page.evaluate(sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height};},selector);
     await page.screenshot({path:path.join(shots,name),fullPage:true,clip:{x:Math.max(0,box.x),y:Math.max(0,box.y),width:Math.ceil(box.width),height:Math.ceil(box.height)},timeout:60000});}
   finally{await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(false));}}
@@ -30,7 +33,8 @@ async function pageShot(page,name){if(!shots)return;await page.evaluate(()=>wind
   try{await page.screenshot({path:path.join(shots,name),timeout:60000});}finally{await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(false));}}
 const ready=page=>page.waitForFunction(()=>/^dos_/.test(document.body.dataset.dossier||'')&&window.__ft3dDossier?.evaluation&&window.__ft3dDelivery,null,{timeout:60000});
 const scenario=(page,id)=>page.evaluate(id=>window.__ft3dDossier.loadScenario(id),id);
-const panelText=page=>page.evaluate(()=>['dossierPanel','projMeta','cardTasks','gantt','stepProject','stepPlan','brandPreview'].map(id=>document.getElementById(id)?.innerText||'').join('\n'));
+// textContent (not innerText): hidden and collapsed blocks are checked too, so nothing of the previous project can hide there.
+const panelText=page=>page.evaluate(()=>['projSummary','dossierPanel','projMeta','cardTasks','gantt','stepProject','stepPlan','brandPreview','topProject'].map(id=>document.getElementById(id)?.textContent||'').join('\n'));
 // The documents exactly as RUBIK and FT3D-8 export them (JSON text) plus the Catastro GML file.
 async function filesOf(id,{only=null}={}){
   const c=await X.dossier(id),out=[];
@@ -81,20 +85,20 @@ test('desktop 1440x900 · scenarios A-J: correspondence, human messages, capture
   }
   assert.equal(new Set(Object.values(ids)).size,Object.keys(ids).length,'every scenario is a distinct dossier');
   // Human messages are shown; codes live in the diagnostics panel.
-  await scenario(page,'E');let text=await page.locator('#dossierFlow').innerText();
+  await scenario(page,'E');let text=await read(page,'#dossierFlow');
   assert.match(text,/El presupuesto pertenece a otro proyecto/);assert.ok(!text.includes('budget-other-project'));
   assert.ok((await page.locator('#dossierDiag').textContent()).includes('budget-other-project'),'codes stay in the (collapsed) diagnostics panel');
   assert.equal(await page.locator('#videoGo').isDisabled(),true);assert.match(await page.locator('#videoBlocked').innerText(),/incompatibilidades/);
   await shot(page,'#dossierPanel','05-error-presupuesto-ajeno.png');
-  await scenario(page,'F');text=await page.locator('#dossierFlow').innerText();assert.match(text,/La planificación pertenece a otro proyecto/);
+  await scenario(page,'F');text=await read(page,'#dossierFlow');assert.match(text,/La planificación pertenece a otro proyecto/);
   assert.match(await page.locator('#gantt').innerText(),/PLAN DE OTRO PROYECTO/);await shot(page,'#dossierPanel','06-error-planificacion-ajena.png');
-  await scenario(page,'G');text=await page.locator('#dossierFlow').innerText();assert.match(text,/La parcela está asociada a otro proyecto/);
+  await scenario(page,'G');text=await read(page,'#dossierFlow');assert.match(text,/La parcela está asociada a otro proyecto/);
   await shot(page,'#dossierPanel','07-error-parcela-ajena.png');
-  await scenario(page,'H');text=await page.locator('#dossierFlow').innerText();assert.match(text,/La planificación se hizo sobre otra revisión del proyecto/);
+  await scenario(page,'H');text=await read(page,'#dossierFlow');assert.match(text,/La planificación se hizo sobre otra revisión del proyecto/);
   await shot(page,'#dossierPanel','08-revision-obsoleta.png');
-  await scenario(page,'I');text=await page.locator('#dossierFlow').innerText();assert.match(text,/sin precio/);assert.match(text,/incompleto/);assert.ok(!/0,00 €/.test(text),'unknown amounts are never 0 €');
+  await scenario(page,'I');text=await read(page,'#dossierFlow');assert.match(text,/sin precio/);assert.match(text,/incompleto/);assert.ok(!/0,00 €/.test(text),'unknown amounts are never 0 €');
   await shot(page,'li.dstep[data-step="3"]','09-presupuesto-parcial.png');
-  await scenario(page,'D');text=await page.locator('#dossierFlow').innerText();assert.match(text,/Todavía no hay una planificación asociada/);assert.match(text,/No se inventa ninguna/);
+  await scenario(page,'D');text=await read(page,'#dossierFlow');assert.match(text,/Todavía no hay una planificación asociada/);assert.match(text,/No se inventa ninguna/);
   assert.match(await page.locator('#gantt').innerText(),/PLANIFICACIÓN NO DISPONIBLE/);assert.match(text,/desconocido/);
   await pageShot(page,'10-proyecto-sin-plan.png');
   // J: an invalid GML is rejected with a readable message and the previous valid dossier stays.
@@ -102,11 +106,11 @@ test('desktop 1440x900 · scenarios A-J: correspondence, human messages, capture
   assert.match(await page.locator('#dossierError').innerText(),/sistema de coordenadas no admitido.*se conserva/);
   await shot(page,'#dossierPanel','11b-gml-no-valido-estado-conservado.png');
   // Building: each level budget, never a sum.
-  await scenario(page,'B');text=await page.locator('li.dstep[data-step="3"]').innerText();
+  await scenario(page,'B');text=await read(page,'li.dstep[data-step="3"]');
   assert.match(text,/planta lvl_fx-b0/);assert.match(text,/planta lvl_fx-b1/);assert.match(text,/sin sumarlos/);
   await shot(page,'#dossierPanel','04-edificio-dos-plantas-alcance-economico.png');
   await scenario(page,'A');await shot(page,'#dossierPanel','01-proyecto-A-vinculado.png');
-  await page.locator('.ddiag summary').click();await shot(page,'#dossierPanel','01b-proyecto-A-diagnostico.png');
+  await reveal(page,'#dossierFull');await page.locator('.ddiag summary').click();await shot(page,'#dossierPanel','01b-proyecto-A-diagnostico.png');
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });
 
@@ -190,7 +194,7 @@ test('video and delivery bound to the dossier: record, download, play, history k
   await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
   const dos=await page.evaluate(()=>window.__ft3dDossier.evaluation.dossier.id);
   assert.equal(await page.evaluate(()=>window.__ft3dDelivery.state.source),'dossier');
-  await page.locator('#videoGo').click();
+  await reveal(page,'#deliverPanel');await page.locator('#videoGo').click();
   await page.waitForFunction(()=>window.__ft3dDelivery.state.video||/cancelad|no válido|no generó|no puede/.test(document.getElementById('videoStatus').textContent),null,{timeout:600000});
   const v=await page.evaluate(()=>{const s=window.__ft3dDelivery.state;return s.video&&{type:s.video.type,durationMs:s.video.durationMs,sha256:s.video.sha256,manifest:{id:s.manifest.id,dossier:s.manifest.dossier,territory:s.manifest.territory,brand:s.manifest.brand.name,schemaVersion:s.manifest.schemaVersion}};});
   assert.ok(v,'a video was produced: '+await page.locator('#videoStatus').innerText());
@@ -234,10 +238,11 @@ test('mobile 390x844 · dossier readable, no horizontal scroll, steps stacked',{
   const ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
   await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
+  await reveal(page,'#dossierFull');
   const m=await page.evaluate(()=>{const steps=[...document.querySelectorAll('#dossierFlow .dstep')].map(e=>e.getBoundingClientRect());
     return {sw:document.documentElement.scrollWidth,cols:new Set(steps.map(r=>Math.round(r.left))).size,minW:Math.min(...steps.map(r=>r.width))};});
   assert.ok(m.sw<=391,'no horizontal scroll: '+m.sw);assert.equal(m.cols,1);assert.ok(m.minW>300);
   await shot(page,'#dossierPanel','12-movil-expediente.png');
-  await scenario(page,'E');assert.match(await page.locator('#dossierFlow').innerText(),/El presupuesto pertenece a otro proyecto/);
+  await scenario(page,'E');assert.match(await read(page,'#dossierFlow'),/El presupuesto pertenece a otro proyecto/);
   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
 });

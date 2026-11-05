@@ -23,7 +23,9 @@ function watch(page){const errors=[],external=[];page.on('pageerror',e=>errors.p
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))external.push(u);});return {errors,external};}
 async function open(page,caseId){await page.goto(`${base}labs/ft3d-8/?case=${caseId}`);
-  await page.waitForFunction(id=>document.body.dataset.case===id&&window.__ft3dDelivery,caseId,{timeout:30000});}
+  await page.waitForFunction(id=>document.body.dataset.case===id&&window.__ft3dDelivery,caseId,{timeout:30000});
+  // Gate D layout: the delivery lives in its own section («Entrega»).
+  await page.evaluate(()=>window.__ft3dUI.reveal('#deliverPanel'));}
 async function labBrand(page,name='FIXTURE Estudio Demo'){
   const logo=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=180;c.height=60;const x=c.getContext('2d');x.fillStyle='#1f5a66';x.fillRect(0,0,180,60);
     x.fillStyle='#fff';x.font='bold 28px Arial';x.fillText('FX',20,42);return c.toDataURL('image/png').split(',')[1];});
@@ -185,7 +187,8 @@ test('cancel, frozen delivery after a brand change, foreign plan and over-limit 
   assert.equal(await page.locator('#publishVideo').isDisabled(),true);assert.match(await page.locator('#publishVideoNote').innerText(),/supera el límite de 4 MB/);
   await assert.rejects(page.evaluate(()=>window.__ft3dDelivery.publish({code:'x',agree:true,withVideo:true})),/supera 4 MB/);
   // Foreign plan: C's geometry with A's plan is rejected; no playback, no video.
-  await page.locator('#caseSel').selectOption('C');await page.waitForFunction(()=>document.body.dataset.case==='C');
+  await page.evaluate(()=>window.__ft3dUI.reveal('#caseSel'));await page.locator('#caseSel').selectOption('C');await page.waitForFunction(()=>document.body.dataset.case==='C');
+  await page.evaluate(()=>window.__ft3dUI.reveal('#deliverPanel'));
   const a=await F.build('A');await page.evaluate(s=>window.__ft3dFidelity.loadPart('schedule',s),JSON.stringify(a.schedule));
   assert.match(await page.locator('#planRejected').innerText(),/PLAN DE OTRO PROYECTO \(prj_fx-house-a\)/);
   assert.equal(await page.locator('.transport').getAttribute('data-disabled'),'true');

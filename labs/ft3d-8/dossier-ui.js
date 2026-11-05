@@ -169,7 +169,7 @@ function stepDelivery(ev){
     <div class="dactions"><button type="button" class="btn" data-go="deliverPanel">Ir a la entrega</button></div>`];
 }
 function render(){
-  const ev=state.evaluation,err=state.error;
+  const ev=state.evaluation,err=state.error;queueMicrotask(notify);
   $('dossierError').textContent=err?`${err.message}${state.evaluation?' · El expediente anterior se conserva sin cambios.':''}`:'';
   $('dossierError').dataset.code=err?.code||'';
   if(!ev){$('dossierFlow').innerHTML='';return;}
@@ -187,6 +187,7 @@ function render(){
     <p><b>Conflictos</b> (ninguna fuente se impone): ${ev.conflicts.length?ev.conflicts.map(x=>`<code>${esc(x.code)}</code> ${esc(JSON.stringify(x.values))}`).join(' · '):'ninguno'}</p>
     <p><b>Huellas</b>: ${Object.entries(ev.fingerprints).map(([k2,v])=>`${k2} <code>${esc(typeof v==='string'?short(v):JSON.stringify(Object.fromEntries(Object.entries(v||{}).map(([a,b2])=>[a,short(b2)]))))}</code>`).join(' · ')}</p>`;
 }
+function notify(){window.dispatchEvent(new CustomEvent('ft3d8-dossier',{detail:{error:state.error}}));}
 function summary(){const ev=state.evaluation;return ev?{id:ev.dossier.id,subject:ev.subject.id,usable:ev.usable,level:ev.delivery.level,errors:ev.issues.filter(i=>i.severity==='error').map(i=>i.code),
   steps:[...document.querySelectorAll('#dossierFlow .dstep')].map(s=>s.dataset.status),change:state.change,error:state.error}:{error:state.error};}
 
@@ -196,7 +197,7 @@ $('dossierSel').onchange=()=>loadScenario($('dossierSel').value).catch(e=>{state
 $('dossierFiles').onchange=async()=>{const f=$('dossierFiles').files;try{if(f.length)await loadFiles(f);}catch{}finally{$('dossierFiles').value='';}};
 $('dossierSave').onclick=()=>savePackage().catch(e=>{state.error={code:e.code,message:e.message};render();});
 $('budgetPickGo').onclick=()=>apply({...state.input,selectedBudgetIds:[$('budgetPickSel').value]},{...state.origin,text:state.origin.text+' · presupuesto elegido'});
-$('dossierFlow').onclick=e=>{const b=e.target.closest('[data-go]');if(b)$(b.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'});};
+$('dossierFlow').onclick=e=>{const b=e.target.closest('[data-go]');if(!b)return;window.__ft3dUI?.reveal('#'+b.dataset.go);$(b.dataset.go)?.scrollIntoView({block:'start'});};
 // defineProperties, not Object.assign: the getter must stay live (Object.assign would copy its current value).
 Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadScenario,loadFiles,savePackage,summary,get evaluation(){return state.evaluation;},scenarios:Object.keys(SCENARIOS)}));
 const q=new URLSearchParams(location.search);
