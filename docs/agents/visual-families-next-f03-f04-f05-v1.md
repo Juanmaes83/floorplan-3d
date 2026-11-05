@@ -1,5 +1,7 @@
 # RUBIK SOTA — MISIÓN KIMI CODE · VISUAL FAMILIES: SIGUIENTE CORTE
 ## F01 / F03 ampliada / F04 / F05 · Calidad arquitectónica visible, continuidad y QA
+> **ADENDA PRIORITARIA — DECISIÓN HUMANA DEL 05/11/2026 (posterior a la misión inicial).** La muestra visual F03 V2 de `rough_plaster_03` está **aprobada** y es el referente **preferido de calidad** de la siguiente fase. **No se aprueba extender universalmente ese revoco**: la decisión principal es **trasladar la técnica/metodología experimental** a OTROS referentes y materiales compatibles, conservando las características propias de cada uno. F02 V2 y `white_stucco` F03 V1 siguen protegidos. F03 V2 como fachada completa y su móvil todavía **no están aprobados**. Faltan imágenes desde **altura humana** con fachada, carpinterías y encuentros legibles; el móvil existente es insuficiente. Esta adenda prevalece sobre cualquier etiqueta previa que dijera «revoco no aprobado». Ver [decisión completa y próxima misión](../qa/visual-families-next-v1/F03-V2-DECISION-METODOLOGIA-Y-SIGUIENTE-MISION-2026-11-05.md).
+
 **Fecha:** 5 noviembre 2026 · **Modo:** misión de implementación autorizada, sin merge ni deploy.
 
 **Rama YA CREADA para esta misión:** `feat/visual-families-next-f03-f04-f05-v1`
