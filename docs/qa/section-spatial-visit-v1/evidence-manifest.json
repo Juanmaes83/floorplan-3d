@@ -80,6 +80,36 @@
    "testedSha": "1a7034f",
    "status": "CAPTURED/INSPECTED",
    "note": "R5 final: S1 frontal section, S2 depth opening, S3 approach above the master bedroom with the validated route on the minimap, S4 descent through the cut in the hall, real doorway, arrival inside at eye level, S5 hand-over to Recorrer with return bar, S6 back to section. No page errors."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/before-after-composition.jpg",
+   "sha256": "61c9931b49f27dd01fe08ea1b89dffcdc976fee6ca7a0d6b403f6a76e4be074f",
+   "bytes": 320683,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/final-section-visit-1280x800.mp4",
+   "sha256": "2c95d4fa65a3f9d735166b9c6e0f57a5502137c37a3cae844e55e72de2945b05",
+   "bytes": 871279,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/final-storyboard-S0-S6.jpg",
+   "sha256": "b49dccff65d0e1d8fa93b2569a098c6add71a502ea03b58d9e3f797007724b61",
+   "bytes": 260735,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
   }
  ]
 }
