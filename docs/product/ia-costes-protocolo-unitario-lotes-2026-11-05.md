@@ -9,6 +9,10 @@ Se añade la oferta **Foto→reforma** sin proyecto previo, y como líneas de ex
 
 La presencia de una cifra de gasto en una captura agregada de OpenAI puede documentar **gasto observado de cuenta**, pero no garantiza asignación al único render de RUBIK salvo correlación de petición/horario. Registrar cifra exacta y fuente al recibir evidencia verificable.
 
+## Complemento CAT-IA — coste y precio del catálogo comercial (05/11/2026)
+
+Se agrega el escenario [CAT-IA — Catálogos comerciales y personalización visual por fabricante](cat-ia-catalogos-comerciales-personalizacion-fabricante-2026-11-05.md). Medir el coste adicional de **referencias de fabricante**, **3 alternativas**, identificación y validación de **SKU/fichas/dimensiones**, derechos de imágenes/modelos, actualización de precios, almacenamiento de biblioteca, revisión profesional y vinculación C1–C4. Distinguir coste API por imagen, coste por propuesta aceptada y valor comercial del servicio de cocina/mobiliario; no dar por hecho que las fotografías del producto garantizan su reproducción exacta. Añadir ensayos `CAT-VIS-01`, `CAT-VIS-03`, `CAT-COL-05`, `CAT-3D-02` y `CAT-PRO-01` antes de fijar tarifas. **Sin pruebas de pago ni precios aprobados.**
+
 ## 1. Qué conocemos, qué no conocemos
 
 **Conocido:**
