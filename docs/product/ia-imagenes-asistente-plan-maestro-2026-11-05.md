@@ -22,6 +22,12 @@ Por decisión de producto, se incorpora un nuevo frente prioritario de **reforma
 
 **Contrato detallado y criterios:** [Foto→reforma, panorama 360, vídeo y precio premium](ia-servicios-foto-reforma-panorama-360-video-valor-comercial-2026-11-05.md). Este documento es un **complemento normativo de planificación**; las prioridades antiguas deben interpretarse junto a él. No se afirma que las funciones añadidas ya estén implementadas.
 
+## CAT-IA — Catálogos comerciales y personalización por fabricante (05/11/2026)
+
+Se añade **CAT-IA**, priorizada **junto a FOT-01 Reforma desde fotografía**, para conectar la identidad profesional de **Mi estudio** con referencias autorizadas de productos, colecciones y marcas en Render IA; después fichas de productos/SKU con dimensiones verificadas; y, por último, activos 3D comprobados y presupuestos derivados de C1–C4. No se implementa ningún catálogo comercial nuevo ni se altera el proyecto por representar una imagen.
+
+**Contrato y etapas CAT-IA-1/2/3:** [CAT-IA — Catálogos comerciales y personalización visual por fabricante](cat-ia-catalogos-comerciales-personalizacion-fabricante-2026-11-05.md). Debe leerse con FOT-01, IMG-01/02/03/04 y el protocolo económico; requiere privacidad, licencias, coste previo y revisión de fidelidad. **Solo documentación; pendiente de cierre de Claude y Kimi y aprobación del propietario.**
+
 ## 1. Evidencias y estado real (no mezclar integraciones con propuestas)
 
 | Elemento | Evidencia / estado al corte | Falta |
