@@ -4999,6 +4999,11 @@ Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,prese
 Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd,presentationAmbienceBegin,presentationAmbienceEnd});
 Object.defineProperty(window.View3D,'presentationLivingDrawingInfo',{get:()=>livingDrawing?livingDrawing.info:{active:false}});
 Object.defineProperty(window.View3D,'presentationAmbienceInfo',{get:presentationAmbienceInfo});
+// Read-only audit of what a scene could leave behind on the shared renderer, scene and camera (Hybrid V2 integration QA).
+Object.defineProperty(window.View3D,'presentationRendererState',{get:()=>renderer&&{renderTarget:renderer.getRenderTarget()?renderer.getRenderTarget().uuid:null,autoClear:renderer.autoClear,toneMapping:renderer.toneMapping,
+  exposure:renderer.toneMappingExposure,outputColorSpace:renderer.outputColorSpace,localClipping:renderer.localClippingEnabled,clippingPlanes:renderer.clippingPlanes.length,pixelRatio:renderer.getPixelRatio(),
+  overrideMaterial:!!scene.overrideMaterial,background:scene.background?.isColor?scene.background.getHexString():scene.background?.isTexture?'texture':null,
+  camera:{fov:camera.fov,near:camera.near,far:camera.far,zoom:camera.zoom,layers:camera.layers.mask},livingDrawing:!!livingDrawing,ambience:!!ambience}});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
 Object.defineProperty(window.View3D,'presentationElevationResidue',{get:presentationElevationResidue});
