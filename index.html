@@ -2462,6 +2462,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-elevation-core.js"></script>
 <script src="js/presentation-axon-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
+<script src="js/presentation-living-drawing-core.js"></script>
 <script src="js/presentation-living-drawing.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-templates-core.js"></script>
@@ -4192,6 +4193,37 @@ function presentationLivingDrawingBegin(options={}){
   livingDrawing=ld;return ld.info;
 }
 function presentationLivingDrawingEnd(){if(!livingDrawing)return false;livingDrawing.dispose();livingDrawing=null;return true;}
+/* «Dibujo vivo» as a story scene (C2–C3). view: {timeline (FloorPlanLivingDrawing.timeline of this level, rooms in the
+   presentation's order), intro, outro, reduced}. Transactional: if anything fails after the walls were lowered or the
+   layer started, everything is undone before the error goes up. Walls at the presentation's 1.2 m reading cut so the
+   next room is seen, still drawn, beyond the one coming to life. */
+const LIVING_CUT=1.2,LIVING_FOV=48;
+function beginLiving(view,stop,aspect,region){
+  const tl=view?.timeline;if(!tl?.rooms?.length)throw Error('Dibujo vivo no disponible: no hay estancias con elementos protagonistas.');
+  const started=!livingDrawing,cut0=opt.cut;
+  if(started){const r=presentationLivingDrawingBegin();if(!r.active)throw Error('Dibujo vivo no disponible en este navegador.');}
+  try{
+    if(opt.cut>LIVING_CUT)setPresentationCut(LIVING_CUT);
+    const intro=Number(view.intro)||4.5,outro=Number(view.outro)||1.6,wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.map(w=>w.heightMm||0))/1000;
+    const rooms=geometry.rooms.map((r,i)=>({index:i+1,id:r.id,poly:r.poly.map(([x,y])=>[wx(x),wz(y)])}));
+    const inRoom=(poly,x,z)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
+    const furniture=(furnG?.children||[]).map((g,i)=>{const b=new THREE.Box3().setFromObject(g);if(b.isEmpty())return null;const cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
+      return {fid:g.userData.fid,index:i,min:b.min.toArray(),max:b.max.toArray(),roomIndex:rooms.find(r=>inRoom(r.poly,cx,cz))?.index||0};}).filter(Boolean);
+    const visits=tl.rooms.map(r=>({roomIndex:rooms.find(x=>x.id===r.roomId)?.index||0,start:intro+r.start,duration:r.duration,seeds:r.seeds.map(sd=>({fid:sd.id,at:sd.at}))})).filter(v=>v.roomIndex);
+    livingDrawing.setLanding({rooms,visits,furniture,levelY:[-.3,wallTop+.6]});
+    const start=presentationStopPose(stop,aspect,region),total=intro+tl.total+outro;
+    const roomViews=tl.rooms.map(r=>{const g=geometry.rooms.find(x=>x.id===r.roomId),xs=g.poly.map(p=>p[0]),ys=g.poly.map(p=>p[1]);
+      return {id:r.roomId,center:[wx((Math.min(...xs)+Math.max(...xs))/2),wz((Math.min(...ys)+Math.max(...ys))/2)],extent:[(Math.max(...xs)-Math.min(...xs))/1000,(Math.max(...ys)-Math.min(...ys))/1000],start:intro+r.start,duration:r.duration,leaveAt:intro+r.leaveAt};});
+    const all=geometry.rooms.filter(r=>r.poly.length>=3),houseCenter=[all.reduce((n,r)=>n+wx(r.poly.reduce((m,p)=>m+p[0],0)/r.poly.length),0)/all.length,all.reduce((n,r)=>n+wz(r.poly.reduce((m,p)=>m+p[1],0)/r.poly.length),0)/all.length];
+    const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
+    return {narrative,started,cut0,timeline:tl,total};
+  }catch(error){livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
+}
+function endLiving(living){
+  livingDrawing?.clearLanding();
+  if(opt.cut!==living.cut0)setPresentationCut(living.cut0);
+  if(living.started)presentationLivingDrawingEnd();
+}
 // loseContext() marks the context lost at once but its event arrives in a later task; never render in between
 // (three.js would compile a program against the dead context and throw on its null info log).
 function glLost(){ return contextLost || !!renderer?.getContext()?.isContextLost?.(); }
@@ -4588,8 +4620,11 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null,section=null,elevation=null,axon=null;
-  if(kind==='axon-open'||kind==='exploded-levels-open'){
+  let narrative,sectionCut=null,section=null,elevation=null,axon=null,living=null;
+  if(kind==='living-drawing'){
+    // Hybrid V2: the house starts as a graphite drawing and comes to life room by room (js/presentation-living-drawing*.js)
+    living=beginLiving(view.living,stop,aspect,view.region);narrative=living.narrative;
+  }else if(kind==='axon-open'||kind==='exploded-levels-open'){
     // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
     // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
     axon=beginAxon(view.axon,kind);
@@ -4627,7 +4662,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon};
+  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon,living};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4645,6 +4680,7 @@ function presentationStoryApply(p){
   if(storyRun.section)applySection(storyRun.section,st);
   if(storyRun.elevation)applyElevation(storyRun.elevation,st);
   if(storyRun.axon)applyAxon(storyRun.axon,st);
+  if(storyRun.living)livingDrawing?.setTime(st.t);
   if(furnG&&st.furnitureScale!==undefined){furnG.scale.y=Math.max(st.furnitureScale,.001);storyRun.furn=furnG;}
   if(lampG)lampG.visible=grow>.99&&((st.wallScale??1)>.99||st.phase==='room');
   // The descent's last state is the room stop as presentationGo shows it: its floor outline appears on arrival.
@@ -4667,6 +4703,7 @@ function endPresentationStory({keepPose=true}={}){
   if(run.section)endSection(run.section);
   if(run.elevation)endElevation(run.elevation);
   if(run.axon)endAxon(run.axon);
+  if(run.living)endLiving(run.living);
   if(run.arch&&run.arch!==archUp)run.arch.scale.y=1;if(run.furn&&run.furn!==furnG)run.furn.scale.y=1;
   applyGrow();
   camera.fov=run.saved.fov;camera.near=run.saved.near;camera.far=run.saved.far;camera.updateProjectionMatrix();
@@ -4887,7 +4924,7 @@ function presentationClipInfo(){const withPlanes=new Set();scene?.traverse(o=>{f
 function presentationStoryInfo(){
   if(!storyRun)return {active:false,wallScale:archUp?archUp.scale.y:null,fov:camera?.fov??null,near:camera?.near??null,far:camera?.far??null,orbitMaxDistance:orbit?.maxDistance??null,orbitEnabled:orbit?.enabled??null};
   const st=storyRun.state;
-  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,elevation:storyRun.elevation?elevationInfo(storyRun.elevation):null,axon:storyRun.axon?axonInfo(storyRun.axon):null,solar:st?.solar??null,contextVisible:st?.contextVisible??null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
+  return {active:true,kind:storyRun.kind,stopId:storyRun.stopId,p:st?.p??null,phase:st?.phase??null,section:!!st?.section,dynamicSection:storyRun.section?sectionInfo(storyRun.section):null,elevation:storyRun.elevation?elevationInfo(storyRun.elevation):null,axon:storyRun.axon?axonInfo(storyRun.axon):null,living:storyRun.living?{t:st?.t??null,roomId:st?.roomId??null,roomIndex:st?.roomIndex??-1,total:storyRun.living.total,rooms:storyRun.living.timeline.rooms.map(r=>r.roomId),ends:storyRun.narrative.info.rooms.map(r=>r.end/storyRun.living.total),drawing:livingDrawing?livingDrawing.info:null}:null,solar:st?.solar??null,contextVisible:st?.contextVisible??null,cut:opt.cut,wallScale:archUp?archUp.scale.y:null,lens:st?.lens??null,
     fov:camera.fov,near:camera.near,far:camera.far,orbitEnabled:orbit.enabled,info:{...storyRun.narrative.info,options:undefined},
     saved:{fov:storyRun.saved.fov,near:storyRun.saved.near,far:storyRun.saved.far,maxDistance:storyRun.saved.maxDistance,orbitEnabled:storyRun.saved.orbitEnabled}};
 }

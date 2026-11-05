@@ -140,7 +140,10 @@ void main(){
    info.precision=type===THREE.FloatType?'float':'half';
    comp=new THREE.ShaderMaterial({vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',fragmentShader:COMP_FS(),
     uniforms:{tAux:{value:null},uRes:{value:new THREE.Vector2(1,1)},uCam:{value:new THREE.Vector3()},uStep:{value:1},uAoN:{value:12},
-     uPaper:{value:new THREE.Color(...PAPER)},uInk:{value:new THREE.Color(...INK)},uKey:{value:new THREE.Vector3(.45,.8,.35)},uLine:{value:.92}},depthTest:false,depthWrite:false});
+     uPaper:{value:new THREE.Color(...PAPER)},uInk:{value:new THREE.Color(...INK)},uKey:{value:new THREE.Vector3(.45,.8,.35)},uLine:{value:.92},
+     uLand:{value:0},uTime:{value:0},uObjSpeed:{value:1.6},tReal:{value:null},tRoom:{value:null},uRoomMap:{value:new THREE.Vector4(0,0,1,1)},uLevelY:{value:new THREE.Vector2(-1e3,1e3)},
+     uSeedA:{value:Array.from({length:MAX_SEEDS},()=>new THREE.Vector4())},uSeedB:{value:Array.from({length:MAX_SEEDS},()=>new THREE.Vector4())},uSeedC:{value:Array.from({length:MAX_SEEDS},()=>new THREE.Vector4())},
+     uObjA:{value:Array.from({length:MAX_OBJ},()=>new THREE.Vector4(0,0,0,1e4))},uRoomDone:{value:new Array(MAX_ROOMS).fill(0)}},depthTest:false,depthWrite:false});
    quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),comp);quad.frustumCulled=false;quadScene=new THREE.Scene();quadScene.add(quad);quadCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
    info.active=true;info.reason=null;return {...info};
   }
@@ -170,11 +173,75 @@ void main(){
    return m;
   }
   const glass=m=>!!m&&(m===hooks.glass?.()||m.transparent||m.opacity<1||m.transmission>0);
+  /* C2 — landing data, prepared once per story from the project's rooms and furniture and the C0 timeline:
+     input = {rooms:[{index, poly:[[x,z]…]}] (world m, index 1..n), visits:[{roomIndex, start, duration, seeds:[{fid, at}]}]
+     (seconds on the story clock), furniture:[{fid, index, roomIndex, min:[x,y,z], max:[x,y,z]}], levelY:[lo,hi]}.
+     The room's environment front speed is solved so the room is complete at ~92 % of its time (the camera has left at
+     70–80 %: drawing and realism still meet in the frame it leaves). */
+  let landing=null,roomTex=null,realTex=null;
+  const inside=(poly,x,z)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
+  function setLanding(input){
+   clearLanding();if(!info.active||!input?.visits?.length)return null;
+   const rooms=input.rooms||[],xs=rooms.flatMap(r=>r.poly.map(p=>p[0])),zs=rooms.flatMap(r=>r.poly.map(p=>p[1]));
+   const pad=.6,x0=Math.min(...xs)-pad,z0=Math.min(...zs)-pad,x1=Math.max(...xs)+pad,z1=Math.max(...zs)+pad,res=.04,w=Math.ceil((x1-x0)/res),h=Math.ceil((z1-z0)/res);
+   const cv=document.createElement('canvas');cv.width=w;cv.height=h;const g=cv.getContext('2d');
+   for(const r of rooms){g.fillStyle=`rgb(${r.index},0,0)`;g.beginPath();r.poly.forEach((p,j)=>{const X=(p[0]-x0)/res,Y=(p[1]-z0)/res;j?g.lineTo(X,Y):g.moveTo(X,Y);});g.closePath();g.fill();}
+   const img=g.getImageData(0,0,w,h).data,id=new Uint8Array(w*h);for(let i=0;i<w*h;i++)id[i]=img[i*4+3]>200?img[i*4]:0;
+   // walls and gaps belong to the nearest room within 0.4 m (the face of a wall to the room it bounds)
+   let front=[];for(let i=0;i<w*h;i++)if(id[i])front.push(i);
+   for(let step=0;step<10&&front.length;step++){const nx=[];for(const i of front){const x=i%w,y=(i/w)|0;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=w||Y>=h)continue;const j=Y*w+X;if(!id[j]){id[j]=id[i];nx.push(j);}}}front=nx;}
+   const data=new Uint8Array(w*h*4);for(let i=0;i<w*h;i++){data[i*4]=id[i];data[i*4+3]=255;}
+   roomTex=new THREE.DataTexture(data,w,h,THREE.RGBAFormat);roomTex.minFilter=roomTex.magFilter=THREE.NearestFilter;roomTex.needsUpdate=true;
+   const furn=new Map((input.furniture||[]).map(f=>[f.fid,f])),seeds=[],objects=[],done=new Array(MAX_ROOMS).fill(Infinity),ENV_DELAY=.6;
+   for(const v of input.visits){
+    const room=rooms.find(r=>r.index===v.roomIndex);if(!room)continue;
+    const own=v.seeds.map(sd=>{const f=furn.get(sd.fid);if(!f)return null;const ext=Math.hypot(f.max[0]-f.min[0],f.max[1]-f.min[1],f.max[2]-f.min[2]);
+     return {p:[(f.min[0]+f.max[0])/2,f.min[1]+.62*(f.max[1]-f.min[1]),(f.min[2]+f.max[2])/2],t:v.start+sd.at,obj:f.index,room:v.roomIndex,vObj:Math.min(1.6,Math.max(.45,ext/.9))};}).filter(Boolean);
+    if(!own.length)continue;
+    // sample the room's floor every 0.3 m and solve the front speed (bisection) for completion at 92 % of its time
+    const rx=room.poly.map(p=>p[0]),rz=room.poly.map(p=>p[1]),pts=[];for(let x=Math.min(...rx)+.15;x<Math.max(...rx);x+=.3)for(let z=Math.min(...rz)+.15;z<Math.max(...rz);z+=.3)if(inside(room.poly,x,z))pts.push([x,z]);
+    const goal=v.start+v.duration*.92,reach=vEnv=>Math.max(...pts.map(([x,z])=>Math.min(...own.map(sd=>sd.t+ENV_DELAY+Math.hypot(x-sd.p[0],z-sd.p[2])/vEnv))));
+    let lo=.15,hi=4;for(let k=0;k<30;k++){const mid=(lo+hi)/2;if(reach(mid)>goal)lo=mid;else hi=mid;}const vEnv=pts.length?hi:1;
+    const maxR=Math.max(Math.max(...rx)-Math.min(...rx),Math.max(...rz)-Math.min(...rz))*1.2+1;
+    for(const sd of own)seeds.push({...sd,vEnv,envDelay:ENV_DELAY,maxR,noise:.35});
+    // the other pieces of the room land whole, from the side the nearest front reaches first
+    let last=goal;
+    for(const f of input.furniture||[]){if(f.roomIndex!==v.roomIndex||v.seeds.some(sd=>sd.fid===f.fid))continue;
+     let best=null;for(const sd of own){const q=[Math.max(f.min[0],Math.min(f.max[0],sd.p[0])),Math.max(f.min[1],Math.min(f.max[1],sd.p[1])),Math.max(f.min[2],Math.min(f.max[2],sd.p[2]))];
+      const jitter=((Math.sin((f.index+1)*12.9898)*43758.5453)%1+1)%1*.35,t=sd.t+ENV_DELAY+Math.hypot(q[0]-sd.p[0],q[2]-sd.p[2])/vEnv+.1+jitter;if(!best||t<best.t)best={index:f.index,p:q,t};}
+     if(best){objects.push(best);last=Math.max(last,best.t+1.2);}}
+    // a protagonist also keeps a whole-object moment (when its stain has covered it), so it stays real once its room is
+    // complete and its seed is no longer evaluated; the room is complete only when every piece of it has landed
+    for(const sd of own){const f=[...furn.values()].find(x=>x.index===sd.obj),ext=f?Math.hypot(f.max[0]-f.min[0],f.max[1]-f.min[1],f.max[2]-f.min[2]):1;
+     const whole=sd.t+ext/sd.vObj+.2;objects.push({index:sd.obj,p:sd.p,t:whole});last=Math.max(last,sd.t+2.2,whole+ext/1.6+.2);}
+    if(v.roomIndex<MAX_ROOMS)done[v.roomIndex]=last+.3;
+   }
+   landing={seeds,objects,done,levelY:input.levelY||[-1e3,1e3],map:[x0,z0,x1-x0,z1-z0]};
+   const u=comp.uniforms;u.tRoom.value=roomTex;u.uRoomMap.value.set(...landing.map);u.uLevelY.value.set(...landing.levelY);
+   for(const o of u.uObjA.value)o.set(0,0,0,1e4);for(const o of objects)if(o.index>=0&&o.index<MAX_OBJ)u.uObjA.value[o.index].set(o.p[0],o.p[1],o.p[2],o.t);
+   info.landing={seeds:seeds.length,objects:objects.length,rooms:input.visits.length};
+   setTime(-1);return {...info.landing};
+  }
+  /* Story clock → what is real: only the seeds of rooms in progress are sent (≤ MAX_SEEDS); a finished room is real as
+     a whole (uRoomDone) without evaluating its seeds. Pure in t: seeking and reversing give the same frame. */
+  function setTime(t){
+   if(!landing||!comp)return;const u=comp.uniforms;u.uLand.value=1;u.uTime.value=t;
+   for(let k=0;k<MAX_ROOMS;k++)u.uRoomDone.value[k]=t>=landing.done[k]?1:0;
+   const live=landing.seeds.filter(sd=>t>=sd.t-.2&&!(t>=landing.done[sd.room]));
+   for(let i=0;i<MAX_SEEDS;i++){const sd=live[i];if(!sd){u.uSeedC.value[i].set(0,0,0,0);continue;}
+    u.uSeedA.value[i].set(sd.p[0],sd.p[1],sd.p[2],sd.t);u.uSeedB.value[i].set(sd.obj,sd.room,sd.vObj,sd.vEnv);u.uSeedC.value[i].set(sd.envDelay,sd.maxR,sd.noise,1);}
+   info.time=t;info.liveSeeds=Math.min(live.length,MAX_SEEDS);
+  }
+  function clearLanding(){landing=null;roomTex?.dispose();roomTex=null;if(comp){comp.uniforms.uLand.value=0;comp.uniforms.tRoom.value=null;}info.landing=null;}
   function render(scene,camera){
    if(!info.active)return renderer.render(scene,camera);
    renderer.getDrawingBufferSize(size);const w=Math.max(1,Math.floor(size.x)),h=Math.max(1,Math.floor(size.y));ensureTarget(w,h);
    const dpr=renderer.getPixelRatio(),step=Math.max(1,Math.round(dpr*.75)),aoN=w*h>2.6e6?6:12;
    info.lineStep=step;info.aoSamples=aoN;
+   // C2 — the real render first (RUBIK's own materials, light and shadows), kept as a texture for what has landed
+   if(landing){renderer.setRenderTarget(null);renderer.render(scene,camera);
+    if(!realTex||realTex.image.width!==w||realTex.image.height!==h){realTex?.dispose();realTex=new THREE.FramebufferTexture(w,h);realTex.minFilter=realTex.magFilter=THREE.NearestFilter;}
+    renderer.copyFramebufferToTexture(new THREE.Vector2(0,0),realTex);comp.uniforms.tReal.value=realTex;}
    // AUX pass: swap → render → restore (always, even if the render throws)
    const swapped=[],prevTarget=renderer.getRenderTarget(),prevAlpha=renderer.getClearAlpha(),prevAuto=renderer.shadowMap.autoUpdate,bg=scene.background,fog=scene.fog;
    renderer.getClearColor(savedClear);info.restored=false;
@@ -205,11 +272,12 @@ void main(){
    info.frames++;
   }
   function dispose(){
+   clearLanding();realTex?.dispose();realTex=null;
    rt?.dispose();rt=null;comp?.dispose();comp=null;quad?.geometry.dispose();quad=null;quadScene=null;quadCam=null;
    for(const m of auxCache.values())m.dispose();auxCache.clear();openingIds.clear();skip.dispose();
    info.active=false;info.auxMaterials=0;info.width=info.height=0;
   }
-  return {begin,render,dispose,get info(){return {...info};}};
+  return {begin,render,dispose,setLanding,setTime,clearLanding,get info(){return {...info};}};
  }
- root.FloorPlanLivingDrawingRenderer={create,version:1};
+ root.FloorPlanLivingDrawingRenderer={create,version:2};
 })(typeof self!=='undefined'?self:this);
