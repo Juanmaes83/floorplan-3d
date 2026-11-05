@@ -2502,6 +2502,8 @@ import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.j
 import {SurfaceRenderer} from './js/surface-renderer.mjs';
 import {WindowVisualAdapter} from './js/visual-families-adapter.mjs';
 import {mountVisualPreview} from './js/visual-families-preview.mjs';
+import {FacadeFidelityAdapter} from './js/facade-fidelity-adapter.mjs';
+import {mountFacadePreview} from './js/facade-fidelity-preview.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
@@ -2653,6 +2655,7 @@ const TEX = {
 const floorMats = {};
 const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
 const windowVisual=new WindowVisualAdapter(THREE);
+const facadeVisual=new FacadeFidelityAdapter(THREE);
 function floorMat(materialId){
   const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
@@ -3496,7 +3499,7 @@ function buildArch(other){
   clearPresentationRoute();
   renderedSource=project; renderedGeometry=geometry;
   }
-  if(!other)windowVisual.clearBindings();
+  if(!other){windowVisual.clearBindings();facadeVisual.clearBindings();}
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
   doors.length = 0; colliders = [];
@@ -3567,7 +3570,9 @@ function buildArch(other){
   if(other)return;
   buildLevels();
   buildRoof();
-  windowVisual.apply();applyLight(); applyGrow(); surfaceRenderer.end();
+  windowVisual.apply();
+  facadeVisual.register(project,exterior,archUp.children.filter(o=>o.isMesh&&o.userData.wallId),new Set([...windowVisual.bindings.values()].flatMap(b=>b.facade.map(f=>f.mesh))));
+  facadeVisual.apply();applyLight(); applyGrow(); surfaceRenderer.end();
 }
 
 /* ======================= 多层建筑 / building levels ======================= */
@@ -3945,7 +3950,7 @@ function abort3D(){
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
   assetGeneration++;assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
-  windowVisual.clearBindings();surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
+  windowVisual.clearBindings();facadeVisual.clearBindings();surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
   active=false;stage.classList.remove('is3d','animating');
 }
@@ -4913,9 +4918,11 @@ window.View3D = {
 
 window.View3D.presentationReveal=presentationReveal;
 Object.defineProperty(window.View3D,'visualFamilies',{get:()=>windowVisual.snapshot()});
-window.View3D.releaseVisualFamilies=()=>windowVisual.release();
+window.View3D.releaseVisualFamilies=()=>{windowVisual.release();facadeVisual.release();};
 window.View3D.setVisualFamilies=options=>{if(!active||contextLost)throw Error('3D view unavailable');if(options.enabled&&options.projectId!==geometry.source.id)throw Error('Visual target Project mismatch');const result=windowVisual.set(options);renderer.render(scene,camera);return result;};
-mountVisualPreview(window.View3D);
+Object.defineProperty(window.View3D,'facadeFidelity',{get:()=>facadeVisual.snapshot()});
+window.View3D.setFacadeFidelity=async options=>{if(!active||contextLost)throw Error('3D view unavailable');const result=await facadeVisual.set(options);renderer.render(scene,camera);return result;};
+mountVisualPreview(window.View3D);mountFacadePreview(window.View3D);
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
