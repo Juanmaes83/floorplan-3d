@@ -38,7 +38,7 @@ function renderHeader(model,meta){
     ...lv.map(l=>`${esc(l.levelId||'planta unica')}: escala ${esc(l.scale.status)}`),
     `PLAN ${model.planning.status==='available'?esc(model.planning.evidence):model.planning.status==='rejected'?'RECHAZADO':'NO DISPONIBLE'}`,
     `PRESUPUESTO ${model.costs.status==='available'?esc(model.costs.report.budgetId):esc(model.costs.reason||'no disponible')}`].join('<i>//</i>');
-  $('origin').textContent=meta.origin;$('origin').dataset.kind=meta.kind;
+  $('origin').textContent=meta.origin;$('origin').title=meta.origin;$('origin').dataset.kind=meta.kind;
   $('delivery').textContent=model.delivery.label;$('delivery').dataset.level=model.delivery.level;
   $('blockers').textContent=model.delivery.blockers.length?'Bloqueos: '+model.delivery.blockers.join(', '):'Sin bloqueos registrados';
   $('simulation').textContent=model.delivery.simulation+' · '+model.delivery.scopeNotice+' · Aprobación: '+model.delivery.assurances.approval;

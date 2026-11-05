@@ -74,6 +74,13 @@ ni códigos.
 dominante y tarjeta mínima flotante). En móvil, las tres se apilan en el mismo orden. Se implementa así en el Corte B,
 **pendiente de aprobación**; el cambio entre distribuciones queda aislado en CSS.
 
+> **Actualización (decisión del propietario, Gate D).** El propietario aportó tres capturas de la demo «La obra, día a
+> día» como referencia obligatoria de composición. La distribución implementada pasa a ser esa: visor a todo el ancho
+> con el título y el sello del momento superpuestos, barra de reproducción debajo, y tarjeta grafito (izquierda) junto
+> al Gantt con leyenda (derecha). Es la opción 1 girada: tarjeta y Gantt comparten fila bajo el visor. En
+> «Presentación» se oculta lo profesional y el visor gana alto. La correspondencia con la referencia, elemento a
+> elemento, está en `ft3d-8-ux4d-gate-d-matriz-equivalencias-2026-11-05.md`.
+
 ## 4. Sistema Perla
 El laboratorio cargará `css/design-system.css`, los tokens reales de RUBIK (acción petróleo `#1f5a66`, selección
 grafito `#2b3034`, foco `#1f6f8b`, superficies `#eceeee` y `#ffffff`, AA ≥ 4,5:1), en lugar de repetir valores.

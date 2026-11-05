@@ -98,7 +98,8 @@
     const next=st.tasks.filter(t=>t.plannedPhase==='not-started').sort((a,b)=>a.startDate.localeCompare(b.startDate))[0]||null;
     const allDone=st.tasks.length>0&&st.tasks.every(t=>t.plannedPhase==='completed');
     return {date,dateText:dateLabel(date),week:weekOf(schedule,date),evidence:st.evidence,
-      evidenceText:st.evidence==='plan-approved'?'Plan aprobado · animacion ilustrativa':'Plan estimado (borrador) · animacion ilustrativa',
+      // The plan DECLARES its approval; nobody authenticated it (approval-not-authenticated): never say «aprobado» alone.
+      evidenceText:st.evidence==='plan-approved'?'Plan declarado como aprobado · animación ilustrativa':'Plan estimado (borrador) · animación ilustrativa',
       active:active.map(view),next:next?view(next):null,
       headline:allDone?'Plan completado: todas las tareas planificadas terminadas':active.length?active.map(t=>t.title).join(' · '):next?'Antes de: '+next.title:'—',
       stage:allDone?'final':active.length||st.tasks.some(t=>t.plannedPhase==='completed')?'en-obra':'inicio'};
