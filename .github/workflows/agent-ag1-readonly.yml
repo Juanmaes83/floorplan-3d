@@ -1,0 +1,27 @@
+name: RUBIK Assistant AG-1 read-only tools
+on:
+  push:
+    branches:
+      - feat/agent-ai-ag1-readonly-2026-11-05
+    paths:
+      - js/assistant-domain-tools-core.js
+      - tests/assistant-domain-tools-core.test.cjs
+      - .github/workflows/agent-ag1-readonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax
+        run: |
+          node --check js/assistant-domain-tools-core.js
+          node --check tests/assistant-domain-tools-core.test.cjs
+      - name: AG-1 and domain engines regression
+        run: node --test tests/assistant-domain-tools-core.test.cjs tests/quantity-core.test.cjs tests/budget-core.test.cjs
