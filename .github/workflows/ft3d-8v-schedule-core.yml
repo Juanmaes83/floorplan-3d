@@ -29,7 +29,7 @@ jobs:
       - name: Syntax checks
         run: |
           # Every FT3D-8 classic script and test (globs: new S1 files and the mp4 muxer are checked too).
-          for f in js/construction-*.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js \
+          for f in js/construction-*.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js labs/ft3d-8/dossier-fixtures.js \
                    tests/construction-*.cjs tests/ft3d-8-*.cjs tests/fixtures/construction-*.cjs; do node --check "$f"; done
           node --input-type=module --check < labs/ft3d-8/app.js
           node --input-type=module --check < labs/ft3d-8/scene.js
@@ -43,7 +43,15 @@ jobs:
           tests/ft3d-8-lab.test.cjs
           tests/construction-project-adapter.test.cjs
           tests/construction-delivery-core.test.cjs
+          tests/construction-dossier-core.test.cjs
           tests/budget-core.test.cjs
+          tests/bc3-budget.test.cjs
+          tests/budget-cost-bridge.test.cjs
+          tests/fiebdc3-codec.test.cjs
+          tests/parcel-core.test.cjs
+          tests/geo-site-adapter.test.cjs
+          tests/territory-integration.test.cjs
+          tests/guide.test.cjs
           tests/brand-core.test.cjs
           tests/share-api.test.cjs
           tests/budget-draft.test.cjs
