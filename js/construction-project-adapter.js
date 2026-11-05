@@ -36,6 +36,14 @@
   // Render defaults of the editor's own 3D viewer (index.html) when the project declares no material: not project data.
   const VIEWER_DEFAULTS=Object.freeze({wall:'#f4f1eb',facade:'#d9cbbb',cap:'#34312d',roof:'#c9c1b3',slab:'#d9d3c8',frame:'#5d6166',glass:'#cfe6ef',door:'#efe6d8',entrance:'#6b4f3a'});
   const APPEAR=['site','build','structure','envelope','services'],REMOVE=['demolition'];
+  // Illustrative site resources (owner decision, Gate D): a plan task may link one of these reserved keys explicitly.
+  // They are drawn as labelled illustrations, never as project geometry, and never count in coverage or evidence.
+  const ILLUSTRATIVE_PREFIX='illustrative/';
+  const ILLUSTRATIVE=Object.freeze({
+    'site-fence':{label:'Vallado de obra',roles:['site','demolition']},
+    'site-hut':{label:'Caseta de obra',roles:['site','demolition']},
+    'crane':{label:'Grúa',roles:['temporary','site','demolition']},
+    'scaffold':{label:'Andamio',roles:['temporary','site','demolition']}});
   const err=s=>{throw new TypeError('FloorPlanConstructionProject: '+s);};
   const clone=x=>JSON.parse(JSON.stringify(x));
   const isBuilding=doc=>!!doc&&doc.schema===Building.SCHEMA;
@@ -222,7 +230,15 @@
     else issues.push(issue('warning','planning-unavailable','PLANIFICACION NO DISPONIBLE O PENDIENTE: no se inventan fechas ni tareas'));
     // Links: the schedule's own task.elements (FT3D-8 0.2.0) are the single source of element<->task links.
     const links=[],linked=new Map();
+    const illustrative=new Map();
     for(const t of sch?.tasks||[])for(const el of t.elements){
+      if(el.elementId.startsWith(ILLUSTRATIVE_PREFIX)){
+        const kind=el.elementId.slice(ILLUSTRATIVE_PREFIX.length),def=ILLUSTRATIVE[kind];let status='illustrative';
+        if(!def){status='broken';issues.push(issue('error','illustrative-unknown','La tarea '+t.id+' pide un recurso ilustrativo desconocido: '+kind,{taskId:t.id,elementKey:el.elementId}));}
+        else if(!def.roles.includes(el.role)){status='role-mismatch';issues.push(issue('error','role-status-mismatch','Rol '+el.role+' no admitido para '+def.label+' ('+el.elementId+')',{taskId:t.id,elementKey:el.elementId,role:el.role}));}
+        else{if(!illustrative.has(el.elementId))illustrative.set(el.elementId,{key:el.elementId,kind,label:def.label,tasks:[]});illustrative.get(el.elementId).tasks.push({taskId:t.id,role:el.role});}
+        links.push({elementKey:el.elementId,taskId:t.id,role:el.role,status});continue;
+      }
       const e=byKey.get(el.elementId);let status='ok';
       if(!e){status='broken';issues.push(issue('error','link-unknown-element','La tarea '+t.id+' apunta a '+el.elementId+', que no existe en el proyecto',{taskId:t.id,elementKey:el.elementId}));}
       else{
@@ -291,8 +307,12 @@
         if(budget&&bnd.budgetId!==null&&bnd.budgetId!==budget.id)issues.push(issue('error','binding-other-budget','El vinculo se aprobo para el presupuesto '+bnd.budgetId));
       }
     }else issues.push(issue('info','binding-missing','Sin documento de vinculo: las revisiones no estan fijadas por un profesional'));
+    // Illustrations join the visual elements (to be drawn) but never the project's coverage or evidence.
+    for(const r of illustrative.values()){visualElements.push({key:r.key,type:'illustrative',kind:r.kind,label:r.label,levelId:null,lifecycle:'temporary',
+      evidence:'illustrative',representable:true,illustrative:true,timeline:'scheduled',tasks:r.tasks});
+      issues.push(issue('info','illustrative-resource',r.label+': representación ilustrativa vinculada al plan, no es geometría del proyecto',{elementKey:r.key}));}
     // Coverage: shows its gaps.
-    const eligible=visualElements,rep=eligible.filter(e=>e.representable),report=costs.report;
+    const eligible=visualElements.filter(e=>!e.illustrative),rep=eligible.filter(e=>e.representable),report=costs.report;
     const coverage={
       elements:{total:eligible.length,representable:rep.length,notRepresentable:eligible.filter(e=>!e.representable).map(e=>e.key),
         linked:eligible.filter(e=>e.tasks.length).length,unlinked:eligible.filter(e=>!e.tasks.length).map(e=>e.key),
@@ -340,7 +360,7 @@
       'evidenced-plan':'Presentacion planificada con evidencias registradas (revision declarada, no acreditada; no certifica obra)',
       accredited:'Aprobacion acreditada: requiere identidad verificable (no disponible)'};
     return {schema:MODEL_SCHEMA,schemaVersion:MODEL_VERSION,subject:{type:inv.kind,id:inv.id,name:inv.name,updatedAt:inv.updatedAt},
-      fingerprints:now,inventory:inv,planning,links,visualElements,costs,coverage,issues,obsolescence:obsolete,
+      fingerprints:now,inventory:inv,planning,links,visualElements,illustrative:[...illustrative.values()].map(r=>({...r,tasks:r.tasks.map(t=>({...t}))})),costs,coverage,issues,obsolescence:obsolete,
       delivery:{level,label:LABEL[level],blockers,simulation:'Simulacion planificada e ilustrativa: no es obra ejecutada ni certificada',
         // What the system checked vs what only a professional declared. Nothing here certifies built work.
         assurances:{
@@ -351,6 +371,6 @@
           execution:'no registrada (fuera del alcance de FT3D-8)',certification:'no aplica: FT3D-8 no certifica obra'},
         scopeNotice:'Alcance parcial: RUBIK no modela '+NOT_IN_AUTHORITY.map(x=>x.category).join(', ')+'; esas partes no se representan ni se presupuestan aqui'}};
   }
-  return Object.freeze({BINDING_SCHEMA,BINDING_VERSION,MODEL_SCHEMA,MODEL_VERSION,EVIDENCE,DELIVERY,NOT_IN_AUTHORITY,VIEWER_DEFAULTS,ROLE_RULES,
+  return Object.freeze({BINDING_SCHEMA,BINDING_VERSION,MODEL_SCHEMA,MODEL_VERSION,EVIDENCE,DELIVERY,NOT_IN_AUTHORITY,VIEWER_DEFAULTS,ROLE_RULES,ILLUSTRATIVE,ILLUSTRATIVE_PREFIX,
     elementKey,fingerprint,validateSource,levelsOf,scaleEvidence,sourceEvidence,inventory,validateBinding,createBinding,evaluate});
 });

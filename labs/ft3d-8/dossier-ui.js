@@ -18,6 +18,7 @@ const provider=Cat?.provider||null;
 
 /* ---------- scenarios (synthetic, built with the real engines) ---------- */
 const SCENARIOS={
+  K:{label:'K · Vivienda con medios de obra ilustrativos (expediente coherente)',build:()=>base('K')},
   A:{label:'A · Vivienda de una planta (expediente coherente)',build:()=>base('A')},
   B:{label:'B · Edificio de dos plantas (presupuestos por planta)',build:()=>base('B')},
   C:{label:'C · Reforma (existente, nuevo y demolido)',build:()=>base('C')},
@@ -201,7 +202,7 @@ $('dossierFlow').onclick=e=>{const b=e.target.closest('[data-go]');if(!b)return;
 // defineProperties, not Object.assign: the getter must stay live (Object.assign would copy its current value).
 Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadScenario,loadFiles,savePackage,summary,get evaluation(){return state.evaluation;},scenarios:Object.keys(SCENARIOS)}));
 const q=new URLSearchParams(location.search);
-if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'A';
+if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'K';
   loadScenario(id).then(()=>{const f=Fid();if(q.get('date')&&f.ctx?.timeline)f.setDate(q.get('date'));if(q.get('end')==='1'&&f.ctx?.timeline)f.end();})
     .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});}
 else{$('dossierPanel').dataset.mode='fidelity';$('dossierId').textContent='Modo fidelidad (?case=): casos A–D sin expediente. Quita «?case» para usar el expediente.';}

@@ -10,9 +10,9 @@
 (function(root,factory){
   if(typeof module==='object'&&module.exports)module.exports=factory(()=>({Fid:require('./fidelity-fixtures.js'),Core:require('../../js/project-core.js'),
     Building:require('../../js/building-core.js'),Parcel:require('../../js/parcel-core.js'),ParcelSite:require('../../js/parcel-site-adapter.js'),
-    Adapter:require('../../js/construction-project-adapter.js'),Brand:require('../../js/brand-core.js')}));
+    Adapter:require('../../js/construction-project-adapter.js'),Brand:require('../../js/brand-core.js'),Schedule:require('../../js/construction-schedule-core.js')}));
   else root.FT3D8DossierFixtures=factory(()=>({Fid:root.FT3D8FidelityFixtures,Core:root.FloorPlanCore,Building:root.FloorPlanBuilding,Parcel:root.FloorPlanParcelCore,
-    ParcelSite:root.FloorPlanParcelSiteAdapter,Adapter:root.FloorPlanConstructionProject,Brand:root.FloorPlanBrand}));
+    ParcelSite:root.FloorPlanParcelSiteAdapter,Adapter:root.FloorPlanConstructionProject,Brand:root.FloorPlanBrand,Schedule:root.FloorPlanConstructionSchedule}));
 })(typeof globalThis!=='undefined'?globalThis:this,function(deps){
   'use strict';
   const clone=x=>JSON.parse(JSON.stringify(x));
@@ -72,7 +72,24 @@
   function brandFor(id,subject){const {Brand}=deps(),profile=Brand.normalizeProfile({...BRANDS[id]},{id:'brd_fx'+id.toLowerCase()+'00001'});
     return {snapshot:{profile,title:'FIXTURE evolución de obra '+id,intro:'FIXTURE presentación sintética',takenAt:'2026-11-05T09:00:00.000Z'},appliesTo:{type:subject.type,id:subject.id}};}
   // Dossier input for Dossier.evaluate (and for the lab). gml: the text the professional loads, associated with this subject.
+  // K = A + explicit illustrative site resources in its plan (owner decision, Gate D). The fixture budget has no items
+  // for them, so they show «sin partidas»: nothing is priced or dated outside the plan.
+  const SITE_TASKS=[
+    {id:'implantacion',wbs:'00',title:'FIXTURE Implantacion de obra (vallado y caseta)',startDate:'2027-08-30',endDate:'2027-09-03',dependsOn:[],
+      elements:[{elementId:'illustrative/site-fence',role:'site'},{elementId:'illustrative/site-hut',role:'site'}],budgetAllocations:[]},
+    {id:'grua',wbs:'08',title:'FIXTURE Grua y medios de elevacion',startDate:'2027-09-20',endDate:'2027-10-22',dependsOn:[],
+      elements:[{elementId:'illustrative/crane',role:'temporary'}],budgetAllocations:[]},
+    {id:'andamios',wbs:'09',title:'FIXTURE Andamios',startDate:'2027-10-04',endDate:'2027-11-19',dependsOn:[],
+      elements:[{elementId:'illustrative/scaffold',role:'temporary'}],budgetAllocations:[]},
+    {id:'retirada',wbs:'10',title:'FIXTURE Retirada de medios y limpieza',startDate:'2027-11-29',endDate:'2027-12-01',dependsOn:['suelos'],
+      elements:[{elementId:'illustrative/site-fence',role:'demolition'},{elementId:'illustrative/site-hut',role:'demolition'}],budgetAllocations:[]}];
   async function dossier(id){
+    if(id==='K'){const a=await dossier('A'),{Adapter,Schedule}=deps();let plan=clone(a.schedule);
+      plan.id='sch_fx-house-a-site';plan.tasks=[SITE_TASKS[0],...plan.tasks,...SITE_TASKS.slice(1)].map(t=>({source:'FIXTURE de prueba — proyecto sintetico, no es de un cliente',...clone(t)}));
+      plan=Schedule.validate(plan);
+      const binding=Adapter.createBinding({id:'bnd_fx-house-a-site',source:a.project,fingerprints:{project:await Adapter.fingerprint(a.project),schedule:await Adapter.fingerprint(plan),budget:await Adapter.fingerprint(a.budgets[0])},
+        scheduleId:plan.id,budgetId:a.budgets[0].id,review:a.binding.review});
+      return {...a,id:'K',label:'K · Vivienda con medios de obra ilustrativos',schedule:plan,binding};}
     const {Fid,Core,Building}=deps(),c=await Fid.build(id);
     if(id==='D')return {id,label:'D · Sin plan ni parcela',project:c.source,budgets:[c.budget],schedule:null,binding:null,brand:null,gml:null};
     const site=siteFor(id,c.source);let source=c.source.levels?Building.setSite(c.source,site):Core.setSite(c.source,site);
@@ -84,5 +101,5 @@
     return {id,label:c.label,project:source,budgets,schedule,binding,brand:brandFor(id,subject),
       gml:{fileName:'FIXTURE-'+PARCELS[id].reference+'.gml',text:gml(PARCELS[id].reference,PARCELS[id].ring),associatedWith:subject}};
   }
-  return Object.freeze({PARCELS,gml,catastroResult,stubProvider,siteFor,brandFor,dossier,ids:['A','B','C','D']});
+  return Object.freeze({PARCELS,gml,catastroResult,stubProvider,siteFor,brandFor,dossier,ids:['A','B','C','D','K']});
 });

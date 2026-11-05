@@ -350,3 +350,25 @@ test('A6: three coverages are separate; 100 % of loaded items is not 100 % of th
   const d=await A.evaluate(await F.build('D'));
   assert.ok(d.coverage.scope.categories.every(x=>['budgeted-unpriced','not-in-budget','not-budgetable-in-c1-c4'].includes(x.status)));
 });
+test('Gate D: illustrative site resources are explicit plan links, drawn as illustrations, never project geometry',async()=>{
+  const a=await F.build('A'),base=await A.evaluate(a);
+  const plan=structuredClone(a.schedule);
+  plan.tasks.unshift({id:'implantacion',wbs:'00',title:'FIXTURE Implantacion de obra',startDate:'2027-09-01',endDate:'2027-09-03',source:'FIXTURE',dependsOn:[],
+    elements:[{elementId:'illustrative/site-fence',role:'site'},{elementId:'illustrative/site-hut',role:'site'}],budgetAllocations:[]});
+  plan.tasks.push({id:'grua',wbs:'08',title:'FIXTURE Grua',startDate:'2027-09-20',endDate:'2027-10-22',source:'FIXTURE',dependsOn:[],
+    elements:[{elementId:'illustrative/crane',role:'temporary'}],budgetAllocations:[]});
+  Schedule.validate(plan);
+  const m=await A.evaluate({...a,schedule:plan,binding:null});
+  assert.deepEqual(m.illustrative.map(r=>[r.key,r.label]),[['illustrative/site-fence','Vallado de obra'],['illustrative/site-hut','Caseta de obra'],['illustrative/crane','Grúa']]);
+  assert.ok(m.links.filter(l=>l.elementKey.startsWith('illustrative/')).every(l=>l.status==='illustrative'));
+  assert.ok(!codes(m).includes('link-unknown-element'));
+  assert.equal(m.issues.filter(i=>i.code==='illustrative-resource').length,3);
+  const v=m.visualElements.filter(e=>e.illustrative);assert.equal(v.length,3);assert.ok(v.every(e=>e.evidence==='illustrative'&&e.type==='illustrative'));
+  // Coverage and evidence of the project are unchanged by illustrations.
+  assert.deepEqual(m.coverage.elements,base.coverage.elements);assert.deepEqual(m.inventory.elements.length,base.inventory.elements.length);
+  // Unknown kinds and roles outside the allowed ones are errors.
+  const bad=structuredClone(plan);bad.tasks[0].elements=[{elementId:'illustrative/helicopter',role:'site'}];bad.tasks.at(-1).elements=[{elementId:'illustrative/crane',role:'finish'}];
+  const mb=await A.evaluate({...a,schedule:bad,binding:null});
+  assert.ok(codes(mb).includes('illustrative-unknown'));assert.ok(mb.issues.some(i=>i.code==='role-status-mismatch'&&/Grúa/.test(i.message)));
+  assert.equal(mb.delivery.level,'internal');
+});

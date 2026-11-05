@@ -7,6 +7,7 @@
    Illustrative only: the "raw" colour before a finish layer, ghosts for elements without a task, and the growth. */
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {buildIllustrative} from './illustrative-props.js';
 
 const RAW='#cfc9bf',GHOST='#7a8a99',DEMOLISH='#b23a2a';
 const ease=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
@@ -38,7 +39,7 @@ export function createProjectScene(canvas){
   function clear(){root.traverse(o=>o.geometry?.dispose());root.clear();objects=new Map();
     for(const grp of [foot,marks]){grp.traverse(o=>o.geometry?.dispose());grp.clear();}}
   // World mapping identical to the editor: x=(xmm-OX)/1000, z=(ymm-OY)/1000, levels lifted by elevation.
-  function load(inventory){
+  function load(inventory,illustrative=[]){
     clear();frame={origin:inventory.origin};
     const levels=new Map(inventory.levels.map(l=>[l.levelId,l]));
     const wx=(x,l)=>(x+l.offsetMm.x-frame.origin.x)/1000,wz=(y,l)=>(y+l.offsetMm.y-frame.origin.y)/1000;
@@ -101,12 +102,25 @@ export function createProjectScene(canvas){
       ghost.visible=false;g.add(ghost);
       root.add(g);objects.set(e.key,{e,g,parts,ghost});
     }
+    loadIllustrative(inventory,illustrative);
+  }
+  // Illustrative site resources linked by the plan (never project geometry): built around the project's envelope.
+  let animators=[];
+  function loadIllustrative(inventory,list){
+    animators=[];if(!list.length)return;
+    const env=inventory.levels.reduce((a,l)=>({x0:Math.min(a.x0,l.envelope.x+l.offsetMm.x),y0:Math.min(a.y0,l.envelope.y+l.offsetMm.y),x1:Math.max(a.x1,l.envelope.x+l.envelope.w+l.offsetMm.x),y1:Math.max(a.y1,l.envelope.y+l.envelope.h+l.offsetMm.y)}),{x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity});
+    const box={x0:(env.x0-frame.origin.x)/1000,x1:(env.x1-frame.origin.x)/1000,z0:(env.y0-frame.origin.y)/1000,z1:(env.y1-frame.origin.y)/1000,top:Math.max(...inventory.levels.map(l=>l.elevationMm))/1000+3};
+    for(const r of list){const {pieces,animate}=buildIllustrative(r.kind,box);if(!pieces.length)continue;
+      const g=new THREE.Group();g.name=r.key;g.userData.illustrative=true;for(const p of pieces){p.userData.base={y:p.position.y,sy:p.scale.y};g.add(p);}
+      const ghost=new THREE.Group();ghost.visible=false;g.add(ghost);root.add(g);
+      objects.set(r.key,{e:{key:r.key,type:'illustrative',kind:r.kind},g,parts:{appear:pieces,layer:[],meshes:pieces},ghost});if(animate)animators.push(animate);}
   }
   const tintable=x=>x&&x!==glass&&x!==frameMat&&x!==capMat&&!x.isMeshPhysicalMaterial&&x.color;
   const tint=(m,final,k)=>{if(!final)return;m.traverse(o=>{if(!o.isMesh)return;for(const x of [].concat(o.material))if(tintable(x))x.color.set(RAW).lerp(new THREE.Color(final),k);});};
   /* state: key -> {mode:'scheduled'|'pre-existing'|'unscheduled', build:0..1, layer:0..1|null, removal:0..1, present:0..1} */
   let visiblePieces=0;
-  function setState(states){
+  function setState(states,pos=0){
+    for(const a of animators)a(pos);
     visiblePieces=0;
     for(const [key,o] of objects){
       const s=states.get(key)||{mode:'unscheduled'};
@@ -127,7 +141,7 @@ export function createProjectScene(canvas){
         m.scale.y=m.userData.base.sy*Math.max(.001,k)*(1-rem*.98);m.position.y=m.userData.base.y;visiblePieces++;});
       const layerK=s.layer===null||s.layer===undefined?1:s.layer;
       o.parts.meshes.forEach(m=>{if(m.userData.final)tint(m,m.userData.final,layerK);});
-      if(rem>0)o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
+      if(rem>0&&o.e.type!=='illustrative')o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
     }
   }
   const setPose=({position,target,fov})=>{auto=false;controls.autoRotate=false;const d=controls.enableDamping;controls.enableDamping=false;camera.position.fromArray(position);controls.target.fromArray(target);if(fov){camera.fov=fov;camera.updateProjectionMatrix();}controls.update();controls.enableDamping=d;};
@@ -144,7 +158,8 @@ export function createProjectScene(canvas){
   function presentationPose(inventory,view='iso'){
     const p=frameEnvelope(inventory,view),t=new THREE.Vector3(...p.target),pos=new THREE.Vector3(...p.position),dir=pos.clone().sub(t);
     const wide=(canvas.clientWidth||1)/(canvas.clientHeight||1)>1.6&&(canvas.clientWidth||0)>760;
-    dir.multiplyScalar(wide?.8:.86);
+    // With illustrative site resources (fence 4 m around the envelope) the frame opens to keep them in view.
+    dir.multiplyScalar((wide?.8:.86)*(animators.length||[...objects.keys()].some(k=>k.startsWith('illustrative/'))?1.35:1));
     const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize(),shift=wide?dir.length()*.14:0;
     t.add(right.multiplyScalar(shift));
     return {position:t.clone().add(dir).toArray(),target:t.toArray(),fov:p.fov};

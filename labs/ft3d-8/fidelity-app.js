@@ -57,7 +57,11 @@ function renderHeader(model,meta){
 // The moment card (bottom-left, as in the owner's reference). Short first: week, date, headline, the tasks of this
 // instant with their dates, share of their planned time and assigned amount (sin IVA); details on demand.
 const days=(a,b)=>Math.round((ms(b)-ms(a))/DAY)+1;
-const elemText=t=>t.elements.length?`${t.elements.length} ${t.elements.length===1?'elemento':'elementos'} del modelo`:'sin representación 3D';
+// Project elements and illustrative site resources are counted apart: an illustration is never «del modelo».
+const elemText=t=>{const ill=t.elements.filter(e=>e.elementId.startsWith('illustrative/')),own=t.elements.length-ill.length,parts=[];
+  if(own)parts.push(`${own} ${own===1?'elemento':'elementos'} del modelo`);
+  if(ill.length)parts.push(ill.map(e=>(ctx.model.illustrative||[]).find(r=>r.key===e.elementId)?.label||e.elementId).join(', ').toLowerCase()+' (ilustración)');
+  return parts.join(' · ')||'sin representación 3D';};
 function costHtml(t,report){
   if(!report)return `<div class="cost c-desconocido"><b>Importes no disponibles</b> · ${esc(ctx.model.costs.message||'sin presupuesto de este proyecto')}</div>`;
   const cost=P.costView(report.byTask.find(x=>x.taskId===t.id),report);
@@ -121,7 +125,7 @@ function setPos(p){
     window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));return;}
   const LAST=tl.positions-1;pos=Math.max(0,Math.min(LAST,p));
   const i=Math.floor(pos+1e-9),j=Math.min(LAST,i+1),f=pos-i,date=iso(ms(tl.preStartDate)+i*DAY);
-  const states=stateFor(ctx.model,ctx.frames[i],ctx.frames[j],f);scene.setState(states);
+  const states=stateFor(ctx.model,ctx.frames[i],ctx.frames[j],f);scene.setState(states,pos);
   $('scrub').value=String(pos);ctx.gantt.update(pos,date);
   if(i!==lastDay){lastDay=i;renderCard(date);$('dateReadout').textContent=P.dateLabel(date).toUpperCase();
     const w=P.weekOf(ctx.schedule,date),ws=P.weeks(ctx.schedule);$('weekSel').value=String(i>=LAST?LAST:w.n===0?0:Math.round((ms(ws[w.n-1].startDate)-ms(tl.preStartDate))/DAY));
@@ -138,7 +142,7 @@ async function show(input,meta,preModel=null,dossier=null){
   const model=preModel||await A.evaluate(input);
   const schedule=model.planning.status==='available'?input.schedule:null,timeline=schedule?V.timeline(schedule):null;
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
-  scene.load(model.inventory);
+  scene.load(model.inventory,model.illustrative||[]);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
   const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.presentationPose(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
