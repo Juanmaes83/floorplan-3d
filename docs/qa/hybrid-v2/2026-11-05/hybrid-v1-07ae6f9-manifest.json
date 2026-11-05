@@ -1,0 +1,32 @@
+{
+ "headSha": "07ae6f9969cae9df746443e97410e40cee2e932a",
+ "dirtyWorktree": false,
+ "chromium": {
+  "version": "141.0.7390.37",
+  "executable": "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
+ },
+ "errors": [],
+ "external": [],
+ "entries": [
+  {
+   "headSha": "07ae6f9969cae9df746443e97410e40cee2e932a",
+   "dirtyWorktree": false,
+   "chromium": {
+    "version": "141.0.7390.37",
+    "executable": "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
+   },
+   "scenario": "video:1280x800:forward",
+   "viewport": {
+    "width": 1280,
+    "height": 800
+   },
+   "progress": {
+    "from": 0,
+    "to": 1,
+    "steps": 72
+   },
+   "output": "/home/user/hv2/v1/video/frames-1280x800-forward",
+   "frames": 73
+  }
+ ]
+}

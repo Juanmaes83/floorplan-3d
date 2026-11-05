@@ -1,0 +1,410 @@
+{
+ "keys": [
+  {
+   "t": 0,
+   "pos": [
+    4.25,
+    1.6,
+    1.8
+   ],
+   "tgt": [
+    0.7,
+    0.85,
+    4.05
+   ]
+  },
+  {
+   "t": 4.4,
+   "pos": [
+    3.85,
+    1.6,
+    2.1
+   ],
+   "tgt": [
+    0.6,
+    0.85,
+    3.9
+   ]
+  },
+  {
+   "t": 7.2,
+   "pos": [
+    2.2,
+    1.6,
+    3.2
+   ],
+   "tgt": [
+    -3.7,
+    0.95,
+    1.9
+   ]
+  },
+  {
+   "t": 10.2,
+   "pos": [
+    0.25,
+    1.6,
+    2.05
+   ],
+   "tgt": [
+    -5,
+    1,
+    1.1
+   ]
+  },
+  {
+   "t": 13,
+   "pos": [
+    -0.15,
+    1.6,
+    2.3
+   ],
+   "tgt": [
+    -4.4,
+    1,
+    -0.8
+   ]
+  }
+ ],
+ "seeds": [
+  {
+   "fid": "obj_template-032",
+   "room": "rom_living",
+   "p": [
+    2.45,
+    0.46,
+    4.78
+   ],
+   "t": 0.9,
+   "vObj": 0.95,
+   "vEnv": 0.62,
+   "envDelay": 0.9,
+   "noise": 0.8,
+   "why": "sofá: el protagonista"
+  },
+  {
+   "fid": "obj_template-033",
+   "room": "rom_living",
+   "p": [
+    1.35,
+    0.44,
+    3.52
+   ],
+   "t": 1.75,
+   "vObj": 0.55,
+   "vEnv": 0.6,
+   "envDelay": 0.5,
+   "noise": 0.7,
+   "why": "mesa de centro y alfombra"
+  },
+  {
+   "room": "rom_living",
+   "p": [
+    -1.05,
+    1.55,
+    3.6
+   ],
+   "t": 2.35,
+   "vEnv": 0.55,
+   "envDelay": 0,
+   "noise": 0.9,
+   "maxR": 3.2,
+   "why": "muro del fondo: luz sobre el yeso"
+  },
+  {
+   "fid": "obj_template-031",
+   "room": "rom_living",
+   "p": [
+    2.3,
+    0.52,
+    1.52
+   ],
+   "t": 2.9,
+   "vObj": 0.8,
+   "vEnv": 0.55,
+   "envDelay": 0.6,
+   "noise": 0.7,
+   "why": "mueble de TV"
+  },
+  {
+   "fid": "obj_template-037",
+   "room": "rom_living",
+   "p": [
+    -0.68,
+    0.9,
+    1.75
+   ],
+   "t": 3.45,
+   "vObj": 0.7,
+   "vEnv": 0.5,
+   "envDelay": 0.8,
+   "noise": 0.6,
+   "maxR": 2,
+   "why": "planta junto al paso al comedor"
+  },
+  {
+   "fid": "obj_template-034",
+   "room": "rom_living",
+   "p": [
+    3.55,
+    0.45,
+    3.6
+   ],
+   "t": 3.95,
+   "vObj": 0.7,
+   "vEnv": 0.55,
+   "envDelay": 0.6,
+   "noise": 0.6,
+   "why": "sillón"
+  },
+  {
+   "fid": "obj_template-024",
+   "room": "rom_dining",
+   "p": [
+    -2.3,
+    0.76,
+    1.3
+   ],
+   "t": 6.55,
+   "vObj": 0.5,
+   "vEnv": 0.55,
+   "envDelay": 0.7,
+   "noise": 0.7,
+   "why": "mesa de comedor"
+  },
+  {
+   "fid": "obj_template-023",
+   "room": "rom_dining",
+   "p": [
+    -3.15,
+    1.1,
+    0.3
+   ],
+   "t": 7.35,
+   "vObj": 0.9,
+   "vEnv": 0.5,
+   "envDelay": 0.9,
+   "noise": 0.6,
+   "maxR": 2.4,
+   "why": "frigorífico de acero"
+  },
+  {
+   "fid": "obj_template-020",
+   "room": "rom_kitchen",
+   "p": [
+    -4.4,
+    0.92,
+    2.4
+   ],
+   "t": 7.95,
+   "vObj": 0.7,
+   "vEnv": 0.55,
+   "envDelay": 0.6,
+   "noise": 0.7,
+   "why": "encimera"
+  },
+  {
+   "fid": "obj_template-029",
+   "room": "rom_dining",
+   "p": [
+    -2.4,
+    0.8,
+    2.5
+   ],
+   "t": 8.6,
+   "vObj": 0.7,
+   "vEnv": 0.5,
+   "envDelay": 0.8,
+   "noise": 0.6,
+   "maxR": 2.4,
+   "why": "aparador"
+  },
+  {
+   "fid": "obj_template-019",
+   "room": "rom_kitchen",
+   "p": [
+    -5.6,
+    0.92,
+    1.2
+   ],
+   "t": 9.25,
+   "vObj": 0.7,
+   "vEnv": 0.5,
+   "envDelay": 0.6,
+   "noise": 0.7,
+   "why": "frente de cocina"
+  }
+ ],
+ "objects": [
+  {
+   "i": 21,
+   "p": [
+    -5.6,
+    0.92,
+    1.2
+   ],
+   "t": 10.414344032650973,
+   "fid": "obj_template-021",
+   "room": "rom_kitchen"
+  },
+  {
+   "i": 22,
+   "p": [
+    -4.4,
+    0.92,
+    2.4
+   ],
+   "t": 8.830156764914356,
+   "fid": "obj_template-022",
+   "room": "rom_kitchen"
+  },
+  {
+   "i": 25,
+   "p": [
+    -2.777009272578807,
+    0.76,
+    1.2449999982118607
+   ],
+   "t": 8.601252437163007,
+   "fid": "obj_template-025",
+   "room": "rom_dining"
+  },
+  {
+   "i": 26,
+   "p": [
+    -2.777009272578807,
+    0.76,
+    1.4950000017881393
+   ],
+   "t": 8.675383680383502,
+   "fid": "obj_template-026",
+   "room": "rom_dining"
+  },
+  {
+   "i": 27,
+   "p": [
+    -1.8729907274211928,
+    0.76,
+    1.2449999982118607
+   ],
+   "t": 8.490825689826766,
+   "fid": "obj_template-027",
+   "room": "rom_dining"
+  },
+  {
+   "i": 28,
+   "p": [
+    -1.8729907274211928,
+    0.76,
+    1.4950000017881393
+   ],
+   "t": 8.362406193605311,
+   "fid": "obj_template-028",
+   "room": "rom_dining"
+  },
+  {
+   "i": 30,
+   "p": [
+    1.35,
+    0.01550000004749745,
+    3.52
+   ],
+   "t": 2.4242492865651144,
+   "fid": "obj_template-030",
+   "room": "rom_living"
+  },
+  {
+   "i": 35,
+   "p": [
+    -1.05,
+    1.4749140664935112,
+    4.115000004768372
+   ],
+   "t": 3.8517893501354075,
+   "fid": "obj_template-035",
+   "room": "rom_living"
+  },
+  {
+   "i": 36,
+   "p": [
+    3.7578207122867413,
+    0.46,
+    4.78
+   ],
+   "t": 4.469786219704368,
+   "fid": "obj_template-036",
+   "room": "rom_living"
+  }
+ ],
+ "dressed": [
+  [
+   "floor",
+   "rom_living",
+   "surface-oak-wood-planks"
+  ],
+  [
+   "floor",
+   "rom_dining",
+   "surface-oak-wood-planks"
+  ],
+  [
+   "floor",
+   "rom_hall",
+   "surface-oak-wood-planks"
+  ],
+  [
+   "floor",
+   "rom_kitchen",
+   "surface-marble-01"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w25",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w26",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w27",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w28",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w29",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w30",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-w32",
+   "surface-long-white-tiles"
+  ],
+  [
+   "wall",
+   "rom_kitchen",
+   "wal_ref-slide-1",
+   "surface-long-white-tiles"
+  ]
+ ],
+ "errors": []
+}
