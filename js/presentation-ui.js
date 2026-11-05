@@ -66,7 +66,7 @@
  // project), computed once when the dialog opens; the 3D view receives it and never derives it again.
  let axonMode='off',axonEnabled=false,axonDescriptor=null,axonLevelNames=new Map();
  // Hybrid V2 «Dibujo vivo» (C1): opt-in graphite drawing of the same model during the presentation; off by default.
- let livingChosen=false,livingEnabled=false;
+ let livingChosen=false,livingEnabled=false,ambienceChosen=false,ambienceEnabled=false;
  const AXON_KINDS=['axon-open','exploded-levels-open'];
  const isAxonKind=kind=>AXON_KINDS.includes(kind);
  const OVERVIEW_DIRECTION=[.42,.84,.34];
@@ -586,16 +586,22 @@
   if(d.partial)hint.classList.add('presentation-axon-partial');
  }
  function livingDrawingOption(parent){
-  livingChosen=false;
+  livingChosen=false;ambienceChosen=false;
   if(!window.FloorPlanLivingDrawingRenderer)return;
   const box=el('div',undefined,parent,'presentation-story-option presentation-living-option');box.id='presentationLivingOptionBox';
   const label=el('label',undefined,box);const input=el('input',undefined,label);input.type='checkbox';input.id='presentationLivingDrawing';input.checked=false;
   el('span',tx('Dibujo vivo · lámina a grafito (experimental)','Living drawing · graphite sheet (experimental)','活绘 · 石墨图纸（实验）'),label);
-  const hint=el('p',tx('Opcional: la vivienda se presenta como un dibujo arquitectónico a grafito del mismo modelo. Fase de prueba: todavía sin materialización. No cambia el proyecto ni sus materiales.','Optional: the home is presented as a graphite architectural drawing of the same model. Trial phase: no materialisation yet. The project and its materials do not change.','可选：以同一模型的石墨建筑图呈现住宅。试验阶段：尚无材质化。项目及其材质不变。'),box,'presentation-story-hint');
+  const hint=el('p',tx('Opcional: la vivienda empieza como un dibujo arquitectónico a grafito del mismo modelo y cobra vida estancia a estancia con sus propios materiales. No cambia el proyecto.','Optional: the home starts as a graphite architectural drawing of the same model and comes to life room by room with its own materials. The project does not change.','可选：住宅以同一模型的石墨建筑图开始，并逐个房间以其自身材质鲜活呈现。项目不变。'),box,'presentation-story-hint');
   hint.id='presentationLivingHint';input.setAttribute('aria-describedby',hint.id);
-  input.onchange=()=>{livingChosen=input.checked;};
+  // D3: an optional catalogue ambience, only inside the living drawing, off by default and kept apart from the project.
+  const aLabel=el('label',undefined,box,'presentation-living-ambience');const amb=el('input',undefined,aLabel);amb.type='checkbox';amb.id='presentationLivingAmbience';amb.checked=false;amb.disabled=true;
+  el('span',tx('Ambientación sugerida del catálogo (opcional)','Suggested catalogue ambience (optional)','目录建议氛围（可选）'),aLabel);
+  const aHint=el('p',tx('Solo durante el dibujo vivo: los suelos sin acabado de catálogo se muestran con un acabado sugerido, rotulado «Ambientación sugerida · no forma parte del proyecto». No se guarda en el proyecto y se retira al terminar.','Only during the living drawing: floors without a catalogue finish show a suggested one, labelled «Suggested ambience · not part of the project». It is not saved in the project and is removed at the end.','仅在活绘期间：没有目录饰面的地面显示建议饰面，并标注「建议氛围 · 不属于项目」。不保存到项目，结束时移除。'),box,'presentation-story-hint');
+  aHint.id='presentationLivingAmbienceHint';amb.setAttribute('aria-describedby',aHint.id);
+  input.onchange=()=>{livingChosen=input.checked;amb.disabled=!input.checked;if(!input.checked){amb.checked=false;ambienceChosen=false;}};
+  amb.onchange=()=>{ambienceChosen=amb.checked&&input.checked;};
  }
- function endLivingDrawing(){livingEnabled=false;window.View3D?.presentationLivingDrawingEnd?.();}
+ function endLivingDrawing(){livingEnabled=false;ambienceEnabled=false;window.View3D?.presentationAmbienceEnd?.();window.View3D?.presentationLivingDrawingEnd?.();}
  // The rooms of the living drawing: the presentation's chosen rooms of this overview's level, in the dialog's order.
  function livingRooms(stopIndex){const s=plan?.stops[stopIndex];if(!s)return [];return plan.stops.filter(x=>x.kind==='room'&&(x.levelId??null)===(s.levelId??null)).map(x=>x.roomId);}
  function livingView(stopIndex){const s=plan.stops[stopIndex],levelId=s.levelId??null,project=levelProject(levelId)||app.project;
@@ -606,7 +612,8 @@
   const order=[],left=chosen.filter(id=>centre(id)),heart=left.findIndex(id=>{const r=geometry.rooms.find(x=>x.id===id);return FloorPlanLivingDrawing.classify(r,FloorPlanLivingDrawing.objectsIn(project,r))==='living';});
   if(heart>0)left.unshift(left.splice(heart,1)[0]);if(left.length)order.push(left.shift());
   while(left.length){const c=centre(order[order.length-1]);left.sort((a,b)=>Math.hypot(...centre(a).map((v,k)=>v-c[k]))-Math.hypot(...centre(b).map((v,k)=>v-c[k])));order.push(left.shift());}
-  return {timeline:FloorPlanLivingDrawing.timeline(project,geometry,{order:order.length?order:null,reduced:reducedMotion()}),reduced:reducedMotion()};}
+  const ambience=ambienceEnabled?FloorPlanLivingDrawing.ambience(project,geometry,window.FloorPlanSurfaces?.entries||[],{rooms:chosen}):null;
+  return {timeline:FloorPlanLivingDrawing.timeline(project,geometry,{order:order.length?order:null,reduced:reducedMotion()}),reduced:reducedMotion(),ambience};}
  const livingAt=stop=>!!stop&&stop.kind==='overview'&&livingEnabled;
  const axonKind=()=>frozenTemplate?(frozenTemplate.buildingReading==='exploded-levels'?'exploded-levels-open':frozenTemplate.buildingReading==='axon'?'axon-open':null):axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
  const axonAt=stop=>{if(!stop||stop.kind!=='overview'||!axonDescriptor?.supported)return false;if(axonMode==='exploded'&&!axonDescriptor.variants.exploded.supported)return false;
@@ -702,8 +709,10 @@
   let caption;
   if(sc.kind==='living-drawing'){const info=View3D.presentationStoryInfo,lv=info?.living,phase=info?.phase,rooms=lv?.rooms||[],ri=lv?.roomIndex??-1,lvl=plan.stops[sc.stop]?.levelId;
    const here=ri>=0?roomName(rooms[ri],lvl):'',next=ri>=0&&rooms[ri+1]?roomName(rooms[ri+1],lvl):'';
-   caption=p<=0?tx('La vivienda, dibujada a grafito','The home, drawn in graphite','以石墨绘制的住宅'):p>=1?tx('La vivienda, viva — materiales del proyecto','The home, alive — the project\'s own materials','鲜活的住宅 — 项目自身材质')
+   const amb=View3D.presentationAmbienceInfo?.active;
+   caption=p<=0?tx('La vivienda, dibujada a grafito','The home, drawn in graphite','以石墨绘制的住宅'):p>=1?(amb?tx('La vivienda, viva','The home, alive','鲜活的住宅'):tx('La vivienda, viva — materiales del proyecto','The home, alive — the project\'s own materials','鲜活的住宅 — 项目自身材质'))
     :phase==='intro'?tx('Un dibujo arquitectónico del mismo modelo','An architectural drawing of the same model','同一模型的建筑图'):phase==='leaving'&&next?tx(`${here} cobra vida · hacia ${next}`,`${here} comes to life · towards ${next}`,`${here} 渐显 · 前往 ${next}`):tx(`${here} cobra vida`,`${here} comes to life`,`${here} 渐显`);
+   if(amb&&p>0)caption+=' — '+tx('Ambientación sugerida · no forma parte del proyecto','Suggested ambience · not part of the project','建议氛围 · 不属于项目');
    if(!multi){u.panel.setAttribute('aria-label',tx('Dibujo vivo','Living drawing','活绘'));u.slider.setAttribute('aria-label',tx('Del dibujo (0) a la vivienda viva (100)','From the drawing (0) to the living home (100)','从图纸 (0) 到鲜活住宅 (100)'));
     u.planButton.textContent=tx('Volver al dibujo','Back to the drawing','回到图纸');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):p<=0?tx('Ver dibujo vivo','See the living drawing','观看活绘'):tx('Seguir','Resume','继续');}}
@@ -840,7 +849,7 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
+ function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -1089,6 +1098,7 @@
    if(token!==epoch)return;
    // Hybrid V2: «Dibujo vivo» is a story scene that opens the presentation (the drawing layer belongs to it).
    livingEnabled=livingChosen&&!!window.FloorPlanLivingDrawing&&!!window.View3D?.presentationLivingDrawingBegin&&!!window.View3D?.presentationStoryBegin;
+   ambienceEnabled=livingEnabled&&ambienceChosen&&!!window.View3D?.presentationAmbienceBegin;
    updateAssetWarning();
    if(frozenTemplate||sectionEnabled||elevationEnabled||axonEnabled||livingEnabled)storyControls();
    if(frozenTemplate&&fullStory().length)await openStory(token,fullStory(),{from:0,to:reducedMotion()?null:1});

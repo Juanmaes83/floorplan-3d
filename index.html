@@ -374,6 +374,7 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-level-empty{margin:2px 0;font-size:12px;color:var(--muted)}
 .presentation-minimap-section{stroke:#9a3a2a;stroke-width:110;stroke-dasharray:280 140;pointer-events:none}.presentation-minimap-facade{stroke:#1f6f8b;stroke-width:160;stroke-linecap:round;pointer-events:none}.presentation-minimap-facade-look{fill:none;stroke:#1f6f8b;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-elevation-details{display:grid;gap:6px;margin:6px 0 0 26px}.presentation-elevation-pick{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.presentation-elevation-pick select{min-height:32px;max-width:100%}.presentation-minimap-section-look{fill:none;stroke:#9a3a2a;stroke-width:110;stroke-linecap:round;pointer-events:none}.presentation-story-option input:disabled+span{color:var(--muted)}
 .presentation-story-option{margin:10px 0;padding:6px 10px;border:1px solid var(--line);border-radius:10px}.presentation-story-option label{display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px;cursor:pointer}.presentation-story-option input{width:20px;height:20px;flex:none}.presentation-story-option .presentation-story-hint{margin:0 0 4px;font-size:13px;color:var(--muted)}
+.presentation-story-option label.presentation-living-ambience{margin-left:30px;font-weight:500}.presentation-living-ambience:has(input:disabled){opacity:.55;cursor:default}#presentationLivingAmbienceHint{margin-left:30px}
 .presentation-story{margin:8px 0;display:grid;gap:6px}.presentation-story[hidden]{display:none}.presentation-story-counter{margin:0;font-size:12px;color:var(--muted)}.presentation-story-counter[hidden]{display:none}.presentation-story-caption{margin:0;font-weight:600;font-size:14px}.presentation-story-slider{width:100%;min-height:44px;margin:0;accent-color:var(--accent)}.presentation-story-actions{display:flex;gap:8px;flex-wrap:wrap}.presentation-story-actions .btn{min-height:44px;flex:1 1 auto}
 .presentation-config-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:sticky;bottom:-20px;z-index:2;background:var(--panel,#fff);padding:10px 0 20px;border-top:1px solid var(--line)}
 .presentation-config-actions .btn{border:1px solid var(--line);min-height:44px}
@@ -3931,7 +3932,7 @@ async function enter(options={}){
   stage.classList.remove('animating');
 }
 function abort3D(){
-  presentationLivingDrawingEnd();
+  presentationAmbienceEnd();presentationLivingDrawingEnd();
   if(heldEntry){heldEntry=null;grow=furnGrow=1;}
   territoryRenderer?.dispose();
   clearPresentationReveal();
@@ -3949,7 +3950,7 @@ function abort3D(){
 // A held entry that no narrative took over (the chapter could not start, another stop was chosen…) rises at once.
 function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;}
 async function exit(){
-  presentationLivingDrawingEnd();
+  presentationAmbienceEnd();presentationLivingDrawingEnd();
   heldEntry=null;
   if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
     const dir = new THREE.Vector3(); camera.getWorldDirection(dir); orbit.target.copy(camera.position).addScaledVector(dir, 3).setY(0); opt.mode = 'orbit'; syncModeBtns(); }
@@ -4193,6 +4194,37 @@ function presentationLivingDrawingBegin(options={}){
   livingDrawing=ld;return ld.info;
 }
 function presentationLivingDrawingEnd(){if(!livingDrawing)return false;livingDrawing.dispose();livingDrawing=null;return true;}
+/* D3 «Ambientación sugerida» (opt-in, presentation only): while the living drawing plays, some floors show a catalogue
+   finish instead of the project's own. Nothing is written to the project: each floor mesh keeps its own material and gets
+   it back on end; the suggested finishes live in a private SurfaceRenderer, disposed whole (textures, bitmaps, materials). */
+let ambience=null;
+function presentationAmbienceBegin(input){
+  presentationAmbienceEnd();
+  const list=(input?.suggestions||[]).filter(s=>s.surface==='floor');
+  if(!active||!list.length)return {active:false,applied:[],skipped:[]};
+  const sr=new SurfaceRenderer(THREE,FloorPlanSurfaces),swaps=[],applied=[],skipped=[];
+  for(const s of list){
+    const entry=FloorPlanSurfaces.get?.(s.suggested),meshes=[...archFloor.children,...archUp.children].filter(o=>o.isMesh&&o.userData.room===s.roomId);
+    const m=entry&&meshes.length?sr.get({id:'ambience:'+s.suggested,category:'floor',appearance:{preset:s.suggested,color:entry.color}}):null;
+    if(!m){skipped.push({roomId:s.roomId,suggested:s.suggested,reason:!entry?'unknown-finish':!meshes.length?'no-floor':'unsupported'});continue;}
+    for(const o of meshes){const own=o.material;swaps.push({o,own});o.material=Array.isArray(own)?own.map((x,i)=>i===0?m:x):m;}
+    applied.push({roomId:s.roomId,suggested:s.suggested,name:entry.name});
+  }
+  for(const w of (input.suggestions||[]).filter(s=>s.surface!=='floor'))skipped.push({roomId:w.roomId,suggested:w.suggested,reason:'walls-not-applied'});
+  if(!swaps.length){sr.disposeAll();return {active:false,applied,skipped};}
+  ambience={sr,swaps,applied,skipped,label:String(input.label||'')};
+  return presentationAmbienceInfo();
+}
+function presentationAmbienceEnd(){
+  if(!ambience)return false;const a=ambience;ambience=null;
+  for(const {o,own} of a.swaps)o.material=own;
+  a.sr.disposeAll();return true;
+}
+function presentationAmbienceInfo(){
+  if(!ambience)return {active:false,applied:[],skipped:[]};
+  const states=new Map(ambience.sr.metrics().map(r=>[r.id,r.state]));
+  return {active:true,label:ambience.label,applied:ambience.applied.map(a=>({...a,state:states.get(a.suggested)||'loading'})),skipped:ambience.skipped.slice(),swapped:ambience.swaps.length};
+}
 /* «Dibujo vivo» as a story scene (C2–C3). view: {timeline (FloorPlanLivingDrawing.timeline of this level, rooms in the
    presentation's order), intro, outro, reduced}. Transactional: if anything fails after the walls were lowered or the
    layer started, everything is undone before the error goes up. Walls at the presentation's 1.2 m reading cut so the
@@ -4211,15 +4243,17 @@ function beginLiving(view,stop,aspect,region){
       return {fid:g.userData.fid,index:i,min:b.min.toArray(),max:b.max.toArray(),roomIndex:rooms.find(r=>inRoom(r.poly,cx,cz))?.index||0};}).filter(Boolean);
     const visits=tl.rooms.map(r=>({roomIndex:rooms.find(x=>x.id===r.roomId)?.index||0,start:intro+r.start,duration:r.duration,seeds:r.seeds.map(sd=>({fid:sd.id,at:sd.at}))})).filter(v=>v.roomIndex);
     livingDrawing.setLanding({rooms,visits,furniture,levelY:[-.3,wallTop+.6]});
+    const amb=view.ambience?presentationAmbienceBegin(view.ambience):null;
     const start=presentationStopPose(stop,aspect,region),total=intro+tl.total+outro;
     const roomViews=tl.rooms.map(r=>{const g=geometry.rooms.find(x=>x.id===r.roomId),xs=g.poly.map(p=>p[0]),ys=g.poly.map(p=>p[1]);
       return {id:r.roomId,center:[wx((Math.min(...xs)+Math.max(...xs))/2),wz((Math.min(...ys)+Math.max(...ys))/2)],extent:[(Math.max(...xs)-Math.min(...xs))/1000,(Math.max(...ys)-Math.min(...ys))/1000],start:intro+r.start,duration:r.duration,leaveAt:intro+r.leaveAt};});
     const all=geometry.rooms.filter(r=>r.poly.length>=3),houseCenter=[all.reduce((n,r)=>n+wx(r.poly.reduce((m,p)=>m+p[0],0)/r.poly.length),0)/all.length,all.reduce((n,r)=>n+wz(r.poly.reduce((m,p)=>m+p[1],0)/r.poly.length),0)/all.length];
     const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
-    return {narrative,started,cut0,timeline:tl,total};
-  }catch(error){livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
+    return {narrative,started,cut0,timeline:tl,total,ambience:!!amb?.active};
+  }catch(error){presentationAmbienceEnd();livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
 }
 function endLiving(living){
+  if(living.ambience)presentationAmbienceEnd();
   livingDrawing?.clearLanding();
   if(opt.cut!==living.cut0)setPresentationCut(living.cut0);
   if(living.started)presentationLivingDrawingEnd();
@@ -4959,8 +4993,9 @@ window.View3D = {
 
 window.View3D.presentationReveal=presentationReveal;
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
-Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd});
+Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd,presentationAmbienceBegin,presentationAmbienceEnd});
 Object.defineProperty(window.View3D,'presentationLivingDrawingInfo',{get:()=>livingDrawing?livingDrawing.info:{active:false}});
+Object.defineProperty(window.View3D,'presentationAmbienceInfo',{get:presentationAmbienceInfo});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
 Object.defineProperty(window.View3D,'presentationElevationResidue',{get:presentationElevationResidue});

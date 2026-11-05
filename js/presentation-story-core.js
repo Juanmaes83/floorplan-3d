@@ -364,7 +364,8 @@
   const total=Math.max(Number(input.total)||0,...rooms.map(r=>r.start+r.duration)),intro=Math.max(0,Number(input.intro)||0);
   // free region of the screen (the presentation card covers the rest): the room is framed in its middle
   const reg=Array.isArray(input.region)&&input.region.length===4?input.region:[0,0,1,1],tV=Math.tan(fov*Math.PI/360),tH=tV*aspect;
-  const yawOff=-Math.atan(((reg[0]+reg[2])-1)*tH),pitchOff=Math.atan((1-(reg[1]+reg[3]))*tV);
+  // (signs checked by projecting the aim with a real camera: the room lands in the middle of the free region, never under the card)
+  const yawOff=Math.atan(((reg[0]+reg[2])-1)*tH),pitchOff=-Math.atan((1-(reg[1]+reg[3]))*tV);
   const aim=(pos,tgt)=>{const v=sub(tgt,pos),h=Math.hypot(v[0],v[2]),yaw=Math.atan2(v[0],v[2])+yawOff,pitch=Math.atan2(v[1],h)+pitchOff,d=len(v);
    return add(pos,[Math.sin(yaw)*Math.cos(pitch)*d,Math.sin(pitch)*d,Math.cos(yaw)*Math.cos(pitch)*d]);};
   const views=rooms.map((r,i)=>{
@@ -386,7 +387,8 @@
   const T=keys.map(k=>k.t),tan=(i,key)=>{if(i===0||i===keys.length-1)return [0,0,0];return mul(sub(keys[i+1].pose[key],keys[i-1].pose[key]),1/(T[i+1]-T[i-1]));};
   function hermite(i,key,t){const a=keys[i],b=keys[i+1],dt=b.t-a.t,s=clamp01((t-a.t)/dt),s2=s*s,s3=s2*s,ma=tan(i,key),mb=tan(i+1,key);
    return [0,1,2].map(k=>(2*s3-3*s2+1)*a.pose[key][k]+(s3-2*s2+s)*dt*ma[k]+(-2*s3+3*s2)*b.pose[key][k]+(s3-s2)*dt*mb[k]);}
-  const roomAt=t=>{let i=views.findIndex(v=>t<v.end);if(i<0)i=views.length-1;return t<intro?-1:i;};
+  // the end of a room still belongs to it (complete): reduced motion holds there, in that room's own view
+  const roomAt=t=>{let i=views.findIndex(v=>t<=v.end+1e-6);if(i<0)i=views.length-1;return t<intro?-1:i;};
   function stateAt(raw){
    const p=clamp01(Number(raw)||0),t=p*total,ri=roomAt(t),view=views[ri];
    let pose;

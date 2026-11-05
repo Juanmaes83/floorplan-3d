@@ -111,7 +111,9 @@
   const materialName=id=>(project?.materials||[]).find(m=>m.id===id)?.name||null,out=[];
   for(const room of (geometry?.rooms||[])){if(rooms&&!rooms.includes(room.id))continue;const pr=(project?.rooms||[]).find(r=>r.id===room.id);
    const cls=classify(room,objectsIn(project,room)),s=AMBIENCE[cls]||AMBIENCE.other;
-   if(ok(s.floor,'floor'))out.push({roomId:room.id,surface:'floor',suggested:s.floor,original:pr?.floorMaterialId??null,originalName:materialName(pr?.floorMaterialId)});
+   // a finish the client already chose from the catalogue is the project's own: the ambience never covers it
+   const chosen=(project?.materials||[]).find(m=>m.id===pr?.floorMaterialId)?.appearance?.preset?.startsWith?.('surface-');
+   if(ok(s.floor,'floor')&&!chosen)out.push({roomId:room.id,surface:'floor',suggested:s.floor,original:pr?.floorMaterialId??null,originalName:materialName(pr?.floorMaterialId)});
    if(ok(s.wall,'wall'))out.push({roomId:room.id,surface:'walls',suggested:s.wall,original:null,originalName:null});}
   return Object.freeze({source:'ambientacion',label:LIVING.label,optional:true,defaultOn:false,storesInProject:false,suggestions:Object.freeze(out.map(Object.freeze))});
  }

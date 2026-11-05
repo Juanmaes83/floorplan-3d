@@ -76,6 +76,11 @@ test('HV2-C0 ambience is optional, labelled and never touches the project (D3)',
  assert.ok(a.suggestions.every(s=>catalogue.some(e=>e.id===s.suggested&&e.applications.includes(s.surface==='walls'?'wall':'floor'))),'only real catalogue finishes for their surface');
  assert.ok(Object.isFrozen(a)&&Object.isFrozen(a.suggestions));
  assert.equal(L.ambience(reference,geometry,[]).suggestions.length,0,'no catalogue, no suggestion');
+ // a floor the client finished with a catalogue surface stays the client's: no suggestion over it
+ const chosen=structuredClone(reference);chosen.materials.push({id:'mat_client_oak',category:'floor',name:'Roble del cliente',appearance:{preset:'surface-oak-wood-planks',color:'#a27553'}});
+ chosen.rooms.find(r=>r.id==='rom_living').floorMaterialId='mat_client_oak';
+ const b=L.ambience(chosen,geometry,catalogue);assert.equal(b.suggestions.some(s=>s.roomId==='rom_living'&&s.surface==='floor'),false);
+ assert.ok(b.suggestions.some(s=>s.roomId==='rom_dining'&&s.surface==='floor'),'the other rooms keep their suggestion');
 });
 
 test('HV2-C0 two-level building: each level gets its own protagonists and moments',()=>{

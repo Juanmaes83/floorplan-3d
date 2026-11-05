@@ -3,10 +3,10 @@
    The presentation is configured as a person would (rooms in the dialog, «Dibujo vivo» on), the story opens by itself;
    it is paused and every frame applies the story at t = i / fps through View3D.presentationStoryApply (the same pure
    state the player applies), waits two animation frames and takes a screenshot of the page (card included).
-   usage: node scripts/qa/render-living-drawing-story.cjs <root> <out> [stills|video] [fps=24] [WxH=1280x720] [rooms=Salón,Comedor,Cocina,Dormitorio principal] [dpr=1] */
+   usage: node scripts/qa/render-living-drawing-story.cjs <root> <out> [stills|video] [fps=24] [WxH=1280x720] [rooms=Salón,Comedor,Cocina,Dormitorio principal] [dpr=1] [fromFrame] [toFrame] */
 const path=require('node:path'),fs=require('node:fs/promises'),{createServer}=require('node:http'),{execFileSync}=require('node:child_process');
 const {chromium}=require('playwright');
-const [root,out,mode='stills',fpsArg='24',vp='1280x720',roomsArg='Salón,Comedor,Cocina,Dormitorio principal',dprArg='1']=process.argv.slice(2);
+const [root,out,mode='stills',fpsArg='24',vp='1280x720',roomsArg='Salón,Comedor,Cocina,Dormitorio principal',dprArg='1',fromArg='0',toArg='1e9']=process.argv.slice(2);
 const [width,height]=vp.split('x').map(Number),fps=Number(fpsArg),dpr=Number(dprArg),want=roomsArg.split(',');
 const three=require(path.join(root,'tests/helpers/three-module.cjs'));
 (async()=>{
@@ -31,11 +31,11 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  await fs.mkdir(out,{recursive:true});
  const times=mode==='stills'?[0,.25,.45,.6,.75,.9].map(f=>f*total).concat(info.ends.map(e=>e*total-.4)).sort((a,b)=>a-b):Array.from({length:Math.round(total*fps)+1},(_,i)=>i/fps);
  const manifest={head,chromium:browser.version(),viewport:{width,height,dpr},rooms:info.rooms,total,fps,frames:[]};
- for(let i=0;i<times.length;i++){const t=Math.min(total,times[i]),t0=Date.now();
+ for(let i=Number(fromArg);i<Math.min(times.length,Number(toArg));i++){const t=Math.min(total,times[i]),t0=Date.now();
   const st=await p.evaluate(P=>{View3D.presentationStoryApply(P);return new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r({phase:View3D.presentationStoryInfo.phase,room:View3D.presentationStoryInfo.living.roomId,drawing:View3D.presentationLivingDrawingInfo}))));},t/total);
   const file=mode==='stills'?`still-${t.toFixed(2).padStart(6,'0')}.png`:`f${String(i).padStart(4,'0')}.png`;await p.screenshot({path:path.join(out,file)});
   manifest.frames.push({i,t:+t.toFixed(3),file,phase:st.phase,room:st.room,liveSeeds:st.drawing?.liveSeeds,ms:Date.now()-t0});
   if(mode==='stills'||i%24===0)console.log(file,t.toFixed(2),st.phase,st.room,Date.now()-t0,'ms');}
- manifest.errors=errors;await fs.writeFile(path.join(out,'manifest.json'),JSON.stringify(manifest,null,1));
+ manifest.errors=errors;await fs.writeFile(path.join(out,`manifest-${fromArg}.json`),JSON.stringify(manifest,null,1));
  console.log('errors',errors.slice(0,5));await browser.close();await new Promise(r=>server.close(r));
 })().catch(e=>{console.error(e);process.exit(1);});
