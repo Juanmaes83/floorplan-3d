@@ -184,10 +184,8 @@ void main(){
    clearLanding();if(!info.active||!input?.visits?.length)return null;
    const rooms=(input.rooms||[]).filter(r=>Number.isInteger(r.index)&&r.index>0&&r.index<MAX_ROOMS&&Array.isArray(r.poly)&&r.poly.length>=3&&r.poly.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))),xs=rooms.flatMap(r=>r.poly.map(p=>p[0])),zs=rooms.flatMap(r=>r.poly.map(p=>p[1]));
    if(!xs.length)return null;
-   const pad=.6,x0=Math.min(...xs)-pad,z0=Math.min(...zs)-pad,x1=Math.max(...xs)+pad,z1=Math.max(...zs)+pad;
    // A bounded, adaptive map prevents extremely large floor plans from exhausting GPU/browser memory.
-   const maxSide=Math.min(2048,renderer.capabilities?.maxTextureSize||2048),res=Math.max(.04,(x1-x0)/maxSide,(z1-z0)/maxSide);
-   const w=Math.max(1,Math.ceil((x1-x0)/res)),h=Math.max(1,Math.ceil((z1-z0)/res));
+   const {x0,z0,x1,z1,res,w,h}=maskGrid(xs,zs,renderer.capabilities?.maxTextureSize);
    const cv=document.createElement('canvas');cv.width=w;cv.height=h;const g=cv.getContext('2d');
    for(const r of rooms){g.fillStyle=`rgb(${r.index},0,0)`;g.beginPath();r.poly.forEach((p,j)=>{const X=(p[0]-x0)/res,Y=(p[1]-z0)/res;j?g.lineTo(X,Y):g.moveTo(X,Y);});g.closePath();g.fill();}
    const img=g.getImageData(0,0,w,h).data,id=new Uint8Array(w*h);for(let i=0;i<w*h;i++)id[i]=img[i*4+3]>200?img[i*4]:0;
@@ -196,7 +194,7 @@ void main(){
    for(let step=0;step<10&&front.length;step++){const nx=[];for(const i of front){const x=i%w,y=(i/w)|0;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=w||Y>=h)continue;const j=Y*w+X;if(!id[j]){id[j]=id[i];nx.push(j);}}}front=nx;}
    const data=new Uint8Array(w*h*4);for(let i=0;i<w*h;i++){data[i*4]=id[i];data[i*4+3]=255;}
    roomTex=new THREE.DataTexture(data,w,h,THREE.RGBAFormat);roomTex.minFilter=roomTex.magFilter=THREE.NearestFilter;roomTex.needsUpdate=true;
-   const furn=new Map((input.furniture||[]).map(f=>[f.fid,f])),seeds=[],objects=[],done=new Array(MAX_ROOMS).fill(Infinity),ENV_DELAY=.6;
+   const furn=new Map((input.furniture||[]).map(f=>[f.fid,f])),seeds=[],objects=[],done=new Array(MAX_ROOMS).fill(Infinity),doneInfo=[],ENV_DELAY=.6;
    for(const v of input.visits){
     const room=rooms.find(r=>r.index===v.roomIndex);if(!room)continue;
     const own=v.seeds.map(sd=>{const f=furn.get(sd.fid);if(!f)return null;const ext=Math.hypot(f.max[0]-f.min[0],f.max[1]-f.min[1],f.max[2]-f.min[2]);
@@ -220,12 +218,12 @@ void main(){
      const whole=sd.t+ext/sd.vObj+.2;objects.push({index:sd.obj,p:sd.p,t:whole});last=Math.max(last,sd.t+2.2,whole+ext/1.6+.2);}
     // A visit may leave while stains remain (the next room stays graphite), but at the *end* of a
     // room the remaining material must be fully revealed. Otherwise the final frame can still be pencil.
-    if(v.roomIndex<MAX_ROOMS)done[v.roomIndex]=Math.min(v.start+v.duration-0.001,last+.3);
+    if(v.roomIndex<MAX_ROOMS){done[v.roomIndex]=roomDoneAt(v,last);doneInfo.push({roomIndex:v.roomIndex,done:done[v.roomIndex],end:v.start+v.duration});}
    }
    landing={seeds,objects,done,levelY:input.levelY||[-1e3,1e3],map:[x0,z0,x1-x0,z1-z0]};
    const u=comp.uniforms;u.tRoom.value=roomTex;u.uRoomMap.value.set(...landing.map);u.uLevelY.value.set(...landing.levelY);
    for(const o of u.uObjA.value)o.set(0,0,0,1e4);for(const o of objects)if(o.index>=0&&o.index<MAX_OBJ)u.uObjA.value[o.index].set(o.p[0],o.p[1],o.p[2],o.t);
-   info.landing={seeds:seeds.length,objects:objects.length,rooms:input.visits.length};
+   info.landing={seeds:seeds.length,objects:objects.length,rooms:input.visits.length,map:[w,h],done:doneInfo};
    setTime(-1);return {...info.landing};
   }
   /* Story clock → what is real: only the seeds of rooms in progress are sent (≤ MAX_SEEDS); a finished room is real as
@@ -285,5 +283,13 @@ void main(){
   }
   return {begin,render,dispose,setLanding,setTime,clearLanding,get info(){return {...info};}};
  }
- root.FloorPlanLivingDrawingRenderer={create,version:2};
+ /* Pure parts of the landing (b9b0ace), testable without a GPU:
+    - maskGrid: the room map covers the plan at 4 cm, but never exceeds 2048 px (nor the GPU's max texture) per side;
+    - roomDoneAt: a room is complete when its last piece has landed, and in any case by the end of its own time, so the
+      last frame of a room is never left in pencil. */
+ function maskGrid(xs,zs,maxTexture){const pad=.6,x0=Math.min(...xs)-pad,z0=Math.min(...zs)-pad,x1=Math.max(...xs)+pad,z1=Math.max(...zs)+pad;
+  const maxSide=Math.min(2048,maxTexture||2048),res=Math.max(.04,(x1-x0)/maxSide,(z1-z0)/maxSide);
+  return {x0,z0,x1,z1,res,w:Math.max(1,Math.ceil((x1-x0)/res)),h:Math.max(1,Math.ceil((z1-z0)/res))};}
+ function roomDoneAt(visit,last){return Math.min(visit.start+visit.duration-0.001,last+.3);}
+ root.FloorPlanLivingDrawingRenderer={create,version:2,maskGrid,roomDoneAt};
 })(typeof self!=='undefined'?self:this);

@@ -64,6 +64,7 @@ test('HV2 ON: drawing → stains with drawing still on screen → exact reverse 
  await configure(page,{living:true});await livingOpen(page);
  const s0=await story(page);assert.equal(s0.info.living.rooms[0],'rom_living','opens on the living room');assert.ok(s0.info.living.rooms.length>=4);
  const d0=await info(page);assert.equal(d0.active,true);assert.equal(d0.restored,true);assert.ok(d0.landing.seeds>=8,`seeds prepared ${JSON.stringify(d0.landing)}`);
+ assert.ok(d0.landing.map.every(n=>n>=1&&n<=2048),'bounded room mask '+d0.landing.map);assert.ok(d0.landing.done.length>=4&&d0.landing.done.every(r=>r.done<r.end),'every room complete before its end '+JSON.stringify(d0.landing.done));
  const drawn=await read(page,'on-1440-p000',[.05,.2,.55,.95]);assert.ok(drawn.paper>.4&&drawn.dark>.004&&drawn.colour<.012,`graphite on paper at p = 0 ${JSON.stringify({...drawn,sig:0})}`);
  // a moment inside the first room, after its first stains and before it is complete
  const r0=s0.info.living,first=(4.5+2.4)/r0.total;await seek(page,first);
