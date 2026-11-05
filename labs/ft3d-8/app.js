@@ -91,7 +91,7 @@ function renderCard(date){
   $('cardTasks').innerHTML=list.map(t=>`<li>
     <div class="t"><span class="wbs">${esc(t.wbs)}</span> ${esc(t.title.replace(/^FIXTURE /,''))} <span class="pp">${c.active.length?t.plannedPercent+' % plan':'proxima'}</span></div>
     <div class="d">${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${esc(t.phaseText)}</div>
-    <div class="cost c-${t.cost.status}"><b>${esc(t.cost.label)}</b> · total ${esc(t.cost.totalText)}${t.cost.status==='parcial'?' · conocido '+esc(t.cost.knownText):''}</div>
+    <div class="cost c-${t.cost.status}"><b>${esc(t.cost.label)}</b> · asignado sin IVA ${esc(t.cost.totalText)}${t.cost.status==='parcial'?' · conocido '+esc(t.cost.knownText):''}</div>
     ${t.cost.notes.length?`<div class="notes">${t.cost.notes.map(esc).join(' · ')}</div>`:''}</li>`).join('')||`<li class="none">
     <div class="t">${schedule.tasks.length} / ${schedule.tasks.length} tareas completadas según plan</div>
     <div class="cost c-${sum.complete?'revisado':'parcial'}"><b>Presupuestado conocido ${esc(sum.knownText)}</b>${sum.complete?'':' · incompleto'}</div>

@@ -26,7 +26,7 @@
   const COST_MODES=Object.freeze(['none','summary','tasks']);
   const CONTACT_FIELDS=Object.freeze(['person','phone','email','web']);
   const SIMULATION='Simulacion planificada e ilustrativa de la evolucion de obra: no muestra obra ejecutada ni certificada';
-  const COSTS_NOTICE='Importes presupuestados (C1-C4): no son gasto ejecutado, pagado ni certificado';
+  const COSTS_NOTICE='Importes presupuestados (C1-C4) sin IVA: no son gasto ejecutado, pagado ni certificado';
   const err=s=>{throw new TypeError('FloorPlanConstructionDelivery: '+s);};
   const DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),iso=x=>new Date(x).toISOString().slice(0,10);
   const deepFreeze=o=>{if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.freeze(o);for(const v of Object.values(o))deepFreeze(v);}return o;};
@@ -85,11 +85,12 @@
     const st=Schedule.stateAt(schedule,date),week=Presenter.weekOf(schedule,date),active=st.tasks.filter(t=>t.plannedPhase==='in-progress');
     const done=st.tasks.every(t=>t.plannedPhase==='completed');
     // The plan total and the active phase cost are two different figures and are always labelled as such.
-    const total='Total presupuestado asignado al plan: '+(policy?.summary?.knownText||'—')+(policy?.summary&&!policy.summary.complete?' (incompleto)':'');
+    // Allocations come from the NET amounts of C1-C4: always labelled «sin IVA» (never read as a VAT-inclusive total).
+    const total='Total presupuestado asignado al plan (sin IVA): '+(policy?.summary?.knownText||'—')+(policy?.summary&&!policy.summary.complete?' (incompleto)':'');
     let cost;
     if(!policy||!policy.allowed||policy.mode==='none')cost=[policy&&!policy.allowed?'Costes no incluidos en este video':'Costes no incluidos (eleccion del profesional)'];
     else if(policy.mode==='summary')cost=[total+' · no es el coste de la fase en curso'];
-    else{const lines=active.map(t=>{const r=policy.rows.find(x=>x.taskId===t.id);return r?'Fase en curso «'+t.title.replace(/^FIXTURE /,'')+'»: '+r.totalText+(r.status!=='revisado'?' ('+r.label.toLowerCase()+')':''):null;}).filter(Boolean);
+    else{const lines=active.map(t=>{const r=policy.rows.find(x=>x.taskId===t.id);return r?'Fase en curso «'+t.title.replace(/^FIXTURE /,'')+'» (sin IVA): '+r.totalText+(r.status!=='revisado'?' ('+r.label.toLowerCase()+')':''):null;}).filter(Boolean);
       cost=[...(lines.length?lines:['Sin fase en curso']),total];}
     return {date,dateText:Presenter.dateLabel(date),week:week.label,
       headline:done?'Plan completado segun la planificacion':active.length?active.map(t=>t.title.replace(/^FIXTURE /,'')).join(' · '):'Estado previo a la obra',
@@ -155,8 +156,8 @@
     const phases=m.plan.phases.map(p=>`<tr><td>${esc(p.wbs)}</td><td>${esc(p.title.replace(/^FIXTURE /,''))}</td><td>${esc(Presenter.dateLabel(p.startDate))}</td><td>${esc(Presenter.dateLabel(p.endDate))}</td></tr>`).join('');
     const costs=!m.costs.allowed||m.costs.mode==='none'
       ?`<p class="muted">${m.costs.allowed?'El profesional no ha incluido importes en esta presentación.':'Importes no incluidos: '+esc(m.costs.reasons.join('; ')||'no disponibles')}</p>`
-      :`<p><strong>Presupuesto total asignado a las fases del plan (importe conocido): ${esc(m.costs.summary.knownText)}</strong>${m.costs.summary.complete?'':' · <em>incompleto</em>'}</p>`+
-       (m.costs.mode==='tasks'?`<table><thead><tr><th>Fase</th><th>Importe</th><th>Estado</th></tr></thead><tbody>${m.costs.rows.map(r=>`<tr><td>${esc(r.wbs)} ${esc(r.title.replace(/^FIXTURE /,''))}</td><td>${esc(r.totalText)}</td><td>${esc(r.label)}</td></tr>`).join('')}</tbody></table>`:'');
+      :`<p><strong>Presupuesto asignado a las fases del plan, sin IVA (importe conocido): ${esc(m.costs.summary.knownText)}</strong>${m.costs.summary.complete?'':' · <em>incompleto</em>'}</p>`+
+       (m.costs.mode==='tasks'?`<table><thead><tr><th>Fase</th><th>Importe sin IVA</th><th>Estado</th></tr></thead><tbody>${m.costs.rows.map(r=>`<tr><td>${esc(r.wbs)} ${esc(r.title.replace(/^FIXTURE /,''))}</td><td>${esc(r.totalText)}</td><td>${esc(r.label)}</td></tr>`).join('')}</tbody></table>`:'');
     const warn=[...m.warnings.slice(0,3),...m.costs.warnings].map(w=>`<li>${esc(w)}</li>`).join('');
     const json=JSON.stringify(m).replace(/</g,'\\u003c');
     return `<!doctype html>

@@ -59,10 +59,10 @@ test('overlay texts come from the plan and the cost policy',async()=>{
   const {c,m}=await ctxA();
   const o=D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'tasks',schedule:c.schedule}));
   assert.equal(o.week,'SEM 06 / 12');assert.deepEqual(o.active.map(a=>a.id),['tabiques','cubierta']);
-  assert.ok(o.cost.some(x=>/Fase en curso «Tabiqueria interior»: \d/.test(x))&&o.cost.some(x=>/Fase en curso «Cubierta .*desconocido/.test(x)));
-  assert.match(o.cost.at(-1),/^Total presupuestado asignado al plan: 19\.717,64 €$/,'plan total kept apart from the phase cost');
+  assert.ok(o.cost.some(x=>/Fase en curso «Tabiqueria interior» \(sin IVA\): \d/.test(x))&&o.cost.some(x=>/Fase en curso «Cubierta .*\(sin IVA\): desconocido/.test(x)));
+  assert.match(o.cost.at(-1),/^Total presupuestado asignado al plan \(sin IVA\): 19\.717,64 €$/,'plan total kept apart from the phase cost');
   const sum=D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'summary',schedule:c.schedule}));
-  assert.deepEqual(sum.cost,['Total presupuestado asignado al plan: 19.717,64 € · no es el coste de la fase en curso']);
+  assert.deepEqual(sum.cost,['Total presupuestado asignado al plan (sin IVA): 19.717,64 € · no es el coste de la fase en curso']);
   assert.match(D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'none',schedule:c.schedule})).cost[0],/eleccion del profesional/);
   assert.match(D.overlay(m,c.schedule,'2027-11-27',null).headline,/Plan completado/);
 });
@@ -158,4 +158,12 @@ test('S1 manifest 0.2.0: carries the dossier identity and only the territory tex
   await assert.rejects(D.createManifest({model:m,schedule:c.schedule,brand:D.brandFor(null),costPolicy:null,title:'x',dossier:other}),/do not match/);
   // 0.1.0 manifests (no dossier) remain readable by the client document.
   const legacy={...manifest,schemaVersion:'0.1.0',dossier:undefined,territory:undefined};assert.match(D.clientDocument(legacy),/<!doctype html>/i);
+});
+test('every amount shown to the client says «sin IVA» (allocations are net C1-C4 amounts)',async()=>{
+  const {c,m}=await ctxA(),{snapshot}=fixtureBrand();
+  const pol=D.costPolicy(m,{mode:'tasks',schedule:c.schedule});
+  const o=D.overlay(m,c.schedule,'2027-10-12',pol);assert.ok(o.cost.every(x=>/sin IVA/.test(x)),o.cost.join(' | '));
+  assert.match(D.COSTS_NOTICE,/sin IVA/);
+  const man=await D.createManifest({model:m,schedule:c.schedule,budget:c.budget,brand:D.brandFor(snapshot),costPolicy:pol,title:'FIXTURE',intro:'',binding:c.binding,generatedAt:'2026-11-05T10:00:00Z'});
+  const html=D.clientDocument(man);assert.match(html,/<th>Importe sin IVA<\/th>/);assert.match(html,/asignado a las fases del plan, sin IVA/);
 });

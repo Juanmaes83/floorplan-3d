@@ -69,7 +69,7 @@ function renderCard(date){
     const elems=t.elements.length?`${t.elements.length} elemento(s) del proyecto`:'sin representación en el modelo RUBIK';
     return `<li><div class="t"><span class="wbs">${esc(t.wbs)}</span> ${esc(t.title.replace(/^FIXTURE /,''))} <span class="pp">${Math.round(t.visualProgress*100)} % plan</span></div>
       <div class="d">${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${elems}</div>
-      ${cost?`<div class="cost c-${cost.status}"><b>${esc(cost.label)}</b> · total ${esc(cost.totalText)}${cost.status==='parcial'?' · conocido '+esc(cost.knownText):''}</div>${cost.notes.length?`<div class="notes">${cost.notes.map(esc).join(' · ')}</div>`:''}`
+      ${cost?`<div class="cost c-${cost.status}"><b>${esc(cost.label)}</b> · asignado sin IVA ${esc(cost.totalText)}${cost.status==='parcial'?' · conocido '+esc(cost.knownText):''}</div>${cost.notes.length?`<div class="notes">${cost.notes.map(esc).join(' · ')}</div>`:''}`
         :`<div class="cost c-desconocido"><b>Costes no disponibles</b> · ${esc(m.costs.message||m.costs.reason||'sin presupuesto')}</div>`}</li>`;}).join('')||(done?`<li class="none"><div class="notes">Fin del plan, no certificado de fin de obra</div></li>`:'');
   return c;
 }

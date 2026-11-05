@@ -235,6 +235,11 @@ Claude original; el contrato de mallas por elemento, con Kimi.
 defecto real en lo ya entregado (§2, errores 38–39): un cliente puede leer como total con IVA un importe neto. Se
 entrega aparte, con su prueba.
 
+**Aplicada** (commit siguiente a `05a8c4d`): tarjeta «asignado sin IVA», rótulo del vídeo «… (sin IVA)», HTML «Importe
+sin IVA» y «asignado a las fases del plan, sin IVA», aviso general «Importes presupuestados (C1-C4) sin IVA». Nueva
+prueba pura: todo importe mostrado al cliente dice «sin IVA». El IVA y el total siguen en el detalle del presupuesto
+(paso 3 del expediente: neto, IVA y total).
+
 ## 10. Pruebas de tareas reales (aceptación de experiencia, sin inventar porcentajes)
 Con una persona que no conozca el laboratorio, observar y anotar dónde duda:
 1. Encontrar y reproducir la evolución.
