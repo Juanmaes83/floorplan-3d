@@ -76,10 +76,9 @@ function renderCard(date){
   const c=report?P.taskCard(ctx.schedule,report,date):{week:P.weekOf(ctx.schedule,date),dateText:P.dateLabel(date),evidenceText:'Plan · animación ilustrativa',headline:'',active:[],stage:'en-obra'};
   const st=S.stateAt(ctx.schedule,date),active=st.tasks.filter(t=>t.plannedPhase==='in-progress');
   $('cardWeek').textContent=c.week.label;$('cardWeek').classList.toggle('long',c.week.label.length>14);$('cardDate').textContent=c.dateText.toUpperCase();$('cardEvidence').textContent=c.evidenceText;
-  const done=st.tasks.every(t=>t.plannedPhase==='completed'),started=st.tasks.some(t=>t.plannedPhase!=='not-started');
-  const idle=started&&!done&&!active.length;
-  $('cardHeadline').textContent=done?'Plan completado: todas las tareas planificadas terminadas':active.length?active.map(t=>t.title.replace(/^FIXTURE /,'')).join(' · '):idle?'No hay trabajos programados durante este periodo':'Antes del plan';
-  $('cardStage').textContent=done?'FINAL · PLAN COMPLETADO':started?'EN OBRA (SEGÚN PLAN)':'INICIO · ESTADO PREVIO';$('cardStage').dataset.stage=done?'final':started?'en-obra':'inicio';
+  // Same wording as the video frame (FloorPlanConstructionDelivery.moment): what the screen says, the MP4 says.
+  const mo=window.FloorPlanConstructionDelivery.moment(ctx.schedule,date,st),done=mo.done,idle=mo.idle;
+  $('cardHeadline').textContent=mo.headline;$('cardStage').textContent=mo.stageText;$('cardStage').dataset.stage=mo.stage;
   // The selected task (from the Gantt) is always shown, first, even outside its dates.
   const sel=selected?st.tasks.find(t=>t.id===selected):null,shown=[...(sel?[sel]:[]),...active.filter(t=>t.id!==selected)];
   const phaseText=t=>t.plannedPhase==='in-progress'?`${Math.round(t.visualProgress*100)} % del plazo`:t.plannedPhase==='completed'?'terminada según plan':'pendiente';
@@ -88,7 +87,7 @@ function renderCard(date){
       ${costHtml(t,report)}</li>`).join('')||(done?`<li class="none"><div class="notes">Fin del plan, no certificado de fin de obra</div></li>`:'');
   // Second level: simultaneity, what the amounts are, next activity, task and item details, back to the overview.
   const extra=[];
-  if(active.length>1)extra.push(`<p class="note">Hay ${active.length} trabajos previstos a la vez.</p>`);
+  if(mo.concurrentText)extra.push(`<p class="note">${esc(mo.concurrentText)}.</p>`);
   if(idle){const next=ctx.canon.tasks.filter(t=>t.startDate>date).sort((a,b)=>a.startDate.localeCompare(b.startDate))[0];
     if(next)extra.push(`<button type="button" class="btn" data-card="next" data-date="${esc(next.startDate)}">Ir a la siguiente actividad: ${esc(next.title.replace(/^FIXTURE /,''))}</button>`);}
   if(report&&shown.length){const cov=m.coverage.budget;

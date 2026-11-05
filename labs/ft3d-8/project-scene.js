@@ -155,11 +155,13 @@ export function createProjectScene(canvas){
   }
   // Presentation framing (the evolution view): closer than frameEnvelope and, on wide screens, shifted so the house sits
   // right of the headline. frameEnvelope stays the neutral framing used by the fidelity comparison with the editor.
+  // With illustrative site resources (fence 4 m around the envelope, crane outside it) every framing opens the same way.
+  const siteOpen=()=>[...objects.keys()].some(k=>k.startsWith('illustrative/'))?1.35:1;
   function presentationPose(inventory,view='iso'){
     const p=frameEnvelope(inventory,view),t=new THREE.Vector3(...p.target),pos=new THREE.Vector3(...p.position),dir=pos.clone().sub(t);
     const wide=(canvas.clientWidth||1)/(canvas.clientHeight||1)>1.6&&(canvas.clientWidth||0)>760;
     // With illustrative site resources (fence 4 m around the envelope) the frame opens to keep them in view.
-    dir.multiplyScalar((wide?.8:.86)*(animators.length||[...objects.keys()].some(k=>k.startsWith('illustrative/'))?1.35:1));
+    dir.multiplyScalar((wide?.8:.86)*siteOpen());
     const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize(),shift=wide?dir.length()*.14:0;
     t.add(right.multiplyScalar(shift));
     return {position:t.clone().add(dir).toArray(),target:t.toArray(),fov:p.fov};
@@ -171,7 +173,7 @@ export function createProjectScene(canvas){
   const releaseRenderSize=()=>{fixedSize=null;renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));resize();};
   // Deterministic orbit (no damping) around the project's own envelope, for the video.
   const orbitPose=(inventory,angle,{lift=.55,scale=1}={})=>{const p=frameEnvelope(inventory,'iso'),t=new THREE.Vector3(...p.target),v=new THREE.Vector3(...p.position).sub(t);
-    const r=Math.hypot(v.x,v.z)*scale,base=Math.atan2(v.x,v.z)+angle;return {position:[t.x+Math.sin(base)*r,t.y+v.y*scale*lift/.55,t.z+Math.cos(base)*r],target:p.target,fov:p.fov};};
+    const k=scale*siteOpen(),r=Math.hypot(v.x,v.z)*k,base=Math.atan2(v.x,v.z)+angle;return {position:[t.x+Math.sin(base)*r,t.y+v.y*k*lift/.55,t.z+Math.cos(base)*r],target:p.target,fov:p.fov};};
   const renderNow=()=>{renderer.render(scene,camera);};
   controls.addEventListener('start',()=>{auto=false;controls.autoRotate=false;});
   // While a video is encoded frame by frame the recorder renders explicitly (renderNow): the live loop is suspended.

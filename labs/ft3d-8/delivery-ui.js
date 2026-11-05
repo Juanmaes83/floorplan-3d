@@ -7,7 +7,7 @@ const B=window.FloorPlanBrand,D=window.FloorPlanConstructionDelivery,P=window.Fl
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const W=1280,H=720,FPS=30,BITRATE=1_400_000,EMBED_LIMIT=12*1024*1024;
-const C={dark:'#2b3034',action:'#1f5a66',surface:'#eceeee',ink:'#1f2326',muted:'#5b6266',soft:'#e3ecee',warn:'#7a5200',warnSoft:'#fff4dc'};
+const C={dark:'#2b3034',action:'#1f5a66',light:'#8fd0dc',success:'#2f6e4a',surface:'#eceeee',ink:'#1f2326',muted:'#5b6266',soft:'#e3ecee',warn:'#7a5200',warnSoft:'#fff4dc'};
 const memory=()=>{const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)};};
 const state={labStore:memory(),labProfileId:null,copies:{},source:'none',title:'',intro:'',include:new Set(),costMode:'summary',
   video:null,manifest:null,doc:null,published:null,recording:null,lastError:null,
@@ -104,12 +104,10 @@ const images=new Map();
 const img=src=>{if(!src)return null;if(!images.has(src)){const i=new Image();i.src=src;images.set(src,i);}return images.get(src);};
 function fit(x,s,max){if(x.measureText(s).width<=max)return s;while(s.length>1&&x.measureText(s+'…').width>max)s=s.slice(0,-1);return s+'…';}
 function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
+  const nW=P.weeks(schedule).length,weeksText=nW+(nW===1?' semana':' semanas');
   const src=Fid().scene.canvas;x.fillStyle='#000';x.fillRect(0,0,W,H);
   if(src.width&&src.height){const k=Math.max(W/src.width,H/src.height),w=W/k,h=H/k;x.drawImage(src,(src.width-w)/2,(src.height-h)/2,w,h,0,0,W,H);}
   x.textBaseline='alphabetic';const font=(w,s)=>`${w} ${s}px Inter, "Helvetica Neue", Arial, sans-serif`;
-  const brandChip=(y=28)=>{x.fillStyle='rgba(255,255,255,.92)';x.fillRect(28,y,420,56);let left=40;const lg=img(brand.logo);
-    if(lg&&lg.complete&&lg.naturalWidth){const lh=36,lw=Math.min(108,lg.naturalWidth*lh/lg.naturalHeight);x.drawImage(lg,left,y+10,lw,lh);left+=lw+12;}
-    x.fillStyle=C.ink;x.font=font(700,20);x.fillText(fit(x,brand.present?brand.name:'RUBIK SOTA',360-left+40),left,y+25);x.fillStyle=C.muted;x.font=font(500,15);x.fillText(fit(x,manifestInfo.title,360-left+40),left,y+45);};
   if(f.segment==='opening'||f.segment==='closing'){
     if(f.segment==='opening'){x.fillStyle='rgba(43,48,52,.88)';x.fillRect(0,0,W,H);}
     else{const g=x.createLinearGradient(0,0,W*.78,0);g.addColorStop(0,'rgba(43,48,52,.94)');g.addColorStop(.62,'rgba(43,48,52,.78)');g.addColorStop(1,'rgba(43,48,52,0)');x.fillStyle=g;x.fillRect(0,0,W,H);}
@@ -117,29 +115,45 @@ function drawFrame(x,f,{sb,model,schedule,brand,pol,manifestInfo}){
     x.fillStyle='#fff';x.font=font(800,26);x.fillText(fit(x,brand.present?brand.name:'RUBIK SOTA',W-200),96,y);y+=64;
     if(f.segment==='opening'){
       x.font=font(800,54);x.fillText(fit(x,manifestInfo.title,W-200),96,y);y+=48;x.font=font(500,24);x.fillStyle='#d9e5e8';
-      x.fillText(fit(x,'Proyecto '+model.subject.name,W-200),96,y);y+=40;x.fillText(P.dateLabel(sb.startDate)+'  →  '+P.dateLabel(sb.endDate),96,y);y+=56;
-      x.fillStyle='#ffd8a8';x.font=font(700,22);x.fillText('Simulación planificada de la evolución de obra · no muestra obra ejecutada',96,y);
+      x.fillText(fit(x,'Proyecto '+model.subject.name,W-200),96,y);y+=40;x.fillText(P.dateLabel(sb.startDate)+'  →  '+P.dateLabel(sb.endDate)+'  ·  '+weeksText,96,y);y+=56;
+      x.fillStyle=C.light;x.font=font(700,22);x.fillText('Simulación planificada de la evolución de obra · no muestra obra ejecutada',96,y);
     }else{
+      // Closing: the message and who presents it. Technical identifiers live in the manifest, not on screen.
       x.font=font(800,44);x.fillText('Plan completado según la planificación',96,y);y+=50;x.font=font(500,22);x.fillStyle='#d9e5e8';
+      x.fillText(fit(x,'Proyecto '+model.subject.name+'  ·  '+weeksText,W-200),96,y);y+=36;
       if(brand.contact){x.fillText(fit(x,brand.contact,W-200),96,y);y+=36;}
-      x.fillText(fit(x,brand.credit,W-200),96,y);y+=46;x.font=font(500,18);
-      x.fillText(fit(x,`Proyecto ${model.subject.id} · rev ${model.fingerprints.project.slice(0,12)} · plan ${schedule.id} · rev ${(model.fingerprints.schedule||'').slice(0,12)}`,W-200),96,y);y+=40;
-      x.fillStyle='#ffd8a8';x.font=font(700,20);x.fillText('La simulación no certifica obra ejecutada, pagada ni terminada.',96,y);
+      x.fillText(fit(x,brand.credit,W-200),96,y);y+=50;
+      x.fillStyle=C.light;x.font=font(700,20);x.fillText('La simulación no certifica obra ejecutada, pagada ni terminada.',96,y);
     }
     return;
   }
-  // timeline
-  const o=D.overlay(model,schedule,f.date,pol);brandChip();
-  x.fillStyle='rgba(31,90,102,.92)';x.fillRect(W-430,28,402,40);x.fillStyle='#fff';x.font=font(700,15);x.fillText('SIMULACIÓN PLANIFICADA · movimiento ilustrativo',W-416,54);
-  const by=H-176;x.fillStyle='rgba(255,255,255,.94)';x.fillRect(0,by,W,176);x.fillStyle=C.action;x.fillRect(0,by,6,176);
-  x.fillStyle=C.ink;x.font=font(800,30);x.fillText(o.week,28,by+42);x.fillStyle=C.muted;x.font=font(600,18);x.fillText(o.dateText,28,by+70);
-  x.fillStyle=C.ink;x.font=font(700,24);x.fillText(fit(x,o.headline,W-360),300,by+40);
-  x.font=font(500,17);x.fillStyle=o.cost[0]&&/no incluidos/.test(o.cost[0])?C.warn:C.ink;o.cost.slice(0,2).forEach((t,i)=>x.fillText(fit(x,t,W-360),300,by+68+i*24));
-  // mini Gantt of the real plan
-  const gx=28,gw=W-56,gy=by+120,rows=o.bars.length,rh=Math.max(3,Math.min(7,40/Math.max(1,rows))),d0=Date.parse(sb.preStartDate),span=Date.parse(sb.completionDate)-d0+86400000;
-  o.bars.forEach((b,i)=>{const a=(Date.parse(b.start)-d0)/span,e=(Date.parse(b.end)+86400000-d0)/span;x.fillStyle=b.phase==='completed'?C.dark:b.phase==='in-progress'?C.action:'#c9cfd1';x.fillRect(gx+a*gw,gy+i*rh,(e-a)*gw,Math.max(2,rh-1));});
-  const cx=gx+((Date.parse(f.date)+86400000-d0)/span)*gw;x.fillStyle='#e8622c';x.fillRect(cx-1,gy-6,3,rows*rh+10);
-  x.fillStyle=C.muted;x.font=font(500,13);x.fillText('Cronograma del plan · costes: '+(pol.allowed&&pol.mode!=='none'?'importes presupuestados, no gasto ejecutado':'no incluidos'),gx,H-10);
+  // Development frame: the same composition and wording as the screen (owner's reference, Perla palette).
+  const o=D.overlay(model,schedule,f.date,pol),M=48;
+  // Top left: title chip (brand + «La obra, día a día · N semanas").
+  {const lg=img(brand.logo);let left=M+18;const y=28,h=78;x.font=font(800,28);
+    const title='LA OBRA, DÍA A DÍA · '+weeksText.toUpperCase(),tw=Math.min(560,x.measureText(title).width);
+    const hasLogo=lg&&lg.complete&&lg.naturalWidth,lw=hasLogo?Math.min(96,lg.naturalWidth*44/lg.naturalHeight):0;
+    x.fillStyle='rgba(255,255,255,.94)';x.fillRect(M,y,tw+36+(hasLogo?lw+14:0),h);x.fillStyle=C.action;x.fillRect(M,y,5,h);
+    if(hasLogo){x.drawImage(lg,left,y+17,lw,44);left+=lw+14;}
+    x.fillStyle=C.muted;x.font=font(600,14);x.fillText(fit(x,(brand.present?brand.name:'RUBIK SOTA')+' · '+model.subject.name,tw),left,y+26);
+    x.fillStyle=C.ink;x.font=font(800,28);x.fillText(fit(x,title,tw),left,y+60);}
+  // Top right: the moment stamp, as on the screen.
+  {const col=o.stage==='final'?C.success:o.stage==='en-obra'?C.action:C.dark;x.font=font(800,20);const tw=x.measureText(o.stageText).width+40,y=28;
+    x.fillStyle=col;x.fillRect(W-M-tw,y,tw,46);x.fillStyle='#fff';x.fillText(o.stageText,W-M-tw+20,y+30);
+    x.font=font(600,14);const note='Simulación planificada · no es obra ejecutada',nw=x.measureText(note).width+20;
+    x.fillStyle='rgba(43,48,52,.78)';x.fillRect(W-M-nw,y+52,nw,26);x.fillStyle='#fff';x.fillText(note,W-M-nw+10,y+70);}
+  // Bottom band (graphite): week and date | what is being done and its amount | mini schedule of the real plan.
+  const bh=182,by=H-bh-16;x.fillStyle='rgba(43,48,52,.9)';x.fillRect(M,by,W-2*M,bh);x.fillStyle=C.light;x.fillRect(M,by,5,bh);
+  x.fillStyle='#fff';x.font=font(800,30);x.fillText(fit(x,o.week,250),M+24,by+44);x.fillStyle=C.light;x.font=font(700,18);x.fillText(o.dateText.toUpperCase(),M+24,by+72);
+  if(o.concurrentText){x.fillStyle='#fff';x.font=font(600,15);x.fillText(fit(x,o.concurrentText,256),M+24,by+98);}
+  const cx0=M+300,cw=W-2*M-324;x.fillStyle='#fff';x.font=font(700,22);x.fillText(fit(x,o.headline,cw),cx0,by+40);
+  x.font=font(500,16);
+  o.cost.slice(0,3).forEach((t,i)=>{x.fillStyle=/no incluidos|incompleto|desconocido/.test(t)?'#ffd98a':'#d9e5e8';x.fillText(fit(x,t,cw),cx0,by+66+i*21);});
+  const gx=M+24,gw=W-2*M-48,gy=by+122,rows=o.bars.length,rh=Math.min(5,30/Math.max(1,rows)),d0=Date.parse(sb.preStartDate),span=Date.parse(sb.completionDate)-d0+86400000;
+  x.fillStyle='rgba(255,255,255,.08)';x.fillRect(gx,gy-2,gw,rows*rh+4);
+  o.bars.forEach((b,i)=>{const a=(Date.parse(b.start)-d0)/span,e=(Date.parse(b.end)+86400000-d0)/span;x.fillStyle=b.phase==='completed'?'#9aa3a7':b.phase==='in-progress'?C.light:'rgba(255,255,255,.22)';x.fillRect(gx+a*gw,gy+i*rh,Math.max(2,(e-a)*gw),Math.max(1,rh-.5));});
+  const cur=gx+((Date.parse(f.date)+86400000-d0)/span)*gw;x.fillStyle='#fff';x.fillRect(cur-1,gy-8,3,rows*rh+14);
+  x.fillStyle='rgba(255,255,255,.75)';x.font=font(500,13);x.fillText('Cronograma del plan · costes: '+(pol.allowed&&pol.mode!=='none'?'importes presupuestados sin IVA, no gasto ejecutado':'no incluidos'),gx,by+bh-10);
 }
 async function verifyPlayable(url){
   // The preview element plays the same Blob URL that is downloaded; WebM from MediaRecorder may report Infinity first.

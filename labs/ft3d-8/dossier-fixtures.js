@@ -75,9 +75,9 @@
   // K = A + explicit illustrative site resources in its plan (owner decision, Gate D). The fixture budget has no items
   // for them, so they show «sin partidas»: nothing is priced or dated outside the plan.
   const SITE_TASKS=[
-    {id:'implantacion',wbs:'00',title:'FIXTURE Implantacion de obra (vallado y caseta)',startDate:'2027-08-30',endDate:'2027-09-03',dependsOn:[],
+    {id:'implantacion',wbs:'00',title:'FIXTURE Implantación de obra (vallado y caseta)',startDate:'2027-08-30',endDate:'2027-09-03',dependsOn:[],
       elements:[{elementId:'illustrative/site-fence',role:'site'},{elementId:'illustrative/site-hut',role:'site'}],budgetAllocations:[]},
-    {id:'grua',wbs:'08',title:'FIXTURE Grua y medios de elevacion',startDate:'2027-09-20',endDate:'2027-10-22',dependsOn:[],
+    {id:'grua',wbs:'08',title:'FIXTURE Grúa y medios de elevación',startDate:'2027-09-20',endDate:'2027-10-22',dependsOn:[],
       elements:[{elementId:'illustrative/crane',role:'temporary'}],budgetAllocations:[]},
     {id:'andamios',wbs:'09',title:'FIXTURE Andamios',startDate:'2027-10-04',endDate:'2027-11-19',dependsOn:[],
       elements:[{elementId:'illustrative/scaffold',role:'temporary'}],budgetAllocations:[]},

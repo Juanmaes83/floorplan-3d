@@ -80,20 +80,30 @@
     return deepFreeze({totalMs:total,openingMs,timelineMs,closingMs,positions:tl.positions,startDate:tl.startDate,endDate:tl.endDate,
       preStartDate:tl.preStartDate,completionDate:tl.completionDate,at});
   }
+  // ONE wording of «what is happening on day `date`», shared by the on-screen card and the video frame (parity, Gate D).
+  const clean=t=>String(t||'').replace(/^FIXTURE /,'');
+  function moment(schedule,date,st=Schedule.stateAt(schedule,date)){
+    const active=st.tasks.filter(t=>t.plannedPhase==='in-progress');
+    const done=st.tasks.length>0&&st.tasks.every(t=>t.plannedPhase==='completed'),started=st.tasks.some(t=>t.plannedPhase!=='not-started');
+    const idle=started&&!done&&!active.length,stage=done?'final':started?'en-obra':'inicio';
+    return {stage,stageText:done?'FINAL · PLAN COMPLETADO':started?'EN OBRA (SEGÚN PLAN)':'INICIO · ESTADO PREVIO',idle,done,concurrent:active.length,
+      headline:done?'Plan completado: todas las tareas planificadas terminadas':active.length?active.map(t=>clean(t.title)).join(' · '):idle?'No hay trabajos programados durante este periodo':'Antes del comienzo de la obra',
+      concurrentText:active.length>1?'Hay '+active.length+' trabajos previstos a la vez':''};
+  }
   // Texts painted over a video frame at plan date `date` (authoritative day state).
   function overlay(model,schedule,date,policy){
     const st=Schedule.stateAt(schedule,date),week=Presenter.weekOf(schedule,date),active=st.tasks.filter(t=>t.plannedPhase==='in-progress');
-    const done=st.tasks.every(t=>t.plannedPhase==='completed');
+    const mo=moment(schedule,date,st);
     // The plan total and the active phase cost are two different figures and are always labelled as such.
     // Allocations come from the NET amounts of C1-C4: always labelled «sin IVA» (never read as a VAT-inclusive total).
     const total='Total presupuestado asignado al plan (sin IVA): '+(policy?.summary?.knownText||'—')+(policy?.summary&&!policy.summary.complete?' (incompleto)':'');
     let cost;
-    if(!policy||!policy.allowed||policy.mode==='none')cost=[policy&&!policy.allowed?'Costes no incluidos en este video':'Costes no incluidos (eleccion del profesional)'];
+    if(!policy||!policy.allowed||policy.mode==='none')cost=[policy&&!policy.allowed?'Costes no incluidos en este vídeo':'Costes no incluidos (elección del profesional)'];
     else if(policy.mode==='summary')cost=[total+' · no es el coste de la fase en curso'];
     else{const lines=active.map(t=>{const r=policy.rows.find(x=>x.taskId===t.id);return r?'Fase en curso «'+t.title.replace(/^FIXTURE /,'')+'» (sin IVA): '+r.totalText+(r.status!=='revisado'?' ('+r.label.toLowerCase()+')':''):null;}).filter(Boolean);
       cost=[...(lines.length?lines:['Sin fase en curso']),total];}
-    return {date,dateText:Presenter.dateLabel(date),week:week.label,
-      headline:done?'Plan completado segun la planificacion':active.length?active.map(t=>t.title.replace(/^FIXTURE /,'')).join(' · '):'Estado previo a la obra',
+    return {date,dateText:Presenter.dateLabel(date),week:week.label,weeks:week.total,stage:mo.stage,stageText:mo.stageText,concurrentText:mo.concurrentText,idle:mo.idle,
+      headline:mo.headline,
       active:active.map(t=>({id:t.id,wbs:t.wbs,title:t.title.replace(/^FIXTURE /,''),plannedPercent:Math.round(t.visualProgress*100)})),
       bars:st.tasks.map(t=>({id:t.id,start:t.startDate,end:t.endDate,phase:t.plannedPhase})),cost,evidence:st.evidence};
   }
@@ -193,5 +203,5 @@ footer{font-size:13px;color:var(--muted);margin-top:24px}code{font-size:12px}.ta
     kind:'Tipo de archivo no admitido por el servicio.',file:'El documento no tiene el formato esperado.',method:'Método no permitido.'});
   function publishError(status,code){if(status===404)return PUBLISH_ERRORS.unavailable;return PUBLISH_ERRORS[code]||(status===401?PUBLISH_ERRORS.token:status===413?PUBLISH_ERRORS.size:status===503?PUBLISH_ERRORS['not-configured']:PUBLISH_ERRORS['storage-error']);}
   return Object.freeze({MANIFEST_SCHEMA,MANIFEST_VERSION,SHARE_LIMIT_BYTES,ENDPOINTS,COST_MODES,CONTACT_FIELDS,SIMULATION,COSTS_NOTICE,PUBLISH_ERRORS,
-    costPolicy,storyboard,overlay,brandFor,createManifest,clientDocument,videoFilename,documentFilename,publishError,slug});
+    costPolicy,storyboard,moment,overlay,brandFor,createManifest,clientDocument,videoFilename,documentFilename,publishError,slug});
 });

@@ -63,7 +63,7 @@ test('overlay texts come from the plan and the cost policy',async()=>{
   assert.match(o.cost.at(-1),/^Total presupuestado asignado al plan \(sin IVA\): 19\.717,64 €$/,'plan total kept apart from the phase cost');
   const sum=D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'summary',schedule:c.schedule}));
   assert.deepEqual(sum.cost,['Total presupuestado asignado al plan (sin IVA): 19.717,64 € · no es el coste de la fase en curso']);
-  assert.match(D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'none',schedule:c.schedule})).cost[0],/eleccion del profesional/);
+  assert.match(D.overlay(m,c.schedule,'2027-10-14',D.costPolicy(m,{mode:'none',schedule:c.schedule})).cost[0],/elección del profesional/);
   assert.match(D.overlay(m,c.schedule,'2027-11-27',null).headline,/Plan completado/);
 });
 test('brand: FloorPlanBrand snapshot, re-validated, contact filtered to the fields explicitly included',()=>{
