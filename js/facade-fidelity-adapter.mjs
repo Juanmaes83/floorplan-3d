@@ -39,12 +39,13 @@ export class FacadeFidelityAdapter{
   const began=performance.now();
   try{
    const response=await fetch(MANIFEST,{signal:record.controller.signal});if(!response.ok)throw Error('Manifiesto F03 no disponible');
-   const manifest=await response.json(),variant=manifest.materials?.[record.decision.materialId]?.variants?.[record.decision.profile];if(manifest.schema!=='F03/pbr-derivatives@1'||!variant)throw Error('Material/perfil F03 ausente');
+   const manifest=await response.json(),materialRecord=manifest.materials?.[record.decision.materialId],variant=materialRecord?.variants?.[record.decision.profile];if(manifest.schema!=='F03/pbr-derivatives@1'||!variant)throw Error('Material/perfil F03 ausente');
+   if(materialRecord.integration?.compatiblePreset!==registry.F03.recipes['facade-material'].compatibility[record.decision.materialId]||materialRecord.integration.tintLinear?.length!==3||materialRecord.integration.tintLinear.some(v=>!Number.isFinite(v)||v<=0||v>1))throw Error('Calibración cromática F03 ausente o incompatible');
    const entries=Object.entries(variant.maps),loaded=[];
    for(const [role,file]of entries){const item=await this.verifiedMap(file,record,role);if(!item)return;loaded.push(item);record.resources.push(item);}
    if(record.controller.signal.aborted)return;
    const byRole=Object.fromEntries(entries.map(([role],i)=>[role,loaded[i]]));
-   const material=new this.T.MeshStandardMaterial({color:0xffffff,map:byRole.albedo.texture,normalMap:byRole.normal.texture,roughnessMap:byRole.roughness.texture,roughness:1,metalness:0});material.normalScale.setScalar(record.decision.normalStrength);record.material=material;record.state='ready';record.bytes=loaded.reduce((n,item)=>n+item.bytes,0);record.gpuBytes=loaded.reduce((n,item)=>n+item.gpuBytes,0);this.loadMs=performance.now()-began;
+   const material=new this.T.MeshStandardMaterial({color:0xffffff,map:byRole.albedo.texture,normalMap:byRole.normal.texture,roughnessMap:byRole.roughness.texture,roughness:1,metalness:0});material.color.setRGB(...materialRecord.integration.tintLinear);material.normalScale.setScalar(record.decision.normalStrength);record.material=material;record.state='ready';record.bytes=loaded.reduce((n,item)=>n+item.bytes,0);record.gpuBytes=loaded.reduce((n,item)=>n+item.gpuBytes,0);this.loadMs=performance.now()-began;
   }catch(error){if(record.controller.signal.aborted)return;record.state='fallback';record.error=error.message;this.status='fallback';this.error=error.message;}
   finally{if(!record.controller.signal.aborted)globalThis.dispatchEvent?.(new Event('facade-fidelity-status'));}
  }

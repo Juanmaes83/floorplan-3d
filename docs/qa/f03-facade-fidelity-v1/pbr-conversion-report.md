@@ -29,7 +29,7 @@ Las doce fuentes son 4096×4096. Los hashes SHA-256 completos están en los mani
 | rough_plaster_03 | 399194 / 1899448 / 604800 B | 100942 / 473886 / 151806 B | 2903442 B | 726634 B |
 
 - Albedo: sRGB, WebP calidad 88/método 6. Si hay ICC se transforma a sRGB; sin ICC se conservan los valores y se declara sRGB. Error absoluto medio HERO frente a la imagen redimensionada antes de comprimir: 1,81 / 2,45 / 2,53 niveles de 8 bits, en el orden de la tabla.
-- Normal: datos lineales, OpenGL Y+, reducción por media de área y renormalización; WebP lossless. Error medio de longitud unitaria tras cuantizar: 0,00181 / 0,00195 / 0,00192. El pipeline no invierte Y. Falta comprobar su lectura en la fachada bajo luz rasante.
+- Normal: datos lineales, OpenGL Y+, reducción por media de área y renormalización; WebP lossless. Error medio de longitud unitaria tras cuantizar: 0,00181 / 0,00195 / 0,00192. El pipeline no invierte Y. La primera integración mostró microsombras coherentes en el detalle; no se detectó inversión de relieve en las vistas inspeccionadas.
 - Roughness: datos lineales sin gamma, replicados en R=G=B para que Three.js lea correctamente G; WebP lossless. La igualdad de canales se verifica reabriendo cada archivo.
 - Displacement: fuente inventariada, **OFF** y sin derivado runtime. No hay subdivisión apta ni autorización para alterar cotas.
 - GPU estimada con mipmaps: `ancho × alto × 4 × 4/3` por textura; es estimación, no medición de driver.

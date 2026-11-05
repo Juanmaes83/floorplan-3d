@@ -34,6 +34,11 @@ MATERIALS = {
     },
 }
 PROFILES = {"hero": 1024, "balanced": 512}
+COMPATIBILITY = {
+    "white_stucco": {"preset": "surface-white-plaster-02", "albedo": "white-plaster-02.webp", "mapTint": "#f2f2f2"},
+    "white_rough_plaster": {"preset": "surface-white-plaster-02", "albedo": "white-plaster-02.webp", "mapTint": "#f2f2f2"},
+    "rough_plaster_03": {"preset": "surface-plastered-wall-03", "albedo": "plastered-wall-03.webp", "mapTint": "#ffffff"},
+}
 
 
 def sha256(path):
@@ -180,6 +185,28 @@ def derivative_record(path, root, role, size, source, color_space):
     return record
 
 
+def integration_record(material, root, output):
+    compatibility = COMPATIBILITY[material]
+    original_path = root / "assets/materials" / compatibility["albedo"]
+    derived_path = output / material / "hero/albedo.webp"
+    with Image.open(original_path) as image:
+        original = np.asarray(image.convert("RGB"), dtype=np.float64) / 255.0
+    with Image.open(derived_path) as image:
+        derived = np.asarray(image.convert("RGB"), dtype=np.float64) / 255.0
+    to_linear = lambda values: np.where(values <= 0.04045, values / 12.92, ((values + 0.055) / 1.055) ** 2.4)
+    to_srgb = lambda values: np.where(values <= 0.0031308, 12.92 * values, 1.055 * values ** (1 / 2.4) - 0.055)
+    tint = np.array([int(compatibility["mapTint"][i:i + 2], 16) / 255.0 for i in (1, 3, 5)])
+    ratio = to_linear(original).mean(axis=(0, 1)) * to_linear(tint) / to_linear(derived).mean(axis=(0, 1))
+    return {
+        "compatiblePreset": compatibility["preset"],
+        "originalAlbedo": file_identity(original_path, root),
+        "originalMapTint": compatibility["mapTint"],
+        "tintLinear": ratio.tolist(),
+        "tintSrgb": to_srgb(ratio).tolist(),
+        "method": "Media RGB lineal del albedo original multiplicada por mapTint, dividida por la media lineal del nuevo albedo HERO; conserva identidad cromática sin alterar el proyecto.",
+    }
+
+
 def convert_material(material, paths, root, output, repeat_mm):
     source_records = {}
     albedo, albedo_icc, source_records["albedo"] = ldr_source(paths["albedo"], root)
@@ -247,6 +274,7 @@ def convert_material(material, paths, root, output, repeat_mm):
         "sourceArchive": paths["archive"],
         "provenance": "Poly Haven; CC0 comunicada por el usuario",
         "sources": source_records,
+        "integration": integration_record(material, root, output),
         "variants": variants,
     }
 

@@ -137,6 +137,26 @@
           "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
         }
       },
+      "integration": {
+        "compatiblePreset": "surface-white-plaster-02",
+        "originalAlbedo": {
+          "path": "assets/materials/white-plaster-02.webp",
+          "bytes": 7864,
+          "sha256": "722844e62e9d8fd72a14fec01033537848525d1075b68daaa38602f281a18baf"
+        },
+        "originalMapTint": "#f2f2f2",
+        "tintLinear": [
+          0.352736933178991,
+          0.3335856391836871,
+          0.2764456515707557
+        ],
+        "tintSrgb": [
+          0.6284241937250403,
+          0.6127114964119448,
+          0.562433033164252
+        ],
+        "method": "Media RGB lineal del albedo original multiplicada por mapTint, dividida por la media lineal del nuevo albedo HERO; conserva identidad cromática sin alterar el proyecto."
+      },
       "variants": {
         "hero": {
           "repeatMm": {
@@ -352,6 +372,26 @@
           "runtimeEnabled": false,
           "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
         }
+      },
+      "integration": {
+        "compatiblePreset": "surface-white-plaster-02",
+        "originalAlbedo": {
+          "path": "assets/materials/white-plaster-02.webp",
+          "bytes": 7864,
+          "sha256": "722844e62e9d8fd72a14fec01033537848525d1075b68daaa38602f281a18baf"
+        },
+        "originalMapTint": "#f2f2f2",
+        "tintLinear": [
+          0.48225777723031277,
+          0.44222347894495473,
+          0.38270837234383664
+        ],
+        "tintSrgb": [
+          0.7235481487193668,
+          0.6959364899089918,
+          0.6520456331039298
+        ],
+        "method": "Media RGB lineal del albedo original multiplicada por mapTint, dividida por la media lineal del nuevo albedo HERO; conserva identidad cromática sin alterar el proyecto."
       },
       "variants": {
         "hero": {
@@ -585,6 +625,26 @@
           "runtimeEnabled": false,
           "reason": "Sin subdivisión apta ni autorización para alterar cotas constructivas; se conserva sólo la fuente."
         }
+      },
+      "integration": {
+        "compatiblePreset": "surface-plastered-wall-03",
+        "originalAlbedo": {
+          "path": "assets/materials/plastered-wall-03.webp",
+          "bytes": 4870,
+          "sha256": "2db58e46de7ca52ef2db1fc5f94f8aa42bfb909dbf3ee740ec1be120c45526d7"
+        },
+        "originalMapTint": "#ffffff",
+        "tintLinear": [
+          0.8395050047348864,
+          0.8973637969596017,
+          0.9596225495729492
+        ],
+        "tintSrgb": [
+          0.925833966032008,
+          0.953453830262731,
+          0.9820371430110743
+        ],
+        "method": "Media RGB lineal del albedo original multiplicada por mapTint, dividida por la media lineal del nuevo albedo HERO; conserva identidad cromática sin alterar el proyecto."
       },
       "variants": {
         "hero": {
