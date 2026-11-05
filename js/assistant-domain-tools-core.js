@@ -8,8 +8,9 @@
   const api=factory(deps);
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.RubikAssistantDomainTools=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function({Q,B,L}){
+})(typeof globalThis!=='undefined'?globalThis:this,function(deps){
   'use strict';
+  const {Q,B,L}=deps;
   const TOOLS=Object.freeze(['list_capabilities','get_project_summary','list_rooms','get_room','get_quantities','get_budget_summary','get_layout_review']);
   const fail=(code,message)=>({ok:false,error:{code,message}});
   const okay=(data,provenance,limitations=[])=>({ok:true,data,provenance,limitations});
