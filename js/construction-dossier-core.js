@@ -366,7 +366,7 @@
         changed:opened?.changed??[],fingerprint:await sha(JSON.stringify({subject:{type:kind,id:project.id},fingerprints}))},
       subject:{...subject,levels:levelProjects},fingerprints,
       authorities:{project:{status:'loaded',schemaVersion:project.schemaVersion,updatedAt:project.updatedAt,fingerprint:fingerprints.project,geometryRevision:fingerprints.geometry},
-        budget:{scope,selected:views,rejected:budgets.length-valid.length,message:scope==='levels-not-summed'?human('building-budgets-not-summed'):scope==='level'?human('level-budget-not-building'):scope==='none'?human('budget-unavailable'):null},
+        budget:{scope,selected:views,rejected:budgets.length-valid.length,adapterBudgetId:adapterBudget?.id??null,message:scope==='levels-not-summed'?human('building-budgets-not-summed'):scope==='level'?human('level-budget-not-building'):scope==='none'?human('budget-unavailable'):null},
         schedule:{status:!schedule?'absent':model.planning.status,id:schedule?.id??null,fingerprint:fingerprints.schedule},
         binding:{status:binding?(model.issues.some(i=>i.code==='binding-invalid')?'invalid':'loaded'):'absent',obsolescence:clone(model.obsolescence)},
         territory:terr,brand:brandView},

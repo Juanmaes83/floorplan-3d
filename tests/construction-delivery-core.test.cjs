@@ -138,3 +138,24 @@ test('MP4 muxer writes an indexed file whose declared duration equals its sample
   assert.throws(()=>M.mux({width:1280,height:720,fps:7,samples,avcC}),/divide the timescale/);
   assert.equal(M.inspect(Uint8Array.from([0,0,0,8,...Buffer.from('ftyp')])).valid,false);
 });
+test('S1 manifest 0.2.0: carries the dossier identity and only the territory text its export policy allows',async()=>{
+  const Dos=require('../js/construction-dossier-core.js'),X=require('../labs/ft3d-8/dossier-fixtures.js');
+  const c=await X.dossier('A'),parcelDocument=await Dos.readParcelDocument(c.gml.text,{provider:X.stubProvider,associatedWith:c.gml.associatedWith});
+  const e=await Dos.evaluate({...c,parcelDocument}),m=e.model,{snapshot}=fixtureBrand();
+  const manifest=await D.createManifest({model:m,schedule:c.schedule,budget:c.budgets[0],brand:D.brandFor(snapshot),costPolicy:D.costPolicy(m,{mode:'summary',schedule:c.schedule}),
+    title:'FIXTURE',intro:'',binding:c.binding,dossier:e,generatedAt:'2026-11-05T10:00:00Z'});
+  assert.equal(manifest.schemaVersion,'0.2.0');
+  assert.equal(manifest.dossier.id,e.dossier.id);assert.deepEqual(manifest.dossier.budgetIds,['bud_prj_fx-house-a']);
+  assert.deepEqual({reference:manifest.territory.reference,geometryIncluded:manifest.territory.geometryIncluded},{reference:'FX00A00001AA01',geometryIncluded:false});
+  const html=D.clientDocument(manifest);
+  assert.ok(html.includes(e.dossier.id)&&html.includes('FX00A00001AA01')&&html.includes('Dirección General del Catastro'));
+  // Restricted geometry never reaches the client file: no source coordinates of the parcel ring.
+  for(const v of ['500030','4500020','500015','4500010'])assert.ok(!html.includes(v),'parcel coordinate '+v+' leaked');
+  // A dossier with incompatibilities cannot be delivered; nor one of another subject.
+  const bad=await Dos.evaluate({...c,budgets:[(await X.dossier('C')).budgets[0]]});
+  await assert.rejects(D.createManifest({model:bad.model,schedule:c.schedule,brand:D.brandFor(null),costPolicy:null,title:'x',dossier:bad}),/incompatibilities/);
+  const other=await Dos.evaluate(await X.dossier('C'));
+  await assert.rejects(D.createManifest({model:m,schedule:c.schedule,brand:D.brandFor(null),costPolicy:null,title:'x',dossier:other}),/do not match/);
+  // 0.1.0 manifests (no dossier) remain readable by the client document.
+  const legacy={...manifest,schemaVersion:'0.1.0',dossier:undefined,territory:undefined};assert.match(D.clientDocument(legacy),/<!doctype html>/i);
+});

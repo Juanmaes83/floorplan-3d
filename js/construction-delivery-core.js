@@ -19,7 +19,7 @@
   'use strict';
   const {Schedule,Visual,Presenter,Project,Brand}=deps;
   for(const [n,v] of Object.entries(deps))if(!v)throw new TypeError('FloorPlanConstructionDelivery requires '+n);
-  const MANIFEST_SCHEMA='rubik-sota.construction-delivery',MANIFEST_VERSION='0.1.0';
+  const MANIFEST_SCHEMA='rubik-sota.construction-delivery',MANIFEST_VERSION='0.2.0';
   // Same limit as api/share.js (Vercel function body ~4.5 MB).
   const SHARE_LIMIT_BYTES=4*1024*1024;
   const ENDPOINTS=Object.freeze({share:'/api/share',view:'/api/view'}); // absolute: the lab lives under /labs/ft3d-8/
@@ -109,9 +109,14 @@
   }
 
   /* ---------- manifest (D7) ---------- */
-  async function createManifest({model,schedule,budget=null,brand,costPolicy:policy,title,intro,generatedAt=new Date().toISOString(),video=null,binding=null}){
+  // 0.2.0 (S1): optional `dossier` = the FloorPlanConstructionDossier evaluation the delivery comes from. The manifest then
+  // records the dossier identity and, for the territory, ONLY what its export policy allows (reference text + attribution;
+  // never restricted geometry). A dossier with incompatibilities cannot be delivered. 0.1.0 manifests stay readable.
+  async function createManifest({model,schedule,budget=null,brand,costPolicy:policy,title,intro,generatedAt=new Date().toISOString(),video=null,binding=null,dossier=null}){
     if(!model||!model.subject)err('presentation model required');
     if(model.planning.status!=='available'||!schedule)err('a valid plan of this project is required to deliver its evolution');
+    if(dossier&&!dossier.usable?.delivery)err('the dossier has incompatibilities and cannot be delivered: '+(dossier.usable?.reasons||[]).join(', '));
+    if(dossier&&(dossier.subject.type!==model.subject.type||dossier.subject.id!==model.subject.id))err('dossier and project do not match');
     const s=Schedule.validate(schedule);
     if(s.projectRef.id!==model.subject.id)err('plan and project do not match');
     const b=brand||brandFor(null),fp=Project.fingerprint;
@@ -127,6 +132,11 @@
       brand:{present:b.present,name:b.name,tagline:b.tagline||'',logo:b.logo||null,contact:b.contact,fields:[...b.fields],credit:b.credit,takenAt:b.takenAt||null},
       warnings:[SIMULATION,model.delivery.scopeNotice,'Aprobacion: '+model.delivery.assurances.approval,
         ...model.issues.filter(i=>i.severity!=='info').map(i=>i.code+': '+i.message)],
+      dossier:dossier?{id:dossier.dossier.id,fingerprint:dossier.dossier.fingerprint,integrity:dossier.dossier.integrity,route:dossier.dossier.route,
+        budgetScope:dossier.authorities.budget.scope,budgetIds:dossier.authorities.budget.selected.map(x=>x.budgetId)}:null,
+      territory:dossier?.authorities.territory.parcel&&dossier.exportPolicy.html.parcelReferenceText?{reference:dossier.authorities.territory.parcel.reference,
+        attribution:dossier.authorities.territory.parcel.attribution,geometryIncluded:!!dossier.exportPolicy.html.parcelGeometry,
+        note:dossier.exportPolicy.html.parcelGeometry?null:'Geometría de la parcela no incluida: su licencia no permite redistribuirla'}:null,
       video:video?{filename:video.filename,type:video.type,bytes:video.bytes,width:video.width,height:video.height,durationMs:video.durationMs,sha256:video.sha256}:null};
     body.brand.fingerprint=b.present?await fp({name:b.name,logo:b.logo,contact:b.contact,takenAt:b.takenAt}):null;
     const fingerprint=await fp(body);
@@ -169,7 +179,7 @@ footer{font-size:13px;color:var(--muted);margin-top:24px}code{font-size:12px}.ta
 <section class="card"><h2>Fases del plan</h2><table><thead><tr><th>WBS</th><th>Fase</th><th>Inicio</th><th>Fin</th></tr></thead><tbody>${phases}</tbody></table></section>
 <section class="card"><h2>Presupuesto</h2>${costs}</section>
 <section class="notice" role="note"><strong>Importante</strong><ul>${warn}</ul></section>
-<section class="card"><h2>Estado de la información</h2><p>${esc(m.delivery.label)}</p><p class="muted">${esc(m.delivery.scopeNotice)}</p></section>
+<section class="card"><h2>Estado de la información</h2><p>${esc(m.delivery.label)}</p><p class="muted">${esc(m.delivery.scopeNotice)}</p>${m.dossier?`<p class="muted">Expediente <code>${esc(m.dossier.id)}</code> · ${m.dossier.integrity==='verified'?'paquete verificado':'documentos cargados localmente'}</p>`:''}${m.territory?`<p class="muted">Parcela catastral ${esc(m.territory.reference)}${m.territory.attribution?` · Fuente: ${esc(m.territory.attribution)}`:''}${m.territory.note?` · ${esc(m.territory.note)}`:''}</p>`:''}</section>
 <footer>${esc(b.credit)}${b.present&&b.contact?` · ${esc(b.contact)}`:''}<br>Generado el ${esc(m.generatedAt)} · entrega <code>${esc(m.id)}</code> · huella <code>${esc(m.fingerprint.slice(0,16))}</code>. Documento de solo lectura: no contiene el proyecto editable. Si el proyecto cambia, el profesional genera una entrega nueva.</footer>
 </main><script type="application/json" id="ft3d8-manifest">${json}</script></body></html>`;
   }
