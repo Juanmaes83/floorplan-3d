@@ -189,3 +189,20 @@ No estimar precios ni duraciones sin datos de uso y alcance aprobados. El regist
 **Próxima acción autorizable sólo después:** revisión humana de clips y evidencias; documento de integración con gates exactos para PR candidatas, sin tocar producción hasta decisión separada.
 
 **Principio rector:** Rubik ya resuelve mucho del flujo profesional. La prioridad no es sumar ideas sin fin, sino **unificar, validar, comercializar de forma segura y entregar una vivienda real sin perder autoridad geométrica, economía ni confianza**.
+
+
+---
+
+## Adenda 05/11/2026 — FT3D-8 obligatorio para E2 (decisión posterior del propietario)
+
+**Autoridad temporal:** esta adenda refleja una decisión posterior y expresa del propietario, y prevalece **exclusivamente en la clasificación y gates FT3D-8**, sin borrar ni reescribir los hechos históricos E2/E3 del corte original. No convierte automáticamente otras funciones premium E3 en obligatorias para E2.
+
+- **Decisión vigente:** FT3D-8, incluyendo la integración comercial S4 necesaria para una evolución y entrega auténticas, es **requisito E2**. El epígrafe histórico «FT3D-8» bajo E3 en §E y §G queda **superado en este punto**, no eliminadas las demás capacidades E3.
+- **S1 / Gate D:** los motores de expediente y experiencia 4D existen en rama aislada. GD-UX-01 se corrigió en `b12b9252fe1df5adb06cea5b17cde48642a893b2`; **el propietario aprobó visualmente esa Preview el 05/11/2026**, pero el resultado final de la CI `42118973111` requiere comprobarse antes de cerrar el gate técnico.
+- **Pendiente para E2:** S2 BCCA gestionada (condicionada a permisos acreditados), S3 Catastro directo (con GML local como alternativa y servicio oficial verificado), S4 biblioteca + presupuesto + planificación + visor + marca + Entregar + experiencia cliente. El alcance obligatorio exacto de activación BCCA gestionada y de publicación remota debe respetar los gates y decisiones del propietario; no hacer una excepción implícita a la política de acceso.
+- **Requisito de integración:** un proyecto **guardado** de RUBIK debe poder vincular su presupuesto, plan, parcela cuando procede y evolución, generar MP4/HTML con snapshot histórico y ofrecer acceso cliente solo cuando se haya autorizado. El laboratorio con archivos manuales no equivale a cierre E2.
+- **Fuente documental de referencia (borrador en revisión):** [FT3D-8 Documento Maestro E2 v1.1](./ft3d-8-e2-documento-maestro-borrador-v1.md). Conserva 16 capítulos, 41 requisitos, 24 escenarios QA y las dos misiones M1 (S2+S3), M2 (S4). Su publicación en rama documental no autoriza implementación compartida, merge, Production, publicación real ni cambios en ramas de otros agentes.
+- **Responsables:** Claude Code 2 (FT3D-8), Claude original (PR #166 Entregar), Kimi (contrato de mallas) y propietario (decisiones, gates y aprobación final), sujetos al mandato específico y la coordinación de archivos.
+- **Historia preservada:** los demás gates de E2 y la distinción E3 del corte original no quedan automáticamente cerrados ni modificados por esta adenda.
+
+**Estado documental de esta adenda:** actualización de prioridades; pendiente de aprobación del contenido definitivo del Documento Maestro por el propietario.
