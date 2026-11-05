@@ -1,9 +1,9 @@
 # RUBIK SOTA — FT3D-8 · Documento Maestro de Integración E2
 
-**Versión:** 1.0 — BORRADOR PARA REVISIÓN DEL PROPIETARIO  
+**Versión:** 1.1 — BORRADOR REVISADO Y AUDITADO (contenido pendiente de aprobación definitiva)  
 **Fecha de corte documental:** 5 de noviembre de 2026  
-**Estado:** PROPUESTO; estructura de 16 capítulos aprobada, **contenido pendiente de aprobación**  
-**Destino propuesto tras aprobación:** `docs/product/ft3d-8-e2-documento-maestro.md`, en rama documental aislada  
+**Estado:** GUARDADO COMO BORRADOR en rama documental; estructura aprobada; **contenido final pendiente de aprobación**  
+**Archivo actual:** `docs/product/ft3d-8-e2-documento-maestro-borrador-v1.md` en rama `docs/rubik-evolution-preparation-2026-11-04`. **Nombre previsto cuando se apruebe el contenido:** `docs/product/ft3d-8-e2-documento-maestro.md`; no renombrar anticipadamente.  
 **Ámbito:** S2 BCCA gestionada, S3 Catastro directo, S4 integración comercial y aceptación integral FT3D-8 para E2  
 **Regla de autorización:** aprobar este documento **no** autoriza merges, producción, publicación de clientes, gasto externo ni cambios en ramas ajenas.
 
@@ -62,7 +62,7 @@ BIM completo, levantamiento topográfico certificado, movimientos de tierras o m
 | DEC-09 | Lectura directa de biblioteca y presupuestos por planta | **OBJETIVO S4, IMPLEMENTACIÓN NO AUTORIZADA AÚN** | Coordinar `index.html`, `budget-ui`, biblioteca |
 | DEC-10 | No merge, Production, pagos ni publicación real sin autorización | **DECIDIDO** | Gates externos a cada misión |
 | DEC-11 | Asistente IA congelado | **DECIDIDO** | Fuera de FT3D-8 |
-| DEC-12 | Revisión humana Gate D | **PENDIENTE** | Corregir GD-UX-01 y verificar encuadre/video, luego aceptar |
+| DEC-12 | Revisión humana Gate D, Preview `b12b925` | **VISUAL_APROBADO por el propietario el 05/11/2026** | GD-UX-01 aceptada visualmente; verificar CI final por separado. Grúa/MP4 figura como limitación independiente (OPEN-02). |
 
 **Precedencia documental:** (a) órdenes expresas vigentes del propietario; (b) contratos/esquemas efectivamente implementados y validados en el SHA elegido; (c) este documento para alcance y aceptación; (d) propuestas y roadmaps históricos para contexto. Si (a) requiere cambios incompatibles con (b), crear una propuesta de migración, no reinterpretar el código silenciosamente.
 
@@ -74,10 +74,10 @@ BIM completo, levantamiento topográfico certificado, movimientos de tierras o m
 |---|---|
 | `master` | `0f9c6ead9732901681498efec326d1ca92e42ffe` |
 | Rama Gate D | `feat/ft3d-8-ux4d-gate-d-2026-11-05` |
-| HEAD Gate D | `0fe6453b275b535e2a7dc37f854754c4285fedb5` |
-| CI HEAD Gate D | ejecución `42109440298`, verde (verificar de nuevo antes de usar) |
+| HEAD Gate D | `b12b9252fe1df5adb06cea5b17cde48642a893b2` (GD-UX-01) |
+| CI HEAD Gate D | ejecución `42118973111` de `b12b925`: pruebas puras verdes; suite de navegador sin conclusión final en comprobación del 05/11/2026. **Verificar antes de marcar CI verde**. La `42109440298` verde era del SHA anterior `0fe6453`. |
 | PR Entregas | [#166](https://github.com/Juanmaes83/floorplan-3d/pull/166), `draft`, abierta, HEAD `cef06ff` |
-| Roadmaps originales | rama `docs/rubik-evolution-preparation-2026-11-04`, HEAD observado `747569e` |
+| Roadmaps originales | rama `docs/rubik-evolution-preparation-2026-11-04`; el HEAD antiguo `747569e` ya no está vigente; nueva adenda E2/E3 mantiene el historial |
 
 Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía futura. Tras nuevo trabajo, la autoridad será el SHA de la nueva rama y su evidencia.
 
@@ -96,7 +96,7 @@ Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía fu
 | Plan y dependencias | `js/construction-schedule-core.js`, `js/construction-gantt-adapter.js` | Motor y Gantt; faltan edición/persistencia profesional en Presupuestar |
 | Dossier y correspondencia | `js/construction-dossier-core.js` | Paquete `construction-dossier` 0.1.0; evaluación de documentos y huellas |
 | Elementos/tiempo | `js/construction-project-adapter.js`, `js/construction-visual-state.js` | Reglas visuales implementadas; evitar mallas paralelas permanentes |
-| UX/4D de Gate D | `js/construction-lab-presenter.js`, `labs/ft3d-8/ux-shell.js`, `labs/ft3d-8/ux.css` | Implementado en rama; altura de escritorio GD-UX-01 pendiente de aceptación |
+| UX/4D de Gate D | `js/construction-lab-presenter.js`, `labs/ft3d-8/ux-shell.js`, `labs/ft3d-8/ux.css` | Implementado en `b12b925`; GD-UX-01 aprobada visualmente; CI final por verificar y limitaciones MP4 documentadas por separado |
 | Vídeo y cliente local | `js/construction-delivery-core.js`, `js/construction-mp4-muxer.js`, `labs/ft3d-8/delivery-ui.js` | MP4/HTML/manifiesto; publicación real no comprobada |
 | Marca | `js/brand-core.js`, `js/brand-ui.js` | Reutilizar snapshot activo; no recrear gestor |
 | Enlaces y vista compartida | `api/share.js`, `api/view.js`, PR #166 | Validaciones en mock; necesita política de acceso y prueba remota autorizada |
@@ -105,7 +105,30 @@ Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía fu
 
 ### 3.3 S1 y Gate D: no rehacer
 
-S1 aporta identidades, paquetes, correspondencia `match/mismatch/obsolete/absent/unverifiable`, invalidaciones, tres coberturas y pruebas negativas. Gate D aporta UX, tarjeta dinámica, Gantt/escena y vídeo contextual. **Mantener** los tests de fidelidad, expediente, 4D, entrega y vídeo. **Pendiente de UX:** GD-UX-01 (los componentes esenciales deben ser visibles simultáneamente en escritorio sin scroll de página habitual), pruebas en viewports bajos y confirmación visual del propietario. No equiparar “Gate D documentado” a “Gate D aceptado”.
+S1 aporta identidades, paquetes, correspondencia `match/mismatch/obsolete/absent/unverifiable`, invalidaciones, tres coberturas y pruebas negativas. Gate D aporta UX, tarjeta dinámica, Gantt/escena y vídeo contextual. **Mantener** los tests de fidelidad, expediente, 4D, entrega y vídeo. **GD-UX-01:** corregida en `b12b925` con prueba local de encaje y evidencias en `docs/product/ft3d-8-gd-ux-01/`. **El propietario aprobó visualmente la nueva Preview el 05/11/2026.** Falta verificar la CI completa `42118973111`; la aprobación visual no equivale por sí sola al cierre técnico. La grúa en el MP4 y la cubierta derivada siguen siendo limitaciones independientes. Ninguna aprobación de Gate D implica integración S4.
+
+
+### 3.4 Matriz de autoridad, versión, SHA y prueba (auditoría 05/11/2026)
+
+El plan original exige estas cinco referencias por componente. Las ramas y SHA son **puntos de inspección**, no SHA individuales por archivo. Las pruebas indicadas existen en el árbol inspeccionado, pero **no acreditan por sí mismas la integración futura**. Revalidar versión y API real al comenzar cada misión.
+
+| Componente | Archivo/autoridad | Referencia de inspección | Contrato o versión | Pruebas existentes para inspección | Dependencia |
+|---|---|---|---|---|---|
+| Geometría y edificio | FloorPlanCore.geometry; FloorPlanBuilding; visor | master@0f9c6ea; verificar HEAD | Proyecto/edificio: revisar esquemas | tests/project.test.cjs; tests/building-project-1-6.test.cjs | Kimi: mallas sin contrato cerrado |
+| Biblioteca/presupuesto UI | js/project-library.js; js/budget-ui.js | master@0f9c6ea; verificar HEAD | Almacenamiento actual: inspección obligatoria | tests/budget-ui.browser.test.cjs; tests/project-first.browser.test.cjs | FT3D-8 aún no conectado |
+| C1–C4 | js/budget-core.js; js/budget-presentation.js | master@0f9c6ea; verificar HEAD | Presupuestos 1.0/1.1 según S1 | tests/budget-core.test.cjs; tests/budget-presentation.test.cjs | DEC-06/07 pendientes |
+| BC3 y bridge | Importador BC3; js/budget-cost-bridge.js | master@0f9c6ea; verificar HEAD | BC3 aportado; no duplicar parser | tests/bc3-budget.test.cjs; tests/budget-cost-bridge.test.cjs | Usar contrato existente |
+| BCCA | js/cost-provider-bcca-es.js; js/cost-provider.js | master@0f9c6ea; verificar HEAD | user-supplied disponible; rubik-managed bloqueado | tests/cost-provider-bcca-es.test.cjs; tests/cost-provider-bcca-es-legal-date.test.cjs | S2 y permiso escrito |
+| Catastro/GML | js/catastro-parcel-provider.js; js/geo-provider.js; js/geo-site-adapter.js | master@0f9c6ea; verificar HEAD | GML local; servicio directo pendiente | tests/geo-provider.test.cjs; tests/geo-site-adapter.test.cjs; tests/parcel-core.test.cjs | S3 oficial |
+| Territorio/exportación | js/territory-integration-core.js; js/territory-export-policy.js | master@0f9c6ea; verificar HEAD | site, CRS, norte y permiso por canal | tests/territory-integration.test.cjs; tests/territory-integration.browser.test.cjs | S3 fallback/licencia |
+| Plan y Gantt | js/construction-schedule-core.js; js/construction-gantt-adapter.js | GateD@b12b925; no merge | Plan 0.1/0.2 según S1 | tests/construction-schedule-core.test.cjs; tests/construction-schedule-rules.test.cjs | S4 editor/persistencia |
+| Dossier | js/construction-dossier-core.js | GateD@b12b925; no merge | construction-dossier 0.1 y correspondencias | tests/construction-dossier-core.test.cjs; tests/ft3d-8-dossier.browser.test.cjs | S4 biblioteca |
+| UX/4D | js/construction-visual-state.js; labs/ft3d-8/ux-shell.js | GateD@b12b925; no merge | GD-UX-01 visual aprobada; CI por verificar | tests/ft3d-8-ux4d.browser.test.cjs; tests/ft3d-8-fit.browser.test.cjs | S4 visor/Kimi |
+| Vídeo/entrega | js/construction-delivery-core.js; js/construction-mp4-muxer.js | GateD@b12b925; no merge | Manifiesto 0.2; MP4/HTML del lab | tests/construction-delivery-core.test.cjs; tests/ft3d-8-delivery.browser.test.cjs | S4 y pruebas cliente |
+| Marca | js/brand-core.js; js/brand-ui.js | master@0f9c6ea; verificar HEAD | FloorPlanBrand snapshot | tests/brand-core.test.cjs; tests/brand.browser.test.cjs | Mi estudio |
+| Enlaces | api/share.js; api/view.js; PR #166 | master@0f9c6ea y PR#166@cef06ff | Publicación simulada; PR draft | tests/ft3d-8-delivery.browser.test.cjs | Acceso y QA remoto |
+
+El árbol de Gate D no demuestra que cada módulo esté fusionado en master. No tomar una referencia histórica como HEAD actual ni asumir métodos no leídos en código.
 
 ---
 
@@ -138,6 +161,23 @@ El cliente abre **la versión congelada** que se haya autorizado: proyecto/estud
 | Evolución | «Reproducir» | escena/Gantt/tarjeta sincronizados | sin geometría: tarea textual | UX-05 |
 | Entrega | «Previsualizar / generar» | snapshot coherente y descarga | bloqueos/estado parcial explicados | UX-06 |
 | Cliente | «Ver evolución» | lectura autorizada | sin permiso/revocado: acceso denegado | UX-07 |
+
+
+### 4.5 Contrato de seis dimensiones por paso del recorrido
+
+Cada paso debe especificar los **seis aspectos del plan del propietario**: objetivo, información visible, acción, autoridad del dato, tratamiento de ausencia/error y transición. La parcela y el presupuesto no son bloqueantes universales para ver el modelo.
+
+| Paso | Objetivo | Información visible | Acción | Dato/autoridad | Error y recuperación | Transición |
+|---|---|---|---|---|---|---|
+| Abrir proyecto | Obtener vivienda y revisión | Sujeto, nivel, estado guardado | Elegir/abrir | Biblioteca/editor | Sin proyecto: biblioteca y sin datos residuales | Parcela/presupuesto |
+| Situar parcela | Asociar y colocar sin inferencias | Fuente, RC, CRS, posición | Consultar/importar/colocar | Catastro/site/placement | Sin red: GML; sin parcela: no disponible | Presupuestar |
+| Presupuestar | Definir precios y alcance | Edición, unidad, fuente, sin IVA, cobertura | Seleccionar/revisar | C1–C4; BC3/BCCA | Precio unknown: nunca cero; no total edificio falso | Planificar |
+| Planificar | Guardar calendario vinculado | Tareas, fechas, elementos, partidas | Crear/validar/guardar | Schedule/Binding/Dossier | Sin plan: visor estático; error recuperable | Evolución |
+| Evolución | Explicar progresión 4D | Vivienda, fecha, tarjeta, Gantt, importes | Reproducir/scrub/selección | Schedule/Visual/Presenter | Sin 3D: tarea textual; sin precio: desconocido | Entregar |
+| Entregar | Congelar revisión correcta | Snapshot, marca, vídeo/HTML, avisos | Previsualizar/generar/descargar | Delivery/Brand/PR #166 | Incompatibilidad bloquea; descarga sin enlace | Cliente si autorizado |
+| Cliente | Consultar entrega permitida | Proyecto y datos autorizados | Abrir/reproducir | Snapshot/api/view | Sin permiso: denegar sin filtrar | Fin/nueva entrega |
+
+**Gate:** QA-01/02/05/08/09/11/12/15/16/18 verifican recorridos continuos; una colección de pantallas aisladas no equivale a integración.
 
 ## 5. Contrato UX/4D y lenguaje del producto
 
@@ -343,6 +383,28 @@ Biblioteca [project.id / building.id, revisión del sujeto]
 
 Antes de cualquier integración, preparar **tabla de conflictos de archivos y contratos**, comparar SHA base y PR, y decidir orden de integración. No fusionar ramas en master en el marco de las misiones M1/M2. Una Preview por rama no autoriza publicación comercial.
 
+
+### 12.1 Matriz de archivos compartidos y responsabilidad de edición
+
+Los roles de esta tabla **no conceden permisos automáticos**. Antes de cambiar un archivo compartido, comprobar PR, HEAD, contratos y responsable real; sin acuerdo, elaborar adaptador aislado o registrar bloqueo.
+
+| Archivo | Autoridad | Responsable a coordinar | Límite | Requisito y QA |
+|---|---|---|---|---|
+| index.html | Editor y visor | Responsable editor + Kimi | Solo lectura del sujeto; no editar unilateralmente | FT8-S4-01/10; QA-01/23 |
+| js/project-library.js | Biblioteca | Responsable biblioteca + integrador | Planes y vínculos sin reescribir vivienda | FT8-S4-01/03; QA-10/11 |
+| js/budget-ui.js | Presupuestar | Responsable economía/Presupuestar | Plan editor y selección presupuesto | FT8-S4-02/04/06; QA-04/11 |
+| js/budget-core.js | C1–C4 | Responsable economía + propietario | Decisiones DEC-06/07 antes de cambio de esquema | FT8-S4-04/05; QA-04/24 |
+| js/cost-provider-bcca-es.js | BCCA | M1/S2 | Reutilizar; no activar managed sin permiso | FT8-S2-01…09; QA-06/07 |
+| js/catastro-parcel-provider.js | Catastro | M1/S3 | Consulta oficial, no inventar respuesta | FT8-S3-01…08; QA-08/09 |
+| js/construction-*.js | FT3D-8 | Responsable FT3D-8 + M2 | No duplicar motor ni generador | FT8-S4-06…15; QA-11…16 |
+| labs/ft3d-8/* | Gate D | Claude Code 2 | Base del laboratorio; no nueva app | FT8-UX-03/05; QA-19 |
+| js/brand-ui.js; js/brand-core.js | Mi estudio | Responsable marca + M2 | Usar snapshot, no gestor paralelo | FT8-S4-13; QA-15 |
+| api/share.js; api/view.js | Publicación | Claude original/Entregar | Política cliente primero; no publicar | FT8-S4-16/17; QA-18 |
+| PR #166 | Entregar | Claude original + M2 | Coordinar contratos antes de modificar rama | FT8-S4-14…18; QA-16/18 |
+| Contrato de mallas | Visor oficial | Kimi + M2 | API acordada y fidelidad | FT8-S4-10; QA-03/23 |
+
+La misión S4 requiere coordinación expresa para tocar Entregar, biblioteca, editor o mallas, aunque sus requisitos ya estén documentados.
+
 ## 13. Programa de ejecución autónoma: dos misiones, múltiples cortes
 
 ### M1 — S2 + S3: datos y servicios (rama aislada)
@@ -419,7 +481,7 @@ SHA/branch, alcance implementado y no implementado, lista de archivos, contratos
 
 | ID | Responsable | Situación | Acción antes del cierre |
 |---|---|---|---|
-| OPEN-01 | Claude Code Gate D + propietario | GD-UX-01: composición vertical de escritorio sin aceptación | Corregir, probar viewports bajos, revisión visual |
+| OPEN-01 | Claude Code Gate D + propietario | **CERRADO VISUALMENTE**: GD-UX-01 corregida y aprobada en Preview `b12b925` el 05/11/2026 | Confirmar CI completa `42118973111` y registrar resultado; no reabrir diseño sin defecto nuevo |
 | OPEN-02 | Responsable Gate D | Grúa parcialmente fuera de encuadre en MP4 de prueba | Revisar y registrar resolución o limitación aceptada |
 | OPEN-03 | Propietario | Opción 3 presupuesto global edificio sin aprobación formal de contrato | Aprobar diseño y migración o registrar alcance alternativo E2 |
 | OPEN-04 | Propietario / economía | `subject.revision` opcional propuesto | Aprobar o conservar `unverifiable` con límites explícitos |
@@ -429,12 +491,48 @@ SHA/branch, alcance implementado y no implementado, lista de archivos, contratos
 | OPEN-08 | Kimi + propietario | Contrato de mallas compartidas pendiente | Diseño/read-only, fidelidad y pruebas |
 | OPEN-09 | Propietario | Modelo de acceso de cliente no decidido | Decidir antes de pruebas de publicación real |
 | OPEN-10 | Responsable integración | Proyecto activo/planes/presupuestos persistidos no cableados a FT3D-8 | Implementar S4-A/B/C y probar dos proyectos |
-| OPEN-11 | Documentación | Roadmap global coloca FT3D-8 en E3 | Actualizar matriz E2 y añadir adenda sin borrar historia |
+| OPEN-11 | Documentación | Roadmap histórico coloca FT3D-8 en E3 | Añadir adenda vigente E2 al roadmap sin borrar historial ni declarar terminadas otras familias E3 |
 | OPEN-12 | QA/seguridad | MP4 fuera de Chromium, dispositivo físico, publicación remota sin validar | Matriz de compatibilidad y prueba autorizada |
 
 ### 16.3 Política de actualización
 
 No reescribir un hecho histórico: añadir adenda de fecha/autor/commit que lo corrige. Cuando Claude finalice un corte, actualizar únicamente los estados respaldados por pruebas y proporcionar enlace a los artefactos. Cada nuevo SHA obliga a verificar que sus evidencias siguen correspondiendo a ese código.
+
+
+### 16.4 Auditoría de cotejo del plan original (566 líneas, 05/11/2026)
+
+El plan facilitado por el propietario se ha cotejado con el documento v1.0. **Es la misma arquitectura funcional**, pero la v1.0 carecía de algunas conexiones operativas. No se han añadido nuevas fases ni autorizado decisiones legales.
+
+| Criterio del plan | Antes | Corrección v1.1 |
+|---|---|---|
+| Cinco bloques y capítulos 1–16 | Completo | Conservados sin ampliar alcance |
+| S2/S3/S4 y gates | Completo | Se mantienen 41 requisitos y 24 QA |
+| Autoridades con ruta, versión, SHA, prueba | Parcial | §3.4 añadido |
+| Seis dimensiones UX por paso | Parcial | §4.5 añadido |
+| Trazabilidad requisito-responsable-prueba-gate | Parcial | Anexo C con 41 filas |
+| Responsabilidad por archivo compartido | Parcial | §12.1 añadido |
+| Ejemplo de ficha uniforme de requisito | Ausente como ficha | §16.5 añadido |
+| GD-UX-01, aprobación visual, CI | Obsoleto | DEC-12/§3/OPEN-01 corregidos |
+| FT3D-8 E2 frente a E3 histórica | Discrepancia | Adenda al roadmap global |
+| Bloqueos legales y acceso cliente | Correcto | No se han levantado |
+
+**Riesgos no resueltos por documentación:** derechos BCCA, consulta oficial S3, cambios de esquema DEC-06/07, contrato Kimi, PR #166, política de acceso cliente y prueba remota. Mantener OPEN-02…12 según sus gates.
+
+### 16.5 Ficha uniforme obligatoria para cada requisito
+
+Cada ejecución debe completar: **ID, objetivo, ya disponible, trabajo faltante, autoridad/archivo, responsable, prueba, aceptación, evidencia SHA, estado y gate**. El Anexo C establece el enlace por ID; los capítulos 5–8 detallan el comportamiento exigido.
+
+**Ejemplo: FT8-S2-04 — Actualización de precios BCCA**
+
+- **Objetivo:** consultar una edición nueva sin alterar presupuestos históricos.
+- **Ya existe:** C1–C4, puente CostQuote y procedencia de partidas.
+- **Falta:** comparación entre ediciones, propuesta de actualización y confirmación profesional.
+- **Autoridad:** motor económico y bridge; proveedor BCCA sujeto a licencia.
+- **Responsable:** M1/S2, coordinado con economía para cualquier cambio C1–C4.
+- **Aceptación:** sin intervención profesional explícita el presupuesto anterior conserva precio, unidad, procedencia y huella.
+- **Pruebas:** QA-06/07 y comparación antes/después; unidades incompatibles.
+- **Gate:** G-TECH, y G-LEGAL para activar el catálogo gestionado.
+- **Estado:** pendiente S2; adaptador existente no significa catálogo listo.
 
 ---
 
@@ -445,11 +543,13 @@ No reescribir un hecho histórico: añadir adenda de fecha/autor/commit que lo c
 3. [S1-B contrato expediente](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-s1b-contrato-expediente-2026-11-05.md).
 4. [S1-E plan de integración](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-s1e-plan-integracion-futura-2026-11-05.md).
 5. [S1-F matriz 38 puntos](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-s1f-matriz-38-correcciones-2026-11-05.md).
-6. [Gate D informe final, no aceptación humana](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-ux4d-gate-d-informe-final-2026-11-05.md).
+6. [Informe histórico Gate D A–F (anterior a aceptación GD-UX-01)](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-ux4d-gate-d-informe-final-2026-11-05.md).
 7. [Propuesta de integración profesional (no implementada)](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-integracion-profesional-2026-11-05.md).
 8. [Auditoría de permisos BCCA](https://github.com/Juanmaes83/floorplan-3d/blob/docs/rubik-evolution-preparation-2026-11-04/docs/legal/bcca-es-reuse-gate-2026-10-27.md).
 9. [PR #166 — Delivery 3D V1](https://github.com/Juanmaes83/floorplan-3d/pull/166).
-10. [CI Gate D del SHA `0fe6453`](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42109440298).
+10. [CI Gate D SHA `b12b925` — resultado final a comprobar](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42118973111).
+11. [Informe de corrección GD-UX-01](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8-ux4d-gate-d-2026-11-05/docs/product/ft3d-8-gd-ux-01-correccion-2026-11-05.md).
+12. Plan original del propietario de 566 líneas: adjunto en conversación del 05/11/2026, no guardado en repositorio; cotejo en §16.4.
 
 # Anexo B — Matriz de trazabilidad resumida por capacidad
 
@@ -462,4 +562,55 @@ No reescribir un hecho histórico: añadir adenda de fecha/autor/commit que lo c
 | Plan profesional | FT8-S4-06…09 | FT3D-8 Schedule/Binding | G-TECH/G-INT |
 | Entregas y cliente | FT8-S4-13…18 | Brand, Delivery, PR #166, share/view | G-SEC/G-INT/G-OWNER |
 
-**Fin del borrador v1.0. Pendiente de revisión y aprobación del propietario. No guardar en GitHub antes de esa aprobación.**
+
+# Anexo C — Trazabilidad individual de 41 requisitos
+
+Los resultados/criterios de aceptación están en capítulos 5–8. Los QA son **pruebas futuras exigidas**, no resultados verificados; cruzar con §3.4 para versión/SHA y §12.1 para permiso de edición. Las etiquetas PROBADO_LAB no significan integrado en E2.
+
+| ID | Autoridad | Trabajo pendiente E2 | Responsable | QA vinculado | Gate | Estado |
+|---|---|---|---|---|---|---|
+| FT8-UX-01 | Library+Dossier | Entrada directa proyecto | M2/editor | QA-01/11 | G-INT | PENDIENTE |
+| FT8-UX-02 | Dossier/C1–C4 | Estados incompletos | M2 UX | QA-02/05 | G-UX | PENDIENTE |
+| FT8-UX-03 | Gate D CSS/UX | Conservar fit aprobado en S4 | M2+Gate D | QA-19 | G-UX | VISUAL_APROBADO en lab |
+| FT8-UX-04 | Gate D/Perla | Móvil, zoom y teclado S4 | M2 UX | QA-20/21 | G-UX | PENDIENTE |
+| FT8-UX-05 | Delivery/Presenter | Paridad vídeo integrada | M2 Entregar | QA-14/16 | G-INT | PROBADO_LAB |
+| FT8-UX-06 | Dossier/UX | Mensajes de recuperación | M2 UX | QA-02/11 | G-UX | PENDIENTE |
+| FT8-S2-01 | BCCA provider | Búsqueda edición/región | M1/S2 | QA-06/07 | G-TECH/LEGAL | PENDIENTE |
+| FT8-S2-02 | CostQuote | Ficha de procedencia | M1/S2 | QA-05/06 | G-TECH | PENDIENTE |
+| FT8-S2-03 | Budget Bridge | Comparar tarifa | M1+economía | QA-05/06 | G-TECH | PENDIENTE |
+| FT8-S2-04 | Budget Core | Actualizar voluntariamente | M1+economía | QA-06/24 | G-TECH | PENDIENTE |
+| FT8-S2-05 | Unidades | Validación estricta | M1/S2 | QA-05 | G-TECH | PENDIENTE |
+| FT8-S2-06 | CostQuote | Retener fuente/licencia | M1/S2 | QA-06/23 | G-TECH/LEGAL | PENDIENTE |
+| FT8-S2-07 | Gate legal | Bloquear managed | M1+propietario | QA-07 | G-LEGAL | BLOQUEADO_PERMISOS |
+| FT8-S2-08 | Presupuestar UI | Mensajes y selección | M1+UI | QA-05/06 | G-UX | PENDIENTE |
+| FT8-S2-09 | Cost Provider | Límites y recuperación | M1/S2 | QA-06/22 | G-TECH | PENDIENTE |
+| FT8-S3-01 | Catastro provider | Conectar fuente oficial | M1/S3 | QA-08/09 | G-TECH | VERIFICACIÓN PENDIENTE |
+| FT8-S3-02 | Geo Site/GML | CRS y huellas | M1/S3 | QA-08/09 | G-TECH | PENDIENTE |
+| FT8-S3-03 | Dossier/site | Conflictos seguros | M1/S3 | QA-02/09 | G-TECH | PENDIENTE |
+| FT8-S3-04 | Territory Core | Colocación explícita | M1/S3 | QA-08/09 | G-TECH | PENDIENTE |
+| FT8-S3-05 | Geo UI | Fallback/cancelación | M1/S3 | QA-09 | G-TECH | PENDIENTE |
+| FT8-S3-06 | PNOA/MDT05 | Capas opcionales | M1/S3 | QA-09/17 | G-LEGAL | PENDIENTE |
+| FT8-S3-07 | Export Policy | Bloquear restricted | M1+legal | QA-17 | G-LEGAL | PENDIENTE |
+| FT8-S3-08 | Territory UI | Guardar y sustituir | M1+UI | QA-08/09 | G-UX | PENDIENTE |
+| FT8-S4-01 | Library/editor | Proyecto real seguro | M2+editor | QA-01/02/10 | G-INT | PENDIENTE |
+| FT8-S4-02 | Budget UI | Selección presupuesto | M2+economía | QA-01/05 | G-INT | PENDIENTE |
+| FT8-S4-03 | Library/Binding | Persistir planes | M2+biblioteca | QA-10/11/24 | G-INT | PENDIENTE |
+| FT8-S4-04 | Budget Core | Total edificio único | M2+economía | QA-04 | G-TECH | DEC-06 PENDIENTE |
+| FT8-S4-05 | Budget Core | Revisión opcional | M2+economía | QA-10/24 | G-TECH | DEC-07 PENDIENTE |
+| FT8-S4-06 | Schedule/UI | Editor plan | M2+UI | QA-11 | G-INT | PENDIENTE |
+| FT8-S4-07 | Project Adapter | Vínculos y roles | M2+visor | QA-03/12 | G-TECH/INT | PENDIENTE |
+| FT8-S4-08 | Budget Allocations | Porcentajes explícitos | M2+economía | QA-04/05/12 | G-TECH | PENDIENTE |
+| FT8-S4-09 | Binding/Dossier | Revisión declarada | M2 | QA-10/11 | G-INT | PENDIENTE |
+| FT8-S4-10 | Visor/Kimi | Mallas coherentes | Kimi+M2 | QA-03/23 | G-INT | CONTRATO PENDIENTE |
+| FT8-S4-11 | Gate D/Schedule | Integrar 4D real | M2 | QA-12/13/19 | G-UX/INT | PENDIENTE |
+| FT8-S4-12 | Dossier/UX | Estados parciales | M2 UX | QA-02/05/12 | G-UX | PENDIENTE |
+| FT8-S4-13 | Brand UI | Mi estudio activo | M2+marca | QA-15 | G-INT | PENDIENTE |
+| FT8-S4-14 | Delivery/#166 | Entrega MP4/HTML | Claude+M2 | QA-14/16 | G-INT | PR DRAFT |
+| FT8-S4-15 | Dossier/Manifest | Snapshot inmutable | M2 | QA-10/15/24 | G-INT | PENDIENTE |
+| FT8-S4-16 | share/view | Política de acceso | Propietario+Entregas | QA-18 | G-SEC | DEC-05 PENDIENTE |
+| FT8-S4-17 | share/view | Publicación autorizada | Propietario+Entregas | QA-18 | G-SEC/OWNER | BLOQUEADO |
+| FT8-S4-18 | Delivery | Descarga sin publicar | M2+Entregas | QA-14/16 | G-INT | PROBADO_LAB |
+
+**Regla:** ningún requisito se declara PROBADO o APROBADO sin SHA, evidencia y gate competente. VISUAL_APROBADO se limita al viewport de Gate D en b12b925; no a la integración comercial.
+
+**Fin del borrador v1.1. Este archivo ya está guardado en rama documental para revisión; el contenido definitivo sigue pendiente de aprobación del propietario.**
