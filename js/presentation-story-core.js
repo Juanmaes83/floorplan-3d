@@ -380,7 +380,7 @@
   // lens on the way down; at eye height they rise back to full height around the viewer (close).
   const wB=Number(input.walls?.base)||3,wL=Number(input.walls?.low)||1.1,wF=Number(input.walls?.full)||wB;let wallHeight=wB;
   const pose=(position,yaw,pitchDeg,fov,phase,p,extra={})=>({p,phase,position,target:add(position,dir(yaw+yo*ramp,pitchDeg+po*ramp)),fov,near:base.near,far:base.far,distance:1,
-   fullHeight:['close','walk','turn','arrive','room'].includes(phase),wallHeight,...extra});
+   fullHeight:['walk','turn','arrive','room'].includes(phase),wallHeight,...extra});
   // Sample interpolation by walking time (the choreography's own clock).
   function walkAt(sec){
    if(sec<=first.t)return first;if(sec>=last.t)return last;

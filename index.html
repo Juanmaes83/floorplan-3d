@@ -4706,7 +4706,9 @@ function beginRoomVisit(stop,view,aspect,startPose){
   const baseCut=presentationBaseCut??2.8,builtBase=baseCut===2.8?fullTop:Math.min(fullTop,baseCut);
   const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far},view:{yawOffset,pitchOffsetDeg},walls:{base:builtBase,low:1.1,full:fullTop}});
   const doorIds=[...(r.plan.doorIds||[])];
-  return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:presentationBaseCut??2.8,fullTop,doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
+  // Cut while approaching, going down and while the walls rise: just under the walls' top, so no ceiling exists yet
+  // (a ceiling is built only at a full-height cut); the ceiling appears above the viewer at the full-height rebuild.
+  return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,fullTop-.01),fullTop,doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
     route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,extendedMm:r.extended,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
 }
 function applyRoomVisit(v,st){

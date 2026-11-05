@@ -30,7 +30,8 @@ async function start(page,{visit}){
 const validity=page=>page.evaluate(()=>{const g=FloorPlanApp.geometry,P=FloorPlanApp.project,c=View3D.cameraState.position,x=c[0]*1000+g.center.x,y=c[2]*1000+g.center.y,h=c[1];
  const inRect=(r,px,py,pad)=>{const dx=px-r.center[0],dy=py-r.center[1],co=Math.cos(r.angle),si=Math.sin(r.angle);return Math.abs(dx*co+dy*si)<r.spanMm/2+pad&&Math.abs(-dx*si+dy*co)<r.thickness/2+pad;};
  const top=Math.max(P.defaults.wallHeightMm,...P.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...P.objects.map(o=>(o.size?.heightMm||0)/1000));
- const inWall=g.walls.filter(w=>w.status!=='demolished').some(w=>inRect(w,x,y,0)),inObj=P.objects.some(o=>{if(o.type==='rug'||!o.position)return false;const a=(o.rotationDeg||0)*Math.PI/180,dx=x-o.position.x,dy=y-o.position.y;return Math.abs(dx*Math.cos(a)+dy*Math.sin(a))<o.size.widthMm/2&&Math.abs(-dx*Math.sin(a)+dy*Math.cos(a))<o.size.depthMm/2&&h<(o.size.heightMm||0)/1000;});
+ // A wall is a solid up to its height: being above it (the approach flies over the walls) is not being inside it.
+ const inWall=h<top&&g.walls.filter(w=>w.status!=='demolished').some(w=>inRect(w,x,y,0)),inObj=P.objects.some(o=>{if(o.type==='rug'||!o.position)return false;const a=(o.rotationDeg||0)*Math.PI/180,dx=x-o.position.x,dy=y-o.position.y;return Math.abs(dx*Math.cos(a)+dy*Math.sin(a))<o.size.widthMm/2&&Math.abs(-dx*Math.sin(a)+dy*Math.cos(a))<o.size.depthMm/2&&h<(o.size.heightMm||0)/1000;});
  const room=g.rooms.find(r=>{let inside=false;for(let i=0,j=r.poly.length-1;i<r.poly.length;j=i++){const a=r.poly[i],b=r.poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;});
  const inDoor=g.doors.some(d=>inRect(d.rect,x,y,80));
  const s=View3D.presentationStoryInfo;return {phase:s.phase,kind:s.kind,cut:s.cut,h,above:h>Math.max(top,tallest),inWall,inObj,inDoor,room:room?.id||null,pos:c.map(v=>+v.toFixed(4))};});
