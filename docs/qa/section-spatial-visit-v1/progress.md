@@ -65,5 +65,17 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 | R3 | `982546f` → evidencia `ab81f88` | aterrizaje junto al destino, ruta en el minimapa, texto del relevo | `evidence/r3/` 348 fotogramas |
 | R4 | `9323105` | Escape e invalidación durante el paseo; test de navegador 6/6 (OFF, ON, fallback, 5 ciclos, móvil vertical y horizontal) | log local |
 
+
+## Regresiones (en solitario, SwiftShader)
+| Suite | Rama | Base `master@0f9c6ea` | Clasificación |
+|---|---|---|---|
+| Unitarias de presentación y Recorrer | 155/155 | — | OK |
+| presentation-visit (nueva) | 6/6 | — | OK |
+| presentation-section | 7/7 | — | OK |
+| presentation-story | 8/8 | — | OK |
+| walk | 2/2 | — | OK |
+| walk-controls | 8/8 (falló 1 vez en la primera tanda) | 8/8 | inestable por carga; no reproducible |
+| presentation-route | 5/7 | 6/7 (M18 a 1440 agota los 120 s) | M18 a 1440 es **preexistente**. Los otros dos fallos solo en la rama (crecen 2 geometrías al repetir en 390; `aspect` 0 al cerrar): **en investigación**, repitiendo rama/base/rama |
+
 ## Próxima acción
-Regresiones (sección, historia, ruta, Recorrer, controles de Recorrer, revelado, plantillas), rendimiento comparable y PR en borrador.
+Clasificar los fallos de presentation-route que solo aparecen en la rama; después revelado y plantillas, rendimiento y PR en borrador.
