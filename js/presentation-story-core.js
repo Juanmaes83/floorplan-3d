@@ -376,8 +376,11 @@
   const total=legs.reduce((n,[,ms])=>n+ms,0),bounds=[];{let acc=0;for(const [name,ms] of legs){bounds.push({name,from:acc/total,to:(acc+ms)/total});acc+=ms;}}
   // View offsets (the region the presentation card leaves free), eased in during the approach and kept to the end.
   const vo=input.view||{},yo=Number(vo.yawOffset)||0,po=Number(vo.pitchOffsetDeg)||0;let ramp=1;
+  // Wall height (m): from the overview's, the walls lower while the camera approaches, so no wall top ever sweeps past the
+  // lens on the way down; at eye height they rise back to full height around the viewer (close).
+  const wB=Number(input.walls?.base)||3,wL=Number(input.walls?.low)||1.1,wF=Number(input.walls?.full)||wB;let wallHeight=wB;
   const pose=(position,yaw,pitchDeg,fov,phase,p,extra={})=>({p,phase,position,target:add(position,dir(yaw+yo*ramp,pitchDeg+po*ramp)),fov,near:base.near,far:base.far,distance:1,
-   fullHeight:['close','walk','turn','arrive','room'].includes(phase)&&(phase!=='close'||extra.closed),...extra});
+   fullHeight:['close','walk','turn','arrive','room'].includes(phase),wallHeight,...extra});
   // Sample interpolation by walking time (the choreography's own clock).
   function walkAt(sec){
    if(sec<=first.t)return first;if(sec>=last.t)return last;
@@ -389,9 +392,10 @@
    if(p<=0)return {p:0,phase:'overview',position:[...A.position],target:[...A.target],fov:A.fov,near:base.near,far:base.far,distance:len(sub(A.target,A.position)),fullHeight:false};
    const leg=bounds.find(b=>p<b.to)||bounds.at(-1),t=clamp01((p-leg.from)/Math.max(1e-9,leg.to-leg.from)),e=smooth(t);
    ramp=leg.name==='approach'?e:1;
+   wallHeight=leg.name==='approach'?lerp(wB,wL,e):leg.name==='descend'?wL:leg.name==='close'?lerp(wL,wF,e):wF;
    if(leg.name==='approach')return pose(lerp3(A.position,top,e),lerp(yawA,yawFirst,e),lerp(pitch0,o.lookPitchDeg,e),lerp(A.fov,walkFov,e),'approach',p);
    if(leg.name==='descend')return pose([first.x,lerp(above,eye,e),first.z],first.yaw,lerp(o.lookPitchDeg,first.pitchDeg,e),walkFov,'descend',p);
-   if(leg.name==='close')return pose([first.x,eye,first.z],first.yaw,first.pitchDeg,walkFov,'close',p,{closed:t>=.25});
+   if(leg.name==='close')return pose([first.x,eye,first.z],first.yaw,first.pitchDeg,walkFov,'close',p);
    // The visit may start part-way along the route: its walking clock eases in from rest (and the choreography already
    // eases out on arrival), so the camera never starts at cruising speed.
    if(leg.name==='walk'){const c=1/.51,u=t<.3?c*t*t:c*.09+.6*c*(t-.3);const q=walkAt(first.t+Math.min(1,u)*(last.t-first.t));return pose([q.x,eye,q.z],q.yaw,q.pitchDeg,walkFov,'walk',p);}
