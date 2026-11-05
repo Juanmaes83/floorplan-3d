@@ -28,7 +28,8 @@ test(`FT3D-8 visual lab ${viewport.width}x${viewport.height}`,{timeout:180000},a
   const name=`${viewport.width}x${viewport.height}`,mobile=viewport.width<900;
   const context=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile});t.after(()=>context.close());
   const page=await context.newPage(),errors=[],external=[];
-  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
+  page.on('response',r=>{if(r.status()>=400)errors.push(`HTTP ${r.status()} ${r.url()}`);});
   page.on('request',r=>{if(!r.url().startsWith(url.slice(0,url.indexOf('/labs'))))external.push(r.url());});
   await page.goto(url);
   await page.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
