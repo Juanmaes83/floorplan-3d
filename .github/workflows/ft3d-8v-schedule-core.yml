@@ -1,0 +1,27 @@
+name: FT3D-8V pure schedule and budget validation
+on:
+  push:
+    branches:
+      - feat/ft3d-8v-schedule-core-2026-11-05
+    paths:
+      - js/construction-schedule-core.js
+      - tests/construction-schedule-core.test.cjs
+      - .github/workflows/ft3d-8v-schedule-core.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax checks
+        run: |
+          node --check js/construction-schedule-core.js
+          node --check tests/construction-schedule-core.test.cjs
+      - name: Pure FT3D-8V and existing budget/story regression
+        run: node --test tests/construction-schedule-core.test.cjs tests/budget-core.test.cjs tests/presentation-story.test.cjs
