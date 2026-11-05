@@ -2462,6 +2462,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
 <script src="js/presentation-elevation-core.js"></script>
 <script src="js/presentation-axon-core.js"></script>
 <script src="js/presentation-story-core.js"></script>
+<script src="js/presentation-living-drawing.js"></script>
 <script src="js/delivery-image.js"></script>
 <script src="js/presentation-templates-core.js"></script>
 <script src="js/presentation-templates-ui.js"></script>
@@ -3929,6 +3930,7 @@ async function enter(options={}){
   stage.classList.remove('animating');
 }
 function abort3D(){
+  presentationLivingDrawingEnd();
   if(heldEntry){heldEntry=null;grow=furnGrow=1;}
   territoryRenderer?.dispose();
   clearPresentationReveal();
@@ -3946,6 +3948,7 @@ function abort3D(){
 // A held entry that no narrative took over (the chapter could not start, another stop was chosen…) rises at once.
 function releaseHeldEntry(){if(!heldEntry)return;heldEntry=null;grow=furnGrow=1;applyGrow();orbit.enabled=true;}
 async function exit(){
+  presentationLivingDrawingEnd();
   heldEntry=null;
   if (opt.mode === 'walk'){ walkCtl.unlock(); stopTouchWalk(); $('#hint3d').textContent = HINT_ORBIT; $('#walkOverlay').style.display = 'none'; $('#cross').style.display = 'none';
     const dir = new THREE.Vector3(); camera.getWorldDirection(dir); orbit.target.copy(camera.position).addScaledVector(dir, 3).setY(0); opt.mode = 'orbit'; syncModeBtns(); }
@@ -4177,6 +4180,18 @@ function startLoop(){ if (!raf){ clock.getDelta(); raf = requestAnimationFrame(l
 // While a full-screen work area covers the 3D view nothing is visible: frames are skipped (no render cost, battery),
 // but camera animations and flights still advance so programmatic framing (presentation stops) keeps working.
 let renderSuspended=false;
+// Hybrid V2 «Dibujo vivo» (C1, opt-in): while a presentation asks for it, the same scene is drawn as a graphite drawing
+// (js/presentation-living-drawing.js). null = the normal render, exactly as before.
+let livingDrawing=null;
+function presentationLivingDrawingBegin(options={}){
+  if(!active||contextLost||!renderer)return {active:false,reason:'3d-unavailable'};
+  if(livingDrawing)return livingDrawing.info;
+  const R=window.FloorPlanLivingDrawingRenderer;if(!R)return {active:false,reason:'module-unavailable'};
+  const ld=R.create(THREE,renderer,{furniture:()=>furnG,glass:()=>glassMat,cap:()=>capMat,forceUnsupported:!!options.forceUnsupported});
+  const result=ld.begin();if(!result.active){ld.dispose();return result;}
+  livingDrawing=ld;return ld.info;
+}
+function presentationLivingDrawingEnd(){if(!livingDrawing)return false;livingDrawing.dispose();livingDrawing=null;return true;}
 // loseContext() marks the context lost at once but its event arrives in a later task; never render in between
 // (three.js would compile a program against the dead context and throw on its null info log).
 function glLost(){ return contextLost || !!renderer?.getContext()?.isContextLost?.(); }
@@ -4199,7 +4214,7 @@ function loop(){
   updateSel();
   syncCeilingFixtures(camera);
   syncRoofVisibility();
-  renderer.render(scene, camera);
+  if (livingDrawing) livingDrawing.render(scene, camera); else renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 }
 
@@ -4907,6 +4922,8 @@ window.View3D = {
 
 window.View3D.presentationReveal=presentationReveal;
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
+Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd});
+Object.defineProperty(window.View3D,'presentationLivingDrawingInfo',{get:()=>livingDrawing?livingDrawing.info:{active:false}});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
 Object.defineProperty(window.View3D,'presentationElevationResidue',{get:presentationElevationResidue});

@@ -65,6 +65,8 @@
  // never saved. axonDescriptor: FloorPlanPresentationAxon.derive over every structural level of the building (or the
  // project), computed once when the dialog opens; the 3D view receives it and never derives it again.
  let axonMode='off',axonEnabled=false,axonDescriptor=null,axonLevelNames=new Map();
+ // Hybrid V2 «Dibujo vivo» (C1): opt-in graphite drawing of the same model during the presentation; off by default.
+ let livingChosen=false,livingEnabled=false;
  const AXON_KINDS=['axon-open','exploded-levels-open'];
  const isAxonKind=kind=>AXON_KINDS.includes(kind);
  const OVERVIEW_DIRECTION=[.42,.84,.34];
@@ -583,6 +585,17 @@
   const hint=el('p',parts.join(' '),box,'presentation-story-hint');hint.id=hintId;
   if(d.partial)hint.classList.add('presentation-axon-partial');
  }
+ function livingDrawingOption(parent){
+  livingChosen=false;
+  if(!window.FloorPlanLivingDrawingRenderer)return;
+  const box=el('div',undefined,parent,'presentation-story-option presentation-living-option');box.id='presentationLivingOptionBox';
+  const label=el('label',undefined,box);const input=el('input',undefined,label);input.type='checkbox';input.id='presentationLivingDrawing';input.checked=false;
+  el('span',tx('Dibujo vivo · lámina a grafito (experimental)','Living drawing · graphite sheet (experimental)','活绘 · 石墨图纸（实验）'),label);
+  const hint=el('p',tx('Opcional: la vivienda se presenta como un dibujo arquitectónico a grafito del mismo modelo. Fase de prueba: todavía sin materialización. No cambia el proyecto ni sus materiales.','Optional: the home is presented as a graphite architectural drawing of the same model. Trial phase: no materialisation yet. The project and its materials do not change.','可选：以同一模型的石墨建筑图呈现住宅。试验阶段：尚无材质化。项目及其材质不变。'),box,'presentation-story-hint');
+  hint.id='presentationLivingHint';input.setAttribute('aria-describedby',hint.id);
+  input.onchange=()=>{livingChosen=input.checked;};
+ }
+ function endLivingDrawing(){livingEnabled=false;window.View3D?.presentationLivingDrawingEnd?.();}
  const axonKind=()=>frozenTemplate?(frozenTemplate.buildingReading==='exploded-levels'?'exploded-levels-open':frozenTemplate.buildingReading==='axon'?'axon-open':null):axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
  const axonAt=stop=>{if(!stop||stop.kind!=='overview'||!axonDescriptor?.supported)return false;if(axonMode==='exploded'&&!axonDescriptor.variants.exploded.supported)return false;
   return !isBuildingPlan()||axonDescriptor.levels.some(l=>l.levelId===stop.levelId);};
@@ -920,6 +933,7 @@
    sectionOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
    elevationOption(config,[{levelId:activeLevelId(),project:app.project,geometry:app.geometry}]);
    axonOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
+   livingDrawingOption(config);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -954,6 +968,7 @@
   sectionOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm})));
   elevationOption(config,levels.map(l=>({levelId:l.levelId,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
   axonOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,order:l.order,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
+  livingDrawingOption(config);
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -1048,6 +1063,10 @@
    if(!materialButton.hidden)View3D.setSurfaceQuality('enhanced');
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
+   // Hybrid V2 C1: the graphite drawing, only when chosen; without float render targets the presentation goes on as usual and says so.
+   livingEnabled=false;
+   if(livingChosen){const r=View3D.presentationLivingDrawingBegin?.();livingEnabled=!!r?.active;
+    if(!livingEnabled)toast(tx('Dibujo vivo no disponible en este navegador: la presentación sigue con la vista habitual.','Living drawing unavailable in this browser: the presentation continues with the usual view.','此浏览器不支持活绘：展示以常规视图继续。'),6000);}
    updateAssetWarning();
    if(frozenTemplate||sectionEnabled||elevationEnabled||axonEnabled)storyControls();
    if(frozenTemplate&&fullStory().length)await openStory(token,fullStory(),{from:0,to:reducedMotion()?null:1});
@@ -1055,6 +1074,7 @@
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
     toast(error.message,6000);
+    endLivingDrawing();
     document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
     if(startLevelId&&activeLevelId()!==startLevelId)building()?.presentLevel(startLevelId);startLevelId=null;
     await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;entry=null;plan=null;sceneState=null;
@@ -1079,6 +1099,7 @@
   // A building presentation leaves the editor on the level it started from, before the camera and the entry return.
   if(startLevelId&&activeLevelId()!==startLevelId){try{await showLevel(startLevelId);}catch{}}
   startLevelId=null;
+  endLivingDrawing();
   if(sceneState)View3D?.presentationRestore(sceneState);
   if(pendingStart)await pendingStart.catch(()=>{});
   const saved=entry,three=sceneState;
@@ -1095,7 +1116,7 @@
  }
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
-  cancelBatch();closeStory();disposeStory();
+  cancelBatch();closeStory();disposeStory();endLivingDrawing();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presenting','presentation-exiting');
