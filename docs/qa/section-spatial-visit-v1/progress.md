@@ -108,5 +108,7 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 - **Cómo leer las cifras:** ambas rondan 1 fps porque se renderiza en CPU. Sirven para comparar, no son cifras de GPU ni de móvil (`MOBILE_PHYSICAL_PENDING`).
 - **Encuadre:** la cámara de la visita se centra en la pantalla completa, sin compensar la tarjeta. Así la caché es compartida y el relevo a Recorrer, que es a pantalla completa, no se descoloca.
 
+| R5 | `1a7034f` | vídeo final y storyboard S0–S6 inspeccionados | `evidence/r5/` |
+
 ## Próxima acción
-Render R5 (1280×800) sobre el SHA final, inspección, evidencia y PR en borrador.
+PR en borrador abierta contra `master`, pendiente de revisión visual humana. Sin merge ni despliegue.

@@ -60,6 +60,26 @@
    "testedSha": "982546f",
    "status": "CAPTURED/INSPECTED",
    "note": "R3: landing in the hall 1.2-4 m before the master bedroom door (sample 142), validated route on the minimap, walk through the real doorway, arrival inside with the bed in view, hand-over and back to section. Minor: during the descent a cut wall top passes close to the lens (valid, 220 mm clearance)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r5/r5-section-visit-1280x800.mp4",
+   "sha256": "f42ba5e5d22c5fd22e292ebeb92a4d550ef5f71b2819b397afa3c30962626a0c",
+   "bytes": 798157,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "1a7034f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R5 final: S1 frontal section, S2 depth opening, S3 approach above the master bedroom with the validated route on the minimap, S4 descent through the cut in the hall, real doorway, arrival inside at eye level, S5 hand-over to Recorrer with return bar, S6 back to section. No page errors."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r5/r5-storyboard-S0-S6.jpg",
+   "sha256": "bec86a3dff493261f482129e47cb19cb2c90e81a07e72004af18c40a60b73823",
+   "bytes": 262751,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "1a7034f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R5 final: S1 frontal section, S2 depth opening, S3 approach above the master bedroom with the validated route on the minimap, S4 descent through the cut in the hall, real doorway, arrival inside at eye level, S5 hand-over to Recorrer with return bar, S6 back to section. No page errors."
   }
  ]
 }
