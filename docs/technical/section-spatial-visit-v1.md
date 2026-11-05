@@ -36,6 +36,11 @@ Durante la visita, las puertas de la ruta se abren y recuperan su estado al term
 - `View3D.presentationWalkEnd()` sale sin el vuelo de órbita y repone el corte de la presentación. Cerrar la presentación o perder el contexto también sale del paseo.
 - Cerrar la presentación restaura el clipping, las puertas, el corte y el editor. El JSON del proyecto no cambia (lo comprueba el test).
 
+## Caché y encuadre
+`roomVisitPlan` guarda el resultado por geometría, estancia y tamaño de pantalla (`WeakMap`). Un objeto de geometría nuevo, que aparece con cualquier edición o cambio de planta o de proyecto, invalida la caché.
+
+La coreografía cuesta unos 1000 ms de JavaScript. Se calcula una sola vez, en la comprobación de disponibilidad, y la escena entra en unos 12 ms. Para poder compartirla, la cámara de la visita se centra en la pantalla completa, sin la compensación de la tarjeta que usa el recorrido clásico.
+
 ## Minimapa
 Es el mismo plano de orientación de la presentación. Durante la visita resalta el destino, dibuja la ruta validada (`presentation-minimap-route`) y la flecha de posición y dirección.
 

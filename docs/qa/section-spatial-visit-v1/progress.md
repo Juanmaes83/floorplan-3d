@@ -2,7 +2,7 @@
 
 - **Rama:** `feat/section-spatial-visit-v1`. **Base:** `master@0f9c6ea` + misión `0ff2c97`.
 - **Worktree:** `/home/user/fp-ssv`, aislado de Delivery, Hybrid y Kimi.
-- **Estado:** R4 en curso (R1–R3 grabados e inspeccionados).
+- **Estado:** R5 en curso. R1–R4 completos.
 
 ## Qué existe (no se reconstruye)
 - **FT3D-3:**
@@ -91,5 +91,22 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 - **Clasificación:** carrera preexistente de la app y del test, reproducida en la base con la misma traza. La frecuencia observada es mayor en la rama, pero sin mecanismo atribuible al código nuevo. Se deja documentada y no se modifica ese test ajeno.
 
 
+| presentation-reveal | 3/8 | 3/8 (los mismos 5 por tiempo agotado) | **preexistente**, idéntico en la base |
+| presentation-templates | 18/18 | — | OK |
+| presentation-visit sobre `1a7034f` | 6/6 | — | OK |
+
+## Rendimiento (`scripts/qa/measure-section-visit.cjs`, 1280×800, misma sesión, SwiftShader)
+- **Recursos:** geometrías 1189 → 1143 y texturas 10 → 10 tras ambas escenas. No crecen.
+- **Primera iteración:** entrar en `room-visit` costaba 937 ms, porque la coreografía (unos 1000 ms de JavaScript) se calculaba al entrar.
+- **Corrección:** plan en caché por geometría, estancia y pantalla. La comprobación de disponibilidad, que ocurre al dibujarse el panel mientras se lee la vista general, lo calcula una sola vez (828 ms).
+
+| Medida | `room-descent` (base) | `room-visit` |
+|---|---|---|
+| Entrada en la escena | 135 ms | **12 ms** |
+| Intervalo entre fotogramas p50 / p95 | 917 / 1867 ms | 1100 / 1283 ms |
+
+- **Cómo leer las cifras:** ambas rondan 1 fps porque se renderiza en CPU. Sirven para comparar, no son cifras de GPU ni de móvil (`MOBILE_PHYSICAL_PENDING`).
+- **Encuadre:** la cámara de la visita se centra en la pantalla completa, sin compensar la tarjeta. Así la caché es compartida y el relevo a Recorrer, que es a pantalla completa, no se descoloca.
+
 ## Próxima acción
-Revelado y plantillas (en curso), rendimiento, vídeo final y PR en borrador.
+Render R5 (1280×800) sobre el SHA final, inspección, evidencia y PR en borrador.
