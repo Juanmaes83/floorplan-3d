@@ -5,7 +5,13 @@ on:
       - feat/ft3d-8v-schedule-core-2026-11-05
     paths:
       - js/construction-schedule-core.js
+      - js/construction-visual-state.js
+      - js/construction-gantt-adapter.js
       - tests/construction-schedule-core.test.cjs
+      - tests/construction-schedule-rules.test.cjs
+      - tests/construction-visual-state.test.cjs
+      - tests/fixtures/construction-schedule-fixtures.cjs
+      - docs/product/ft3d-8v-*.md
       - .github/workflows/ft3d-8v-schedule-core.yml
   workflow_dispatch:
 permissions:
@@ -22,6 +28,17 @@ jobs:
       - name: Syntax checks
         run: |
           node --check js/construction-schedule-core.js
+          node --check js/construction-visual-state.js
+          node --check js/construction-gantt-adapter.js
           node --check tests/construction-schedule-core.test.cjs
+          node --check tests/construction-schedule-rules.test.cjs
+          node --check tests/construction-visual-state.test.cjs
+          node --check tests/fixtures/construction-schedule-fixtures.cjs
       - name: Pure FT3D-8V and existing budget/story regression
-        run: node --test tests/construction-schedule-core.test.cjs tests/budget-core.test.cjs tests/presentation-story.test.cjs
+        run: >-
+          node --test
+          tests/construction-schedule-core.test.cjs
+          tests/construction-schedule-rules.test.cjs
+          tests/construction-visual-state.test.cjs
+          tests/budget-core.test.cjs
+          tests/presentation-story.test.cjs
