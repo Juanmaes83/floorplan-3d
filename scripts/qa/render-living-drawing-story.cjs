@@ -1,12 +1,12 @@
 /* Hybrid V2 «Dibujo vivo» — frame-by-frame evidence of the story scene on the real app (Chromium; SwiftShader here, so
    frames are rendered one by one at fixed story times instead of in real time). Not product code.
    The presentation is configured as a person would (rooms in the dialog, «Dibujo vivo» on), the story opens by itself;
-   it is paused and every frame applies the story at t = i / fps through View3D.presentationStoryApply (the same pure
-   state the player applies), waits two animation frames and takes a screenshot of the page (card included).
-   usage: node scripts/qa/render-living-drawing-story.cjs <root> <out> [stills|video] [fps=24] [WxH=1280x720] [rooms=Salón,Comedor,Cocina,Dormitorio principal] [dpr=1] [fromFrame] [toFrame] */
+   it is paused and every frame seeks the story at t = i / fps with the story slider (the same path a person uses, so the
+   card and captions follow), waits two animation frames and takes a screenshot of the page (card included).
+   usage: node scripts/qa/render-living-drawing-story.cjs <root> <out> [stills|video] [fps=24] [WxH=1280x720] [rooms=Salón,Comedor,Cocina,Dormitorio principal] [dpr=1] [fromFrame] [toFrame] [ambience=0] */
 const path=require('node:path'),fs=require('node:fs/promises'),{createServer}=require('node:http'),{execFileSync}=require('node:child_process');
 const {chromium}=require('playwright');
-const [root,out,mode='stills',fpsArg='24',vp='1280x720',roomsArg='Salón,Comedor,Cocina,Dormitorio principal',dprArg='1',fromArg='0',toArg='1e9']=process.argv.slice(2);
+const [root,out,mode='stills',fpsArg='24',vp='1280x720',roomsArg='Salón,Comedor,Cocina,Dormitorio principal',dprArg='1',fromArg='0',toArg='1e9',ambArg='0']=process.argv.slice(2);
 const [width,height]=vp.split('x').map(Number),fps=Number(fpsArg),dpr=Number(dprArg),want=roomsArg.split(',');
 const three=require(path.join(root,'tests/helpers/three-module.cjs'));
 (async()=>{
@@ -22,7 +22,7 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  await p.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await p.locator('#presentationConfig[open]').waitFor();
  const rows=p.locator('.presentation-room-row'),n=await rows.count();
  for(let i=0;i<n;i++){const row=rows.nth(i),text=(await row.textContent()).trim().replace(/^\d+\s*/,''),box=row.locator('input[type=checkbox]');if(!await box.count())continue;const on=want.some(w=>text.startsWith(w));if((await box.isChecked())!==on)await box.setChecked(on);}
- await p.locator('#presentationLivingDrawing').check();
+ await p.locator('#presentationLivingDrawing').check();if(ambArg==='1')await p.locator('#presentationLivingAmbience').check();
  const s=p.getByRole('button',{name:'Iniciar presentación'});await s.scrollIntoViewIfNeeded();await s.click();
  await p.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing'&&View3D.presentationStoryInfo?.living,null,{timeout:300000});
  // pause the player (a person moving the slider pauses it), then drive the same pure state frame by frame
@@ -32,7 +32,8 @@ const three=require(path.join(root,'tests/helpers/three-module.cjs'));
  const times=mode==='stills'?[0,.25,.45,.6,.75,.9].map(f=>f*total).concat(info.ends.map(e=>e*total-.4)).sort((a,b)=>a-b):Array.from({length:Math.round(total*fps)+1},(_,i)=>i/fps);
  const manifest={head,chromium:browser.version(),viewport:{width,height,dpr},rooms:info.rooms,total,fps,frames:[]};
  for(let i=Number(fromArg);i<Math.min(times.length,Number(toArg));i++){const t=Math.min(total,times[i]),t0=Date.now();
-  const st=await p.evaluate(P=>{View3D.presentationStoryApply(P);return new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r({phase:View3D.presentationStoryInfo.phase,room:View3D.presentationStoryInfo.living.roomId,drawing:View3D.presentationLivingDrawingInfo}))));},t/total);
+  // the same slider a person drags (step 'any' so every frame lands on its exact time): the card and captions follow
+  const st=await p.evaluate(P=>{const sl=document.querySelector('#presentationStorySlider');sl.step='any';sl.value=String(P*Number(sl.max));sl.dispatchEvent(new Event('input',{bubbles:true}));return new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r({phase:View3D.presentationStoryInfo.phase,room:View3D.presentationStoryInfo.living.roomId,drawing:View3D.presentationLivingDrawingInfo}))));},t/total);
   const file=mode==='stills'?`still-${t.toFixed(2).padStart(6,'0')}.png`:`f${String(i).padStart(4,'0')}.png`;await p.screenshot({path:path.join(out,file)});
   manifest.frames.push({i,t:+t.toFixed(3),file,phase:st.phase,room:st.room,liveSeeds:st.drawing?.liveSeeds,ms:Date.now()-t0});
   if(mode==='stills'||i%24===0)console.log(file,t.toFixed(2),st.phase,st.room,Date.now()-t0,'ms');}

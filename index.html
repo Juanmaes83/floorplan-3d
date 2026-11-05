@@ -4248,7 +4248,10 @@ function beginLiving(view,stop,aspect,region){
     const roomViews=tl.rooms.map(r=>{const g=geometry.rooms.find(x=>x.id===r.roomId),xs=g.poly.map(p=>p[0]),ys=g.poly.map(p=>p[1]);
       return {id:r.roomId,center:[wx((Math.min(...xs)+Math.max(...xs))/2),wz((Math.min(...ys)+Math.max(...ys))/2)],extent:[(Math.max(...xs)-Math.min(...xs))/1000,(Math.max(...ys)-Math.min(...ys))/1000],start:intro+r.start,duration:r.duration,leaveAt:intro+r.leaveAt};});
     const all=geometry.rooms.filter(r=>r.poly.length>=3),houseCenter=[all.reduce((n,r)=>n+wx(r.poly.reduce((m,p)=>m+p[0],0)/r.poly.length),0)/all.length,all.reduce((n,r)=>n+wz(r.poly.reduce((m,p)=>m+p[1],0)/r.poly.length),0)/all.length];
-    const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
+    // tall or dark pieces (TV, fridge, wardrobe) so the camera never stands right behind one
+    const lum=c=>.2126*c.r+.7152*c.g+.0722*c.b,obstacles=furniture.map(f=>{let sum=0,n=0;furnG.children[f.index].traverse(o=>{if(!o.isMesh)return;for(const m of [].concat(o.material))if(m?.color){sum+=lum(m.color);n++;}});
+      return {x:(f.min[0]+f.max[0])/2,z:(f.min[2]+f.max[2])/2,h:f.max[1],dark:n>0&&sum/n<.12};});
+    const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,obstacles,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
     return {narrative,started,cut0,timeline:tl,total,ambience:!!amb?.active};
   }catch(error){presentationAmbienceEnd();livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}
 }

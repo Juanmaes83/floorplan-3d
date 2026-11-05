@@ -63,3 +63,15 @@ test('HV2-C3 projected with a real camera, the room lands in the free region of 
    const [x,y]=screen(s,[((Math.min(...xs)+Math.max(...xs))/2-OX)/1000,0,((Math.min(...ys)+Math.max(...ys))/2-OY)/1000],aspect);
    assert.ok(g&&x>=region[0]&&x<=region[2]&&y>=region[1]&&y<=region[3],`${room.id} centre at (${x.toFixed(2)}, ${y.toFixed(2)}) inside the free region ${region}`);}}
 });
+
+test('HV2-C3 the camera never stands right behind a tall dark piece; long glides between rooms rise above the drawing',()=>{
+ const rooms=[{id:'a',center:[0,0],extent:[4,4],start:5,duration:6,leaveAt:9.5},{id:'b',center:[4.5,0],extent:[4,4],start:11,duration:6,leaveAt:15},{id:'c',center:[4.5,9],extent:[4,4],start:17,duration:6,leaveAt:21}];
+ const make=obstacles=>S.create('living-drawing',{start:{position:[9,15,11],target:[0,0,0],fov:45},rooms,houseCenter:[2,3],obstacles,total:24,intro:5,aspect:1.6,region:[0,0,1,1],fov:48,base:{near:.05,far:300}});
+ const clear=make([]),at=(n,t)=>n.stateAt(t/24);
+ const p=at(clear,6.5).position;
+ const blocked=make([{x:(p[0]+0)/2,z:(p[2]+0)/2,h:1.7,dark:true},{x:p[0],z:p[2],h:1.7,dark:true}]);
+ assert.notDeepEqual(at(blocked,6.5).position,p,'another standpoint is chosen when a tall dark piece stands between the camera and the room');
+ // a → b: the standpoints are far apart (more than transitMin), so the glide between them rises above both
+ const yA=at(clear,9.5).position[1],yB=at(clear,11.6).position[1],mid=Math.max(...Array.from({length:22},(_,k)=>at(clear,9.5+k*.1).position[1]));
+ assert.ok(mid>Math.max(yA,yB)+1,`arc over the drawing (peak ${mid.toFixed(2)} vs ${Math.max(yA,yB).toFixed(2)})`);
+});
