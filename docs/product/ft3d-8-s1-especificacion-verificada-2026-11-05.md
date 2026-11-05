@@ -33,8 +33,11 @@ revisable; la decisión es del propietario (P5).
 **Hueco ya existente en el filtro de rutas (encontrado al verificar):** `paths` es una lista *explícita* de archivos,
 no un comodín. Hoy `js/construction-mp4-muxer.js` **no está en la lista**: un cambio que sólo toque el muxer no
 dispararía la CI. Y cualquier archivo nuevo de S1 (`js/construction-<nuevo>.js`, `tests/<nuevo>.test.cjs`) tampoco la
-dispararía. Corrección propuesta (no aplicada en este documento): usar `js/construction-*.js`,
-`tests/construction-*.test.cjs` y `tests/ft3d-8-*.cjs`.
+dispararía. Corrección propuesta: usar `js/construction-*.js`, `tests/construction-*.test.cjs` y `tests/ft3d-8-*.cjs`.
+
+**Aplicada al empezar S1 (mejora 1):** el workflow incluye la rama `feat/ft3d-8-s1-real-project-integration-2026-11-05`,
+los filtros son comodines y la comprobación de sintaxis recorre también `js/construction-mp4-muxer.js`, que antes
+no se comprobaba. La rama original conserva su disparador.
 
 ## 2. Autoridades existentes que S1 debe reutilizar
 
