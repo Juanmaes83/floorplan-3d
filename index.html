@@ -4681,7 +4681,7 @@ function beginRoomVisit(stop,view,aspect,startPose){
   // The part of the screen the presentation card covers: the visit's view is shifted so its subject sits in the free
   // region (same offsets as the classic route), kept until the arrival, so the hand-over keeps the exact pose.
   const reg=view.region&&view.region[2]-view.region[0]>.25&&view.region[3]-view.region[1]>.25?view.region:[0,0,1,1];
-  const aspect=SW()/Math.max(1,SH()),tV=Math.tan(r.vfov*Math.PI/360),tH=tV*aspect;
+  const asp=SW()/Math.max(1,SH()),tV=Math.tan(r.vfov*Math.PI/360),tH=tV*asp;
   const yawOffset=-Math.atan(((reg[0]+reg[2])-1)*tH),pitchOffsetDeg=Math.atan((1-(reg[1]+reg[3]))*tV)*180/Math.PI;
   const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far},view:{yawOffset,pitchOffsetDeg}});
   const doorIds=[...(r.plan.doorIds||[])];
