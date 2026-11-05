@@ -17,7 +17,7 @@ El propietario ya dispone de una segunda cuenta de Claude Code. Se acuerda **des
 | Entregas, cliente 3D y cortes pendientes | Claude Code original | PR #166 y su propio ámbito | trabajando; no tocar |
 | Fidelidad visual / Visual Families | Kimi Code | su rama y PR asociadas cuando las confirme | trabajando; no tocar |
 | FT3D-8V cronograma + presupuesto | **Claude Code 2 (segunda cuenta)** | [`feat/ft3d-8v-schedule-core-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/ft3d-8v-schedule-core-2026-11-05) | **núcleo implementado (por ChatGPT), CI verde; Claude Code 2 asume auditoría y evolución** |
-| Asistente de lectura AG-1 | **ChatGPT + propietario** | [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) | **núcleo de herramientas y tests escritos en rama propia; ChatGPT desarrolla y valida, no Claude 2** |
+| Asistente de lectura AG-1 | **ChatGPT + propietario** | [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) | **núcleo AG-1 implementado por ChatGPT; CI verde, 79 tests aprobados; LLM/UI aún pendientes** |
 | Aceptación e integración | propietario + agentes tras revisiones | a decidir en coordinación | **NO AUTORIZADO** |
 
 ## FT3D-8V: hechos comprobados
@@ -45,6 +45,10 @@ El propietario ya dispone de una segunda cuenta de Claude Code. Se acuerda **des
 ## Asistente AG-1: desarrollo por ChatGPT + propietario
 
 La rama [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) es **de ChatGPT**. El antiguo brief `assistant-ai-ag1-brief-claude-code-2-2026-11-05.md` se ha sustituido por un aviso de corrección. Primer alcance: herramientas puras de consulta del proyecto y cantidades/presupuestos, sin LLM ni API facturable, con pruebas y CI propias. **Claude Code 2 no debe editar esta rama.**
+
+## AG-1 — Resultado de pruebas confirmado después de la corrección
+
+GitHub Actions [#42000333863](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42000333863): **79 pruebas aprobadas, 0 fallos**. Se añadieron herramientas de consulta de proyecto, estancias, cantidades, presupuesto y revisión de distribución; 12 pruebas nuevas más regresión de los módulos existentes. **No existe todavía conversación con LLM, endpoint autorizado, llamadas OpenAI ni UI.** Contrato y siguiente procedimiento de coste en [AG-1: estado y siguientes gates](https://github.com/Juanmaes83/floorplan-3d/blob/feat/agent-ai-ag1-readonly-2026-11-05/docs/product/assistant-ai-ag1-estado-pruebas-siguientes-gates-2026-11-05.md).
 
 ## Condiciones de integración futura
 
