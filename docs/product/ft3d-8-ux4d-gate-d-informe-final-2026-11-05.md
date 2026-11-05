@@ -193,7 +193,7 @@ Fecha: 2026-11-05 · Responsable: Claude Code 2 (laboratorio FT3D-8) · **Pendie
 | `ft3d-8-dossier.browser` | 6 de 6 |
 | `ft3d-8-ux4d.browser` (nueva, P01–P20) | 20 de 20 |
 
-En la CI de GitHub, las ejecuciones 21 a 27 de la rama están en verde. La 27 incluye la suite nueva. La 28 (`c8f6ac0`)
+En la CI de GitHub, las ejecuciones 21 a 29 de la rama están en verde. La 28 (`c8f6ac0`, código y evidencias) y la 29 (`b897cfc`, informe) incluyen la suite nueva del Gate D.
 estaba en curso al escribir este informe; su resultado se comunica en el mensaje de entrega.
 
 ## 12. Regresiones
@@ -236,7 +236,6 @@ estaba en curso al escribir este informe; su resultado se comunica en el mensaje
     de fidelidad los usan como datos.
 - **Pendiente:**
   - revisión visual del propietario;
-  - confirmar el resultado de la CI de la ejecución 28 (`c8f6ac0`);
   - recibir el vídeo `AUDITORIA VISUAL .mp4`, que no ha llegado y no se ha podido estudiar.
 - **Bloqueado por otro contrato o agente:**
   - integración en la aplicación principal y Entregar/Mi estudio (Claude original, Juanmaes83/floorplan-3d#166);
