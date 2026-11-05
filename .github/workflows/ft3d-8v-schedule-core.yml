@@ -121,6 +121,17 @@ jobs:
           name: ft3d-8-ux4d-evidence
           path: qa-results/ft3d-8-ux4d
           if-no-files-found: ignore
+      - name: FT3D-8 Gate D GD-UX-01 (the 4D experience fits the window at 1280x720, 1366x768, 1440x900, 1920x1080, zoom, mobile)
+        if: always()
+        env:
+          FT3D8_FIT_SHOTS: qa-results/ft3d-8-fit
+        run: node --test --test-concurrency=1 tests/ft3d-8-fit.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-fit-evidence
+          path: qa-results/ft3d-8-fit
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: always()
         with:

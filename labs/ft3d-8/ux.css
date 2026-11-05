@@ -131,7 +131,7 @@ main{display:block;min-height:0}
 #ganttWrap .row[data-phase=in-progress] .name{color:#16434c}
 #ganttWrap .row[data-phase=in-progress] .bar{border-color:var(--action)}#ganttWrap .row[data-phase=in-progress] .bar .fill{background:var(--action)}
 #ganttWrap .row[data-phase=completed] .bar .fill,#ganttWrap .row[data-phase=completed] .bar{background:var(--select);border-color:var(--select)}
-#ganttWrap .cursor{background:var(--action)}#ganttWrap .cursor span{background:var(--action);color:#fff}
+#ganttWrap .cursor{background:var(--action);margin-left:-2px} /* drawn inside the track also on the last day */#ganttWrap .cursor span{background:var(--action);color:#fff}
 .glegend{margin:8px 0 0;font:12px/1.6 var(--sans);color:var(--ink-muted)}
 .glegend .k{display:inline-block;width:18px;height:9px;margin:0 4px 0 8px;vertical-align:middle;border:1.5px solid var(--select)}
 .glegend .k.done{background:var(--select)}.glegend .k.act{background:var(--action);border-color:var(--action)}
@@ -211,3 +211,66 @@ body[data-mode=client] .credits{display:none}
 .gresult.ok{color:#fff;background:var(--success,#2f6e4a);padding:10px 12px;border-radius:8px}
 .step iframe#clientPreview{width:100%;min-height:260px;border:1px solid #dfe3e4;border-radius:8px}
 @media (max-width:1100px){.steps.guided{grid-template-columns:1fr}}
+
+
+/* ---------- GD-UX-01 · the 4D experience fits the window (desktop) ----------
+   Evolución is ONE composition the height of the usable window: viewer (flexible, protagonist) · playback (fixed) ·
+   moment card + Gantt (a band proportional to the height). Long content scrolls INSIDE its panel (card tasks, Gantt
+   rows with a sticky time scale and legend); the page never has to scroll to relate the house, the date, the tasks
+   and the plan. Secondary help (3D legend, hints) sits under the composition. Short or zoomed windows (< 560 px of
+   height) fall back to the stacked layout with page scroll: nothing is cut or hidden. */
+:root{--topbar-h:65px;--evo-need:0px;--evo-band:clamp(196px,max(34vh,var(--evo-need)),max(372px,46vh))}
+/* --evo-need = what the plan needs to show every phase at 18 px per row (ux-shell fitGantt); capped at 46 % of the height. */
+@media (min-width:761px) and (min-height:560px){
+  /* Not in capture mode (fixed canvas size for the fidelity comparison with the editor). */
+  body[data-tab=evolucion]:not(.capture) #panel-evolucion{display:flex;flex-direction:column;height:calc(100vh - var(--topbar-h));height:calc(100dvh - var(--topbar-h))}
+  body:not(.capture) #panel-evolucion>.stagewrap,body[data-mode=client]:not(.capture) #panel-evolucion>.stagewrap{flex:1 1 auto;height:auto;min-height:min(200px,30vh)}
+  #panel-evolucion>.transport{flex:none}
+  #panel-evolucion>.evo-panel{flex:0 0 var(--evo-band);height:var(--evo-band);min-height:0;align-items:stretch;overflow:hidden}
+  body[data-mode=client] #panel-evolucion>.evo-panel{--evo-band:clamp(180px,max(30vh,var(--evo-need)),max(340px,44vh))}
+  .evo-panel .card{max-height:none;height:100%;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:12px 16px}
+  .evo-panel .card>.cardtop,.evo-panel .card>.evidence,.evo-panel .card>#cardHeadline{flex:none}
+  .evo-panel #cardHeadline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin:4px 0 6px}
+  .evo-panel .cardscroll{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-color:#5b6266 transparent;margin-right:-8px;padding-right:8px}
+  .evo-panel .cardscroll:focus-visible{outline:3px solid #8fd0dc;outline-offset:-3px}
+  /* Gantt: the plan scrolls in its own box (#gantt) and the legend sits UNDER it, never over a phase. Row height is
+     computed from the real space (ux-shell fitGantt, 16-24 px) so that every phase is visible when it fits. */
+  #ganttWrap{height:100%;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:0 14px 4px;position:relative}
+  #ganttWrap>#gantt{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;position:relative}
+  #ganttWrap .ghead{position:sticky;top:0;z-index:4;background:var(--surface-panel);box-shadow:0 1px 0 var(--line)}
+  #ganttWrap .glegend{flex:none;margin:0;padding:4px 0 0;border-top:1px solid var(--line);font-size:10.5px;line-height:1.3;color:var(--ink-muted)}
+  #ganttWrap .row{height:var(--grow,24px)}#ganttWrap .bar{top:calc((var(--grow,24px) - 12px)/2)}
+  #ganttWrap .row .name{font-size:clamp(11px,calc(var(--grow,24px)*.56),13px)}
+  /* Secondary help goes INTO the viewer as a discreet note (it never takes height from the plan). */
+  .stagewrap>.evo-foot{position:absolute;left:12px;bottom:10px;z-index:2;max-width:min(58%,760px);margin:0;padding:4px 9px;
+    background:rgba(255,255,255,.84);border-radius:6px;font-size:11px;line-height:1.35;gap:2px 12px;pointer-events:none}
+  .stagewrap>.evo-foot .legend3d{font-size:11px}
+}
+/* Compact heights (laptops, browser bars, zoom): the headline keeps its weight on ONE line, the playback bar is lower,
+   the Gantt rows are tighter. Text is never below 11 px. */
+@media (min-width:761px) and (min-height:560px) and (max-height:860px){
+  .hero{top:10px;max-width:min(780px,calc(100% - 340px))}.hero-k{font-size:11.5px;padding:3px 8px}
+  .evo-panel .evidence{font-size:10.5px;margin:2px 0}
+  .hero-t{font-size:clamp(24px,4.8vh,38px);margin:3px 0}.hero-t .num{display:inline;margin-left:.3em}.hero-t .num b{border-left-width:3px;padding-left:8px}
+  .hero-meta{font-size:11.5px;padding:3px 8px}.hero-fx{margin-top:4px}
+  #panel-evolucion>.transport{padding:5px 14px}#panel-evolucion>.transport button{min-height:36px;min-width:36px}
+  #panel-evolucion .cams{top:10px}#panel-evolucion .cams button{min-height:30px}
+  .evo-panel #cardWeek{font-size:24px}.evo-panel #cardHeadline{font-size:16px}
+  #ganttWrap .ghead{height:22px}
+}
+@media (min-width:761px) and (min-height:900px){:root{--evo-band:clamp(300px,max(33vh,var(--evo-need)),max(400px,44vh))}}
+
+/* GD-UX-01 · one row for the top bar and the playback bar on every desktop width (1024 px = 1280 × 720 at 125 % zoom):
+   the project name and the data origin shrink with an ellipsis (full text on hover), nothing wraps under the bar. */
+@media (min-width:761px){
+  .topbar.ux{flex-wrap:nowrap}.topbar.ux>*{flex-shrink:0}.topbar.ux .ptitle{flex:1 1 0;min-width:60px;overflow:hidden}
+  .topbar.ux .origin{flex-shrink:1;min-width:90px}
+  #panel-evolucion>.transport{flex-wrap:nowrap}#panel-evolucion>.transport #scrub{flex:1 1 auto;min-width:60px}
+  #panel-evolucion>.transport #weekSel{max-width:220px;min-width:0}#panel-evolucion>.transport #dateReadout{white-space:nowrap}
+}
+@media (min-width:761px) and (max-width:1180px){.topbar.ux .readypill{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #panel-evolucion>.transport{gap:6px;padding-left:10px;padding-right:10px}#panel-evolucion>.transport button{min-width:34px}}
+/* GD-UX-01 · hierarchy: the help note in the viewer never grows over the house (one line per item; on low windows only
+   the 3D legend). The «Pulsa una tarea…» hint stays in the accessible names of the Gantt tasks. */
+.stagewrap>.evo-foot>*{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media (min-width:761px) and (max-height:760px){.stagewrap>.evo-foot .sim{display:none}}

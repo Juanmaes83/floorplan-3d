@@ -32,7 +32,7 @@ export function createProjectScene(canvas){
   const footMat=new THREE.MeshBasicMaterial({color:0x9aa7ad,transparent:true,opacity:.55,depthWrite:false});
   const footLine=new THREE.LineBasicMaterial({color:0x2b3034});
   const markLine=new THREE.LineBasicMaterial({color:0x1f5a66,depthTest:false,transparent:true,opacity:.95});
-  let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false;
+  let objects=new Map(),roofVisible=true,frame={origin:{x:0,y:0}},auto=false,userMoved=false;
   const glass=new THREE.MeshPhysicalMaterial({color:0xcfe6ef,roughness:.05,transparent:true,opacity:.28,depthWrite:false,side:THREE.DoubleSide});
   const frameMat=mat('#5d6166',{roughness:.5,metalness:.4});
   const capMat=mat('#34312d',{roughness:.9});
@@ -106,10 +106,14 @@ export function createProjectScene(canvas){
   }
   // Illustrative site resources linked by the plan (never project geometry): built around the project's envelope.
   let animators=[];
+  // The project's own envelope in world metres (x, z on the ground; top = highest level + 3 m).
+  function envBox(inventory){
+    const env=inventory.levels.reduce((a,l)=>({x0:Math.min(a.x0,l.envelope.x+l.offsetMm.x),y0:Math.min(a.y0,l.envelope.y+l.offsetMm.y),x1:Math.max(a.x1,l.envelope.x+l.envelope.w+l.offsetMm.x),y1:Math.max(a.y1,l.envelope.y+l.envelope.h+l.offsetMm.y)}),{x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity});
+    return {x0:(env.x0-frame.origin.x)/1000,x1:(env.x1-frame.origin.x)/1000,z0:(env.y0-frame.origin.y)/1000,z1:(env.y1-frame.origin.y)/1000,top:Math.max(...inventory.levels.map(l=>l.elevationMm))/1000+3};
+  }
   function loadIllustrative(inventory,list){
     animators=[];if(!list.length)return;
-    const env=inventory.levels.reduce((a,l)=>({x0:Math.min(a.x0,l.envelope.x+l.offsetMm.x),y0:Math.min(a.y0,l.envelope.y+l.offsetMm.y),x1:Math.max(a.x1,l.envelope.x+l.envelope.w+l.offsetMm.x),y1:Math.max(a.y1,l.envelope.y+l.envelope.h+l.offsetMm.y)}),{x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity});
-    const box={x0:(env.x0-frame.origin.x)/1000,x1:(env.x1-frame.origin.x)/1000,z0:(env.y0-frame.origin.y)/1000,z1:(env.y1-frame.origin.y)/1000,top:Math.max(...inventory.levels.map(l=>l.elevationMm))/1000+3};
+    const box=envBox(inventory);
     for(const r of list){const {pieces,animate}=buildIllustrative(r.kind,box);if(!pieces.length)continue;
       const g=new THREE.Group();g.name=r.key;g.userData.illustrative=true;for(const p of pieces){p.userData.base={y:p.position.y,sy:p.scale.y};g.add(p);}
       const ghost=new THREE.Group();ghost.visible=false;g.add(ghost);root.add(g);
@@ -144,7 +148,12 @@ export function createProjectScene(canvas){
       if(rem>0&&o.e.type!=='illustrative')o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
     }
   }
-  const setPose=({position,target,fov})=>{auto=false;controls.autoRotate=false;const d=controls.enableDamping;controls.enableDamping=false;camera.position.fromArray(position);controls.target.fromArray(target);if(fov){camera.fov=fov;camera.updateProjectionMatrix();}controls.update();controls.enableDamping=d;};
+  // offset (NDC): where the target is drawn on screen. It shifts the PROJECTION (setViewOffset), not the world: the camera
+  // keeps orbiting around the house's own centre and the house stays in the free part of the viewer at every angle.
+  let viewOffset=null;
+  const applyOffset=()=>{const [w,h]=fixedSize||[canvas.clientWidth||1,canvas.clientHeight||1];
+    if(viewOffset&&!fixedSize)camera.setViewOffset(w,h,-viewOffset.x*w/2,viewOffset.y*h/2,w,h);else camera.clearViewOffset();};
+  const setPose=({position,target,fov,offset=null})=>{auto=false;userMoved=false;controls.autoRotate=false;viewOffset=offset;const d=controls.enableDamping;controls.enableDamping=false;camera.position.fromArray(position);controls.target.fromArray(target);if(fov){camera.fov=fov;}applyOffset();camera.updateProjectionMatrix();controls.update();controls.enableDamping=d;};
   // Default framing from the project's own envelope (no fixed demo camera).
   function frameEnvelope(inventory,view='iso'){
     const env=inventory.levels.reduce((a,l)=>({x0:Math.min(a.x0,l.envelope.x+l.offsetMm.x),y0:Math.min(a.y0,l.envelope.y+l.offsetMm.y),x1:Math.max(a.x1,l.envelope.x+l.envelope.w+l.offsetMm.x),y1:Math.max(a.y1,l.envelope.y+l.envelope.h+l.offsetMm.y)}),{x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity});
@@ -157,17 +166,34 @@ export function createProjectScene(canvas){
   // right of the headline. frameEnvelope stays the neutral framing used by the fidelity comparison with the editor.
   // With illustrative site resources (fence 4 m around the envelope, crane outside it) every framing opens the same way.
   const siteOpen=()=>[...objects.keys()].some(k=>k.startsWith('illustrative/'))?1.35:1;
-  function presentationPose(inventory,view='iso'){
-    const p=frameEnvelope(inventory,view),t=new THREE.Vector3(...p.target),pos=new THREE.Vector3(...p.position),dir=pos.clone().sub(t);
-    const wide=(canvas.clientWidth||1)/(canvas.clientHeight||1)>1.6&&(canvas.clientWidth||0)>760;
-    // With illustrative site resources (fence 4 m around the envelope) the frame opens to keep them in view.
-    dir.multiplyScalar((wide?.8:.86)*siteOpen());
-    const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize(),shift=wide?dir.length()*.14:0;
-    t.add(right.multiplyScalar(shift));
-    return {position:t.clone().add(dir).toArray(),target:t.toArray(),fov:p.fov};
+  /* Presentation framing (GD-UX-01): the house is CENTRED in the part of the viewer the headline leaves free, and the
+     distance is the closest at which a vertical cylinder around the house (+ 4.3 m when the plan has site resources:
+     fence ring at 4 m, hut and crane base) fits that part with the viewer's real aspect, so nothing standing on the
+     ground is cut at any angle of the AUTO orbit. Only the crane's mast and jib may leave the frame (as in the reference).
+     frameEnvelope stays the neutral framing used by the fidelity comparison with the editor. */
+  const fitCam=new THREE.PerspectiveCamera(45,1,.1,4000);
+  // standing=true (ISO button): frame what stands at the current moment (site resources only if one is visible now).
+  const siteStanding=()=>[...objects].some(([k,o])=>k.startsWith('illustrative/')&&o.g.visible&&!o.ghost.visible);
+  function presentationPose(inventory,view='iso',reserve=null,{standing=false}={}){
+    const b=envBox(inventory),site=standing?siteStanding():siteOpen()>1,m=site?4.3:.3,orbit=view==='iso'||view==='auto';
+    const cx=(b.x0+b.x1)/2,cz=(b.z0+b.z1)/2,top=b.top-(site?0:1.2),pts=[];
+    if(orbit){const R=Math.hypot(b.x1-b.x0+2*m,b.z1-b.z0+2*m)/2;for(let i=0;i<24;i++){const a=i/24*Math.PI*2;for(const y of [0,top])pts.push(new THREE.Vector3(cx+Math.cos(a)*R,y,cz+Math.sin(a)*R));}}
+    else for(const x of [b.x0-m,b.x1+m])for(const z of [b.z0-m,b.z1+m])for(const y of [0,top])pts.push(new THREE.Vector3(x,y,z));
+    const w=Math.max(1,fixedSize?.[0]||canvas.clientWidth||1),h=Math.max(1,fixedSize?.[1]||canvas.clientHeight||1),aspect=w/h;
+    const wide=aspect>1.6&&w>760,res=reserve||{left:wide?.3:0,top:wide?0:.26};
+    // Usable window in normalised device coordinates (x right, y up), with a safety margin; its centre (wx, wy).
+    const win={x0:-1+2*Math.min(.5,res.left||0)+.04,x1:.95,y0:-.92,y1:1-2*Math.min(.5,res.top||0)-.05},wx=(win.x0+win.x1)/2,wy=(win.y0+win.y1)/2;
+    const dirs={iso:[.62,.55,.72],front:[0,.28,1],top:[0,1,.001],auto:[.62,.55,.72]},dir=new THREE.Vector3(...(dirs[view]||dirs.iso)).normalize();
+    fitCam.fov=45;fitCam.aspect=aspect;fitCam.updateProjectionMatrix();fitCam.up.set(0,1,0);
+    const target=new THREE.Vector3(cx,top*.42,cz);
+    const fits=d=>{fitCam.position.copy(target).addScaledVector(dir,d);fitCam.lookAt(target);fitCam.updateMatrixWorld();
+      // The view offset draws the target at the window centre (wx, wy): test every point with that offset (exact).
+      for(const p of pts){const q=p.clone().project(fitCam);if(q.z>1||q.x+wx<win.x0||q.x+wx>win.x1||q.y+wy<win.y0||q.y+wy>win.y1)return false;}return true;};
+    let lo=1,hi=800;for(let i=0;i<36;i++){const mid=(lo+hi)/2;fits(mid)?hi=mid:lo=mid;}const d=hi;fits(d);
+    return {position:target.clone().addScaledVector(dir,d).toArray(),target:target.toArray(),fov:45,offset:{x:wx,y:wy}};
   }
   let fixedSize=null;
-  const resize=()=>{const [w,h]=fixedSize||[canvas.clientWidth||1,canvas.clientHeight||1];renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+  const resize=()=>{const [w,h]=fixedSize||[canvas.clientWidth||1,canvas.clientHeight||1];renderer.setSize(w,h,false);camera.aspect=w/h;applyOffset?.();camera.updateProjectionMatrix();};
   // Recording: render at an exact pixel size (e.g. 1280x720) without touching the page layout.
   const setRenderSize=(w,h)=>{fixedSize=[w,h];renderer.setPixelRatio(1);resize();};
   const releaseRenderSize=()=>{fixedSize=null;renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));resize();};
@@ -175,9 +201,11 @@ export function createProjectScene(canvas){
   const orbitPose=(inventory,angle,{lift=.55,scale=1}={})=>{const p=frameEnvelope(inventory,'iso'),t=new THREE.Vector3(...p.target),v=new THREE.Vector3(...p.position).sub(t);
     const k=scale*siteOpen(),r=Math.hypot(v.x,v.z)*k,base=Math.atan2(v.x,v.z)+angle;return {position:[t.x+Math.sin(base)*r,t.y+v.y*k*lift/.55,t.z+Math.cos(base)*r],target:p.target,fov:p.fov};};
   const renderNow=()=>{renderer.render(scene,camera);};
-  controls.addEventListener('start',()=>{auto=false;controls.autoRotate=false;});
+  controls.addEventListener('start',()=>{auto=false;controls.autoRotate=false;userMoved=true;});
   // While a video is encoded frame by frame the recorder renders explicitly (renderNow): the live loop is suspended.
   let raf=0,suspended=false;const tick=()=>{raf=requestAnimationFrame(tick);if(suspended)return;controls.update();renderer.render(scene,camera);};resize();tick();window.addEventListener('resize',resize);
+  // The viewer's box follows the layout (window, mode, sections): re-size the renderer and tell the app (re-framing).
+  let onResize=null,roT=0;if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{if(fixedSize)return;resize();clearTimeout(roT);roT=setTimeout(()=>onResize?.(),120);}).observe(canvas);
   // Read-only structural inspection: world-space bounding box of every rendered element (for fidelity checks).
   function inspect(){const out={};for(const [key,o] of objects){if(!o.g.visible||o.ghost.visible)continue;const b=new THREE.Box3();
     o.parts.meshes.forEach(m=>{if(m.visible)b.expandByObject(m);});if(b.isEmpty())continue;
@@ -201,8 +229,17 @@ export function createProjectScene(canvas){
     for(const h of hits)for(let o=h.object;o&&o!==root;o=o.parent)if(o.name&&objects.has(o.name)&&!o.userData.ghostOnly)return o.name;
     return null;
   }
-  return {load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
+  // Read-only: normalised screen box (NDC, -1..1) of what stands now among the keys with this prefix (framing checks).
+  function screenBounds(prefix='project/'){
+    const all=new THREE.Box3(),tmp=new THREE.Box3();let any=false;
+    for(const [k,o] of objects){if(!k.startsWith(prefix)||!o.g.visible||o.ghost.visible)continue;tmp.setFromObject(o.g);if(tmp.isEmpty())continue;all.union(tmp);any=true;}
+    if(!any)return null;camera.updateMatrixWorld();const r={x0:Infinity,x1:-Infinity,y0:Infinity,y1:-Infinity};
+    for(const x of [all.min.x,all.max.x])for(const y of [all.min.y,all.max.y])for(const z of [all.min.z,all.max.z]){const q=new THREE.Vector3(x,y,z).project(camera);r.x0=Math.min(r.x0,q.x);r.x1=Math.max(r.x1,q.x);r.y0=Math.min(r.y0,q.y);r.y1=Math.max(r.y1,q.y);}
+    return r;
+  }
+  return {get userMoved(){return userMoved;},screenBounds,set onResize(fn){onResize=fn;},get size(){return [canvas.clientWidth,canvas.clientHeight];},
+    load,setState,highlight,pick,presentationPose,setFootprint(v){foot.visible=!!v;},get footprintVisible(){return foot.visible;},setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
-    get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov};},get visiblePieces(){return visiblePieces;},
+    get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov,offset:viewOffset};},get visiblePieces(){return visiblePieces;},
     get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};
 }

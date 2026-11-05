@@ -78,7 +78,7 @@ function renderCard(date){
   $('cardWeek').textContent=c.week.label;$('cardWeek').classList.toggle('long',c.week.label.length>14);$('cardDate').textContent=c.dateText.toUpperCase();$('cardEvidence').textContent=c.evidenceText;
   // Same wording as the video frame (FloorPlanConstructionDelivery.moment): what the screen says, the MP4 says.
   const mo=window.FloorPlanConstructionDelivery.moment(ctx.schedule,date,st),done=mo.done,idle=mo.idle;
-  $('cardHeadline').textContent=mo.headline;$('cardStage').textContent=mo.stageText;$('cardStage').dataset.stage=mo.stage;
+  $('cardHeadline').textContent=mo.headline;$('cardHeadline').title=mo.headline;$('cardStage').textContent=mo.stageText;$('cardStage').dataset.stage=mo.stage;
   // The selected task (from the Gantt) is always shown, first, even outside its dates.
   const sel=selected?st.tasks.find(t=>t.id===selected):null,shown=[...(sel?[sel]:[]),...active.filter(t=>t.id!==selected)];
   const phaseText=t=>t.plannedPhase==='in-progress'?`${Math.round(t.visualProgress*100)} % del plazo`:t.plannedPhase==='completed'?'terminada según plan':'pendiente';
@@ -143,7 +143,7 @@ async function show(input,meta,preModel=null,dossier=null){
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory,model.illustrative||[]);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
-  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.presentationPose(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
+  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;camView='auto';framedFinal=false;scene.setPose(fitPose('iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
   const controls=document.querySelector('.transport');controls.dataset.disabled=String(!timeline);
   if(timeline){$('scrub').max=String(timeline.positions-1);
@@ -192,9 +192,29 @@ $('play').onclick=()=>playing?pause():play();$('reset').onclick=()=>{pause();set
 $('back').onclick=()=>step(-1);$('fwd').onclick=()=>step(1);$('wback').onclick=()=>step(-7);$('wfwd').onclick=()=>step(7);
 $('scrub').oninput=()=>{pause();setPos(Number($('scrub').value));};$('weekSel').onchange=()=>{pause();setPos(Number($('weekSel').value));};
 for(const b of document.querySelectorAll('[data-speed]'))b.onclick=()=>{speed=Number(b.dataset.speed);document.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
+/* GD-UX-01 framing: fit the project into the part of the viewer the headline leaves free (left column or top band,
+   whichever leaves the house larger), with the viewer's real size; re-framed when the layout changes size, unless the
+   user moved the camera or chose LIBRE. */
+let camView='auto';
+function heroReserve(){
+  const hero=document.getElementById('hero'),cv=scene.canvas;if(!hero||document.body.classList.contains('capture')||!hero.offsetParent)return [{left:0,top:0}];
+  const h=hero.getBoundingClientRect(),c=cv.getBoundingClientRect();if(!c.width||!c.height)return [{left:0,top:0}];
+  return [{left:Math.max(0,(h.right-c.left+8)/c.width),top:0},{left:0,top:Math.max(0,(h.bottom-c.top+8)/c.height)}];
+}
+function fitPose(view,opts={}){
+  const poses=heroReserve().map(r=>scene.presentationPose(ctx.model.inventory,view,r,opts));
+  const dist=p=>Math.hypot(...p.position.map((v,i)=>v-p.target[i]));return poses.reduce((a,b)=>dist(b)<dist(a)?b:a);
+}
+let framedFinal=false;
+scene.onResize=()=>{if(!ctx||camView==='free'||scene.userMoved||document.body.classList.contains('capture'))return;const auto=camView==='auto';scene.setPose(fitPose(auto?'iso':camView,{standing:!auto||framedFinal}));if(auto)scene.setAuto(true);};
+// AUTO: at the end of the plan (site resources removed) the camera comes closer to the finished house; going back in
+// time restores the site framing. Never while a video is recorded, in capture mode or after the user moved the camera.
+window.addEventListener('ft3d8-moment',e=>{const fin=e.detail?.stage==='final';if(fin===framedFinal)return;
+  if(!ctx||camView!=='auto'||scene.userMoved||document.body.classList.contains('capture')||window.__ft3dDelivery?.state?.recording){framedFinal=fin;return;}
+  framedFinal=fin;scene.setPose(fitPose('iso',{standing:fin}));scene.setAuto(true);});
 // AUTO orbits, ISO/ALZADO/PLANTA frame the whole project, LIBRE keeps the current view for free exploration.
 for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>{if(!ctx)return;const v=b.dataset.view;
-  if(v==='auto')scene.setAuto(true);else if(v==='free')scene.setAuto(false);else{scene.setAuto(false);scene.setPose(v==='iso'?scene.presentationPose(ctx.model.inventory,'iso'):scene.frameEnvelope(ctx.model.inventory,v));}
+  camView=v;if(v==='auto'){scene.setPose(fitPose('iso'));scene.setAuto(true);}else if(v==='free')scene.setAuto(false);else{scene.setAuto(false);scene.setPose(fitPose(v,{standing:true}));}
   document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
 $('roofToggle').onchange=()=>api.setRoof($('roofToggle').checked);
 $('caseSel').innerHTML=FX.ids.map(id=>`<option value="${id}">${id}</option>`).join('');$('caseSel').onchange=()=>loadCase($('caseSel').value).catch(e=>$('importError').textContent=e.message);

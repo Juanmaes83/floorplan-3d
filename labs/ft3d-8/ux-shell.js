@@ -60,7 +60,7 @@ function state(){
 function renderSummary(){
   const s=state(),box=$('projSummary');if(!s){box.innerHTML='';return;}
   const {ev,m,steps,errors,plan}=s;
-  $('topProject').textContent=m.subject.name;$('readiness').textContent=s.pill;$('readiness').dataset.state=s.tone;
+  $('topProject').textContent=m.subject.name;$('topProject').title=m.subject.name;$('readiness').textContent=s.pill;$('readiness').dataset.state=s.tone;
   const inv=m.inventory,kind=inv.kind==='building'?`Edificio de ${inv.levels.length} plantas`:'Vivienda de una planta';
   const est=m.coverage.elements.byEvidence,approx=est.estimated+est.pending>0;
   const b=ev?.authorities.budget,t=ev?.authorities.territory;
@@ -175,3 +175,24 @@ go(TABS.includes(q.get('tab'))?q.get('tab'):q.get('case')?'evolucion':'proyecto'
 // The first project may already be on screen (its fingerprints are computed asynchronously before this module runs).
 if(Fid()?.ctx){renderSummary();renderHero();if(Fid().last)onMoment(Fid().last);}
 Object.assign(ui,{go,reveal,renderSummary,showPick,get tab(){return document.body.dataset.tab;},state:()=>{const s=state();return s&&{pill:s.pill,tone:s.tone,errors:s.errors.map(i=>i.code),plan:s.plan};}});
+
+/* GD-UX-01: the real height of the top bar (it wraps at some widths and with larger text) sizes the Evolución view. */
+{const bar=document.querySelector('.topbar'),set=()=>document.documentElement.style.setProperty('--topbar-h',Math.round(bar.getBoundingClientRect().height)+'px');
+  set();if(typeof ResizeObserver!=='undefined')new ResizeObserver(set).observe(bar);else window.addEventListener('resize',set);}
+
+/* GD-UX-01 · hierarchy in the bottom band: every phase of the plan visible when it fits (row height from the real
+   space, 16-24 px; beyond that the plan scrolls inside its box), and the 3D legend and hints moved into the viewer as a
+   discreet note so they never take height from the plan. Desktop fit layout only; phones keep the stacked layout. */
+{const fitMQ=window.matchMedia('(min-width:761px) and (min-height:560px)'),foot=document.querySelector('.evo-foot'),stage=document.querySelector('#panel-evolucion>.stagewrap'),home=foot?.parentElement,next=foot?.nextSibling;
+  const place=()=>{if(!foot||!stage)return;if(fitMQ.matches&&!document.body.classList.contains('capture')){if(foot.parentElement!==stage)stage.append(foot);}else if(foot.parentElement!==home)home.insertBefore(foot,next);};
+  const fitGantt=()=>{const g=document.getElementById('gantt');if(!g)return;const rows=g.querySelectorAll('.row').length;
+    if(!fitMQ.matches||!rows){g.style.removeProperty('--grow');document.documentElement.style.removeProperty('--evo-need');}
+    else{const head=g.querySelector('.ghead')?.offsetHeight||22,leg=document.getElementById('ganttLegend')?.offsetHeight||0;
+      // The band asks for what shows every phase at 18 px (the CSS caps it); rows then share the real space (16-24 px).
+      document.documentElement.style.setProperty('--evo-need',(head+rows*18+leg+10)+'px');
+      const avail=g.clientHeight-head-2;g.style.setProperty('--grow',Math.max(16,Math.min(24,Math.floor(avail/rows)))+'px');}
+    requestAnimationFrame(()=>Fid()?.ctx?.gantt?.drawArrows?.());};
+  place();fitGantt();fitMQ.addEventListener?.('change',()=>{place();fitGantt();});
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(fitGantt).observe(document.getElementById('gantt'));
+  window.addEventListener('ft3d8-selection',()=>requestAnimationFrame(fitGantt));
+  ui.fitGantt=fitGantt;}
