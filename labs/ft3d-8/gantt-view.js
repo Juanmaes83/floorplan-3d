@@ -17,7 +17,8 @@ export function createGanttView(container,{schedule,report,timeline,S,G,P,onPick
       ${badges.map(x=>`<span class="dep" style="${b/span>.82?`left:calc(${pct(a)} - 6px);transform:translateX(-100%)`:`left:calc(${pct(b)} + 6px)`}" title="${esc(x.title)}">${esc(x.text)}</span>`).join('')}</div></div>`;}).join('')}
     <svg class="arrows" aria-hidden="true"></svg><div class="cursor" data-role="cursor"><span></span></div></div>`;
   const cursor=container.querySelector('[data-role=cursor]');
-  function drawArrows(){const svg=container.querySelector('.arrows'),body=container.querySelector('.gbody'),br=body.getBoundingClientRect(),out=[];
+  // A newer selection may have replaced this Gantt before a queued redraw runs: then there is nothing to draw.
+  function drawArrows(){const svg=container.querySelector('.arrows'),body=container.querySelector('.gbody');if(!svg||!body||!body.contains(cursor))return;const br=body.getBoundingClientRect(),out=[];
     svg.setAttribute('width',br.width);svg.setAttribute('height',br.height);
     for(const a of links.arrows){const f=container.querySelector(`.row[data-task="${a.from}"] .bar`)?.getBoundingClientRect(),t=container.querySelector(`.row[data-task="${a.to}"] .bar`)?.getBoundingClientRect();if(!f||!t)continue;
       const x1=f.right-br.left,y1=f.top+f.height/2-br.top,x2=t.left-br.left,y2=t.top+t.height/2-br.top,mx=Math.max(x1+5,Math.min(x2-5,x1+8));
@@ -28,7 +29,7 @@ export function createGanttView(container,{schedule,report,timeline,S,G,P,onPick
     const lab=cursor.querySelector('span');lab.textContent='PLAN · '+P.dateLabel(date);lab.style.transform=fr>.86?'translateX(-100%)':fr<.08?'translateX(0)':'translateX(-50%)';
     const st=S.stateAt(schedule,date);for(const row of container.querySelectorAll('.row')){const t=st.tasks.find(x=>x.id===row.dataset.task);row.dataset.phase=t.plannedPhase;row.querySelector('.fill').style.width=(t.visualProgress*100)+'%';}
   }
-  let drag=false;const pick=e=>{const tr=container.querySelector('.ghead .track').getBoundingClientRect(),x=(e.clientX-tr.left)/tr.width;if(x>=0&&x<=1)onPick(Math.round(x*span-1));};
+  let drag=false;const pick=e=>{const head=container.querySelector('.ghead .track');if(!head)return;const tr=head.getBoundingClientRect(),x=(e.clientX-tr.left)/tr.width;if(x>=0&&x<=1)onPick(Math.round(x*span-1));};
   container.addEventListener('pointerdown',e=>{if(e.target.closest('.lab'))return;drag=true;container.setPointerCapture(e.pointerId);pick(e);});
   container.addEventListener('pointermove',e=>{if(drag)pick(e);});container.addEventListener('pointerup',()=>{drag=false;});
   requestAnimationFrame(drawArrows);
