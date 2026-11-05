@@ -3,6 +3,10 @@
 **Complementa:** [Plan maestro IA](ia-imagenes-asistente-plan-maestro-2026-11-05.md) y [Modelo económico](ia-costes-protocolo-unitario-lotes-2026-11-05.md).
 **Propuesta del propietario:** priorizar valor comercial de imágenes reales, reforma visual mediante foto del cliente, escenas habitadas, panoramas, vídeo y precios premium basados en utilidad; reevaluar la urgencia de mejoras visuales geométricas en paralelo con Kimi sin interrumpir ni desautorizar trabajo pendiente.
 
+## Complemento CAT-IA — Reformas con catálogo real del profesional (05/11/2026)
+
+A **FOT-01** se incorpora como línea prioritaria complementaria [CAT-IA — Catálogos comerciales y personalización visual por fabricante](cat-ia-catalogos-comerciales-personalizacion-fabricante-2026-11-05.md): subir una foto autorizada de la cocina/salón/baño del cliente, seleccionar referencias reales de muebles, electrodomésticos y revestimientos del profesional, generar 1–3 propuestas con coste previo, verificar productos y preparar fichas comerciales de entrega. Evoluciona en tres cortes: **(1) referencias visuales**, **(2) catálogo con SKU, ficha y medidas verificadas**, **(3) modelos 3D validados y presupuestos canónicos**. No confundir imagen generativa con colocación métrica/stock/precio/compatibilidad.
+
 ## 1. Cambio estratégico
 
 RUBIK no debe limitarse a `plano → 3D → render`. Debe admitir **dos puertas comerciales de entrada** a una misma experiencia profesional y de entrega:
