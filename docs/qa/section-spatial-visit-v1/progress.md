@@ -75,7 +75,21 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 | presentation-story | 8/8 | — | OK |
 | walk | 2/2 | — | OK |
 | walk-controls | 8/8 (falló 1 vez en la primera tanda) | 8/8 | inestable por carga; no reproducible |
-| presentation-route | 5/7 | 6/7 (M18 a 1440 agota los 120 s) | M18 a 1440 es **preexistente**. Los otros dos fallos solo en la rama (crecen 2 geometrías al repetir en 390; `aspect` 0 al cerrar): **en investigación**, repitiendo rama/base/rama |
+| presentation-route | 5–6/7 | 6/7 | **M18 a 1440×900 y a 390×844:** fallan también en `master` (tiempo agotado y +2 geometrías), preexistentes e inestables. **«M18 returns to the preexisting 3D camera and door state»:** ver abajo. |
+
+### «M18 returns to the preexisting 3D camera and door state»: carrera preexistente, medida
+- **Recuento:** con el `index.html` de la rama falla 6 de 11 veces; con el de `master`, 0 de 10. La bisección por ficheros lo sitúa en `index.html`. El diff solo añade funciones, exportaciones y CSS que no se ejecutan sin la visita.
+- **Traza fotograma a fotograma**, con la sonda temporal ya retirada:
+
+  | Momento | `master` | Rama |
+  |---|---|---|
+  | Cierre de la presentación | escenario a 0 px durante unos 500 ms | escenario a 0 px durante unos 500 ms |
+  | Proporción de la cámara después | 0 → 0,068 → 0,508 | 0 → 0,137 → 0,508 |
+
+  La secuencia es la misma en ambos casos.
+- **Mecanismo:** el test lee la cámara nada más `active=false`, dentro de esa ventana transitoria que también existe en `master`. Que pase o falle depende del momento exacto de la lectura.
+- **Clasificación:** carrera preexistente de la app y del test, reproducida en la base con la misma traza. La frecuencia observada es mayor en la rama, pero sin mecanismo atribuible al código nuevo. Se deja documentada y no se modifica ese test ajeno.
+
 
 ## Próxima acción
-Clasificar los fallos de presentation-route que solo aparecen en la rama; después revelado y plantillas, rendimiento y PR en borrador.
+Revelado y plantillas (en curso), rendimiento, vídeo final y PR en borrador.
