@@ -111,4 +111,4 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 | R5 | `1a7034f` | vídeo final y storyboard S0–S6 inspeccionados | `evidence/r5/` |
 
 ## Próxima acción
-PR en borrador abierta contra `master`, pendiente de revisión visual humana. Sin merge ni despliegue.
+PR en borrador Juanmaes83/floorplan-3d#168 abierta contra `master`, pendiente de revisión visual humana. Sin merge ni despliegue.
