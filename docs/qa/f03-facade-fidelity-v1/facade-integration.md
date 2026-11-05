@@ -38,6 +38,11 @@ Esta corrección conserva la media cromática del acabado asignado; no convierte
 node --test tests/facade-fidelity.test.cjs tests/visual-families.test.cjs
 NODE_PATH=<herramientas-qa> CHROME=<Chrome> node --test tests/facade-fidelity-smoke.browser.test.cjs
 NODE_PATH=<herramientas-qa> CHROME=<Chrome> node --test tests/facade-fidelity-visual.browser.test.cjs
+NODE_PATH=<herramientas-qa> CHROME=<Chrome> node --test tests/facade-fidelity-lifecycle.browser.test.cjs
+NODE_PATH=<herramientas-qa> CHROME=<Chrome> node --test tests/facade-fidelity-performance.browser.test.cjs
+PYTHONPATH=<dependencias-pbr> python scripts/qa/f03/package-visual-evidence.py <salida-visual> <directorio-publicable>
 ```
 
-Las capturas usan el fixture VQ01 real, A/B/C con F02 OFF/OFF/ON y F03 OFF/OFF/ON. La vista general, detalle, plano medio, ambas oblicuas, fachada compatible completa y móvil emulado mantienen la misma cámara, luz, exposición, proyecto y perfil entre comparadores. La revisión visual humana permanece pendiente.
+Las capturas usan el fixture VQ01 real, A/B/C con F02 OFF/OFF/ON y F03 OFF/OFF/ON. La vista general, detalle, plano medio, ambas oblicuas, fachada compatible completa y móvil emulado mantienen la misma cámara, luz, exposición, proyecto y perfil entre comparadores.
+
+Las hojas y capturas WebP publicadas están en `evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/`; lifecycle y rendimiento están en `evidence/technical/1cb022df26b35e6f373a71a5baf3ff49f07691a0/`. Todos los tests dirigidos y la regresión F02 pasaron; la matriz y los contadores están en `delivery-report.md`. La revisión visual humana permanece pendiente.

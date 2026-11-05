@@ -1,0 +1,147 @@
+{
+  "schema": "F03/visual-evidence@1",
+  "codeSha": "1cb022df26b35e6f373a71a5baf3ff49f07691a0",
+  "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+  "geometrySha256": "43a9322ac095262cb968d151106124639b0d7e9552a8d9725928fa933fb8c696",
+  "desktopCaptures": 21,
+  "mobileCaptures": 6,
+  "sourcePngPolicy": "Los PNG originales se convirtieron a WebP RGB; sourcePngSha256 conserva la identidad de la captura original.",
+  "visualGate": "VISUAL_PENDING_HUMAN",
+  "files": [
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-D1.webp",
+      "bytes": 15274,
+      "sha256": "2af1ab3547ce38046cd12b87d0a0e53a34099e1bb73f5415ed5cd687c5c52edf"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-F02-M1.webp",
+      "bytes": 26922,
+      "sha256": "614cc9bfe1bdc15db6ae05af1033b4f579b5441e2913b02b640cbe4043ee0f5c"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-F1.webp",
+      "bytes": 7616,
+      "sha256": "40681fbf5c5888c6d3342108b5212c901ade2c11520573bb0a747c44c8b0a52e"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-G1.webp",
+      "bytes": 49698,
+      "sha256": "0e60f203d7bede08e2215adcd35e0a0a67dc1eecaeaad5d1d5251cd77e198333"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-M1.webp",
+      "bytes": 13364,
+      "sha256": "f7ae9568c2adecf8debd083857d1f0c8dfc9977b17f3f421b4b580fada7fc8ce"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-M2.webp",
+      "bytes": 10152,
+      "sha256": "1a5e2318112338c8e6f01aa4b8047de825d323cb9351ad5ceb1cbc77612bb4e0"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/A-M3.webp",
+      "bytes": 10544,
+      "sha256": "55fe2b082f2d55ddcc5b9c9bcc99f127beb4737aa16fe29e4173e5eed5041f15"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-D1.webp",
+      "bytes": 15274,
+      "sha256": "2af1ab3547ce38046cd12b87d0a0e53a34099e1bb73f5415ed5cd687c5c52edf"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-F02-M1.webp",
+      "bytes": 40720,
+      "sha256": "c83896203c4e544339c3c16c9fa46c7156aeab0fa51c8dbe1a5259c1cf2ffa63"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-F1.webp",
+      "bytes": 7616,
+      "sha256": "40681fbf5c5888c6d3342108b5212c901ade2c11520573bb0a747c44c8b0a52e"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-G1.webp",
+      "bytes": 54154,
+      "sha256": "09b37aa53892d46393ceaa3e42c277093dfe11764f7521f4ed0edc5feda20f47"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-M1.webp",
+      "bytes": 13364,
+      "sha256": "f7ae9568c2adecf8debd083857d1f0c8dfc9977b17f3f421b4b580fada7fc8ce"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-M2.webp",
+      "bytes": 10690,
+      "sha256": "b7fe8ff7c4f3d05f9295f720e9f7240075b25864b7d1e5fb32522fad8f2516f2"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/B-M3.webp",
+      "bytes": 10544,
+      "sha256": "55fe2b082f2d55ddcc5b9c9bcc99f127beb4737aa16fe29e4173e5eed5041f15"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-D1.webp",
+      "bytes": 163550,
+      "sha256": "8ebcf9afa453fa2de96834f6b91426722643d36bd708f6ddfab0a39392e8fc8c"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-F02-M1.webp",
+      "bytes": 40736,
+      "sha256": "1efb317304db814b264bd3eb13a43eb04913be7716eb7e0ac01399e9e839c44e"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-F1.webp",
+      "bytes": 4948,
+      "sha256": "f75e70ebc937614aee779d12d55220847a602ac8d05e672a38c29d14066288fb"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-G1.webp",
+      "bytes": 54140,
+      "sha256": "ba027ea58760d116dd842c097705e7dabc455a877ebe3b50345592a6c0ba4395"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-M1.webp",
+      "bytes": 12936,
+      "sha256": "b4b9fd17e18dcb672b0cc3b3af429f0ac583abd76e0877fd4361f4fb9c4504b7"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-M2.webp",
+      "bytes": 9298,
+      "sha256": "c664fadaed4d81e8e435a3c2a0df4e498d59bd888a3a2898951e409812be8870"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/C-M3.webp",
+      "bytes": 8818,
+      "sha256": "8611320349c6450feba0073decad45f8eacd5078482da860f65150805a36d1e0"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/D1-material-detail.webp",
+      "bytes": 71518,
+      "sha256": "af4aa1f246aae7bdeb0a19df6dabb1249d0329a5f2ab30a1b0235ff535d3404a"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/desktop-contact.webp",
+      "bytes": 128788,
+      "sha256": "d1c2ec0c33fe11c776060adfad88e7e5cfc6013d1f11be55e21eb40a6a2a6698"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/desktop-manifest.json",
+      "bytes": 68878,
+      "sha256": "2998889ebc48afebf8686a9baa4b50d9b7e08e9d697241903c3d6f80b301ce7e"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/F02-window-control.webp",
+      "bytes": 111888,
+      "sha256": "638b33c222c56138d3b8f4574f8a275726a209ae8d2364ce80c22f2a9d3a03fe"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/mobile-contact.webp",
+      "bytes": 19736,
+      "sha256": "e3e1190a3afa592e503906d4cebfc5e77b0dc9ec195ceb4d338d1acb242394af"
+    },
+    {
+      "path": "docs/qa/f03-facade-fidelity-v1/evidence/facade-abc/1cb022df26b35e6f373a71a5baf3ff49f07691a0/mobile-manifest.json",
+      "bytes": 59494,
+      "sha256": "0aa5da775b1826ae4eb1677a6b5142b4a3bd152a0f709ea74907343d706be65e"
+    }
+  ]
+}
