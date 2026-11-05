@@ -4650,10 +4650,11 @@ function computeVisitPlan(roomId,region){
   // goes on along the same validated route path (clearance already checked) until 0.9 m inside the room, from rest to
   // rest, turning to the room's farthest corner — the pose handed over to «Recorrer» is in the room it names.
   if(inside){
-    // Inside landing: hold at the landing point looking at what the room contains (else its farthest corner).
+    // Inside landing: hold at the landing point looking across the room to its farthest corner (the widest reading of
+    // the room: its furniture, window and depth together).
     const things=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inPoly(dest.poly,o.position.x,o.position.y));
     const far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-inside.x,p[1]-inside.y)>Math.hypot(b[0]-inside.x,b[1]-inside.y)?p:b,dest.poly[0]);
-    const aim=things.length?[things.reduce((a,o)=>a+o.position.x,0)/things.length,things.reduce((a,o)=>a+o.position.y,0)/things.length]:far,aimAt=Math.hypot(aim[0]-inside.x,aim[1]-inside.y)>900?aim:far;
+    const aimAt=far;void things;
     const yaw=Math.atan2(aimAt[1]-inside.y,aimAt[0]-inside.x);
     return {ok:true,plan,moves,landing:-1,landingInside:true,vfov,samples:[{t:0,s:0,x:inside.x,y:inside.y,cameraYaw:yaw,cameraPitchDeg:12},{t:1.4,s:0,x:inside.x,y:inside.y,cameraYaw:yaw,cameraPitchDeg:10}],arrival:{yaw,pitchDeg:10},extended:0};
   }

@@ -357,7 +357,7 @@
     - turn: in place, to the arrival view; arrive: hold — the pose handed over to «Recorrer».
     input: start {position, target, fov} (world); first {x, z} world, above, eye (m); samples [{t (s), x, z, yaw, pitchDeg}]
     (world, yaw about +y measured from +x towards +z, pitch down positive); arrival {yaw, pitchDeg}; walkFov; base {near,far}. */
- const ROOM_VISIT={approachMinMs:1400,approachMaxMs:3200,approachSpeed:4,descendMs:1700,closeMs:900,arriveMs:1600,turnDegPerS:35,minTurnMs:700,lookPitchDeg:35,playMs:14000};
+ const ROOM_VISIT={approachMinMs:1400,approachMaxMs:3200,approachSpeed:4,descendMs:1700,closeMs:900,arriveMs:1600,turnDegPerS:35,minTurnMs:700,lookPitchDeg:58,playMs:14000};
  function roomVisit(input){
   const o={...ROOM_VISIT,...(input.options||{})},A=input.start,S=input.samples||[];
   if(!A||![...A.position,...A.target,A.fov].every(Number.isFinite))throw Error('Falta la vista general de partida.');
