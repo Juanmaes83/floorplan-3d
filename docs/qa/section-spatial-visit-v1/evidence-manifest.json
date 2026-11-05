@@ -110,6 +110,26 @@
    "testedSha": "be5ee5a",
    "status": "CAPTURED/INSPECTED",
    "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/mobile-portrait-390x844.jpg",
+   "sha256": "527ec4057ec5055b3fa42e4f17d0ab069229a8129bbab728da074d8747060e98",
+   "bytes": 99941,
+   "viewport": "390x844",
+   "gpu": "SwiftShader (CPU, headless Chromium, emulated touch)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Phone viewport, not a physical device. Landscape: card on the right third, architecture readable. Portrait: the existing presentation card covers about the lower half; the visit framing keeps the subject in the free upper area, but the visible area is small (documented limitation)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/mobile-landscape-844x390.jpg",
+   "sha256": "1ad7cc45be8aa110ed329d94c80c63e98703714c3146567a05422091228e6b57",
+   "bytes": 98321,
+   "viewport": "844x390",
+   "gpu": "SwiftShader (CPU, headless Chromium, emulated touch)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Phone viewport, not a physical device. Landscape: card on the right third, architecture readable. Portrait: the existing presentation card covers about the lower half; the visit framing keeps the subject in the free upper area, but the visible area is small (documented limitation)."
   }
  ]
 }

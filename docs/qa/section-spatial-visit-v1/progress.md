@@ -137,3 +137,16 @@ Resto de la batería sobre `c7ed454`/`be5ee5a`:
 - walk-controls 8/8;
 - templates 18/18;
 - presentation-visit 6/6 sobre `c7ed454`. Tras el cambio de `be5ee5a` solo se ha vuelto a pasar el caso ON (1/1).
+
+### Validación final (`be5ee5a`)
+- **presentation-visit.browser:** 6/6 sobre el código final:
+  - OFF;
+  - ON con estados seguros, reversa, relevo y salida limpia;
+  - fallback;
+  - Escape y 5 ciclos;
+  - móvil vertical y horizontal.
+- **Vídeo final 1280×800:** revisado completo en `evidence/final/`, con la lámina S0–S6 y la comparación antes/después.
+- **Móvil (viewport emulado, no dispositivo):**
+  - En horizontal, correcto.
+  - **En vertical, limitación:** la tarjeta de presentación existente ocupa cerca de la mitad inferior. La visita encuadra en la mitad libre, pero el área útil es pequeña. Propuesta para una iteración aparte: plegar las herramientas de la tarjeta durante la visita en vertical (no se ha rediseñado el panel aquí).
+- **GPU real y móvil físico:** `MOBILE_PHYSICAL_PENDING`; solo hay SwiftShader.
