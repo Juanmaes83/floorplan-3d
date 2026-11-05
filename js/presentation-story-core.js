@@ -415,7 +415,68 @@
   }
   return {kind:'living-drawing',stateAt,checkpoints:[0,.25,.5,.75,1],info:{total,intro,rooms:views.map(v=>({id:v.id,start:v.start,leaveAt:v.leaveAt,end:v.end})),keys:keys.map(k=>k.t),playMs:Math.round(total*1000),reduced:!!input.reduced,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen,'axon-open':axonOpen,'exploded-levels-open':explodedLevelsOpen,'living-drawing':livingDrawing};
+ /* «Sección → visita espacial» (roomVisit, Section → Spatial Visit V1): from the overview the section ends on, into a
+    real room the professional chose, along the route Rubik already validates (FloorPlanPresentationRoute.plan +
+    choreography: grid search with wall / window / low-door / furniture clearance, eye-level camera, arrival view).
+    This narrative only times and blends what those modules return; it never invents a path:
+    - approach: overview pose → above the first interior route point, higher than every wall and piece of furniture
+      (nothing can be crossed up there), turning to look down at it; the horizontal cut stays (no ceiling exists);
+    - descend: straight down onto that point, which lies inside a room with the route's clearance (never a doorway
+      lintel), to eye height;
+    - close: at eye height the cut returns to full height (fullHeight): walls, openings and ceiling close around the
+      viewer — one rebuild at the threshold, never per frame;
+    - walk: the choreographed samples (time, position, yaw, pitch), exactly;
+    - turn: in place, to the arrival view; arrive: hold — the pose handed over to «Recorrer».
+    input: start {position, target, fov} (world); first {x, z} world, above, eye (m); samples [{t (s), x, z, yaw, pitchDeg}]
+    (world, yaw about +y measured from +x towards +z, pitch down positive); arrival {yaw, pitchDeg}; walkFov; base {near,far}. */
+ const ROOM_VISIT={approachMinMs:1400,approachMaxMs:3200,approachSpeed:4,descendMs:1700,closeMs:900,arriveMs:1600,turnDegPerS:35,minTurnMs:700,lookPitchDeg:58,playMs:14000};
+ function roomVisit(input){
+  const o={...ROOM_VISIT,...(input.options||{})},A=input.start,S=input.samples||[];
+  if(!A||![...A.position,...A.target,A.fov].every(Number.isFinite))throw Error('Falta la vista general de partida.');
+  if(S.length<2||!S.every(q=>[q.t,q.x,q.z,q.yaw,q.pitchDeg].every(Number.isFinite)))throw Error('No hay una ruta interior validada hasta la estancia.');
+  const above=Number(input.above),eye=Number(input.eye),walkFov=Number(input.walkFov)||A.fov,base={near:input.base?.near??.05,far:input.base?.far??300};
+  if(!Number.isFinite(above)||!Number.isFinite(eye)||above<=eye)throw Error('Alturas de visita no válidas.');
+  const dir=(yaw,pitchDeg)=>{const pt=rad(pitchDeg);return [Math.cos(pt)*Math.cos(yaw),-Math.sin(pt),Math.cos(pt)*Math.sin(yaw)];};
+  const f0=norm(sub(A.target,A.position)),yaw0=Math.atan2(f0[2],f0[0]),pitch0=-deg(Math.asin(Math.max(-1,Math.min(1,f0[1]))));
+  const first=S[0],last=S.at(-1),top=[first.x,above,first.z];
+  // Shortest yaw turns, unwrapped once so interpolation never spins the long way round.
+  const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a)),yawA=yaw0,yawFirst=yawA+wrap(first.yaw-yawA);
+  const arrYaw=last.yaw+wrap((input.arrival?.yaw??last.yaw)-last.yaw),arrPitch=Number.isFinite(input.arrival?.pitchDeg)?input.arrival.pitchDeg:last.pitchDeg;
+  const approachMs=Math.round(Math.min(o.approachMaxMs,Math.max(o.approachMinMs,len(sub(top,A.position))/o.approachSpeed*1000)));
+  const walkMs=Math.round((last.t-first.t)*1000),turn=Math.abs(arrYaw-last.yaw),turnMs=turn>.02?Math.max(o.minTurnMs,Math.round(deg(turn)/o.turnDegPerS*1000)):0;
+  const legs=[['approach',approachMs],['descend',o.descendMs],['close',o.closeMs],['walk',walkMs],['turn',turnMs],['arrive',o.arriveMs]].filter(([,ms])=>ms>0);
+  const total=legs.reduce((n,[,ms])=>n+ms,0),bounds=[];{let acc=0;for(const [name,ms] of legs){bounds.push({name,from:acc/total,to:(acc+ms)/total});acc+=ms;}}
+  // View offsets (the region the presentation card leaves free), eased in during the approach and kept to the end.
+  const vo=input.view||{},yo=Number(vo.yawOffset)||0,po=Number(vo.pitchOffsetDeg)||0;let ramp=1;
+  // Wall height (m): from the overview's, the walls lower while the camera approaches, so no wall top ever sweeps past the
+  // lens on the way down; at eye height they rise back to full height around the viewer (close).
+  const wB=Number(input.walls?.base)||3,wL=Number(input.walls?.low)||1.1,wF=Number(input.walls?.full)||wB;let wallHeight=wB;
+  const pose=(position,yaw,pitchDeg,fov,phase,p,extra={})=>({p,phase,position,target:add(position,dir(yaw+yo*ramp,pitchDeg+po*ramp)),fov,near:base.near,far:base.far,distance:1,
+   fullHeight:['walk','turn','arrive','room'].includes(phase),wallHeight,...extra});
+  // Sample interpolation by walking time (the choreography's own clock).
+  function walkAt(sec){
+   if(sec<=first.t)return first;if(sec>=last.t)return last;
+   let lo=0,hi=S.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(S[m].t<=sec)lo=m;else hi=m;}
+   const a=S[lo],b=S[hi],k=(sec-a.t)/Math.max(1e-9,b.t-a.t);return {x:lerp(a.x,b.x,k),z:lerp(a.z,b.z,k),yaw:a.yaw+wrap(b.yaw-a.yaw)*k,pitchDeg:lerp(a.pitchDeg,b.pitchDeg,k)};
+  }
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0);
+   if(p<=0)return {p:0,phase:'overview',position:[...A.position],target:[...A.target],fov:A.fov,near:base.near,far:base.far,distance:len(sub(A.target,A.position)),fullHeight:false};
+   const leg=bounds.find(b=>p<b.to)||bounds.at(-1),t=clamp01((p-leg.from)/Math.max(1e-9,leg.to-leg.from)),e=smooth(t);
+   ramp=leg.name==='approach'?e:1;
+   wallHeight=leg.name==='approach'?lerp(wB,wL,e):leg.name==='descend'?wL:leg.name==='close'?lerp(wL,wF,e):wF;
+   if(leg.name==='approach')return pose(lerp3(A.position,top,e),lerp(yawA,yawFirst,e),lerp(pitch0,o.lookPitchDeg,e),lerp(A.fov,walkFov,e),'approach',p);
+   if(leg.name==='descend')return pose([first.x,lerp(above,eye,e),first.z],first.yaw,lerp(o.lookPitchDeg,first.pitchDeg,e),walkFov,'descend',p);
+   if(leg.name==='close')return pose([first.x,eye,first.z],first.yaw,first.pitchDeg,walkFov,'close',p);
+   // The visit may start part-way along the route: its walking clock eases in from rest (and the choreography already
+   // eases out on arrival), so the camera never starts at cruising speed.
+   if(leg.name==='walk'){const c=1/.51,u=t<.3?c*t*t:c*.09+.6*c*(t-.3);const q=walkAt(first.t+Math.min(1,u)*(last.t-first.t));return pose([q.x,eye,q.z],q.yaw,q.pitchDeg,walkFov,'walk',p);}
+   if(leg.name==='turn')return pose([last.x,eye,last.z],lerp(last.yaw,arrYaw,e),lerp(last.pitchDeg,arrPitch,e),walkFov,'turn',p);
+   return pose([last.x,eye,last.z],arrYaw,arrPitch,walkFov,p>=1?'room':'arrive',p);
+  }
+  return {kind:'room-visit',stateAt,checkpoints:[0,.25,.5,.75,1],info:{playMs:total,legs:bounds.map(b=>({...b})),approachMs,walkMs,turnMs,above,eye,walkFov,samples:S.length,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen,'axon-open':axonOpen,'exploded-levels-open':explodedLevelsOpen,'living-drawing':livingDrawing,'room-visit':roomVisit};
  /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
     proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
     the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
@@ -429,9 +490,9 @@
   return {count:w.length,starts:[...starts],total,locate,at};
  }
  // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
- const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000,'axon-open':7000,'exploded-levels-open':10000,'living-drawing':30000};
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000,'axon-open':7000,'exploded-levels-open':10000,'living-drawing':30000,'room-visit':14000};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,planReveal,roomDescent,sectionOpen,elevationOpen,axonOpen,explodedLevelsOpen,livingDrawing,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN,AXON_OPEN,EXPLODED_LEVELS_OPEN,LIVING_DRAWING};
+ return {create,roomVisit,ROOM_VISIT,planReveal,roomDescent,sectionOpen,elevationOpen,axonOpen,explodedLevelsOpen,livingDrawing,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN,AXON_OPEN,EXPLODED_LEVELS_OPEN,LIVING_DRAWING};
 });

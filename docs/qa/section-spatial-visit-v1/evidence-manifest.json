@@ -1,0 +1,135 @@
+{
+ "mission": "section-spatial-visit-v1",
+ "items": [
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r1/r1-contact-sheet.jpg",
+   "sha256": "4763c258bb990888fb7a2917eb27473975af504582c29ee0b4e26ef244410acd",
+   "bytes": 264566,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "7b32e23 (R1 code; frames stepped deterministically)",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R1 first transition: section-open \u2192 room-visit (landing at entrance-side route sample). Defect found: long, wall-filled walk; fixed next (landing 1.2\u20134 m before the destination door)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r1/r1-section-to-visit-1280x800.mp4",
+   "sha256": "b022312116a3b65ee43b147865517255def5d53077e1b25b3ebc58005bc92250",
+   "bytes": 914631,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "7b32e23 (R1 code; frames stepped deterministically)",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R1 first transition: section-open \u2192 room-visit (landing at entrance-side route sample). Defect found: long, wall-filled walk; fixed next (landing 1.2\u20134 m before the destination door)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r2/r2-contact-sheet.jpg",
+   "sha256": "f3991d04633f0f7e5c10012271de900374e3a581eb16cdb4c0f70fa54e5cf309",
+   "bytes": 224576,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "b0e1088",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R2: arrival inside the master bedroom, hand-over to Recorrer, back to section. Defects: landing still at entrance (choreography ends at a doorway view, fixed after), walk card text from base mode (fixed after)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r2/r2-section-visit-handover-960x600.mp4",
+   "sha256": "b851a1dc5f38da4b7259ec0568b062608cb4e628ac55868047ac9b6e6a9a278c",
+   "bytes": 568453,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "b0e1088",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R2: arrival inside the master bedroom, hand-over to Recorrer, back to section. Defects: landing still at entrance (choreography ends at a doorway view, fixed after), walk card text from base mode (fixed after)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r3/r3-contact-sheet.jpg",
+   "sha256": "6efe25657d379437981b37f8407bc4d531bde324c606ef50f37ad87398038042",
+   "bytes": 217613,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "982546f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R3: landing in the hall 1.2-4 m before the master bedroom door (sample 142), validated route on the minimap, walk through the real doorway, arrival inside with the bed in view, hand-over and back to section. Minor: during the descent a cut wall top passes close to the lens (valid, 220 mm clearance)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r3/r3-section-visit-960x600.mp4",
+   "sha256": "d9255dbd7658cf26cecab2ca3945bb3641380f15ed042887ecf41dff776656f4",
+   "bytes": 522508,
+   "viewport": "960x600",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "982546f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R3: landing in the hall 1.2-4 m before the master bedroom door (sample 142), validated route on the minimap, walk through the real doorway, arrival inside with the bed in view, hand-over and back to section. Minor: during the descent a cut wall top passes close to the lens (valid, 220 mm clearance)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r5/r5-section-visit-1280x800.mp4",
+   "sha256": "f42ba5e5d22c5fd22e292ebeb92a4d550ef5f71b2819b397afa3c30962626a0c",
+   "bytes": 798157,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "1a7034f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R5 final: S1 frontal section, S2 depth opening, S3 approach above the master bedroom with the validated route on the minimap, S4 descent through the cut in the hall, real doorway, arrival inside at eye level, S5 hand-over to Recorrer with return bar, S6 back to section. No page errors."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/r5/r5-storyboard-S0-S6.jpg",
+   "sha256": "bec86a3dff493261f482129e47cb19cb2c90e81a07e72004af18c40a60b73823",
+   "bytes": 262751,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "1a7034f",
+   "status": "CAPTURED/INSPECTED",
+   "note": "R5 final: S1 frontal section, S2 depth opening, S3 approach above the master bedroom with the validated route on the minimap, S4 descent through the cut in the hall, real doorway, arrival inside at eye level, S5 hand-over to Recorrer with return bar, S6 back to section. No page errors."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/before-after-composition.jpg",
+   "sha256": "61c9931b49f27dd01fe08ea1b89dffcdc976fee6ca7a0d6b403f6a76e4be074f",
+   "bytes": 320683,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/final-section-visit-1280x800.mp4",
+   "sha256": "2c95d4fa65a3f9d735166b9c6e0f57a5502137c37a3cae844e55e72de2945b05",
+   "bytes": 871279,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/final-storyboard-S0-S6.jpg",
+   "sha256": "b49dccff65d0e1d8fa93b2569a098c6add71a502ea03b58d9e3f797007724b61",
+   "bytes": 260735,
+   "viewport": "1280x800",
+   "gpu": "SwiftShader (CPU, headless Chromium)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Quality iteration: full video (348 frames, 14.5 s, no page errors) reviewed end to end; storyboard S0-S6; before/after of the defective frames (dark cut wall tops, near wall, 360\u00b0 spin, arrival). BEFORE frames from evidence r5 (1a7034f) and the c1 control render (6862240)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/mobile-portrait-390x844.jpg",
+   "sha256": "527ec4057ec5055b3fa42e4f17d0ab069229a8129bbab728da074d8747060e98",
+   "bytes": 99941,
+   "viewport": "390x844",
+   "gpu": "SwiftShader (CPU, headless Chromium, emulated touch)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Phone viewport, not a physical device. Landscape: card on the right third, architecture readable. Portrait: the existing presentation card covers about the lower half; the visit framing keeps the subject in the free upper area, but the visible area is small (documented limitation)."
+  },
+  {
+   "path": "docs/qa/section-spatial-visit-v1/evidence/final/mobile-landscape-844x390.jpg",
+   "sha256": "1ad7cc45be8aa110ed329d94c80c63e98703714c3146567a05422091228e6b57",
+   "bytes": 98321,
+   "viewport": "844x390",
+   "gpu": "SwiftShader (CPU, headless Chromium, emulated touch)",
+   "testedSha": "be5ee5a",
+   "status": "CAPTURED/INSPECTED",
+   "note": "Phone viewport, not a physical device. Landscape: card on the right third, architecture readable. Portrait: the existing presentation card covers about the lower half; the visit framing keeps the subject in the free upper area, but the visible area is small (documented limitation)."
+  }
+ ]
+}

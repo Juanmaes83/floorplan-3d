@@ -56,6 +56,8 @@
  // descriptor of each level (FloorPlanPresentationSection.derive), computed when the dialog opens; sectionAxis: the one
  // axis of a building (envelope of its levels in the building frame), so every level is cut the same way.
  let sectionChosen=false,sectionEnabled=false,sectionLevels=new Map(),sectionAxis=null;
+ // Section → Spatial Visit V1: after the section, into the first chosen room with a validated interior route.
+ let visitChosen=false,visitEnabled=false,visitFallback=null;
  // FT3D-4 «Incluir alzado/fachada narrativa»: chosen per presentation, off by default, never saved. elevationDescriptor:
  // the façade candidates of the home or building (FloorPlanPresentationElevation.derive), computed when the dialog
  // opens; elevationCandidateId: the façade chosen in its selector (the automatic one by default); the solar snapshot is
@@ -135,7 +137,9 @@
   mapToggle.textContent=tx(mapOpen?'Ocultar plano':'Mostrar plano',mapOpen?'Hide map':'Show map',mapOpen?'隐藏平面图':'显示平面图');
   mapToggle.setAttribute('aria-expanded',String(mapOpen));mapPanel.hidden=!mapOpen;
   if(!mapOpen)return;
-  const data=Core.minimap(app.geometry,overlay.dataset.moving==='true'?null:View3D.presentationPose(),plan.stops[index].roomId);
+  // Section → Spatial Visit V1: during the visit the map names its destination (not the overview it started from).
+  const visitScene=story&&story.scenes[story.i]?.kind==='room-visit'?story.scenes[story.i]:null;
+  const data=Core.minimap(app.geometry,overlay.dataset.moving==='true'?null:View3D.presentationPose(),visitScene?plan.stops[visitScene.stop].roomId:plan.stops[index].roomId);
   if(!data){map.hidden=true;return;}
   mapSvg.replaceChildren();mapSvg.setAttribute('viewBox',data.viewBox.join(' '));
   mapSvg.setAttribute('aria-label',tx('Plano de orientación','Orientation map','方向平面图'));
@@ -151,6 +155,10 @@
   }
   const route=View3D.presentationRouteInfo;
   if(route?.points?.length>1&&['running','complete'].includes(route.status))svgEl('polyline',mapSvg,{points:route.points.map(point=>`${point.x},${point.y}`).join(' '),class:'presentation-minimap-route'});
+  // Section → Spatial Visit V1: the validated route of the visit, from the entrance to the destination.
+  const visit=visitScene&&story.p>0?View3D.presentationVisitInfo:null;
+  if(visit?.route?.points?.length>1){svgEl('polyline',mapSvg,{points:visit.route.points.map(point=>`${point.x},${point.y}`).join(' '),class:'presentation-minimap-route','data-visit-route':'true'});
+   mapSvg.setAttribute('aria-label',tx('Plano de orientación con la ruta validada hasta la estancia','Orientation map with the validated route to the room','带已验证路线的方向平面图'));}
   // FT3D-3: while the section is on, its cut line and the way the frontal camera looks, from the same descriptor.
   const cut=story&&story.scenes[story.i]?.kind==='section-open'&&story.p>0?View3D.presentationStoryInfo?.dynamicSection:null;
   if(cut){const [a,b]=cut.line,len=Math.max(data.viewBox[2],data.viewBox[3])*.09,mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
@@ -525,7 +533,14 @@
   const text=!supported?tx(`No disponible: ${[...sectionLevels.values()][0]?.message||''}`,'Unavailable: no candidate plane crosses the model.','不可用：没有剖切面穿过模型。')
    :tx('Opcional: tras la vista general, un corte vertical del mismo modelo abre la vivienda. Sección visual · derivada del modelo · no es plano de ejecución.','Optional: after the overview, a vertical cut of the same model opens the home. Visual section · derived from the model · not a construction drawing.','可选：总览后，同一模型的竖向剖切展开住宅。可视剖面，非施工图。')+(reasons.length?' '+tx('Se omite en ','Skipped on ','跳过 ')+reasons.join(' · '):'');
   const hint=el('p',text,box,'presentation-story-hint');hint.id='presentationSectionHint';input.setAttribute('aria-describedby',hint.id);
-  input.onchange=()=>{sectionChosen=input.checked&&!!supported;};
+  // Section → Spatial Visit V1: a sub-option of the section, never on by default; only with the section on.
+  const vbox=el('div',undefined,box,'presentation-visit-option');vbox.id='presentationVisitOptionBox';
+  const vlabel=el('label',undefined,vbox);const vinput=el('input',undefined,vlabel);vinput.type='checkbox';vinput.id='presentationVisitOption';vinput.checked=false;vinput.disabled=true;
+  el('span',tx('Sección → visita espacial','Section → spatial visit','剖面 → 空间参观'),vlabel);
+  const vhint=el('p',tx('Tras abrir la sección, la cámara entra en la primera estancia elegida que tenga una ruta interior validada (sin atravesar muros, puertas cerradas, muebles ni techo) y te deja a la altura de los ojos para seguir con «Recorrer».','After the section opens, the camera enters the first chosen room with a validated interior route (no walls, closed doors, furniture or ceiling crossed) and leaves you at eye level to continue with «Walk».','剖面展开后，镜头沿已验证的室内路线进入第一个所选房间，停在视线高度，可继续“漫游”。'),vbox,'presentation-story-hint');vhint.id='presentationVisitHint';vinput.setAttribute('aria-describedby',vhint.id);
+  visitChosen=false;
+  input.onchange=()=>{sectionChosen=input.checked&&!!supported;vinput.disabled=!sectionChosen;if(!sectionChosen){vinput.checked=false;visitChosen=false;}};
+  vinput.onchange=()=>{visitChosen=vinput.checked&&sectionChosen;};
  }
  const sectionAt=stop=>!!stop&&stop.kind==='overview'&&!!sectionLevels.get(stop.levelId??null)?.supported;
  // FT3D-4: the option, enabled only when the model gives at least one façade with a demonstrable outside; when it does
@@ -646,6 +661,9 @@
    else if(reducedMotion()&&hasHeldScene(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
    else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
+  // Section → Spatial Visit V1: on arrival, hand over to «Recorrer» at the same pose, or go back to the section.
+  const visitWalk=button('',row,()=>walkFromVisit());visitWalk.id='presentationVisitWalk';visitWalk.hidden=true;visitWalk.classList.add('primary');
+  const visitSection=button('',row,()=>backToSection());visitSection.id='presentationVisitSection';visitSection.hidden=true;
   const replay=button('',tools,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
   const enter=button('',tools,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,[{kind:'room-descent',stop:to,from:index}],{from:0,to:1});});enter.id='presentationStoryEnter';enter.hidden=true;
   // With reduced motion the story waits at its start, as the 1a chapter: scene buttons and «Reproducir historia» jump.
@@ -658,18 +676,23 @@
   let axon=null;if(axonEnabled){axon=button('',tools,()=>{const kind=axonKind();if(kind&&axonAt(plan?.stops[index]))openStory(epoch,[{kind,stop:index}],{from:0,to:reducedMotion()?null:1});});axon.id='presentationAxonPlay';axon.hidden=true;}
   // Hybrid V2: replay «Dibujo vivo» from an overview of the presentation.
   let living=null;if(livingEnabled){living=button('',tools,()=>{if(livingAt(plan?.stops[index]))openStory(epoch,[{kind:'living-drawing',stop:index}],{from:0,to:reducedMotion()?null:1});});living.id='presentationLivingPlay';living.hidden=true;}
-  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,living};return storyUi;
+  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,living,visitWalk,visitSection};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
  // FT3D-2: the whole presentation as one story — for each level, its plan rising to its overview, then the descent into
  // its first chosen room. Derived from the presentation plan, so the dialog's order and selection edit it.
- function fullStory(){if(frozenTemplate)return templateMaterialized.scenes.map(sc=>({...sc}));const scenes=[];let facade=false,building=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
+ function fullStory(){if(frozenTemplate)return templateMaterialized.scenes.map(sc=>({...sc}));const scenes=[];let facade=false,building=false,visited=false;plan?.stops.forEach((s,i)=>{if(s.kind!=='overview')return;scenes.push({kind:'plan-reveal',stop:i});if(sectionEnabled&&sectionAt(s))scenes.push({kind:'section-open',stop:i});
   // FT3D-4: the façade belongs to the whole building, so it is read once, at the first overview that can show it.
   if(elevationEnabled&&!facade&&elevationAt(s)){scenes.push({kind:'elevation-open',stop:i});facade=true;}
   // FT3D-5: the reading of the building is global too: once, at the first overview of a level it includes.
-  if(axonEnabled&&!building&&axonAt(s)){scenes.push({kind:axonKind(),stop:i});building=true;}const r=plan.stops[i+1];if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
- const sceneEnd=sc=>sc.stop,sceneHome=sc=>sc.kind==='room-descent'?sc.from:sc.stop;
+  if(axonEnabled&&!building&&axonAt(s)){scenes.push({kind:axonKind(),stop:i});building=true;}const r=plan.stops[i+1];
+  // Section → Spatial Visit V1: after this level's section, the first chosen room of the level with a validated
+  // interior route is entered (instead of the descent). No such room: the descent, honestly, and the reason is kept.
+  if(visitEnabled&&!visited&&sectionEnabled&&sectionAt(s)){let j=-1,why=null;for(let k=i+1;k<plan.stops.length&&plan.stops[k].kind==='room'&&plan.stops[k].levelId===s.levelId;k++){const v=View3D.presentationVisitPlan(plan.stops[k].roomId);if(v.ok){j=k;break;}why=why||v.reason;}
+   if(j>=0){scenes.push({kind:'room-visit',stop:j,from:i});visited=true;return;}visitFallback=why||tx('No hay estancias elegidas en esta planta.','No rooms chosen on this level.','此楼层未选择房间。');}
+  if(r?.kind==='room'&&r.levelId===s.levelId)scenes.push({kind:'room-descent',stop:i+1,from:i});});return scenes;}
+ const sceneEnd=sc=>sc.stop,sceneHome=sc=>sc.kind==='room-descent'||sc.kind==='room-visit'?sc.from:sc.stop;
  function previousStart(run){const here=run.seq.at(run.i,0);return run.P-here>.004?here:run.seq.at(Math.max(0,run.i-1),0);}
  // Reduced motion lands on the open section (its held state) instead of its untouched start (FT3D-3 §10).
  const sectionHold=()=>FloorPlanPresentationStory.SECTION_OPEN.reducedHold;
@@ -685,6 +708,36 @@
  function nextHold(run){const h=holdsOf(run.scenes[run.i]?.kind).find(v=>v>run.p+1e-6);return h===undefined?null:h;}
  // A story with a scene that has reduced-motion holds (section, façade, axonometric reading, breakdown).
  const hasHeldScene=run=>run.scenes.some(sc=>holdsOf(sc.kind).length>0);
+ // ── Section → Spatial Visit V1: hand-over to «Recorrer» (S5) and the way back (S6) ─────────────────────────────
+ // While walking, the presentation card steps aside for a small bar: where you are, back to the presentation (the room
+ // stop) and back to the section. The walk itself (collisions, doors, controls) is Rubik's, unchanged.
+ let walking=null;
+ const walkBar=el('div',undefined,overlay,'presentation-walkbar');walkBar.id='presentationWalkBar';walkBar.hidden=true;walkBar.setAttribute('role','group');
+ const walkLabel=el('p','',walkBar,'presentation-walkbar-label');walkLabel.setAttribute('aria-live','polite');
+ const walkBack=button('',walkBar,()=>leaveWalk('stop'));walkBack.id='presentationWalkBack';
+ const walkSection=button('',walkBar,()=>leaveWalk('section'));walkSection.id='presentationWalkSection';
+ function walkFromVisit(){
+  const run=story,sc=run?.scenes[run.i];if(!sc||sc.kind!=='room-visit'||run.P<1)return;
+  const target=sc.stop,home=sc.from;pauseStory();
+  const r=window.View3D?.presentationWalkFrom?.();if(!r?.ok)return;
+  story=null;drawStory();index=target;walking={stop:target,home};overlay.dataset.walking='true';
+  const t=plan.stops[target];walkLabel.textContent=tx(`Recorrer · ${roomName(t.roomId,t.levelId)}`,`Walk · ${roomName(t.roomId,t.levelId)}`,`漫游 · ${roomName(t.roomId,t.levelId)}`);
+  walkBack.textContent=tx('Volver a la presentación','Back to the presentation','返回展示');walkSection.textContent=tx('Volver a la sección','Back to the section','回到剖面');
+  walkBar.hidden=false;draw();walkBack.focus({preventScroll:true});
+ }
+ async function leaveWalk(to){
+  if(!walking)return;const w=walking;walking=null;walkBar.hidden=true;delete overlay.dataset.walking;
+  window.View3D?.presentationWalkEnd?.();
+  if(to==='section'){index=w.home;await go(w.home);backToSection();}else{await go(w.stop);}
+ }
+ // Back to the start of the section of this story (the overview the section starts from), held there.
+ function backToSection(){
+  const run=story;
+  if(run){const i=run.scenes.findIndex(sc=>sc.kind==='section-open');if(i>=0){pauseStory();seekStory(run.seq.at(i,0));return;}}
+  if(plan?.stops[index]?.kind!=='overview')return;
+  const scenes=fullStory(),i=scenes.findIndex(sc=>sc.kind==='section-open');if(i<0)return;
+  const seq=FloorPlanPresentationStory.sequence(scenes.map(sc=>FloorPlanPresentationStory.SCENE_MS[sc.kind]));openStory(epoch,scenes,{from:seq.at(i,0),to:null});
+ }
  function drawStory(){
   if(!storyUi)return;
   const u=storyUi,on=!!story;
@@ -695,6 +748,10 @@
   u.enter.hidden=u.replay.hidden||nextRoom===null;u.enter.disabled=u.replay.disabled;
   if(frozenTemplate)u.enter.hidden=!templateDecision('room-tour')||on||!plan||plan.stops[index]?.kind!=='overview'||nextRoom===null;
   if(nextRoom!==null)u.enter.textContent=tx(`Entrar en ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`Enter ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`,`进入 ${roomName(plan.stops[nextRoom].roomId,plan.stops[nextRoom].levelId)}`);
+  {const sc=story?.scenes[story.i],arrived=sc?.kind==='room-visit'&&story.P>=1&&!story.playing;
+   u.visitWalk.hidden=!arrived;u.visitSection.hidden=!(sc?.kind==='room-visit'&&!story.playing&&story.P>0);
+   if(arrived)u.visitWalk.textContent=tx('Explorar desde aquí','Explore from here','从这里漫游');
+   u.visitSection.textContent=tx('Volver a la sección','Back to the section','回到剖面');}
   u.full.textContent=tx('Ver la historia completa','Play the whole story','播放完整故事');u.full.hidden=u.replay.hidden||fullStory().length<2;u.full.disabled=u.replay.disabled;
   if(frozenTemplate)u.full.hidden=on||!plan||plan.stops[index]?.kind!=='overview'||!fullStory().length;
   if(u.section){u.section.textContent=tx('Ver sección dinámica','See dynamic section','查看动态剖面');u.section.hidden=!sectionEnabled||on||!plan||!sectionAt(plan.stops[index]);u.section.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
@@ -740,6 +797,11 @@
     u.slider.setAttribute('aria-label',exploded?tx('De la vista general (0) al despiece y de vuelta (100)','From the overview (0) to the breakdown and back (100)','从总览 (0) 到拆解再返回 (100)'):tx('De la vista general (0) a la vista axonométrica y de vuelta (100)','From the overview (0) to the axonometric view and back (100)','从总览 (0) 到轴测图再返回 (100)'));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&nextHold(story)===null&&p>0)?tx('Continuar presentación','Continue presentation','继续展示'):exploded?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');}}
+  else if(sc.kind==='room-visit'){const t=plan.stops[sc.stop],name=roomName(t.roomId,t.levelId),ph=View3D.presentationStoryInfo?.state?.phase||'';
+   caption=p<=0?tx('Vista general 3D','3D overview','3D 总览'):p>=1?tx(`${name} · a la altura de los ojos`,`${name} · at eye level`,`${name} · 视线高度`):ph==='approach'?tx(`Hacia ${name}`,`Towards ${name}`,`前往 ${name}`):ph==='descend'||ph==='close'?tx(`Entrando por el corte en la vivienda`,`Entering the home through the cut`,`从剖面进入住宅`):tx(`Camino real hasta ${name} · ruta validada`,`Real path to ${name} · validated route`,`前往 ${name} 的真实路线`);
+   if(!multi){u.panel.setAttribute('aria-label',tx(`Visita espacial: ${name}`,`Spatial visit: ${name}`,`空间参观：${name}`));u.slider.setAttribute('aria-label',tx(`De la vista general (0) a ${name} (100)`,`From the overview (0) to ${name} (100)`,`从总览 (0) 到 ${name} (100)`));
+    u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing;
+    u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`);}}
   else if(sc.kind==='room-descent'){const t=plan.stops[sc.stop],name=roomName(t.roomId,t.levelId);caption=p<=0?tx('Vista general 3D','3D overview','3D 总览'):p>=1?name:tx(`Bajando a ${name}`,`Going down to ${name}`,`下降到 ${name}`);
    if(!multi){u.panel.setAttribute('aria-label',tx(`Entrar en ${name}`,`Enter ${name}`,`进入 ${name}`));u.slider.setAttribute('aria-label',tx(`De la vista general (0) a ${name} (100)`,`From the overview (0) to ${name} (100)`,`从总览 (0) 到 ${name} (100)`));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing;
@@ -749,6 +811,8 @@
    if(!multi){u.panel.setAttribute('aria-label',tx('Desde el plano','From the plan','从平面图'));u.slider.setAttribute('aria-label',tx('Del plano (0) a la vista 3D (100)','From plan (0) to 3D view (100)','从平面图 (0) 到 3D 视图 (100)'));
     u.planButton.textContent=tx('Ver el plano','Show the plan','查看平面图');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver en 3D','See in 3D','查看 3D');}}
+  // An honest fallback is said, not hidden: the descent replaced the visit, and why.
+  if(visitEnabled&&visitFallback&&story.scenes.some(x=>x.kind==='room-descent')&&!story.scenes.some(x=>x.kind==='room-visit'))caption+=tx(` · Visita espacial no disponible: ${visitFallback}`,` · Spatial visit unavailable: ${visitFallback}`,` · 空间参观不可用：${visitFallback}`);
   u.caption.textContent=caption;
   if(multi){u.panel.setAttribute('aria-label',tx('Historia completa','Whole story','完整故事'));u.slider.max='1000';u.slider.value=String(Math.round(story.P*1000));
    u.slider.setAttribute('aria-label',tx('Progreso de la historia, del plano a la última estancia','Story progress, from the plan to the last room','故事进度'));
@@ -758,7 +822,7 @@
   else{u.slider.max='100';u.slider.value=String(Math.round(p*100));}
   u.slider.setAttribute('aria-valuetext',`${Math.round(story.P*100)} % · ${caption}`);
   u.panel.dataset.scene=sc.kind;
-  if(sc.kind==='section-open'||sc.kind==='elevation-open'||u.panel.dataset.sectionMap)renderMinimap();
+  if(sc.kind==='section-open'||sc.kind==='elevation-open'||sc.kind==='room-visit'||u.panel.dataset.sectionMap)renderMinimap();
  }
  // Builds a scene on the scene graph: the card is measured as its stops show it (so its ends are the poses go() frames),
  // the previous narrative ends, the level of the scene is shown, and the narrative begins at local p.
@@ -768,10 +832,10 @@
   if(story!==run||!active)return false;
   const saved=story;story=null;
   index=sceneEnd(sc);draw();const region=viewRegion();
-  let fromRegion=null;if(sc.kind==='room-descent'){index=sc.from;draw();fromRegion=viewRegion();}
+  let fromRegion=null;if(sc.kind==='room-descent'||sc.kind==='room-visit'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
   if(run.failed?.has(i)){View3D.presentationStoryEnd?.({keepPose:true});await View3D.presentationGo(plan.stops[index],true,{region:viewRegion()});return story===run;}
-  try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...(sc.kind==='room-descent'&&run.scenes.length>1?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{}),...(sc.kind==='living-drawing'?{living:livingView(sc.stop)}:{})},sc.kind);}
+  try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...((sc.kind==='room-descent'||sc.kind==='room-visit')&&(run.scenes.length>1||sc.kind==='room-visit')?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{}),...(sc.kind==='living-drawing'?{living:livingView(sc.stop)}:{})},sc.kind);}
   catch(error){if(!frozenTemplate)throw error;return templateSceneFailure(run,sc,error);}
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
   return true;
@@ -819,7 +883,7 @@
  }
  async function openStory(token,scenes,{from=0,to=null}={}){
   if(!active||batchActive||token!==epoch||plan.stops[index]?.kind!=='overview'||!scenes?.length)return;
-  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))||(isAxonKind(sc.kind)&&(!axonEnabled||sc.kind!==axonKind()||!axonAt(plan.stops[sc.stop])))))return;
+  if(scenes.some(sc=>plan.stops[sc.stop]?.kind!==(sc.kind==='room-descent'||sc.kind==='room-visit'?'room':'overview')||(sc.kind==='section-open'&&!sectionAt(plan.stops[sc.stop]))||(sc.kind==='elevation-open'&&!elevationAt(plan.stops[sc.stop]))||(isAxonKind(sc.kind)&&(!axonEnabled||sc.kind!==axonKind()||!axonAt(plan.stops[sc.stop])))))return;
   closeStory();
   View3D.clearPresentationReveal?.();View3D.clearPresentationRoute?.();routeStatus.hidden=true;routeStatus.textContent='';delete overlay.dataset.route;
   ++movement;
@@ -846,10 +910,10 @@
  // stop: the story stays on the plan.
  async function finishStory(at=1){const run=story;if(!run)return;
   // A story that starts with a descent or a section starts on an overview stop: going back to 0 hands over there.
-  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
+  const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'||run.scenes[0].kind==='room-visit'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
+ function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -1082,6 +1146,7 @@
    // With the chapter the 3D view opens on the plan as the 2D view shows it and the chapter continues from there.
    storyEnabled=storyChosen&&!!window.FloorPlanPresentationStory&&!!window.View3D?.presentationStoryBegin;
    sectionEnabled=sectionChosen&&!!window.FloorPlanPresentationSection&&!!window.View3D?.presentationStoryBegin;
+   visitEnabled=visitChosen&&sectionEnabled&&!!window.View3D?.presentationVisitPlan&&!!window.FloorPlanPresentationRoute;visitFallback=null;
    elevationEnabled=elevationChosen&&!!elevationDescriptor?.supported&&!!window.View3D?.presentationStoryBegin;
    axonEnabled=axonMode!=='off'&&!!axonDescriptor?.supported&&(axonMode!=='exploded'||!!axonDescriptor.variants.exploded.supported)&&!!window.View3D?.presentationStoryBegin;
    // The solar snapshot, once: if solar is no longer available the façade goes on without it.
@@ -1126,6 +1191,7 @@
  }
  async function stop(fromPop=false){
   if(stopping||(!entry&&!active&&!pendingStart))return;
+  if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
   cancelBatch();closeStory();disposeStory();
   stopping=true;++epoch;
   captureButton.disabled=true;
@@ -1140,15 +1206,19 @@
   document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
   if(saved)await app.restorePresentationEntry(saved,three);
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presentation-exiting');
+  // The presentation reports itself closed only once the editor's 3D view has its real size and the camera matches it
+  // (the layout rebuild passes through a 0 px stage); then the roof, hidden while presenting, is synced again.
+  if(saved?.viewMode==='3d')await window.View3D?.viewportSettled?.();
   if(!fromPop&&location.hash==='#presentacion'){
    const focus=saved?.focus;
    addEventListener('popstate',()=>refocus(focus),{once:true});
    history.back();
   }else if(document.activeElement===document.body||!shown(document.activeElement))refocus(saved?.focus);
-  stopping=false;
+  stopping=false;window.View3D?.syncRoofVisibility?.();
  }
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
+  if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
   cancelBatch();closeStory();disposeStory();endLivingDrawing();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
@@ -1168,6 +1238,8 @@
   // A dialog opened over the presentation («Añadir observación», «Compartir imagen») owns the keyboard: Escape closes
   // that dialog only and the arrows stay in it. A second Escape then ends the presentation.
   if(active&&modalOpen())return;
+  // Walking from the visit: the keys belong to the walk (arrows move); Escape first returns to the presentation.
+  if(active&&walking){if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();leaveWalk('stop');}return;}
   if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();stop();return;}
   if(active&&e.target?.matches?.('input,select,textarea'))return;
   if(active&&map.contains(e.target)&&(e.key==='Enter'||e.key===' '))return;
@@ -1195,5 +1267,5 @@
  addEventListener('floorplan-asset-status',()=>{updateAssetWarning();updateCapture();});
  config.addEventListener('close',()=>{if(!active&&!pendingStart)refocus(returnFocus);});
  draw();
- window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
+ window.FloorPlanPresentation={open,stop,invalidate,onProjectChange,contextLost,get active(){return active||stopping;},get plan(){return plan;},get current(){return active&&plan?plan.stops[index]||null:null;},get templates(){return structuredClone({snapshot:templateSnapshot,session:templateUi?.session||null,resolved:templateUi?.resolved||null,frozen:frozenTemplate,failures:templateFailures});},get story(){return story?{p:story.scenes.length>1?story.P:story.p,local:story.p,P:story.P,playing:story.playing,kind:story.scenes[story.i]?.kind,scene:story.i,scenes:story.scenes.length,kinds:story.scenes.map(sc=>sc.kind),busy:story.busy}:null;},get storyEnabled(){return storyEnabled;},get section(){return {chosen:sectionChosen,enabled:sectionEnabled,axis:sectionAxis,levels:[...sectionLevels.entries()].map(([levelId,d])=>({levelId,supported:d.supported,reason:d.reason,message:d.message,axis:d.axis,fraction:d.fraction??null}))};}};
 })();
