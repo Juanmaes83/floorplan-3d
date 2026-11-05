@@ -112,3 +112,28 @@ Se encadena como `section-open → room-visit` en la misma secuencia de Story.
 
 ## Próxima acción
 PR en borrador Juanmaes83/floorplan-3d#168 abierta contra `master`, pendiente de revisión visual humana. Sin merge ni despliegue.
+
+## Iteración de calidad visual (revisión humana del 5-11)
+| Commit | Cambio |
+|---|---|
+| `96dad92` | **Restauración de cámara al salir** (causa raíz, ver documento técnico): «M18 returns to the preexisting 3D camera and door state» pasa 6/6 (antes fallaba 4 de 7). |
+| `6862240`–`c7ed454` | Composición: aterrizaje despejado o dentro del destino, muros bajos durante la llegada, giro decidido una vez (corrige uno de 360°), llegada amplia, encuadre según la tarjeta, contorno del destino. |
+| `be5ee5a` | No hay techo hasta que los muros están arriba. El test de navegador comprueba «dentro de un muro» con su altura. |
+
+### Comparación final con `master` (ejecuciones alternas, en solitario)
+| Suite | `master` | Rama `be5ee5a` |
+|---|---|---|
+| presentation-reveal | 3/8, 3/8 (M10 ×4 y caras compartidas) | 3/8, 3/8 (los mismos 5) |
+| presentation-route M18 interior | falla en 1440 y en 390 (×2) | falla igual, en 1440 o en 390 |
+| presentation-route «returns to the preexisting…» | **falla 1 de 2** | 0 fallos (corregido en esta rama) |
+
+Revelado y M18 son idénticos a `master`: **preexistentes**. No hay fallos exclusivos de la rama.
+
+Resto de la batería sobre `c7ed454`/`be5ee5a`:
+- unitarias 155/155;
+- section 7/7;
+- story 8/8;
+- walk 2/2;
+- walk-controls 8/8;
+- templates 18/18;
+- presentation-visit 6/6 sobre `c7ed454`. Tras el cambio de `be5ee5a` solo se ha vuelto a pasar el caso ON (1/1).
