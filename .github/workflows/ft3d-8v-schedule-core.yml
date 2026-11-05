@@ -4,6 +4,7 @@ on:
     branches:
       - feat/ft3d-8v-schedule-core-2026-11-05
       - feat/ft3d-8-s1-real-project-integration-2026-11-05
+      - feat/ft3d-8-ux4d-gate-d-2026-11-05
     # Globs, not a closed list: a new FT3D-8 module or test (S1 dossier, mp4 muxer) must trigger the suite too.
     paths:
       - js/construction-*.js
