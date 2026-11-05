@@ -1,5 +1,5 @@
 const freeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==='object')freeze(v);});return Object.freeze(o);};
-export const registry=freeze({F03:{label:'Materialidad de fachadas',recipes:{'facade-material':{
+const facadeMaterialV1={
  version:1,target:'existing-exterior-wall-finish',roles:['HERO'],enabled:false,
  materials:['white_stucco','white_rough_plaster','rough_plaster_03'],defaultMaterial:'white_stucco',
  profiles:{editor:'balanced',presentation:'hero',walk:'balanced',capture:'hero',mobile:'balanced'},
@@ -8,7 +8,12 @@ export const registry=freeze({F03:{label:'Materialidad de fachadas',recipes:{'fa
  provenance:{author:'Rubik',method:'PBR derivado de fuentes Poly Haven; adaptación visual modular',externalAssets:['white_stucco','white_rough_plaster','rough_plaster_03']},
  renderBudget:{instances:256,textures:3,materials:1,geometries:256,gpuBytes:14000000},
  visualGate:'VISUAL_PENDING_HUMAN',authority:'VISUAL_ONLY'
-}}}});
+};
+export const registry=freeze({F03:{label:'Materialidad de fachadas',recipes:{
+ 'facade-material':facadeMaterialV1,
+ 'facade-material-v2':{...facadeMaterialV1,version:2,renderBudget:{...facadeMaterialV1.renderBudget,gpuBytes:17000000},provenance:{...facadeMaterialV1.provenance,method:'F03 V1 preservado; cobertura compatible y presupuesto GPU efectivo'}}
+}}});
+export function facadeRecipe(decision){const recipe=registry[decision.familyId]?.recipes[decision.recipeId];return recipe?.version===decision.recipeVersion?recipe:null;}
 const plain=o=>o&&typeof o==='object'&&!Array.isArray(o)&&[Object.prototype,null].includes(Object.getPrototypeOf(o));
 export function resolveFacade(input={}){
  if(!plain(input))throw Error('Facade decision must be an object');

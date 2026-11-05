@@ -1,4 +1,4 @@
-import {resolveFacade,facadeEligibility,compatibleFacade,registry} from './facade-fidelity-core.mjs';
+import {resolveFacade,facadeEligibility,compatibleFacade,facadeRecipe} from './facade-fidelity-core.mjs';
 const MANIFEST='assets/materials/f03/derivatives-manifest.json';
 const digest=async data=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)),v=>v.toString(16).padStart(2,'0')).join('');
 export function metricFacadeGeometry(T,mesh){
@@ -40,7 +40,7 @@ export class FacadeFidelityAdapter{
   try{
    const response=await fetch(MANIFEST,{signal:record.controller.signal});if(!response.ok)throw Error('Manifiesto F03 no disponible');
    const manifest=await response.json(),materialRecord=manifest.materials?.[record.decision.materialId],variant=materialRecord?.variants?.[record.decision.profile];if(manifest.schema!=='F03/pbr-derivatives@1'||!variant)throw Error('Material/perfil F03 ausente');
-   if(materialRecord.integration?.compatiblePreset!==registry.F03.recipes['facade-material'].compatibility[record.decision.materialId]||materialRecord.integration.tintLinear?.length!==3||materialRecord.integration.tintLinear.some(v=>!Number.isFinite(v)||v<=0||v>1))throw Error('Calibración cromática F03 ausente o incompatible');
+   if(materialRecord.integration?.compatiblePreset!==facadeRecipe(record.decision).compatibility[record.decision.materialId]||materialRecord.integration.tintLinear?.length!==3||materialRecord.integration.tintLinear.some(v=>!Number.isFinite(v)||v<=0||v>1))throw Error('Calibración cromática F03 ausente o incompatible');
    const entries=Object.entries(variant.maps),loaded=[];
    for(const [role,file]of entries){const item=await this.verifiedMap(file,record,role);if(!item)return;loaded.push(item);record.resources.push(item);}
    if(record.controller.signal.aborted)return;
@@ -57,8 +57,9 @@ export class FacadeFidelityAdapter{
    if(epoch!==this.epoch||record.controller.signal.aborted)return this.snapshot();
    if(record.state!=='ready'||!record.material){this.release();this.status='fallback';this.error=record.error||'Carga F03 incompleta';return this.snapshot();}
    try{
-    const budget=registry.F03.recipes['facade-material'].renderBudget,selected=[...this.bindings.values()].filter(b=>compatibleFacade(b.source,next));
-    if(selected.length>budget.instances)throw Error('Visual facade budget exceeded');
+    const budget=facadeRecipe(next).renderBudget,selected=[...this.bindings.values()].filter(b=>compatibleFacade(b.source,next));
+    const usage={instances:selected.length,textures:record.resources.filter(item=>item.texture).length,materials:record.material?1:0,geometries:selected.length,gpuBytes:record.gpuBytes};
+    if(next.recipeVersion>=2)for(const [key,value]of Object.entries(usage))if(value>budget[key])throw Error(`Visual facade budget exceeded: ${key} ${value}>${budget[key]}`);
     for(const binding of selected){const geometry=metricFacadeGeometry(this.T,binding.mesh);record.resources.push({geometry});binding.mesh.geometry=geometry;binding.mesh.material=record.material;this.active.push(binding);}
     this.status='ready';
    }catch(error){this.release();this.status='fallback';this.error=error.message;}
