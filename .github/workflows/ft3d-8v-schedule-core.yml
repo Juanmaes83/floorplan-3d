@@ -8,14 +8,18 @@ on:
       - js/construction-visual-state.js
       - js/construction-gantt-adapter.js
       - js/construction-lab-presenter.js
+      - js/construction-project-adapter.js
       - labs/ft3d-8/**
       - tests/construction-schedule-core.test.cjs
       - tests/construction-schedule-rules.test.cjs
       - tests/construction-visual-state.test.cjs
       - tests/ft3d-8-lab.test.cjs
       - tests/ft3d-8-lab.browser.test.cjs
+      - tests/construction-project-adapter.test.cjs
+      - tests/ft3d-8-fidelity.browser.test.cjs
       - tests/fixtures/construction-schedule-fixtures.cjs
       - docs/product/ft3d-8v-*.md
+      - docs/product/ft3d-8-*.md
       - .github/workflows/ft3d-8v-schedule-core.yml
   workflow_dispatch:
 permissions:
@@ -32,12 +36,13 @@ jobs:
       - name: Syntax checks
         run: |
           for f in js/construction-schedule-core.js js/construction-visual-state.js js/construction-gantt-adapter.js \
-                   js/construction-lab-presenter.js labs/ft3d-8/lab-fixture.js \
+                   js/construction-lab-presenter.js js/construction-project-adapter.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js \
                    tests/construction-schedule-core.test.cjs tests/construction-schedule-rules.test.cjs \
                    tests/construction-visual-state.test.cjs tests/ft3d-8-lab.test.cjs tests/ft3d-8-lab.browser.test.cjs \
-                   tests/fixtures/construction-schedule-fixtures.cjs; do node --check "$f"; done
+                   tests/fixtures/construction-schedule-fixtures.cjs tests/construction-project-adapter.test.cjs tests/ft3d-8-fidelity.browser.test.cjs; do node --check "$f"; done
           node --input-type=module --check < labs/ft3d-8/app.js
           node --input-type=module --check < labs/ft3d-8/scene.js
+          for m in fidelity-app project-scene gantt-view; do node --input-type=module --check < labs/ft3d-8/$m.js; done
       - name: Pure FT3D-8V and existing budget/story regression
         run: >-
           node --test
@@ -45,11 +50,14 @@ jobs:
           tests/construction-schedule-rules.test.cjs
           tests/construction-visual-state.test.cjs
           tests/ft3d-8-lab.test.cjs
+          tests/construction-project-adapter.test.cjs
           tests/budget-core.test.cjs
+          tests/budget-draft.test.cjs
+          tests/building.test.cjs
           tests/presentation-story.test.cjs
   visual-lab-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     needs: validate
     steps:
       - uses: actions/checkout@v4
@@ -62,13 +70,24 @@ jobs:
           node "$RUNNER_TEMP/lab-tools/node_modules/playwright/cli.js" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/lab-tools/node_modules" >> "$GITHUB_ENV"
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/lab-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
-      - name: FT3D-8 Visual Lab in real Chromium (1440x900 and 390x844)
+      - name: FT3D-8 demo lab in real Chromium (1440x900 and 390x844)
         env:
           FT3D8_LAB_SHOTS: qa-results/ft3d-8-lab
         run: node --test --test-concurrency=1 tests/ft3d-8-lab.browser.test.cjs
+      - name: FT3D-8 fidelity vs the real editor (reference captures, overlays, metrics, video)
+        if: always()
+        env:
+          FT3D8_FIDELITY_SHOTS: qa-results/ft3d-8-fidelity
+        run: node --test --test-concurrency=1 tests/ft3d-8-fidelity.browser.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ft3d-8-visual-lab-screenshots
           path: qa-results/ft3d-8-lab
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-fidelity-evidence
+          path: qa-results/ft3d-8-fidelity
           if-no-files-found: ignore
