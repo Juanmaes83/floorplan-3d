@@ -4633,7 +4633,11 @@ function computeVisitPlan(roomId,region){
   // The reference point is where the route enters the destination; when the choreography stops at a doorway view before
   // it (its samples never enter), the end of the samples (that doorway) is used.
   const ref=enter>0?enter:enter<0?S.length-1:0;
-  if(ref>0){for(let i=ref-1;i>=0;i--){const back=at(ref)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){k=i;break;}}}
+  // Among the candidates, the one farthest from any wall: the cut wall tops then never sweep past the lens while it
+  // comes down (composition), with the same validated route point (safety unchanged).
+  const walls=geometry.walls.filter(w=>w.status!=='demolished');
+  const wallGap=q=>Math.min(...walls.map(w=>{const dx=q.x-w.center[0],dy=q.y-w.center[1],c=Math.cos(w.angle),s=Math.sin(w.angle),u=Math.abs(dx*c+dy*s)-w.spanMm/2,v=Math.abs(-dx*s+dy*c)-w.thickness/2;return Math.hypot(Math.max(u,0),Math.max(v,0));}));
+  if(ref>0){let best=-1;for(let i=ref-1;i>=0;i--){const back=at(ref)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){const g=wallGap(S[i]);if(g>best){best=g;k=i;}}}}
   if(k<0)k=S.findIndex((q,i)=>i>=Math.max(0,enter)&&landable(q));
   if(k<0)k=S.findIndex(landable);
   if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
@@ -4645,13 +4649,20 @@ function computeVisitPlan(roomId,region){
   if(!inPoly(dest.poly,last.x,last.y)&&plan.path?.length){
     const path=plan.path;let j0=0,best=Infinity;path.forEach((q,i)=>{const d=Math.hypot(q.x-last.x,q.y-last.y);if(d<best){best=d;j0=i;}});
     const ext=[{x:last.x,y:last.y}];let inside=-1,acc=0;
-    for(let i=j0+1;i<path.length;i++){const q=path[i],prev=ext.at(-1);acc+=Math.hypot(q.x-prev.x,q.y-prev.y);ext.push({x:q.x,y:q.y,s:acc});if(inPoly(dest.poly,q.x,q.y)&&inside<0)inside=acc;if(inside>=0&&acc-inside>=900)break;}
+    for(let i=j0+1;i<path.length;i++){const q=path[i],prev=ext.at(-1);acc+=Math.hypot(q.x-prev.x,q.y-prev.y);ext.push({x:q.x,y:q.y,s:acc});if(inPoly(dest.poly,q.x,q.y)&&inside<0)inside=acc;if(inside>=0&&acc-inside>=1300)break;}
     const fin=ext.at(-1);
     if(inside>=0&&inPoly(dest.poly,fin.x,fin.y)){
-      const L=acc,T=L/550+.8,n=Math.max(8,Math.ceil(L/60)),far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-fin.x,p[1]-fin.y)>Math.hypot(b[0]-fin.x,b[1]-fin.y)?p:b,dest.poly[0]);
-      const yEnd=Math.atan2(far[1]-fin.y,far[0]-fin.x),y0=last.cameraYaw??last.yaw,dy=Math.atan2(Math.sin(yEnd-y0),Math.cos(yEnd-y0)),p0=last.cameraPitchDeg??last.pitchDeg;
+      // The arrival view looks at what the room contains (its furniture), else at its farthest corner.
+      const L=acc,T=L/550+1.2,n=Math.max(8,Math.ceil(L/60)),far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-fin.x,p[1]-fin.y)>Math.hypot(b[0]-fin.x,b[1]-fin.y)?p:b,dest.poly[0]);
+      const things=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inPoly(dest.poly,o.position.x,o.position.y)),aim=things.length?[things.reduce((a,o)=>a+o.position.x,0)/things.length,things.reduce((a,o)=>a+o.position.y,0)/things.length]:far;
+      const aimAt=Math.hypot(aim[0]-fin.x,aim[1]-fin.y)>900?aim:far;
+      const yEnd=Math.atan2(aimAt[1]-fin.y,aimAt[0]-fin.x),y0=last.cameraYaw??last.yaw,p0=last.cameraPitchDeg??last.pitchDeg;
+      // While crossing the doorway the camera looks where it walks; it turns to the room only once inside (last 45 %).
+      const pathYaw=d=>{const a=at(Math.max(0,d-120)),b=at(Math.min(L,d+480));return Math.atan2(b.y-a.y,b.x-a.x);};
+      const unwrap=(a,ref)=>ref+Math.atan2(Math.sin(a-ref),Math.cos(a-ref));
       const sm=t=>t*t*(3-2*t),at=d=>{for(let i=1;i<ext.length;i++)if(ext[i].s>=d){const a=ext[i-1],b=ext[i],k=(d-(a.s||0))/Math.max(1e-9,b.s-(a.s||0));return {x:a.x+(b.x-a.x)*k,y:a.y+(b.y-a.y)*k};}return fin;};
-      for(let m=1;m<=n;m++){const u=m/n,q=at(L*sm(u));samples.push({t:last.t+T*u,s:(last.s||0)+L*sm(u),x:q.x,y:q.y,cameraYaw:y0+dy*sm(u),cameraPitchDeg:p0+(10-p0)*sm(u)});}
+      let prev=y0;for(let m=1;m<=n;m++){const u=m/n,d=L*sm(Math.min(1,u/.8)),q=at(d),walkYaw=unwrap(pathYaw(d),prev),k=sm((u-.55)/.45),yaw=unwrap(walkYaw+Math.atan2(Math.sin(yEnd-walkYaw),Math.cos(yEnd-walkYaw))*k,prev);
+       const y=u<.15?prev+Math.atan2(Math.sin(yaw-prev),Math.cos(yaw-prev))*.5:yaw;prev=y;samples.push({t:last.t+T*u,s:(last.s||0)+d,x:q.x,y:q.y,cameraYaw:y,cameraPitchDeg:p0+(10-p0)*sm(u)});}
       arrival={yaw:yEnd,pitchDeg:10};extended=Math.round(L);
     }
   }
@@ -4667,12 +4678,19 @@ function beginRoomVisit(stop,view,aspect,startPose){
   const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size?.heightMm||0)));
   // Eye height of «Recorrer» (1.6 m), so the hand-over never moves the horizon.
   const above=Math.max(fullTop,tallest)+.8,eye=WALK_EYE;
-  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far}});
+  // The part of the screen the presentation card covers: the visit's view is shifted so its subject sits in the free
+  // region (same offsets as the classic route), kept until the arrival, so the hand-over keeps the exact pose.
+  const reg=view.region&&view.region[2]-view.region[0]>.25&&view.region[3]-view.region[1]>.25?view.region:[0,0,1,1];
+  const aspect=SW()/Math.max(1,SH()),tV=Math.tan(r.vfov*Math.PI/360),tH=tV*aspect;
+  const yawOffset=-Math.atan(((reg[0]+reg[2])-1)*tH),pitchOffsetDeg=Math.atan((1-(reg[1]+reg[3]))*tV)*180/Math.PI;
+  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far},view:{yawOffset,pitchOffsetDeg}});
   const doorIds=[...(r.plan.doorIds||[])];
   return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,2.4),doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
     route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,extendedMm:r.extended,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
 }
 function applyRoomVisit(v,st){
+  // The destination is named on the model itself while the camera goes to it: its real floor outline.
+  const mark=st.phase==='approach'||st.phase==='descend';if(mark&&!roomOutline)showRoomOutline(v.roomId);else if(!mark&&roomOutline&&st.phase!=='overview')clearRoomOutline();
   const cut=st.fullHeight?2.8:v.cutaway;
   if(opt.cut!==cut||v.full===null){setPresentationCut(cut);clearRoomOutline();}
   if(v.full!==st.fullHeight||!doors.every(d=>!v.doorIds.includes(d.id)||d.open)){doors.forEach(d=>{if(v.doorIds.includes(d.id))d.open=true;});setWalkAids(!!st.fullHeight);v.full=!!st.fullHeight;}

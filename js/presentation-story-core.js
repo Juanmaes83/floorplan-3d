@@ -357,7 +357,7 @@
     - turn: in place, to the arrival view; arrive: hold — the pose handed over to «Recorrer».
     input: start {position, target, fov} (world); first {x, z} world, above, eye (m); samples [{t (s), x, z, yaw, pitchDeg}]
     (world, yaw about +y measured from +x towards +z, pitch down positive); arrival {yaw, pitchDeg}; walkFov; base {near,far}. */
- const ROOM_VISIT={approachMinMs:1400,approachMaxMs:3200,approachSpeed:4,descendMs:1600,closeMs:900,arriveMs:1600,turnDegPerS:35,minTurnMs:700,lookPitchDeg:55,playMs:14000};
+ const ROOM_VISIT={approachMinMs:1400,approachMaxMs:3200,approachSpeed:4,descendMs:1700,closeMs:900,arriveMs:1600,turnDegPerS:35,minTurnMs:700,lookPitchDeg:35,playMs:14000};
  function roomVisit(input){
   const o={...ROOM_VISIT,...(input.options||{})},A=input.start,S=input.samples||[];
   if(!A||![...A.position,...A.target,A.fov].every(Number.isFinite))throw Error('Falta la vista general de partida.');
@@ -374,7 +374,9 @@
   const walkMs=Math.round((last.t-first.t)*1000),turn=Math.abs(arrYaw-last.yaw),turnMs=turn>.02?Math.max(o.minTurnMs,Math.round(deg(turn)/o.turnDegPerS*1000)):0;
   const legs=[['approach',approachMs],['descend',o.descendMs],['close',o.closeMs],['walk',walkMs],['turn',turnMs],['arrive',o.arriveMs]].filter(([,ms])=>ms>0);
   const total=legs.reduce((n,[,ms])=>n+ms,0),bounds=[];{let acc=0;for(const [name,ms] of legs){bounds.push({name,from:acc/total,to:(acc+ms)/total});acc+=ms;}}
-  const pose=(position,yaw,pitchDeg,fov,phase,p,extra={})=>({p,phase,position,target:add(position,dir(yaw,pitchDeg)),fov,near:base.near,far:base.far,distance:1,
+  // View offsets (the region the presentation card leaves free), eased in during the approach and kept to the end.
+  const vo=input.view||{},yo=Number(vo.yawOffset)||0,po=Number(vo.pitchOffsetDeg)||0;let ramp=1;
+  const pose=(position,yaw,pitchDeg,fov,phase,p,extra={})=>({p,phase,position,target:add(position,dir(yaw+yo*ramp,pitchDeg+po*ramp)),fov,near:base.near,far:base.far,distance:1,
    fullHeight:['close','walk','turn','arrive','room'].includes(phase)&&(phase!=='close'||extra.closed),...extra});
   // Sample interpolation by walking time (the choreography's own clock).
   function walkAt(sec){
@@ -386,6 +388,7 @@
    const p=clamp01(Number(raw)||0);
    if(p<=0)return {p:0,phase:'overview',position:[...A.position],target:[...A.target],fov:A.fov,near:base.near,far:base.far,distance:len(sub(A.target,A.position)),fullHeight:false};
    const leg=bounds.find(b=>p<b.to)||bounds.at(-1),t=clamp01((p-leg.from)/Math.max(1e-9,leg.to-leg.from)),e=smooth(t);
+   ramp=leg.name==='approach'?e:1;
    if(leg.name==='approach')return pose(lerp3(A.position,top,e),lerp(yawA,yawFirst,e),lerp(pitch0,o.lookPitchDeg,e),lerp(A.fov,walkFov,e),'approach',p);
    if(leg.name==='descend')return pose([first.x,lerp(above,eye,e),first.z],first.yaw,lerp(o.lookPitchDeg,first.pitchDeg,e),walkFov,'descend',p);
    if(leg.name==='close')return pose([first.x,eye,first.z],first.yaw,first.pitchDeg,walkFov,'close',p,{closed:t>=.25});
