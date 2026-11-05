@@ -189,7 +189,7 @@ test(`fidelity lab interaction ${viewport.width}x${viewport.height}`,{timeout:24
   await page.locator('#caseSel').selectOption('D');await page.waitForFunction(()=>document.body.dataset.case==='D');
   assert.match(await page.locator('#gantt').innerText(),/PLANIFICACIÓN NO DISPONIBLE O PENDIENTE/);
   assert.match(await page.locator('#delivery').innerText(),/Vista interna exploratoria/);
-  assert.match(await page.locator('#coverage').innerText(),/sin plan: no se reparte entre tareas/);
+  assert.match(await page.locator('#coverage').innerText(),/sin plan válido: no se reparte entre tareas/);
   assert.equal(await page.locator('.transport').getAttribute('data-disabled'),'true');
   if(shots)await page.screenshot({path:path.join(shots,`${name}-D-datos-insuficientes.png`),fullPage:!mobile});
   // Revision change: the professional's schedule no longer matches an edited project file.

@@ -110,7 +110,7 @@ export function createProjectScene(canvas){
       if(rem>0)o.parts.meshes.forEach(m=>m.traverse(x=>{if(x.isMesh)for(const y of [].concat(x.material))if(tintable(y))y.color.lerp(new THREE.Color(DEMOLISH),rem*.6);}));
     }
   }
-  const setPose=({position,target,fov})=>{auto=false;controls.autoRotate=false;camera.position.fromArray(position);controls.target.fromArray(target);if(fov){camera.fov=fov;camera.updateProjectionMatrix();}controls.update();};
+  const setPose=({position,target,fov})=>{auto=false;controls.autoRotate=false;const d=controls.enableDamping;controls.enableDamping=false;camera.position.fromArray(position);controls.target.fromArray(target);if(fov){camera.fov=fov;camera.updateProjectionMatrix();}controls.update();controls.enableDamping=d;};
   // Default framing from the project's own envelope (no fixed demo camera).
   function frameEnvelope(inventory,view='iso'){
     const env=inventory.levels.reduce((a,l)=>({x0:Math.min(a.x0,l.envelope.x+l.offsetMm.x),y0:Math.min(a.y0,l.envelope.y+l.offsetMm.y),x1:Math.max(a.x1,l.envelope.x+l.envelope.w+l.offsetMm.x),y1:Math.max(a.y1,l.envelope.y+l.envelope.h+l.offsetMm.y)}),{x0:Infinity,y0:Infinity,x1:-Infinity,y1:-Infinity});
@@ -119,16 +119,25 @@ export function createProjectScene(canvas){
     const dirs={iso:[.62,.55,.72],front:[0,.28,1],top:[0,1,.001],auto:[.62,.55,.72]},v=new THREE.Vector3(...dirs[view]).normalize();
     return {position:[cx+v.x*d,top/2+v.y*d,cz+v.z*d],target:[cx,top/3,cz],fov:45};
   }
-  const resize=()=>{const w=canvas.clientWidth||1,h=canvas.clientHeight||1;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+  let fixedSize=null;
+  const resize=()=>{const [w,h]=fixedSize||[canvas.clientWidth||1,canvas.clientHeight||1];renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+  // Recording: render at an exact pixel size (e.g. 1280x720) without touching the page layout.
+  const setRenderSize=(w,h)=>{fixedSize=[w,h];renderer.setPixelRatio(1);resize();};
+  const releaseRenderSize=()=>{fixedSize=null;renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));resize();};
+  // Deterministic orbit (no damping) around the project's own envelope, for the video.
+  const orbitPose=(inventory,angle,{lift=.55,scale=1}={})=>{const p=frameEnvelope(inventory,'iso'),t=new THREE.Vector3(...p.target),v=new THREE.Vector3(...p.position).sub(t);
+    const r=Math.hypot(v.x,v.z)*scale,base=Math.atan2(v.x,v.z)+angle;return {position:[t.x+Math.sin(base)*r,t.y+v.y*scale*lift/.55,t.z+Math.cos(base)*r],target:p.target,fov:p.fov};};
+  const renderNow=()=>{renderer.render(scene,camera);};
   controls.addEventListener('start',()=>{auto=false;controls.autoRotate=false;});
-  let raf=0;const tick=()=>{raf=requestAnimationFrame(tick);controls.update();renderer.render(scene,camera);};resize();tick();window.addEventListener('resize',resize);
+  // While a video is encoded frame by frame the recorder renders explicitly (renderNow): the live loop is suspended.
+  let raf=0,suspended=false;const tick=()=>{raf=requestAnimationFrame(tick);if(suspended)return;controls.update();renderer.render(scene,camera);};resize();tick();window.addEventListener('resize',resize);
   // Read-only structural inspection: world-space bounding box of every rendered element (for fidelity checks).
   function inspect(){const out={};for(const [key,o] of objects){if(!o.g.visible||o.ghost.visible)continue;const b=new THREE.Box3();
     o.parts.meshes.forEach(m=>{if(m.visible)b.expandByObject(m);});if(b.isEmpty())continue;
     const entry={min:b.min.toArray().map(v=>+v.toFixed(4)),max:b.max.toArray().map(v=>+v.toFixed(4)),type:o.e.type};
     const pv=o.parts.meshes.find(m=>m.userData.doorPivot);if(pv){const w=pv.getWorldPosition(new THREE.Vector3());entry.pivot={x:+w.x.toFixed(4),z:+w.z.toFixed(4),angle:+pv.rotation.y.toFixed(4)};}
     out[key]=entry;}return out;}
-  return {load,setState,setPose,frameEnvelope,resize,inspect,
+  return {load,setState,setPose,frameEnvelope,resize,inspect,setRenderSize,releaseRenderSize,orbitPose,renderNow,canvas,setSuspended(v){suspended=!!v;},
     setAuto(v){auto=v;controls.autoRotate=v;controls.autoRotateSpeed=.5;},setRoofVisible(v){roofVisible=!!v;},get roofVisible(){return roofVisible;},
     get pose(){return {position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov};},get visiblePieces(){return visiblePieces;},
     get objectCount(){return objects.size;},renderer,dispose:()=>cancelAnimationFrame(raf)};

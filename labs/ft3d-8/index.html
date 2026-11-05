@@ -39,24 +39,34 @@
 <script src="../../js/construction-gantt-adapter.js"></script>
 <script src="../../js/construction-lab-presenter.js"></script>
 <script src="../../js/construction-project-adapter.js"></script>
+<!-- Existing RUBIK services reused as they are: brand core (profiles, snapshot) and the tour recorder's format detection. -->
+<script src="../../js/brand-core.js"></script>
+<script src="../../js/tour-recorder.js"></script>
+<script src="../../js/construction-delivery-core.js"></script>
+<script src="../../js/construction-mp4-muxer.js"></script>
 <script src="./fidelity-fixtures.js"></script>
 <script type="module" src="./fidelity-app.js"></script>
+<script type="module" src="./delivery-ui.js"></script>
 </head>
 <body data-stage="inicio">
 <header class="topbar">
   <span class="brand"><i></i>RUBIK // FT3D-8 <em>[FIDELIDAD]</em></span>
   <span class="tab on">Proyecto real → plan → presupuesto</span>
   <a class="tab" href="./demo.html">Demo ilustrativa</a>
+  <span class="modes" role="group" aria-label="Modo"><button data-mode="pro" aria-pressed="true">Modo profesional</button><button data-mode="client" aria-pressed="false">Modo cliente</button></span>
   <span class="origin" id="origin" data-kind="fixture" role="status"></span>
 </header>
 <main>
   <section class="sources" aria-label="Fuente del proyecto">
     <label>Proyecto de prueba <select id="caseSel" aria-label="Proyecto de prueba"></select></label>
     <label class="file">Importar proyecto RUBIK (.json) <input id="fileInput" type="file" accept=".json,application/json"></label>
-    <label class="file">Plan FT3D-8 opcional (.json) <input id="scheduleInput" type="file" accept=".json,application/json"></label>
+    <label class="file">Plan FT3D-8 (.json) <input id="scheduleInput" type="file" accept=".json,application/json"></label>
+    <label class="file">Presupuesto C1–C4 (.json) <input id="budgetInput" type="file" accept=".json,application/json"></label>
+    <label class="file">Vínculo (.json) <input id="bindingInput" type="file" accept=".json,application/json"></label>
     <label class="chk"><input id="roofToggle" type="checkbox" checked> Cubierta derivada</label>
     <span class="err" id="importError" role="alert"></span>
   </section>
+  <div class="client-header" id="clientHeader" aria-label="Identidad de la entrega"></div>
   <section class="stagewrap" aria-label="Escena 3D del proyecto">
     <canvas id="stage"></canvas>
     <div class="hud">
@@ -91,6 +101,52 @@
     <div class="ganttwrap"><div class="gantt" id="gantt"></div></div>
   </section>
   <section class="coverage" id="coverage" aria-label="Cobertura y evidencias"></section>
+  <section class="deliver" id="deliverPanel" aria-labelledby="deliverTitle">
+    <header class="deliver-head"><h2 id="deliverTitle">Entrega al cliente</h2>
+      <p class="pitch">Muestra a tu cliente cómo evolucionará su proyecto: qué se construirá, cuándo y con qué presupuesto. Todo sale del proyecto, el plan y el presupuesto seleccionados.</p></header>
+    <ol class="steps">
+      <li class="step" id="step1"><h3><span>1</span> Revisar proyecto</h3><div id="stepProject"></div></li>
+      <li class="step" id="step2"><h3><span>2</span> Revisar planificación y presupuesto</h3><div id="stepPlan"></div></li>
+      <li class="step" id="step3"><h3><span>3</span> Personalizar con mi marca</h3>
+        <label>Identidad <select id="brandSel"></select></label><p class="hint" id="brandBrowserNote"></p>
+        <fieldset id="labBrandForm" hidden><legend>Marca de prueba de este laboratorio (solo en memoria, no se guarda)</legend>
+          <label>Nombre comercial <input id="labName" maxlength="80"></label><label>Profesional responsable <input id="labPerson" maxlength="80"></label>
+          <label>Teléfono <input id="labPhone" maxlength="30"></label><label>Correo <input id="labEmail" maxlength="120"></label>
+          <label>Web <input id="labWeb" maxlength="200"></label><label>Lema <input id="labTagline" maxlength="120"></label>
+          <label>Logotipo (PNG, JPG o WebP) <input id="labLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+          <button type="button" class="btn" id="labBrandSave">Usar esta marca</button><p class="err" id="labBrandError" role="alert"></p></fieldset>
+        <label>Título de la entrega <input id="brandTitle" maxlength="120" placeholder="Título para el cliente"></label>
+        <label>Introducción <textarea id="brandIntro" maxlength="400" rows="2"></textarea></label>
+        <fieldset class="inline"><legend>Datos de contacto que se mostrarán</legend>
+          <label><input type="checkbox" id="inc-person"> Profesional</label><label><input type="checkbox" id="inc-phone"> Teléfono</label>
+          <label><input type="checkbox" id="inc-email"> Correo</label><label><input type="checkbox" id="inc-web"> Web</label></fieldset>
+        <div class="brand-preview" id="brandPreview" aria-live="polite"></div><p class="hint" id="brandWhere"></p></li>
+      <li class="step" id="step4"><h3><span>4</span> Generar vídeo de la evolución</h3>
+        <p class="hint" id="videoFormat"></p>
+        <label>Costes en el vídeo y la presentación <select id="costMode"><option value="none">No mostrar importes</option><option value="summary" selected>Resumen del presupuesto asignado</option><option value="tasks">Importe por fase</option></select></label>
+        <p class="bad" id="videoBlocked"></p>
+        <div class="actions"><button type="button" class="btn primary" id="videoGo">Generar vídeo</button><button type="button" class="btn" id="videoCancel" hidden>Cancelar grabación</button>
+          <button type="button" class="btn" id="videoDownload" hidden>Descargar vídeo</button></div>
+        <p class="status" id="videoStatus" role="status" aria-live="polite"></p>
+        <video id="videoPreview" controls playsinline muted hidden aria-label="Vista previa del vídeo: es el mismo archivo que se descarga"></video><p class="meta-line" id="videoMeta"></p></li>
+      <li class="step" id="step5"><h3><span>5</span> Descargar o compartir</h3>
+        <p class="hint">Producto 1: el vídeo descargado se envía por correo o mensajería, sin servicios externos. Producto 2: una presentación de solo lectura (vídeo, fases, fechas, presupuesto autorizado y advertencias). La URL de esta Preview no es un enlace para clientes.</p>
+        <div class="actions"><button type="button" class="btn primary" id="docPrepare">Preparar presentación para el cliente</button>
+          <button type="button" class="btn" id="docDownload" hidden>Descargar presentación (.html)</button><button type="button" class="btn" id="manifestDownload" hidden>Descargar manifiesto (.json)</button></div>
+        <p class="meta-line" id="docMeta"></p>
+        <iframe id="clientPreview" title="Vista previa de la presentación para el cliente" sandbox="" hidden></iframe>
+        <details class="publish" id="publishBox"><summary>Publicar enlace para el cliente (servicio /api/share existente)</summary>
+          <p id="publishWhat"></p>
+          <p class="hint">Cualquiera que tenga el enlace podrá abrirlo: no tiene contraseña ni caduca solo, y no figura en buscadores (eso no es una protección). Se guarda en el almacén Vercel Blob del proyecto (carpeta rubik-share/) y se retira desde ese panel. Si cambias el proyecto, genera una entrega nueva.</p>
+          <label><input type="checkbox" id="publishVideo"> <span id="publishVideoNote"></span></label>
+          <label><input type="checkbox" id="publishAgree"> Entiendo que cualquiera con el enlace podrá ver este contenido.</label>
+          <label>Código de acceso del servidor <input id="publishToken" type="password" autocomplete="off"></label>
+          <button type="button" class="btn primary" id="publishGo">Publicar enlace</button>
+          <p class="status" id="publishStatus" role="status" aria-live="polite"></p>
+          <div id="publishResult" hidden><input id="publishUrl" readonly aria-label="Enlace para el cliente"><button type="button" class="btn" id="publishCopy">Copiar</button><a class="btn" id="publishOpen" target="_blank" rel="noopener noreferrer">Abrir</a></div>
+        </details></li>
+    </ol>
+  </section>
 </main>
 <footer class="credits">
   Geometría: <code>FloorPlanCore.geometry</code>, <code>FloorPlanRoof</code>, <code>FloorPlanBuilding</code> · Fechas: plan FT3D-8 · Importes: presupuesto C1–C4 (<code>FloorPlanBudget</code>).

@@ -23,7 +23,8 @@
   const BINDING_SCHEMA='rubik-sota.construction-binding',BINDING_VERSION='0.1.0';
   const MODEL_SCHEMA='rubik-sota.construction-presentation-model',MODEL_VERSION='0.1.0';
   const EVIDENCE=Object.freeze(['verified','estimated','pending','unavailable']);
-  const DELIVERY=Object.freeze(['internal','orientative','approved-plan','professional']);
+  // 'accredited' is reserved for a future approval with verifiable identity (not implemented): never reached today.
+  const DELIVERY=Object.freeze(['internal','orientative','declared-plan','evidenced-plan','accredited']);
   // What FT3D-8 might want to show but RUBIK does not model: listed, never drawn.
   const NOT_IN_AUTHORITY=Object.freeze([
     {category:'foundation',reason:'FloorPlanProjectV1 no modela cimentaciones'},
@@ -178,19 +179,47 @@
     opening:{new:['build','finish'],existing:['finish','build'],demolished:[]},
     floor:{undeclared:['build','finish']},roof:{new:['envelope','build','finish'],existing:['finish']},slab:{new:['structure','build'],existing:['finish']}};
   const family=t=>['window','door','sliding-door','opening'].includes(t)?'opening':t;
+  /* A6 scope coverage: which categories of the MODELED project have a C1-C4 item (FloorPlanBudgetDraft keys), priced or
+     not. Roof/slab have no C1-C4 item kind; categories RUBIK does not model are listed apart. */
+  function scopeCoverage(inv,lines){
+    const byId=new Map((lines||[]).map(l=>[l.id,l])),els=inv.elements,cats=[];
+    const add=(category,count,itemId,label)=>{if(!count)return;const l=itemId?byId.get(itemId):null;
+      cats.push({category,label,elements:count,budgetItemId:itemId,status:!itemId?'not-budgetable-in-c1-c4':!lines?'no-budget':!l?'not-in-budget':l.subtotalNet===null?'budgeted-unpriced':'budgeted-known'});};
+    const walls=els.filter(e=>e.type==='wall');
+    add('walls-new',walls.filter(w=>w.lifecycle==='new').length,'partition-new','Muros y tabiques nuevos');
+    add('walls-demolished',walls.filter(w=>w.lifecycle==='demolished').length,'demolition','Demolicion de muros');
+    add('wall-finish',walls.filter(w=>w.lifecycle!=='demolished').length,'paint','Acabado de paredes');
+    const mats=new Map();for(const f of els.filter(e=>e.type==='floor'))mats.set(f.material.id,(mats.get(f.material.id)||0)+1);
+    for(const [m,n] of mats)add('floors:'+m,n,'floor:'+m,'Pavimento '+m);
+    if(mats.size)add('skirting',els.filter(e=>e.type==='floor').length,'skirting','Rodapie');
+    for(const k of ['door','sliding-door','window'])add('openings:'+k,els.filter(e=>e.type===k&&e.representable).length,'opening:'+k,'Carpinteria '+k);
+    add('roof',els.filter(e=>e.type==='roof'&&e.representable&&e.lifecycle==='new').length,null,'Cubierta derivada');
+    add('slab',els.filter(e=>e.type==='slab'&&e.lifecycle==='new').length,null,'Forjado entre plantas');
+    const count=st=>cats.filter(c=>c.status===st).length;
+    return {categories:cats,modeled:cats.length,budgetedKnown:count('budgeted-known'),budgetedUnpriced:count('budgeted-unpriced'),notInBudget:count('not-in-budget'),
+      notBudgetable:count('not-budgetable-in-c1-c4'),notModeled:NOT_IN_AUTHORITY.map(x=>x.category),
+      note:'Cobertura del alcance MODELADO por RUBIK; cimentacion, estructura y demas categorias no modeladas no tienen geometria ni presupuesto aqui'};
+  }
   async function evaluate({source,schedule=null,budget=null,budgets=null,binding=null}={}){
     const inv=inventory(source),issues=[],now={project:await fingerprint(source),schedule:null,budget:null};
     const byKey=new Map(inv.elements.map(e=>[e.key,e]));
     let sch=null,planning={status:'unavailable',reason:'missing',message:'PLANIFICACION NO DISPONIBLE O PENDIENTE',evidence:null};
+    let rejected=null;
     if(schedule){
       try{sch=Schedule.canonical(schedule);now.schedule=await fingerprint(Schedule.validate(schedule));}
-      catch(e){issues.push(issue('error','schedule-invalid',e.message));}
+      catch(e){issues.push(issue('error','schedule-invalid',e.message));rejected={reason:'schedule-invalid',message:'PLAN NO VALIDO: '+e.message};}
+    }
+    // A plan of another project/building never animates this geometry (identity by type+id, never by task names).
+    if(sch&&(sch.projectRef.type!==inv.kind||sch.projectRef.id!==inv.id)){
+      issues.push(issue('error','schedule-other-project','El plan '+sch.id+' pertenece a '+sch.projectRef.type+' '+sch.projectRef.id+', no a '+inv.kind+' '+inv.id+': no se usa',{schedule:sch.id,projectRef:{...sch.projectRef}}));
+      rejected={reason:'schedule-other-project',message:'PLAN DE OTRO PROYECTO ('+sch.projectRef.id+'): no se reproduce ni se usan sus costes',scheduleId:sch.id};
+      sch=null;now.schedule=null;
     }
     if(sch){
       planning={status:'available',reason:null,message:null,evidence:Schedule.evidence(schedule).level,reviewed:sch.review.status==='reviewed'};
-      if(sch.projectRef.type!==inv.kind||sch.projectRef.id!==inv.id)issues.push(issue('error','schedule-other-project','El plan pertenece a '+sch.projectRef.type+' '+sch.projectRef.id,{schedule:sch.id}));
-      else if(sch.projectRef.revision!==now.project)issues.push(issue('warning','schedule-project-revision-obsolete','El plan se aprobo sobre otra revision del proyecto',{expected:sch.projectRef.revision,current:now.project}));
-    }else if(!schedule)issues.push(issue('warning','planning-unavailable','PLANIFICACION NO DISPONIBLE O PENDIENTE: no se inventan fechas ni tareas'));
+      if(sch.projectRef.revision!==now.project)issues.push(issue('warning','schedule-project-revision-obsolete','El plan se aprobo sobre otra revision del proyecto',{expected:sch.projectRef.revision,current:now.project}));
+    }else if(rejected)planning={status:'rejected',reason:rejected.reason,message:rejected.message,evidence:null,rejectedScheduleId:rejected.scheduleId||null};
+    else issues.push(issue('warning','planning-unavailable','PLANIFICACION NO DISPONIBLE O PENDIENTE: no se inventan fechas ni tareas'));
     // Links: the schedule's own task.elements (FT3D-8 0.2.0) are the single source of element<->task links.
     const links=[],linked=new Map();
     for(const t of sch?.tasks||[])for(const el of t.elements){
@@ -217,15 +246,22 @@
       return {key:e.key,type:e.type,levelId:e.levelId,lifecycle:e.lifecycle,evidence:e.evidence.status,representable:e.representable,timeline,tasks:linked.get(e.key)||[]};
     });
     // Costs: only the selected C1-C4 budget whose subject is this document.
-    let costs={status:'unavailable',reason:'missing',report:null};
-    if(inv.kind==='building'){
+    let costs={status:'unavailable',reason:'missing',report:null},budgetLines=null;
+    if(inv.kind==='building'&&budget){
+      // A level budget is identified as such and is never used as the budget of the whole building.
+      const level=inv.levels.find(l=>source.levels.find(x=>x.id===l.levelId)?.project.id===budget.subject?.id);
+      costs={status:'unavailable',reason:level?'level-budget-not-building':'budget-other-project',report:null,budgetId:budget.id,levelId:level?.levelId||null,
+        message:level?'Presupuesto de la planta '+level.levelId+' ('+budget.subject.id+'): RUBIK no tiene presupuesto de edificio; no se reparte entre las tareas del edificio':'El presupuesto pertenece a '+(budget.subject&&budget.subject.id)};
+      issues.push(issue(level?'warning':'error',costs.reason,costs.message));
+    }else if(inv.kind==='building'){
       costs={status:'unavailable',reason:'building-budget-not-supported',report:null,levels:(budgets||[]).map(x=>({levelId:x.levelId,budgetId:x.budget.id,subject:{...x.budget.subject}})),
         message:'RUBIK guarda un presupuesto por planta (rubik-budget-v1[projectId]); no existe presupuesto de edificio que repartir entre tareas'};
       issues.push(issue('warning','building-budget-not-supported',costs.message));
     }else if(budget){
       now.budget=await fingerprint(budget);
-      if(!budget.subject||budget.subject.id!==inv.id)issues.push(issue('error','budget-other-project','El presupuesto pertenece a '+(budget.subject&&budget.subject.id)));
-      else if(sch){
+      if(!budget.subject||budget.subject.id!==inv.id){issues.push(issue('error','budget-other-project','El presupuesto pertenece a '+(budget.subject&&budget.subject.id)+', no a '+inv.id));
+        costs={status:'unavailable',reason:'budget-other-project',report:null};}
+      else if((budgetLines=Budget.calculateBudget(budget).lines)&&sch){
         try{costs={status:'available',reason:null,report:Schedule.budgetReport(schedule,budget,Budget)};}
         catch(e){issues.push(issue('error','budget-report-failed',e.message));costs={status:'unavailable',reason:'report-failed',report:null};}
       }else{const calc=Budget.calculateBudget(budget);costs={status:'budget-only',reason:'planning-unavailable',report:null,totals:calc.totals.net,budgetId:calc.budgetId};}
@@ -237,12 +273,19 @@
       try{bnd=validateBinding(binding);}catch(e){issues.push(issue('error','binding-invalid',e.message));}
       if(bnd){
         if(bnd.subject.id!==inv.id)issues.push(issue('error','binding-other-project','El vinculo pertenece a '+bnd.subject.id));
+        // Per authority: current | obsolete | unbound (document present, not fixed in the binding) |
+        // missing-document (fixed in the binding, not supplied now) | not-applicable.
         for(const k of ['project','schedule','budget']){
           if(bnd.fingerprints[k]===null)obsolete[k]=now[k]===null?'not-applicable':'unbound';
+          else if(now[k]===null)obsolete[k]='missing-document';
           else obsolete[k]=bnd.fingerprints[k]===now[k]?'current':'obsolete';
           if(obsolete[k]==='obsolete')issues.push(issue('warning',k+'-revision-obsolete','La revision actual de '+k+' no es la aprobada en el vinculo',{bound:bnd.fingerprints[k],current:now[k]}));
+          if(obsolete[k]==='unbound')issues.push(issue('warning',k+'-unbound','El vinculo no fija la revision de '+k+' aunque se ha cargado ese documento'));
+          if(obsolete[k]==='missing-document')issues.push(issue('warning',k+'-missing','El vinculo fija una revision de '+k+' que no se ha cargado'));
         }
-        if(sch&&bnd.scheduleId!==sch.id)issues.push(issue('error','binding-other-schedule','El vinculo se aprobo para el plan '+bnd.scheduleId));
+        if(sch&&bnd.scheduleId===null)issues.push(issue('warning','binding-schedule-unbound','El vinculo no identifica el plan cargado'));
+        if(budget&&inv.kind==='project'&&bnd.budgetId===null)issues.push(issue('warning','binding-budget-unbound','El vinculo no identifica el presupuesto cargado'));
+        if(sch&&bnd.scheduleId!==null&&bnd.scheduleId!==sch.id)issues.push(issue('error','binding-other-schedule','El vinculo se aprobo para el plan '+bnd.scheduleId));
         if(budget&&bnd.budgetId!==null&&bnd.budgetId!==budget.id)issues.push(issue('error','binding-other-budget','El vinculo se aprobo para el presupuesto '+bnd.budgetId));
       }
     }else issues.push(issue('info','binding-missing','Sin documento de vinculo: las revisiones no estan fijadas por un profesional'));
@@ -262,26 +305,38 @@
         allocatedPercentOfKnown:report.budgetTotals.amount?Math.round(report.scheduleTotals.allocatedKnownNet/report.budgetTotals.amount*10000)/100:null,
         tasksWithoutCost:report.byTask.filter(t=>t.totalNet===null).map(t=>t.taskId),unverifiedTasks:report.byTask.filter(t=>t.lines.length&&!t.verified).map(t=>t.taskId),
         projectRevisionCheck:report.projectRevision.check}:null,
-      revisions:{...obsolete}};
+      revisions:{...obsolete},
+      // A6: three different coverages, never merged into one "100 %".
+      geometry:{representable:rep.length,total:eligible.length,phasesWithElements:sch?sch.tasks.filter(t=>t.elements.length).length:0,phases:sch?sch.tasks.length:0,
+        notModeled:NOT_IN_AUTHORITY.map(x=>x.category),note:'Elementos y fases que el modelo RUBIK permite representar'},
+      scope:scopeCoverage(inv,budgetLines)};
+    if(coverage.budget)coverage.budget.note='Porcentaje de las partidas CARGADAS y con precio asignadas a tareas: no equivale al porcentaje de la obra presupuestada';
     // Delivery level (B7). Never a "fully verified project" label.
     const errors=issues.filter(i=>i.severity==='error'),blockers=[];
     const need=(cond,code)=>{if(!cond)blockers.push(code);return cond;};
     let level='internal';
-    const orient=need(planning.status==='available','planning-unavailable')&need(!errors.length,'errors-present');
+    const okState=k=>obsolete[k]==='current'||(obsolete[k]==='not-applicable');
+    const orient=need(planning.status==='available',planning.status==='rejected'?'planning-rejected':'planning-unavailable')&need(!errors.length,'errors-present');
     if(orient){level='orientative';
-      const approved=need(planning.reviewed,'schedule-draft')&need(bnd?.review.status==='reviewed','binding-not-reviewed')
-        &need(!Object.values(obsolete).includes('obsolete')&&obsolete.project==='current','revision-obsolete-or-unbound')
-        &need(!coverage.elements.unscheduled.length,'elements-unscheduled');
-      if(approved){level='approved-plan';
+      // Declared plan: every supplied authority is fixed in the binding with its current SHA-256.
+      const declared=need(planning.reviewed,'schedule-draft')&need(bnd?.review.status==='reviewed','binding-not-reviewed')
+        &need(obsolete.project==='current','project-revision-not-current')&need(obsolete.schedule==='current','schedule-revision-not-current')
+        &need(okState('budget'),'budget-revision-not-current')&need(!coverage.elements.unscheduled.length,'elements-unscheduled');
+      if(declared){level='declared-plan';
         const linkedEls=eligible.filter(e=>e.tasks.length);
-        const pro=need(linkedEls.every(e=>e.evidence==='verified'),'geometry-not-verified')&need(costs.status==='available','costs-unavailable')
+        const evidenced=need(linkedEls.every(e=>e.evidence==='verified'),'geometry-not-verified')&need(costs.status==='available','costs-unavailable')
+          &need(obsolete.budget==='current','budget-not-bound')
           &need(report&&!report.pendingAllocations.length&&!report.unassignedBudgetItemIds.length&&!report.budgetTotals.missingItemIds.length,'budget-coverage-incomplete')
           &need(report&&report.byTask.every(t=>!t.lines.length||t.verified),'budget-lines-unverified');
-        if(pro)level='professional';
+        if(evidenced)level='evidenced-plan';
       }
     }
-    const LABEL={internal:'Vista interna exploratoria',orientative:'Presentacion orientativa (plan no aprobado o incompleto)',
-      'approved-plan':'Presentacion de plan aprobado (no certifica ejecucion)',professional:'Entrega profesional con evidencias registradas (no certifica ejecucion ni obra)'};
+    // The review inside a JSON binding is a declaration: nobody's identity is verified here (A4).
+    blockers.push('approval-not-authenticated');
+    const LABEL={internal:'Vista interna exploratoria',orientative:'Presentacion orientativa (plan sin revision declarada o incompleto)',
+      'declared-plan':'Plan con revision declarada, no acreditada (no certifica ejecucion)',
+      'evidenced-plan':'Presentacion planificada con evidencias registradas (revision declarada, no acreditada; no certifica obra)',
+      accredited:'Aprobacion acreditada: requiere identidad verificable (no disponible)'};
     return {schema:MODEL_SCHEMA,schemaVersion:MODEL_VERSION,subject:{type:inv.kind,id:inv.id,name:inv.name,updatedAt:inv.updatedAt},
       fingerprints:now,inventory:inv,planning,links,visualElements,costs,coverage,issues,obsolescence:obsolete,
       delivery:{level,label:LABEL[level],blockers,simulation:'Simulacion planificada e ilustrativa: no es obra ejecutada ni certificada',
@@ -290,7 +345,9 @@
           geometry:'derivada de FloorPlanCore.geometry / FloorPlanRoof; evidencia segun escala y origen declarados',
           projectRevision:obsolete.project==='current'?'huella SHA-256 coincide con la aprobada en el vinculo':obsolete.project,
           budgetToProject:report?(report.projectRevision.check==='match'?'verificada por el motor':'no verificable por C1-C4; '+(bnd?.review.status==='reviewed'&&obsolete.budget==='current'?'emparejamiento declarado por el profesional en el vinculo':'sin declaracion vigente')):'sin presupuesto',
-          execution:'no registrada (fuera del alcance de FT3D-8)',certification:'no aplica: FT3D-8 no certifica obra'}}};
+          approval:bnd?(bnd.review.status==='reviewed'?'declarada en el vinculo por '+bnd.review.by+' ('+bnd.review.at+'); identidad no verificada':'vinculo en borrador'):'sin vinculo',
+          execution:'no registrada (fuera del alcance de FT3D-8)',certification:'no aplica: FT3D-8 no certifica obra'},
+        scopeNotice:'Alcance parcial: RUBIK no modela '+NOT_IN_AUTHORITY.map(x=>x.category).join(', ')+'; esas partes no se representan ni se presupuestan aqui'}};
   }
   return Object.freeze({BINDING_SCHEMA,BINDING_VERSION,MODEL_SCHEMA,MODEL_VERSION,EVIDENCE,DELIVERY,NOT_IN_AUTHORITY,VIEWER_DEFAULTS,ROLE_RULES,
     elementKey,fingerprint,validateSource,levelsOf,scaleEvidence,sourceEvidence,inventory,validateBinding,createBinding,evaluate});

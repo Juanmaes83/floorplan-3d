@@ -9,6 +9,7 @@ on:
       - js/construction-gantt-adapter.js
       - js/construction-lab-presenter.js
       - js/construction-project-adapter.js
+      - js/construction-delivery-core.js
       - labs/ft3d-8/**
       - tests/construction-schedule-core.test.cjs
       - tests/construction-schedule-rules.test.cjs
@@ -17,6 +18,8 @@ on:
       - tests/ft3d-8-lab.browser.test.cjs
       - tests/construction-project-adapter.test.cjs
       - tests/ft3d-8-fidelity.browser.test.cjs
+      - tests/construction-delivery-core.test.cjs
+      - tests/ft3d-8-delivery.browser.test.cjs
       - tests/fixtures/construction-schedule-fixtures.cjs
       - docs/product/ft3d-8v-*.md
       - docs/product/ft3d-8-*.md
@@ -36,13 +39,13 @@ jobs:
       - name: Syntax checks
         run: |
           for f in js/construction-schedule-core.js js/construction-visual-state.js js/construction-gantt-adapter.js \
-                   js/construction-lab-presenter.js js/construction-project-adapter.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js \
+                   js/construction-lab-presenter.js js/construction-project-adapter.js js/construction-delivery-core.js labs/ft3d-8/lab-fixture.js labs/ft3d-8/fidelity-fixtures.js \
                    tests/construction-schedule-core.test.cjs tests/construction-schedule-rules.test.cjs \
                    tests/construction-visual-state.test.cjs tests/ft3d-8-lab.test.cjs tests/ft3d-8-lab.browser.test.cjs \
-                   tests/fixtures/construction-schedule-fixtures.cjs tests/construction-project-adapter.test.cjs tests/ft3d-8-fidelity.browser.test.cjs; do node --check "$f"; done
+                   tests/fixtures/construction-schedule-fixtures.cjs tests/construction-project-adapter.test.cjs tests/ft3d-8-fidelity.browser.test.cjs tests/construction-delivery-core.test.cjs tests/ft3d-8-delivery.browser.test.cjs; do node --check "$f"; done
           node --input-type=module --check < labs/ft3d-8/app.js
           node --input-type=module --check < labs/ft3d-8/scene.js
-          for m in fidelity-app project-scene gantt-view; do node --input-type=module --check < labs/ft3d-8/$m.js; done
+          for m in fidelity-app project-scene gantt-view delivery-ui; do node --input-type=module --check < labs/ft3d-8/$m.js; done
       - name: Pure FT3D-8V and existing budget/story regression
         run: >-
           node --test
@@ -51,13 +54,16 @@ jobs:
           tests/construction-visual-state.test.cjs
           tests/ft3d-8-lab.test.cjs
           tests/construction-project-adapter.test.cjs
+          tests/construction-delivery-core.test.cjs
           tests/budget-core.test.cjs
+          tests/brand-core.test.cjs
+          tests/share-api.test.cjs
           tests/budget-draft.test.cjs
           tests/building.test.cjs
           tests/presentation-story.test.cjs
   visual-lab-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 50
     needs: validate
     steps:
       - uses: actions/checkout@v4
@@ -84,6 +90,17 @@ jobs:
         with:
           name: ft3d-8-visual-lab-screenshots
           path: qa-results/ft3d-8-lab
+          if-no-files-found: ignore
+      - name: FT3D-8 delivery (brand, real video + playback of the downloaded file, client document, mocked publication)
+        if: always()
+        env:
+          FT3D8_DELIVERY_SHOTS: qa-results/ft3d-8-delivery
+        run: node --test --test-concurrency=1 tests/ft3d-8-delivery.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-delivery-evidence
+          path: qa-results/ft3d-8-delivery
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: always()

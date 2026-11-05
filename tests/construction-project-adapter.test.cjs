@@ -162,7 +162,7 @@ test('a building has no building-level budget in RUBIK: costs unavailable, never
 test('missing planning is reported, not invented',async()=>{
   const m=await A.evaluate(await F.build('D'));
   assert.equal(m.planning.status,'unavailable');assert.equal(m.planning.message,'PLANIFICACION NO DISPONIBLE O PENDIENTE');
-  assert.equal(m.delivery.level,'internal');assert.deepEqual(m.delivery.blockers,['planning-unavailable']);
+  assert.equal(m.delivery.level,'internal');assert.deepEqual(m.delivery.blockers,['planning-unavailable','approval-not-authenticated']);
   assert.equal(m.costs.status,'budget-only');assert.equal(m.links.length,0);
   assert.equal(m.inventory.roof.status,'unavailable');
   assert.equal(el(m,'project/roof').representable,false);assert.equal(el(m,'project/roof').unavailableReason,'open-or-branched-facade');
@@ -170,12 +170,12 @@ test('missing planning is reported, not invented',async()=>{
 
 test('revision changes invalidate: project, schedule and budget edits mark the binding obsolete',async()=>{
   const c=await F.build('A');
-  assert.equal((await A.evaluate(c)).delivery.level,'professional');
+  assert.equal((await A.evaluate(c)).delivery.level,'evidenced-plan');
   const p2=structuredClone(c.source);p2.walls[0].heightMm=2900;
   const m1=await A.evaluate({...c,source:p2});
   assert.equal(m1.obsolescence.project,'obsolete');
   assert.ok(codes(m1).includes('schedule-project-revision-obsolete')&&codes(m1).includes('project-revision-obsolete'));
-  assert.notEqual(m1.delivery.level,'professional');assert.ok(m1.delivery.blockers.includes('revision-obsolete-or-unbound'));
+  assert.notEqual(m1.delivery.level,'evidenced-plan');assert.ok(m1.delivery.blockers.includes('project-revision-not-current'));
   const b2=structuredClone(c.budget);b2.items[0]={...b2.items[0],wastePercent:7};
   const m2=await A.evaluate({...c,budget:Budget.validateBudget(b2)});
   assert.equal(m2.obsolescence.budget,'obsolete');assert.equal(m2.delivery.level,'orientative');
@@ -243,4 +243,100 @@ test('compatibility: legacy 0.1.0 schedule strings over real keys still evaluate
   assert.ok(m.links.every(l=>l.status==='ok'&&l.role==='build'));
   assert.equal(m.costs.status,'available');
   assert.equal(m.planning.evidence,'plan-estimated');
+});
+
+/* ---------- Phase A corrections (traceability) ---------- */
+const withBinding=async(c,patch={})=>({...c,binding:A.createBinding({id:'bnd_fx-test',source:c.source,
+  fingerprints:{project:await A.fingerprint(c.source),schedule:await A.fingerprint(c.schedule),budget:c.budget?await A.fingerprint(c.budget):null,...(patch.fingerprints||{})},
+  scheduleId:patch.scheduleId!==undefined?patch.scheduleId:c.schedule.id,budgetId:patch.budgetId!==undefined?patch.budgetId:(c.budget?c.budget.id:null),
+  review:patch.review||{status:'reviewed',by:'FIXTURE arquitecta',at:'2026-11-05T09:00:00+01:00'}})});
+
+test('A1: the highest level reachable today is "evidenced-plan"; accredited approval is never claimed',async()=>{
+  const m=await A.evaluate(await F.build('A'));
+  assert.equal(m.delivery.level,'evidenced-plan');
+  assert.match(m.delivery.label,/revision declarada, no acreditada/);
+  assert.doesNotMatch(m.delivery.label,/Entrega profesional|verificad[oa] completamente|certificad[oa]\b/i);
+  assert.ok(m.delivery.blockers.includes('approval-not-authenticated'));
+  assert.ok(A.DELIVERY.includes('accredited'));
+  assert.match(m.delivery.assurances.approval,/identidad no verificada/);
+  assert.match(m.delivery.scopeNotice,/Alcance parcial: RUBIK no modela foundation/);
+});
+test('A1: correct project fingerprint but unbound budget cannot reach evidenced-plan',async()=>{
+  const c=await F.build('A'),m=await A.evaluate(await withBinding(c,{fingerprints:{budget:null},budgetId:null}));
+  assert.equal(m.obsolescence.budget,'unbound');
+  assert.ok(m.issues.some(i=>i.code==='budget-unbound')&&m.issues.some(i=>i.code==='binding-budget-unbound'));
+  assert.equal(m.delivery.level,'orientative');assert.ok(m.delivery.blockers.includes('budget-revision-not-current'));
+});
+test('A1: obsolete plan fingerprint and obsolete budget fingerprint both block a declared plan',async()=>{
+  const c=await F.build('A');
+  const ms=await A.evaluate(await withBinding(c,{fingerprints:{schedule:'0'.repeat(64)}}));
+  assert.equal(ms.obsolescence.schedule,'obsolete');assert.equal(ms.delivery.level,'orientative');assert.ok(ms.delivery.blockers.includes('schedule-revision-not-current'));
+  const mb=await A.evaluate(await withBinding(c,{fingerprints:{budget:'1'.repeat(64)}}));
+  assert.equal(mb.obsolescence.budget,'obsolete');assert.equal(mb.delivery.level,'orientative');assert.ok(mb.delivery.blockers.includes('budget-revision-not-current'));
+});
+test('A1: partially defined binding (plan not fixed) never raises confidence',async()=>{
+  const c=await F.build('A'),m=await A.evaluate(await withBinding(c,{fingerprints:{schedule:null},scheduleId:null}));
+  assert.equal(m.obsolescence.schedule,'unbound');
+  assert.ok(m.issues.some(i=>i.code==='binding-schedule-unbound'));
+  assert.equal(m.delivery.level,'orientative');
+  // A binding fixing a document that was not supplied is reported, not assumed.
+  const noBudget=await A.evaluate({...(await withBinding(c)),budget:null});
+  assert.equal(noBudget.obsolescence.budget,'missing-document');assert.ok(noBudget.issues.some(i=>i.code==='budget-missing'));
+});
+test('A1/A4: a reviewer declared in JSON is a declaration, not an authenticated approval',async()=>{
+  const c=await F.build('A'),m=await A.evaluate(await withBinding(c,{review:{status:'reviewed',by:'Cualquiera',at:'2026-11-05T10:00:00Z'}}));
+  assert.equal(m.delivery.level,'evidenced-plan');
+  assert.match(m.delivery.assurances.approval,/declarada en el vinculo por Cualquiera.*identidad no verificada/);
+  assert.notEqual(m.delivery.level,'accredited');
+  const draft=await A.evaluate(await withBinding(c,{review:{status:'draft'}}));
+  assert.equal(draft.delivery.level,'orientative');assert.ok(draft.delivery.blockers.includes('binding-not-reviewed'));
+});
+test('A1: incomplete budget coverage stays at declared-plan with explicit blockers',async()=>{
+  const m=await A.evaluate(await F.build('C'));
+  assert.equal(m.delivery.level,'declared-plan');
+  assert.ok(['budget-coverage-incomplete','budget-lines-unverified','geometry-not-verified'].every(b=>m.delivery.blockers.includes(b)));
+});
+test('A2: a plan of another project never animates this geometry, even with identical task names',async()=>{
+  const a=await F.build('A'),c=await F.build('C');
+  // Same task ids/titles as C's plan, but it belongs to project A.
+  const twin=structuredClone(c.schedule);twin.projectRef={...a.schedule.projectRef};
+  const m=await A.evaluate({source:c.source,schedule:twin,budget:c.budget});
+  assert.equal(m.planning.status,'rejected');assert.equal(m.planning.reason,'schedule-other-project');
+  assert.match(m.planning.message,/PLAN DE OTRO PROYECTO \(prj_fx-house-a\)/);
+  assert.equal(m.links.length,0,'no element is linked through a rejected plan');
+  assert.equal(m.costs.status,'budget-only','costs are not combined with a rejected plan');
+  assert.equal(m.fingerprints.schedule,null);
+  assert.ok(m.delivery.blockers.includes('planning-rejected'));
+  // Same project id but tasks pointing to A's keys: rejected through ids, never through texts.
+  const forged=structuredClone(a.schedule);forged.projectRef={...c.schedule.projectRef};
+  const m2=await A.evaluate({source:c.source,schedule:forged,budget:c.budget});
+  assert.equal(m2.planning.status,'available');
+  assert.ok(m2.issues.filter(i=>i.code==='link-unknown-element').length>=6);
+  assert.equal(m2.delivery.level,'internal');
+  // A building plan on a single project is rejected too.
+  const b=await F.build('B');
+  assert.equal((await A.evaluate({source:c.source,schedule:b.schedule})).planning.status,'rejected');
+});
+test('A3: a level budget is identified and never used as the whole building budget',async()=>{
+  const b=await F.build('B'),levelBudget=b.budgets[0].budget;
+  const m=await A.evaluate({...b,budget:levelBudget});
+  assert.equal(m.costs.status,'unavailable');assert.equal(m.costs.reason,'level-budget-not-building');assert.equal(m.costs.levelId,'lvl_fx-b0');
+  assert.match(m.costs.message,/planta lvl_fx-b0/);assert.equal(m.coverage.budget,null);
+  const other=await A.evaluate({...b,budget:(await F.build('C')).budget});
+  assert.equal(other.costs.reason,'budget-other-project');
+});
+test('A6: three coverages are separate; 100 % of loaded items is not 100 % of the works',async()=>{
+  const m=await A.evaluate(await F.build('A'));
+  assert.equal(m.coverage.budget.allocatedPercentOfKnown,100);
+  assert.match(m.coverage.budget.note,/no equivale al porcentaje de la obra presupuestada/);
+  const scope=m.coverage.scope;
+  assert.ok(scope.categories.find(x=>x.category==='roof').status==='not-budgetable-in-c1-c4');
+  assert.ok(scope.notModeled.includes('foundation'));
+  assert.ok(scope.budgetedKnown>0&&scope.notBudgetable>0);
+  assert.equal(m.coverage.geometry.phasesWithElements,6);assert.equal(m.coverage.geometry.phases,7);
+  const c=await A.evaluate(await F.build('C'));
+  assert.equal(c.coverage.scope.categories.find(x=>x.category==='openings:window').status,'budgeted-unpriced');
+  assert.equal(c.coverage.scope.categories.find(x=>x.category==='floors:mat_fx-tile').status,'budgeted-unpriced');
+  const d=await A.evaluate(await F.build('D'));
+  assert.ok(d.coverage.scope.categories.every(x=>['budgeted-unpriced','not-in-budget','not-budgetable-in-c1-c4'].includes(x.status)));
 });
