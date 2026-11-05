@@ -43,10 +43,11 @@ async function filesOf(id,{only=null}={}){
   if(c.gml)add('gml',c.gml.fileName,c.gml.text,'application/gml+xml');
   return out;
 }
-const load=async(page,files)=>{const before=await page.evaluate(()=>window.__ft3dDossier.state.evaluation?.dossier.id+'|'+(window.__ft3dDossier.state.error?.code||''));
+// Waits on the lab's load counter (incremented for accepted AND rejected loads): never on a value that may not change.
+const load=async(page,files)=>{const seq=await page.evaluate(()=>window.__ft3dDossier.state.seq);
   await page.locator('#dossierFiles').setInputFiles(files);
-  await page.waitForFunction(b=>(window.__ft3dDossier.state.evaluation?.dossier.id+'|'+(window.__ft3dDossier.state.error?.code||''))!==b||window.__ft3dDossier.state.error,before,{timeout:60000}).catch(()=>{});
-  await page.waitForTimeout(150);return page.evaluate(()=>window.__ft3dDossier.summary());};
+  await page.waitForFunction(n=>window.__ft3dDossier.state.seq>n,seq,{timeout:60000,polling:100});
+  return page.evaluate(()=>window.__ft3dDossier.summary());};
 
 test('the REAL Catastro provider reads the fixture GML exactly as the Node stand-in (contract is shared)',{timeout:120000},async t=>{
   const ctx=await browser.newContext();t.after(()=>ctx.close());const page=await ctx.newPage(),{errors,external}=watch(page);

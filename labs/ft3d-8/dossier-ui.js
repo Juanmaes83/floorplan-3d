@@ -11,7 +11,8 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const short=h=>h?String(h).slice(0,12):'—';
 const euro=v=>v===null||v===undefined?'desconocido':P.euro(v);
-const state={input:null,evaluation:null,previous:null,change:null,opened:null,origin:null,error:null};
+// seq counts every finished file load (accepted or rejected): a deterministic signal for whoever waits on a load.
+const state={input:null,evaluation:null,previous:null,change:null,opened:null,origin:null,error:null,seq:0};
 const api=window.__ft3dDossier={state};
 const provider=Cat?.provider||null;
 
@@ -87,7 +88,7 @@ async function loadFiles(files){
   }catch(e){
     // The previous valid dossier stays exactly as it was.
     state.error={code:e.code||'import-failed',message:e.message};render();throw e;
-  }
+  }finally{state.seq++;}
 }
 async function savePackage(){
   if(!state.input)throw new Error('No hay expediente');
