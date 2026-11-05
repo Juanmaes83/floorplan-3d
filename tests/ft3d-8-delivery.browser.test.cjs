@@ -25,7 +25,10 @@ function watch(page){const errors=[],external=[];page.on('pageerror',e=>errors.p
 async function open(page,caseId){await page.goto(`${base}labs/ft3d-8/?case=${caseId}`);
   await page.waitForFunction(id=>document.body.dataset.case===id&&window.__ft3dDelivery,caseId,{timeout:30000});
   // Gate D layout: the delivery lives in its own section («Entrega»).
-  await page.evaluate(()=>window.__ft3dUI.reveal('#deliverPanel'));}
+  await page.evaluate(()=>window.__ft3dUI.reveal('#deliverPanel'));
+  // Gate D cut E: secondary options are folded; this suite drives them as a professional who unfolds them
+  // (the folded default is covered by ft3d-8-ux4d.browser.test.cjs).
+  await page.evaluate(()=>document.querySelectorAll('#deliverPanel details:not(#publishBox)').forEach(d=>d.open=true));}
 async function labBrand(page,name='FIXTURE Estudio Demo'){
   const logo=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=180;c.height=60;const x=c.getContext('2d');x.fillStyle='#1f5a66';x.fillRect(0,0,180,60);
     x.fillStyle='#fff';x.font='bold 28px Arial';x.fillText('FX',20,42);return c.toDataURL('image/png').split(',')[1];});
@@ -87,9 +90,10 @@ test('desktop · brand, real video, download, playback of the downloaded file, c
   assert.match(await page.locator('#brandPreview').innerText(),/FIXTURE Estudio Demo[\s\S]*FIXTURE La obra de tu casa[\s\S]*estudio@example\.com/);
   assert.doesNotMatch(await page.locator('#brandPreview').innerText(),/600 000 000/,'phone not included');
   await elShot(page.locator('#step3'),'01-selector-marca.png');
-  // Cards have a usable size at 1440 px (three per row for steps 3-5, two for 1-2).
-  const sizes=await page.evaluate(()=>['step1','step2','step3','step4','step5'].map(id=>Math.round(document.getElementById(id).getBoundingClientRect().width)));
-  assert.ok(sizes.slice(0,2).every(w=>w>=640)&&sizes.slice(2).every(w=>w>=420),'card widths '+sizes);
+  // Gate D cut E: four guided steps (Previsualizar, Personalizar, Generar, Resultado), two per row at 1440 px.
+  const sizes=await page.evaluate(()=>['step1','step3','step4','step5'].map(id=>Math.round(document.getElementById(id).getBoundingClientRect().width)));
+  assert.ok(sizes.every(w=>w>=600),'card widths '+sizes);
+  assert.deepEqual(await page.evaluate(()=>[...document.querySelectorAll('.steps.guided>.step>h3')].map(h=>h.textContent.replace(/^\d\s*/,'').trim())),['Previsualizar','Personalizar','Generar','Resultado']);
   // Button states before recording.
   const btn=()=>page.evaluate(()=>({go:!document.getElementById('videoGo').disabled,goText:document.getElementById('videoGo').textContent,cancel:!document.getElementById('videoCancel').hidden,
     download:!document.getElementById('videoDownload').hidden,preview:!document.getElementById('videoPreview').hidden}));

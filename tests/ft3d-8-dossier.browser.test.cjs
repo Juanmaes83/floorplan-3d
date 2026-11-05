@@ -194,7 +194,7 @@ test('video and delivery bound to the dossier: record, download, play, history k
   await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
   const dos=await page.evaluate(()=>window.__ft3dDossier.evaluation.dossier.id);
   assert.equal(await page.evaluate(()=>window.__ft3dDelivery.state.source),'dossier');
-  await reveal(page,'#deliverPanel');await page.locator('#videoGo').click();
+  await reveal(page,'#videoGo');await page.locator('#videoGo').click();
   await page.waitForFunction(()=>window.__ft3dDelivery.state.video||/cancelad|no válido|no generó|no puede/.test(document.getElementById('videoStatus').textContent),null,{timeout:600000});
   const v=await page.evaluate(()=>{const s=window.__ft3dDelivery.state;return s.video&&{type:s.video.type,durationMs:s.video.durationMs,sha256:s.video.sha256,manifest:{id:s.manifest.id,dossier:s.manifest.dossier,territory:s.manifest.territory,brand:s.manifest.brand.name,schemaVersion:s.manifest.schemaVersion}};});
   assert.ok(v,'a video was produced: '+await page.locator('#videoStatus').innerText());

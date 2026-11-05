@@ -254,7 +254,7 @@ const withBinding=async(c,patch={})=>({...c,binding:A.createBinding({id:'bnd_fx-
 test('A1: the highest level reachable today is "evidenced-plan"; accredited approval is never claimed',async()=>{
   const m=await A.evaluate(await F.build('A'));
   assert.equal(m.delivery.level,'evidenced-plan');
-  assert.match(m.delivery.label,/revision declarada, no acreditada/);
+  assert.match(m.delivery.label,/revisión declarada, no acreditada/);
   assert.doesNotMatch(m.delivery.label,/Entrega profesional|verificad[oa] completamente|certificad[oa]\b/i);
   assert.ok(m.delivery.blockers.includes('approval-not-authenticated'));
   assert.ok(A.DELIVERY.includes('accredited'));

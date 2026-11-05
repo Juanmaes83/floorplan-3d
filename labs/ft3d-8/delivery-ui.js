@@ -77,7 +77,8 @@ function renderReview(){
     <p>Presupuesto: ${m.costs.status==='available'?`<strong>${esc(m.costs.report.budgetId)}</strong> · ${c.budget.allocatedPercentOfKnown} % de las partidas cargadas asignadas (no equivale a la obra presupuestada)`:`<span class="bad">${esc(m.costs.message||m.costs.reason||'no disponible')}</span>`}</p>
     <p>Nivel: <strong>${esc(m.delivery.label)}</strong></p>${pol.allowed?'':`<p class="bad">Costes no incluibles en la entrega: ${esc(pol.reasons.join('; '))}</p>`}`;
   const block=dossierBlock(),can=m.planning.status==='available'&&!block;
-  $('videoGo').disabled=!can||!!state.recording;$('docPrepare').disabled=!can;
+  $('videoGo').disabled=!can||!!state.recording;$('docPrepare').disabled=!can;$('deliverGo').disabled=!can||!!state.recording;
+  renderPreview(ctx,pol,block);
   $('videoBlocked').textContent=block||(can?'':'Sin un plan válido de este proyecto no se puede generar la evolución de obra.');
   $('costMode').querySelectorAll('option').forEach(o=>{o.disabled=o.value!=='none'&&!pol.allowed;});if(!pol.allowed)$('costMode').value='none',state.costMode='none';
 }
@@ -85,6 +86,27 @@ const policy=()=>{const ctx=Fid()?.ctx;if(!ctx)return {allowed:false,mode:'none'
 // A new project/plan/budget/brand selection invalidates generated files: they showed another selection.
 function invalidate(){if(state.video?.url)URL.revokeObjectURL(state.video.url);state.video=null;state.manifest=null;state.doc=null;state.published=null;renderVideo();renderShare();}
 
+// Guided delivery (Gate D cut E): 1 Previsualizar · 2 Personalizar · 3 Generar · 4 Resultado. Plain language first,
+// technical identifiers one click away (pro-only details). Nothing is published from these steps.
+function renderPreview(ctx,pol,block){
+  const m=ctx.model,sch=ctx.schedule,brand=currentBrand();
+  if(m.planning.status!=='available'){$('deliverSummary').innerHTML=`<p class="bad">${esc(m.planning.message||'Sin planificación de este proyecto: no hay evolución que entregar.')}</p>`;return;}
+  const sb=D.storyboard(sch),n=P.weeks(sch).length,tasks=ctx.canon?.tasks?.length||sch.tasks?.length||0;
+  const costs=!pol.allowed?'sin importes (no se pueden incluir: '+pol.reasons.join('; ')+')':state.costMode==='none'?'sin importes':state.costMode==='summary'?'con el resumen del presupuesto asignado, sin IVA'+(pol.summary&&!pol.summary.complete?' (incompleto)':''):'con el importe de cada fase, sin IVA';
+  $('deliverSummary').innerHTML=`<p class="lead">Tu cliente verá <strong>${esc(m.subject.name)}</strong> construirse en <strong>${n} ${n===1?'semana':'semanas'}</strong>, del ${esc(P.dateLabel(sb.startDate))} al ${esc(P.dateLabel(sb.endDate))}.</p>
+    <ul class="gfacts"><li>${tasks} trabajos del plan, con sus fechas</li><li>${esc(costs)}</li><li>${brand.present?'con la marca «'+esc(brand.name)+'»':'sin marca propia (aparecerá «Generado con RUBIK SOTA»)'}</li><li>${esc(m.delivery.label)} · simulación planificada, no obra ejecutada</li></ul>
+    ${block?`<p class="bad">${esc(block)}</p>`:''}`;
+}
+function renderResult(){
+  const v=state.video,d=state.doc,el=$('deliverResult');
+  el.classList.toggle('ok',!!(v&&d));$('deliverGo').textContent=v&&d?'Generar de nuevo':'Generar vídeo y presentación';
+  el.textContent=state.recording?'Generando… puedes cancelar en el paso 3.':v&&d?'Tu presentación está preparada: revisa el vídeo y descarga los archivos. No se ha publicado nada.'
+    :v?'El vídeo está listo. Falta preparar la presentación (paso 3).':d?'La presentación está lista, sin vídeo dentro del archivo.':'Aún no se ha generado nada.';
+}
+async function generateAll(){
+  const v=await record();if(!v&&!state.video)return null;
+  await prepareDocument();renderResult();$('step5').scrollIntoView?.({block:'start'});return state.doc;
+}
 /* ---------- video ---------- */
 function renderVideo(message=''){
   const type=state.encoder?'video/mp4':Rec?.pickType?.()||null;
@@ -93,12 +115,13 @@ function renderVideo(message=''){
     :'Formato: WebM (este navegador no puede crear MP4). WebM se abre en Chrome, Edge, Firefox y Android; en iPhone/Safari antiguos o algunas apps de mensajería puede no reproducirse. No se renombra a .mp4.';
   $('videoFormat').classList.toggle('warn',!!type&&!state.encoder);
   const v=state.video,rec=!!state.recording;
-  $('videoCancel').hidden=!rec;$('videoGo').textContent=v?'Grabar de nuevo':'Generar vídeo';$('videoGo').disabled=rec||!type||Fid().ctx?.model.planning.status!=='available'||!!dossierBlock();
+  $('videoCancel').hidden=!rec;$('videoGo').textContent=v?'Grabar de nuevo':'Generar vídeo';$('deliverGo').disabled=rec||!type||Fid().ctx?.model.planning.status!=='available'||!!dossierBlock();$('videoGo').disabled=rec||!type||Fid().ctx?.model.planning.status!=='available'||!!dossierBlock();
   $('videoDownload').hidden=!v;$('videoPreview').hidden=!v;
   if(v){if($('videoPreview').src!==v.url)$('videoPreview').src=v.url;
     $('videoMeta').textContent=`${v.ext.toUpperCase()}${v.seekable?' indexado':''} · ${v.width}×${v.height} · ${secs(v.durationMs)}${v.fps?` · ${v.fps} fps · ${v.keyframes} fotogramas clave`:''} · ${sizeText(v.bytes)} · SHA-256 ${v.sha256.slice(0,12)} · entrega ${state.manifest?.id||'—'}`;}
   else{$('videoPreview').removeAttribute('src');$('videoMeta').textContent='';}
   if(message!==null)$('videoStatus').textContent=message;
+  renderResult();
 }
 const images=new Map();
 const img=src=>{if(!src)return null;if(!images.has(src)){const i=new Image();i.src=src;images.set(src,i);}return images.get(src);};
@@ -263,7 +286,7 @@ function renderHistory(){
   $('deliveryHistory').innerHTML=state.history.map(h=>`<li>${esc(h.kind)} · entrega <code>${esc(h.deliveryId)}</code> · expediente <code>${esc(h.dossierId||'—')}</code> · ${esc(h.projectName)}${h.sha256?` · SHA-256 <code>${esc(h.sha256.slice(0,12))}</code>`:''}</li>`).join('');
 }
 function renderShare(message=null){
-  const v=state.video,d=state.doc;renderHistory();
+  const v=state.video,d=state.doc;renderHistory();renderResult();
   $('docDownload').hidden=!d;$('manifestDownload').hidden=!state.manifest;
   $('docMeta').textContent=d?`Documento ${sizeText(d.bytes)} · ${d.embedded?'vídeo incluido dentro del archivo':'sin vídeo dentro del archivo'} · entrega ${d.manifest.id}`:'';
   if(!d)$('clientPreview').hidden=true;
@@ -312,6 +335,8 @@ for(const f of D.CONTACT_FIELDS)$('inc-'+f).onchange=e=>{e.target.checked?state.
 $('costMode').onchange=()=>{state.costMode=$('costMode').value;invalidate();renderReview();renderShare(null);};
 $('videoGo').onclick=()=>record().catch(e=>{state.lastError=e.message;renderVideo(e.name==='AbortError'?'Grabación cancelada. No se ha guardado nada.':e.message);});
 $('videoCancel').onclick=()=>state.recording?.controller.abort();
+$('deliverGo').onclick=()=>generateAll().catch(e=>{state.lastError=e.message;renderVideo(e.name==='AbortError'?'Grabación cancelada. No se ha guardado nada.':e.message);});
+$('deliverSeeEvolution').onclick=()=>window.__ft3dUI?.go('evolucion');
 $('videoDownload').onclick=()=>state.video&&download(state.video.blob,state.video.filename);
 $('docPrepare').onclick=()=>prepareDocument().catch(e=>renderShare(e.message));
 $('docDownload').onclick=()=>state.doc&&download(new Blob([state.doc.html],{type:'text/html'}),D.documentFilename(state.doc.manifest));
@@ -323,7 +348,7 @@ $('publishGo').onclick=async()=>{$('publishGo').disabled=true;renderShare('Publi
 $('publishCopy').onclick=async()=>{try{await navigator.clipboard.writeText(state.published.link);renderShare('Enlace copiado.');}catch{$('publishUrl').select();renderShare('Selecciona el enlace y cópialo.');}};
 for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>{document.body.dataset.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));};
 Object.defineProperty(api,'history',{get:()=>state.history.map(h=>({...h})),enumerable:true});
-Object.assign(api,{record,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
+Object.assign(api,{record,generateAll,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
   select(source){state.source=source;invalidate();renderBrand();},setInclude(list){state.include=new Set(list);D.CONTACT_FIELDS.forEach(f=>$('inc-'+f).checked=state.include.has(f));invalidate();renderBrand();},
   setCostMode(m){$('costMode').value=m;state.costMode=m;invalidate();renderReview();}});
 encoderConfig().then(c=>{state.encoder=c;renderVideo(null);});

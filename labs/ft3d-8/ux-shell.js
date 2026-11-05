@@ -135,7 +135,7 @@ function onMoment(last){
   const note=$('sceneNote');
   if(!tl){note.hidden=false;note.textContent=ctx.model.planning.status==='rejected'?'La planificación cargada pertenece a otro proyecto: se muestra el modelo sin fechas.':'Sin planificación: se muestra la vivienda, sin fechas inventadas.';}
   else if(none.length){note.hidden=false;note.textContent=none.map(t=>t.title.replace(/^FIXTURE /,'').replace(/\s*\(sin geometr[ií]a en RUBIK\)/i,'')).join(' · ')+': planificado, sin representación 3D.';}
-  else note.hidden=true;
+  else{note.hidden=true;note.textContent='';}
 }
 $('introPlay').onclick=()=>{$('introOverlay').hidden=true;Fid().play();};
 window.addEventListener('ft3d8-moment',e=>onMoment(e.detail));

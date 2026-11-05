@@ -355,9 +355,9 @@
     }
     // The review inside a JSON binding is a declaration: nobody's identity is verified here (A4).
     blockers.push('approval-not-authenticated');
-    const LABEL={internal:'Vista interna exploratoria',orientative:'Presentacion orientativa (plan sin revision declarada o incompleto)',
-      'declared-plan':'Plan con revision declarada, no acreditada (no certifica ejecucion)',
-      'evidenced-plan':'Presentacion planificada con evidencias registradas (revision declarada, no acreditada; no certifica obra)',
+    const LABEL={internal:'Vista interna exploratoria',orientative:'Presentación orientativa (plan sin revisión declarada o incompleto)',
+      'declared-plan':'Plan con revisión declarada, no acreditada (no certifica ejecución)',
+      'evidenced-plan':'Presentación planificada con evidencias registradas (revisión declarada, no acreditada; no certifica obra)',
       accredited:'Aprobacion acreditada: requiere identidad verificable (no disponible)'};
     return {schema:MODEL_SCHEMA,schemaVersion:MODEL_VERSION,subject:{type:inv.kind,id:inv.id,name:inv.name,updatedAt:inv.updatedAt},
       fingerprints:now,inventory:inv,planning,links,visualElements,illustrative:[...illustrative.values()].map(r=>({...r,tasks:r.tasks.map(t=>({...t}))})),costs,coverage,issues,obsolescence:obsolete,

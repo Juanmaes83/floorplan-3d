@@ -34,7 +34,7 @@ jobs:
                    tests/construction-*.cjs tests/ft3d-8-*.cjs tests/fixtures/construction-*.cjs; do node --check "$f"; done
           node --input-type=module --check < labs/ft3d-8/app.js
           node --input-type=module --check < labs/ft3d-8/scene.js
-          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui; do node --input-type=module --check < labs/ft3d-8/$m.js; done
+          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < labs/ft3d-8/$m.js; done
       - name: Pure FT3D-8V and existing budget/story regression
         run: >-
           node --test
@@ -60,7 +60,7 @@ jobs:
           tests/presentation-story.test.cjs
   visual-lab-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 70
+    timeout-minutes: 90
     needs: validate
     steps:
       - uses: actions/checkout@v4
@@ -109,6 +109,17 @@ jobs:
         with:
           name: ft3d-8-dossier-evidence
           path: qa-results/ft3d-8-dossier
+          if-no-files-found: ignore
+      - name: FT3D-8 Gate D UX/4D (20 functional checks, MP4 = screen parity, guided delivery, client view, mobile)
+        if: always()
+        env:
+          FT3D8_UX4D_SHOTS: qa-results/ft3d-8-ux4d
+        run: node --test --test-concurrency=1 tests/ft3d-8-ux4d.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ft3d-8-ux4d-evidence
+          path: qa-results/ft3d-8-ux4d
           if-no-files-found: ignore
       - uses: actions/upload-artifact@v4
         if: always()

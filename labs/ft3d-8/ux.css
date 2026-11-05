@@ -147,12 +147,21 @@ body.capture .scene-top,body.capture .intro,body.capture .pick,body.capture .her
 body.capture #panel-evolucion>.stagewrap{width:var(--capture-w);height:var(--capture-h)}
 
 @media (max-width:760px){
-  .topbar.ux{gap:8px;padding:8px 12px}.ptitle{flex-basis:100%;order:2}.tabs{order:3;width:100%;justify-content:space-between}.tabs button{flex:1;padding:8px 6px}
-  .topbar.ux .modes{order:4}.topbar.ux .origin{order:5;max-width:100%}
+  /* Two rows on a phone (viewer first): brand · project · mode, then the three sections. The data origin is shown
+     with the project section only; the readiness pill stays (it is the state of the dossier). */
+  .topbar.ux{gap:6px 8px;padding:6px 12px}.topbar.ux .brand em{display:none}
+  .ptitle{flex:1 1 0;order:1;gap:6px}#topProject{font-size:13.5px}.readypill{font-size:11px;padding:3px 8px}
+  .topbar.ux .modes{order:2}.topbar.ux .modes button{padding:6px 9px;min-height:32px;font-size:11.5px}
+  .tabs{order:3;width:100%;justify-content:space-between;padding:3px}.tabs button{flex:1;padding:6px 6px;min-height:36px}
+  .topbar.ux .origin{order:5;max-width:100%}body:not([data-tab=proyecto]) .topbar.ux .origin{display:none}
+  .topbar.ux .demo{display:none}
   #panel-evolucion>.stagewrap{height:54vh;min-height:300px}
   .hero{left:12px;top:10px;max-width:calc(100% - 24px)}.hero-t{font-size:24px}.hero-meta{display:none}
   #panel-evolucion .cams{top:auto;bottom:12px;right:auto;left:12px}
-  .scene-top{bottom:12px;right:12px}
+  .scene-top{bottom:56px;right:12px} /* above the camera row, never on top of it */
+  #topProject{display:none} /* the hero names the project right below */
+  .ptitle{overflow:hidden}
+  .readypill{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .evo-panel{grid-template-columns:1fr}
   .intro{bottom:6%;padding:12px 14px}.intro-k{font-size:17px}
   .scene-note{max-width:220px}
@@ -179,3 +188,19 @@ body[data-mode=client] .credits{display:none}
 .evo-panel #cardTasks li.sel .t::after{content:'seleccionada';margin-left:8px;font:700 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#8fd0dc}
 .cdet{margin-top:8px;font-size:12.5px;color:#dfe6e8}.cdet summary{cursor:pointer;font:700 13px var(--sans);color:#fff;padding:4px 0}
 .cdet-t{border-top:1px solid #444c51;padding:6px 0}.cdet-t p{margin:2px 0;color:#c9d4d7}.cdet-t ul{margin:4px 0 0;padding-left:16px}
+
+/* ---------- Gate D cut E · guided delivery: Previsualizar · Personalizar · Generar · Resultado ---------- */
+.steps.guided{grid-template-columns:repeat(2,minmax(0,1fr))}
+.steps.guided>#step1,.steps.guided>#step3,.steps.guided>#step4,.steps.guided>#step5{grid-column:auto}
+.steps.guided .step{border-top:3px solid transparent}
+.steps.guided .step:has(.gresult.ok){border-top-color:var(--success,#2f6e4a)}
+.gsum .lead{margin:0 0 6px;font:500 15px/1.45 var(--sans);color:#1f2326}
+.gfacts{margin:0;padding-left:18px;display:grid;gap:3px;font-size:13px;color:#3d4448}
+.step details.more{border-top:1px solid #e3e6e7;padding-top:6px}
+.step details.more>summary{cursor:pointer;font:600 12.5px var(--sans);color:#1f5a66;list-style-position:inside}
+.step details.more[open]>summary{margin-bottom:6px}
+.step details.more>*:not(summary){margin-top:6px}
+.gresult{margin:0;font:600 14px/1.4 var(--sans);color:#3d4448}
+.gresult.ok{color:#fff;background:var(--success,#2f6e4a);padding:10px 12px;border-radius:8px}
+.step iframe#clientPreview{width:100%;min-height:260px;border:1px solid #dfe3e4;border-radius:8px}
+@media (max-width:1100px){.steps.guided{grid-template-columns:1fr}}

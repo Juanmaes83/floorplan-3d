@@ -176,10 +176,12 @@
     <section class="deliver" id="deliverPanel" aria-labelledby="deliverTitle">
     <header class="deliver-head"><h2 id="deliverTitle">Entrega al cliente</h2>
       <p class="pitch">Muestra a tu cliente cómo evolucionará su proyecto: qué se construirá, cuándo y con qué presupuesto. Todo sale del proyecto, el plan y el presupuesto seleccionados.</p></header>
-    <ol class="steps">
-      <li class="step" id="step1"><h3><span>1</span> Revisar proyecto</h3><div id="stepProject"></div></li>
-      <li class="step" id="step2"><h3><span>2</span> Revisar planificación y presupuesto</h3><div id="stepPlan"></div></li>
-      <li class="step" id="step3"><h3><span>3</span> Personalizar con mi marca</h3>
+    <ol class="steps guided" aria-label="Pasos de la entrega">
+      <li class="step" id="step1" data-step="preview"><h3><span>1</span> Previsualizar</h3>
+        <div class="gsum" id="deliverSummary" aria-live="polite"></div>
+        <div class="actions"><button type="button" class="btn" id="deliverSeeEvolution">Ver la evolución en el visor</button></div>
+        <details class="more pro-only" id="step2"><summary>Detalles del proyecto, el plan y el presupuesto</summary><div id="stepProject"></div><div id="stepPlan"></div></details></li>
+      <li class="step" id="step3" data-step="customize"><h3><span>2</span> Personalizar</h3>
         <label>Identidad <select id="brandSel"></select></label><p class="hint" id="brandBrowserNote"></p>
         <fieldset id="labBrandForm" hidden><legend>Marca de prueba de este laboratorio (solo en memoria, no se guarda)</legend>
           <label>Nombre comercial <input id="labName" maxlength="80"></label><label>Profesional responsable <input id="labPerson" maxlength="80"></label>
@@ -188,26 +190,31 @@
           <label>Logotipo (PNG, JPG o WebP) <input id="labLogo" type="file" accept="image/png,image/jpeg,image/webp"></label>
           <button type="button" class="btn" id="labBrandSave">Usar esta marca</button><p class="err" id="labBrandError" role="alert"></p></fieldset>
         <label>Título de la entrega <input id="brandTitle" maxlength="120" placeholder="Título para el cliente"></label>
-        <label>Introducción <textarea id="brandIntro" maxlength="400" rows="2"></textarea></label>
-        <fieldset class="inline"><legend>Datos de contacto que se mostrarán</legend>
-          <label><input type="checkbox" id="inc-person"> Profesional</label><label><input type="checkbox" id="inc-phone"> Teléfono</label>
-          <label><input type="checkbox" id="inc-email"> Correo</label><label><input type="checkbox" id="inc-web"> Web</label></fieldset>
-        <div class="brand-preview" id="brandPreview" aria-live="polite"></div><p class="hint" id="brandWhere"></p></li>
-      <li class="step" id="step4"><h3><span>4</span> Generar vídeo de la evolución</h3>
-        <p class="hint" id="videoFormat"></p>
         <label>Costes en el vídeo y la presentación <select id="costMode"><option value="none">No mostrar importes</option><option value="summary" selected>Resumen del presupuesto asignado</option><option value="tasks">Importe por fase</option></select></label>
+        <div class="brand-preview" id="brandPreview" aria-live="polite"></div>
+        <details class="more" id="customizeMore"><summary>Más opciones: introducción y datos de contacto</summary>
+          <label>Introducción <textarea id="brandIntro" maxlength="400" rows="2"></textarea></label>
+          <fieldset class="inline"><legend>Datos de contacto que se mostrarán</legend>
+          <label><input type="checkbox" id="inc-person"> Profesional</label><label><input type="checkbox" id="inc-phone"> Teléfono</label>
+          <label><input type="checkbox" id="inc-email"> Correo</label><label><input type="checkbox" id="inc-web"> Web</label></fieldset><p class="hint" id="brandWhere"></p></details></li>
+      <li class="step" id="step4" data-step="generate"><h3><span>3</span> Generar</h3>
+        <p class="hint">Se prepara el vídeo de la evolución y la presentación de solo lectura para tu cliente. No se publica nada.</p>
         <p class="bad" id="videoBlocked"></p>
-        <div class="actions"><button type="button" class="btn primary" id="videoGo">Generar vídeo</button><button type="button" class="btn" id="videoCancel" hidden>Cancelar grabación</button>
-          <button type="button" class="btn" id="videoDownload" hidden>Descargar vídeo</button></div>
+        <div class="actions"><button type="button" class="btn primary" id="deliverGo">Generar vídeo y presentación</button><button type="button" class="btn" id="videoCancel" hidden>Cancelar grabación</button></div>
         <p class="status" id="videoStatus" role="status" aria-live="polite"></p>
-        <video id="videoPreview" controls playsinline muted hidden aria-label="Vista previa del vídeo: es el mismo archivo que se descarga"></video><p class="meta-line" id="videoMeta"></p></li>
-      <li class="step" id="step5"><h3><span>5</span> Descargar o compartir</h3>
-        <p class="hint">Producto 1: el vídeo descargado se envía por correo o mensajería, sin servicios externos. Producto 2: una presentación de solo lectura (vídeo, fases, fechas, presupuesto autorizado y advertencias). La URL de esta Preview no es un enlace para clientes.</p>
-        <div class="actions"><button type="button" class="btn primary" id="docPrepare">Preparar presentación para el cliente</button>
-          <button type="button" class="btn" id="docDownload" hidden>Descargar presentación (.html)</button><button type="button" class="btn" id="manifestDownload" hidden>Descargar manifiesto (.json)</button></div>
+        <details class="more pro-only" id="generateMore"><summary>Generar por separado y formato</summary>
+          <p class="hint" id="videoFormat"></p>
+          <div class="actions"><button type="button" class="btn" id="videoGo">Generar vídeo</button><button type="button" class="btn" id="docPrepare">Preparar presentación para el cliente</button></div></details></li>
+      <li class="step" id="step5" data-step="result"><h3><span>4</span> Resultado</h3>
+        <p class="gresult" id="deliverResult" role="status" aria-live="polite">Aún no se ha generado nada.</p>
+        <video id="videoPreview" controls playsinline muted hidden aria-label="Vista previa del vídeo: es el mismo archivo que se descarga"></video><p class="meta-line" id="videoMeta"></p>
+        <div class="actions"><button type="button" class="btn primary" id="videoDownload" hidden>Descargar vídeo</button>
+          <button type="button" class="btn" id="docDownload" hidden>Descargar presentación (.html)</button><button type="button" class="btn pro-only" id="manifestDownload" hidden>Descargar manifiesto (.json)</button></div>
         <p class="meta-line" id="docMeta"></p>
-        <p class="hint">Entregas generadas en esta sesión (no se borran al cambiar de proyecto; los archivos descargados no cambian):</p><ol class="history" id="deliveryHistory" aria-label="Historial de entregas"></ol>
         <iframe id="clientPreview" title="Vista previa de la presentación para el cliente" sandbox="" hidden></iframe>
+        <details class="more" id="resultMore"><summary>Compartir e historial</summary>
+        <p class="hint">Producto 1: el vídeo descargado se envía por correo o mensajería, sin servicios externos. Producto 2: una presentación de solo lectura (vídeo, fases, fechas, presupuesto autorizado y advertencias). La URL de esta Preview no es un enlace para clientes.</p>
+        <p class="hint">Entregas generadas en esta sesión (no se borran al cambiar de proyecto; los archivos descargados no cambian):</p><ol class="history" id="deliveryHistory" aria-label="Historial de entregas"></ol>
         <details class="publish" id="publishBox"><summary>Publicar enlace para el cliente (servicio /api/share existente)</summary>
           <p id="publishWhat"></p>
           <p class="hint">Cualquiera que tenga el enlace podrá abrirlo: no tiene contraseña ni caduca solo, y no figura en buscadores (eso no es una protección). Se guarda en el almacén Vercel Blob del proyecto (carpeta rubik-share/) y se retira desde ese panel. Si cambias el proyecto, genera una entrega nueva.</p>
@@ -217,7 +224,7 @@
           <button type="button" class="btn primary" id="publishGo">Publicar enlace</button>
           <p class="status" id="publishStatus" role="status" aria-live="polite"></p>
           <div id="publishResult" hidden><input id="publishUrl" readonly aria-label="Enlace para el cliente"><button type="button" class="btn" id="publishCopy">Copiar</button><a class="btn" id="publishOpen" target="_blank" rel="noopener noreferrer">Abrir</a></div>
-        </details></li>
+        </details></details></li>
     </ol>
   </section>
   </section>
