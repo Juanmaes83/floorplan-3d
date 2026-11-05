@@ -1,5 +1,11 @@
-# RUBIK SOTA — Avance paralelo autorizado: FT3D-8V y Asistente AG-1
+# RUBIK SOTA — Reparto corregido: Claude Code 2 = FT3D-8V; ChatGPT = Asistente IA
 **Fecha:** 2026-11-05 · **Estado:** CÓDIGO AISLADO + ENCARGO NUEVO · **SIN MERGE, SIN PRODUCCIÓN**.
+
+## CORRECCIÓN EXPRESA DEL REPARTO (05/11/2026)
+
+**El reparto anterior Claude Code 2→AG-1 y ChatGPT→FT3D-8V fue erróneo y queda anulado.** El propietario ha decidido que **Claude Code 2, cuenta nueva sin contexto, DESARROLLE FT3D-8V** sobre el núcleo ya creado; **ChatGPT + propietario DESARROLLEN ASISTENTE IA AG-1**. Los responsables anteriores Claude original (Entregas) y Kimi (fidelidad visual) no cambian. **No merge, no producción ni APIs pagadas**.
+
+El documento de incorporación completo para Claude Code 2 está en [la rama FT3D-8V](https://github.com/Juanmaes83/floorplan-3d/blob/feat/ft3d-8v-schedule-core-2026-11-05/docs/product/claude-code-2-ft3d8v-onboarding-y-encargo-2026-11-05.md); contiene enlaces al repo MIT [Flat-to-3D Schedule Build](https://github.com/Sam1983Aing/flat-to-3d/tree/main/05-schedule-build), su [demo](https://sam1983aing.github.io/flat-to-3d/05-schedule-build/?dir=a), Frappe Gantt, 4DBIM, documentos del proyecto y estado de los 73 tests aprobados.
 
 ## Decisión del propietario
 El propietario ya dispone de una segunda cuenta de Claude Code. Se acuerda **desarrollar y validar módulos en paralelo**, con **integración posterior exclusivamente por aprobación expresa** cuando Claude Code original y Kimi Code terminen sus cortes en curso. Esta decisión modifica el bloqueo anterior de *no empezar a programar en ningún frente*: **sí está autorizado desarrollar en ramas aisladas sin solapamientos**, pero siguen prohibidos merges, cambios en `master`, despliegue de producción y uso de API de pago sin aprobación.
@@ -10,8 +16,8 @@ El propietario ya dispone de una segunda cuenta de Claude Code. Se acuerda **des
 | --- | --- | --- | --- |
 | Entregas, cliente 3D y cortes pendientes | Claude Code original | PR #166 y su propio ámbito | trabajando; no tocar |
 | Fidelidad visual / Visual Families | Kimi Code | su rama y PR asociadas cuando las confirme | trabajando; no tocar |
-| FT3D-8V cronograma + presupuesto | ChatGPT + GitHub | [`feat/ft3d-8v-schedule-core-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/ft3d-8v-schedule-core-2026-11-05) | **corte puro implementado, CI verde** |
-| Asistente de lectura AG-1 | Claude Code 2 (segunda cuenta) | [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) | rama y brief listos; ejecución de Claude 2 no iniciada desde esta conversación |
+| FT3D-8V cronograma + presupuesto | **Claude Code 2 (segunda cuenta)** | [`feat/ft3d-8v-schedule-core-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/ft3d-8v-schedule-core-2026-11-05) | **núcleo implementado (por ChatGPT), CI verde; Claude Code 2 asume auditoría y evolución** |
+| Asistente de lectura AG-1 | **ChatGPT + propietario** | [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) | **núcleo de herramientas y tests escritos en rama propia; ChatGPT desarrolla y valida, no Claude 2** |
 | Aceptación e integración | propietario + agentes tras revisiones | a decidir en coordinación | **NO AUTORIZADO** |
 
 ## FT3D-8V: hechos comprobados
@@ -34,17 +40,17 @@ El propietario ya dispone de una segunda cuenta de Claude Code. Se acuerda **des
 
 **No implementado todavía:** importación de Frappe Gantt, reproducción visual Three.js, unión de elementos concretos del visor, UI profesional para calendario, vídeo de obra, permisos/roles y revisión móvil. Estado: **núcleo validado; integración visual pendiente.**
 
-**Próximo corte FT3D-8V (para revisión, sin solapar Claude):** adaptador de Gantt de solo lectura, fixtures de planificación de reforma y vivienda, estado visual por elemento en estructura independiente; desarrollar interfaz únicamente cuando Claude termine Entregas y exista integración sin conflictos. La capa de datos real precede a cualquier promesa de calendario final.
+**Próximo corte FT3D-8V, ASIGNADO A CLAUDE CODE 2 (sin solapar Claude original):** adaptador de Gantt de solo lectura, fixtures de planificación de reforma y vivienda, estado visual por elemento en estructura independiente; desarrollar interfaz únicamente cuando Claude termine Entregas y exista integración sin conflictos. La capa de datos real precede a cualquier promesa de calendario final.
 
-## Asistente AG-1: instrucción para Claude Code 2
+## Asistente AG-1: desarrollo por ChatGPT + propietario
 
-Leer el [brief listo en su propia rama](https://github.com/Juanmaes83/floorplan-3d/blob/feat/agent-ai-ag1-readonly-2026-11-05/docs/product/assistant-ai-ag1-brief-claude-code-2-2026-11-05.md). Define herramientas autorizadas, archivos propios, aceptación, privacidad, no mutación y CI. Claude 2 debe trabajar **exclusivamente** en su rama, sin generar llamadas API, sin tocar `index.html`, Entregas, presupuesto original, Render IA o visor. Entregar SHA, pruebas y resultados; la integración del modelo LLM remoto y propuestas de escritura quedan para otro corte autorizado.
+La rama [`feat/agent-ai-ag1-readonly-2026-11-05`](https://github.com/Juanmaes83/floorplan-3d/tree/feat/agent-ai-ag1-readonly-2026-11-05) es **de ChatGPT**. El antiguo brief `assistant-ai-ag1-brief-claude-code-2-2026-11-05.md` se ha sustituido por un aviso de corrección. Primer alcance: herramientas puras de consulta del proyecto y cantidades/presupuestos, sin LLM ni API facturable, con pruebas y CI propias. **Claude Code 2 no debe editar esta rama.**
 
 ## Condiciones de integración futura
 
 1. Claude original confirma sus dos cortes, proporciona SHA, CI y evidencias.
 2. Kimi entrega su trabajo, SHA y evidencias con aceptación humana pendiente donde proceda.
-3. Claude 2 entrega AG-1 y QA; FT3D-8V conserva CI y QA sin rebase destructivo.
+3. **Claude 2 entrega FT3D-8V**, mientras **ChatGPT entrega AG-1** con CI y QA independientes, sin rebase destructivo.
 4. Integrador construye **una matriz de conflictos de archivos/contratos** y valida la combinación real en rama de integración separada creada sólo con OK del propietario.
 5. Se ejecutan navegador, móvil, seguridad, costes y regresión B2/B8, Story y C1–C4.
 6. Sólo entonces el propietario autoriza merges individualmente. **Ninguna integración automática**.
