@@ -1,0 +1,2468 @@
+{
+  "codeSha": "dd9c26ff47da38a2e1672121d55cf8c4ccd07f98",
+  "browser": "153.0.8010.53",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "mobileEmulated": false,
+  "physicalMobile": "NOT_TESTED",
+  "fixture": "visual-families-next-stucco-v1",
+  "projectSha256": "72a361daa2ab995a31860b2fb64a97b866d877b416e28cb64503256ce7b71c86",
+  "geometrySha256": "4f6ccbb7d20f0698265d0cfcc9f41adc15e952d972c6f7ad8bf5bc3baa965f36",
+  "light": {
+    "preset": "neutral",
+    "status": "hdr",
+    "error": "",
+    "bytes": 1615248,
+    "source": "assets/environments/studio-small-09-1k.hdr",
+    "estimatedSourceGpuBytes": 4194304,
+    "estimatedPmremGpuBytes": 4194304,
+    "environment": "hdr",
+    "hemiColor": 16777215,
+    "hemiGround": 11450562,
+    "hemiIntensity": 1.05,
+    "sunColor": 16774888,
+    "sunIntensity": 2.25,
+    "background": 15856370,
+    "exposure": 1.04,
+    "envK": 0.75
+  },
+  "captures": [
+    {
+      "variant": "A",
+      "view": "D1",
+      "file": "A-D1.webp",
+      "sha256": "ee6483d8ed524613e1e71998be719b7c27fd6242ecfa84982abd896597ed1031",
+      "bytes": 17314,
+      "pose": {
+        "position": [
+          2.1,
+          1.6500000000000001,
+          7.35
+        ],
+        "quaternion": [
+          -0.06371159750841851,
+          0,
+          0,
+          0.9979683523754275
+        ],
+        "target": [
+          2.1,
+          1.4,
+          5.4
+        ],
+        "fov": 40,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "A",
+      "view": "M1",
+      "file": "A-M1.webp",
+      "sha256": "9a6cce0935b8aa58f8477e935a944df7181a0640adf2922187619d082c2a85d7",
+      "bytes": 19378,
+      "pose": {
+        "position": [
+          4.5,
+          2.2000000000000006,
+          11.5
+        ],
+        "quaternion": [
+          -0.05978857657878014,
+          0.23595435210947735,
+          0.014546474154100987,
+          0.9698140388347469
+        ],
+        "target": [
+          1.3449999999999995,
+          1.3499999999999996,
+          5.399999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "A",
+      "view": "M2",
+      "file": "A-M2.webp",
+      "sha256": "f20553280ba28aa4afbd541ddfedfda002dcd2cabfb5140c55c300a89c124ca5",
+      "bytes": 18240,
+      "pose": {
+        "position": [
+          15,
+          3.3999999999999995,
+          15.999999999999998
+        ],
+        "quaternion": [
+          -0.09330483041937469,
+          0.4301446091947981,
+          0.044752621509791334,
+          0.8968093591555941
+        ],
+        "target": [
+          7.3999999999999995,
+          1.35,
+          9.899999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "A",
+      "view": "M3",
+      "file": "A-M3.webp",
+      "sha256": "e51a9a889410c6d3acb9c00b168f002e327c8626421c1e025ff54940726f1b75",
+      "bytes": 14744,
+      "pose": {
+        "position": [
+          -6,
+          3.4000000000000004,
+          15
+        ],
+        "quaternion": [
+          -0.08957253096316166,
+          -0.4379344066368886,
+          -0.04390470095205461,
+          0.8934554238543524
+        ],
+        "target": [
+          2,
+          1.35,
+          8.8
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "A",
+      "view": "F1",
+      "file": "A-F1.webp",
+      "sha256": "e00bb9e48d5e862bfcbaf89fb9ea866f45b84f64ad63c5a36a574125bd67e65a",
+      "bytes": 12490,
+      "pose": {
+        "position": [
+          1.345,
+          1.6,
+          13.2
+        ],
+        "quaternion": [
+          -0.012817353286048582,
+          0,
+          0,
+          0.9999178543534166
+        ],
+        "target": [
+          1.345,
+          1.4,
+          5.4
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "A",
+      "view": "G1",
+      "file": "A-G1.webp",
+      "sha256": "bd2946e6b987c24113c787e6c9d32d4bcfa4981cf2039d518bc3c57f81987ec3",
+      "bytes": 61462,
+      "pose": {
+        "position": [
+          11.701805610678774,
+          19.155886586540934,
+          5.129978514784598
+        ],
+        "quaternion": [
+          -0.4323683717389173,
+          0.3779592877333376,
+          0.20627084738790868,
+          0.7922478813186059
+        ],
+        "target": [
+          2.1238623174083067,
+          0,
+          -2.6235946273867325
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "D1",
+      "file": "B-D1.webp",
+      "sha256": "ee6483d8ed524613e1e71998be719b7c27fd6242ecfa84982abd896597ed1031",
+      "bytes": 17314,
+      "pose": {
+        "position": [
+          2.1,
+          1.6500000000000001,
+          7.35
+        ],
+        "quaternion": [
+          -0.06371159750841851,
+          0,
+          0,
+          0.9979683523754275
+        ],
+        "target": [
+          2.1,
+          1.4,
+          5.4
+        ],
+        "fov": 40,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "M1",
+      "file": "B-M1.webp",
+      "sha256": "9a6cce0935b8aa58f8477e935a944df7181a0640adf2922187619d082c2a85d7",
+      "bytes": 19378,
+      "pose": {
+        "position": [
+          4.5,
+          2.2000000000000006,
+          11.5
+        ],
+        "quaternion": [
+          -0.05978857657878014,
+          0.23595435210947735,
+          0.014546474154100987,
+          0.9698140388347469
+        ],
+        "target": [
+          1.3449999999999995,
+          1.3499999999999996,
+          5.399999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "M2",
+      "file": "B-M2.webp",
+      "sha256": "2a5fc46c70a63ada5f5513f16f32dd679586a51394ee21239041f3f4c8179ca0",
+      "bytes": 21570,
+      "pose": {
+        "position": [
+          15,
+          3.3999999999999995,
+          15.999999999999998
+        ],
+        "quaternion": [
+          -0.09330483041937469,
+          0.4301446091947981,
+          0.044752621509791334,
+          0.8968093591555941
+        ],
+        "target": [
+          7.3999999999999995,
+          1.35,
+          9.899999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "M3",
+      "file": "B-M3.webp",
+      "sha256": "6bdc8de4b372e355abc3773672067addb0222aedb6406ef497fd3251644ae3d0",
+      "bytes": 14782,
+      "pose": {
+        "position": [
+          -6,
+          3.4000000000000004,
+          15
+        ],
+        "quaternion": [
+          -0.08957253096316166,
+          -0.4379344066368886,
+          -0.04390470095205461,
+          0.8934554238543524
+        ],
+        "target": [
+          2,
+          1.35,
+          8.8
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "F1",
+      "file": "B-F1.webp",
+      "sha256": "e00bb9e48d5e862bfcbaf89fb9ea866f45b84f64ad63c5a36a574125bd67e65a",
+      "bytes": 12490,
+      "pose": {
+        "position": [
+          1.345,
+          1.6,
+          13.2
+        ],
+        "quaternion": [
+          -0.012817353286048582,
+          0,
+          0,
+          0.9999178543534166
+        ],
+        "target": [
+          1.345,
+          1.4,
+          5.4
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "B",
+      "view": "G1",
+      "file": "B-G1.webp",
+      "sha256": "d7976d0bc6137b3cf4b4a59d4d050da187ba198fa8cfec14ee47c248e014c1c9",
+      "bytes": 66628,
+      "pose": {
+        "position": [
+          11.701805610678774,
+          19.155886586540934,
+          5.129978514784598
+        ],
+        "quaternion": [
+          -0.4323683717389173,
+          0.3779592877333376,
+          0.20627084738790868,
+          0.7922478813186059
+        ],
+        "target": [
+          2.1238623174083067,
+          0,
+          -2.6235946273867325
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "D1",
+      "file": "C-D1.webp",
+      "sha256": "d73c358283ca1b5b7c08de0162b34f8d24f65aa7d68887db8855a3d6ee22875e",
+      "bytes": 213670,
+      "pose": {
+        "position": [
+          2.1,
+          1.6500000000000001,
+          7.35
+        ],
+        "quaternion": [
+          -0.06371159750841851,
+          0,
+          0,
+          0.9979683523754275
+        ],
+        "target": [
+          2.1,
+          1.4,
+          5.4
+        ],
+        "fov": 40,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "M1",
+      "file": "C-M1.webp",
+      "sha256": "956f2f90e8034cb29f418d0cd3ef252104cf08df83265747a197fe9619d718d3",
+      "bytes": 30914,
+      "pose": {
+        "position": [
+          4.5,
+          2.2000000000000006,
+          11.5
+        ],
+        "quaternion": [
+          -0.05978857657878014,
+          0.23595435210947735,
+          0.014546474154100987,
+          0.9698140388347469
+        ],
+        "target": [
+          1.3449999999999995,
+          1.3499999999999996,
+          5.399999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "M2",
+      "file": "C-M2.webp",
+      "sha256": "f97f530ef8f5a352bd3805e800ef95a72455d6666e4eca96768518f4a2a13982",
+      "bytes": 20224,
+      "pose": {
+        "position": [
+          15,
+          3.3999999999999995,
+          15.999999999999998
+        ],
+        "quaternion": [
+          -0.09330483041937469,
+          0.4301446091947981,
+          0.044752621509791334,
+          0.8968093591555941
+        ],
+        "target": [
+          7.3999999999999995,
+          1.35,
+          9.899999999999999
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "M3",
+      "file": "C-M3.webp",
+      "sha256": "71658f4847331e1dab4199169db0a75194225e3f63ba2858101930565fd24e6f",
+      "bytes": 12376,
+      "pose": {
+        "position": [
+          -6,
+          3.4000000000000004,
+          15
+        ],
+        "quaternion": [
+          -0.08957253096316166,
+          -0.4379344066368886,
+          -0.04390470095205461,
+          0.8934554238543524
+        ],
+        "target": [
+          2,
+          1.35,
+          8.8
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "F1",
+      "file": "C-F1.webp",
+      "sha256": "75032711549f28eb540732ea1cd7b84418dbdfcd23621036395ca2e730e2aad0",
+      "bytes": 10540,
+      "pose": {
+        "position": [
+          1.345,
+          1.6,
+          13.2
+        ],
+        "quaternion": [
+          -0.012817353286048582,
+          0,
+          0,
+          0.9999178543534166
+        ],
+        "target": [
+          1.345,
+          1.4,
+          5.4
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    },
+    {
+      "variant": "C",
+      "view": "G1",
+      "file": "C-G1.webp",
+      "sha256": "1bd5b64a5668360848f6748ed0809c9324831c2ecb132230ca720ff2561c5ecf",
+      "bytes": 66194,
+      "pose": {
+        "position": [
+          11.701805610678774,
+          19.155886586540934,
+          5.129978514784598
+        ],
+        "quaternion": [
+          -0.4323683717389173,
+          0.3779592877333376,
+          0.20627084738790868,
+          0.7922478813186059
+        ],
+        "target": [
+          2.1238623174083067,
+          0,
+          -2.6235946273867325
+        ],
+        "fov": 45,
+        "aspect": 1.6
+      }
+    }
+  ],
+  "states": {
+    "A": {
+      "f02": {
+        "decision": {
+          "authority": "VISUAL_ONLY",
+          "enabled": false,
+          "familyId": "F02",
+          "mode": "capture",
+          "profile": "detail",
+          "projectId": "prj_reference-home",
+          "recipeId": "window-assembly",
+          "recipeVersion": 2,
+          "role": "HERO",
+          "seed": 0,
+          "sourceIds": [
+            "opn_window-0",
+            "opn_window-1",
+            "opn_window-10",
+            "opn_window-11",
+            "opn_window-2",
+            "opn_window-3",
+            "opn_window-4",
+            "opn_window-5",
+            "opn_window-6",
+            "opn_window-7",
+            "opn_window-8",
+            "opn_window-9"
+          ],
+          "target": "existing-window",
+          "tokens": {
+            "facade.grain": "mineral-fine",
+            "frame.finish": "graphite",
+            "frame.system": "recessed-sash",
+            "glazing.optics": "clear-low-iron"
+          },
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "bindings": [
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-0",
+            "wallId": "wal_ref-window-0",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1000,
+            "thicknessMm": 240,
+            "sillMm": 1400,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-1",
+            "wallId": "wal_ref-window-1",
+            "kind": "window",
+            "widthMm": 3070,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-2",
+            "wallId": "wal_ref-window-2",
+            "kind": "window",
+            "widthMm": 1820,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-3",
+            "wallId": "wal_ref-window-3",
+            "kind": "window",
+            "widthMm": 605,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-4",
+            "wallId": "wal_ref-window-4",
+            "kind": "window",
+            "widthMm": 1580,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-5",
+            "wallId": "wal_ref-window-5",
+            "kind": "window",
+            "widthMm": 3350,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-6",
+            "wallId": "wal_ref-window-6",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-7",
+            "wallId": "wal_ref-window-7",
+            "kind": "window",
+            "widthMm": 1890,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-8",
+            "wallId": "wal_ref-window-8",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-9",
+            "wallId": "wal_ref-window-9",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-10",
+            "wallId": "wal_ref-window-10",
+            "kind": "window",
+            "widthMm": 1575,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-11",
+            "wallId": "wal_ref-window-11",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          }
+        ],
+        "active": [],
+        "resources": {
+          "geometries": 0,
+          "materials": 0,
+          "textures": 0,
+          "meshes": 0,
+          "facadeMeshes": 0,
+          "triangles": 0,
+          "gpuBytes": 0,
+          "pending": 0
+        },
+        "disposals": 0
+      },
+      "f03": {
+        "decision": {
+          "projectId": null,
+          "familyId": "F03",
+          "recipeId": "facade-material-v2",
+          "recipeVersion": 2,
+          "enabled": false,
+          "role": "HERO",
+          "mode": "capture",
+          "profile": "hero",
+          "materialId": "white_stucco",
+          "repeatMm": 2000,
+          "normalStrength": 0.65,
+          "allowExperimentalVariant": false,
+          "target": "existing-exterior-wall-finish",
+          "authority": "VISUAL_ONLY",
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "status": "off",
+        "error": null,
+        "loadMs": 0,
+        "candidates": [
+          {
+            "wallId": "wal_ref-w0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w12",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w13",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w14",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w15",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w16",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w17",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w18",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w19",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w20",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w21",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w22",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w23",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w24",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w25",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w26",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w27",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w28",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w29",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w30",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w31",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w32",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w33",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w34",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w35",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w36",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w37",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w38",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w39",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w40",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w41",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w42",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w43",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w44",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w45",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w46",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w47",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-slide-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-slide-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-bay-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-bay-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          }
+        ],
+        "active": [],
+        "meshCount": 0,
+        "resources": {
+          "geometries": 0,
+          "materials": 0,
+          "textures": 0,
+          "pending": 0,
+          "bytes": 0,
+          "gpuBytes": 0
+        },
+        "disposals": 0
+      }
+    },
+    "B": {
+      "f02": {
+        "decision": {
+          "authority": "VISUAL_ONLY",
+          "enabled": true,
+          "familyId": "F02",
+          "mode": "capture",
+          "profile": "detail",
+          "projectId": "prj_reference-home",
+          "recipeId": "window-assembly",
+          "recipeVersion": 2,
+          "role": "HERO",
+          "seed": 0,
+          "sourceIds": [
+            "opn_window-0",
+            "opn_window-1",
+            "opn_window-10",
+            "opn_window-11",
+            "opn_window-2",
+            "opn_window-3",
+            "opn_window-4",
+            "opn_window-5",
+            "opn_window-6",
+            "opn_window-7",
+            "opn_window-8",
+            "opn_window-9"
+          ],
+          "target": "existing-window",
+          "tokens": {
+            "facade.grain": "mineral-fine",
+            "frame.finish": "graphite",
+            "frame.system": "recessed-sash",
+            "glazing.optics": "clear-low-iron"
+          },
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "bindings": [
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-0",
+            "wallId": "wal_ref-window-0",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1000,
+            "thicknessMm": 240,
+            "sillMm": 1400,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-1",
+            "wallId": "wal_ref-window-1",
+            "kind": "window",
+            "widthMm": 3070,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-2",
+            "wallId": "wal_ref-window-2",
+            "kind": "window",
+            "widthMm": 1820,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-3",
+            "wallId": "wal_ref-window-3",
+            "kind": "window",
+            "widthMm": 605,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-4",
+            "wallId": "wal_ref-window-4",
+            "kind": "window",
+            "widthMm": 1580,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-5",
+            "wallId": "wal_ref-window-5",
+            "kind": "window",
+            "widthMm": 3350,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-6",
+            "wallId": "wal_ref-window-6",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-7",
+            "wallId": "wal_ref-window-7",
+            "kind": "window",
+            "widthMm": 1890,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-8",
+            "wallId": "wal_ref-window-8",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-9",
+            "wallId": "wal_ref-window-9",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-10",
+            "wallId": "wal_ref-window-10",
+            "kind": "window",
+            "widthMm": 1575,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-11",
+            "wallId": "wal_ref-window-11",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          }
+        ],
+        "active": [
+          "opn_window-0",
+          "opn_window-1",
+          "opn_window-2",
+          "opn_window-3",
+          "opn_window-4",
+          "opn_window-5",
+          "opn_window-6",
+          "opn_window-7",
+          "opn_window-8",
+          "opn_window-9",
+          "opn_window-10",
+          "opn_window-11"
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 6,
+          "textures": 3,
+          "meshes": 69,
+          "facadeMeshes": 18,
+          "triangles": 9756,
+          "gpuBytes": 1101450,
+          "pending": 0
+        },
+        "disposals": 0
+      },
+      "f03": {
+        "decision": {
+          "projectId": null,
+          "familyId": "F03",
+          "recipeId": "facade-material-v2",
+          "recipeVersion": 2,
+          "enabled": false,
+          "role": "HERO",
+          "mode": "capture",
+          "profile": "hero",
+          "materialId": "white_stucco",
+          "repeatMm": 2000,
+          "normalStrength": 0.65,
+          "allowExperimentalVariant": false,
+          "target": "existing-exterior-wall-finish",
+          "authority": "VISUAL_ONLY",
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "status": "off",
+        "error": null,
+        "loadMs": 0,
+        "candidates": [
+          {
+            "wallId": "wal_ref-w0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w12",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w13",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w14",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w15",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w16",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w17",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w18",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w19",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w20",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w21",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w22",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w23",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w24",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w25",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w26",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w27",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w28",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w29",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w30",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w31",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w32",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w33",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w34",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w35",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w36",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w37",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w38",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w39",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w40",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w41",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w42",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w43",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w44",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w45",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w46",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w47",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-door-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-slide-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-slide-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-bay-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-bay-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "project-mismatch"
+          }
+        ],
+        "active": [],
+        "meshCount": 0,
+        "resources": {
+          "geometries": 0,
+          "materials": 0,
+          "textures": 0,
+          "pending": 0,
+          "bytes": 0,
+          "gpuBytes": 0
+        },
+        "disposals": 0
+      }
+    },
+    "C": {
+      "f02": {
+        "decision": {
+          "authority": "VISUAL_ONLY",
+          "enabled": true,
+          "familyId": "F02",
+          "mode": "capture",
+          "profile": "detail",
+          "projectId": "prj_reference-home",
+          "recipeId": "window-assembly",
+          "recipeVersion": 2,
+          "role": "HERO",
+          "seed": 0,
+          "sourceIds": [
+            "opn_window-0",
+            "opn_window-1",
+            "opn_window-10",
+            "opn_window-11",
+            "opn_window-2",
+            "opn_window-3",
+            "opn_window-4",
+            "opn_window-5",
+            "opn_window-6",
+            "opn_window-7",
+            "opn_window-8",
+            "opn_window-9"
+          ],
+          "target": "existing-window",
+          "tokens": {
+            "facade.grain": "mineral-fine",
+            "frame.finish": "graphite",
+            "frame.system": "recessed-sash",
+            "glazing.optics": "clear-low-iron"
+          },
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "bindings": [
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-0",
+            "wallId": "wal_ref-window-0",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1000,
+            "thicknessMm": 240,
+            "sillMm": 1400,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-1",
+            "wallId": "wal_ref-window-1",
+            "kind": "window",
+            "widthMm": 3070,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-2",
+            "wallId": "wal_ref-window-2",
+            "kind": "window",
+            "widthMm": 1820,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-3",
+            "wallId": "wal_ref-window-3",
+            "kind": "window",
+            "widthMm": 605,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-4",
+            "wallId": "wal_ref-window-4",
+            "kind": "window",
+            "widthMm": 1580,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-5",
+            "wallId": "wal_ref-window-5",
+            "kind": "window",
+            "widthMm": 3350,
+            "heightMm": 1500,
+            "thicknessMm": 240,
+            "sillMm": 900,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-6",
+            "wallId": "wal_ref-window-6",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-7",
+            "wallId": "wal_ref-window-7",
+            "kind": "window",
+            "widthMm": 1890,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-8",
+            "wallId": "wal_ref-window-8",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-9",
+            "wallId": "wal_ref-window-9",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-10",
+            "wallId": "wal_ref-window-10",
+            "kind": "window",
+            "widthMm": 1575,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          },
+          {
+            "projectId": "prj_reference-home",
+            "id": "opn_window-11",
+            "wallId": "wal_ref-window-11",
+            "kind": "window",
+            "widthMm": 620,
+            "heightMm": 1950,
+            "thicknessMm": 100,
+            "sillMm": 450,
+            "fullHeight": true
+          }
+        ],
+        "active": [
+          "opn_window-0",
+          "opn_window-1",
+          "opn_window-2",
+          "opn_window-3",
+          "opn_window-4",
+          "opn_window-5",
+          "opn_window-6",
+          "opn_window-7",
+          "opn_window-8",
+          "opn_window-9",
+          "opn_window-10",
+          "opn_window-11"
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 6,
+          "textures": 3,
+          "meshes": 69,
+          "facadeMeshes": 18,
+          "triangles": 9756,
+          "gpuBytes": 1101450,
+          "pending": 0
+        },
+        "disposals": 10
+      },
+      "f03": {
+        "decision": {
+          "projectId": "prj_reference-home",
+          "familyId": "F03",
+          "recipeId": "facade-material-v2",
+          "recipeVersion": 2,
+          "enabled": true,
+          "role": "HERO",
+          "mode": "capture",
+          "profile": "hero",
+          "materialId": "white_stucco",
+          "repeatMm": 2000,
+          "normalStrength": 0.65,
+          "allowExperimentalVariant": false,
+          "target": "existing-exterior-wall-finish",
+          "authority": "VISUAL_ONLY",
+          "visualGate": "VISUAL_PENDING_HUMAN"
+        },
+        "status": "ready",
+        "error": null,
+        "loadMs": 115,
+        "candidates": [
+          {
+            "wallId": "wal_ref-w0",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w1",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w2",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w3",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w4",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w5",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w6",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w7",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w8",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w9",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w10",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w11",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w12",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w13",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w14",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w15",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w16",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w17",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w18",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w19",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w20",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w21",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w22",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w23",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w24",
+            "eligible": false,
+            "reason": "material-unassigned"
+          },
+          {
+            "wallId": "wal_ref-w25",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w26",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w27",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-w28",
+            "eligible": false,
+            "reason": "material-semantic-mismatch"
+          },
+          {
+            "wallId": "wal_ref-w29",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w30",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w31",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w32",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w33",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w34",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w35",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w36",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w37",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w38",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w39",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w40",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w41",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w42",
+            "eligible": false,
+            "reason": "exterior-unavailable"
+          },
+          {
+            "wallId": "wal_ref-w43",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w44",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w45",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w46",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-w47",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-0",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-1",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-2",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-3",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-4",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-door-5",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-slide-0",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-slide-1",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-bay-0",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-bay-1",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-0",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-window-1",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-2",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-window-3",
+            "eligible": false,
+            "reason": "interior-wall"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-4",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-window-5",
+            "eligible": true,
+            "reason": null,
+            "preset": "surface-white-plaster-02",
+            "materialId": "mat_surface-white-plaster-02-wall"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-6",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-7",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-8",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-9",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-10",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          },
+          {
+            "wallId": "wal_ref-window-11",
+            "eligible": false,
+            "reason": "f02-owned-surface"
+          }
+        ],
+        "active": [
+          "wal_ref-w2",
+          "wal_ref-w7",
+          "wal_ref-w18",
+          "wal_ref-w19",
+          "wal_ref-w21",
+          "wal_ref-w23",
+          "wal_ref-w27",
+          "wal_ref-window-1",
+          "wal_ref-window-5"
+        ],
+        "meshCount": 11,
+        "resources": {
+          "geometries": 11,
+          "materials": 1,
+          "textures": 3,
+          "pending": 0,
+          "bytes": 2077204,
+          "gpuBytes": 16777218
+        },
+        "disposals": 0
+      }
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
