@@ -75,7 +75,9 @@
   async function dossier(id){
     const {Fid,Core,Building}=deps(),c=await Fid.build(id);
     if(id==='D')return {id,label:'D · Sin plan ni parcela',project:c.source,budgets:[c.budget],schedule:null,binding:null,brand:null,gml:null};
-    const site=siteFor(id,c.source),source=c.source.levels?Building.setSite(c.source,site):Core.setSite(c.source,site);
+    const site=siteFor(id,c.source);let source=c.source.levels?Building.setSite(c.source,site):Core.setSite(c.source,site);
+    // FloorPlanBuilding.setSite stamps updatedAt with the current time: a fixture must be deterministic (same id every run).
+    if(source.updatedAt!==c.source.updatedAt){source={...source,updatedAt:c.source.updatedAt};c.source.levels?Building.validate(source):Core.validate(source,{strict:true});}
     const {schedule,binding}=await resign(c,source),subject={type:source.levels?'building':'project',id:source.id};
     let budgets=c.budget?[c.budget]:[];
     if(id==='B'){const upper=source.levels[1].project;budgets=[c.budgets[0].budget,Fid.budgetFor(upper,{paint:12.5,'opening:window':595,'opening:door':410},['paint'])];}

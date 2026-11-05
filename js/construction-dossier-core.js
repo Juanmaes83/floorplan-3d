@@ -70,6 +70,7 @@
     'placement-invalid':'La colocación guardada no es válida',
     'placement-anchor-outside-parcel':'El punto de colocación queda fuera de la parcela',
     'placement-footprint-outside-parcel':'Parte de la huella del modelo queda fuera de la parcela',
+    'placement-scale-not-verified':'La escala del plano no está verificada: la posición en la parcela es aproximada',
     'territory-not-exportable':'La parcela se puede ver aquí, pero su licencia no permite incluirla en el archivo del cliente',
     'brand-absent':'No hay marca profesional en el expediente',
     'brand-other-project':'La marca está asociada a otro proyecto',
@@ -333,6 +334,11 @@
       conflicts.push({code:'schedule-other-project',message:human('schedule-other-project'),values:{dossier:{type:kind,id:project.id},schedule:clone(Schedule.canonical(schedule).projectRef)},resolution:'none'});
     // Territory.
     const terr=territory(project,{type:kind,id:project.id},parcelDocument,registeredParcel,issue,conflicts,corr);
+    // The transforms are exact, but they place the model at ITS scale: with an estimated scale the position in the parcel
+    // is approximate. The worst level scale evidence travels with the placement (never upgraded).
+    if(terr.placement.status==='placed'){const order=['verified','estimated','pending','unavailable'];
+      terr.placement.scaleEvidence=model.inventory.levels.map(l=>l.scale.status).sort((a,b)=>order.indexOf(b)-order.indexOf(a))[0]||'unavailable';
+      if(terr.placement.scaleEvidence!=='verified')issue('warning','placement-scale-not-verified',{scale:terr.placement.scaleEvidence});}
     // Brand: FloorPlanBrand keeps no project identity, so the association is the one declared in the dossier.
     let brandView={status:'absent'};
     if(brand?.snapshot){

@@ -188,6 +188,10 @@ test('C7 territory: placement transforms are checked numerically with a document
   }
   const b=await run(await X.dossier('B'));
   assert.equal(b.authorities.territory.placement.levels.length,2);
+  // Exact transforms place the model at ITS scale: an estimated scale keeps the placement approximate (never upgraded).
+  assert.equal((await run(await X.dossier('A'))).authorities.territory.placement.scaleEvidence,'verified');
+  const c=await run(await X.dossier('C'));assert.equal(c.authorities.territory.placement.scaleEvidence,'estimated');
+  assert.ok(codes(c).includes('placement-scale-not-verified'));assert.equal(b.authorities.territory.placement.scaleEvidence,'estimated');
 });
 test('C8 no mutation: evaluating and packaging never modify the professional documents',async()=>{
   const c=await X.dossier('A'),parcelDocument=await parcelOf(c),before=JSON.stringify({c,parcelDocument});

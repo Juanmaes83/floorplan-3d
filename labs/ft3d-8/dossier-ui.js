@@ -82,6 +82,7 @@ async function loadFiles(files){
         input.parcelDocument=pd;}
       else if(r.kind==='project'||r.kind==='building'||r.kind==='dossier')throw new Error('Carga un solo proyecto o expediente cada vez.');}
     const names=read.map(r=>kindLabel[r.kind]+' «'+r.name+'»').join(', ');
+    $('dossierSel').value='';
     return await apply(input,{text:(opened?'Expediente abierto':'Documentos cargados')+' localmente (no se envían) · '+names,kind:'import'},{opened});
   }catch(e){
     // The previous valid dossier stays exactly as it was.
@@ -97,14 +98,14 @@ async function savePackage(){
 }
 
 /* ---------- rendering (human messages; codes in the diagnostics panel) ---------- */
-const CHIP={ok:'Verificado',declared:'Declarado',partial:'Parcial',estimated:'Estimado',pending:'Pendiente',missing:'No disponible',obsolete:'Desactualizado',conflict:'Incompatible',unverifiable:'No verificable'};
+const CHIP={ok:'Verificado',valid:'Válido',available:'Disponible',declared:'Declarado',partial:'Parcial',estimated:'Estimado',pending:'Pendiente',missing:'No disponible',obsolete:'Desactualizado',conflict:'Incompatible',unverifiable:'No verificable'};
 const chip=k=>`<span class="dchip d-${k}">${CHIP[k]}</span>`;
 const msgs=(ev,codes)=>{const list=ev.issues.filter(i=>codes.some(c=>typeof c==='string'?i.code===c:c.test(i.code)));
   return list.length?`<ul class="dmsg">${list.map(i=>`<li class="sev-${i.severity}">${esc(i.message)}</li>`).join('')}</ul>`:'';};
 const has=(ev,code)=>ev.issues.some(i=>i.code===code);
 function stepProject(ev){
   const s=ev.subject,a=ev.authorities.project,cov=ev.model.coverage.elements.byEvidence;
-  const k=has(ev,'dossier-altered')||has(ev,'dossier-other-subject')?'conflict':'ok';
+  const k=has(ev,'dossier-altered')||has(ev,'dossier-other-subject')?'conflict':'valid';
   return [k,`<p><strong>${esc(s.name)}</strong></p>
     <p>${s.type==='building'?`Edificio <code>${esc(s.id)}</code> · ${s.levels.length} plantas: ${s.levels.map(l=>`${esc(l.name)} (<code>${esc(l.projectId)}</code>)`).join(', ')}`:`Proyecto de una planta <code>${esc(s.id)}</code>`} · esquema ${esc(a.schemaVersion)}</p>
     <p>Revisión de geometría <code>${short(a.geometryRevision)}</code> · documento <code>${short(a.fingerprint)}</code> · guardado ${esc(a.updatedAt)}</p>
@@ -113,7 +114,7 @@ function stepProject(ev){
 function stepPlace(ev){
   const t=ev.authorities.territory;let k='missing';
   if(t.status==='conflict'||t.evidence?.status==='other-project'||t.evidence?.status==='rejected')k='conflict';
-  else if(t.status==='project-site')k=t.placement.status==='placed'?'ok':t.placement.status==='invalid'?'conflict':'pending';
+  else if(t.status==='project-site')k=t.placement.status==='placed'?(t.placement.scaleEvidence==='verified'?'ok':'estimated'):t.placement.status==='invalid'?'conflict':'pending';
   else if(t.status==='candidate-unplaced')k='pending';
   const lic={restricted:'restringida: se puede ver aquí, no se incluye en el archivo del cliente','not-applicable':'sin restricción',verified:'verificada',unknown:'desconocida: no se exporta'};
   const ok=t.placement.checks?.filter(c=>c.ok).length||0,all=t.placement.checks?.length||0;
@@ -126,13 +127,14 @@ function stepPlace(ev){
     msgs(ev,[/^parcel-(other|reference|geometry|document|candidate|association)/,/^placement-/,'territory-not-exportable'])];
 }
 function stepBudget(ev){
-  const b=ev.authorities.budget;let k='ok';
+  const b=ev.authorities.budget;let k='declared';
   if(has(ev,'budget-other-project')||has(ev,'budget-selection-invalid'))k='conflict';
   else if(ev.correspondence.some(c=>c.authority==='binding'&&c.against==='budget'&&c.result==='obsolete'))k='obsolete';
   else if(b.scope==='none')k='missing';
   else if(b.scope!=='project'&&b.scope!=='building')k='partial';
   else if(b.selected.some(v=>!v.totals.net.complete))k='partial';
-  else if(b.selected.some(v=>v.unreviewedPriceItemIds.length))k='declared';
+  // A C1-C4 price review is a declaration of the professional: a budget is never shown as «verified».
+  else k='declared';
   const rows=b.selected.map(v=>{const o={};for(const p of v.provenance)o[p.origin]=(o[p.origin]||0)+1;
     return `<div class="dbud"><p><strong>${esc(v.title)}</strong> <code>${esc(v.budgetId)}</code> · ${v.role==='level'?'planta '+esc(v.levelId):'todo el '+(ev.subject.type==='building'?'edificio':'proyecto')}</p>
       <p>Neto ${euro(v.totals.net.amount)}${v.totals.net.complete?'':' (incompleto)'} · IVA ${euro(v.totals.tax.amount)} · Total ${euro(v.totals.gross.amount)}${v.totals.gross.complete?'':' (incompleto)'}</p>
@@ -153,7 +155,7 @@ function stepPlan(ev){
     <p>${m.planning.reviewed?`Revisión declarada por ${esc(s.review.by)} (no acreditada)`:'Plan en borrador'}</p>`+msgs(ev,['schedule-project-revision-obsolete','schedule-revision-obsolete','link-unknown-element','project-revision-obsolete'])];
 }
 function stepEvolution(ev){
-  return ev.usable.timelapse?['ok','<p>El timelapse y el Gantt usan este modelo y este plan. La animación es ilustrativa: no es obra ejecutada.</p><div class="dactions"><button type="button" class="btn" data-go="stage">Ver evolución</button><button type="button" class="btn" data-go="gantt">Ver Gantt</button></div>']
+  return ev.usable.timelapse?['available','<p>El timelapse y el Gantt usan este modelo y este plan. La animación es ilustrativa: no es obra ejecutada.</p><div class="dactions"><button type="button" class="btn" data-go="stage">Ver evolución</button><button type="button" class="btn" data-go="gantt">Ver Gantt</button></div>']
     :['missing','<p>Sin una planificación válida de este proyecto se muestra el modelo estático, sin fechas inventadas.</p>'];
 }
 function stepDelivery(ev){
@@ -173,6 +175,7 @@ function render(){
   const c=state.change;
   $('dossierId').innerHTML=`<strong>Expediente <code>${esc(ev.dossier.id)}</code></strong> · ${esc(ev.subject.type==='building'?'edificio':'proyecto')} <code>${esc(ev.subject.id)}</code> · ${esc(({'local-documents':'documentos locales','local-package':'paquete local'})[ev.dossier.route])}${ev.dossier.integrity==='verified'?' · integridad verificada':ev.dossier.integrity==='altered'?' · <span class="bad">modificado después de prepararlo</span>':''}`;
   $('dossierChange').innerHTML=!c?'':c.subjectChanged?'Has cambiado de expediente: se han descartado el presupuesto, el plan, la parcela y la marca del anterior. Las entregas ya descargadas no cambian.'
+    :!c.changed.length&&ev.issues.some(i=>i.severity==='error')?'Los documentos que no pertenecen a este expediente no se han incorporado: el expediente no cambia.'
     :c.changed.length?`Cambios desde la evaluación anterior: ${c.changed.map(x=>({geometry:'geometría',project:'proyecto',site:'parcela o colocación',schedule:'planificación',binding:'vínculo',brand:'marca',budget:'presupuesto'})[x]||x).join(', ')} → se invalida la entrega preparada${c.invalidates.links?', se recomprueban los vínculos':''}${c.invalidates.costs?', se recalculan los costes':''}. Las entregas descargadas se conservan.`:'Sin cambios respecto a la evaluación anterior.';
   const steps=[['Proyecto',stepProject],['Ubicación',stepPlace],['Presupuesto',stepBudget],['Plan de obra',stepPlan],['Evolución',stepEvolution],['Entrega',stepDelivery]];
   $('dossierFlow').innerHTML=steps.map(([t,f],i)=>{const [k,html]=f(ev);return `<li class="dstep" data-step="${i+1}" data-status="${k}"><h3><span>${i+1}</span>${t}${chip(k)}</h3>${html}</li>`;}).join('');
@@ -187,13 +190,14 @@ function summary(){const ev=state.evaluation;return ev?{id:ev.dossier.id,subject
   steps:[...document.querySelectorAll('#dossierFlow .dstep')].map(s=>s.dataset.status),change:state.change,error:state.error}:{error:state.error};}
 
 /* ---------- wiring ---------- */
-$('dossierSel').innerHTML=Object.entries(SCENARIOS).map(([id,s])=>`<option value="${id}">${esc(s.label)}</option>`).join('');
+$('dossierSel').innerHTML='<option value="" disabled>— documentos cargados por ti —</option>'+Object.entries(SCENARIOS).map(([id,s])=>`<option value="${id}">${esc(s.label)}</option>`).join('');
 $('dossierSel').onchange=()=>loadScenario($('dossierSel').value).catch(e=>{state.error={code:e.code,message:e.message};render();});
 $('dossierFiles').onchange=async()=>{const f=$('dossierFiles').files;try{if(f.length)await loadFiles(f);}catch{}finally{$('dossierFiles').value='';}};
 $('dossierSave').onclick=()=>savePackage().catch(e=>{state.error={code:e.code,message:e.message};render();});
 $('budgetPickGo').onclick=()=>apply({...state.input,selectedBudgetIds:[$('budgetPickSel').value]},{...state.origin,text:state.origin.text+' · presupuesto elegido'});
 $('dossierFlow').onclick=e=>{const b=e.target.closest('[data-go]');if(b)$(b.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'});};
-Object.assign(api,{loadScenario,loadFiles,savePackage,summary,get evaluation(){return state.evaluation;},scenarios:Object.keys(SCENARIOS)});
+// defineProperties, not Object.assign: the getter must stay live (Object.assign would copy its current value).
+Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadScenario,loadFiles,savePackage,summary,get evaluation(){return state.evaluation;},scenarios:Object.keys(SCENARIOS)}));
 const q=new URLSearchParams(location.search);
 if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'A';
   loadScenario(id).then(()=>{const f=Fid();if(q.get('date')&&f.ctx?.timeline)f.setDate(q.get('date'));if(q.get('end')==='1'&&f.ctx?.timeline)f.end();})

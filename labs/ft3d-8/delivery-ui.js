@@ -93,7 +93,7 @@ function renderVideo(message=''){
     :'Formato: WebM (este navegador no puede crear MP4). WebM se abre en Chrome, Edge, Firefox y Android; en iPhone/Safari antiguos o algunas apps de mensajería puede no reproducirse. No se renombra a .mp4.';
   $('videoFormat').classList.toggle('warn',!!type&&!state.encoder);
   const v=state.video,rec=!!state.recording;
-  $('videoCancel').hidden=!rec;$('videoGo').textContent=v?'Grabar de nuevo':'Generar vídeo';$('videoGo').disabled=rec||!type||Fid().ctx?.model.planning.status!=='available';
+  $('videoCancel').hidden=!rec;$('videoGo').textContent=v?'Grabar de nuevo':'Generar vídeo';$('videoGo').disabled=rec||!type||Fid().ctx?.model.planning.status!=='available'||!!dossierBlock();
   $('videoDownload').hidden=!v;$('videoPreview').hidden=!v;
   if(v){if($('videoPreview').src!==v.url)$('videoPreview').src=v.url;
     $('videoMeta').textContent=`${v.ext.toUpperCase()}${v.seekable?' indexado':''} · ${v.width}×${v.height} · ${secs(v.durationMs)}${v.fps?` · ${v.fps} fps · ${v.keyframes} fotogramas clave`:''} · ${sizeText(v.bytes)} · SHA-256 ${v.sha256.slice(0,12)} · entrega ${state.manifest?.id||'—'}`;}
@@ -308,7 +308,8 @@ $('publishGo').onclick=async()=>{$('publishGo').disabled=true;renderShare('Publi
   catch(e){state.published=null;renderShare('No publicado: '+e.message);}finally{$('publishGo').disabled=false;}};
 $('publishCopy').onclick=async()=>{try{await navigator.clipboard.writeText(state.published.link);renderShare('Enlace copiado.');}catch{$('publishUrl').select();renderShare('Selecciona el enlace y cópialo.');}};
 for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>{document.body.dataset.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));};
-Object.assign(api,{get history(){return state.history.map(h=>({...h}));},record,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
+Object.defineProperty(api,'history',{get:()=>state.history.map(h=>({...h})),enumerable:true});
+Object.assign(api,{record,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
   select(source){state.source=source;invalidate();renderBrand();},setInclude(list){state.include=new Set(list);D.CONTACT_FIELDS.forEach(f=>$('inc-'+f).checked=state.include.has(f));invalidate();renderBrand();},
   setCostMode(m){$('costMode').value=m;state.costMode=m;invalidate();renderReview();}});
 encoderConfig().then(c=>{state.encoder=c;renderVideo(null);});
