@@ -5,6 +5,12 @@
 **Prioridad propuesta:** backlog estratégico FT3D-8, más visible en el programa global. Debe evaluarse por producto/cliente y datos de proyecto antes de comparar su prioridad con Home V2, E2, Render IA o CAT-IA.
 **Objetivo:** hacer comprensible **qué partes de una obra se ejecutarían en qué fase, con qué duración, qué dependencias y qué presupuesto respaldado por cantidades y precios verificados**, sin confundir una simulación con ejecución real.
 
+## Actualización de producto: prioridad visual con DATOS reales (05/11/2026)
+
+Tras revisar los repositorios disponibles, el propietario ha especificado una prioridad más precisa: **mostrar visualmente el inicio, desarrollo y fin de la obra, con animación ilustrativa de montaje y tareas, pero un Gantt REAL de fechas, tareas y presupuesto vinculado a datos C1–C4**. Esto **no significa** que FT3D-8A aislado sea un producto profesional listo para venta: el primer piloto útil debe unir la experiencia visual con el cronograma y las cifras verificadas, aunque la coreografía no sea fiel a la ejecución exacta.
+
+**Estudio comparativo y recomendación de stack:** [FT3D-8 — repositorios, animación visual, Gantt real y presupuesto](ft3d-8-repositorios-plan-visual-gantt-presupuesto-2026-11-05.md). Incluye Flat-to-3D MIT (visual), Frappe Gantt MIT (cronograma), 4DBIM MIT (vínculo tarea↔elemento), jsgantt-improved (alternativa con auditoría de licencia pendiente) y otras referencias. Ninguna dependencia nueva ha sido añadida a RUBIK. **No implementar ni fusionar mientras Claude y Kimi no terminen**.
+
 ## 1. Evidencia visual aportada por el propietario
 
 En seis capturas de la referencia interactiva **Schedule Build / The Build** se ven la misma casa en:
