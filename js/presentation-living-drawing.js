@@ -182,8 +182,12 @@ void main(){
   const inside=(poly,x,z)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
   function setLanding(input){
    clearLanding();if(!info.active||!input?.visits?.length)return null;
-   const rooms=input.rooms||[],xs=rooms.flatMap(r=>r.poly.map(p=>p[0])),zs=rooms.flatMap(r=>r.poly.map(p=>p[1]));
-   const pad=.6,x0=Math.min(...xs)-pad,z0=Math.min(...zs)-pad,x1=Math.max(...xs)+pad,z1=Math.max(...zs)+pad,res=.04,w=Math.ceil((x1-x0)/res),h=Math.ceil((z1-z0)/res);
+   const rooms=(input.rooms||[]).filter(r=>Number.isInteger(r.index)&&r.index>0&&r.index<MAX_ROOMS&&Array.isArray(r.poly)&&r.poly.length>=3&&r.poly.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))),xs=rooms.flatMap(r=>r.poly.map(p=>p[0])),zs=rooms.flatMap(r=>r.poly.map(p=>p[1]));
+   if(!xs.length)return null;
+   const pad=.6,x0=Math.min(...xs)-pad,z0=Math.min(...zs)-pad,x1=Math.max(...xs)+pad,z1=Math.max(...zs)+pad;
+   // A bounded, adaptive map prevents extremely large floor plans from exhausting GPU/browser memory.
+   const maxSide=Math.min(2048,renderer.capabilities?.maxTextureSize||2048),res=Math.max(.04,(x1-x0)/maxSide,(z1-z0)/maxSide);
+   const w=Math.max(1,Math.ceil((x1-x0)/res)),h=Math.max(1,Math.ceil((z1-z0)/res));
    const cv=document.createElement('canvas');cv.width=w;cv.height=h;const g=cv.getContext('2d');
    for(const r of rooms){g.fillStyle=`rgb(${r.index},0,0)`;g.beginPath();r.poly.forEach((p,j)=>{const X=(p[0]-x0)/res,Y=(p[1]-z0)/res;j?g.lineTo(X,Y):g.moveTo(X,Y);});g.closePath();g.fill();}
    const img=g.getImageData(0,0,w,h).data,id=new Uint8Array(w*h);for(let i=0;i<w*h;i++)id[i]=img[i*4+3]>200?img[i*4]:0;
@@ -214,7 +218,9 @@ void main(){
     // complete and its seed is no longer evaluated; the room is complete only when every piece of it has landed
     for(const sd of own){const f=[...furn.values()].find(x=>x.index===sd.obj),ext=f?Math.hypot(f.max[0]-f.min[0],f.max[1]-f.min[1],f.max[2]-f.min[2]):1;
      const whole=sd.t+ext/sd.vObj+.2;objects.push({index:sd.obj,p:sd.p,t:whole});last=Math.max(last,sd.t+2.2,whole+ext/1.6+.2);}
-    if(v.roomIndex<MAX_ROOMS)done[v.roomIndex]=last+.3;
+    // A visit may leave while stains remain (the next room stays graphite), but at the *end* of a
+    // room the remaining material must be fully revealed. Otherwise the final frame can still be pencil.
+    if(v.roomIndex<MAX_ROOMS)done[v.roomIndex]=Math.min(v.start+v.duration-0.001,last+.3);
    }
    landing={seeds,objects,done,levelY:input.levelY||[-1e3,1e3],map:[x0,z0,x1-x0,z1-z0]};
    const u=comp.uniforms;u.tRoom.value=roomTex;u.uRoomMap.value.set(...landing.map);u.uLevelY.value.set(...landing.levelY);
