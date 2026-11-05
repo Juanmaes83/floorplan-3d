@@ -86,6 +86,7 @@ test('Case G: a parcel associated with another project is a conflict, never plac
   const e=await run(a,{gml:{associatedWith:{type:'project',id:'prj_fx-reform-c'}}});
   assert.ok(errors(e).includes('parcel-other-project'));
   assert.ok(e.conflicts.some(x=>x.code==='parcel-other-project'));
+  assert.notEqual(e.dossier.id,(await run(a)).dossier.id,'a conflicting parcel association never shares the coherent dossier id');
   assert.equal(e.authorities.territory.evidence.status,'other-project');
   // The GML of C associated with A: references differ from A's saved parcel -> conflict, no placement used.
   const e2=await run(a,{gml:{text:c.gml.text,associatedWith:{type:'project',id:a.project.id}}});

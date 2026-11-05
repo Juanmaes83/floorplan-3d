@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Crect width=%2216%22 height=%2216%22 fill=%22%231f5a66%22/%3E%3C/svg%3E">
-<title>FT3D-8 Laboratorio de fidelidad — RUBIK</title>
+<title>FT3D-8 Expediente de obra — RUBIK</title>
 <link rel="stylesheet" href="./lab.css">
 <link rel="stylesheet" href="./fidelity.css">
 <script type="importmap">
@@ -19,6 +19,9 @@
 <script src="../../js/terrain-core.js"></script>
 <script src="../../js/territory-integration-core.js"></script>
 <script src="../../js/geo-provider.js"></script>
+<script src="../../js/catastro-parcel-provider.js"></script>
+<script src="../../js/territory-export-policy.js"></script>
+<script src="../../js/guide-core.js"></script>
 <script src="../../js/geo-site-adapter.js"></script>
 <script src="../../js/parcel-site-adapter.js"></script>
 <script src="../../js/orthophoto-site-adapter.js"></script>
@@ -44,20 +47,43 @@
 <script src="../../js/tour-recorder.js"></script>
 <script src="../../js/construction-delivery-core.js"></script>
 <script src="../../js/construction-mp4-muxer.js"></script>
+<script src="../../js/construction-dossier-core.js"></script>
 <script src="./fidelity-fixtures.js"></script>
+<script src="./dossier-fixtures.js"></script>
 <script type="module" src="./fidelity-app.js"></script>
 <script type="module" src="./delivery-ui.js"></script>
+<script type="module" src="./dossier-ui.js"></script>
 </head>
 <body data-stage="inicio">
 <header class="topbar">
   <span class="brand"><i></i>RUBIK // FT3D-8 <em>[FIDELIDAD]</em></span>
-  <span class="tab on">Proyecto real → plan → presupuesto</span>
+  <span class="tab on">Expediente: proyecto → parcela → presupuesto → plan</span>
   <a class="tab" href="./demo.html">Demo ilustrativa</a>
   <span class="modes" role="group" aria-label="Modo"><button data-mode="pro" aria-pressed="true">Modo profesional</button><button data-mode="client" aria-pressed="false">Modo cliente</button></span>
   <span class="origin" id="origin" data-kind="fixture" role="status"></span>
 </header>
 <main>
+  <section class="dossier" id="dossierPanel" aria-labelledby="dossierTitle">
+    <header class="dossier-head">
+      <div><h2 id="dossierTitle">Expediente del proyecto</h2>
+        <p class="pitch">Comprueba que la vivienda, su parcela, su presupuesto y su plan de obra pertenecen al mismo proyecto antes de enseñarle al cliente cómo evolucionará.</p>
+        <p class="route" id="dossierRoute"><strong>Ruta S1:</strong> documentos exportados desde RUBIK y cargados en este navegador. Nada se envía a ningún servidor. Todavía no es la conexión directa con tu biblioteca de proyectos.</p></div>
+      <div class="dossier-controls">
+        <label>Expediente de prueba <select id="dossierSel" aria-label="Expediente de prueba"></select></label>
+        <label class="file">Cargar documentos del proyecto <small>(proyecto o edificio .json, presupuesto .json, plan, vínculo, marca, parcela .gml o un expediente)</small>
+          <input id="dossierFiles" type="file" multiple accept=".json,.gml,.xml,application/json,application/gml+xml,text/xml"></label>
+        <button type="button" class="btn" id="dossierSave">Guardar expediente (.json)</button>
+      </div>
+    </header>
+    <p class="dossier-id" id="dossierId" role="status"></p>
+    <p class="dossier-change" id="dossierChange" aria-live="polite"></p>
+    <p class="err" id="dossierError" role="alert"></p>
+    <p class="budget-pick" id="budgetPick" hidden><label>Hay varios presupuestos de este proyecto: <select id="budgetPickSel"></select></label> <button type="button" class="btn" id="budgetPickGo">Usar este</button></p>
+    <ol class="dflow" id="dossierFlow"></ol>
+    <details class="ddiag"><summary>Diagnóstico profesional (códigos técnicos y huellas)</summary><div id="dossierDiag"></div></details>
+  </section>
   <section class="sources" aria-label="Fuente del proyecto">
+    <span class="srclabel">Modo fidelidad (sin expediente):</span>
     <label>Proyecto de prueba <select id="caseSel" aria-label="Proyecto de prueba"></select></label>
     <label class="file">Importar proyecto RUBIK (.json) <input id="fileInput" type="file" accept=".json,application/json"></label>
     <label class="file">Plan FT3D-8 (.json) <input id="scheduleInput" type="file" accept=".json,application/json"></label>
@@ -134,6 +160,7 @@
         <div class="actions"><button type="button" class="btn primary" id="docPrepare">Preparar presentación para el cliente</button>
           <button type="button" class="btn" id="docDownload" hidden>Descargar presentación (.html)</button><button type="button" class="btn" id="manifestDownload" hidden>Descargar manifiesto (.json)</button></div>
         <p class="meta-line" id="docMeta"></p>
+        <p class="hint">Entregas generadas en esta sesión (no se borran al cambiar de proyecto; los archivos descargados no cambian):</p><ol class="history" id="deliveryHistory" aria-label="Historial de entregas"></ol>
         <iframe id="clientPreview" title="Vista previa de la presentación para el cliente" sandbox="" hidden></iframe>
         <details class="publish" id="publishBox"><summary>Publicar enlace para el cliente (servicio /api/share existente)</summary>
           <p id="publishWhat"></p>

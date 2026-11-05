@@ -10,7 +10,9 @@ const W=1280,H=720,FPS=30,BITRATE=1_400_000,EMBED_LIMIT=12*1024*1024;
 const C={dark:'#2b3034',action:'#1f5a66',surface:'#eceeee',ink:'#1f2326',muted:'#5b6266',soft:'#e3ecee',warn:'#7a5200',warnSoft:'#fff4dc'};
 const memory=()=>{const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)};};
 const state={labStore:memory(),labProfileId:null,copies:{},source:'none',title:'',intro:'',include:new Set(),costMode:'summary',
-  video:null,manifest:null,doc:null,published:null,recording:null,lastError:null};
+  video:null,manifest:null,doc:null,published:null,recording:null,lastError:null,
+  // Read-only history of what was actually produced: never cleared when the project or dossier changes.
+  history:[]};
 const api=window.__ft3dDelivery={state};
 const browserProfiles=()=>{try{return B.readProfiles(window.localStorage).profiles;}catch{return [];}};
 const entryKey=()=>'ft3d8:'+(Fid().ctx?.model.subject.id||'none');
@@ -20,8 +22,13 @@ async function sha256(blob){const buf=await blob.arrayBuffer();return [...new Ui
 
 /* ---------- brand ---------- */
 // The snapshot always comes from FloorPlanBrand.snapshot over the lab's memory storage (never the user's profiles).
+// S1: the brand of the dossier is the FloorPlanBrand snapshot associated with THIS subject (never another project's).
+const dossierBrand=()=>{const ctx=Fid().ctx;return ctx?.dossier?.authorities.brand.status==='snapshot'?ctx.dossierInput?.brand?.snapshot||null:null;};
+const dossierBlock=()=>{const d=Fid().ctx?.dossier;if(!d||d.usable.delivery)return null;
+  const errs=d.issues.filter(i=>i.severity==='error').map(i=>i.message);return errs.length?'El expediente tiene incompatibilidades: '+errs.join(' · '):null;};
 function snapshot(){
   const ctx=Fid().ctx;if(!ctx||state.source==='none')return null;
+  if(state.source==='dossier'){const b=dossierBrand();return b?Object.freeze({...b,title:state.title||b.title,intro:state.intro||b.intro}):null;}
   let profileId=state.labProfileId;
   // A browser profile is COPIED (read-only source) into the lab memory store, once per source profile.
   if(state.source.startsWith('browser:')){const srcId=state.source.slice(8),p=browserProfiles().find(x=>x.id===srcId);if(!p)return null;profileId=B.saveProfile(state.labStore,{...p,id:state.copies[srcId]}).id;state.copies[srcId]=profileId;}
@@ -32,7 +39,8 @@ function snapshot(){
 const currentBrand=()=>D.brandFor(snapshot(),{include:[...state.include]});
 function renderBrand(){
   const sel=$('brandSel'),cur=state.source,profiles=browserProfiles();
-  sel.innerHTML=`<option value="none">Sin marca (atribución RUBIK)</option>`+profiles.map(p=>`<option value="browser:${esc(p.id)}">Mi estudio: ${esc(p.name)} (este navegador)</option>`).join('')+
+  const db=dossierBrand();
+  sel.innerHTML=`<option value="none">Sin marca (atribución RUBIK)</option>`+(db?`<option value="dossier">Marca del expediente: ${esc(db.profile.name)}</option>`:'')+profiles.map(p=>`<option value="browser:${esc(p.id)}">Mi estudio: ${esc(p.name)} (este navegador)</option>`).join('')+
     `<option value="lab">Marca de prueba de este laboratorio${state.labProfileId?'':' (crear)'}</option>`;
   sel.value=[...sel.options].some(o=>o.value===cur)?cur:'none';
   $('brandBrowserNote').textContent=profiles.length?`${profiles.length} marca(s) guardada(s) en este navegador para este dominio (solo lectura).`
@@ -68,8 +76,9 @@ function renderReview(){
   $('stepPlan').innerHTML=`<p>Plan: ${m.planning.status==='available'?`<strong>${esc(ctx.schedule.id)}</strong> (${esc(m.planning.evidence)})`:`<strong class="bad">${esc(m.planning.message)}</strong>`}</p>
     <p>Presupuesto: ${m.costs.status==='available'?`<strong>${esc(m.costs.report.budgetId)}</strong> · ${c.budget.allocatedPercentOfKnown} % de las partidas cargadas asignadas (no equivale a la obra presupuestada)`:`<span class="bad">${esc(m.costs.message||m.costs.reason||'no disponible')}</span>`}</p>
     <p>Nivel: <strong>${esc(m.delivery.label)}</strong></p>${pol.allowed?'':`<p class="bad">Costes no incluibles en la entrega: ${esc(pol.reasons.join('; '))}</p>`}`;
-  const can=m.planning.status==='available';
-  $('videoGo').disabled=!can||!!state.recording;$('videoBlocked').textContent=can?'':'Sin un plan válido de este proyecto no se puede generar la evolución de obra.';
+  const block=dossierBlock(),can=m.planning.status==='available'&&!block;
+  $('videoGo').disabled=!can||!!state.recording;$('docPrepare').disabled=!can;
+  $('videoBlocked').textContent=block||(can?'':'Sin un plan válido de este proyecto no se puede generar la evolución de obra.');
   $('costMode').querySelectorAll('option').forEach(o=>{o.disabled=o.value!=='none'&&!pol.allowed;});if(!pol.allowed)$('costMode').value='none',state.costMode='none';
 }
 const policy=()=>{const ctx=Fid()?.ctx;if(!ctx)return {allowed:false,mode:'none',reasons:['sin proyecto'],rows:[],summary:null,warnings:[]};return D.costPolicy(ctx.model,{mode:state.costMode,schedule:ctx.schedule});};
@@ -152,6 +161,7 @@ api.encoderConfig=encoderConfig;
 const FPS_OFFLINE=25;
 async function record(){
   const fid=Fid(),ctx=fid.ctx;if(!ctx||ctx.model.planning.status!=='available')throw Error('Se necesita un plan válido de este proyecto.');
+  if(dossierBlock())throw Error(dossierBlock());
   if(state.recording)throw Error('Ya hay una grabación en curso.');
   const cfg=await encoderConfig(),type=cfg?'video/mp4':Rec.pickType();if(!type)throw Error('Este navegador no puede grabar vídeo.');
   invalidate();const controller=new AbortController();state.recording={controller,progress:0};renderVideo('Preparando la grabación…');
@@ -206,10 +216,11 @@ async function record(){
   const hash=await sha256(blob),durationMs=declaredMs??check.durationMs;
   const meta={type:blob.type,ext,bytes:blob.size,width:check.width,height:check.height,durationMs,playerDurationMs:check.durationMs,sha256:hash,frames,container,
     seekable:container==='mp4-indexed',keyframes:file?file.keyframes.length:null,fps:container==='mp4-indexed'?FPS_OFFLINE:null};
-  const manifest=await D.createManifest({model,schedule,budget:ctx.input.budget,brand,costPolicy:pol,title,intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding,
+  const manifest=await D.createManifest({model,schedule,budget:ctx.input.budget,brand,costPolicy:pol,title,intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding,dossier:ctx.dossier||null,
     video:{filename:'',type:blob.type,bytes:blob.size,width:check.width,height:check.height,durationMs,sha256:hash}});
   const filename=D.videoFilename(manifest,ext);
   state.video={...meta,blob,url,filename};state.manifest=manifest;state.doc=null;
+  remember('vídeo',manifest,{filename,sha256:hash,bytes:blob.size});
   renderVideo(meta.seekable?'Revisa el vídeo antes de descargarlo: es exactamente el archivo que se descarga.':'Revisa el vídeo antes de descargarlo. Este navegador no dispone de codificación H.264 por fotogramas: el archivo (MediaRecorder) puede no permitir saltar a un punto en algunos reproductores.');renderShare();
   return {...meta,filename,manifestId:manifest.id};
 }
@@ -219,17 +230,26 @@ function download(blob,filename){const a=document.createElement('a');a.href=URL.
 const blobToData=blob=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(blob);});
 async function prepareDocument(){
   const ctx=Fid().ctx;if(!ctx||ctx.model.planning.status!=='available')throw Error('Se necesita un plan válido de este proyecto.');
+  if(dossierBlock())throw Error(dossierBlock());
   const brand=currentBrand(),pol=policy();
   // With a video, its frozen manifest is the delivery; without one, a manifest is frozen now.
   const manifest=state.manifest||await D.createManifest({model:ctx.model,schedule:ctx.schedule,budget:ctx.input.budget,brand,costPolicy:pol,
-    title:brand.present?brand.title:(state.title||ctx.model.subject.name),intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding});
+    title:brand.present?brand.title:(state.title||ctx.model.subject.name),intro:brand.present?brand.intro:state.intro,binding:ctx.input.binding,dossier:ctx.dossier||null});
   const embed=state.video&&state.video.bytes<=EMBED_LIMIT?{src:await blobToData(state.video.blob),type:state.video.type}:null;
   const html=D.clientDocument(manifest,{video:embed});
   state.manifest=manifest;state.doc={html,bytes:new Blob([html]).size,embedded:!!embed,manifest};
+  remember('presentación',manifest,{bytes:state.doc.bytes,embedded:!!embed});
   $('clientPreview').srcdoc=html;$('clientPreview').hidden=false;renderShare();return state.doc;
 }
+function remember(kind,manifest,extra){
+  if(state.history.some(h=>h.kind===kind&&h.deliveryId===manifest.id))return;
+  state.history.push(Object.freeze({kind,deliveryId:manifest.id,dossierId:manifest.dossier?.id||null,subjectId:manifest.project.id,projectName:manifest.project.name,at:manifest.generatedAt,...extra}));
+}
+function renderHistory(){
+  $('deliveryHistory').innerHTML=state.history.map(h=>`<li>${esc(h.kind)} · entrega <code>${esc(h.deliveryId)}</code> · expediente <code>${esc(h.dossierId||'—')}</code> · ${esc(h.projectName)}${h.sha256?` · SHA-256 <code>${esc(h.sha256.slice(0,12))}</code>`:''}</li>`).join('');
+}
 function renderShare(message=null){
-  const v=state.video,d=state.doc;
+  const v=state.video,d=state.doc;renderHistory();
   $('docDownload').hidden=!d;$('manifestDownload').hidden=!state.manifest;
   $('docMeta').textContent=d?`Documento ${sizeText(d.bytes)} · ${d.embedded?'vídeo incluido dentro del archivo':'sin vídeo dentro del archivo'} · entrega ${d.manifest.id}`:'';
   if(!d)$('clientPreview').hidden=true;
@@ -266,7 +286,10 @@ async function publish({code,agree,withVideo}){
 
 /* ---------- wiring ---------- */
 function refresh(){renderBrand();renderReview();renderVideo(null);renderShare(null);}
-window.addEventListener('ft3d8-selection',()=>{invalidate();refresh();});
+window.addEventListener('ft3d8-selection',()=>{
+  // A new dossier: its own matched brand is used; the brand of the previous dossier never carries over.
+  if(dossierBrand())state.source='dossier';else if(state.source==='dossier')state.source='none';
+  invalidate();refresh();});
 $('brandSel').onchange=()=>{state.source=$('brandSel').value;if(state.source==='lab'&&state.labProfileId===null){renderBrand();return;}invalidate();renderBrand();};
 $('labBrandSave').onclick=()=>saveLabBrand().catch(()=>{});
 $('brandTitle').oninput=()=>{state.title=$('brandTitle').value.slice(0,B.LIMITS.title);invalidate();renderBrand();};
@@ -285,7 +308,7 @@ $('publishGo').onclick=async()=>{$('publishGo').disabled=true;renderShare('Publi
   catch(e){state.published=null;renderShare('No publicado: '+e.message);}finally{$('publishGo').disabled=false;}};
 $('publishCopy').onclick=async()=>{try{await navigator.clipboard.writeText(state.published.link);renderShare('Enlace copiado.');}catch{$('publishUrl').select();renderShare('Selecciona el enlace y cópialo.');}};
 for(const b of document.querySelectorAll('[data-mode]'))b.onclick=()=>{document.body.dataset.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));};
-Object.assign(api,{record,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
+Object.assign(api,{get history(){return state.history.map(h=>({...h}));},record,cancel:()=>state.recording?.controller.abort(),prepareDocument,publish,saveLabBrand,snapshot:()=>currentBrand(),refresh,
   select(source){state.source=source;invalidate();renderBrand();},setInclude(list){state.include=new Set(list);D.CONTACT_FIELDS.forEach(f=>$('inc-'+f).checked=state.include.has(f));invalidate();renderBrand();},
   setCostMode(m){$('costMode').value=m;state.costMode=m;invalidate();renderReview();}});
 encoderConfig().then(c=>{state.encoder=c;renderVideo(null);});

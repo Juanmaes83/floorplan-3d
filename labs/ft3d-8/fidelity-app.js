@@ -87,11 +87,12 @@ function setPos(p){
     api.last={date,stage:fr.stage,activeTaskIds:fr.activeTaskIds,ganttCursorDate:document.querySelector('#gantt [data-role=cursor]').dataset.date,
       presentElements:fr.elements.filter(e=>e.present).map(e=>e.elementId),modes:Object.fromEntries([...states].map(([k,s])=>[k,s.mode]))};}
 }
-async function show(input,meta){
+// model/dossier: when a construction dossier (S1) was evaluated, its model is reused as is (one evaluation, one source).
+async function show(input,meta,preModel=null,dossier=null){
   pause();lastDay=-1;
-  const model=await A.evaluate(input);
+  const model=preModel||await A.evaluate(input);
   const schedule=model.planning.status==='available'?input.schedule:null,timeline=schedule?V.timeline(schedule):null;
-  ctx={input,model,schedule,timeline,meta,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
+  ctx={input,model,schedule,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
   const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.frameEnvelope(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
@@ -106,8 +107,8 @@ async function show(input,meta){
   setPos(0);renderCard(timeline?timeline.preStartDate:null);
   api.model={subject:model.subject,fingerprint:model.fingerprints.project,delivery:model.delivery.level,planning:model.planning.status,costs:model.costs.status,
     elements:model.inventory.elements.length,unscheduled:model.coverage.elements.unscheduled.length,issues:model.issues.map(i=>i.code)};
-  document.body.classList.add('ready');document.body.dataset.case=meta.caseId||'import';
-  window.dispatchEvent(new CustomEvent('ft3d8-selection',{detail:{subject:model.subject}}));
+  document.body.classList.add('ready');document.body.dataset.case=meta.caseId||'import';document.body.dataset.dossier=dossier?dossier.dossier.id:'';
+  window.dispatchEvent(new CustomEvent('ft3d8-selection',{detail:{subject:model.subject,dossier:dossier?dossier.dossier.id:null}}));
   return api.model;
 }
 async function loadCase(id){const c=await FX.build(id);$('caseSel').value=id;return show(c,{caseId:id,origin:'FIXTURE de prueba · '+c.label,kind:'fixture'});}
@@ -134,7 +135,7 @@ function pause(){playing=false;$('play').textContent='▶';}
 function loop(t){if(!playing)return;const dt=Math.min(.1,(t-lastT)/1000);lastT=t;setPos(pos+dt*4*speed);if(pos>=ctx.timeline.positions-1){pause();return;}requestAnimationFrame(loop);}
 // Steps from the day on screen, so «‹» always goes back even when paused mid-tween.
 const step=d=>{pause();setPos(Math.floor(pos+1e-9)+d);};
-Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadCase,importText,loadPart,get ctx(){return ctx;},get scene(){return scene;},play,pause,setPos:p=>{pause();setPos(p);return api.last;},
+Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadCase,importText,loadPart,show,get ctx(){return ctx;},get scene(){return scene;},play,pause,setPos:p=>{pause();setPos(p);return api.last;},
   setDate:d=>{pause();setPos(Math.round((ms(d)-ms(ctx.timeline.preStartDate))/DAY));return api.last;},
   end:()=>{pause();setPos(ctx.timeline.positions-1);return api.last;},get playing(){return playing;},get pos(){return pos;},get timeline(){return ctx?.timeline;},
   setPose:p=>scene.setPose(p),get pose(){return scene.pose;},inspect:()=>scene.inspect(),setRoof:v=>{scene.setRoofVisible(v);setPos(pos);$('roofToggle').checked=!!v;},
@@ -153,5 +154,6 @@ for(const [id,kind] of [['scheduleInput','schedule'],['budgetInput','budget'],['
 window.addEventListener('keydown',e=>{if(e.target.closest('select,input'))return;if(e.code==='Space'){e.preventDefault();playing?pause():play();}
   else if(e.key==='ArrowRight')step(e.shiftKey?7:1);else if(e.key==='ArrowLeft')step(e.shiftKey?-7:-1);});
 window.addEventListener('resize',()=>requestAnimationFrame(()=>{ctx?.gantt?.drawArrows();scene.resize();}));
-loadCase(FX.ids.includes(q.get('case'))?q.get('case'):'A').then(()=>{if(q.get('date')&&ctx.timeline)api.setDate(q.get('date'));if(q.get('end')==='1'&&ctx.timeline)api.end();})
+// Without ?case the lab opens the S1 dossier flow (dossier-ui.js loads it); ?case=A-D keeps the fidelity cases.
+if(q.get('case')||!window.FloorPlanConstructionDossier)loadCase(FX.ids.includes(q.get('case'))?q.get('case'):'A').then(()=>{if(q.get('date')&&ctx.timeline)api.setDate(q.get('date'));if(q.get('end')==='1'&&ctx.timeline)api.end();})
   .catch(e=>{$('importError').textContent=e.message;document.body.classList.add('ready');});

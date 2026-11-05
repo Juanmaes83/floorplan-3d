@@ -140,11 +140,14 @@
     const b=Building.canonical?JSON.parse(Building.canonical(doc)):clone(doc);
     return JSON.stringify({units:b.units,stairs:b.stairs,levels:b.levels.map(l=>({...l,name:undefined,project:Guide.revision(l.project)}))});
   }
-  async function aspects({project,budgets=[],schedule=null,binding=null,brand=null}){
+  // The parcel evidence (GML hash, reference, explicit association) is part of the dossier identity: a dossier whose GML
+  // is associated with another project never shares the id of the coherent one.
+  const evidenceOf=e=>e&&e.sha256?{sha256:e.sha256,reference:e.reference??null,associatedWith:e.associatedWith?{type:e.associatedWith.type,id:e.associatedWith.id}:null}:null;
+  async function aspects({project,budgets=[],schedule=null,binding=null,brand=null,parcelEvidence=null}){
     const site=project?.site;
     return {project:await fp(project),geometry:project?await sha(geometryText(project)):null,site:site?await fp(site):null,
       budgets:Object.fromEntries(await Promise.all(budgets.map(async b=>[b.id,await fp(b)]))),
-      schedule:await fp(schedule),binding:await fp(binding),brand:brand?.snapshot?await fp(brand.snapshot):null};
+      schedule:await fp(schedule),binding:await fp(binding),brand:brand?.snapshot?await fp(brand.snapshot):null,parcelEvidence:await fp(evidenceOf(parcelEvidence))};
   }
 
   /* ---------- budgets (C1-C4 is the only source of amounts) ---------- */
@@ -262,7 +265,7 @@
     if(!VERSIONS.includes(pkg.schemaVersion))fail('dossier-version-unsupported',String(pkg.schemaVersion));
     const p=pkg.parts||{};if(!p.project)fail('import-malformed','el expediente no contiene proyecto');
     const {fingerprint,...body}=pkg,now=await aspects(p),changed=[];
-    for(const k of ['project','geometry','site','schedule','binding','brand'])if((pkg.fingerprints?.[k]??null)!==now[k])changed.push(k);
+    for(const k of ['project','geometry','site','schedule','binding','brand','parcelEvidence'])if((pkg.fingerprints?.[k]??null)!==now[k])changed.push(k);
     for(const id of new Set([...Object.keys(pkg.fingerprints?.budgets||{}),...Object.keys(now.budgets)]))if(pkg.fingerprints?.budgets?.[id]!==now.budgets[id])changed.push('budget:'+id);
     const integrity=!changed.length&&fingerprint===await fp(body)?'verified':'altered';
     return {integrity,changed,id:pkg.id,assembledAt:pkg.assembledAt,declaredSubject:clone(pkg.subject),
@@ -342,7 +345,8 @@
       }catch(e){brandView={status:'invalid'};issue('error','brand-invalid',{detail:e.message});corr('brand','validator','mismatch','brand-invalid');}
     }else corr('brand','subject','absent','brand-absent');
     // Fingerprints and dossier identity (derived, never invented).
-    const fingerprints=await aspects({project,budgets:selected.map(v=>v.doc),schedule:model.planning.status==='available'?schedule:null,binding,brand});
+    const pe=parcelDocument?{sha256:parcelDocument.sha256,reference:parcelDocument.result?.parcel?.reference??null,associatedWith:parcelDocument.associatedWith}:registeredParcel;
+    const fingerprints=await aspects({project,budgets:selected.map(v=>v.doc),schedule:model.planning.status==='available'?schedule:null,binding,brand,parcelEvidence:pe});
     const id=opened?.id||('dos_'+(await sha(JSON.stringify(fingerprints))).slice(0,16));
     const errors=issues.filter(i=>i.severity==='error');
     // Usability (what the timelapse, the costs and the delivery may use) and the delivery level.
@@ -377,11 +381,11 @@
   function invalidation(prev,next){
     if(!prev||!next||!prev.fingerprints||!next.fingerprints)return {subjectChanged:true,changed:['all'],invalidates:{links:true,costs:true,territory:true,delivery:true},history:'kept'};
     const subjectChanged=prev.subject.type!==next.subject.type||prev.subject.id!==next.subject.id,a=prev.fingerprints,b=next.fingerprints,changed=[];
-    for(const k of ['geometry','project','site','schedule','binding','brand'])if(a[k]!==b[k])changed.push(k);
+    for(const k of ['geometry','project','site','parcelEvidence','schedule','binding','brand'])if(a[k]!==b[k])changed.push(k);
     if(JSON.stringify(a.budgets)!==JSON.stringify(b.budgets))changed.push('budget');
     const has=k=>subjectChanged||changed.includes(k);
     return {subjectChanged,changed:subjectChanged?['subject',...changed]:changed,
-      invalidates:{links:has('geometry')||has('schedule'),costs:has('budget')||has('schedule'),territory:has('site')||has('geometry'),
+      invalidates:{links:has('geometry')||has('schedule'),costs:has('budget')||has('schedule'),territory:has('site')||has('geometry')||has('parcelEvidence'),
         delivery:subjectChanged||changed.length>0},
       // Downloaded deliveries are frozen files: they are never rewritten, only superseded.
       history:'kept'};
