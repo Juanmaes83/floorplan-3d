@@ -19,6 +19,18 @@ La cámara **no inventa caminos**. Se usa lo mismo que ya valida Rubik para «Re
 2. **Prolonga la llegada si hace falta.** Si la coreografía se detiene fuera del destino (vista desde la puerta), la visita continúa **por el mismo `plan.path` validado** hasta 0,9 m dentro de la estancia. Ese tramo va de reposo a reposo y gira hacia el rincón más lejano.
 3. **Rechaza en lugar de falsear.** Sin ruta interior, sin coreografía legible, sin punto de aterrizaje o sin llegada dentro del destino, no hay capítulo: `fullStory` usa el descenso existente (`room-descent`) y el caption dice «Visita espacial no disponible: motivo».
 
+## Composición (iteración de calidad visual)
+- **Muros bajos durante la llegada.** La narrativa da la altura de muro: baja de la altura de la vista general a 1,1 m mientras la cámara se aproxima, se mantiene durante el descenso y sube a la altura completa, con su techo, a la altura de los ojos. Así ningún canto de muro cortado cruza la lente al bajar. Se aplica como escala de los muros construidos, igual que en `room-descent`.
+- **Aterrizaje.**
+  - Si el espacio previo a la puerta del destino es amplio, se baja en el punto de la ruta validada más alejado de los muros, entre 1,2 y 4 m antes de la puerta.
+  - Si es un pasillo estrecho (ningún punto queda a 0,7 m de un muro), se baja directamente en el punto de la ruta más despejado dentro del destino. La puerta y la ruta se leen desde arriba durante la aproximación.
+- **Mirada.**
+  - Aproximación: picada (58°) hacia el punto de aterrizaje, con el contorno real del suelo del destino resaltado.
+  - Cruce de la puerta: la cámara mira hacia donde camina.
+  - Giro final: su sentido y su amplitud se fijan una sola vez, a 35°/s. Esto corrige un giro de 360° que aparecía cuando el objetivo quedaba casi detrás.
+  - Llegada: hacia el rincón más lejano, que da la lectura más amplia.
+- **Interfaz.** Desplazamientos de yaw y pitch según la región que deja libre la tarjeta (escritorio a la derecha, móvil abajo), los mismos que usa el recorrido clásico. Se introducen de forma gradual en la aproximación y se mantienen hasta la llegada, de modo que el relevo a Recorrer conserva la pose exacta.
+
 ## Fases de `room-visit` (`stateAt(p)` puro y determinista)
 | Fase | Qué ocurre | Por qué es válida |
 |---|---|---|
@@ -43,6 +55,11 @@ La coreografía cuesta unos 1000 ms de JavaScript. Se calcula una sola vez, en l
 
 ## Minimapa
 Es el mismo plano de orientación de la presentación. Durante la visita resalta el destino, dibuja la ruta validada (`presentation-minimap-route`) y la flecha de posición y dirección.
+
+## Restauración al salir de la presentación (corrección de causa raíz)
+Al cerrar la presentación se reconstruye el layout del editor. Durante unos 600 ms el visor 3D pasa por 0 px y por alturas transitorias. El `ResizeObserver` y `presentationRestore` adoptaban esas medidas (proporción 0, 0,068 o 0,137) mientras la presentación ya se declaraba inactiva, así que cualquier lectura en esa ventana veía una cámara incorrecta.
+- **View3D:** el `ResizeObserver` y `presentationRestore` ignoran un visor de 0 px. `viewportSettled()` resuelve cuando el visor mantiene el mismo tamaño real durante 3 fotogramas y sincroniza con él la cámara y el renderer.
+- **Presentación:** `stop()` espera a `viewportSettled()` cuando se vuelve al 3D. `FloorPlanPresentation.active` sigue siendo `true` mientras se sale. La cubierta, oculta al presentar, se vuelve a sincronizar cuando el flag se limpia.
 
 ## Limitaciones conocidas de V1
 - **Puntos de partida:** la ruta parte siempre de la puerta de entrada identificada (`Route.plan`). Una casa sin puerta de entrada marcada no ofrece el capítulo.
