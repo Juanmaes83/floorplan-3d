@@ -14,7 +14,8 @@ Esto es una mejora visual candidata, no aprobación humana. La cobertura real es
 - Rama: `feat/f03-facade-material-fidelity-v1`.
 - Base documental: `6b8d9f33cbf5ada5f4e210777f195a73e4ddfa1c`; incluye F02 `fe876c1c2016beafba48f1993b5c23ecb82f6814`.
 - Runtime y evidencias de este informe: `1cb022df26b35e6f373a71a5baf3ff49f07691a0`.
-- Los SHA de publicación verificados y la PR se registran en `progress.md`.
+- Publicación de evidencias verificada: `94d18e90f2ac928b507665d03e59ee9ca6725153`; el HEAD final se registra en `progress.md`.
+- PR draft: [#169 — F03: fidelidad material reversible de fachadas](https://github.com/Juanmaes83/floorplan-3d/pull/169), base `master`.
 - Sin merge, deploy ni cambios en ramas ajenas. PR #167 permanece intacta.
 
 ## 3. Materiales y procedencia
@@ -105,4 +106,4 @@ Presupuesto inicial medido para esta receta: como máximo los recursos observado
 
 ## 8. Estado
 
-`READY_FOR_HUMAN_REVIEW` cuando la rama y la PR draft estén publicadas. Esta etiqueta no implica aceptación visual, merge ni deploy.
+`READY_FOR_HUMAN_REVIEW`: rama, evidencias y PR draft #169 publicadas. Esta etiqueta no implica aceptación visual, merge ni deploy.
