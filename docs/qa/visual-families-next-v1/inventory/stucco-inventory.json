@@ -1,0 +1,2014 @@
+{
+  "schema": "visual-families-next/wall-inventory@1",
+  "fixture": "visual-families-next-stucco-v1",
+  "fixturePath": "tests/fixtures/visual-families-next-stucco-v1.json",
+  "projectSha256": "72a361daa2ab995a31860b2fb64a97b866d877b416e28cb64503256ce7b71c86",
+  "geometrySha256": "4f6ccbb7d20f0698265d0cfcc9f41adc15e952d972c6f7ad8bf5bc3baa965f36",
+  "f03": {
+    "materialId": "white_stucco",
+    "status": "ready",
+    "active": [
+      "wal_ref-w2",
+      "wal_ref-w7",
+      "wal_ref-w18",
+      "wal_ref-w19",
+      "wal_ref-w21",
+      "wal_ref-w23",
+      "wal_ref-w27",
+      "wal_ref-window-1",
+      "wal_ref-window-5"
+    ],
+    "resources": {
+      "geometries": 11,
+      "materials": 1,
+      "textures": 3,
+      "pending": 0,
+      "bytes": 2077204,
+      "gpuBytes": 16777218
+    }
+  },
+  "summary": {
+    "walls": 70,
+    "facades": 29,
+    "interiors": 33,
+    "unavailable": 8,
+    "assignedFacades": 10,
+    "f03Eligible": 9,
+    "f02ActiveOpenings": 12
+  },
+  "projectId": "prj_reference-home",
+  "exteriorStatus": "partial",
+  "exteriorRooms": [],
+  "walls": [
+    {
+      "wallId": "wal_ref-w0",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 540,
+      "heightMm": 2800,
+      "grossAreaM2": 1.512,
+      "start": {
+        "x": 1580,
+        "y": -120
+      },
+      "end": {
+        "x": 2120,
+        "y": -120
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w0",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w1",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 300,
+      "heightMm": 2800,
+      "grossAreaM2": 0.84,
+      "start": {
+        "x": 1700,
+        "y": 0
+      },
+      "end": {
+        "x": 1700,
+        "y": 300
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w1",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w2",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 2460,
+      "heightMm": 2800,
+      "grossAreaM2": 6.888,
+      "start": {
+        "x": 2120,
+        "y": -120
+      },
+      "end": {
+        "x": 4580,
+        "y": -120
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w2",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w3",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 560,
+      "heightMm": 2800,
+      "grossAreaM2": 1.568,
+      "start": {
+        "x": 4580,
+        "y": -120
+      },
+      "end": {
+        "x": 5140,
+        "y": -120
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w3",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w4",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 290,
+      "heightMm": 2800,
+      "grossAreaM2": 0.812,
+      "start": {
+        "x": 5760,
+        "y": -120
+      },
+      "end": {
+        "x": 6050,
+        "y": -120
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w4",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w5",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 550,
+      "heightMm": 2800,
+      "grossAreaM2": 1.54,
+      "start": {
+        "x": 6050,
+        "y": -120
+      },
+      "end": {
+        "x": 6600,
+        "y": -120
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w5",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w6",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 300,
+      "heightMm": 2800,
+      "grossAreaM2": 0.84,
+      "start": {
+        "x": 6480,
+        "y": 0
+      },
+      "end": {
+        "x": 6480,
+        "y": 300
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w6",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w7",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 3360,
+      "heightMm": 2800,
+      "grossAreaM2": 9.408,
+      "start": {
+        "x": 6600,
+        "y": -120
+      },
+      "end": {
+        "x": 9960,
+        "y": -120
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w7",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w8",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 550,
+      "heightMm": 2800,
+      "grossAreaM2": 1.54,
+      "start": {
+        "x": 9960,
+        "y": -120
+      },
+      "end": {
+        "x": 10510,
+        "y": -120
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w8",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w9",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 300,
+      "heightMm": 2800,
+      "grossAreaM2": 0.84,
+      "start": {
+        "x": 10390,
+        "y": 0
+      },
+      "end": {
+        "x": 10390,
+        "y": 300
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w9",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w10",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 500,
+      "heightMm": 2800,
+      "grossAreaM2": 1.4,
+      "start": {
+        "x": 10390,
+        "y": 300
+      },
+      "end": {
+        "x": 10390,
+        "y": 800
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w10",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w11",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 490,
+      "heightMm": 2800,
+      "grossAreaM2": 1.372,
+      "start": {
+        "x": 10390,
+        "y": 2600
+      },
+      "end": {
+        "x": 10390,
+        "y": 3090
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w11",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w12",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1170,
+      "heightMm": 2800,
+      "grossAreaM2": 3.276,
+      "start": {
+        "x": 10390,
+        "y": 3090
+      },
+      "end": {
+        "x": 10390,
+        "y": 4260
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w12",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w13",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 630,
+      "heightMm": 2800,
+      "grossAreaM2": 1.764,
+      "start": {
+        "x": 10390,
+        "y": 5740
+      },
+      "end": {
+        "x": 10390,
+        "y": 6370
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w13",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w14",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 550,
+      "heightMm": 2800,
+      "grossAreaM2": 1.54,
+      "start": {
+        "x": 9960,
+        "y": 6490
+      },
+      "end": {
+        "x": 10510,
+        "y": 6490
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w14",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w15",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 790,
+      "heightMm": 2800,
+      "grossAreaM2": 2.212,
+      "start": {
+        "x": 10390,
+        "y": 6610
+      },
+      "end": {
+        "x": 10390,
+        "y": 7400
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w15",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w16",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 790,
+      "heightMm": 2800,
+      "grossAreaM2": 2.212,
+      "start": {
+        "x": 10390,
+        "y": 9770
+      },
+      "end": {
+        "x": 10390,
+        "y": 10560
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w16",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w17",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 550,
+      "heightMm": 2800,
+      "grossAreaM2": 1.54,
+      "start": {
+        "x": 9960,
+        "y": 10680
+      },
+      "end": {
+        "x": 10510,
+        "y": 10680
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w17",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w18",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 5380,
+      "heightMm": 2800,
+      "grossAreaM2": 15.064,
+      "start": {
+        "x": 4580,
+        "y": 10680
+      },
+      "end": {
+        "x": 9960,
+        "y": 10680
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w18",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w19",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 1580,
+      "heightMm": 2800,
+      "grossAreaM2": 4.424,
+      "start": {
+        "x": 10510,
+        "y": 10680
+      },
+      "end": {
+        "x": 12090,
+        "y": 10680
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w19",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w20",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 600,
+      "heightMm": 2800,
+      "grossAreaM2": 1.68,
+      "start": {
+        "x": 11970,
+        "y": 9960
+      },
+      "end": {
+        "x": 11970,
+        "y": 10560
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w20",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w21",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 1360,
+      "heightMm": 2800,
+      "grossAreaM2": 3.808,
+      "start": {
+        "x": 4700,
+        "y": 9200
+      },
+      "end": {
+        "x": 4700,
+        "y": 10560
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w21",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w22",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 350,
+      "heightMm": 2800,
+      "grossAreaM2": 0.98,
+      "start": {
+        "x": 4700,
+        "y": 7960
+      },
+      "end": {
+        "x": 4700,
+        "y": 8310
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w22",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w23",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 960,
+      "heightMm": 2800,
+      "grossAreaM2": 2.688,
+      "start": {
+        "x": 3620,
+        "y": 8080
+      },
+      "end": {
+        "x": 4580,
+        "y": 8080
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w23",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w24",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1440,
+      "heightMm": 2800,
+      "grossAreaM2": 4.032,
+      "start": {
+        "x": 2180,
+        "y": 8080
+      },
+      "end": {
+        "x": 3620,
+        "y": 8080
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w24",
+        "eligible": false,
+        "reason": "material-unassigned"
+      }
+    },
+    {
+      "wallId": "wal_ref-w25",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 370,
+      "heightMm": 2800,
+      "grossAreaM2": 1.036,
+      "start": {
+        "x": 2300,
+        "y": 7590
+      },
+      "end": {
+        "x": 2300,
+        "y": 7960
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w25",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w26",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 240,
+      "heightMm": 2800,
+      "grossAreaM2": 0.672,
+      "start": {
+        "x": 2180,
+        "y": 7495
+      },
+      "end": {
+        "x": 2420,
+        "y": 7495
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w26",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w27",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 2420,
+      "heightMm": 2800,
+      "grossAreaM2": 6.776,
+      "start": {
+        "x": -240,
+        "y": 8080
+      },
+      "end": {
+        "x": 2180,
+        "y": 8080
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w27",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w28",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-brushed-concrete-wall",
+      "preset": "surface-brushed-concrete",
+      "category": "wall",
+      "lengthMm": 4350,
+      "heightMm": 2800,
+      "grossAreaM2": 12.18,
+      "start": {
+        "x": -120,
+        "y": 3610
+      },
+      "end": {
+        "x": -120,
+        "y": 7960
+      },
+      "structure": "exterior",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w28",
+        "eligible": false,
+        "reason": "material-semantic-mismatch"
+      }
+    },
+    {
+      "wallId": "wal_ref-w29",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 240,
+      "heightMm": 2800,
+      "grossAreaM2": 0.672,
+      "start": {
+        "x": 100,
+        "y": 4950
+      },
+      "end": {
+        "x": 100,
+        "y": 5190
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w29",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w30",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1075,
+      "heightMm": 1000,
+      "grossAreaM2": 1.075,
+      "start": {
+        "x": 200,
+        "y": 5070
+      },
+      "end": {
+        "x": 1275,
+        "y": 5070
+      },
+      "structure": "low",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w30",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w31",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 840,
+      "heightMm": 2800,
+      "grossAreaM2": 2.352,
+      "start": {
+        "x": 1580,
+        "y": 3598
+      },
+      "end": {
+        "x": 2420,
+        "y": 3598
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w31",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w32",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1366,
+      "heightMm": 2800,
+      "grossAreaM2": 3.8248,
+      "start": {
+        "x": 2300,
+        "y": 4430
+      },
+      "end": {
+        "x": 2300,
+        "y": 5796
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w32",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w33",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 240,
+      "heightMm": 2800,
+      "grossAreaM2": 0.672,
+      "start": {
+        "x": 2135,
+        "y": 4950
+      },
+      "end": {
+        "x": 2135,
+        "y": 5190
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w33",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w34",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 2160,
+      "heightMm": 2800,
+      "grossAreaM2": 6.048,
+      "start": {
+        "x": 2420,
+        "y": 5070
+      },
+      "end": {
+        "x": 4580,
+        "y": 5070
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w34",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w35",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 795,
+      "heightMm": 2800,
+      "grossAreaM2": 2.226,
+      "start": {
+        "x": 4700,
+        "y": 3280
+      },
+      "end": {
+        "x": 4700,
+        "y": 4075
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w35",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w36",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 330,
+      "heightMm": 2800,
+      "grossAreaM2": 0.924,
+      "start": {
+        "x": 4700,
+        "y": 4860
+      },
+      "end": {
+        "x": 4700,
+        "y": 5190
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w36",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w37",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 2160,
+      "heightMm": 2800,
+      "grossAreaM2": 6.048,
+      "start": {
+        "x": 2420,
+        "y": 3490
+      },
+      "end": {
+        "x": 4580,
+        "y": 3490
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w37",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w38",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 2400,
+      "heightMm": 2800,
+      "grossAreaM2": 6.72,
+      "start": {
+        "x": 4700,
+        "y": 0
+      },
+      "end": {
+        "x": 4700,
+        "y": 2400
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w38",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w39",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1540,
+      "heightMm": 2800,
+      "grossAreaM2": 4.312,
+      "start": {
+        "x": 4820,
+        "y": 2200
+      },
+      "end": {
+        "x": 6360,
+        "y": 2200
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w39",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w40",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 898,
+      "heightMm": 2800,
+      "grossAreaM2": 2.5144,
+      "start": {
+        "x": 6480,
+        "y": 300
+      },
+      "end": {
+        "x": 6480,
+        "y": 1198
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w40",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w41",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 417,
+      "heightMm": 2800,
+      "grossAreaM2": 1.1676,
+      "start": {
+        "x": 6480,
+        "y": 1983
+      },
+      "end": {
+        "x": 6480,
+        "y": 2400
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w41",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w42",
+      "exteriorStatus": "unavailable",
+      "exteriorReason": "insufficient-room-geometry",
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 517,
+      "heightMm": 2800,
+      "grossAreaM2": 1.4476,
+      "start": {
+        "x": 6083,
+        "y": 3538
+      },
+      "end": {
+        "x": 6600,
+        "y": 3538
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w42",
+        "eligible": false,
+        "reason": "exterior-unavailable"
+      }
+    },
+    {
+      "wallId": "wal_ref-w43",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 240,
+      "heightMm": 2800,
+      "grossAreaM2": 0.672,
+      "start": {
+        "x": 6360,
+        "y": 3325
+      },
+      "end": {
+        "x": 6600,
+        "y": 3325
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w43",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w44",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 3360,
+      "heightMm": 2800,
+      "grossAreaM2": 9.408,
+      "start": {
+        "x": 6600,
+        "y": 3490
+      },
+      "end": {
+        "x": 9960,
+        "y": 3490
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w44",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w45",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 310,
+      "heightMm": 2800,
+      "grossAreaM2": 0.868,
+      "start": {
+        "x": 9960,
+        "y": 3490
+      },
+      "end": {
+        "x": 10270,
+        "y": 3490
+      },
+      "structure": "load-bearing",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w45",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w46",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 2010,
+      "heightMm": 2800,
+      "grossAreaM2": 5.628,
+      "start": {
+        "x": 6203,
+        "y": 4600
+      },
+      "end": {
+        "x": 6203,
+        "y": 6610
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w46",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-w47",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 3637,
+      "heightMm": 2800,
+      "grossAreaM2": 10.1836,
+      "start": {
+        "x": 6323,
+        "y": 6490
+      },
+      "end": {
+        "x": 9960,
+        "y": 6490
+      },
+      "structure": "partition",
+      "openings": [],
+      "f03": {
+        "wallId": "wal_ref-w47",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-0",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 620,
+      "heightMm": 2800,
+      "grossAreaM2": 1.736,
+      "start": {
+        "x": 5140,
+        "y": -120
+      },
+      "end": {
+        "x": 5760,
+        "y": -120
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-0",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-0",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-1",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 3070,
+      "heightMm": 2800,
+      "grossAreaM2": 8.596,
+      "start": {
+        "x": 1700,
+        "y": 300
+      },
+      "end": {
+        "x": 1700,
+        "y": 3370
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-1",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-1",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-2",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1820,
+      "heightMm": 2800,
+      "grossAreaM2": 5.096,
+      "start": {
+        "x": -240,
+        "y": 3490
+      },
+      "end": {
+        "x": 1580,
+        "y": 3490
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-2",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-2",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-3",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 605,
+      "heightMm": 2800,
+      "grossAreaM2": 1.694,
+      "start": {
+        "x": 2300,
+        "y": 3825
+      },
+      "end": {
+        "x": 2300,
+        "y": 4430
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-3",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-3",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-4",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1580,
+      "heightMm": 2800,
+      "grossAreaM2": 4.424,
+      "start": {
+        "x": 10510,
+        "y": 6490
+      },
+      "end": {
+        "x": 12090,
+        "y": 6490
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-4",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-4",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-5",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": "mat_surface-white-plaster-02-wall",
+      "preset": "surface-white-plaster-02",
+      "category": "wall",
+      "lengthMm": 3350,
+      "heightMm": 2800,
+      "grossAreaM2": 9.38,
+      "start": {
+        "x": 11970,
+        "y": 6610
+      },
+      "end": {
+        "x": 11970,
+        "y": 9960
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-5",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-5",
+        "eligible": true,
+        "reason": null,
+        "preset": "surface-white-plaster-02",
+        "materialId": "mat_surface-white-plaster-02-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-6",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 620,
+      "heightMm": 2800,
+      "grossAreaM2": 1.736,
+      "start": {
+        "x": 10510,
+        "y": 710
+      },
+      "end": {
+        "x": 11130,
+        "y": 710
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-6",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-6",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-7",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1890,
+      "heightMm": 2800,
+      "grossAreaM2": 5.292,
+      "start": {
+        "x": 11080,
+        "y": 760
+      },
+      "end": {
+        "x": 11080,
+        "y": 2650
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-7",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-7",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-8",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 620,
+      "heightMm": 2800,
+      "grossAreaM2": 1.736,
+      "start": {
+        "x": 10510,
+        "y": 2700
+      },
+      "end": {
+        "x": 11130,
+        "y": 2700
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-8",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-8",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-9",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 620,
+      "heightMm": 2800,
+      "grossAreaM2": 1.736,
+      "start": {
+        "x": 10510,
+        "y": 4160
+      },
+      "end": {
+        "x": 11130,
+        "y": 4160
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-9",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-9",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-10",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1575,
+      "heightMm": 2800,
+      "grossAreaM2": 4.41,
+      "start": {
+        "x": 11080,
+        "y": 4210
+      },
+      "end": {
+        "x": 11080,
+        "y": 5785
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-10",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-10",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-window-11",
+      "exteriorStatus": "facade",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 620,
+      "heightMm": 2800,
+      "grossAreaM2": 1.736,
+      "start": {
+        "x": 10510,
+        "y": 5835
+      },
+      "end": {
+        "x": 11130,
+        "y": 5835
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_window-11",
+          "kind": "window",
+          "f02Active": true
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-window-11",
+        "eligible": false,
+        "reason": "f02-owned-surface"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-0",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 880,
+      "heightMm": 2800,
+      "grossAreaM2": 2.464,
+      "start": {
+        "x": 4700,
+        "y": 2400
+      },
+      "end": {
+        "x": 4700,
+        "y": 3280
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-0",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-0",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-1",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 880,
+      "heightMm": 2800,
+      "grossAreaM2": 2.464,
+      "start": {
+        "x": 6480,
+        "y": 2400
+      },
+      "end": {
+        "x": 6480,
+        "y": 3280
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-1",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-1",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-2",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 785,
+      "heightMm": 2800,
+      "grossAreaM2": 2.198,
+      "start": {
+        "x": 6480,
+        "y": 1198
+      },
+      "end": {
+        "x": 6480,
+        "y": 1983
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-2",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-2",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-3",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 785,
+      "heightMm": 2800,
+      "grossAreaM2": 2.198,
+      "start": {
+        "x": 4700,
+        "y": 4075
+      },
+      "end": {
+        "x": 4700,
+        "y": 4860
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-3",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-3",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-4",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 893,
+      "heightMm": 2800,
+      "grossAreaM2": 2.5004,
+      "start": {
+        "x": 6203,
+        "y": 3707
+      },
+      "end": {
+        "x": 6203,
+        "y": 4600
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-4",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-4",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-door-5",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 890,
+      "heightMm": 2800,
+      "grossAreaM2": 2.492,
+      "start": {
+        "x": 4700,
+        "y": 8310
+      },
+      "end": {
+        "x": 4700,
+        "y": 9200
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_door-5",
+          "kind": "door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-door-5",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-slide-0",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 2370,
+      "heightMm": 2800,
+      "grossAreaM2": 6.636,
+      "start": {
+        "x": 10390,
+        "y": 7400
+      },
+      "end": {
+        "x": 10390,
+        "y": 9770
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_slide-0",
+          "kind": "sliding-door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-slide-0",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-slide-1",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 815,
+      "heightMm": 2800,
+      "grossAreaM2": 2.282,
+      "start": {
+        "x": 1275,
+        "y": 5070
+      },
+      "end": {
+        "x": 2090,
+        "y": 5070
+      },
+      "structure": "partition",
+      "openings": [
+        {
+          "id": "opn_slide-1",
+          "kind": "sliding-door",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-slide-1",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-bay-0",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1800,
+      "heightMm": 2800,
+      "grossAreaM2": 5.04,
+      "start": {
+        "x": 10390,
+        "y": 800
+      },
+      "end": {
+        "x": 10390,
+        "y": 2600
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_bay-0",
+          "kind": "opening",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-bay-0",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    },
+    {
+      "wallId": "wal_ref-bay-1",
+      "exteriorStatus": "interior",
+      "exteriorReason": null,
+      "surfaceMaterialId": null,
+      "preset": null,
+      "category": null,
+      "lengthMm": 1480,
+      "heightMm": 2800,
+      "grossAreaM2": 4.144,
+      "start": {
+        "x": 10390,
+        "y": 4260
+      },
+      "end": {
+        "x": 10390,
+        "y": 5740
+      },
+      "structure": "exterior",
+      "openings": [
+        {
+          "id": "opn_bay-1",
+          "kind": "opening",
+          "f02Active": false
+        }
+      ],
+      "f03": {
+        "wallId": "wal_ref-bay-1",
+        "eligible": false,
+        "reason": "interior-wall"
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "id": "visual-families-next-stucco-v1",
+  "status": "declared-qa-fixture",
+  "authority": "VISUAL_ONLY QA; derived from vq01-material-ab-v2, never a user-project mutation",
+  "baseFixture": "tests/fixtures/vq01-material-ab-v2.json",
+  "projectSha256": "72a361daa2ab995a31860b2fb64a97b866d877b416e28cb64503256ce7b71c86",
+  "materialId": "white_stucco",
+  "allowExperimentalVariant": false,
+  "assignments": [
+    { "surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0 },
+    { "surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 2 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 7 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 18 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 19 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 21 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 23 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 27 },
+    { "surfaceId": "surface-brushed-concrete", "kind": "wall", "targetIndex": 28 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 49 },
+    { "surfaceId": "surface-white-plaster-02", "kind": "wall", "targetIndex": 53 }
+  ]
+}
