@@ -185,3 +185,56 @@ Auditoría completa: `docs/qa/hybrid-v2/2026-11-05/poc-audit.md`.
 3. **Materiales de la presentación.** ¿Puede RUBIK proponer acabados del catálogo para estancias que no los tienen (como hace la PoC), o la presentación debe usar exactamente los del proyecto?
 4. **Ritmo.** Unos 6 s por estancia. ¿Reproducción automática o guiada por desplazamiento (*scroll*)?
 5. **Implementación.** ¿Se autorizan C0–C1 en una rama aislada?
+
+## 9. Decisiones de Juanma (05-11-2026) y lo que implican
+
+| # | Decisión | Qué implica en el diseño |
+|---|---|---|
+| D1 | **Storyboard S1–S7 aprobado como dirección.** Se mantienen las manchas asíncronas sobre protagonistas, la convivencia de dibujo y realismo y la salida antes del 100 %. La TV, la puerta y la planta no deben dominar la composición | Regla de encuadre en el núcleo: penaliza los objetos grandes y oscuros (pantallas), las puertas abiertas al exterior y los objetos altos a menos de 1,5 m de la línea de visión. La puerta de entrada se cierra durante la secuencia y se restaura al terminar. Ningún protagonista oscuro abre una estancia |
+| D2 | **Bordes en grafito fino y elegante.** Sin naranja ni color. Deben leerse como materialización arquitectónica, no como pintura desconchada | En muros y techos, el frente avanza por **paneles completos** (piezas arquitectónicas) con un contorno de grafito fino. El ruido orgánico queda solo en suelos y muebles, con amplitud baja. Sin islas por debajo de un tamaño mínimo en pantalla |
+| D3 | **Ambientación opcional** con acabados del catálogo de RUBIK, **claramente diferenciada** de los materiales del cliente; el proyecto no se modifica ni se guarda | Una capa de ambientación aparte, solo para la presentación, desactivada por defecto. Lleva etiqueta visible «Ambientación sugerida · no forma parte del proyecto». El JSON del proyecto no cambia, y un test lo comprueba |
+| D4 | **Reproducción automática y cinematográfica**, con pausa, avance y retroceso; unos 6 s por estancia como referencia flexible | Narrativa pura de Story: hereda pausa, búsqueda, reversa y *reduced motion*. La duración por estancia se ajusta a su número de protagonistas, entre 5 y 8 s |
+| D5 | **Recomendación:** empezar C0 y C1 en una rama aislada, con `master`, Section y Hybrid V1 intactos. **La autorización efectiva se confirmará por separado** | **No se empieza C0 ni C1 hasta esa confirmación.** No hay merge y no se amplía el alcance |
+
+**Fuera de alcance hasta nuevo aviso:** el merge de Hybrid V2, el despliegue y cambios en Section, Story existente o Hybrid V1 más allá de lo que pida cada checkpoint aprobado.
+
+La PoC y su evidencia se conservan en `docs/qa/hybrid-v2/2026-11-05/` como referencia visual.
+
+## 10. Plan de C0 y C1 (pendiente de autorización expresa)
+
+**Rama:** `feat/hybrid-v2-living-drawing`, creada desde `master`. Cada checkpoint termina con commit, push, HEAD remoto verificado, pruebas y evidencia, y espera revisión.
+
+### C0: núcleo puro (sin efecto visible en la app)
+
+`js/presentation-living-drawing-core.js` (UMD) y `tests/presentation-living-drawing-core.test.cjs`.
+
+**Contenido:**
+- **Protagonistas por tipo de estancia (§6.2)** con reglas de exclusión de D1: una pantalla o un objeto oscuro y grande nunca es la primera mancha; las puertas nunca son protagonistas; las plantas, solo como protagonista secundario.
+- **Semillas deterministas** (hash del proyecto y de la estancia): intervalos irregulares de al menos 0,45 s y nunca dos iguales seguidos.
+- **Línea de tiempo por estancia:** 5–8 s según el número de protagonistas; la cámara sale hacia el 70–80 %.
+- **Variante de movimiento reducido:** manchas por estancia sin desplazamiento de cámara.
+- **Ambientación (D3):** sugerencias del catálogo con `source: 'ambientacion'`, en un objeto aparte.
+
+**Pruebas que deben pasar:**
+- determinismo;
+- intervalos irregulares;
+- protagonistas y exclusiones en el ejemplo y en el edificio de 2 plantas;
+- `stateAt(p)` puro y simétrico en reversa;
+- ambientación sin mutar el proyecto (igualdad profunda antes y después).
+
+**Evidencia:** tabla de protagonistas y tiempos que el núcleo genera para el ejemplo. **Visual:** ninguna; es núcleo puro.
+
+### C1: capa de dibujo en el producto (solo dibujo, sin manchas)
+
+**Contenido:**
+- View3D gana `presentationLivingDrawingBegin/Apply/End`: un render target AUX (posición e identidad), composición de grafito sobre papel según D2 y fallback si no hay render target float.
+- Opción nueva en «Presentar mi vivienda», **desactivada por defecto**. Sin ella, la app es idéntica a `master`, y un test lo comprueba.
+
+**Evidencia:**
+- láminas del salón, comedor y cocina y del dormitorio principal a 1440×900, 390×844 y 844×390, en dibujo puro, para aprobar el grafito;
+- recursos antes y después de entrar y salir 5 veces, sin fugas;
+- coste por fotograma en SwiftShader, indicando que no es una GPU;
+- suites `section`, `story`, `walk`, `walk-controls` y `templates`, más regresiones comparadas con `master`;
+- CI en el HEAD final.
+
+**Puerta humana:** revisión del grafito antes de pasar a C2 (manchas).
