@@ -131,7 +131,7 @@ function onMoment(last){
     intro.hidden=false;
   }else intro.hidden=true;
   // Planned work with no 3D representation is said, never drawn.
-  const none=tl?ctx.schedule.tasks.filter(t=>last.activeTaskIds?.includes(t.id)&&!t.elements?.length):[];
+  const none=tl?ctx.canon.tasks.filter(t=>last.activeTaskIds?.includes(t.id)&&!t.elements.length):[];
   const note=$('sceneNote');
   if(!tl){note.hidden=false;note.textContent=ctx.model.planning.status==='rejected'?'La planificación cargada pertenece a otro proyecto: se muestra el modelo sin fechas.':'Sin planificación: se muestra la vivienda, sin fechas inventadas.';}
   else if(none.length){note.hidden=false;note.textContent=none.map(t=>t.title.replace(/^FIXTURE /,'').replace(/\s*\(sin geometr[ií]a en RUBIK\)/i,'')).join(' · ')+': planificado, sin representación 3D.';}
@@ -143,9 +143,35 @@ window.addEventListener('ft3d8-selection',()=>{requestAnimationFrame(()=>{render
 window.addEventListener('ft3d8-dossier',()=>renderSummary());
 document.getElementById('play').addEventListener('click',()=>{$('introOverlay').hidden=true;});
 
+/* ---------- element -> tasks (click on the house, not a drag) ---------- */
+const TYPE={wall:'Muro',window:'Ventana',door:'Puerta','sliding-door':'Puerta corredera',opening:'Hueco',floor:'Suelo',roof:'Cubierta',slab:'Forjado',object:'Objeto'};
+const LIFE={new:'elemento nuevo',existing:'elemento existente',demolished:'elemento a demoler',undeclared:''};
+let down=null;
+$('stage').addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
+$('stage').addEventListener('pointerup',e=>{
+  if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down=null;return;}down=null;
+  const ctx=Fid()?.ctx;if(!ctx)return;const key=Fid().scene.pick(e.clientX,e.clientY);showPick(key);
+});
+function showPick(key){
+  const box=$('pickInfo'),ctx=Fid()?.ctx;
+  if(!key||!ctx){box.hidden=true;return null;}
+  const v=ctx.model.visualElements.find(x=>x.key===key);if(!v){box.hidden=true;return null;}
+  const sch=ctx.schedule,date=Fid().last?.date,st=sch&&date?window.FloorPlanConstructionSchedule.stateAt(sch,date):null,report=ctx.model.costs.report;
+  const rows=v.tasks.map(l=>{const t=ctx.canon?.tasks.find(z=>z.id===l.taskId);if(!t)return '';const s=st?.tasks.find(z=>z.id===t.id);
+    const tc=report?.byTask.find(z=>z.taskId===t.id);
+    return `<li><b>${esc(t.wbs)} ${esc(t.title.replace(/^FIXTURE /,''))}</b> · ${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${s?({'in-progress':'en curso según plan',completed:'terminada según plan','not-started':'pendiente'})[s.plannedPhase]:''}${tc&&tc.lines.length?` · ${tc.totalNet===null?'importe desconocido':P.euro(tc.totalNet)+' sin IVA'}`:''}
+      <br><button type="button" class="btn" data-pick-task="${esc(t.id)}">Ver trabajo</button></li>`;}).join('');
+  box.innerHTML=`<h4>${esc(TYPE[v.type]||v.type)}${LIFE[v.lifecycle]?' · '+esc(LIFE[v.lifecycle]):''}${v.levelId?` · ${esc(v.levelId)}`:''}</h4>
+    ${rows?`<ul>${rows}</ul>`:'<p>Este elemento no tiene trabajos vinculados en la planificación.</p>'}<button type="button" class="btn" data-pick-close>Cerrar</button>`;
+  box.hidden=false;box.dataset.key=key;return {key,tasks:v.tasks.map(t=>t.taskId)};
+}
+$('pickInfo').addEventListener('click',e=>{const t=e.target.closest('[data-pick-task]');if(t){$('pickInfo').hidden=true;Fid().selectTask(t.dataset.pickTask);}
+  else if(e.target.closest('[data-pick-close]'))$('pickInfo').hidden=true;});
+window.addEventListener('ft3d8-selection',()=>{$('pickInfo').hidden=true;});
+
 /* ---------- first section ---------- */
 // ?case= (fidelity) and ?tab= open where asked; a dossier opens on its summary («Ver evolución» is the main action).
 go(TABS.includes(q.get('tab'))?q.get('tab'):q.get('case')?'evolucion':'proyecto');
 // The first project may already be on screen (its fingerprints are computed asynchronously before this module runs).
 if(Fid()?.ctx){renderSummary();renderHero();if(Fid().last)onMoment(Fid().last);}
-Object.assign(ui,{go,reveal,renderSummary,get tab(){return document.body.dataset.tab;},state:()=>{const s=state();return s&&{pill:s.pill,tone:s.tone,errors:s.errors.map(i=>i.code),plan:s.plan};}});
+Object.assign(ui,{go,reveal,renderSummary,showPick,get tab(){return document.body.dataset.tab;},state:()=>{const s=state();return s&&{pill:s.pill,tone:s.tone,errors:s.errors.map(i=>i.code),plan:s.plan};}});

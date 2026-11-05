@@ -54,25 +54,66 @@ function renderHeader(model,meta){
     <li><b>No modelado por RUBIK (no se dibuja)</b>: ${model.inventory.notInAuthority.map(x=>esc(x.category)).join(', ')}</li></ul>
     <h3>Avisos (${model.issues.length})</h3><ul class="issues">${model.issues.map(i=>`<li class="sev-${i.severity}"><b>${esc(i.code)}</b> ${esc(i.message)}</li>`).join('')||'<li>—</li>'}</ul>`;
 }
+// The moment card (bottom-left, as in the owner's reference). Short first: week, date, headline, the tasks of this
+// instant with their dates, share of their planned time and assigned amount (sin IVA); details on demand.
+const days=(a,b)=>Math.round((ms(b)-ms(a))/DAY)+1;
+const elemText=t=>t.elements.length?`${t.elements.length} ${t.elements.length===1?'elemento':'elementos'} del modelo`:'sin representación 3D';
+function costHtml(t,report){
+  if(!report)return `<div class="cost c-desconocido"><b>Importes no disponibles</b> · ${esc(ctx.model.costs.message||'sin presupuesto de este proyecto')}</div>`;
+  const cost=P.costView(report.byTask.find(x=>x.taskId===t.id),report);
+  return `<div class="cost c-${cost.status}"><b>${esc(cost.label)}</b> · asignado sin IVA ${esc(cost.totalText)}${cost.status==='parcial'?' · conocido '+esc(cost.knownText):''}</div>`;
+}
 function renderCard(date){
-  const m=ctx.model;
+  const m=ctx.model,x=$('cardExtra');
   if(!ctx.schedule){$('cardWeek').textContent='SIN PLAN';$('cardDate').textContent='';$('cardHeadline').textContent=m.planning.status==='rejected'?m.planning.message:'PLANIFICACIÓN NO DISPONIBLE O PENDIENTE';
-    $('cardEvidence').textContent='Se muestra el modelo del proyecto, sin fechas inventadas';$('cardTasks').innerHTML='';$('cardStage').textContent='SOLO MODELO';$('cardStage').dataset.stage='none';return null;}
+    $('cardEvidence').textContent='Se muestra el modelo del proyecto, sin fechas inventadas';$('cardTasks').innerHTML='';$('cardStage').textContent='SOLO MODELO';$('cardStage').dataset.stage='none';
+    x.innerHTML=m.planning.status==='rejected'?'':'<p class="note">Añade la planificación de este proyecto para ver su evolución día a día.</p>';return null;}
   const report=m.costs.report;
-  const c=report?P.taskCard(ctx.schedule,report,date):{week:P.weekOf(ctx.schedule,date),dateText:P.dateLabel(date),evidenceText:'Plan · animacion ilustrativa',headline:'',active:[],stage:'en-obra'};
+  const c=report?P.taskCard(ctx.schedule,report,date):{week:P.weekOf(ctx.schedule,date),dateText:P.dateLabel(date),evidenceText:'Plan · animación ilustrativa',headline:'',active:[],stage:'en-obra'};
   const st=S.stateAt(ctx.schedule,date),active=st.tasks.filter(t=>t.plannedPhase==='in-progress');
-  $('cardWeek').textContent=c.week.label;$('cardDate').textContent=c.dateText.toUpperCase();$('cardEvidence').textContent=c.evidenceText;
+  $('cardWeek').textContent=c.week.label;$('cardWeek').classList.toggle('long',c.week.label.length>14);$('cardDate').textContent=c.dateText.toUpperCase();$('cardEvidence').textContent=c.evidenceText;
   const done=st.tasks.every(t=>t.plannedPhase==='completed'),started=st.tasks.some(t=>t.plannedPhase!=='not-started');
-  $('cardHeadline').textContent=done?'Plan completado: todas las tareas planificadas terminadas':active.length?active.map(t=>t.title.replace(/^FIXTURE /,'')).join(' · '):'Antes del plan';
-  $('cardStage').textContent=done?'FINAL · PLAN COMPLETADO':started?'EN OBRA (SEGUN PLAN)':'INICIO · ESTADO PREVIO';$('cardStage').dataset.stage=done?'final':started?'en-obra':'inicio';
-  $('cardTasks').innerHTML=active.map(t=>{const cost=report?P.costView(report.byTask.find(x=>x.taskId===t.id),report):null;
-    const elems=t.elements.length?`${t.elements.length} elemento(s) del proyecto`:'sin representación en el modelo RUBIK';
-    return `<li><div class="t"><span class="wbs">${esc(t.wbs)}</span> ${esc(t.title.replace(/^FIXTURE /,''))} <span class="pp">${Math.round(t.visualProgress*100)} % plan</span></div>
-      <div class="d">${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${elems}</div>
-      ${cost?`<div class="cost c-${cost.status}"><b>${esc(cost.label)}</b> · asignado sin IVA ${esc(cost.totalText)}${cost.status==='parcial'?' · conocido '+esc(cost.knownText):''}</div>${cost.notes.length?`<div class="notes">${cost.notes.map(esc).join(' · ')}</div>`:''}`
-        :`<div class="cost c-desconocido"><b>Costes no disponibles</b> · ${esc(m.costs.message||m.costs.reason||'sin presupuesto')}</div>`}</li>`;}).join('')||(done?`<li class="none"><div class="notes">Fin del plan, no certificado de fin de obra</div></li>`:'');
+  const idle=started&&!done&&!active.length;
+  $('cardHeadline').textContent=done?'Plan completado: todas las tareas planificadas terminadas':active.length?active.map(t=>t.title.replace(/^FIXTURE /,'')).join(' · '):idle?'No hay trabajos programados durante este periodo':'Antes del plan';
+  $('cardStage').textContent=done?'FINAL · PLAN COMPLETADO':started?'EN OBRA (SEGÚN PLAN)':'INICIO · ESTADO PREVIO';$('cardStage').dataset.stage=done?'final':started?'en-obra':'inicio';
+  // The selected task (from the Gantt) is always shown, first, even outside its dates.
+  const sel=selected?st.tasks.find(t=>t.id===selected):null,shown=[...(sel?[sel]:[]),...active.filter(t=>t.id!==selected)];
+  const phaseText=t=>t.plannedPhase==='in-progress'?`${Math.round(t.visualProgress*100)} % del plazo`:t.plannedPhase==='completed'?'terminada según plan':'pendiente';
+  $('cardTasks').innerHTML=shown.map(t=>`<li${t.id===selected?' class="sel"':''}><div class="t"><span class="wbs">${esc(t.wbs)}</span> ${esc(t.title.replace(/^FIXTURE /,''))} <span class="pp">${esc(phaseText(t))}</span></div>
+      <div class="d">${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${days(t.startDate,t.endDate)} días · ${esc(elemText(t))}</div>
+      ${costHtml(t,report)}</li>`).join('')||(done?`<li class="none"><div class="notes">Fin del plan, no certificado de fin de obra</div></li>`:'');
+  // Second level: simultaneity, what the amounts are, next activity, task and item details, back to the overview.
+  const extra=[];
+  if(active.length>1)extra.push(`<p class="note">Hay ${active.length} trabajos previstos a la vez.</p>`);
+  if(idle){const next=ctx.canon.tasks.filter(t=>t.startDate>date).sort((a,b)=>a.startDate.localeCompare(b.startDate))[0];
+    if(next)extra.push(`<button type="button" class="btn" data-card="next" data-date="${esc(next.startDate)}">Ir a la siguiente actividad: ${esc(next.title.replace(/^FIXTURE /,''))}</button>`);}
+  if(report&&shown.length){const cov=m.coverage.budget;
+    extra.push(`<p class="note">Importes sin IVA de las partidas vinculadas a cada trabajo: no son el coste total de la obra${cov&&(cov.unassignedItemIds.length||cov.pendingAllocations.length||cov.unknownItemIds.length)?'; hay partidas sin asignar o sin precio':''}.</p>`);
+    extra.push(`<details class="cdet"><summary>Ver tareas y partidas</summary>${shown.map(t=>{const tc=report.byTask.find(b=>b.taskId===t.id);const deps=(ctx.canon.tasks.find(z=>z.id===t.id)?.dependsOn||[]);
+      return `<div class="cdet-t"><b>${esc(t.wbs)} ${esc(t.title.replace(/^FIXTURE /,''))}</b>${deps.length?`<p>Depende de: ${esc(deps.map(d=>(typeof d==='string'?d:d.taskId)+(d.type&&d.type!=='FS'?` (${d.type}${d.lagDays?'+'+d.lagDays+' d':''})`:'')).join(', '))}</p>`:''}
+        ${tc&&tc.lines.length?`<ul>${tc.lines.map(l=>`<li>${esc(l.description||l.itemId)} · ${l.sharePercent} % · ${l.allocatedNet===null?'importe desconocido':P.euro(l.allocatedNet)+' sin IVA'}${l.reviewStatus==='reviewed'?'':' · precio sin revisar'}${l.quantityStatus==='estimated'?' · cantidad estimada':''}</li>`).join('')}</ul>`:'<p>Sin partidas asignadas.</p>'}</div>`;}).join('')}</details>`);}
+  if(report&&report.projectRevision.check!=='match')extra.push('<p class="note">El presupuesto no indica sobre qué revisión del proyecto se hizo.</p>');
+  if(selected)extra.push('<button type="button" class="btn" data-card="clear">Volver a la vista general</button>');
+  x.innerHTML=extra.join('');
   return c;
 }
+// Selection from the Gantt: go to the middle of the task, show it first in the card and outline its elements.
+let selected=null;
+function applyHighlight(){
+  if(!ctx)return 0;const t=selected?ctx.canon?.tasks.find(z=>z.id===selected):null;
+  const present=new Set(api.last?.presentElements||[]);
+  return scene.highlight(t?t.elements.map(e=>e.elementId).filter(k=>present.has(k)):[]);
+}
+function selectTask(id){
+  if(!ctx?.schedule)return null;const t=ctx.canon.tasks.find(z=>z.id===id);if(!t)return null;
+  selected=id;pause();ctx.gantt.select(id);
+  const mid=Math.round((ms(t.startDate)+ms(t.endDate))/2/DAY)*DAY;lastDay=-1;setPos(Math.round((mid-ms(ctx.timeline.preStartDate))/DAY));
+  window.dispatchEvent(new CustomEvent('ft3d8-task',{detail:{taskId:id}}));
+  return {...api.last,selected:id,highlighted:applyHighlight()};
+}
+function clearSelection(){selected=null;ctx?.gantt?.select(null);scene.highlight([]);lastDay=-1;if(ctx)setPos(pos);window.dispatchEvent(new CustomEvent('ft3d8-task',{detail:{taskId:null}}));}
+$('cardExtra').addEventListener('click',e=>{const b=e.target.closest('[data-card]');if(!b)return;
+  if(b.dataset.card==='clear')clearSelection();else if(b.dataset.card==='next'){pause();setPos(Math.round((ms(b.dataset.date)-ms(ctx.timeline.preStartDate))/DAY));}});
 function setPos(p){
   if(!ctx)return;const tl=ctx.timeline;
   if(!tl){scene.setState(stateFor(ctx.model,null,null,0));$('dateReadout').textContent='';
@@ -88,21 +129,22 @@ function setPos(p){
     api.last={date,stage:fr.stage,activeTaskIds:fr.activeTaskIds,ganttCursorDate:document.querySelector('#gantt [data-role=cursor]').dataset.date,
       presentElements:fr.elements.filter(e=>e.present).map(e=>e.elementId),modes:Object.fromEntries([...states].map(([k,s])=>[k,s.mode]))};
     // One evaluation per day, shared: the shell (intro, notes, selection) listens instead of recomputing the plan.
+    applyHighlight();
     window.dispatchEvent(new CustomEvent('ft3d8-moment',{detail:api.last}));}
 }
 // model/dossier: when a construction dossier (S1) was evaluated, its model is reused as is (one evaluation, one source).
 async function show(input,meta,preModel=null,dossier=null){
-  pause();lastDay=-1;
+  pause();lastDay=-1;selected=null;scene.highlight([]);
   const model=preModel||await A.evaluate(input);
   const schedule=model.planning.status==='available'?input.schedule:null,timeline=schedule?V.timeline(schedule):null;
-  ctx={input,model,schedule,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
+  ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
   const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;scene.setPose(scene.presentationPose(model.inventory,'iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
   const controls=document.querySelector('.transport');controls.dataset.disabled=String(!timeline);
   if(timeline){$('scrub').max=String(timeline.positions-1);
-    ctx.gantt=createGanttView($('gantt'),{schedule,report:model.costs.report,timeline,S,G,P,onPick:p=>{pause();setPos(p);}});
+    ctx.gantt=createGanttView($('gantt'),{schedule,report:model.costs.report,timeline,S,G,P,onPick:p=>{pause();setPos(p);},onSelect:id=>selectTask(id)});
     $('weekSel').innerHTML=`<option value="0">Antes del plan</option>`+P.weeks(schedule).map(w=>`<option value="${Math.round((ms(w.startDate)-ms(timeline.preStartDate))/DAY)}">SEM ${String(w.n).padStart(2,'0')} · ${P.dateLabel(w.startDate)}</option>`).join('')+`<option value="${timeline.positions-1}">FIN · plan completado</option>`;
   }else{$('gantt').innerHTML=model.planning.status==='rejected'
       ?`<p class="noplan" id="planRejected">${esc(model.planning.message)}. El modelo se muestra estático; carga un plan de ${esc(model.subject.id)} para reproducir su evolución.</p>`
@@ -138,7 +180,7 @@ function pause(){playing=false;$('play').textContent='▶';}
 function loop(t){if(!playing)return;const dt=Math.min(.1,(t-lastT)/1000);lastT=t;setPos(pos+dt*4*speed);if(pos>=ctx.timeline.positions-1){pause();return;}requestAnimationFrame(loop);}
 // Steps from the day on screen, so «‹» always goes back even when paused mid-tween.
 const step=d=>{pause();setPos(Math.floor(pos+1e-9)+d);};
-Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadCase,importText,loadPart,show,get ctx(){return ctx;},get scene(){return scene;},play,pause,setPos:p=>{pause();setPos(p);return api.last;},
+Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadCase,importText,loadPart,show,selectTask,clearSelection,get selected(){return selected;},get ctx(){return ctx;},get scene(){return scene;},play,pause,setPos:p=>{pause();setPos(p);return api.last;},
   setDate:d=>{pause();setPos(Math.round((ms(d)-ms(ctx.timeline.preStartDate))/DAY));return api.last;},
   end:()=>{pause();setPos(ctx.timeline.positions-1);return api.last;},get playing(){return playing;},get pos(){return pos;},get timeline(){return ctx?.timeline;},
   setPose:p=>scene.setPose(p),get pose(){return scene.pose;},inspect:()=>scene.inspect(),setRoof:v=>{scene.setRoofVisible(v);setPos(pos);$('roofToggle').checked=!!v;},
