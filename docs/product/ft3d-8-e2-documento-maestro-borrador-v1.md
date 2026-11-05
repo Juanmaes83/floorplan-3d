@@ -75,11 +75,13 @@ BIM completo, levantamiento topográfico certificado, movimientos de tierras o m
 | `master` | `0f9c6ead9732901681498efec326d1ca92e42ffe` |
 | Rama Gate D | `feat/ft3d-8-ux4d-gate-d-2026-11-05` |
 | HEAD Gate D | `b12b9252fe1df5adb06cea5b17cde48642a893b2` (GD-UX-01) |
-| CI HEAD Gate D | ejecución `42118973111` de `b12b925`: pruebas puras verdes; suite de navegador sin conclusión final en comprobación del 05/11/2026. **Verificar antes de marcar CI verde**. La `42109440298` verde era del SHA anterior `0fe6453`. |
+| CI HEAD Gate D | ejecución `42118973111` de `b12b925`: pruebas puras verdes; suite de navegador **completada en verde**; conclusión GitHub Actions `success` comprobada para `42118973111` y el SHA exacto `b12b925`. La `42109440298` verde era del SHA anterior `0fe6453`. |
 | PR Entregas | [#166](https://github.com/Juanmaes83/floorplan-3d/pull/166), `draft`, abierta, HEAD `cef06ff` |
 | Roadmaps originales | rama `docs/rubik-evolution-preparation-2026-11-04`; el HEAD antiguo `747569e` ya no está vigente; nueva adenda E2/E3 mantiene el historial |
 
 Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía futura. Tras nuevo trabajo, la autoridad será el SHA de la nueva rama y su evidencia.
+
+**Verificación posterior del 05/11/2026:** ejecución GitHub Actions [`42118973111`](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42118973111), SHA exacto `b12b9252fe1df5adb06cea5b17cde48642a893b2`, estado `completed/success`. Con la aprobación visual expresa del propietario, **Gate D queda cerrado para el alcance UX/4D de esta rama**. No equivale a integrar FT3D-8 en master, autorizar Production, resolver OPEN-02 ni aprobar S2–S4.
 
 ### 3.2 Autoridades a reutilizar
 
@@ -96,7 +98,7 @@ Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía fu
 | Plan y dependencias | `js/construction-schedule-core.js`, `js/construction-gantt-adapter.js` | Motor y Gantt; faltan edición/persistencia profesional en Presupuestar |
 | Dossier y correspondencia | `js/construction-dossier-core.js` | Paquete `construction-dossier` 0.1.0; evaluación de documentos y huellas |
 | Elementos/tiempo | `js/construction-project-adapter.js`, `js/construction-visual-state.js` | Reglas visuales implementadas; evitar mallas paralelas permanentes |
-| UX/4D de Gate D | `js/construction-lab-presenter.js`, `labs/ft3d-8/ux-shell.js`, `labs/ft3d-8/ux.css` | Implementado en `b12b925`; GD-UX-01 aprobada visualmente; CI final por verificar y limitaciones MP4 documentadas por separado |
+| UX/4D de Gate D | `js/construction-lab-presenter.js`, `labs/ft3d-8/ux-shell.js`, `labs/ft3d-8/ux.css` | Implementado en `b12b925`; GD-UX-01 aprobada visualmente; CI final `42118973111` verificada verde; limitaciones MP4 documentadas por separado |
 | Vídeo y cliente local | `js/construction-delivery-core.js`, `js/construction-mp4-muxer.js`, `labs/ft3d-8/delivery-ui.js` | MP4/HTML/manifiesto; publicación real no comprobada |
 | Marca | `js/brand-core.js`, `js/brand-ui.js` | Reutilizar snapshot activo; no recrear gestor |
 | Enlaces y vista compartida | `api/share.js`, `api/view.js`, PR #166 | Validaciones en mock; necesita política de acceso y prueba remota autorizada |
@@ -105,7 +107,7 @@ Los datos de rama, CI y PR son una **fotografía temporal**, no una garantía fu
 
 ### 3.3 S1 y Gate D: no rehacer
 
-S1 aporta identidades, paquetes, correspondencia `match/mismatch/obsolete/absent/unverifiable`, invalidaciones, tres coberturas y pruebas negativas. Gate D aporta UX, tarjeta dinámica, Gantt/escena y vídeo contextual. **Mantener** los tests de fidelidad, expediente, 4D, entrega y vídeo. **GD-UX-01:** corregida en `b12b925` con prueba local de encaje y evidencias en `docs/product/ft3d-8-gd-ux-01/`. **El propietario aprobó visualmente la nueva Preview el 05/11/2026.** Falta verificar la CI completa `42118973111`; la aprobación visual no equivale por sí sola al cierre técnico. La grúa en el MP4 y la cubierta derivada siguen siendo limitaciones independientes. Ninguna aprobación de Gate D implica integración S4.
+S1 aporta identidades, paquetes, correspondencia `match/mismatch/obsolete/absent/unverifiable`, invalidaciones, tres coberturas y pruebas negativas. Gate D aporta UX, tarjeta dinámica, Gantt/escena y vídeo contextual. **Mantener** los tests de fidelidad, expediente, 4D, entrega y vídeo. **GD-UX-01:** corregida en `b12b925` con prueba local de encaje y evidencias en `docs/product/ft3d-8-gd-ux-01/`. **El propietario aprobó visualmente la nueva Preview el 05/11/2026.** La CI completa `42118973111` terminó con `success` y coincide con el SHA `b12b925`; el propietario aprobó visualmente la Preview. El **Gate D queda cerrado técnica y visualmente para este alcance**; no implica merge ni integración S4. La grúa en el MP4 y la cubierta derivada siguen siendo limitaciones independientes. Ninguna aprobación de Gate D implica integración S4.
 
 
 ### 3.4 Matriz de autoridad, versión, SHA y prueba (auditoría 05/11/2026)
@@ -481,7 +483,7 @@ SHA/branch, alcance implementado y no implementado, lista de archivos, contratos
 
 | ID | Responsable | Situación | Acción antes del cierre |
 |---|---|---|---|
-| OPEN-01 | Claude Code Gate D + propietario | **CERRADO VISUALMENTE**: GD-UX-01 corregida y aprobada en Preview `b12b925` el 05/11/2026 | Confirmar CI completa `42118973111` y registrar resultado; no reabrir diseño sin defecto nuevo |
+| OPEN-01 | Claude Code Gate D + propietario | **CERRADO VISUALMENTE**: GD-UX-01 corregida y aprobada en Preview `b12b925` el 05/11/2026 | CI completa `42118973111` verificada `success`; GD-UX-01 cerrada técnico/visualmente para `b12b925`. Mantener OPEN-02 como límite independiente. |
 | OPEN-02 | Responsable Gate D | Grúa parcialmente fuera de encuadre en MP4 de prueba | Revisar y registrar resolución o limitación aceptada |
 | OPEN-03 | Propietario | Opción 3 presupuesto global edificio sin aprobación formal de contrato | Aprobar diseño y migración o registrar alcance alternativo E2 |
 | OPEN-04 | Propietario / economía | `subject.revision` opcional propuesto | Aprobar o conservar `unverifiable` con límites explícitos |
