@@ -21,8 +21,11 @@ function watch(page){const errors=[],external=[];page.on('pageerror',e=>errors.p
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))external.push(u);});return {errors,external};}
 // The 3D loop is paused while an element is captured (SwiftShader keeps the page busy otherwise).
+// A full-page capture clipped to the element: no «element is stable» wait, which a busy CI runner can starve.
 async function shot(page,selector,name){if(!shots)return;await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(true));
-  try{await page.locator(selector).screenshot({path:path.join(shots,name),timeout:60000});}finally{await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(false));}}
+  try{const box=await page.evaluate(sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height};},selector);
+    await page.screenshot({path:path.join(shots,name),fullPage:true,clip:{x:Math.max(0,box.x),y:Math.max(0,box.y),width:Math.ceil(box.width),height:Math.ceil(box.height)},timeout:60000});}
+  finally{await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(false));}}
 async function pageShot(page,name){if(!shots)return;await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(true));
   try{await page.screenshot({path:path.join(shots,name),timeout:60000});}finally{await page.evaluate(()=>window.__ft3dFidelity.scene.setSuspended(false));}}
 const ready=page=>page.waitForFunction(()=>/^dos_/.test(document.body.dataset.dossier||'')&&window.__ft3dDossier?.evaluation&&window.__ft3dDelivery,null,{timeout:60000});
