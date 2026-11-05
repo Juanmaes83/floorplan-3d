@@ -19,17 +19,24 @@ test('fixtures are explicitly labelled FIXTURE and are valid schedules',()=>{
     assert.ok(Schedule.validate(schedule));
   }
 });
-test('timeline: inicio is an empty site the day before work, final is the last planned day',()=>{
+test('timeline: inicio is an empty site the day before work, final is the day after the last task',()=>{
   const {schedule}=F.simpleHouse(),t=Visual.timeline(schedule);
   assert.equal(t.preStartDate,'2026-11-30');
   assert.equal(t.endDate,'2027-02-26');
+  assert.equal(t.completionDate,'2027-02-27');
   assert.equal(Visual.progressToDate(schedule,0),'2026-11-30');
-  assert.equal(Visual.progressToDate(schedule,1),'2027-02-26');
+  assert.equal(Visual.progressToDate(schedule,1),'2027-02-27');
   assert.equal(Visual.progressToDate(schedule,-3),'2026-11-30');
-  assert.equal(Visual.progressToDate(schedule,9),'2027-02-26');
+  assert.equal(Visual.progressToDate(schedule,9),'2027-02-27');
   const start=Visual.frameAt(schedule,'2026-11-30');
   assert.ok(start.elements.every(e=>!e.present));
-  const end=Visual.frameAt(schedule,'2027-02-26');
+  assert.equal(start.stage,'inicio');
+  // On the last planned day the last task is still running: not yet an unequivocal end state.
+  assert.equal(Visual.frameAt(schedule,'2027-02-26').stage,'en-obra');
+  const end=Visual.frameAt(schedule,t.completionDate);
+  assert.equal(end.stage,'final');assert.equal(end.planComplete,true);
+  assert.deepEqual(end.activeTaskIds,[]);
+  assert.ok(end.elements.every(e=>e.state==='standing'||e.state==='removed'||e.state==='absent'));
   assert.equal(el(end,'crane').present,false);
   assert.ok(['wall-n','roof','floor-slab','foundation'].every(id=>el(end,id).present));
   assert.deepEqual(el(end,'wall-n').appliedLayers.map(l=>l.role),['cladding','finish']);
@@ -110,7 +117,16 @@ test('Gantt tasks: user dates, execution progress 0, costs only from the C1-C4 r
   assert.equal(floors.start,'2027-02-08');assert.equal(floors.end,'2027-02-15');
   assert.equal(floors.progress,0);
   assert.equal(floors.custom_class,'ft3d-plan-approved');
-  assert.equal(floors.dependencies,'cladding');
+  // floors depends on cladding through FF+3: it must NOT become a Frappe finish-to-start arrow.
+  assert.equal(floors.dependencies,'');
+  assert.deepEqual(floors._ft3d.nonFsDependencies,[{taskId:'cladding',type:'FF',lagDays:3}]);
+  const services=rows.find(r=>r.id==='services');
+  assert.equal(services.dependencies,'');
+  assert.deepEqual(services._ft3d.nonFsDependencies,[{taskId:'structure',type:'SS',lagDays:15}]);
+  const structure=rows.find(r=>r.id==='structure');
+  assert.equal(structure.dependencies,'foundations');
+  assert.deepEqual(structure._ft3d.fsLags,[{taskId:'foundations',type:'FS',lagDays:2}]);
+  assert.equal(floors._ft3d.cost.projectRevisionCheck,'unverifiable');
   assert.equal(floors._ft3d.cost.totalNet,report.byTask.find(t=>t.taskId==='floors').totalNet);
   assert.equal(rows.find(r=>r.id==='finishes').dependencies,'services, floors');
   assert.equal(Gantt.toGanttTasks(schedule)[0]._ft3d.cost,null);

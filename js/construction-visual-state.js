@@ -33,16 +33,18 @@
   const iso=ms=>new Date(ms).toISOString().slice(0,10);
 
   /* Timeline: day-quantized cursor shared by the future Gantt and 3D view.
-     Position 0 is the day BEFORE the first task (empty site = "inicio"); the last position is the
-     last planned day ("final"). Every position is a whole calendar day, so scrubbing is stable. */
+     Position 0 is the day BEFORE the first task (empty site = "inicio"); the last position is
+     completionDate, the day AFTER the last planned day, where every task is completed and every
+     temporary/demolished element is gone ("final"). completionDate is a display position only: no
+     task date changes. Every position is a whole calendar day, so scrubbing is stable. */
   const timeline=schedule=>{
     const s=Schedule.canonical(schedule),b=Schedule.bounds(s);
-    if(b.startDate===null)return {startDate:null,endDate:null,preStartDate:null,positions:0,checkpoints:[]};
+    if(b.startDate===null)return {startDate:null,endDate:null,preStartDate:null,completionDate:null,positions:0,checkpoints:[]};
     const start=dayMs(b.startDate,'startDate'),end=dayMs(b.endDate,'endDate');
-    const set=new Set([iso(start-DAY),b.endDate]);
+    const set=new Set([iso(start-DAY),b.endDate,iso(end+DAY)]);
     for(const t of s.tasks){set.add(t.startDate);set.add(t.endDate);const after=dayMs(t.endDate,'endDate')+DAY;if(after<=end)set.add(iso(after));}
-    return {startDate:b.startDate,endDate:b.endDate,preStartDate:iso(start-DAY),
-      positions:Math.round((end-start)/DAY)+2,checkpoints:[...set].sort()};
+    return {startDate:b.startDate,endDate:b.endDate,preStartDate:iso(start-DAY),completionDate:iso(end+DAY),
+      positions:Math.round((end-start)/DAY)+3,checkpoints:[...set].sort()};
   };
   const progressToDate=(schedule,p)=>{
     if(typeof p!=='number'||!Number.isFinite(p))err('progress must be a finite number');
@@ -86,8 +88,12 @@
         appliedLayers:layer.filter(l=>l.progress>0).map(l=>({role:l.role,taskId:l.taskId,progress:l.progress})),
         layers:layers.map(({startDate,endDate,...l})=>l)};
     });
+    const started=st.tasks.some(t=>t.plannedPhase!=='not-started');
+    const planComplete=st.tasks.length>0&&st.tasks.every(t=>t.plannedPhase==='completed');
     return {schema:SCHEMA,schemaVersion:VERSION,date:st.date,scheduleId:st.scheduleId,projectRef:st.projectRef,
       evidence:st.evidence,illustrative:true,
+      // stage is about the PLAN: 'final' = every planned task completed, never "obra entregada".
+      stage:planComplete?'final':started?'en-obra':'inicio',planComplete,
       activeTaskIds:st.tasks.filter(t=>t.plannedPhase==='in-progress').map(t=>t.id),
       completedTaskIds:st.tasks.filter(t=>t.plannedPhase==='completed').map(t=>t.id),
       elements,disclaimer:'Estado visual planificado e ilustrativo; no certifica ejecucion ni pago'};
