@@ -62,7 +62,7 @@
  // the façade candidates of the home or building (FloorPlanPresentationElevation.derive), computed when the dialog
  // opens; elevationCandidateId: the façade chosen in its selector (the automatic one by default); the solar snapshot is
  // taken once when the presentation starts and only when the person chose it.
- let elevationChosen=false,elevationEnabled=false,elevationDescriptor=null,elevationCandidateId=null,elevationSolarChosen=false,elevationSolar=null;
+ let elevationHybridChosen=false,elevationChosen=false,elevationEnabled=false,elevationDescriptor=null,elevationCandidateId=null,elevationSolarChosen=false,elevationSolar=null;
  // FT3D-5 «Lectura del edificio»: axonMode 'off' | 'compact' | 'exploded', chosen per presentation, 'off' by default,
  // never saved. axonDescriptor: FloorPlanPresentationAxon.derive over every structural level of the building (or the
  // project), computed once when the dialog opens; the 3D view receives it and never derives it again.
@@ -546,7 +546,7 @@
  // FT3D-4: the option, enabled only when the model gives at least one façade with a demonstrable outside; when it does
  // not, the concrete reason. Its selector and the solar choice appear only while the option is on.
  function elevationOption(parent,levels){
-  elevationChosen=false;elevationDescriptor=null;elevationCandidateId=null;elevationSolarChosen=false;
+  elevationChosen=false;elevationDescriptor=null;elevationCandidateId=null;elevationSolarChosen=false;elevationHybridChosen=false;
   const E=window.FloorPlanPresentationElevation;if(!E||!window.FloorPlanPresentationStory)return;
   const site=app.levelContext?building()?.site:app.project.site;
   elevationDescriptor=E.derive({levels:levels.map(l=>({levelId:l.levelId??null,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm||{x:0,y:0},elevationMm:l.elevationMm||0})),northOffsetDeg:site?.northOffsetDeg});
@@ -571,6 +571,13 @@
    :tx('No disponible: configura el norte, la ubicación y la hora en «Orientación y solar». La fachada no lo necesita.','Unavailable: set north, location and time in «Orientation and solar». The façade does not need it.','不可用：请在“朝向与日照”中设置北向、位置和时间。立面不依赖它。'),details,'presentation-story-hint');
   solarHint.id='presentationElevationSolarHint';solar.setAttribute('aria-describedby',solarHint.id);
   solar.onchange=()=>{elevationSolarChosen=solar.checked&&solarOk;};
+  // Hybrid Registered Elevation V1 (opt-in, session only): the same façade read technically, then materialised.
+  const hybridOk=!!window.FloorPlanElevationHybrid;
+  const hybridLabel=el('label',undefined,details);const hybrid=el('input',undefined,hybridLabel);hybrid.type='checkbox';hybrid.id='presentationElevationHybrid';hybrid.checked=false;hybrid.disabled=!hybridOk;
+  el('span',tx('Elevación híbrida','Hybrid elevation','混合立面'),hybridLabel);
+  const hybridHint=el('p',tx('Opcional: la misma fachada se lee primero como lectura técnica (rayado según la luz y la sombra reales de la escena) y se materializa de un extremo a otro con sus materiales. Representación de presentación · sin cotas ni escala.','Optional: the same façade is first read technically (hatching that follows the scene\'s real light and shadow) and then materialised from one end to the other with its materials. Presentation representation · no dimensions or scale.','可选：同一立面先以技术图解读（排线随场景真实光影变化），再从一端到另一端以其材质呈现。展示性表达 · 无尺寸与比例。'),details,'presentation-story-hint');
+  hybridHint.id='presentationElevationHybridHint';hybrid.setAttribute('aria-describedby',hybridHint.id);
+  hybrid.onchange=()=>{elevationHybridChosen=hybrid.checked&&hybridOk;};
   input.onchange=()=>{elevationChosen=input.checked;details.hidden=!input.checked;};
  }
  const elevationCandidate=()=>elevationDescriptor?.candidates.find(c=>c.id===(frozenTemplate?frozenTemplate.facade:elevationCandidateId))||elevationDescriptor?.candidates.find(c=>c.id===elevationDescriptor.defaultId)||null;
@@ -636,7 +643,7 @@
  const axonView=kind=>({descriptor:axonDescriptor,variant:kind==='exploded-levels-open'?'vertical-levels':'compact-building',activeLevelId:activeLevelId()??null});
  // The project of a level shown in the presentation (the minimap draws the chosen façade walls of that level).
  function levelProject(levelId){if(!isBuildingPlan())return app.project;return building()?.presentationSources()?.levels.find(l=>l.levelId===levelId)?.project||null;}
- const elevationView=()=>({candidate:elevationCandidate(),envelope:elevationDescriptor.envelope,solar:elevationSolar?.result||null});
+ const elevationView=()=>({candidate:elevationCandidate(),envelope:elevationDescriptor.envelope,solar:elevationSolar?.result||null,hybrid:elevationHybridChosen});
  // ── FT3D-2 story player ──────────────────────────────────────────────────────────────────────────────────────────
  // One player for every narrative: a story is a list of scenes (narratives of FloorPlanPresentationStory) played as a
  // single progress P (FloorPlanPresentationStory.sequence). The chapter of 1a («Empezar desde el plano») and the descent
@@ -697,7 +704,8 @@
  // Reduced motion lands on the open section (its held state) instead of its untouched start (FT3D-3 §10).
  const sectionHold=()=>FloorPlanPresentationStory.SECTION_OPEN.reducedHold;
  // FT3D-4: reduced motion shows the façade in discrete states: frontal, then exterior perspective, then the overview.
- const elevationHolds=()=>{const o=FloorPlanPresentationStory.ELEVATION_OPEN;return [o.reducedFront,o.reducedPersp];};
+ // Hybrid: a third stable state (frontal, fully material) between the technical and the exterior holds.
+ const elevationHolds=()=>{const o=FloorPlanPresentationStory.ELEVATION_OPEN,h=window.View3D?.presentationStoryInfo?.elevation?.hybrid;return (h?h.supported:elevationHybridChosen)?[o.reducedFront,o.reducedMaterial,o.reducedPersp]:[o.reducedFront,o.reducedPersp];};
  // FT3D-5: axon holds on the compact reading; the breakdown on the compact reading, then on the separated levels.
  const axonHolds=kind=>{const S=FloorPlanPresentationStory;return kind==='axon-open'?[S.AXON_OPEN.reducedHold]:[S.EXPLODED_LEVELS_OPEN.reducedCompact,S.EXPLODED_LEVELS_OPEN.reducedExploded];};
  // Hybrid V2: reduced motion steps the living drawing room by room (each room complete), never one jump to the end.
@@ -781,9 +789,9 @@
   else if(sc.kind==='elevation-open'){const info=View3D.presentationStoryInfo,phase=p<=0||p>=1?'overview':info?.phase,c=elevationCandidate();
    const base=tx('Fachada visual · derivada del modelo · no es alzado de ejecución','Visual façade · derived from the model · not a construction elevation','可视立面 · 源自模型 · 非施工立面图');
    const name=c?(c.cardinal?tx(`${c.label} · orientación derivada del proyecto`,`${c.label.replace('Fachada','Façade')} · orientation derived from the project`,`${c.label} · 朝向源自项目`):tx(c.label,c.label.replace('Fachada','Façade'),c.label)):'';
-   const solarOn=!!info?.solar&&!!elevationSolar;
-   const text=phase==='align'?tx('Nos alineamos con la fachada','Facing the façade','对准立面'):phase==='front'?tx('Fachada frontal','Frontal façade','正立面'):phase==='light'?(solarOn?tx('Luz solar orientativa sobre la fachada','Indicative sunlight on the façade','立面上的日照示意'):tx('Materiales y huecos de la fachada','Façade materials and openings','立面材质与洞口')):phase==='perspective'?tx('Abrimos la perspectiva exterior','Opening the exterior perspective','展开外部透视'):phase==='exterior'?tx('Perspectiva exterior','Exterior perspective','外部透视'):phase==='return'?tx('Volvemos a la vista general','Back to the overview','回到总览'):tx('Vista general 3D','3D overview','3D 总览');
-   caption=`${text} — ${name} — ${base}`+(solarOn?' — '+tx(`Solar orientativo ${elevationSolar.localDate} ${elevationSolar.localTime} · no es estudio de soleamiento, certificación ni verificación normativa.`,`Indicative solar ${elevationSolar.localDate} ${elevationSolar.localTime} · not a sunlight study, certification or regulatory verification.`,`日照示意 ${elevationSolar.localDate} ${elevationSolar.localTime} · 不构成日照研究、认证或法规验证。`):'');
+   const solarOn=!!info?.solar&&!!elevationSolar,hy=info?.elevation?.hybrid,hs=hy?.supported&&p>0&&p<1?hy.state:null;
+   const text=hs&&hs.technicalMix>0&&(phase==='front'||phase==='light')?(hs.materialReveal<=0?tx('Lectura técnica de la fachada · rayado según la luz real','Technical reading of the façade · hatching follows the real light','立面技术解读 · 排线随真实光照'):hs.materialReveal<1?tx('La fachada se materializa · misma geometría','The façade materialises · same geometry','立面材质化 · 同一几何'):solarOn?tx('Luz solar orientativa sobre la fachada','Indicative sunlight on the façade','立面上的日照示意'):tx('Materiales de la fachada','Façade materials','立面材质')):phase==='align'?tx('Nos alineamos con la fachada','Facing the façade','对准立面'):phase==='front'?tx('Fachada frontal','Frontal façade','正立面'):phase==='light'?(solarOn?tx('Luz solar orientativa sobre la fachada','Indicative sunlight on the façade','立面上的日照示意'):tx('Materiales y huecos de la fachada','Façade materials and openings','立面材质与洞口')):phase==='perspective'?tx('Abrimos la perspectiva exterior','Opening the exterior perspective','展开外部透视'):phase==='exterior'?tx('Perspectiva exterior','Exterior perspective','外部透视'):phase==='return'?tx('Volvemos a la vista general','Back to the overview','回到总览'):tx('Vista general 3D','3D overview','3D 总览');
+   caption=`${text} — ${name} — ${base}`+(hy?.supported?' — '+tx('Elevación híbrida','Hybrid elevation','混合立面'):'')+(solarOn?' — '+tx(`Solar orientativo ${elevationSolar.localDate} ${elevationSolar.localTime} · no es estudio de soleamiento, certificación ni verificación normativa.`,`Indicative solar ${elevationSolar.localDate} ${elevationSolar.localTime} · not a sunlight study, certification or regulatory verification.`,`日照示意 ${elevationSolar.localDate} ${elevationSolar.localTime} · 不构成日照研究、认证或法规验证。`):'');
    if(!multi){u.panel.setAttribute('aria-label',tx('Fachada visual','Visual façade','可视立面'));u.slider.setAttribute('aria-label',tx('De la vista general (0) a la fachada y de vuelta (100)','From the overview (0) to the façade and back (100)','从总览 (0) 到立面再返回 (100)'));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
     u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1||(reducedMotion()&&nextHold(story)===null&&p>0)?tx('Continuar presentación','Continue presentation','继续展示'):tx('Ver fachada','See the façade','查看立面');}}
@@ -913,7 +921,7 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'||run.scenes[0].kind==='room-visit'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
+ function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationHybridChosen=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;

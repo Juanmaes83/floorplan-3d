@@ -186,7 +186,14 @@
     input: facade {normal:[x,0,z] world outward unit, tangent:[x,0,z] world clockwise unit, center:[x,y,z] frame centre,
     width, height (m)}; corners: [[x,y,z]…] the building box (world, architecture only); end {position, target, fov}
     (the overview pose); aspect; region; base {near, far}; solar: a solar snapshot will be applied (bool). */
- const ELEVATION_OPEN={alignEnd:.28,frontEnd:.42,lightEnd:.58,perspEnd:.82,holdEnd:.9,frontFovDeg:4,margin:.12,oblique:[1,.35,.18],reducedFront:.35,reducedLight:.5,reducedPersp:.86,playMs:8000};
+ /* Hybrid Registered Elevation (V1, opt-in: input.hybrid): the same façade read first technically, then materialised.
+    Pure plain data, a function of p only (no history): technicalMix rises while the camera aligns (0 → alignEnd), holds
+    through the frontal technical reading (alignEnd → frontEnd), stays while the material is revealed across the façade
+    (materialReveal 0 → 1 over frontEnd → revealEnd, in façade coordinates — the runtime registers it) and fades out once
+    the façade is fully material (lightEnd → perspEnd). p = 0, the exterior hold, the return and p = 1 are neutral: the
+    hybrid representation is off (active = false) and the façade is the normal Rubik rendering. hatchStrength follows
+    technicalMix. Reduced motion holds: reducedFront (technical), reducedMaterial (frontal material), reducedPersp. */
+const ELEVATION_OPEN={alignEnd:.28,frontEnd:.42,lightEnd:.58,perspEnd:.82,holdEnd:.9,frontFovDeg:4,margin:.12,oblique:[1,.35,.18],reducedFront:.35,reducedLight:.5,reducedPersp:.86,playMs:8000,revealEnd:.55,reducedMaterial:.565};
  function elevationOpen(input){
   const o={...ELEVATION_OPEN,...(input.options||{})},end=input.end,fa=input.facade;
   if(!end||![...end.position,...end.target,end.fov].every(Number.isFinite))throw Error('Falta la vista general de destino.');
@@ -224,7 +231,14 @@
   function pose(dir,tan,frame,target){const d=frame/2/tan;return {position:add(target,mul(dir,d)),target,fov:deg(2*Math.atan(tan)),distance:d,frameHeight:frame,...nearFar(d)};}
   // Enhancements as pure functions of p: solar only between the lighting phase and the return; context hidden from the
   // frontal hold until the perspective opens; upper levels rise while aligning and fold back while returning.
-  const extras=p=>({solar:!!input.solar&&p>=o.frontEnd&&p<o.holdEnd,contextVisible:!(p>=o.alignEnd&&p<o.lightEnd),levelScale:p<=0||p>=1?0:p<o.alignEnd?smooth(p/o.alignEnd):p<o.holdEnd?1:1-smooth((p-o.holdEnd)/(1-o.holdEnd))});
+  const extrasBase=p=>({solar:!!input.solar&&p>=o.frontEnd&&p<o.holdEnd,contextVisible:!(p>=o.alignEnd&&p<o.lightEnd),levelScale:p<=0||p>=1?0:p<o.alignEnd?smooth(p/o.alignEnd):p<o.holdEnd?1:1-smooth((p-o.holdEnd)/(1-o.holdEnd))});
+  const hybridOn=!!input.hybrid;
+  function hybridAt(p){
+   const tech=p<=0||p>=o.perspEnd?0:p<o.alignEnd?smooth(p/o.alignEnd):p<o.lightEnd?1:1-span(p,o.lightEnd,o.perspEnd);
+   const reveal=p<=o.frontEnd||p>=1?0:p>=o.revealEnd?1:span(p,o.frontEnd,o.revealEnd);
+   const t=tech<1e-6?0:tech;return {enabled:true,technicalMix:t,materialReveal:reveal,hatchStrength:t,active:t>0&&reveal<1};
+  }
+  const extras=p=>hybridOn?{...extrasBase(p),hybrid:hybridAt(p)}:extrasBase(p);
   const overview=(p,phase)=>({p,phase,position:[...end.position],target:[...end.target],fov:fov1,near:base.near,far:base.far,distance:d1,frameHeight:frame1,...extras(p)});
   function stateAt(raw){
    const p=clamp01(Number(raw)||0);
@@ -244,7 +258,7 @@
    return {p,phase:'return',...st,near:lerp(st.near,base.near,s),far:lerp(st.far,base.far,s),...extras(p)};
   }
   return {kind:'elevation-open',stateAt,checkpoints:[0,.25,.35,.5,.72,.86,1],info:{fovFront:fov0,fovEnd:fov1,distanceFront:d0,distanceEnd:d1,distancePerspective:dP,frameFront:frame0,frameEnd:frame1,width,height,
-   normal:[...n],tangent:[...t],perspectiveDirection:dirP,turnDeg:deg(turnTo(az1,az0)),playMs:o.playMs,reducedFront:o.reducedFront,reducedLight:o.reducedLight,reducedPersp:o.reducedPersp,solar:!!input.solar,options:o}};
+   normal:[...n],tangent:[...t],perspectiveDirection:dirP,turnDeg:deg(turnTo(az1,az0)),playMs:o.playMs,reducedFront:o.reducedFront,reducedLight:o.reducedLight,reducedPersp:o.reducedPersp,solar:!!input.solar,...(hybridOn?{hybrid:true,reducedMaterial:o.reducedMaterial,revealEnd:o.revealEnd}:{}),options:o}};
  }
  /* FT3D-5 — «Vista axonométrica» (axonOpen) and «Despiece por plantas» (explodedLevelsOpen) on the same model with the
     same PerspectiveCamera (no orthographic camera): a spatial reading of the building, never a construction sequence.

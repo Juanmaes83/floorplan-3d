@@ -12,7 +12,10 @@
     "examples/jsm/loaders/RGBELoader.js": "f0e87d0008d9484d31358b32befd1bf80e4301f77573cc9a7cf7d871cc3f64b4",
     "examples/jsm/renderers/CSS2DRenderer.js": "a4f0f79184c043f6b9d2654d8ba051e49a7d631d34e8f437c1804798a68c379f",
     "examples/jsm/loaders/GLTFLoader.js": "d073b438e6a07e1359741dd5d6c76c953420cc0d4fd84eb1bdde94315540e6a3",
+    "examples/jsm/lines/LineSegments2.js": "5009e85ffbd09e86003509f7d1001642cfe7594d42192facdde516fcd4418d24",
     "LICENSE": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d",
-    "examples/jsm/utils/BufferGeometryUtils.js": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb"
+    "examples/jsm/utils/BufferGeometryUtils.js": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb",
+    "examples/jsm/lines/LineSegmentsGeometry.js": "59419cee5eccbaacfab5939871308ee262a63761815f72ff49cbd217fd84fdb7",
+    "examples/jsm/lines/LineMaterial.js": "eed69bd471547ca0d15e0e87722530317d5d514f533585948086515c5f308234"
   }
 }
