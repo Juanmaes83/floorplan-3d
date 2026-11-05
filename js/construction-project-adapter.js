@@ -247,19 +247,21 @@
     });
     // Costs: only the selected C1-C4 budget whose subject is this document.
     let costs={status:'unavailable',reason:'missing',report:null},budgetLines=null;
-    if(inv.kind==='building'&&budget){
+    // C1-C4 already allows subject.type 'building' (no editor component produces one yet): its identity is the building.
+    const buildingBudget=inv.kind==='building'&&budget&&budget.subject?.type==='building'&&budget.subject.id===inv.id;
+    if(inv.kind==='building'&&budget&&!buildingBudget){
       // A level budget is identified as such and is never used as the budget of the whole building.
       const level=inv.levels.find(l=>source.levels.find(x=>x.id===l.levelId)?.project.id===budget.subject?.id);
       costs={status:'unavailable',reason:level?'level-budget-not-building':'budget-other-project',report:null,budgetId:budget.id,levelId:level?.levelId||null,
         message:level?'Presupuesto de la planta '+level.levelId+' ('+budget.subject.id+'): RUBIK no tiene presupuesto de edificio; no se reparte entre las tareas del edificio':'El presupuesto pertenece a '+(budget.subject&&budget.subject.id)};
       issues.push(issue(level?'warning':'error',costs.reason,costs.message));
-    }else if(inv.kind==='building'){
+    }else if(inv.kind==='building'&&!buildingBudget){
       costs={status:'unavailable',reason:'building-budget-not-supported',report:null,levels:(budgets||[]).map(x=>({levelId:x.levelId,budgetId:x.budget.id,subject:{...x.budget.subject}})),
         message:'RUBIK guarda un presupuesto por planta (rubik-budget-v1[projectId]); no existe presupuesto de edificio que repartir entre tareas'};
       issues.push(issue('warning','building-budget-not-supported',costs.message));
     }else if(budget){
       now.budget=await fingerprint(budget);
-      if(!budget.subject||budget.subject.id!==inv.id){issues.push(issue('error','budget-other-project','El presupuesto pertenece a '+(budget.subject&&budget.subject.id)+', no a '+inv.id));
+      if(!budget.subject||budget.subject.id!==inv.id||budget.subject.type!==inv.kind){issues.push(issue('error','budget-other-project','El presupuesto pertenece a '+(budget.subject&&budget.subject.id)+', no a '+inv.id));
         costs={status:'unavailable',reason:'budget-other-project',report:null};}
       else if((budgetLines=Budget.calculateBudget(budget).lines)&&sch){
         try{costs={status:'available',reason:null,report:Schedule.budgetReport(schedule,budget,Budget)};}

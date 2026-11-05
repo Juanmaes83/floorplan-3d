@@ -325,6 +325,16 @@ test('A3: a level budget is identified and never used as the whole building budg
   const other=await A.evaluate({...b,budget:(await F.build('C')).budget});
   assert.equal(other.costs.reason,'budget-other-project');
 });
+test('S1: a C1-C4 budget whose subject is the building itself is accepted by identity (schema allows it)',async()=>{
+  const b=await F.build('B'),whole={...structuredClone(b.budgets[0].budget),id:'bud_fx-building-b',subject:{type:'building',id:b.source.id}};
+  Budget.validateBudget(whole);
+  const m=await A.evaluate({...b,budget:whole});
+  assert.equal(m.costs.status,'available');assert.equal(m.costs.report.budgetId,'bud_fx-building-b');
+  assert.ok(!codes(m).includes('budget-other-project')&&!codes(m).includes('level-budget-not-building'));
+  // The same subject id under another type is another subject: never matched.
+  const a=await F.build('A'),wrongType={...structuredClone(a.budget),subject:{type:'building',id:a.source.id}};
+  assert.equal((await A.evaluate({...a,budget:wrongType})).costs.reason,'budget-other-project');
+});
 test('A6: three coverages are separate; 100 % of loaded items is not 100 % of the works',async()=>{
   const m=await A.evaluate(await F.build('A'));
   assert.equal(m.coverage.budget.allocatedPercentOfKnown,100);
