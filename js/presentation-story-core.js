@@ -404,7 +404,79 @@
   }
   return {kind:'room-visit',stateAt,checkpoints:[0,.25,.5,.75,1],info:{playMs:total,legs:bounds.map(b=>({...b})),approachMs,walkMs,turnMs,above,eye,walkFov,samples:S.length,options:o}};
  }
- const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen,'axon-open':axonOpen,'exploded-levels-open':explodedLevelsOpen,'room-visit':roomVisit};
+ /* «Dibujo vivo» (livingDrawing, Hybrid V2): the home starts as a graphite drawing and comes to life room by room. This
+    narrative owns only time and camera; what is drawn or real at each moment comes from the room timeline of
+    FloorPlanLivingDrawing (protagonists and their moments) through state.t, so the drawing and the camera share one clock.
+    - intro: the overview (drawn) holds, then glides down to the first room;
+    - each room: an elevated three-quarter view across the room towards the NEXT room (which is still drawn, so the
+      depth shows both states), a slow push while the stains land, and before the room is complete (its leaveAt) the
+      camera already travels to the next room's view;
+    - the last room keeps its view until every stain of it has landed (outro).
+    The path is a cubic Hermite in real seconds (C¹: no speed jump at any key). Reduced motion: the camera holds each
+    room's view and cuts between rooms; the stains keep their moments.
+    input: start {position,target,fov} (the overview), rooms [{id, center:[x,z], extent:[w,d], start, duration, leaveAt}]
+    (world metres, seconds on the shared clock), total, intro, aspect, region, fov, reduced, base {near,far}. */
+ const LIVING_DRAWING={introHold:.3,arriveS:.6,heightBase:3.7,heightPerM:.35,heightMin:4.5,heightMax:5.4,outside:1.0,backMin:3.0,lookIn:.25,narrowLift:1.1,push:.5,sway:.3,targetY:0,neighbourGap:1.2,nearBand:1.4,tallH:.9,darkWeight:2.5,nextBonus:.6,transitLift:2.4,transitMin:3,arriveFarS:1.1};
+ function livingDrawing(input){
+  const o={...LIVING_DRAWING,...(input.options||{})},A=input.start,rooms=(input.rooms||[]).filter(r=>r&&Array.isArray(r.center));
+  if(!A||![...A.position,...A.target].every(Number.isFinite))throw Error('Falta la vista general de partida.');
+  if(!rooms.length)throw Error('El dibujo vivo necesita al menos una estancia.');
+  const fov=Number(input.fov)||A.fov||45,aspect=Math.max(.2,Number(input.aspect)||1.6),base={near:input.base?.near??.05,far:input.base?.far??300};
+  const total=Math.max(Number(input.total)||0,...rooms.map(r=>r.start+r.duration)),intro=Math.max(0,Number(input.intro)||0);
+  // free region of the screen (the presentation card covers the rest): the room is framed in its middle
+  const reg=Array.isArray(input.region)&&input.region.length===4?input.region:[0,0,1,1],tV=Math.tan(fov*Math.PI/360),tH=tV*aspect;
+  // (signs checked by projecting the aim with a real camera: the room lands in the middle of the free region, never under the card)
+  const yawOff=Math.atan(((reg[0]+reg[2])-1)*tH),pitchOff=-Math.atan((1-(reg[1]+reg[3]))*tV);
+  const aim=(pos,tgt)=>{const v=sub(tgt,pos),h=Math.hypot(v[0],v[2]),yaw=Math.atan2(v[0],v[2])+yawOff,pitch=Math.atan2(v[1],h)+pitchOff,d=len(v);
+   return add(pos,[Math.sin(yaw)*Math.cos(pitch)*d,Math.sin(pitch)*d,Math.cos(yaw)*Math.cos(pitch)*d]);};
+  const views=rooms.map((r,i)=>{
+   // Towards the next room when it is a neighbour (it shows beyond, still drawn); otherwise from the inside of the home
+   // outwards, so the room is read frontally against its outer wall and windows (never through the envelope).
+   const c=r.center,nx=rooms[i+1],hc=input.houseCenter||c,halfOf=q=>Math.max(...(q.extent||[4,4]))/2;
+   const adjacent=nx&&Math.hypot(nx.center[0]-c[0],nx.center[1]-c[1])<=halfOf(r)+halfOf(nx)+o.neighbourGap;
+   const unit=v=>{const l=Math.hypot(v[0],v[1]);return l<.3?null:[v[0]/l,v[1]/l];};
+   // Candidate standpoints: towards the next room (preferred), from the inside of the home outwards, and their
+   // perpendiculars. Each is scored by the tall or dark pieces between the camera and the room (a TV, a fridge, a
+   // wardrobe would fill the foreground): the clearest view wins, so no single object dominates the frame.
+   const first=unit(adjacent?[nx.center[0]-c[0],nx.center[1]-c[1]]:[c[0]-hc[0],c[1]-hc[1]])||unit(nx?[nx.center[0]-c[0],nx.center[1]-c[1]]:[0,1])||[0,1];
+   const second=unit([c[0]-hc[0],c[1]-hc[1]]);
+   const cands=[{d:first,bonus:adjacent?o.nextBonus:0},...(second&&Math.abs(second[0]*first[0]+second[1]*first[1])<.95?[{d:second,bonus:0}]:[]),{d:[-first[1],first[0]],bonus:-.2},{d:[first[1],-first[0]],bonus:-.2}];
+   const obstacles=Array.isArray(input.obstacles)?input.obstacles:[];
+   const cost=d=>{const half=Math.abs(d[0])*(r.extent?.[0]||4)/2+Math.abs(d[1])*(r.extent?.[1]||4)/2,back=Math.max(o.backMin,half+o.outside),P=[c[0]-d[0]*back,c[1]-d[1]*back],E=[c[0]-d[0]*half*.6,c[1]-d[1]*half*.6];
+    let n=0;for(const b of obstacles){if(!(b.h>o.tallH))continue;const ax=E[0]-P[0],az=E[1]-P[1],L=ax*ax+az*az||1,u=Math.max(0,Math.min(1,((b.x-P[0])*ax+(b.z-P[1])*az)/L)),dist=Math.hypot(b.x-P[0]-ax*u,b.z-P[1]-az*u);
+     if(dist<o.nearBand)n+=(b.h-o.tallH+.3)*(b.dark?o.darkWeight:1)*(1-dist/o.nearBand)*(1.2-u*.6);}return n;};
+   const best=cands.map(k=>({...k,score:cost(k.d)-k.bonus})).sort((a,b)=>a.score-b.score)[0];let d=best.d;
+   // The room fills the frame: the camera stands just beyond the room's edge opposite the next room, high above every
+   // piece of furniture (walls are read at 1.2 m), and looks down into the room; the next room, still drawn, lies
+   // beyond it at the top of the frame. Walls facing the camera are the room's own, so they come to life with it.
+   const ext=Math.hypot(...(r.extent||[4,4]))/2,half=Math.abs(d[0])*(r.extent?.[0]||4)/2+Math.abs(d[1])*(r.extent?.[1]||4)/2;
+   const H=Math.min(o.heightMax,Math.max(o.heightMin,o.heightBase+o.heightPerM*half))+(aspect<.8?o.narrowLift:0),back=Math.max(o.backMin,half+o.outside);
+   const side=[-d[1],d[0]],arrive={position:[c[0]-d[0]*back,H,c[1]-d[1]*back],target:[c[0]+d[0]*half*o.lookIn,o.targetY,c[1]+d[1]*half*o.lookIn]};
+   const drift={position:[arrive.position[0]+d[0]*o.push+side[0]*o.sway,H-.08,arrive.position[2]+d[1]*o.push+side[1]*o.sway],target:[arrive.target[0]+d[0]*o.push*1.1,o.targetY,arrive.target[2]+d[1]*o.push*1.1]};
+   return {id:r.id,arrive:{position:arrive.position,target:aim(arrive.position,arrive.target)},drift:{position:drift.position,target:aim(drift.position,drift.target)},start:r.start,leaveAt:r.leaveAt,end:r.start+r.duration};});
+  const keys=[{t:0,pose:{position:A.position,target:A.target}},{t:intro*o.introHold,pose:{position:A.position,target:A.target}}];
+  views.forEach((v,i)=>{
+   // a long glide between rooms rises above the drawing (an arc), so tall furniture on the way never fills the frame
+   const prev=keys[keys.length-1],t0=prev.t,gap=Math.hypot(v.arrive.position[0]-prev.pose.position[0],v.arrive.position[2]-prev.pose.position[2]),far=i>0&&gap>o.transitMin,t1=Math.max(t0+.2,v.start+(far?o.arriveFarS:o.arriveS));
+   if(far&&t1-t0>1.2){const m=(a,b)=>a.map((x,k)=>(x+b[k])/2),pos=m(prev.pose.position,v.arrive.position);pos[1]=Math.max(prev.pose.position[1],v.arrive.position[1])+o.transitLift;
+    keys.push({t:(t0+t1)/2,pose:{position:pos,target:m(prev.pose.target,v.arrive.target)}});}
+   keys.push({t:t1,pose:v.arrive});keys.push({t:Math.max(keys[keys.length-1].t+.2,i===views.length-1?total:v.leaveAt),pose:v.drift});});
+  const T=keys.map(k=>k.t),tan=(i,key)=>{if(i===0||i===keys.length-1)return [0,0,0];return mul(sub(keys[i+1].pose[key],keys[i-1].pose[key]),1/(T[i+1]-T[i-1]));};
+  function hermite(i,key,t){const a=keys[i],b=keys[i+1],dt=b.t-a.t,s=clamp01((t-a.t)/dt),s2=s*s,s3=s2*s,ma=tan(i,key),mb=tan(i+1,key);
+   return [0,1,2].map(k=>(2*s3-3*s2+1)*a.pose[key][k]+(s3-2*s2+s)*dt*ma[k]+(-2*s3+3*s2)*b.pose[key][k]+(s3-s2)*dt*mb[k]);}
+  // the end of a room still belongs to it (complete): reduced motion holds there, in that room's own view
+  const roomAt=t=>{let i=views.findIndex(v=>t<=v.end+1e-6);if(i<0)i=views.length-1;return t<intro?-1:i;};
+  function stateAt(raw){
+   const p=clamp01(Number(raw)||0),t=p*total,ri=roomAt(t),view=views[ri];
+   let pose;
+   if(input.reduced){pose=ri<0?{position:A.position,target:A.target}:view.arrive;}
+   else{let i=keys.length-2;while(i>0&&t<keys[i].t)i--;pose=t>=keys[keys.length-1].t?keys[keys.length-1].pose:{position:hermite(i,'position',t),target:hermite(i,'target',t)};}
+   const phase=ri<0?'intro':(!input.reduced&&t>=view.leaveAt&&ri<views.length-1)?'leaving':'room';
+   return {p,t,phase,roomIndex:ri,roomId:ri<0?null:view.id,position:[...pose.position],target:[...pose.target],fov,near:base.near,far:base.far,distance:len(sub(pose.position,pose.target))};
+  }
+  return {kind:'living-drawing',stateAt,checkpoints:[0,.25,.5,.75,1],info:{total,intro,rooms:views.map(v=>({id:v.id,start:v.start,leaveAt:v.leaveAt,end:v.end})),keys:keys.map(k=>k.t),playMs:Math.round(total*1000),reduced:!!input.reduced,options:o}};
+ }
+ const NARRATIVES={'plan-reveal':planReveal,'room-descent':roomDescent,'section-open':sectionOpen,'elevation-open':elevationOpen,'axon-open':axonOpen,'exploded-levels-open':explodedLevelsOpen,'room-visit':roomVisit,'living-drawing':livingDrawing};
  /* FT3D-2 — a story: a sequence of narratives played as one progress P ∈ [0,1]. Each scene takes a share of P
     proportional to its weight (its play time), so locate(P) → {i, p} and at(i, p) → P are pure and inverse of each other:
     the same P is always the same scene at the same local p, forwards or backwards. A boundary belongs to the next scene
@@ -418,9 +490,9 @@
   return {count:w.length,starts:[...starts],total,locate,at};
  }
  // Play time of a scene before it is built (the narrative refines it once it knows the project): stable shares of P.
- const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000,'axon-open':7000,'exploded-levels-open':10000,'room-visit':14000};
+ const SCENE_MS={'plan-reveal':6000,'room-descent':3500,'section-open':7000,'elevation-open':8000,'axon-open':7000,'exploded-levels-open':10000,'room-visit':14000,'living-drawing':30000};
  function create(kind,input){const build=NARRATIVES[kind];if(!build)throw Error(`Narrativa desconocida: ${kind}`);return build(input);}
  // Wall-clock duration of a play from p to q (ms): proportional to the distance travelled, never a fixed copied time.
  function playMs(from,to,{fullMs=6000,reduced=false}={}){return reduced?0:Math.round(Math.abs(clamp01(to)-clamp01(from))*fullMs);}
- return {create,roomVisit,ROOM_VISIT,planReveal,roomDescent,sectionOpen,elevationOpen,axonOpen,explodedLevelsOpen,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN,AXON_OPEN,EXPLODED_LEVELS_OPEN};
+ return {create,roomVisit,ROOM_VISIT,planReveal,roomDescent,sectionOpen,elevationOpen,axonOpen,explodedLevelsOpen,livingDrawing,sequence,playMs,smooth,NARRATIVES:Object.keys(NARRATIVES),SCENE_MS,PLAN_REVEAL,ROOM_DESCENT,SECTION_OPEN,ELEVATION_OPEN,AXON_OPEN,EXPLODED_LEVELS_OPEN,LIVING_DRAWING};
 });

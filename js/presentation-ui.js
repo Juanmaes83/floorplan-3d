@@ -67,6 +67,8 @@
  // never saved. axonDescriptor: FloorPlanPresentationAxon.derive over every structural level of the building (or the
  // project), computed once when the dialog opens; the 3D view receives it and never derives it again.
  let axonMode='off',axonEnabled=false,axonDescriptor=null,axonLevelNames=new Map();
+ // Hybrid V2 «Dibujo vivo» (C1): opt-in graphite drawing of the same model during the presentation; off by default.
+ let livingChosen=false,livingEnabled=false,ambienceChosen=false,ambienceEnabled=false;
  const AXON_KINDS=['axon-open','exploded-levels-open'];
  const isAxonKind=kind=>AXON_KINDS.includes(kind);
  const OVERVIEW_DIRECTION=[.42,.84,.34];
@@ -598,6 +600,36 @@
   const hint=el('p',parts.join(' '),box,'presentation-story-hint');hint.id=hintId;
   if(d.partial)hint.classList.add('presentation-axon-partial');
  }
+ function livingDrawingOption(parent){
+  livingChosen=false;ambienceChosen=false;
+  if(!window.FloorPlanLivingDrawingRenderer)return;
+  const box=el('div',undefined,parent,'presentation-story-option presentation-living-option');box.id='presentationLivingOptionBox';
+  const label=el('label',undefined,box);const input=el('input',undefined,label);input.type='checkbox';input.id='presentationLivingDrawing';input.checked=false;
+  el('span',tx('Dibujo vivo · lámina a grafito (experimental)','Living drawing · graphite sheet (experimental)','活绘 · 石墨图纸（实验）'),label);
+  const hint=el('p',tx('Opcional: la vivienda empieza como un dibujo arquitectónico a grafito del mismo modelo y cobra vida estancia a estancia con sus propios materiales. No cambia el proyecto.','Optional: the home starts as a graphite architectural drawing of the same model and comes to life room by room with its own materials. The project does not change.','可选：住宅以同一模型的石墨建筑图开始，并逐个房间以其自身材质鲜活呈现。项目不变。'),box,'presentation-story-hint');
+  hint.id='presentationLivingHint';input.setAttribute('aria-describedby',hint.id);
+  // D3: an optional catalogue ambience, only inside the living drawing, off by default and kept apart from the project.
+  const aLabel=el('label',undefined,box,'presentation-living-ambience');const amb=el('input',undefined,aLabel);amb.type='checkbox';amb.id='presentationLivingAmbience';amb.checked=false;amb.disabled=true;
+  el('span',tx('Ambientación sugerida del catálogo (opcional)','Suggested catalogue ambience (optional)','目录建议氛围（可选）'),aLabel);
+  const aHint=el('p',tx('Solo durante el dibujo vivo: los suelos sin acabado de catálogo se muestran con un acabado sugerido, rotulado «Ambientación sugerida · no forma parte del proyecto». No se guarda en el proyecto y se retira al terminar.','Only during the living drawing: floors without a catalogue finish show a suggested one, labelled «Suggested ambience · not part of the project». It is not saved in the project and is removed at the end.','仅在活绘期间：没有目录饰面的地面显示建议饰面，并标注「建议氛围 · 不属于项目」。不保存到项目，结束时移除。'),box,'presentation-story-hint');
+  aHint.id='presentationLivingAmbienceHint';amb.setAttribute('aria-describedby',aHint.id);
+  input.onchange=()=>{livingChosen=input.checked;amb.disabled=!input.checked;if(!input.checked){amb.checked=false;ambienceChosen=false;}};
+  amb.onchange=()=>{ambienceChosen=amb.checked&&input.checked;};
+ }
+ function endLivingDrawing(){livingEnabled=false;ambienceEnabled=false;window.View3D?.presentationAmbienceEnd?.();window.View3D?.presentationLivingDrawingEnd?.();}
+ // The rooms of the living drawing: the presentation's chosen rooms of this overview's level, in the dialog's order.
+ function livingRooms(stopIndex){const s=plan?.stops[stopIndex];if(!s)return [];return plan.stops.filter(x=>x.kind==='room'&&(x.levelId??null)===(s.levelId??null)).map(x=>x.roomId);}
+ function livingView(stopIndex){const s=plan.stops[stopIndex],levelId=s.levelId??null,project=levelProject(levelId)||app.project;
+  const geometry=isBuildingPlan()?building()?.presentationSources()?.levels.find(l=>l.levelId===levelId)?.geometry||app.geometry:app.geometry;
+  // the chosen rooms chained by proximity from the first one, so the camera always travels to a neighbouring room
+  const chosen=livingRooms(stopIndex),centre=id=>{const r=geometry.rooms.find(x=>x.id===id);if(!r)return null;const xs=r.poly.map(p=>p[0]),ys=r.poly.map(p=>p[1]);return [(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2];};
+  // it opens on the heart of the home (the living room) when it is among the chosen rooms
+  const order=[],left=chosen.filter(id=>centre(id)),heart=left.findIndex(id=>{const r=geometry.rooms.find(x=>x.id===id);return FloorPlanLivingDrawing.classify(r,FloorPlanLivingDrawing.objectsIn(project,r))==='living';});
+  if(heart>0)left.unshift(left.splice(heart,1)[0]);if(left.length)order.push(left.shift());
+  while(left.length){const c=centre(order[order.length-1]);left.sort((a,b)=>Math.hypot(...centre(a).map((v,k)=>v-c[k]))-Math.hypot(...centre(b).map((v,k)=>v-c[k])));order.push(left.shift());}
+  const ambience=ambienceEnabled?FloorPlanLivingDrawing.ambience(project,geometry,window.FloorPlanSurfaces?.entries||[],{rooms:chosen}):null;
+  return {timeline:FloorPlanLivingDrawing.timeline(project,geometry,{order:order.length?order:null,reduced:reducedMotion()}),reduced:reducedMotion(),ambience};}
+ const livingAt=stop=>!!stop&&stop.kind==='overview'&&livingEnabled;
  const axonKind=()=>frozenTemplate?(frozenTemplate.buildingReading==='exploded-levels'?'exploded-levels-open':frozenTemplate.buildingReading==='axon'?'axon-open':null):axonMode==='exploded'?'exploded-levels-open':axonMode==='compact'?'axon-open':null;
  const axonAt=stop=>{if(!stop||stop.kind!=='overview'||!axonDescriptor?.supported)return false;if(axonMode==='exploded'&&!axonDescriptor.variants.exploded.supported)return false;
   return !isBuildingPlan()||axonDescriptor.levels.some(l=>l.levelId===stop.levelId);};
@@ -642,7 +674,9 @@
   let elevation=null;if(elevationEnabled){elevation=button('',tools,()=>{if(elevationAt(plan?.stops[index]))openStory(epoch,[{kind:'elevation-open',stop:index}],{from:0,to:reducedMotion()?null:1});});elevation.id='presentationElevationPlay';elevation.hidden=true;}
   // FT3D-5: likewise only when a reading of the building was chosen; the same scene the whole story inserts.
   let axon=null;if(axonEnabled){axon=button('',tools,()=>{const kind=axonKind();if(kind&&axonAt(plan?.stops[index]))openStory(epoch,[{kind,stop:index}],{from:0,to:reducedMotion()?null:1});});axon.id='presentationAxonPlay';axon.hidden=true;}
-  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,visitWalk,visitSection};return storyUi;
+  // Hybrid V2: replay «Dibujo vivo» from an overview of the presentation.
+  let living=null;if(livingEnabled){living=button('',tools,()=>{if(livingAt(plan?.stops[index]))openStory(epoch,[{kind:'living-drawing',stop:index}],{from:0,to:reducedMotion()?null:1});});living.id='presentationLivingPlay';living.hidden=true;}
+  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,visitWalk,visitSection,living};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
@@ -666,7 +700,9 @@
  const elevationHolds=()=>{const o=FloorPlanPresentationStory.ELEVATION_OPEN;return [o.reducedFront,o.reducedPersp];};
  // FT3D-5: axon holds on the compact reading; the breakdown on the compact reading, then on the separated levels.
  const axonHolds=kind=>{const S=FloorPlanPresentationStory;return kind==='axon-open'?[S.AXON_OPEN.reducedHold]:[S.EXPLODED_LEVELS_OPEN.reducedCompact,S.EXPLODED_LEVELS_OPEN.reducedExploded];};
- const holdsOf=kind=>kind==='section-open'?[sectionHold()]:kind==='elevation-open'?elevationHolds():isAxonKind(kind)?axonHolds(kind):[];
+ // Hybrid V2: reduced motion steps the living drawing room by room (each room complete), never one jump to the end.
+ const livingHolds=()=>(View3D.presentationStoryInfo?.living?.ends||[]).filter(v=>v>0&&v<1);
+ const holdsOf=kind=>kind==='section-open'?[sectionHold()]:kind==='elevation-open'?elevationHolds():isAxonKind(kind)?axonHolds(kind):kind==='living-drawing'?livingHolds():[];
  function nextStart(run){if(run.i+1>=run.scenes.length)return 1;const k=run.scenes[run.i+1].kind;return run.seq.at(run.i+1,reducedMotion()&&holdsOf(k).length?holdsOf(k)[0]:0);}
  // The next held state of the current scene after its local p (null when none is left).
  function nextHold(run){const h=holdsOf(run.scenes[run.i]?.kind).find(v=>v>run.p+1e-6);return h===undefined?null:h;}
@@ -722,12 +758,22 @@
   if(u.elevation){u.elevation.textContent=tx('Ver fachada','See the façade','查看立面');u.elevation.hidden=!elevationEnabled||on||!plan||!elevationAt(plan.stops[index]);u.elevation.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   if(u.axon){const kind=axonKind();u.axon.textContent=kind==='exploded-levels-open'?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');
    u.axon.hidden=!axonEnabled||on||!plan||!axonAt(plan.stops[index]);u.axon.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
+  if(u.living){u.living.textContent=tx('Ver dibujo vivo','See the living drawing','观看活绘');u.living.hidden=!livingEnabled||on||!plan||!livingAt(plan.stops[index]);u.living.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   u.panel.hidden=!on;if(!on)return;
   const multi=story.scenes.length>1,sc=story.scenes[story.i],p=story.p;
   u.counter.hidden=!multi;u.nextButton.hidden=!multi;
   if(multi){const lvl=isBuildingPlan()?` · ${plan.stops[sc.stop].levelName}`:'';u.counter.textContent=tx(`Historia · escena ${story.i+1} de ${story.scenes.length}${lvl}`,`Story · scene ${story.i+1} of ${story.scenes.length}${lvl}`,`故事 · 第 ${story.i+1} / ${story.scenes.length} 幕${lvl}`);}
   let caption;
-  if(sc.kind==='section-open'){const phase=View3D.presentationStoryInfo?.phase,base=tx('Sección visual · derivada del modelo · no es plano de ejecución','Visual section · derived from the model · not a construction drawing','可视剖面 · 源自模型 · 非施工图');
+  if(sc.kind==='living-drawing'){const info=View3D.presentationStoryInfo,lv=info?.living,phase=info?.phase,rooms=lv?.rooms||[],ri=lv?.roomIndex??-1,lvl=plan.stops[sc.stop]?.levelId;
+   const here=ri>=0?roomName(rooms[ri],lvl):'',next=ri>=0&&rooms[ri+1]?roomName(rooms[ri+1],lvl):'';
+   const amb=View3D.presentationAmbienceInfo?.active;
+   caption=p<=0?tx('La vivienda, dibujada a grafito','The home, drawn in graphite','以石墨绘制的住宅'):p>=1?(amb?tx('La vivienda, viva','The home, alive','鲜活的住宅'):tx('La vivienda, viva — materiales del proyecto','The home, alive — the project\'s own materials','鲜活的住宅 — 项目自身材质'))
+    :phase==='intro'?tx('Un dibujo arquitectónico del mismo modelo','An architectural drawing of the same model','同一模型的建筑图'):phase==='leaving'&&next?tx(`${here} cobra vida · hacia ${next}`,`${here} comes to life · towards ${next}`,`${here} 渐显 · 前往 ${next}`):tx(`${here} cobra vida`,`${here} comes to life`,`${here} 渐显`);
+   if(amb&&p>0)caption+=' — '+tx('Ambientación sugerida · no forma parte del proyecto','Suggested ambience · not part of the project','建议氛围 · 不属于项目');
+   if(!multi){u.panel.setAttribute('aria-label',tx('Dibujo vivo','Living drawing','活绘'));u.slider.setAttribute('aria-label',tx('Del dibujo (0) a la vivienda viva (100)','From the drawing (0) to the living home (100)','从图纸 (0) 到鲜活住宅 (100)'));
+    u.planButton.textContent=tx('Volver al dibujo','Back to the drawing','回到图纸');u.planButton.disabled=story.playing||p<=0;
+    u.play.textContent=story.playing?tx('Pausa','Pause','暂停'):p>=1?tx('Continuar presentación','Continue presentation','继续展示'):p<=0?tx('Ver dibujo vivo','See the living drawing','观看活绘'):tx('Seguir','Resume','继续');}}
+  else if(sc.kind==='section-open'){const phase=View3D.presentationStoryInfo?.phase,base=tx('Sección visual · derivada del modelo · no es plano de ejecución','Visual section · derived from the model · not a construction drawing','可视剖面 · 源自模型 · 非施工图');
    caption=p<=0?tx('Vista general 3D','3D overview','3D 总览'):(phase==='cut'?tx('El corte entra en el mismo modelo','The cut enters the same model','剖切进入同一模型'):phase==='front'?tx('Sección frontal','Front section','正面剖面'):phase==='open'?tx('Abrimos perspectiva para leer los espacios detrás del corte','We open the perspective to read the spaces behind the cut','打开透视以查看剖切后的空间'):tx('Vista general seccionada','Sectioned overview','剖切总览'))+' — '+base;
    if(!multi){u.panel.setAttribute('aria-label',tx('Sección dinámica','Dynamic section','动态剖面'));u.slider.setAttribute('aria-label',tx('De la vista general (0) a la sección abierta (100)','From the overview (0) to the open section (100)','从总览 (0) 到剖面 (100)'));
     u.planButton.textContent=tx('Volver a la vista general','Back to the overview','回到总览');u.planButton.disabled=story.playing||p<=0;
@@ -789,7 +835,7 @@
   let fromRegion=null;if(sc.kind==='room-descent'||sc.kind==='room-visit'){index=sc.from;draw();fromRegion=viewRegion();}
   index=sceneHome(sc);story=saved;story.i=i;draw();
   if(run.failed?.has(i)){View3D.presentationStoryEnd?.({keepPose:true});await View3D.presentationGo(plan.stops[index],true,{region:viewRegion()});return story===run;}
-  try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...((sc.kind==='room-descent'||sc.kind==='room-visit')&&(run.scenes.length>1||sc.kind==='room-visit')?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{})},sc.kind);}
+  try{View3D.presentationStoryBegin(plan.stops[sc.stop],{region,startRegion:viewRegion(),...((sc.kind==='room-descent'||sc.kind==='room-visit')&&(run.scenes.length>1||sc.kind==='room-visit')?{fromStop:plan.stops[sc.from],fromRegion}:{}),...(sc.kind==='section-open'&&sectionAxis?{sectionAxis}:{}),...(sc.kind==='elevation-open'?{elevation:elevationView()}:{}),...(isAxonKind(sc.kind)?{axon:axonView(sc.kind)}:{}),...(sc.kind==='living-drawing'?{living:livingView(sc.stop)}:{})},sc.kind);}
   catch(error){if(!frozenTemplate)throw error;return templateSceneFailure(run,sc,error);}
   sc.ms=View3D.presentationStoryInfo?.info?.playMs||FloorPlanPresentationStory.SCENE_MS[sc.kind];
   return true;
@@ -871,7 +917,7 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'||run.scenes[0].kind==='room-visit'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi=null;}}
+ function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
@@ -988,6 +1034,7 @@
    sectionOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
    elevationOption(config,[{levelId:activeLevelId(),project:app.project,geometry:app.geometry}]);
    axonOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
+   livingDrawingOption(config);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -1022,6 +1069,7 @@
   sectionOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm})));
   elevationOption(config,levels.map(l=>({levelId:l.levelId,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
   axonOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,order:l.order,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
+  livingDrawingOption(config);
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -1117,13 +1165,18 @@
    if(!materialButton.hidden)View3D.setSurfaceQuality('enhanced');
    await View3D.setPresentationLightPreset('neutral');
    if(token!==epoch)return;
+   // Hybrid V2: «Dibujo vivo» is a story scene that opens the presentation (the drawing layer belongs to it).
+   livingEnabled=livingChosen&&!!window.FloorPlanLivingDrawing&&!!window.View3D?.presentationLivingDrawingBegin&&!!window.View3D?.presentationStoryBegin;
+   ambienceEnabled=livingEnabled&&ambienceChosen&&!!window.View3D?.presentationAmbienceBegin;
    updateAssetWarning();
-   if(frozenTemplate||sectionEnabled||elevationEnabled||axonEnabled)storyControls();
+   if(frozenTemplate||sectionEnabled||elevationEnabled||axonEnabled||livingEnabled)storyControls();
    if(frozenTemplate&&fullStory().length)await openStory(token,fullStory(),{from:0,to:reducedMotion()?null:1});
+   else if(livingEnabled&&livingAt(plan.stops[0]))await openStory(token,[{kind:'living-drawing',stop:0}],{from:0,to:reducedMotion()?null:1});
    else if(storyEnabled&&plan.stops[0]?.kind==='overview')await openStory(token,[{kind:'plan-reveal',stop:0}],{from:0,to:reducedMotion()?null:1});else await go(0,token);closeButton.focus();
   }catch(error){
    if(token===epoch){status.textContent=error.message;info.textContent=tx('El plano permanece disponible.','Your plan remains available.','平面图仍可用。');
     toast(error.message,6000);
+    endLivingDrawing();
     document.body.classList.remove('presenting');document.body.classList.add('presentation-exiting');
     if(startLevelId&&activeLevelId()!==startLevelId)building()?.presentLevel(startLevelId);startLevelId=null;
     await app.restorePresentationEntry(entry,sceneState);document.body.classList.remove('presentation-exiting');overlay.hidden=true;active=false;entry=null;plan=null;sceneState=null;
@@ -1149,6 +1202,7 @@
   // A building presentation leaves the editor on the level it started from, before the camera and the entry return.
   if(startLevelId&&activeLevelId()!==startLevelId){try{await showLevel(startLevelId);}catch{}}
   startLevelId=null;
+  endLivingDrawing();
   if(sceneState)View3D?.presentationRestore(sceneState);
   if(pendingStart)await pendingStart.catch(()=>{});
   const saved=entry,three=sceneState;
@@ -1169,7 +1223,7 @@
  function invalidate(){
   if(!active&&!pendingStart){if(config.open&&templateMode()){config.close();resetTemplates();}return;}
   if(walking){walking=null;walkBar.hidden=true;delete overlay.dataset.walking;window.View3D?.presentationWalkEnd?.();}
-  cancelBatch();closeStory();disposeStory();
+  cancelBatch();closeStory();disposeStory();endLivingDrawing();
   ++epoch;++movement;active=false;plan=null;sceneState=null;entry=null;startLevelId=null;visited=new Set();warning.hidden=true;
   captureButton.disabled=true;
   overlay.hidden=true;map.hidden=true;document.body.classList.remove('presenting','presentation-exiting');

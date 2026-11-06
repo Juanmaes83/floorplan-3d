@@ -1,0 +1,131 @@
+# RUBIK SOTA E2: independent quality gate for the real Hybrid V2 + corrected Section combination.
+name: E2 Hybrid V2 + Section integration
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'js/presentation-living-drawing*.js'
+      - 'js/presentation-story-core.js'
+      - 'js/presentation-ui.js'
+      - 'tests/presentation-living-drawing*'
+      - 'tests/presentation-scenes-integration.browser.test.cjs'
+      - 'tests/presentation-visit-handover.browser.test.cjs'
+      - '.github/workflows/rubik-e2-hybrid-v2-gate.yml'
+permissions:
+  contents: read
+jobs:
+  living-and-visit-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: SHA, syntax and pure regressions
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          node --check js/presentation-living-drawing-core.js
+          node --check js/presentation-living-drawing.js
+          node --check js/presentation-story-core.js
+          node --check js/presentation-ui.js
+          node --check tests/presentation-scenes-integration.browser.test.cjs
+          node --test tests/presentation-living-drawing-core.test.cjs tests/presentation-living-drawing-landing.test.cjs tests/presentation-story-living.test.cjs tests/presentation-story.test.cjs tests/presentation-visit.test.cjs
+
+  living-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      LIVING_ARTIFACTS: qa-results/e2-hv2-living
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/hv2-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/hv2-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — graphite, patches, reverse, OFF, D3, mobile and Section
+        run: node --test --test-concurrency=1 tests/presentation-living-drawing.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2-hv2-living-${{ env.TESTED_SHA }}
+          path: qa-results/e2-hv2-living/
+          if-no-files-found: ignore
+
+  section-handover-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      HANDOVER_ARTIFACTS: qa-results/e2-hv2-handover
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/hv2-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/hv2-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — autoplay room visit, explore, back, pause and repeat
+        run: node --test --test-concurrency=1 tests/presentation-visit-handover.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2-hv2-handover-${{ env.TESTED_SHA }}
+          path: qa-results/e2-hv2-handover/
+          if-no-files-found: ignore
+
+  living-section-combined-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      INTEGRATION_ARTIFACTS: qa-results/e2-hv2-section-combined
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/hv2-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/hv2-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/hv2-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Mandatory two-round Hybrid V2 + corrected Section test (no V1 dependency)
+        run: node --test --test-concurrency=1 tests/presentation-scenes-integration.browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2-hv2-section-combined-${{ env.TESTED_SHA }}
+          path: qa-results/e2-hv2-section-combined/
+          if-no-files-found: ignore

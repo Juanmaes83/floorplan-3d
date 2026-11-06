@@ -1,0 +1,12 @@
+ok 1 - HV2 OFF by default: no drawing state, the usual presentation, the same project
+ok 2 - HV2 ON: drawing → stains with drawing still on screen → exact reverse → the usual presentation; project intact
+ok 3 - HV2 reduced motion: the story waits at its start and steps room by room
+ok 4 - HV2 with the dynamic section: living drawing first, then the section; nothing left after closing
+ok 5 - HV2 D3 ambience: opt-in, labelled, floors only during the scene, removed after it; project never touched
+ok 6 - HV2 five open/close cycles with the living drawing keep geometries and textures constant
+ok 7 - HV2 fallback: without the drawing layer the presentation goes on with the usual view
+ok 8 - HV2 phone 390×844 (DPR 2): the story draws, line step 2, no horizontal overflow
+# tests 8
+# pass 8
+# fail 0
+# skipped 0

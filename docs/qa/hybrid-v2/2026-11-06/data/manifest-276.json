@@ -1,0 +1,632 @@
+{
+ "head": "376744430fb54aea8b5164afc71ed13610574d56",
+ "chromium": "141.0.7390.37",
+ "viewport": {
+  "width": 1280,
+  "height": 720,
+  "dpr": 1
+ },
+ "rooms": [
+  "rom_living",
+  "rom_dining",
+  "rom_kitchen",
+  "rom_master"
+ ],
+ "total": 28.6,
+ "fps": 24,
+ "frames": [
+  {
+   "i": 276,
+   "t": 11.5,
+   "file": "f0276.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 0,
+   "ms": 44241
+  },
+  {
+   "i": 277,
+   "t": 11.542,
+   "file": "f0277.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 0,
+   "ms": 41192
+  },
+  {
+   "i": 278,
+   "t": 11.583,
+   "file": "f0278.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 0,
+   "ms": 41560
+  },
+  {
+   "i": 279,
+   "t": 11.625,
+   "file": "f0279.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 0,
+   "ms": 42233
+  },
+  {
+   "i": 280,
+   "t": 11.667,
+   "file": "f0280.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 0,
+   "ms": 35307
+  },
+  {
+   "i": 281,
+   "t": 11.708,
+   "file": "f0281.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 40996
+  },
+  {
+   "i": 282,
+   "t": 11.75,
+   "file": "f0282.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 44521
+  },
+  {
+   "i": 283,
+   "t": 11.792,
+   "file": "f0283.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 42797
+  },
+  {
+   "i": 284,
+   "t": 11.833,
+   "file": "f0284.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 44707
+  },
+  {
+   "i": 285,
+   "t": 11.875,
+   "file": "f0285.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 43679
+  },
+  {
+   "i": 286,
+   "t": 11.917,
+   "file": "f0286.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 36920
+  },
+  {
+   "i": 287,
+   "t": 11.958,
+   "file": "f0287.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 44919
+  },
+  {
+   "i": 288,
+   "t": 12,
+   "file": "f0288.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 44070
+  },
+  {
+   "i": 289,
+   "t": 12.042,
+   "file": "f0289.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 43497
+  },
+  {
+   "i": 290,
+   "t": 12.083,
+   "file": "f0290.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 43455
+  },
+  {
+   "i": 291,
+   "t": 12.125,
+   "file": "f0291.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 42680
+  },
+  {
+   "i": 292,
+   "t": 12.167,
+   "file": "f0292.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 45313
+  },
+  {
+   "i": 293,
+   "t": 12.208,
+   "file": "f0293.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 1,
+   "ms": 46435
+  },
+  {
+   "i": 294,
+   "t": 12.25,
+   "file": "f0294.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 44748
+  },
+  {
+   "i": 295,
+   "t": 12.292,
+   "file": "f0295.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 44418
+  },
+  {
+   "i": 296,
+   "t": 12.333,
+   "file": "f0296.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 45476
+  },
+  {
+   "i": 297,
+   "t": 12.375,
+   "file": "f0297.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 48411
+  },
+  {
+   "i": 298,
+   "t": 12.417,
+   "file": "f0298.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 45932
+  },
+  {
+   "i": 299,
+   "t": 12.458,
+   "file": "f0299.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 42723
+  },
+  {
+   "i": 300,
+   "t": 12.5,
+   "file": "f0300.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 46958
+  },
+  {
+   "i": 301,
+   "t": 12.542,
+   "file": "f0301.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 47846
+  },
+  {
+   "i": 302,
+   "t": 12.583,
+   "file": "f0302.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 46149
+  },
+  {
+   "i": 303,
+   "t": 12.625,
+   "file": "f0303.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 46836
+  },
+  {
+   "i": 304,
+   "t": 12.667,
+   "file": "f0304.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 2,
+   "ms": 47351
+  },
+  {
+   "i": 305,
+   "t": 12.708,
+   "file": "f0305.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 50101
+  },
+  {
+   "i": 306,
+   "t": 12.75,
+   "file": "f0306.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 48991
+  },
+  {
+   "i": 307,
+   "t": 12.792,
+   "file": "f0307.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 43297
+  },
+  {
+   "i": 308,
+   "t": 12.833,
+   "file": "f0308.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 43440
+  },
+  {
+   "i": 309,
+   "t": 12.875,
+   "file": "f0309.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 47025
+  },
+  {
+   "i": 310,
+   "t": 12.917,
+   "file": "f0310.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 45486
+  },
+  {
+   "i": 311,
+   "t": 12.958,
+   "file": "f0311.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 43674
+  },
+  {
+   "i": 312,
+   "t": 13,
+   "file": "f0312.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 48204
+  },
+  {
+   "i": 313,
+   "t": 13.042,
+   "file": "f0313.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 44855
+  },
+  {
+   "i": 314,
+   "t": 13.083,
+   "file": "f0314.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 45321
+  },
+  {
+   "i": 315,
+   "t": 13.125,
+   "file": "f0315.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 46014
+  },
+  {
+   "i": 316,
+   "t": 13.167,
+   "file": "f0316.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 48186
+  },
+  {
+   "i": 317,
+   "t": 13.208,
+   "file": "f0317.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 46951
+  },
+  {
+   "i": 318,
+   "t": 13.25,
+   "file": "f0318.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 47771
+  },
+  {
+   "i": 319,
+   "t": 13.292,
+   "file": "f0319.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 42434
+  },
+  {
+   "i": 320,
+   "t": 13.333,
+   "file": "f0320.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 3,
+   "ms": 45682
+  },
+  {
+   "i": 321,
+   "t": 13.375,
+   "file": "f0321.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 44161
+  },
+  {
+   "i": 322,
+   "t": 13.417,
+   "file": "f0322.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45792
+  },
+  {
+   "i": 323,
+   "t": 13.458,
+   "file": "f0323.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 47816
+  },
+  {
+   "i": 324,
+   "t": 13.5,
+   "file": "f0324.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 36576
+  },
+  {
+   "i": 325,
+   "t": 13.542,
+   "file": "f0325.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 47327
+  },
+  {
+   "i": 326,
+   "t": 13.583,
+   "file": "f0326.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 46185
+  },
+  {
+   "i": 327,
+   "t": 13.625,
+   "file": "f0327.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45986
+  },
+  {
+   "i": 328,
+   "t": 13.667,
+   "file": "f0328.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45854
+  },
+  {
+   "i": 329,
+   "t": 13.708,
+   "file": "f0329.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 40361
+  },
+  {
+   "i": 330,
+   "t": 13.75,
+   "file": "f0330.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45782
+  },
+  {
+   "i": 331,
+   "t": 13.792,
+   "file": "f0331.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 43278
+  },
+  {
+   "i": 332,
+   "t": 13.833,
+   "file": "f0332.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45487
+  },
+  {
+   "i": 333,
+   "t": 13.875,
+   "file": "f0333.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 50735
+  },
+  {
+   "i": 334,
+   "t": 13.917,
+   "file": "f0334.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 45418
+  },
+  {
+   "i": 335,
+   "t": 13.958,
+   "file": "f0335.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 43157
+  },
+  {
+   "i": 336,
+   "t": 14,
+   "file": "f0336.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 36082
+  },
+  {
+   "i": 337,
+   "t": 14.042,
+   "file": "f0337.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 34977
+  },
+  {
+   "i": 338,
+   "t": 14.083,
+   "file": "f0338.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 25269
+  },
+  {
+   "i": 339,
+   "t": 14.125,
+   "file": "f0339.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 24621
+  },
+  {
+   "i": 340,
+   "t": 14.167,
+   "file": "f0340.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 23636
+  },
+  {
+   "i": 341,
+   "t": 14.208,
+   "file": "f0341.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 23874
+  },
+  {
+   "i": 342,
+   "t": 14.25,
+   "file": "f0342.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 23827
+  },
+  {
+   "i": 343,
+   "t": 14.292,
+   "file": "f0343.png",
+   "phase": "room",
+   "room": "rom_dining",
+   "liveSeeds": 4,
+   "ms": 24438
+  }
+ ],
+ "errors": []
+}

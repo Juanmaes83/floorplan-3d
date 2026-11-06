@@ -1,0 +1,632 @@
+{
+ "head": "376744430fb54aea8b5164afc71ed13610574d56",
+ "chromium": "141.0.7390.37",
+ "viewport": {
+  "width": 1280,
+  "height": 720,
+  "dpr": 1
+ },
+ "rooms": [
+  "rom_living",
+  "rom_dining",
+  "rom_kitchen",
+  "rom_master"
+ ],
+ "total": 28.6,
+ "fps": 24,
+ "frames": [
+  {
+   "i": 552,
+   "t": 23,
+   "file": "f0552.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 40250
+  },
+  {
+   "i": 553,
+   "t": 23.042,
+   "file": "f0553.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 38854
+  },
+  {
+   "i": 554,
+   "t": 23.083,
+   "file": "f0554.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 41054
+  },
+  {
+   "i": 555,
+   "t": 23.125,
+   "file": "f0555.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 40965
+  },
+  {
+   "i": 556,
+   "t": 23.167,
+   "file": "f0556.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 42605
+  },
+  {
+   "i": 557,
+   "t": 23.208,
+   "file": "f0557.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 46044
+  },
+  {
+   "i": 558,
+   "t": 23.25,
+   "file": "f0558.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 1,
+   "ms": 39521
+  },
+  {
+   "i": 559,
+   "t": 23.292,
+   "file": "f0559.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 42015
+  },
+  {
+   "i": 560,
+   "t": 23.333,
+   "file": "f0560.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 42236
+  },
+  {
+   "i": 561,
+   "t": 23.375,
+   "file": "f0561.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 39442
+  },
+  {
+   "i": 562,
+   "t": 23.417,
+   "file": "f0562.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 43588
+  },
+  {
+   "i": 563,
+   "t": 23.458,
+   "file": "f0563.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 40297
+  },
+  {
+   "i": 564,
+   "t": 23.5,
+   "file": "f0564.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 39365
+  },
+  {
+   "i": 565,
+   "t": 23.542,
+   "file": "f0565.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 43965
+  },
+  {
+   "i": 566,
+   "t": 23.583,
+   "file": "f0566.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 43126
+  },
+  {
+   "i": 567,
+   "t": 23.625,
+   "file": "f0567.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 42724
+  },
+  {
+   "i": 568,
+   "t": 23.667,
+   "file": "f0568.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 42553
+  },
+  {
+   "i": 569,
+   "t": 23.708,
+   "file": "f0569.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 43254
+  },
+  {
+   "i": 570,
+   "t": 23.75,
+   "file": "f0570.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 40103
+  },
+  {
+   "i": 571,
+   "t": 23.792,
+   "file": "f0571.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 32328
+  },
+  {
+   "i": 572,
+   "t": 23.833,
+   "file": "f0572.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 43946
+  },
+  {
+   "i": 573,
+   "t": 23.875,
+   "file": "f0573.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 40194
+  },
+  {
+   "i": 574,
+   "t": 23.917,
+   "file": "f0574.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 40699
+  },
+  {
+   "i": 575,
+   "t": 23.958,
+   "file": "f0575.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 46624
+  },
+  {
+   "i": 576,
+   "t": 24,
+   "file": "f0576.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 2,
+   "ms": 48105
+  },
+  {
+   "i": 577,
+   "t": 24.042,
+   "file": "f0577.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40232
+  },
+  {
+   "i": 578,
+   "t": 24.083,
+   "file": "f0578.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 44176
+  },
+  {
+   "i": 579,
+   "t": 24.125,
+   "file": "f0579.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39842
+  },
+  {
+   "i": 580,
+   "t": 24.167,
+   "file": "f0580.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42301
+  },
+  {
+   "i": 581,
+   "t": 24.208,
+   "file": "f0581.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40860
+  },
+  {
+   "i": 582,
+   "t": 24.25,
+   "file": "f0582.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40289
+  },
+  {
+   "i": 583,
+   "t": 24.292,
+   "file": "f0583.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 38946
+  },
+  {
+   "i": 584,
+   "t": 24.333,
+   "file": "f0584.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39586
+  },
+  {
+   "i": 585,
+   "t": 24.375,
+   "file": "f0585.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39436
+  },
+  {
+   "i": 586,
+   "t": 24.417,
+   "file": "f0586.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42133
+  },
+  {
+   "i": 587,
+   "t": 24.458,
+   "file": "f0587.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 37748
+  },
+  {
+   "i": 588,
+   "t": 24.5,
+   "file": "f0588.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42519
+  },
+  {
+   "i": 589,
+   "t": 24.542,
+   "file": "f0589.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40971
+  },
+  {
+   "i": 590,
+   "t": 24.583,
+   "file": "f0590.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 38454
+  },
+  {
+   "i": 591,
+   "t": 24.625,
+   "file": "f0591.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 43318
+  },
+  {
+   "i": 592,
+   "t": 24.667,
+   "file": "f0592.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 36608
+  },
+  {
+   "i": 593,
+   "t": 24.708,
+   "file": "f0593.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 38898
+  },
+  {
+   "i": 594,
+   "t": 24.75,
+   "file": "f0594.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41266
+  },
+  {
+   "i": 595,
+   "t": 24.792,
+   "file": "f0595.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39137
+  },
+  {
+   "i": 596,
+   "t": 24.833,
+   "file": "f0596.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39849
+  },
+  {
+   "i": 597,
+   "t": 24.875,
+   "file": "f0597.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41693
+  },
+  {
+   "i": 598,
+   "t": 24.917,
+   "file": "f0598.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 26494
+  },
+  {
+   "i": 599,
+   "t": 24.958,
+   "file": "f0599.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42807
+  },
+  {
+   "i": 600,
+   "t": 25,
+   "file": "f0600.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 35946
+  },
+  {
+   "i": 601,
+   "t": 25.042,
+   "file": "f0601.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 44461
+  },
+  {
+   "i": 602,
+   "t": 25.083,
+   "file": "f0602.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41489
+  },
+  {
+   "i": 603,
+   "t": 25.125,
+   "file": "f0603.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41348
+  },
+  {
+   "i": 604,
+   "t": 25.167,
+   "file": "f0604.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 44642
+  },
+  {
+   "i": 605,
+   "t": 25.208,
+   "file": "f0605.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40214
+  },
+  {
+   "i": 606,
+   "t": 25.25,
+   "file": "f0606.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41012
+  },
+  {
+   "i": 607,
+   "t": 25.292,
+   "file": "f0607.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 38776
+  },
+  {
+   "i": 608,
+   "t": 25.333,
+   "file": "f0608.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 40135
+  },
+  {
+   "i": 609,
+   "t": 25.375,
+   "file": "f0609.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41999
+  },
+  {
+   "i": 610,
+   "t": 25.417,
+   "file": "f0610.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41970
+  },
+  {
+   "i": 611,
+   "t": 25.458,
+   "file": "f0611.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41327
+  },
+  {
+   "i": 612,
+   "t": 25.5,
+   "file": "f0612.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 41862
+  },
+  {
+   "i": 613,
+   "t": 25.542,
+   "file": "f0613.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42507
+  },
+  {
+   "i": 614,
+   "t": 25.583,
+   "file": "f0614.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 43261
+  },
+  {
+   "i": 615,
+   "t": 25.625,
+   "file": "f0615.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 39963
+  },
+  {
+   "i": 616,
+   "t": 25.667,
+   "file": "f0616.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 42129
+  },
+  {
+   "i": 617,
+   "t": 25.708,
+   "file": "f0617.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 31695
+  },
+  {
+   "i": 618,
+   "t": 25.75,
+   "file": "f0618.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 32423
+  },
+  {
+   "i": 619,
+   "t": 25.792,
+   "file": "f0619.png",
+   "phase": "room",
+   "room": "rom_master",
+   "liveSeeds": 3,
+   "ms": 31236
+  }
+ ],
+ "errors": []
+}
