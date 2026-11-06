@@ -40,6 +40,9 @@ async function configure(page,{suggested=true,living=false,ambience=false}={}){
   assert.ok(await page.evaluate(()=>{const d=document.querySelector('#presentationConfig').getBoundingClientRect(),b=[...document.querySelectorAll('#presentationConfig .presentation-config-actions .btn')][0].getBoundingClientRect();return b.top>=d.top&&b.bottom<=d.bottom+1;}),'«Iniciar presentación» visible');}
  if(living){await page.locator('#presentationLivingDrawing').check();if(ambience)await page.locator('#presentationLivingAmbience').check();}
  await page.locator('#presentationConfig .presentation-config-actions .btn').first().click();
+ // The presentation opens with a story of its own («Dibujo vivo», or the plan): wait for it first, so «settled» is
+ // the end of that story and not the instant before it opens.
+ if(living||(suggested&&!await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches)))await page.waitForFunction(()=>!!FloorPlanPresentation.story,null,{timeout:300000});
  if(suggested){const reduced=await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
   if(reduced){await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal'&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
    for(let i=0;i<6&&await page.evaluate(()=>!!FloorPlanPresentation.story);i++){await page.locator('#presentationStoryPlay').click();await page.waitForTimeout(500);}}}
@@ -159,16 +162,16 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  await page.locator('#presentationStorySlider').evaluate(e=>{e.value='80';e.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForFunction(()=>Math.abs((FloorPlanPresentation.story?.P||0)-.8)<.02&&!FloorPlanPresentation.story.busy);
  await page.locator('#presentationStoryPlay').click();
  await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return !s||(s.P>=1&&!s.playing&&!s.busy);},null,{timeout:900000});
- await page.screenshot({path:path.join(QA,`${size}-3-end.png`)});
+ // Played to its end with the play button, the scene hands over to the presentation by itself, as on master: the
+ // overview again, «Ver dibujo vivo» available to repeat it, no ambience left.
+ await settled(page);await page.screenshot({path:path.join(QA,`${size}-3-end.png`)});
  const samples=await stopSampler(page);assertStable(samples,size);
  if(viewport.width>=700){const last=samples.filter(x=>x.story).at(-1).card;for(const i of [0,1,2,3])assert.ok(Math.abs(last[i]-browse[i])<=TOL,`${size}: the same card in stops and story`);}
- // «Continuar presentación» goes on as before; the ambience never stays.
- await page.locator('#presentationStoryPlay').click();await settled(page);
+ assert.equal(await page.evaluate(()=>FloorPlanPresentation.current?.kind),'overview',`${size}: back on the overview`);
  assert.equal(await page.evaluate(()=>!!View3D.presentationAmbienceInfo?.active),false,`${size}: no ambience left`);
- // Repeat: «Ver dibujo vivo» plays it again from the drawing.
+ // Repeat: «Ver dibujo vivo» plays it again from the drawing; pause and resume to its end.
  await page.locator('#presentationLivingPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing'&&(FloorPlanPresentation.story.P||0)>0.05,null,{timeout:900000});
  await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return !s||(s.P>=1&&!s.playing&&!s.busy);},null,{timeout:900000});
  await page.locator('#presentationStoryPlay').click();await settled(page);
  if(thenStory){
   // The presentation goes on with the whole story: plan → section → façade → axonometric view → interior visit.
