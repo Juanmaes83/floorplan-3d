@@ -1,0 +1,5 @@
+ok 1 - HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of materials, camera or renderer
+# tests 1
+# pass 1
+# fail 0
+# skipped 0

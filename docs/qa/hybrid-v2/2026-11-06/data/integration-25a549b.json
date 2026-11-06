@@ -1,0 +1,252 @@
+[
+ {
+  "round": 1,
+  "kinds": [
+   "plan-reveal",
+   "section-open",
+   "elevation-open",
+   "room-visit"
+  ],
+  "after": [
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1178,
+     "textures": 10
+    }
+   },
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1178,
+     "textures": 10
+    }
+   },
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1189,
+     "textures": 10
+    }
+   }
+  ]
+ },
+ {
+  "round": 2,
+  "kinds": [
+   "plan-reveal",
+   "section-open",
+   "elevation-open",
+   "room-visit"
+  ],
+  "after": [
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1178,
+     "textures": 10
+    }
+   },
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1178,
+     "textures": 10
+    }
+   },
+   {
+    "drawing": false,
+    "ambience": false,
+    "clipMaterials": 0,
+    "localClipping": false,
+    "hybridSwapped": false,
+    "contourNodes": 0,
+    "hybridMaterials": 0,
+    "bindings": {
+     "meshes": 1248,
+     "kinds": 137
+    },
+    "renderer": {
+     "renderTarget": null,
+     "autoClear": true,
+     "toneMapping": 4,
+     "exposure": 1.04,
+     "outputColorSpace": "srgb",
+     "localClipping": false,
+     "clippingPlanes": 0,
+     "pixelRatio": 1,
+     "overrideMaterial": false,
+     "background": "f1f2f2",
+     "camera": {
+      "fov": 45,
+      "near": 0.05,
+      "far": 300,
+      "zoom": 1,
+      "layers": 1
+     },
+     "livingDrawing": false,
+     "ambience": false
+    },
+    "memory": {
+     "geometries": 1189,
+     "textures": 10
+    }
+   }
+  ]
+ }
+]
