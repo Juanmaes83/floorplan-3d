@@ -1,0 +1,10 @@
+{
+ "status": "Catastro no encuentra esa parcela en el huso elegido (Península, huso 30 (ETRS89)). Comprueba la referencia o elige el huso donde está la parcela.",
+ "diagnostic": {
+  "kind": "not-found-in-zone",
+  "at": "2026-11-06T00:28:32.447Z",
+  "zone": "EPSG:25830",
+  "message": "No se ha encontrado la parcela 0000000AA0000A para el huso 25830"
+ },
+ "parcel": null
+}
