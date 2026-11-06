@@ -155,8 +155,13 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  // Diagnostics: if the story panel is ever hidden while this scene should stay open, keep the call path that did it.
  await page.evaluate(()=>{const p=document.getElementById('presentationStory'),d=Object.getOwnPropertyDescriptor(HTMLElement.prototype,'hidden');window.__storyHidden=[];
   Object.defineProperty(p,'hidden',{configurable:true,get(){return d.get.call(this);},set(v){if(v&&!d.get.call(this))window.__storyHidden.push({t:Math.round(performance.now()),stack:String(new Error().stack).split('\n').slice(1,9).join(' | ')});d.set.call(this,v);}});});
- await page.waitForFunction(()=>(FloorPlanPresentation.story?.P||0)>0.45,null,{timeout:900000});
+ // Pause as soon as the scene is under way, then take it to the middle with the slider (what a person does). Waiting
+ // for the middle while it plays raced the scene's own end on slow CI renderers (SwiftShader, 2 cores): between two
+ // polls the 30 s scene could reach its end and close, which is the expected end of a played scene, not a defect.
+ await page.waitForFunction(()=>(FloorPlanPresentation.story?.P||0)>0.03,null,{timeout:900000});
  await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+ await page.evaluate(()=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(+s.max*.5));s.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return s&&!s.busy&&s.P>0.4&&s.P<0.6;},null,{timeout:300000});
  await page.waitForTimeout(500);
  {const s=await page.evaluate(()=>({story:FloorPlanPresentation.story,current:FloorPlanPresentation.current?.kind,hidden:window.__storyHidden}));
   assert.ok(s.story&&s.story.kind==='living-drawing'&&s.story.P<1,`${size}: paused, the living drawing stays open ${JSON.stringify(s)}`);}
