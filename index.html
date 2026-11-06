@@ -2566,7 +2566,7 @@ function init(){
 
   const pm = new THREE.PMREMGenerator(renderer); envTex = pm.fromScene(new RoomEnvironment(), .04).texture; baseEnvTex = envTex; pm.dispose();
   glassMat = new THREE.MeshPhysicalMaterial({color:0xcfe6ef, roughness:.05, transparent:true, opacity:.28, depthWrite:false, side:THREE.DoubleSide});
-  wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
+  wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.35, metalness:.85});
 
   archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
   levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof'; exteriorG = new THREE.Group(); exteriorG.name = 'derived-exterior-volumes';

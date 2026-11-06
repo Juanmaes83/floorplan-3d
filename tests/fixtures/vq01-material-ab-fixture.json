@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "status": "cp1-a-locked",
+  "authority": "VQ-01 Material Fidelity Foundation canonical contract V1",
+  "baselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "projectSha256": "9e0cf855bbc37576351f40aa109aebe253d4cb92ec620510b33975fdf61d0946",
+  "note": "The CP0.1 884x498 observation belonged to the editor 3D pane. The canonical A/B fixture is the full Presentation runtime below, measured and then reproduced from the exact baseline/project hash.",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "deviceScaleFactor": 1
+  },
+  "assignments": [
+    {"surfaceId": "surface-oak-wood-planks", "kind": "floor", "targetIndex": 0},
+    {"surfaceId": "surface-marble-01", "kind": "floor", "targetIndex": 1}
+  ],
+  "presentation": {
+    "startMode": "default",
+    "stopIndex": 0,
+    "surfaceQuality": "enhanced",
+    "current": {"kind": "overview", "roomId": null, "levelId": null},
+    "status": "Vista 1 de 2",
+    "moving": "false"
+  },
+  "stage": {"width": 1440, "height": 900},
+  "canvas": {
+    "cssWidth": 1440,
+    "cssHeight": 900,
+    "width": 1440,
+    "height": 900,
+    "pixelRatio": 1
+  },
+  "camera": {
+    "position": [11.701805610678774, 19.155886586540934, 5.129978514784598],
+    "quaternion": [-0.4323683717389173, 0.3779592877333376, 0.20627084738790868, 0.7922478813186059],
+    "target": [2.1238623174083067, 0, -2.6235946273867325],
+    "fov": 45,
+    "aspect": 1.6
+  },
+  "viewOptions": {
+    "cut": 2.8,
+    "furn": true,
+    "labels": true,
+    "night": false,
+    "hour": 10,
+    "mode": "orbit",
+    "surfaceQuality": "enhanced",
+    "roof": false
+  },
+  "light": {
+    "preset": "neutral",
+    "status": "fallback",
+    "error": "HDR MIME inválido",
+    "bytes": 0,
+    "source": "assets/environments/studio-small-09-1k.hdr",
+    "estimatedSourceGpuBytes": 4194304,
+    "estimatedPmremGpuBytes": 0,
+    "environment": "synthetic",
+    "hemiColor": 16777215,
+    "hemiGround": 11450562,
+    "hemiIntensity": 1.05,
+    "sunColor": 16774888,
+    "sunIntensity": 2.25,
+    "background": 15856370,
+    "exposure": 1.04,
+    "envK": 0.75
+  },
+  "environment3D": "studio",
+  "surfaces": [
+    {
+      "id": "surface-marble-01",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 53616,
+      "gpuBytes": 1048578,
+      "map": {"repeat": [1, 1], "colorSpace": "srgb"},
+      "normalMap": {"repeat": [1, 1], "colorSpace": ""},
+      "roughnessMap": {"repeat": [1, 1], "colorSpace": ""},
+      "error": null,
+      "detailError": null
+    },
+    {
+      "id": "surface-oak-wood-planks",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 51542,
+      "gpuBytes": 1048578,
+      "map": {"repeat": [1, 1], "colorSpace": "srgb"},
+      "normalMap": {"repeat": [1, 1], "colorSpace": ""},
+      "roughnessMap": {"repeat": [1, 1], "colorSpace": ""},
+      "error": null,
+      "detailError": null
+    }
+  ],
+  "projectBindings": [
+    {
+      "id": "mat_surface-marble-01-floor",
+      "category": "floor",
+      "preset": "surface-marble-01",
+      "repeatMm": {"x": 1000, "y": 1000}
+    },
+    {
+      "id": "mat_surface-oak-wood-planks-floor",
+      "category": "floor",
+      "preset": "surface-oak-wood-planks",
+      "repeatMm": {"x": 1000, "y": 1000}
+    }
+  ],
+  "lifecycle": {
+    "loopActive": true,
+    "animating": false,
+    "flying": false,
+    "pendingAssets": 0
+  }
+}

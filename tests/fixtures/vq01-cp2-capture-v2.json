@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "views": "vq01-cp2-views.json",
+  "reason": "The first procedural prototype exposed an existing asynchronous export-button readiness race: global repeats differed in button enablement. Wait for the same fully-ready UI and assets on A0, B1 and B2; never mask pixels or change scene values. CP1 fixtures and the original CP2-A record remain historical.",
+  "readiness": "all four surfaces ready; pendingAssets=0; presentationCapture enabled; settled layout",
+  "capture": "same page screenshot and same immediate closeup canvas readback as CP2-A"
+}

@@ -14,6 +14,9 @@
    ids.add(e.id);
    if(!Array.isArray(e.applications)||!e.applications.length||e.applications.some(x=>!['floor','wall'].includes(x)))throw Error('Aplicación de superficie inválida');
    if(!/^#[a-f0-9]{6}$/i.test(e.color)||!Number.isFinite(e.roughness)||e.roughness<0||e.roughness>1)throw Error('Fallback de superficie inválido');
+   // Optional calibration for this Rubik slice; the verified map still owns its bytes and UV scale.
+   if(e.mapTint!==undefined&&!/^#[a-f0-9]{6}$/i.test(e.mapTint))throw Error('Tinte de mapa inválido');
+   if(e.normalStrength!==undefined&&(!e.maps?.normal||!Number.isFinite(e.normalStrength)||e.normalStrength<0||e.normalStrength>1))throw Error('Intensidad normal inválida');
    if(e.source?.license!=='CC0-1.0'||!/^https:\/\/polyhaven\.com\/a\/[a-z0-9_]+$/.test(e.source?.url||'')||!e.source.author||!/^https:\/\/github\.com\/Poly-Haven\/polyhaven\.com\/blob\/[a-f0-9]{40}\/public\/locales\/en\/license\.json$/.test(e.source.licenseUrl||'')||!e.source.distributionUrl||!e.source.distributionLicenseUrl||!e.source.rightsEvidence||!e.scaleEvidence)throw Error('Procedencia/licencia de superficie ausente');
    const channels=Object.keys(e.maps||{});
    if(channels.some(channel=>!['baseColor','normal','roughness'].includes(channel))||
