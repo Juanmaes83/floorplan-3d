@@ -45,3 +45,11 @@ Mientras solo esté en staging, revertir significa descartar o dejar de usar la 
 ## Documento vivo
 
 Este archivo describe únicamente la primera integración. Cada promoción, cambio de SHA o integración posterior debe generar una entrada documental con resultados verificados, sin atribuir un check a un commit distinto.
+
+## Entrada 2026-11-06 — corrección aislada del final de la visita espacial (QA humano bloqueante, PR #172)
+
+- Rama aislada: `fix/section-visit-handover-2026-11-06`, basada en el staging `339d24b`. **No modifica el staging, `master`, producción, Section original ni Hybrid V1/V2.**
+- **Causa raíz:** los dos finales de reproducción automática (`openStory` y el botón de reproducción) cerraban la historia con `finishStory()`, con lo que se perdía el estado de llegada `room-visit` del que dependen «Explorar desde aquí» y «Volver a la sección».
+- **Corrección:** una historia que termina en `room-visit` ya no se cierra sola. Queda dentro de la estancia, a la altura de los ojos, con el traspaso. Las demás historias no cambian.
+- Detalle, pruebas y evidencias: `docs/qa/section-spatial-visit-v1/handover-fix-2026-11-06.md`.
+- Estado: **pendiente de revisión humana en la Preview de la rama de corrección**. Ninguna promoción autorizada.
