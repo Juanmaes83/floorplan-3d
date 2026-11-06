@@ -59,3 +59,15 @@ test('FT8-S3-05 · through the GeoProvider registry: cancellation and input vali
   const c=new AbortController();c.abort();
   assert.equal((await reg.getParcel('catastro-inspire-wfs',{mode:'reference',reference:'3662001TF3136S'},{signal:c.signal})).status,'cancelled');
 });
+
+test('M2 · autoZone: tries the official zones only while the service says «not found in this zone»; any other answer stops',async()=>{
+  const nf=z=>res(200,`<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows/1.1"><ows:Exception><ows:ExceptionText><![CDATA[No se ha encontrado la parcela 0000000AA0000A para el huso ${z}]]></ows:ExceptionText></ows:Exception></ows:ExceptionReport>`);
+  const seen=[];const p=W.create({now,autoZone:true,fetch:async url=>{const z=/srsname=EPSG%3A%3A(\d+)/.exec(url)[1];seen.push(z);return z==='25829'?res(400,'<html/>','text/html'):nf(z);}});
+  assert.deepEqual(await p.getParcel({mode:'reference',reference:'0000000AA0000A'}),{status:'unavailable',reason:'network-unavailable'});
+  assert.deepEqual(seen,['25830','25829'],'stops at the first answer that is not «not found in this zone»');
+  assert.deepEqual(p.lastDiagnostic().zonesTried,['EPSG:25830','EPSG:25829']);
+  const all=[];const q=W.create({now,autoZone:true,fetch:async url=>{const z=/srsname=EPSG%3A%3A(\d+)/.exec(url)[1];all.push(z);return nf(z);}});
+  assert.deepEqual(await q.getParcel({mode:'reference',reference:'0000000AA0000A'}),{status:'not-found',reason:'parcel-not-found'});
+  assert.equal(all.length,4,'one request per official zone, never more');assert.equal(q.lastDiagnostic().kind,'not-found-in-any-zone');
+  const one=W.create({now,fetch:async()=>nf('25830')});await one.getParcel({mode:'reference',reference:'0000000AA0000A'});assert.equal(one.lastDiagnostic().kind,'not-found-in-zone','without autoZone the M1 behaviour is unchanged');
+});

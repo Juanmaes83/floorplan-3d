@@ -37,7 +37,7 @@
   for(const [k,v] of [['service','wfs'],['version','2'],['request','getfeature'],['STOREDQUERIE_ID','GetParcel'],['refcat',ref],['srsname','EPSG::'+zone.slice(5)]])u.searchParams.set(k,v);
   return u.toString();
  }
- function create({fetch:fetchImpl=root.fetch?.bind(root),endpoint=ENDPOINT,timeoutMs=20000,crs='EPSG:25830',now=()=>new Date()}={}){
+ function create({fetch:fetchImpl=root.fetch?.bind(root),endpoint=ENDPOINT,timeoutMs=20000,crs='EPSG:25830',now=()=>new Date(),autoZone=false}={}){
   if(typeof fetchImpl!=='function')throw new TypeError('FloorPlanCatastroWfs: fetch is required');
   Parcel.normalizeCrs(crs);
   let zone=crs,diagnostic=null;
@@ -49,7 +49,22 @@
     sourceName:SOURCE_NAME,sourceUrl:SERVICE_PAGE,version:'WFS 2.0 · INSPIRE CP',region:'España',coverage:'Territorio de la DGC (no incluye País Vasco ni Navarra)',
     attribution:'Dirección General del Catastro',license:{...LICENSE}};},
    getSourceMetadata(){return {providerId:ID,type:'official-source',sourceName:SOURCE_NAME,sourceUrl:SERVICE_PAGE};},
+   // M2: with autoZone the official zones are tried in order (current zone first), ONLY while the service answers
+   // «no se ha encontrado la parcela … para el huso …». At most one low-impact request per zone; any other answer stops.
    async getParcel(input,context={}){
+    if(!autoZone)return lookup(zone,input,context);
+    const order=[zone,...ZONES.map(z=>z.crs).filter(z=>z!==zone)],tried=[];
+    for(const z of order){const r=await lookup(z,input,context);tried.push(z);
+     if(!(r.status==='not-found'&&diagnostic?.kind==='not-found-in-zone')){if(tried.length>1)diagnostic=Object.freeze({...diagnostic,zonesTried:tried});return r;}}
+    diagnostic=Object.freeze({...diagnostic,kind:'not-found-in-any-zone',zonesTried:tried});return result('not-found','parcel-not-found');
+   },
+   // Read-only: why the last lookup ended as it did (for plain-language messages); never contains personal data.
+   lastDiagnostic(){return diagnostic;},
+   setZone(next){Parcel.normalizeCrs(next);zone=next;},
+   get zone(){return zone;},
+   get autoZone(){return autoZone;}
+  };
+  async function lookup(zone,input,context={}){
     if(input?.mode!=='reference')return result('unsupported','invalid-parcel-input');
     let reference,url;
     try{reference=Parcel.normalizeReference(input.reference);url=queryUrl(reference,zone,endpoint);}catch{diag('invalid-reference');return result('invalid','invalid-parcel-reference');}
@@ -91,12 +106,7 @@
      if(['inconsistent-source-crs','invalid-source-geometry'].includes(reason))return result('unavailable',reason);
      return result('unavailable','invalid-source-geometry');
     }
-   },
-   // Read-only: why the last lookup ended as it did (for plain-language messages); never contains personal data.
-   lastDiagnostic(){return diagnostic;},
-   setZone(next){Parcel.normalizeCrs(next);zone=next;},
-   get zone(){return zone;}
-  };
+  }
   Geo.inspectProvider(provider);
   return provider;
  }
