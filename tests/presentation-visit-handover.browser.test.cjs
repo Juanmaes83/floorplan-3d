@@ -45,8 +45,9 @@ async function playWholeStory(page,{pauseInVisit=false}={}){
  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());
  await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1,null,{timeout:120000});
  if(pauseInVisit){
-  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='room-visit'&&FloorPlanPresentation.story.playing&&View3D.presentationStoryInfo?.phase==='walk',null,{timeout:600000});
-  await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+  // the pause is pressed inside the page the moment the visit walks (a slow software renderer must not let it end first)
+  await page.evaluate(async()=>{for(let i=0;i<30000;i++){const s=FloorPlanPresentation.story;if(s?.kind==='room-visit'&&s.playing&&View3D.presentationStoryInfo?.phase==='walk'){document.querySelector('#presentationStoryPlay').click();return;}await new Promise(r=>setTimeout(r,20));}throw Error('the visit never walked');});
+  await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
   const paused=await state(page);assert.equal(paused.story?.kind,'room-visit','paused inside the visit');assert.ok(paused.story.P<1);
   await page.locator('#presentationStoryPlay').click();}   // resume with the play button: its own path to the end
  await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return !s||(s.P>=1&&!s.playing&&!s.busy);},null,{timeout:900000});
@@ -68,10 +69,12 @@ test('whole story autoplay ends INSIDE the room at eye level, stays there and ha
  await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());
  const w=await state(page);assert.deepEqual(w.pos,s.pos,'Recorrer starts at the arrival position');assert.deepEqual(w.quat,s.quat,'and orientation');
  assert.equal(await page.locator('#presentationWalkBar').isVisible(),true);await page.screenshot({path:path.join(QA,'2-recorrer.png')});
- // The user walks normally.
+ // The user walks normally: «Empezar el recorrido» takes the pointer (as on any desktop «Recorrer»), then W.
+ await page.locator('#walkStart').click();await page.waitForFunction(()=>!!document.pointerLockElement,null,{timeout:10000});
  await page.keyboard.down('KeyW');await page.waitForTimeout(900);await page.keyboard.up('KeyW');await page.waitForTimeout(200);
  const moved=await state(page);assert.ok(Math.hypot(moved.pos[0]-w.pos[0],moved.pos[2]-w.pos[2])>.05,'walking moves the viewer');assert.ok(Math.abs(moved.pos[1]-1.6)<1e-3,'at eye level');
- // Back to the presentation.
+ // Back to the presentation: the pointer is released first (what Esc does in the browser), then the bar's button.
+ await page.evaluate(()=>document.exitPointerLock());await page.waitForFunction(()=>!document.pointerLockElement);
  await page.locator('#presentationWalkBack').click();await page.waitForFunction(()=>!View3D.walking());await settled(page);
  const back=await state(page);assert.equal(back.current,'room','back in the presentation, on the room stop');assert.equal(back.walking,false);
  await page.screenshot({path:path.join(QA,'3-back-to-presentation.png')});
@@ -83,12 +86,20 @@ test('whole story autoplay ends INSIDE the room at eye level, stays there and ha
  await page.locator('#presentationWalkSection').click();
  await page.waitForFunction(()=>!View3D.walking()&&FloorPlanPresentation.story?.kind==='section-open'&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.story.local),0,'held at the section start');await page.screenshot({path:path.join(QA,'4-back-to-section.png')});
- // Leave the story (plan button to the plan) and measure at the overview again: no growth between cycles.
- await page.evaluate(()=>{const s=document.querySelector('#presentationStorySlider');s.value='0';s.dispatchEvent(new Event('input',{bubbles:true}));});
- await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy);
+ // Back on the overview stop: no clipping and the presentation's own wall height. (The section scene keeps its
+ // geometries until the next scene — identical on staging 339d24b, see docs — so memory is compared after one more
+ // cycle by the same path as cycle 1.)
+ await page.locator('.presentation-stops button').nth(0).click();await settled(page);
+ const ov=await state(page);assert.equal(ov.clip.materialsWithPlanes??0,0,'no clipping after the section');assert.equal(ov.clip.localClipping,false);
+ assert.equal(await page.evaluate(()=>View3D.presentationInspect().options.cut),2.8,'wall height of the overview restored');
+ await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
+ await page.evaluate(()=>{const s=document.querySelector('#presentationStorySlider');s.value=s.max;s.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.waitForFunction(()=>FloorPlanPresentation.story?.P>=1&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
+ await page.locator('#presentationVisitWalk').click();await page.waitForFunction(()=>View3D.walking());await page.locator('#presentationWalkBack').click();await page.waitForFunction(()=>!View3D.walking());await settled(page);
+ await page.locator('.presentation-stops button').nth(0).click();await settled(page);const mem3=(await state(page)).memory;
+ assert.ok(Math.abs(mem3.geometries-mem1.geometries)<=4&&Math.abs(mem3.textures-mem1.textures)<=2,`no growth over the cycles ${JSON.stringify([mem1,mem3])}`);
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active);await page.waitForTimeout(800);
  const end=await state(page);assert.equal(end.clip.materialsWithPlanes??0,0,'no clipping left');assert.equal(end.clip.localClipping,false);assert.equal(end.walking,false);
- assert.ok(Math.abs(end.memory.geometries-mem1.geometries)<=4&&Math.abs(end.memory.textures-mem1.textures)<=2,`no growth ${JSON.stringify([mem1,end.memory])}`);
  assert.equal(await page.evaluate(()=>JSON.stringify(FloorPlanApp.project)),project,'project JSON unchanged');assert.deepEqual(errors,[]);
 });
 
