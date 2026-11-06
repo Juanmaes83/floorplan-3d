@@ -149,8 +149,14 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  await startSampler(page);
  await page.locator('#presentationLivingPlay').click();
  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing',null,{timeout:120000});
+ // Diagnostics: if the story panel is ever hidden while this scene should stay open, keep the call path that did it.
+ await page.evaluate(()=>{const p=document.getElementById('presentationStory'),d=Object.getOwnPropertyDescriptor(HTMLElement.prototype,'hidden');window.__storyHidden=[];
+  Object.defineProperty(p,'hidden',{configurable:true,get(){return d.get.call(this);},set(v){if(v&&!d.get.call(this))window.__storyHidden.push({t:Math.round(performance.now()),stack:String(new Error().stack).split('\n').slice(1,9).join(' | ')});d.set.call(this,v);}});});
  await page.waitForFunction(()=>(FloorPlanPresentation.story?.P||0)>0.45,null,{timeout:900000});
  await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+ await page.waitForTimeout(500);
+ {const s=await page.evaluate(()=>({story:FloorPlanPresentation.story,current:FloorPlanPresentation.current?.kind,hidden:window.__storyHidden}));
+  assert.ok(s.story&&s.story.kind==='living-drawing'&&s.story.P<1,`${size}: paused, the living drawing stays open ${JSON.stringify(s)}`);}
  const mid=await page.evaluate(()=>({info:View3D.presentationLivingDrawingInfo,caption:document.querySelector('#presentationStoryCaption').textContent}));
  if(ambience)assert.match(mid.caption,/no forma parte del proyecto/,`${size}: the ambience label stays in the caption`);
  await page.screenshot({path:path.join(QA,`${size}-1-paused.png`)});
