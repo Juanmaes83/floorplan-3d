@@ -1,10 +1,10 @@
 # RUBIK SOTA — Incidente UX de Presentation (2026-11-06)
 
-**Estado:** PENDIENTE de incorporar el vídeo original comprimido. Este README no constituye la evidencia de vídeo.
+**Estado:** VÍDEO RECIBIDO Y SUBIDO A GITHUB. Archivo verificado mediante Git blob SHA-1 y SHA-256 original.
 
 ## Archivo necesario
 
-- Nombre: `RUBIK_Presentation_UX_incidente_2026-11-06_comprimido.mp4`
+- Archivo: [`RUBIK_Presentation_UX_incidente_2026-11-06_comprimido.mp4`](RUBIK_Presentation_UX_incidente_2026-11-06_comprimido.mp4)
 - Tamaño: 2400229 bytes
 - Duración: 57.344 segundos
 - Vídeo: H.264, 1920x1020
