@@ -39,7 +39,7 @@ test('M2-1 · versions: unknown version rejected, invalid data rejected, empty s
   assert.throws(()=>R.parseStore(JSON.stringify({schema:R.SCHEMA,schemaVersion:'9.0.0',records:{}})),{code:'record-version-unsupported'});
   assert.throws(()=>R.parseStore('{nope'),{code:'record-invalid'});
   const a=R.subjectOf(entryA),st=R.putSchedule(R.empty(),entryA.id,a,plan(a,REV_A),{at:'2026-11-06T10:00:00Z'});
-  const tampered=JSON.parse(JSON.stringify(st));tampered.records[R.keyOf(entryA.id,a)].schedule.projectRef.id='prj_other';
+  const tampered=JSON.parse(JSON.stringify(st));tampered.records[R.keyOf(entryA.id,a)].plans[0].projectRef.id='prj_other';
   assert.throws(()=>R.parseStore(JSON.stringify(tampered)),{code:'record-invalid'});
   assert.deepEqual(R.parseStore(JSON.stringify(st)),st,'round trip is lossless');
 });
@@ -88,4 +88,17 @@ test('M2-1 · injected storage: persists, reloads, and a full or blocked storage
   // Price history is per budget subject (level project for buildings), bounded.
   store.addPriceChange(entryA.id,a,'prj_docA',{itemId:'paint',before:{unitPrice:null},after:{unitPrice:8.5},revBefore:'rev_1',revAfter:'rev_2'});
   assert.equal(R.open(mem).get(entryA.id,a).priceHistory.prj_docA[0].after.unitPrice,8.5);
+});
+
+test('M2-1 · several plans per subject: duplicate keeps the original, selection is explicit, removal never auto-selects',()=>{
+  const a=R.subjectOf(entryA),mem=memory(),store=R.open(mem),base=plan(a,REV_A,[task('t1'),task('t2')]);
+  store.saveSchedule(entryA.id,a,base);
+  const copy=R.duplicateSchedule(base,{id:'sch_copy',title:'Alternativa con más plazo'});
+  assert.deepEqual([copy.id,copy.review.status,copy.tasks.length,copy.projectRef.id],['sch_copy','draft',2,'prj_docA']);
+  let r=store.saveSchedule(entryA.id,a,copy,{select:false});
+  assert.deepEqual([r.plans.map(p=>p.id),r.selectedScheduleId],[['sch_test','sch_copy'],'sch_test'],'the original stays selected');
+  r=store.selectSchedule(entryA.id,a,'sch_copy');assert.equal(R.open(mem).get(entryA.id,a).schedule.id,'sch_copy');
+  r=store.removeSchedule(entryA.id,a,'sch_copy');
+  assert.deepEqual([r.plans.map(p=>p.id),r.selectedScheduleId],[['sch_test'],null],'no silent re-selection');
+  assert.equal(R.correspondence(R.open(mem).get(entryA.id,a),{subject:a,revision:REV_A}).find(x=>x.aspect==='plan').result,'absent');
 });

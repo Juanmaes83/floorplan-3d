@@ -14,7 +14,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(Schedule){
   'use strict';
   const KEY='rubik-construction-v1',SCHEMA='rubik-sota.construction-record',VERSION='0.1.0';
-  const LIMITS=Object.freeze({planHistory:40,priceHistory:200,deliveries:40,storeBytes:4*1024*1024});
+  const LIMITS=Object.freeze({plans:6,planHistory:40,priceHistory:200,deliveries:40,storeBytes:4*1024*1024});
   const RESULTS=Object.freeze(['match','mismatch','obsolete','absent','unverifiable']);
   class RecordError extends Error{constructor(code,message){super(message||code);this.name='RecordError';this.code=code;}}
   const fail=(code,message)=>{throw new RecordError(code,message);};
@@ -59,8 +59,13 @@
   const empty=()=>({schema:SCHEMA,schemaVersion:VERSION,records:{}});
   function validRecord(key,r){
     if(!isObj(r)||r.key!==key||typeof r.entryId!=='string'||!isObj(r.subject)||keyOf(r.entryId,r.subject)!==key)fail('record-invalid');
-    if(r.schedule!==null){try{Schedule.validate(r.schedule);}catch(e){fail('record-invalid','Plan guardado no válido: '+e.message);}
-      if(r.schedule.projectRef.type!==r.subject.type||r.schedule.projectRef.id!==r.subject.id)fail('record-invalid');}
+    if(!Array.isArray(r.plans)||r.plans.length>LIMITS.plans)fail('record-invalid');
+    const ids=new Set();
+    for(const p of r.plans){try{Schedule.validate(p);}catch(e){fail('record-invalid','Plan guardado no válido: '+e.message);}
+      if(p.projectRef.type!==r.subject.type||p.projectRef.id!==r.subject.id||ids.has(p.id))fail('record-invalid');ids.add(p.id);}
+    if(r.selectedScheduleId!==null&&!ids.has(r.selectedScheduleId))fail('record-invalid');
+    // `schedule` is the explicitly selected plan (derived, kept for readers); never a guess among several.
+    r.schedule=r.selectedScheduleId?r.plans.find(p=>p.id===r.selectedScheduleId):null;
     if(r.binding!==null&&!(isObj(r.binding)&&isObj(r.binding.fingerprints)&&SHA.test(r.binding.fingerprints.project||'')))fail('record-invalid');
     for(const k of ['planHistory','deliveries'])if(!Array.isArray(r[k]))fail('record-invalid');
     if(!isObj(r.priceHistory))fail('record-invalid');
@@ -76,7 +81,7 @@
     return s;
   }
   const newRecord=(entryId,subject)=>({key:keyOf(entryId,subject),entryId,subject:{type:subject.type,id:subject.id},
-    schedule:null,binding:null,planHistory:[],priceHistory:{},deliveries:[],updatedAt:null});
+    plans:[],selectedScheduleId:null,schedule:null,binding:null,planHistory:[],priceHistory:{},deliveries:[],updatedAt:null});
 
   /* ---------- pure updates (return a new store) ---------- */
   function withRecord(store,entryId,subject,fn,at){
@@ -84,17 +89,30 @@
     fn(r);r.updatedAt=at;validRecord(key,r);next.records[key]=r;return next;
   }
   const bounded=(list,n)=>list.slice(Math.max(0,list.length-n));
-  function putSchedule(store,entryId,subject,schedule,{at,action='save'}){
+  function putSchedule(store,entryId,subject,schedule,{at,action='save',select=true}){
     let s;try{s=Schedule.validate(schedule);}catch(e){throw new RecordError('schedule-invalid',e.message);}
     if(s.projectRef.type!==subject.type||s.projectRef.id!==subject.id)fail('schedule-other-project');
     return withRecord(store,entryId,subject,r=>{
       // The previous review binding is kept: its fingerprints make it `obsolete` (visible), never silently dropped.
-      r.schedule=s;r.planHistory=bounded([...r.planHistory,{at,action,scheduleId:s.id,tasks:s.tasks.length,revision:s.projectRef.revision,review:s.review.status}],LIMITS.planHistory);
+      const i=r.plans.findIndex(p=>p.id===s.id);
+      if(i>=0)r.plans[i]=s;else{if(r.plans.length>=LIMITS.plans)fail('plans-limit','Cada proyecto guarda hasta '+LIMITS.plans+' planes. Elimina uno antes de crear otro.');r.plans.push(s);}
+      if(select||!r.selectedScheduleId)r.selectedScheduleId=s.id;r.planHistory=bounded([...r.planHistory,{at,action,scheduleId:s.id,tasks:s.tasks.length,revision:s.projectRef.revision,review:s.review.status}],LIMITS.planHistory);
     },at);
   }
-  function removeSchedule(store,entryId,subject,{at}){
-    return withRecord(store,entryId,subject,r=>{if(r.schedule)r.planHistory=bounded([...r.planHistory,{at,action:'remove',scheduleId:r.schedule.id,tasks:r.schedule.tasks.length,revision:r.schedule.projectRef.revision,review:r.schedule.review.status}],LIMITS.planHistory);r.schedule=null;r.binding=null;},at);
+  function removeSchedule(store,entryId,subject,scheduleId,{at}){
+    return withRecord(store,entryId,subject,r=>{const p=r.plans.find(x=>x.id===scheduleId);if(!p)fail('record-invalid','Plan no encontrado');
+      r.planHistory=bounded([...r.planHistory,{at,action:'remove',scheduleId:p.id,tasks:p.tasks.length,revision:p.projectRef.revision,review:p.review.status}],LIMITS.planHistory);
+      r.plans=r.plans.filter(x=>x.id!==scheduleId);if(r.binding?.scheduleId===scheduleId)r.binding=null;
+      // Removing the selected plan never selects another one silently.
+      if(r.selectedScheduleId===scheduleId)r.selectedScheduleId=null;},at);
   }
+  function selectSchedule(store,entryId,subject,scheduleId,{at}){
+    return withRecord(store,entryId,subject,r=>{if(scheduleId!==null&&!r.plans.some(p=>p.id===scheduleId))fail('record-invalid','Plan no encontrado');r.selectedScheduleId=scheduleId;
+      r.planHistory=bounded([...r.planHistory,{at,action:'select',scheduleId}],LIMITS.planHistory);},at);
+  }
+  // A copy is a new draft plan (new id, review reset); the original stays saved and selected until the professional chooses.
+  function duplicateSchedule(schedule,{id,title}={}){const s=Schedule.validate(schedule);
+    return Schedule.create({id,projectRef:{...s.projectRef},source:title||s.source+' (copia)',tasks:JSON.parse(JSON.stringify(s.tasks)),review:{status:'draft',by:null,at:null}});}
   function putBinding(store,entryId,subject,binding,{at}){
     return withRecord(store,entryId,subject,r=>{if(!r.schedule||binding.scheduleId!==r.schedule.id)fail('record-invalid','El vínculo no corresponde al plan guardado');r.binding=clone(binding);},at);
   }
@@ -169,7 +187,8 @@
       get:(entryId,subject)=>clone(store.records[keyOf(entryId,subject)]||null),
       all:()=>clone(store),
       saveSchedule:(entryId,subject,schedule,opts={})=>commit(putSchedule(store,entryId,subject,schedule,{at:now(),...opts})).records[keyOf(entryId,subject)],
-      removeSchedule:(entryId,subject)=>commit(removeSchedule(store,entryId,subject,{at:now()})).records[keyOf(entryId,subject)],
+      removeSchedule:(entryId,subject,scheduleId)=>commit(removeSchedule(store,entryId,subject,scheduleId,{at:now()})).records[keyOf(entryId,subject)],
+      selectSchedule:(entryId,subject,scheduleId)=>commit(selectSchedule(store,entryId,subject,scheduleId,{at:now()})).records[keyOf(entryId,subject)],
       saveBinding:(entryId,subject,binding)=>commit(putBinding(store,entryId,subject,binding,{at:now()})).records[keyOf(entryId,subject)],
       addPriceChange:(entryId,subject,budgetSubjectId,change)=>commit(addPriceChange(store,entryId,subject,budgetSubjectId,change,{at:now()})).records[keyOf(entryId,subject)],
       addDelivery:(entryId,subject,delivery)=>commit(addDelivery(store,entryId,subject,delivery,{at:now()})).records[keyOf(entryId,subject)],
@@ -178,6 +197,6 @@
   }
 
   return Object.freeze({KEY,SCHEMA,VERSION,LIMITS,RESULTS,MESSAGES,RecordError,human,
-    subjectOf,subjectDoc,keyOf,duplicateSubjects,empty,parseStore,putSchedule,removeSchedule,putBinding,addPriceChange,addDelivery,
+    subjectOf,subjectDoc,keyOf,duplicateSubjects,empty,parseStore,putSchedule,removeSchedule,selectSchedule,duplicateSchedule,putBinding,addPriceChange,addDelivery,
     correspondence,links,newId,open});
 });

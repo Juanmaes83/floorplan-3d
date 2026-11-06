@@ -58,6 +58,8 @@
     el('td',eur(l.subtotalNet),tr,'is-num').dataset.label=tx('Subtotal','Subtotal','小计');
     const rt=el('td',undefined,tr);rt.dataset.label=tx('Revisado','Reviewed','已审核');const r=el('input',undefined,rt);r.type='checkbox';r.checked=it.review.status==='reviewed';r.disabled=it.unitPrice===null;r.setAttribute('aria-label',tx(`Precio de ${it.description} revisado`,`${it.description} price reviewed`,'已审核'));r.dataset.field='review';
     r.onchange=()=>{setItem(it.id,x=>r.checked?B.markReviewed(x,{reviewedAt:new Date().toISOString()}):B.setManualPrice(x,{unitPrice:x.unitPrice,label:x.priceSource?.label||tx('Precio propio','Own price','自有价格'),asOf:x.priceSource?.asOf||null}));draw(`${it.id}|review`);};
+    // M2 (FT3D-8 S4): optional, read-only decoration of the row (linked tasks/elements of the construction plan).
+    try{window.FloorPlanBudgetLinks?.decorate?.(th,it.id);}catch{}
     if(openRef===it.id&&base)refPanel(tb,it);}}
   if(X&&Bridge){const ref=el('details',undefined,undefined,'budget-bc3');bar.after(ref);ref.id='budgetBc3';ref.open=!!base;el('summary',tx('Precios de referencia (BC3)','Reference prices (BC3)','参考价格 (BC3)'),ref);
    el('p',tx('Carga una base de precios en formato BC3 que tengas (tu tarifa o una base de precios que hayas obtenido). Se lee en este navegador: Rubik no la sube ni la guarda. Tú respondes de su licencia de uso. Un precio de referencia nunca se da por revisado.','Load a BC3 price base you have. It is read in this browser: Rubik does not upload or keep it. You answer for its licence. A reference price never counts as reviewed.','载入您拥有的 BC3 价格库，仅在本浏览器读取。'),ref,'budget-bc3-note');
@@ -101,5 +103,9 @@
  function summary(){try{const r=load();return B.calculateBudget(r.budget);}catch{return null;}}
  // C4: read-only access to the same draft summary() uses, plus whether a budget was ever prepared. Never saves.
  function current(){try{const r=load();return {budget:r.budget,saved:r.savedBefore};}catch{return null;}}
- window.FloorPlanBudgetUI={open,summary,current,get budget(){return state?.budget||null;}};
+ // M2 (FT3D-8 S4): the single write path for other Presupuestar tools (reference prices). Same storage and validation
+ // as this dialog; only the open project's own budget is accepted (identity by subject id, never by name).
+ function commit(budget){const b=B.validateBudget(budget);if(b.subject.type!=='project'||b.subject.id!==app.project.id)throw Error(tx('El presupuesto pertenece a otro proyecto: no se guarda.','The budget belongs to another project: not saved.','预算属于其他项目。'));
+  const all=read(BUDGETS);all[app.project.id]=JSON.parse(B.serializeBudget(b));if(!write(BUDGETS,all))throw Error(tx('No se pudo guardar el presupuesto en este navegador.','The budget could not be saved in this browser.','无法保存预算。'));if(state)state.budget=b;return b;}
+ window.FloorPlanBudgetUI={open,summary,current,commit,get budget(){return state?.budget||null;}};
 })();
