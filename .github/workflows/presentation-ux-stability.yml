@@ -11,6 +11,7 @@ on:
       - 'js/brand-ui.js'
       - 'tests/presentation-ux-stability.browser.test.cjs'
       - '.github/workflows/presentation-ux-stability.yml'
+      - 'docs/qa/presentation-ux/**'
 permissions:
   contents: read
 jobs:

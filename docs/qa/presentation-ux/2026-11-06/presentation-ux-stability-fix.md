@@ -108,6 +108,45 @@ Sonda `scripts/qa/presentation-ux-probe.cjs`:
   - `tests/presentation-ux-stability.browser.test.cjs` y `.github/workflows/presentation-ux-stability.yml`;
   - `scripts/qa/presentation-ux-probe.cjs` y `scripts/qa/record-presentation-ux.cjs`.
 
-## 5. Resultados
+## 5. Resultados en el SHA final
 
-Los resultados se completan en el apartado «Resultados en el SHA final», al final de este documento.
+**SHA de la aplicación: `af4351a`.** Los commits posteriores solo cambian tests, CI y este documento. Preview verificada en ese SHA (estado READY, y sirve el código nuevo): <https://floorplan-3d-qjvbxodts-juanma-espinosas-projects.vercel.app>.
+
+### Puerta A · técnica
+- Tests unitarios: **774 ✓ / 0 ✗** (2 omitidos).
+- `node --check` limpio.
+- Ningún cambio en el motor 3D, las narrativas, los materiales, la geometría, el JSON del proyecto ni los estados persistidos.
+
+### Puerta B · disposición medida, con 1 px de tolerancia
+En `tests/presentation-ux-stability.browser.test.cjs` se muestrea cada fotograma de una historia completa. No se mueven ni cambian de tamaño la tarjeta, la cabecera, el botón de reproducir, el deslizador ni la caja del texto.
+
+| Viewport | Antes (`master`): movimiento del borde superior / cabecera / botón de reproducir | Después |
+|---|---|---|
+| 1440×900 | 88 / 88 / 179 px | **0 / 0 / 0** |
+| 1280×800 | 57 / 57 / 179 px | **0 / 0 / 0** |
+| 390×844 | 104 / 104 / 104 px | **0 / 0 / 0** |
+| 844×390 | 0 / 0 / 185 px | **0 / 0 / 0** |
+
+- **Botones visibles durante la reproducción:** 15 antes; ahora 4 (cerrar, plano, reproducir o pausar, siguiente).
+- **Cabecera:** nombra lo que se ve: «Sección visual», «Fachada visual», «Axonometría», la estancia y «Dibujo vivo». Antes decía «Vista general» en todas las escenas. Un test de mutación comprueba que la aserción se ejecuta de verdad.
+
+### Puerta C · navegador real
+Resultados de CI en `af4351a`, más `45bfb61` para «Dibujo vivo» 1280:
+- Historia completa a 1440×900, 1280×800, 390×844 y 844×390 y movimiento reducido: ✓.
+- «Dibujo vivo» a 390×844 con ambientación: ✓.
+- «Dibujo vivo» a 1280×800: el fallo era del test, no del producto. La escena llegaba a su final natural antes de la pausa en un runner lento. Lo corrige `45bfb61`; en local pasan los dos casos.
+- Regresiones que no tienen otro workflow (overview, framing, section, elevation, axon, visit, building-presentation, delivery-image): ✓.
+- **Suites que ya fallaban en `master`, comparadas con la base en el mismo runner** ([comentario con el detalle](https://github.com/Juanmaes83/floorplan-3d/pull/175#issuecomment-6693864854)): presentation, material-detail, minimap, reveal, route, light, contact, batch y visit-handover tienen los mismos fallos en `master`.
+  - En `presentation`, la cabecera da 54 ✓ / 0 ✗ / 4 cancelados y `master` da 53 / 0 / 5.
+  - `brand` 1440 agota los 30 s de un clic que tarda 22 s en ambas versiones (medido).
+- En local, `presentation-visit-handover` en la cabecera: **3/3 ✓** (7 min).
+
+### Puerta D · evidencia real
+Rama aislada `evidence/presentation-ux-2026-11-06@3789a66`, carpeta `docs/qa/presentation-ux/2026-11-06/claude-gate-d/`, con su `SHA256SUMS`:
+- Grabación ANTES (`master@0cfe6a5`) y DESPUÉS (`af4351a`) del mismo recorrido a 1280×800, más el vídeo lado a lado.
+- «Dibujo vivo» sin ambientación y con ella, a 1280×800: grafito → manchas → pausa → «Volver al dibujo» → final → repetir → historia completa → sección → visita → «Explorar desde aquí».
+- Móvil a 390×844: historia completa y «Dibujo vivo».
+- Hojas de fotogramas con el SHA, el viewport y el instante de cada uno.
+
+### Puerta E · aprobación humana
+**Pendiente: Juanma.** No se ha fusionado nada.
