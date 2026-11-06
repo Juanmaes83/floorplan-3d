@@ -25,13 +25,14 @@ async function open(t,{reduced=false,viewport={width:1280,height:800}}={}){const
  await page.locator('#welcomeExample').click();await page.waitForFunction(()=>FloorPlanApp.project.rooms.length>3);return {page,errors};}
 const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:300000});
 // The dialog as the user set it in the recording: from the plan + dynamic section (+ the spatial visit when asked).
-async function start(page,{visit=true,section=true}={}){
+async function start(page,{visit=true,section=true,reduced=false}={}){
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  await page.locator('#presentationStoryOption').check();if(section)await page.locator('#presentationSectionOption').check();if(visit)await page.locator('#presentationVisitOption').check();
  await page.locator('#presentationConfig .presentation-config-actions .btn').first().click();
- // With reduced motion «Empezar desde el plano» waits on the plan: step it to the overview as a person would.
- await page.waitForFunction(()=>FloorPlanPresentation.active&&(FloorPlanPresentation.story?.kind==='plan-reveal'&&!FloorPlanPresentation.story.busy||!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'),null,{timeout:300000});
- for(let i=0;i<6&&await page.evaluate(()=>!!FloorPlanPresentation.story);i++){await page.locator('#presentationStoryPlay').click();await page.waitForTimeout(500);}
+ // With reduced motion «Empezar desde el plano» waits on the plan: step it to the overview as a person would (without
+ // reduced motion it plays by itself and hands over to the overview).
+ if(reduced){await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='plan-reveal'&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
+  for(let i=0;i<6&&await page.evaluate(()=>!!FloorPlanPresentation.story);i++){await page.locator('#presentationStoryPlay').click();await page.waitForTimeout(500);}}
  await settled(page);}
 const state=page=>page.evaluate(()=>{const s=FloorPlanPresentation.story,i=View3D.presentationStoryInfo,c=View3D.cameraState;
  const vis=id=>{const e=document.querySelector(id);return !!e&&!e.hidden&&e.offsetParent!==null;};
@@ -103,7 +104,7 @@ test('regression: a whole story WITHOUT the visit, and «Ver sección dinámica�
 });
 
 test('regression: reduced motion still waits, steps to the arrival, and «Continuar presentación» hands over to the room stop',{timeout:1800000},async t=>{
- const {page,errors}=await open(t,{reduced:true});await start(page);
+ const {page,errors}=await open(t,{reduced:true});await start(page,{reduced:true});
  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:120000});
  assert.equal((await state(page)).story.P,0,'waits at its start');
  for(let i=0;i<12;i++){const s=await state(page);if(s.story?.kind==='room-visit'&&s.story.P>=1)break;await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy&&!FloorPlanPresentation.story?.playing,null,{timeout:300000});}
