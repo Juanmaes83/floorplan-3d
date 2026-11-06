@@ -23,6 +23,11 @@ const frames=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>re
 const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'&&!View3D.lifecycleMetrics.flying,null,{timeout:300000});
 async function slide(page,P){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.step='any';s.value=String(v*Number(s.max));s.dispatchEvent(new Event('input',{bubbles:true}));},P);
  await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:300000});await frames(page);}
+// A scene button plays its scene to the end and hands back to the presentation (product behaviour); the evidence pauses
+// it the moment it exists (inside the page, so a loaded machine cannot let it run to the end first).
+async function openPaused(page,selector,kind){await page.evaluate(async([sel,k])=>{document.querySelector(sel).click();
+  for(let i=0;i<6000;i++){const st=FloorPlanPresentation.story;if(st&&(k==='full'?st.scenes>1:st.kind===k)){const s=document.querySelector('#presentationStorySlider');s.dispatchEvent(new Event('input',{bubbles:true}));return;}await new Promise(r=>setTimeout(r,20));}
+  throw Error('scene did not open: '+k);},[selector,kind]);await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:300000});}
 async function finish(page){await slide(page,1);await page.locator('#presentationStoryPlay').click();await settled(page);await frames(page);}
 // Back to the first overview stop (the state every scene is compared at): never measured at a room stop.
 async function toOverview(page){
@@ -60,7 +65,7 @@ test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of
  const log=[];let first=null,rounds=[];
  for(let round=1;round<=2;round++){
   // 1. living drawing (it opened the presentation in round 1; replayed from the overview in round 2)
-  if(round===2){await page.locator('#presentationLivingPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing'&&!FloorPlanPresentation.story.busy,null,{timeout:300000});}
+  if(round===2)await openPaused(page,'#presentationLivingPlay','living-drawing');
   await slide(page,0);const drawn=await read(page,`r${round}-living-p000`,[.2,.15,.75,.95]);
   assert.ok(drawn.paper>.4&&drawn.colour<.012,`round ${round}: a clean graphite drawing, no clip or hybrid residue ${JSON.stringify(drawn)}`);
   const total=await page.evaluate(()=>View3D.presentationStoryInfo.living.total);await slide(page,(4.5+3.5)/total);
@@ -70,7 +75,7 @@ test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of
   if(!first)first=r1;
   assert.deepEqual(r1.bindings,first.bindings,`round ${round}: every mesh has its own material after the living drawing`);
   // 2. the whole story: section → validated room visit
-  await page.evaluate(()=>document.querySelector('#presentationStoryFull').click());await page.waitForFunction(()=>FloorPlanPresentation.story?.scenes>1&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
+  await openPaused(page,'#presentationStoryFull','full');
   const kinds=await page.evaluate(()=>FloorPlanPresentation.story.kinds);assert.ok(kinds.includes('section-open')&&kinds.includes('room-visit'),'section and visit chained '+kinds);
   const at=k=>page.evaluate(k=>{const ks=FloorPlanPresentation.story.kinds,seq=FloorPlanPresentationStory.sequence(ks.map(x=>FloorPlanPresentationStory.SCENE_MS[x]));return seq.at(ks.indexOf(k),.6);},k);
   await slide(page,await at('section-open'));assert.ok((await page.evaluate(()=>View3D.presentationClipInfo)).materialsWithPlanes>0,'the section clips the model');assert.equal((await page.evaluate(()=>View3D.presentationLivingDrawingInfo)).active,false,'the section is the usual render');
@@ -79,7 +84,7 @@ test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of
   const r2=await residue(page);clean(r2,`round ${round} after section + visit`);assert.deepEqual(r2.bindings,first.bindings,`round ${round}: materials intact after section + visit`);
   assert.deepEqual(r2.renderer,first.renderer,`round ${round}: renderer and camera lens as after the living drawing`);
   // 3. the hybrid façade
-  await page.evaluate(()=>document.querySelector('#presentationElevationPlay').click());await page.waitForFunction(()=>View3D.presentationStoryInfo?.kind==='elevation-open'&&!FloorPlanPresentation.story?.busy,null,{timeout:300000});
+  await openPaused(page,'#presentationElevationPlay','elevation-open');
   await slide(page,.35);assert.equal((await page.evaluate(()=>View3D.presentationHybridInspect())).swapped,true,'the hybrid façade swaps its targets');
   await finish(page);await toOverview(page);const r3=await residue(page);clean(r3,`round ${round} after the hybrid façade`);
   assert.deepEqual(r3.bindings,first.bindings,`round ${round}: exact materials after the hybrid façade`);assert.deepEqual(r3.renderer,first.renderer,`round ${round}: renderer and lens after the hybrid façade`);
