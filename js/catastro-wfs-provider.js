@@ -8,8 +8,10 @@
    - Every failure is a normal result (cancelled, timeout, network, service rejection, exception, empty answer,
      unsupported CRS): nothing is thrown at the caller and nothing previously saved is touched here.
    - Licence: «Licencia de acceso y uso INSPIRE de la DGC» → status restricted: shown, not exported as geometry.
-   VERIFICATION STATUS (2026-11-05): implemented against the published contract; from the development environment the
-   service answered HTTP 400 (HTML) to every request, so a real official answer is NOT yet verified. */
+   VERIFICATION (2026-11-06): from Chromium (the product path) the official service answered HTTP 200 with a valid
+   CP:CadastralParcel for the public example reference of its own documentation (3662001TF3136S, EPSG:25830), and an
+   ExceptionReport «No se ha encontrado la parcela … para el huso …» for a non-existent one. Command-line clients (curl)
+   received HTTP 400 HTML from the same host; that path is not used by RUBIK. */
 (function(root){
  'use strict';
  const node=typeof module==='object'&&module.exports;
@@ -69,7 +71,9 @@
     if(outer?.aborted){diag('cancelled');return result('cancelled','cancelled');}
     if(new TextEncoder().encode(text).length>Parcel.LIMITS.documentBytes){diag('too-large');return result('invalid','invalid-source-document');}
     if(/<(?:\w+:)?ExceptionReport\b/.test(text)){
-     const msg=(/<(?:\w+:)?ExceptionText>([\s\S]*?)<\//.exec(text)?.[1]||'').trim().slice(0,200);
+     const msg=(/<(?:\w+:)?ExceptionText>([\s\S]*?)<\//.exec(text)?.[1]||'').replace(/^<!\[CDATA\[|\]\]>$/g,'').trim().slice(0,200);
+     // Observed live (2026-11-06): «No se ha encontrado la parcela <RC> para el huso <EPSG>» → not found IN THAT ZONE.
+     if(/no se ha encontrado la parcela/i.test(msg)){diag('not-found-in-zone',{zone,message:msg});return result('not-found','parcel-not-found');}
      diag('service-exception',{message:msg});
      return /refcat|referencia/i.test(msg)?result('invalid','invalid-parcel-reference'):result('unavailable','network-unavailable');
     }

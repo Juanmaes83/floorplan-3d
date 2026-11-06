@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUBIK · Precios y parcela</title>
+<meta name="description" content="Laboratorio M1 (FT3D-8 S2 + S3): precios de referencia con procedencia y parcela catastral por referencia. Datos de prueba.">
+<link rel="stylesheet" href="../../css/design-system.css">
+<link rel="stylesheet" href="./m1.css">
+</head>
+<body data-tab="precios">
+<header class="top">
+  <span class="brand"><i></i>RUBIK</span>
+  <span class="ptitle">Precios de referencia y parcela</span>
+  <span class="demo-pill" title="Todos los datos de esta página son inventados">Datos de prueba</span>
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tab-precios" data-tab="precios" aria-controls="panel-precios" aria-selected="true">Precios</button>
+    <button type="button" role="tab" id="tab-parcela" data-tab="parcela" aria-controls="panel-parcela" aria-selected="false" tabindex="-1">Parcela</button>
+  </nav>
+</header>
+<main>
+<!-- ================= S2 · Precios de referencia ================= -->
+<section class="tabpanel" id="panel-precios" role="tabpanel" aria-labelledby="tab-precios">
+  <p class="lede">Consulta precios de referencia, compáralos con tu presupuesto y decide qué incorporar. <strong>Nada cambia sin tu confirmación</strong> y las versiones anteriores se conservan.</p>
+  <div class="grid">
+    <div class="col">
+      <article class="card" id="budgetCard" aria-labelledby="budgetTitle">
+        <header class="card-h"><h2 id="budgetTitle">Presupuesto</h2><span class="rev" id="budgetRev"></span></header>
+        <div class="banner" id="coverage" role="status" aria-live="polite"></div>
+        <ul class="items" id="items" aria-label="Partidas del presupuesto"></ul>
+        <div class="actions"><button type="button" class="btn" id="budgetSave">Guardar presupuesto (.json)</button>
+          <label class="btn file">Abrir presupuesto (.json)<input type="file" id="budgetOpen" accept=".json,application/json"></label></div>
+        <p class="hint" id="budgetIo" role="status"></p>
+      </article>
+      <article class="card" id="historyCard" aria-labelledby="historyTitle">
+        <header class="card-h"><h2 id="historyTitle">Historial de cambios</h2></header>
+        <p class="hint">Cada cambio crea una versión nueva. Las versiones anteriores no se modifican.</p>
+        <ol class="history" id="history"></ol>
+      </article>
+    </div>
+    <div class="col">
+      <article class="card" id="sourcesCard" aria-labelledby="sourcesTitle">
+        <header class="card-h"><h2 id="sourcesTitle">Fuentes de precios</h2></header>
+        <div class="actions">
+          <button type="button" class="btn primary" id="loadDemo">Cargar fuentes de demostración</button>
+          <label class="btn file">BC3 de la BCCA aportado por ti<input type="file" id="loadBcca" accept=".bc3,.BC3"></label>
+          <label class="btn file">Otro BC3<input type="file" id="loadBc3" accept=".bc3,.BC3"></label>
+          <label class="btn file">Tarifa propia (BC3)<input type="file" id="loadTariff" accept=".bc3,.BC3"></label>
+        </div>
+        <p class="hint">Los archivos se leen en este navegador: RUBIK no los sube ni los guarda. Cuando aportas un BC3, tú respondes de su licencia de uso.</p>
+        <p class="err" id="sourceError" role="alert"></p>
+        <ul class="sources" id="sourceList" aria-label="Fuentes cargadas"></ul>
+        <div class="managed" id="managed" role="note"></div>
+      </article>
+      <article class="card" id="searchCard" aria-labelledby="searchTitle">
+        <header class="card-h"><h2 id="searchTitle">Buscar referencia</h2><span class="for" id="searchFor"></span></header>
+        <form id="searchForm" class="search" role="search">
+          <label>Código o texto<input id="q" type="search" autocomplete="off" placeholder="p. ej. fábrica o SYN-FAB" minlength="2"></label>
+          <label>Familia<select id="family"><option value="">Todas</option></select></label>
+          <label class="check"><input type="checkbox" id="sameUnit" checked> Solo la unidad de la partida</label>
+          <button type="submit" class="btn primary" id="doSearch">Buscar</button>
+        </form>
+        <p class="hint" id="searchStatus" role="status" aria-live="polite"></p>
+        <div id="results"></div>
+      </article>
+      <article class="card" id="compareCard" aria-labelledby="compareTitle" hidden>
+        <header class="card-h"><h2 id="compareTitle">Comparar y decidir</h2></header>
+        <div id="compare"></div>
+        <div id="detail"></div>
+        <div class="preview" id="preview" hidden></div>
+      </article>
+      <article class="card" id="updatesCard" aria-labelledby="updatesTitle" hidden>
+        <header class="card-h"><h2 id="updatesTitle">Actualización de edición</h2></header>
+        <div id="updates"></div>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- ================= S3 · Parcela ================= -->
+<section class="tabpanel" id="panel-parcela" role="tabpanel" aria-labelledby="tab-parcela" hidden>
+  <p class="lede">Busca la parcela por su referencia catastral, comprueba la fuente y asóciala a tu proyecto. <strong>La vivienda no se coloca sola:</strong> la colocas tú.</p>
+  <div class="grid">
+    <div class="col">
+      <article class="card" aria-labelledby="projTitle">
+        <header class="card-h"><h2 id="projTitle">Proyecto</h2></header>
+        <label class="field">Proyecto seleccionado<select id="project"></select></label>
+        <div class="saved" id="saved" role="status" aria-live="polite"></div>
+      </article>
+      <article class="card" aria-labelledby="lookupTitle">
+        <header class="card-h"><h2 id="lookupTitle">Buscar parcela</h2></header>
+        <fieldset class="modes"><legend>Origen de la consulta</legend>
+          <label><input type="radio" name="lookupMode" value="official" checked> Servicio oficial de Catastro</label>
+          <label><input type="radio" name="lookupMode" value="demo"> Demostración (datos de prueba)</label></fieldset>
+        <form id="lookupForm" class="search lookup">
+          <label>Referencia catastral<input id="rc" autocomplete="off" spellcheck="false" placeholder="14 o 20 caracteres" maxlength="24"></label>
+          <label>Huso de la parcela<select id="zone"></select></label>
+          <div class="btns"><button type="submit" class="btn primary" id="lookup">Consultar</button>
+          <button type="button" class="btn" id="cancelLookup" hidden>Cancelar</button></div>
+        </form>
+        <p class="status" id="lookupStatus" role="status" aria-live="polite"></p>
+        <div class="fallback" id="gmlFallback">
+          <p class="hint">¿Sin conexión con Catastro? Descarga el GML de la parcela en la Sede Electrónica del Catastro y ábrelo aquí.</p>
+          <label class="btn file">Abrir archivo GML<input type="file" id="gmlFile" accept=".gml,.xml,application/gml+xml,text/xml"></label>
+        </div>
+        <p class="hint src" id="serviceInfo"></p>
+      </article>
+    </div>
+    <div class="col">
+      <article class="card" id="parcelCard" aria-labelledby="parcelTitle" hidden>
+        <header class="card-h"><h2 id="parcelTitle">Parcela encontrada</h2></header>
+        <div class="parcel" id="parcelView"></div>
+        <div class="plan" id="planView"></div>
+      </article>
+      <article class="card" id="placeCard" aria-labelledby="placeTitle" hidden>
+        <header class="card-h"><h2 id="placeTitle">Colocar la vivienda</h2></header>
+        <p class="hint">Indica el norte y pulsa sobre la parcela donde quieres el centro de la huella. Nada se guarda hasta que pulses «Guardar colocación».</p>
+        <label class="field">Norte del proyecto (grados)<input id="north" type="number" min="0" max="359.99" step="0.5" value="0"></label>
+        <div class="placeview" id="placeView"></div>
+        <div class="actions"><button type="button" class="btn primary" id="savePlacement" disabled>Guardar colocación</button><button type="button" class="btn" id="clearPlacement">Quitar colocación</button></div>
+        <p class="status" id="placeStatus" role="status" aria-live="polite"></p>
+      </article>
+      <article class="card" id="exportCard" aria-labelledby="exportTitle" hidden>
+        <header class="card-h"><h2 id="exportTitle">Qué puede compartirse</h2></header>
+        <div id="exportView"></div>
+      </article>
+      <article class="card" id="contextCard" aria-labelledby="contextTitle" hidden>
+        <header class="card-h"><h2 id="contextTitle">Contexto territorial (opcional)</h2></header>
+        <div id="contextView"></div>
+      </article>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="credits">Laboratorio M1 de RUBIK (FT3D-8 S2 + S3). Motores reutilizados: FloorPlanBudget (C1–C4), FloorPlanBudgetCostBridge, FloorPlanBc3Budget, FloorPlanBccaEsCostProvider, FloorPlanGeoProvider, FloorPlanCatastroParcel, FloorPlanTerritoryIntegration y FloorPlanTerritoryExportPolicy. Datos de prueba inventados.</footer>
+<script src="../../js/cost-provider.js"></script>
+<script src="../../js/fiebdc3-codec.js"></script>
+<script src="../../js/budget-core.js"></script>
+<script src="../../js/budget-cost-bridge.js"></script>
+<script src="../../js/bc3-budget-core.js"></script>
+<script src="../../js/cost-provider-bcca-es.js"></script>
+<script src="../../js/cost-catalog-core.js"></script>
+<script src="../../js/parcel-core.js"></script>
+<script src="../../js/orthophoto-core.js"></script>
+<script src="../../js/terrain-core.js"></script>
+<script src="../../js/geo-provider.js"></script>
+<script src="../../js/catastro-parcel-provider.js"></script>
+<script src="../../js/pnoa-orthophoto-provider.js"></script>
+<script src="../../js/ign-mdt05-terrain-provider.js"></script>
+<script src="../../js/catastro-wfs-provider.js"></script>
+<script src="../../js/parcel-site-adapter.js"></script>
+<script src="../../js/territory-integration-core.js"></script>
+<script src="../../js/territory-export-policy.js"></script>
+<script src="../../js/parcel-association-core.js"></script>
+<script src="./fixtures.js"></script>
+<script src="./shell.js"></script>
+<script src="./s2-ui.js"></script>
+<script src="./s3-ui.js"></script>
+</body>
+</html>

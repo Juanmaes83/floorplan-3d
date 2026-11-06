@@ -100,7 +100,7 @@
     const families=familyIndex(m),labels=m.version?.labels?.length?m.version.labels:['Precio'];
     const dates=m.concepts.flatMap(c=>(c.prices||[]).map(p=>p.date)).filter(d=>/^\d{8}$/.test(d||'')).map(d=>`${d.slice(4)}-${d.slice(2,4)}-${d.slice(0,2)}`);
     const src=baseSource({kind:'bcca',label:meta.label,providerId:provider.id,edition:meta.edition,region:meta.region,asOf:maxDate(dates),license:meta.license,
-      attribution:meta.attribution,sourceUrl:meta.sourceUrl,legal:{status:gate.legal.status,mode:datasetMode},columns:labels,column:labels.length===1?0:column,families,count:m.concepts.length});
+      attribution:meta.attribution,sourceUrl:meta.sourceUrl,legal:{status:gate.legal.status,mode:datasetMode},columns:labels,column:labels.length===1?0:column,families,count:m.concepts.filter(c=>c.unit&&(c.prices||[]).some(p=>Number.isFinite(p.value))).length});
     const cache=lru(LIMITS.cacheEntries);
     const pricedFamily=code=>families.get(code)?.label||null;
     return {status:'available',source:deepFreeze(src),

@@ -31,6 +31,10 @@ test('FT8-S3-05 · every failure is a normal result: rejected service, exception
   assert.deepEqual(html.lastDiagnostic(),{kind:'service-rejected',at:'2026-11-05T12:00:00.000Z',httpStatus:400,contentType:'text/html'});
   const exc=W.create({fetch:async()=>res(200,'<ows:ExceptionReport><ows:Exception><ows:ExceptionText>La REFCAT no es correcta</ows:ExceptionText></ows:Exception></ows:ExceptionReport>'),now});
   assert.deepEqual(await exc.getParcel({mode:'reference',reference:'3662001TF3136S'}),{status:'invalid',reason:'invalid-parcel-reference'});
+  // Real wording observed from the official service (2026-11-06) for a reference that does not exist in the zone.
+  const nf=W.create({now,crs:'EPSG:25830',fetch:async()=>res(200,'<ows:ExceptionReport xmlns:ows="http://www.opengis.net/ows/1.1"><ows:Exception exceptionCode="InvalidParameterValue"><ows:ExceptionText><![CDATA[No se ha encontrado la parcela 0000000AA0000A para el huso 25830]]></ows:ExceptionText></ows:Exception></ows:ExceptionReport>')});
+  assert.deepEqual(await nf.getParcel({mode:'reference',reference:'0000000AA0000A'}),{status:'not-found',reason:'parcel-not-found'});
+  assert.deepEqual([nf.lastDiagnostic().kind,nf.lastDiagnostic().zone,nf.lastDiagnostic().message],['not-found-in-zone','EPSG:25830','No se ha encontrado la parcela 0000000AA0000A para el huso 25830']);
   const exc2=W.create({fetch:async()=>res(200,'<ExceptionReport><ExceptionText>Servicio no disponible</ExceptionText></ExceptionReport>'),now});
   assert.equal((await exc2.getParcel({mode:'reference',reference:'3662001TF3136S'})).reason,'network-unavailable');
   const down=W.create({fetch:async()=>{throw new TypeError('Failed to fetch');},now});
