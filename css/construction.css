@@ -102,3 +102,34 @@
 #evolutionStatus{max-width:260px;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:1400px){.cx-evolution-bar .cx-crumbs{display:none}}
 @media(max-width:600px){#evolutionStatus{display:none}.cx-modes{order:2}}
+/* Examen M2 · D-11: the RUBIK bar above the Evolución never wraps or cuts at zoom (911 px CSS = 1366 at 150 %). */
+@media(max-width:1180px){.cx-evolution-bar{gap:8px}.cx-evolution-bar h2{max-width:22vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cx-steps .cx-step+.cx-step::before{content:none}.cx-step{padding:0 9px}}
+/* D-06: on phones the four steps fit in the bar without hidden items (no arrows, compact labels); the bar still scrolls
+   if a translation is longer, and the focused step is brought into view by script. */
+@media(max-width:600px){.cx-steps{gap:0;scroll-snap-type:x proximity}.cx-steps .cx-step{padding:0 7px;font-size:13px;scroll-snap-align:start}.cx-steps .cx-step+.cx-step::before{content:none}}
+/* D-07: touch targets of at least 44 px where the pointer is coarse. */
+@media(pointer:coarse){.cx-step{min-height:44px}.cx-foot .btn,.cx-foot button{min-height:44px}}
+/* Recorrido de obra: ordered steps with state; one primary action on the next step (novice guide). */
+.cx-journey{grid-column:1/-1;margin:0 0 18px;padding:16px 18px;border:1px solid var(--line,#e2dbcf);border-left:4px solid var(--action,#1f5a66);border-radius:10px;background:var(--surface-panel,#fbf8f2)}
+.cx-journey h2{margin:0;font-size:20px}
+.cx-journey-sum{margin:4px 0 12px;color:var(--ink-muted,#5b5f62);font-size:14px}
+.cx-journey ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.cx-jstep{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:start;padding:10px 12px;border-radius:8px;border:1px solid transparent}
+.cx-jstep>div{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.cx-jstep b{flex:1 1 100%;font-size:15px}
+.cx-jtext{flex:1 1 260px;font-size:14px;color:var(--ink-muted,#5b5f62)}
+.cx-jnum{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:2px solid var(--line-strong,#b9b0a0);font-weight:700;font-size:14px;color:var(--ink-muted,#5b5f62);background:#fff}
+.cx-jstep[data-state=done] .cx-jnum{background:var(--action,#1f5a66);border-color:var(--action,#1f5a66);color:#fff}
+.cx-jstep[data-state=next]{border-color:var(--action,#1f5a66);background:var(--action-soft,#dceaea)}
+.cx-jstep[data-state=next] .cx-jnum{border-color:var(--action,#1f5a66);color:var(--action,#1f5a66)}
+.cx-jstep .btn{min-height:40px}
+@media(pointer:coarse){.cx-jstep .btn{min-height:44px}}
+@media(max-width:600px){.cx-journey{padding:12px}.cx-jstep{grid-template-columns:28px 1fr;gap:8px;padding:8px}}
+.cx-journey .btn:not(.primary){border:1px solid var(--line-strong,#b9b0a0);background:#fff;border-radius:6px;padding:0 14px;color:var(--ink,#2b3034)}
+/* N-04/N-05: the global «dialog input{width:100%}» rule must not stretch checkboxes in the construction dialogs. */
+.cx-dialog input[type=checkbox]{display:inline-block;width:20px;height:20px;min-height:0;padding:0;margin:0;flex:none;accent-color:var(--action,#1f5a66)}
+.cx-dialog .cx-check,.cx-dialog .cx-pick label{margin:4px 0}
+.cx-dialog .cx-pick select{display:inline-block;width:auto;min-width:130px;padding:6px 8px;font-size:14px}
+.cx-dialog .cx-pick label span{flex:1 1 auto}
+.cx-dialog .cx-filter{display:block;width:100%;min-height:40px;margin:0 0 6px;padding:0 10px;border:1px solid var(--line-strong,#978b79);border-radius:4px;font:inherit;font-size:15px}
+.cx-dialog .cx-pick label[hidden],.cx-dialog .cx-pick fieldset[hidden]{display:none}

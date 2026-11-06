@@ -142,7 +142,7 @@ function stepBudget(ev){
       <p>Neto ${euro(v.totals.net.amount)}${v.totals.net.complete?'':' (incompleto)'} · IVA ${euro(v.totals.tax.amount)} · Total ${euro(v.totals.gross.amount)}${v.totals.gross.complete?'':' (incompleto)'}</p>
       <p>${v.items} partidas · ${v.unpricedItemIds.length} sin precio · ${v.unreviewedPriceItemIds.length} precio sin revisar · origen: ${Object.entries(o).map(([k2,n])=>`${n} ${({manual:'manual',none:'sin precio','user-bc3':'BC3 del estudio','bcca-es':'BCCA'})[k2]||k2}`).join(', ')}</p></div>`;}).join('');
   return [k,(rows||'<p>Sin presupuesto de este proyecto. No se muestran importes.</p>')+(b.message?`<p class="dnote">${esc(b.message)}</p>`:'')+
-    (b.selected.length?'<p class="dnote">Revisión del proyecto en el presupuesto: no verificable (C1–C4 no la guarda)</p>':'')+
+    (b.selected.length?'<p class="dnote">Revisión del proyecto en el presupuesto: no se puede comprobar (el presupuesto no la guarda)</p>':'')+
     msgs(ev,['budget-other-project','budget-selection-required','budget-selection-invalid','budget-revision-obsolete','budget-invalid'])];
 }
 function stepPlan(ev){

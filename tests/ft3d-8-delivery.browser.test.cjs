@@ -239,7 +239,7 @@ test('publication through the existing /api/share contract (mocked): consent, er
   client.on('console',m=>{if(m.type()==='error')cerr.push(m.text());});client.on('pageerror',e=>cerr.push(e.message));
   await client.route('**/api/view**',r=>r.fulfill({status:200,contentType:'text/html; charset=utf-8',headers:{'content-security-policy':View.csp(BLOB_HOST),'x-content-type-options':'nosniff'},body:published}));
   await client.goto(link);assert.match(await client.locator('h1').innerText(),/FIXTURE La obra de tu casa/);
-  assert.match(await client.locator('body').innerText(),/Importante[\s\S]*Simulacion planificada/);
+  assert.match(await client.locator('body').innerText(),/Importante[\s\S]*Simulación planificada/);
   assert.deepEqual(cerr,[],'no CSP violations');await shot(client,'10-documento-cliente-publicado.png',{fullPage:true});
   assert.deepEqual(errors,[]);
 });

@@ -63,29 +63,43 @@
  const LIFE={new:'nuevo',existing:'existente',demolished:'a demoler',undeclared:'sin estado declarado',furniture:'mobiliario'};
  const ROLE={site:'implantación',build:'construir',structure:'estructura',envelope:'envolvente',services:'instalaciones',cladding:'revestimiento',finish:'acabado',temporary:'provisional',demolition:'demoler'};
  const m=v=>(v/1000).toLocaleString('es-ES',{maximumFractionDigits:2});
+ // N-06 · a novice must recognise each wall and opening: name the rooms it touches («Muro de 3,1 m · Cocina / Salón»).
+ const roomNm=r=>typeof roomDisplay==='function'?roomDisplay(r):typeof nm==='function'?nm(r.name):r.name;
+ function segDist(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/l));return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy);}
+ function roomsBy(project,pt,tol){return (project?.rooms||[]).filter(r=>r.polygon?.length>=3&&r.polygon.some((q,i)=>segDist(pt,q,r.polygon[(i+1)%r.polygon.length])<=tol));}
+ function placeOf(e){try{const P=window.app?.project||app.project;if(!P||!e?.key)return '';const id=String(e.key).split('/').pop();
+  let w=null,pt=null;if(e.type==='wall'){w=P.walls.find(x=>x.id===id);if(w)pt={x:(w.start.x+w.end.x)/2,y:(w.start.y+w.end.y)/2};}
+  else if(['door','window','sliding-door','opening'].includes(e.type)){const o=P.openings.find(x=>x.id===id);w=o&&P.walls.find(x=>x.id===o.wallId);if(w){const L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y)||1,t=Math.min(1,Math.max(0,((o.offsetMm||0)+(o.widthMm||0)/2)/L));pt={x:w.start.x+(w.end.x-w.start.x)*t,y:w.start.y+(w.end.y-w.start.y)*t};}}
+  if(!pt)return '';const names=[...new Set(roomsBy(P,pt,(w.thicknessMm||150)/2+60).map(roomNm))].slice(0,2);
+  return names.length?names.join(' / '):(e.type==='wall'?'fachada':'');}catch{return '';}}
  function elementLabel(e,levels){
   const lv=e.levelId&&levels?levels.find(l=>l.levelId===e.levelId):null;
   const what=e.type==='floor'&&e.name?`Suelo · ${typeof nm==='function'?nm(e.name):e.name}`:e.type==='wall'?`Muro de ${m(e.lengthMm)} m`:['door','window','sliding-door','opening'].includes(e.type)?`${TYPE[e.type]} de ${m(e.widthMm)} m`:TYPE[e.type]||e.type;
-  return (lv?lv.name+' · ':'')+what;
+  const at=lv?'':placeOf(e);return (lv?lv.name+' · ':'')+what+(at?' · '+at:'');
  }
  const rolesFor=e=>{const f=FAMILY[e.type],rules=f&&A.ROLE_RULES[f];return rules?(rules[e.lifecycle]||[]):[];};
 
  /* ---------- Evolución: the Gate D experience on this saved project, inside RUBIK ---------- */
  let overlay=null,frame=null,lastFocus=null,current=null;
  const STEPS=[['plan','Plan de obra'],['proyecto','Expediente'],['evolucion','Evolución 4D'],['entrega','Entregar']];
+ // N-09: the guide marks «Mira la obra día a día» as done once the evolution of this project has been opened.
+ const seenKey='rubik-evolution-seen-v1',seen=id=>{try{return !!JSON.parse(localStorage.getItem(seenKey)||'{}')[id];}catch{return false;}};
+ const markSeen=id=>{try{const o=JSON.parse(localStorage.getItem(seenKey)||'{}');o[id]=Date.now();localStorage.setItem(seenKey,JSON.stringify(o));}catch{}};
  async function openEvolution({mode='view',taskId=null,date=null}={}){
+  try{markSeen(entry()?.id||app.entryId);}catch{}
   ensureStyles();persistBudget();const snap=await snapshot();
   if(!overlay){overlay=el('div',undefined,document.body,'cx-evolution');overlay.id='evolutionOverlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','evolutionTitle');overlay.hidden=true;
    const bar=el('div',undefined,overlay,'cx-evolution-bar');const back=el('button','← Volver a RUBIK',bar,'btn');back.type='button';back.id='evolutionBack';back.onclick=closeEvolution;
    const t=el('h2','',bar);t.id='evolutionTitle';
    const nav=el('nav',undefined,bar,'cx-steps');nav.setAttribute('aria-label','Recorrido de la obra');
-   for(const [k,label] of STEPS){const b=el('button',label,nav,'cx-step');b.type='button';b.dataset.step=k;b.onclick=()=>k==='plan'?over(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog'):frame?.contentWindow?.__ft3dUI?.go?.(k);}
+   for(const [k,label] of STEPS){const b=el('button',label,nav,'cx-step');b.type='button';b.dataset.step=k;b.onclick=()=>k==='plan'?over(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog'):frame?.contentWindow?.__ft3dUI?.go?.(k);b.addEventListener('focus',()=>b.scrollIntoView({block:'nearest',inline:'nearest'}));}
    el('span','',bar,'cx-crumbs').id='evolutionCrumbs';
    // Mirrors of the page's own status and mode (its top bar is hidden inside RUBIK): one bar for the whole screen.
    const pill=el('span','Cargando…',bar,'cx-chip');pill.id='evolutionStatus';pill.setAttribute('role','status');
    const modes=el('span',undefined,bar,'cx-modes');modes.setAttribute('role','group');modes.setAttribute('aria-label','Modo');
    for(const [m,label] of [['pro','Profesional'],['client','Presentación']]){const b=el('button',label,modes,'cx-step');b.type='button';b.dataset.viewMode=m;b.onclick=()=>frame?.contentDocument?.querySelector(`.modes [data-mode="${m}"]`)?.click();}
-   overlay.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&!document.querySelector('dialog[open]')){e.preventDefault();closeEvolution();}});}
+   // Escape returns to RUBIK wherever the focus is in this page (inside the frame, library-source.js forwards it).
+   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay&&!overlay.hidden&&!e.defaultPrevented&&!document.querySelector('dialog[open]')){e.preventDefault();closeEvolution();}});}
   current={mode,taskId,date};
   overlay.querySelector('#evolutionTitle').textContent=snap.entry.name;
   overlay.querySelector('#evolutionCrumbs').textContent=`${snap.subject.type==='building'?'Edificio':'Proyecto'} · revisión ${short(snap.revision)}${snap.level?' · planta activa: '+snap.level.name:''}`;
@@ -94,6 +108,8 @@
   if(taskId)q.set('task',taskId);if(date)q.set('date',date);
   frame.src='evolucion/?'+q;if(overlay.hidden)lastFocus=document.activeElement;overlay.hidden=false;document.body.classList.add('evolution-open');
   window.View3D?.setSuspended?.(true);
+  // Focus moves INTO the evolution (its «← Volver a RUBIK»), never stays on the hidden workspace behind it.
+  overlay.querySelector('#evolutionBack')?.focus();
   return new Promise(res=>frame.addEventListener('load',()=>{const doc=frame.contentDocument;
    if(doc){new MutationObserver(syncSteps).observe(doc.body,{attributes:true,attributeFilter:['data-tab','data-mode']});const r=doc.getElementById('readiness');if(r)new MutationObserver(syncSteps).observe(r,{childList:true,characterData:true,subtree:true,attributes:true});}
    syncSteps();res(frame);},{once:true}));
@@ -149,8 +165,49 @@
   if(s){const b=S.bounds(s);text=`${s.tasks.length} ${s.tasks.length===1?'tarea':'tareas'}${b.startDate?` · ${day(b.startDate)} – ${day(b.endDate)}`:''} · ${s.review.status==='reviewed'?'revisado (declarado)':'borrador'}`;}
   return {text,tone:plan.result==='match'?'ok':plan.result==='absent'?'':'warn',result:plan.result,corr};
  }
+ /* Recorrido de obra (novice guide): the five steps of the construction flow in order, each with its real state and ONE
+    primary action on the next step. It only reads the same documents as the cards below and opens the same dialogs. */
+ async function journey(grid,snap,area){
+  grid.querySelector('#obraJourney')?.remove();
+  // The stored plan may use the compact 0.1.0 fields (elementIds/budgetItemIds): read it in its full form, as the editor does.
+  const sch=snap.record?.schedule;let tasks=[];try{tasks=sch?window.FloorPlanConstructionSchedule.canonical(sch).tasks:[];}catch{tasks=sch?.tasks||[];}const isBuilding=snap.subject.type==='building';
+  let priced=0,total=0;const b=budgetFor(snap.subject);
+  if(b.kind==='project'&&b.budget){try{const c=window.FloorPlanBudget.calculateBudget(b.budget);total=c.lines.length;priced=total-c.totals.unpricedItemIds.length;}catch{total=b.budget.items.length;}}
+  // A milestone (one day, nothing linked) builds nothing: only the works count for the links step.
+  const works=tasks.filter(t=>!(t.startDate===t.endDate&&!(t.elements||[]).length)),withEl=works.filter(t=>(t.elements||[]).length).length,withIt=works.filter(t=>(t.budgetAllocations||[]).length).length;
+  const ds=sch?await deliveryState(snap).catch(()=>null):null;
+  // Every action opens the same dialog as its card; when that dialog closes the workspace (and this guide) is redrawn and the
+  // focus goes to the new next step, so the novice always sees where they are.
+  const refresh=()=>{const a=window.FloorPlanProfessionalUI?.area;if(a)window.FloorPlanProfessionalUI.open(a);setTimeout(()=>document.querySelector('#obraJourney [aria-current=step] button')?.focus(),400);};
+  const viaDialog=(fn,sel)=>async()=>{await fn();const d=document.querySelector(sel);if(d?.open)d.addEventListener('close',refresh,{once:true});};
+  const openBudget=viaDialog(()=>document.querySelector('#professionalWorkspace [data-route="budget-edit"]')?.click(),'#budgetDialog');
+  const steps=[
+   {k:'precios',t:'Pon precio a las partidas',done:isBuilding||total>0&&priced===total,
+    s:isBuilding?'En un edificio, cada planta tiene su presupuesto: ábrelo desde la planta.':total?`${priced} de ${total} partidas con precio${priced<total?' · las que no tienen precio no suman':''}`:'Todavía no hay partidas: dibuja estancias y huecos en Diseñar.',
+    a:isBuilding||!total?null:['Abrir presupuesto',openBudget]},
+   {k:'plan',t:'Crea el plan de obra',done:!!sch&&tasks.length>0,s:sch?`${tasks.length} ${tasks.length===1?'tarea':'tareas'} guardadas${sch.review?.status==='reviewed'?' · revisado':' · en borrador: cuando lo compruebes, márcalo como revisado en el plan'}`:'Añade las tareas con sus fechas y dependencias.',
+    a:[sch?'Abrir plan de obra':'Crear plan de obra',viaDialog(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog')]},
+   {k:'vinculos',t:'Vincula cada tarea con lo que construye',done:works.length>0&&withEl===works.length&&(isBuilding||withIt>0),
+    s:tasks.length?`${withEl} de ${works.length} ${works.length===1?'trabajo':'trabajos'} con elementos del proyecto${isBuilding?'':` · ${withIt} con partidas del presupuesto`}`:'Primero crea el plan de obra.',
+    a:tasks.length?['Revisar vínculos',viaDialog(()=>window.FloorPlanConstructionPlanUI.open({tab:'tasks'}),'#planDialog')]:null},
+   {k:'evolucion',t:'Mira la obra día a día',done:tasks.length>0&&(seen(snap.entry.id)||!!ds),optional:true,s:tasks.length?'Evolución 4D: la casa se construye según tu plan; puedes pausar, retroceder y abrir cada elemento.':'Disponible cuando el plan tenga tareas.',
+    a:tasks.length?['Ver evolución 4D',()=>openEvolution()]:null},
+   {k:'entrega',t:'Entrega a tu cliente',done:ds?.result==='match',s:ds?(ds.result==='match'?'Última entrega al día con el proyecto.':'Hay cambios desde la última entrega: genera una nueva versión.'):'Vídeo y presentación para el cliente, con tu firma. Se descargan en tu equipo: no se publica nada.',
+    a:tasks.length?['Preparar entrega',()=>openEvolution({mode:'deliver'})]:null}];
+  const next=steps.find(x=>!x.done&&!x.optional&&x.a)||steps.find(x=>!x.done&&x.a);
+  const sec=el('section',undefined,null,'cx-journey');sec.id='obraJourney';sec.setAttribute('aria-labelledby','obraJourneyTitle');
+  const h=el('h2','Recorrido de obra',sec);h.id='obraJourneyTitle';
+  const doneN=steps.filter(x=>x.done).length;el('p',`${doneN} de ${steps.length} pasos hechos${next?` · Siguiente: ${next.t.toLowerCase()}`:' · todo al día'}`,sec,'cx-journey-sum');
+  const ol=el('ol',undefined,sec);
+  steps.forEach((x,i)=>{const li=el('li',undefined,ol,'cx-jstep');li.dataset.step=x.k;li.dataset.state=x.done?'done':x===next?'next':'todo';if(x===next)li.setAttribute('aria-current','step');
+   el('span',x.done?'✓':String(i+1),li,'cx-jnum').setAttribute('aria-hidden','true');const body=el('div',undefined,li);
+   el('b',x.t+(x.done?' · hecho':x===next?' · siguiente paso':''),body);el('span',x.s,body,'cx-jtext');
+   if(x.a){const bt=el('button',x.a[0],body,x===next?'btn primary':'btn');bt.type='button';bt.dataset.journey=x.k;bt.onclick=x.a[1];}});
+  (area==='deliver'?grid:grid).prepend(sec);
+ }
  async function cards(area,grid,{card,detail,route}){
   ensureStyles();const snap=await snapshot().catch(()=>null);if(!snap||!grid.isConnected)return;
+  if(area==='budget'||area==='deliver')await journey(grid,snap,area).catch(e=>console.warn('[Recorrido de obra]',e?.message||e));
   if(area==='budget'){
    const st=planState(snap),c=card(grid,'Plan de obra',st.text);c.dataset.module='construction-plan';c.id='constructionPlanCard';sym(c,'plan');
    if(st.result==='obsolete')detail(c,'El proyecto ha cambiado desde que guardaste el plan: revisa los vínculos y vuelve a guardarlo.');

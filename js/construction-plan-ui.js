@@ -16,9 +16,11 @@
  const {eur,day,short}=C;
  const DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),days=(a,b)=>Math.round((ms(b)-ms(a))/DAY)+1;
 
- let nowF=null,snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='';
+ let nowF=null,snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='',removing=null;
  const dialog=el('dialog',undefined,document.body,'cx-dialog');dialog.id='planDialog';dialog.setAttribute('aria-labelledby','planTitle');
  dialog.addEventListener('cancel',e=>{if(dirty){e.preventDefault();closing=true;draw();}});
+ // D-05: leaving or reloading the page with unsaved plan changes asks first (the browser shows its own warning).
+ addEventListener('beforeunload',e=>{if(dirty&&dialog.open){e.preventDefault();e.returnValue='';}});
 
  /* ---------- data ---------- */
  const stored=()=>snap.record?.schedule||null;
@@ -50,7 +52,9 @@
   if(/lagDays/.test(msg))return 'El desfase debe ser un número entero de días.';
   if(/title|wbs|non-empty/.test(msg))return 'Completa el título y el código de la tarea.';
   if(/duplicate task/.test(msg))return 'Ya existe una tarea con ese identificador.';
-  return msg;
+  if(/contradict/.test(msg))return 'No se ha podido actualizar la tarea: sus elementos o partidas no coinciden con la versión guardada. Vuelve a abrirla e inténtalo de nuevo.';
+  console.warn('[Plan de obra] validación:',msg);
+  return 'No se ha podido aplicar el cambio. Revisa los datos de la tarea e inténtalo de nuevo.';
  }
  const brokenLinks=()=>tasks().flatMap(t=>t.elements.filter(e=>!e.elementId.startsWith(A.ILLUSTRATIVE_PREFIX)&&!byKey.has(e.elementId)).map(e=>({taskId:t.id,elementId:e.elementId})));
  const unknownItems=()=>{const ids=new Set(money?.budget?.items.map(i=>i.id)||[]);return money?.kind==='project'&&money.budget?tasks().flatMap(t=>t.budgetAllocations.filter(a=>!ids.has(a.itemId)).map(a=>({taskId:t.id,itemId:a.itemId}))):[];};
@@ -58,7 +62,7 @@
  /* ---------- open / save ---------- */
  async function open({tab:t='tasks',taskId=null,itemId=null,elementKey=null}={}){
   snap=await C.snapshot();nowF=await C.nowFingerprints(snap);inv=A.inventory(snap.doc);byKey=new Map(inv.elements.map(e=>[e.key,e]));
-  draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;message='';error=snap.recordError?R.human(snap.recordError):'';
+  draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;removing=null;message='';error=snap.recordError?R.human(snap.recordError):'';
   money=budgetNow();tab=t;focus={taskId,itemId,elementKey};draw();if(!dialog.open)dialog.showModal();
   (dialog.querySelector('.is-focus button, .is-focus')||dialog.querySelector('#planTitle')).focus({preventScroll:false});
   dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});
@@ -141,8 +145,16 @@
   sel.value=draft?.id||'';sel.onchange=()=>{if(dirty){error='Guarda o descarta los cambios antes de cambiar de plan.';sel.value=draft.id;draw();return;}const p=list.find(x=>x.id===sel.value);if(p){draft=S.canonical(p);money=budgetNow();message='';draw();}};
   const bx=el('div',undefined,row);bx.style.display='flex';bx.style.gap='6px';bx.style.flexWrap='wrap';
   if(draft&&stored()&&draft.id!==snap.record.selectedScheduleId&&list.some(p=>p.id===draft.id)){const use=btn('Usar este plan',bx,'btn primary');use.id='planUse';use.onclick=async()=>{C.store().selectSchedule(snap.entry.id,snap.subject,draft.id);snap=await C.snapshot();message='Este plan es ahora el que usan Evolución y Entregar.';draw();};}
-  const dup=btn('Duplicar plan',bx);dup.id='planDuplicate';dup.disabled=dirty||!list.some(p=>p.id===draft?.id);dup.onclick=()=>{try{const copy=R.duplicateSchedule(list.find(p=>p.id===draft.id),{id:R.newId('sch'),title:draft.source+' (copia)'});
+  const dup=btn('Duplicar plan',bx);dup.id='planDuplicate';dup.disabled=dirty||!list.some(p=>p.id===draft?.id);if(dirty)dup.title='Guarda o descarta los cambios antes de duplicar el plan.';dup.onclick=()=>{try{const copy=R.duplicateSchedule(list.find(p=>p.id===draft.id),{id:R.newId('sch'),title:draft.source+' (copia)'});
    C.store().saveSchedule(snap.entry.id,snap.subject,copy,{action:'duplicate',select:false});C.snapshot().then(s=>{snap=s;draft=S.canonical(copy);message='Copia guardada como borrador. El plan en uso no cambia hasta que elijas «Usar este plan».';draw();});}catch(e){error=R.human(e);draw();}};
+  // D-03: a saved plan can be removed, always with an explicit confirmation that says what changes (the plan in use too).
+  if(draft&&list.some(p=>p.id===draft.id)){const inUse=draft.id===snap.record.selectedScheduleId;
+   if(removing!==draft.id||dirty){const rm=btn('Eliminar plan',bx);rm.id='planRemove';rm.disabled=dirty;if(dirty)rm.title='Guarda o descarta los cambios antes de eliminar el plan.';rm.onclick=()=>{removing=draft.id;draw();dialog.querySelector('#planRemoveConfirm')?.focus();};}
+   else{const box=el('div',undefined,body,'cx-status');box.setAttribute('role','alert');box.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px';
+    el('span',inUse?`¿Eliminar «${draft.source}»? Es el plan en uso: Evolución y Entregar se quedarán sin plan hasta que elijas o crees otro. El presupuesto y las entregas ya descargadas no cambian.`:`¿Eliminar «${draft.source}»? Se borra solo este plan; el plan en uso, el presupuesto y las entregas ya descargadas no cambian.`,box);
+    const yes=btn('Sí, eliminar',box,'btn primary');yes.id='planRemoveConfirm';const no=btn('Cancelar',box);no.onclick=()=>{removing=null;draw();};
+    yes.onclick=async()=>{const gone=draft.source;try{C.store().removeSchedule(snap.entry.id,snap.subject,removing);}catch(e){removing=null;error=R.human(e);draw();return;}
+     removing=null;snap=await C.snapshot();const sel2=(snap.record.plans||[]).find(p=>p.id===snap.record.selectedScheduleId)||snap.record.plans?.[0]||null;draft=sel2?S.canonical(sel2):null;money=budgetNow();message=`Plan «${gone}» eliminado.`;draw();};}}
  }
  function tabs(body){
   const nItems=money.kind==='project'&&money.budget?money.budget.items.length:0,issues=brokenLinks().length+unknownItems().length;
@@ -177,7 +189,7 @@
     const b=btn(`${it?it.description:'Partida que ya no existe'} · ${pct(a.sharePercent)}${line?' · '+(line.allocatedNet===null?'importe desconocido':eur(line.allocatedNet)):''}`,ib,'cx-link');b.dataset.item=a.itemId;b.onclick=()=>{tab='items';focus={itemId:a.itemId};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};}
    const ac=el('td',undefined,tr),ab=el('div',undefined,ac,'cx-links');
    const ed=btn('Editar',ab,'cx-link');ed.dataset.edit=tk.id;ed.onclick=()=>{editing={id:tk.id};draw();dialog.querySelector('#taskTitle')?.focus();};
-   const du=btn('Duplicar',ab,'cx-link');du.dataset.dup=tk.id;du.onclick=()=>{const id=R.newId('tsk');change(d=>{d.tasks.push({...structuredClone(tk),id,title:tk.title+' (copia)',dependsOn:[],elements:[],budgetAllocations:[]});},'Copia creada sin elementos ni partidas: no pueden repetirse con el mismo papel ni superar el 100 %.');focus={taskId:id};};
+   const du=btn('Duplicar',ab,'cx-link');du.dataset.dup=tk.id;du.onclick=()=>{const id=R.newId('tsk'),prevFocus=focus;focus={taskId:id};const ok=change(d=>{d.tasks.push({...structuredClone(tk),id,title:tk.title+' (copia)',dependsOn:[],elements:[],budgetAllocations:[]});},'Copia creada sin elementos ni partidas: no pueden repetirse con el mismo papel ni superar el 100 %.');if(!ok)focus=prevFocus;else dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};
    const rm=btn('Eliminar',ab,'cx-link');rm.dataset.remove=tk.id;rm.onclick=()=>{const deps=tasks().filter(o=>o.dependsOn.some(d=>d.taskId===tk.id));if(deps.length){error=`«${deps.map(o=>o.title).join('», «')}» depende de esta tarea: quita antes esa dependencia.`;draw();return;}change(d=>{d.tasks=d.tasks.filter(o=>o.id!==tk.id);},'Tarea eliminada. Sus partidas quedan sin asignar.');};
    if(editing?.id===tk.id){const fr=el('tr',undefined,tb),fd=el('td',undefined,fr);fd.colSpan=8;taskForm(fd,tk);}
   }
@@ -188,7 +200,7 @@
   const field=(label,id,type,value)=>{const l=el('label',undefined,row,'cx-field');el('span',label,l);const i=el('input',undefined,l);i.id=id;i.type=type;i.value=value??'';return i;};
   const title=field('Título','taskTitle','text',tk?.title||'');const wbs=field('Código (WBS)','taskWbs','text',tk?.wbs||String(tasks().length+1));
   const start=field('Inicio','taskStart','date',tk?.startDate||'');const end=field('Fin','taskEnd','date',tk?.endDate||'');
-  const msl=el('label',undefined,f,'cx-check');const ms=el('input',undefined,msl);ms.type='checkbox';ms.id='taskMilestone';ms.checked=tk?tk.startDate===tk.endDate:!!editing.milestone;el('span','Hito (un solo día: la fecha de fin es la de inicio). RUBIK no tiene un tipo «hito» aparte.',msl);
+  const msl=el('label',undefined,f,'cx-check');const ms=el('input',undefined,msl);ms.type='checkbox';ms.id='taskMilestone';ms.checked=tk?tk.startDate===tk.endDate:!!editing.milestone;el('span','Es un hito: un momento de un solo día, como «Fin de obra» (la fecha de fin es la de inicio).',msl);
   const sync=()=>{end.disabled=ms.checked;if(ms.checked)end.value=start.value;};ms.onchange=sync;start.addEventListener('input',()=>{if(ms.checked)end.value=start.value;});sync();
   // Dependencies
   const deps=el('div',undefined,f,'cx-sub');el('b','Dependencias',deps);const depRows=[];
@@ -201,6 +213,10 @@
   // Elements of the saved project (only allowed roles)
   const es=el('div',undefined,f,'cx-sub');el('b','Elementos del proyecto',es);
   el('span','Marca los elementos que construye, reviste o demuele esta tarea. Solo se ofrecen los papeles admitidos para cada elemento según su estado (nuevo, existente, a demoler).',es,'cx-status').style.color='var(--ink-muted)';
+  // N-07: a filter so a novice finds «cocina», «ventana» or «salón» among dozens of elements.
+  const flt=el('input',undefined,es,'cx-filter');flt.type='search';flt.id='taskElementFilter';flt.placeholder='Buscar: estancia o tipo (p. ej. cocina, ventana, suelo)';flt.setAttribute('aria-label','Buscar elementos del proyecto');
+  const norm=v=>String(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  flt.oninput=()=>{const q=norm(flt.value.trim());for(const fs of pick.querySelectorAll('fieldset')){let any=false;for(const l of fs.querySelectorAll('label')){const show=!q||norm(l.textContent+' '+fs.querySelector('legend').textContent).includes(q)||l.querySelector('input:checked');l.hidden=!show;any=any||show;}fs.hidden=!any;}};
   const pick=el('div',undefined,es,'cx-pick');pick.id='taskElements';const chosen=new Map((tk?.elements||[]).map(e=>[e.elementId,e.role]));const elRows=[];
   const groups=new Map();for(const e of inv.elements.filter(e=>e.type!=='object'&&C.rolesFor(e).length)){const g=C.TYPE[e.type]||e.type;if(!groups.has(g))groups.set(g,[]);groups.get(g).push(e);}
   for(const [g,list] of groups){const fs=el('fieldset',undefined,pick);el('legend',`${g} (${list.length})`,fs);
@@ -236,7 +252,7 @@
     budgetAllocations:itRows.filter(r=>r.s.value).map(r=>({itemId:r.s.value,sharePercent:Number(r.p.value)}))};
    if(t.budgetAllocations.some(a=>!(a.sharePercent>0))){er.textContent='Indica el porcentaje de cada partida.';return;}
    // On a validation error the form keeps what was typed and explains it (no redraw).
-   const okDone=change(d=>{const i=d.tasks.findIndex(x=>x.id===id);if(i>=0)d.tasks[i]={...d.tasks[i],...t};else d.tasks.push(t);},tk?'Tarea actualizada.':'Tarea añadida.',{silent:true});
+   const okDone=change(d=>{const i=d.tasks.findIndex(x=>x.id===id);if(i>=0){const{elementIds,budgetItemIds,...rest}=d.tasks[i];d.tasks[i]={...rest,...t};}else d.tasks.push(t);},tk?'Tarea actualizada.':'Tarea añadida.',{silent:true});
    if(okDone){editing=null;focus={taskId:id};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});}else{er.textContent=error;error='';}
   };
  }

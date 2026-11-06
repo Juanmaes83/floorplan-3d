@@ -35,6 +35,10 @@
  src.embedded=window.parent!==window;
  // Inside RUBIK the page uses RUBIK's bar (status, mode and steps are mirrored there): one bar, more room for the house.
  if(mode==='library'&&src.embedded)document.documentElement.dataset.embedded='1';
+ // D-09: Escape works with the focus inside this page too: first it closes the element panel, then it returns to RUBIK.
+ if(mode==='library'&&src.embedded)document.addEventListener('keydown',e=>{if(e.key!=='Escape'||e.defaultPrevented||document.querySelector('dialog[open]'))return;
+  const pick=document.getElementById('pickInfo');if(pick&&!pick.hidden){e.preventDefault();const c=[...pick.querySelectorAll('button')].find(x=>/Cerrar/.test(x.textContent));if(c)c.click();else pick.hidden=true;return;}
+  e.preventDefault();src.toRubik('close');});
  document.addEventListener('click',e=>{const b=e.target.closest('[data-rubik]');if(!b)return;e.preventDefault();src.toRubik(b.dataset.rubik,{...b.dataset});});
  // Every delivery generated here is recorded in the project's construction record, with the fingerprints it froze.
  src.recordDelivery=async(kind,manifest,extra={})=>{

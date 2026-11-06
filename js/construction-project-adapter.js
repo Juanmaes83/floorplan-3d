@@ -361,7 +361,7 @@
       accredited:'Aprobacion acreditada: requiere identidad verificable (no disponible)'};
     return {schema:MODEL_SCHEMA,schemaVersion:MODEL_VERSION,subject:{type:inv.kind,id:inv.id,name:inv.name,updatedAt:inv.updatedAt},
       fingerprints:now,inventory:inv,planning,links,visualElements,illustrative:[...illustrative.values()].map(r=>({...r,tasks:r.tasks.map(t=>({...t}))})),costs,coverage,issues,obsolescence:obsolete,
-      delivery:{level,label:LABEL[level],blockers,simulation:'Simulacion planificada e ilustrativa: no es obra ejecutada ni certificada',
+      delivery:{level,label:LABEL[level],blockers,simulation:'Simulación planificada e ilustrativa: no es obra ejecutada ni certificada',
         // What the system checked vs what only a professional declared. Nothing here certifies built work.
         assurances:{
           geometry:'derivada de FloorPlanCore.geometry / FloorPlanRoof; evidencia segun escala y origen declarados',

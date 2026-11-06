@@ -140,10 +140,10 @@
   </section>
   <section class="tabpanel" id="panel-evolucion" role="tabpanel" aria-labelledby="tab-evolucion" data-panel="evolucion">
     <section class="stagewrap" aria-label="Escena 3D del proyecto">
-    <canvas id="stage" tabindex="0" aria-label="Escena 3D de la vivienda. Usa la barra de reproducción o el plan de obra para cambiar el momento."></canvas>
+    <canvas id="stage" tabindex="0" aria-label="Escena 3D de la vivienda. Usa la barra de reproducción o el plan de obra para cambiar el momento. Las flechas cambian el día; Intro recorre los elementos y muestra sus trabajos (Mayús+Intro, el anterior)."></canvas><span id="pickLive" class="sr-only" aria-live="polite"></span>
     
     <div class="cams" role="group" aria-label="Cámara">
-      <button data-view="auto">AUTO</button><button data-view="iso">ISO</button><button data-view="front">ALZADO</button><button data-view="top">PLANTA</button><button data-view="free">LIBRE</button>
+      <button data-view="auto">AUTO</button><button data-view="iso">ISO</button><button data-view="front">ALZADO</button><button data-view="top">PLANTA</button><button data-view="free">LIBRE</button><button type="button" id="roofCut" aria-pressed="false" title="Ocultar la cubierta para ver y señalar el interior">INTERIOR</button>
     </div>
     <div class="hero" id="hero">
       <p class="hero-k" id="heroProject">—</p>

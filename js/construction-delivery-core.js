@@ -25,8 +25,8 @@
   const ENDPOINTS=Object.freeze({share:'/api/share',view:'/api/view'}); // absolute: the lab lives under /labs/ft3d-8/
   const COST_MODES=Object.freeze(['none','summary','tasks']);
   const CONTACT_FIELDS=Object.freeze(['person','phone','email','web']);
-  const SIMULATION='Simulacion planificada e ilustrativa de la evolucion de obra: no muestra obra ejecutada ni certificada';
-  const COSTS_NOTICE='Importes presupuestados (C1-C4) sin IVA: no son gasto ejecutado, pagado ni certificado';
+  const SIMULATION='Simulación planificada e ilustrativa de la evolución de obra: no muestra obra ejecutada ni certificada';
+  const COSTS_NOTICE='Importes presupuestados sin IVA: no son gasto ejecutado, pagado ni certificado';
   const err=s=>{throw new TypeError('FloorPlanConstructionDelivery: '+s);};
   const DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),iso=x=>new Date(x).toISOString().slice(0,10);
   const deepFreeze=o=>{if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.freeze(o);for(const v of Object.values(o))deepFreeze(v);}return o;};
@@ -59,7 +59,7 @@
     if(pending.length)warnings.push('Repartos pendientes: '+pending.map(p=>p.itemId+' '+p.pendingPercent+' %').join(', '));
     if(unassigned.length)warnings.push('Partidas sin asignar a ninguna tarea: '+unassigned.join(', '));
     if(rows.some(r=>r.status==='no-verificado'))warnings.push('Hay importes conocidos pero no verificados (precio sin revisar o reparto pendiente)');
-    if(report.projectRevision.check!=='match')warnings.push('Correspondencia proyecto-presupuesto no verificable por C1-C4');
+    if(report.projectRevision.check!=='match')warnings.push('No se puede comprobar que el presupuesto corresponda a esta versión del proyecto');
     if(model.coverage.scope)warnings.push('Cobertura: '+model.coverage.budget.allocatedPercentOfKnown+' % de las partidas cargadas asignadas; no equivale a la obra completa (no modelado: '+model.coverage.scope.notModeled.join(', ')+')');
     const summary={knownNet:report.scheduleTotals.allocatedKnownNet,knownText:Presenter.euro(report.scheduleTotals.allocatedKnownNet),
       complete:report.scheduleTotals.complete,unknownItems:unknown.length,currency:'EUR'};

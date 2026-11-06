@@ -150,7 +150,7 @@ async function show(input,meta,preModel=null,dossier=null){
   ctx={input,model,schedule,canon:schedule?S.canonical(schedule):null,timeline,meta,dossier,dossierInput:meta.dossierInput||null,frames:timeline?Array.from({length:timeline.positions},(_,i)=>V.frameAt(schedule,iso(ms(timeline.preStartDate)+i*DAY))):null};
   scene.load(model.inventory,model.illustrative||[]);
   // Reform: the derived roof hides the interior works; it stays available through the toggle.
-  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;camView='auto';framedFinal=false;scene.setPose(fitPose('iso'));scene.setAuto(!document.body.classList.contains('capture'));
+  const reform=model.inventory.elements.some(e=>e.lifecycle==='existing'||e.lifecycle==='demolished');scene.setRoofVisible(!reform);$('roofToggle').checked=!reform;$('roofCut')?.setAttribute('aria-pressed',String(reform));camView='auto';framedFinal=false;scene.setPose(fitPose('iso'));scene.setAuto(!document.body.classList.contains('capture'));
   renderHeader(model,meta);
   const controls=document.querySelector('.transport');controls.dataset.disabled=String(!timeline);
   if(timeline){$('scrub').max=String(timeline.positions-1);
@@ -225,6 +225,9 @@ for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>{if(!ctx)r
   camView=v;if(v==='auto'){scene.setPose(fitPose('iso'));scene.setAuto(true);}else if(v==='free')scene.setAuto(false);else{scene.setAuto(false);scene.setPose(fitPose(v,{standing:true}));}
   document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
 $('roofToggle').onchange=()=>api.setRoof($('roofToggle').checked);
+// D-14: in RUBIK the lab controls are hidden, so the viewer offers its own «INTERIOR» switch (roof hidden ↔ shown).
+const syncRoofCut=()=>$('roofCut')?.setAttribute('aria-pressed',String(!$('roofToggle').checked));
+if($('roofCut'))$('roofCut').onclick=()=>{if(!ctx)return;api.setRoof(!$('roofToggle').checked);syncRoofCut();};
 if(FX)$('caseSel').innerHTML=FX.ids.map(id=>`<option value="${id}">${id}</option>`).join('');$('caseSel').onchange=()=>loadCase($('caseSel').value).catch(e=>$('importError').textContent=e.message);
 const fail=e=>{$('importError').textContent='Importación rechazada: '+e.message;};
 $('fileInput').onchange=async()=>{const f=$('fileInput').files[0];$('importError').textContent='';if(!f)return;try{await importText(await f.text());}catch(e){fail(e);}finally{$('fileInput').value='';}};

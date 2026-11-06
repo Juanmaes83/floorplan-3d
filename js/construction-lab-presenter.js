@@ -42,7 +42,7 @@
   };
   const ISSUE_TEXT=Object.freeze({
     'price-missing':'partida sin precio','price-unreviewed':'precio sin revisar','quantity-unavailable':'cantidad no disponible',
-    'quantity-incomplete':'medicion incompleta','allocation-pending':'reparto pendiente','project-revision-mismatch':'revision de proyecto distinta',
+    'quantity-incomplete':'medicion incompleta','allocation-pending':'reparto pendiente','project-revision-mismatch':'revisión de proyecto distinta',
     'quantity-estimated':'cantidad estimada','price-source-undated':'precio sin fecha'});
   const REVISION_TEXT=Object.freeze({
     unverifiable:'Revision proyecto ↔ presupuesto: no verificable (el presupuesto no declara revision)',

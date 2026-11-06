@@ -26,7 +26,7 @@ test('cost policy: costs only when project, plan and budget agree; null stays un
   assert.equal(p.rows.find(r=>r.taskId==='cubierta').status,'sin-partidas');
   assert.ok(p.warnings[0]===D.COSTS_NOTICE&&/no son gasto ejecutado/.test(D.COSTS_NOTICE));
   assert.ok(p.warnings.some(w=>/no equivale a la obra completa/.test(w)));
-  assert.ok(p.warnings.some(w=>/no verificable por C1-C4/.test(w)));
+  assert.ok(p.warnings.some(w=>/No se puede comprobar que el presupuesto corresponda/.test(w)));
   assert.equal(D.costPolicy(m,{mode:'summary',schedule:c.schedule}).rows.length,0);
   assert.equal(D.costPolicy(m,{mode:'none',schedule:c.schedule}).mode,'none');
   assert.throws(()=>D.costPolicy(m,{mode:'all'}),/none, summary or tasks/);

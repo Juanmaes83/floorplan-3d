@@ -157,6 +157,14 @@ $('stage').addEventListener('pointerup',e=>{
   if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>5){down=null;return;}down=null;
   const ctx=Fid()?.ctx;if(!ctx)return;const key=Fid().scene.pick(e.clientX,e.clientY);showPick(key);
 });
+// D-13 · keyboard alternative to clicking the house: with the 3D view focused, Enter / Shift+Enter go through the elements of the
+// project (those linked to a work first) and open the same panel; Escape closes it (library-source.js). The arrows keep
+// moving the date (fidelity-app), so the element keys are Enter / Shift+Enter.
+let kbIndex=-1;
+$('stage').addEventListener('keydown',e=>{if(e.key!=='Enter'||e.altKey||e.ctrlKey||e.metaKey)return;const ctx=Fid()?.ctx;if(!ctx)return;
+  const list=ctx.model.visualElements.filter(v=>!String(v.key).startsWith('illustrative/')).slice().sort((a,b)=>(b.tasks.length>0)-(a.tasks.length>0));if(!list.length)return;
+  e.preventDefault();kbIndex=(kbIndex+(e.shiftKey?-1:1)+list.length)%list.length;const r=showPick(list[kbIndex].key);
+  const live=$('pickLive');if(live&&r)live.textContent=`Elemento ${kbIndex+1} de ${list.length}: ${$('pickInfo').querySelector('h4')?.textContent||''}`;});
 function showPick(key){
   const box=$('pickInfo'),ctx=Fid()?.ctx;
   if(!key||!ctx){box.hidden=true;return null;}
