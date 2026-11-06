@@ -17,7 +17,8 @@ test('HV2-C0 rooms of the reference home are classified from what they contain (
 
 test('HV2-C0 protagonists follow the room ranking and the D1 rules (no TV or plant first, doors never, one plant)',()=>{
  const living=L.protagonists('living',L.objectsIn(reference,room('rom_living')));
- assert.deepEqual(living.map(p=>p.type),['sofa','coffeetable','rug','tvstand','armchair','plant'].filter(t=>living.some(p=>p.type===t)));
+ assert.deepEqual(living.map(p=>p.type),['sofa','coffeetable','rug','armchair','plant','tvstand'].filter(t=>living.some(p=>p.type===t)));
+ assert.equal(living.at(-1).type,'tvstand','the TV (dark mass) lands last, just before the camera leaves (D1)');
  assert.equal(living[0].type,'sofa');assert.ok(living.length<=L.LIVING.maxProtagonists);
  assert.ok(living.filter(p=>p.type==='plant').length<=1,'at most one plant');
  const kitchen=L.protagonists('kitchen',L.objectsIn(reference,room('rom_kitchen')));assert.equal(kitchen[0].type,'counter');
@@ -25,6 +26,7 @@ test('HV2-C0 protagonists follow the room ranking and the D1 rules (no TV or pla
  // A room where the TV and a plant would rank first by size: neither may open it.
  const tvRoom=[{id:'tv',type:'tvstand',color:'#e2cfb4',position:{x:0,y:0},size:{widthMm:2400,depthMm:500}},{id:'p',type:'plant',position:{x:1,y:1},size:{widthMm:600,depthMm:600}},{id:'a',type:'armchair',position:{x:2,y:2},size:{widthMm:800,depthMm:800}}];
  const r=L.protagonists('living',tvRoom);assert.equal(r[0].type,'armchair');assert.equal(r.find(p=>p.type==='tvstand').dark,true);
+ assert.deepEqual(r.map(p=>p.type),['armchair','plant','tvstand'],'main pieces, then the plant, then the dark mass');
  const dark=L.protagonists('living',[{id:'s',type:'sofa',color:'#151515',position:{x:0,y:0},size:{widthMm:2000,depthMm:900}},{id:'c',type:'coffeetable',color:'#e8dccb',position:{x:0,y:0},size:{widthMm:900,depthMm:500}}]);
  assert.equal(dark[0].type,'coffeetable','a near-black sofa does not open the room');
  assert.equal(L.protagonists('living',[{id:'d',type:'door',position:{x:0,y:0}}]).length,0,'doors are never protagonists');

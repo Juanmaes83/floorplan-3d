@@ -4241,7 +4241,7 @@ function beginLiving(view,stop,aspect,region){
     const inRoom=(poly,x,z)=>{let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])hit=!hit;}return hit;};
     const furniture=(furnG?.children||[]).map((g,i)=>{const b=new THREE.Box3().setFromObject(g);if(b.isEmpty())return null;const cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
       return {fid:g.userData.fid,index:i,min:b.min.toArray(),max:b.max.toArray(),roomIndex:rooms.find(r=>inRoom(r.poly,cx,cz))?.index||0};}).filter(Boolean);
-    const visits=tl.rooms.map(r=>({roomIndex:rooms.find(x=>x.id===r.roomId)?.index||0,start:intro+r.start,duration:r.duration,seeds:r.seeds.map(sd=>({fid:sd.id,at:sd.at}))})).filter(v=>v.roomIndex);
+    const visits=tl.rooms.map(r=>({roomIndex:rooms.find(x=>x.id===r.roomId)?.index||0,start:intro+r.start,duration:r.duration,seeds:r.seeds.map(sd=>({fid:sd.id,at:sd.at,dark:!!sd.dark}))})).filter(v=>v.roomIndex);
     livingDrawing.setLanding({rooms,visits,furniture,levelY:[-.3,wallTop+.6]});
     const amb=view.ambience?presentationAmbienceBegin(view.ambience):null;
     const start=presentationStopPose(stop,aspect,region),total=intro+tl.total+outro;
@@ -4249,8 +4249,9 @@ function beginLiving(view,stop,aspect,region){
       return {id:r.roomId,center:[wx((Math.min(...xs)+Math.max(...xs))/2),wz((Math.min(...ys)+Math.max(...ys))/2)],extent:[(Math.max(...xs)-Math.min(...xs))/1000,(Math.max(...ys)-Math.min(...ys))/1000],start:intro+r.start,duration:r.duration,leaveAt:intro+r.leaveAt};});
     const all=geometry.rooms.filter(r=>r.poly.length>=3),houseCenter=[all.reduce((n,r)=>n+wx(r.poly.reduce((m,p)=>m+p[0],0)/r.poly.length),0)/all.length,all.reduce((n,r)=>n+wz(r.poly.reduce((m,p)=>m+p[1],0)/r.poly.length),0)/all.length];
     // tall or dark pieces (TV, fridge, wardrobe) so the camera never stands right behind one
-    const lum=c=>.2126*c.r+.7152*c.g+.0722*c.b,obstacles=furniture.map(f=>{let sum=0,n=0;furnG.children[f.index].traverse(o=>{if(!o.isMesh)return;for(const m of [].concat(o.material))if(m?.color){sum+=lum(m.color);n++;}});
-      return {x:(f.min[0]+f.max[0])/2,z:(f.min[2]+f.max[2])/2,h:f.max[1],dark:n>0&&sum/n<.12};});
+    // (a TV built into a light stand is still a black slab on screen: any near-black material makes the piece dark)
+    const lum=c=>.2126*c.r+.7152*c.g+.0722*c.b,obstacles=furniture.map(f=>{let sum=0,n=0,min=1;furnG.children[f.index].traverse(o=>{if(!o.isMesh)return;for(const m of [].concat(o.material))if(m?.color){const l=lum(m.color);sum+=l;n++;min=Math.min(min,l);}});
+      return {x:(f.min[0]+f.max[0])/2,z:(f.min[2]+f.max[2])/2,h:f.max[1],dark:n>0&&(sum/n<.12||min<.05)};});
     const narrative=window.FloorPlanPresentationStory.create('living-drawing',{start:{position:start.p.toArray(),target:start.t.toArray(),fov:camera.fov},rooms:roomViews,houseCenter,obstacles,total,intro,aspect,region,fov:LIVING_FOV,reduced:!!view.reduced,base:{near:camera.near,far:camera.far}});
     return {narrative,started,cut0,timeline:tl,total,ambience:!!amb?.active};
   }catch(error){presentationAmbienceEnd();livingDrawing?.clearLanding();if(opt.cut!==cut0)setPresentationCut(cut0);if(started)presentationLivingDrawingEnd();throw error;}

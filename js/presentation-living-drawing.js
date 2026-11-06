@@ -198,8 +198,14 @@ void main(){
    for(const v of input.visits){
     const room=rooms.find(r=>r.index===v.roomIndex);if(!room)continue;
     const own=v.seeds.map(sd=>{const f=furn.get(sd.fid);if(!f)return null;const ext=Math.hypot(f.max[0]-f.min[0],f.max[1]-f.min[1],f.max[2]-f.min[2]);
-     return {p:[(f.min[0]+f.max[0])/2,f.min[1]+.62*(f.max[1]-f.min[1]),(f.min[2]+f.max[2])/2],t:v.start+sd.at,obj:f.index,room:v.roomIndex,vObj:Math.min(1.6,Math.max(.45,ext/.9))};}).filter(Boolean);
-    if(!own.length)continue;
+     return {p:[(f.min[0]+f.max[0])/2,f.min[1]+.62*(f.max[1]-f.min[1]),(f.min[2]+f.max[2])/2],t:v.start+sd.at,obj:f.index,room:v.roomIndex,vObj:Math.min(1.6,Math.max(.45,ext/.9)),dark:!!sd.dark,low:[(f.min[0]+f.max[0])/2,f.min[1]-2,(f.min[2]+f.max[2])/2]};}).filter(Boolean);
+    // D1: a dark mass (a TV) never grows as a round stain (a black hole on the drawing): it fills from the bottom up, a
+    // nearly flat front rising through the piece only (centred 2 m below it), reaching its foot at its moment; it does
+    // not seed the room's floor and walls
+    const darkOnes=own.filter(sd=>sd.dark);for(let i=own.length-1;i>=0;i--)if(own[i].dark)own.splice(i,1);
+    for(const sd of darkOnes)objects.push({index:sd.obj,p:sd.low,t:sd.t-2/1.6});
+    if(!own.length&&!darkOnes.length)continue;
+    if(!own.length){if(v.roomIndex<MAX_ROOMS){done[v.roomIndex]=roomDoneAt(v,Math.max(...darkOnes.map(sd=>sd.t+1.2)));doneInfo.push({roomIndex:v.roomIndex,done:done[v.roomIndex],end:v.start+v.duration});}continue;}
     // sample the room's floor every 0.3 m and solve the front speed (bisection) for completion at 92 % of its time
     const rx=room.poly.map(p=>p[0]),rz=room.poly.map(p=>p[1]),pts=[];for(let x=Math.min(...rx)+.15;x<Math.max(...rx);x+=.3)for(let z=Math.min(...rz)+.15;z<Math.max(...rz);z+=.3)if(inside(room.poly,x,z))pts.push([x,z]);
     const goal=v.start+v.duration*.92,reach=vEnv=>Math.max(...pts.map(([x,z])=>Math.min(...own.map(sd=>sd.t+ENV_DELAY+Math.hypot(x-sd.p[0],z-sd.p[2])/vEnv))));
@@ -207,7 +213,7 @@ void main(){
     const maxR=Math.max(Math.max(...rx)-Math.min(...rx),Math.max(...rz)-Math.min(...rz))*1.2+1;
     for(const sd of own)seeds.push({...sd,vEnv,envDelay:ENV_DELAY,maxR,noise:.35});
     // the other pieces of the room land whole, from the side the nearest front reaches first
-    let last=goal;
+    let last=Math.max(goal,...darkOnes.map(sd=>sd.t+1.2));
     for(const f of input.furniture||[]){if(f.roomIndex!==v.roomIndex||v.seeds.some(sd=>sd.fid===f.fid))continue;
      let best=null;for(const sd of own){const q=[Math.max(f.min[0],Math.min(f.max[0],sd.p[0])),Math.max(f.min[1],Math.min(f.max[1],sd.p[1])),Math.max(f.min[2],Math.min(f.max[2],sd.p[2]))];
       const jitter=((Math.sin((f.index+1)*12.9898)*43758.5453)%1+1)%1*.35,t=sd.t+ENV_DELAY+Math.hypot(q[0]-sd.p[0],q[2]-sd.p[2])/vEnv+.1+jitter;if(!best||t<best.t)best={index:f.index,p:q,t};}

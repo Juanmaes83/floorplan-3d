@@ -60,9 +60,11 @@
   const pool=(objects||[]).filter(o=>o&&rank.includes(o.type)).slice().sort((a,b)=>score(a)-score(b)||(b.size?.widthMm||0)*(b.size?.depthMm||0)-(a.size?.widthMm||0)*(a.size?.depthMm||0)||String(a.id).localeCompare(String(b.id)));
   const taken={},out=[];
   for(const o of pool){const cap=PER_TYPE[o.type]??1;if((taken[o.type]||0)>=cap)continue;taken[o.type]=(taken[o.type]||0)+1;out.push(o);if(out.length>=max)break;}
-  // Opening rule: the first stain is never a dark mass nor a plant; move such items after the first suitable one.
-  const first=out.findIndex(o=>!isDark(o)&&o.type!=='plant');
-  if(first>0)out.unshift(out.splice(first,1)[0]);
+  // D1: the room is told by its main pieces; plants come after them and dark masses (a TV) last of all, so a black slab
+  // never takes over the view while the camera is in the room (it lands just before the camera leaves). Stable within
+  // each group; the first stain is therefore never a dark mass nor a plant when anything else exists.
+  const group=o=>isDark(o)?2:o.type==='plant'?1:0;
+  out.splice(0,out.length,...out.map((o,i)=>({o,i})).sort((a,b)=>group(a.o)-group(b.o)||a.i-b.i).map(x=>x.o));
   return out.map((o,i)=>({id:o.id,type:o.type,rank:i,dark:isDark(o),position:{x:o.position.x,y:o.position.y},reason:i===0?'opens the room':isDark(o)?'dark mass — never first':o.type==='plant'?'secondary only':'protagonist'}));
  }
  /* Deterministic, irregular moments for a room's protagonists, seconds from the room's start. */
@@ -73,7 +75,7 @@
     // never two equal intervals in a row (mechanical rhythm): push away from the previous gap, never under the minimum
     if(prev!==null&&Math.abs(g-prev)<LIVING.minGapDeltaS){g=g>=prev?prev+LIVING.minGapDeltaS:prev-LIVING.minGapDeltaS;if(g<LIVING.minGapS)g=prev+LIVING.minGapDeltaS;}
     t+=g;prev=g;}
-   out.push({id:list[i].id,type:list[i].type,rank:list[i].rank,at:round(t)});
+   out.push({id:list[i].id,type:list[i].type,rank:list[i].rank,at:round(t),...(list[i].dark?{dark:true}:{})});
   }
   return out;
  }
