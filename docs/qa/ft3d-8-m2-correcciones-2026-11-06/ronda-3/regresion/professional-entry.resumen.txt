@@ -1,0 +1,16 @@
+ok 1 - perfil opcional y entradas intactas 1440x900
+ok 2 - perfil opcional y entradas intactas 390x844
+ok 3 - perfil opcional y entradas intactas 844x390
+ok 4 - el perfil explica para qué sirve Rubik y su primera acción es una entrada existente 1440x900
+ok 5 - el perfil explica para qué sirve Rubik y su primera acción es una entrada existente 390x844
+ok 6 - el perfil explica para qué sirve Rubik y su primera acción es una entrada existente 844x390
+ok 7 - «El plano | La vivienda en 3D» shows the same example drawn and as a real Rubik capture 1440x900
+ok 8 - «Recórrela en 3D» and «Soluciones»: a reading path after the entries, cards open on demand 1440x900
+ok 9 - «Recórrela en 3D» and «Soluciones»: a reading path after the entries, cards open on demand 390x844
+ok 10 - «Recórrela en 3D» and «Soluciones»: a reading path after the entries, cards open on demand 844x390
+ok 11 - «Recorrer el ejemplo en 3D» opens the example in the 3D walk 1440x900 # SKIP THREE_LOCAL_DIR not set: 3D cannot load offline
+# tests 11
+# pass 10
+# fail 0
+# skipped 1
+# duration_ms 19080.327726

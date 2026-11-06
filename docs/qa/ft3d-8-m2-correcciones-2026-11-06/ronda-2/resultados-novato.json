@@ -1,0 +1,305 @@
+{
+ "codigoSha": "fix-ronda-2",
+ "navegador": "Chromium 153.0.8010.12",
+ "fecha": "2026-11-06T16:57:23.383Z",
+ "resumenEscenarios": {
+  "PASS": 2
+ },
+ "resumenComprobaciones": {
+  "PASS": 19
+ },
+ "escenarios": [
+  {
+   "id": "V5-novato",
+   "titulo": "Recorrido completo de un usuario novato",
+   "area": "Experiencia novato (vídeo 5)",
+   "checks": [
+    {
+     "id": "N.1",
+     "desc": "La portada ofrece un punto de partida claro (subir plano, crear o probar el ejemplo)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.2",
+     "desc": "El ejemplo invita a crear una copia propia",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.3",
+     "desc": "Presupuestar muestra el «Recorrido de obra» con 5 pasos ordenados y un siguiente paso",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "sum": "0 de 5 pasos hechos · Siguiente: pon precio a las partidas",
+      "steps": [
+       {
+        "k": "precios",
+        "state": "next",
+        "text": "1 Pon precio a las partidas · siguiente paso 0 de 11 partidas con precio · las que no tienen precio no suman Abrir presupuesto"
+       },
+       {
+        "k": "plan",
+        "state": "todo",
+        "text": "2 Crea el plan de obra Añade las tareas con sus fechas y dependencias. Crear plan de obra"
+       },
+       {
+        "k": "vinculos",
+        "state": "todo",
+        "text": "3 Vincula cada tarea con lo que construye Primero crea el plan de obra."
+       },
+       {
+        "k": "evolucion",
+        "state": "todo",
+        "text": "4 Mira la obra día a día Disponible cuando el plan tenga tareas."
+       },
+       {
+        "k": "entrega",
+        "state": "todo",
+        "text": "5 Entrega a tu cliente Vídeo y presentación para el cliente, con tu firma. Se descargan en tu equipo: no se publica nada."
+       }
+      ],
+      "next": "precios"
+     },
+     "evidence": null
+    },
+    {
+     "id": "N.4",
+     "desc": "Con todas las partidas valoradas, el total es completo (sin «parcial»)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "Base imponible | 16.377,85 € | IVA | 3439,35 € | Total | 19.817,20 €",
+     "evidence": null
+    },
+    {
+     "id": "N.5",
+     "desc": "Tras poner precios, el paso 1 queda hecho y el siguiente es crear el plan",
+     "status": "PASS",
+     "expected": null,
+     "observed": "1 de 5 pasos hechos · Siguiente: crea el plan de obra",
+     "evidence": null
+    },
+    {
+     "id": "N.6",
+     "desc": "Tarea «Pavimentos» con suelos (buscados por nombre) y su partida",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.7",
+     "desc": "Tarea «Pintura» después de «Pavimentos» (dependencia) con muros del salón",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.8",
+     "desc": "Hito «Fin de obra»",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.9",
+     "desc": "Plan y vínculos quedan hechos; el recorrido ofrece ver la evolución y entregar",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "sum": "3 de 5 pasos hechos · Siguiente: entrega a tu cliente",
+      "steps": [
+       {
+        "k": "precios",
+        "state": "done",
+        "text": "✓ Pon precio a las partidas · hecho 11 de 11 partidas con precio Abrir presupuesto"
+       },
+       {
+        "k": "plan",
+        "state": "done",
+        "text": "✓ Crea el plan de obra · hecho 3 tareas guardadas · en borrador: cuando lo compruebes, márcalo como revisado en el plan Abrir plan de obra"
+       },
+       {
+        "k": "vinculos",
+        "state": "done",
+        "text": "✓ Vincula cada tarea con lo que construye · hecho 2 de 2 trabajos con elementos del proyecto · 2 con partidas del presupuesto Revisar vínculos"
+       },
+       {
+        "k": "evolucion",
+        "state": "todo",
+        "text": "4 Mira la obra día a día Evolución 4D: la casa se construye según tu plan; puedes pausar, retroceder y abrir cada elemento. Ver evolución 4D"
+       },
+       {
+        "k": "entrega",
+        "state": "next",
+        "text": "5 Entrega a tu cliente · siguiente paso Vídeo y presentación para el cliente, con tu firma. Se descargan en tu equipo: no se publica nada. Preparar entrega"
+       }
+      ],
+      "next": "entrega"
+     },
+     "evidence": null
+    },
+    {
+     "id": "N.10",
+     "desc": "La evolución reproduce el plan (la fecha avanza)",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.10b",
+     "desc": "Entregar no muestra textos técnicos de desarrollo (nombres de módulos)",
+     "status": "PASS",
+     "expected": null,
+     "observed": "\n  Geometría: FloorPlanCore.geometry, FloorPlanRoof, FloorPlanBuilding · Fechas: plan FT3D-8 · Importes: presupuesto C1–C4 (FloorPlanBudget).\n  El montaje de ma",
+     "evidence": null
+    },
+    {
+     "id": "N.11",
+     "desc": "Entregar tiene una acción principal clara: «Generar vídeo y presentación»",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      "Ver la evolución en el visor",
+      "Generar vídeo y presentación",
+      "Generar vídeo",
+      "Preparar presentación para el cliente"
+     ],
+     "evidence": null
+    },
+    {
+     "id": "N.12",
+     "desc": "La presentación queda lista para descargar",
+     "status": "PASS",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    },
+    {
+     "id": "N.13",
+     "desc": "Al terminar, el recorrido marca la entrega al día",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "sum": "5 de 5 pasos hechos · todo al día",
+      "steps": [
+       {
+        "k": "precios",
+        "state": "done",
+        "text": "✓ Pon precio a las partidas · hecho 11 de 11 partidas con precio Abrir presupuesto"
+       },
+       {
+        "k": "plan",
+        "state": "done",
+        "text": "✓ Crea el plan de obra · hecho 3 tareas guardadas · en borrador: cuando lo compruebes, márcalo como revisado en el plan Abrir plan de obra"
+       },
+       {
+        "k": "vinculos",
+        "state": "done",
+        "text": "✓ Vincula cada tarea con lo que construye · hecho 2 de 2 trabajos con elementos del proyecto · 2 con partidas del presupuesto Revisar vínculos"
+       },
+       {
+        "k": "evolucion",
+        "state": "done",
+        "text": "✓ Mira la obra día a día · hecho Evolución 4D: la casa se construye según tu plan; puedes pausar, retroceder y abrir cada elemento. Ver evolución 4D"
+       },
+       {
+        "k": "entrega",
+        "state": "done",
+        "text": "✓ Entrega a tu cliente · hecho Última entrega al día con el proyecto. Preparar entrega"
+       }
+      ],
+      "next": null
+     },
+     "evidence": null
+    },
+    {
+     "id": "N.14",
+     "desc": "Al terminar, los 5 pasos están hechos y no queda ningún «siguiente paso» pendiente",
+     "status": "PASS",
+     "expected": null,
+     "observed": "5 de 5 pasos hechos · todo al día",
+     "evidence": null
+    },
+    {
+     "id": "N.Z",
+     "desc": "Sin errores JavaScript en todo el recorrido",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [
+    "Botones visibles en Entregar: Ver la evolución en el visor | Generar vídeo y presentación | Generar vídeo | Preparar presentación para el cliente"
+   ],
+   "status": "PASS",
+   "started": "2026-11-06T16:55:38.096Z",
+   "error": null,
+   "finished": "2026-11-06T16:57:19.876Z"
+  },
+  {
+   "id": "V5-movil",
+   "titulo": "Recorrido de obra en móvil",
+   "area": "Experiencia novato (vídeo 5)",
+   "checks": [
+    {
+     "id": "N.M1",
+     "desc": "El recorrido cabe en 390 px sin desbordar",
+     "status": "PASS",
+     "expected": null,
+     "observed": {
+      "w": 366,
+      "overflow": false,
+      "pageOverflow": false,
+      "btns": [
+       44,
+       44
+      ]
+     },
+     "evidence": null
+    },
+    {
+     "id": "N.M2",
+     "desc": "Botones del recorrido con altura táctil ≥ 44 px",
+     "status": "PASS",
+     "expected": null,
+     "observed": [
+      44,
+      44
+     ],
+     "evidence": null
+    },
+    {
+     "id": "N.MZ",
+     "desc": "Sin errores JavaScript",
+     "status": "PASS",
+     "expected": null,
+     "observed": [],
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "PASS",
+   "started": "2026-11-06T16:57:19.877Z",
+   "error": null,
+   "finished": "2026-11-06T16:57:23.378Z"
+  }
+ ],
+ "metricas": [
+  {
+   "scenario": "V5-novato",
+   "name": "novato-generar-entrega",
+   "value": 48585,
+   "unit": "ms"
+  }
+ ]
+}

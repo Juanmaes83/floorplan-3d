@@ -1,0 +1,13 @@
+ok 1 - FT3D off: the presentation is unchanged; FT3D on: checkpoints, p = 1 = overview, reversible, clean exit (1440x900)
+ok 2 - reduced motion: plan ⇄ 3D directly, no intermediate frames (1440x900)
+ok 3 - phone 390x844: the chapter fits the screen and ends on the overview
+ok 4 - two-level building: the chapter opens each level overview from its plan; editor level and project kept
+ok 5 - room descent: overview → first room continuously, p = 1 = room stop, reversible, back to the overview, clean exit (1440x900)
+ok 6 - room descent with reduced motion on a two-level building: direct, each level enters its own first room
+ok 7 - whole story: plan → overview → first room as one progress; scenes match the single chapters; reversible; ends on the room stop (1440x900)
+ok 8 - whole story on a two-level building with reduced motion: 4 scenes, level changes, last room of the upper level
+# tests 8
+# pass 8
+# fail 0
+# skipped 0
+# duration_ms 1168607.004326
