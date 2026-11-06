@@ -58,3 +58,51 @@ jobs:
           name: presentation-ux-${{ env.ART }}-${{ env.TESTED_SHA }}
           path: qa-results/presentation-ux/
           if-no-files-found: ignore
+
+  # Every Presentation browser suite that no other workflow runs, against the same SHA: the card, its states and the
+  # scenes group must not change what they verify (framing, stops, tools, batch, route, light, reveal, minimap,
+  # section, façade, axonometry, visit, buildings, brand, delivery image).
+  presentation-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - presentation
+          - presentation-framing
+          - presentation-overview
+          - presentation-minimap
+          - presentation-light
+          - presentation-contact
+          - presentation-reveal
+          - presentation-route
+          - presentation-batch
+          - presentation-section
+          - presentation-visit
+          - presentation-elevation
+          - presentation-axon
+          - building-presentation
+          - brand
+          - material-detail
+          - delivery-image
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/ux-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — ${{ matrix.suite }}
+        run: node --test --test-concurrency=1 tests/${{ matrix.suite }}.browser.test.cjs
