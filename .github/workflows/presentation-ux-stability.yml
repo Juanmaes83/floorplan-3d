@@ -106,3 +106,44 @@ jobs:
           echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
       - name: Real app — ${{ matrix.suite }}
         run: node --test --test-concurrency=1 tests/${{ matrix.suite }}.browser.test.cjs
+
+  # The same suites on the PR's BASE (master), in the same runner type: a failure that also happens here is not this
+  # PR's. These suites never ran in CI before this PR, so this is their first CI baseline.
+  presentation-regressions-base:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - presentation
+          - presentation-reveal
+          - presentation-route
+          - presentation-light
+          - presentation-minimap
+          - presentation-contact
+          - presentation-batch
+          - presentation-visit
+          - presentation-visit-handover
+          - brand
+          - material-detail
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$BASE_SHA"
+          npm install --prefix "$RUNNER_TEMP/ux-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Base (master) — ${{ matrix.suite }}
+        run: node --test --test-concurrency=1 tests/${{ matrix.suite }}.browser.test.cjs
