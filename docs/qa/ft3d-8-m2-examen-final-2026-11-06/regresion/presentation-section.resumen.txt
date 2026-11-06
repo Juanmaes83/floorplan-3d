@@ -1,0 +1,12 @@
+ok 1 - OFF unchanged; ON: checkpoints, real plane on the building only, reverse, resize, cancel, continue (1440x900)
+ok 2 - whole story: plan → section → room without a camera jump; restore on exit (1440x900, reduced motion)
+ok 3 - autoplay plays and pauses; finishing restores (1440x900, motion allowed)
+ok 4 - phone 390x844: framed, operable, no overflow
+ok 5 - phone 844x390: framed, operable, no overflow
+ok 6 - two-level building: one section per level, same axis, restore on exit
+ok 7 - unsupported plan: option disabled with a concrete reason; presentation unaffected
+# tests 7
+# pass 7
+# fail 0
+# skipped 0
+# duration_ms 855345.903619

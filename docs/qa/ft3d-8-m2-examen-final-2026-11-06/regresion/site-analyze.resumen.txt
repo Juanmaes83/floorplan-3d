@@ -1,0 +1,7 @@
+ok 1 - Project-First A3: visual Analyze and the orientation/site report 1440x900
+ok 2 - Project-First A3: visual Analyze and the orientation/site report 390x844
+# tests 2
+# pass 2
+# fail 0
+# skipped 0
+# duration_ms 6054.380072

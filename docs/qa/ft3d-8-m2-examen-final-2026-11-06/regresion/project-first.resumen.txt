@@ -1,0 +1,10 @@
+ok 1 - Project-First A1: the project and its real outputs are visible before any click 1440x900
+ok 2 - Project-First A1: the project and its real outputs are visible before any click 1280x800
+ok 3 - Project-First A1: the project and its real outputs are visible before any click 390x844
+ok 4 - Project-First A1: the project and its real outputs are visible before any click 844x390
+ok 5 - Project-First A1: Deliver follows a change in the project
+# tests 5
+# pass 5
+# fail 0
+# skipped 0
+# duration_ms 9749.916076

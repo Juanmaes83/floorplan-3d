@@ -1,0 +1,143 @@
+{
+ "codigoSha": "49e8feba2e3aad03a25fb602248758e39dbe3b3c",
+ "navegador": "Chromium 153.0.8010.12",
+ "fecha": "2026-11-06T16:16:51.013Z",
+ "resumenEscenarios": {
+  "FAIL": 2
+ },
+ "resumenComprobaciones": {
+  "FAIL": 10,
+  "PASS": 1
+ },
+ "escenarios": [
+  {
+   "id": "V4-escritorio",
+   "titulo": "Vídeo 4: hallazgos de escritorio",
+   "area": "Hallazgos (vídeo 4)",
+   "checks": [
+    {
+     "id": "V4.A7",
+     "desc": "Un presupuesto parcial no se rotula «Total» sin calificar",
+     "status": "FAIL",
+     "expected": null,
+     "observed": "Base imponible | 21.601,18 € | IVA | 2160,12 € | Total | 23.761,30 €",
+     "evidence": null
+    },
+    {
+     "id": "V4.B7",
+     "desc": "El cambio manual de precio queda en el historial",
+     "status": "FAIL",
+     "expected": null,
+     "observed": 0,
+     "evidence": null
+    },
+    {
+     "id": "V4.C4",
+     "desc": "Editar los elementos de una tarea guardada se guarda",
+     "status": "FAIL",
+     "expected": null,
+     "observed": "FloorPlanConstructionSchedule: elementIds of tsk_bbc895a97f3af924 contradict elements",
+     "evidence": null
+    },
+    {
+     "id": "V4.C4b",
+     "desc": "El mensaje de error está en castellano y sin códigos técnicos",
+     "status": "FAIL",
+     "expected": null,
+     "observed": "FloorPlanConstructionSchedule: elementIds of tsk_bbc895a97f3af924 contradict elements",
+     "evidence": null
+    },
+    {
+     "id": "V4.6b",
+     "desc": "La copia queda señalada",
+     "status": "PASS",
+     "expected": null,
+     "observed": 1,
+     "evidence": null
+    },
+    {
+     "id": "V4.11",
+     "desc": "Existe «Eliminar plan» en la UI",
+     "status": "FAIL",
+     "expected": null,
+     "observed": 0,
+     "evidence": null
+    },
+    {
+     "id": "V4.12",
+     "desc": "Recargar con cambios sin guardar avisa",
+     "status": "FAIL",
+     "expected": null,
+     "observed": {
+      "aviso": false,
+      "tareasDraftTrasRecarga": null
+     },
+     "evidence": null
+    },
+    {
+     "id": "V4.k3",
+     "desc": "El foco vuelve al botón que abrió el diálogo",
+     "status": "FAIL",
+     "expected": null,
+     "observed": "professionalTitle",
+     "evidence": null
+    },
+    {
+     "id": "V4.k4",
+     "desc": "Escape con el foco dentro de la Evolución la cierra",
+     "status": "FAIL",
+     "expected": null,
+     "observed": null,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "FAIL",
+   "started": "2026-11-06T16:15:35.168Z",
+   "error": null,
+   "finished": "2026-11-06T16:16:33.183Z"
+  },
+  {
+   "id": "V4-movil",
+   "titulo": "Vídeo 4: hallazgos móviles",
+   "area": "Hallazgos (vídeo 4)",
+   "checks": [
+    {
+     "id": "V4.MOB02",
+     "desc": "«Entregar» visible o revelado al recibir el foco",
+     "status": "FAIL",
+     "expected": null,
+     "observed": {
+      "v0": {
+       "visible": false,
+       "sw": 410,
+       "cw": 370,
+       "h": 36
+      },
+      "v1": {
+       "visible": false,
+       "sw": 410,
+       "cw": 370,
+       "h": 36
+      }
+     },
+     "evidence": null
+    },
+    {
+     "id": "V4.m4",
+     "desc": "Pasos de la barra con altura ≥ 44 px",
+     "status": "FAIL",
+     "expected": null,
+     "observed": 36,
+     "evidence": null
+    }
+   ],
+   "notes": [],
+   "status": "FAIL",
+   "started": "2026-11-06T16:16:33.185Z",
+   "error": null,
+   "finished": "2026-11-06T16:16:51.009Z"
+  }
+ ],
+ "metricas": []
+}

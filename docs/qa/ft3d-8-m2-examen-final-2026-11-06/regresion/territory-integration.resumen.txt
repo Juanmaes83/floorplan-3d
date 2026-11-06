@@ -1,0 +1,8 @@
+ok 1 - 8C-E explicit building placement, layers, presentation, export and offline 390x844
+ok 2 - 8C-E explicit building placement, layers, presentation, export and offline 844x390
+ok 3 - 8C-E Walk keeps model start, height, doors and movement with placed terrain
+# tests 3
+# pass 3
+# fail 0
+# skipped 0
+# duration_ms 63105.769501
