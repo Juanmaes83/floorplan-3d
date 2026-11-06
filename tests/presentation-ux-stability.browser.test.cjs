@@ -57,6 +57,12 @@ const startSampler=page=>page.evaluate(()=>{const S=window.__ux={samples:[],on:t
    cardScroll:card.scrollHeight>card.clientHeight+1||card.scrollTop>0,docScroll:scrollX||scrollY,ids:buttons.map(b=>b.id||b.closest('.presentation-stops')&&'stop'||b.textContent.trim()),
    out:buttons.filter(b=>{if(b.closest('.presentation-card-body'))return false;const r=b.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left<c.left-1||r.right>c.right+1||r.top<c.top-1||r.bottom>c.bottom+1;}).map(b=>b.id)});
   requestAnimationFrame(tick);};requestAnimationFrame(tick);});
+// A person's prompt pause: the page itself clicks «Pausa» on the first frame where the «Dibujo vivo» scene is past
+// `atP`, in its own animation loop. Driving that click from the test process instead raced the 30 s scene on slow CI
+// renderers: Playwright's messages only got through after most of the scene had already played (measured with the
+// CPU throttled 6x: first observation at P≈0.76), and a played scene ends and closes by itself, as on master.
+const armPause=(page,atP)=>page.evaluate(atP=>{const f=()=>{const s=FloorPlanPresentation.story;if(s?.kind==='living-drawing'&&s.playing&&s.P>atP){document.querySelector('#presentationStoryPlay').click();return;}requestAnimationFrame(f);};requestAnimationFrame(f);},atP);
+const pausedLiving=page=>page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return s?.kind==='living-drawing'&&!s.playing&&!s.busy;},null,{timeout:900000});
 const stopSampler=page=>page.evaluate(()=>{window.__ux.on=false;return window.__ux.samples;});
 const spanOf=(xs,f)=>{const v=xs.map(f).filter(x=>x!=null);if(!v.length)return 0;return Math.max(...v)-Math.min(...v);};
 function assertStable(samples,label){
@@ -150,16 +156,13 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  assert.equal(await page.evaluate(()=>document.querySelector('#presentationScenes button:not([hidden])')?.id),'presentationLivingPlay',`${size}: «Ver dibujo vivo» leads the scenes`);
  assert.equal(await page.locator('#presentationLivingPlay').isVisible(),true);
  await startSampler(page);
- await page.locator('#presentationLivingPlay').click();
+ await armPause(page,0.03);await page.locator('#presentationLivingPlay').click();
  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing',null,{timeout:120000});
  // Diagnostics: if the story panel is ever hidden while this scene should stay open, keep the call path that did it.
  await page.evaluate(()=>{const p=document.getElementById('presentationStory'),d=Object.getOwnPropertyDescriptor(HTMLElement.prototype,'hidden');window.__storyHidden=[];
   Object.defineProperty(p,'hidden',{configurable:true,get(){return d.get.call(this);},set(v){if(v&&!d.get.call(this))window.__storyHidden.push({t:Math.round(performance.now()),stack:String(new Error().stack).split('\n').slice(1,9).join(' | ')});d.set.call(this,v);}});});
- // Pause as soon as the scene is under way, then take it to the middle with the slider (what a person does). Waiting
- // for the middle while it plays raced the scene's own end on slow CI renderers (SwiftShader, 2 cores): between two
- // polls the 30 s scene could reach its end and close, which is the expected end of a played scene, not a defect.
- await page.waitForFunction(()=>(FloorPlanPresentation.story?.P||0)>0.03,null,{timeout:900000});
- await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+ // Paused as soon as the scene is under way (armPause), then taken to the middle with the slider (what a person does).
+ await pausedLiving(page);
  await page.evaluate(()=>{const s=document.querySelector('#presentationStorySlider');s.value=String(Math.round(+s.max*.5));s.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return s&&!s.busy&&s.P>0.4&&s.P<0.6;},null,{timeout:300000});
  await page.waitForTimeout(500);
@@ -171,8 +174,7 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  // Back to the drawing, play again, pause; then forward with the slider: the card never moves.
  await page.locator('#presentationStoryPlan').click();await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return s&&s.P===0&&!s.playing&&!s.busy;});
  await page.screenshot({path:path.join(QA,`${size}-2-back-to-drawing.png`)});
- await page.locator('#presentationStoryPlay').click();await page.waitForFunction(()=>(FloorPlanPresentation.story?.P||0)>0.15,null,{timeout:900000});
- await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+ await armPause(page,0.15);await page.locator('#presentationStoryPlay').click();await pausedLiving(page);
  await page.locator('#presentationStorySlider').evaluate(e=>{e.value='80';e.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForFunction(()=>Math.abs((FloorPlanPresentation.story?.P||0)-.8)<.02&&!FloorPlanPresentation.story.busy);
  await page.locator('#presentationStoryPlay').click();
  await page.waitForFunction(()=>{const s=FloorPlanPresentation.story;return !s||(s.P>=1&&!s.playing&&!s.busy);},null,{timeout:900000});
@@ -184,8 +186,7 @@ test(`«Dibujo vivo» in the new panel ${viewport.width}x${viewport.height}${amb
  assert.equal(await page.evaluate(()=>FloorPlanPresentation.current?.kind),'overview',`${size}: back on the overview`);
  assert.equal(await page.evaluate(()=>!!View3D.presentationAmbienceInfo?.active),false,`${size}: no ambience left`);
  // Repeat: «Ver dibujo vivo» plays it again from the drawing; pause and resume to its end.
- await page.locator('#presentationLivingPlay').click();await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing'&&(FloorPlanPresentation.story.P||0)>0.05,null,{timeout:900000});
- await page.evaluate(()=>document.querySelector('#presentationStoryPlay').click());await page.waitForFunction(()=>!FloorPlanPresentation.story?.playing);
+ await armPause(page,0.05);await page.locator('#presentationLivingPlay').click();await pausedLiving(page);
  await page.locator('#presentationStoryPlay').click();await settled(page);
  if(thenStory){
   // The presentation goes on with the whole story: plan → section → façade → axonometric view → interior visit.
