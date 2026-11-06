@@ -169,7 +169,7 @@
    el('td',day(tk.startDate),tr,'num');el('td',day(tk.endDate),tr,'num');el('td',String(days(tk.startDate,tk.endDate)),tr,'num');
    const ec=el('td',undefined,tr),eb=el('div',undefined,ec,'cx-links');
    if(!tk.elements.length)el('span','Sin representación 3D',eb,'cx-chip');
-   for(const e of tk.elements.slice(0,3)){const x=byKey.get(e.elementId),b=btn(x?C.elementLabel(x,inv.levels):e.elementId.startsWith(A.ILLUSTRATIVE_PREFIX)?'Recurso ilustrativo':'Elemento que ya no existe',eb,'cx-link');b.dataset.element=e.elementId;b.title=C.ROLE[e.role];b.onclick=()=>{tab='elements';focus={elementKey:e.elementId};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};}
+   for(const e of tk.elements.slice(0,3)){const x=byKey.get(e.elementId),b=btn(x?C.elementLabel(x,inv.levels):e.elementId.startsWith(A.ILLUSTRATIVE_PREFIX)?(A.ILLUSTRATIVE[e.elementId.slice(A.ILLUSTRATIVE_PREFIX.length)]?.label||'Medio de obra')+' (ilustración)':'Elemento que ya no existe',eb,'cx-link');b.dataset.element=e.elementId;b.title=C.ROLE[e.role];b.onclick=()=>{tab='elements';focus={elementKey:e.elementId};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});};}
    if(tk.elements.length>3)el('span',`+${tk.elements.length-3}`,eb,'cx-chip');
    const ic=el('td',undefined,tr),ib=el('div',undefined,ic,'cx-links'),tl=lines?.get(tk.id);
    if(!tk.budgetAllocations.length)el('span','Sin partidas',ib,'cx-chip');
@@ -207,6 +207,10 @@
    for(const e of list){const l=el('label',undefined,fs),cb=el('input',undefined,l);cb.type='checkbox';cb.value=e.key;cb.checked=chosen.has(e.key);cb.dataset.element=e.key;
     el('span',`${C.elementLabel(e,inv.levels)} · ${C.LIFE[e.lifecycle]||e.lifecycle}${e.representable?'':' · sin representación'}`,l);
     const role=el('select',undefined,l);role.setAttribute('aria-label','Papel de '+C.elementLabel(e,inv.levels));for(const r0 of C.rolesFor(e)){const o=el('option',C.ROLE[r0],role);o.value=r0;}if(chosen.has(e.key))role.value=chosen.get(e.key);elRows.push({cb,role,key:e.key});}}
+  // Site resources (crane, scaffold, fence, hut): ILLUSTRATIONS linked expressly to this task, never part of the project.
+  const ill=el('fieldset',undefined,pick);el('legend','Medios de obra (ilustración: no forman parte del proyecto)',ill);
+  for(const [kind,def] of Object.entries(A.ILLUSTRATIVE||{})){const key=A.ILLUSTRATIVE_PREFIX+kind,l=el('label',undefined,ill),cb=el('input',undefined,l);cb.type='checkbox';cb.value=key;cb.checked=chosen.has(key);cb.dataset.element=key;
+   el('span',def.label+' · se dibuja como ilustración mientras dura la tarea',l);const role=el('select',undefined,l);role.setAttribute('aria-label','Papel de '+def.label);for(const r0 of def.roles){const o=el('option',C.ROLE[r0],role);o.value=r0;}if(chosen.has(key))role.value=chosen.get(key);elRows.push({cb,role,key});}
   // Budget items (explicit %; project subject only)
   const bs=el('div',undefined,f,'cx-sub');el('b','Partidas del presupuesto',bs);const itRows=[];
   if(money.kind!=='project'){el('span','Edificio: los importes se consultan por planta. RUBIK todavía no tiene presupuesto de edificio (decisión pendiente), así que las tareas del edificio no reparten partidas.',bs);}
@@ -231,7 +235,6 @@
     elements:elRows.filter(r=>r.cb.checked).map(r=>({elementId:r.key,role:r.role.value})),
     budgetAllocations:itRows.filter(r=>r.s.value).map(r=>({itemId:r.s.value,sharePercent:Number(r.p.value)}))};
    if(t.budgetAllocations.some(a=>!(a.sharePercent>0))){er.textContent='Indica el porcentaje de cada partida.';return;}
-   const keep=[...(tk?.elements||[]).filter(e=>e.elementId.startsWith(A.ILLUSTRATIVE_PREFIX))];t.elements=[...t.elements,...keep];
    // On a validation error the form keeps what was typed and explains it (no redraw).
    const okDone=change(d=>{const i=d.tasks.findIndex(x=>x.id===id);if(i>=0)d.tasks[i]={...d.tasks[i],...t};else d.tasks.push(t);},tk?'Tarea actualizada.':'Tarea añadida.',{silent:true});
    if(okDone){editing=null;focus={taskId:id};draw();dialog.querySelector('.is-focus')?.scrollIntoView({block:'center'});}else{er.textContent=error;error='';}

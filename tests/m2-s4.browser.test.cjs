@@ -60,14 +60,15 @@ async function elements(page){return page.evaluate(async()=>{const s=await Floor
 async function buildPlanThroughUI(page,{itemId,elementsA,elementsB}){
  await area(page,'budget');await page.locator('[data-route="construction-plan"]').click();await page.waitForSelector('#planDialog[open]');
  await page.locator('#planCreate').click();
- const addTask=async({title,start,end,dep=null,els=[],alloc=[],milestone=false})=>{
+ const addTask=async({title,start,end,dep=null,els=[],ill=[],alloc=[],milestone=false})=>{
   await page.locator(milestone?'#planAddMilestone':'#planAddTask').click();await page.fill('#taskTitle',title);await page.fill('#taskStart',start);if(!milestone)await page.fill('#taskEnd',end);
   if(dep){await page.locator('#taskAddDep').click();const r=page.locator('#taskForm [data-dep]').last();await r.locator('select').first().selectOption({label:dep.label});await r.locator('select').nth(1).selectOption(dep.type);await r.locator('input').fill(String(dep.lag));}
   for(const k of els)await page.locator(`#taskElements input[data-element="${k}"]`).check();
+  for(const [k,role] of ill){await page.locator(`#taskElements input[data-element="${k}"]`).check();await page.locator(`#taskElements label:has(input[data-element="${k}"]) select`).selectOption(role);}
   for(const a of alloc){await page.locator('#taskAddItem').click();const r=page.locator('#taskForm [data-alloc]').last();await r.locator('select').selectOption(a.itemId);await r.locator('input').fill(String(a.share));}
   await page.locator('#taskSave').click();if(await page.locator('#taskForm').count())assert.fail('task not saved: '+await page.locator('#taskError').textContent());};
  await addTask({title:'Replanteo y protecciones',start:'2026-03-02',end:'2026-03-04'});                          // no geometry, no items
- await addTask({title:'Revestimiento de muros',start:'2026-03-05',end:'2026-03-18',dep:{label:'1 Replanteo y protecciones',type:'FS',lag:0},els:elementsA,alloc:[{itemId,share:60}]});
+ await addTask({title:'Revestimiento de muros',start:'2026-03-05',end:'2026-03-18',dep:{label:'1 Replanteo y protecciones',type:'FS',lag:0},els:elementsA,ill:[['illustrative/scaffold','temporary']],alloc:[{itemId,share:60}]});
  await addTask({title:'Pavimentos',start:'2026-03-10',end:'2026-03-24',dep:{label:'1 Replanteo y protecciones',type:'FS',lag:3},els:elementsB,alloc:[{itemId,share:40}]});
  await addTask({title:'Entrega de llaves',start:'2026-03-25',milestone:true,dep:{label:'3 Pavimentos',type:'FS',lag:0}});
  await page.locator('#planSave').click();await page.waitForFunction(()=>/Plan guardado/.test(document.getElementById('planStatus').textContent));
@@ -167,6 +168,8 @@ test('M2-QA-05 · Evolución: scene, Gantt, date, card and amounts from one eval
   if(d==='2026-03-12')assert.equal(r.tasks.length,2,'two simultaneous works on the card');
   if(d==='2026-03-03')assert.match(r.tasks.join(' '),/Replanteo/,'a task without geometry is still on the card');}
  await f.evaluate(()=>window.__ft3dFidelity.setDate('2026-03-12'));await page.waitForTimeout(300);await shot(page,'m2-05-evolucion-simultaneas');
+ const ill=await f.evaluate(()=>({n:(window.__ft3dFidelity.ctx.model.illustrative||[]).length,card:document.getElementById('cardTasks').textContent}));
+ assert.equal(ill.n,1,'the scaffold linked in the plan is drawn');assert.match(ill.card,/andamio \(ilustración\)/,'and said to be an illustration');
  // Card amounts = C1–C4 subtotal × explicit share.
  const c=await f.evaluate(()=>{const F=window.__ft3dFidelity,rep=F.ctx.model.costs.report;return {byTask:rep.byTask.map(t=>({id:t.taskId,known:t.knownNet})),econ:document.getElementById('cardEconomy')?.textContent};});
  const net=await page.evaluate(id=>FloorPlanBudget.calculateBudget(FloorPlanBudgetUI.current().budget).lines.find(l=>l.id===id).subtotalNet,oak.id);
