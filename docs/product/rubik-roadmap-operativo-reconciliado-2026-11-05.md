@@ -206,3 +206,23 @@ No estimar precios ni duraciones sin datos de uso y alcance aprobados. El regist
 - **Historia preservada:** los demás gates de E2 y la distinción E3 del corte original no quedan automáticamente cerrados ni modificados por esta adenda.
 
 **Estado documental de esta adenda:** actualización de prioridades; pendiente de aprobación del contenido definitivo del Documento Maestro por el propietario.
+
+
+---
+
+## Adenda 06/11/2026 — HOME-UX-E2 · Home adaptativa por profesión y descubrimiento de capacidades
+
+**Decisión expresa del propietario:** incorporar al roadmap documental la mejora de Home para mostrar las capacidades reales de RUBIK y adaptar el contenido prioritario a la profesión elegida. **Autorización documental, no autorización de implementación ni merge.**
+
+**Documento normativo de esta línea (versión de preparación):** [HOME-UX-E2 — requisitos y QA](./home-ux-e2-roadmap-2026-11-06.md).
+
+- **Objetivo P0 de producto:** la Home existente (`js/guide-ui.js::buildWelcome()`) debe mostrar qué aporta RUBIK a arquitectura, inmobiliaria, promotora, reformas e interiorismo. La profesión cambia hero, demostración, ventajas/orden y CTA relevante, **no el modelo, permisos, presupuestos ni las herramientas disponibles**.
+- **Base a conservar:** tres entradas principales Subir plano / Crear desde cero / Probar ejemplo; selector de profesión opcional en `rubik-professional-audience-v1`; ejemplo 2D/3D real; cinco áreas Diseñar / Analizar / Presupuestar / Entregar / Mi estudio. No duplicar aplicación, navegación ni motores.
+- **Disciplina comercial:** un registro de capacidades con evidencia, SHA, permisos y estados `INTEGRADO_VERIFICADO`, `INTEGRADO_CON_CONDICIONES`, `EN_VALIDACION`, `EN_PREPARACION`, `BLOQUEADO_PERMISOS` y `NO_SOPORTADO`. No anunciar como integradas FT3D-8 S4, Catastro directo, BCCA gestionada, PR #166 ni otras ramas con CI verde pero sin integración y gates.
+- **Primer corte H1, aún no encargado:** **14 requisitos HOME-UX-E2-01…14 y 18 casos HUX-QA-01…18**, con pruebas por perfil, claims, navegación, permisos, ES/EN/ZH, 1280×720/1366×768/1440×900/1920×1080, móvil 390×844/844×390, zoom y regresiones.
+- **Otras hipótesis con alcance separado:** panel contextual + KPI y preflight de modificaciones (P0 candidatos); filtros de muebles, recetas de estilo, amueblamiento local y modos 3D (P1); iluminación y tipología asistida (P2); randomización global controlada (P3). No incluirlas de forma implícita en H1 ni declarar implementadas capacidades observadas únicamente en el benchmark Floorcraft.
+- **Independencia y secuencia:** FT3D-8 M1 S2+S3 continúa sin cambios; S4 conserva sus dependencias, y Home H1 necesita encargo propio y coordinación de la bienvenida/UI compartida. **La clasificación como bloqueo obligatorio de release E2 requiere decisión posterior del propietario.**
+- **Gates:** catálogo comercial fiel a master/QA, funcionalidad real, aprobación visual del propietario, seguridad y autorizaciones separadas para merge y Production.
+- **Antecedentes:** `docs/product/home-v2-content-audit-2026-11-04.md`, Punto 9 y el PDF Floorcraft vs RUBIK SOTA (material de referencia aportado por propietario, no una demostración de capacidades en master).
+
+**Seguimiento operativo:** `RUBIK-HOME-V2` pasa de «diseño documentado» a «HOME-UX-E2 plan documentado con requisitos y QA; implementación H1 no encargada». No elevarlo a implementado hasta nuevo mandato.
