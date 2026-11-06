@@ -158,10 +158,10 @@
    route(c,snap.record?.schedule?'Abrir plan de obra':'Crear plan de obra','construction-plan',()=>window.FloorPlanConstructionPlanUI.open(),true);
    if(snap.record?.schedule)route(c,'Ver evolución','construction-evolution',()=>openEvolution());
    const managed=window.FloorPlanCostCatalog?.managedStatus?.();
-   const p=card(grid,'Precios de referencia',managed?'BC3 propio, BCCA aportada y tarifa del estudio':'No disponible');p.dataset.module='reference-prices';p.id='referencePricesCard';sym(p,'prices');
+   const p=card(grid,'Precios de referencia',managed?'Bases de precios que aportes y tarifa del estudio':'No disponible');p.dataset.module='reference-prices';p.id='referencePricesCard';sym(p,'prices');
    const changes=snap.record?.priceHistory?.[app.project.id]?.length||0;
    detail(p,'Busca por código, texto o familia, compara con tu precio y decide. Nada se aplica sin tu confirmación'+(changes?` · ${changes} ${changes===1?'cambio registrado':'cambios registrados'}`:'')+'.');
-   detail(p,'Catálogo BCCA gestionado por RUBIK: no disponible mientras su permiso no esté documentado.');
+   detail(p,'El catálogo de precios gestionado por RUBIK no está disponible mientras su permiso de uso no esté documentado.');
    if(window.FloorPlanReferencePricesUI)route(p,'Buscar precios de referencia','reference-prices',()=>window.FloorPlanReferencePricesUI.open(),false);
   }
   if(area==='deliver'){

@@ -20,9 +20,9 @@ jobs:
           for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < evolucion/$m.js; done
       - name: Every pure test of the repository
         run: node --test $(ls tests/*.test.cjs | grep -v browser)
-  browser:
+  m2:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,9 +37,33 @@ jobs:
       - name: M2 · integrated QA over the real app (official Catastro host intercepted, never reached)
         env:
           FT3D8_M2_SHOTS: qa-results/ft3d-8-m2
-        run: node --test --test-concurrency=1 tests/m2-s4.browser.test.cjs
-      - name: Gate D (approved b12b925) at its new address evolucion/?lab=1
+        run: |
+          node --test --test-concurrency=1 tests/m2-s4.browser.test.cjs > m2.tap 2>&1 || status=$?
+          grep -E '^# (pass|fail)|^not ok' m2.tap || true
+          # Failure details last, so the end of the job log shows them.
+          awk '/^not ok/{p=1} p&&/^  \.\.\./{print;p=0} p' m2.tap | grep -v 'waiting\|retrying\|scrolling\|element is' | head -120
+          exit ${status:-0}
+      - uses: actions/upload-artifact@v4
         if: always()
+        with:
+          name: ft3d-8-m2-evidence
+          path: qa-results/ft3d-8-m2
+          if-no-files-found: ignore
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Chromium (pinned, same as the territory and M1 workflows)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/m2-playwright" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/m2-playwright/node_modules/playwright/cli.js" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/m2-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/m2-playwright/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Gate D (approved b12b925) at its new address evolucion/?lab=1
         run: node --test --test-concurrency=1 tests/ft3d-8-ux4d.browser.test.cjs tests/ft3d-8-fit.browser.test.cjs tests/ft3d-8-fidelity.browser.test.cjs tests/ft3d-8-dossier.browser.test.cjs tests/ft3d-8-delivery.browser.test.cjs tests/ft3d-8-lab.browser.test.cjs
       - name: M1 lab (S2 + S3)
         if: always()
@@ -47,9 +71,3 @@ jobs:
       - name: Regression of the shared modules touched by M2
         if: always()
         run: node --test --test-concurrency=1 tests/budget-ui.browser.test.cjs tests/economic-dossier.browser.test.cjs tests/professional-workspace.browser.test.cjs tests/professional-entry.browser.test.cjs tests/project-first.browser.test.cjs tests/site-analyze.browser.test.cjs tests/parcel.browser.test.cjs tests/territory-integration.browser.test.cjs tests/brand.browser.test.cjs tests/quantity-schedule.browser.test.cjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ft3d-8-m2-evidence
-          path: qa-results/ft3d-8-m2
-          if-no-files-found: ignore
