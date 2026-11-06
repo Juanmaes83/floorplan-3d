@@ -1,0 +1,18 @@
+ok 1 - off by default and off = existing façade: no hybrid state, no presentation material
+ok 2 - on: real façade targets, registered reveal, exact original materials back, capture, reverse, clean exit (1440×900)
+ok 3 - five lifecycles begin → seek → reverse → seek → end: no growth, clones disposed, borrowed maps intact; late map mirrored
+ok 4 - fail closed: a façade whose walls are not in the scene plays the normal elevation; a real one is supported
+ok 5 - reduced motion: technical, frontal material and exterior holds
+ok 6 - phone 390×844: technical, mid reveal, material, restored; controls usable, no overflow
+ok 7 - phone 844×390: technical, mid reveal, material, restored; controls usable, no overflow
+ok 8 - real Presentation PNG (1280, view aspect) of the technical state: ink set for the output buffer, interactive line state restored, valid PNG with contours, no residue
+ok 9 - OFF: the base story is unchanged (no room-visit, no visit controls)
+ok 10 - ON: section → validated visit → eye level; reversible; hand-over to Recorrer and back; clean exit
+ok 11 - fallback: a chosen room without an interior route keeps the base descent and says why
+ok 12 - Escape while walking returns to the presentation; five cycles keep resources stable
+ok 13 - phone portrait: arrival, hand-over bar fits, no horizontal overflow
+ok 14 - phone landscape: arrival, hand-over bar fits, no horizontal overflow
+# tests 14
+# pass 14
+# fail 0
+# skipped 0

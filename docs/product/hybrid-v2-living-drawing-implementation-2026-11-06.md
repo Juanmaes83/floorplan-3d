@@ -91,7 +91,41 @@ Resultado: ver §7.
 
 ## 7. Pruebas, CI y rendimiento
 
-(se completa con los datos medidos en el SHA final; ver §9)
+Código congelado en `3767444`. Los commits posteriores solo añaden documentación y evidencias.
+
+| Prueba | Dónde | Resultado |
+|---|---|---|
+| Suite unitaria completa (Node) | `master` `0f9c6ea` | 749/751 (2 omitidos) |
+| Suite unitaria completa (Node) | rama `3767444` | **767/769** (2 omitidos), 0 fallos; 18 tests nuevos |
+| `presentation-living-drawing.browser.test.cjs` (Chromium + SwiftShader) | rama `3767444` | **8/8** |
+| Integración: escenas sucesivas ×2 (dibujo vivo + ambientación → Section → visita → fachada híbrida → dibujo vivo) | `qa/hv2-integration-section-v1-2026-11-05` `25a549b` | **1/1** (21 min) |
+| Suites propias de Section → visita (6) y Hybrid V1 (8) | misma integración `25a549b` | **14/14** |
+| Suite unitaria completa | misma integración `25a549b` | 784/786 (2 omitidos), 0 fallos |
+| CI de GitHub (10 comprobaciones) | PR #170, `3767444` | **verde** (10/10) |
+| Rendimiento (SwiftShader, CPU; comparativo) | rama `3767444` | ON +30 % (1280×800) y +25 % (390×844) frente a OFF; memoria constante; GPU real no medida |
+
+La suite de navegador cubre:
+- **OFF por defecto:** sin estado del dibujo, el mismo proyecto.
+- **ON:**
+  - p = 0 es grafito sobre papel;
+  - a mitad de estancia hay realismo con el dibujo todavía en pantalla;
+  - el retroceso da el mismo fotograma;
+  - la máscara está acotada y cada estancia se completa antes de su final;
+  - «Continuar presentación» libera la capa;
+  - el JSON y los materiales quedan idénticos.
+- **Reduced motion:** espera en el inicio y avanza estancia a estancia, cada una completa.
+- **Con Section:** primero el dibujo vivo, después la sección, sin restos.
+- **D3:** opt-in, rotulada, solo suelos y texturas verificadas; se retira con la escena.
+- **5 ciclos:** geometrías y texturas idénticas.
+- **Fallback:** sin capa, la vista habitual.
+- **Teléfono 390×844 con DPR 2:** dibuja, línea de 1 px CSS y sin desbordamiento horizontal.
+
+Datos de la integración (`integration.json`), tras cada escena y en la vista general:
+- 0 planos de recorte, 0 materiales o contornos híbridos, sin capa ni ambientación;
+- 1248 mallas con 137 firmas de material idénticas;
+- la memoria de la segunda ronda es igual a la de la primera (1189 geometrías y 10 texturas tras la fachada).
+
+Tras la fachada híbrida quedan 11 geometrías más que tras el dibujo vivo. Son estables entre rondas, así que no crecen: proceden de la escena de fachada, no de Hybrid V2.
 
 ## 8. Limitaciones y defectos abiertos
 
@@ -99,8 +133,21 @@ Resultado: ver §7.
 - **Materiales del ejemplo pálidos:** el realismo es fiel al proyecto, y en el proyecto de ejemplo (salvia, lino, roble claro) el contraste con el grafito es sutil. La ambientación D3 lo realza, pero es opcional y va rotulada.
 - **Paredes:** sin ambientación por estancia (§4).
 - **Nevera en la propia cocina:** al llegar a la cocina sigue en primer plano lateral. Pertenece a la propia estancia, pero un encuadre algo más alto la reduciría.
+- **Puerta del salón:** una hoja de puerta de madera queda en la esquina inferior del encuadre del salón. No la tiene en cuenta el evitador de obstáculos, que solo considera muebles.
+- **PoC frente a producto:**
+  - La PoC era más espectacular: cámara interior a la altura de los ojos y materiales retocados a mano.
+  - El producto usa los materiales reales del proyecto (pálidos en el ejemplo) y una cámara elevada a tres cuartos que lee la estancia y la siguiente aún dibujada.
+  - La ambientación D3 (roble, mármol) acerca el producto a la PoC, sin tocar el proyecto.
+- **Capturas durante la escena:** las exportaciones PNG y de vídeo de la presentación están deshabilitadas mientras la escena está abierta, así que no registran el dibujo.
 - **Un solo nivel:** cada escena recorre las estancias de un nivel. Una vivienda de dos plantas recorre la planta de la vista general elegida.
 
 ## 9. Evidencias
 
-Ver `docs/qa/hybrid-v2/2026-11-06/README.md`.
+`docs/qa/hybrid-v2/2026-11-06/README.md` reúne:
+- el vídeo definitivo de `3767444`;
+- las hojas de fotogramas de escritorio, teléfono y ambientación;
+- la comparativa V1 / PoC / V2;
+- los datos de integración y rendimiento, y los resultados de las suites.
+
+Preview de Vercel de la rama (automática, no es producción):
+https://floorplan-3d-git-feat-hybrid-v-787c2c-juanma-espinosas-projects.vercel.app
