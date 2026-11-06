@@ -51,7 +51,7 @@ test('HV2 + corrected Section visit, twice: no residue of materials, camera or r
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});page.setDefaultTimeout(300000);
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:90000});
- if(!await page.evaluate(()=>!!(View3D.presentationVisitPlan&&View3D.presentationLivingDrawingBegin))){t.skip('Section visit or Hybrid V2 not in this build: integration only');return;}
+ assert.equal(await page.evaluate(()=>!!(View3D.presentationVisitPlan&&View3D.presentationLivingDrawingBegin)),true,'Section visit and Hybrid V2 MUST both exist: never skip integration');
  await page.locator('#welcomeExample').click();await page.waitForFunction(()=>FloorPlanApp.project.rooms.length>3);await page.waitForTimeout(800);
  const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
