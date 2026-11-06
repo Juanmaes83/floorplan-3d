@@ -40,10 +40,13 @@ const currentBrand=()=>D.brandFor(snapshot(),{include:[...state.include]});
 function renderBrand(){
   const sel=$('brandSel'),cur=state.source,profiles=browserProfiles();
   const db=dossierBrand();
-  sel.innerHTML=`<option value="none">Sin marca (atribución RUBIK)</option>`+(db?`<option value="dossier">Marca del expediente: ${esc(db.profile.name)}</option>`:'')+profiles.map(p=>`<option value="browser:${esc(p.id)}">Mi estudio: ${esc(p.name)} (este navegador)</option>`).join('')+
-    `<option value="lab">Marca de prueba de este laboratorio${state.labProfileId?'':' (crear)'}</option>`;
+  // Product: the signature is Mi estudio's («Firmar con» of this project); no second brand manager, no lab brand.
+  const LIB=window.__ft3dSource?.mode==='library';
+  sel.innerHTML=`<option value="none">Sin marca (atribución RUBIK)</option>`+(db?`<option value="dossier">${LIB?'Firma de este proyecto (Mi estudio)':'Marca del expediente'}: ${esc(db.profile.name)}</option>`:'')+profiles.filter(p=>!LIB||p.id!==db?.profile.id).map(p=>`<option value="browser:${esc(p.id)}">Mi estudio: ${esc(p.name)} (este navegador)</option>`).join('')+
+    (LIB?'':`<option value="lab">Marca de prueba de este laboratorio${state.labProfileId?'':' (crear)'}</option>`);
   sel.value=[...sel.options].some(o=>o.value===cur)?cur:'none';
-  $('brandBrowserNote').textContent=profiles.length?`${profiles.length} marca(s) guardada(s) en este navegador para este dominio (solo lectura).`
+  if(LIB)$('brandBrowserNote').textContent=db?'La firma se copia en cada entrega: si cambias después tu logo o tus datos en Mi estudio, las entregas ya generadas no cambian.':'Este proyecto no tiene firma elegida. Elígela en RUBIK → Mi estudio («Firmar con») o entrega sin marca.';
+  else $('brandBrowserNote').textContent=profiles.length?`${profiles.length} marca(s) guardada(s) en este navegador para este dominio (solo lectura).`
     :'Este dominio no tiene marcas guardadas. Las marcas de Mi estudio se guardan por dominio: una Preview de Vercel no ve las de producción. Usa la marca de prueba del laboratorio.';
   $('labBrandForm').hidden=sel.value!=='lab';
   const b=currentBrand();
@@ -281,6 +284,8 @@ async function prepareDocument(){
 function remember(kind,manifest,extra){
   if(state.history.some(h=>h.kind===kind&&h.deliveryId===manifest.id))return;
   state.history.push(Object.freeze({kind,deliveryId:manifest.id,dossierId:manifest.dossier?.id||null,subjectId:manifest.project.id,projectName:manifest.project.name,at:manifest.generatedAt,...extra}));
+  // M2: the delivery is also recorded in the project's construction record (frozen fingerprints, read-only history).
+  window.__ft3dSource?.recordDelivery?.(kind,manifest,{withVideo:!!(extra&&(extra.embedded||kind==='vídeo')),bytes:extra?.bytes||null,sha256:extra?.sha256||null});
 }
 function renderHistory(){
   $('deliveryHistory').innerHTML=state.history.map(h=>`<li>${esc(h.kind)} · entrega <code>${esc(h.deliveryId)}</code> · expediente <code>${esc(h.dossierId||'—')}</code> · ${esc(h.projectName)}${h.sha256?` · SHA-256 <code>${esc(h.sha256.slice(0,12))}</code>`:''}</li>`).join('');
@@ -342,7 +347,8 @@ $('docPrepare').onclick=()=>prepareDocument().catch(e=>renderShare(e.message));
 $('docDownload').onclick=()=>state.doc&&download(new Blob([state.doc.html],{type:'text/html'}),D.documentFilename(state.doc.manifest));
 $('manifestDownload').onclick=()=>state.manifest&&download(new Blob([JSON.stringify(state.manifest,null,1)],{type:'application/json'}),'entrega-'+state.manifest.id+'.json');
 $('publishVideo').onchange=()=>renderShare(null);
-$('publishGo').onclick=async()=>{$('publishGo').disabled=true;renderShare('Publicando…');
+$('publishGo').onclick=async()=>{if(window.__ft3dSource?.mode==='library')return; // product: remote publication stays off (DEC-05)
+ $('publishGo').disabled=true;renderShare('Publicando…');
   try{await publish({code:$('publishToken').value.trim(),agree:$('publishAgree').checked,withVideo:$('publishVideo').checked});}
   catch(e){state.published=null;renderShare('No publicado: '+e.message);}finally{$('publishGo').disabled=false;}};
 $('publishCopy').onclick=async()=>{try{await navigator.clipboard.writeText(state.published.link);renderShare('Enlace copiado.');}catch{$('publishUrl').select();renderShare('Selecciona el enlace y cópialo.');}};

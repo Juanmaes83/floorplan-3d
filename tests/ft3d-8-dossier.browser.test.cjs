@@ -55,7 +55,7 @@ const load=async(page,files)=>{const seq=await page.evaluate(()=>window.__ft3dDo
 
 test('the REAL Catastro provider reads the fixture GML exactly as the Node stand-in (contract is shared)',{timeout:120000},async t=>{
   const ctx=await browser.newContext();t.after(()=>ctx.close());const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1`);await ready(page);
   for(const id of ['A','B','C']){
     const real=await page.evaluate(({text})=>window.FloorPlanCatastroParcel.provider.getParcel({mode:'document',text}),{text:X.gml(X.PARCELS[id].reference,X.PARCELS[id].ring)});
     assert.deepEqual(real,X.catastroResult(id),id);
@@ -68,7 +68,7 @@ test('the REAL Catastro provider reads the fixture GML exactly as the Node stand
 test('desktop 1440x900 · scenarios A-J: correspondence, human messages, captures',{timeout:600000},async t=>{
   const ctx=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1`);await ready(page);
   const expect={A:{steps:['valid','ok','declared','declared','available','declared'],errors:[]},
     B:{steps:['valid','estimated','partial','pending','available','pending'],errors:[]},
     C:{steps:['valid','estimated','partial','declared','available','declared'],errors:[]},
@@ -117,7 +117,7 @@ test('desktop 1440x900 · scenarios A-J: correspondence, human messages, capture
 test('project switch through the real file input: A -> B with A\'s documents -> B coherent; nothing of A survives',{timeout:600000},async t=>{
   const ctx=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/?dossier=D`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1&dossier=D`);await ready(page);
   // 1-3: project A with its budget, plan, binding, brand and parcel, exactly as exported.
   let s=await load(page,await filesOf('A'));
   assert.equal(s.subject,'prj_fx-house-a');assert.deepEqual(s.errors,[]);assert.deepEqual(s.steps,['valid','ok','declared','declared','available','declared']);
@@ -160,7 +160,7 @@ test('project switch through the real file input: A -> B with A\'s documents -> 
 test('dossier package round trip: save, reopen, verified integrity, same id; Gantt sync and reversible timelapse',{timeout:300000},async t=>{
   const ctx=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1&dossier=A`);await ready(page);
   const id=await page.evaluate(()=>window.__ft3dDossier.evaluation.dossier.id);
   const [dl]=await Promise.all([page.waitForEvent('download'),page.locator('#dossierSave').click()]);
   const file=path.join(tmp,dl.suggestedFilename());await dl.saveAs(file);
@@ -191,7 +191,7 @@ test('dossier package round trip: save, reopen, verified integrity, same id; Gan
 test('video and delivery bound to the dossier: record, download, play, history kept after switching',{timeout:900000},async t=>{
   const ctx=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1&dossier=A`);await ready(page);
   const dos=await page.evaluate(()=>window.__ft3dDossier.evaluation.dossier.id);
   assert.equal(await page.evaluate(()=>window.__ft3dDelivery.state.source),'dossier');
   await reveal(page,'#videoGo');await page.locator('#videoGo').click();
@@ -237,7 +237,7 @@ test('video and delivery bound to the dossier: record, download, play, history k
 test('mobile 390x844 · dossier readable, no horizontal scroll, steps stacked',{timeout:300000},async t=>{
   const ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});t.after(()=>ctx.close());
   const page=await ctx.newPage(),{errors,external}=watch(page);
-  await page.goto(`${base}labs/ft3d-8/?dossier=A`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1&dossier=A`);await ready(page);
   await reveal(page,'#dossierFull');
   const m=await page.evaluate(()=>{const steps=[...document.querySelectorAll('#dossierFlow .dstep')].map(e=>e.getBoundingClientRect());
     return {sw:document.documentElement.scrollWidth,cols:new Set(steps.map(r=>Math.round(r.left))).size,minW:Math.min(...steps.map(r=>r.width))};});

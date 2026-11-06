@@ -9,6 +9,7 @@ on:
     paths:
       - js/construction-*.js
       - labs/ft3d-8/**
+      - evolucion/**
       - tests/construction-*.cjs
       - tests/ft3d-8-*.cjs
       - tests/fixtures/construction-*.cjs
@@ -34,7 +35,7 @@ jobs:
                    tests/construction-*.cjs tests/ft3d-8-*.cjs tests/fixtures/construction-*.cjs; do node --check "$f"; done
           node --input-type=module --check < labs/ft3d-8/app.js
           node --input-type=module --check < labs/ft3d-8/scene.js
-          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < labs/ft3d-8/$m.js; done
+          for m in fidelity-app project-scene gantt-view delivery-ui dossier-ui ux-shell illustrative-props; do node --input-type=module --check < evolucion/$m.js; done
       - name: Pure FT3D-8V and existing budget/story regression
         run: >-
           node --test

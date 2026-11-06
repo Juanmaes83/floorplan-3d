@@ -42,6 +42,18 @@
   let saved={};try{saved=JSON.parse(localStorage.getItem('rubik-budget-v1'))||{};}catch{}
   return {kind:'building-levels',budget:null,levels:s.levels.map(l=>{let b=null;try{b=saved[l.projectId]?B.parseBudget(JSON.stringify(saved[l.projectId])):null;}catch{}return {...l,budget:b};})};
  }
+ // Fingerprints of what a delivery freezes, computed exactly as the Evolución page records them (stored budgets).
+ async function nowFingerprints(snap){
+  let saved={};try{saved=JSON.parse(localStorage.getItem('rubik-budget-v1'))||{};}catch{}
+  const ids=snap.subject.type==='project'?[snap.doc.id]:snap.doc.levels.map(l=>l.project.id),list=ids.map(id=>saved[id]).filter(Boolean);
+  let budget=null;try{budget=list.length===1?B.parseBudget(JSON.stringify(list[0])):null;}catch{}
+  const brand=window.FloorPlanBrand?.snapshot(localStorage,snap.entry.id,snap.entry.name)||null;
+  return R.aspectFingerprints(A.fingerprint,{doc:snap.doc,schedule:snap.record?.schedule||null,budget,brand});
+ }
+ const ASPECT={project:'el proyecto',schedule:'el plan de obra',budget:'el presupuesto',brand:'la firma de Mi estudio',site:'el emplazamiento'};
+ async function deliveryState(snap){const last=snap.record?.deliveries?.at(-1);if(!last)return null;
+  const c=R.correspondence(snap.record,R.nowOf(snap.subject,await nowFingerprints(snap))).find(x=>x.aspect==='delivery');
+  return {last,result:c.result,changed:(c.changed||[]).map(k=>ASPECT[k]||k)};}
  // Persist the budget exactly as Presupuestar shows it, so Evolución and Entregar read the same document.
  function persistBudget(){const c=window.FloorPlanBudgetUI?.current?.();if(!c?.budget)return null;try{return window.FloorPlanBudgetUI.commit(c.budget);}catch{return null;}}
 
@@ -58,29 +70,58 @@
  }
  const rolesFor=e=>{const f=FAMILY[e.type],rules=f&&A.ROLE_RULES[f];return rules?(rules[e.lifecycle]||[]):[];};
 
- /* ---------- Evolución: the Gate D experience on this saved project ---------- */
- let overlay=null,frame=null,lastFocus=null;
- async function openEvolution({mode='view',taskId=null}={}){
-  ensureStyles();const snap=await snapshot();persistBudget();
+ /* ---------- Evolución: the Gate D experience on this saved project, inside RUBIK ---------- */
+ let overlay=null,frame=null,lastFocus=null,current=null;
+ const STEPS=[['plan','Plan de obra'],['proyecto','Expediente'],['evolucion','Evolución 4D'],['entrega','Entregar']];
+ async function openEvolution({mode='view',taskId=null,date=null}={}){
+  ensureStyles();persistBudget();const snap=await snapshot();
   if(!overlay){overlay=el('div',undefined,document.body,'cx-evolution');overlay.id='evolutionOverlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','evolutionTitle');overlay.hidden=true;
-   const bar=el('div',undefined,overlay,'cx-evolution-bar');const back=el('button','← Volver',bar,'btn');back.type='button';back.id='evolutionBack';back.onclick=closeEvolution;
-   el('h2','Evolución de obra',bar).id='evolutionTitle';el('span','',bar,'cx-crumbs').id='evolutionCrumbs';
-   overlay.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented){e.preventDefault();closeEvolution();}});}
-  overlay.querySelector('#evolutionCrumbs').textContent=`${snap.entry.name} · ${snap.subject.type==='building'?'Edificio':'Proyecto'} · revisión ${short(snap.revision)}${snap.level?' · '+snap.level.name:''}`;
+   const bar=el('div',undefined,overlay,'cx-evolution-bar');const back=el('button','← Volver a RUBIK',bar,'btn');back.type='button';back.id='evolutionBack';back.onclick=closeEvolution;
+   const t=el('h2','',bar);t.id='evolutionTitle';
+   const nav=el('nav',undefined,bar,'cx-steps');nav.setAttribute('aria-label','Recorrido de la obra');
+   for(const [k,label] of STEPS){const b=el('button',label,nav,'cx-step');b.type='button';b.dataset.step=k;b.onclick=()=>k==='plan'?over(()=>window.FloorPlanConstructionPlanUI.open(),'#planDialog'):frame?.contentWindow?.__ft3dUI?.go?.(k);}
+   el('span','',bar,'cx-crumbs').id='evolutionCrumbs';
+   // Mirrors of the page's own status and mode (its top bar is hidden inside RUBIK): one bar for the whole screen.
+   const pill=el('span','Cargando…',bar,'cx-chip');pill.id='evolutionStatus';pill.setAttribute('role','status');
+   const modes=el('span',undefined,bar,'cx-modes');modes.setAttribute('role','group');modes.setAttribute('aria-label','Modo');
+   for(const [m,label] of [['pro','Profesional'],['client','Presentación']]){const b=el('button',label,modes,'cx-step');b.type='button';b.dataset.viewMode=m;b.onclick=()=>frame?.contentDocument?.querySelector(`.modes [data-mode="${m}"]`)?.click();}
+   overlay.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&!document.querySelector('dialog[open]')){e.preventDefault();closeEvolution();}});}
+  current={mode,taskId,date};
+  overlay.querySelector('#evolutionTitle').textContent=snap.entry.name;
+  overlay.querySelector('#evolutionCrumbs').textContent=`${snap.subject.type==='building'?'Edificio':'Proyecto'} · revisión ${short(snap.revision)}${snap.level?' · planta activa: '+snap.level.name:''}`;
   frame?.remove();frame=el('iframe',undefined,overlay);frame.id='evolutionFrame';frame.title='Evolución de obra de '+snap.entry.name;
-  const q=new URLSearchParams({source:'library',entry:snap.entry.id,subject:snap.subject.type+':'+snap.subject.id,revision:snap.revision});if(mode==='deliver')q.set('mode','deliver');if(taskId)q.set('task',taskId);
-  frame.src='evolucion.html?'+q;lastFocus=document.activeElement;overlay.hidden=false;document.body.classList.add('evolution-open');
-  window.View3D?.setSuspended?.(true);overlay.querySelector('#evolutionBack').focus();
-  return new Promise(res=>frame.addEventListener('load',()=>res(frame),{once:true}));
+  const q=new URLSearchParams({source:'library',entry:snap.entry.id,subject:snap.subject.type+':'+snap.subject.id,revision:snap.revision,tab:mode==='deliver'?'entrega':'evolucion'});
+  if(taskId)q.set('task',taskId);if(date)q.set('date',date);
+  frame.src='evolucion/?'+q;if(overlay.hidden)lastFocus=document.activeElement;overlay.hidden=false;document.body.classList.add('evolution-open');
+  window.View3D?.setSuspended?.(true);
+  return new Promise(res=>frame.addEventListener('load',()=>{const doc=frame.contentDocument;
+   if(doc){new MutationObserver(syncSteps).observe(doc.body,{attributes:true,attributeFilter:['data-tab','data-mode']});const r=doc.getElementById('readiness');if(r)new MutationObserver(syncSteps).observe(r,{childList:true,characterData:true,subtree:true,attributes:true});}
+   syncSteps();res(frame);},{once:true}));
  }
- function closeEvolution(){if(!overlay||overlay.hidden)return;overlay.hidden=true;frame?.remove();frame=null;document.body.classList.remove('evolution-open');
-  if(!document.getElementById('professionalWorkspace')||document.getElementById('professionalWorkspace').hidden)window.View3D?.setSuspended?.(false);
-  window.FloorPlanProfessionalUI?.area&&!document.getElementById('professionalWorkspace').hidden&&document.dispatchEvent(new CustomEvent('construction-changed'));(lastFocus?.isConnected?lastFocus:document.body).focus?.();}
- // Messages from the Evolución page (same origin only): deliveries made there are recorded here, with their frozen fingerprints.
+ function syncSteps(){const doc=frame?.contentDocument;if(!doc||!overlay)return;const tab=doc.body.dataset.tab,mode=doc.body.dataset.mode;
+  for(const b of overlay.querySelectorAll('[data-step]'))b.setAttribute('aria-current',String(b.dataset.step===tab));
+  for(const b of overlay.querySelectorAll('[data-view-mode]'))b.setAttribute('aria-pressed',String(b.dataset.viewMode===mode));
+  const r=doc.getElementById('readiness'),pill=overlay.querySelector('#evolutionStatus');if(r&&pill){pill.textContent=r.textContent;const tone=r.dataset.tone||r.dataset.state;pill.className='cx-chip'+(/ok|ready/.test(tone||'')?' ok':/warn|partial/.test(tone||'')?' warn':/bad|error/.test(tone||'')?' bad':'');}}
+ function closeEvolution(){if(!overlay||overlay.hidden)return;overlay.hidden=true;frame?.remove();frame=null;current=null;document.body.classList.remove('evolution-open');
+  const ws=document.getElementById('professionalWorkspace');if(!ws||ws.hidden)window.View3D?.setSuspended?.(false);
+  else{const area=window.FloorPlanProfessionalUI?.area;if(area)window.FloorPlanProfessionalUI.open(area);}
+  (lastFocus?.isConnected?lastFocus:document.body).focus?.();}
+ // What the evolution shows comes from these three documents; if a dialog opened over it changed one of them, the
+ // evolution is rebuilt from the saved data at the same date and task (when they still exist).
+ const savedState=()=>['rubik-sota-project-library-v1','rubik-budget-v1','rubik-construction-v1',window.FloorPlanBrand?.DELIVERY_KEY,window.FloorPlanBrand?.PROFILES_KEY].map(k=>k?localStorage.getItem(k):'').join('\u0000');
+ async function over(openFn,selector){
+  const before=savedState();await openFn();const d=document.querySelector(selector);if(!d?.open)return;
+  d.addEventListener('close',async()=>{if(!frame)return;if(savedState()!==before){const f=frame.contentWindow?.__ft3dFidelity;await openEvolution({mode:frame.contentWindow?.document.body.dataset.tab==='entrega'?'deliver':'view',date:f?.last?.date||null,taskId:f?.selected||null});}else frame.focus();},{once:true});
+ }
+ function openBudgetAt(itemId){window.FloorPlanBudgetUI.open();const tr=itemId&&document.querySelector(`#budgetDialog tr[data-item="${CSS.escape(itemId)}"]`);
+  if(tr){tr.classList.add('is-focus');tr.scrollIntoView({block:'center'});tr.querySelector('[data-field="price"]')?.focus({preventScroll:true});}}
+ // Messages from the Evolución page (same origin only).
  addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='rubik-construction')return;const d=e.data;
   if(d.action==='close')closeEvolution();
-  if(d.action==='open-plan'){closeEvolution();window.FloorPlanConstructionPlanUI?.open({tab:'tasks',taskId:d.taskId||null});}
-  if(d.action==='open-budget'){closeEvolution();window.FloorPlanConstructionPlanUI?.open({tab:'items',itemId:d.itemId||null});}});
+  if(d.action==='open-plan')over(()=>window.FloorPlanConstructionPlanUI.open({tab:d.itemId?'items':d.elementKey?'elements':'tasks',taskId:d.taskId||null,itemId:d.itemId||null,elementKey:d.elementKey||null}),'#planDialog');
+  if(d.action==='open-budget')over(()=>openBudgetAt(d.itemId||null),'#budgetDialog');
+  if(d.action==='open-site')over(()=>window.FloorPlanTerritoryUI?.open(),'#territoryDialog');
+  if(d.action==='delivered')document.dispatchEvent(new CustomEvent('construction-delivered',{detail:{deliveryId:d.deliveryId}}));});
 
  /* ---------- budget dialog: partida → tareas → elementos (read-only) ---------- */
  let linkCache=null;
@@ -126,7 +167,8 @@
   if(area==='deliver'){
    const st=planState(snap),last=snap.record?.deliveries?.at(-1),c=card(grid,'Evolución de obra',snap.record?.schedule?st.text:'Necesita un plan de obra');c.dataset.module='construction-delivery';c.id='constructionDeliveryCard';sym(c,'evolution');
    detail(c,'Vídeo MP4 y presentación HTML de la obra prevista, con tu firma, desde el plan y el presupuesto de este proyecto. Se descargan en este equipo: no se publica nada.');
-   if(last)detail(c,`Última entrega: ${new Date(last.at).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'short'})}`);
+   const ds=await deliveryState(snap);
+   if(ds){const d=detail(c,`Última entrega: ${new Date(ds.last.at).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'short'})} · ${ds.result==='match'?'corresponde al estado actual':'desactualizada: ha cambiado '+ds.changed.join(', ')+'. La entrega descargada no cambia; genera una nueva versión.'}`);d.id='deliveryState';d.dataset.result=ds.result;}
    if(snap.record?.schedule)route(c,'Preparar evolución de obra','construction-delivery',()=>openEvolution({mode:'deliver'}),true);
    else route(c,'Crear plan de obra','construction-plan-from-deliver',()=>window.FloorPlanConstructionPlanUI.open());
    const items=grid.querySelector('[data-group="experience"] .professional-group-items');if(items)items.append(c);
@@ -137,6 +179,6 @@
     const d=detail(card0,`${origin} · referencia ${s.parcel.reference||'—'} · ${s.parcel.sourceCrs||''}`);d.id='parcelOrigin';}
   }
  }
- window.FloorPlanConstructionContext={entry,subject,snapshot,store,budgetFor,persistBudget,elementLabel,rolesFor,TYPE,ROLE,LIFE,eur,day,short};
- window.FloorPlanConstructionUI={cards,openEvolution,closeEvolution,planState};
+ window.FloorPlanConstructionContext={entry,subject,snapshot,store,budgetFor,persistBudget,nowFingerprints,deliveryState,elementLabel,rolesFor,TYPE,ROLE,LIFE,eur,day,short};
+ window.FloorPlanConstructionUI={cards,openEvolution,closeEvolution,planState,get evolutionFrame(){return frame;}};
 })();

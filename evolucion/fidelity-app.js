@@ -9,7 +9,7 @@ const S=window.FloorPlanConstructionSchedule,V=window.FloorPlanConstructionVisua
 const $=id=>document.getElementById(id),DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),iso=x=>new Date(x).toISOString().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LAYER=['finish','cladding'],APPEARS=['site','build','structure','envelope','services'];
-const q=new URLSearchParams(location.search);
+const q=new URLSearchParams(location.search),LIB=window.__ft3dSource?.mode==='library',RUBIK=LIB&&!!window.__ft3dSource?.embedded;
 if(q.get('capture')){const [w,h]=q.get('capture').split('x').map(Number);if(w&&h)document.documentElement.style.setProperty('--capture-w',w+'px'),document.documentElement.style.setProperty('--capture-h',h+'px'),document.body.classList.add('capture');}
 const scene=createProjectScene($('stage'));
 let ctx=null,pos=0,playing=false,speed=1,lastT=0,lastDay=-1;
@@ -90,11 +90,18 @@ function renderCard(date){
   if(mo.concurrentText)extra.push(`<p class="note">${esc(mo.concurrentText)}.</p>`);
   if(idle){const next=ctx.canon.tasks.filter(t=>t.startDate>date).sort((a,b)=>a.startDate.localeCompare(b.startDate))[0];
     if(next)extra.push(`<button type="button" class="btn" data-card="next" data-date="${esc(next.startDate)}">Ir a la siguiente actividad: ${esc(next.title.replace(/^FIXTURE /,''))}</button>`);}
+  // M2: the project's budget picture, said once and plainly (C1–C4 amounts + explicit allocations; never a total of the works).
+  if(LIB&&report){const cov=m.coverage.budget,parts=[];if(cov){
+    parts.push(`Presupuesto conocido del proyecto: ${cov.budgetKnownNet===null?'desconocido':P.euro(cov.budgetKnownNet)} sin IVA${cov.unknownItemIds.length?' (parcial)':''}`);
+    if(cov.unknownItemIds.length)parts.push(`${cov.unknownItemIds.length} ${cov.unknownItemIds.length===1?'partida sin precio':'partidas sin precio'}`);
+    if(cov.unassignedItemIds.length)parts.push(`${cov.unassignedItemIds.length} ${cov.unassignedItemIds.length===1?'partida sin asignar a tareas':'partidas sin asignar a tareas'}`);
+    if(cov.pendingAllocations.length)parts.push(`${cov.pendingAllocations.length} con reparto pendiente`);
+    extra.push(`<p class="note econ" id="cardEconomy">${esc(parts.join(' · '))}.</p>`);}}
   if(report&&shown.length){const cov=m.coverage.budget;
     extra.push(`<p class="note">Importes sin IVA de las partidas vinculadas a cada trabajo: no son el coste total de la obra${cov&&(cov.unassignedItemIds.length||cov.pendingAllocations.length||cov.unknownItemIds.length)?'; hay partidas sin asignar o sin precio':''}.</p>`);
     extra.push(`<details class="cdet"><summary>Ver tareas y partidas</summary>${shown.map(t=>{const tc=report.byTask.find(b=>b.taskId===t.id);const deps=(ctx.canon.tasks.find(z=>z.id===t.id)?.dependsOn||[]);
       return `<div class="cdet-t"><b>${esc(t.wbs)} ${esc(t.title.replace(/^FIXTURE /,''))}</b>${deps.length?`<p>Depende de: ${esc(deps.map(d=>(typeof d==='string'?d:d.taskId)+(d.type&&d.type!=='FS'?` (${d.type}${d.lagDays?'+'+d.lagDays+' d':''})`:'')).join(', '))}</p>`:''}
-        ${tc&&tc.lines.length?`<ul>${tc.lines.map(l=>`<li>${esc(l.description||l.itemId)} · ${l.sharePercent} % · ${l.allocatedNet===null?'importe desconocido':P.euro(l.allocatedNet)+' sin IVA'}${l.reviewStatus==='reviewed'?'':' · precio sin revisar'}${l.quantityStatus==='estimated'?' · cantidad estimada':''}</li>`).join('')}</ul>`:'<p>Sin partidas asignadas.</p>'}</div>`;}).join('')}</details>`);}
+        ${tc&&tc.lines.length?`<ul>${tc.lines.map(l=>`<li>${RUBIK?`<button type="button" class="linkbtn" data-rubik="open-budget" data-item-id="${esc(l.itemId)}" title="Abrir la partida en Presupuestar">${esc(l.description||l.itemId)}</button>`:esc(l.description||l.itemId)} · ${l.sharePercent} % · ${l.allocatedNet===null?'importe desconocido':P.euro(l.allocatedNet)+' sin IVA'}${l.reviewStatus==='reviewed'?'':' · precio sin revisar'}${l.quantityStatus==='estimated'?' · cantidad estimada':''}</li>`).join('')}</ul>`:'<p>Sin partidas asignadas.</p>'}${RUBIK?`<button type="button" class="linkbtn" data-rubik="open-plan" data-task-id="${esc(t.id)}">Ver la tarea en el plan de obra</button>`:''}</div>`;}).join('')}</details>`);}
   if(report&&report.projectRevision.check!=='match')extra.push('<p class="note">El presupuesto no indica sobre qué revisión del proyecto se hizo.</p>');
   if(selected)extra.push('<button type="button" class="btn" data-card="clear">Volver a la vista general</button>');
   x.innerHTML=extra.join('');
@@ -150,7 +157,8 @@ async function show(input,meta,preModel=null,dossier=null){
     ctx.gantt=createGanttView($('gantt'),{schedule,report:model.costs.report,timeline,S,G,P,onPick:p=>{pause();setPos(p);},onSelect:id=>selectTask(id)});
     $('weekSel').innerHTML=`<option value="0">Antes del plan</option>`+P.weeks(schedule).map(w=>`<option value="${Math.round((ms(w.startDate)-ms(timeline.preStartDate))/DAY)}">SEM ${String(w.n).padStart(2,'0')} · ${P.dateLabel(w.startDate)}</option>`).join('')+`<option value="${timeline.positions-1}">FIN · plan completado</option>`;
   }else{$('gantt').innerHTML=model.planning.status==='rejected'
-      ?`<p class="noplan" id="planRejected">${esc(model.planning.message)}. El modelo se muestra estático; carga un plan de ${esc(model.subject.id)} para reproducir su evolución.</p>`
+      ?`<p class="noplan" id="planRejected">${esc(model.planning.message)}. El modelo se muestra estático; ${LIB?'revisa el plan en Presupuestar → Plan de obra':'carga un plan de '+esc(model.subject.id)} para reproducir su evolución.</p>`
+      :LIB?`<p class="noplan" id="planMissing">Este proyecto todavía no tiene plan de obra. RUBIK no inventa fechas: crea las tareas en Presupuestar → Plan de obra. ${window.__ft3dSource.embedded?'<button type="button" class="btn primary" data-rubik="open-plan">Crear plan de obra</button>':''}</p>`
       :`<p class="noplan">PLANIFICACIÓN NO DISPONIBLE O PENDIENTE. FT3D-8 no genera fechas a partir de superficie, tipología, precio ni número de plantas.</p>`;$('weekSel').innerHTML='';}
   setPos(0);renderCard(timeline?timeline.preStartDate:null);
   api.model={subject:model.subject,fingerprint:model.fingerprints.project,delivery:model.delivery.level,planning:model.planning.status,costs:model.costs.status,
@@ -217,7 +225,7 @@ for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>{if(!ctx)r
   camView=v;if(v==='auto'){scene.setPose(fitPose('iso'));scene.setAuto(true);}else if(v==='free')scene.setAuto(false);else{scene.setAuto(false);scene.setPose(fitPose(v,{standing:true}));}
   document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};
 $('roofToggle').onchange=()=>api.setRoof($('roofToggle').checked);
-$('caseSel').innerHTML=FX.ids.map(id=>`<option value="${id}">${id}</option>`).join('');$('caseSel').onchange=()=>loadCase($('caseSel').value).catch(e=>$('importError').textContent=e.message);
+if(FX)$('caseSel').innerHTML=FX.ids.map(id=>`<option value="${id}">${id}</option>`).join('');$('caseSel').onchange=()=>loadCase($('caseSel').value).catch(e=>$('importError').textContent=e.message);
 const fail=e=>{$('importError').textContent='Importación rechazada: '+e.message;};
 $('fileInput').onchange=async()=>{const f=$('fileInput').files[0];$('importError').textContent='';if(!f)return;try{await importText(await f.text());}catch(e){fail(e);}finally{$('fileInput').value='';}};
 for(const [id,kind] of [['scheduleInput','schedule'],['budgetInput','budget'],['bindingInput','binding']])
@@ -226,5 +234,5 @@ window.addEventListener('keydown',e=>{if(e.target.closest('select,input'))return
   else if(e.key==='ArrowRight')step(e.shiftKey?7:1);else if(e.key==='ArrowLeft')step(e.shiftKey?-7:-1);});
 window.addEventListener('resize',()=>requestAnimationFrame(()=>{ctx?.gantt?.drawArrows();scene.resize();}));
 // Without ?case the lab opens the S1 dossier flow (dossier-ui.js loads it); ?case=A-D keeps the fidelity cases.
-if(q.get('case')||!window.FloorPlanConstructionDossier)loadCase(FX.ids.includes(q.get('case'))?q.get('case'):'A').then(()=>{if(q.get('date')&&ctx.timeline)api.setDate(q.get('date'));if(q.get('end')==='1'&&ctx.timeline)api.end();})
+if(FX&&(q.get('case')||!window.FloorPlanConstructionDossier))loadCase(FX.ids.includes(q.get('case'))?q.get('case'):'A').then(()=>{if(q.get('date')&&ctx.timeline)api.setDate(q.get('date'));if(q.get('end')==='1'&&ctx.timeline)api.end();})
   .catch(e=>{$('importError').textContent=e.message;document.body.classList.add('ready');});

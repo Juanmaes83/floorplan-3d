@@ -193,7 +193,7 @@ function summary(){const ev=state.evaluation;return ev?{id:ev.dossier.id,subject
   steps:[...document.querySelectorAll('#dossierFlow .dstep')].map(s=>s.dataset.status),change:state.change,error:state.error}:{error:state.error};}
 
 /* ---------- wiring ---------- */
-$('dossierSel').innerHTML='<option value="" disabled>— documentos cargados por ti —</option>'+Object.entries(SCENARIOS).map(([id,s])=>`<option value="${id}">${esc(s.label)}</option>`).join('');
+if(X)$('dossierSel').innerHTML='<option value="" disabled>— documentos cargados por ti —</option>'+Object.entries(SCENARIOS).map(([id,s])=>`<option value="${id}">${esc(s.label)}</option>`).join('');
 $('dossierSel').onchange=()=>loadScenario($('dossierSel').value).catch(e=>{state.error={code:e.code,message:e.message};render();});
 $('dossierFiles').onchange=async()=>{const f=$('dossierFiles').files;try{if(f.length)await loadFiles(f);}catch{}finally{$('dossierFiles').value='';}};
 $('dossierSave').onclick=()=>savePackage().catch(e=>{state.error={code:e.code,message:e.message};render();});
@@ -202,7 +202,16 @@ $('dossierFlow').onclick=e=>{const b=e.target.closest('[data-go]');if(!b)return;
 // defineProperties, not Object.assign: the getter must stay live (Object.assign would copy its current value).
 Object.defineProperties(api,Object.getOwnPropertyDescriptors({loadScenario,loadFiles,savePackage,summary,get evaluation(){return state.evaluation;},scenarios:Object.keys(SCENARIOS)}));
 const q=new URLSearchParams(location.search);
-if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'K';
+const SRC=window.__ft3dSource||{mode:'lab'};
+// Product: the project saved in the RUBIK library, evaluated with the same S1 dossier engine (no fixture, no file).
+if(SRC.mode==='library'){
+  if(SRC.error){state.error={code:'library-source',message:SRC.error};render();document.body.classList.add('ready');document.body.dataset.state='library-error';}
+  else apply(SRC.input,{caseId:null,text:'Proyecto guardado en tu biblioteca',kind:'library'}).then(()=>{const f=Fid();
+    if(SRC.initialDate&&f.ctx?.timeline)f.setDate(SRC.initialDate);if(SRC.initialTask&&f.ctx?.canon?.tasks.some(t=>t.id===SRC.initialTask))f.selectTask(SRC.initialTask);
+    window.dispatchEvent(new CustomEvent('ft3d8-library',{detail:summary()}));})
+   .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});
+}else if(SRC.mode==='none'){state.error={code:'no-project',message:'Abre un proyecto desde tu biblioteca de RUBIK para ver su evolución.'};render();document.body.classList.add('ready');document.body.dataset.state='no-project';}
+else if(!q.get('case')){const id=SCENARIOS[q.get('dossier')]?q.get('dossier'):'K';
   loadScenario(id).then(()=>{const f=Fid();if(q.get('date')&&f.ctx?.timeline)f.setDate(q.get('date'));if(q.get('end')==='1'&&f.ctx?.timeline)f.end();})
     .catch(e=>{state.error={code:e.code,message:e.message};render();document.body.classList.add('ready');});}
 else{$('dossierPanel').dataset.mode='fidelity';$('dossierId').textContent='Modo fidelidad (?case=): casos A–D sin expediente. Quita «?case» para usar el expediente.';}

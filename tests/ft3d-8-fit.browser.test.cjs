@@ -20,7 +20,7 @@ async function open(t,width,height,extra={}){
   const page=await ctx.newPage(),errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))external.push(u);});
-  await page.goto(`${base}labs/ft3d-8/?tab=evolucion`);
+  await page.goto(`${base}evolucion/?lab=1&tab=evolucion`);
   await page.waitForFunction(()=>/^dos_/.test(document.body.dataset.dossier||'')&&window.__ft3dFidelity?.ctx,null,{timeout:60000});
   await page.evaluate(()=>{document.getElementById('introOverlay').hidden=true;});await settle(page);return {page,errors,external};
 }

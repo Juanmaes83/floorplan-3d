@@ -17,7 +17,7 @@ before(async()=>{
   browser=await chromium.launch({...(process.env.CHROME?{executablePath:process.env.CHROME}:{}),args:launchArgs});
   if(shots)await fs.mkdir(shots,{recursive:true});
   ctx=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});page=await ctx.newPage();watched=watch(page);
-  await page.goto(`${base}labs/ft3d-8/`);await ready(page);
+  await page.goto(`${base}evolucion/?lab=1`);await ready(page);
 });
 after(async()=>{await ctx?.close();await browser?.close();await new Promise(r=>server?.close(r));});
 function watch(p){const errors=[],external=[],share=[];p.on('pageerror',e=>errors.push(e.message));
@@ -185,7 +185,7 @@ test('15 · client view: no technical tab nor professional details, the viewer s
 
 test('16 · mobile 390×844: viewer first, no horizontal scroll in any section',{timeout:180000},async t=>{
   const mctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});t.after(()=>mctx.close());
-  const m=await mctx.newPage(),w=watch(m);await m.goto(`${base}labs/ft3d-8/?tab=evolucion`);await ready(m);await at(m,K.simultaneous);
+  const m=await mctx.newPage(),w=watch(m);await m.goto(`${base}evolucion/?lab=1&tab=evolucion`);await ready(m);await at(m,K.simultaneous);
   for(const tab of ['evolucion','proyecto','entrega']){await m.evaluate(t=>window.__ft3dUI.go(t),tab);
     assert.ok(await m.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'no horizontal scroll in '+tab);}
   await m.evaluate(()=>window.__ft3dUI.go('evolucion'));const st=await m.evaluate(()=>document.getElementById('stage').getBoundingClientRect().toJSON());

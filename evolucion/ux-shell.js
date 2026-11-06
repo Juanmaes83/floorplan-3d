@@ -6,6 +6,7 @@ const Fid=()=>window.__ft3dFidelity,Dos=()=>window.__ft3dDossier,P=window.FloorP
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const TABS=['proyecto','evolucion','entrega'];
+const RUBIK=window.__ft3dSource?.mode==='library'&&!!window.__ft3dSource?.embedded;
 const q=new URLSearchParams(location.search);
 const ui=window.__ft3dUI={};
 
@@ -80,16 +81,20 @@ function renderSummary(){
   const lead=errors.length?`El expediente tiene ${errors.length===1?'una incompatibilidad':errors.length+' incompatibilidades'}: corrígelas para presentar con datos fiables.`
     :plan?'Proyecto preparado para ver su evolución.':'Puedes ver la vivienda en 3D. Añade una planificación para ver su evolución.';
   const main=errors.length?['fix','Resolver incompatibilidades']:plan?['evolution','Ver evolución']:['evolution','Ver la vivienda en 3D'];
-  box.innerHTML=`<p class="kicker">${ev?(ev.dossier.route==='local-package'?'Expediente abierto desde un paquete':'Expediente de documentos cargados en este navegador'):'Modo fidelidad · sin expediente'}${/FIXTURE/.test(m.subject.name)?' · <span class="fx">datos de prueba</span>':''}</p>
+  const SRC=window.__ft3dSource,lib=SRC?.mode==='library';
+  const libKicker=lib?`Proyecto guardado en tu biblioteca · ${m.subject.type==='building'?'edificio':'proyecto'} · revisión ${esc(String(m.fingerprints.project).slice(0,8))}${SRC.subject?.activeLevelId?' · planta activa: '+esc(SRC.subject.levels.find(l=>l.id===SRC.subject.activeLevelId)?.name||''):''}`:null;
+  box.innerHTML=`<p class="kicker">${libKicker?libKicker:ev?(ev.dossier.route==='local-package'?'Expediente abierto desde un paquete':'Expediente de documentos cargados en este navegador'):'Modo fidelidad · sin expediente'}${/FIXTURE/.test(m.subject.name)?' · <span class="fx">datos de prueba</span>':''}</p>
     <h2>${esc(m.subject.name)}</h2><p class="lead${errors.length?' bad':''}">${esc(lead)}</p>
     <ul class="srows">${rows.map(([k,st,v])=>`<li data-row="${esc(k)}"><span class="k">${esc(k)}${st?chipHtml(st):''}</span><span class="v">${esc(v)}</span></li>`).join('')}</ul>
     ${errors.length?`<ul class="issues-ux">${errors.slice(0,4).map(i=>`<li data-code="${esc(i.code)}"><b>${esc(i.message)}</b><p>${esc(FIX[i.code]||'Revisa el detalle en el expediente completo.')}</p></li>`).join('')}</ul>`:''}
     <div class="pactions"><button type="button" class="btn primary" id="mainAction" data-act="${main[0]}">${esc(main[1])}</button>
-      ${plan&&!errors.length?'':''}<button type="button" class="btn" data-act="budget">Revisar presupuesto</button><button type="button" class="btn" data-act="plan">Consultar planificación</button>
+      ${plan&&!errors.length?'':''}<button type="button" class="btn" data-act="budget">${lib&&SRC.embedded?'Abrir presupuesto':'Revisar presupuesto'}</button><button type="button" class="btn" data-act="plan">${lib&&SRC.embedded?'Abrir plan de obra':'Consultar planificación'}</button>${lib&&SRC.embedded?'<button type="button" class="btn" data-act="site">Emplazamiento</button>':''}
       ${ev?'<button type="button" class="btn link" data-act="full">Ver expediente completo</button>':''}<button type="button" class="btn link pro-only" data-act="load">Cargar documentos</button></div>`;
 }
 $('projSummary').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;
-  const a=b.dataset.act;
+  const a=b.dataset.act,SRC=window.__ft3dSource;
+  // Inside RUBIK the real dialogs open over this page; closing them comes back to the same date and task.
+  if(SRC?.mode==='library'&&SRC.embedded&&['budget','plan','site'].includes(a)){SRC.toRubik({budget:'open-budget',plan:'open-plan',site:'open-site'}[a]);return;}
   if(a==='evolution'){go('evolucion');$('stage').focus({preventScroll:true});}
   else if(a==='fix'){const first=document.querySelector('#dossierFlow .dstep[data-status=conflict]');reveal(first||'#dossierFull');(first||$('dossierFull')).scrollIntoView({block:'start'});}
   else if(a==='budget'){const st=document.querySelector('#dossierFlow .dstep[data-step="3"]');if(st&&document.body.dataset.dossier){reveal(st);st.scrollIntoView({block:'start'});}else{reveal('#coverage');$('coverage').scrollIntoView({block:'start'});}}
@@ -160,9 +165,11 @@ function showPick(key){
   const rows=v.tasks.map(l=>{const t=ctx.canon?.tasks.find(z=>z.id===l.taskId);if(!t)return '';const s=st?.tasks.find(z=>z.id===t.id);
     const tc=report?.byTask.find(z=>z.taskId===t.id);
     return `<li><b>${esc(t.wbs)} ${esc(t.title.replace(/^FIXTURE /,''))}</b> · ${esc(P.dateLabel(t.startDate))} → ${esc(P.dateLabel(t.endDate))} · ${s?({'in-progress':'en curso según plan',completed:'terminada según plan','not-started':'pendiente'})[s.plannedPhase]:''}${tc&&tc.lines.length?` · ${tc.totalNet===null?'importe desconocido':P.euro(tc.totalNet)+' sin IVA'}`:''}
+      ${RUBIK&&tc&&tc.lines.length?`<br><span class="pick-items">Partidas: ${tc.lines.map(l=>`<button type="button" class="linkbtn" data-rubik="open-budget" data-item-id="${esc(l.itemId)}">${esc(l.description||l.itemId)} · ${l.sharePercent} %</button>`).join(' ')}</span>`:RUBIK?'<br><span class="pick-items">Sin partidas asignadas a este trabajo.</span>':''}
       <br><button type="button" class="btn" data-pick-task="${esc(t.id)}">Ver trabajo</button></li>`;}).join('');
+  const RUBIK_PLAN=RUBIK?`<button type="button" class="btn" data-rubik="open-plan" data-element-key="${esc(key)}">Ver en el plan de obra</button>`:'';
   box.innerHTML=`<h4>${esc(TYPE[v.type]||v.type)}${LIFE[v.lifecycle]?' · '+esc(LIFE[v.lifecycle]):''}${v.levelId?` · ${esc(v.levelId)}`:''}</h4>
-    ${rows?`<ul>${rows}</ul>`:'<p>Este elemento no tiene trabajos vinculados en la planificación.</p>'}<button type="button" class="btn" data-pick-close>Cerrar</button>`;
+    ${rows?`<ul>${rows}</ul>`:'<p>Este elemento no tiene trabajos vinculados en la planificación.</p>'}${RUBIK_PLAN}<button type="button" class="btn" data-pick-close>Cerrar</button>`;
   box.hidden=false;box.dataset.key=key;return {key,tasks:v.tasks.map(t=>t.taskId)};
 }
 $('pickInfo').addEventListener('click',e=>{const t=e.target.closest('[data-pick-task]');if(t){$('pickInfo').hidden=true;Fid().selectTask(t.dataset.pickTask);}

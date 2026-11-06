@@ -172,6 +172,16 @@
     return {byItem,byElement,byTask,elementsOfItem,allocatedPercent};
   }
 
+  /* ---------- fingerprints of the aspects a delivery freezes (same function in RUBIK and in Evolución) ---------- */
+  // hash: async (doc)=>sha256 hex | null (FloorPlanConstructionProject.fingerprint). The brand is compared by what the
+  // client sees (profile, title, intro), never by the moment the snapshot was taken.
+  async function aspectFingerprints(hash,{doc,schedule=null,budget=null,brand=null}){
+    const site=doc&&doc.site!==undefined?doc.site:null;
+    return {project:await hash(doc),schedule:schedule?await hash(Schedule.validate(schedule)):null,budget:budget?await hash(budget):null,
+      brand:brand?await hash({profile:brand.profile,title:brand.title??null,intro:brand.intro??null}):null,site:site?await hash(site):null};
+  }
+  const nowOf=(subject,f)=>({subject,revision:f.project,scheduleFingerprint:f.schedule,budgetFingerprint:f.budget,brandFingerprint:f.brand,siteFingerprint:f.site});
+
   /* ---------- ids ---------- */
   const hex=n=>{const a=new Uint8Array(n);(globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(a):a.forEach((_,i)=>a[i]=Math.floor(Math.random()*256)));return [...a].map(x=>x.toString(16).padStart(2,'0')).join('');};
   const newId=prefix=>prefix+'_'+hex(8);
@@ -198,5 +208,5 @@
 
   return Object.freeze({KEY,SCHEMA,VERSION,LIMITS,RESULTS,MESSAGES,RecordError,human,
     subjectOf,subjectDoc,keyOf,duplicateSubjects,empty,parseStore,putSchedule,removeSchedule,selectSchedule,duplicateSchedule,putBinding,addPriceChange,addDelivery,
-    correspondence,links,newId,open});
+    correspondence,links,aspectFingerprints,nowOf,newId,open});
 });

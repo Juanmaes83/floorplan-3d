@@ -22,7 +22,7 @@ const elShot=async(loc,name)=>{if(shots)await loc.screenshot({path:path.join(sho
 function watch(page){const errors=[],external=[];page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'&&!/^Failed to load resource/.test(m.text()))errors.push(m.text());});
   page.on('request',r=>{const u=r.url();if(!u.startsWith(base)&&!/^(data|blob):/.test(u))external.push(u);});return {errors,external};}
-async function open(page,caseId){await page.goto(`${base}labs/ft3d-8/?case=${caseId}`);
+async function open(page,caseId){await page.goto(`${base}evolucion/?lab=1&case=${caseId}`);
   await page.waitForFunction(id=>document.body.dataset.case===id&&window.__ft3dDelivery,caseId,{timeout:30000});
   // Gate D layout: the delivery lives in its own section («Entrega»).
   await page.evaluate(()=>window.__ft3dUI.reveal('#deliverPanel'));

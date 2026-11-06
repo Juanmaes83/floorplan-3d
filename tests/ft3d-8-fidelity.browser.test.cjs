@@ -81,7 +81,7 @@ test(`fidelity vs real editor · case ${CASE}`,{timeout:300000},async t=>{
   // --- candidate: FT3D-8 fidelity lab
   const labCtx=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>labCtx.close());
   const lab=await labCtx.newPage();watch(lab,errors,external);
-  await lab.goto(`${base}labs/ft3d-8/?case=${CASE}&capture=${CANVAS}`);await lab.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
+  await lab.goto(`${base}evolucion/?lab=1&case=${CASE}&capture=${CANVAS}`);await lab.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
   const pose=await lab.evaluate(r=>{const f=window.__ft3dFidelity;f.setRoof(r);const p=f.frameEnvelope('iso');f.setPose(p);return p;},roof);
   for(const [k,fn] of [['01-start','reset'],['02-mid','mid'],['03-final','end']]){
     await lab.evaluate(fn=>{const f=window.__ft3dFidelity;if(fn==='reset')f.setPos(0);else if(fn==='mid')f.setPos(Math.round(f.timeline.positions*.5));else f.end();},fn);
@@ -147,7 +147,7 @@ test(`fidelity vs real editor · case ${CASE}`,{timeout:300000},async t=>{
 test('two projects render differently; the demo house is never used',{timeout:120000},async t=>{
   const ctx=await browser.newContext({viewport:{width:1440,height:900}});t.after(()=>ctx.close());
   const page=await ctx.newPage(),errors=[],external=[];watch(page,errors,external);
-  await page.goto(`${base}labs/ft3d-8/?case=A`);await page.waitForFunction(()=>document.body.classList.contains('ready'));
+  await page.goto(`${base}evolucion/?lab=1&case=A`);await page.waitForFunction(()=>document.body.classList.contains('ready'));
   const a=await page.evaluate(async()=>{const f=window.__ft3dFidelity;await f.loadCase('A');f.end();return Object.keys(f.inspect()).sort();});
   const b=await page.evaluate(async()=>{const f=window.__ft3dFidelity;await f.loadCase('B');f.end();return Object.keys(f.inspect()).sort();});
   assert.notDeepEqual(a,b);assert.ok(a.every(k=>k.startsWith('project/')));assert.ok(b.some(k=>k.startsWith('lvl_fx-b1/')));
@@ -161,7 +161,7 @@ test(`fidelity lab interaction ${viewport.width}x${viewport.height}`,{timeout:24
   const ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,...(shots&&!mobile?{recordVideo:{dir:shots,size:{width:1280,height:800}}}:{})});
   t.after(()=>ctx.close());
   const page=await ctx.newPage(),errors=[],external=[];watch(page,errors,external);
-  await page.goto(`${base}labs/ft3d-8/?case=A`);await page.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
+  await page.goto(`${base}evolucion/?lab=1&case=A`);await page.waitForFunction(()=>document.body.classList.contains('ready'),null,{timeout:30000});
   const f=(fn,arg)=>page.evaluate(([fn,arg])=>window.__ft3dFidelity[fn](arg),[fn,arg]);const last=()=>page.evaluate(()=>window.__ft3dFidelity.last);
   // Technical blocks live in «Proyecto › Detalles técnicos» (Gate D layout): open them before reading, as a user would.
   const read=async sel=>{await page.evaluate(s=>window.__ft3dUI.reveal(s),sel);return page.locator(sel).innerText();};
