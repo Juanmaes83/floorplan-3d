@@ -226,3 +226,24 @@ No estimar precios ni duraciones sin datos de uso y alcance aprobados. El regist
 - **Antecedentes:** `docs/product/home-v2-content-audit-2026-11-04.md`, Punto 9 y el PDF Floorcraft vs RUBIK SOTA (material de referencia aportado por propietario, no una demostración de capacidades en master).
 
 **Seguimiento operativo:** `RUBIK-HOME-V2` pasa de «diseño documentado» a «HOME-UX-E2 plan documentado con requisitos y QA; implementación H1 no encargada». No elevarlo a implementado hasta nuevo mandato.
+
+---
+
+## Adenda 06/11/2026 — Reconciliación posterior a M2/S4 y prioridad P1 documental
+
+**Precedencia:** esta adenda posterior complementa la tabla histórica de agentes, etapas y gates y **no elimina tareas ni reescribe fechas anteriores**. Los estados de las secciones precedentes que anuncian S4/M1 como no iniciados son una instantánea obsoleta, no una orden vigente. [Documento Maestro FT3D-8 v1.1 — adenda D M1/M2/S4](./ft3d-8-e2-documento-maestro-borrador-v1.md) conserva los 41 requisitos originales y 24 QA e incorpora diez gates `S4-GINT-01…10` y diez pruebas `S4-INT-QA-01…10` adicionales, sin renumeración ni aprobación final.
+
+**Estado comprobado 06/11 (rama/commit):** `master@840189407cb63a996a71e47f14ad8931a3dcfb4a`; Gate D `b12b925` con CI y aprobación visual del propietario; M1 `970ca54` implementado técnicamente (S2/BCCA gestionada bloqueada; S3 Catastro real acreditado en M1 con límites); M2/S4 `49e8feb`, CI [42209990134](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42209990134) verde y [Preview READY](https://floorplan-3d-nai78rskz-juanma-espinosas-projects.vercel.app/) protegida, **sin merge ni aprobación visual M2**. La rama M2 y master divergen 54/37 commits desde `0f9c6ea`. La superposición de archivos incluye `index.html`, pero **no** excluye incompatibilidades de estado, orden de scripts, módulos, selección de proyectos o visor. Section/visita espacial avanzó en master; PR #166 Entregar, #167 visor y #169 F03 siguen abiertas/draft. No duplicar S1, Gate D, M1 ni S4.
+
+**Orden operativo vigente (planeamiento, no ejecución de código):**
+
+| Prioridad | Línea | Condición de aceptación / responsable |
+|---|---|---|
+| **P0 inmediata** | M2-GATE-09: revisión humana escritorio/móvil de Preview `49e8feb` | Propietario. Tres incidencias `M2-UX-MOB-01/02` y `M2-UX-DEMO-03` **detectadas en capturas, aún pendientes de confirmación funcional**; no ordenar cambios sobre un mecanismo de navegación sin probarlo interactivamente. Exclusivamente capturas auténticas de RUBIK, cada una con SHA y viewport. |
+| **P1 en paralelo** | Consolidación Maestro FT3D-8 y estados S4, M1/M2, 10 gates + 10 QA, decisiones y excepciones | ChatGPT en rama documental aislada; **no modificar código**, no sobrescribir histórico ni declarar aprobado el borrador. La adenda D referencia los SHA y fuentes originales. |
+| **P1 condicionado** | Correcciones mínimas M2 (solo si los defectos se confirman y el propietario autoriza) | Claude Code 2 en su ámbito autorizado; cubrir botones nuevos del panel de selección 3D y vuelta Presupuestar → Evolución tras cambiar datos, con QA, nuevo SHA, CI completa y evidencias visuales. |
+| **P1 planificación** | Ensayo aislado con `master` actualizado, Section y propietarios de contratos (economía, biblioteca, editor, territorio, marca), coordinación con Entregar/Kimi | Regresión conjunta **funcional**, no solo conflicto Git: inicialización, scripts, estados/modes 3D, visita espacial, identidad/proyecto, presupuesto C1–C4, plan, Evolución, vuelta y entrega. Sin merge sin decisión expresa. |
+| **P1 gates E2** | DEC-05/06/07; FT8-S4-10 Kimi; PR #166; derechos BCCA; Catastro/licencias; QA-21/22; seguridad y cliente | **Abiertos/bloqueados/no ejecutados según alcance**. DEC-06 edificio sin total ficticio y comunes únicos, DEC-07 revisión `unverifiable`, cliente sin publicación, BCCA `rubik-managed` desactivada. Ningún gate se cierra por CI verde. |
+| **Backlog conservado** | [HOME-UX-E2](./home-ux-e2-roadmap-2026-11-06.md) y las demás líneas históricas E2/E3 | 14 requisitos HOME-UX-E2 y 18 QA HUX; H1 no encargado ni comercialmente disponible. Conservar además Entregar/FT3D-7, legal #161, B2/B8, calidad real y propuestas premium E3, cada una con su gate propio. |
+
+**Prohibiciones:** no merge/rebase/cherry-pick, Production, activación de enlaces de cliente, BCCA gestionada, servicios legales/de pago/IA, cambios de licencias/dominios, publicación de proyectos reales ni modificación de ramas de otros agentes sin autorización explícita. Cualquier estado aceptado debe citar prueba, SHA y aprobación competente. **FT3D-8 desarrollado en rama ≠ terminado para E2.**
