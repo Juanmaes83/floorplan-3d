@@ -1,0 +1,25 @@
+{
+  "repository": "Juanmaes83/VECINIA-WORLDS",
+  "sha": "f4efdbea2a230d8b88911796af78bfc6ee630d4c",
+  "note": "User supplied 39-character prefix; git resolved full 40-character commit. Reference only, not Rubik certification or redistributed assets.",
+  "references": [
+    {
+      "name": "sierra",
+      "path": "visual/qa/three-house-quality-proof/after-window/sierra.png",
+      "sha256": "3db1411e7e8e78a12dc6f1a4089b2e918aaac4f4a1ec7602e7f57fb9933bbc30",
+      "bytes": 457008
+    },
+    {
+      "name": "oldtown",
+      "path": "visual/qa/three-house-quality-proof/after-window/oldtown.png",
+      "sha256": "2ae4868dc8d996026934ae680ebe96f6d0c94494c52d5904da58b6e721b1bc48",
+      "bytes": 449620
+    },
+    {
+      "name": "marina",
+      "path": "visual/qa/three-house-quality-proof/after-window/marina.png",
+      "sha256": "91961d0cb92fe68c2eaec9a839b4ff0e352ebb0b4c1fbf85ceac76c8040fd0eb",
+      "bytes": 398330
+    }
+  ]
+}

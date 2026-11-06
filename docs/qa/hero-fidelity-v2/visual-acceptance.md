@@ -1,0 +1,63 @@
+# Hero Fidelity V2 — visual acceptance
+
+## Iteration 1 — code `9e8829a51ca93ee3661cd0d5300af3ac207e63e7`
+
+Opened and inspected OFF/V2 D1, M1, M2, M3 and G1 Chromium renders of the real fixture. The candidate adds a legible sill and nose, deeper lateral reading and distinct frame/sash/bead lines. M1 and M2 show a perceptible architectural improvement rather than a finish-only change; the real bedroom remains visible and G1 preserves the source geometry.
+
+Remaining defects: the combined outer frame and sash still read too dark/heavy, glazing slightly washes out the interior, and mineral facade variation is too subtle at medium distance. Iteration 1 is not human-approved and is not a propagation gate.
+
+Next correction: reduce stock overlap, improve graphite response and lower glazing opacity/transmission while retaining the new aperture/sill geometry. Then repeat the same cameras and lighting.
+
+Lighting for both variants: requested `assets/environments/studio-small-09-1k.hdr`; effective environment is synthetic fallback because the harness reports invalid HDR MIME; exposure 1.04, neutral preset. No HDR evaluation is claimed.
+
+## Iteration 2 — code `49555e9d063cb39ee47d5a90e7e35dfd70a7eba8`
+
+Repeated the same OFF/V2 cameras and lighting after reducing the outer section from 48 to 38 mm, the sash from 32 to 26 mm and maximum frame depth from 72 to 56 mm. Graphite response is lighter and glazing opacity/transmission is reduced. Opened the new D1, M1, M2, M3 and G1 renders plus the OFF/V2 contact sheet.
+
+The slimmer perimeter and mullions read less heavy, the real bedroom is clearer, and the reveals, paired sills and nose remain legible. No new occlusion or construction regression was observed in the inspected views. This is a perceptible improvement over OFF and iteration 1 in detail and medium views, not only a finish change. Remaining limitations are slight glass veiling, subtle facade grain and the unresolved HDR fallback. Human approval is still pending.
+
+## Iteration 2 QA
+
+`tests/visual-families.test.cjs`: 3/3 PASS. `tests/hero-fidelity-v2.browser.test.cjs`: 1/1 PASS; 10 captures, no browser errors/warnings, Project and rendered geometry unchanged. Resources remain 1 geometry, 6 materials, 3 textures, 19 owned meshes, 6 facade meshes, 2964 triangles and 1,065,226 estimated bytes. Rendering used the NVIDIA GeForce RTX 5070 Ti through ANGLE; this is not a mobile or GPU-time certification.
+
+Next independent correction: serve the existing HDR with the presentation harness MIME rule and capture a separately declared lighting comparison before expanding coverage.
+
+## Iteration 3 — separately declared HDR comparison, code `b0696419822eebedefc7984c286d3b6fc19d6800`
+
+Corrected only the V2 test-server MIME for `.hdr`, reusing the presentation harness rule. The real `studio-small-09-1k.hdr` loaded successfully: status/environment `hdr`, 1,615,248 source bytes and 4,194,304 estimated PMREM bytes; exposure remained 1.04 with the neutral preset. `tests/hero-fidelity-v2-lighting.browser.test.cjs`: 1/1 PASS, three captures, no browser errors/warnings and unchanged Project/rendered geometry.
+
+Opened the synthetic/HDR contact sheet and HDR D1/M1/M2 images. HDR gives the graphite a brighter metallic response, but washes out the bedroom, facade and glass more than the synthetic comparison. It is recorded as a valid technical lighting probe but not selected as superior visual evidence. No production lighting or material constants were changed for this probe.
+
+Next: apply the already inspected iteration-2 recipe to every compatible real window in an explicit experimental capture, record exclusions and inspect general/facade views. Human approval remains pending.
+
+## Coverage — all compatible real windows, code `5ad25c912004c81de3b549bb0ae70cf7c814a515`
+
+Applied the inspected iteration-2 recipe explicitly to all 12 existing windows: 12 compatible, 12 treated, zero excluded. Opened OFF/V2 M1, M3 and G1 plus the contact sheet. The treatment is coherent across narrow and wide openings, preserves the real rooms and shows the same sill/reveal language on the visible facades. No new overlap or opaque-glass defect was observed in these views.
+
+`tests/hero-fidelity-v2-coverage.browser.test.cjs`: 1/1 PASS. Shared resources at full coverage: 1 geometry, 6 materials, 3 textures, 69 owned meshes, 22 facade meshes, 9756 triangles and 1,101,450 estimated bytes, all within the declared budget. Three ON/OFF cycles returned every owned-resource count to zero; Project/rendered geometry stayed unchanged and no browser errors/warnings occurred.
+
+Desktop ANGLE/NVIDIA frame intervals over 90 samples: OFF p50/p95 16.7/16.8 ms; V2 p50/p95 16.7/16.8 ms. This is a partial desktop navigation signal, not GPU duration, physical-mobile certification or proof for every scene.
+
+Next: demonstrate a second architecturally distinct frame system using the same semantic recipe, then run emulated-mobile and expanded lifecycle checks without claiming a physical-device result.
+
+## R3 — second architectural system, code `95c792f4a7aad3f027d0bb32d8cb4ada87f4d060`
+
+Added `frame.system: flush-sash` beside the default `recessed-sash`. It changes outer/sash sections, maximum frame depth and the sash/gasket/bead planes; it is not a finish-only variant. Both systems share the same aperture, sill, glazing and material mechanisms.
+
+Unit tests remain 3/3 PASS and now assert different geometry with unchanged materials between systems. `tests/hero-fidelity-v2-systems.browser.test.cjs`: 1/1 PASS, eight identical-camera captures, distinct image hashes, clean OFF and unchanged Project/rendered geometry. Opened RECESSED/FLUSH D1/M1/M2/M3 and the contact sheet: FLUSH reads slimmer and closer to the outer frame while preserving depth and the real interior. No new visual defect was observed in the inspected views. Both remain experimental and human approval is pending.
+
+Human verdict: VISUAL_PENDING_HUMAN.
+
+## R5 — emulated mobile and lifecycle, code `e044da7038c361aed46d6bdf7598cdd3a0758edf`
+
+The first lifecycle run exposed a real exit defect: 12 derived windows remained active after entry restoration rebuilt the 3D scene. Cleanup was moved to the end of restoration and exposed as the small `releaseVisualFamilies()` runtime hook. The final test passes: exit has zero owned resources, reentry reapplies all 12 windows with the balanced profile, and forced WebGL context loss clears bindings/resources without changing Project or rendered geometry.
+
+Opened and inspected MOBILE M1/G1 and their contact sheet at 390×844, DPR 1. The mullion, sash and sill remain legible and the real bedroom is unobstructed; the general view keeps the source layout and all visible window treatments. Slight glass veiling remains and mineral grain is subtle. This is an emulated viewport on the desktop browser, not a physical-mobile result.
+
+`tests/hero-fidelity-v2-lifecycle.browser.test.cjs`: 1/1 PASS, two captures and no browser errors/warnings. Over 60 frame intervals, OFF and V2 both measured p50/p95 16.7/16.8 ms. These are `requestAnimationFrame` intervals, not GPU work duration. Balanced resources: 1 geometry, 6 materials, 3 textures, 69 owned meshes, 22 facade meshes, 7740 triangles and 1,090,698 estimated bytes.
+
+Human verdict remains VISUAL_PENDING_HUMAN.
+
+## Final focused regression — code `a2db71c5dce142e74b50af299e7ed8ffdd4d297e`
+
+Unit tests: 3/3 PASS. Browser tests: 6/6 PASS, covering fixed views, HDR, architectural systems, 12-window coverage, emulated-mobile lifecycle and the original F02 smoke path. Final mobile M1 and full-coverage G1 were opened and inspected; no new visual regression was observed. This does not change the independent human visual gate.

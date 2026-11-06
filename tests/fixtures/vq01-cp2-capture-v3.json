@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "views": "vq01-cp2-views.json",
+  "reason": "CI exposed the historical A0 missed terminal-material UI notification: the v2 readiness wait can leave capture disabled after surfaces are ready. Once actual surface readiness and pendingAssets=0 are verified, replay the existing floorplan-asset-status notification on every side to refresh capture controls. No readiness state, scene value, pose or pixel is mocked. Record before/after control state. Preserve v2 and all historical fixtures.",
+  "readiness": "all four surfaces ready; pendingAssets=0; common existing UI notification; presentationCapture enabled; settled layout",
+  "capture": "same page screenshot and same immediate closeup canvas readback as CP2-A"
+}

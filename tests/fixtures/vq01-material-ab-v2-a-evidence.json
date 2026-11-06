@@ -1,0 +1,30 @@
+{
+  "checkpoint": "V2-A before CP1-B product parameters",
+  "reason": "The immutable CP1-A fixture assigns oak and marble floors but no plaster or concrete. V2 adds existing surface-white-plaster-02 to wall[18] and surface-brushed-concrete to wall[28] for the four-family human gate. The original oak/marble assignments and all camera, Presentation, light, environment, viewport, DPR, geometry and readiness settings are preserved.",
+  "sourceSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "fixture": "tests/fixtures/vq01-material-ab-v2.json",
+  "fixtureSha256": "e565493699f84108d692576556f1aaca490e954c04ccafe825740ef1de3ed814",
+  "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+  "runtimeInvariants": {
+    "sameAcrossA1A2": true,
+    "runtimeSha256A1": "566a2d21fbfb81b6dccf1707333d0babcafd6452ce0e47268727841876ae13a4",
+    "runtimeSha256A2": "566a2d21fbfb81b6dccf1707333d0babcafd6452ce0e47268727841876ae13a4",
+    "fields": ["Project SHA", "viewport", "stage", "canvas", "Presentation stop/state", "camera position/quaternion/target/FOV/aspect", "view options", "light/environment", "surface quality", "four verified surface metrics", "Project bindings", "lifecycle"],
+    "rendererMemoryA1": {"geometries": 1178, "textures": 17},
+    "rendererMemoryA2": {"geometries": 1178, "textures": 17},
+    "pendingAssets": 0,
+    "pageConsoleWebGLShaderErrors": [],
+    "consoleWarnings": []
+  },
+  "localCapture": {
+    "platform": "Windows",
+    "node": "24.14.1",
+    "playwright": "1.62.1",
+    "chromium": "151.0.7922.34",
+    "three": "0.160.0",
+    "pngSha256A1": "1c3e913c100b5f7261fec0eb0b5718f25b9578c8588d47b15139a395a4bffc32",
+    "pngSha256A2": "e04b882278d94101cb790d5bd5b2a0fcc0400996d1b5000845f497a96a92a3a9",
+    "pixelDiff": {"changedPixels": 36, "maxChannelDelta": 1, "boundingBox": [534, 666, 672, 792]},
+    "note": "The two PNG files are not byte identical on this Windows GPU. Their runtime manifests are byte identical; 36 of 1,296,000 pixels differ by at most one RGB level. Both original hashes are retained. CI reproduces A independently and uploads both PNGs and manifests."
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "state": "BASELINE_ONLY",
+  "candidateRendering": "PENDING_SHARED_FILE_SEAM",
+  "baselineSha": "894607b38fa43a5e89a9f5296a41cdbcc989d5ce",
+  "runs": [
+    {
+      "baselineSha": "894607b38fa43a5e89a9f5296a41cdbcc989d5ce",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "geometrySha256": "43a9322ac095262cb968d151106124639b0d7e9552a8d9725928fa933fb8c696",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "dpr": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "vendor": "Google Inc. (NVIDIA)",
+        "documentLoadMs": 384.80000019073486
+      },
+      "browser": "151.0.7922.34",
+      "sceneReadyMs": 5531,
+      "measurementScene": "G1",
+      "frame": {
+        "samples": 90,
+        "metric": "requestAnimationFrame interval; not GPU timer",
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "p99": null
+      },
+      "budget": {
+        "calls": 1409,
+        "triangles": 198526,
+        "geometries": 1189,
+        "textures": 21,
+        "meshes": {
+          "architecture": 217,
+          "furniture": 959,
+          "lamps": 0,
+          "contact": 0
+        }
+      },
+      "memory": {
+        "geometries": 1189,
+        "textures": 21
+      },
+      "light": {
+        "preset": "neutral",
+        "status": "fallback",
+        "error": "HDR MIME inv\u00c3\u00a1lido",
+        "bytes": 0,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 0,
+        "environment": "synthetic",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 15856370,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "scenes": [
+        {
+          "id": "D1",
+          "file": "1440x900-D1.png",
+          "sha256": "f489affb912e69e3655e57901ad1c56f2557b141af3aff464b6a4ac98ff7a7e2",
+          "pose": {
+            "position": [
+              6.381558126798547,
+              2.743088694190371,
+              -2.866185002101342
+            ],
+            "quaternion": [
+              -0.14437913977925654,
+              0.492831612247411,
+              0.08331842581355851,
+              0.8540080244858183
+            ],
+            "target": [
+              5.155,
+              2.25,
+              -3.575
+            ],
+            "fov": 40,
+            "aspect": 1.6
+          }
+        },
+        {
+          "id": "M1",
+          "file": "1440x900-M1.png",
+          "sha256": "f09155d5087a1b5dbc684c1567c4d8f0d96827cbd0b9cf4f22c6adb2a6f64e77",
+          "pose": {
+            "position": [
+              7.999999999999998,
+              1.9999999999999996,
+              -2.2
+            ],
+            "quaternion": [
+              -0.07936169749982866,
+              0.5291006044266285,
+              0.04978864688378325,
+              0.84337142588945
+            ],
+            "target": [
+              5.154999999999999,
+              1.4,
+              -3.575
+            ],
+            "fov": 45,
+            "aspect": 1.6
+          }
+        },
+        {
+          "id": "M2",
+          "file": "1440x900-M2.png",
+          "sha256": "6f56647ba070f8ea4053d3331c0d3d683b7c48bace95a5e8a14105713b084a96",
+          "pose": {
+            "position": [
+              6.3,
+              1.7,
+              -0.8999999999999995
+            ],
+            "quaternion": [
+              -0.04196768753383192,
+              0.20066045127187696,
+              0.008604323367381067,
+              0.9787236903834601
+            ],
+            "target": [
+              5.155,
+              1.45,
+              -3.5749999999999997
+            ],
+            "fov": 45,
+            "aspect": 1.6
+          }
+        },
+        {
+          "id": "M3",
+          "file": "1440x900-M3.png",
+          "sha256": "2c4922c2489d098318c50989a257133c7d8afb9a1ba59b481f571ec3e6233520",
+          "pose": {
+            "position": [
+              6.299999999999999,
+              1.7000000000000002,
+              -6.1
+            ],
+            "quaternion": [
+              -0.009496064794435202,
+              0.9764415414952117,
+              0.04393469108291043,
+              0.211048534027896
+            ],
+            "target": [
+              5.155,
+              1.45,
+              -3.5749999999999997
+            ],
+            "fov": 45,
+            "aspect": 1.6
+          }
+        },
+        {
+          "id": "G1",
+          "file": "1440x900-G1.png",
+          "sha256": "0181703cf89a4f8437bba14c5fe776772a0ce148fe00af05e31552e0d18eccda",
+          "pose": {
+            "position": [
+              11.701805610678774,
+              19.155886586540934,
+              5.129978514784598
+            ],
+            "quaternion": [
+              -0.4323683717389173,
+              0.3779592877333376,
+              0.20627084738790868,
+              0.7922478813186059
+            ],
+            "target": [
+              2.1238623174083067,
+              0,
+              -2.6235946273867325
+            ],
+            "fov": 45,
+            "aspect": 1.6
+          }
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "physicalMobile": "NOT_TESTED"
+    },
+    {
+      "baselineSha": "894607b38fa43a5e89a9f5296a41cdbcc989d5ce",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "geometrySha256": "43a9322ac095262cb968d151106124639b0d7e9552a8d9725928fa933fb8c696",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "dpr": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "vendor": "Google Inc. (NVIDIA)",
+        "documentLoadMs": 292.5999994277954
+      },
+      "browser": "151.0.7922.34",
+      "sceneReadyMs": 5495,
+      "measurementScene": "D1",
+      "frame": {
+        "samples": 90,
+        "metric": "requestAnimationFrame interval; not GPU timer",
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "p99": null
+      },
+      "budget": {
+        "calls": 153,
+        "triangles": 18444,
+        "geometries": 1178,
+        "textures": 21,
+        "meshes": {
+          "architecture": 217,
+          "furniture": 959,
+          "lamps": 11,
+          "contact": 0
+        }
+      },
+      "memory": {
+        "geometries": 1178,
+        "textures": 21
+      },
+      "light": {
+        "preset": "neutral",
+        "status": "fallback",
+        "error": "HDR MIME inv\u00c3\u00a1lido",
+        "bytes": 0,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 0,
+        "environment": "synthetic",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 15856370,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "scenes": [
+        {
+          "id": "D1",
+          "file": "390x844-D1.png",
+          "sha256": "298af26bae8c6a5da7e8d74dec0f9a5d9e1ed4258b72a478ba6f1f7358a791bc",
+          "pose": {
+            "position": [
+              6.381558126798547,
+              2.7430886941903707,
+              -2.866185002101342
+            ],
+            "quaternion": [
+              -0.1443791397792564,
+              0.49283161224741107,
+              0.08331842581355846,
+              0.8540080244858183
+            ],
+            "target": [
+              5.155,
+              2.25,
+              -3.575
+            ],
+            "fov": 40,
+            "aspect": 0.46208530805687204
+          }
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "physicalMobile": "NOT_TESTED"
+    },
+    {
+      "baselineSha": "894607b38fa43a5e89a9f5296a41cdbcc989d5ce",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "geometrySha256": "43a9322ac095262cb968d151106124639b0d7e9552a8d9725928fa933fb8c696",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "device": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "dpr": 1,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "vendor": "Google Inc. (NVIDIA)",
+        "documentLoadMs": 325.80000019073486
+      },
+      "browser": "151.0.7922.34",
+      "sceneReadyMs": 5479,
+      "measurementScene": "D1",
+      "frame": {
+        "samples": 90,
+        "metric": "requestAnimationFrame interval; not GPU timer",
+        "p50": 16.699999999999818,
+        "p95": 16.800000000000182,
+        "p99": null
+      },
+      "budget": {
+        "calls": 577,
+        "triangles": 64404,
+        "geometries": 1181,
+        "textures": 21,
+        "meshes": {
+          "architecture": 217,
+          "furniture": 959,
+          "lamps": 11,
+          "contact": 0
+        }
+      },
+      "memory": {
+        "geometries": 1181,
+        "textures": 21
+      },
+      "light": {
+        "preset": "neutral",
+        "status": "fallback",
+        "error": "HDR MIME inv\u00c3\u00a1lido",
+        "bytes": 0,
+        "source": "assets/environments/studio-small-09-1k.hdr",
+        "estimatedSourceGpuBytes": 4194304,
+        "estimatedPmremGpuBytes": 0,
+        "environment": "synthetic",
+        "hemiColor": 16777215,
+        "hemiGround": 11450562,
+        "hemiIntensity": 1.05,
+        "sunColor": 16774888,
+        "sunIntensity": 2.25,
+        "background": 15856370,
+        "exposure": 1.04,
+        "envK": 0.75
+      },
+      "scenes": [
+        {
+          "id": "D1",
+          "file": "844x390-D1.png",
+          "sha256": "e8fab1aa91ee14885ca06a49cf70cfd9924be646e9f44c546e89b77780c5bf16",
+          "pose": {
+            "position": [
+              6.381558126798547,
+              2.7430886941903707,
+              -2.866185002101342
+            ],
+            "quaternion": [
+              -0.1443791397792564,
+              0.49283161224741107,
+              0.08331842581355846,
+              0.8540080244858183
+            ],
+            "target": [
+              5.155,
+              2.25,
+              -3.575
+            ],
+            "fov": 40,
+            "aspect": 2.164102564102564
+          }
+        }
+      ],
+      "errors": [],
+      "warnings": [],
+      "physicalMobile": "NOT_TESTED"
+    }
+  ]
+}
