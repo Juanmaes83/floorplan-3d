@@ -1,3 +1,5 @@
+> **SUPERSEDED FOR CURRENT OPERATIONS — 02-11-2026.** Este archivo se conserva como snapshot histórico. Para el estado operativo vigente usar [`current-status-2026-11-02.md`](current-status-2026-11-02.md) y la matriz [`roadmap-completion-matrix-2026-11-02.md`](roadmap-completion-matrix-2026-11-02.md). La frase inferior «Fuente operativa de verdad» y las menciones a FT3D-5/6 describen el momento histórico de este documento y no el producto actual.
+
 # Estado operativo de producto e integración — actualizado 01-11-2026
 
 **Fuente operativa de verdad para el trabajo actual.**  
