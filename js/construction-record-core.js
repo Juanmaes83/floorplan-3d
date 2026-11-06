@@ -167,7 +167,8 @@
       for(const e of t.elements){if(!byElement.has(e.elementId))byElement.set(e.elementId,[]);byElement.get(e.elementId).push({taskId:t.id,title:t.title,wbs:t.wbs,role:e.role});}
     }
     // Elements of an item = elements of the tasks that carry it (the plan has no direct item↔element link).
-    const elementsOfItem=itemId=>[...new Set((byItem.get(itemId)||[]).flatMap(x=>byTask.get(x.taskId).elements.map(e=>e.elementId)))];
+    // Illustrative site resources (crane, scaffold…) are drawn for a task but are not project elements: never counted here.
+    const elementsOfItem=itemId=>[...new Set((byItem.get(itemId)||[]).flatMap(x=>byTask.get(x.taskId).elements.map(e=>e.elementId)).filter(k=>!k.startsWith('illustrative/')))];
     const allocatedPercent=itemId=>(byItem.get(itemId)||[]).reduce((sum,x)=>sum+Math.round(x.sharePercent*100),0)/100;
     return {byItem,byElement,byTask,elementsOfItem,allocatedPercent};
   }

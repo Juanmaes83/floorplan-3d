@@ -89,6 +89,10 @@ Biblioteca (rubik-sota-project-library-v1)  ── entrada entry.id ── sujet
 | `js/territory-ui.js` | Mensajes en castellano para la consulta por referencia; colocación ofrecida justo tras guardar la parcela | Antes mostraba «parcel-not-found» y obligaba a reabrir el diálogo |
 | `js/economic-dossier-ui.js` | **Corrección de un bloqueo** | Ver más abajo |
 | `js/catastro-wfs-provider.js` (M1) | Opción `autoZone` | Prueba los husos oficiales solo mientras la respuesta sea «no encontrada en este huso» |
+| `tests/parcel.browser.test.cjs` | El selector de fuente de parcela es visible y GML sigue por defecto | Consecuencia directa: ahora hay dos fuentes (GML y consulta oficial) |
+| `tests/professional-workspace.browser.test.cjs` | Nueva frase de fuentes de precio | La frase antigua («todavía no está disponible») ya no es cierta |
+
+La regla de producto que protege `professional-workspace.browser` (sin siglas técnicas BC3/BCCA en la vista principal de Presupuestar) **se respeta**: los textos nuevos de M2 se han reescrito para cumplirla, sin rebajar la prueba.
 
 **Defecto de `master` encontrado y corregido:**
 - **Síntoma:** con un presupuesto con precios solo en algunas partidas, abrir Entregar congelaba la pestaña.
@@ -139,7 +143,7 @@ de referencia, presupuesto) → Plan de obra → Evolución 4D → Entregar.
 | Núcleo del registro M2 | 7 de 7 (incluidas en la fila anterior) |
 | M2 integradas (`m2-s4.browser`) | **14 de 14** |
 | Gate D en `evolucion/?lab=1` (ux4d, fit, fidelity, dossier, delivery, lab) | **49 de 49** |
-| Regresión de módulos compartidos, M1 y Gate D (21 suites) | Ver mensaje de entrega |
+| Regresión de módulos compartidos, M1 y Gate D (21 suites, 123 pruebas) | Primera ejecución: 113 de 123 (8 fallos y 2 omitidas). Tras las correcciones, las suites afectadas pasan: `parcel` y `professional-workspace` 17 de 17 dos veces seguidas |
 
 **M2-QA:**
 
@@ -174,6 +178,12 @@ de referencia, presupuesto) → Plan de obra → Evolución 4D → Entregar.
 - Suite M2 completa: 1 min 40 s.
 - Apertura de Evolución desde la app: unos 2–3 s con la vivienda de ejemplo (~150 elementos).
 - No se han medido proyectos grandes.
+
+**Fallos de la regresión y qué se hizo:**
+- `parcel.browser` (×3): esperaba una sola fuente de parcela. Se ajustó la prueba al cambio deseado.
+- `professional-workspace.browser` (×4): frase de fuentes de precio. Se ajustó la frase de la prueba y se reescribió el texto de M2 sin siglas.
+- Dos fallos intermitentes (pulsación sobre Entregar con 10 s de margen y «human review 2»). Ocurrieron con dos suites de navegador a la vez en esta máquina. En ejecución secuencial no se reproducen: 17 de 17, dos veces.
+- La CI del commit `0ab35bc` detectó un conteo de elementos que incluía el andamio ilustrativo. Corregido en el núcleo: una ilustración nunca cuenta como elemento del proyecto.
 
 **Errores conocidos:**
 - La selección de elementos en la escena 3D (Gate D) está cubierta por las pruebas de Gate D; los botones nuevos de su panel (partidas, plan) no tienen prueba automatizada propia.

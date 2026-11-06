@@ -66,11 +66,11 @@ test('M2-1 · correspondence uses the S1 results: absent, match, obsolete, unver
 
 test('M2-1 · links index: item → tasks → elements and element → tasks, shares never above 100 %',()=>{
   const a=R.subjectOf(entryA);
-  const s=plan(a,REV_A,[task('t1',{elements:[{elementId:'project/w1',role:'build'}],budgetAllocations:[{itemId:'paint',sharePercent:60}]}),
+  const s=plan(a,REV_A,[task('t1',{elements:[{elementId:'project/w1',role:'build'},{elementId:'illustrative/scaffold',role:'temporary'}],budgetAllocations:[{itemId:'paint',sharePercent:60}]}),
     task('t2',{elements:[{elementId:'project/w2',role:'finish'}],budgetAllocations:[{itemId:'paint',sharePercent:40},{itemId:'floor',sharePercent:50}]})]);
   const L=R.links(s);
   assert.deepEqual(L.byItem.get('paint').map(x=>[x.taskId,x.sharePercent]),[['t1',60],['t2',40]]);
-  assert.deepEqual(L.elementsOfItem('paint'),['project/w1','project/w2']);
+  assert.deepEqual(L.elementsOfItem('paint'),['project/w1','project/w2'],'an illustration is not a project element');
   assert.deepEqual(L.byElement.get('project/w2').map(x=>[x.taskId,x.role]),[['t2','finish']]);
   assert.equal(L.allocatedPercent('paint'),100);assert.equal(L.allocatedPercent('floor'),50);assert.equal(L.allocatedPercent('none'),0);
   assert.throws(()=>plan(a,REV_A,[task('t1',{budgetAllocations:[{itemId:'paint',sharePercent:70}]}),task('t2',{budgetAllocations:[{itemId:'paint',sharePercent:40}]})]),/beyond 100/);
