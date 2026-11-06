@@ -28,7 +28,11 @@ const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!Floo
 async function start(page,{visit=true,section=true}={}){
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
  await page.locator('#presentationStoryOption').check();if(section)await page.locator('#presentationSectionOption').check();if(visit)await page.locator('#presentationVisitOption').check();
- await page.locator('#presentationConfig .presentation-config-actions .btn').first().click();await settled(page);}
+ await page.locator('#presentationConfig .presentation-config-actions .btn').first().click();
+ // With reduced motion «Empezar desde el plano» waits on the plan: step it to the overview as a person would.
+ await page.waitForFunction(()=>FloorPlanPresentation.active&&(FloorPlanPresentation.story?.kind==='plan-reveal'&&!FloorPlanPresentation.story.busy||!FloorPlanPresentation.story&&document.querySelector('#presentationOverlay').dataset.moving==='false'),null,{timeout:300000});
+ for(let i=0;i<6&&await page.evaluate(()=>!!FloorPlanPresentation.story);i++){await page.locator('#presentationStoryPlay').click();await page.waitForTimeout(500);}
+ await settled(page);}
 const state=page=>page.evaluate(()=>{const s=FloorPlanPresentation.story,i=View3D.presentationStoryInfo,c=View3D.cameraState;
  const vis=id=>{const e=document.querySelector(id);return !!e&&!e.hidden&&e.offsetParent!==null;};
  return {story:s?{kind:s.kind,P:s.P,playing:s.playing,kinds:s.kinds}:null,phase:i?.phase??null,current:FloorPlanPresentation.current?.kind??null,

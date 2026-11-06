@@ -627,7 +627,7 @@
    // Reduced motion with a section or a façade: one explicit step at a time (the open section; the frontal façade, then
    // its exterior perspective), so each state is seen before going on.
    else if(reducedMotion()&&hasHeldScene(story)){const run=story,single=run.scenes.length===1,hold=nextHold(run);if(single&&hold===null)finishStory();else playStory(hold!==null?run.seq.at(run.i,hold):nextStart(run));}
-   else playStory(1).then(done=>{if(done)finishStory();});});play.id='presentationStoryPlay';play.classList.add('primary');
+   else{const run=story;playStory(1).then(done=>{if(done&&!endsInVisit(run))finishStory();});}});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
   // Section → Spatial Visit V1: on arrival, hand over to «Recorrer» at the same pose, or go back to the section.
   const visitWalk=button('',row,()=>walkFromVisit());visitWalk.id='presentationVisitWalk';visitWalk.hidden=true;visitWalk.classList.add('primary');
@@ -850,7 +850,7 @@
   try{if(!await enterScene(run,start.i)||story!==run)return;run.p=start.p;run.P=Math.min(1,Math.max(0,from));if(!applyStory(run,run.p))return;drawStory();}
   catch(error){if(frozenTemplate){templateSceneFailure(run,run.scenes[start.i],error);return;}story=null;drawStory();toast(error.message||String(error),6000);await go(index,token);return;}
   draw();updateCapture();
-  if(to!==null){const done=await playStory(to);if(done&&to>=1&&story===run)await finishStory();}
+  if(to!==null){const done=await playStory(to);if(done&&to>=1&&story===run&&!endsInVisit(run))await finishStory();}
  }
  // Resize: the same P on the scene rebuilt for the new screen. A single descent that started from the camera of the
  // moment (1b) settles on the nearer of its two stops, as before.
@@ -862,6 +862,10 @@
  // The ends of a story are presentation stops (the last scene's stop; for a story that starts with a descent, its
  // overview too): the narrative ends there and the presentation continues from the same view. P = 0 of a plan is not a
  // stop: the story stays on the plan.
+ // Section → Spatial Visit: a story whose last scene is the visit is not closed when its autoplay ends. It stays at the
+ // arrival (eye level, inside the room) with «Explorar desde aquí» and «Volver a la sección»; leaving it is the user's
+ // explicit choice («Continuar presentación», a stop, «Volver a editar»). Every other story ends exactly as before.
+ const endsInVisit=run=>run?.scenes.at(-1)?.kind==='room-visit';
  async function finishStory(at=1){const run=story;if(!run)return;
   // A story that starts with a descent or a section starts on an overview stop: going back to 0 hands over there.
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'||run.scenes[0].kind==='room-visit'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
