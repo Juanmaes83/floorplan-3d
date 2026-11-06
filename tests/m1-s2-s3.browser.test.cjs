@@ -106,10 +106,14 @@ test('S2 · save and reopen the budget: prices, references and provenance kept; 
   const dl=page.waitForEvent('download');await page.click('#budgetSave');const d=await dl;const file=await d.path();
   const saved=JSON.parse(await fs.readFile(file,'utf8'));const ref=saved.items.find(i=>i.id==='it-fab').priceReference;
   assert.deepEqual([ref.code,ref.source.edition,ref.source.region,saved.items.find(i=>i.id==='it-fab').unitPrice],['SYN-FAB','2024','Andalucía, España',null],'reference kept, price unchanged');
+  // The file is read asynchronously: wait for the message instead of reading it immediately (CI is slower).
+  const revBefore=await page.evaluate(()=>window.__m1s2.revision());
   await page.setInputFiles('#budgetOpen',{name:'roto.json',mimeType:'application/json',buffer:Buffer.from('{"no":1}')});
+  await page.waitForFunction(()=>/No se puede abrir/.test(document.getElementById('budgetIo').textContent));
   assert.match(await text(page,'#budgetIo'),/No se puede abrir[\s\S]*No ha cambiado nada/);
+  assert.equal(await page.evaluate(()=>window.__m1s2.revision()),revBefore,'an invalid file changes nothing');
   await page.setInputFiles('#budgetOpen',file);
-  assert.match(await text(page,'#budgetIo'),/procedencia y revisiones conservadas/);
+  await page.waitForFunction(()=>/procedencia y revisiones conservadas/.test(document.getElementById('budgetIo').textContent));
   assert.match(await text(page,'#items li:first-child'),/Ref. guardada 31,20\s€/);assert.deepEqual(errors,[]);
 });
 
