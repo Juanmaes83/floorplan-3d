@@ -135,3 +135,6 @@ body.guided #newRoomBtn{display:none}
 @media(prefers-reduced-motion:reduce){.solutions-card,.solutions-phases li,.solutions-body{transition:none}}
 /* 3D capture: the caption sits under the image in the flow (it wraps on short screens), never over it; the top padding keeps the view switch clear. */
 .welcome-visual[data-view="home"]{flex-direction:column;gap:10px;padding-top:64px}.welcome-visual[data-view="home"] .welcome-shot{flex:1 1 auto;min-height:0;max-height:none}.welcome-visual[data-view="home"] figcaption{position:static;flex:none}
+/* «Legal y autoría» on the Home: a quiet text link in the top bar, readable and with a full touch target. */
+.welcome-nav .welcome-legal{background:none;border:0;box-shadow:none;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-weight:500;font-size:14px;padding:6px 8px}
+.welcome-nav .welcome-legal:hover{background:none;color:var(--action)}

@@ -106,6 +106,9 @@
   const nav=el('div',undefined,brand,'welcome-nav');
   if(data.seen||hadLibrary)btn('welcomeReturn',tx('Volver al proyecto →','Return to project →','返回项目 →'),closeWelcome,nav);
   btn('welcomeLanguage',({es:'English',en:'中文',zh:'Español'})[LANG],()=>{setLang(({es:'en',en:'zh',zh:'es'})[LANG]);buildWelcome();},nav);
+  // «Legal y autoría»: the platform's existing, approved legal and authorship text (#legalDialog), never a copy.
+  // Always in the Home's top bar, whatever the chosen field; it opens over the Home and closing it returns here.
+  btn('welcomeLegal',tx('Legal y autoría','Legal & authorship','法律与作者'),()=>window.FloorPlanLegal?.open(),nav).classList.add('welcome-legal');
   const intro=el('section',undefined,shell,'welcome-intro'),left=el('div',undefined,intro);
   el('p',tx('Para inmobiliarias, promotoras y estudios','For agencies, developers and studios','面向房产中介、开发商和设计事务所'),left,'welcome-eyebrow');const h=el('h1',tx('¿Qué quieres hacer?','What would you like to do?','你想做什么？'),left);h.id='welcomeDialogTitle';
   el('p',tx('Convierte un plano en una vivienda editable en 2D y 3D, amuéblala y preséntala a tu cliente. Te acompañamos desde el primer paso.','Turn a plan into an editable home in 2D and 3D, furnish it and present it to your client. We guide you from the first step.','把平面图变成可编辑的 2D 和 3D 住宅，布置家具并展示给客户。从第一步开始提供指南。'),left,'lead');

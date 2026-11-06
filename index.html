@@ -2343,9 +2343,12 @@ function setLang(l){
 }
 $('#langBtn').onclick = () => setLang(({es:'en',en:'zh',zh:'es'})[LANG]);
 const legalDialog = $('#legalDialog');
-$('#legalLink').onclick = e => { e.preventDefault(); location.hash = 'legal-y-uso'; legalDialog.showModal(); };
+// One legal dialog for every entry point (footer, #legal-y-uso, the Home's «Legal y autoría»): never two at once.
+// The Home opens it over itself without touching the route, so closing it returns to the Home and its focus.
+window.FloorPlanLegal = { open(){ if(!legalDialog.open) legalDialog.showModal(); return legalDialog; } };
+$('#legalLink').onclick = e => { e.preventDefault(); location.hash = 'legal-y-uso'; window.FloorPlanLegal.open(); };
 $('#legalClose').onclick = () => legalDialog.close();
-function openLegalHash(){ if(location.hash === '#legal-y-uso' && !legalDialog.open) legalDialog.showModal(); }
+function openLegalHash(){ if(location.hash === '#legal-y-uso') window.FloorPlanLegal.open(); }
 window.addEventListener('hashchange',openLegalHash);
 openLegalHash();
 
