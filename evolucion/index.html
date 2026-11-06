@@ -15,6 +15,8 @@
  html:not([data-source=library]) .library-only{display:none!important}
  html[data-embedded] .topbar{display:none!important}
  html[data-source=library] .demo{display:none!important}
+ /* Product: the evolution keeps the approved fit (GD-UX-01) without a page scroll; credits stay on the other tabs. */
+ html[data-source=library] body[data-tab=evolucion] footer.credits{display:none}
  .linkbtn{display:inline;padding:0;border:0;background:none;font:inherit;color:var(--action,#1f5a66);text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-align:left}
  .linkbtn:focus-visible{outline:2px solid var(--focus,#2f7f8c);outline-offset:2px}
  .pick-items{font-size:.92em}

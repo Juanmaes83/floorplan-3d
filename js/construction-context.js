@@ -127,7 +127,7 @@
  let linkCache=null;
  function linksNow(){try{const e=entry(),s=R.subjectOf(e),rec=store().get(e.id,s);if(!rec?.schedule||s.type!=='project')return null;return {L:R.links(rec.schedule),schedule:rec.schedule};}catch{return null;}}
  window.FloorPlanBudgetLinks={decorate(th,itemId){
-  if(!document.getElementById('budgetDialog')?.open)return;if(!linkCache||linkCache.at<Date.now()-500)linkCache={at:Date.now(),v:linksNow()};const v=linkCache.v;
+  if(!linkCache||linkCache.at<Date.now()-500)linkCache={at:Date.now(),v:linksNow()};const v=linkCache.v;
   const box=el('div',undefined,th,'budget-links');box.dataset.links=itemId;
   if(!v){el('span','Sin plan de obra: esta partida no está asignada a tareas.',box);return;}
   const tasks=v.L.byItem.get(itemId)||[];
