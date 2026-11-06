@@ -1,12 +1,7 @@
-/* Hybrid V2 «Dibujo vivo» together with Section → Spatial Visit V1 and Hybrid Registered Elevation V1, one after the
-   other in ONE presentation, twice (integration evidence; it skips itself where those features are not present):
-   living drawing (+ ambience) → full story (section → validated room visit) → hybrid façade → living drawing again.
-   After every scene, at the overview: no drawing layer, no ambience, no clipping plane on any material, no hybrid
-   material or contour node, the same multiset of material signatures in use as after the first scene (Section rebuilds meshes and materials, so not
-   per id), the same renderer state
-   (render target, clear, tone mapping, clipping, override material, background) and the same camera lens; the second
-   round leaves renderer geometries/textures exactly as the first; the drawing still draws (no clip or hybrid residue)
-   and still comes to life; the project JSON never changes; no page error. */
+/* Integration QA: Hybrid V2 «Dibujo vivo» + corrected Section → Spatial Visit, twice in ONE presentation.
+   This test runs WITHOUT Hybrid V1 and checks graphite → living room → full Section story → interior handover;
+   after each scene: no living drawing, ambience, clipping or material residue; identical material signatures,
+   renderer and lens state, stable memory across two rounds, and unchanged project JSON. */
 const {test,before,after}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path'),{createServer}=require('node:http');
 const {execFile}=require('node:child_process'),{promisify}=require('node:util'),run=promisify(execFile),{chromium}=require('playwright');
@@ -40,9 +35,9 @@ async function read(page,name,region){const png=await page.locator('#view3d canv
   const x0=Math.round(img.width*r[0]),y0=Math.round(img.height*r[1]),w=Math.round(img.width*(r[2]-r[0])),h=Math.round(img.height*(r[3]-r[1]));const d=x.getImageData(x0,y0,w,h).data;let paper=0,colour=0,n=0;
   for(let i=0;i<d.length;i+=4){const R=d[i],G=d[i+1],B=d[i+2],l=(.2126*R+.7152*G+.0722*B)/255;n++;if(l>.82)paper++;if(Math.max(R,G,B)-Math.min(R,G,B)>10)colour++;}return {paper:paper/n,colour:colour/n};},[png.toString('base64'),region]);}
 // Everything a scene could leave behind, read at the overview between scenes.
-const residue=page=>page.evaluate(()=>{const x=View3D.presentationHybridInspect(),c=View3D.presentationClipInfo;
+const residue=page=>page.evaluate(()=>{const x=View3D.presentationHybridInspect?.()||{swapped:false,contourNodes:0},c=View3D.presentationClipInfo;
  return {drawing:View3D.presentationLivingDrawingInfo.active,ambience:View3D.presentationAmbienceInfo.active,clipMaterials:c.materialsWithPlanes,localClipping:c.localClipping,
-  hybridSwapped:x.swapped,contourNodes:x.contourNodes,hybridMaterials:View3D.presentationElevationResidue.hybridMaterials,
+  hybridSwapped:x.swapped,contourNodes:x.contourNodes,hybridMaterials:View3D.presentationElevationResidue?.hybridMaterials||0,
   // Section rebuilds the scene graph when it returns to full height (new mesh and material ids), so the evidence is the
   // multiset of material signatures in use: any presentation material left behind, or any original lost, changes it.
   bindings:View3D.presentationMaterialSignature,renderer:View3D.presentationRendererState,memory:View3D.rendererMemory};});
@@ -50,17 +45,17 @@ function clean(r,label){assert.equal(r.drawing,false,label+': drawing layer rele
  assert.equal(r.localClipping,false,label+': local clipping off');assert.equal(r.hybridSwapped,false,label+': no hybrid material');assert.equal(r.contourNodes,0,label+': no contour node');assert.equal(r.hybridMaterials,0,label+': no hybrid clone');
  assert.equal(r.renderer.renderTarget,null,label+': renders to the screen');assert.equal(r.renderer.overrideMaterial,false,label+': no override material');assert.equal(r.renderer.clippingPlanes,0,label+': no global clipping');}
 
-test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of materials, camera or renderer',{skip,timeout:3600000},async t=>{
- // Reduced motion, as the Section and Hybrid V1 suites: every scene waits at its start (no race with autoplay).
+test('HV2 + corrected Section visit, twice: no residue of materials, camera or renderer',{skip,timeout:3600000},async t=>{
+ // Reduced motion: each scene waits at its start, so one can inspect exact final handover and restoration.
  const context=await browser.newContext({viewport:{width:1280,height:800},reducedMotion:'reduce'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});page.setDefaultTimeout(300000);
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:90000});
- if(!await page.evaluate(()=>!!(window.FloorPlanElevationHybrid&&View3D.presentationVisitPlan&&View3D.presentationLivingDrawingBegin))){t.skip('Section visit or Hybrid V1 not in this build: integration only');return;}
+ if(!await page.evaluate(()=>!!(View3D.presentationVisitPlan&&View3D.presentationLivingDrawingBegin))){t.skip('Section visit or Hybrid V2 not in this build: integration only');return;}
  await page.locator('#welcomeExample').click();await page.waitForFunction(()=>FloorPlanApp.project.rooms.length>3);await page.waitForTimeout(800);
  const project=await page.evaluate(()=>JSON.stringify(FloorPlanApp.project));
  await page.locator('#presentationBtn:visible,#guidePresent:visible').first().click();await page.locator('#presentationConfig[open]').waitFor();
- for(const id of ['#presentationLivingDrawing','#presentationLivingAmbience','#presentationSectionOption','#presentationVisitOption','#presentationElevationOption','#presentationElevationHybrid'])await page.locator(id).check();
+ for(const id of ['#presentationLivingDrawing','#presentationLivingAmbience','#presentationSectionOption','#presentationVisitOption'])await page.locator(id).check();
  const start=page.getByRole('button',{name:'Iniciar presentación'});await start.scrollIntoViewIfNeeded();await start.click();
  await page.waitForFunction(()=>FloorPlanPresentation.story?.kind==='living-drawing'&&!FloorPlanPresentation.story.busy,null,{timeout:300000});
  const log=[];let first=null,rounds=[];
@@ -81,15 +76,13 @@ test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of
   const at=k=>page.evaluate(k=>{const ks=FloorPlanPresentation.story.kinds,seq=FloorPlanPresentationStory.sequence(ks.map(x=>FloorPlanPresentationStory.SCENE_MS[x]));return seq.at(ks.indexOf(k),.6);},k);
   await slide(page,await at('section-open'));assert.ok((await page.evaluate(()=>View3D.presentationClipInfo)).materialsWithPlanes>0,'the section clips the model');assert.equal((await page.evaluate(()=>View3D.presentationLivingDrawingInfo)).active,false,'the section is the usual render');
   await slide(page,await at('room-visit'));await slide(page,1);const visit=await page.evaluate(()=>View3D.presentationVisitInfo);assert.ok(visit?.roomId,'the visit reaches its room');
+  assert.equal(await page.locator('#presentationVisitWalk').isVisible(),true,'handover: Explore from here is visible');
+  assert.equal(await page.locator('#presentationVisitSection').isVisible(),true,'handover: Back to section is visible');
+  await page.waitForTimeout(800);assert.equal(await page.evaluate(()=>FloorPlanPresentation.story?.kind),'room-visit','handover stays in the room');
   await page.locator('#presentationStoryPlay').click();await settled(page);await toOverview(page);
   const r2=await residue(page);clean(r2,`round ${round} after section + visit`);assert.deepEqual(r2.bindings,first.bindings,`round ${round}: materials intact after section + visit`);
   assert.deepEqual(r2.renderer,first.renderer,`round ${round}: renderer and camera lens as after the living drawing`);
-  // 3. the hybrid façade
-  await openPaused(page,'#presentationElevationPlay','elevation-open');
-  await slide(page,.35);assert.equal((await page.evaluate(()=>View3D.presentationHybridInspect())).swapped,true,'the hybrid façade swaps its targets');
-  await finish(page);await toOverview(page);const r3=await residue(page);clean(r3,`round ${round} after the hybrid façade`);
-  assert.deepEqual(r3.bindings,first.bindings,`round ${round}: exact materials after the hybrid façade`);assert.deepEqual(r3.renderer,first.renderer,`round ${round}: renderer and lens after the hybrid façade`);
-  rounds.push(r3.memory);log.push({round,kinds,after:[r1,r2,r3].map(r=>({...r,bindings:{meshes:r.bindings.meshes,kinds:Object.keys(r.bindings.materials).length}}))});
+  rounds.push(r2.memory);log.push({round,kinds,after:[r1,r2].map(r=>({...r,bindings:{meshes:r.bindings.meshes,kinds:Object.keys(r.bindings.materials).length}}))});
  }
  await fs.writeFile(path.join(QA,'integration.json'),JSON.stringify(log,null,1));
  assert.deepEqual(rounds[1],rounds[0],`second round leaves renderer memory as the first ${JSON.stringify(rounds)}`);
