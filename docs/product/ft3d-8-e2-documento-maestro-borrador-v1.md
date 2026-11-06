@@ -615,4 +615,93 @@ Los resultados/criterios de aceptación están en capítulos 5–8. Los QA son *
 
 **Regla:** ningún requisito se declara PROBADO o APROBADO sin SHA, evidencia y gate competente. VISUAL_APROBADO se limita al viewport de Gate D en b12b925; no a la integración comercial.
 
+---
+
+## Anexo D — Continuidad M1/M2 y gates S4 (adenda 06/11/2026 · P1 documental)
+
+**Naturaleza:** actualización de trazabilidad posterior al corte histórico de 05/11/2026, **no** aprobación definitiva de este borrador v1.1. Los capítulos 1–16, **41 requisitos FT8** y **24 QA-01…24** se mantienen intactos. Las referencias antiguas a M1/M2/S4 «pendiente de implementar» describen el estado histórico anterior a esta adenda; no se deben reutilizar como instrucciones actuales. La evidencia depende del SHA y la decisión del propietario; no convertir CI/Preview en aprobación visual, legal o comercial.
+
+### D.1 Corte vivo contrastado el 06/11/2026
+
+| Fuente | SHA / prueba | Alcance comprobable |
+|---|---|---|
+| Gate D | `b12b9252fe1df5adb06cea5b17cde48642a893b2` · [CI 42118973111](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42118973111) | CI verde; **aprobación visual expresa del propietario del 05/11** para esa rama; no transferible a M2. |
+| M1/S2+S3 | `970ca54c2bf31a2dacf3f53694e8e477dfe5a90f` · [CI 42140465454](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42140465454) | Catálogo/precios S2 y proveedor WFS/asociación Catastro S3 implementados; consulta **oficial real acreditada en M1**. BCCA `rubik-managed` desactivada; FT8-S2-07 bloqueado y S2-09 parcial. La reacción «NO LO VEO MAL» no es aceptación comercial incondicional. |
+| M2/S4 | `49e8feba2e3aad03a25fb602248758e39dbe3b3c` · [CI 42209990134](https://github.com/Juanmaes83/floorplan-3d/actions/runs/42209990134) | Recorrido nativo implementado **solo en rama**, no integrado en master. Jobs `pure`, `m2` y `regression` verdes. Puras 895 PASS / 2 SKIPPED; M2 14 PASS; Gate D 49 PASS; M1 11 PASS / 1 SKIPPED; módulos compartidos 53 PASS / 1 SKIPPED. `M2-GATE-09` PENDIENTE. |
+| Preview M2 | [Abrir Preview protegida](https://floorplan-3d-nai78rskz-juanma-espinosas-projects.vercel.app/) · [Inspector](https://vercel.com/juanma-espinosas-projects/floorplan-3d/H7J31U6ETF1JmzByXToEmyw43WDF) | `READY`, `target:null`, SHA exacto `49e8feb`: **no Production**. Sin revisión externa interactiva autenticada; biblioteca almacenada por origen. |
+| `master` | `840189407cb63a996a71e47f14ad8931a3dcfb4a` | Base común `0f9c6ea`; **54 commits exclusivos M2 y 37 exclusivos master**. 214 archivos modificados M2 y 37 master, única ruta coincidente `index.html`; esta estadística **no prueba** compatibilidad entre módulos. |
+| PR relacionadas | [#166 Entregar](https://github.com/Juanmaes83/floorplan-3d/pull/166), [#167 visor](https://github.com/Juanmaes83/floorplan-3d/pull/167), [#169 fachadas](https://github.com/Juanmaes83/floorplan-3d/pull/169) | OPEN/DRAFT/no fusionadas; Section/visita espacial avanzó en master y no debe perderse. |
+
+**Fuentes técnicas enlazadas por SHA:** [Informe M1](https://github.com/Juanmaes83/floorplan-3d/blob/970ca54/docs/product/ft3d-8-m1-informe-final-2026-11-06.md), [Auditoría M2-0](https://github.com/Juanmaes83/floorplan-3d/blob/49e8feb/docs/product/ft3d-8-m2-0-auditoria-integracion-2026-11-06.md), [Informe final M2](https://github.com/Juanmaes83/floorplan-3d/blob/49e8feb/docs/product/ft3d-8-m2-informe-final-2026-11-06.md), [evidencias M2](https://github.com/Juanmaes83/floorplan-3d/tree/49e8feb/docs/product/ft3d-8-m2-evidencias).
+
+### D.2 Contrato S4 aprobado: «sin islas», sin duplicados
+
+**Un mismo proyecto guardado y un mismo sujeto/revisión** deben enlazar Biblioteca → Analizar/Parcela → Presupuestar/partidas → Plan de obra → Evolución/Gantt/3D/costes → Entregar/MP4/HTML/marca. No introducir laboratorios como navegación comercial, importación de JSON manual para conectar áreas ni IDs repetidos.
+
+M2 implementa lectura de biblioteca `entry.id` y `subject {project|building,id}` con huella/revisión del origen, presupuesto canónico **C1–C4**, `site.parcel` / colocación del territorio existente, planes persistentes y múltiples por sujeto en `rubik-sota.construction-record` 0.1.0, expediente S1, vista Gate D en `evolucion/`, y exportación MP4/HTML **local** con snapshot de marca. Conservar vínculos bidireccionales **partida ↔ tarea(s) ↔ elemento(s)**, asignaciones económicas explícitas ≤100 %, importes conocidos ≠ coste total; grúas/andamios ilustrativos no se contabilizan como elementos constructivos.
+
+**Limitaciones que M2 no resolvió:** presupuesto de edificio **por planta, sin total global** (DEC-06 no aprobado); correspondencia revisión económica ↔ proyecto `unverifiable` (DEC-07 no aprobado); «revisión declarada» del profesional no equivale a certificación; mallas Kimi FT8-S4-10 parcial; PR #166 no integrada; cliente remoto sin autorización.
+
+### D.3 Adenda de diez gates y diez QA (sin renumerar los existentes)
+
+Estos IDs, acordados para S4 pero ausentes en el maestro anterior, **son suplementarios**. `S4-GINT-01…10` y `S4-INT-QA-01…10` no sustituyen `M2-GATE-01…10`, `M2-QA-01…10`, los 41 FT8 ni los 24 QA base. Las equivalencias expresan alcance de pruebas de M2 y pendientes, no aprobación adicional.
+
+| Gate | Criterio exigido | Prueba aditiva | Estado / equivalencia M2 |
+|---|---|---|---|
+| `S4-GINT-01` | Una identidad de sujeto/revisión/planta en toda app | `S4-INT-QA-01` Biblioteca → áreas sin JSON, mismo sujeto | M2-GATE-01 / M2-QA-01: PASS en rama; revalidar en integración. |
+| `S4-GINT-02` | Una sola economía C1–C4 y S2 integrado | `S4-INT-QA-03` BC3, guardar/reabrir, misma partida y coste | M2-GATE-02 / M2-QA-03: PASS para proyecto; DEC-06 y DEC-07 abiertos. |
+| `S4-GINT-03` | Parcela Catastro/GML y emplazamiento persistente | `S4-INT-QA-02` consulta/asociación/colocación/reapertura | M2-GATE-03 / M2-QA-02: PASS con **servicio interceptado**; M2 en vivo no respondió, M1 sí acreditó servicio oficial. |
+| `S4-GINT-04` | Partida ↔ tarea ↔ elemento, porcentajes explícitos | `S4-INT-QA-04` dos tareas, dos elementos, enlaces en ambos sentidos | M2-GATE-04 / M2-QA-04: PASS flujo; faltan pruebas de nuevos botones de selección 3D. |
+| `S4-GINT-05` | Mismo día/estado para 3D, Gantt, tarjeta y costes | `S4-INT-QA-05` scrub y tareas simultáneas | M2-GATE-06 / M2-QA-05: PASS; falta regreso tras **cambiar** datos en Presupuestar. |
+| `S4-GINT-06` | Recorrido sin `/labs/` ni JSON manual | `S4-INT-QA-09` navegación completa desde app | M2-GATE-08 / M2-QA-09: PASS en rama, repetir con master. |
+| `S4-GINT-07` | Revisión, invalidación y entrega histórica inmutable | `S4-INT-QA-07` muro/precio/fecha/parcela/marca e histórico | M2-GATE-05/07 / M2-QA-07: PASS para cambios cubiertos; completar variantes y regresión. |
+| `S4-GINT-08` | Perla desktop/móvil/zoom/teclado y Gate D intacto | `S4-INT-QA-10` capturas/viewport/SHA + firma visual propietaria | M2-GATE-09 / M2-QA-10: **PENDIENTE** aprobación visual humana. |
+| `S4-GINT-09` | Bloqueos legales/cliente y exportación territorial segura | `S4-INT-QA-08` MP4/HTML local con marca y sin geometría restringida | M2-GATE-07/10 / M2-QA-08: PASS técnico local Chromium; DEC-05/BCCA y publicación bloqueados. |
+| `S4-GINT-10` | Sin motor duplicado; contratos y owners trazables | `S4-INT-QA-06` dos proyectos separados + matriz de autoridades | M2-GATE-01/02/10 / M2-QA-06 y M2-0: PASS técnico rama, integración cruzada pendiente. |
+
+### D.4 Estado de QA y defectos observados
+
+**QA-01…24 base:** M2 declara PASS técnicos para QA-01,02,03,05,06,07,08 (simulado),09,10,11,12,13,14 (Chromium),15,16,17,19,20,23,24. `QA-04 = BLOCKED` por DEC-06; `QA-18 = BLOCKED` por DEC-05; `QA-21 = NOT_RUN` Safari/Firefox/móviles físicos; `QA-22 = NOT_RUN` en volumen alto (solo ~150 elementos). `QA-20` técnico móvil no sustituye revisión humana; los tiempos 2–3 s no se extrapolan a edificios grandes. La consulta oficial **real en M1** no convierte las interceptaciones CI M2 en respuesta oficial real M2.
+
+**Huecos de regresión M2:** (a) automatizar nuevos botones del panel de selección elemento 3D → partida/plan y regreso; (b) volver desde Presupuestar a Evolución **después de modificar datos**, verificando fecha, tarea, recálculo, revisión e invalidación de huellas. La prueba actual solo cubre regreso sin cambios.
+
+| ID | Observación en evidencia real | Estado riguroso / condición de actuación |
+|---|---|---|
+| `M2-UX-MOB-01` | Pie de Plan de obra 390 px: mensaje «Plan guardado…» comprimido junto a botones | **Detectada en captura, NO confirmada interactivamente**; probar Preview autenticada a 390×844, zoom 125–150 %, teclado/foco/scroll. Corregir solo si procede y está autorizado. |
+| `M2-UX-MOB-02` | En Evolución móvil la secuencia de navegación parece parcialmente recortada | **Detectada en captura, NO confirmada funcionalmente**; comprobar si el scroll/indicador existente ya es accesible a 390×844 y 844×390 con touch/teclado. No imponer segundo menú por inferencia. |
+| `M2-UX-DEMO-03` | Fixture sintético asocia parqué con «Revestimiento de muros» / muros | **Observación de plausibilidad demo**, no bug económico acreditado; comprobar datos de ejemplo sin modificar proyectos de clientes. |
+
+**Evidencia visual exclusiva:** [capturas RUBIK M2 en `49e8feb`](https://github.com/Juanmaes83/floorplan-3d/tree/49e8feb/docs/product/ft3d-8-m2-evidencias) con archivo, rama, SHA y viewport. No usar imágenes genéricas como prueba. Mantener composición escritorio Gate D aprobada, sin nuevo scroll global.
+
+### D.5 Bloqueos y decisiones vigentes (sin aceptación por inferencia)
+
+| ID / ámbito | Estado y gate |
+|---|---|
+| `M2-GATE-09` | **PENDIENTE** firma visual del propietario sobre Preview del SHA final. |
+| `DEC-06` / QA-04 | **PROPUESTA** presupuesto canónico edificio con partidas comunes únicas, IVA/coberturas y contrato versionado; no autorizado cambiar C1–C4. Hasta entonces, desglose por planta sin total inventado. |
+| `DEC-07` | **PROPUESTA** `subject.revision` compatible; identidad presupuesto↔sujeto = `unverifiable` hasta decisión y migración. |
+| `FT8-S4-10` | **PARCIAL** contrato mallas Kimi: clave `levelId|project/elementId`, materiales, rol, volumen, visibilidad. Sin editar ramas ajenas. |
+| `PR #166` / Entregar | OPEN/DRAFT; coordinar tipo Evolución, snapshot, interfaz cliente; entrega actual solo local, sin duplicar autoría. |
+| `DEC-05` / QA-18 | **PENDIENTE/BLOQUEADO** política autenticación, read-only, caducidad, revocación, privacidad, almacenamiento y retirada. No enlaces de clientes reales. |
+| BCCA gestionada | `LEGAL GATE=UNKNOWN` / desactivada; evidencias sobre descarga, alojamiento, redistribución, caché, edición, uso comercial, atribución y vigencia antes de activar; BC3 aportado separado. |
+| S3/territorio | M1 servicio oficial acreditado; M2 llamada viva falló recuperablemente; GML, CRS, PNOA/MDT05 y licencia/exportación requieren controles por canal. |
+| Compatibilidad | QA-21 Safari/Firefox/móvil real y QA-22 gran volumen sin ejecutar según alcance anterior; GPU/CPU/memoria y dispositivos reales pendientes. |
+| Integración `master` | **NO REALIZADA**: rama ensayo aislada, matriz de ownership y **regresión conjunta** de editor, Section/visita, presupuesto C1–C4, visor FT3D-8 y PR/ramas coordinadas. Probar orden de scripts, inicialización, estado/mode del visor, selección y restauración de proyecto, no solo conflictos Git en `index.html`. |
+| Documento maestro | Esta adenda es trazabilidad documental P1; borrador sigue sin aprobación definitiva del propietario. |
+| HOME-UX-E2 | [Documento H1 con 14 requisitos y 18 QA](./home-ux-e2-roadmap-2026-11-06.md) conservado; H1 no encargado, no prometer capacidad comercial aún no integrada. |
+
+### D.6 Orden y autorizaciones de continuidad
+
+**P0 visual:** revisar Preview autenticada y capturas auténticas del SHA vigente; registrar aceptación/defectos confirmados. Solo tras autorización del propietario, correcciones **acotadas** por Claude Code 2 con las dos regresiones, nuevo SHA, CI completa y comparativas.
+
+**P1 documental (en paralelo):** consolidar en **rama documental aislada** evidencia M1/M2, gates/QA aditivos y decisiones antes de mandar nuevo encargo de integración. Mantener histórico, no renombrar a maestro definitivo.
+
+**P1 integración:** coordinar owners de archivos, Section, Entregar y Kimi; preparar ensayo aislado con `master` vigente, regresión de funcionalidad cruzada y revisión visual. Ninguna integración a master implícita.
+
+**P1 comercial/contractual:** DEC-05/06/07, derechos BCCA, política cliente, QA externa, licencias y firma explícita de gates; FT3D-8 **no está terminado para E2**.
+
+**P2 HOME-UX-E2 / backlog:** mantener las tareas del roadmap, sin iniciar H1 u otras misiones sin autorización específica.
+
+**No-acciones permanentes:** no merge/rebase/cherry-pick, Production, cambio de dominio, publicación de clientes, BCCA `rubik-managed`, servicios de pago/IA, claves/licencias, material real de clientes para QA ni modificación unilateral de ramas ajenas. Aceptaciones y cambios siempre trazables por **ID, propietario responsable, SHA, prueba, decisión y fecha**.
+
 **Fin del borrador v1.1. Este archivo ya está guardado en rama documental para revisión; el contenido definitivo sigue pendiente de aprobación del propietario.**
