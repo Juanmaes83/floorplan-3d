@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "globalFixture": "vq01-material-ab-v2.json",
+  "reason": "V2 assignments and global composition remain sufficient and immutable. Additional QA-only cameras resolve each assigned surface at useful distance; they never change product camera presets or geometry. Plaster and concrete have separate views because their V2 walls are on opposite sides of the dwelling.",
+  "sources": {
+    "A0": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+    "B1": "fac408025c9cc11ed554f6f395cd3153d1838861"
+  },
+  "closeups": [
+    {
+      "id": "STONE_CLOSEUP",
+      "position": [
+        -0.335,
+        2.45,
+        -3.5
+      ],
+      "target": [
+        -0.335,
+        0,
+        -4.2
+      ],
+      "fov": 45
+    },
+    {
+      "id": "TIMBER_CLOSEUP",
+      "position": [
+        3.15,
+        2.45,
+        -2.7
+      ],
+      "target": [
+        2.5,
+        0,
+        -3.2
+      ],
+      "fov": 50
+    },
+    {
+      "id": "PLASTER_CLOSEUP",
+      "position": [
+        3,
+        2,
+        9.1
+      ],
+      "target": [
+        1.3,
+        1.3,
+        5.4
+      ],
+      "fov": 45
+    },
+    {
+      "id": "CONCRETE_CLOSEUP",
+      "position": [
+        -9.8,
+        2,
+        2
+      ],
+      "target": [
+        -6.045,
+        1.3,
+        0.5
+      ],
+      "fov": 45
+    },
+    {
+      "id": "GLASS_METAL_CLOSEUP",
+      "position": [
+        7,
+        1.8,
+        -2.5
+      ],
+      "target": [
+        4.465,
+        1.4,
+        -3.58
+      ],
+      "fov": 45
+    }
+  ],
+  "capture": "GLOBAL uses CP1 page screenshot. Closeups use immediate canvas readback after QA pose restore, excluding UI without changing scene. Two fresh contexts for each source.",
+  "resources": {
+    "maxExtraTextures": 8,
+    "maxExtraSurfaceGpuBytes": 8388608,
+    "maxExtraGeometries": 0
+  },
+  "visualVerdict": "PENDING_JUANMA"
+}

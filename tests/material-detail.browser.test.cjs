@@ -7,20 +7,40 @@ after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(
 async function setup(t,viewport){const context=await browser.newContext({viewport,isMobile:viewport.width<1000,hasTouch:viewport.width<1000,acceptDownloads:true});t.after(()=>context.close());const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,require('./helpers/three-module.cjs')(target,()=>run('curl',['--fail','--silent','--show-error','--max-time','30',target],{maxBuffer:4*1024*1024}).then(r=>r.stdout)));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});await page.goto(url);try{await page.waitForFunction(()=>window.View3D&&window.FloorPlanPresentation&&FloorPlanSurfaces.entries.length===50,null,{timeout:10000});}catch(error){throw Error(error.message+' '+JSON.stringify(errors)+' '+JSON.stringify(await page.evaluate(()=>({view:!!window.View3D,pres:!!window.FloorPlanPresentation,entries:FloorPlanSurfaces.entries.length,status:[...FloorPlanSurfaces.status]}))));}if(await page.locator('#welcomeDialog').evaluate(d=>d.open))await page.locator('#welcomeActionInput').press('Escape');await page.evaluate(()=>document.querySelector('#guideDetails').click());await page.evaluate(()=>document.querySelector('#guideAllTools').click());await require('./layout-fixture.cjs')(page);return {page,errors};}
 const inspect=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),entry:FloorPlanApp.entryId,guide:JSON.stringify(FloorPlanGuideUI.state()),camera:View3D.cameraState,metrics:View3D.surfaceMetrics,memory:View3D.rendererMemory,quality:View3D.surfaceQuality}));
 function sameCamera(a,b){assert.equal(a.fov,b.fov);assert.ok(Math.abs(a.aspect-b.aspect)<1e-9);for(const key of ['position','quaternion'])for(let i=0;i<a[key].length;i++)assert.ok(Math.abs(a[key][i]-b[key][i])<1e-9,`${key}[${i}] moved`);}
-async function ready(page,quality){await page.waitForFunction(q=>View3D.surfaceQuality===q&&View3D.surfaceMetrics.filter(m=>['surface-oak-wood-planks','surface-marble-01'].includes(m.id)).length===2&&View3D.surfaceMetrics.every(m=>m.state==='ready'&&(q==='base'||m.detailState==='ready'||m.detailState==='off')),quality,{timeout:25000});}
-for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`M08 material detail same scene and return ${viewport.width}x${viewport.height}`,{timeout:180000},async t=>{
+async function ready(page,quality){await page.waitForFunction(q=>View3D.surfaceQuality===q&&View3D.surfaceMetrics.filter(m=>['surface-oak-wood-planks','surface-marble-01'].includes(m.id)).length===2&&View3D.surfaceMetrics.every(m=>m.state==='ready'&&(q==='base'||m.detailState==='ready'||m.detailState==='off')),quality,{timeout:90000});}
+for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390},{width:360,height:800}])test(`M08 material detail same scene and return ${viewport.width}x${viewport.height}`,{timeout:viewport.width===1440?480000:180000},async t=>{
  const {page,errors}=await setup(t,viewport),size=`${viewport.width}x${viewport.height}`;
  await page.evaluate(()=>{let p=FloorPlanApp.project;p=FloorPlanSurfaces.apply(p,FloorPlanSurfaces.get('surface-oak-wood-planks'),{kind:'floor',id:p.rooms[0].id});p=FloorPlanSurfaces.apply(p,FloorPlanSurfaces.get('surface-marble-01'),{kind:'floor',id:p.rooms[1].id});FloorPlanApp.importProject(p);});
  const initial=await inspect(page);await page.locator('#presentationBtn').click();assert.match(await page.locator('#presentationConfig').textContent(),/Iniciar presentación/);await page.getByRole('button',{name:'Iniciar presentación'}).click();
  await page.waitForFunction(()=>FloorPlanPresentation.active&&document.querySelector('#presentationOverlay').dataset.moving==='false',null,{timeout:30000});await ready(page,'enhanced');
  const enhanced=await inspect(page),button=page.locator('#presentationMaterialQuality');assert.equal(await button.isVisible(),true);assert.equal(await button.getAttribute('aria-pressed'),'true');
+ assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').material,{color:'e0e0e0',roughness:1,metalness:0,normalScale:[1,1]});
+ assert.equal(enhanced.metrics.find(m=>m.id==='surface-oak-wood-planks').recipe,'oak-physical-v1');
+ assert.deepEqual(enhanced.metrics.find(m=>m.id==='surface-marble-01').material,{color:'dedede',roughness:.95,metalness:0,normalScale:[.5,.5]});
  for(const metric of enhanced.metrics.filter(m=>m.detailState==='ready')){assert.deepEqual(metric.map.repeat,metric.normalMap.repeat);assert.deepEqual(metric.map.repeat,metric.roughnessMap.repeat);assert.equal(metric.map.colorSpace,'srgb');assert.equal(metric.normalMap.colorSpace,'');assert.equal(metric.roughnessMap.colorSpace,'');assert.ok(metric.bytes<=512*1024*3);}
  assert.ok(await page.locator('#stage').evaluate(e=>e.getBoundingClientRect().height)>viewport.height*.7);
  await page.screenshot({path:path.join(QA,`${size}-enhanced.png`)});await button.click();await ready(page,'base');const base=await inspect(page);sameCamera(base.camera,enhanced.camera);assert.deepEqual(JSON.parse(base.project),JSON.parse(initial.project));assert.equal(base.entry,initial.entry);assert.ok(base.metrics.every(m=>m.detailState==='off'));await page.screenshot({path:path.join(QA,`${size}-base.png`)});
  await button.click();await ready(page,'enhanced');sameCamera((await inspect(page)).camera,enhanced.camera);
  await page.locator('#presentationOverlay .presentation-stops .btn').nth(1).click();await page.waitForFunction(()=>document.querySelector('#presentationOverlay').dataset.moving==='false'&&document.querySelector('.presentation-status').textContent.includes('Vista 2'),null,{timeout:15000});
  const roomEnhanced=await inspect(page);await page.screenshot({path:path.join(QA,`${size}-room-enhanced.png`)});
- await page.locator('#presentationCapture').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled);const download=page.waitForEvent('download');await page.locator('#presentationCapture').click();const stream=await (await download).createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);const png=Buffer.concat(chunks);assert.ok(png.length>10000);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');sameCamera((await inspect(page)).camera,roomEnhanced.camera);
+ await page.locator('#presentationCapture').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled);// A software WebGL PNG export may block the page thread after a genuine input event.
+  // locator.click() additionally waits for post-click action completion (30s default).
+  // Send a real browser mouse event to the actionable button and make the PNG download,
+  // its contents and the unchanged camera the actual success criteria.
+  const captureControl=page.locator('#presentationCapture');
+  await captureControl.scrollIntoViewIfNeeded();
+  const captureBox=await captureControl.boundingBox();
+  assert.ok(captureBox&&captureBox.width>0&&captureBox.height>0,'PNG capture button has a hit target');
+  const capturePoint={x:captureBox.x+captureBox.width/2,y:captureBox.y+captureBox.height/2};
+  assert.equal(await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.closest('#presentationCapture')?.id,capturePoint),
+    'presentationCapture','The real pointer must hit the PNG button');
+  const downloadStart=Date.now();
+  const download=page.waitForEvent('download',{timeout:120000});
+  await page.mouse.click(capturePoint.x,capturePoint.y);
+  const saved=await download;
+  console.log('M08 real-pointer PNG export event duration_ms:',Date.now()-downloadStart);
+  assert.match(saved.suggestedFilename(),/-3D\.png$/,'capture retains the application PNG filename');
+  const stream=await saved.createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);const png=Buffer.concat(chunks);assert.ok(png.length>10000);assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');sameCamera((await inspect(page)).camera,roomEnhanced.camera);
  await button.click();await ready(page,'base');sameCamera((await inspect(page)).camera,roomEnhanced.camera);await page.screenshot({path:path.join(QA,`${size}-room-base.png`)});
  if(viewport.width===360){await page.setViewportSize({width:844,height:390});await page.waitForFunction(()=>{const c=View3D.canvasState,cam=View3D.cameraState,s=document.querySelector('#stage');return s.clientWidth>0&&Math.abs(cam.aspect-s.clientWidth/s.clientHeight)<.001&&Math.abs(c.width-s.clientWidth*c.pixelRatio)<=2;});await page.screenshot({path:path.join(QA,'360x800-to-844x390-room-base.png')});}
  await page.locator('#presentationClose').click();await page.waitForFunction(()=>!FloorPlanPresentation.active&&FloorPlanApp.viewMode==='2d',null,{timeout:30000});const returned=await inspect(page);assert.deepEqual(JSON.parse(returned.project),JSON.parse(initial.project));assert.equal(returned.entry,initial.entry);assert.equal(returned.guide,initial.guide);assert.equal(returned.quality,'base');assert.deepEqual(errors,[]);
@@ -36,8 +56,8 @@ test('M08 rejects HTTP, hash and decode failures while preserving albedo and dis
   if(sha)await page.evaluate(hash=>{FloorPlanSurfaces.get('surface-oak-wood-planks').maps.normal.sha256=hash;},sha);
   await page.route(target,route=>route.fulfill({status,contentType:'image/webp',body}));
   await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));
-  await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='fallback',null,{timeout:15000});
-  const metric=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(metric.state,'ready');assert.ok(metric.map);assert.equal(metric.normalMap,null);assert.equal(metric.roughnessMap,null);assert.match(metric.detailError,label);
+ await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='fallback',null,{timeout:15000});
+  const metric=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(metric.state,'ready');assert.ok(metric.map);assert.equal(metric.material.color,'e0e0e0');assert.equal(metric.normalMap,null);assert.equal(metric.roughnessMap,null);assert.match(metric.detailError,label);
   await page.unroute(target);await page.evaluate(()=>View3D.setSurfaceQuality('base'));
   await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.detailState==='off');
  }
@@ -49,7 +69,7 @@ test('M08 rejects HTTP, hash and decode failures while preserving albedo and dis
  await page.screenshot({path:path.join(QA,'1440x900-recovered.png')});
  await page.evaluate(()=>View3D.setSurfaceQuality('base'));await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='ready');
  const baseTarget='**/assets/materials/oak-wood-planks.webp';await page.route(baseTarget,route=>route.fulfill({status:503,body:'unavailable'}));await page.evaluate(()=>View3D.setSurfaceQuality('enhanced'));
- await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='fallback');const baseFailure=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(baseFailure.detailState,'fallback');assert.equal(baseFailure.map,null);assert.match(baseFailure.error,/HTTP 503/);
+ await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='fallback');const baseFailure=(await inspect(page)).metrics.find(m=>m.id==='surface-oak-wood-planks');assert.equal(baseFailure.detailState,'fallback');assert.equal(baseFailure.map,null);assert.equal(baseFailure.material.color,'a27553');assert.match(baseFailure.error,/HTTP 503/);
  await page.unroute(baseTarget);await page.evaluate(()=>View3D.setSurfaceQuality('base'));await page.waitForFunction(()=>View3D.surfaceMetrics.find(m=>m.id==='surface-oak-wood-planks')?.state==='ready');
  await page.evaluate(()=>document.querySelector('#view3d canvas').dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
  await page.waitForFunction(()=>!View3D.contextAvailable&&View3D.surfaceMetrics.length===0);

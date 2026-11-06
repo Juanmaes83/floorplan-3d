@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "branch": "feat/visual-families-hero-fidelity-v2",
+  "baseSha": "de6ba2c22a33f5ca6d51939fc92813a5dd64bab5",
+  "missionSha": "51896b010ff16d0f4f10edc895c4dc5a231b8ced",
+  "status": "PUBLISHED",
+  "finalRegressionSha": "a2db71c5dce142e74b50af299e7ed8ffdd4d297e",
+  "finalRegression": { "unit": "3/3 PASS", "browser": "6/6 PASS", "visualInspection": "FINAL_MOBILE_M1_AND_COVERAGE_G1_INSPECTED" },
+  "iterations": [
+    {
+      "id": "iteration-1",
+      "codeSha": "9e8829a51ca93ee3661cd0d5300af3ac207e63e7",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; HDR rejected by MIME",
+      "files": [
+        { "path": "evidence/iteration-1/off-v2-contact.jpg", "sha256": "8422e47206780f120dea5250fdafaae997222e204fe9eca3567e858e33ae32e3" },
+        { "path": "evidence/iteration-1/v2-detail.jpg", "sha256": "51db7830955d6a6bd2d910c080502b9af6813bba79c55dbc8b791c5292fa716d" },
+        { "path": "evidence/iteration-1/v2-medium.jpg", "sha256": "fd878333cbd65687abcd7a7641d4366a1971b18a8522b044812afc58e854ae52" }
+      ],
+      "localFullManifestSha256": "49d333c686fe44f0e36d43d2299302b4cd094854f9b082413f1f2137a89c9259",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "iteration-2",
+      "codeSha": "49555e9d063cb39ee47d5a90e7e35dfd70a7eba8",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; HDR rejected by MIME",
+      "files": [
+        { "path": "evidence/iteration-2/off-v2-contact.jpg", "sha256": "4ec2b8f6e21b789f1e3a543d8694eb41a8d3bcf7df335643b3c157ef01619bb8" },
+        { "path": "evidence/iteration-2/v2-detail.jpg", "sha256": "5dab6288b9a646bcba99a2c72e639011a56a39d17fcdade04341e003069a6b62" },
+        { "path": "evidence/iteration-2/v2-medium.jpg", "sha256": "efba3b25f5eef6308a1e8c9df5707319661defd8158c83d55861acbae8e7e863" }
+      ],
+      "localFullManifestSha256": "86753508345f79134f07eabae8f41c83d9dd4fb33d97648cecc8d0eafb6bccf5",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "iteration-3-hdr",
+      "codeSha": "b0696419822eebedefc7984c286d3b6fc19d6800",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "HDR loaded; separate comparison against iteration-2 synthetic fallback",
+      "files": [
+        { "path": "evidence/iteration-3-hdr/synthetic-hdr-contact.jpg", "sha256": "358f7e6ffd6ff58a18910cc7561ab57a94530135aaf4d8266473fd99973f9ed3" },
+        { "path": "evidence/iteration-3-hdr/hdr-detail.jpg", "sha256": "557b0e3b92808295a57bd18ced745d9f1d8e6de4f602ea0201f6023e17de987a" },
+        { "path": "evidence/iteration-3-hdr/hdr-medium.jpg", "sha256": "896473a784ab37b6a5fad53f9939724210d14e90eab10dbb9b4d13f7636f4238" }
+      ],
+      "localFullManifestSha256": "7a392258c7d759ad4508d5d3110dbeddedeecfbb573c76286d2bf4b0a6c38000",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "coverage-12",
+      "codeSha": "5ad25c912004c81de3b549bb0ae70cf7c814a515",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; intentionally matched to iteration 2",
+      "coverage": { "existing": 12, "compatible": 12, "treated": 12, "excluded": 0 },
+      "files": [
+        { "path": "evidence/coverage-12/off-v2-contact.jpg", "sha256": "dc3eede20df75790d0f82967a4360d83d1936eb6a0aa30ddd1b88f9ad9aad35e" },
+        { "path": "evidence/coverage-12/v2-detail.jpg", "sha256": "ee78e56110e3a033f28f07bf939d43427a2dfd828361e94e93756b237dd4d8c8" },
+        { "path": "evidence/coverage-12/v2-general.jpg", "sha256": "48d32540b0ffd4dc86dbb0683e7a56f71b92ef416d4665b22cad38188160e9d2" }
+      ],
+      "localFullManifestSha256": "fc1bc977bce0b56f7873aa30c1b3df5b956f8efd318869a2f6edeef0156f36a2",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "systems",
+      "codeSha": "95c792f4a7aad3f027d0bb32d8cb4ada87f4d060",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1",
+      "environment": "synthetic fallback; recessed-sash versus flush-sash",
+      "files": [
+        { "path": "evidence/systems/systems-contact.jpg", "sha256": "e67eaf43630ed0b061abd3fb0073a69cca70c2f1d4403273ca4a38c91aa1b98d" },
+        { "path": "evidence/systems/flush-detail.jpg", "sha256": "8d745f9e83b8db8979f0f48ef4d7a7e14edd6bac7577b262c958ebb4a69f1478" },
+        { "path": "evidence/systems/flush-medium.jpg", "sha256": "b1576439ce4861dd2d0a2abd38521d29eefc865573d90add8b753a3db1ccdcf5" }
+      ],
+      "localFullManifestSha256": "be672d7e1a8e43392a4a874c717430bf0f0dce37d8e87a1764dc2dbd7d793a9d",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    },
+    {
+      "id": "lifecycle",
+      "codeSha": "e044da7038c361aed46d6bdf7598cdd3a0758edf",
+      "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+      "viewport": { "width": 390, "height": 844, "dpr": 1 },
+      "browser": "Chromium via Playwright 1.62.1; emulated mobile viewport",
+      "environment": "synthetic light during captures; context intentionally lost at test end",
+      "files": [
+        { "path": "evidence/lifecycle/mobile-contact.jpg", "sha256": "328f234e675ea712e246f8cefdf5cb43a45e592d13f81b6f94988b3f7ae542a4" },
+        { "path": "evidence/lifecycle/mobile-medium.jpg", "sha256": "5c1ea95b6c502c24fcaced711e9d50dfcac712f7e05af6eff3ee77f25adca424" },
+        { "path": "evidence/lifecycle/mobile-general.jpg", "sha256": "146081c50e73ea5c15125a9884ad61cf880f79ac293cadb27a811b46f9cf4b2b" }
+      ],
+      "localFullManifestSha256": "403d4f1a47fb8d39efc0997e779f68c5f54742bd73aa674b1c984cd5138ba598",
+      "visualState": "VISUAL_PENDING_HUMAN"
+    }
+  ],
+  "limitations": [
+    "Full PNGs remain local; compressed permanent review images are in this directory.",
+    "No human visual approval, physical-mobile result or GPU-time certification."
+  ]
+}

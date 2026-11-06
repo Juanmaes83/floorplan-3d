@@ -1,0 +1,697 @@
+{
+  "checkpoint": "CP2-A; before product mutation",
+  "globalFixture": "vq01-material-ab-v2.json",
+  "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+  "viewsSha256": "29a9ab97fc48de7222363566a6f0b3b985b47805dec1e099bb27a30d58c0e5c9",
+  "baselines": {
+    "a0": {
+      "result": {
+        "result": "PASS",
+        "side": "A0",
+        "sourceSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+        "fixtureSha": "e565493699f84108d692576556f1aaca490e954c04ccafe825740ef1de3ed814",
+        "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+        "screenshotSha256": [
+          "ff0df814e2014290777e4dcea18817f5f235a94bbd814b6c134f63fc34578f39",
+          "0c1490f4a745728293b4791a5a74833f013ecccef05fcbf0190281d127fe79dc"
+        ],
+        "pixelDelta": {
+          "changedPixels": 40,
+          "maxChannelDelta": 1,
+          "boundingBox": [
+            497,
+            568,
+            736,
+            736
+          ]
+        },
+        "closeupDeltas": [
+          {
+            "id": "STONE_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "TIMBER_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "PLASTER_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "CONCRETE_CLOSEUP",
+            "changedPixels": 23,
+            "maxChannelDelta": 1,
+            "boundingBox": [
+              103,
+              198,
+              252,
+              431
+            ]
+          },
+          {
+            "id": "GLASS_METAL_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          }
+        ],
+        "runs": 2,
+        "browserVersion": "151.0.7922.34"
+      },
+      "runs": [
+        {
+          "globalSha256": "ff0df814e2014290777e4dcea18817f5f235a94bbd814b6c134f63fc34578f39",
+          "runtimeSha256": "a6668cea45bb12f020e3ba00ae31f066a994855c777feceb5976e7f4e48a7284",
+          "closeups": [
+            {
+              "id": "STONE_CLOSEUP",
+              "file": "a01-STONE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -0.335,
+                  2.45,
+                  -3.5
+                ],
+                "quaternion": [
+                  -0.6021955131444529,
+                  0,
+                  0,
+                  0.7983486481160277
+                ],
+                "target": [
+                  -0.335,
+                  0,
+                  -4.2
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "36481a1412c3d872419921f83e0f0e89b6f21c5797dbf729b4755544c33b05b4"
+            },
+            {
+              "id": "TIMBER_CLOSEUP",
+              "file": "a01-TIMBER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3.15,
+                  2.45,
+                  -2.7
+                ],
+                "quaternion": [
+                  -0.5241117678769359,
+                  0.3585285620538341,
+                  0.25807341933404115,
+                  0.7281224039938333
+                ],
+                "target": [
+                  2.5,
+                  0,
+                  -3.2
+                ],
+                "fov": 50,
+                "aspect": 1.6
+              },
+              "sha256": "dbee67ccf27bb4ce8a4e847205b812181f90dfdedf27e4e02d326b7a070ffb54"
+            },
+            {
+              "id": "PLASTER_CLOSEUP",
+              "file": "a01-PLASTER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3,
+                  2,
+                  9.1
+                ],
+                "quaternion": [
+                  -0.08305730903840355,
+                  0.21291197573566692,
+                  0.018167790363123645,
+                  0.9733652476829834
+                ],
+                "target": [
+                  1.3,
+                  1.3,
+                  5.4
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "726d3bc18bccba7de6bc33509afb71d371c2d2f0b56d6dbce5862cf36c9d6cd3"
+            },
+            {
+              "id": "CONCRETE_CLOSEUP",
+              "file": "a01-CONCRETE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -9.8,
+                  2,
+                  2
+                ],
+                "quaternion": [
+                  -0.07087480322255045,
+                  -0.5587603071705028,
+                  -0.04800831569126452,
+                  0.8248993169007827
+                ],
+                "target": [
+                  -6.045,
+                  1.3,
+                  0.5
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "57027e25a00ca289add911c395705196d690eb30726b10ff3a3846af754ca790"
+            },
+            {
+              "id": "GLASS_METAL_CLOSEUP",
+              "file": "a01-GLASS_METAL_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  7,
+                  1.8,
+                  -2.5
+                ],
+                "quaternion": [
+                  -0.06008017269955065,
+                  0.549954078724655,
+                  0.03970912695662871,
+                  0.8320841720516324
+                ],
+                "target": [
+                  4.465,
+                  1.4,
+                  -3.58
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "d42aa00df9f35559de379f8bc29584ca891562c22a4e279d82604eb25ecfd801"
+            }
+          ],
+          "rendererMemory": {
+            "geometries": 1178,
+            "textures": 17
+          },
+          "errors": [],
+          "warnings": [
+            "console:WARNING: Multiple instances of Three.js being imported."
+          ]
+        },
+        {
+          "globalSha256": "0c1490f4a745728293b4791a5a74833f013ecccef05fcbf0190281d127fe79dc",
+          "runtimeSha256": "a6668cea45bb12f020e3ba00ae31f066a994855c777feceb5976e7f4e48a7284",
+          "closeups": [
+            {
+              "id": "STONE_CLOSEUP",
+              "file": "a02-STONE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -0.335,
+                  2.45,
+                  -3.5
+                ],
+                "quaternion": [
+                  -0.6021955131444529,
+                  0,
+                  0,
+                  0.7983486481160277
+                ],
+                "target": [
+                  -0.335,
+                  0,
+                  -4.2
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "36481a1412c3d872419921f83e0f0e89b6f21c5797dbf729b4755544c33b05b4"
+            },
+            {
+              "id": "TIMBER_CLOSEUP",
+              "file": "a02-TIMBER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3.15,
+                  2.45,
+                  -2.7
+                ],
+                "quaternion": [
+                  -0.5241117678769359,
+                  0.3585285620538341,
+                  0.25807341933404115,
+                  0.7281224039938333
+                ],
+                "target": [
+                  2.5,
+                  0,
+                  -3.2
+                ],
+                "fov": 50,
+                "aspect": 1.6
+              },
+              "sha256": "dbee67ccf27bb4ce8a4e847205b812181f90dfdedf27e4e02d326b7a070ffb54"
+            },
+            {
+              "id": "PLASTER_CLOSEUP",
+              "file": "a02-PLASTER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3,
+                  2,
+                  9.1
+                ],
+                "quaternion": [
+                  -0.08305730903840355,
+                  0.21291197573566692,
+                  0.018167790363123645,
+                  0.9733652476829834
+                ],
+                "target": [
+                  1.3,
+                  1.3,
+                  5.4
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "726d3bc18bccba7de6bc33509afb71d371c2d2f0b56d6dbce5862cf36c9d6cd3"
+            },
+            {
+              "id": "CONCRETE_CLOSEUP",
+              "file": "a02-CONCRETE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -9.8,
+                  2,
+                  2
+                ],
+                "quaternion": [
+                  -0.07087480322255045,
+                  -0.5587603071705028,
+                  -0.04800831569126452,
+                  0.8248993169007827
+                ],
+                "target": [
+                  -6.045,
+                  1.3,
+                  0.5
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "35461b7121c51ac8dd48b648ca57a093042b0f7e8b549f64a9c49f2164b07c5d"
+            },
+            {
+              "id": "GLASS_METAL_CLOSEUP",
+              "file": "a02-GLASS_METAL_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  7,
+                  1.8,
+                  -2.5
+                ],
+                "quaternion": [
+                  -0.06008017269955065,
+                  0.549954078724655,
+                  0.03970912695662871,
+                  0.8320841720516324
+                ],
+                "target": [
+                  4.465,
+                  1.4,
+                  -3.58
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "d42aa00df9f35559de379f8bc29584ca891562c22a4e279d82604eb25ecfd801"
+            }
+          ],
+          "rendererMemory": {
+            "geometries": 1178,
+            "textures": 17
+          },
+          "errors": [],
+          "warnings": [
+            "console:WARNING: Multiple instances of Three.js being imported."
+          ]
+        }
+      ]
+    },
+    "b1": {
+      "result": {
+        "result": "PASS",
+        "side": "B1",
+        "sourceSha": "fac408025c9cc11ed554f6f395cd3153d1838861",
+        "fixtureSha": "e565493699f84108d692576556f1aaca490e954c04ccafe825740ef1de3ed814",
+        "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+        "screenshotSha256": [
+          "7653f72f0c8b27388e267483afa4188be6c5df7ef48eb730b49fe3dc768ea867",
+          "8699a98a56c286e3f1a64a9a090763ff5973bf38e024f0442344a625ff5b1821"
+        ],
+        "pixelDelta": {
+          "changedPixels": 46,
+          "maxChannelDelta": 1,
+          "boundingBox": [
+            515,
+            568,
+            736,
+            734
+          ]
+        },
+        "closeupDeltas": [
+          {
+            "id": "STONE_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "TIMBER_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "PLASTER_CLOSEUP",
+            "changedPixels": 0,
+            "maxChannelDelta": 0,
+            "boundingBox": null
+          },
+          {
+            "id": "CONCRETE_CLOSEUP",
+            "changedPixels": 2,
+            "maxChannelDelta": 1,
+            "boundingBox": [
+              103,
+              212,
+              111,
+              217
+            ]
+          },
+          {
+            "id": "GLASS_METAL_CLOSEUP",
+            "changedPixels": 10,
+            "maxChannelDelta": 1,
+            "boundingBox": [
+              1074,
+              244,
+              1076,
+              259
+            ]
+          }
+        ],
+        "runs": 2,
+        "browserVersion": "151.0.7922.34"
+      },
+      "runs": [
+        {
+          "globalSha256": "7653f72f0c8b27388e267483afa4188be6c5df7ef48eb730b49fe3dc768ea867",
+          "runtimeSha256": "a6668cea45bb12f020e3ba00ae31f066a994855c777feceb5976e7f4e48a7284",
+          "closeups": [
+            {
+              "id": "STONE_CLOSEUP",
+              "file": "b11-STONE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -0.335,
+                  2.45,
+                  -3.5
+                ],
+                "quaternion": [
+                  -0.6021955131444529,
+                  0,
+                  0,
+                  0.7983486481160277
+                ],
+                "target": [
+                  -0.335,
+                  0,
+                  -4.2
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "0248d7fe3cbc72429c10857045637c792c07bc07d7978a06608f0a69b74be26a"
+            },
+            {
+              "id": "TIMBER_CLOSEUP",
+              "file": "b11-TIMBER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3.15,
+                  2.45,
+                  -2.7
+                ],
+                "quaternion": [
+                  -0.5241117678769359,
+                  0.3585285620538341,
+                  0.25807341933404115,
+                  0.7281224039938333
+                ],
+                "target": [
+                  2.5,
+                  0,
+                  -3.2
+                ],
+                "fov": 50,
+                "aspect": 1.6
+              },
+              "sha256": "453fc6e9863709be265352cc1867dc6bd2356461f3914d8a2b0d3f5241882f25"
+            },
+            {
+              "id": "PLASTER_CLOSEUP",
+              "file": "b11-PLASTER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3,
+                  2,
+                  9.1
+                ],
+                "quaternion": [
+                  -0.08305730903840355,
+                  0.21291197573566692,
+                  0.018167790363123645,
+                  0.9733652476829834
+                ],
+                "target": [
+                  1.3,
+                  1.3,
+                  5.4
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "a2da8a05c8b4dc6d33d657b6b7fdaacb17f99d60f2513d557b7a84470624d1a6"
+            },
+            {
+              "id": "CONCRETE_CLOSEUP",
+              "file": "b11-CONCRETE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -9.8,
+                  2,
+                  2
+                ],
+                "quaternion": [
+                  -0.07087480322255045,
+                  -0.5587603071705028,
+                  -0.04800831569126452,
+                  0.8248993169007827
+                ],
+                "target": [
+                  -6.045,
+                  1.3,
+                  0.5
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "fb6fc0b4be118882a0ba75dd9e2049f8df34f1a33c2c5996a60f2e054431dc9b"
+            },
+            {
+              "id": "GLASS_METAL_CLOSEUP",
+              "file": "b11-GLASS_METAL_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  7,
+                  1.8,
+                  -2.5
+                ],
+                "quaternion": [
+                  -0.06008017269955065,
+                  0.549954078724655,
+                  0.03970912695662871,
+                  0.8320841720516324
+                ],
+                "target": [
+                  4.465,
+                  1.4,
+                  -3.58
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "437570c643959270629a5a2f8bcc92ba6ef63688f498e696962b35d5083b0c86"
+            }
+          ],
+          "rendererMemory": {
+            "geometries": 1178,
+            "textures": 17
+          },
+          "errors": [],
+          "warnings": [
+            "console:WARNING: Multiple instances of Three.js being imported."
+          ]
+        },
+        {
+          "globalSha256": "8699a98a56c286e3f1a64a9a090763ff5973bf38e024f0442344a625ff5b1821",
+          "runtimeSha256": "a6668cea45bb12f020e3ba00ae31f066a994855c777feceb5976e7f4e48a7284",
+          "closeups": [
+            {
+              "id": "STONE_CLOSEUP",
+              "file": "b12-STONE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -0.335,
+                  2.45,
+                  -3.5
+                ],
+                "quaternion": [
+                  -0.6021955131444529,
+                  0,
+                  0,
+                  0.7983486481160277
+                ],
+                "target": [
+                  -0.335,
+                  0,
+                  -4.2
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "0248d7fe3cbc72429c10857045637c792c07bc07d7978a06608f0a69b74be26a"
+            },
+            {
+              "id": "TIMBER_CLOSEUP",
+              "file": "b12-TIMBER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3.15,
+                  2.45,
+                  -2.7
+                ],
+                "quaternion": [
+                  -0.5241117678769359,
+                  0.3585285620538341,
+                  0.25807341933404115,
+                  0.7281224039938333
+                ],
+                "target": [
+                  2.5,
+                  0,
+                  -3.2
+                ],
+                "fov": 50,
+                "aspect": 1.6
+              },
+              "sha256": "453fc6e9863709be265352cc1867dc6bd2356461f3914d8a2b0d3f5241882f25"
+            },
+            {
+              "id": "PLASTER_CLOSEUP",
+              "file": "b12-PLASTER_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  3,
+                  2,
+                  9.1
+                ],
+                "quaternion": [
+                  -0.08305730903840355,
+                  0.21291197573566692,
+                  0.018167790363123645,
+                  0.9733652476829834
+                ],
+                "target": [
+                  1.3,
+                  1.3,
+                  5.4
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "a2da8a05c8b4dc6d33d657b6b7fdaacb17f99d60f2513d557b7a84470624d1a6"
+            },
+            {
+              "id": "CONCRETE_CLOSEUP",
+              "file": "b12-CONCRETE_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  -9.8,
+                  2,
+                  2
+                ],
+                "quaternion": [
+                  -0.07087480322255045,
+                  -0.5587603071705028,
+                  -0.04800831569126452,
+                  0.8248993169007827
+                ],
+                "target": [
+                  -6.045,
+                  1.3,
+                  0.5
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "59e68b1f5a3e289de0d1d7be1dc60a67b93b33873f6c6f00e11fe064639baa2f"
+            },
+            {
+              "id": "GLASS_METAL_CLOSEUP",
+              "file": "b12-GLASS_METAL_CLOSEUP.png",
+              "pose": {
+                "position": [
+                  7,
+                  1.8,
+                  -2.5
+                ],
+                "quaternion": [
+                  -0.06008017269955065,
+                  0.549954078724655,
+                  0.03970912695662871,
+                  0.8320841720516324
+                ],
+                "target": [
+                  4.465,
+                  1.4,
+                  -3.58
+                ],
+                "fov": 45,
+                "aspect": 1.6
+              },
+              "sha256": "0b32aefb3f72c26fbac54cdf951d9ef9c359ec8017c2525cb37f5fc35807b91e"
+            }
+          ],
+          "rendererMemory": {
+            "geometries": 1178,
+            "textures": 17
+          },
+          "errors": [],
+          "warnings": [
+            "console:WARNING: Multiple instances of Three.js being imported."
+          ]
+        }
+      ]
+    }
+  }
+}

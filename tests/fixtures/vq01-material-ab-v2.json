@@ -1,0 +1,249 @@
+{
+  "version": 2,
+  "status": "cp1-c-four-families",
+  "authority": "VQ-01 Material Fidelity Foundation canonical contract V1",
+  "baselineSha": "0f9c6ead9732901681498efec326d1ca92e42ffe",
+  "projectSha256": "aa66a50a6543cf551f77a32c06e4ffc4920f00d63349d252c05673a70173a54c",
+  "note": "Versioned extension of the immutable CP1-A fixture. Adds plaster on wall[18] and concrete on wall[28] so all four required families can be judged. All camera, Presentation, light, environment, viewport, DPR, geometry and capture readiness settings remain identical. The A side is captured from baselineSha before B.",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "deviceScaleFactor": 1
+  },
+  "assignments": [
+    {
+      "surfaceId": "surface-oak-wood-planks",
+      "kind": "floor",
+      "targetIndex": 0
+    },
+    {
+      "surfaceId": "surface-marble-01",
+      "kind": "floor",
+      "targetIndex": 1
+    },
+    {
+      "surfaceId": "surface-white-plaster-02",
+      "kind": "wall",
+      "targetIndex": 18
+    },
+    {
+      "surfaceId": "surface-brushed-concrete",
+      "kind": "wall",
+      "targetIndex": 28
+    }
+  ],
+  "presentation": {
+    "startMode": "default",
+    "stopIndex": 0,
+    "surfaceQuality": "enhanced",
+    "current": {
+      "kind": "overview",
+      "roomId": null,
+      "levelId": null
+    },
+    "status": "Vista 1 de 2",
+    "moving": "false"
+  },
+  "stage": {
+    "width": 1440,
+    "height": 900
+  },
+  "canvas": {
+    "cssWidth": 1440,
+    "cssHeight": 900,
+    "width": 1440,
+    "height": 900,
+    "pixelRatio": 1
+  },
+  "camera": {
+    "position": [
+      11.701805610678774,
+      19.155886586540934,
+      5.129978514784598
+    ],
+    "quaternion": [
+      -0.4323683717389173,
+      0.3779592877333376,
+      0.20627084738790868,
+      0.7922478813186059
+    ],
+    "target": [
+      2.1238623174083067,
+      0,
+      -2.6235946273867325
+    ],
+    "fov": 45,
+    "aspect": 1.6
+  },
+  "viewOptions": {
+    "cut": 2.8,
+    "furn": true,
+    "labels": true,
+    "night": false,
+    "hour": 10,
+    "mode": "orbit",
+    "surfaceQuality": "enhanced",
+    "roof": false
+  },
+  "light": {
+    "preset": "neutral",
+    "status": "fallback",
+    "error": "HDR MIME inválido",
+    "bytes": 0,
+    "source": "assets/environments/studio-small-09-1k.hdr",
+    "estimatedSourceGpuBytes": 4194304,
+    "estimatedPmremGpuBytes": 0,
+    "environment": "synthetic",
+    "hemiColor": 16777215,
+    "hemiGround": 11450562,
+    "hemiIntensity": 1.05,
+    "sunColor": 16774888,
+    "sunIntensity": 2.25,
+    "background": 15856370,
+    "exposure": 1.04,
+    "envK": 0.75
+  },
+  "environment3D": "studio",
+  "surfaces": [
+    {
+      "id": "surface-brushed-concrete",
+      "state": "ready",
+      "detailState": "off",
+      "bytes": 10796,
+      "gpuBytes": 349526,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": null,
+      "roughnessMap": null,
+      "error": null,
+      "detailError": null
+    },
+    {
+      "id": "surface-marble-01",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 53616,
+      "gpuBytes": 1048578,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "roughnessMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "error": null,
+      "detailError": null
+    },
+    {
+      "id": "surface-oak-wood-planks",
+      "state": "ready",
+      "detailState": "ready",
+      "bytes": 51542,
+      "gpuBytes": 1048578,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "roughnessMap": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": ""
+      },
+      "error": null,
+      "detailError": null
+    },
+    {
+      "id": "surface-white-plaster-02",
+      "state": "ready",
+      "detailState": "off",
+      "bytes": 7864,
+      "gpuBytes": 349526,
+      "map": {
+        "repeat": [
+          1,
+          1
+        ],
+        "colorSpace": "srgb"
+      },
+      "normalMap": null,
+      "roughnessMap": null,
+      "error": null,
+      "detailError": null
+    }
+  ],
+  "projectBindings": [
+    {
+      "id": "mat_surface-brushed-concrete-wall",
+      "category": "wall",
+      "preset": "surface-brushed-concrete",
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      }
+    },
+    {
+      "id": "mat_surface-marble-01-floor",
+      "category": "floor",
+      "preset": "surface-marble-01",
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      }
+    },
+    {
+      "id": "mat_surface-oak-wood-planks-floor",
+      "category": "floor",
+      "preset": "surface-oak-wood-planks",
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      }
+    },
+    {
+      "id": "mat_surface-white-plaster-02-wall",
+      "category": "wall",
+      "preset": "surface-white-plaster-02",
+      "repeatMm": {
+        "x": 1000,
+        "y": 1000
+      }
+    }
+  ],
+  "lifecycle": {
+    "loopActive": true,
+    "animating": false,
+    "flying": false,
+    "pendingAssets": 0
+  }
+}

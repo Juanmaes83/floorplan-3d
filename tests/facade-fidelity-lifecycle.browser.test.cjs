@@ -1,0 +1,31 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path'),{execFileSync}=require('node:child_process');
+const h=require('./visual-families-harness.cjs');
+
+test('F03 browser lifecycle, profiles, rebuild, fallback, reentry and context loss',{timeout:240000},async()=>{
+ const root=path.resolve(process.env.VF_APP_ROOT||path.join(__dirname,'..')),codeSha=execFileSync('git',['-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),out=process.env.VF_ARTIFACTS||path.join('qa-results','facade-fidelity-lifecycle',codeSha),r=await h.start(root);
+ try{
+  const project=await h.setup(r.page);await h.present(r.page);
+  const original=await r.page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),geometry:JSON.stringify(View3D.renderedGeometry),f02:View3D.visualFamilies})),ids=original.f02.bindings.map(b=>b.id);
+  await r.page.evaluate(ids=>View3D.setVisualFamilies({enabled:true,projectId:View3D.source.id,sourceIds:ids,mode:'capture'}),ids);
+  const cycles=[];
+  for(let i=0;i<3;i++){
+   const on=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:true,projectId:View3D.source.id,mode:'capture'}));assert.equal(on.status,'ready');assert.equal(on.resources.textures,3);assert.equal(on.resources.pending,0);
+   const off=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:false}));assert.equal(off.active.length,0);assert.equal(off.resources.textures,0);assert.equal(off.resources.materials,0);assert.equal(off.resources.geometries,0);assert.equal(off.resources.pending,0);
+   const state=await r.page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.project),geometry:JSON.stringify(View3D.renderedGeometry),f02:View3D.visualFamilies,render:View3D.renderBudget}));assert.equal(state.project,original.project);assert.equal(state.geometry,original.geometry);assert.deepEqual([...state.f02.active].sort(),[...ids].sort());cycles.push({on:on.resources,off:off.resources,disposals:off.disposals,renderAfterOff:state.render});
+  }
+  const hero=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:true,projectId:View3D.source.id,mode:'capture'})),balanced=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:true,projectId:View3D.source.id,mode:'mobile'}));
+  assert.equal(hero.decision.profile,'hero');assert.equal(balanced.decision.profile,'balanced');assert(balanced.resources.bytes<hero.resources.bytes);assert(balanced.resources.gpuBytes<hero.resources.gpuBytes);
+  await r.page.evaluate(()=>View3D.refreshSurfaces());await r.page.waitForFunction(()=>View3D.facadeFidelity.status==='ready'&&View3D.facadeFidelity.resources.pending===0);
+  const rebuilt=await r.page.evaluate(()=>({f03:View3D.facadeFidelity,f02:View3D.visualFamilies,project:JSON.stringify(FloorPlanApp.project),geometry:JSON.stringify(View3D.renderedGeometry)}));assert.deepEqual(rebuilt.f03.active,balanced.active);assert.equal(rebuilt.f03.decision.profile,'balanced');assert.deepEqual([...rebuilt.f02.active].sort(),[...ids].sort());assert.equal(rebuilt.project,original.project);assert.equal(rebuilt.geometry,original.geometry);
+  await r.page.route('**/assets/materials/f03/white_stucco/hero/albedo.webp',route=>route.fulfill({status:404,contentType:'text/plain',body:'intentional F03 fallback test'}));
+  const fallback=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:true,projectId:View3D.source.id,mode:'capture'}));assert.equal(fallback.status,'fallback');assert.equal(fallback.active.length,0);assert.equal(fallback.resources.textures,0);assert.match(fallback.error,/HTTP 404/);await r.page.unroute('**/assets/materials/f03/white_stucco/hero/albedo.webp');
+  const recovered=await r.page.evaluate(()=>View3D.setFacadeFidelity({enabled:true,projectId:View3D.source.id,mode:'mobile'}));assert.equal(recovered.status,'ready');
+  await r.page.locator('#presentationClose').click();await r.page.waitForFunction(()=>!FloorPlanPresentation.active&&!document.body.classList.contains('presentation-exiting'),null,{timeout:60000});
+  const exited=await r.page.evaluate(()=>({f03:View3D.facadeFidelity,f02:View3D.visualFamilies,project:JSON.stringify(FloorPlanApp.project)}));assert.equal(exited.f03.active.length,0);assert.equal(exited.f03.resources.textures,0);assert.equal(exited.f03.resources.geometries,0);assert.equal(exited.f02.active.length,0);assert.equal(exited.project,original.project);
+  await h.present(r.page);const reentered=await r.page.evaluate(()=>({f03:View3D.facadeFidelity,f02:View3D.visualFamilies}));assert.deepEqual(reentered.f03.active,balanced.active);assert.equal(reentered.f03.decision.profile,'balanced');assert.deepEqual([...reentered.f02.active].sort(),[...ids].sort());
+  await r.page.evaluate(()=>{window.__f03ContextLost=0;addEventListener('floorplan-3d-context-lost',()=>window.__f03ContextLost++);document.querySelector('#view3d canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext();});await r.page.waitForFunction(()=>!View3D.contextAvailable&&window.__f03ContextLost===1);
+  const lost=await r.page.evaluate(()=>({f03:View3D.facadeFidelity,f02:View3D.visualFamilies,project:JSON.stringify(FloorPlanApp.project),geometry:JSON.stringify(View3D.renderedGeometry),events:window.__f03ContextLost}));assert.equal(lost.f03.active.length,0);assert.equal(lost.f03.resources.textures,0);assert.equal(lost.f03.resources.geometries,0);assert.equal(lost.f03.resources.pending,0);assert.equal(lost.f02.active.length,0);assert.equal(lost.project,original.project);assert.equal(lost.geometry,original.geometry);assert.deepEqual(r.errors,['Failed to load resource: the server responded with a status of 404 (Not Found)']);
+  const manifest={codeSha,projectSha256:h.hash(original.project),geometrySha256:h.hash(original.geometry),browser:r.browserVersion,cycles,profiles:{hero:hero.resources,balanced:balanced.resources,profileSwitchLoadMs:balanced.loadMs},rebuilt,fallback,recovered,exited,reentered,lost,errors:r.errors,warnings:r.warnings};await fs.mkdir(out,{recursive:true});await fs.writeFile(path.join(out,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+  console.log(JSON.stringify({out,cycles:cycles.length,profiles:manifest.profiles,rebuild:rebuilt.f03.status,fallback:fallback.status,reentry:reentered.f03.status,contextLostEvents:lost.events,warnings:r.warnings}));
+ }finally{await r.close();}
+});

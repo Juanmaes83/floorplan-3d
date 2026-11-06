@@ -2452,6 +2452,7 @@ window.FloorPlanApp={importProjectFile,beginFileImport,fileImportCurrent,cancelF
     else{drawer('lib',!entry.hiddenLib);drawer('panel',!entry.hiddenPanel);}
     $('header').scrollLeft=entry.headerScroll;
     if(entry.focus?.isConnected)entry.focus.focus({preventScroll:true});
+    window.View3D?.releaseVisualFamilies();
     return true;
   },
   importProject(value){const before=snap();const next=Core.importInto(projectStore,value);window.FloorPlanTraceUI?.cancel();ui.sel=null;undoStack.push(before);redoStack.length=0;refreshProject();renderAll();fitView();return next;}};
@@ -2506,6 +2507,10 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
 import {SurfaceRenderer} from './js/surface-renderer.mjs';
+import {WindowVisualAdapter} from './js/visual-families-adapter.mjs';
+import {mountVisualPreview} from './js/visual-families-preview.mjs';
+import {FacadeFidelityAdapter} from './js/facade-fidelity-adapter.mjs';
+import {mountFacadePreview} from './js/facade-fidelity-preview.mjs';
 import * as AssetLoader from './js/asset-loader.mjs';
 
 const stage = $('#stage'), host = $('#view3d');
@@ -2566,7 +2571,7 @@ function init(){
 
   const pm = new THREE.PMREMGenerator(renderer); envTex = pm.fromScene(new RoomEnvironment(), .04).texture; baseEnvTex = envTex; pm.dispose();
   glassMat = new THREE.MeshPhysicalMaterial({color:0xcfe6ef, roughness:.05, transparent:true, opacity:.28, depthWrite:false, side:THREE.DoubleSide});
-  wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.5, metalness:.4});
+  wallMat = mat('#f4f1eb', {roughness:.92}); capMat = mat('#34312d', {roughness:.9}); frameMat = mat('#5d6166', {roughness:.35, metalness:.85});
 
   archFloor = new THREE.Group(); archUp = new THREE.Group(); furnG = new THREE.Group(); labelG = new THREE.Group(); lampG = new THREE.Group(); revealG = new THREE.Group(); contactG = new THREE.Group();
   levelsG = new THREE.Group(); levelsG.name = 'building-levels'; roofG = new THREE.Group(); roofG.name = 'derived-flat-roof'; exteriorG = new THREE.Group(); exteriorG.name = 'derived-exterior-volumes';
@@ -2659,6 +2664,8 @@ const TEX = {
 };
 const floorMats = {};
 const surfaceRenderer=new SurfaceRenderer(THREE,FloorPlanSurfaces);
+const windowVisual=new WindowVisualAdapter(THREE);
+const facadeVisual=new FacadeFidelityAdapter(THREE);
 function floorMat(materialId){
   const external=surfaceRenderer.get(project.materials.find(m=>m.id===materialId));if(external)return external;
   const material=MATS[materialId];const kind=({'tile-800':'tile800','tile-600':'tile600','tile-300':'antislip'})[material.preset]||material.preset||'plain';
@@ -3310,7 +3317,7 @@ function wallBox(rect, yb, yt, m){
   const [x0,y0,x1,y1]=rect;
   if (yt - yb <= .001) return;
   const o = new THREE.Mesh(new THREE.BoxGeometry(M(rect.spanMm), yt-yb, M(rect.thickness)), m || [wallMat, wallMat, capMat, wallMat, wallMat, wallMat]);
-  if(assignment){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
+  if(assignment||m===facadeMat){const uv=o.geometry.attributes.uv,p=o.geometry.parameters;for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);uv.setXY(i,uv.getX(i)*(face<2?p.depth:p.width),uv.getY(i)*(face===2||face===3?p.depth:p.height));}uv.needsUpdate=true;}
   o.userData.wallId=rect.id;
   o.userData.exterior=exteriorByWall.get(rect.id)||'unavailable';
   o.userData.revealRect={center:[...rect.center],endpoints:[rect[0],rect[1],rect[2],rect[3]],spanMm:rect.spanMm,thicknessMm:rect.thickness,angle:rect.angle,height:yt-yb};
@@ -3502,6 +3509,7 @@ function buildArch(other){
   clearPresentationRoute();
   renderedSource=project; renderedGeometry=geometry;
   }
+  if(!other){windowVisual.clearBindings();facadeVisual.clearBindings();}
   clearGroup(archFloor); clearGroup(archUp);
   lampG.traverse(o=>{o.geometry?.dispose();o.material?.dispose?.();});lampG.clear();
   doors.length = 0; colliders = [];
@@ -3548,6 +3556,7 @@ function buildArch(other){
     const n=Math.max(1,Math.round(L/.9));
     for(let k=0;k<=n;k++){const mu=new THREE.Mesh(new THREE.BoxGeometry(.04,gh,.06),frameMat);mu.position.set(-L/2+k*L/n,sill+gh/2,0);mu.castShadow=true;group.add(mu);}
     [sill+.02,gTop-.02].forEach(y=>{const tr=new THREE.Mesh(new THREE.BoxGeometry(L,.04,.06),frameMat);tr.position.set(0,y,0);group.add(tr);});
+    if(!other)windowVisual.register({projectId:geometry.source.id,id:r.openingId,wallId:r.id,kind:'window',widthMm:r.spanMm,heightMm:(head-sill)*1000,thicknessMm:r.thickness,sillMm:sill*1000,fullHeight:gTop===head},group,group.children.filter(o=>o.isMesh&&o.material===frameMat),[pane],archUp.children.filter(o=>o.isMesh&&o.userData.wallId===r.id&&o.material===facadeMat));
   });
   geometry.doors.forEach(d => {
     const pivot = new THREE.Group(), L = M(d.len), dh = Math.min(d.height - .05, top);
@@ -3571,7 +3580,9 @@ function buildArch(other){
   if(other)return;
   buildLevels();
   buildRoof();
-  applyLight(); applyGrow(); surfaceRenderer.end();
+  windowVisual.apply();
+  facadeVisual.register(project,exterior,archUp.children.filter(o=>o.isMesh&&o.userData.wallId),new Set([...windowVisual.bindings.values()].flatMap(b=>b.facade.map(f=>f.mesh))));
+  facadeVisual.apply();applyLight(); applyGrow(); surfaceRenderer.end();
 }
 
 /* ======================= 多层建筑 / building levels ======================= */
@@ -3949,7 +3960,7 @@ function abort3D(){
   if(anim?.res)anim.res();anim=null;
   if(fly?.res)fly.res(false);fly=null;
   assetGeneration++;assetRequests.forEach(controller=>controller.abort());assetRequests.clear();
-  surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
+  windowVisual.clearBindings();facadeVisual.clearBindings();surfaceRenderer.disposeAll();surfaceRenderer.setQuality('base');opt.surfaceQuality='base';
   walkCtl?.unlock();stopTouchWalk();orbit&&(orbit.enabled=false);
   active=false;stage.classList.remove('is3d','animating');
 }
@@ -5085,6 +5096,12 @@ window.View3D = {
   get walkDoors(){return doors.map(d=>({id:d.id,open:!!d.open,angle:+d.cur.toFixed(3),closedAngle:d.a0,openAngle:d.a1,hinge:[Math.round(d.pivot.position.x*1000+OX),Math.round(d.pivot.position.z*1000+OY)],len:Math.round(d.len*1000)}));}};
 
 window.View3D.presentationReveal=presentationReveal;
+Object.defineProperty(window.View3D,'visualFamilies',{get:()=>windowVisual.snapshot()});
+window.View3D.releaseVisualFamilies=()=>{windowVisual.release();facadeVisual.release();};
+window.View3D.setVisualFamilies=options=>{if(!active||contextLost)throw Error('3D view unavailable');if(options.enabled&&options.projectId!==geometry.source.id)throw Error('Visual target Project mismatch');const result=windowVisual.set(options);renderer.render(scene,camera);return result;};
+Object.defineProperty(window.View3D,'facadeFidelity',{get:()=>facadeVisual.snapshot()});
+window.View3D.setFacadeFidelity=async options=>{if(!active||contextLost)throw Error('3D view unavailable');const result=await facadeVisual.set(options);renderer.render(scene,camera);return result;};
+mountVisualPreview(window.View3D);mountFacadePreview(window.View3D);
 Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,presentationStoryEnd:endPresentationStory,presentationStoryReframe});
 Object.defineProperty(window.View3D,'presentationStoryInfo',{get:presentationStoryInfo});
 Object.defineProperty(window.View3D,'presentationClipInfo',{get:presentationClipInfo});
