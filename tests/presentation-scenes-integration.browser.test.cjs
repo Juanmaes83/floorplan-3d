@@ -24,7 +24,12 @@ const settled=page=>page.waitForFunction(()=>FloorPlanPresentation.active&&!Floo
 async function slide(page,P){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.step='any';s.value=String(v*Number(s.max));s.dispatchEvent(new Event('input',{bubbles:true}));},P);
  await page.waitForFunction(()=>!FloorPlanPresentation.story?.busy,null,{timeout:300000});await frames(page);}
 async function finish(page){await slide(page,1);await page.locator('#presentationStoryPlay').click();await settled(page);await frames(page);}
-async function toOverview(page){const b=page.locator('#presentationOverlay button',{hasText:/^Vista general$/}).first();if(await b.count()&&!(await b.getAttribute('aria-current'))){await b.click();await settled(page);}await frames(page);}
+// Back to the first overview stop (the state every scene is compared at): never measured at a room stop.
+async function toOverview(page){
+ if(await page.evaluate(()=>FloorPlanPresentation.current?.kind!=='overview')){
+  const buttons=page.locator('#presentationOverlay button:visible',{hasText:/^\s*Vista general\s*$/});assert.ok(await buttons.count()>0,'an overview stop button');await buttons.last().click();
+  await page.waitForFunction(()=>FloorPlanPresentation.current?.kind==='overview',null,{timeout:300000});await settled(page);}
+ assert.equal(await page.evaluate(()=>FloorPlanPresentation.current?.kind),'overview','measured at the overview');await frames(page);}
 async function read(page,name,region){const png=await page.locator('#view3d canvas').screenshot();await fs.writeFile(path.join(QA,name+'.png'),png);
  return page.evaluate(async([b64,r])=>{const img=new Image();img.src='data:image/png;base64,'+b64;await img.decode();const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);
   const x0=Math.round(img.width*r[0]),y0=Math.round(img.height*r[1]),w=Math.round(img.width*(r[2]-r[0])),h=Math.round(img.height*(r[3]-r[1]));const d=x.getImageData(x0,y0,w,h).data;let paper=0,colour=0,n=0;
