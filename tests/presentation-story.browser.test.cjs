@@ -28,6 +28,8 @@ const snapshot=page=>page.evaluate(()=>({project:JSON.stringify(FloorPlanApp.pro
 const pose=page=>page.evaluate(()=>({...View3D.cameraState,story:View3D.presentationStoryInfo}));
 const near=(a,b,eps)=>a.position.every((v,i)=>Math.abs(v-b.position[i])<=eps)&&a.quaternion.every((v,i)=>Math.abs(v-b.quaternion[i])<=eps)&&Math.abs(a.fov-b.fov)<=1e-6;
 const tools=page=>page.$$eval('#presentationTools button',list=>list.map(b=>b.id));
+// The chapter's buttons live in their own «Escenas» group (after the navigation), never among the tools.
+const scenes=page=>page.$$eval('#presentationScenes button',list=>list.map(b=>b.id));
 async function scrub(page,value){await page.evaluate(v=>{const s=document.querySelector('#presentationStorySlider');s.value=String(v);s.dispatchEvent(new Event('input',{bubbles:true}));},value);
  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));return pose(page);}
 async function exitAndCheck(page,before,name,baseline=null){
@@ -79,7 +81,7 @@ test('FT3D off: the presentation is unchanged; FT3D on: checkpoints, p = 1 = ove
  await page.locator('#presentationStoryPlay').click();await settledOverview(page);await page.waitForTimeout(300);
  const continued=await pose(page);assert.ok(near(continued,overview,1e-4),'continues from the overview without a jump');
  assert.equal(continued.story.active,false);assert.equal(continued.story.fov,overview.fov);
- assert.deepEqual(await tools(page),[...offTools,'presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'only the chapter tools are added, after the existing tools');
+ assert.deepEqual(await tools(page),offTools,'the existing tools are unchanged');assert.deepEqual(await scenes(page),['presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'only the chapter buttons are added, in the scenes group');
  assert.equal(await page.locator('.presentation-card h2').textContent(),'Vista general');
  await page.waitForFunction(()=>!document.querySelector('#presentationCapture').disabled,null,{timeout:60000});
  // Replay: back to the plan (1 → 0), then 3D again.
@@ -243,7 +245,7 @@ test('whole story: plan → overview → first room as one progress; scenes matc
  const off=await exitAndCheck(page,editor,'story off');
  await configure(page,true);await page.waitForFunction(()=>FloorPlanPresentation.story,null,{timeout:180000});await settledOverview(page);await page.waitForTimeout(300);
  const full=page.locator('#presentationStoryFull');assert.equal(await full.isVisible(),true);assert.equal(await full.textContent(),'Ver la historia completa');
- assert.deepEqual(await tools(page),[...(await tools(page)).filter(id=>!/^presentationStory/.test(id)),'presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'story tools only after the existing ones');
+ assert.deepEqual((await tools(page)).filter(id=>/^presentationStory/.test(id)),[],'no story button among the tools');assert.deepEqual(await scenes(page),['presentationStoryReplay','presentationStoryEnter','presentationStoryFull'],'story buttons in the scenes group');
  await holdFull(page);
  const info=await page.evaluate(()=>FloorPlanPresentation.story);assert.equal(info.scenes,2);
  const starts=await page.evaluate(()=>{const S=FloorPlanPresentationStory.sequence([FloorPlanPresentationStory.SCENE_MS['plan-reveal'],FloorPlanPresentationStory.SCENE_MS['room-descent']]);return S.starts;});
