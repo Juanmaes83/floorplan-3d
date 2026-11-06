@@ -477,6 +477,7 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 .presentation-story-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:6px;min-height:52px;align-items:stretch}
 .presentation-story-actions .btn{min-width:0;font-size:13px;line-height:1.2;padding:4px 6px;overflow-wrap:anywhere}
 .presentation-story-actions .btn[hidden]{display:none}
+.presentation-story-actions:has(>#presentationStoryNext[hidden]){grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}
 .presentation-story-arrival{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}
 .presentation-story-arrival[hidden]{display:none}
 .presentation-story-arrival .btn{min-width:0;font-size:13px;line-height:1.2;padding:4px 6px}

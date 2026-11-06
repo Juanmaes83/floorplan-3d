@@ -775,6 +775,8 @@
  }
  function storyTitle(){
   const sc=story?.scenes[story.i];if(!sc||!plan)return;
+  // «Dibujo vivo» travels through the rooms from the overview: its header names the scene, the caption the room.
+  if(sc.kind==='living-drawing'){const text=tx('Dibujo vivo','Living drawing','活绘');title.textContent=text;title.title=text;return;}
   const t=(sc.kind==='room-descent'||sc.kind==='room-visit')&&story.p>0?plan.stops[sc.stop]:plan.stops[sceneHome(sc)];if(!t)return;
   const text=t.kind==='room'?roomName(t.roomId,t.levelId):tx('Vista general','Overview','总览');title.textContent=text;title.title=text;
  }
