@@ -18,7 +18,7 @@
    convention FloorPlanSolar uses (projectAzimuth = azimuth + northOffsetDeg). */
 (function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./exterior-core.js'):root.FloorPlanExterior);if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPresentationElevation=api;})(typeof self!=='undefined'?self:this,function(DefaultExterior){
  'use strict';
- const ELEVATION={sectorDeg:45,sampleAt:[.2,.5,.8],sampleMarginMm:50,minFacadeMm:500,minWallMm:1};
+ const ELEVATION={sectorDeg:45,sampleAt:[.2,.5,.8],sampleMarginMm:50,minFacadeMm:500,minWallMm:1,expressiveMinWidthRatio:.6};
  const CARDINALS=['norte','noreste','este','sureste','sur','suroeste','oeste','noroeste'];
  const LETTERS='ABCDEFGH';
  const REASONS={
@@ -71,13 +71,15 @@
    const ext=Exterior.derive(project);
    const indoor=(project.rooms||[]).filter(r=>Array.isArray(r.polygon)&&r.polygon.length>=3&&!['terrace','balcony'].includes(r.family));
    const openingsOf=new Map();for(const o of ext.openings||[]){if(!openingsOf.has(o.wallId))openingsOf.set(o.wallId,[]);openingsOf.get(o.wallId).push(o.openingId);}
+   // Real opening surface (width × height of the project's own windows and doors), for the default façade below.
+   const openingArea=new Map((project.openings||[]).map(o=>[o.id,finite(o.widthMm)&&finite(o.heightMm)&&o.widthMm>0&&o.heightMm>0?o.widthMm*o.heightMm:0]));
    for(const r of ext.walls||[]){
     if(r.status!=='facade')continue;
     const w=byId.get(r.wallId);if(!w)continue; // a demolished or invalid wall never comes back
     facadeCount++;
     const L=Math.hypot(w.end.x-w.start.x,w.end.y-w.start.y),n=L>=ELEVATION.minWallMm?outward(w,indoor):null;
     if(!n){unoriented.push({levelId,wallId:w.id});continue;}
-    walls.push({levelId,order,wallId:w.id,length:L,normal:n,a:[w.start.x+ox,w.start.y+oy],b:[w.end.x+ox,w.end.y+oy],bottom:base,top:base+(w.heightMm||defaultHeight),openings:openingsOf.get(w.id)||[]});
+    walls.push({levelId,order,wallId:w.id,length:L,normal:n,a:[w.start.x+ox,w.start.y+oy],b:[w.end.x+ox,w.end.y+oy],bottom:base,top:base+(w.heightMm||defaultHeight),openings:openingsOf.get(w.id)||[],openingAreaMm2:(openingsOf.get(w.id)||[]).reduce((a,id)=>a+(openingArea.get(id)||0),0)});
    }
   });
   if(!activeCount)return no('invalid-geometry');
@@ -105,7 +107,7 @@
    groups.push({sector:k,normalPlan:normal,tangentPlan:tangent,anglePlanDeg,
     wallRefs:refs,openingRefs:list.flatMap(w=>w.openings.map(openingId=>({levelId:w.levelId,openingId}))),
     centerMm:{x:z(tangent[0]*(tMin+tMax)/2+normal[0]*s),y:z(tangent[1]*(tMin+tMax)/2+normal[1]*s)},widthMm:width,baseMm:bottom,heightMm:top-bottom,
-    totalFacadeLengthMm:total,openingCount:list.reduce((n,w)=>n+w.openings.length,0),
+    totalFacadeLengthMm:total,openingCount:list.reduce((n,w)=>n+w.openings.length,0),openingAreaMm2:list.reduce((a,w)=>a+w.openingAreaMm2,0),
     frame:{centerMm:{x:z(tangent[0]*fc+normal[0]*fn),y:z(tangent[1]*fc+normal[1]*fn)},widthMm:Math.max(...et)-Math.min(...et),depthMm:Math.max(...en)-Math.min(...en),baseMm:envelope.bottomMm,heightMm:envelope.heightMm},
     levels:[...new Set(list.map(w=>w.levelId))]});
   }
@@ -114,8 +116,17 @@
    const letter=LETTERS[i],cardinal=north===null?null:CARDINALS[Math.round(wrap(g.anglePlanDeg-north)/45)%8];
    return {id:`facade-${letter}`,letter,...g,trueAzimuthDeg:north===null?null:wrap(g.anglePlanDeg-north),cardinal,label:`Fachada ${letter}${cardinal?` · ${cardinal}`:''}`};
   });
-  const best=[...candidates].sort((a,b)=>b.totalFacadeLengthMm-a.totalFacadeLengthMm||b.openingCount-a.openingCount||a.sector-b.sector)[0];
+  const best=defaultFacade(candidates);
   return {supported:true,reason:null,message:null,partial:unoriented.length>0||excluded.length>0,candidates,defaultId:best.id,envelope,unoriented,excluded,northOffsetDeg:north};
  }
- return {derive,angleOf,ELEVATION,CARDINALS,REASONS};
+ // The default façade is the most expressive one of the project itself, never an invented one: among the façades with
+ // at least one real opening and at least 60 % of the widest one's width, the largest real opening surface (width ×
+ // height of its windows and doors); then the most openings, the longest, the angular order. Without any such façade,
+ // the longest, as before. Every candidate stays selectable in the dialog.
+ function defaultFacade(candidates){
+  const widest=Math.max(...candidates.map(c=>c.widthMm)),expressive=candidates.filter(c=>c.openingCount>0&&c.openingAreaMm2>0&&c.widthMm>=ELEVATION.expressiveMinWidthRatio*widest);
+  if(expressive.length)return [...expressive].sort((a,b)=>b.openingAreaMm2-a.openingAreaMm2||b.openingCount-a.openingCount||b.totalFacadeLengthMm-a.totalFacadeLengthMm||a.sector-b.sector)[0];
+  return [...candidates].sort((a,b)=>b.totalFacadeLengthMm-a.totalFacadeLengthMm||b.openingCount-a.openingCount||a.sector-b.sector)[0];
+ }
+ return {derive,angleOf,defaultFacade,ELEVATION,CARDINALS,REASONS};
 });
