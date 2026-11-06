@@ -4,6 +4,12 @@
  const Core=FloorPlanPresentationCore,app=FloorPlanApp,tx=(es,en,zh)=>FloorPlanGuide.text([es,en,zh||es],LANG);
  const roomName=(roomId,levelId)=>roomDisplay((buildingConfig?.find(level=>level.levelId===levelId)?.project||app.project).rooms.find(room=>room.id===roomId));
  const el=(tag,text,parent,cls)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;parent?.append(node);return node;};
+ // The story redraws its controls on every frame of playback: a node marked quiet only changes when its text or an
+ // attribute really changes, so playback does not rewrite the DOM (nor re-announce live regions) sixty times a second.
+ const TEXT=Object.getOwnPropertyDescriptor(Node.prototype,'textContent'),SET_ATTR=Element.prototype.setAttribute;
+ const QUIET=new WeakSet(),quiet=node=>{if(!node||QUIET.has(node))return node;QUIET.add(node);
+  Object.defineProperty(node,'textContent',{configurable:true,get(){return TEXT.get.call(this);},set(v){v=v==null?'':String(v);if(TEXT.get.call(this)!==v)TEXT.set.call(this,v);}});
+  node.setAttribute=function(name,value){value=String(value);if(this.getAttribute(name)!==value)SET_ATTR.call(this,name,value);};return node;};
  const button=(text,parent,fn)=>{const node=el('button',text,parent,'btn');node.type='button';node.onclick=fn;return node;};
  const headerButton=button('',document.querySelector('header'),()=>open());headerButton.id='presentationBtn';headerButton.classList.add('presentation-entry');
  const config=el('dialog',undefined,document.body,'presentation-config');config.id='presentationConfig';config.setAttribute('aria-labelledby','presentationConfigTitle');
@@ -12,20 +18,32 @@
  const mapToggle=button('',map,()=>{mapOpen=!mapOpen;renderMinimap();});mapToggle.id='presentationMinimapToggle';
  const mapPanel=el('div',undefined,map,'presentation-minimap-panel');mapPanel.id='presentationMinimapPanel';
  const mapSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');mapSvg.setAttribute('role','group');mapPanel.append(mapSvg);
+ // The card is one stable, anchored panel (index.html, «Presentation card»): a fixed header, the story player (only while
+ // a story is open) and ONE scrollable body for everything that changes with the stop or the state (texts, navigation,
+ // tools, stops). Its size never depends on what the body shows, so the header, the player and the region left free for
+ // the camera (viewRegion) do not move between play, pause, scenes and stops.
  const card=el('div',undefined,overlay,'presentation-card');
  const top=el('div',undefined,card,'presentation-card-top');
- const title=el('h2',undefined,top),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
- const status=el('p',undefined,card,'presentation-status');status.setAttribute('role','status');
+ const body=el('div',undefined,card,'presentation-card-body');body.id='presentationCardBody';
+ const title=quiet(el('h2',undefined,top)),closeButton=button('',top,()=>stop());closeButton.id='presentationClose';
+ const status=el('p',undefined,body,'presentation-status');status.setAttribute('role','status');
  // In the card header (sticky on short screens), so the level of the view stays visible when the card scrolls.
  const levelLine=el('p',undefined,top,'presentation-level');levelLine.id='presentationLevel';levelLine.hidden=true;levelLine.setAttribute('aria-live','polite');
- const progress=el('p',undefined,card,'presentation-progress');progress.setAttribute('aria-live','polite');
- const info=el('p',undefined,card,'presentation-info');
- const sectionNote=el('p',undefined,card,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;
- const warning=el('p',undefined,card,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
- const controls=el('div',undefined,card,'presentation-controls');
+ const progress=el('p',undefined,body,'presentation-progress');progress.setAttribute('aria-live','polite');
+ const info=el('p',undefined,body,'presentation-info');
+ const sectionNote=el('p',undefined,body,'presentation-section');sectionNote.id='presentationSection';sectionNote.hidden=true;
+ const warning=el('p',undefined,body,'presentation-warning');warning.setAttribute('role','alert');warning.hidden=true;
+ const controls=el('div',undefined,body,'presentation-controls');
  // The client's navigation first; the professional's tools (image, light, batch…) in their own group. On a phone the
  // group is one scrollable row, so each tool added later does not make the card cover more of the home.
  const nav=el('div',undefined,controls,'presentation-nav'),tools=el('div',undefined,controls,'presentation-tools');tools.id='presentationTools';tools.setAttribute('role','group');
+ // The scenes the professional chose (the whole story, «Dibujo vivo», the section, the façade…) are a group of their
+ // own, right after the navigation: they are what the presentation tells, not technical tools, and they appear only
+ // where they can play (an overview), so a presentation without scenes is unchanged.
+ // Scenes and tools share one row container: stacked on a desktop card; on a phone a single scrollable row, as the
+ // tools were alone, so choosing scenes never makes the card taller (nor the camera's free region smaller).
+ const scenesGroup=el('div',undefined,null,'presentation-scenes');scenesGroup.id='presentationScenes';scenesGroup.setAttribute('role','group');
+ const actionsRow=el('div',undefined,controls,'presentation-actions');actionsRow.append(scenesGroup,tools);
  const previous=button('',nav,()=>go(index-1)),next=button('',nav,()=>go(index+1));
  const captureButton=button('',tools,()=>capture());captureButton.id='presentationCapture';
  const shareButton=button('',tools,()=>share());shareButton.id='presentationShare';
@@ -37,10 +55,10 @@
  const routeButton=button('',tools,()=>{routeCurrent();});routeButton.id='presentationRoute';
  const batchButton=button('',tools,()=>startBatch());batchButton.id='presentationBatch';
  const cancelBatchButton=button('',tools,()=>cancelBatch());cancelBatchButton.id='presentationBatchCancel';cancelBatchButton.hidden=true;
- const batchStatus=el('p',undefined,card,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
- const routeStatus=el('p',undefined,card,'presentation-status');routeStatus.id='presentationRouteStatus';routeStatus.setAttribute('role','status');routeStatus.setAttribute('aria-live','polite');routeStatus.hidden=true;
+ const batchStatus=el('p',undefined,body,'presentation-status');batchStatus.id='presentationBatchStatus';batchStatus.setAttribute('role','status');batchStatus.setAttribute('aria-live','polite');batchStatus.hidden=true;
+ const routeStatus=el('p',undefined,body,'presentation-status');routeStatus.id='presentationRouteStatus';routeStatus.setAttribute('role','status');routeStatus.setAttribute('aria-live','polite');routeStatus.hidden=true;
  const captureOptions={size:'1280',aspect:'view'};
- const stops=el('div',undefined,card,'presentation-stops');
+ const stops=el('div',undefined,body,'presentation-stops');
  let plan=null,entry=null,sceneState=null,index=0,epoch=0,movement=0,active=false,pendingStart=null,returnFocus=null,stopping=false,visited=new Set();
  // Focus goes back to the control that opened the presentation; if the guide has since moved the entry (one
  // presentation entry at a time), to the presentation entry that is visible now, never to an unrelated control.
@@ -510,6 +528,20 @@
  // Plan → walls rising → lens opening → the existing overview → the presentation as it was. The narrative state is
  // f(p) (FloorPlanPresentationStory); the slider and the buttons only choose p, so going back is the same path.
  const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ // The scene options are one group with a heading and one shortcut: «Usar escenas sugeridas» turns on the scenes this
+ // project can show (from the plan, the section and its visit, the façade, the axonometric view). Each stays an
+ // explicit, reversible choice; nothing is saved and the default (all off) does not change. «Dibujo vivo» (Hybrid V2,
+ // approved) is the first option of the group, in plain sight, and stays opt-in like its «Ambientación sugerida».
+ function scenesHeader(parent){
+  const head=el('div',undefined,parent,'presentation-scenes-head');
+  el('h3',tx('Historia y escenas','Story and scenes','故事与场景'),head);
+  const suggest=button(tx('Usar escenas sugeridas','Use suggested scenes','使用推荐场景'),head,()=>{
+   const on=[];for(const id of ['presentationStoryOption','presentationSectionOption','presentationVisitOption','presentationElevationOption','presentationAxonCompact']){
+    const input=config.querySelector('#'+id);if(input&&!input.disabled&&!input.checked){input.click();}if(input?.checked)on.push(input.closest('label')?.textContent.trim()||id);}
+   note.textContent=on.length?tx(`Activadas: ${on.join(' · ')}`,`On: ${on.join(' · ')}`,`已开启：${on.join(' · ')}`):'';});
+  suggest.id='presentationSuggestedScenes';
+  const note=el('p','',head,'presentation-scenes-note');note.id='presentationSuggestedNote';note.setAttribute('role','status');
+ }
  function storyOption(parent){
   storyChosen=false;
   const box=el('div',undefined,parent,'presentation-story-option');
@@ -645,11 +677,12 @@
  // starts from (descent)}. Entering a scene ends the previous narrative and begins the next on the same scene graph.
  function storyControls(){
   if(storyUi)return storyUi;
-  const panel=el('div',undefined,null,'presentation-story');panel.id='presentationStory';panel.setAttribute('role','group');panel.hidden=true;card.insertBefore(panel,controls);
+  const panel=el('div',undefined,null,'presentation-story');panel.id='presentationStory';panel.setAttribute('role','group');panel.hidden=true;card.insertBefore(panel,body);
   const counter=el('p',undefined,panel,'presentation-story-counter');counter.id='presentationStoryCounter';counter.hidden=true;
   const caption=el('p',undefined,panel,'presentation-story-caption');caption.id='presentationStoryCaption';caption.setAttribute('aria-live','polite');
   const slider=el('input',undefined,panel,'presentation-story-slider');slider.type='range';slider.min='0';slider.max='100';slider.step='1';slider.id='presentationStorySlider';
   slider.oninput=()=>{if(!story)return;const P=Number(slider.value)/(story.scenes.length>1?1000:100);pauseStory();seekStory(P);};
+  // Transport: always the same three slots (previous · play/pause · next), so the play button never moves.
   const row=el('div',undefined,panel,'presentation-story-actions');
   // Single scene: back to its start (the plan, or the overview for a descent, which then hands over to that stop).
   // Several scenes: the start of this scene, or of the previous one when already there.
@@ -662,21 +695,26 @@
    else{const run=story;playStory(1).then(done=>{if(done&&!endsInVisit(run))finishStory();});}});play.id='presentationStoryPlay';play.classList.add('primary');
   const nextButton=button('',row,()=>{const run=story;if(!run)return;playStory(nextStart(run));});nextButton.id='presentationStoryNext';nextButton.hidden=true;
   // Section → Spatial Visit V1: on arrival, hand over to «Recorrer» at the same pose, or go back to the section.
-  const visitWalk=button('',row,()=>walkFromVisit());visitWalk.id='presentationVisitWalk';visitWalk.hidden=true;visitWalk.classList.add('primary');
-  const visitSection=button('',row,()=>backToSection());visitSection.id='presentationVisitSection';visitSection.hidden=true;
-  const replay=button('',tools,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
-  const enter=button('',tools,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,[{kind:'room-descent',stop:to,from:index}],{from:0,to:1});});enter.id='presentationStoryEnter';enter.hidden=true;
+  // Arrival actions get their own row under the transport, so they never reflow it.
+  const arrival=el('div',undefined,panel,'presentation-story-arrival');arrival.id='presentationStoryArrival';arrival.hidden=true;
+  const visitWalk=button('',arrival,()=>walkFromVisit());visitWalk.id='presentationVisitWalk';visitWalk.hidden=true;visitWalk.classList.add('primary');
+  const visitSection=button('',arrival,()=>backToSection());visitSection.id='presentationVisitSection';visitSection.hidden=true;
+  const replay=button('',scenesGroup,()=>{openStory(epoch,[{kind:'plan-reveal',stop:index}],{from:1,to:0});});replay.id='presentationStoryReplay';replay.hidden=true;
+  const enter=button('',scenesGroup,()=>{const to=nextRoomIndex();if(to!==null)openStory(epoch,[{kind:'room-descent',stop:to,from:index}],{from:0,to:1});});enter.id='presentationStoryEnter';enter.hidden=true;
   // With reduced motion the story waits at its start, as the 1a chapter: scene buttons and «Reproducir historia» jump.
-  const full=button('',tools,()=>{const scenes=fullStory();if(scenes.length>(frozenTemplate?0:1))openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
+  const full=button('',scenesGroup,()=>{const scenes=fullStory();if(scenes.length>(frozenTemplate?0:1))openStory(epoch,scenes,{from:0,to:reducedMotion()?null:1});});full.id='presentationStoryFull';full.hidden=true;
   // FT3D-3: only when the section was chosen, so a presentation without it keeps exactly its tools.
-  let section=null;if(sectionEnabled){section=button('',tools,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
+  let section=null;if(sectionEnabled){section=button('',scenesGroup,()=>{if(sectionAt(plan?.stops[index]))openStory(epoch,[{kind:'section-open',stop:index}],{from:0,to:reducedMotion()?null:1});});section.id='presentationSectionPlay';section.hidden=true;}
   // FT3D-4: likewise only when the façade was chosen; it plays the façade scene on the same player.
-  let elevation=null;if(elevationEnabled){elevation=button('',tools,()=>{if(elevationAt(plan?.stops[index]))openStory(epoch,[{kind:'elevation-open',stop:index}],{from:0,to:reducedMotion()?null:1});});elevation.id='presentationElevationPlay';elevation.hidden=true;}
+  let elevation=null;if(elevationEnabled){elevation=button('',scenesGroup,()=>{if(elevationAt(plan?.stops[index]))openStory(epoch,[{kind:'elevation-open',stop:index}],{from:0,to:reducedMotion()?null:1});});elevation.id='presentationElevationPlay';elevation.hidden=true;}
   // FT3D-5: likewise only when a reading of the building was chosen; the same scene the whole story inserts.
-  let axon=null;if(axonEnabled){axon=button('',tools,()=>{const kind=axonKind();if(kind&&axonAt(plan?.stops[index]))openStory(epoch,[{kind,stop:index}],{from:0,to:reducedMotion()?null:1});});axon.id='presentationAxonPlay';axon.hidden=true;}
+  let axon=null;if(axonEnabled){axon=button('',scenesGroup,()=>{const kind=axonKind();if(kind&&axonAt(plan?.stops[index]))openStory(epoch,[{kind,stop:index}],{from:0,to:reducedMotion()?null:1});});axon.id='presentationAxonPlay';axon.hidden=true;}
   // Hybrid V2: replay «Dibujo vivo» from an overview of the presentation.
-  let living=null;if(livingEnabled){living=button('',tools,()=>{if(livingAt(plan?.stops[index]))openStory(epoch,[{kind:'living-drawing',stop:index}],{from:0,to:reducedMotion()?null:1});});living.id='presentationLivingPlay';living.hidden=true;}
-  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,visitWalk,visitSection,living};return storyUi;
+  let living=null;if(livingEnabled){living=button('',scenesGroup,()=>{if(livingAt(plan?.stops[index]))openStory(epoch,[{kind:'living-drawing',stop:index}],{from:0,to:reducedMotion()?null:1});});living.id='presentationLivingPlay';living.hidden=true;scenesGroup.prepend(living);}
+  // While the story plays the body keeps only this line: the stops and tools come back on pause, in the same place.
+  const hint=el('p',undefined,null,'presentation-playing-hint');hint.id='presentationPlayingHint';body.prepend(hint);
+  [panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,visitWalk,visitSection,living,hint].forEach(quiet);
+  storyUi={panel,counter,caption,slider,planButton,play,nextButton,replay,enter,full,section,elevation,axon,visitWalk,visitSection,arrival,living,hint};return storyUi;
  }
  // FT3D-1b: the room after an overview on the same level, the one «Siguiente →» would go to.
  function nextRoomIndex(){const a=plan?.stops[index],b=plan?.stops[index+1];return a?.kind==='overview'&&b?.kind==='room'&&b.levelId===a.levelId?index+1:null;}
@@ -738,6 +776,15 @@
   const scenes=fullStory(),i=scenes.findIndex(sc=>sc.kind==='section-open');if(i<0)return;
   const seq=FloorPlanPresentationStory.sequence(scenes.map(sc=>FloorPlanPresentationStory.SCENE_MS[sc.kind]));openStory(epoch,scenes,{from:seq.at(i,0),to:null});
  }
+ function storyTitle(){
+  const sc=story?.scenes[story.i];if(!sc||!plan)return;
+  // «Dibujo vivo» travels through the rooms from the overview: its header names the scene, the caption the room.
+  // Section, façade and axonometry leave the overview too: the header names the view on screen, not the stop behind it.
+  const scene={'living-drawing':['Dibujo vivo','Living drawing','活绘'],'section-open':['Sección visual','Visual section','可视剖面'],'elevation-open':['Fachada visual','Visual façade','可视立面'],'axon-open':['Axonometría','Axonometric view','轴测图']}[sc.kind];
+  if(scene&&(sc.kind==='living-drawing'||story.p>0)){const text=tx(...scene);title.textContent=text;title.title=text;return;}
+  const t=(sc.kind==='room-descent'||sc.kind==='room-visit')&&story.p>0?plan.stops[sc.stop]:plan.stops[sceneHome(sc)];if(!t)return;
+  const text=t.kind==='room'?roomName(t.roomId,t.levelId):tx('Vista general','Overview','总览');title.textContent=text;title.title=text;
+ }
  function drawStory(){
   if(!storyUi)return;
   const u=storyUi,on=!!story;
@@ -759,8 +806,16 @@
   if(u.axon){const kind=axonKind();u.axon.textContent=kind==='exploded-levels-open'?tx('Ver despiece','See the breakdown','查看拆解'):tx('Ver axonometría','See the axonometric view','查看轴测图');
    u.axon.hidden=!axonEnabled||on||!plan||!axonAt(plan.stops[index]);u.axon.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
   if(u.living){u.living.textContent=tx('Ver dibujo vivo','See the living drawing','观看活绘');u.living.hidden=!livingEnabled||on||!plan||!livingAt(plan.stops[index]);u.living.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running';}
-  u.panel.hidden=!on;if(!on)return;
+  u.panel.hidden=!on;if(!on){if('story' in overlay.dataset)delete overlay.dataset.story;return;}
   const multi=story.scenes.length>1,sc=story.scenes[story.i],p=story.p;
+  // One explicit UI state for the whole card (index.html styles it): playing shows only the player; paused and the end
+  // bring the stops and tools back in the body, below the player, without moving it.
+  const ui=story.playing?'playing':story.P>=1?'end':'paused';if(overlay.dataset.story!==ui)overlay.dataset.story=ui;
+  u.hint.textContent=tx('Pausa la historia para ver las vistas y las herramientas.','Pause the story to see the views and tools.','暂停故事以查看视图和工具。');
+  u.arrival.hidden=u.visitWalk.hidden&&u.visitSection.hidden;
+  // The header names what is on screen: the room once a descent or a visit has entered it (it used to keep saying
+  // «Vista general» inside the room).
+  storyTitle();
   u.counter.hidden=!multi;u.nextButton.hidden=!multi;
   if(multi){const lvl=isBuildingPlan()?` · ${plan.stops[sc.stop].levelName}`:'';u.counter.textContent=tx(`Historia · escena ${story.i+1} de ${story.scenes.length}${lvl}`,`Story · scene ${story.i+1} of ${story.scenes.length}${lvl}`,`故事 · 第 ${story.i+1} / ${story.scenes.length} 幕${lvl}`);}
   let caption;
@@ -848,7 +903,7 @@
   const target=sc.target||{levelId:plan.stops[sc.stop]?.levelId??null};
   if(!templateFailures.some(f=>f.capability===capability&&f.target?.levelId===target.levelId))templateFailures.push({capability,target,reason:'adapter-failed'});
   const result=Templates.runtimeFailure(frozenTemplate,templateFailures);(run.failed||(run.failed=new Set())).add(run.i);
-  if(!templateRuntimeNote){templateRuntimeNote=el('p',undefined,card,'presentation-warning');templateRuntimeNote.id='presentationTemplateRuntimeWarning';templateRuntimeNote.setAttribute('role','alert');}
+  if(!templateRuntimeNote){templateRuntimeNote=el('p',undefined,body,'presentation-warning');templateRuntimeNote.id='presentationTemplateRuntimeWarning';templateRuntimeNote.setAttribute('role','alert');}
   templateRuntimeNote.textContent=result.warnings.map(w=>FloorPlanPresentationTemplatesUI.warningText(w,templateSnapshot)).join(' ');
   if(result.action==='close'){pauseStory();toast(templateRuntimeNote.textContent,6000);setTimeout(()=>stop(),0);return false;}
   const home=plan.stops.findIndex(s=>s.kind==='overview'&&(s.levelId??null)===activeLevelId());
@@ -917,13 +972,13 @@
   const to=at>=1?sceneEnd(run.scenes.at(-1)):run.scenes[0].kind==='room-descent'||run.scenes[0].kind==='room-visit'?run.scenes[0].from:['section-open','elevation-open',...AXON_KINDS].includes(run.scenes[0].kind)?run.scenes[0].stop:null;if(to===null)return;
   await seekStory(at);if(story!==run)return;closeStory();await go(to);}
  // The chapter's controls leave with the presentation: the next one starts as if the chapter never existed.
- function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi=null;}livingEnabled=false;}
+ function disposeStory(){ambienceEnabled=false;storyEnabled=false;sectionEnabled=false;visitEnabled=false;visitChosen=false;visitFallback=null;elevationEnabled=false;elevationSolar=null;axonEnabled=false;axonMode='off';axonDescriptor=null;frozenTemplate=null;templateMaterialized=null;templateFailures=[];templateRuntimeNote?.remove();templateRuntimeNote=null;if(storyUi){storyUi.panel.remove();storyUi.replay.remove();storyUi.enter.remove();storyUi.full.remove();storyUi.section?.remove();storyUi.elevation?.remove();storyUi.axon?.remove();storyUi.living?.remove();storyUi.hint.remove();storyUi=null;}delete overlay.dataset.story;livingEnabled=false;}
  function closeStory(){clearFacadeMarks();if(!story)return;pauseStory();story=null;window.View3D?.presentationStoryEnd?.({keepPose:true});drawStory();updateCapture();}
  function draw(){
   territoryButton.hidden=!(window.FloorPlanBuildingUI?.site||app.project.site)?.buildingPlacement;
   headerButton.textContent=tx('Presentar mi vivienda','Present my home','展示我的住宅');
   closeButton.textContent=tx('Volver a editar','Return to editor','返回编辑');
-  tools.setAttribute('aria-label',tx('Herramientas de la presentación','Presentation tools','演示工具'));previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
+  tools.setAttribute('aria-label',tx('Herramientas de la presentación','Presentation tools','演示工具'));scenesGroup.setAttribute('aria-label',tx('Escenas de la presentación','Presentation scenes','展示场景'));previous.textContent=tx('← Anterior','← Previous','← 上一个');next.textContent=tx('Siguiente →','Next →','下一个 →');
   materialButton.textContent=window.View3D?.surfaceQuality==='enhanced'?tx('Material: detalle','Material: detail','材质：细节'):tx('Material: básico','Material: basic','材质：基础');
   materialButton.setAttribute('aria-pressed',String(window.View3D?.surfaceQuality==='enhanced'));
   materialButton.disabled=batchActive||window.View3D?.presentationRouteInfo?.status==='running';
@@ -941,7 +996,7 @@
   routeButton.disabled=batchActive||overlay.dataset.moving==='true'||window.View3D?.presentationRouteInfo?.status==='running'||window.View3D?.presentationRevealInfo?.status==='running';
   drawStory();
   if(!plan)return;
-  const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');title.title=title.textContent;
+  const stop=plan.stops[index];title.textContent=stop.kind==='room'?roomName(stop.roomId,stop.levelId):tx('Vista general','Overview','总览');title.title=title.textContent;if(story)storyTitle();
   window.FloorPlanBrandUI?.decorate(card,brandSnap,{index,count:plan.stops.length,kind:stop.kind});
   // Building: the level of every view is named; the first view of a level says that the level changes.
   levelLine.hidden=!isBuildingPlan();
@@ -982,9 +1037,9 @@
   const current=stops.querySelectorAll('button')[index];
   if(current&&matchMedia('(max-height: 500px), (max-width: 600px)').matches){
    if(stops.scrollWidth>stops.clientWidth){const left=current.getBoundingClientRect().left-stops.getBoundingClientRect().left+stops.scrollLeft,right=left+current.offsetWidth;if(left<stops.scrollLeft)stops.scrollLeft=left;else if(right>stops.scrollLeft+stops.clientWidth)stops.scrollLeft=right-stops.clientWidth;}
-   // A short card scrolls by itself (its header with the close button is sticky): bring the stops row into it.
-   // Kept in view as the card content changes, but never during a batch, whose controls must stay put.
-   if(!batchActive&&matchMedia('(max-height: 500px)').matches&&card.scrollHeight>card.clientHeight){const c=card.getBoundingClientRect(),r=stops.getBoundingClientRect();if(r.bottom>c.bottom)card.scrollTop+=r.bottom-c.bottom+4;}
+   // A short card scrolls its body (the header never moves): bring the stops row into it.
+   // Kept in view as the body content changes, but never during a batch, whose controls must stay put.
+   if(!batchActive&&matchMedia('(max-height: 500px)').matches&&body.scrollHeight>body.clientHeight){const c=body.getBoundingClientRect(),r=stops.getBoundingClientRect();if(r.bottom>c.bottom)body.scrollTop+=r.bottom-c.bottom+4;}
   }
   if(active&&overlay.dataset.moving!=='true')renderMinimap();
  }
@@ -1030,11 +1085,12 @@
    else if(result.changed)configMessage.textContent=tx(result.missing?`El plano cambió: ${result.missing} estancia(s) ya no existen. Revisa la selección.`:'El plano cambió. Las vistas se calcularán de nuevo.','The layout changed. Review the room selection; views will be recalculated.','布局已更改。请检查房间选择；视图将重新计算。');
    else configMessage.textContent=tx('Selecciona y ordena las estancias. La vista general va primero.','Select and order rooms. Overview comes first.','选择并排序房间。总览始终在前。');
    roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias','Rooms','房间'));
+   scenesHeader(config);
+   livingDrawingOption(config);
    storyOption(config);
    sectionOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
    elevationOption(config,[{levelId:activeLevelId(),project:app.project,geometry:app.geometry}]);
    axonOption(config,[{levelId:activeLevelId(),name:app.project.name,project:app.project,geometry:app.geometry}]);
-   livingDrawingOption(config);
    window.FloorPlanBrandUI?.configFields(config);
    const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
    button(tx('Cancelar','Cancel','取消'),row,()=>config.close());
@@ -1065,11 +1121,12 @@
    :buildingConfig.some(l=>l.message==='changed')?tx('El plano cambió. Revisa la selección de cada planta.','The layout changed. Review the selection of each level.','布局已更改。请检查各楼层的选择。')
    :tx('Selecciona y ordena las estancias de cada planta. Las plantas se presentan en orden, de abajo arriba.','Select and order the rooms of each level. Levels are presented from the bottom up.','选择并排序各楼层的房间。');
   roomList=el('div',undefined,config,'presentation-room-list');roomList.setAttribute('role','group');roomList.setAttribute('aria-label',tx('Estancias por planta','Rooms by level','按楼层的房间'));
+  scenesHeader(config);
+  livingDrawingOption(config);
   storyOption(config);
   sectionOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm})));
   elevationOption(config,levels.map(l=>({levelId:l.levelId,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
   axonOption(config,levels.map(l=>({levelId:l.levelId,name:l.name,order:l.order,project:l.project,geometry:l.geometry,offsetMm:l.offsetMm,elevationMm:l.elevationMm})));
-  livingDrawingOption(config);
   window.FloorPlanBrandUI?.configFields(config);
   const row=el('div',undefined,config,'presentation-config-actions');startButton=button(tx('Iniciar presentación','Start presentation','开始展示'),row,()=>{pendingStart=start();pendingStart.finally(()=>{pendingStart=null;});});
   button(tx('Cancelar','Cancel','取消'),row,()=>config.close());

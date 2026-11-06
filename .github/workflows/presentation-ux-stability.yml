@@ -1,0 +1,150 @@
+# RUBIK SOTA E2: Presentation UX stability gate (owner incident video 2026-11-06). The card, its header and the story
+# player must not move or resize during a whole story, only the player is shown while it plays, and Hybrid V2
+# «Dibujo vivo» stays in plain sight and keeps the same stable card. One job per journey so they run in parallel.
+name: E2 Presentation UX stability
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'index.html'
+      - 'js/presentation-ui.js'
+      - 'js/brand-ui.js'
+      - 'tests/presentation-ux-stability.browser.test.cjs'
+      - '.github/workflows/presentation-ux-stability.yml'
+      - 'docs/qa/presentation-ux/**'
+permissions:
+  contents: read
+jobs:
+  ux-stability-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        journey:
+          - 'whole story 1440x900'
+          - 'whole story 1280x800$'
+          - 'whole story 390x844$'
+          - 'whole story 844x390'
+          - 'reduced motion'
+          - 'Dibujo vivo» in the new panel 1280x800'
+          - 'Dibujo vivo» in the new panel 390x844'
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+      UX_ARTIFACTS: qa-results/presentation-ux
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/ux-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — stable card, UI states, Hybrid V2 and Section (${{ matrix.journey }})
+        run: node --test --test-concurrency=1 --test-name-pattern="${{ matrix.journey }}" tests/presentation-ux-stability.browser.test.cjs
+      - name: Artifact name
+        if: always()
+        run: echo "ART=$(echo '${{ matrix.journey }}' | tr -c 'A-Za-z0-9' '-')" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: presentation-ux-${{ env.ART }}-${{ env.TESTED_SHA }}
+          path: qa-results/presentation-ux/
+          if-no-files-found: ignore
+
+  # Every Presentation browser suite that no other workflow runs, against the same SHA: the card, its states and the
+  # scenes group must not change what they verify (framing, stops, tools, batch, route, light, reveal, minimap,
+  # section, façade, axonometry, visit, buildings, brand, delivery image).
+  presentation-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - presentation
+          - presentation-framing
+          - presentation-overview
+          - presentation-minimap
+          - presentation-light
+          - presentation-contact
+          - presentation-reveal
+          - presentation-route
+          - presentation-batch
+          - presentation-section
+          - presentation-visit
+          - presentation-elevation
+          - presentation-axon
+          - building-presentation
+          - brand
+          - material-detail
+          - delivery-image
+    env:
+      TESTED_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$TESTED_SHA"
+          npm install --prefix "$RUNNER_TEMP/ux-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Real app — ${{ matrix.suite }}
+        run: node --test --test-concurrency=1 tests/${{ matrix.suite }}.browser.test.cjs
+
+  # The same suites on the PR's BASE (master), in the same runner type: a failure that also happens here is not this
+  # PR's. These suites never ran in CI before this PR, so this is their first CI baseline.
+  presentation-regressions-base:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - presentation
+          - presentation-reveal
+          - presentation-route
+          - presentation-light
+          - presentation-minimap
+          - presentation-contact
+          - presentation-batch
+          - presentation-visit
+          - presentation-visit-handover
+          - brand
+          - material-detail
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Pinned Playwright and local Three
+        run: |
+          test "$(git rev-parse HEAD)" = "$BASE_SHA"
+          npm install --prefix "$RUNNER_TEMP/ux-tools" --no-save playwright@1.62.1
+          node "$RUNNER_TEMP/ux-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          test -f "$GITHUB_WORKSPACE/vendor/three/build/three.module.js"
+          echo "NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules" >> "$GITHUB_ENV"
+          echo "THREE_LOCAL_DIR=$GITHUB_WORKSPACE/vendor/three" >> "$GITHUB_ENV"
+          echo "CHROME=$(NODE_PATH=$RUNNER_TEMP/ux-tools/node_modules node -e 'console.log(require("playwright").chromium.executablePath())')" >> "$GITHUB_ENV"
+      - name: Base (master) — ${{ matrix.suite }}
+        run: node --test --test-concurrency=1 tests/${{ matrix.suite }}.browser.test.cjs
