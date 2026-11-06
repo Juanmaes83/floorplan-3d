@@ -51,7 +51,8 @@ function clean(r,label){assert.equal(r.drawing,false,label+': drawing layer rele
  assert.equal(r.renderer.renderTarget,null,label+': renders to the screen');assert.equal(r.renderer.overrideMaterial,false,label+': no override material');assert.equal(r.renderer.clippingPlanes,0,label+': no global clipping');}
 
 test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of materials, camera or renderer',{skip,timeout:3600000},async t=>{
- const context=await browser.newContext({viewport:{width:1280,height:800},reducedMotion:'no-preference'});t.after(()=>context.close());
+ // Reduced motion, as the Section and Hybrid V1 suites: every scene waits at its start (no race with autoplay).
+ const context=await browser.newContext({viewport:{width:1280,height:800},reducedMotion:'reduce'});t.after(()=>context.close());
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push('console: '+m.text());});page.setDefaultTimeout(300000);
  await page.route('https://cdn.jsdelivr.net/npm/three@0.160.0/**',async route=>{const target=route.request().url();if(!cache.has(target))cache.set(target,three(target));await route.fulfill({contentType:'text/javascript',headers:{'access-control-allow-origin':'*'},body:await cache.get(target)});});
  await page.goto(url);await page.waitForFunction(()=>window.FloorPlanPresentation&&window.View3D?.presentationStoryBegin,null,{timeout:90000});
