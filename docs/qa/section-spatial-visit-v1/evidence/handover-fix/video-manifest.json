@@ -1,0 +1,127 @@
+{
+ "head": "41ddf3539539cbf1e3c8abd995f3f5cc6b8950bf",
+ "chromium": "141.0.7390.37",
+ "frames": [
+  {
+   "file": "s0000.png",
+   "hold": 2,
+   "label": "options"
+  },
+  {
+   "file": "s0001.png",
+   "hold": 1.5,
+   "label": "overview"
+  },
+  {
+   "file": "s0002.png",
+   "hold": 0.25,
+   "label": "story"
+  },
+  {
+   "file": "s0003.png",
+   "hold": 0.25,
+   "label": "story"
+  },
+  {
+   "file": "s0004.png",
+   "hold": 0.25,
+   "label": "story"
+  },
+  {
+   "file": "s0005.png",
+   "hold": 0.25,
+   "label": "story"
+  },
+  {
+   "file": "s0006.png",
+   "hold": 0.25,
+   "label": "story"
+  },
+  {
+   "file": "s0007.png",
+   "hold": 3,
+   "label": "arrival + 3 s: still inside, «Explorar desde aquí»"
+  },
+  {
+   "file": "s0008.png",
+   "hold": 1.5,
+   "label": "hover"
+  },
+  {
+   "file": "s0009.png",
+   "hold": 2.5,
+   "label": "Recorrer at the same pose"
+  },
+  {
+   "file": "s0010.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0011.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0012.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0013.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0014.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0015.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0016.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0017.png",
+   "hold": 0.3,
+   "label": "walking"
+  },
+  {
+   "file": "s0018.png",
+   "hold": 1.2,
+   "label": "back"
+  },
+  {
+   "file": "s0019.png",
+   "hold": 2.5,
+   "label": "back in the presentation"
+  },
+  {
+   "file": "s0020.png",
+   "hold": 1.5,
+   "label": "arrival again"
+  },
+  {
+   "file": "s0021.png",
+   "hold": 1.5,
+   "label": "Recorrer"
+  },
+  {
+   "file": "s0022.png",
+   "hold": 1.2,
+   "label": "to the section"
+  },
+  {
+   "file": "s0023.png",
+   "hold": 3,
+   "label": "back to the section"
+  }
+ ],
+ "errors": []
+}

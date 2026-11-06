@@ -380,6 +380,13 @@ dialog::backdrop{background:#0006}dialog label{display:block;margin:12px 0}dialo
 .presentation-config-actions .btn:first-child{background:var(--accent);color:white}
 .presentation-overlay{position:absolute;inset:0;z-index:15;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding:12px}
 .presentation-overlay[hidden]{display:none}
+/* Section → Spatial Visit V1: while walking from the visit, the card steps aside for a compact bar (top centre). */
+.presentation-overlay[data-walking="true"] .presentation-card,.presentation-overlay[data-walking="true"] .presentation-minimap{display:none}
+.presentation-walkbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:3;pointer-events:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px);padding:8px 10px;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 30px #2b282433}
+.presentation-walkbar[hidden]{display:none}
+.presentation-walkbar-label{margin:0 4px;font-weight:700;font-size:14px}
+.presentation-walkbar .btn{min-height:44px;border:1px solid var(--line)}
+.presentation-visit-option{margin:6px 0 0 26px}
 .presentation-minimap{position:absolute;top:12px;left:12px;z-index:1;pointer-events:auto;width:min(220px,calc(100% - 24px));padding:7px;background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 30px #2b282433}
 .presentation-minimap[hidden],.presentation-minimap-panel[hidden]{display:none}
 .presentation-minimap .btn{border:1px solid var(--line);min-height:44px;width:100%}
@@ -2618,7 +2625,10 @@ function init(){
     else if (h?.room) window.select({kind:'room', id:h.room});
     else window.select(null);
   });
+  // A stage of 0 px (a layout being rebuilt, e.g. leaving the presentation) never becomes the camera's aspect: the
+  // camera keeps its last valid projection until the stage has a real size again.
   new ResizeObserver(() => {
+    if (!SW() || !SH()) return;
     renderer.setSize(SW(), SH()); labelRenderer.setSize(SW(), SH());
     camera.aspect = SW()/SH(); camera.updateProjectionMatrix();
   }).observe(stage);
@@ -4509,7 +4519,7 @@ function presentationRestore(state){
   Object.assign(opt,state.options);if(state.territoryLayers)territoryRenderer?.setLayers(state.territoryLayers);
   surfaceRenderer.setQuality(opt.surfaceQuality);
   camera.position.fromArray(state.position);orbit.target.fromArray(state.target);
-  camera.fov=state.fov;camera.aspect=SW()/Math.max(1,SH());camera.updateProjectionMatrix();
+  camera.fov=state.fov;if(SW()&&SH())camera.aspect=SW()/SH();camera.updateProjectionMatrix();
   if(opt.mode==='walk'){
     camera.quaternion.fromArray(state.quaternion);orbit.enabled=false;
     $('#walkOverlay').style.display='flex';$('#cross').style.display='none';
@@ -4518,7 +4528,18 @@ function presentationRestore(state){
   document.querySelectorAll('#toggles3d .btn').forEach(b=>b.classList.toggle('on',!!opt[b.dataset.t]));
   $('#sun').value=String(opt.hour);applyLight();sync(true);showLabels(opt.labels&&!roofG?.visible);
   state.doors.forEach((saved,i)=>{if(doors[i]){doors[i].open=saved.open;doors[i].cur=saved.cur;doors[i].pivot.rotation.y=saved.cur;}});
-  renderer.setSize(SW(),SH());labelRenderer.setSize(SW(),SH());
+  if(SW()&&SH()){renderer.setSize(SW(),SH());labelRenderer.setSize(SW(),SH());}
+}
+// Resolves once the stage has a real size and the camera and renderer match it (after a layout change such as leaving
+// the presentation); bounded so a hidden 3D view never blocks the caller.
+function viewportSettled(timeoutMs=3000){
+  const t0=performance.now();
+  let last='',same=0;
+  return new Promise(resolve=>{const check=()=>{const w=SW(),h=SH(),key=w+'x'+h;
+    same=w&&h&&key===last?same+1:0;last=key;
+    // Settled: the same real size on three consecutive frames (a layout rebuild passes through transient heights too).
+    if(same>=2){if(Math.abs(camera.aspect-w/h)>1e-9){camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);labelRenderer.setSize(w,h);}resolve(true);return;}
+    if(!active||performance.now()-t0>timeoutMs){resolve(false);return;}requestAnimationFrame(check);};check();});
 }
 function presentationInspect(){return active?{
   position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:orbit.target.toArray(),
@@ -4551,9 +4572,162 @@ function presentationRestorePose(state){
    restores it; nothing here edits the project, rebuilds geometry or adds a second model. The narrative ends exactly on
    the pose presentationGo computes for the same stop, so continuing to the presentation has no jump. */
 let storyRun=null,storyPlanStart=null;
+/* Section → Spatial Visit V1 (room-visit): the camera path is FloorPlanPresentationRoute's — the same plan and
+   choreography as presentationRoute (wall, window, low-door and furniture clearance), never a new spline. Only the
+   timing is new, and it is a pure Story narrative: seekable, reversible, pausable. While above the walls and going down
+   the cut stays horizontal (cutaway, no ceiling to cross); at eye height inside the room the cut returns to full height
+   once (walls, openings and ceiling close around the viewer). The route's doors are open for the visit and get their
+   state back when it ends. */
+const WALK_EYE=1.6;
+/* Hand-over to «Recorrer» (S5): the walk takes the camera exactly where the visit arrived (same position, yaw and pitch)
+   when that spot is clear for the walker; otherwise the walk's own start. Collisions, doors, keyboard, pointer lock,
+   joystick and the walk card are the walk's, untouched. presentationWalkEnd leaves the walk without the orbit's fly-back
+   (the presentation reframes its stop itself) and puts the presentation's wall cut back. */
+function presentationWalkFrom(){
+  if(!active||contextLost||anim||opt.mode==='walk')return {ok:false};
+  const pos=camera.position.clone(),q=camera.quaternion.clone(),clear=!blocked(pos.x,pos.z,.25);
+  endPresentationStory({keepPose:true});
+  setMode('walk');
+  if(clear){camera.position.set(pos.x,WALK_EYE,pos.z);camera.quaternion.copy(q);}
+  // The walk card speaks of this hand-over (from the room, not the entrance; no pointer to «Presentar mi vivienda»).
+  const t3=(es,en,zh)=>LANG==='en'?en:LANG==='zh'?zh:es;
+  $('#wo1').textContent=clear?t3('Visita libre a la altura de los ojos, desde esta estancia. No cambia nada del proyecto.','A free visit at eye level, from this room. Nothing in the project changes.','从此房间开始视线高度自由漫游，不会改变项目。'):t3('Visita libre a la altura de los ojos, desde la entrada (este punto no deja sitio para caminar). No cambia nada del proyecto.','A free visit at eye level, from the entrance (this spot leaves no room to walk). Nothing in the project changes.','从入户门开始视线高度自由漫游，不会改变项目。');
+  $('#wo4').hidden=true;
+  return {ok:true,keptPose:clear,position:camera.position.toArray()};
+}
+function presentationWalkEnd(){
+  if(!active||opt.mode!=='walk')return false;
+  walkCtl.unlock();stopTouchWalk();opt.mode='orbit';syncModeBtns();orbit.enabled=true;
+  $('#walkOverlay').style.display='none';$('#cross').style.display='none';syncHint3d();$('#wo4').hidden=false;syncWalkTexts();
+  if(presentationBaseCut!=null&&opt.cut!==presentationBaseCut)setPresentationCut(presentationBaseCut);
+  return true;
+}
+// The plan is computed once per geometry, room and screen layout: the availability check of the dialog/story and the
+// scene that then begins share it (a new geometry object — any edit, level or project change — invalidates it).
+const visitPlanCache=new WeakMap();
+// The visit's camera is centred on the whole screen, not on the region left free by the card: the hand-over to «Recorrer»
+// is full screen, and the (costly, ~1 s of JavaScript) choreography is then shared by the availability check and the
+// scene, so entering the scene has no hitch.
+function roomVisitPlan(roomId){
+  const key=`${roomId}|${SW()}x${SH()}`,region=undefined;let byGeo=visitPlanCache.get(geometry);
+  if(!byGeo){byGeo=new Map();visitPlanCache.set(geometry,byGeo);}
+  if(!byGeo.has(key))byGeo.set(key,computeVisitPlan(roomId,region));
+  return byGeo.get(key);
+}
+function computeVisitPlan(roomId,region){
+  const Route=window.FloorPlanPresentationRoute;if(!Route)return {ok:false,code:'no_route_module',reason:'Rutas no disponibles.'};
+  const aspect=SW()/Math.max(1,SH()),vfov=Math.min(72,Math.max(48,2*Math.atan(Math.tan(37*Math.PI/180)/aspect)*180/Math.PI)),hfovDeg=2*Math.atan(Math.tan(vfov*Math.PI/360)*aspect)*180/Math.PI;
+  const plan=Route.plan(project,geometry,roomId);
+  if(plan.kind!=='interior')return {ok:false,code:plan.code||plan.kind,reason:plan.reason||'Sin ruta interior.',plan};
+  const moves=Route.choreography(project,geometry,roomId,plan,{hfovDeg,vfovDeg:vfov,region});
+  if(!moves)return {ok:false,code:'no_moves',reason:'La ruta no tiene coreografía.',plan};
+  if(moves.readable===false)return {ok:false,code:'illegible',reason:'La ruta interior segura no ofrece una vista legible.',plan};
+  // The descent lands on the first route sample that lies inside a room and outside every doorway (no lintel above).
+  const inPoly=(poly,x,y)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+  const inRectP=(r,x,y,pad)=>{const dx=x-r.center[0],dy=y-r.center[1],c=Math.cos(r.angle),s=Math.sin(r.angle);return Math.abs(dx*c+dy*s)<r.spanMm/2+pad&&Math.abs(-dx*s+dy*c)<r.thickness/2+pad;};
+  // Landing: a short walk that shows the room and its access — the camera comes down in the space just before the
+  // destination (1.2–4 m of route before its door), then walks through the real doorway. A route sample counts only
+  // inside a room and clear of every doorway (no lintel above). Fallback: the destination's first such sample.
+  const S=moves.samples,dest=geometry.rooms.find(x=>x.id===roomId),landable=q=>geometry.rooms.some(r=>r.poly.length>=3&&inPoly(r.poly,q.x,q.y))&&!geometry.doors.some(d=>inRectP(d.rect,q.x,q.y,250));
+  const enter=S.findIndex(q=>inPoly(dest.poly,q.x,q.y)),at=i=>S[i].s??0;let k=-1;
+  // The reference point is where the route enters the destination; when the choreography stops at a doorway view before
+  // it (its samples never enter), the end of the samples (that doorway) is used.
+  const ref=enter>0?enter:enter<0?S.length-1:0;
+  // Among the candidates, the one farthest from any wall: the cut wall tops then never sweep past the lens while it
+  // comes down (composition), with the same validated route point (safety unchanged).
+  const walls=geometry.walls.filter(w=>w.status!=='demolished');
+  const wallGap=q=>Math.min(...walls.map(w=>{const dx=q.x-w.center[0],dy=q.y-w.center[1],c=Math.cos(w.angle),s=Math.sin(w.angle),u=Math.abs(dx*c+dy*s)-w.spanMm/2,v=Math.abs(-dx*s+dy*c)-w.thickness/2;return Math.hypot(Math.max(u,0),Math.max(v,0));}));
+  if(ref>0){let best=-1;for(let i=ref-1;i>=0;i--){const back=at(ref)-at(i);if(back<1200)continue;if(back>4000)break;if(!inPoly(dest.poly,S[i].x,S[i].y)&&landable(S[i])){const g=wallGap(S[i]);if(g>best){best=g;k=i;}}}}
+  // A narrow corridor before the door (less than 0.7 m from a wall everywhere) gives no clean descent: the camera then
+  // comes down inside the destination itself, on the clearest validated route point there; the door and the route stay
+  // readable from above (outline and minimap) while it approaches.
+  let inside=null;
+  if(k<0||wallGap(S[k])<700){const pts=(plan.path||[]).filter(q=>inPoly(dest.poly,q.x,q.y));let g=-1;for(const q of pts){const v=wallGap(q);if(v>g){g=v;inside=q;}}if(inside&&g<500)inside=null;}
+  if(k<0)k=S.findIndex((q,i)=>i>=Math.max(0,enter)&&landable(q));
+  if(k<0)k=S.findIndex(landable);
+  if(k<0||k>=S.length-1)return {ok:false,code:'no_landing',reason:'No hay un punto libre dentro de una estancia donde descender.',plan};
+  // Arrival inside the destination: the choreography may settle on a doorway view from the space before; the visit then
+  // goes on along the same validated route path (clearance already checked) until 0.9 m inside the room, from rest to
+  // rest, turning to the room's farthest corner — the pose handed over to «Recorrer» is in the room it names.
+  if(inside){
+    // Inside landing: hold at the landing point looking across the room to its farthest corner (the widest reading of
+    // the room: its furniture, window and depth together).
+    const things=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inPoly(dest.poly,o.position.x,o.position.y));
+    const far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-inside.x,p[1]-inside.y)>Math.hypot(b[0]-inside.x,b[1]-inside.y)?p:b,dest.poly[0]);
+    const aimAt=far;void things;
+    const yaw=Math.atan2(aimAt[1]-inside.y,aimAt[0]-inside.x);
+    return {ok:true,plan,moves,landing:-1,landingInside:true,vfov,samples:[{t:0,s:0,x:inside.x,y:inside.y,cameraYaw:yaw,cameraPitchDeg:12},{t:1.4,s:0,x:inside.x,y:inside.y,cameraYaw:yaw,cameraPitchDeg:10}],arrival:{yaw,pitchDeg:10},extended:0};
+  }
+  let samples=S.slice(k),arrival={yaw:moves.arrival.cameraYaw,pitchDeg:moves.arrival.cameraPitchDeg},extended=0;
+  const last=samples.at(-1);
+  if(!inPoly(dest.poly,last.x,last.y)&&plan.path?.length){
+    const path=plan.path;let j0=0,best=Infinity;path.forEach((q,i)=>{const d=Math.hypot(q.x-last.x,q.y-last.y);if(d<best){best=d;j0=i;}});
+    const ext=[{x:last.x,y:last.y}];let inside=-1,acc=0;
+    for(let i=j0+1;i<path.length;i++){const q=path[i],prev=ext.at(-1);acc+=Math.hypot(q.x-prev.x,q.y-prev.y);ext.push({x:q.x,y:q.y,s:acc});if(inPoly(dest.poly,q.x,q.y)&&inside<0)inside=acc;if(inside>=0&&acc-inside>=1300)break;}
+    const fin=ext.at(-1);
+    if(inside>=0&&inPoly(dest.poly,fin.x,fin.y)){
+      // The arrival view looks at what the room contains (its furniture), else at its farthest corner.
+      const L=acc,T=L/550+1.2,n=Math.max(8,Math.ceil(L/60)),far=dest.poly.reduce((b,p)=>Math.hypot(p[0]-fin.x,p[1]-fin.y)>Math.hypot(b[0]-fin.x,b[1]-fin.y)?p:b,dest.poly[0]);
+      const things=(project.objects||[]).filter(o=>o.position&&o.type!=='rug'&&inPoly(dest.poly,o.position.x,o.position.y)),aim=things.length?[things.reduce((a,o)=>a+o.position.x,0)/things.length,things.reduce((a,o)=>a+o.position.y,0)/things.length]:far;
+      const aimAt=Math.hypot(aim[0]-fin.x,aim[1]-fin.y)>900?aim:far;
+      const yEnd=Math.atan2(aimAt[1]-fin.y,aimAt[0]-fin.x),y0=last.cameraYaw??last.yaw,p0=last.cameraPitchDeg??last.pitchDeg;
+      // While crossing the doorway the camera looks where it walks; it turns to the room only once inside (last 45 %).
+      const pathYaw=d=>{const a=at(Math.max(0,d-120)),b=at(Math.min(L,d+480));return Math.atan2(b.y-a.y,b.x-a.x);};
+      const unwrap=(a,ref)=>ref+Math.atan2(Math.sin(a-ref),Math.cos(a-ref));
+      const sm=t=>t*t*(3-2*t),at=d=>{for(let i=1;i<ext.length;i++)if(ext[i].s>=d){const a=ext[i-1],b=ext[i],k=(d-(a.s||0))/Math.max(1e-9,b.s-(a.s||0));return {x:a.x+(b.x-a.x)*k,y:a.y+(b.y-a.y)*k};}return fin;};
+      // Walk: look where it walks (from the doorway view, eased). Turn: one direction and amplitude fixed when it starts,
+      // never re-decided per sample (a target almost behind would otherwise flip sides and spin the camera round).
+      const walkTo=.55,dWalk=L*sm(walkTo/.8);let prev=y0;const ws=[];
+      for(let m=0;m<=n;m++){const u=walkTo*m/n,d=L*sm(Math.min(1,u/.8)),wy=unwrap(pathYaw(d),prev),y=m===0?y0:u<.15?prev+(wy-prev)*.5:wy;prev=y;ws.push({u,d,y});}
+      const yTurn=prev,dTurn=Math.atan2(Math.sin(yEnd-yTurn),Math.cos(yEnd-yTurn)),turnT=Math.max(1.2,Math.abs(dTurn)*180/Math.PI/35*1.3),walkT=T;
+      for(const w of ws.slice(1)){const q=at(w.d);samples.push({t:last.t+walkT*w.u/walkTo*.75,s:(last.s||0)+w.d,x:q.x,y:q.y,cameraYaw:w.y,cameraPitchDeg:p0+(10-p0)*sm(w.u/walkTo)});}
+      const t1=samples.at(-1).t,m2=Math.max(8,Math.ceil(turnT*20));
+      for(let m=1;m<=m2;m++){const u=m/m2,d=dWalk+(L-dWalk)*sm(u),q=at(d);samples.push({t:t1+turnT*u,s:(last.s||0)+d,x:q.x,y:q.y,cameraYaw:yTurn+dTurn*sm(u),cameraPitchDeg:10});}
+      arrival={yaw:yEnd,pitchDeg:10};extended=Math.round(L);
+    }
+  }
+  if(!inPoly(dest.poly,samples.at(-1).x,samples.at(-1).y))return {ok:false,code:'outside_arrival',reason:'La ruta validada no llega a una posición libre dentro de la estancia.',plan};
+  return {ok:true,plan,moves,landing:k,vfov,samples,arrival,extended};
+}
+function beginRoomVisit(stop,view,aspect,startPose){
+  const r=roomVisitPlan(stop.roomId,view.region);if(!r.ok)throw Error(r.reason);
+  const fromPose=view.fromStop?.bounds?presentationStopPose(view.fromStop,aspect,view.fromRegion??view.region):null;
+  const start=fromPose?{position:fromPose.p.toArray(),target:fromPose.t.toArray(),fov:camera.fov}:startPose;
+  const S=r.samples,t0=S[0].t;
+  const samples=S.map(q=>({t:q.t-t0,x:wx(q.x),z:wz(q.y),yaw:q.cameraYaw??q.yaw,pitchDeg:q.cameraPitchDeg??q.pitchDeg}));
+  const fullTop=Math.max(project.defaults.wallHeightMm,...project.walls.map(w=>w.heightMm||0))/1000,tallest=Math.max(0,...project.objects.map(o=>M(o.size?.heightMm||0)));
+  // Eye height of «Recorrer» (1.6 m), so the hand-over never moves the horizon.
+  const above=Math.max(fullTop,tallest)+.8,eye=WALK_EYE;
+  // The part of the screen the presentation card covers: the visit's view is shifted so its subject sits in the free
+  // region (same offsets as the classic route), kept until the arrival, so the hand-over keeps the exact pose.
+  const reg=view.region&&view.region[2]-view.region[0]>.25&&view.region[3]-view.region[1]>.25?view.region:[0,0,1,1];
+  const asp=SW()/Math.max(1,SH()),tV=Math.tan(r.vfov*Math.PI/360),tH=tV*asp;
+  const yawOffset=-Math.atan(((reg[0]+reg[2])-1)*tH),pitchOffsetDeg=Math.atan((1-(reg[1]+reg[3]))*tV)*180/Math.PI;
+  const baseCut=presentationBaseCut??2.8,builtBase=baseCut===2.8?fullTop:Math.min(fullTop,baseCut);
+  const narrative=window.FloorPlanPresentationStory.create('room-visit',{start,samples,above,eye,walkFov:r.vfov,arrival:r.arrival,base:{near:camera.near,far:camera.far},view:{yawOffset,pitchOffsetDeg},walls:{base:builtBase,low:1.1,full:fullTop}});
+  const doorIds=[...(r.plan.doorIds||[])];
+  // Cut while approaching, going down and while the walls rise: just under the walls' top, so no ceiling exists yet
+  // (a ceiling is built only at a full-height cut); the ceiling appears above the viewer at the full-height rebuild.
+  return {narrative,roomId:stop.roomId,baseCut:presentationBaseCut,cutaway:Math.min(presentationBaseCut??2.8,fullTop-.01),fullTop,doorIds,doorsSaved:doors.map(d=>({id:d.id,open:d.open,cur:d.cur})),
+    route:{kind:r.plan.kind,code:r.plan.code,lengthMm:r.plan.lengthMm,doorIds,landing:r.landing,extendedMm:r.extended,points:r.plan.points.map(p=>({x:p.x,y:p.y}))},full:null};
+}
+function applyRoomVisit(v,st){
+  // The destination is named on the model itself while the camera goes to it: its real floor outline.
+  const mark=st.phase==='approach'||st.phase==='descend';if(mark&&!roomOutline)showRoomOutline(v.roomId);else if(!mark&&roomOutline&&st.phase!=='overview')clearRoomOutline();
+  const cut=st.fullHeight?2.8:v.cutaway;
+  if(opt.cut!==cut||v.full===null){setPresentationCut(cut);clearRoomOutline();}
+  // The walls' height is the narrative's: a scale of the walls as built at the current cut (as the room descent does).
+  if(archUp&&Number.isFinite(st.wallHeight)){const built=opt.cut===2.8?v.fullTop:Math.min(v.fullTop,opt.cut);archUp.scale.y=Math.max(.001,Math.min(1,st.wallHeight/built));storyRun.arch=archUp;}
+  if(v.full!==st.fullHeight||!doors.every(d=>!v.doorIds.includes(d.id)||d.open)){doors.forEach(d=>{if(v.doorIds.includes(d.id))d.open=true;});setWalkAids(!!st.fullHeight);v.full=!!st.fullHeight;}
+}
+function endRoomVisit(v){
+  setWalkAids(false);
+  if(opt.cut!==v.baseCut&&v.baseCut!=null)setPresentationCut(v.baseCut);
+  restoreRouteDoors(v.doorsSaved);
+}
 function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   if(!active||contextLost||anim||!stop?.bounds||!window.FloorPlanPresentationStory)throw Error('Narrativa no disponible.');
-  if(kind==='room-descent'&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
+  if((kind==='room-descent'||kind==='room-visit')&&(stop.kind!=='room'||!stop.roomId))throw Error('Narrativa no disponible.');
   if(kind==='section-open'&&(stop.kind!=='overview'||!window.FloorPlanPresentationSection))throw Error('Narrativa no disponible.');
   if(kind==='elevation-open'&&(stop.kind!=='overview'||!view.elevation?.candidate||!view.elevation?.envelope))throw Error('Narrativa no disponible.');
   if((kind==='axon-open'||kind==='exploded-levels-open')&&(stop.kind!=='overview'||!view.axon?.descriptor?.supported||(kind==='exploded-levels-open'&&!view.axon.descriptor.variants?.exploded?.supported)))throw Error('Narrativa no disponible.');
@@ -4573,7 +4747,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
   const aspect=Math.max(.2,SW()/Math.max(1,SH()));
   const wallTop=Math.max(project.defaults?.wallHeightMm||2800,...project.walls.filter(w=>w.status!=='demolished').map(w=>w.heightMm||0))/1000;
   const saved={position:camera.position.clone(),quaternion:camera.quaternion.clone(),target:orbit.target.clone(),fov:camera.fov,near:camera.near,far:camera.far,maxDistance:orbit.maxDistance,orbitEnabled:orbit.enabled};
-  let narrative,sectionCut=null,section=null,elevation=null,axon=null;
+  let narrative,sectionCut=null,section=null,elevation=null,axon=null,visit=null;
   if(kind==='axon-open'||kind==='exploded-levels-open'){
     // FT3D-5: the descriptor computed by the dialog (FloorPlanPresentationAxon, model mm) — never derived again here.
     // beginAxon is transactional: if anything fails after levelView changed, everything it touched is undone first.
@@ -4595,6 +4769,9 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const line={from:[wx(d.line[0][0]),wz(d.line[0][1])],to:[wx(d.line[1][0]),wz(d.line[1][1])]};
     narrative=window.FloorPlanPresentationStory.create('section-open',{plane,line,wallTop:builtTop,depth:d.span/1000,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,base:{near:camera.near,far:camera.far}});
     section=beginSection(d,{normal,plane,builtTop});
+  }else if(kind==='room-visit'){
+    // Section → Spatial Visit V1: the route Rubik validates (FloorPlanPresentationRoute) timed as a Story narrative.
+    visit=beginRoomVisit(stop,view,aspect,startPose);narrative=visit.narrative;
   }else if(kind==='room-descent'){
     // The room stop exactly as presentationGo frames it; a lower wall section is reached by lowering the walls built at
     // the overview's cut, and presentationGo then applies the real section when the presentation continues.
@@ -4612,7 +4789,7 @@ function presentationStoryBegin(stop,view={},kind='plan-reveal'){
     const corners=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]].map(([x,y])=>[wx(x),wz(y)]);
     narrative=window.FloorPlanPresentationStory.create('plan-reveal',{corners,wallTop,start:planStart,end:{position:end.p.toArray(),target:end.t.toArray(),fov:camera.fov},aspect,region:view.region,startRegion:view.startRegion,base:{near:camera.near,far:camera.far}});
   }
-  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon};
+  storyRun={kind,stopId:stop.id,stop,saved,narrative,state:null,arch:null,sectionCut,section,elevation,axon,visit};
   orbit.enabled=false;
   return {...narrative.info};
 }
@@ -4627,6 +4804,7 @@ function presentationStoryApply(p){
   if(storyRun.sectionCut){const cut=st.section?storyRun.sectionCut.section:storyRun.sectionCut.base;if(opt.cut!==cut)setPresentationCut(cut);}
   // Walls (and the openings and ceilings they carry) rise from the plan; ceiling fixtures wait for full height.
   if(archUp&&st.wallScale!==undefined){archUp.scale.y=Math.max(st.wallScale,.001);storyRun.arch=archUp;}
+  if(storyRun.visit)applyRoomVisit(storyRun.visit,st);
   if(storyRun.section)applySection(storyRun.section,st);
   if(storyRun.elevation)applyElevation(storyRun.elevation,st);
   if(storyRun.axon)applyAxon(storyRun.axon,st);
@@ -4649,6 +4827,7 @@ function presentationStoryReframe(view={}){
 function endPresentationStory({keepPose=true}={}){
   if(!storyRun)return null;
   const run=storyRun;storyRun=null;
+  if(run.visit)endRoomVisit(run.visit);
   if(run.section)endSection(run.section);
   if(run.elevation)endElevation(run.elevation);
   if(run.axon)endAxon(run.axon);
@@ -4924,6 +5103,9 @@ Object.defineProperty(window.View3D,'presentationFrameInfo',{get:()=>frameInfo&&
 Object.defineProperty(window.View3D,'presentationOverviewInfo',{get:()=>overviewInfo&&{...overviewInfo,region:[...overviewInfo.region]}});
 // Read-only view of the built door leaves (hinge position and open angle) for QA of the edited swing.
 Object.defineProperty(window.View3D,'doorLeaves',{get:()=>doors.map(d=>({id:d.id,x:d.pivot.position.x,z:d.pivot.position.z,open:d.a1,closed:d.a0}))});
+window.View3D.viewportSettled=viewportSettled;window.View3D.syncRoofVisibility=()=>syncRoofVisibility();window.View3D.presentationWalkFrom=presentationWalkFrom;window.View3D.presentationWalkEnd=presentationWalkEnd;
+window.View3D.presentationVisitPlan=(roomId,region)=>{const r=roomVisitPlan(roomId,region);return r.ok?{ok:true,code:'clear',landing:r.landing,lengthMm:r.plan.lengthMm,doorIds:[...(r.plan.doorIds||[])],duration:r.moves.duration}:{ok:false,code:r.code,reason:r.reason};};
+Object.defineProperty(window.View3D,'presentationVisitInfo',{get:()=>storyRun?.visit?{roomId:storyRun.visit.roomId,route:{...storyRun.visit.route,points:storyRun.visit.route.points.map(p=>({...p}))},fullHeight:storyRun.visit.full,cut:opt.cut}:null});
 Object.defineProperty(window.View3D,'presentationRouteInfo',{get:()=>({...routeInfo,points:routeInfo.points.map(p=>({...p})),doorIds:[...routeInfo.doorIds]})});
 window.View3D.setPrimitiveBatching=enabled=>{primitiveBatching=!!enabled;if(active&&!contextLost){sigFurn='';sync();}return primitiveBatching;};
 Object.defineProperty(window.View3D,'primitiveBatching',{get:()=>primitiveBatching});
