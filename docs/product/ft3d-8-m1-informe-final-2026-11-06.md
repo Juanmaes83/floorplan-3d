@@ -11,7 +11,9 @@ a Production, publicación de datos ni gasto externo.
   - `0029b3b`: núcleos S2 y S3;
   - `fb00083`: interfaz, verificación en directo y correcciones de revisión;
   - `c1955b8`: CI, adenda legal y evidencias;
-  - más el commit de este informe.
+  - `97dc39a`: informe;
+  - `7543255`: espera del mensaje en la prueba «guardar y reabrir»;
+  - más este commit, que registra el resultado de CI.
 - **Archivos creados:**
   - `js/cost-catalog-core.js`, `js/catastro-wfs-provider.js`, `js/parcel-association-core.js`;
   - `labs/m1-s2-s3/` (`index.html`, `m1.css`, `shell.js`, `fixtures.js`, `s2-ui.js`, `s3-ui.js`);
@@ -96,8 +98,15 @@ a Production, publicación de datos ni gasto externo.
 
 - **Rendimiento medido** con 20.000 conceptos: carga de unos 0,8 s, búsqueda de unos 20 ms, búsqueda en caché de
   unos 0,02 ms.
-- **CI:** workflow `ft3d-8-m1-s2-s3.yml`. El resultado de la ejecución asociada al SHA final se indica en el mensaje
-  de entrega.
+- **CI:** workflow `ft3d-8-m1-s2-s3.yml`.
+  - Ejecuciones 1 (`c1955b8`) y 2 (`97dc39a`): **fallidas** por una sola prueba M1, «guardar y reabrir». La prueba
+    leía el mensaje antes de que terminara la lectura asíncrona del archivo. Corregida en `7543255`: la prueba espera
+    el mensaje y comprueba que un archivo inválido no cambia la revisión.
+  - Ejecución 3 (`7543255`), intento 1: suite M1 en verde (11 de 11). Falló la prueba existente de master
+    `budget-ui.browser` («the card follows the budget»), que pasó en las ejecuciones 1 y 2 y pasa 5 de 5 en local.
+    M1 no modifica ningún archivo compartido, así que es inestabilidad de tiempos de esa prueba. No se ha tocado,
+    por ser compartida. Queda señalada para su responsable.
+  - Ejecución 3, intento 2: **verde**, con todos los pasos.
 - **Capturas** en `docs/product/ft3d-8-m1-evidencias/`, de la ventana visible:
   - escritorio, 1440 × 900: estado inicial, procedencia, confirmación, unidad incompatible, actualización de edición,
     servicio rechazado, parcela encontrada, colocación y sustitución;
