@@ -52,7 +52,7 @@ const startSampler=page=>page.evaluate(()=>{const S=window.__ux={samples:[],on:t
  const rect=e=>{if(!e||!e.getClientRects().length||e.closest('[hidden]'))return null;const r=e.getBoundingClientRect();return [r.left,r.top,r.width,r.height].map(v=>Math.round(v*10)/10);};
  const tick=()=>{if(!S.on)return;const card=q('#presentationOverlay .presentation-card'),s=FloorPlanPresentation.story;
   const buttons=[...card.querySelectorAll('button')].filter(b=>b.getClientRects().length&&!b.closest('[hidden]')&&getComputedStyle(b).visibility!=='hidden');
-  S.samples.push({story:s?{kind:s.kind,P:s.P,playing:!!s.playing}:null,ui:q('#presentationOverlay').dataset.story||null,
+  S.samples.push({story:s?{kind:s.kind,P:s.P,local:s.local,playing:!!s.playing}:null,ui:q('#presentationOverlay').dataset.story||null,title:card.querySelector('h2').textContent,
    card:rect(card),head:rect(card.querySelector('.presentation-card-top')),play:rect(q('#presentationStoryPlay')),slider:rect(q('#presentationStorySlider')),caption:rect(q('#presentationStoryCaption')),
    cardScroll:card.scrollHeight>card.clientHeight+1||card.scrollTop>0,docScroll:scrollX||scrollY,ids:buttons.map(b=>b.id||b.closest('.presentation-stops')&&'stop'||b.textContent.trim()),
    out:buttons.filter(b=>{if(b.closest('.presentation-card-body'))return false;const r=b.getBoundingClientRect(),c=card.getBoundingClientRect();return r.left<c.left-1||r.right>c.right+1||r.top<c.top-1||r.bottom>c.bottom+1;}).map(b=>b.id)});
@@ -66,6 +66,9 @@ function assertStable(samples,label){
  assert.equal(s.filter(x=>x.cardScroll).length,0,`${label}: the card itself never scrolls (only its body)`);
  assert.equal(s.filter(x=>x.docScroll).length,0,`${label}: the page never scrolls`);
  assert.deepEqual([...new Set(s.flatMap(x=>x.out))],[],`${label}: header and player controls stay inside the card`);
+ // The header names the view on screen: a section, façade or axonometry under way is not «Vista general».
+ const names={'section-open':'Sección visual','elevation-open':'Fachada visual','axon-open':'Axonometría'};
+ for(const [kind,name] of Object.entries(names)){const t=[...new Set(s.filter(x=>x.story.kind===kind&&x.story.local>.05).map(x=>x.title))];if(t.length)assert.deepEqual(t,[name],`${label}: header during ${kind}`);}
  const playing=s.filter(x=>x.story.playing);
  const extra=[...new Set(playing.flatMap(x=>x.ids))].filter(id=>!['presentationClose','presentationStoryPlan','presentationStoryPlay','presentationStoryNext'].includes(id));
  assert.deepEqual(extra,[],`${label}: while playing only the player is shown`);

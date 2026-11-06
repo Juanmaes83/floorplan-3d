@@ -779,7 +779,9 @@
  function storyTitle(){
   const sc=story?.scenes[story.i];if(!sc||!plan)return;
   // «Dibujo vivo» travels through the rooms from the overview: its header names the scene, the caption the room.
-  if(sc.kind==='living-drawing'){const text=tx('Dibujo vivo','Living drawing','活绘');title.textContent=text;title.title=text;return;}
+  // Section, façade and axonometry leave the overview too: the header names the view on screen, not the stop behind it.
+  const scene={'living-drawing':['Dibujo vivo','Living drawing','活绘'],'section-open':['Sección visual','Visual section','可视剖面'],'elevation-open':['Fachada visual','Visual façade','可视立面'],'axon-open':['Axonometría','Axonometric view','轴测图']}[sc.kind];
+  if(scene&&(sc.kind==='living-drawing'||story.p>0)){const text=tx(...scene);title.textContent=text;title.title=text;return;}
   const t=(sc.kind==='room-descent'||sc.kind==='room-visit')&&story.p>0?plan.stops[sc.stop]:plan.stops[sceneHome(sc)];if(!t)return;
   const text=t.kind==='room'?roomName(t.roomId,t.levelId):tx('Vista general','Overview','总览');title.textContent=text;title.title=text;
  }
