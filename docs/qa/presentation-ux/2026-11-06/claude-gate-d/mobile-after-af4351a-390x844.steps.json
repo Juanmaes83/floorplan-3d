@@ -1,0 +1,63 @@
+{
+ "label": "mobile-after-af4351a",
+ "sha": null,
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "steps": [
+  {
+   "t": 0.7,
+   "step": "example"
+  },
+  {
+   "t": 0.8,
+   "step": "dialog"
+  },
+  {
+   "t": 4.6,
+   "step": "dialog read"
+  },
+  {
+   "t": 4.7,
+   "step": "suggested scenes"
+  },
+  {
+   "t": 9.2,
+   "step": "start"
+  },
+  {
+   "t": 19,
+   "step": "overview"
+  },
+  {
+   "t": 20.6,
+   "step": "whole story"
+  },
+  {
+   "t": 38.2,
+   "step": "pause"
+  },
+  {
+   "t": 41.2,
+   "step": "resume"
+  },
+  {
+   "t": 66.5,
+   "step": "arrival"
+  },
+  {
+   "t": 75.1,
+   "step": "explore from here"
+  },
+  {
+   "t": 82.2,
+   "step": "back to the presentation"
+  },
+  {
+   "t": 90.5,
+   "step": "return to editor"
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,99 @@
+{
+ "label": "living-af4351a",
+ "sha": null,
+ "viewport": {
+  "width": 1280,
+  "height": 800
+ },
+ "steps": [
+  {
+   "t": 0.9,
+   "step": "example"
+  },
+  {
+   "t": 1,
+   "step": "dialog"
+  },
+  {
+   "t": 4.7,
+   "step": "dialog read"
+  },
+  {
+   "t": 4.8,
+   "step": "suggested scenes"
+  },
+  {
+   "t": 4.9,
+   "step": "dibujo vivo on"
+  },
+  {
+   "t": 11.8,
+   "step": "start"
+  },
+  {
+   "t": 17.5,
+   "step": "graphite drawing"
+  },
+  {
+   "t": 22.4,
+   "step": "pause (patches)"
+  },
+  {
+   "t": 44.8,
+   "step": "back to the drawing"
+  },
+  {
+   "t": 63.7,
+   "step": "play"
+  },
+  {
+   "t": 73.1,
+   "step": "living end"
+  },
+  {
+   "t": 78.3,
+   "step": "overview"
+  },
+  {
+   "t": 92.7,
+   "step": "repeat «Ver dibujo vivo»"
+  },
+  {
+   "t": 102.4,
+   "step": "living end again"
+  },
+  {
+   "t": 106.4,
+   "step": "overview"
+  },
+  {
+   "t": 108.9,
+   "step": "whole story"
+  },
+  {
+   "t": 126.7,
+   "step": "pause"
+  },
+  {
+   "t": 130.3,
+   "step": "resume"
+  },
+  {
+   "t": 155.8,
+   "step": "arrival"
+  },
+  {
+   "t": 171.2,
+   "step": "explore from here"
+  },
+  {
+   "t": 185.9,
+   "step": "back to the presentation"
+  },
+  {
+   "t": 201.8,
+   "step": "return to editor"
+  }
+ ],
+ "errors": []
+}

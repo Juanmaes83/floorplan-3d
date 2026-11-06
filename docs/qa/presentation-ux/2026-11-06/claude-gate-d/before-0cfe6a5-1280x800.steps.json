@@ -1,0 +1,63 @@
+{
+ "label": "before-0cfe6a5",
+ "sha": "0cfe6a5",
+ "viewport": {
+  "width": 1280,
+  "height": 800
+ },
+ "steps": [
+  {
+   "t": 2.7,
+   "step": "example"
+  },
+  {
+   "t": 2.8,
+   "step": "dialog"
+  },
+  {
+   "t": 6.8,
+   "step": "dialog read"
+  },
+  {
+   "t": 7.5,
+   "step": "options checked"
+  },
+  {
+   "t": 19.4,
+   "step": "start"
+  },
+  {
+   "t": 38.2,
+   "step": "overview"
+  },
+  {
+   "t": 41.4,
+   "step": "whole story"
+  },
+  {
+   "t": 62.3,
+   "step": "pause"
+  },
+  {
+   "t": 65.8,
+   "step": "resume"
+  },
+  {
+   "t": 91.1,
+   "step": "arrival"
+  },
+  {
+   "t": 134.4,
+   "step": "explore from here"
+  },
+  {
+   "t": 174.2,
+   "step": "back to the presentation"
+  },
+  {
+   "t": 209.7,
+   "step": "return to editor"
+  }
+ ],
+ "errors": []
+}

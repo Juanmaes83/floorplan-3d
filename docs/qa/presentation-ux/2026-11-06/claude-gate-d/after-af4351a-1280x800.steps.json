@@ -1,0 +1,63 @@
+{
+ "label": "after-af4351a",
+ "sha": null,
+ "viewport": {
+  "width": 1280,
+  "height": 800
+ },
+ "steps": [
+  {
+   "t": 1,
+   "step": "example"
+  },
+  {
+   "t": 1.1,
+   "step": "dialog"
+  },
+  {
+   "t": 4.8,
+   "step": "dialog read"
+  },
+  {
+   "t": 4.9,
+   "step": "suggested scenes"
+  },
+  {
+   "t": 10.3,
+   "step": "start"
+  },
+  {
+   "t": 21.3,
+   "step": "overview"
+  },
+  {
+   "t": 23.5,
+   "step": "whole story"
+  },
+  {
+   "t": 42.1,
+   "step": "pause"
+  },
+  {
+   "t": 45.7,
+   "step": "resume"
+  },
+  {
+   "t": 71.3,
+   "step": "arrival"
+  },
+  {
+   "t": 87.1,
+   "step": "explore from here"
+  },
+  {
+   "t": 102.6,
+   "step": "back to the presentation"
+  },
+  {
+   "t": 119.7,
+   "step": "return to editor"
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,73 @@
+[
+ {
+  "id": "facade-A",
+  "label": "Fachada A",
+  "defaultId": "facade-C",
+  "lengthM": 11.37,
+  "openings": 5,
+  "kinds": [
+   "window",
+   "window",
+   "window",
+   "window",
+   "window"
+  ],
+  "openingAreaM2": 8.14,
+  "openingRatio": 0.256,
+  "shots": [
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-A-front-1280x800.png",
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-A-perspective-1280x800.png"
+  ]
+ },
+ {
+  "id": "facade-B",
+  "label": "Fachada B",
+  "defaultId": "facade-C",
+  "lengthM": 10.51,
+  "openings": 3,
+  "kinds": [
+   "window",
+   "window",
+   "window"
+  ],
+  "openingAreaM2": 11.78,
+  "openingRatio": 0.401,
+  "shots": [
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-B-front-1280x800.png",
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-B-perspective-1280x800.png"
+  ]
+ },
+ {
+  "id": "facade-C",
+  "label": "Fachada C",
+  "defaultId": "facade-C",
+  "lengthM": 13.02,
+  "openings": 2,
+  "kinds": [
+   "window",
+   "window"
+  ],
+  "openingAreaM2": 2.42,
+  "openingRatio": 0.066,
+  "shots": [
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-C-front-1280x800.png",
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-C-perspective-1280x800.png"
+  ]
+ },
+ {
+  "id": "facade-D",
+  "label": "Fachada D",
+  "defaultId": "facade-C",
+  "lengthM": 9.43,
+  "openings": 1,
+  "kinds": [
+   "window"
+  ],
+  "openingAreaM2": 4.61,
+  "openingRatio": 0.174,
+  "shots": [
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-D-front-1280x800.png",
+   "/tmp/claude-0/-home-user/af3e7d78-49af-5a96-8c97-4de1ce7bfb92/scratchpad/facades/facade-D-perspective-1280x800.png"
+  ]
+ }
+]
