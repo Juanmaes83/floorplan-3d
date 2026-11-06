@@ -296,3 +296,12 @@ test('M2-QA-10 · mobile 390×844, keyboard and reduced motion: plan editor and 
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
  await shot(page,'m2-10-movil-evolucion');assert.deepEqual(errors,[]);await context.close();
 });
+
+test('M2 · Entregar with a partially priced budget answers (master froze here: endless mutation loop in the C4 summary)',{timeout:120000},async()=>{
+ const {page,errors,context}=await boot();
+ const items=await setPrices(page,{});await setPrices(page,{[items[0].id]:30});
+ await page.evaluate(()=>{setTimeout(()=>FloorPlanProfessionalUI.open('deliver'),0);});await page.waitForTimeout(1500);
+ const r=await Promise.race([page.evaluate(()=>document.querySelector('.project-context-ready')?.textContent||''),new Promise(res=>setTimeout(()=>res('BLOCKED'),8000))]);
+ assert.notEqual(r,'BLOCKED','the page keeps answering');assert.equal((r.match(/Presupuesto: /g)||[]).length<=1,true,'the budget state is written once, not repeated');
+ assert.deepEqual(errors,[]);await context.close();
+});

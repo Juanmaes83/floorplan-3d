@@ -16,7 +16,7 @@
  const {eur,day,short}=C;
  const DAY=86400000,ms=d=>Date.parse(d+'T00:00:00Z'),days=(a,b)=>Math.round((ms(b)-ms(a))/DAY)+1;
 
- let snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='';
+ let nowF=null,snap=null,inv=null,byKey=new Map(),money=null,draft=null,dirty=false,tab='tasks',focus={},editing=null,closing=false,review=false,message='',error='';
  const dialog=el('dialog',undefined,document.body,'cx-dialog');dialog.id='planDialog';dialog.setAttribute('aria-labelledby','planTitle');
  dialog.addEventListener('cancel',e=>{if(dirty){e.preventDefault();closing=true;draw();}});
 
@@ -57,7 +57,7 @@
 
  /* ---------- open / save ---------- */
  async function open({tab:t='tasks',taskId=null,itemId=null,elementKey=null}={}){
-  snap=await C.snapshot();inv=A.inventory(snap.doc);byKey=new Map(inv.elements.map(e=>[e.key,e]));
+  snap=await C.snapshot();nowF=await C.nowFingerprints(snap);inv=A.inventory(snap.doc);byKey=new Map(inv.elements.map(e=>[e.key,e]));
   draft=stored()?S.canonical(stored()):null;dirty=false;editing=null;closing=false;review=false;message='';error=snap.recordError?R.human(snap.recordError):'';
   money=budgetNow();tab=t;focus={taskId,itemId,elementKey};draw();if(!dialog.open)dialog.showModal();
   (dialog.querySelector('.is-focus button, .is-focus')||dialog.querySelector('#planTitle')).focus({preventScroll:false});
@@ -70,7 +70,7 @@
    snap=await C.snapshot();
    // Saving declares the plan for the CURRENT revision of the project: the professional has just reviewed it.
    const doc=asStored(draft,snap.revision);C.store().saveSchedule(snap.entry.id,snap.subject,doc,{action:stored()?'save':'create'});
-   snap=await C.snapshot();draft=S.canonical(stored());dirty=false;error='';if(!quiet)message=`Plan guardado para la revisión ${short(snap.revision)} del proyecto.`;money=budgetNow();draw();return true;
+   snap=await C.snapshot();nowF=await C.nowFingerprints(snap);draft=S.canonical(stored());dirty=false;error='';if(!quiet)message=`Plan guardado para la revisión ${short(snap.revision)} del proyecto.`;money=budgetNow();draw();return true;
   }catch(e){error=R.human(e);draw();return false;}
  }
  async function markReviewed(by){
@@ -80,7 +80,7 @@
   try{const s=stored(),b=money.kind==='project'?money.budget:null;
    const binding=A.createBinding({id:R.newId('bnd'),source:snap.doc,fingerprints:{project:snap.revision,schedule:await A.fingerprint(S.validate(s)),budget:b?await A.fingerprint(b):null},
     scheduleId:s.id,budgetId:b?.id||null,review:{status:'reviewed',by:by.trim(),at:s.review.at},createdAt:new Date().toISOString()});
-   C.store().saveBinding(snap.entry.id,snap.subject,binding);snap=await C.snapshot();review=false;message='Plan marcado como revisado. Es tu declaración: RUBIK no la convierte en una aprobación firmada.';draw();
+   C.store().saveBinding(snap.entry.id,snap.subject,binding);snap=await C.snapshot();nowF=await C.nowFingerprints(snap);review=false;message='Plan marcado como revisado. Es tu declaración: RUBIK no la convierte en una aprobación firmada.';draw();
   }catch(e){error=R.human(e);draw();}
  }
  function close(force=false){if(dirty&&!force){closing=true;draw();return;}dialog.close();}
@@ -91,7 +91,7 @@
   const head=el('div',undefined,dialog,'cx-head'),hl=el('div',undefined,head);const h=el('h2','Plan de obra',hl);h.id='planTitle';h.tabIndex=-1;
   const sub=el('p',undefined,hl,'cx-subject');sub.id='planSubject';el('b',snap.entry.name,sub);
   el('span',`${snap.subject.type==='building'?'Edificio':'Proyecto'} · revisión ${short(snap.revision)}${snap.level?' · planta activa: '+snap.level.name:''}`,sub);
-  const corr=R.correspondence(snap.record,{subject:snap.subject,revision:snap.revision}),plan=corr.find(c=>c.aspect==='plan'),rev=corr.find(c=>c.aspect==='review');
+  const corr=R.correspondence(snap.record,nowF?R.nowOf(snap.subject,nowF):{subject:snap.subject,revision:snap.revision}),plan=corr.find(c=>c.aspect==='plan'),rev=corr.find(c=>c.aspect==='review');
   if(draft){chip(draft.review.status==='reviewed'?'Revisado (declarado)':'Borrador',sub,draft.review.status==='reviewed'?'ok':'');if(plan.result==='obsolete'&&!dirty)chip('Plan desactualizado',sub,'warn');if(rev.result==='obsolete')chip('Revisión anterior desactualizada',sub,'warn');if(dirty)chip('Cambios sin guardar',sub,'info');}
   if(snap.duplicate)chip('Identidad duplicada en la biblioteca',sub,'bad');
   const x=btn('Cerrar',head);x.id='planClose';x.onclick=()=>close();
@@ -310,7 +310,7 @@
    const fix=btn('Quitar repartos de partidas inexistentes',body,'btn');fix.id='planFixItems';const ids=new Set(money.budget.items.map(i=>i.id));fix.onclick=()=>change(d=>{for(const t of d.tasks)t.budgetAllocations=t.budgetAllocations.filter(a=>ids.has(a.itemId));},'Repartos corregidos.');}
   if(!broken.length&&!gone.length)banner(body,'','Sin vínculos rotos','Todas las tareas apuntan a elementos y partidas que existen en el proyecto y el presupuesto actuales.');
   if(draft.tasks.length){const rep=S.dependencyReport(asStored());if(rep.length){el('h3','Dependencias',body);const ul=el('ul',undefined,body);for(const d of rep)el('li',`${task(d.from)?.title} → ${task(d.to)?.title} · ${DEP[d.type]}${d.lagDays?`, desfase ${d.lagDays} d`:''} · margen ${d.slackDays} ${d.slackDays===1?'día':'días'}`,ul);}}
-  const corr=R.correspondence(snap.record,{subject:snap.subject,revision:snap.revision});el('h3','Identidad y revisiones',body);const ul=el('ul',undefined,body);ul.id='planCorrespondence';
+  const corr=R.correspondence(snap.record,nowF?R.nowOf(snap.subject,nowF):{subject:snap.subject,revision:snap.revision});el('h3','Identidad y revisiones',body);const ul=el('ul',undefined,body);ul.id='planCorrespondence';
   const TXT={plan:{absent:'Plan: todavía no guardado',match:'Plan: guardado para la revisión actual del proyecto',obsolete:'Plan: guardado para otra revisión del proyecto',mismatch:'Plan: pertenece a otro proyecto'},
    review:{absent:'Revisión: sin declarar',match:'Revisión: declarada sobre el plan y el proyecto actuales',obsolete:'Revisión: desactualizada (el plan, el proyecto o el presupuesto han cambiado)'},
    'budget-revision':{unverifiable:'Presupuesto ↔ revisión del proyecto: no comprobable (el presupuesto no guarda la revisión del proyecto)'},

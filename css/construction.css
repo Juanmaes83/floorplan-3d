@@ -100,5 +100,5 @@
 .cx-modes .cx-step[aria-pressed=true]{background:var(--ink,#2b3034);color:#fff}
 .cx-modes .cx-step+.cx-step::before{content:none}
 #evolutionStatus{max-width:260px;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:1100px){.cx-evolution-bar .cx-crumbs{display:none}}
+@media(max-width:1400px){.cx-evolution-bar .cx-crumbs{display:none}}
 @media(max-width:600px){#evolutionStatus{display:none}.cx-modes{order:2}}
