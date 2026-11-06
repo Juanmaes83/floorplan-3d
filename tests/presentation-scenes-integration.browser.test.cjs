@@ -2,7 +2,8 @@
    other in ONE presentation, twice (integration evidence; it skips itself where those features are not present):
    living drawing (+ ambience) → full story (section → validated room visit) → hybrid façade → living drawing again.
    After every scene, at the overview: no drawing layer, no ambience, no clipping plane on any material, no hybrid
-   material or contour node, the same multiset of materials in use as after the first scene (Section rebuilds meshes, so not per mesh id), the same renderer state
+   material or contour node, the same multiset of material signatures in use as after the first scene (Section rebuilds meshes and materials, so not
+   per id), the same renderer state
    (render target, clear, tone mapping, clipping, override material, background) and the same camera lens; the second
    round leaves renderer geometries/textures exactly as the first; the drawing still draws (no clip or hybrid residue)
    and still comes to life; the project JSON never changes; no page error. */
@@ -32,9 +33,9 @@ async function read(page,name,region){const png=await page.locator('#view3d canv
 const residue=page=>page.evaluate(()=>{const x=View3D.presentationHybridInspect(),c=View3D.presentationClipInfo;
  return {drawing:View3D.presentationLivingDrawingInfo.active,ambience:View3D.presentationAmbienceInfo.active,clipMaterials:c.materialsWithPlanes,localClipping:c.localClipping,
   hybridSwapped:x.swapped,contourNodes:x.contourNodes,hybridMaterials:View3D.presentationElevationResidue.hybridMaterials,
-  // Section rebuilds the scene graph when it returns to full height (new mesh ids), so the evidence is the multiset of
-  // materials in use: any presentation material left behind, or any original lost, changes it.
-  bindings:Object.values(x.bindings).flatMap(v=>String(v).split(',')).sort().reduce((m,k)=>(m[k]=(m[k]||0)+1,m),{}),renderer:View3D.presentationRendererState,memory:View3D.rendererMemory};});
+  // Section rebuilds the scene graph when it returns to full height (new mesh and material ids), so the evidence is the
+  // multiset of material signatures in use: any presentation material left behind, or any original lost, changes it.
+  bindings:View3D.presentationMaterialSignature,renderer:View3D.presentationRendererState,memory:View3D.rendererMemory};});
 function clean(r,label){assert.equal(r.drawing,false,label+': drawing layer released');assert.equal(r.ambience,false,label+': ambience removed');assert.equal(r.clipMaterials,0,label+': no clipping plane left');
  assert.equal(r.localClipping,false,label+': local clipping off');assert.equal(r.hybridSwapped,false,label+': no hybrid material');assert.equal(r.contourNodes,0,label+': no contour node');assert.equal(r.hybridMaterials,0,label+': no hybrid clone');
  assert.equal(r.renderer.renderTarget,null,label+': renders to the screen');assert.equal(r.renderer.overrideMaterial,false,label+': no override material');assert.equal(r.renderer.clippingPlanes,0,label+': no global clipping');}
@@ -77,7 +78,7 @@ test('HV2 + Section visit + Hybrid V1, one after the other, twice: no residue of
   await slide(page,.35);assert.equal((await page.evaluate(()=>View3D.presentationHybridInspect())).swapped,true,'the hybrid façade swaps its targets');
   await finish(page);await toOverview(page);const r3=await residue(page);clean(r3,`round ${round} after the hybrid façade`);
   assert.deepEqual(r3.bindings,first.bindings,`round ${round}: exact materials after the hybrid façade`);assert.deepEqual(r3.renderer,first.renderer,`round ${round}: renderer and lens after the hybrid façade`);
-  rounds.push(r3.memory);log.push({round,kinds,after:[r1,r2,r3].map(r=>({...r,bindings:Object.keys(r.bindings).length}))});
+  rounds.push(r3.memory);log.push({round,kinds,after:[r1,r2,r3].map(r=>({...r,bindings:{meshes:r.bindings.meshes,kinds:Object.keys(r.bindings.materials).length}}))});
  }
  await fs.writeFile(path.join(QA,'integration.json'),JSON.stringify(log,null,1));
  assert.deepEqual(rounds[1],rounds[0],`second round leaves renderer memory as the first ${JSON.stringify(rounds)}`);

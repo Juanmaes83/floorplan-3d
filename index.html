@@ -4999,6 +4999,13 @@ Object.assign(window.View3D,{presentationStoryBegin,presentationStoryApply,prese
 Object.assign(window.View3D,{presentationLivingDrawingBegin,presentationLivingDrawingEnd,presentationAmbienceBegin,presentationAmbienceEnd});
 Object.defineProperty(window.View3D,'presentationLivingDrawingInfo',{get:()=>livingDrawing?livingDrawing.info:{active:false}});
 Object.defineProperty(window.View3D,'presentationAmbienceInfo',{get:presentationAmbienceInfo});
+// Read-only multiset of what the meshes of the scene are painted with, as stable signatures (type, colour, map, opacity,
+// clipping, presentation marks): equal before and after a scene means no presentation material was left behind, even when
+// a scene rebuilt the meshes (new ids). Hybrid V2 integration QA.
+Object.defineProperty(window.View3D,'presentationMaterialSignature',{get:()=>{if(!scene)return null;const out={};let meshes=0;
+  scene.traverse(o=>{if(!o.isMesh||!o.visible&&o.userData?.hybridPresentation)return;meshes++;for(const m of [].concat(o.material)){if(!m)continue;
+    const k=[m.type,m.color?.getHexString?.()??'-',m.map?(m.map.image?.width||1)+'x'+(m.map.image?.height||1):'-',m.transparent?1:0,+(+m.opacity).toFixed(3),(m.clippingPlanes||[]).length,m.userData?.hybridPresentation?'H':'',m.side,m.visible?1:0].join('|');
+    out[k]=(out[k]||0)+1;}});return {meshes,materials:out};}});
 // Read-only audit of what a scene could leave behind on the shared renderer, scene and camera (Hybrid V2 integration QA).
 Object.defineProperty(window.View3D,'presentationRendererState',{get:()=>renderer&&{renderTarget:renderer.getRenderTarget()?renderer.getRenderTarget().uuid:null,autoClear:renderer.autoClear,toneMapping:renderer.toneMapping,
   exposure:renderer.toneMappingExposure,outputColorSpace:renderer.outputColorSpace,localClipping:renderer.localClippingEnabled,clippingPlanes:renderer.clippingPlanes.length,pixelRatio:renderer.getPixelRatio(),
