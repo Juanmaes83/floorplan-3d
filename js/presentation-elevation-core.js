@@ -12,8 +12,8 @@
    (orientation-unavailable) and the result is partial.
    Grouping: outward normals in 8 sectors of 45° in project coordinates (centres every 45°, ±22.5°), angle measured
    clockwise from plan-up. Candidates are ordered from plan-up clockwise and named facade-A, facade-B… in that order.
-   Default: the longest total façade length (all levels), then the most openings, then the order. It is an automatic
-   selection, never a «main façade».
+   Default: the most expressive façade of the project (see defaultFacade below: real openings, at least 60 % of the
+   widest façade, largest real opening surface), else the longest. It is an automatic selection, never a «main façade».
    Cardinal names only when site.northOffsetDeg exists: true azimuth = wrap(anglePlanDeg − northOffsetDeg), the
    convention FloorPlanSolar uses (projectAzimuth = azimuth + northOffsetDeg). */
 (function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./exterior-core.js'):root.FloorPlanExterior);if(typeof module==='object'&&module.exports)module.exports=api;else root.FloorPlanPresentationElevation=api;})(typeof self!=='undefined'?self:this,function(DefaultExterior){
