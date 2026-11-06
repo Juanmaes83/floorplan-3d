@@ -40,7 +40,10 @@
  // The scenes the professional chose (the whole story, «Dibujo vivo», the section, the façade…) are a group of their
  // own, right after the navigation: they are what the presentation tells, not technical tools, and they appear only
  // where they can play (an overview), so a presentation without scenes is unchanged.
- const scenesGroup=el('div',undefined,null,'presentation-scenes');scenesGroup.id='presentationScenes';scenesGroup.setAttribute('role','group');controls.insertBefore(scenesGroup,tools);
+ // Scenes and tools share one row container: stacked on a desktop card; on a phone a single scrollable row, as the
+ // tools were alone, so choosing scenes never makes the card taller (nor the camera's free region smaller).
+ const scenesGroup=el('div',undefined,null,'presentation-scenes');scenesGroup.id='presentationScenes';scenesGroup.setAttribute('role','group');
+ const actionsRow=el('div',undefined,controls,'presentation-actions');actionsRow.append(scenesGroup,tools);
  const previous=button('',nav,()=>go(index-1)),next=button('',nav,()=>go(index+1));
  const captureButton=button('',tools,()=>capture());captureButton.id='presentationCapture';
  const shareButton=button('',tools,()=>share());shareButton.id='presentationShare';

@@ -484,12 +484,13 @@ body.presentation-exiting header,body.presentation-exiting .guide-bar,body.prese
 .presentation-playing-hint{display:none;margin:6px 0;font-size:13px;color:var(--muted)}
 .presentation-overlay[data-story="playing"] .presentation-playing-hint{display:block}
 .presentation-overlay[data-story] .presentation-story{border-bottom:1px solid var(--line);padding-bottom:8px}
+.presentation-actions{display:flex;flex-direction:column;gap:8px}
 .presentation-scenes{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:8px}
 .presentation-scenes:not(:has(>button:not([hidden]))){display:none}
 .presentation-card .presentation-scenes .btn{border-color:var(--accent);color:var(--accent);font-weight:600;background:#fff}
 .presentation-card .presentation-scenes .btn:disabled{color:var(--muted);border-color:var(--line)}
 .presentation-card .presentation-scenes #presentationLivingPlay{background:var(--accent);color:#fff}
-@media(max-width:600px),(max-height:500px){.presentation-scenes{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding-bottom:2px}.presentation-scenes .btn{flex:0 0 auto;white-space:nowrap}}
+@media(max-width:600px),(max-height:500px){.presentation-actions{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding-bottom:2px;border-top:1px solid var(--line);padding-top:8px}.presentation-actions>.presentation-scenes,.presentation-actions>.presentation-tools{flex:0 0 auto;flex-wrap:nowrap;overflow:visible;border-top:0;padding-top:0;padding-bottom:0}.presentation-scenes .btn{flex:0 0 auto;white-space:nowrap}}
 .presentation-overlay[data-story] .presentation-card-body>:is(.presentation-status,.presentation-progress,.presentation-info,.presentation-section,.presentation-next,.presentation-intro){display:none}
 .presentation-overlay[data-story="playing"] .presentation-card-body>:is(.presentation-controls,.presentation-stops){display:none}
 @media(min-width:700px){.presentation-overlay{align-items:flex-start;justify-content:flex-end;padding:62px 12px 12px}.presentation-card{width:min(320px,43%);height:min(100%,820px);max-height:100%}}
